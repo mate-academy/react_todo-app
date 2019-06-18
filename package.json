@@ -1,5 +1,5 @@
 {
-  "homepage": "http://mate-academy.github.io/react-jun19-todo-app",
+  "homepage": "http://voooodoo.github.io/react-jun19-todo-app",
   "name": "todo-app",
   "version": "0.1.0",
   "private": true,
@@ -13,6 +13,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "precommit": "lint-staged",
+    "eslint": "node_modules/.bin/eslint src/",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
@@ -32,6 +34,18 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "eslint-config-prettier": "^5.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "gh-pages": "^2.0.1",
+    "husky": "^2.4.1",
+    "lint-staged": "^8.2.1",
+    "prettier": "^1.18.2"
+  },
+  "lint-staged": {
+    "*.{js, jsx}": [
+      "node_modules/.bin/eslint --max-warnings=0",
+      "prettier --write",
+      "git add"
+    ]
   }
 }
