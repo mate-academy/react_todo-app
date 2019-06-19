@@ -1,61 +1,91 @@
 import React from 'react';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+import ToDoItem from './ToDoItem'
+import Header from './Header'
+import Footer from './Footer'
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus=""
-        />
-      </header>
+class App extends React.Component {
 
-      <section className="main" style={{ display: 'block' }}>
-        <input id="toggle-all" className="toggle-all" type="checkbox" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sdfsdfsdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>dsfgsdfgdsrg</label>
-              <button className="destroy"></button></div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sddfgdfgdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-        </ul>
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toDoItems: [],
+      selectedFilter: "all"
+    }
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem("toDoItems") !== null) {
+      this.setState({
+        toDoItems: JSON.parse(localStorage.getItem("toDoItems")),
+        selectedFilter: JSON.parse(localStorage.getItem("selectedFilter"))
+      })
+    }
+  }
+
+  saveDataToLocalStorage() {
+    localStorage.setItem('toDoItems', JSON.stringify(this.state.toDoItems))
+    localStorage.setItem('selectedFilter', JSON.stringify(this.state.selectedFilter))
+  }
+
+  updateToDoItems = (newItem) => {
+    this.setState({
+      toDoItems: [...this.state.toDoItems, newItem],
+    })
+  }
+
+  replaceItemWithChangedState = (itemToReplace) => {
+    const toDoArray = [...this.state.toDoItems];
+    const index = toDoArray.indexOf(itemToReplace);
+    itemToReplace.isCompleted = !itemToReplace.isCompleted;
+    toDoArray[index] = itemToReplace;
+    this.setState({
+      toDoItems: toDoArray
+    })
+  }
+
+  deleteToDoItem = (item) => {
+    const toDoArray = [...this.state.toDoItems];
+    toDoArray.splice(toDoArray.indexOf(item), 1);
+    this.setState({
+      toDoItems: toDoArray,
+    })
+  }
+
+  setSelectedFiler = (value) => {
+    this.setState({
+      selectedFilter: value
+    })
+  }
+
+  render() {
+    let visibleItems;
+    if (this.state.selectedFilter === "all") {
+      visibleItems = this.state.toDoItems
+    } else if (this.state.selectedFilter === "active") {
+      visibleItems = this.state.toDoItems.filter(item => item.isCompleted === false)
+    } else {
+      visibleItems = this.state.toDoItems.filter(item => item.isCompleted === true)
+    }
+
+    this.state.toDoItems.length > 0 && this.saveDataToLocalStorage();
+    return (
+      <section className="todoapp" >
+        <Header
+          updateToDoItems={this.updateToDoItems} />
+        <ToDoItem
+          replaceItemWithChangedState={this.replaceItemWithChangedState}
+          deleteToDoItem={this.deleteToDoItem}
+          items={visibleItems} />
+        <Footer
+          activeItemsLength={this.state.toDoItems.filter(item => item.isCompleted === false).length}
+          setSelectedFiler={this.setSelectedFiler}
+          selectedFilter={this.state.selectedFilter} />
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count"><strong>3</strong> items left</span>
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-        <button className="clear-completed" style={{ display: 'block' }}></button>
-      </footer>
-    </section>
-  );
+    )
+  }
+
 }
 
 export default App;
