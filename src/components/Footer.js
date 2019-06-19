@@ -1,22 +1,44 @@
 import React from 'react';
 
-const Footer = () => {
+const Footer = props => {
+  const { todosTotal, changeFilter } = props;
+  console.log(props);
   return (
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
-        <strong>3</strong> items left
+        <strong>{todosTotal}</strong> items left
       </span>
       <ul className="filters">
         <li>
-          <a href="#/" className="selected">
+          <button
+            type="button"
+            className="selected"
+            onClick={() => {
+              changeFilter('all');
+            }}
+          >
             All
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#/active">Active</a>
+          <button
+            type="button"
+            onClick={() => {
+              changeFilter('active');
+            }}
+          >
+            Active
+          </button>
         </li>
         <li>
-          <a href="#/completed">Completed</a>
+          <button
+            type="button"
+            onClick={() => {
+              changeFilter('completed');
+            }}
+          >
+            Completed
+          </button>
         </li>
       </ul>
       <button className="clear-completed" style={{ display: 'block' }}></button>
