@@ -14,7 +14,6 @@ class App extends Component {
       },
     ],
     filter: 'all',
-    total: 1,
   };
 
   addTodo = todo => {
@@ -58,14 +57,21 @@ class App extends Component {
     this.setState({ filter });
   };
 
-  updateLenght = length => {
-    this.setState({
-      length,
-    });
-  };
-
   render() {
-    const { todos, filter, length } = this.state;
+    const { todos, filter } = this.state;
+    let todoList = [];
+    switch (filter) {
+      case 'active':
+        todoList = todos.filter(({ completed }) => !completed);
+        break;
+      case 'completed':
+        todoList = todos.filter(({ completed }) => completed);
+        break;
+      default:
+        todoList = [...todos];
+    }
+    const length = todoList.length;
+
     return (
       <section className="todoapp">
         <Header addTodo={this.addTodo} />
@@ -73,7 +79,7 @@ class App extends Component {
           <input id="toggle-all" className="toggle-all" type="checkbox" />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
-            todos={todos}
+            todos={todoList}
             filter={filter}
             length={length}
             deleteTodo={this.deleteTodo}
@@ -81,7 +87,7 @@ class App extends Component {
             updateLength={this.updateLenght}
           />
         </section>
-        <Footer todosTotal={length} changeFilter={this.changeFilter} />
+        <Footer todosTotal={length} changeFilter={this.changeFilter} filter={filter} />
       </section>
     );
   }

@@ -1,8 +1,7 @@
 import React from 'react';
 
 const Footer = props => {
-  const { todosTotal, changeFilter } = props;
-  console.log(props);
+  const { todosTotal, changeFilter, filter } = props;
   return (
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
@@ -12,7 +11,7 @@ const Footer = props => {
         <li>
           <button
             type="button"
-            className="selected"
+            className={`btn-filter ${filter === 'all' ? 'selected' : ''}`}
             onClick={() => {
               changeFilter('all');
             }}
@@ -23,6 +22,7 @@ const Footer = props => {
         <li>
           <button
             type="button"
+            className={`btn-filter ${filter === 'active' ? 'selected' : ''}`}
             onClick={() => {
               changeFilter('active');
             }}
@@ -33,6 +33,7 @@ const Footer = props => {
         <li>
           <button
             type="button"
+            className={`btn-filter ${filter === 'completed' ? 'selected' : ''}`}
             onClick={() => {
               changeFilter('completed');
             }}

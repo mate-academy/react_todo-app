@@ -520,3 +520,14 @@ hr {
 	}
 }
 
+.btn-filter {
+  border-radius: 2px;
+  padding: 2px 6px;
+  border: 1px solid rgba(0, 0, 0, .4);
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.selected {
+  border-color: red;
+}
