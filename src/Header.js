@@ -6,22 +6,25 @@ const Header = props => {
     <header className="header">
       <h1>todos</h1>
 
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        autoFocus=""
-        onKeyDown={event => {
-          if (event.key === "Enter") {
-            const newItem = {
-              id: uuid(),
-              text: event.target.value,
-              isCompleted: false
-            };
-            props.addNewItem(newItem);
-            event.target.value = "";
-          }
+      <form
+        onSubmit={event => {
+          const newItem = {
+            id: uuid(),
+            text: event.target.toDoItem.value,
+            isCompleted: false
+          };
+          props.addNewItem(newItem);
+          event.target.toDoItem.value = "";
         }}
-      />
+      >
+        <input
+          autofocus="true"
+          className="new-todo"
+          placeholder="What needs to be done?"
+          autoFocus=""
+          name="toDoItem"
+        />
+      </form>
     </header>
   );
 };
