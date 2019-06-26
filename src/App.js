@@ -1,61 +1,106 @@
-import React from 'react';
+import React from "react";
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+import ToDoItem from "./ToDoItem";
+import Header from "./Header";
+import Footer from "./Footer";
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus=""
+class App extends React.Component {
+  state = {
+    toDoItems: [],
+    selectedFilter: "all"
+  };
+
+  saveToLocalSetState = state => {
+    this.setState({ ...state }, () => {
+      this.saveDataToLocalStorage();
+    });
+  };
+
+  componentDidMount() {
+    if (localStorage.getItem("toDoItems") !== null) {
+      this.saveToLocalSetState({
+        toDoItems: JSON.parse(localStorage.getItem("toDoItems")),
+        selectedFilter: localStorage.getItem("selectedFilter")
+      });
+    }
+  }
+
+  saveDataToLocalStorage() {
+    localStorage.setItem("toDoItems", JSON.stringify(this.state.toDoItems));
+    localStorage.setItem("selectedFilter", this.state.selectedFilter);
+  }
+
+  addNewItem = newItem => {
+    this.saveToLocalSetState({
+      toDoItems: [...this.state.toDoItems, newItem]
+    });
+  };
+
+  toggleItem = id => {
+    const toDoArray = [...this.state.toDoItems];
+    const index = toDoArray.findIndex(item => item.id === id);
+    toDoArray[index] = {
+      ...toDoArray[index],
+      isCompleted: !toDoArray[index].isCompleted
+    }
+    this.saveToLocalSetState({
+      toDoItems: toDoArray
+    });
+  };
+
+  deleteToDoItem = id => {
+    const toDoItems = [...this.state.toDoItems].filter(toDo => toDo.id !== id);
+    this.saveToLocalSetState({
+      toDoItems
+    });
+  };
+
+  setSelectedFiler = selectedFilter => {
+    this.saveToLocalSetState({
+      selectedFilter
+    });
+  };
+
+  generateFilteredDataSouce = () => {
+    const { selectedFilter, toDoItems } = this.state;
+    let res = [];
+    switch (selectedFilter) {      
+      case "active":
+        res = toDoItems.filter(item => !item.isCompleted);
+        break;
+      case "completed":
+        res = toDoItems.filter(item => item.isCompleted);
+        break;
+        default:
+        res = toDoItems;
+        break;
+    }
+
+    return res;
+  };
+
+  render() {
+    let visibleItems = this.generateFilteredDataSouce();
+
+    return (
+      <section className="todoapp">
+        <Header addNewItem={this.addNewItem} />
+        <ToDoItem
+          toggleItem={this.toggleItem}
+          deleteToDoItem={this.deleteToDoItem}
+          items={visibleItems}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input id="toggle-all" className="toggle-all" type="checkbox" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sdfsdfsdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>dsfgsdfgdsrg</label>
-              <button className="destroy"></button></div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sddfgdfgdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-        </ul>
+        <Footer
+          activeItemsLength={
+            this.state.toDoItems.filter(item => item.isCompleted === false)
+              .length
+          }
+          setSelectedFiler={this.setSelectedFiler}
+          selectedFilter={this.state.selectedFilter}
+        />
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count"><strong>3</strong> items left</span>
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-        <button className="clear-completed" style={{ display: 'block' }}></button>
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
