@@ -39,7 +39,10 @@ class App extends React.Component {
   toggleItem = id => {
     const toDoArray = [...this.state.toDoItems];
     const index = toDoArray.findIndex(item => item.id === id);
-    toDoArray[index].isCompleted = !toDoArray[index].isCompleted;
+    toDoArray[index] = {
+      ...toDoArray[index],
+      isCompleted: !toDoArray[index].isCompleted
+    }
     this.saveToLocalSetState({
       toDoItems: toDoArray
     });
@@ -61,15 +64,15 @@ class App extends React.Component {
   generateFilteredDataSouce = () => {
     const { selectedFilter, toDoItems } = this.state;
     let res = [];
-    switch (selectedFilter) {
-      default:
-        res = toDoItems;
-        break;
+    switch (selectedFilter) {      
       case "active":
         res = toDoItems.filter(item => !item.isCompleted);
         break;
       case "completed":
         res = toDoItems.filter(item => item.isCompleted);
+        break;
+        default:
+        res = toDoItems;
         break;
     }
 
