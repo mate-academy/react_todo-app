@@ -11,6 +11,7 @@ class App extends Component {
       {
         title: 'drink coffee',
         completed: false,
+        id: new Date().toISOString(),
       },
     ],
     filter: 'all',
@@ -21,6 +22,7 @@ class App extends Component {
       const newTodo = {
         title: todo,
         completed: false,
+        id: new Date().toISOString(),
       };
 
       return {
@@ -32,7 +34,7 @@ class App extends Component {
   toggleTodo = togledTodo => {
     this.setState(prevState => {
       const { todos } = prevState;
-      const index = todos.findIndex(({ title }) => title === togledTodo);
+      const index = todos.findIndex(({ id }) => id === togledTodo);
       const newTodo = { ...todos[index], completed: !todos[index].completed };
 
       return {
@@ -44,7 +46,7 @@ class App extends Component {
   deleteTodo = deletedTodo => {
     this.setState(prevState => {
       const { todos } = prevState;
-      const index = todos.findIndex(({ title }) => title === deletedTodo);
+      const index = todos.findIndex(({ id }) => id === deletedTodo);
       const newTodos = [...todos.slice(0, index), ...todos.slice(index + 1)];
 
       return {
