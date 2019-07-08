@@ -17,21 +17,21 @@ class App extends Component {
   };
 
   addTodo = todo => {
-    this.setState(state => {
+    this.setState(prevState => {
       const newTodo = {
         title: todo,
         completed: false,
       };
 
       return {
-        todos: [...state.todos, newTodo],
+        todos: [...prevState.todos, newTodo],
       };
     });
   };
 
   toggleTodo = togledTodo => {
-    this.setState(state => {
-      const { todos } = state;
+    this.setState(prevState => {
+      const { todos } = prevState;
       const index = todos.findIndex(({ title }) => title === togledTodo);
       const newTodo = { ...todos[index], completed: !todos[index].completed };
 
@@ -42,8 +42,8 @@ class App extends Component {
   };
 
   deleteTodo = deletedTodo => {
-    this.setState(state => {
-      const { todos } = state;
+    this.setState(prevState => {
+      const { todos } = prevState;
       const index = todos.findIndex(({ title }) => title === deletedTodo);
       const newTodos = [...todos.slice(0, index), ...todos.slice(index + 1)];
 
@@ -57,20 +57,20 @@ class App extends Component {
     this.setState({ filter });
   };
 
-  render() {
-    const { todos, filter } = this.state;
-    let todoList = [];
+  getTodos(todos, filter) {
     switch (filter) {
       case 'active':
-        todoList = todos.filter(({ completed }) => !completed);
-        break;
+        return todos.filter(({ completed }) => !completed);
       case 'completed':
-        todoList = todos.filter(({ completed }) => completed);
-        break;
+        return todos.filter(({ completed }) => completed);
       default:
-        todoList = [...todos];
+        return todos;
     }
-    const length = todoList.length;
+  }
+
+  render() {
+    const { todos, filter } = this.state;
+    const todoList = this.getTodos(todos, filter);
 
     return (
       <section className="todoapp">
@@ -78,16 +78,9 @@ class App extends Component {
         <section className="main">
           <input id="toggle-all" className="toggle-all" type="checkbox" />
           <label htmlFor="toggle-all">Mark all as complete</label>
-          <TodoList
-            todos={todoList}
-            filter={filter}
-            length={length}
-            deleteTodo={this.deleteTodo}
-            toggleTodo={this.toggleTodo}
-            updateLength={this.updateLenght}
-          />
+          <TodoList todos={todoList} deleteTodo={this.deleteTodo} toggleTodo={this.toggleTodo} />
         </section>
-        <Footer todosTotal={length} changeFilter={this.changeFilter} filter={filter} />
+        <Footer todosTotal={todoList.length} changeFilter={this.changeFilter} filter={filter} />
       </section>
     );
   }
