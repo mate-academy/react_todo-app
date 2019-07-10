@@ -12,23 +12,13 @@ class TodoApp extends React.Component {
     allTasksIsSelected: false,
   };
 
-  addTask = (event) => {
-    if (event.key && event.key !== 'Enter') {
-      return null;
-    }
-
-    const { target } = event;
-
-    if (!target.value) {
-      return null;
-    }
-
+  addTask = (task) => {
     this.setState((prevState) => {
       const key = prevState.currentTaskId;
 
       return {
         todos: [...prevState.todos, {
-          description: target.value,
+          description: task.value,
           id: key,
           completed: false,
           inputMode: false,
@@ -39,9 +29,8 @@ class TodoApp extends React.Component {
         }],
         currentTaskId: key + 1,
       };
-    }
-    , () => {
-      target.value = '';
+    }, () => {
+      task.value = '';
     });
   };
 
@@ -89,27 +78,21 @@ class TodoApp extends React.Component {
     });
   };
 
-  changeTaskDescription = (event, key) => {
-    if (event.key && event.key !== 'Enter') {
-      return null;
-    }
-
-    const { value } = event.target;
-
-    if (!value) {
-      this.removeTask(key);
+  changeTaskDescription = (description, taskId) => {
+    if (!description) {
+      this.removeTask(taskId);
     } else {
       this.setState((prevState) => {
         const task = prevState.todos
-          .find(currentTask => currentTask.id === key);
-        task.description = value;
+          .find(currentTask => currentTask.id === taskId);
+        task.description = description;
 
         return {
           todos: prevState.todos,
         };
-      }, () => this.toggleTaskProp(key, 'inputMode'));
+      });
     }
-  }
+  };
 
   toggleTaskProp(key, prop) {
     this.setState((prevState) => {

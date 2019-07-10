@@ -1,34 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import TaskInput from './TaskInput';
 
 class Task extends React.PureComponent {
-  componentDidUpdate() {
-    if (this.editInput) {
-      this.editInput.focus();
-    }
-  }
+  state = {
+    inputMode: false,
+  };
+
+  toggleInputMode = () => {
+    this.setState(prevState => ({
+      inputMode: !prevState.inputMode,
+    }));
+  };
 
   render() {
     const {
       completed,
       description,
       toggleStatus,
-      inputMode,
-      toggleInputMode,
       changeDescription,
       id,
       remove,
     } = this.props;
 
-    if (inputMode) {
+    if (this.state.inputMode) {
       return (
-        <input
-          ref={(input) => { this.editInput = input; }}
-          name="edit"
-          className="edit"
-          defaultValue={description}
-          onKeyPress={changeDescription}
-          onBlur={changeDescription}
+        <TaskInput
+          toggleInputMode={this.toggleInputMode}
+          description={description}
+          changeDescription={changeDescription}
+          taskKey={id}
         />
       );
     }
@@ -45,8 +46,7 @@ class Task extends React.PureComponent {
           />
           <label
             htmlFor={`todo-${id}`}
-            onDoubleClick={toggleInputMode}
-            onClick={event => event.preventDefault()}
+            onDoubleClick={this.toggleInputMode}
           >
             {description}
           </label>
@@ -65,7 +65,6 @@ Task.propTypes = {
   completed: PropTypes.bool.isRequired,
   description: PropTypes.string.isRequired,
   toggleStatus: PropTypes.func.isRequired,
-  inputMode: PropTypes.bool.isRequired,
   toggleInputMode: PropTypes.func.isRequired,
   changeDescription: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
