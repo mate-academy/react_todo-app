@@ -331,6 +331,10 @@ html .clear-completed:active {
   text-decoration: underline;
 }
 
+.clear-completed--disable {
+  display: none;
+}
+
 .info {
   margin: 65px auto 0;
   color: #bfbfbf;
