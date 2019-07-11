@@ -33,11 +33,10 @@ class App extends React.Component {
       filterValue = '';
     }
 
-    await this.setState({ filteredField: filterValue });
-    console.log(this.state.filteredField);
+    this.setState({ filteredField: filterValue });
   };
 
-  filter = (todosList) => {
+  filterTodos = (todosList) => {
     const { filteredField } = this.state;
     let status;
 
@@ -150,7 +149,7 @@ class App extends React.Component {
       filteredField,
     } = this.state;
 
-    const filteredTodosList = this.filter(todosList);
+    const filteredTodosList = this.filterTodos(todosList);
     const todosLeft = todosList.length - completedLength;
     const addTodo = this.addId(this.createTodo);
 

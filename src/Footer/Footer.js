@@ -14,7 +14,9 @@ class Footer extends React.Component {
       todosLeft,
       completedLength,
     } = this.props;
-    const className = completedLength ? '' : 'clear-completed--disable';
+
+    const clearBtnClassName = completedLength ? '' : 'clear-completed--disable';
+
     return (
       <footer className="footer">
         <span className="todo-count">
@@ -44,7 +46,7 @@ class Footer extends React.Component {
 
           <li>
             <a
-              onClick={e => changeFilter(e)}
+              onClick={changeFilter}
               href="#/completed"
               className={this.selectedPage('completed')}
             >
@@ -56,7 +58,7 @@ class Footer extends React.Component {
         <button
           onClick={deleteAllCompleted}
           type="button"
-          className={`clear-completed ${className}`}
+          className={`clear-completed ${clearBtnClassName}`}
         >
           Clear completed
         </button>

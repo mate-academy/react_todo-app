@@ -12,7 +12,7 @@ function TodoList(props) {
     completedLength,
   } = props;
 
-  const togleChecked = completedLength > 0;
+  const togleCheckbox = completedLength > 0;
 
   return (
 
@@ -22,7 +22,7 @@ function TodoList(props) {
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
-        checked={togleChecked}
+        checked={togleCheckbox}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -30,6 +30,7 @@ function TodoList(props) {
         {
           todosList.map(todo => (
             <TodoItem
+              key={todo.id}
               completeTodo={completeTodo}
               deleteTodo={deleteTodo}
               todo={todo}

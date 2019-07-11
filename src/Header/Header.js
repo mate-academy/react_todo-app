@@ -7,10 +7,8 @@ function Header({ addTodo, inputValue, changeInput }) {
       <h1>todos</h1>
 
       <input
-        onKeyDown={(e) => {
-          addTodo(e);
-        }}
-        onChange={e => changeInput(e)}
+        onKeyDown={addTodo}
+        onChange={changeInput}
         className="new-todo"
         placeholder="What needs to be done?"
         value={inputValue}
