@@ -200,7 +200,7 @@ class App extends React.Component {
                 />
               </footer>
             </div>)
-          : <span>''</span>}
+          : <span></span>}
       </section>
     );
   }
