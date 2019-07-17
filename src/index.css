@@ -5,6 +5,7 @@ body {
 }
 
 button {
+  cursor: pointer;
   margin: 0;
   padding: 0;
   border: 0;
@@ -108,6 +109,7 @@ body {
 
 .main {
   position: relative;
+  display: block;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
 }
@@ -190,6 +192,10 @@ body {
   appearance: none;
 }
 
+.toggle {
+  cursor: pointer;
+}
+
 .todo-list li .toggle {
   opacity: 0;
 }
@@ -257,6 +263,7 @@ body {
 }
 
 .footer {
+  display: block;
   color: #777;
   padding: 10px 15px;
   height: 20px;
@@ -318,6 +325,10 @@ body {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
+.clear-completed {
+  display: block;
+}
+
 .clear-completed,
 html .clear-completed:active {
   float: right;
@@ -352,6 +363,12 @@ html .clear-completed:active {
 .info a:hover {
   text-decoration: underline;
 }
+
+.completed-item {
+  color: #d9d9d9;
+  text-decoration: line-through;
+}
+
 
 /*
 	Hack to remove background from Mobile Safari.
