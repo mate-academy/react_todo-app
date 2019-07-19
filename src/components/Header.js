@@ -11,7 +11,6 @@ function Header(props) {
           className="new-todo"
           placeholder="What needs to be done?"
           name="title"
-
           onChange={props.handleType}
           value={props.todoValue}
         />

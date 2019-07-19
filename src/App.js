@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 class App extends React.Component {
   state = {
     todoItemsArr: [],
-    currentArr: [],
+    sortedTodoItemsArr: [],
     todoValue: '',
     todoEditValue: '',
     sortState: 'All',
@@ -28,75 +28,74 @@ class App extends React.Component {
   };
 
   handleAllCompleted = (event) => {
-    if (this.state.allCompleted) {
-      this.setState(prevState => ({
-        todoItemsArr: prevState.todoItemsArr.map((todo) => {
-          todo.completed = false;
-          return todo;
-        }),
-        allCompleted: !prevState.allCompleted,
-      }));
-    } else {
-      (
-        this.setState(prevState => ({
-          todoItemsArr: prevState.todoItemsArr.map((todo) => {
-            todo.completed = true;
-            return todo;
-          }),
-          allCompleted: !prevState.allCompleted,
-        }))
-      );
+    this.setState(prevState => ({
+      todoItemsArr: prevState.todoItemsArr.map(todo => (
+        { ...todo, completed: !prevState.allCompleted }
+      )),
+      allCompleted: !prevState.allCompleted,
+    }));
+  }
+
+  isExistingAndUnique = (value, arr) => {
+    if (value && !arr.some(item => item.title === value)) {
+      return true;
     }
+    return false;
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    if (event.target.editInput) {
-      if (this.state.todoEditValue
-        && !this.state.todoItemsArr
-          .some(item => (item.title === this.state.todoEditValue))) {
-        this.setState(prevState => ({
-          todoItemsArr: prevState.todoItemsArr.map((todo) => {
-            if (todo.id === prevState.editingId) {
-              todo.title = prevState.todoEditValue;
-            }
-
-            return todo;
-          }),
-
-          currentArr: [...prevState.todoItemsArr],
-          sortState: 'All',
-        }));
-      }
-    }
-
     const todoObj = {
       title: this.state.todoValue,
-      id: `${this.state.todoValue}-${this.state.todoItemsArr.length}`,
+      id: this.state.todoValue,
       completed: false,
     };
 
-    if (this.state.todoValue
-      && !this.state.todoItemsArr
-        .some(item => item.title === this.state.todoValue)) {
-      localStorage.setItem(
-        'array', JSON.stringify([...this.state.todoItemsArr, todoObj])
-      );
+    this.setState((prevState) => {
+      if (this.isExistingAndUnique(
+        prevState.todoValue,
+        prevState.todoItemsArr
+      )) {
+        return ({
+          todoItemsArr: [todoObj, ...prevState.todoItemsArr],
+          todoValue: '',
+          editingId: '',
+          sortState: 'All',
+        });
+      }
+      return ({
+        todoValue: prevState.todoValue,
+        editingId: '',
+      });
+    });
+  }
 
-      this.setState(prevState => ({
-        todoItemsArr: [...prevState.todoItemsArr, todoObj],
-        todoValue: '',
-        currentArr: [...prevState.todoItemsArr, todoObj],
+  handleSubmitEdit = (event) => {
+    event.preventDefault();
+
+    this.setState((prevState) => {
+      if (this.isExistingAndUnique(
+        prevState.todoEditValue,
+        prevState.todoItemsArr
+      )) {
+        return ({
+          todoItemsArr: prevState.todoItemsArr.map((todo) => {
+            if (todo.id === prevState.editingId) {
+              todo = { ...todo, title: prevState.todoEditValue };
+            }
+            return todo;
+          }),
+          todoEditValue: '',
+          editingId: '',
+          sortState: 'All',
+        });
+      }
+      return ({
+        todoEditValue: prevState.todoEditValue,
         editingId: '',
-        sortState: 'All',
-      }));
-    } else {
-      this.setState(prevState => ({
-        todoValue: prevState.value,
-        editingId: '',
-      }));
-    }
+      });
+    });
   }
 
   handleItem = (id, type) => {
@@ -105,62 +104,66 @@ class App extends React.Component {
         return (
           this.setState(prevState => ({
             todoItemsArr: prevState.todoItemsArr.filter(item => item.id !== id),
-            currentArr: prevState.todoItemsArr.filter(item => item.id !== id),
+            sortState: 'All',
           })));
 
       case 'completed':
         return (
           this.setState(prevState => ({
-            todoItemsArr: [...prevState.todoItemsArr].map((item) => {
-              item.id === id && (item.completed = !item.completed);
+            todoItemsArr: prevState.todoItemsArr.map((item) => {
+              item.id === id
+              && (item = { ...item, completed: !item.completed });
+
               return item;
             }),
+
+            sortState: 'All',
           })));
 
       default:
-        return this.state.currentArr;
+        return this.state.todoItemsArr;
     }
   }
 
   handleDestroyComleted = () => {
     this.setState(prevState => ({
       todoItemsArr: prevState.todoItemsArr.filter(item => !item.completed),
-      currentArr: prevState.todoItemsArr.filter(item => !item.completed),
+
+      allCompleted: false,
     }));
   }
 
   handleSort = (state) => {
-    switch (state) {
-      case 'Active':
-        return (
-          this.setState(prevState => ({
-            currentArr: [...prevState.todoItemsArr]
+    this.setState((prevState) => {
+      switch (state) {
+        case 'Active':
+          return ({
+            sortedTodoItemsArr: [...prevState.todoItemsArr]
               .filter(item => !item.completed),
             sortState: 'Active',
-          })));
+          });
 
-      case 'Completed':
-        return (
-          this.setState(prevState => ({
-            currentArr: [...prevState.todoItemsArr]
+        case 'Completed':
+          return ({
+            sortedTodoItemsArr: [...prevState.todoItemsArr]
               .filter(item => item.completed),
             sortState: 'Completed',
-          })));
+          });
 
-      default:
-        return (
-          this.setState(prevState => ({
-            currentArr: prevState.todoItemsArr,
+        default:
+          return ({
+            sortedTodoItemsArr: prevState.todoItemsArr,
             sortState: 'All',
-          })));
-    }
+          });
+      }
+    });
   }
 
   handleEdit = (id) => {
     this.setState(prevState => ({
       editingId: id,
-      todoEditValue: prevState.currentArr
-        .filter(todo => todo.id === id).map(todo => todo.title),
+      todoEditValue: prevState.todoItemsArr
+        .find(todo => todo.id === id).title,
     }));
   }
 
@@ -174,7 +177,9 @@ class App extends React.Component {
         />
 
         <Main
-          currentArr={this.state.currentArr}
+          sortState={this.state.sortState}
+          sortedTodoItemsArr={this.state.sortedTodoItemsArr}
+          todoItemsArr={this.state.todoItemsArr}
 
           handleAllCompleted={this.handleAllCompleted}
           allCompleted={this.state.allCompleted}
@@ -182,7 +187,7 @@ class App extends React.Component {
           handleEdit={this.handleEdit}
 
           handleTypeEdit={this.handleTypeEdit}
-          handleSubmit={this.handleSubmit}
+          handleSubmitEdit={this.handleSubmitEdit}
 
           todoEditValue={this.state.todoEditValue}
           editingId={this.state.editingId}

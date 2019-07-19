@@ -22,7 +22,7 @@ function TodoItem(props) {
           type="checkbox"
           className="toggle"
           checked={props.todo.completed}
-          onClick={() => props.handleItem(props.todo.id, 'completed')}
+          onChange={() => props.handleItem(props.todo.id, 'completed')}
         />
 
         <label
@@ -32,7 +32,7 @@ function TodoItem(props) {
           {props.todo.title}
         </label>
 
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={props.handleSubmitEdit}>
           <input
             name="editInput"
             className="edit"
@@ -63,7 +63,7 @@ TodoItem.propTypes = {
   handleEdit: PropTypes.func.isRequired,
 
   todoEditValue: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  handleSubmitEdit: PropTypes.func.isRequired,
   handleTypeEdit: PropTypes.func.isRequired,
   editingId: PropTypes.string.isRequired,
 };

@@ -1,22 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TodoItem from './TodoItem';
+import TodoItems from './TodoItems';
 
 function Main(props) {
-  const todoItems = props.currentArr.map(todo => (
-    <TodoItem
-      todo={todo}
-      key={todo.id}
+  const todoItems = (
+    <TodoItems
+      sortState={props.sortState}
+      todoItemsArr={props.todoItemsArr}
+      sortedTodoItemsArr={props.sortedTodoItemsArr}
 
       handleItem={props.handleItem}
       handleEdit={props.handleEdit}
 
       todoEditValue={props.todoEditValue}
-      handleSubmit={props.handleSubmit}
+      handleSubmitEdit={props.handleSubmitEdit}
       handleTypeEdit={props.handleTypeEdit}
       editingId={props.editingId}
     />
-  ));
+  );
 
   return (
     <section className="main" style={{ display: 'block' }}>
@@ -37,14 +38,16 @@ function Main(props) {
 }
 
 Main.propTypes = {
-  currentArr: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sortedTodoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sortState: PropTypes.string.isRequired,
   handleItem: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleAllCompleted: PropTypes.func.isRequired,
   allCompleted: PropTypes.bool.isRequired,
 
   handleTypeEdit: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  handleSubmitEdit: PropTypes.func.isRequired,
 
   todoEditValue: PropTypes.string.isRequired,
   editingId: PropTypes.string.isRequired,
