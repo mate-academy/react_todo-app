@@ -1,38 +1,32 @@
 import React from 'react';
 import Todo from './Todo';
 
-/*
-const myStorage = window.localStorage;
-
-window.onbeforeunload = closingCode;
-function closingCode() {
-  // do something...
-  return null;
-}
-
- */
-
 class App extends React.Component {
   state = {
     allToggled: false,
     showContent: false,
+    isDoneTodoes: false,
     value: '',
     todoes: [],
   }
 
-  /*   componentDidMount() {
-      const myLocaleStorage = myStorage.getItem('todoes');
+  handleFilterClear = () => {
+    this.setState(prevState => ({
+      todoes: [...prevState.todoes],
+    }));
+  }
 
-      if (myLocaleStorage === 'undefined') {
-        this.setState({
-          todoes: JSON.parse(myLocaleStorage),
-        })
-      }
-    }
+  handleFilterCompleted = () => {
+    this.setState(prevState => ({
+      todoes: [...prevState.todoes.filter(todo => todo.isDone)],
+    }));
+  }
 
-    componentWillUnmount() {
-      myStorage.setItem('todoes', JSON.stringify(this.state.todoes));
-    } */
+  handleFilterActive = () => {
+    this.setState(prevState => ({
+      todoes: [...prevState.todoes.filter(todo => !todo.isDone)],
+    }));
+  }
 
   toggle = (id) => {
     this.setState(prevState => ({
@@ -46,6 +40,7 @@ class App extends React.Component {
           isDone: !todo.isDone,
         };
       }),
+      isDoneTodoes: !prevState.todoes.filter(todo => todo.isDone).length > 0,
     }));
   }
 
@@ -65,13 +60,36 @@ class App extends React.Component {
         };
       }),
       allToggled: !prevState.allToggled,
+      isDoneTodoes: !prevState.todoes.filter(todo => todo.isDone).length > 0,
     }));
+  }
+
+  addTask = (event) => {
+    if (event.key === 'Enter' && event.target.value.length > 0) {
+      this.setState(prevState => ({
+        todoes: [...prevState.todoes, {
+          id: Date.now(),
+          title: prevState.value,
+          isDone: false,
+        }],
+        value: '',
+        showContent: true,
+      }));
+    }
   }
 
   destroy = (id) => {
     this.setState(prevState => ({
       todoes: prevState.todoes.filter(todo => todo.id !== id),
       showContent: !(prevState.todoes.length < 2),
+      isDoneTodoes: !prevState.todoes.filter(todo => todo.isDone).length > 0,
+    }));
+  }
+
+  destroyCompleted = () => {
+    this.setState(prevState => ({
+      todoes: prevState.todoes.filter(todo => todo.isDone === false),
+      isDoneTodoes: false,
     }));
   }
 
@@ -81,26 +99,15 @@ class App extends React.Component {
     });
   }
 
-  /*   handleFilterDone = () => {
-      this.setState(prevState => ({
-        todoes: prevState.todoes.filter(todo => (
-          todo.isDone
-        )),
-      }))
-    }
-
-    handleFilterNotDone = () => {
-      this.setState(prevState => ({
-        todoes: prevState.todoes.filter(todo => (
-          !todo.isDone
-        )),
-      }))
-    }
-   */
-
   render() {
-    const { showContent, todoes, value } = this.state;
+    const {
+      showContent,
+      isDoneTodoes,
+      todoes,
+      value,
+    } = this.state;
     const resultingList = todoes.length !== 0
+
       ? todoes.map(todo => (
         <Todo todo={todo} toggle={this.toggle} destroy={this.destroy} />
       ))
@@ -116,27 +123,15 @@ class App extends React.Component {
               onChange={this.handleChange}
               value={value}
               placeholder="What needs to be done?"
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  this.setState(prevState => ({
-                    todoes: [...prevState.todoes, {
-                      id: Date.now(),
-                      title: prevState.value,
-                      isDone: false,
-                    }],
-                    value: '',
-                    showContent: true,
-                  }));
-                }
-              }}
+              onKeyDown={this.addTask}
             />
 
           </form>
 
         </header>
 
-        {showContent === true
-          ? (
+        {showContent
+          && (
             <div className="content-group">
 
               <section className="main">
@@ -148,6 +143,7 @@ class App extends React.Component {
                 />
                 <label
                   htmlFor="toggle-all"
+                  id="label"
                 >
                   Mark all as complete
                 </label>
@@ -169,6 +165,7 @@ class App extends React.Component {
                     <a
                       href="#/"
                       className="selected"
+                      onClick={this.handleFilterClear}
                     >
                       All
                     </a>
@@ -177,7 +174,7 @@ class App extends React.Component {
                   <li>
                     <a
                       href="#/active"
-                      onClick={() => this.handleFilterNotDone}
+                      onClick={this.handleFilterActive}
                     >
                       Active
                     </a>
@@ -186,21 +183,25 @@ class App extends React.Component {
                   <li>
                     <a
                       href="#/completed"
-                      onClick={() => this.handleFilterDone}
+                      onClick={this.handleFilterCompleted}
                     >
                       Completed
                     </a>
                   </li>
                 </ul>
+                {isDoneTodoes && (
+                  <button
+                    type="button"
+                    onClick={this.destroyCompleted}
+                    className="clear-completed"
+                  >
+                    Clear completed
+                  </button>
+                )}
 
-                <button
-                  type="button"
-                  className="clear-completed"
-                  style={{ display: 'block' }}
-                />
               </footer>
             </div>)
-          : <span></span>}
+        }
       </section>
     );
   }
