@@ -11,16 +11,16 @@ const TodoItems = (props) => {
 
   const todoItem = currentArr.map(todo => (
     <TodoItem
+      todoItemsArr={props.todoItemsArr}
       todo={todo}
       key={todo.id}
 
-      handleItem={props.handleItem}
+      handleCompletedOrDestroy={props.handleCompletedOrDestroy}
       handleEdit={props.handleEdit}
 
-      todoEditValue={props.todoEditValue}
-      handleSubmitEdit={props.handleSubmitEdit}
       handleTypeEdit={props.handleTypeEdit}
       editingId={props.editingId}
+      rewriteExistingTodo={props.rewriteExistingTodo}
     />
   ));
 
@@ -28,15 +28,10 @@ const TodoItems = (props) => {
 };
 
 TodoItems.propTypes = {
+  todoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
   sortedTodoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleItem: PropTypes.func.isRequired,
-  handleEdit: PropTypes.func.isRequired,
-
-  handleTypeEdit: PropTypes.func.isRequired,
-  handleSubmitEdit: PropTypes.func.isRequired,
-
-  todoEditValue: PropTypes.string.isRequired,
-  editingId: PropTypes.string.isRequired,
+  handleCompletedOrDestroy: PropTypes.func.isRequired,
+  rewriteExistingTodo: PropTypes.func.isRequired,
 };
 
 export default TodoItems;

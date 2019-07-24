@@ -1,55 +1,107 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function TodoItem(props) {
-  let classes = ' ';
-
-  if (props.todo.completed) {
-    classes = 'completed';
+class TodoItem extends React.Component {
+  state={
+    todoEditValue: '',
+    editingId: '',
   }
 
-  if (props.todo.id === props.editingId) {
-    classes += ' editing';
+  handleEdit = (id) => {
+    this.setState({
+      editingId: id,
+      todoEditValue: this.props.todo.title,
+    });
   }
 
-  return (
-    <li
-      onDoubleClick={() => props.handleEdit(props.todo.id)}
-      className={classes}
-    >
-      <div>
-        <input
-          type="checkbox"
-          className="toggle"
-          checked={props.todo.completed}
-          onChange={() => props.handleItem(props.todo.id, 'completed')}
-        />
+  handleTypeEdit = (event) => {
+    this.setState({
+      todoEditValue: event.target.value,
+    });
+  };
 
-        <label
-          className="view"
-          htmlFor="todo-1"
-        >
-          {props.todo.title}
-        </label>
+  isExistingAndUnique = (value, arr) => {
+    if (value && !arr.some(item => item.title === value)) {
+      return true;
+    }
+    return false;
+  }
 
-        <form onSubmit={props.handleSubmitEdit}>
+  handleSubmitEdit = (event) => {
+    event.preventDefault();
+
+    this.setState((prevState) => {
+      const { todoEditValue, editingId } = prevState;
+      const { todoItemsArr, rewriteExistingTodo } = this.props;
+
+      if (this.isExistingAndUnique(todoEditValue, todoItemsArr)) {
+        rewriteExistingTodo(todoEditValue, editingId);
+
+        return ({
+          todoEditValue: '',
+          editingId: '',
+        });
+      }
+
+      return ({
+        todoEditValue: prevState.todoEditValue,
+        editingId: '',
+      });
+    });
+  }
+
+  render() {
+    const { todo, handleCompletedOrDestroy } = this.props;
+    const { editingId, todoEditValue } = this.state;
+    let classes = ' ';
+
+    if (todo.completed) {
+      classes = 'completed';
+    }
+
+    if (todo.id === editingId) {
+      classes += ' editing';
+    }
+
+    return (
+      <li
+        onDoubleClick={() => this.handleEdit(todo.id)}
+        className={classes}
+      >
+        <div>
           <input
-            name="editInput"
-            className="edit"
-            type="text"
-            value={props.todoEditValue}
-            onChange={props.handleTypeEdit}
+            type="checkbox"
+            className="toggle"
+            checked={todo.completed}
+            onChange={() => handleCompletedOrDestroy(todo.id, 'completed')}
           />
-        </form>
 
-        <button
-          onClick={() => props.handleItem(props.todo.id, 'destroy')}
-          type="button"
-          className="destroy"
-        />
-      </div>
-    </li>
-  );
+          <label
+            className="view"
+            htmlFor="todo-1"
+          >
+            {todo.title}
+          </label>
+
+          <form onSubmit={this.handleSubmitEdit}>
+            <input
+              name="editInput"
+              className="edit"
+              type="text"
+              value={todoEditValue}
+              onChange={this.handleTypeEdit}
+            />
+          </form>
+
+          <button
+            onClick={() => handleCompletedOrDestroy(todo.id, 'destroy')}
+            type="button"
+            className="destroy"
+          />
+        </div>
+      </li>
+    );
+  }
 }
 
 TodoItem.propTypes = {
@@ -59,13 +111,9 @@ TodoItem.propTypes = {
     completed: PropTypes.bool,
   }).isRequired,
 
-  handleItem: PropTypes.func.isRequired,
-  handleEdit: PropTypes.func.isRequired,
-
-  todoEditValue: PropTypes.string.isRequired,
-  handleSubmitEdit: PropTypes.func.isRequired,
-  handleTypeEdit: PropTypes.func.isRequired,
-  editingId: PropTypes.string.isRequired,
+  todoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleCompletedOrDestroy: PropTypes.func.isRequired,
+  rewriteExistingTodo: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

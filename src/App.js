@@ -8,24 +8,9 @@ class App extends React.Component {
   state = {
     todoItemsArr: [],
     sortedTodoItemsArr: [],
-    todoValue: '',
-    todoEditValue: '',
     sortState: 'All',
-    editingId: '',
     allCompleted: false,
   }
-
-  handleType = (event) => {
-    this.setState({
-      todoValue: event.target.value,
-    });
-  };
-
-  handleTypeEdit = (event) => {
-    this.setState({
-      todoEditValue: event.target.value,
-    });
-  };
 
   handleAllCompleted = (event) => {
     this.setState(prevState => ({
@@ -36,69 +21,25 @@ class App extends React.Component {
     }));
   }
 
-  isExistingAndUnique = (value, arr) => {
-    if (value && !arr.some(item => item.title === value)) {
-      return true;
-    }
-    return false;
+  writeNewTodo = (todoObj) => {
+    this.setState(prevState => ({
+      todoItemsArr: [todoObj, ...prevState.todoItemsArr],
+      sortState: 'All',
+    }));
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    const todoObj = {
-      title: this.state.todoValue,
-      id: this.state.todoValue,
-      completed: false,
-    };
-
-    this.setState((prevState) => {
-      if (this.isExistingAndUnique(
-        prevState.todoValue,
-        prevState.todoItemsArr
-      )) {
-        return ({
-          todoItemsArr: [todoObj, ...prevState.todoItemsArr],
-          todoValue: '',
-          editingId: '',
-          sortState: 'All',
-        });
-      }
-      return ({
-        todoValue: prevState.todoValue,
-        editingId: '',
-      });
-    });
+  rewriteExistingTodo = (title, id) => {
+    this.setState(prevState => ({
+      todoItemsArr: prevState.todoItemsArr.map((todo) => {
+        if (todo.id === id) {
+          todo = { ...todo, title };
+        }
+        return todo;
+      }),
+    }));
   }
 
-  handleSubmitEdit = (event) => {
-    event.preventDefault();
-
-    this.setState((prevState) => {
-      if (this.isExistingAndUnique(
-        prevState.todoEditValue,
-        prevState.todoItemsArr
-      )) {
-        return ({
-          todoItemsArr: prevState.todoItemsArr.map((todo) => {
-            if (todo.id === prevState.editingId) {
-              todo = { ...todo, title: prevState.todoEditValue };
-            }
-            return todo;
-          }),
-          todoEditValue: '',
-          editingId: '',
-          sortState: 'All',
-        });
-      }
-      return ({
-        todoEditValue: prevState.todoEditValue,
-        editingId: '',
-      });
-    });
-  }
-
-  handleItem = (id, type) => {
+  handleCompletedOrDestroy = (id, type) => {
     switch (type) {
       case 'destroy':
         return (
@@ -127,7 +68,9 @@ class App extends React.Component {
 
   handleDestroyComleted = () => {
     this.setState(prevState => ({
-      todoItemsArr: prevState.todoItemsArr.filter(item => !item.completed),
+      todoItemsArr: prevState.todoItemsArr.filter(item => (
+        !item.completed
+      )),
 
       allCompleted: false,
     }));
@@ -159,21 +102,12 @@ class App extends React.Component {
     });
   }
 
-  handleEdit = (id) => {
-    this.setState(prevState => ({
-      editingId: id,
-      todoEditValue: prevState.todoItemsArr
-        .find(todo => todo.id === id).title,
-    }));
-  }
-
   render() {
     return (
       <section className="todoapp">
         <Header
-          handleType={this.handleType}
-          handleSubmit={this.handleSubmit}
-          todoValue={this.state.todoValue}
+          writeNewTodo={this.writeNewTodo}
+          todoItemsArr={this.state.todoItemsArr}
         />
 
         <Main
@@ -183,14 +117,11 @@ class App extends React.Component {
 
           handleAllCompleted={this.handleAllCompleted}
           allCompleted={this.state.allCompleted}
-          handleItem={this.handleItem}
-          handleEdit={this.handleEdit}
-
-          handleTypeEdit={this.handleTypeEdit}
-          handleSubmitEdit={this.handleSubmitEdit}
+          handleCompletedOrDestroy={this.handleCompletedOrDestroy}
 
           todoEditValue={this.state.todoEditValue}
           editingId={this.state.editingId}
+          rewriteExistingTodo={this.rewriteExistingTodo}
         />
 
         <Footer
