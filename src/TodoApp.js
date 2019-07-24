@@ -9,7 +9,7 @@ class TodoApp extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const { onSubmit } = this.state.props;
+    const { onSubmit } = this.props;
 
     onSubmit(this.state.title);
 
@@ -50,7 +50,7 @@ class TodoApp extends React.Component {
     }
 }
 
-TodoApp.protoType = {
+TodoApp.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
