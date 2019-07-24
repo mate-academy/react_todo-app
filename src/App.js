@@ -5,6 +5,7 @@ import Todo from './Todo';
 class App extends React.Component {
   state = {
     todos: [],
+    completed: false,
   }
 
   addTodo = (title) => {
@@ -18,10 +19,38 @@ class App extends React.Component {
         },
       ],
 
+      completed: prevState.completed,
     }));
   };
 
+  handleToggle = (id) => {
+    this.setState((prevState) => {
+      const task = prevState.todos.find(todo => todo.id === id);
+      task.completed = !task.completed;
+
+      return {
+        todos: prevState.todos,
+      };
+    });
+  }
+
+  handleChackAll = (event) => {
+    const isTodoChecked = event.target.checked;
+
+    this.setState((prevState) => {
+      const allCheckedTodos = [
+        ...prevState.todos,
+      ];
+      allCheckedTodos.forEach(todo => (todo.completed = isTodoChecked));
+
+      return {
+        todos: allCheckedTodos,
+      };
+    });
+  }
+
   render() {
+    const { todos } = this.state;
     return (
       <section className="todoapp">
         <header className="header">
@@ -37,10 +66,11 @@ class App extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            {this.state.todos.map(todo => (
+            {todos.map(todo => (
               <Todo
                 key={todo.id}
                 item={todo}
+                toggle={this.handleToggle}
               />
             ))}
           </ul>
@@ -48,16 +78,31 @@ class App extends React.Component {
 
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
-             items left
+            {`${todos.filter(todo => (!todo.completed)).length}
+            items left`}
           </span>
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected">All</a>
+              <a
+                href="#/"
+                className="selected"
+              >
+                Active
+              </a>
             </li>
 
             <li>
-              <a href="#/active">Active</a>
+              <a href="#/active">
+                <input
+                  type="checkbox"
+                  className="toggle"
+                  id="todo-1"
+                  checked={!(todos.some(todo => !todo.completed))}
+                  onChange={this.handleChackAll}
+                />
+                  All
+              </a>
             </li>
 
             <li>

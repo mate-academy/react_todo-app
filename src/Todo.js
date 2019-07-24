@@ -1,23 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoList = ({ item }) => {
-  const { title, completed } = item;
+const Todo = ({ item, toggle }) => {
+  const { id, title, completed } = item;
+
   return (
     <li className="todo">
       <div className="view">
-        <p>{title}</p>
+        <input
+          type="checkbox"
+          className="toggle"
+          id={id}
+          onClick={() => toggle(id)}
+          checked={completed}
+        />
+        <label htmlFor="todo-2">{title}</label>
+        <button type="button" className="destroy" />
         <p>{completed}</p>
       </div>
     </li>
   );
 };
 
-TodoList.propTypes = {
+Todo.propTypes = {
   item: PropTypes.shape({
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
+    id: PropTypes.number,
   }).isRequired,
+  toggle: PropTypes.func,
 };
 
-export default TodoList;
+Todo.defaultProps = {
+  toggle: null,
+};
+
+export default Todo;
