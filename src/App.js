@@ -27,7 +27,6 @@ class App extends React.Component {
         <header className="header">
           <h1>todos</h1>
           <TodoApp
-            listOfTodos={this.state.todos}
             onSubmit={this.addTodo}
           />
 
