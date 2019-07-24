@@ -62,7 +62,13 @@ class App extends React.Component {
         </header>
 
         <section className="main" style={{ display: 'block' }}>
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            className="toggle-all"
+            id="toggle-all"
+            checked={!(todos.some(todo => !todo.completed))}
+            onChange={this.handleChackAll}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
@@ -83,6 +89,7 @@ class App extends React.Component {
           </span>
 
           <ul className="filters">
+            {/* <TodosFilter /> */}
             <li>
               <a
                 href="#/"
@@ -94,13 +101,6 @@ class App extends React.Component {
 
             <li>
               <a href="#/active">
-                <input
-                  type="checkbox"
-                  className="toggle"
-                  id="todo-1"
-                  checked={!(todos.some(todo => !todo.completed))}
-                  onChange={this.handleChackAll}
-                />
                   All
               </a>
             </li>
