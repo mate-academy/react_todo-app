@@ -73,6 +73,7 @@ class App extends React.Component {
       )),
 
       allCompleted: false,
+      sortState: 'All',
     }));
   }
 
