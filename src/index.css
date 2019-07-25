@@ -216,10 +216,10 @@ body {
   transition: color 0.4s;
 }
 
-.todo-list li.completed label {
+/* .todo-list li.completed label {
   color: #d9d9d9;
   text-decoration: line-through;
-}
+} */
 
 .todo-list li .destroy {
   display: none;
@@ -254,6 +254,11 @@ body {
 
 .todo-list li.editing:last-child {
   margin-bottom: -1px;
+}
+
+.todo--completed {
+  color: #d9d9d9;
+  text-decoration: line-through;
 }
 
 .footer {
@@ -314,7 +319,7 @@ body {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.filters li a.selected:focus {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
