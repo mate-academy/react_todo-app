@@ -8,8 +8,6 @@ import Footer from './components/Footer';
 class App extends React.Component {
   state = {
     todos: [],
-    activ: 0,
-    completed: 0,
     filter: 'all',
     toggleAll: false,
   }
@@ -26,68 +24,55 @@ class App extends React.Component {
           complete: 'activ',
         },
       ],
-      activ: prevState.activ + 1,
     }));
   }
 
   changeStatus = (id) => {
     const newTodos = [...this.state.todos];
-    const { activ, toggleAll } = this.state;
-    let newActiv = 0;
-    let newCompleted = 0;
+    const { toggleAll } = this.state;
     let newToggleAll = false;
     const index = newTodos.findIndex(todo => todo.id === id);
     const todo = newTodos[index];
 
     if (todo.complete === 'activ') {
       todo.complete = 'completed';
-      newActiv = -1;
-      newCompleted = 1;
     } else {
       todo.complete = 'activ';
-      newActiv = 1;
-      newCompleted = -1;
     }
 
     newTodos.splice(index, 1, todo);
 
-    if (activ + newActiv === 0 && toggleAll === false) {
+    const countOfActiv = newTodos
+      .filter(currentTodo => currentTodo.complete === 'activ')
+      .length;
+
+    if (countOfActiv === 0 && toggleAll === false) {
       newToggleAll = true;
     }
 
-    this.setState(prevState => ({
+    this.setState({
       todos: [...newTodos],
-      activ: prevState.activ + newActiv,
-      completed: prevState.completed + newCompleted,
       toggleAll: newToggleAll,
-    }));
+    });
   }
 
   changeAllStatus = () => {
     let newTodos = [...this.state.todos];
-    let newActiv = 0;
-    let newCompleted = 0;
 
     if (!this.state.toggleAll) {
       newTodos = newTodos.map(todo => ({
         ...todo,
         complete: 'completed',
       }));
-      newActiv = 0;
-      newCompleted = newTodos.length;
     } else {
       newTodos = newTodos.map(todo => ({
         ...todo,
         complete: 'activ',
       }));
-      newActiv = newTodos.length;
-      newCompleted = 0;
     }
 
     this.setState(prevState => ({
       todos: [...newTodos],
-      activ: newActiv,
-      completed: newCompleted,
       toggleAll: !prevState.toggleAll,
     }));
   }
@@ -95,28 +80,18 @@ class App extends React.Component {
   handleDestroy = (id) => {
     const newTodos = [...this.state.todos];
     const index = newTodos.findIndex(todo => todo.id === id);
-    let newActiv = 0;
-    let newCompleted = 0;
-
-    if (newTodos[index].complete === 'activ') {
-      newActiv = -1;
-    } else {
-      newCompleted = -1;
-    }
 
     newTodos.splice(index, 1);
 
-    this.setState(prevState => ({
+    this.setState({
       todos: [...newTodos],
-      activ: prevState.activ + newActiv,
-      completed: prevState.completed + newCompleted,
-    }));
+    });
   }
 
   clearCompleted = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.complete === 'activ'),
-      completed: 0,
+      toggleAll: false,
     }));
   }
 
@@ -128,7 +103,7 @@ class App extends React.Component {
 
   render() {
     const {
-      todos, activ, completed, filter, toggleAll,
+      todos, filter, toggleAll,
     } = this.state;
     const filtredTodos = {
       activ: todos.filter(todo => todo.complete === 'activ'),
@@ -152,8 +127,9 @@ class App extends React.Component {
               />
 
               <Footer
-                activ={activ}
-                completed={completed}
+                activ={filtredTodos.activ.length}
+                completed={filtredTodos.completed.length}
+                filter={filter}
                 onFilter={this.handleFilter}
                 onClear={this.clearCompleted}
               />
