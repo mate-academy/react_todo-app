@@ -370,6 +370,10 @@ html .clear-completed:active {
   text-decoration: line-through;
 }
 
+.input-button {
+  display: none;
+}
+
 
 /*
 	Hack to remove background from Mobile Safari.

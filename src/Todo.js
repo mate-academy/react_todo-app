@@ -19,7 +19,16 @@ const Todo = ({ todo, toggle, destroy }) => {
           className={isDone && 'completed-item'}
         >
           {title}
+
+          <input
+            type="checkbox"
+            className="toggle"
+            id={id}
+            onClick={() => toggle(id)}
+            checked={isDone}
+          />
         </label>
+
         <button
           type="button"
           className="destroy"
@@ -46,31 +55,3 @@ Todo.defaultProps = {
 };
 
 export default Todo;
-
-/*
-
-Not yet implemented
-
-const myStorage = window.localStorage;
-
-window.onbeforeunload = closingCode;
-function closingCode() {
-  // do something...
-  return null;
-}
-
- */
-
-/*   componentDidMount() {
-   const myLocaleStorage = myStorage.getItem('todoes');
-
-   if (myLocaleStorage === 'undefined') {
-     this.setState({
-       todoes: JSON.parse(myLocaleStorage),
-     })
-   }
- }
-
- componentWillUnmount() {
-   myStorage.setItem('todoes', JSON.stringify(this.state.todoes));
- } */
