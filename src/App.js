@@ -1,25 +1,8 @@
 import React from 'react';
 import TodoApp from './TodoApp';
 import Todo from './Todo';
-
-const getSortFied = (todos, sortField) => {
-  if (sortField === 'All') {
-    console.log(sortField);
-    return todos;
-  }
-
-  const callBackSort = {
-    Active: a => !a.completed,
-    Completed: a => a.completed,
-  };
-
-  console.log(todos);
-  console.log(sortField);
-
-  const callBack = callBackSort[sortField];
-
-  return todos.filter(callBack);
-};
+import TodosFilter from './TodosFilter';
+import getSortFied from './getSortFied';
 
 class App extends React.Component {
   state = {
@@ -119,34 +102,9 @@ class App extends React.Component {
           </span>
 
           <ul className="filters">
-            {/* <TodosFilter /> */}
-            <li>
-              <a
-                onClick={() => this.handleFilterBy('Active')}
-                href="#/"
-                className="selected"
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                onClick={() => this.handleFilterBy('All')}
-              >
-                  All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                onClick={() => this.handleFilterBy('Completed')}
-              >
-                Completed
-              </a>
-            </li>
+            <TodosFilter
+              handleFilterBy={this.handleFilterBy}
+            />
           </ul>
 
           <button
