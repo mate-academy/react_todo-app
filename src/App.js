@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+import Header from './components/Header';
+import TodoList from './components/TodoList';
+import Footer from './components/Footer';
 
 class App extends React.Component {
   state = {
@@ -8,36 +11,23 @@ class App extends React.Component {
     activ: 0,
     completed: 0,
     filter: 'all',
-    newTodo: '',
     toggleAll: false,
   }
 
-  handleChange = (event) => {
-    const { name, value } = event.target;
+  handleSubmit = (newTodo) => {
+    const currentDate = new Date();
 
-    this.setState({
-      [name]: value,
-    });
-  }
-
-  handleSubmit = (event) => {
-    if (event.key === 'Enter') {
-      const currentDate = new Date();
-
-      this.setState(prevState => ({
-        todos: [
-          ...prevState.todos,
-          {
-            id: currentDate.getTime(),
-            text: prevState.newTodo,
-            complete: 'activ',
-          },
-        ],
-        newTodo: '',
-        activ: prevState.activ + 1,
-      }
-      ));
-    }
+    this.setState(prevState => ({
+      todos: [
+        ...prevState.todos,
+        {
+          id: currentDate.getTime(),
+          text: newTodo,
+          complete: 'activ',
+        },
+      ],
+      activ: prevState.activ + 1,
+    }));
   }
 
   changeStatus = (id) => {
@@ -138,7 +128,7 @@ class App extends React.Component {
 
   render() {
     const {
-      newTodo, todos, activ, completed, filter, toggleAll,
+      todos, activ, completed, filter, toggleAll,
     } = this.state;
     const filtredTodos = {
       activ: todos.filter(todo => todo.complete === 'activ'),
@@ -146,111 +136,31 @@ class App extends React.Component {
       all: todos,
     };
 
-    let styleList = '';
-
-    (todos.length !== 0) ? styleList = 'block' : styleList = 'none';
-
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
+        <Header onSubmit={this.handleSubmit} />
 
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            name="newTodo"
-            value={newTodo}
-            onChange={this.handleChange}
-            onKeyUp={this.handleSubmit}
-          />
-        </header>
+        {(todos.length !== 0)
+          ? (
+            <>
+              <TodoList
+                filtredTodos={filtredTodos[filter]}
+                onChangeStatus={this.changeStatus}
+                onDestroyTodo={this.handleDestroy}
+                toggleAll={toggleAll}
+                onChangeAllStatus={this.changeAllStatus}
+              />
 
-        <section className="main" style={{ display: styleList }}>
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            checked={toggleAll}
-            onChange={this.changeAllStatus}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <ul className="todo-list">
-            {
-              filtredTodos[filter].map(todo => (
-                <li
-                  className={
-                    todo.complete === 'completed' ? 'completed' : undefined
-                  }
-                  key={todo.id}
-                >
-                  <div className="view">
-                    <input
-                      type="checkbox"
-                      className="toggle"
-                      id={`todo-${todo.id}`}
-                      checked={todo.complete === 'completed'}
-                      onChange={() => this.changeStatus(todo.id)}
-                    />
-                    <label htmlFor={`todo-${todo.id}`}>{todo.text}</label>
-                    <button
-                      type="button"
-                      className="destroy"
-                      onClick={() => this.handleDestroy(todo.id)}
-                    />
-                  </div>
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-
-        <footer className="footer" style={{ display: styleList }}>
-          <span className="todo-count">
-            {`${activ} items left`}
-          </span>
-
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className={filter === 'all' ? 'selected' : undefined}
-                onClick={() => this.handleFilter('all')}
-              >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                className={filter === 'activ' ? 'selected' : undefined}
-                onClick={() => this.handleFilter('activ')}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                className={filter === 'completed' ? 'selected' : undefined}
-                onClick={() => this.handleFilter('completed')}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
-
-          <button
-            type="button"
-            className="clear-completed"
-            style={{ display: 'block' }}
-            onClick={this.clearCompleted}
-          >
-            {completed > 0 && 'Clear completed'}
-          </button>
-        </footer>
+              <Footer
+                activ={activ}
+                completed={completed}
+                onFilter={this.handleFilter}
+                onClear={this.clearCompleted}
+              />
+            </>
+          )
+          : ''
+        }
       </section>
     );
   }
