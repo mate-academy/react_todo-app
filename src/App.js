@@ -9,6 +9,7 @@ class App extends React.Component {
     todos: [],
     sortField: '',
     todosVisible: [],
+    isCompletedHide: 0,
   }
 
   addTodo = (title) => {
@@ -32,7 +33,7 @@ class App extends React.Component {
   handleFilterBy = (sortField) => {
     this.setState(prevState => ({
       todosVisible: getSortFied(prevState.todos, sortField),
-      sortField: prevState.sortField,
+      sortField,
     }));
   }
 
@@ -40,6 +41,12 @@ class App extends React.Component {
     this.setState((prevState) => {
       const task = prevState.todosVisible.find(todo => todo.id === id);
       task.completed = !task.completed;
+
+      if (task.completed) {
+        return {
+          isCompletedHide: 1,
+        };
+      }
 
       return {
         todosVisible: prevState.todosVisible,
@@ -69,6 +76,17 @@ class App extends React.Component {
 
     this.setState(prevState => ({
       todosVisible: [...todosDelet],
+    }));
+  }
+
+  destroyAllComplete = () => {
+    const { sortField } = this.state;
+    const allDeletTodo = this.state.todos.filter(a => !a.completed);
+    this.setState(prevState => ({
+      todos: allDeletTodo,
+    }));
+    this.setState(prevState => ({
+      todosVisible: getSortFied(prevState.todos, sortField),
     }));
   }
 
@@ -122,7 +140,10 @@ class App extends React.Component {
             type="button"
             className="clear-completed"
             style={{ display: 'block' }}
-          />
+            onClick={this.destroyAllComplete}
+          >
+            {this.state.isCompletedHide > 0 && 'Clear completed'}
+          </button>
         </footer>
       </section>
     );

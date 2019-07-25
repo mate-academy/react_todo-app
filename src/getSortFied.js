@@ -9,9 +9,6 @@ const getSortFied = (todos, sortField) => {
     Completed: a => a.completed,
   };
 
-  console.log(todos);
-  console.log(sortField);
-
   const callBack = callBackSort[sortField];
 
   return todos.filter(callBack);
