@@ -1,6 +1,5 @@
 const getSortFied = (todos, sortField) => {
   if (sortField === 'All') {
-    console.log(sortField);
     return todos;
   }
 
