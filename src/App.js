@@ -2,26 +2,56 @@ import React from 'react';
 import TodoApp from './TodoApp';
 import Todo from './Todo';
 
+const getSortFied = (todos, sortField) => {
+  if (sortField === 'All') {
+    console.log(sortField);
+    return todos;
+  }
+
+  const callBackSort = {
+    Active: a => !a.completed,
+    Completed: a => a.completed,
+  };
+
+  console.log(todos);
+  console.log(sortField);
+
+  const callBack = callBackSort[sortField];
+
+  return todos.filter(callBack);
+};
+
 class App extends React.Component {
   state = {
     todos: [],
-    completed: false,
+    sortField: '',
+    todosVisible: [],
   }
 
   addTodo = (title) => {
     this.setState(prevState => ({
-      todos: [
-        ...prevState.todos,
+      todos: [...prevState.todos,
         {
           title,
           id: Date.now(),
           completed: false,
         },
       ],
-
+      todosVisible: [...prevState.todos, {
+        title,
+        id: Date.now(),
+        completed: false,
+      }],
       completed: prevState.completed,
     }));
   };
+
+  handleFilterBy = (sortField) => {
+    this.setState(prevState => ({
+      todosVisible: getSortFied(prevState.todos, sortField),
+      sortField: prevState.sortField,
+    }));
+  }
 
   handleToggle = (id) => {
     this.setState((prevState) => {
@@ -50,7 +80,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos } = this.state;
+    const { todosVisible } = this.state;
     return (
       <section className="todoapp">
         <header className="header">
@@ -66,13 +96,13 @@ class App extends React.Component {
             type="checkbox"
             className="toggle-all"
             id="toggle-all"
-            checked={!(todos.some(todo => !todo.completed))}
+            checked={!(todosVisible.some(todo => !todo.completed))}
             onChange={this.handleChackAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            {todos.map(todo => (
+            {todosVisible.map(todo => (
               <Todo
                 key={todo.id}
                 item={todo}
@@ -84,7 +114,7 @@ class App extends React.Component {
 
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
-            {`${todos.filter(todo => (!todo.completed)).length}
+            {`${todosVisible.filter(todo => (!todo.completed)).length}
             items left`}
           </span>
 
@@ -92,6 +122,7 @@ class App extends React.Component {
             {/* <TodosFilter /> */}
             <li>
               <a
+                onClick={() => this.handleFilterBy('Active')}
                 href="#/"
                 className="selected"
               >
@@ -100,13 +131,21 @@ class App extends React.Component {
             </li>
 
             <li>
-              <a href="#/active">
+              <a
+                href="#/active"
+                onClick={() => this.handleFilterBy('All')}
+              >
                   All
               </a>
             </li>
 
             <li>
-              <a href="#/completed">Completed</a>
+              <a
+                href="#/completed"
+                onClick={() => this.handleFilterBy('Completed')}
+              >
+                Completed
+              </a>
             </li>
           </ul>
 

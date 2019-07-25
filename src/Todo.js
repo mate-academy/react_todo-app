@@ -11,7 +11,7 @@ const Todo = ({ item, toggle }) => {
           type="checkbox"
           className="toggle"
           id={id}
-          onClick={() => toggle(id)}
+          onChange={() => toggle(id)}
           checked={completed}
         />
         <label htmlFor="todo-2">{title}</label>
