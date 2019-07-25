@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Todo = ({ item, toggle }) => {
+const Todo = ({ item, toggle, deleteTodo }) => {
   const { id, title, completed } = item;
 
   return (
@@ -15,7 +15,11 @@ const Todo = ({ item, toggle }) => {
           checked={completed}
         />
         <label htmlFor="todo-2">{title}</label>
-        <button type="button" className="destroy" />
+        <button
+          type="button"
+          className="destroy"
+          onClick={() => deleteTodo(id)}
+        />
         <p>{completed}</p>
       </div>
     </li>
@@ -29,6 +33,7 @@ Todo.propTypes = {
     id: PropTypes.number,
   }).isRequired,
   toggle: PropTypes.func,
+  deleteTodo: PropTypes.func.isRequired,
 };
 
 Todo.defaultProps = {

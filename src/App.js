@@ -38,11 +38,11 @@ class App extends React.Component {
 
   handleToggle = (id) => {
     this.setState((prevState) => {
-      const task = prevState.todos.find(todo => todo.id === id);
+      const task = prevState.todosVisible.find(todo => todo.id === id);
       task.completed = !task.completed;
 
       return {
-        todos: prevState.todos,
+        todosVisible: prevState.todosVisible,
       };
     });
   }
@@ -60,6 +60,16 @@ class App extends React.Component {
         todos: allCheckedTodos,
       };
     });
+  }
+
+  deleteTodo = (id) => {
+    const todosDelet = this.state.todos;
+    const index = todosDelet.findIndex(todo => todo.id === id);
+    todosDelet.splice(index, 1);
+
+    this.setState(prevState => ({
+      todosVisible: [...todosDelet],
+    }));
   }
 
   render() {
@@ -90,6 +100,7 @@ class App extends React.Component {
                 key={todo.id}
                 item={todo}
                 toggle={this.handleToggle}
+                deleteTodo={this.deleteTodo}
               />
             ))}
           </ul>
