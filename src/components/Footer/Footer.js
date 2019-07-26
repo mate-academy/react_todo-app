@@ -19,7 +19,7 @@ const Footer = ({ todosLength, completedLength, ...props }) => {
       <span className="todo-count">
         { `${todosLength - completedLength} items left` }
       </span>
-      <HashRouter basename="/">
+      <HashRouter basename="/react_todo-app/">
         <ul className="filters">
           <li>
             <NavLink
