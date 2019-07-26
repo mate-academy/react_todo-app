@@ -17,7 +17,6 @@ class ToDosFilter extends React.Component {
     const active = todos.filter(todo => (
       todo.completed !== true
     ));
-    console.log('active ', todos);
     this.props.injectFilteredTodos(active)
   };
   
@@ -30,7 +29,6 @@ class ToDosFilter extends React.Component {
     const completed = todos.filter(todo => (
       todo.completed === true
     ));
-    console.log('completed ', todos);
     this.props.injectFilteredTodos(completed)
   };
   

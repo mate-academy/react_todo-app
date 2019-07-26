@@ -14,7 +14,7 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos
         .concat(todoObj)
-        .map((todo, i) => ({
+        .map((todo) => ({
           ...todo,
           id: !todo.id
             ? todo.id = i + 1
@@ -56,6 +56,14 @@ class App extends React.Component {
     }))
   };
   
+  clearCompleted = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => (
+        todo.completed !== true
+      )),
+    }))
+  };
+  
   render() {
     return (
       <section className="todoapp">
@@ -92,7 +100,10 @@ class App extends React.Component {
             type="button"
             className="clear-completed"
             style={{ display: 'block' }}
-          />
+            onClick={this.clearCompleted}
+          >
+            Clear completed
+          </button>
         </footer>
       </section>
     )
