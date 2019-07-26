@@ -11,7 +11,7 @@ import App from './components/App/App';
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename="/react_todo-app">
       <Route path="/:filter?" component={App} />
     </BrowserRouter>
   </Provider>,

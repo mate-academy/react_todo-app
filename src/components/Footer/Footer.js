@@ -19,37 +19,35 @@ const Footer = ({ todosLength, completedLength, ...props }) => {
       <span className="todo-count">
         { `${todosLength - completedLength} items left` }
       </span>
-      <HashRouter basename="/react_todo-app/">
-        <ul className="filters">
-          <li>
-            <NavLink
-              exact="/"
-              to="/"
-              activeClassName="selected"
-            >
-              All
-            </NavLink>
-          </li>
+      <ul className="filters">
+        <li>
+          <NavLink
+            exact="/"
+            to="/"
+            activeClassName="selected"
+          >
+            All
+          </NavLink>
+        </li>
 
-          <li>
-            <NavLink
-              to="/active"
-              activeClassName="selected"
-            >
-              Active
-            </NavLink>
-          </li>
+        <li>
+          <NavLink
+            to="/active"
+            activeClassName="selected"
+          >
+            Active
+          </NavLink>
+        </li>
 
-          <li>
-            <NavLink
-              to="/completed"
-              activeClassName="selected"
-            >
-              Completed
-            </NavLink>
-          </li>
-        </ul>
-      </HashRouter>
+        <li>
+          <NavLink
+            to="/completed"
+            activeClassName="selected"
+          >
+            Completed
+          </NavLink>
+        </li>
+      </ul>
 
       <button
         onClick={props.deleteAllCompleted}
