@@ -70,24 +70,26 @@ class App extends React.Component {
   }
 
   deleteTodo = (id) => {
-    const todosDelet = this.state.todos;
+    const todosDelet = [...this.state.todos];
     const index = todosDelet.findIndex(todo => todo.id === id);
     todosDelet.splice(index, 1);
 
     this.setState(prevState => ({
-      todosVisible: [...todosDelet],
+      todosVisible: todosDelet,
     }));
   }
 
   destroyAllComplete = () => {
     const { sortField } = this.state;
-    const allDeletTodo = this.state.todos.filter(a => !a.completed);
-    this.setState(prevState => ({
-      todos: allDeletTodo,
-    }));
-    this.setState(prevState => ({
-      todosVisible: getSortFied(prevState.todos, sortField),
-    }));
+
+    this.setState((prevState) => {
+      const allDeletTodo = prevState.todos.filter(a => !a.completed);
+      console.log(allDeletTodo);
+      return {
+        todos: allDeletTodo,
+        todosVisible: getSortFied(allDeletTodo, sortField),
+      };
+    });
   }
 
   render() {

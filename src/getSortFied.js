@@ -1,3 +1,4 @@
+
 const getSortFied = (todos, sortField) => {
   if (sortField === 'All') {
     return todos;
@@ -7,7 +8,6 @@ const getSortFied = (todos, sortField) => {
     Active: a => !a.completed,
     Completed: a => a.completed,
   };
-
   const callBack = callBackSort[sortField];
 
   return todos.filter(callBack);
