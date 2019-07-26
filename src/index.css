@@ -327,10 +327,6 @@ html .clear-completed:active {
   cursor: pointer;
 }
 
-.clear-completed:hover {
-  text-decoration: underline;
-}
-
 .info {
   margin: 65px auto 0;
   color: #bfbfbf;
