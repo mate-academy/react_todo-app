@@ -3,6 +3,5 @@ export const saveState = (stateToSave) => {
 };
 
 export const loadState = () => {
-  console.log(JSON.parse(localStorage.getItem('state')));
   return JSON.parse(localStorage.getItem('state'));
 };

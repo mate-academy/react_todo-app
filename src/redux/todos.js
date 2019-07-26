@@ -39,28 +39,21 @@ export const changeTodoTitle = (id, title) => ({
 const todosReducer = (state = [], action) => {
   switch (action.type) {
     case ADD_TODO: {
-      const todos = [...state];
-
       const newTodo = {
         id: v4(),
         title: action.title,
         completed: false,
       };
 
-      return [...todos, newTodo];
+      return [...state, newTodo];
     }
 
     case DELETE_TODO: {
-      const todos = [...state];
-      const newTodos = [];
+      let todos = [...state];
 
-      todos.forEach((todo) => {
-        if (todo.id !== action.id) {
-          newTodos.push(todo);
-        }
-      });
+      todos = todos.filter(todo => todo.id !== action.id);
 
-      return newTodos;
+      return todos;
     }
 
     case TOGLE_COMPLETE_TODO: {
@@ -102,7 +95,7 @@ const todosReducer = (state = [], action) => {
     case CHANGE_TODO_TITLE: {
       let todos = [...state];
       const { id, title } = action;
-      console.log(title);
+
       todos = todos.map((todo) => {
         if (todo.id === id) {
           return {
