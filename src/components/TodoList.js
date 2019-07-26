@@ -9,6 +9,7 @@ const TodoList = (props) => {
     onDelete,
     onToggleDone,
     onMarkedAll,
+    handleEditabled,
   } = props;
 
   return (
@@ -29,7 +30,7 @@ const TodoList = (props) => {
               todo={todo}
               onDelete={() => onDelete(todo.id)}
               onToggleDone={() => onToggleDone(todo.id)}
-
+              handleEditabled={() => handleEditabled(todo.id)}
             />
           </li>
         ))}
@@ -42,6 +43,7 @@ TodoList.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
   onMarkedAll: PropTypes.func.isRequired,
+  handleEditabled: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 

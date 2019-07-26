@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TodoItem = (props) => {
-  const { onDelete, todo, onToggleDone } = props;
+  const {
+    onDelete,
+    todo,
+    onToggleDone,
+    handleEditabled,
+  } = props;
 
   return (
     <div className="view">
@@ -12,10 +17,11 @@ const TodoItem = (props) => {
         id={todo.id}
         checked={todo.complete}
         onChange={onToggleDone}
-        readOnly
       />
       <label
-        htmlFor={todo.id}
+        contentEditable={todo.editabled}
+        onDoubleClick={handleEditabled}
+        suppressContentEditableWarning="true"
       >
         {todo.title}
       </label>
@@ -27,11 +33,13 @@ const TodoItem = (props) => {
 TodoItem.propTypes = {
 
   onDelete: PropTypes.func.isRequired,
+  handleEditabled: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
   todo: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     complete: PropTypes.bool.isRequired,
+    editabled: PropTypes.bool.isRequired,
   }).isRequired,
 };
 

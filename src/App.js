@@ -8,15 +8,14 @@ export default class App extends Component {
     todos: [],
     search: '',
     filter: 'all',
-  }
+    // complete: false,
+    // editabled: false
+  };
 
-  componentWillMount() {
-    const getedTodos = this.getFromLocalStorage();
+  async componentWillMount() {
+    const getedTodos = await this.getFromLocalStorage();
     this.setState(state => ({
-      todos: [
-        ...state.todos,
-        ...getedTodos,
-      ],
+      todos: [...state.todos, ...getedTodos],
     }));
   }
 
@@ -25,7 +24,7 @@ export default class App extends Component {
     const getTodos = JSON.parse(storageData);
 
     return getTodos;
-  }
+  };
 
   saveToLocalStorage = () => {
     const data = this.state.todos;
@@ -44,9 +43,10 @@ export default class App extends Component {
   };
 
   createItem = title => ({
-    id: +(new Date()),
+    id: +new Date(),
     title,
     complete: false,
+    editabled: false,
   });
 
   toggleProperty = (arr, id, propName) => {
@@ -55,11 +55,7 @@ export default class App extends Component {
     const value = !oldItem[propName];
 
     const item = { ...arr[idx], [propName]: value };
-    return [
-      ...arr.slice(0, idx),
-      item,
-      ...arr.slice(idx + 1),
-    ];
+    return [...arr.slice(0, idx), item, ...arr.slice(idx + 1)];
   };
 
   onToggleDone = (id) => {
@@ -71,10 +67,6 @@ export default class App extends Component {
 
   onFilterChange = (filter) => {
     this.setState({ filter });
-  };
-
-  onSearchChange = (search) => {
-    this.setState({ search });
   };
 
   onDelete = (id) => {
@@ -93,10 +85,16 @@ export default class App extends Component {
       todos: state.todos.filter(todo => !todo.complete),
     }));
 
-    localStorage.setItem('todos', JSON.stringify(
-      { title: '', id: 0, complete: false }
-    ));
-  }
+    localStorage.setItem(
+      'todos',
+      JSON.stringify({
+        title: '',
+        id: 0,
+        complete: false,
+        editabled: false,
+      })
+    );
+  };
 
   onMarkedAll = () => {
     this.setState((state) => {
@@ -110,27 +108,35 @@ export default class App extends Component {
     }
 
     this.forceUpdate();
-  }
+  };
 
   filterItems = (todos, filter) => {
     if (filter === 'active') {
-      return todos.filter(todo => (!todo.complete));
-    } if (filter === 'complete') {
+      return todos.filter(todo => !todo.complete);
+    }
+    if (filter === 'complete') {
       return todos.filter(todo => todo.complete);
     }
 
     return todos;
-  }
+  };
 
   searchItems = (todos, search) => {
     if (search.length === 0) {
       return todos;
     }
 
-    return todos.filter(todo => todo.title
-      .toLowerCase()
-      .includes(search.toLowerCase()));
-  }
+    return todos.filter(
+      todo => todo.title.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+
+  handleEditabled = (id) => {
+    this.setState((state) => {
+      const todos = this.toggleProperty(state.todos, id, 'editabled');
+      return { todos };
+    });
+  };
 
   render() {
     const { todos, filter, search } = this.state;
@@ -148,14 +154,12 @@ export default class App extends Component {
         {todos.length < 1 ? (
           <>
             <Header
-              onSearch={this.onSearchChange}
               onItemAdded={this.onItemAdded}
             />
           </>
         ) : (
           <>
             <Header
-              onSearch={this.onSearchChange}
               onItemAdded={this.onItemAdded}
             />
             <TodoList
@@ -163,6 +167,7 @@ export default class App extends Component {
               onDelete={this.onDelete}
               onToggleDone={this.onToggleDone}
               onMarkedAll={this.onMarkedAll}
+              handleEditabled={this.handleEditabled}
             />
             <Footer
               todos={visibleTodos}
