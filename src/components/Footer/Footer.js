@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { NavLink } from 'react-router-dom';
+import { NavLink, HashRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { footerPropTypes } from '../../propTypes/propTypes';
@@ -19,36 +19,37 @@ const Footer = ({ todosLength, completedLength, ...props }) => {
       <span className="todo-count">
         { `${todosLength - completedLength} items left` }
       </span>
+      <HashRouter basename="/">
+        <ul className="filters">
+          <li>
+            <NavLink
+              exact="/"
+              to="/"
+              activeClassName="selected"
+            >
+              All
+            </NavLink>
+          </li>
 
-      <ul className="filters">
-        <li>
-          <NavLink
-            exact="/"
-            to="/"
-            activeClassName="selected"
-          >
-            All
-          </NavLink>
-        </li>
+          <li>
+            <NavLink
+              to="/active"
+              activeClassName="selected"
+            >
+              Active
+            </NavLink>
+          </li>
 
-        <li>
-          <NavLink
-            to="/active"
-            activeClassName="selected"
-          >
-            Active
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/completed"
-            activeClassName="selected"
-          >
-            Completed
-          </NavLink>
-        </li>
-      </ul>
+          <li>
+            <NavLink
+              to="/completed"
+              activeClassName="selected"
+            >
+              Completed
+            </NavLink>
+          </li>
+        </ul>
+      </HashRouter>
 
       <button
         onClick={props.deleteAllCompleted}
