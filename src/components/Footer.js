@@ -15,8 +15,7 @@ const Footer = ({
   return (
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
-        {activeTodos}
-        items left
+        {`${activeTodos} items left`}
       </span>
 
       <TodosFilter
