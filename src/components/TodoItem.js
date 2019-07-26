@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import {
   deleteTodo, togleCompleteTodo, changeTodoTitle,
-} from '../../redux/todos';
-import { todoItemPropTypes } from '../../propTypes/propTypes';
+} from '../redux/todos';
+import { todoItemPropTypes } from '../propTypes/propTypes';
 
 class TodoItem extends React.Component {
   state = {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { addTodo } from '../../redux/todos';
-import { headerPropTypes } from '../../propTypes/propTypes';
+import { addTodo } from '../redux/todos';
+import { headerPropTypes } from '../propTypes/propTypes';
 
 class Header extends React.Component {
   state = {

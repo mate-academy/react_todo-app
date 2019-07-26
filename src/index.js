@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 
 import store from './redux/store';
 
 import './base.css';
 import './index.css';
-import App from './components/App/App';
+import App from './components/App';
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename="/react_todo-app">
+    <HashRouter>
       <Route path="/:filter?" component={App} />
-    </BrowserRouter>
+    </HashRouter>
   </Provider>,
   document.getElementById('root')
 );

@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { todoListProps } from '../../propTypes/propTypes';
+import { todoListProps } from '../propTypes/propTypes';
 
-import TodoItem from '../TodoItem/TodoItem';
+import TodoItem from './TodoItem';
 
-import { getFilteredTodos, getCompletedLength } from '../../redux/store';
-import { togleAllComplete } from '../../redux/todos';
+import { getFilteredTodos, getCompletedLength } from '../redux/store';
+import { togleAllComplete } from '../redux/todos';
 
 function Todos({
   todos, completedLength, todosLength, ...props

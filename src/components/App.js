@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import TodoList from '../TodoList/Todos';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import { appPropTypes } from '../../propTypes/propTypes';
+import TodoList from './Todos';
+import Header from './Header';
+import Footer from './Footer';
+import { appPropTypes } from '../propTypes/propTypes';
 
 function App({ todosLength, match: { params } }) {
   return (

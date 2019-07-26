@@ -1,12 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
-import { NavLink, HashRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { footerPropTypes } from '../../propTypes/propTypes';
+import { footerPropTypes } from '../propTypes/propTypes';
 
-import { getCompletedLength } from '../../redux/store';
-import { deleteAllCompleted } from '../../redux/todos';
+import { getCompletedLength } from '../redux/store';
+import { deleteAllCompleted } from '../redux/todos';
 
 const Footer = ({ todosLength, completedLength, ...props }) => {
   const clearBtnClasses = classNames({
