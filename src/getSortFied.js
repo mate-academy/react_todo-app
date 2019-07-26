@@ -9,7 +9,7 @@ const getSortFied = (todos, sortField) => {
     Completed: a => a.completed,
   };
   const callBack = callBackSort[sortField];
-
+  debugger;
   return todos.filter(callBack);
 };
 

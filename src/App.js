@@ -7,7 +7,7 @@ import getSortFied from './getSortFied';
 class App extends React.Component {
   state = {
     todos: [],
-    sortField: '',
+    sortField: 'All',
     todosVisible: [],
     isCompletedHide: 0,
   }
@@ -70,23 +70,26 @@ class App extends React.Component {
   }
 
   deleteTodo = (id) => {
-    const todosDelet = [...this.state.todos];
-    const index = todosDelet.findIndex(todo => todo.id === id);
-    todosDelet.splice(index, 1);
+    const { todos, sortField } = this.state;
 
-    this.setState(prevState => ({
-      todosVisible: todosDelet,
-    }));
+    this.setState((prevState) => {
+      const todosDelet = todos.filter(todo => !(todo.id === id));
+
+      return {
+        todos: todosDelet,
+        todosVisible: getSortFied(todosDelet, sortField),
+      };
+    });
   }
 
   destroyAllComplete = () => {
     const { sortField } = this.state;
 
     this.setState((prevState) => {
-      const allDeletTodo = prevState.todos.filter(a => !a.completed);
+      const todosActive = prevState.todos.filter(a => !a.completed);
       return {
-        todos: allDeletTodo,
-        todosVisible: getSortFied(allDeletTodo, sortField),
+        todos: todosActive,
+        todosVisible: getSortFied(todosActive, sortField),
       };
     });
   }
@@ -143,7 +146,7 @@ class App extends React.Component {
             style={{ display: 'block' }}
             onClick={this.destroyAllComplete}
           >
-            {this.state.isCompletedHide > 0 && 'Clear completed'}
+            {this.state.isCompletedHide ? 'Clear completed' : ''}
           </button>
         </footer>
       </section>
