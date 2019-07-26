@@ -1,75 +1,179 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Header from './components/Header';
+import TodoList from './components/TodoList';
+import Footer from './components/Footer';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+export default class App extends Component {
+  state = {
+    todos: [],
+    search: '',
+    filter: 'all',
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+  componentWillMount() {
+    const getedTodos = this.getFromLocalStorage();
+    this.setState(state => ({
+      todos: [
+        ...state.todos,
+        ...getedTodos,
+      ],
+    }));
+  }
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+  getFromLocalStorage = () => {
+    const storageData = localStorage.getItem('todos');
+    const getTodos = JSON.parse(storageData);
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+    return getTodos;
+  }
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  saveToLocalStorage = () => {
+    const data = this.state.todos;
+    localStorage.setItem('todos', JSON.stringify(data));
+  };
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+  onItemAdded = (title) => {
+    if (title.length > 2) {
+      this.setState((state) => {
+        const todo = this.createItem(title);
+        return { todos: [...state.todos, todo] };
+      });
+    }
+
+    this.saveToLocalStorage();
+  };
+
+  createItem = title => ({
+    id: +(new Date()),
+    title,
+    complete: false,
+  });
+
+  toggleProperty = (arr, id, propName) => {
+    const idx = arr.findIndex(item => item.id === id);
+    const oldItem = arr[idx];
+    const value = !oldItem[propName];
+
+    const item = { ...arr[idx], [propName]: value };
+    return [
+      ...arr.slice(0, idx),
+      item,
+      ...arr.slice(idx + 1),
+    ];
+  };
+
+  onToggleDone = (id) => {
+    this.setState((state) => {
+      const todos = this.toggleProperty(state.todos, id, 'complete');
+      return { todos };
+    });
+  };
+
+  onFilterChange = (filter) => {
+    this.setState({ filter });
+  };
+
+  onSearchChange = (search) => {
+    this.setState({ search });
+  };
+
+  onDelete = (id) => {
+    this.setState((state) => {
+      const idx = state.todos.findIndex(todo => todo.id === id);
+      const todos = [
+        ...state.todos.slice(0, idx),
+        ...state.todos.slice(idx + 1),
+      ];
+      return { todos };
+    });
+  };
+
+  handleDeleteAllCompleted = () => {
+    this.setState(state => ({
+      todos: state.todos.filter(todo => !todo.complete),
+    }));
+
+    localStorage.setItem('todos', JSON.stringify(
+      { title: '', id: 0, complete: false }
+    ));
+  }
+
+  onMarkedAll = () => {
+    this.setState((state) => {
+      state.todos.map(todo => (todo.complete = true));
+    });
+
+    if (this.state.todos.every(todo => todo.complete === true)) {
+      this.setState((state) => {
+        state.todos.map(todo => (todo.complete = false));
+      });
+    }
+
+    this.forceUpdate();
+  }
+
+  filterItems = (todos, filter) => {
+    if (filter === 'active') {
+      return todos.filter(todo => (!todo.complete));
+    } if (filter === 'complete') {
+      return todos.filter(todo => todo.complete);
+    }
+
+    return todos;
+  }
+
+  searchItems = (todos, search) => {
+    if (search.length === 0) {
+      return todos;
+    }
+
+    return todos.filter(todo => todo.title
+      .toLowerCase()
+      .includes(search.toLowerCase()));
+  }
+
+  render() {
+    const { todos, filter, search } = this.state;
+    const doneCount = todos.filter(todo => todo.complete).length;
+    const toDoCount = todos.length - doneCount;
+    const visibleTodos = this.searchItems(
+      this.filterItems(todos, filter),
+      search
+    );
+
+    this.saveToLocalStorage('todos', JSON.stringify([]));
+
+    return (
+      <section className="todoapp">
+        {todos.length < 1 ? (
+          <>
+            <Header
+              onSearch={this.onSearchChange}
+              onItemAdded={this.onItemAdded}
+            />
+          </>
+        ) : (
+          <>
+            <Header
+              onSearch={this.onSearchChange}
+              onItemAdded={this.onItemAdded}
+            />
+            <TodoList
+              todos={visibleTodos}
+              onDelete={this.onDelete}
+              onToggleDone={this.onToggleDone}
+              onMarkedAll={this.onMarkedAll}
+            />
+            <Footer
+              todos={visibleTodos}
+              onFilterChange={this.onFilterChange}
+              filter={filter}
+              handleDeleteAllCompleted={this.handleDeleteAllCompleted}
+              toDoCount={toDoCount}
+            />
+          </>
+        )}
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
-
-export default App;
