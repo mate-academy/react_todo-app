@@ -9,7 +9,7 @@ const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
         id={todo.id}
         onClick={() => changeTodoCompleted(todo.id)}
         type="checkbox"
-        defaultChecked={todo.completed}
+        checked={todo.completed}
         className="toggle"
       />
       {/* eslint-disable-next-line jsx-a11y/label-has-for */}

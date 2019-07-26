@@ -63,6 +63,7 @@ class App extends React.Component {
         completed: prevState.statusAllTodo,
       }
       )),
+      statusAllTodo: !prevState.statusAllTodo,
     }));
   }
 
