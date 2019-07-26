@@ -33,12 +33,34 @@ class App extends React.Component {
           return {
             ...todo,
             completed: !todo.completed,
-          }
+          };
         }
 
         return todo;
       })
     }));
+  };
+
+  handleChangeCompletedAll = () => {
+    this.setState(prevState => {
+      if (prevState.todos.every(todo => todo.completed === false)
+        || prevState.todos.every(todo => todo.completed === true)) {
+        return {
+          todos: prevState.todos.map(todo => ({
+            ...todo,
+            completed: !todo.completed,
+          }))
+        };
+      } else {
+        return {
+          todos: prevState.todos.map(todo => ({
+            ...todo,
+            completed: true,
+          }))
+        };
+      }
+
+    });
   };
 
   render() {
@@ -54,6 +76,7 @@ class App extends React.Component {
         <TodoList
           todos={todos}
           changeCompleted={this.handleChangeCompleted}
+          changeCompletedAll={this.handleChangeCompletedAll}
         />
 
         <footer className="footer" style={{ display: 'block' }}>

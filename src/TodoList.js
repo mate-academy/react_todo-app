@@ -3,22 +3,27 @@ import propTypes from 'prop-types';
 import classnames from 'classnames';
 import './styles/todoList.css';
 
-const TodoList = ({ todos, changeCompleted}) => (
-  <section className="main" style={{display: 'block'}}>
-    <input type="checkbox" id="toggle-all" className="toggle-all"/>
-    <label htmlFor="toggle-all">
+const TodoList = ({ todos, changeCompleted, changeCompletedAll}) => (
+  <section className="main" style={{ display: 'block' }}>
+    <input
+      type="checkbox"
+      id="toggle-all"
+      className="toggle-all"
+      onChange={() => changeCompletedAll()}
+    />
+    <label
+      htmlFor="toggle-all"
+    >
       Mark all as complete
     </label>
 
     <ul className="todo-list">
       {
         todos.map(todo => {
-          const classes = classnames(
-            {
+          const classes = classnames ({
               'todo-active': todo.completed === false,
               'todo-completed': todo.completed === true,
-            }
-          );
+          });
 
           return (
             <li className={classes} key={todo.id}>
@@ -35,7 +40,7 @@ const TodoList = ({ todos, changeCompleted}) => (
                   htmlFor={`todo-${todo.id}`}
                   className={classes}
                 >
-                  {todo.title}
+                  { todo.title }
                 </label>
                 <button type="button" className="destroy"/>
               </div>
@@ -50,6 +55,7 @@ const TodoList = ({ todos, changeCompleted}) => (
 TodoList.propTypes = {
   todos: propTypes.arrayOf().isRequired,
   changeCompleted: propTypes.func,
+  changeCompletedAll: propTypes.func,
 };
 
 export default TodoList;
