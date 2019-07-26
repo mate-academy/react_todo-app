@@ -1,38 +1,45 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-const TodoApp = ({ todos }) => (
-  <section className="main" style={{ display: 'block' }}>
-    <input type="checkbox" id="toggle-all" className="toggle-all" />
-    <label htmlFor="toggle-all">
-      Mark all as complete
-    </label>
+class TodoApp extends React.Component {
+  state = {
+    title: '',
+  };
 
-    <ul className="todo-list">
-      {
-        todos.map(todo => (
-          <li className="" key={todo.id}>
-            <div className="view">
-              <input
-                type="checkbox"
-                className="toggle"
-                id={`todo-${todo.id}`}
-              />
-              <label htmlFor={`todo-${todo.id}`}>{todo.title}</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-);
+  onChangeInput = (event) => {
+    const { value } = event.target;
+
+    this.setState({ title: value });
+  };
+
+  onCLickEnter = (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+
+      this.props.addTodo(this.state.title);
+      this.setState({ title: '' });
+    }
+  };
+
+  render() {
+    const { title } = this.state;
+
+    return (
+      <input
+        type="text"
+        name="title"
+        onChange={this.onChangeInput}
+        className="new-todo"
+        value={title}
+        placeholder="What needs to be done?"
+        onKeyUp={this.onCLickEnter}
+      />
+    );
+  }
+}
 
 TodoApp.propTypes = {
-  todos: propTypes.shape({
-    id: propTypes.number,
-    title: propTypes.string,
-  }).isRequired,
+  addTodo: propTypes.func.isRequired,
 };
 
 export default TodoApp;

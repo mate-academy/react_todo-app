@@ -1,7 +1,8 @@
 import React from 'react';
 import getTodos from './api/todos';
 import TodoApp from './TodoApp';
-import NewTodo from './NewTodo';
+import TodoList from './TodoList';
+import TodosFilter from './TodosFilter';
 
 class App extends React.Component {
   state = {
@@ -25,6 +26,21 @@ class App extends React.Component {
     }));
   };
 
+  handleChangeCompleted = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          }
+        }
+
+        return todo;
+      })
+    }));
+  };
+
   render() {
     const { todos } = this.state;
 
@@ -32,11 +48,12 @@ class App extends React.Component {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTodo addTodo={this.addTodo} />
+          <TodoApp addTodo={this.addTodo} />
         </header>
 
-        <TodoApp
+        <TodoList
           todos={todos}
+          changeCompleted={this.handleChangeCompleted}
         />
 
         <footer className="footer" style={{ display: 'block' }}>
@@ -44,19 +61,7 @@ class App extends React.Component {
             {`${todos.length} items left`}
           </span>
 
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
-
-            <li>
-              <a href="#/active">Active</a>
-            </li>
-
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
+          <TodosFilter />
 
           <button
             type="button"
