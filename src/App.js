@@ -65,14 +65,16 @@ class App extends React.Component {
   }
 
   addTask = (task) => {
-    this.setState(prevState => ({
-      todoes: [...prevState.todoes, {
-        id: Date.now(),
-        title: task,
-        isDone: false,
-      }],
-      showContent: true,
-    }));
+    if (task.length>0) {
+      this.setState(prevState => ({
+        todoes: [...prevState.todoes, {
+          id: Date.now(),
+          title: task,
+          isDone: false,
+        }],
+        showContent: true,
+      }));
+    }
   }
 
   destroy = (id) => {
