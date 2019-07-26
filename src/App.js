@@ -52,6 +52,7 @@ class App extends React.Component {
           ? todo
           : { ...todo, completed: !todo.completed }
       )),
+      filterTodos: this.todosFilter(prevState.filterDescription),
     }));
   }
 
@@ -62,7 +63,6 @@ class App extends React.Component {
         completed: prevState.statusAllTodo,
       }
       )),
-      statusAllTodo: !prevState.statusAllTodo,
     }));
   }
 

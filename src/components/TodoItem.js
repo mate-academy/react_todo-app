@@ -9,7 +9,7 @@ const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
         id={todo.id}
         onClick={() => changeTodoCompleted(todo.id)}
         type="checkbox"
-        checked={todo.completed}
+        defaultChecked={todo.completed}
         className="toggle"
       />
       {/* eslint-disable-next-line jsx-a11y/label-has-for */}
@@ -30,7 +30,7 @@ const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     title: PropTypes.string,
     completed: PropTypes.bool,
   }).isRequired,
