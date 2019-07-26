@@ -33,9 +33,9 @@ Resources:
   - `id` - unique identifier
   - `completed` - current status (`false` by default)
 1. Show the number of not completed todos in `TodoApp`
-1. Implement `TodoList` component to display a list of todos ({ id, title, completed })
+1. Implement `Todos` component to display a list of todos ({ id, title, completed })
     ```jsx harmony
-    <TodoList items={todos} />
+    <Todos items={todos} />
     ```
 1. Implement `TodoItem` component with ability to toggle the `complete` status.
 1. Add ability to toggle the completed status of all the todos.
