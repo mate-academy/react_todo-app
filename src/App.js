@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import NewToDo from './components/NewToDo';
+import TodoList from './components/TodoList';
 
 class App extends React.Component {
   state = {
@@ -20,6 +21,27 @@ class App extends React.Component {
     }));
   };
   
+  changeBool = (boolValue) => {
+    if (boolValue) {
+      return false
+    }
+    return true
+  };
+  
+  todoIsCompleted = (todoId) => {
+    console.log(todoId)
+    this.setState(prevState => ({
+      todos: prevState.todos
+        .map(todo => ({
+          ...todo,
+          completed: (Number(todo.id) === Number(todoId))
+          ? this.changeBool(todo.completed)
+            : todo.completed
+        }))
+    }))
+    
+  };
+  
   render() {
     return (
       <section className="todoapp">
@@ -33,24 +55,10 @@ class App extends React.Component {
           <input type="checkbox" id="toggle-all" className="toggle-all" />
           <label htmlFor="toggle-all">Mark all as complete</label>
       
-          <ul className="todo-list">
-            {this.state.todos.length !== 0
-            ? this.state.todos.map(todo => (
-                <li key={todo.id} className="">
-                  <div className="view">
-                    <input type="checkbox" className="toggle" id="todo-1" />
-                    <label htmlFor="todo-1">{todo.title}</label>
-                    <button type="button" className="destroy" />
-                  </div>
-                </li>
-              ))
-            : <li className="">
-                <div className="view">
-                  <label htmlFor="todo-1">No todo yet</label>
-                </div>
-              </li>
-            }
-          </ul>
+          <TodoList
+            todos={this.state.todos}
+            todoIsCompleted={this.todoIsCompleted}
+          />
         </section>
     
         <footer className="footer" style={{ display: 'block' }}>
