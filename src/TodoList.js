@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import classnames from 'classnames';
 import './styles/todoList.css';
 
-const TodoList = ({ todos, changeCompleted, changeCompletedAll}) => (
+const TodoList = ({ todos, changeCompleted, changeCompletedAll, removeTodo}) => (
   <section className="main" style={{ display: 'block' }}>
     <input
       type="checkbox"
@@ -42,7 +42,11 @@ const TodoList = ({ todos, changeCompleted, changeCompletedAll}) => (
                 >
                   { todo.title }
                 </label>
-                <button type="button" className="destroy"/>
+                <button
+                  type="button"
+                  className="destroy"
+                  onClick={() => removeTodo(todo.id)}
+                />
               </div>
             </li>
           )

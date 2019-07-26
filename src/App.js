@@ -63,6 +63,14 @@ class App extends React.Component {
     });
   };
 
+  handleRemoveTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => (
+        todo.id !== id
+      ))
+    }));
+  };
+
   render() {
     const { todos } = this.state;
 
@@ -77,6 +85,7 @@ class App extends React.Component {
           todos={todos}
           changeCompleted={this.handleChangeCompleted}
           changeCompletedAll={this.handleChangeCompletedAll}
+          removeTodo={this.handleRemoveTodo}
         />
 
         <footer className="footer" style={{ display: 'block' }}>
