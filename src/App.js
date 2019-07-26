@@ -84,7 +84,6 @@ class App extends React.Component {
 
     this.setState((prevState) => {
       const allDeletTodo = prevState.todos.filter(a => !a.completed);
-      console.log(allDeletTodo);
       return {
         todos: allDeletTodo,
         todosVisible: getSortFied(allDeletTodo, sortField),
