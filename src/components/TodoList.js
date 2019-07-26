@@ -2,10 +2,6 @@
 import React from 'react';
 
 class TodoList extends React.Component {
-  // state = {
-  //
-  // };
-
   todoCheck = (event) => {
     this.props.todoIsCompleted(event.target.dataset.todoid);
   };
@@ -23,7 +19,7 @@ class TodoList extends React.Component {
                   className="toggle"
                   id="todo-1"
                   data-todoid={todo.id}
-                  value={todo.completed}
+                  checked={todo.completed}
                   onChange={this.todoCheck}
                 />
                 <label htmlFor="todo-1">{todo.title}</label>
