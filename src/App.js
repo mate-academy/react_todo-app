@@ -7,7 +7,6 @@ class App extends React.Component {
   state = {
     allToggled: false,
     showContent: false,
-    isDoneTodoes: false,
     todoes: [],
     filterBy: 'All',
   }
@@ -43,7 +42,6 @@ class App extends React.Component {
           isDone: !todo.isDone,
         };
       }),
-      isDoneTodoes: !prevState.todoes.filter(todo => todo.isDone).length > 0,
     }));
   }
 
@@ -63,7 +61,6 @@ class App extends React.Component {
         };
       }),
       allToggled: !prevState.allToggled,
-      isDoneTodoes: !prevState.todoes.filter(todo => todo.isDone).length > 0,
     }));
   }
 
@@ -82,21 +79,18 @@ class App extends React.Component {
     this.setState(prevState => ({
       todoes: prevState.todoes.filter(todo => todo.id !== id),
       showContent: !(prevState.todoes.length < 2),
-      isDoneTodoes: !prevState.todoes.filter(todo => todo.isDone).length > 0,
     }));
   }
 
   destroyCompleted = () => {
     this.setState(prevState => ({
       todoes: prevState.todoes.filter(todo => todo.isDone === false),
-      isDoneTodoes: false,
     }));
   }
 
   render() {
     const {
       showContent,
-      isDoneTodoes,
       todoes,
       filterBy,
     } = this.state;
@@ -140,7 +134,6 @@ class App extends React.Component {
             <Footer
               todoes={todoes}
               filterBy={filterBy}
-              isDoneTodoes={isDoneTodoes}
               changeFilter={this.changeFilter}
               destroyCompleted={this.destroyCompleted}
             />

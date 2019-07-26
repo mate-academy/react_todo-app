@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 const Footer = ({
   todoes,
   filterBy,
-  isDoneTodoes,
   changeFilter,
   destroyCompleted,
 }) => (
@@ -45,7 +44,7 @@ const Footer = ({
       </li>
     </ul>
 
-    {isDoneTodoes && (
+    {todoes.some(todo => todo.isDone) && (
       <button
         type="button"
         onClick={destroyCompleted}
@@ -63,7 +62,6 @@ Footer.propTypes = {
     idDone: PropTypes.bool,
   }).isRequired,
   filterBy: PropTypes.string.isRequired,
-  isDoneTodoes: PropTypes.string.isRequired,
   changeFilter: PropTypes.func,
   destroyCompleted: PropTypes.func,
 };
