@@ -25,7 +25,7 @@ function TodoItem({ todo, handleToggle, handleRemove }) {
 }
 
 TodoItem.propTypes = {
-  todo: PropTypes.objectOf().isRequired,
+  todo: PropTypes.object.isRequired,
   handleToggle: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
 };
