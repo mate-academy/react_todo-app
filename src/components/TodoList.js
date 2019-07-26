@@ -5,6 +5,10 @@ class TodoList extends React.Component {
   todoCheck = (event) => {
     this.props.todoIsCompleted(event.target.dataset.todoid);
   };
+  
+  removeItem = (event) => {
+    this.props.removeFromState(event.target.value)
+  };
 
   render() {
     const todos = this.props.todos;
@@ -24,6 +28,7 @@ class TodoList extends React.Component {
                 />
                 <label htmlFor="todo-1">{todo.title}</label>
                 <button
+                  onClick={this.removeItem}
                   type="button"
                   className="destroy"
                   value={todo.id}

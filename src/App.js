@@ -20,7 +20,6 @@ class App extends React.Component {
             ? todo.id = i + 1
             : todo.id
         })),
-      filteredTodos: [],
     }));
   };
   
@@ -49,6 +48,14 @@ class App extends React.Component {
     })
   };
   
+  removeFromState = (todoId) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(item => (
+        Number(item.id) !== Number(todoId)
+      )),
+    }))
+  };
+  
   render() {
     return (
       <section className="todoapp">
@@ -67,6 +74,7 @@ class App extends React.Component {
               ? this.state.filteredTodos
               : this.state.todos}
             todoIsCompleted={this.todoIsCompleted}
+            removeFromState={this.removeFromState}
           />
           
         </section>
