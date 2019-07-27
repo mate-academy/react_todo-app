@@ -14,7 +14,7 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos
         .concat(todoObj)
-        .map((todo) => ({
+        .map((todo, i) => ({
           ...todo,
           id: !todo.id
             ? todo.id = i + 1
