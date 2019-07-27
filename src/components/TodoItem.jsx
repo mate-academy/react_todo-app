@@ -11,6 +11,7 @@ const TodoItem = ({ todo, handleTodoToggle, handleDestroyTodo }) => (
         id={todo.id}
         onChange={() => handleTodoToggle(todo.id)}
       />
+      {/* eslint-disable-next-line */}
       <label
         className={todo.completed ? 'todo--completed' : null}
         htmlFor={todo.id}

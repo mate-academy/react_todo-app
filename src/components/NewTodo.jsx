@@ -11,19 +11,18 @@ class AddNewTodo extends React.Component {
   handleFormSubmit = (event) => {
     event.preventDefault();
 
-    this.setState((prevState) => {
+    if (this.state.valuesMap.title) {
       this.props.onSubmit({
-        ...prevState.valuesMap,
+        ...this.state.valuesMap,
         completed: false,
         id: new Date(),
       });
-    });
-
-    this.setState({
-      valuesMap: {
-        title: '',
-      },
-    });
+      this.setState({
+        valuesMap: {
+          title: '',
+        },
+      });
+    }
   };
 
   handleFieldChange = (event) => {

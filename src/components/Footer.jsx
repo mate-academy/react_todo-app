@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 const Footer = (props) => {
   const {
     todos,
-    isCompleted,
     handleDestroyCompleted,
     handleFilter,
   } = props;
@@ -12,7 +11,7 @@ const Footer = (props) => {
   return (
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
-        {`${todos.filter(todo => (!todo.completed)).length}`}
+        {`${todos.filter(todo => !todo.completed).length}`}
         {' items left'}
       </span>
 
@@ -48,7 +47,7 @@ const Footer = (props) => {
         </li>
       </ul>
 
-      {isCompleted && (
+      {todos.some(todo => todo.completed) && (
         <button
           type="button"
           className="clear-completed"
@@ -69,13 +68,11 @@ Footer.propTypes = {
     completed: PropTypes.bool,
     id: PropTypes.instanceOf(Date),
   })).isRequired,
-  isCompleted: PropTypes.bool,
   handleDestroyCompleted: PropTypes.func,
   handleFilter: PropTypes.func,
 };
 
 Footer.defaultProps = {
-  isCompleted: false,
   handleDestroyCompleted: () => {},
   handleFilter: () => {},
 };

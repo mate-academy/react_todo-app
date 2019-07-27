@@ -9,7 +9,6 @@ class App extends React.Component {
     filteredTodos: [],
     footerVisibility: false,
     allToggle: false,
-    isCompleted: false,
     filterDescription: '',
   };
 
@@ -27,7 +26,6 @@ class App extends React.Component {
           ? todo
           : { ...todo, completed: !todo.completed }
       )),
-      isCompleted: !prevState.isCompleted,
     }));
   };
 
@@ -39,7 +37,6 @@ class App extends React.Component {
           : { ...todo, completed: false }
       )),
       allToggle: !prevState.allToggle,
-      isCompleted: !prevState.isCompleted,
     }));
   };
 
@@ -51,7 +48,7 @@ class App extends React.Component {
 
   handleDestroyCompleted = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => todo.completed === false),
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
 
@@ -61,19 +58,19 @@ class App extends React.Component {
         case 'all':
           return ({
             filteredTodos: prevState.todos,
-            filterDescription: 'all',
+            filterDescription: desc,
           });
 
         case 'active':
           return ({
             filteredTodos: prevState.todos.filter(todo => !todo.completed),
-            filterDescription: 'active',
+            filterDescription: desc,
           });
 
         case 'completed':
           return ({
             filteredTodos: prevState.todos.filter(todo => todo.completed),
-            filterDescription: 'completed',
+            filterDescription: desc,
           });
 
         default:
@@ -86,7 +83,6 @@ class App extends React.Component {
     const {
       todos,
       footerVisibility,
-      isCompleted,
       filteredTodos,
       filterDescription,
     } = this.state;
@@ -112,7 +108,6 @@ class App extends React.Component {
 
           <Footer
             todos={todos}
-            isCompleted={isCompleted}
             handleDestroyCompleted={this.handleDestroyCompleted}
             handleFilter={this.handleFilter}
           />

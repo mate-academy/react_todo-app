@@ -4,6 +4,7 @@ import TodoItem from './TodoItem';
 
 const TodoList = (props) => {
   const {
+    todos,
     filteredTodos,
     filterDescription,
     handleTodoToggle,
@@ -11,26 +12,27 @@ const TodoList = (props) => {
     handleDestroyTodo,
   } = props;
 
-  let { todos } = props;
+  let shownTodos = [...todos];
 
   if (filterDescription === 'active' || filterDescription === 'completed') {
-    todos = filteredTodos;
+    shownTodos = filteredTodos;
   }
 
   return (
-    <section className="main" style={{ display: 'block' }}>
+    <section className="main">
 
       <input
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
-        onChange={() => handleAllToggle()}
+        onChange={handleAllToggle}
       />
 
+      {/* eslint-disable-next-line */}
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
 
-        {todos.map(todoItem => (
+        {shownTodos.map(todoItem => (
           <TodoItem
             key={todoItem.id}
             todo={todoItem}
