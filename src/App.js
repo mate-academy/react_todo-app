@@ -125,7 +125,7 @@ class App extends React.Component {
 
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
-            {`${todosVisible.filter(todo => (!todo.completed)).length}
+            {`${todosVisible.filter(todo => !todo.completed).length}
             items left`}
           </span>
 
