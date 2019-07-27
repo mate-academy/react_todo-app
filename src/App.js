@@ -47,25 +47,14 @@ class App extends React.Component {
 
   toggleAll = () => {
     this.setState(prevState => ({
-      todoes: prevState.todoes.map((todo) => {
-        if (prevState.allToggled === false) {
-          return {
-            ...todo,
-            isDone: true,
-          };
-        }
-
-        return {
-          ...todo,
-          isDone: false,
-        };
-      }),
+      todoes: prevState.todoes
+        .map(todo => ({ ...todo, isDone: !prevState.allToggled })),
       allToggled: !prevState.allToggled,
     }));
   }
 
   addTask = (task) => {
-    if (task.length>0) {
+    if (task.length > 0) {
       this.setState(prevState => ({
         todoes: [...prevState.todoes, {
           id: Date.now(),
@@ -86,7 +75,7 @@ class App extends React.Component {
 
   destroyCompleted = () => {
     this.setState(prevState => ({
-      todoes: prevState.todoes.filter(todo => todo.isDone === false),
+      todoes: prevState.todoes.filter(todo => !todo.isDone),
     }));
   }
 
@@ -101,7 +90,12 @@ class App extends React.Component {
 
     const resultingList = todoes.length !== 0
       ? todosCopy.map(todo => (
-        <Todo todo={todo} toggle={this.toggle} destroy={this.destroy} />
+        <Todo
+          todo={todo}
+          key={todo.id}
+          toggle={this.toggle}
+          destroy={this.destroy}
+        />
       ))
       : '';
 
