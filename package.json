@@ -1,5 +1,5 @@
 {
-  "homepage": "http://mate-academy.github.io/react_todo-app",
+  "homepage": "http://earthhuman41.github.io/react_todo-app",
   "name": "react-todo-app",
   "version": "0.1.0",
   "private": true,
@@ -7,10 +7,16 @@
   "author": "Mate Academy",
   "license": "GPL-3.0",
   "dependencies": {
+    "classnames": "^2.2.6",
+    "node-uuid": "^1.4.8",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "redux": "^4.0.4",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react": "*",
