@@ -10,6 +10,7 @@ class App extends React.Component {
     sortField: 'All',
     todosVisible: [],
     isCompletedHide: 0,
+    statusAllTodo: true,
   }
 
   addTodo = (title) => {
@@ -21,7 +22,7 @@ class App extends React.Component {
           completed: false,
         },
       ],
-      todosVisible: [...prevState.todos, {
+      todosVisible: [...prevState.todosVisible, {
         title,
         id: Date.now(),
         completed: false,
@@ -54,19 +55,15 @@ class App extends React.Component {
     });
   }
 
-  handleChackAll = (event) => {
-    const isTodoChecked = event.target.checked;
-
-    this.setState((prevState) => {
-      const allCheckedTodos = [
-        ...prevState.todos,
-      ];
-      allCheckedTodos.forEach(todo => (todo.completed = isTodoChecked));
-
-      return {
-        todos: allCheckedTodos,
-      };
-    });
+  handleChackAll = () => {
+    this.setState(prevState => ({
+      todosVisible: prevState.todos.map(todo => ({
+        ...todo,
+        completed: prevState.statusAllTodo,
+      }
+      )),
+      statusAllTodo: !prevState.statusAllTodo,
+    }));
   }
 
   deleteTodo = (id) => {
@@ -83,13 +80,12 @@ class App extends React.Component {
   }
 
   destroyAllComplete = () => {
-    const { sortField } = this.state;
-
     this.setState((prevState) => {
       const todosActive = prevState.todos.filter(a => !a.completed);
+
       return {
         todos: todosActive,
-        todosVisible: getSortFied(todosActive, sortField),
+        todosVisible: getSortFied(todosActive, prevState.sortField),
       };
     });
   }
@@ -106,12 +102,11 @@ class App extends React.Component {
 
         </header>
 
-        <section className="main" style={{ display: 'block' }}>
+        <section className="main">
           <input
             type="checkbox"
             className="toggle-all"
             id="toggle-all"
-            checked={!(todosVisible.some(todo => !todo.completed))}
             onChange={this.handleChackAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -143,7 +138,6 @@ class App extends React.Component {
           <button
             type="button"
             className="clear-completed"
-            style={{ display: 'block' }}
             onClick={this.destroyAllComplete}
           >
             {this.state.isCompletedHide ? 'Clear completed' : ''}

@@ -107,6 +107,7 @@ body {
 }
 
 .main {
+  display: 'block';
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
@@ -325,6 +326,7 @@ html .clear-completed:active {
   line-height: 20px;
   text-decoration: none;
   cursor: pointer;
+  display: 'block'
 }
 
 .clear-completed:hover {

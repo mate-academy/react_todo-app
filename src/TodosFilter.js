@@ -5,7 +5,7 @@ const TodosFilter = ({ handleFilterBy }) => (
   <>
     <li>
       <a
-        onClick={() => handleFilterBy('Active')}
+        onClick={() => handleFilterBy('active')}
         href="#/"
         className="selected"
       >
@@ -15,7 +15,7 @@ const TodosFilter = ({ handleFilterBy }) => (
     <li>
       <a
         href="#/active"
-        onClick={() => handleFilterBy('All')}
+        onClick={() => handleFilterBy('all')}
       >
       All
       </a>
@@ -23,7 +23,7 @@ const TodosFilter = ({ handleFilterBy }) => (
     <li>
       <a
         href="#/completed"
-        onClick={() => handleFilterBy('Completed')}
+        onClick={() => handleFilterBy('completed')}
       >
     Completed
       </a>
