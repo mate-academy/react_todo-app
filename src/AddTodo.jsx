@@ -17,6 +17,7 @@ class AddTodo extends React.Component {
     const {handleTodoAdd} = this.props
     let {errorsList} = this.state;
     if (event.key === 'Enter') {
+      event.preventDefault();
       this.setState ((prevState => {
         if (!prevState.text) {
           errorsList = true;
