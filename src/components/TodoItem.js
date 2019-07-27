@@ -54,6 +54,8 @@ class TodoItem extends React.Component {
       this.setState({
         isEditableItem: false,
       });
+    } else {
+      props.deleteTodo(id);
     }
   };
 
