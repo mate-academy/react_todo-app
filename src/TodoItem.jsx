@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const TodoItem = (props) => {
   const {
@@ -31,6 +32,12 @@ const TodoItem = (props) => {
       </li>
     </ul>
   )
+};
+
+TodoItem.propTypes = {
+  todo: PropTypes.object.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  handleComplete: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

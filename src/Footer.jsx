@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 const Footer = ( props ) => {
@@ -69,6 +70,13 @@ const Footer = ( props ) => {
     </footer>
 
   )
+};
+
+Footer.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  activeFilter: PropTypes.string.isRequired,
+  handleFilter: PropTypes.func.isRequired,
+  handleTodoDeleteCompleted: PropTypes.func.isRequired,
 };
 
 export default Footer;
