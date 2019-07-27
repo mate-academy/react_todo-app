@@ -1,32 +1,74 @@
 import React from 'react';
+import classnames from 'classnames';
 
-const Footer = ({ length }) => {
+const Footer = ( props ) => {
+    const {
+      handleFilter,
+      activeFilter,
+      todos,
+      handleTodoDeleteCompleted
+          } = props;
+
+  const activeTodos = todos.filter(todo => (!todo.completed)).length;
+  const todoCompleted = todos.filter(todo => (todo.completed));
   return (
-  <footer className="footer" style={{ display: 'block' }}>
-    <span className="todo-count">
-      {length} items left
-    </span>
-    <ul className="filters">
-      <li>
-        <a href="#/" className="selected">All</a>
-      </li>
+    <footer className="footer" style={{ display: 'block' }}>
+      <span className="todo-count">
+        {activeTodos} items left
+      </span>
+      <ul className="filters">
+        <li>
+          <a href="#/" className={classnames({
+            selected: activeFilter === 'all',
+          })}
+          name='all'
+          onClick={handleFilter}
+          >All</a>
+        </li>
 
-      <li>
-        <a href="#/active">Active</a>
-      </li>
+        <li>
+          <a href="#/active"
+          className={classnames({
+            selected: activeFilter === 'active',
+          })}
+          name='active'
+          onClick={handleFilter}>Active</a>
+        </li>
 
-      <li>
-        <a href="#/completed">Completed</a>
-      </li>
-    </ul>
+        <li>
+          <a href="#/completed"
+          className={classnames({
+            selected: activeFilter === 'completed',
+          })}
+          name='completed'
+          onClick={handleFilter}>Completed</a>
+        </li>
 
-    <button
-      type="button"
-      className="clear-completed"
-      style={{ display: 'block' }}
-    />
-  </footer>
+        <li className={classnames({
+            'hidden': todoCompleted.length === 0,
+            'selected': todoCompleted.length > 0,
+            'clear-completed': true,
+          })}>
+          <a href="#/deleted"
+            className={classnames({
+              'selected': activeFilter === 'deleted',
+
+            })}
+            name='deleted'
+            onClick={() => handleTodoDeleteCompleted(todoCompleted)}>
+              Clear completed
+          </a>
+        </li>
+      </ul>
+
+      <button
+        type="button"
+        className="clear-completed"
+        style={{ display: 'block' }}
+      />
+    </footer>
+
   )
-}
+};
 
 export default Footer;

@@ -1,27 +1,36 @@
 import React from 'react';
 
-const TodoItem = ({ todo, onHandleDelete }) => {
+const TodoItem = (props) => {
+  const {
+    todo,
+    handleDelete,
+    handleComplete
+        } = props;
 
   return (
     <ul className="todo-list">
-      <li className="todo-list_li">
+      <li  className={todo.completed ? 'completed' : ''}>
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
-            id="todo-3" />
-          <label htmlFor="todo-3">
+            id={todo.id}
+            onChange={() => handleComplete(todo.id)}
+            checked={todo.completed}
+
+          />
+          <label htmlFor="todo">
             {todo.text}
           </label>
             <button
               type="button"
               className="destroy"
-              onClick={() => onHandleDelete(todo.id)}
+              onClick={() => handleDelete(todo.id)}
             />
         </div>
       </li>
     </ul>
   )
-}
+};
 
 export default TodoItem;

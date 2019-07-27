@@ -318,6 +318,18 @@ body {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
+.hidden {
+  visibility: hidden;
+}
+
+.clear-completed {
+  margin-left: 40px;
+}
+
+.clear-completed:hover {
+  text-decoration: none;
+}
+
 .clear-completed,
 html .clear-completed:active {
   float: right;
@@ -328,7 +340,7 @@ html .clear-completed:active {
 }
 
 .clear-completed:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .info {
