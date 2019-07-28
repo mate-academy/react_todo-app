@@ -15,7 +15,6 @@ class App extends React.Component {
       todos: prevState.todos
         .concat(todoObj)
         .map((todo, i, arr) => {
-        console.log(arr);
         return ({
           ...todo,
           id: (!todo.id && arr[arr.length -2] === undefined)
