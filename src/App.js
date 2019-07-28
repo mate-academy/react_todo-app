@@ -7,28 +7,37 @@ import TodosFilter from './TodosFilter';
 class App extends React.Component {
   state = {
     todos: [],
+    visibleTodos: [],
   };
 
   componentDidMount() {
-    this.setState({ todos: getTodos });
+    this.setState({
+      todos: getTodos,
+      visibleTodos: getTodos,
+    });
   }
 
   addTodo = (title) => {
-    this.setState(prevState => ({
-      todos: [
+    this.setState(prevState => {
+      const newTodos = [
         ...prevState.todos,
         {
           title,
           id: prevState.todos.length + 1,
           completed: false,
         },
-      ],
-    }));
+      ];
+
+      return {
+        visibleTodos: newTodos,
+        todos: newTodos,
+      }
+    });
   };
 
-  handleChangeCompleted = (id) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
+  handlerChangeCompleted = (id) => {
+    this.setState(prevState => {
+      const newTodos = prevState.todos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -37,26 +46,37 @@ class App extends React.Component {
         }
 
         return todo;
-      })
-    }));
+      });
+
+      return {
+        visibleTodos: newTodos,
+        todos: newTodos,
+      }
+    });
   };
 
   handleChangeCompletedAll = () => {
     this.setState(prevState => {
-      if (prevState.todos.every(todo => todo.completed === false)
-        || prevState.todos.every(todo => todo.completed === true)) {
+      if (prevState.visibleTodos.every(todo => todo.completed === false)
+        || prevState.visibleTodos.every(todo => todo.completed === true)) {
+        const changeAllTodos = prevState.visibleTodos.map(todo => ({
+          ...todo,
+          completed: !todo.completed,
+        }));
+
         return {
-          todos: prevState.todos.map(todo => ({
-            ...todo,
-            completed: !todo.completed,
-          }))
+          visibleTodos: changeAllTodos,
+          todos: changeAllTodos,
         };
       } else {
+        const changeSomeTodos =  prevState.visibleTodos.map(todo => ({
+          ...todo,
+          completed: true,
+        }));
+
         return {
-          todos: prevState.todos.map(todo => ({
-            ...todo,
-            completed: true,
-          }))
+          visibleTodos: changeSomeTodos,
+          todos: changeSomeTodos,
         };
       }
 
@@ -64,15 +84,54 @@ class App extends React.Component {
   };
 
   handleRemoveTodo = (id) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => (
+    this.setState(prevState => {
+      const newTodos = prevState.visibleTodos.filter(todo => (
         todo.id !== id
-      ))
-    }));
+      ));
+      return {
+        visibleTodos: newTodos,
+        todos: newTodos,
+      }
+    });
+  };
+
+  handlerFilter = (filterField) => {
+    this.setState(state => {
+      switch (filterField) {
+        case 'all':
+          return {
+            visibleTodos: state.todos,
+          };
+        case  'active':
+          return {
+            visibleTodos: state.todos.filter(todo => (
+              todo.completed === false
+            )),
+          };
+        case  'completed':
+          return {
+            visibleTodos: state.todos.filter(todo => (
+              todo.completed === true
+            )),
+          };
+      }
+    });
+  };
+
+  handlerClearCompleted = () => {
+    this.setState(prevState => {
+      const newTodos = prevState.visibleTodos.filter(todo => (
+        todo.completed === false
+      ));
+      return {
+        visibleTodos: newTodos,
+        todos: newTodos,
+      }
+    });
   };
 
   render() {
-    const { todos } = this.state;
+    const { visibleTodos } = this.state;
 
     return (
       <section className="todoapp">
@@ -82,24 +141,29 @@ class App extends React.Component {
         </header>
 
         <TodoList
-          todos={todos}
-          changeCompleted={this.handleChangeCompleted}
+          todos={visibleTodos}
+          changeCompleted={this.handlerChangeCompleted}
           changeCompletedAll={this.handleChangeCompletedAll}
           removeTodo={this.handleRemoveTodo}
         />
 
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
-            {`${todos.length} items left`}
+            {`${visibleTodos.length} items left`}
           </span>
 
-          <TodosFilter />
+          <TodosFilter
+            handlerFilter={this.handlerFilter}
+          />
 
           <button
             type="button"
             className="clear-completed"
             style={{ display: 'block' }}
-          />
+            onClick={this.handlerClearCompleted}
+          >
+            Clear completed
+          </button>
         </footer>
       </section>
     );
