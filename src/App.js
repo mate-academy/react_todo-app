@@ -7,7 +7,7 @@ import getSortFied from './getSortFied';
 class App extends React.Component {
   state = {
     todos: [],
-    sortField: 'All',
+    sortField: 'all',
     todosVisible: [],
     isCompletedHide: 0,
     statusAllTodo: true,
@@ -34,7 +34,7 @@ class App extends React.Component {
   handleFilterBy = (sortField) => {
     this.setState(prevState => ({
       todosVisible: getSortFied(prevState.todos, sortField),
-      sortField,
+      sortField: prevState.sortField,
     }));
   }
 
@@ -67,31 +67,28 @@ class App extends React.Component {
   }
 
   deleteTodo = (id) => {
-    const { todos, sortField } = this.state;
-
     this.setState((prevState) => {
-      const todosDelet = todos.filter(todo => !(todo.id === id));
-
+      const todosDelet = prevState.todos.filter(todo => !(todo.id === id));
       return {
         todos: todosDelet,
-        todosVisible: getSortFied(todosDelet, sortField),
+        todosVisible: getSortFied(todosDelet, 'all'),
       };
     });
   }
 
   destroyAllComplete = () => {
     this.setState((prevState) => {
-      const todosActive = prevState.todos.filter(a => !a.completed);
-
+      const todosActive = prevState.todosVisible.filter(a => !a.completed);
       return {
         todos: todosActive,
-        todosVisible: getSortFied(todosActive, prevState.sortField),
+        todosVisible: getSortFied(todosActive, 'all'),
       };
     });
   }
 
   render() {
     const { todosVisible } = this.state;
+
     return (
       <section className="todoapp">
         <header className="header">
