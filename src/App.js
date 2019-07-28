@@ -14,12 +14,17 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos
         .concat(todoObj)
-        .map((todo, i) => ({
+        .map((todo, i, arr) => {
+        console.log(arr);
+        return ({
           ...todo,
-          id: !todo.id
+          id: (!todo.id && arr[arr.length -2] === undefined)
             ? todo.id = i + 1
-            : todo.id
-        })),
+            : (!todo.id && arr[arr.length -2].id !== undefined)
+              ? todo.id = arr[arr.length -2].id + 1
+              : todo.id
+        })
+        }),
     }));
   };
   
