@@ -141,7 +141,7 @@ body {
   padding: 10px 27px 10px 27px;
 }
 
-.toggle-all:checked + label:before {
+.toggle-all--active + label:before {
   color: #737373;
 }
 
@@ -263,6 +263,7 @@ body {
 }
 
 .footer {
+  display: block;
   color: #777;
   padding: 10px 15px;
   height: 20px;

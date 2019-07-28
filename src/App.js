@@ -2,52 +2,50 @@ import React from 'react';
 import Header from './components/Header';
 import TodoList from './components/TodoList';
 import Footer from './components/Footer';
+import { getTodoToggle, getAllToggle } from './utils';
 
 class App extends React.Component {
   state = {
     todos: [],
     filteredTodos: [],
-    footerVisibility: false,
     allToggle: false,
     filterDescription: '',
   };
 
   addTodo = (todo) => {
     this.setState(prevState => ({
+      filteredTodos: [...prevState.filteredTodos, todo],
       todos: [...prevState.todos, todo],
-      footerVisibility: true,
     }));
   };
 
   handleTodoToggle = (todoId) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map(todo => (
-        todo.id !== todoId
-          ? todo
-          : { ...todo, completed: !todo.completed }
-      )),
+      filteredTodos: getTodoToggle(prevState.filteredTodos, todoId),
+      todos: getTodoToggle(prevState.todos, todoId),
     }));
   };
 
   handleAllToggle = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.map(todo => (
-        prevState.allToggle === false
-          ? { ...todo, completed: true }
-          : { ...todo, completed: false }
-      )),
+      filteredTodos: getAllToggle(prevState.filteredTodos, prevState.allToggle),
       allToggle: !prevState.allToggle,
+      todos: getAllToggle(prevState.todos, prevState.allToggle),
     }));
   };
 
   handleDestroyTodo = (todoId) => {
     this.setState(prevState => ({
+      filteredTodos: prevState.filteredTodos.filter(todo => todo.id !== todoId),
+      allToggle: !prevState.todos.length === 0,
       todos: prevState.todos.filter(todo => todo.id !== todoId),
     }));
   };
 
   handleDestroyCompleted = () => {
     this.setState(prevState => ({
+      filteredTodos: prevState.filteredTodos.filter(todo => !todo.completed),
+      allToggle: !prevState.todos.length === 0,
       todos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
@@ -55,26 +53,20 @@ class App extends React.Component {
   handleFilter = (desc) => {
     this.setState((prevState) => {
       switch (desc) {
-        case 'all':
-          return ({
-            filteredTodos: prevState.todos,
-            filterDescription: desc,
-          });
-
         case 'active':
           return ({
             filteredTodos: prevState.todos.filter(todo => !todo.completed),
-            filterDescription: desc,
           });
 
         case 'completed':
           return ({
             filteredTodos: prevState.todos.filter(todo => todo.completed),
-            filterDescription: desc,
           });
 
         default:
-          return ({});
+          return ({
+            filteredTodos: prevState.todos,
+          });
       }
     });
   };
@@ -82,8 +74,8 @@ class App extends React.Component {
   render() {
     const {
       todos,
-      footerVisibility,
       filteredTodos,
+      allToggle,
       filterDescription,
     } = this.state;
 
@@ -91,12 +83,13 @@ class App extends React.Component {
       <section className="todoapp">
 
         <Header
-          todos={todos}
+          todos={filteredTodos}
           addTodo={this.addTodo}
         />
 
         <TodoList
-          todos={todos}
+          todos={filteredTodos}
+          allToggle={allToggle}
           filteredTodos={filteredTodos}
           filterDescription={filterDescription}
           handleTodoToggle={this.handleTodoToggle}
@@ -104,10 +97,10 @@ class App extends React.Component {
           handleDestroyTodo={this.handleDestroyTodo}
         />
 
-        {footerVisibility && (
+        {todos.length > 0 && (
 
           <Footer
-            todos={todos}
+            todos={filteredTodos}
             handleDestroyCompleted={this.handleDestroyCompleted}
             handleFilter={this.handleFilter}
           />

@@ -1,22 +1,23 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
 const TodoList = (props) => {
   const {
-    todos,
+    allToggle,
     filteredTodos,
-    filterDescription,
     handleTodoToggle,
     handleAllToggle,
     handleDestroyTodo,
   } = props;
 
-  let shownTodos = [...todos];
-
-  if (filterDescription === 'active' || filterDescription === 'completed') {
-    shownTodos = filteredTodos;
-  }
+  const getClassesAllToggle = classnames(
+    {
+      'toggle-all': true,
+      'toggle-all--active': allToggle,
+    }
+  );
 
   return (
     <section className="main">
@@ -24,7 +25,7 @@ const TodoList = (props) => {
       <input
         type="checkbox"
         id="toggle-all"
-        className="toggle-all"
+        className={getClassesAllToggle}
         onChange={handleAllToggle}
       />
 
@@ -32,7 +33,7 @@ const TodoList = (props) => {
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
 
-        {shownTodos.map(todoItem => (
+        {filteredTodos.map(todoItem => (
           <TodoItem
             key={todoItem.id}
             todo={todoItem}
@@ -47,28 +48,22 @@ const TodoList = (props) => {
 };
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string,
-    completed: PropTypes.bool,
-    id: PropTypes.instanceOf(Date),
-  })).isRequired,
+  allToggle: PropTypes.bool,
   handleTodoToggle: PropTypes.func,
   handleAllToggle: PropTypes.func,
   handleDestroyTodo: PropTypes.func,
-  filterDescription: PropTypes.string,
   filteredTodos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,
     id: PropTypes.instanceOf(Date),
-  })),
+  })).isRequired,
 };
 
 TodoList.defaultProps = {
   handleTodoToggle: () => {},
   handleAllToggle: () => {},
   handleDestroyTodo: () => {},
-  filterDescription: '',
-  filteredTodos: [],
+  allToggle: false,
 };
 
 export default TodoList;

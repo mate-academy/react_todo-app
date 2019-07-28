@@ -9,7 +9,7 @@ const Footer = (props) => {
   } = props;
 
   return (
-    <footer className="footer" style={{ display: 'block' }}>
+    <footer className="footer">
       <span className="todo-count">
         {`${todos.filter(todo => !todo.completed).length}`}
         {' items left'}
