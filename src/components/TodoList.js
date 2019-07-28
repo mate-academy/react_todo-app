@@ -3,10 +3,23 @@ import PropTypes from 'prop-types';
 
 import TodoItem from './TodoItem';
 
-function TodoList({ todos, handleToggle, handleRemove }) {
+function TodoList({
+  todos,
+  handleToggle,
+  handleRemove,
+  handleToggleAll,
+}) {
   return (
     <>
-      <input type="checkbox" id="toggle-all" className="toggle-all" />
+      <input
+        type="checkbox"
+        id="toggle-all"
+        className="toggle-all"
+        onChange={event => handleToggleAll(event)}
+        checked={todos.length === todos
+          .filter(todo => todo.completed === true)
+          .length}
+      />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list">
@@ -27,5 +40,6 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleToggle: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
+  handleToggleAll: PropTypes.func.isRequired,
 };
 export default TodoList;

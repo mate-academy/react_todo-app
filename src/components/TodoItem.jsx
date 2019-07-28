@@ -8,12 +8,12 @@ function TodoItem({ todo, handleToggle, handleRemove }) {
         <input
           type="checkbox"
           className="toggle"
-          id="todo-3"
+          id={`todo-${todo.id}`}
           checked={todo.completed}
           onChange={() => handleToggle(todo.id)}
         />
-        {/* eslint-disable-next-line */}
-        <label htmlFor="todo-3">{todo.title}</label>
+        {/* eslint-disable-next-line jsx-a11y/label-has-for */}
+        <label htmlFor={`todo-${todo.id}`}>{todo.title}</label>
         <button
           type="button"
           className="destroy"
@@ -25,7 +25,7 @@ function TodoItem({ todo, handleToggle, handleRemove }) {
 }
 
 TodoItem.propTypes = {
-  todo: PropTypes.object.isRequired,
+  todo: PropTypes.objectOf(PropTypes.object).isRequired,
   handleToggle: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
 };

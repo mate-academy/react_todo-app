@@ -1,30 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-let counter = 2;
+let counter = 1;
 
 class NewTodo extends React.Component {
   state = {
-    input: '',
+    todo: '',
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const title = this.state.input;
+    const title = this.state.todo;
     const id = counter;
 
     if (title) {
       this.props.handleSubmit(id, title);
       counter += 1;
       this.setState({
-        input: '',
+        todo: '',
       });
     }
   }
 
   handleChange = (event) => {
-    this.setState({ input: event.target.value });
+    this.setState({ todo: event.target.value });
   }
 
   render() {
@@ -34,7 +34,7 @@ class NewTodo extends React.Component {
           type="text"
           className="new-todo"
           placeholder="What needs to be done?"
-          value={this.state.input}
+          value={this.state.todo}
           onChange={this.handleChange}
         />
         <button type="submit" />
