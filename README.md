@@ -37,7 +37,7 @@ Resources:
     ```jsx harmony
     <TodoList items={todos} />
     ```
-1. Implement `TodoItem` component with ability to toggle the `complete` status.
+1. Implement `TodoApp` component with ability to toggle the `complete` status.
 1. Add ability to toggle the completed status of all the todos.
 1. Create `TodosFilter` component to switch between `all`/`active`/`comleted` todos
 1. Add ability to remove an item.
