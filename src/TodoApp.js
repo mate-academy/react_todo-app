@@ -13,10 +13,15 @@ class TodoApp extends React.Component {
   };
 
   onCLickEnter = (event) => {
+    const { title } = this.state;
     if (event.keyCode === 13) {
       event.preventDefault();
 
-      this.props.addTodo(this.state.title);
+      if (!title || title === ' ') {
+        return;
+      }
+
+      this.props.addTodo(title);
       this.setState({ title: '' });
     }
   };
