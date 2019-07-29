@@ -5,7 +5,7 @@ const classNames = require('classnames');
 
 function Footer(props) {
   const {
-    filterState, handlefilter, destroyAllComleted, todos,
+    filterStatut, handlefilter, destroyAllComleted, todos,
   } = props;
 
   const itemsLeft = todos
@@ -17,15 +17,15 @@ function Footer(props) {
   });
 
   const allButtonClass = classNames({
-    selected: filterState === 'All',
+    selected: filterStatut === 'All',
   });
 
   const activeButtonClass = classNames({
-    selected: filterState === 'Active',
+    selected: filterStatut === 'Active',
   });
 
   const completedButtonClass = classNames({
-    selected: filterState === 'Completed',
+    selected: filterStatut === 'Completed',
   });
 
   const clearComletedClass = classNames({
@@ -86,7 +86,7 @@ function Footer(props) {
 }
 
 Footer.propTypes = {
-  filterState: PropTypes.string.isRequired,
+  filterStatut: PropTypes.string.isRequired,
   handlefilter: PropTypes.func.isRequired,
   destroyAllComleted: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,

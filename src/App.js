@@ -4,26 +4,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import TodoItem from './components/TodoItem';
 
-const cashedFilteredTodos = (callback) => {
-  let prevArgs = [];
-  let prevValue = [];
+import cashedFilteredTodos from './helpers/helpers';
 
-  return (...args) => {
-    if (args.every((arg, i) => arg === prevArgs[i])) {
-      return prevValue;
-    }
-
-    const [todos, state] = args;
-    prevArgs = args;
-    prevValue = callback(todos, state);
-
-    return prevValue;
-  };
-};
-
-const getfilteredTodos = (todos, state) => {
+const getfilteredTodos = (todos, statut) => {
   const filteredTodos = todos.filter((item) => {
-    switch (state) {
+    switch (statut) {
       case 'Active':
         return !item.completed;
 
@@ -43,84 +28,71 @@ const getCashedFilteredTodos = cashedFilteredTodos(getfilteredTodos);
 class App extends React.Component {
   state = {
     todos: [],
-    filterState: 'All',
+    filterStatut: 'All',
     allCompleted: false,
   }
 
-  handleAllCompleted = (event) => {
+  toggleAllComplete = (event) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (
         { ...todo, completed: !prevState.allCompleted }
       )),
       allCompleted: !prevState.allCompleted,
-      filterState: 'All',
+      filterStatut: 'All',
     }));
   }
 
   writeNewTodo = (newTodo) => {
     this.setState(prevState => ({
       todos: [newTodo, ...prevState.todos],
-      filterState: 'All',
+      filterStatut: 'All',
     }));
   }
 
   rewriteExistingTodo = (title, id) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
-        if (todo.id === id) {
-          todo = { ...todo, title };
-        }
-        return todo;
-      }),
+      todos: prevState.todos
+        .map(todo => (todo.id === id ? { ...todo, title } : todo)),
     }));
   }
 
-  toggleComplete = id => (
+  toggleComplete = (id) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map((item) => {
-        item.id === id
-        && (item = { ...item, completed: !item.completed });
+      todos: prevState.todos
+        .map(todo => (
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        )),
 
-        return item;
-      }),
-
-      filterState: 'All',
-    })));
+      filterStatut: 'All',
+    }));
+  }
 
   destroyItem = id => (
     this.setState(prevState => ({
-      todos: prevState.todos.filter(item => item.id !== id),
-      filterState: 'All',
+      todos: prevState.todos.filter(todo => todo.id !== id),
+      filterStatut: 'All',
     })));
 
   destroyAllComleted = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(item => (!item.completed)),
-
+      todos: prevState.todos.filter(todo => (!todo.completed)),
       allCompleted: false,
-      filterState: 'All',
+      filterStatut: 'All',
     }));
   }
 
-  handlefilter = (state) => {
-    this.setState(prevState => ({
-      filterState: state,
-    }));
-  }
+  handlefilter = statut => (
+    this.setState({ filterStatut: statut })
+  );
 
-  isExistingAndUnique = (value, arr) => {
-    if (value && !arr.some(item => item.title === value)) {
-      return true;
-    }
-    return false;
-  }
+  isExistingAndUnique = (value, arr) => (
+    value && !arr.some(todo => todo.title === value)
+  );
 
   render() {
-    const {
-      allCompleted, todos, filterState,
-    } = this.state;
+    const { allCompleted, todos, filterStatut } = this.state;
 
-    const filteredtodos = getCashedFilteredTodos([...todos], filterState);
+    const filteredtodos = getCashedFilteredTodos([...todos], filterStatut);
 
     return (
       <section className="todoapp">
@@ -136,7 +108,7 @@ class App extends React.Component {
             id="toggle-all"
             className="toggle-all"
             checked={allCompleted}
-            onChange={this.handleAllCompleted}
+            onChange={this.toggleAllComplete}
           />
 
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -161,7 +133,7 @@ class App extends React.Component {
           todos={todos}
           handlefilter={this.handlefilter}
           destroyAllComleted={this.destroyAllComleted}
-          filterState={filterState}
+          filterStatut={filterStatut}
         />
       </section>
     );
