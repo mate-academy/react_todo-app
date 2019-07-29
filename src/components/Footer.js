@@ -47,7 +47,7 @@ const Footer = ({
       style={{ display: 'block' }}
       onClick={onClear}
     >
-      {completed > 0 && 'Clear completed'}
+      {completed && 'Clear completed'}
     </button>
   </footer>
 );
@@ -55,14 +55,14 @@ const Footer = ({
 Footer.propTypes = {
   activ: PropTypes.number,
   filter: PropTypes.string,
-  completed: PropTypes.number,
+  completed: PropTypes.bool,
   onFilter: PropTypes.func.isRequired,
   onClear: PropTypes.func.isRequired,
 };
 
 Footer.defaultProps = {
-  activ: '',
-  completed: 0,
+  activ: 0,
+  completed: false,
   filter: 'all',
 };
 

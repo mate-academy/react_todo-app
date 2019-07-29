@@ -13,7 +13,7 @@ const TodoList = ({
       id="toggle-all"
       className="toggle-all"
       checked={toggleAll}
-      onChange={onChangeAllStatus}
+      onChange={() => onChangeAllStatus(toggleAll)}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
 

@@ -15,8 +15,10 @@ class Header extends React.Component {
   }
 
   handleSubmit = (event) => {
-    if (event.key === 'Enter') {
-      this.props.onSubmit(this.state.newTodo);
+    const { newTodo } = this.state;
+
+    if (event.key === 'Enter' && newTodo !== '') {
+      this.props.onSubmit(newTodo);
 
       this.setState({
         newTodo: '',
