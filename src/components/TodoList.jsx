@@ -10,6 +10,7 @@ const TodoList = (props) => {
     handleTodoToggle,
     handleAllToggle,
     handleDestroyTodo,
+    onChangeSubmit,
   } = props;
 
   const getClassesAllToggle = classnames(
@@ -39,6 +40,7 @@ const TodoList = (props) => {
             todo={todoItem}
             handleTodoToggle={handleTodoToggle}
             handleDestroyTodo={handleDestroyTodo}
+            onChangeSubmit={onChangeSubmit}
           />
         ))}
 
@@ -52,6 +54,7 @@ TodoList.propTypes = {
   handleTodoToggle: PropTypes.func,
   handleAllToggle: PropTypes.func,
   handleDestroyTodo: PropTypes.func,
+  onChangeSubmit: PropTypes.func,
   filteredTodos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,
@@ -63,6 +66,7 @@ TodoList.defaultProps = {
   handleTodoToggle: () => {},
   handleAllToggle: () => {},
   handleDestroyTodo: () => {},
+  onChangeSubmit: () => {},
   allToggle: false,
 };
 

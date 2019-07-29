@@ -71,6 +71,21 @@ class App extends React.Component {
     });
   };
 
+  handleChangeTodo = (title, id) => {
+    this.setState(prevState => ({
+      filteredTodos: prevState.filteredTodos.map(todo => (
+        todo.id !== id
+          ? todo
+          : { ...todo, title }
+      )),
+      todos: prevState.todos.map(todo => (
+        todo.id !== id
+          ? todo
+          : { ...todo, title }
+      )),
+    }));
+  };
+
   render() {
     const {
       todos,
@@ -95,6 +110,7 @@ class App extends React.Component {
           handleTodoToggle={this.handleTodoToggle}
           handleAllToggle={this.handleAllToggle}
           handleDestroyTodo={this.handleDestroyTodo}
+          onChangeSubmit={this.handleChangeTodo}
         />
 
         {todos.length > 0 && (
