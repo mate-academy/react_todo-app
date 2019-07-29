@@ -1,29 +1,83 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-const TodoItem = ({ todo, onCheck, onRemove }) => (
-  <li className={todo.completed ? 'completed' : ''}>
-    <div className="view">
-      <input
-        type="checkbox"
-        className="toggle"
-        id={todo.id}
-        onChange={() => onCheck(todo.id)}
-        checked={todo.completed}
-      />
-      {/* eslint-disable-next-line */}
-      <label htmlFor={todo.id}>
-        {todo.title}
-      </label>
+class TodoItem extends React.Component {
+  state = {
+    isEditable: false,
+    currentValue: this.props.todo.title,
+  };
 
-      <button
-        type="button"
-        className="destroy"
-        onClick={() => onRemove(todo)}
-      />
-    </div>
-  </li>
-);
+  changeEditMode = () => {
+    this.setState(prevState => ({
+      isEditable: !prevState.isEditable,
+    }));
+  }
+
+  changeEditModeByKey = (event) => {
+    if (event.key === 'Enter') {
+      this.setState(prevState => ({
+        isEditable: false,
+      }));
+    }
+  }
+
+  handleChange = (event) => {
+    const { value } = event.target;
+
+    this.setState({
+      currentValue: value,
+    });
+  }
+
+  render() {
+    const { todo, onCheck, onRemove } = this.props;
+    const { isEditable, currentValue } = this.state;
+
+    return (
+      <li className={classnames({
+        completed: todo.completed,
+        editing: isEditable,
+      })}
+      >
+        { isEditable
+          ? (
+            <input
+              className="edit"
+              value={currentValue}
+              /* eslint-disable-next-line */
+              autoFocus
+              ref={this.inputRef}
+              onChange={this.handleChange}
+              onKeyPress={this.changeEditModeByKey}
+              onBlur={this.changeEditMode}
+            />
+          ) : (
+            <div className="view">
+              <input
+                type="checkbox"
+                className="toggle"
+                id={todo.id}
+                onChange={() => onCheck(todo.id)}
+                checked={todo.completed}
+              />
+              {/* eslint-disable-next-line */}
+              <label onDoubleClick={this.changeEditMode}>
+                {currentValue}
+              </label>
+
+              <button
+                type="button"
+                className="destroy"
+                onClick={() => onRemove(todo)}
+              />
+            </div>
+          )
+        }
+      </li>
+    );
+  }
+}
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({

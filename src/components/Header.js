@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class TodoApp extends React.Component {
+class Header extends React.Component {
   state = {
     title: '',
   }
@@ -34,20 +34,24 @@ class TodoApp extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          onChange={this.handleChange}
-          value={this.state.title}
-        />
-      </form>
+      <header className="header">
+        <h1>todos</h1>
+
+        <form onSubmit={this.handleSubmit}>
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+            onChange={this.handleChange}
+            value={this.state.title}
+          />
+        </form>
+      </header>
     );
   }
 }
 
-TodoApp.propTypes = {
+Header.propTypes = {
   addNewTodo: PropTypes.func.isRequired,
 };
 
-export default TodoApp;
+export default Header;

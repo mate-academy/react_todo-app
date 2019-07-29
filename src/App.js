@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TodoApp from './components/TodoApp';
+import Header from './components/Header';
 import TodoList from './components/TodoList';
 import Footer from './components/Footer';
 
@@ -96,28 +96,14 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
+        <Header addNewTodo={this.addNewTodo} />
 
-          <TodoApp addNewTodo={this.addNewTodo} />
-        </header>
-
-        <section className="main" style={{ display: 'block' }}>
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onClick={this.handleToggleAll}
-          />
-          {/* eslint-disable-next-line */}
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <TodoList
-            onCheck={this.handleToggle}
-            onRemove={this.handleRemove}
-            todos={visibleTodos}
-          />
-        </section>
+        <TodoList
+          onCheck={this.handleToggle}
+          onRemove={this.handleRemove}
+          todos={visibleTodos}
+          onToggle={this.handleToggleAll}
+        />
 
         { (visibleTodos.length > 0 || selectedFilter !== 'all')
           ? (
