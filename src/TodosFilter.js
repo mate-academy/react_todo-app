@@ -6,6 +6,7 @@ const filters = [
   { path: '#/completed', name: 'Completed', value: 2 },
 ];
 
+// eslint-disable-next-line react/prefer-stateless-function
 class TodosFilter extends React.Component {
   render() {
     const { changeFilter, filter } = this.props;
