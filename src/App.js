@@ -1,36 +1,72 @@
 import React from 'react';
 
 import Header from './components/Header';
-import Main from './components/Main';
 import Footer from './components/Footer';
+import TodoItem from './components/TodoItem';
+
+const cashedFilteredTodos = (callback) => {
+  let prevArgs = [];
+  let prevValue = [];
+
+  return (...args) => {
+    if (args.every((arg, i) => arg === prevArgs[i])) {
+      return prevValue;
+    }
+
+    const [todos, state] = args;
+    prevArgs = args;
+    prevValue = callback(todos, state);
+
+    return prevValue;
+  };
+};
+
+const getfilteredTodos = (todos, state) => {
+  const filteredTodos = todos.filter((item) => {
+    switch (state) {
+      case 'Active':
+        return !item.completed;
+
+      case 'Completed':
+        return item.completed;
+
+      default:
+        return item;
+    }
+  });
+
+  return filteredTodos;
+};
+
+const getCashedFilteredTodos = cashedFilteredTodos(getfilteredTodos);
 
 class App extends React.Component {
   state = {
-    todoItemsArr: [],
-    sortedTodoItemsArr: [],
-    sortState: 'All',
+    todos: [],
+    filterState: 'All',
     allCompleted: false,
   }
 
   handleAllCompleted = (event) => {
     this.setState(prevState => ({
-      todoItemsArr: prevState.todoItemsArr.map(todo => (
+      todos: prevState.todos.map(todo => (
         { ...todo, completed: !prevState.allCompleted }
       )),
       allCompleted: !prevState.allCompleted,
+      filterState: 'All',
     }));
   }
 
-  writeNewTodo = (todoObj) => {
+  writeNewTodo = (newTodo) => {
     this.setState(prevState => ({
-      todoItemsArr: [todoObj, ...prevState.todoItemsArr],
-      sortState: 'All',
+      todos: [newTodo, ...prevState.todos],
+      filterState: 'All',
     }));
   }
 
   rewriteExistingTodo = (title, id) => {
     this.setState(prevState => ({
-      todoItemsArr: prevState.todoItemsArr.map((todo) => {
+      todos: prevState.todos.map((todo) => {
         if (todo.id === id) {
           todo = { ...todo, title };
         }
@@ -39,99 +75,93 @@ class App extends React.Component {
     }));
   }
 
-  handleCompletedOrDestroy = (id, type) => {
-    switch (type) {
-      case 'destroy':
-        return (
-          this.setState(prevState => ({
-            todoItemsArr: prevState.todoItemsArr.filter(item => item.id !== id),
-            sortState: 'All',
-          })));
-
-      case 'completed':
-        return (
-          this.setState(prevState => ({
-            todoItemsArr: prevState.todoItemsArr.map((item) => {
-              item.id === id
-              && (item = { ...item, completed: !item.completed });
-
-              return item;
-            }),
-
-            sortState: 'All',
-          })));
-
-      default:
-        return this.state.todoItemsArr;
-    }
-  }
-
-  handleDestroyComleted = () => {
+  toggleComplete = id => (
     this.setState(prevState => ({
-      todoItemsArr: prevState.todoItemsArr.filter(item => (
-        !item.completed
-      )),
+      todos: prevState.todos.map((item) => {
+        item.id === id
+        && (item = { ...item, completed: !item.completed });
+
+        return item;
+      }),
+
+      filterState: 'All',
+    })));
+
+  destroyItem = id => (
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(item => item.id !== id),
+      filterState: 'All',
+    })));
+
+  destroyAllComleted = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(item => (!item.completed)),
 
       allCompleted: false,
-      sortState: 'All',
+      filterState: 'All',
     }));
   }
 
-  handleSort = (state) => {
-    this.setState((prevState) => {
-      switch (state) {
-        case 'Active':
-          return ({
-            sortedTodoItemsArr: [...prevState.todoItemsArr]
-              .filter(item => !item.completed),
-            sortState: 'Active',
-          });
+  handlefilter = (state) => {
+    this.setState(prevState => ({
+      filterState: state,
+    }));
+  }
 
-        case 'Completed':
-          return ({
-            sortedTodoItemsArr: [...prevState.todoItemsArr]
-              .filter(item => item.completed),
-            sortState: 'Completed',
-          });
-
-        default:
-          return ({
-            sortedTodoItemsArr: prevState.todoItemsArr,
-            sortState: 'All',
-          });
-      }
-    });
+  isExistingAndUnique = (value, arr) => {
+    if (value && !arr.some(item => item.title === value)) {
+      return true;
+    }
+    return false;
   }
 
   render() {
+    const {
+      allCompleted, todos, filterState,
+    } = this.state;
+
+    const filteredtodos = getCashedFilteredTodos([...todos], filterState);
+
     return (
       <section className="todoapp">
         <Header
           writeNewTodo={this.writeNewTodo}
-          todoItemsArr={this.state.todoItemsArr}
+          todos={todos}
+          isExistingAndUnique={this.isExistingAndUnique}
         />
 
-        <Main
-          sortState={this.state.sortState}
-          sortedTodoItemsArr={this.state.sortedTodoItemsArr}
-          todoItemsArr={this.state.todoItemsArr}
+        <section className="main" style={{ display: 'block' }}>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={allCompleted}
+            onChange={this.handleAllCompleted}
+          />
 
-          handleAllCompleted={this.handleAllCompleted}
-          allCompleted={this.state.allCompleted}
-          handleCompletedOrDestroy={this.handleCompletedOrDestroy}
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-          todoEditValue={this.state.todoEditValue}
-          editingId={this.state.editingId}
-          rewriteExistingTodo={this.rewriteExistingTodo}
-        />
+          <ul className="todo-list">
+            {filteredtodos.map(todo => (
+              <TodoItem
+                todos={todos}
+                todo={todo}
+                key={todo.id}
+
+                toggleComplete={this.toggleComplete}
+                destroyItem={this.destroyItem}
+                rewriteExistingTodo={this.rewriteExistingTodo}
+                isExistingAndUnique={this.isExistingAndUnique}
+              />
+            ))}
+          </ul>
+        </section>
 
         <Footer
-          todoItemsArr={this.state.todoItemsArr}
-
-          handleSort={this.handleSort}
-          handleDestroyComleted={this.handleDestroyComleted}
-
-          sortState={this.state.sortState}
+          todos={todos}
+          handlefilter={this.handlefilter}
+          destroyAllComleted={this.destroyAllComleted}
+          filterState={filterState}
         />
       </section>
     );

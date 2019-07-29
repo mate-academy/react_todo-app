@@ -1,22 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const classNames = require('classnames');
+
 function Footer(props) {
   const {
-    sortState, handleSort, handleDestroyComleted, todoItemsArr,
+    filterState, handlefilter, destroyAllComleted, todos,
   } = props;
 
-  const itemsLeft = todoItemsArr
+  const itemsLeft = todos
     .filter(item => !item.completed).length;
 
-  const numberOfComleted = todoItemsArr
-    .filter(item => item.completed).length;
+  const footerClass = classNames({
+    footer: true,
+    hidden: (todos.length < 1),
+  });
 
-  let footerClass = 'footer';
+  const allButtonClass = classNames({
+    selected: filterState === 'All',
+  });
 
-  if (todoItemsArr.length < 1) {
-    footerClass += ' hidden';
-  }
+  const activeButtonClass = classNames({
+    selected: filterState === 'Active',
+  });
+
+  const completedButtonClass = classNames({
+    selected: filterState === 'Completed',
+  });
+
+  const clearComletedClass = classNames({
+    'clear-completed': true,
+    hidden: !todos.some(item => item.completed),
+  });
 
   return (
     <footer className={footerClass}>
@@ -29,9 +44,9 @@ function Footer(props) {
       <ul className="filters">
         <li>
           <a
-            onClick={() => handleSort('All')}
+            onClick={() => handlefilter('All')}
             href="#/"
-            className={sortState === 'All' ? 'selected' : undefined}
+            className={allButtonClass}
           >
             All
           </a>
@@ -39,10 +54,9 @@ function Footer(props) {
 
         <li>
           <a
-            onClick={() => handleSort('Active')}
+            onClick={() => handlefilter('Active')}
             href="#/active"
-            className={sortState === 'Active'
-              ? 'selected' : undefined}
+            className={activeButtonClass}
           >
             Active
           </a>
@@ -50,10 +64,9 @@ function Footer(props) {
 
         <li>
           <a
-            onClick={() => handleSort('Completed')}
+            onClick={() => handlefilter('Completed')}
             href="#/completed"
-            className={sortState === 'Completed'
-              ? 'selected' : undefined}
+            className={completedButtonClass}
           >
             Completed
           </a>
@@ -62,9 +75,8 @@ function Footer(props) {
 
       <button
         type="button"
-        className="clear-completed"
-        style={{ display: numberOfComleted ? 'block' : 'none' }}
-        onClick={handleDestroyComleted}
+        className={clearComletedClass}
+        onClick={destroyAllComleted}
       >
         {' '}
         Clear completed
@@ -74,10 +86,10 @@ function Footer(props) {
 }
 
 Footer.propTypes = {
-  sortState: PropTypes.string.isRequired,
-  handleSort: PropTypes.func.isRequired,
-  handleDestroyComleted: PropTypes.func.isRequired,
-  todoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
+  filterState: PropTypes.string.isRequired,
+  handlefilter: PropTypes.func.isRequired,
+  destroyAllComleted: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Footer;

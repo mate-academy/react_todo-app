@@ -12,37 +12,25 @@ class Header extends React.Component {
     });
   };
 
-  isExistingAndUnique = (value, arr) => {
-    if (value && !arr.some(item => item.title === value)) {
-      return true;
-    }
-    return false;
-  }
-
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const todoObj = {
-      title: this.state.todoValue,
-      id: this.state.todoValue,
+    const { todoValue } = this.state;
+    const { todos, writeNewTodo, isExistingAndUnique } = this.props;
+
+    const newTodo = {
+      title: todoValue,
+      id: todoValue,
       completed: false,
     };
 
-    this.setState((prevState) => {
-      if (this.isExistingAndUnique(
-        prevState.todoValue,
-        this.props.todoItemsArr
-      )) {
-        this.props.writeNewTodo(todoObj);
+    if (isExistingAndUnique(todoValue, todos)) {
+      writeNewTodo(newTodo);
 
-        return ({
-          todoValue: '',
-        });
-      }
-      return ({
-        todoValue: prevState.todoValue,
+      this.setState({
+        todoValue: '',
       });
-    });
+    }
   }
 
   render() {
@@ -68,7 +56,8 @@ class Header extends React.Component {
 
 Header.propTypes = {
   writeNewTodo: PropTypes.func.isRequired,
-  todoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isExistingAndUnique: PropTypes.func.isRequired,
 };
 
 export default Header;

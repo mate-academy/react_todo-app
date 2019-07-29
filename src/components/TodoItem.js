@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const classNames = require('classnames');
+
 class TodoItem extends React.Component {
   state={
     todoEditValue: '',
-    editingId: '',
+    isTodoEditing: false,
   }
 
-  handleEdit = (id) => {
+  handleEdit = () => {
     this.setState({
-      editingId: id,
+      isTodoEditing: true,
       todoEditValue: this.props.todo.title,
     });
   }
@@ -20,60 +22,41 @@ class TodoItem extends React.Component {
     });
   };
 
-  isExistingAndUnique = (value, arr) => {
-    if (value && !arr.some(item => item.title === value)) {
-      return true;
-    }
-    return false;
-  }
-
-  handleSubmitEdit = (event) => {
+  handleSubmit = (event) => {
     event.preventDefault();
+    const { todos, rewriteExistingTodo, isExistingAndUnique } = this.props;
+    const { todoEditValue } = this.state;
 
-    this.setState((prevState) => {
-      const { todoEditValue, editingId } = prevState;
-      const { todoItemsArr, rewriteExistingTodo } = this.props;
+    if (isExistingAndUnique(todoEditValue, todos)) {
+      rewriteExistingTodo(todoEditValue, this.props.todo.id);
 
-      if (this.isExistingAndUnique(todoEditValue, todoItemsArr)) {
-        rewriteExistingTodo(todoEditValue, editingId);
-
-        return ({
-          todoEditValue: '',
-          editingId: '',
-        });
-      }
-
-      return ({
-        todoEditValue: prevState.todoEditValue,
-        editingId: '',
+      this.setState({
+        todoEditValue: '',
       });
+    }
+
+    this.setState({
+      isTodoEditing: false,
     });
   }
 
   render() {
-    const { todo, handleCompletedOrDestroy } = this.props;
-    const { editingId, todoEditValue } = this.state;
-    let classes = ' ';
+    const { todo, toggleComplete, destroyItem } = this.props;
+    const { isTodoEditing, todoEditValue } = this.state;
 
-    if (todo.completed) {
-      classes = 'completed';
-    }
-
-    if (todo.id === editingId) {
-      classes += ' editing';
-    }
+    const todoItemClasses = classNames({
+      completed: todo.completed,
+      editing: isTodoEditing,
+    });
 
     return (
-      <li
-        onDoubleClick={() => this.handleEdit(todo.id)}
-        className={classes}
-      >
-        <div>
+      <li className={todoItemClasses}>
+        <div onDoubleClick={this.handleEdit}>
           <input
             type="checkbox"
             className="toggle"
             checked={todo.completed}
-            onChange={() => handleCompletedOrDestroy(todo.id, 'completed')}
+            onChange={() => toggleComplete(todo.id)}
           />
 
           <label
@@ -83,7 +66,7 @@ class TodoItem extends React.Component {
             {todo.title}
           </label>
 
-          <form onSubmit={this.handleSubmitEdit}>
+          <form onSubmit={this.handleSubmit}>
             <input
               name="editInput"
               className="edit"
@@ -94,7 +77,7 @@ class TodoItem extends React.Component {
           </form>
 
           <button
-            onClick={() => handleCompletedOrDestroy(todo.id, 'destroy')}
+            onClick={() => destroyItem(todo.id)}
             type="button"
             className="destroy"
           />
@@ -111,9 +94,11 @@ TodoItem.propTypes = {
     completed: PropTypes.bool,
   }).isRequired,
 
-  todoItemsArr: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleCompletedOrDestroy: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  toggleComplete: PropTypes.func.isRequired,
+  destroyItem: PropTypes.func.isRequired,
   rewriteExistingTodo: PropTypes.func.isRequired,
+  isExistingAndUnique: PropTypes.func.isRequired,
 };
 
 export default TodoItem;
