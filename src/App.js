@@ -109,7 +109,7 @@ class App extends React.Component {
 
               <Footer
                 activ={countOfActiv}
-                completed={countOfActiv === 0}
+                completed={todos.length - countOfActiv > 0}
                 filter={filter}
                 onFilter={this.handleFilter}
                 onClear={this.clearCompleted}
