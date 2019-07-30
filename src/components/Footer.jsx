@@ -69,12 +69,12 @@ Footer.propTypes = {
     id: PropTypes.number,
   })).isRequired,
   handleDestroyCompleted: PropTypes.func,
-  handleFilter: PropTypes.func,
+  handleSetDesc: PropTypes.func,
 };
 
 Footer.defaultProps = {
   handleDestroyCompleted: () => {},
-  handleFilter: () => {},
+  handleSetDesc: () => {},
 };
 
 export default Footer;
