@@ -1,15 +1,14 @@
-const cashedFilteredTodos = (callback) => {
+const cashedFilteredTodos = (handlerFunction) => {
   let prevArgs = [];
   let prevValue = [];
 
-  return (...todosAndStatut) => {
-    if (todosAndStatut.every((arg, i) => arg === prevArgs[i])) {
+  return (...callbackArgs) => {
+    if (callbackArgs.every((arg, i) => arg === prevArgs[i])) {
       return prevValue;
     }
 
-    const [todos, statut] = todosAndStatut;
-    prevArgs = todosAndStatut;
-    prevValue = callback(todos, statut);
+    prevArgs = callbackArgs;
+    prevValue = handlerFunction(...callbackArgs);
 
     return prevValue;
   };
