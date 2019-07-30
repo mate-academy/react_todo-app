@@ -2,6 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types';
 import classnames from 'classnames';
 import './styles/todoList.css';
+import Todo from './Todo';
 
 const TodoList = ({ todos, changeCompleted, changeCompletedAll, removeTodo}) => (
   <section className="main">
@@ -27,25 +28,11 @@ const TodoList = ({ todos, changeCompleted, changeCompletedAll, removeTodo}) => 
 
           return (
             <li className={classes} key={todo.id}>
-              <div className="view">
-                <input
-                  type="checkbox"
-                  name="completed"
-                  className="toggle"
-                  checked={todo.completed}
-                  onChange={() => changeCompleted(todo.id)}
-                />
-                <label
-                  className={classes}
-                >
-                  { todo.title }
-                </label>
-                <button
-                  type="button"
-                  className="destroy"
-                  onClick={() => removeTodo(todo.id)}
-                />
-              </div>
+              <Todo
+                todo={todo}
+                changeCompleted={changeCompleted}
+                removeTodo={removeTodo}
+              />
             </li>
           )
         })
