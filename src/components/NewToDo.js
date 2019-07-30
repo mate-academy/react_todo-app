@@ -17,12 +17,17 @@ class NewToDo extends React.Component {
   };
 
   buttonHandle = () => {
-    const todo = {
-      title: this.state.inputValue,
-      completed: false,
-    };
-
-    this.props.addTodo(todo);
+    if (this.state.inputValue.length !== 0) {
+      const todo = {
+        title: this.state.inputValue,
+        completed: false,
+      };
+  
+      this.props.addTodo(todo);
+      this.setState({
+        inputValue: '',
+      })
+    }
   };
 
   render() {
@@ -32,7 +37,7 @@ class NewToDo extends React.Component {
           onChange={this.inputChange}
           className="new-todo"
           placeholder="What needs to be done?"
-          value={this.state.value}
+          value={this.state.inputValue}
         />
         <button
           type="submit"

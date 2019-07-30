@@ -21,7 +21,7 @@ class ToDosFilter extends React.Component {
   };
   
   backToAll = () => {
-    this.props.injectFilteredTodos([])
+    this.props.injectFilteredTodos(undefined)
   };
   
   completedFilter = () => {
