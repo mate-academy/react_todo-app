@@ -1,75 +1,237 @@
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+const globalTodos = [
+  { id: 1, title: 'todo1', done: false },
+  { id: 2, title: 'todo2', done: true },
+];
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+const getMaxId = todos => Math.max(...todos.map(todo => todo.id), 0);
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+class App extends React.Component {
+  state = {
+    newTitle: '',
+    currentFilter: 'all',
+    cachedTodos: [...globalTodos],
+    visibleTodos: globalTodos,
+  }
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  handleChange = (event) => {
+    const { value } = event.target;
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+    this.setState({
+      newTitle: value,
+    });
+  }
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+  handleKeyPressed = (event) => {
+    if (event.keyCode === 13) {
+      this.handleAddTodo();
+    }
+  }
+
+  handleAddTodo = () => {
+    const { newTitle, currentFilter } = this.state;
+
+    newTitle && this.setState((state) => {
+      const newTodos = [
+        ...state.cachedTodos,
+        {
+          id: getMaxId(state.cachedTodos) + 1,
+          title: newTitle,
+          done: false,
+        },
+      ];
+
+      return ({
+        newTitle: '',
+        cachedTodos: newTodos,
+        visibleTodos: this.filterByStatus(newTodos, currentFilter),
+      });
+    });
+  }
+
+  deleteTodo = (id) => {
+    this.setState((state) => {
+      const newTodos = [...state.cachedTodos].filter(todo => todo.id !== id);
+
+      return ({
+        cachedTodos: [...newTodos],
+        visibleTodos: this.filterByStatus(newTodos),
+      });
+    });
+  }
+
+  handleFilter = filterValue => this.setState(state => ({
+    currentFilter: filterValue,
+    visibleTodos: this.filterByStatus(state.cachedTodos, filterValue),
+  }));
+
+  filterByStatus = (todos, filterValue) => {
+    if (filterValue === 'all') {
+      return [...todos];
+    }
+
+    if (filterValue === 'active') {
+      return [...todos].filter(todo => (
+        todo.done === false
+      ));
+    }
+
+    return [...todos].filter(todo => (
+      todo.done === true
+    ));
+  }
+
+  toggleCompletion = () => this.setState((state) => {
+    let toggledTodos;
+
+    if (state.cachedTodos.every(todo => todo.done)) {
+      toggledTodos = state.cachedTodos.map(todo => ({
+        ...todo,
+        done: false,
+      }));
+    } else {
+      toggledTodos = state.cachedTodos.map(todo => ({
+        ...todo,
+        done: true,
+      }));
+    }
+
+    return {
+      cachedTodos: [...toggledTodos],
+      visibleTodos: toggledTodos,
+    };
+  })
+
+  toggleTodoStatus = (id) => {
+    this.setState((state) => {
+      const newTodos = state.visibleTodos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            done: !todo.done,
+          };
+        }
+
+        return todo;
+      });
+
+      return ({
+        cachedTodos: [...newTodos],
+        visibleTodos: newTodos,
+      });
+    });
+  }
+
+  render() {
+    const { currentFilter } = this.state;
+
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+            value={this.state.newTitle}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeyPressed}
+            onBlur={this.handleAddTodo}
+          />
+        </header>
+
+        <section className="main" style={{ display: 'block' }}>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onClick={this.toggleCompletion}
+          />
+          <label htmlFor="toggle-all">
+            Mark all as complete
+          </label>
+
+          <ul className="todo-list">
+            {this.state.visibleTodos.map(todo => (
+              <li
+                className={todo.done ? 'completed' : ''}
+                key={todo.id}
+              >
+                <div className="view">
+                  <label htmlFor={`todo-${todo.id}`}>
+                    <input
+                      type="checkbox"
+                      id={`todo-${todo.id}`}
+                      className="toggle"
+                      value={todo.done}
+                      checked
+                      onChange={() => this.toggleTodoStatus(todo.id)}
+                    />
+                    {todo.title}
+                  </label>
+                  <button
+                    type="button"
+                    className="destroy"
+                    onClick={() => this.deleteTodo(todo.id)}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <footer className="footer" style={{ display: 'block' }}>
+          <span className="todo-count">
+            {`${[...this.state.cachedTodos]
+              .filter(todo => todo.done === false)
+              .length}
+            items left`}
+          </span>
+
+          <ul className="filters">
+            <li>
+              <a
+                href="#/"
+                className={currentFilter === 'all' ? 'selected' : ''}
+                onClick={() => this.handleFilter('all')}
+              >
+                All
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#/active"
+                className={currentFilter === 'active' ? 'selected' : ''}
+                onClick={() => this.handleFilter('active')}
+              >
+                Active
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#/completed"
+                className={currentFilter === 'completed' ? 'selected' : ''}
+                onClick={() => this.handleFilter('completed')}
+              >
+                Completed
+              </a>
+            </li>
+          </ul>
+
+          <button
+            type="button"
+            className="clear-completed"
+            style={{ display: 'block' }}
+          />
+        </footer>
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
