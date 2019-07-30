@@ -18,13 +18,15 @@ class App extends React.Component {
   }
 
   setNewTodo = (id, title) => {
+    const { currentFilter } = this.state;
+
     this.setState(prevState => ({
       allTodos: [...prevState.allTodos, {
         id,
         title,
         completed: false,
       }],
-    }), () => this.setFilter(this.state.currentFilter));
+    }), () => this.setFilter(currentFilter));
   }
 
   setFilter = (filter) => {
@@ -58,39 +60,57 @@ class App extends React.Component {
 
   toggleAll = (event) => {
     const val = event.target.checked;
+    const { currentFilter } = this.state;
 
     if (!val) {
       this.setState(prevState => ({
         allTodos: prevState.allTodos.map(todo => (
           { ...todo, completed: false })),
-      }), () => this.setFilter(this.state.currentFilter));
+      }), () => this.setFilter(currentFilter));
     } else {
       this.setState(prevState => ({
         allTodos: prevState.allTodos.map(todo => (
           { ...todo, completed: true })),
-      }), () => this.setFilter(this.state.currentFilter));
+      }), () => this.setFilter(currentFilter));
     }
   }
 
   handleToggle = (id) => {
+    const { currentFilter } = this.state;
+
     this.setState(prevState => ({
       allTodos: prevState.allTodos.map(todo => (
         todo.id !== id
           ? todo
           : { ...todo, completed: !todo.completed })),
-    }), () => this.setFilter(this.state.currentFilter));
+    }), () => this.setFilter(currentFilter));
   }
 
   removeTodo = (id) => {
+    const { currentFilter } = this.state;
+
     this.setState(prevState => ({
       allTodos: prevState.allTodos.filter(todo => id !== todo.id),
-    }), () => this.setFilter(this.state.currentFilter));
+    }), () => this.setFilter(currentFilter));
   }
 
-  removeCompleted = (id) => {
+  removeCompleted = () => {
+    const { currentFilter } = this.state;
+
     this.setState(prevState => ({
       allTodos: prevState.allTodos.filter(todo => !todo.completed),
-    }), () => this.setFilter(this.state.currentFilter));
+    }), () => this.setFilter(currentFilter));
+  }
+
+  updateExciting = (id, title) => {
+    const { currentFilter } = this.state;
+
+    this.setState(prevState => ({
+      allTodos: prevState.allTodos.map(todo => (
+        todo.id !== id
+          ? todo
+          : { ...todo, title })),
+    }), () => this.setFilter(currentFilter));
   }
 
   render() {
@@ -108,6 +128,7 @@ class App extends React.Component {
             handleToggle={this.handleToggle}
             handleToggleAll={this.toggleAll}
             handleRemove={this.removeTodo}
+            handleSubmit={this.updateExciting}
           />
         </section>
 

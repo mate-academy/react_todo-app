@@ -8,6 +8,7 @@ function TodoList({
   handleToggle,
   handleRemove,
   handleToggleAll,
+  handleSubmit,
 }) {
   return (
     <>
@@ -16,10 +17,9 @@ function TodoList({
         id="toggle-all"
         className="toggle-all"
         onChange={event => handleToggleAll(event)}
-        checked={todos.length === todos
-          .filter(todo => todo.completed === true)
-          .length}
+        checked={todos.every(todo => todo.completed)}
       />
+
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list">
@@ -27,6 +27,7 @@ function TodoList({
           <TodoItem
             handleToggle={handleToggle}
             handleRemove={handleRemove}
+            handleSubmit={handleSubmit}
             todo={todo}
             key={todo.id}
           />
@@ -41,5 +42,6 @@ TodoList.propTypes = {
   handleToggle: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
   handleToggleAll: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 };
 export default TodoList;

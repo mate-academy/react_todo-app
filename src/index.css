@@ -248,12 +248,19 @@ body {
   display: block;
 }
 
-.todo-list li .edit {
-  display: none;
+.edit-table {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: #fff;
 }
 
-.todo-list li.editing:last-child {
-  margin-bottom: -1px;
+.todo-list li .edit {
+  display: block;
+  float: right;
+  height: 100%;
+  width: 90%;
 }
 
 .footer {
