@@ -13,7 +13,7 @@ class App extends React.Component {
     this.setState(state => ({
       todos: [...state.todos, todo],
     }));
-  }
+  };
 
   render() {
     const { todos } = this.state;
