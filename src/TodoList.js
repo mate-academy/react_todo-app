@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import './styles/todoList.css';
 
 const TodoList = ({ todos, changeCompleted, changeCompletedAll, removeTodo}) => (
-  <section className="main" style={{ display: 'block' }}>
+  <section className="main">
     <input
       type="checkbox"
       id="toggle-all"
@@ -21,8 +21,8 @@ const TodoList = ({ todos, changeCompleted, changeCompletedAll, removeTodo}) => 
       {
         todos.map(todo => {
           const classes = classnames ({
-              'todo-active': todo.completed === false,
-              'todo-completed': todo.completed === true,
+              'todo-active': !todo.completed,
+              'todo-completed': todo.completed,
           });
 
           return (
@@ -32,12 +32,10 @@ const TodoList = ({ todos, changeCompleted, changeCompletedAll, removeTodo}) => 
                   type="checkbox"
                   name="completed"
                   className="toggle"
-                  id={`todo-${todo.id}`}
                   checked={todo.completed}
                   onChange={() => changeCompleted(todo.id)}
                 />
                 <label
-                  htmlFor={`todo-${todo.id}`}
                   className={classes}
                 >
                   { todo.title }

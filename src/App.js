@@ -57,8 +57,8 @@ class App extends React.Component {
 
   handleChangeCompletedAll = () => {
     this.setState(prevState => {
-      if (prevState.visibleTodos.every(todo => todo.completed === false)
-        || prevState.visibleTodos.every(todo => todo.completed === true)) {
+      if (prevState.visibleTodos.every(todo => !todo.completed)
+        || prevState.visibleTodos.every(todo => todo.completed)) {
         const changeAllTodos = prevState.visibleTodos.map(todo => ({
           ...todo,
           completed: !todo.completed,
