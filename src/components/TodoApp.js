@@ -32,9 +32,7 @@ class TodoApp extends React.Component {
   }
 
   render() {
-    const {
-      todos,
-    } = this.props;
+    const { todos, changeTodoCompleted } = this.props;
     const { title } = this.state;
 
     return (
@@ -61,6 +59,7 @@ class TodoApp extends React.Component {
         </section>
         <TodoList
           todos={todos}
+          changeTodoCompleted={changeTodoCompleted}
         />
       </form>
     );
@@ -70,6 +69,7 @@ class TodoApp extends React.Component {
 TodoApp.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
   addTodo: PropTypes.func.isRequired,
+  changeTodoCompleted: PropTypes.func.isRequired,
 };
 
 export default TodoApp;

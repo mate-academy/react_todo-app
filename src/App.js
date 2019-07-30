@@ -6,6 +6,7 @@ class App extends React.Component {
     super();
     this.state = {
       todos: [],
+      filterTodos: [],
     };
   }
 
@@ -15,8 +16,25 @@ class App extends React.Component {
     }));
   };
 
+  changeTodoCompleted = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => (
+        todo.id !== id
+          ? todo
+          : { ...todo, completed: !todo.completed }
+      )),
+    }));
+  };
+
+  destroyAllCompletedTodos = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.completed),
+      filterTodos: [],
+    }));
+  };
+
   render() {
-    const { todos } = this.state;
+    const { todos, filterTodos } = this.state;
 
     return (
       <section className="todoapp">
@@ -24,11 +42,13 @@ class App extends React.Component {
         <TodoApp
           todos={todos}
           addTodo={this.addTodo}
+          changeTodoCompleted={this.changeTodoCompleted}
+          filterTodos={filterTodos}
         />
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
             {(todos.filter(todo => !todo.completed)).length}
-            items left
+            <> items left</>
           </span>
 
           <ul className="filters">

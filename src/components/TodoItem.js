@@ -2,20 +2,22 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ todo }) => (
-  <li>
+const TodoItem = ({ todo, changeTodoCompleted }) => (
+  <li className="">
     <div className="view">
+      <input
+        id={todo.id}
+        type="checkbox"
+        onClick={() => changeTodoCompleted(todo.id)}
+        defaultChecked={todo.completed}
+        className="toggle"
+      />
+      {/* eslint-disable-next-line jsx-a11y/label-has-for */}
       <label
         className={classnames({ 'todo-completed': todo.completed })}
         htmlFor="todo-1"
       >
         {todo.title}
-        <input
-          id={todo.id}
-          type="checkbox"
-          defaultChecked={todo.completed}
-          className="toggle"
-        />
       </label>
       <button
         type="button"
@@ -27,6 +29,7 @@ const TodoItem = ({ todo }) => (
 
 TodoItem.propTypes = {
   todo: PropTypes.arrayOf(PropTypes.object).isRequired,
+  changeTodoCompleted: PropTypes.func.isRequired,
 };
 
 export default TodoItem;
