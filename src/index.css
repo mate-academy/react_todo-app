@@ -84,7 +84,6 @@ body {
 .edit {
   position: relative;
   margin: 0;
-  width: 100%;
   font-size: 24px;
   font-family: inherit;
   font-weight: inherit;
@@ -155,6 +154,10 @@ body {
   position: relative;
   font-size: 24px;
   border-bottom: 1px solid #ededed;
+}
+
+.buttonHide {
+  visibility: hidden;
 }
 
 .todo-list li:last-child {
@@ -307,7 +310,6 @@ body {
   margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
-  border: 1px solid transparent;
   border-radius: 3px;
 }
 
@@ -316,6 +318,7 @@ body {
 }
 
 .filters li a.selected {
+  border: 1px solid transparent;
   border-color: rgba(175, 47, 47, 0.2);
 }
 

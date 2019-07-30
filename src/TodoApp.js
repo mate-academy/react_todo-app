@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './index.css';
 
 class TodoApp extends React.Component {
   state = {
@@ -42,7 +43,10 @@ class TodoApp extends React.Component {
               type="text"
             />
           </label>
-          <button type="submit">
+          <button
+            type="submit"
+            className="buttonHide"
+          >
           submit
           </button>
         </form>

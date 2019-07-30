@@ -6,9 +6,10 @@ import getSortFied from './getSortFied';
 
 class App extends React.Component {
   state = {
-    todos: [],
-    sortField: 'all',
     todosVisible: [],
+    todos: [],
+    sortFieldEvent: 'all',
+    sortField: 'all',
     isCompletedHide: 0,
     statusAllTodo: true,
   }
@@ -33,8 +34,9 @@ class App extends React.Component {
 
   handleFilterBy = (sortField) => {
     this.setState(prevState => ({
+      sortFieldEvent: sortField,
       todosVisible: getSortFied(prevState.todos, sortField),
-      sortField: prevState.sortField,
+      sortField,
     }));
   }
 
@@ -62,6 +64,7 @@ class App extends React.Component {
         completed: prevState.statusAllTodo,
       }
       )),
+      isCompletedHide: 1,
       statusAllTodo: !prevState.statusAllTodo,
     }));
   }
@@ -71,7 +74,7 @@ class App extends React.Component {
       const todosDelet = prevState.todos.filter(todo => !(todo.id === id));
       return {
         todos: todosDelet,
-        todosVisible: getSortFied(todosDelet, 'all'),
+        todosVisible: getSortFied(todosDelet, prevState.sortField),
       };
     });
   }
@@ -81,13 +84,13 @@ class App extends React.Component {
       const todosActive = prevState.todosVisible.filter(a => !a.completed);
       return {
         todos: todosActive,
-        todosVisible: getSortFied(todosActive, 'all'),
+        todosVisible: getSortFied(todosActive, prevState.sortField),
       };
     });
   }
 
   render() {
-    const { todosVisible } = this.state;
+    const { todosVisible, sortFieldEvent } = this.state;
 
     return (
       <section className="todoapp">
@@ -128,6 +131,7 @@ class App extends React.Component {
 
           <ul className="filters">
             <TodosFilter
+              sortField={sortFieldEvent}
               handleFilterBy={this.handleFilterBy}
             />
           </ul>
