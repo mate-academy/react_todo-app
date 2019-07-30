@@ -19,7 +19,7 @@ class App extends React.Component {
   addTodo = (title) => {
     this.setState(prevState => ({
       visibleTodos: [
-        ...prevState.todos,
+        ...prevState.visibleTodos,
         {
           title,
           id: Math.ceil(Math.random() * 1000 + prevState.visibleTodos.length),
