@@ -3,7 +3,7 @@ import TodoItem from './TodoItem';
 
 class TodoList extends React.Component {
   render() {
-    const { todos, handleChange } = this.props;
+    const { todos, handleChange, destroyItem } = this.props;
 
     return (
       <ul className="todo-list">
@@ -12,7 +12,11 @@ class TodoList extends React.Component {
             className={todo.completed === true ? 'completed' : ''}
             key={todo.id}
           >
-            <TodoItem todo={todo} handleChangeItem={handleChange} />
+            <TodoItem
+              todo={todo}
+              handleChangeItem={handleChange}
+              handleDestroyItem={destroyItem}
+            />
           </li>
         ))}
       </ul>

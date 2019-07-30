@@ -16,9 +16,15 @@ class App extends React.Component {
   };
 
   addTodo = (todo) => {
-    this.setState({
-      todos: [...this.state.todos, todo],
-    });
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
+    }));
+  };
+
+  destroyItem = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => id !== todo.id),
+    }));
   };
 
   handleOnchange = (id, completed) => {
@@ -64,7 +70,11 @@ class App extends React.Component {
           <input type="checkbox" id="toggle-all" className="toggle-all" />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <TodoList todos={filteredList} handleChange={this.handleOnchange} />
+          <TodoList
+            todos={filteredList}
+            handleChange={this.handleOnchange}
+            destroyItem={this.destroyItem}
+          />
         </section>
 
         <footer className="footer" style={{ display: 'block' }}>
