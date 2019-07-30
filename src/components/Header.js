@@ -11,16 +11,14 @@ class Header extends React.Component {
 
     event.preventDefault();
 
-    this.setState((prevState) => {
-      addNewTodo({
-        title: prevState.title,
-        completed: false,
-        id: Date.now(),
-      });
+    addNewTodo({
+      title: this.state.title,
+      completed: false,
+      id: Date.now(),
+    });
 
-      return {
-        title: '',
-      };
+    this.setState({
+      title: '',
     });
   };
 

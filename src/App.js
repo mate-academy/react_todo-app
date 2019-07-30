@@ -18,16 +18,11 @@ class App extends React.Component {
 
   handleToggle = (id) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
-        if (todo.id !== id) {
-          return todo;
-        }
-
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }),
+      todos: prevState.todos.map(todo => (
+        todo.id === id
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      )),
     }));
   };
 
@@ -71,14 +66,10 @@ class App extends React.Component {
     return todos;
   }
 
-  handleRemove = (todo) => {
-    this.setState((prevState) => {
-      prevState.todos.splice(todo, 1);
-
-      return {
-        todos: prevState.todos,
-      };
-    });
+  handleRemove = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
   };
 
   handleRemoveCompleted = () => {

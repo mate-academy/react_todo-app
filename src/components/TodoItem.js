@@ -69,7 +69,7 @@ class TodoItem extends React.Component {
               <button
                 type="button"
                 className="destroy"
-                onClick={() => onRemove(todo)}
+                onClick={() => onRemove(todo.id)}
               />
             </div>
           )
