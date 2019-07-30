@@ -6,7 +6,7 @@ import TodoItem from './TodoItem';
 const TodoList = (props) => {
   const {
     allToggle,
-    filteredTodos,
+    todos,
     handleTodoToggle,
     handleAllToggle,
     handleDestroyTodo,
@@ -34,7 +34,7 @@ const TodoList = (props) => {
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
 
-        {filteredTodos.map(todoItem => (
+        {todos.map(todoItem => (
           <TodoItem
             key={todoItem.id}
             todo={todoItem}
@@ -55,7 +55,7 @@ TodoList.propTypes = {
   handleAllToggle: PropTypes.func,
   handleDestroyTodo: PropTypes.func,
   onChangeSubmit: PropTypes.func,
-  filteredTodos: PropTypes.arrayOf(PropTypes.shape({
+  todos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,
     id: PropTypes.instanceOf(Date),

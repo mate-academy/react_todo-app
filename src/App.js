@@ -7,28 +7,24 @@ import { getTodoToggle, getAllToggle } from './utils';
 class App extends React.Component {
   state = {
     todos: [],
-    filteredTodos: [],
     allToggle: false,
     filterDescription: '',
   };
 
   addTodo = (todo) => {
     this.setState(prevState => ({
-      filteredTodos: [...prevState.filteredTodos, todo],
       todos: [...prevState.todos, todo],
     }));
   };
 
   handleTodoToggle = (todoId) => {
     this.setState(prevState => ({
-      filteredTodos: getTodoToggle(prevState.filteredTodos, todoId),
       todos: getTodoToggle(prevState.todos, todoId),
     }));
   };
 
   handleAllToggle = () => {
     this.setState(prevState => ({
-      filteredTodos: getAllToggle(prevState.filteredTodos, prevState.allToggle),
       allToggle: !prevState.allToggle,
       todos: getAllToggle(prevState.todos, prevState.allToggle),
     }));
@@ -36,7 +32,6 @@ class App extends React.Component {
 
   handleDestroyTodo = (todoId) => {
     this.setState(prevState => ({
-      filteredTodos: prevState.filteredTodos.filter(todo => todo.id !== todoId),
       allToggle: !prevState.todos.length === 0,
       todos: prevState.todos.filter(todo => todo.id !== todoId),
     }));
@@ -44,31 +39,30 @@ class App extends React.Component {
 
   handleDestroyCompleted = () => {
     this.setState(prevState => ({
-      filteredTodos: prevState.filteredTodos.filter(todo => !todo.completed),
       allToggle: !prevState.todos.length === 0,
       todos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
 
   handleFilter = (desc) => {
-    this.setState((prevState) => {
-      switch (desc) {
-        case 'active':
-          return ({
-            filteredTodos: prevState.todos.filter(todo => !todo.completed),
-          });
-
-        case 'completed':
-          return ({
-            filteredTodos: prevState.todos.filter(todo => todo.completed),
-          });
-
-        default:
-          return ({
-            filteredTodos: prevState.todos,
-          });
-      }
+    this.setState({
+      filterDescription: desc,
     });
+  };
+
+  filteringTodos = (desc) => {
+    const { todos } = this.state;
+    
+    switch (desc) {
+      case 'active':
+        return [...todos].filter(todo => !todo.completed);
+
+      case 'completed':
+        return [...todos].filter(todo => todo.completed);
+
+      default:
+        return todos;
+    }
   };
 
   handleChangeTodo = (title, id) => {
@@ -88,11 +82,11 @@ class App extends React.Component {
 
   render() {
     const {
-      todos,
-      filteredTodos,
       allToggle,
       filterDescription,
     } = this.state;
+
+    const filteredTodos = this.filteringTodos(filterDescription);
 
     return (
       <section className="todoapp">
@@ -105,7 +99,6 @@ class App extends React.Component {
         <TodoList
           todos={filteredTodos}
           allToggle={allToggle}
-          filteredTodos={filteredTodos}
           filterDescription={filterDescription}
           handleTodoToggle={this.handleTodoToggle}
           handleAllToggle={this.handleAllToggle}
@@ -113,7 +106,7 @@ class App extends React.Component {
           onChangeSubmit={this.handleChangeTodo}
         />
 
-        {todos.length > 0 && (
+        {filteredTodos.length > 0 && (
 
           <Footer
             todos={filteredTodos}
