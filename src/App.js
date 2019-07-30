@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 
 const globalTodos = [
@@ -58,7 +56,7 @@ class App extends React.Component {
 
       return ({
         cachedTodos: [...newTodos],
-        visibleTodos: this.filterByStatus(newTodos),
+        visibleTodos: this.filterByStatus(newTodos, state.currentFilter),
       });
     });
   }
@@ -107,7 +105,7 @@ class App extends React.Component {
 
   toggleTodoStatus = (id) => {
     this.setState((state) => {
-      const newTodos = state.visibleTodos.map((todo) => {
+      const newTodos = state.cachedTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -120,7 +118,7 @@ class App extends React.Component {
 
       return ({
         cachedTodos: [...newTodos],
-        visibleTodos: newTodos,
+        visibleTodos: this.filterByStatus(newTodos, state.currentFilter),
       });
     });
   }
@@ -150,9 +148,17 @@ class App extends React.Component {
             className="toggle-all"
             onClick={this.toggleCompletion}
           />
+          {
+            /* eslint-disable jsx-a11y/label-has-for */
+            /* eslint-disable jsx-a11y/label-has-associated-control */
+          }
           <label htmlFor="toggle-all">
             Mark all as complete
           </label>
+          {
+            /* eslint-enable jsx-a11y/label-has-for */
+            /* eslint-enable jsx-a11y/label-has-associated-control */
+          }
 
           <ul className="todo-list">
             {this.state.visibleTodos.map(todo => (
