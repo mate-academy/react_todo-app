@@ -1,4 +1,4 @@
-const cashedFilteredTodos = (handlerFunction) => {
+const cashedFilteredTodos = (handlerCallback) => {
   let prevArgs = [];
   let prevValue = [];
 
@@ -8,7 +8,7 @@ const cashedFilteredTodos = (handlerFunction) => {
     }
 
     prevArgs = callbackArgs;
-    prevValue = handlerFunction(...callbackArgs);
+    prevValue = handlerCallback(...callbackArgs);
 
     return prevValue;
   };
