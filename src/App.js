@@ -52,7 +52,7 @@ class App extends React.Component {
 
   filteringTodos = (desc) => {
     const { todos } = this.state;
-    
+
     switch (desc) {
       case 'active':
         return [...todos].filter(todo => !todo.completed);
@@ -67,11 +67,6 @@ class App extends React.Component {
 
   handleChangeTodo = (title, id) => {
     this.setState(prevState => ({
-      filteredTodos: prevState.filteredTodos.map(todo => (
-        todo.id !== id
-          ? todo
-          : { ...todo, title }
-      )),
       todos: prevState.todos.map(todo => (
         todo.id !== id
           ? todo
