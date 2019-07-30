@@ -15,7 +15,7 @@ class AddNewTodo extends React.Component {
       this.props.onSubmit({
         ...this.state.valuesMap,
         completed: false,
-        id: new Date(),
+        id: new Date().getTime(),
       });
       this.setState({
         valuesMap: {

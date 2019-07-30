@@ -12,6 +12,7 @@ class App extends React.Component {
   };
 
   addTodo = (todo) => {
+    console.log(todo.id);
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
     }));
@@ -32,19 +33,19 @@ class App extends React.Component {
 
   handleDestroyTodo = (todoId) => {
     this.setState(prevState => ({
-      allToggle: !prevState.todos.length === 0,
+      allToggle: prevState.todos.length === 0 ? true : false,
       todos: prevState.todos.filter(todo => todo.id !== todoId),
     }));
   };
 
   handleDestroyCompleted = () => {
     this.setState(prevState => ({
-      allToggle: !prevState.todos.length === 0,
+      allToggle: !prevState.todos.length === 0 ? true : false,
       todos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
 
-  handleFilter = (desc) => {
+  handleSetDesc = (desc) => {
     this.setState({
       filterDescription: desc,
     });
@@ -107,7 +108,7 @@ class App extends React.Component {
           <Footer
             todos={filteredTodos}
             handleDestroyCompleted={this.handleDestroyCompleted}
-            handleFilter={this.handleFilter}
+            handleSetDesc={this.handleSetDesc}
           />
 
         )}

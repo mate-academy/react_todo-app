@@ -5,7 +5,7 @@ const Footer = (props) => {
   const {
     todos,
     handleDestroyCompleted,
-    handleFilter,
+    handleSetDesc,
   } = props;
 
   return (
@@ -20,7 +20,7 @@ const Footer = (props) => {
           <a
             href="#/"
             className="selected"
-            onClick={() => handleFilter('all')}
+            onClick={() => handleSetDesc('all')}
           >
             All
           </a>
@@ -30,7 +30,7 @@ const Footer = (props) => {
           <a
             href="#/active"
             className="selected"
-            onClick={() => handleFilter('active')}
+            onClick={() => handleSetDesc('active')}
           >
             Active
           </a>
@@ -40,7 +40,7 @@ const Footer = (props) => {
           <a
             href="#/completed"
             className="selected"
-            onClick={() => handleFilter('completed')}
+            onClick={() => handleSetDesc('completed')}
           >
             Completed
           </a>
@@ -66,7 +66,7 @@ Footer.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,
-    id: PropTypes.instanceOf(Date),
+    id: PropTypes.number,
   })).isRequired,
   handleDestroyCompleted: PropTypes.func,
   handleFilter: PropTypes.func,

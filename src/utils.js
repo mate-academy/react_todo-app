@@ -8,7 +8,7 @@ export const getTodoToggle = (todos, todoId) => (
 
 export const getAllToggle = (todos, allToggle) => (
   todos.map(todo => (
-    allToggle === false
+    !allToggle
       ? { ...todo, completed: true }
       : { ...todo, completed: false }
   ))

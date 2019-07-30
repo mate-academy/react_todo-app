@@ -58,7 +58,7 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,
-    id: PropTypes.instanceOf(Date),
+    id: PropTypes.number,
   })).isRequired,
 };
 

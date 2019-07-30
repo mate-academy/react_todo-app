@@ -5,24 +5,22 @@ class TodoItem extends React.Component {
   state = {
     isEditing: false,
     currentTitle: '',
-    currentId: null,
   }
 
   handleStartEditing = () => {
     this.setState({
       isEditing: true,
       currentTitle: this.props.todo.title,
-      currentId: this.props.todo.id,
     });
   };
 
   handleFormSubmit = (event) => {
     event.preventDefault();
 
-    const { currentTitle, currentId } = this.state;
+    const { currentTitle } = this.state;
 
-    if (this.state.currentTitle) {
-      this.props.onChangeSubmit(currentTitle, currentId);
+    if (currentTitle) {
+      this.props.onChangeSubmit(currentTitle, this.props.todo.id);
 
       this.setState({
         currentTitle: '',
@@ -96,7 +94,7 @@ TodoItem.propTypes = {
   todo: PropTypes.shape({
     title: PropTypes.string,
     completed: PropTypes.bool,
-    id: PropTypes.instanceOf(Date),
+    id: PropTypes.number,
   }).isRequired,
   handleTodoToggle: PropTypes.func,
   handleDestroyTodo: PropTypes.func,
