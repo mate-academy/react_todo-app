@@ -77,6 +77,7 @@ class App extends React.Component {
 
   render() {
     const {
+      todos,
       allToggle,
       filterDescription,
     } = this.state;
@@ -101,7 +102,7 @@ class App extends React.Component {
           onChangeSubmit={this.handleChangeTodo}
         />
 
-        {filteredTodos.length > 0 && (
+        {todos.length > 0 && (
 
           <Footer
             todos={filteredTodos}
