@@ -105,7 +105,7 @@ class App extends React.Component {
               handleRemoveCompleted={this.handleRemoveCompleted}
             />
           ) : (
-            <></>
+            null
           )
         }
       </section>

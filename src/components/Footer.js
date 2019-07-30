@@ -34,7 +34,7 @@ const Footer = ({
             Clear completed
           </button>
         ) : (
-          <></>
+          null
         )
       }
     </footer>

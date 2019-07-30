@@ -16,9 +16,9 @@ class TodoItem extends React.Component {
 
   changeEditModeByKey = (event) => {
     if (event.key === 'Enter') {
-      this.setState(prevState => ({
+      this.setState({
         isEditable: false,
-      }));
+      });
     }
   }
 

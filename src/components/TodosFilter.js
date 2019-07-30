@@ -2,48 +2,35 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const TodosFilter = ({ selectedFilter, handleFilter }) => (
-  <ul className="filters">
-    <li>
-      <a
-        href="#/"
-        className={classnames({
-          selected: selectedFilter === 'all',
-        })}
-        name="all"
-        onClick={handleFilter}
-      >
-        All
-      </a>
-    </li>
+const TodosFilter = ({ selectedFilter, handleFilter }) => {
+  const filterButtons = [
+    { name: 'all', text: 'All' },
+    { name: 'active', text: 'Active' },
+    { name: 'completed', text: 'Completed' },
+  ];
 
-    <li>
-      <a
-        href="#/active"
-        className={classnames({
-          selected: selectedFilter === 'active',
-        })}
-        name="active"
-        onClick={handleFilter}
-      >
-        Active
-      </a>
-    </li>
-
-    <li>
-      <a
-        href="#/completed"
-        className={classnames({
-          selected: selectedFilter === 'completed',
-        })}
-        name="completed"
-        onClick={handleFilter}
-      >
-        Completed
-      </a>
-    </li>
-  </ul>
-);
+  return (
+    <ul className="filters">
+      {filterButtons.map(filterButton => (
+        <li key={filterButton.name}>
+          <a
+            href={`#/${filterButton.name === 'all'
+              ? ''
+              : filterButton.name
+            }`}
+            className={classnames({
+              selected: selectedFilter === filterButton.name,
+            })}
+            name={filterButton.name}
+            onClick={handleFilter}
+          >
+            {filterButton.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 TodosFilter.propTypes = {
   selectedFilter: PropTypes.string.isRequired,
