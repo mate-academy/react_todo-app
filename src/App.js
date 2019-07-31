@@ -58,15 +58,20 @@ class App extends React.Component {
   }
 
   handleChackAll = () => {
-    this.setState(prevState => ({
-      todosVisible: prevState.todos.map(todo => ({
+    this.setState((prevState) => {
+      const todoChakAll = prevState.todos.map(todo => ({
         ...todo,
         completed: prevState.statusAllTodo,
       }
-      )),
-      isCompletedHide: 1,
-      statusAllTodo: !prevState.statusAllTodo,
-    }));
+      ));
+
+      return {
+        todos: todoChakAll,
+        todosVisible: getSortFied(todoChakAll, prevState.sortField),
+        isCompletedHide: 1,
+        statusAllTodo: !prevState.statusAllTodo,
+      };
+    });
   }
 
   deleteTodo = (id) => {
