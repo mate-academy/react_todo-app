@@ -15,21 +15,21 @@ class App extends React.Component {
   }
 
   addTodo = (title) => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos,
+    this.setState((prevState) => {
+      const todosAdd = [...prevState.todos,
         {
           title,
           id: Date.now(),
           completed: false,
         },
-      ],
-      todosVisible: [...prevState.todosVisible, {
-        title,
-        id: Date.now(),
-        completed: false,
-      }],
-      completed: prevState.completed,
-    }));
+      ];
+
+      return {
+        todosVisible: getSortFied(todosAdd, prevState.sortField),
+        todos: todosAdd,
+        completed: prevState.completed,
+      };
+    });
   };
 
   handleFilterBy = (sortField) => {

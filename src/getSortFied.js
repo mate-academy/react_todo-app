@@ -1,4 +1,3 @@
-
 const getSortFied = (todos, sortField) => {
   if (sortField === 'all') {
     return todos;
@@ -10,7 +9,7 @@ const getSortFied = (todos, sortField) => {
   };
   const callBack = callBackSort[sortField];
 
-  return todos.filter(callBack);
+  return [...todos].filter(callBack);
 };
 
 export default getSortFied;
