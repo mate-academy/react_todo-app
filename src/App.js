@@ -27,7 +27,6 @@ class App extends React.Component {
       return {
         todosVisible: getSortFied(todosAdd, prevState.sortField),
         todos: todosAdd,
-        completed: prevState.completed,
       };
     });
   };
@@ -42,8 +41,9 @@ class App extends React.Component {
 
   handleToggle = (id) => {
     this.setState((prevState) => {
-      const task = prevState.todosVisible.find(todo => todo.id === id);
-      task.completed = !task.completed;
+      const task = prevState.todosVisible
+        .find(todo => todo.id === id
+          && { ...todo, completed: !prevState.completed });
 
       if (task.completed) {
         return {
@@ -76,7 +76,7 @@ class App extends React.Component {
 
   deleteTodo = (id) => {
     this.setState((prevState) => {
-      const todosDelet = prevState.todos.filter(todo => !(todo.id === id));
+      const todosDelet = prevState.todos.filter(todo => todo.id !== id);
       return {
         todos: todosDelet,
         todosVisible: getSortFied(todosDelet, prevState.sortField),
