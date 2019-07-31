@@ -1,10 +1,10 @@
 {
-  "homepage": "http://mate-academy.github.io/react_todo-app",
+  "homepage": "http://djkamry22.github.io/react_todo-app",
   "name": "react-todo-app",
   "version": "0.1.0",
   "private": true,
   "keywords": [],
-  "author": "Mate Academy",
+  "author": "Kamran",
   "license": "GPL-3.0",
   "dependencies": {
     "prop-types": "^15.7.2",
