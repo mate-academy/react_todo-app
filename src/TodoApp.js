@@ -29,27 +29,30 @@ class TodoApp extends React.Component {
 
     render() {
       return (
-        <form onSubmit={this.handleSubmit}>
-          <label
-            className="new-todo"
-            htmlFor="new-todo-title"
-          >
-            <input
+        <header className="header">
+          <h1>todos</h1>
+          <form onSubmit={this.handleSubmit}>
+            <label
               className="new-todo"
-              placeholder="What needs to be done?"
-              onChange={this.handleChange}
-              value={this.state.title}
-              name="title"
-              type="text"
-            />
-          </label>
-          <button
-            type="submit"
-            className="buttonHide"
-          >
+              htmlFor="new-todo-title"
+            >
+              <input
+                className="new-todo"
+                placeholder="What needs to be done?"
+                onChange={this.handleChange}
+                value={this.state.title}
+                name="title"
+                type="text"
+              />
+            </label>
+            <button
+              type="submit"
+              className="buttonHide"
+            >
           submit
-          </button>
-        </form>
+            </button>
+          </form>
+        </header>
       );
     }
 }

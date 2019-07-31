@@ -1,8 +1,9 @@
 import React from 'react';
 import TodoApp from './TodoApp';
-import Todo from './Todo';
-import TodosFilter from './TodosFilter';
+
+import Footer from './Footer';
 import getSortFied from './getSortFied';
+import TodoList from './TodoList';
 
 class App extends React.Component {
   state = {
@@ -95,60 +96,27 @@ class App extends React.Component {
   }
 
   render() {
-    const { todosVisible, sortFieldEvent } = this.state;
+    const { todosVisible, sortFieldEvent, isCompletedHide } = this.state;
 
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <TodoApp
-            onSubmit={this.addTodo}
-          />
+        <TodoApp
+          onSubmit={this.addTodo}
+        />
 
-        </header>
-
-        <section className="main">
-          <input
-            type="checkbox"
-            className="toggle-all"
-            id="toggle-all"
-            onChange={this.handleChackAll}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <ul className="todo-list">
-            {todosVisible.map(todo => (
-              <Todo
-                key={todo.id}
-                item={todo}
-                toggle={this.handleToggle}
-                deleteTodo={this.deleteTodo}
-              />
-            ))}
-          </ul>
-        </section>
-
-        <footer className="footer" style={{ display: 'block' }}>
-          <span className="todo-count">
-            {`${todosVisible.filter(todo => !todo.completed).length}
-            items left`}
-          </span>
-
-          <ul className="filters">
-            <TodosFilter
-              sortField={sortFieldEvent}
-              handleFilterBy={this.handleFilterBy}
-            />
-          </ul>
-
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.destroyAllComplete}
-          >
-            {this.state.isCompletedHide ? 'Clear completed' : ''}
-          </button>
-        </footer>
+        <TodoList
+          toggle={this.handleToggle}
+          deleteTodo={this.deleteTodo}
+          handleChackAll={this.handleChackAll}
+          todosVisible={todosVisible}
+        />
+        <Footer
+          sortField={sortFieldEvent}
+          handleFilterBy={this.handleFilterBy}
+          todosVisible={todosVisible}
+          isCompletedHide={isCompletedHide}
+          destroyAllComplete={this.destroyAllComplete}
+        />
       </section>
     );
   }
