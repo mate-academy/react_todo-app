@@ -9,49 +9,75 @@ class App extends React.Component {
     todos: [],
     filteredTodos: undefined,
     allCompleted: false,
+    todoIdCounter: 1,
   };
   
   addTodo = (todoObj) => {
     this.setState(prevState => ({
       todos: prevState.todos
         .concat(todoObj)
-        .map((todo, i, arr) => {
+        .map(todo => {
         return ({
           ...todo,
-          id: (!todo.id && arr[arr.length -2] === undefined)
-            ? todo.id = i + 1
-            : (!todo.id && arr[arr.length -2].id !== undefined)
-              ? todo.id = arr[arr.length -2].id + 1
-              : todo.id
+          id: !todo.id
+            ? this.state.todoIdCounter
+            : todo.id
         })
         }),
-        allCompleted: false,
+      allCompleted: false,
+      todoIdCounter: prevState.todoIdCounter + 1,
     }));
   };
   
-  changeBool = (boolValue) => {
-    if (boolValue) {
-      return false
-    }
-    return true
-  };
-  
-  todoIsCompleted = (todoId) => {
+  todoIsCompletedSetState = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos
         .map(todo => ({
           ...todo,
           completed: (Number(todo.id) === Number(todoId))
-          ? this.changeBool(todo.completed)
+          ? !todo.completed
             : todo.completed
         })),
     }));
   };
   
-  injectFilteredTodos = (todos) => {
-    this.setState({
-      filteredTodos: todos,
-    })
+  injectFilteredTodos = (isCompleted) => {
+    const { todos }  = this.state;
+  //   isCompleted
+  //   ? this.setState({
+  //       filteredTodos: todos.filter(todo => (
+  //         todo.completed === true
+  //       ))
+  //     })
+  //   : !isCompleted ? this.setState({
+  //     filteredTodos: todos.filter(todo => (
+  //       todo.completed !== true
+  //     ))
+  //   })
+  //     : this.setState({
+  //       filteredTodos: undefined,
+  //     })
+    
+    switch(true){
+      case isCompleted:
+        this.setState({
+          filteredTodos: todos.filter(todo => (
+            todo.completed === true
+          ))
+        });
+        break;
+      case !isCompleted:
+        this.setState({
+          filteredTodos: todos.filter(todo => (
+            todo.completed !== true
+          ))
+        });
+        break;
+      case isCompleted === 'all':
+        this.setState({
+          filteredTodos: undefined,
+        });
+    }
   };
   
   removeFromState = (todoId) => {
@@ -65,7 +91,7 @@ class App extends React.Component {
   clearCompleted = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => (
-        todo.completed !== true
+        !todo.completed
       )),
     }))
   };
@@ -118,7 +144,7 @@ class App extends React.Component {
             todos={this.state.filteredTodos
               ? this.state.filteredTodos
               : this.state.todos}
-            todoIsCompleted={this.todoIsCompleted}
+            todoIsCompleted={this.todoIsCompletedSetState}
             removeFromState={this.removeFromState}
           />
           

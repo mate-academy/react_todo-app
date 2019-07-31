@@ -17,7 +17,7 @@ class NewToDo extends React.Component {
   };
 
   buttonHandle = () => {
-    if (this.state.inputValue.length !== 0) {
+    if (this.state.inputValue.length > 0) {
       const todo = {
         title: this.state.inputValue,
         completed: false,

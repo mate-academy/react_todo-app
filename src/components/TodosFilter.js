@@ -2,34 +2,16 @@
 import React from 'react';
 
 class ToDosFilter extends React.Component {
-  state = {
-    todos: this.props.todos,
-  };
-  
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.todos !== this.state.todos) {
-      this.setState({ todos: nextProps.todos });
-    }
-  }
-  
   activeFilter = () => {
-    const { todos }  = this.state;
-    const active = todos.filter(todo => (
-      todo.completed !== true
-    ));
-    this.props.injectFilteredTodos(active)
+    this.props.injectFilteredTodos(false)
   };
   
   backToAll = () => {
-    this.props.injectFilteredTodos(undefined)
+    this.props.injectFilteredTodos('all')
   };
   
   completedFilter = () => {
-    const { todos }  = this.state;
-    const completed = todos.filter(todo => (
-      todo.completed === true
-    ));
-    this.props.injectFilteredTodos(completed)
+    this.props.injectFilteredTodos(true)
   };
   
   render() {
