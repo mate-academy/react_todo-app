@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ todo, changeTodoCompleted }) => (
+const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
   <li className="">
     <div className="view">
       <input
@@ -20,6 +20,7 @@ const TodoItem = ({ todo, changeTodoCompleted }) => (
         {todo.title}
       </label>
       <button
+        onClick={() => destroyTodo(todo.id)}
         type="button"
         className="destroy"
       />
@@ -29,6 +30,7 @@ const TodoItem = ({ todo, changeTodoCompleted }) => (
 
 TodoItem.propTypes = {
   todo: PropTypes.arrayOf(PropTypes.object).isRequired,
+  destroyTodo: PropTypes.arrayOf(PropTypes.object).isRequired,
   changeTodoCompleted: PropTypes.func.isRequired,
 };
 

@@ -11,8 +11,8 @@ class App extends React.Component {
   }
 
   addTodo = (todo) => {
-    this.setState(state => ({
-      todos: [...state.todos, todo],
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
     }));
   };
 
@@ -23,6 +23,12 @@ class App extends React.Component {
           ? todo
           : { ...todo, completed: !todo.completed }
       )),
+    }));
+  };
+
+  destroyTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
     }));
   };
 
@@ -43,6 +49,7 @@ class App extends React.Component {
           todos={todos}
           addTodo={this.addTodo}
           changeTodoCompleted={this.changeTodoCompleted}
+          destroyTodo={this.destroyTodo}
           filterTodos={filterTodos}
         />
         <footer className="footer" style={{ display: 'block' }}>
