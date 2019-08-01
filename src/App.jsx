@@ -115,6 +115,7 @@ class App extends React.Component {
           handleTodoDelete={this.handleTodoDelete}
           handleComplete={this.handleToggleCompleting}
           handleCompleteAll={this.handleToggleCompletingAll}
+          handleEdit={this.handleEdit}
           displayedTodos={displayedTodos}
         />
 

@@ -9,7 +9,7 @@ class AddTodo extends React.Component {
 
   handleTodoInput = (event) => {
     this.setState({
-     text: event.target.value,
+     text: event.target.value.replace(/[^ \wа-яА-ЯІіЇїЁё]/g, ''),
      errorsList: false,
     });
   };

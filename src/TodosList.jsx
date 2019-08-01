@@ -8,7 +8,7 @@ const TodoList = (props) => {
     displayedTodos,
     handleTodoDelete,
     handleComplete,
-    handleCompleteAll
+    handleCompleteAll,
         } = props;
 
   return (
@@ -26,7 +26,7 @@ const TodoList = (props) => {
         (<TodoItem
             todo={todo}
             key={todo.id + 1}
-            handleDelete={() => handleTodoDelete(todo.id)}
+            handleDelete={handleTodoDelete}
             handleComplete={handleComplete}
           />
         ))}
