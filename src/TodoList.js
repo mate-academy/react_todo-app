@@ -1,36 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Todo from './Todo';
-import filteredForField from './filteredForField';
 
 const TodolList = ({
-  toggle, deleteTodo, handleChackAll, todos, sortFieldEvent,
-}) => {
-  const todosVisible = filteredForField(todos, sortFieldEvent);
+  toggle, deleteTodo, handleChackAll, todos,
+}) => (
+  <section className="main">
+    <input
+      type="checkbox"
+      className="toggle-all"
+      id="toggle-all"
+      onChange={handleChackAll}
+    />
+    <label htmlFor="toggle-all">Mark all as complete</label>
 
-  return (
-    <section className="main">
-      <input
-        type="checkbox"
-        className="toggle-all"
-        id="toggle-all"
-        onChange={handleChackAll}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
-
-      <ul className="todo-list">
-        {todosVisible.map(todo => (
-          <Todo
-            key={todo.id}
-            item={todo}
-            toggle={toggle}
-            deleteTodo={deleteTodo}
-          />
-        ))}
-      </ul>
-    </section>
-  );
-};
+    <ul className="todo-list">
+      {todos.map(todo => (
+        <Todo
+          key={todo.id}
+          item={todo}
+          toggle={toggle}
+          deleteTodo={deleteTodo}
+        />
+      ))}
+    </ul>
+  </section>
+);
 
 TodolList.propTypes = {
   item: PropTypes.shape({
@@ -45,7 +40,6 @@ TodolList.propTypes = {
     PropTypes.string,
     PropTypes.number,
     PropTypes.object])).isRequired,
-  sortFieldEvent: PropTypes.string.isRequired,
 };
 
 TodolList.defaultProps = {

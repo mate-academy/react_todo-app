@@ -2,7 +2,7 @@ import React from 'react';
 import TodoApp from './TodoApp';
 
 import Footer from './Footer';
-
+import filteredForFieldWithCaching from './filteredForFieldWithCaching';
 import TodoList from './TodoList';
 
 class App extends React.Component {
@@ -90,25 +90,24 @@ class App extends React.Component {
 
   render() {
     const { todos, sortFieldEvent, isCompletedHide } = this.state;
-    console.log(todos);
-
+    const todosVisible = filteredForFieldWithCaching(todos, sortFieldEvent);
+    console.log(todosVisible);
     return (
       <section className="todoapp">
         <TodoApp
           onSubmit={this.addTodo}
         />
 
-        <CachedTodoList
+        <TodoList
           toggle={this.handleToggle}
           deleteTodo={this.deleteTodo}
           handleChackAll={this.handleChackAll}
-          todos={todos}
-          sortFieldEvent={sortFieldEvent}
+          todos={todosVisible}
         />
-        <CachedFooter
+        <Footer
           sortField={sortFieldEvent}
           handleFilterBy={this.handleFilterBy}
-          todos={todos}
+          todos={todosVisible}
           isCompletedHide={isCompletedHide}
           destroyAllComplete={this.destroyAllComplete}
         />
@@ -116,8 +115,5 @@ class App extends React.Component {
     );
   }
 }
-
-const CachedTodoList = React.memo(TodoList);
-const CachedFooter = React.memo(Footer);
 
 export default App;
