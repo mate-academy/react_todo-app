@@ -32,14 +32,14 @@ class App extends React.Component {
 
   handleDestroyTodo = (todoId) => {
     this.setState(prevState => ({
-      allToggle: !prevState.todos.length === 0,
+      allToggle: prevState.todos.length === 0,
       todos: prevState.todos.filter(todo => todo.id !== todoId),
     }));
   };
 
   handleDestroyCompleted = () => {
     this.setState(prevState => ({
-      allToggle: !prevState.todos.length === 0,
+      allToggle: prevState.todos.length === 0,
       todos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
@@ -55,10 +55,10 @@ class App extends React.Component {
 
     switch (desc) {
       case 'active':
-        return [...todos].filter(todo => !todo.completed);
+        return todos.filter(todo => !todo.completed);
 
       case 'completed':
-        return [...todos].filter(todo => todo.completed);
+        return todos.filter(todo => todo.completed);
 
       default:
         return todos;
