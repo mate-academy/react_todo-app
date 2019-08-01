@@ -90,7 +90,7 @@ class App extends React.Component {
 
   render() {
     const { todos, sortFieldEvent, isCompletedHide } = this.state;
-    console.log(todos)
+    console.log(todos);
 
     const todosVisible = filteredForField(todos, sortFieldEvent);
 
@@ -117,5 +117,7 @@ class App extends React.Component {
     );
   }
 }
+
+// const CachedTodoList = React.memo(TodoList);
 
 export default App;
