@@ -1,4 +1,4 @@
-const getSortFied = (todos, sortField) => {
+const filteredForField = (todos, sortField) => {
   if (sortField === 'all') {
     return todos;
   }
@@ -12,4 +12,4 @@ const getSortFied = (todos, sortField) => {
   return [...todos].filter(callBack);
 };
 
-export default getSortFied;
+export default filteredForField;

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import TodosFilter from './TodosFilter';
 
 const Footer = ({
-  handleFilterBy, sortField, todosVisible, isCompletedHide, destroyAllComplete,
+  handleFilterBy, sortField, todos, isCompletedHide, destroyAllComplete,
 }) => (
-  <footer className="footer" style={{ display: 'block' }}>
+  <footer className="footer">
     <span className="todo-count">
-      {`${todosVisible.filter(todo => !todo.completed).length}
+      {`${todos.filter(todo => !todo.completed).length}
       items left`}
     </span>
 
@@ -32,7 +32,7 @@ const Footer = ({
 Footer.propTypes = {
   sortField: PropTypes.string.isRequired,
   handleFilterBy: PropTypes.func.isRequired,
-  todosVisible: PropTypes.arrayOf(PropTypes.oneOfType([
+  todos: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
     PropTypes.object])).isRequired,

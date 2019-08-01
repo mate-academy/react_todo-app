@@ -2,15 +2,13 @@ import React from 'react';
 import TodoApp from './TodoApp';
 
 import Footer from './Footer';
-import getSortFied from './getSortFied';
+import filteredForField from './filteredForField';
 import TodoList from './TodoList';
 
 class App extends React.Component {
   state = {
-    todosVisible: [],
     todos: [],
     sortFieldEvent: 'all',
-    sortField: 'all',
     isCompletedHide: 0,
     statusAllTodo: true,
   }
@@ -26,25 +24,21 @@ class App extends React.Component {
       ];
 
       return {
-        todosVisible: getSortFied(todosAdd, prevState.sortField),
         todos: todosAdd,
       };
     });
   };
 
-  handleFilterBy = (sortField) => {
-    this.setState(prevState => ({
-      sortFieldEvent: sortField,
-      todosVisible: getSortFied(prevState.todos, sortField),
-      sortField,
-    }));
+  handleFilterBy = (field) => {
+    this.setState({
+      sortFieldEvent: field,
+    });
   }
 
   handleToggle = (id) => {
     this.setState((prevState) => {
-      const task = prevState.todosVisible
-        .find(todo => todo.id === id
-          && { ...todo, completed: !prevState.completed });
+      const task = prevState.todos.find(todo => todo.id === id);
+      task.completed = !task.completed;
 
       if (task.completed) {
         return {
@@ -53,7 +47,7 @@ class App extends React.Component {
       }
 
       return {
-        todosVisible: prevState.todosVisible,
+        todos: prevState.todos,
       };
     });
   }
@@ -68,7 +62,6 @@ class App extends React.Component {
 
       return {
         todos: todoChakAll,
-        todosVisible: getSortFied(todoChakAll, prevState.sortField),
         isCompletedHide: 1,
         statusAllTodo: !prevState.statusAllTodo,
       };
@@ -78,25 +71,28 @@ class App extends React.Component {
   deleteTodo = (id) => {
     this.setState((prevState) => {
       const todosDelet = prevState.todos.filter(todo => todo.id !== id);
+
       return {
         todos: todosDelet,
-        todosVisible: getSortFied(todosDelet, prevState.sortField),
       };
     });
   }
 
   destroyAllComplete = () => {
     this.setState((prevState) => {
-      const todosActive = prevState.todosVisible.filter(a => !a.completed);
+      const todosActive = prevState.todos.filter(a => !a.completed);
+
       return {
         todos: todosActive,
-        todosVisible: getSortFied(todosActive, prevState.sortField),
       };
     });
   }
 
   render() {
-    const { todosVisible, sortFieldEvent, isCompletedHide } = this.state;
+    const { todos, sortFieldEvent, isCompletedHide } = this.state;
+    console.log(todos)
+
+    const todosVisible = filteredForField(todos, sortFieldEvent);
 
     return (
       <section className="todoapp">
@@ -108,12 +104,12 @@ class App extends React.Component {
           toggle={this.handleToggle}
           deleteTodo={this.deleteTodo}
           handleChackAll={this.handleChackAll}
-          todosVisible={todosVisible}
+          todos={todosVisible}
         />
         <Footer
           sortField={sortFieldEvent}
           handleFilterBy={this.handleFilterBy}
-          todosVisible={todosVisible}
+          todos={todosVisible}
           isCompletedHide={isCompletedHide}
           destroyAllComplete={this.destroyAllComplete}
         />
