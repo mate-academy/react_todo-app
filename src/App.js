@@ -10,6 +10,18 @@ class App extends React.Component {
     selectedFilter: 'all',
   };
 
+  componentWillMount() {
+    if (localStorage.getItem('todos')) {
+      this.setState({
+        todos: JSON.parse(localStorage.getItem('todos')),
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
+  }
+
   addNewTodo = (todo) => {
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
