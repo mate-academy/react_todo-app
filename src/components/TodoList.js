@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React from 'react';
+import Todo from './Todo';
 
 class TodoList extends React.Component {
   todoCheck = (event) => {
@@ -16,25 +17,12 @@ class TodoList extends React.Component {
       <ul className="todo-list">
         {todos.length !== 0
           ? todos.map(todo => (
-            <li key={todo.id} className="">
-              <div className="view">
-                <input
-                  type="checkbox"
-                  className="toggle"
-                  id="todo-1"
-                  data-todoid={todo.id}
-                  checked={todo.completed}
-                  onChange={this.todoCheck}
-                />
-                <label htmlFor="todo-1">{todo.title}</label>
-                <button
-                  onClick={this.removeItem}
-                  type="button"
-                  className="destroy"
-                  value={todo.id}
-                />
-              </div>
-            </li>
+            <Todo
+              key={todo.id}
+              todo={todo}
+              todoCheck={this.todoCheck}
+              removeItem={this.removeItem}
+            />
           ))
           : <li className="">
               <div className="view">

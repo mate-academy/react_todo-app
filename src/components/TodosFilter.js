@@ -2,31 +2,23 @@
 import React from 'react';
 
 class ToDosFilter extends React.Component {
-  activeFilter = () => {
-    this.props.injectFilteredTodos(false)
-  };
-  
-  backToAll = () => {
-    this.props.injectFilteredTodos('all')
-  };
-  
-  completedFilter = () => {
-    this.props.injectFilteredTodos(true)
+  todosFilter = (props) => {
+    this.props.injectFilteredTodos(props)
   };
   
   render() {
     return (
       <ul className="filters">
         <li>
-          <a onClick={this.backToAll} href="#/" className="selected">All</a>
+          <a onClick={() => this.todosFilter('all')} data-filter={'all'} href="#/" className="selected">All</a>
         </li>
     
         <li>
-          <a onClick={this.activeFilter} href="#/active">Active</a>
+          <a onClick={() => this.todosFilter(false)} data-filter={false} href="#/active">Active</a>
         </li>
     
         <li>
-          <a onClick={this.completedFilter} href="#/completed">Completed</a>
+          <a onClick={() => this.todosFilter(true)} data-filter={true} href="#/completed">Completed</a>
         </li>
       </ul>
     )

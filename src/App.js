@@ -43,37 +43,23 @@ class App extends React.Component {
   
   injectFilteredTodos = (isCompleted) => {
     const { todos }  = this.state;
-  //   isCompleted
-  //   ? this.setState({
-  //       filteredTodos: todos.filter(todo => (
-  //         todo.completed === true
-  //       ))
-  //     })
-  //   : !isCompleted ? this.setState({
-  //     filteredTodos: todos.filter(todo => (
-  //       todo.completed !== true
-  //     ))
-  //   })
-  //     : this.setState({
-  //       filteredTodos: undefined,
-  //     })
     
-    switch(true){
-      case isCompleted:
+    switch(isCompleted){
+      case true:
         this.setState({
           filteredTodos: todos.filter(todo => (
             todo.completed === true
           ))
         });
         break;
-      case !isCompleted:
+      case false:
         this.setState({
           filteredTodos: todos.filter(todo => (
             todo.completed !== true
           ))
         });
         break;
-      case isCompleted === 'all':
+      case 'all':
         this.setState({
           filteredTodos: undefined,
         });
@@ -97,7 +83,7 @@ class App extends React.Component {
   };
   
   selectAll = () => {
-    const { allCompleted, todos } = this.state;
+    const { allCompleted } = this.state;
     
     !allCompleted
       ? this.setState(prevState => ({

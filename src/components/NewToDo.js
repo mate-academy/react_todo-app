@@ -15,8 +15,8 @@ class NewToDo extends React.Component {
       inputValue: event.target.value,
     });
   };
-
-  buttonHandle = () => {
+  
+  handleButtonClick = () => {
     if (this.state.inputValue.length > 0) {
       const todo = {
         title: this.state.inputValue,
@@ -42,7 +42,7 @@ class NewToDo extends React.Component {
         <button
           type="submit"
           style={{ display: 'hidden' }}
-          onClick={this.buttonHandle}
+          onClick={this.handleButtonClick}
         />
       </form>
     );
