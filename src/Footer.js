@@ -1,33 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TodosFilter from './TodosFilter';
+import filteredForField from './filteredForField';
 
 const Footer = ({
   handleFilterBy, sortField, todos, isCompletedHide, destroyAllComplete,
-}) => (
-  <footer className="footer">
-    <span className="todo-count">
-      {`${todos.filter(todo => !todo.completed).length}
-      items left`}
-    </span>
+}) => {
+  const todosVisible = filteredForField(todos, sortField);
 
-    <ul className="filters">
-      <TodosFilter
-        sortField={sortField}
-        handleFilterBy={handleFilterBy}
-      />
-    </ul>
+  return (
+    <footer className="footer">
+      <span className="todo-count">
+        {`${todosVisible.filter(todo => !todo.completed).length}
+        items left`}
+      </span>
 
-    <button
-      type="button"
-      className="clear-completed"
-      onClick={destroyAllComplete}
-    >
-      {isCompletedHide ? 'Clear completed' : ''}
-    </button>
-  </footer>
+      <ul className="filters">
+        <TodosFilter
+          sortField={sortField}
+          handleFilterBy={handleFilterBy}
+        />
+      </ul>
 
-);
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={destroyAllComplete}
+      >
+        {isCompletedHide ? 'Clear completed' : ''}
+      </button>
+    </footer>
+  );
+};
 
 Footer.propTypes = {
   sortField: PropTypes.string.isRequired,
