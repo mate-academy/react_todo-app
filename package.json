@@ -1,23 +1,48 @@
 {
-  "homepage": "http://mate-academy.github.io/react-jun19-todo-app",
-  "name": "todo-app",
+  "homepage": "http://mate-academy.github.io/react_todo-app",
+  "name": "react-todo-app",
   "version": "0.1.0",
   "private": true,
+  "keywords": [],
+  "author": "Mate Academy",
+  "license": "GPL-3.0",
   "dependencies": {
+    "classnames": "^2.2.6",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1"
+  },
+  "devDependencies": {
+    "@mate-academy/eslint-config-react": "*",
+    "@mate-academy/stylelint-config": "*",
+    "eslint": "^5.16.0",
+    "gh-pages": "^2.0.1",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "stylelint": "^10.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "lint": "eslint --ext .jsx,.js ./src/",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "lint-staged": {
+    "*.css": [
+      "stylelint",
+      "git add"
+    ],
+    "*.js": [
+      "eslint",
+      "git add"
+    ]
   },
   "browserslist": {
     "production": [
@@ -31,7 +56,9 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "gh-pages": "^2.0.1"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
