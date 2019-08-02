@@ -34,6 +34,11 @@ changeEditMode = () => {
       handleComplete,
           } = this.props;
 
+    const {
+      isEditing,
+      text
+          } = this.state;
+
     return (
       <ul className="todo-list">
       <li  className={todo.completed ? 'completed' : 'editing'}>
@@ -45,11 +50,11 @@ changeEditMode = () => {
             onChange={() => handleComplete(todo.id)}
             checked={todo.completed}
           />
-          {this.state.isEditing ? (
+          {isEditing ? (
             <input
               type="text"
               className="edit"
-              value={this.state.text}
+              value={text}
               onChange={this.handleTodoInput}
               onKeyPress={this.changeEditModeByKey}
               autoFocus
@@ -62,7 +67,7 @@ changeEditMode = () => {
               onDoubleClick={() => this.setState ({
                 isEditing: true,
               })}>
-              {this.state.text}
+              {text}
             </label>)}
             <button
               type="button"

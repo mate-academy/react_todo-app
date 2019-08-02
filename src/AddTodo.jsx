@@ -16,7 +16,10 @@ class AddTodo extends React.Component {
 
   handleTodoAdd = (event) => {
     const {handleTodoAdd} = this.props
-    let {errorsList} = this.state;
+    let {
+      errorsList,
+      text,
+        } = this.state;
     if (event.key === 'Enter') {
       event.preventDefault();
       this.setState ((prevState => {
@@ -27,7 +30,7 @@ class AddTodo extends React.Component {
           return { errorsList };
         }
       handleTodoAdd({
-        text: this.state.text,
+        text: text,
         id: Date.now(),
         completed: false,
       });
@@ -44,7 +47,10 @@ class AddTodo extends React.Component {
   };
 
   render () {
-    const { errorsList } = this.state;
+    const {
+      errorsList,
+      text,
+          } = this.state;
     return (
       <form>
         <input
@@ -52,7 +58,7 @@ class AddTodo extends React.Component {
           placeholder={ errorsList
             ? "Enter the todo first"
             : "What needs to be done?" }
-          value={this.state.text}
+          value={text}
           onChange={this.handleTodoInput}
           onKeyPress={this.handleTodoAdd}
         />

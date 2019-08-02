@@ -18,7 +18,8 @@ class App extends React.Component {
   };
 
   componentDidUpdate(prevState) {
-    if (prevState.todos !== this.state.todos){
+    const {todos} = this.state;
+    if (prevState.todos !== todos){
       this.saveToLocalStorage();
     }
   };
@@ -30,14 +31,16 @@ class App extends React.Component {
   };
 
   handleTodoDelete = (todoId) => {
+    const {todos} = this.state;
     this.setState({
-        todos: this.state.todos.filter(todo => todo.id !== todoId)
+        todos: todos.filter(todo => todo.id !== todoId)
     });
   };
 
   handleTodoDeleteCompleted = (todoCompleted) => {
+    const {todos} = this.state;
     this.setState({
-        todos: this.state.todos.filter(todo => todo.completed === !todoCompleted)
+        todos: todos.filter(todo => todo.completed === !todoCompleted)
     });
   };
 
@@ -89,11 +92,11 @@ class App extends React.Component {
     const { todos } = this.state;
 
      if (activeFilter === 'active') {
-      return todos.filter(todo => todo.completed === false);
+      return todos.filter(todo => !todo.completed);
     }
 
      if (activeFilter === 'completed') {
-      return todos.filter(todo => todo.completed === true);
+      return todos.filter(todo => !todo.completed);
     }
     return todos;
   };
