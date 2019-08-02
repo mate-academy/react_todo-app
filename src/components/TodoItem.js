@@ -9,7 +9,7 @@ const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
         id={todo.id}
         type="checkbox"
         onClick={() => changeTodoCompleted(todo.id)}
-        defaultChecked={todo.completed}
+        checked={todo.completed}
         className="toggle"
         onChange={() => true}
       />
