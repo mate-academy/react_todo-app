@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
-  <li className="">
+  <li>
     <div className="view">
       <input
         id={todo.id}
@@ -11,6 +11,7 @@ const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
         onClick={() => changeTodoCompleted(todo.id)}
         defaultChecked={todo.completed}
         className="toggle"
+        onChange={() => true}
       />
       {/* eslint-disable-next-line jsx-a11y/label-has-for */}
       <label
@@ -29,8 +30,11 @@ const TodoItem = ({ todo, changeTodoCompleted, destroyTodo }) => (
 );
 
 TodoItem.propTypes = {
-  todo: PropTypes.arrayOf(PropTypes.object).isRequired,
-  destroyTodo: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+  destroyTodo: PropTypes.func.isRequired,
   changeTodoCompleted: PropTypes.func.isRequired,
 };
 

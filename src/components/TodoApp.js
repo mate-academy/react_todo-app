@@ -29,10 +29,17 @@ class TodoApp extends React.Component {
     this.setState({
       title: '',
     });
-  }
+  };
 
   render() {
-    const { todos, changeTodoCompleted, destroyTodo } = this.props;
+    const {
+      todos,
+      changeTodoCompleted,
+      changeTodoCompletedAll,
+      destroyTodo,
+      filterTodos,
+      filterDescription,
+    } = this.props;
     const { title } = this.state;
 
     return (
@@ -50,6 +57,7 @@ class TodoApp extends React.Component {
         </header>
         <section className="main" style={{ display: 'block' }}>
           <input
+            onClick={changeTodoCompletedAll}
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
@@ -58,7 +66,9 @@ class TodoApp extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
         </section>
         <TodoList
-          todos={todos}
+          todos={(filterDescription === 'active'
+          || filterDescription === 'completed')
+            ? filterTodos : todos}
           changeTodoCompleted={changeTodoCompleted}
           destroyTodo={destroyTodo}
         />
@@ -69,9 +79,12 @@ class TodoApp extends React.Component {
 
 TodoApp.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  destroyTodo: PropTypes.arrayOf(PropTypes.object).isRequired,
+  destroyTodo: PropTypes.func.isRequired,
   addTodo: PropTypes.func.isRequired,
   changeTodoCompleted: PropTypes.func.isRequired,
+  changeTodoCompletedAll: PropTypes.func.isRequired,
+  filterTodos: PropTypes.arrayOf(PropTypes.array).isRequired,
+  filterDescription: PropTypes.string.isRequired,
 };
 
 export default TodoApp;

@@ -7,12 +7,15 @@ class App extends React.Component {
     this.state = {
       todos: [],
       filterTodos: [],
+      filterDescription: 'all',
+      statusAllTodo: true,
     };
   }
 
   addTodo = (todo) => {
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
+      statusAllTodo: true,
     }));
   };
 
@@ -39,8 +42,47 @@ class App extends React.Component {
     }));
   };
 
+  changeStatusAllTodos = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: prevState.statusAllTodo,
+      })),
+      statusAllTodo: !prevState.statusAllTodo,
+    }));
+  };
+
   render() {
-    const { todos, filterTodos } = this.state;
+    const { todos, filterTodos, filterDescription } = this.state;
+    const todosFilter = (desc) => {
+      this.setState((prevState) => {
+        switch (desc) {
+          case 'all':
+
+            return ({
+              filterTodos: prevState.todos,
+              filterDescription: 'all',
+            });
+          case 'active':
+
+            return ({
+              filterTodos: prevState.todos
+                .filter(todo => !todo.completed),
+              filterDescription: 'active',
+            });
+          case 'completed':
+
+            return ({
+              filterTodos: prevState.todos
+                .filter(todo => todo.completed),
+              filterDescription: 'completed',
+            });
+          default:
+
+            return true;
+        }
+      });
+    };
 
     return (
       <section className="todoapp">
@@ -48,9 +90,11 @@ class App extends React.Component {
         <TodoApp
           todos={todos}
           addTodo={this.addTodo}
-          changeTodoCompleted={this.changeTodoCompleted}
-          destroyTodo={this.destroyTodo}
           filterTodos={filterTodos}
+          filterDescription={filterDescription}
+          changeTodoCompleted={this.changeTodoCompleted}
+          changeTodoCompletedAll={this.changeStatusAllTodos}
+          destroyTodo={this.destroyTodo}
         />
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
@@ -60,15 +104,40 @@ class App extends React.Component {
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected">All</a>
+              <a
+                onClick={() => todosFilter('all')}
+                href="#/"
+                className={filterDescription === 'all'
+                  ? 'selected' : ''
+                }
+              >
+                All
+              </a>
             </li>
 
             <li>
-              <a href="#/active">Active</a>
+              <a
+                onClick={() => todosFilter('active')}
+                className={filterDescription === 'active'
+                  ? 'selected' : ''
+                }
+                href="#/active"
+              >
+                Active
+              </a>
             </li>
 
             <li>
-              <a href="#/completed">Completed</a>
+
+              <a
+                onClick={() => todosFilter('completed')}
+                className={filterDescription === 'completed'
+                  ? 'selected' : ''
+                }
+                href="#/completed"
+              >
+                Completed
+              </a>
             </li>
           </ul>
 
