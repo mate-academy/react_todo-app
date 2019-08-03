@@ -68,6 +68,21 @@ class App extends React.Component {
     });
   }
 
+  renameTodo = (title, id) => {
+    this.setState((prevState) => {
+      const todos = prevState.todos
+        .map(todo => (todo.id === id
+          ? {
+            ...todo,
+            title,
+          }
+          : todo));
+      return {
+        todos,
+      };
+    });
+  }
+
   deleteTodo = (id) => {
     this.setState((prevState) => {
       const todosDelet = prevState.todos.filter(todo => todo.id !== id);
@@ -79,9 +94,13 @@ class App extends React.Component {
   }
 
   destroyAllComplete = () => {
-    this.setState(prevState => ({
-      todos: prevState.todos.filter(a => !a.completed),
-    }));
+    this.setState((prevState) => {
+      const todosActive = prevState.todos.filter(a => !a.completed);
+
+      return {
+        todos: todosActive,
+      };
+    });
   }
 
   render() {
@@ -99,6 +118,7 @@ class App extends React.Component {
           deleteTodo={this.deleteTodo}
           handleChackAll={this.handleChackAll}
           todos={todosVisible}
+          renameTodo={this.renameTodo}
         />
         <Footer
           sortField={sortFieldEvent}

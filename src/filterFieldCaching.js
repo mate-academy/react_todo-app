@@ -1,18 +1,3 @@
-const createCachedFilteredFor = (callBack) => {
-  let prevArg = [];
-  let prevValue = null;
-
-  return (...args) => {
-    if (args.every((arg, i) => arg === prevArg[i])) {
-      return prevValue;
-    }
-    prevArg = args;
-    prevValue = callBack(...args);
-
-    return prevValue;
-  };
-};
-
 const filteredForField = (todos, sortField) => {
   if (sortField === 'all') {
     return todos;
@@ -27,6 +12,6 @@ const filteredForField = (todos, sortField) => {
   return todos.filter(callBack);
 };
 
-const filterFieldCaching = createCachedFilteredFor(filteredForField);
+const filteredForFieldWithCaching = filteredForField;
 
-export default filterFieldCaching;
+export default filteredForFieldWithCaching;

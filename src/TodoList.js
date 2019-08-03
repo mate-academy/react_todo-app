@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Todo from './Todo';
 
 const TodolList = ({
-  toggle, deleteTodo, handleChackAll, todos,
+  toggle, deleteTodo, handleChackAll, todos, renameTodo,
 }) => (
   <section className="main">
     <input
@@ -18,9 +18,10 @@ const TodolList = ({
       {todos.map(todo => (
         <Todo
           key={todo.id}
-          item={todo}
+          todo={todo}
           toggle={toggle}
           deleteTodo={deleteTodo}
+          renameTodo={renameTodo}
         />
       ))}
     </ul>
@@ -40,6 +41,7 @@ TodolList.propTypes = {
     PropTypes.string,
     PropTypes.number,
     PropTypes.object])).isRequired,
+  renameTodo: PropTypes.func.isRequired,
 };
 
 TodolList.defaultProps = {
