@@ -84,13 +84,9 @@ class App extends React.Component {
   }
 
   deleteTodo = (id) => {
-    this.setState((prevState) => {
-      const todosDelet = prevState.todos.filter(todo => todo.id !== id);
-
-      return {
-        todos: todosDelet,
-      };
-    });
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
   }
 
   destroyAllComplete = () => {
