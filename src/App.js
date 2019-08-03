@@ -14,9 +14,11 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({
-      todos: JSON.parse(localStorage.getItem('todos')),
-    });
+    if (localStorage.getItem('todos')) {
+      this.setState({
+        todos: JSON.parse(localStorage.getItem('todos')),
+      });
+    }
   }
 
   componentDidUpdate() {
