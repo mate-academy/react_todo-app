@@ -13,6 +13,12 @@ class App extends React.Component {
     statusAllTodo: true,
   }
 
+  componentWillMount() {
+    this.setState({
+      todos: JSON.parse(localStorage.getItem('todos')),
+    });
+  }
+
   addTodo = (title) => {
     this.setState((prevState) => {
       const todosAdd = [...prevState.todos,
