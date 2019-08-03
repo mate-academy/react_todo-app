@@ -24,9 +24,9 @@ const filteredForField = (todos, sortField) => {
   };
   const callBack = callBackSort[sortField];
 
-  return [...todos].filter(callBack);
+  return todos.filter(callBack);
 };
 
-const filteredForFieldWithCaching = createCachedFilteredFor(filteredForField);
+const filterFieldCaching = createCachedFilteredFor(filteredForField);
 
-export default filteredForFieldWithCaching;
+export default filterFieldCaching;

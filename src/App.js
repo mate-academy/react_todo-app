@@ -2,7 +2,7 @@ import React from 'react';
 import TodoApp from './TodoApp';
 
 import Footer from './Footer';
-import filteredForFieldWithCaching from './filteredForFieldWithCaching';
+import filterFieldCaching from './filterFieldCaching';
 import TodoList from './TodoList';
 
 class App extends React.Component {
@@ -79,19 +79,15 @@ class App extends React.Component {
   }
 
   destroyAllComplete = () => {
-    this.setState((prevState) => {
-      const todosActive = prevState.todos.filter(a => !a.completed);
-
-      return {
-        todos: todosActive,
-      };
-    });
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(a => !a.completed),
+    }));
   }
 
   render() {
     const { todos, sortFieldEvent, isCompletedHide } = this.state;
-    const todosVisible = filteredForFieldWithCaching(todos, sortFieldEvent);
-    console.log(todosVisible);
+    const todosVisible = filterFieldCaching(todos, sortFieldEvent);
+
     return (
       <section className="todoapp">
         <TodoApp

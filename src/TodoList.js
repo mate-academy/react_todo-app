@@ -46,6 +46,4 @@ TodolList.defaultProps = {
   toggle: null,
 };
 
-// const CachedTodoList = React.memo(TodoList);
-
 export default TodolList;
