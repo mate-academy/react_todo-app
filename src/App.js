@@ -19,6 +19,10 @@ class App extends React.Component {
     });
   }
 
+  componentDidUpdate() {
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
+  }
+
   addTodo = (title) => {
     this.setState((prevState) => {
       const todosAdd = [...prevState.todos,
