@@ -1,10 +1,12 @@
 import React from 'react';
 import TodoList from './TodoList';
+// import TodosFilter from './TodosFilter';
 
 class TodoApp extends React.Component {
   state = {
     todos: [],
     newTodo: { title: '' },
+    sortField: 'all',
   }
 
   addTodo = (event) => {
@@ -26,6 +28,18 @@ class TodoApp extends React.Component {
     });
   }
 
+  deleteTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
+  };
+
+  clearCompletedTodos = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.completed),
+    }));
+  };
+
   handleToggle = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (
@@ -36,7 +50,38 @@ class TodoApp extends React.Component {
     }));
   };
 
+  handleToggleAll = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => (
+        { ...todo, completed: !todo.completed }
+      )),
+    }));
+  };
+
+  handleFilter = (filterBy) => {
+    this.setState({
+      filterBy,
+    });
+  };
+
+  setFilteredTodos = (filterBy) => {
+    const { todos } = this.state;
+
+    switch (filterBy) {
+      case 'active':
+        return todos.filter(todo => !todo.completed);
+
+      case 'completed':
+        return todos.filter(todo => todo.completed);
+
+      default:
+        return todos;
+    }
+  };
+
   render() {
+    console.log(this.state.todos)
+    const filteredTodos = this.setFilteredTodos(this.state.filterBy);
     return (
       <form onSubmit={this.addTodo}>
         <section className="todoapp">
@@ -50,30 +95,54 @@ class TodoApp extends React.Component {
             />
           </header>
           <section className="main" style={{ display: 'block' }}>
-            <input type="checkbox" id="toggle-all" className="toggle-all" />
+            <input type="checkbox" id="toggle-all" className="toggle-all" onChange={this.handleToggleAll} />
             <label htmlFor="toggle-all">Mark all as complete</label>
-            <TodoList todos={this.state.todos} handleToggle={this.handleToggle} />
+            <TodoList todos={filteredTodos} handleToggle={this.handleToggle} deleteTodo={this.deleteTodo} />
           </section>
           <footer className="footer" style={{ display: 'block' }}>
             <span className="todo-count">
-              {this.state.todos.length} items left
+              {this.state.todos.filter(todo => !todo.completed).length} items left
             </span>
             <ul className="filters">
               <li>
-                <a href="#/" className="selected">All</a>
+                <a
+                  className="selected"
+                  onClick={() => this.handleFilter('active')}
+                  href="#/"
+                >
+                  Active
+                </a>
               </li>
               <li>
-                <a href="#/active">Active</a>
+                <a
+                  className="selected"
+                  onClick={() => this.handleFilter('all')}
+                  href="#/active"
+                >
+                  All
+                </a>
               </li>
               <li>
-                <a href="#/completed">Completed</a>
+                <a
+                  className="selected"
+                  onClick={() => this.handleFilter('completed')}
+                  href="#/completed"
+                >
+                  Completed
+                </a>
               </li>
             </ul>
             <button
               type="button"
               className="clear-completed"
-              style={{ display: 'block' }}
-            />
+              style={this.state.todos
+                .some(todo => todo.completed)
+                ? { display: 'block' }
+                : { display: 'none' }}
+              onClick={this.clearCompletedTodos}
+            >
+            Clear completed
+            </button>
           </footer>
         </section>
       </form>
