@@ -1,3 +1,4 @@
+/* stylelint-disable */
 html,
 body {
   margin: 0;
@@ -110,6 +111,7 @@ body {
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
+  display: block;
 }
 
 .toggle-all {
@@ -262,6 +264,7 @@ body {
   height: 20px;
   text-align: center;
   border-top: 1px solid #e6e6e6;
+  display: block;
 }
 
 .footer:before {
@@ -376,4 +379,8 @@ html .clear-completed:active {
   .filters {
     bottom: 10px;
   }
+}
+
+.display-none {
+  display: none;
 }

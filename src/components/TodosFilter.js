@@ -3,14 +3,17 @@ import React from 'react';
 
 class ToDosFilter extends React.Component {
   todosFilter = (props) => {
-    this.props.injectFilteredTodos(props)
+    this.setState({
+      currentsFilter: props,
+    });
+    this.props.injectFilteredTodos(props);
   };
   
   render() {
     return (
       <ul className="filters">
         <li>
-          <a onClick={() => this.todosFilter('all')} href="#/" className="selected">All</a>
+          <a onClick={() => this.todosFilter('all')} href="#/">All</a>
         </li>
     
         <li>

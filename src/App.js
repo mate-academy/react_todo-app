@@ -10,6 +10,7 @@ class App extends React.Component {
     filteredTodos: undefined,
     allCompleted: false,
     todoIdCounter: 1,
+    todoFilterMethod: undefined,
   };
   
   addTodo = (todoObj) => {
@@ -39,6 +40,10 @@ class App extends React.Component {
             : todo.completed
         })),
     }));
+    this.setState({
+      filteredTodos: undefined,
+      allCompleted: false,
+    });
   };
   
   injectFilteredTodos = (isCompleted) => {
@@ -49,14 +54,14 @@ class App extends React.Component {
         this.setState({
           filteredTodos: todos.filter(todo => (
             todo.completed === true
-          ))
+          )),
         });
         break;
       case false:
         this.setState({
           filteredTodos: todos.filter(todo => (
             todo.completed !== true
-          ))
+          )),
         });
         break;
       case 'all':
@@ -104,6 +109,7 @@ class App extends React.Component {
   };
   
   render() {
+    const { todos, allCompleted, filteredTodos } = this.state;
     return (
       <section className="todoapp">
         <header className="header">
@@ -112,36 +118,36 @@ class App extends React.Component {
           <NewToDo addTodo={this.addTodo}/>
           
         </header>
-        <section className="main" style={{ display: 'block' }}>
+        <section className={ todos.length > 0 ? 'main' : 'display-none' }>
           <input
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            checked={this.state.allCompleted}
+            checked={allCompleted}
+            onChange={this.selectAll}
           />
           <label
             htmlFor="toggle-all"
-            onClick={this.selectAll}
           >
             Mark all as complete
           </label>
       
           <TodoList
-            todos={this.state.filteredTodos
-              ? this.state.filteredTodos
-              : this.state.todos}
+            todos={filteredTodos
+              ? filteredTodos
+              : todos}
             todoIsCompleted={this.todoIsCompletedSetState}
             removeFromState={this.removeFromState}
           />
           
         </section>
-        <footer className="footer" style={{ display: 'block' }}>
+        <footer className={todos.length > 0 ? 'footer' : 'display-none'}>
         <span className="todo-count">
-          {this.state.todos.filter(todo => todo.completed === false).length}
+          {todos.filter(todo => todo.completed === false).length}
         </span>
           
           <ToDosFilter
-            todos={this.state.todos}
+            todos={todos}
             injectFilteredTodos={this.injectFilteredTodos}
           />
       
