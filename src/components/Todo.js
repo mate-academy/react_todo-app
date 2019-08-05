@@ -12,7 +12,11 @@ const Todo = ({ todo, todoCheck, removeItem }) => (
         checked={todo.completed}
         onChange={todoCheck}
       />
-      <label htmlFor="todo-1">{todo.title}</label>
+      <label htmlFor="todo-1"
+             onClick={(event) => event.preventDefault()}
+      >
+        {todo.title}
+      </label>
       <button
         onClick={removeItem}
         type="button"

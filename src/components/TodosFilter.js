@@ -10,15 +10,15 @@ class ToDosFilter extends React.Component {
     return (
       <ul className="filters">
         <li>
-          <a onClick={() => this.todosFilter('all')} data-filter={'all'} href="#/" className="selected">All</a>
+          <a onClick={() => this.todosFilter('all')} href="#/" className="selected">All</a>
         </li>
     
         <li>
-          <a onClick={() => this.todosFilter(false)} data-filter={false} href="#/active">Active</a>
+          <a onClick={() => this.todosFilter(false)} href="#/active">Active</a>
         </li>
     
         <li>
-          <a onClick={() => this.todosFilter(true)} data-filter={true} href="#/completed">Completed</a>
+          <a onClick={() => this.todosFilter(true)} href="#/completed">Completed</a>
         </li>
       </ul>
     )
