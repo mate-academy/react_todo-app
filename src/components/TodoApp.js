@@ -8,6 +8,7 @@ class TodoApp extends React.Component {
     todos: [],
     newTodo: { title: '' },
     sortField: 'all',
+    toggleAll: false,
   }
 
   addTodo = (event) => {
@@ -54,8 +55,11 @@ class TodoApp extends React.Component {
   handleToggleAll = () => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (
-        { ...todo, completed: true }
+        !prevState.toggleAll
+          ? { ...todo, completed: true }
+          : { ...todo, completed: false }
       )),
+      toggleAll: !prevState.toggleAll,
     }));
   };
 
@@ -81,7 +85,6 @@ class TodoApp extends React.Component {
   };
 
   render() {
-    console.log(this.state.todos)
     const filteredTodos = this.setFilteredTodos(this.state.filterBy);
 
     return (

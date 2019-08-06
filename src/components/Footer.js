@@ -16,7 +16,7 @@ const Footer = ({ todos, handleFilter, clearCompletedTodos }) => (
       {filtersList.map((filterItem) =>
         <li key={filterItem.filterName}>
           <a
-            className="selected"
+            // className="selected"
             onClick={() => handleFilter(filterItem.filterName)}
             href="#/"
           >
