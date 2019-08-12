@@ -120,21 +120,27 @@ class App extends React.Component {
         <TodoApp
           onSubmit={this.addTodo}
         />
-
-        <TodoList
-          toggle={this.handleToggle}
-          deleteTodo={this.deleteTodo}
-          handleChackAll={this.handleChackAll}
-          todos={todosVisible}
-          renameTodo={this.renameTodo}
-        />
-        <Footer
-          sortField={sortFieldEvent}
-          handleFilterBy={this.handleFilterBy}
-          todos={todosVisible}
-          isCompletedHide={isCompletedHide}
-          destroyAllComplete={this.destroyAllComplete}
-        />
+        {todos.length
+          ? (
+            <>
+              <TodoList
+                toggle={this.handleToggle}
+                deleteTodo={this.deleteTodo}
+                handleChackAll={this.handleChackAll}
+                todos={todosVisible}
+                renameTodo={this.renameTodo}
+              />
+              <Footer
+                sortField={sortFieldEvent}
+                handleFilterBy={this.handleFilterBy}
+                todos={todosVisible}
+                isCompletedHide={isCompletedHide}
+                destroyAllComplete={this.destroyAllComplete}
+              />
+            </>
+          )
+          : ''
+        }
       </section>
     );
   }
