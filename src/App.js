@@ -15,6 +15,7 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: [...prevState.todos, newTodo],
     }));
+    this.todosFilter(this.state.selectedFilter);
   }
 
   toggleTodo = (id) => {
@@ -32,13 +33,13 @@ class App extends React.Component {
 
       return {
         todos: toggledTodos,
-        filteredTodos: this.todosFilter(prevstate.selectedFilter),
       };
     });
+    this.todosFilter(this.state.selectedFilter);
 
     this.setState(prevstate => ({
       toggleAllIsActive: (prevstate.todos.every(
-        todo => todo.completed === true
+        todo => todo.completed
       )) && true,
     }));
   }
@@ -54,7 +55,6 @@ class App extends React.Component {
         return {
           todos: completeAll,
           toggleAllIsActive: true,
-          filteredTodos: this.todosFilter(prevState.selectedFilter),
         };
       })
       : this.setState((prevstate) => {
@@ -66,9 +66,9 @@ class App extends React.Component {
         return {
           todos: remoteAll,
           toggleAllIsActive: false,
-          filteredTodos: this.todosFilter(prevstate.selectedFilter),
         };
       });
+    this.todosFilter(this.state.selectedFilter);
   }
 
   todosFilter = (value) => {
@@ -77,7 +77,7 @@ class App extends React.Component {
         case 'Active':
           return {
             filteredTodos: prevstate.todos.filter(
-              todo => todo.completed === false
+              todo => !todo.completed
             ),
             selectedFilter: 'Active',
           };
@@ -85,7 +85,7 @@ class App extends React.Component {
         case 'Completed':
           return {
             filteredTodos: prevstate.todos.filter(
-              todo => todo.completed === true
+              todo => todo.completed
             ),
             selectedFilter: 'Completed',
           };
@@ -105,15 +105,17 @@ class App extends React.Component {
   destroyTodo = (id) => {
     this.setState(prevstate => ({
       todos: prevstate.todos.filter(todo => todo.id !== id),
-      filteredTodos: this.todosFilter(prevstate.selectedFilter),
     }));
+
+    this.todosFilter(this.state.selectedFilter);
   }
 
   clearCompleted = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => todo.completed === false),
-      filteredTodos: this.todosFilter(prevState.selectedFilter),
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
+
+    this.todosFilter(this.state.selectedFilter);
   }
 
   render() {

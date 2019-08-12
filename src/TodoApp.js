@@ -40,6 +40,8 @@ class TodoApp extends React.Component {
       destroyTodo,
     } = this.props;
 
+    const { title } = this.state;
+
     return (
       <form onSubmit={this.createTodo}>
         <header className="header">
@@ -48,7 +50,7 @@ class TodoApp extends React.Component {
           <input
             className="new-todo"
             placeholder="What needs to be done?"
-            value={this.state.title}
+            value={title}
             onChange={this.saveCurrentTodoValue}
           />
         </header>
