@@ -152,7 +152,6 @@ body {
 
 .todo-list li {
   position: relative;
-  font-size: 24px;
   border-bottom: 1px solid #ededed;
 }
 
@@ -233,7 +232,7 @@ body {
   bottom: 0;
   width: 40px;
   height: 40px;
-  margin: auto 0;
+  margin-top: 11px;
   font-size: 30px;
   color: #cc9a9a;
   margin-bottom: 11px;

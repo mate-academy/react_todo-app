@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 class Todo extends React.Component {
   state = {
@@ -65,7 +66,8 @@ class Todo extends React.Component {
                 <>
                   <label
                     onDoubleClick={this.handleStart}
-                    htmlFor="todo-2"
+                    className={classnames({ 'todo-completed': todo.completed })}
+                    htmlFor="todo-1"
                   >
                     {todo.title}
                   </label>
