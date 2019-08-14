@@ -21,7 +21,7 @@ class TodoApp extends React.Component {
   createTodo = (event) => {
     event.preventDefault();
 
-    this.props.addTodo({
+    this.state.title.length > 0 && this.props.addTodo({
       ...this.state,
       id: Math.random() * 100,
     });
