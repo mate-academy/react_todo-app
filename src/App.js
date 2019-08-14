@@ -11,6 +11,10 @@ class App extends React.Component {
   }
 
   writeTasks = (event) => {
+    if (!this.state.title) {
+      return;
+    }
+
     event.preventDefault();
     this.setState(state => ({
       tasks: [...state.tasks, {
@@ -82,9 +86,11 @@ class App extends React.Component {
               className="new-todo"
               placeholder="What needs to be done?"
               value={this.state.title}
-              onChange={event => this.setState({
-                title: event.target.value,
-              })}
+              onChange={(event) => {
+                this.setState({
+                  title: event.target.value,
+                });
+              }}
             />
           </form>
 

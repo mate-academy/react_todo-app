@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Footer({ filterBy, currentFilter, clearCompletedAll }) {
+function Footer({
+  tasks, filterBy, currentFilter, clearCompletedAll,
+}) {
   return (
     <footer className="footer">
       <span className="todo-count">
-            3 items left
+        {tasks.filter(item => !item.completed).length}
+        {' '}
+active items
       </span>
 
       <ul className="filters">
@@ -53,6 +57,7 @@ function Footer({ filterBy, currentFilter, clearCompletedAll }) {
 }
 
 Footer.propTypes = {
+  tasks: PropTypes.objectOf.isRequired,
   filterBy: PropTypes.func.isRequired,
   currentFilter: PropTypes.func.isRequired,
   clearCompletedAll: PropTypes.func.isRequired,
