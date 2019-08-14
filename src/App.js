@@ -32,7 +32,7 @@ class TodoApp extends React.Component {
   };
 
   addTodo = (todo) => {
-    this.setState(prevState => ({
+    this.state.title && this.setState(prevState => ({
       todos: [...prevState.todos, todo],
     }));
   };
