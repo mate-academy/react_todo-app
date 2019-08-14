@@ -13,6 +13,9 @@ class TodoApp extends React.Component {
 
   addTodo = (event) => {
     event.preventDefault();
+    if (!this.state.newTodo.title.trim()) {
+      return;
+    }
     this.setState(prevState => ({
       todos: [...prevState.todos, prevState.newTodo],
       newTodo: { title: '' },
