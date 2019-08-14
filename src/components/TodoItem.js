@@ -9,25 +9,43 @@ class TodoItem extends React.Component {
   };
 
   changeEditMode = () => {
+    let editableValue = this.state.currentValue;
+
+    if (!editableValue || editableValue === ' ') {
+      editableValue = this.props.todo.title;
+    }
+
     this.setState(prevState => ({
       isEditable: !prevState.isEditable,
+      currentValue: editableValue,
     }));
   }
 
   changeEditModeByKey = (event) => {
+    const { currentValue } = this.state;
+    let { isEditable } = this.state;
+
+    if ((!currentValue || currentValue === ' ') && event.key === 'Enter') {
+      isEditable = true;
+
+      return isEditable;
+    }
+
     if (event.key === 'Enter') {
       this.setState({
         isEditable: false,
       });
     }
+
+    return {};
   }
 
   handleChange = (event) => {
-    const { value } = event.target;
+    let { value } = event.target;
 
-    this.setState({
-      currentValue: value,
-    });
+    value = value.replace(/[^\w ]/, '').replace(/\s+/g, ' ');
+
+    this.setState({ currentValue: value });
   }
 
   render() {
@@ -51,6 +69,7 @@ class TodoItem extends React.Component {
               onChange={this.handleChange}
               onKeyPress={this.changeEditModeByKey}
               onBlur={this.changeEditMode}
+              placeholder="Please, enter todo"
             />
           ) : (
             <div className="view">
