@@ -1,44 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Todo = ({ item, toggle, deleteTodo }) => {
-  const { id, title, completed } = item;
-
-  return (
-    <li className="todo">
-      <div className="view">
-        <input
-          type="checkbox"
-          className="toggle"
-          id={id}
-          onChange={() => toggle(id)}
-          checked={completed}
-        />
-        {/* eslint-disable-next-line */}
-        <label htmlFor="todo">{title}</label>
-        <button
-          type="button"
-          className="destroy"
-          onClick={() => deleteTodo(id)}
-        />
-        <p>{completed}</p>
-      </div>
-    </li>
-  );
-};
+const Todo = ({
+  todo, handleToggle, deleteTodo,
+}) => (
+  <li>
+    <div className="view">
+      <input
+        type="checkbox"
+        className="toggle"
+        id={todo.id}
+        checked={todo.completed}
+        onChange={() => handleToggle(todo.id)}
+      />
+      {/* eslint-disable-next-line */}
+      <label htmlFor={todo.id}>
+        {todo.title}
+      </label>
+      <button
+        type="button"
+        className="destroy"
+        onClick={() => deleteTodo(todo.id)}
+      />
+    </div>
+  </li>
+);
 
 Todo.propTypes = {
-  item: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
+  todo: PropTypes.shape({
     id: PropTypes.number,
-  }).isRequired,
-  toggle: PropTypes.func,
-  deleteTodo: PropTypes.func.isRequired,
-};
-
-Todo.defaultProps = {
-  toggle: null,
-};
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+  }),
+  handleToggle: PropTypes.func,
+  deleteTodo: PropTypes.func,
+}.isRequired;
 
 export default Todo;

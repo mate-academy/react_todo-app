@@ -1,146 +1,149 @@
 import React from 'react';
-import Todo from './Todo';
 import TodoApp from './TodoApp';
 import FilterBy from './FilterBy';
-import getSortFied from './getSortFied';
 
 class App extends React.Component {
   state = {
     todos: [],
-    sortField: 'all',
-    todosVisible: [],
-    isCompletedHide: 0,
-    statusAllTodo: true,
+    todosFiltered: [],
+    sortField: 'All',
+    statusAllTodo: false,
   }
 
-addTodo = (title) => {
-  this.setState(prevState => ({
-    todos: [...prevState.todos,
-      {
-        title,
-        id: Date.now(),
-        completed: false,
-      },
-    ],
-    todosVisible: [...prevState.todosVisible, {
-      title,
-      id: Date.now(),
-      completed: false,
-    }],
-    completed: prevState.completed,
-  }));
-};
+  addTodo = (todo) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
+    }));
+    this.sortFieldTodo(this.state.sortField);
+  }
 
-handleFilterBy = (sortField) => {
-  this.setState(prevState => ({
-    todosVisible: getSortFied(prevState.todos, sortField),
-    sortField: prevState.sortField,
-  }));
-}
+  handleToggle = (id) => {
+    this.setState((prevstate) => {
+      const toggledTodos = prevstate.todos.map((todo) => {
+        if (todo.id !== id) {
+          return todo;
+        }
 
-handleToggle = (id) => {
-  this.setState((prevState) => {
-    const task = prevState.todosVisible.find(todo => todo.id === id);
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      });
 
-    task.completed = !task.completed;
-    if (task.completed) {
       return {
-        isCompletedHide: 1,
+        todos: toggledTodos,
       };
-    }
+    });
+    this.sortFieldTodo(this.state.sortField);
 
-    return {
-      todosVisible: prevState.todosVisible,
-    };
-  });
-}
+    this.setState(prevstate => ({
+      statusAllTodo: (prevstate.todos.every(
+        todo => todo.completed
+      )) && true,
+    }));
+  }
 
-handleChackAll = () => {
-  this.setState(prevState => ({
-    todosVisible: prevState.todos.map(todo => ({
-      ...todo,
-      completed: prevState.statusAllTodo,
-    }
-    )),
-    statusAllTodo: !prevState.statusAllTodo,
-  }));
-}
+  handleCheckAll = (statusAllTodo) => {
+    (statusAllTodo !== true)
+      ? this.setState((prevState) => {
+        const completeAll = prevState.todos.map(todo => ({
+          ...todo,
+          completed: true,
+        }));
 
-deleteTodo = (id) => {
-  this.setState((prevState) => {
-    const todosDelet = prevState.todos.filter(todo => !(todo.id === id));
+        return {
+          todos: completeAll,
+          statusAllTodo: true,
+        };
+      })
+      : this.setState((prevstate) => {
+        const deleteAll = prevstate.todos.map(todo => ({
+          ...todo,
+          completed: false,
+        }));
 
-    return {
-      todos: todosDelet,
-      todosVisible: getSortFied(todosDelet, 'all'),
-    };
-  });
-}
+        return {
+          todos: deleteAll,
+          statusAllTodo: false,
+        };
+      });
+    this.sortFieldTodo(this.state.sortField);
+  }
 
-deleteAllComplete = () => {
-  this.setState((prevState) => {
-    const todosActive = prevState.todosVisible.filter(a => !a.completed);
+  sortFieldTodo = (value) => {
+    this.setState((prevstate) => {
+      switch (value) {
+        case 'Active':
+          return {
+            todosFiltered: prevstate.todos.filter(
+              todo => !todo.completed
+            ),
+            sortField: 'Active',
+          };
+        case 'Completed':
+          return {
+            todosFiltered: prevstate.todos.filter(
+              todo => todo.completed
+            ),
+            sortField: 'Completed',
+          };
 
-    return {
-      todos: todosActive,
-      todosVisible: getSortFied(todosActive, 'all'),
-    };
-  });
-}
+        case 'All':
+          return {
+            todosFiltered: prevstate.todos,
+            sortField: 'All',
+          };
 
-render() {
-  const { todosVisible } = this.state;
+        default:
+          return {};
+      }
+    });
+  }
 
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+  deleteTodo = (id) => {
+    this.setState(prevstate => ({
+      todos: prevstate.todos.filter(todo => todo.id !== id),
+    }));
+
+    this.sortFieldTodo(this.state.sortField);
+  }
+
+  clearCompleted = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.completed),
+    }));
+
+    this.sortFieldTodo(this.state.sortField);
+  }
+
+  render() {
+    const {
+      todos, sortField, statusAllTodo, todosFiltered,
+    } = this.state;
+
+    const visibleTodos = (sortField === 'All')
+      ? todos
+      : todosFiltered;
+
+    return (
+      <section className="todoapp">
         <TodoApp
-          onSubmit={this.addTodo}
+          todos={visibleTodos}
+          addTodo={this.addTodo}
+          handleToggle={this.handleToggle}
+          handleCheckAll={this.handleCheckAll}
+          statusAllTodo={statusAllTodo}
+          deleteTodo={this.deleteTodo}
         />
-      </header>
-      <section className="main">
-        <input
-          type="checkbox"
-          className="toggle-all"
-          id="toggle-all"
-          onChange={this.handleChackAll}
+        <FilterBy
+          todos={todos}
+          sortFieldTodo={this.sortFieldTodo}
+          sortField={sortField}
+          clearCompleted={this.clearCompleted}
         />
-        {/* eslint-disable-next-line */}
-        <label htmlFor="toggle-all">Mark all as completed</label>
-        <ul className="todo-list">
-          {todosVisible.map(todo => (
-            <Todo
-              key={todo.id}
-              item={todo}
-              toggle={this.handleToggle}
-              deleteTodo={this.deleteTodo}
-            />
-          ))}
-        </ul>
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          {`${todosVisible.filter(todo => !todo.completed).length}
-            items left`}
-        </span>
-
-        <ul className="filters">
-          <FilterBy
-            handleFilterBy={this.handleFilterBy}
-          />
-        </ul>
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={this.deleteAllComplete}
-        >
-          {this.state.isCompletedHide ? 'Clear completed' : ''}
-        </button>
-      </footer>
-    </section>
-  );
-}
+    );
+  }
 }
 
 export default App;

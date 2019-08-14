@@ -1,56 +1,92 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Todo from './Todo';
 
 class TodoApp extends React.Component {
   state = {
     title: '',
+    id: 0,
+    completed: false,
   }
 
-  handleSubmit = (event) => {
+  currentTodoValue = (event) => {
+    const { value } = event.target;
+
+    this.setState({
+      title: value,
+    });
+  }
+
+  addTodo = (event) => {
     event.preventDefault();
 
-    const { onSubmit } = this.props;
+    this.state.title.length > 0 && this.props.addTodo({
+      ...this.state,
+      id: Date.now(),
+    });
 
-    onSubmit(this.state.title);
     this.setState({
       title: '',
     });
   }
 
-  handleChange = (event) => {
-    const { name, value } = event.target;
-
-    this.setState({
-      [name]: value,
-    });
-  }
-
   render() {
+    const {
+      todos,
+      handleToggle,
+      handleCheckAll,
+      statusAllTodo,
+      deleteTodo,
+    } = this.props;
+
+    const { title } = this.state;
+
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label
-          className="new-todo"
-          htmlFor="new-todo-title"
-        >
+      <form onSubmit={this.addTodo}>
+        <header className="header">
+          <h1>todos</h1>
+
           <input
             className="new-todo"
             placeholder="What needs to be done?"
-            onChange={this.handleChange}
-            value={this.state.title}
-            name="title"
-            type="text"
+            value={title}
+            onChange={this.currentTodoValue}
           />
-        </label>
-        <button type="submit">
-          <></>
-        </button>
+        </header>
+
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={statusAllTodo}
+            onChange={() => handleCheckAll(statusAllTodo)}
+          />
+          {/* eslint-disable-next-line */}
+          <label htmlFor="toggle-all">Mark all as complete</label>
+          <ul className="todo-list">
+            {todos.map(todo => (
+              <Todo
+                key={todo.id}
+                todo={todo}
+                handleToggle={handleToggle}
+                deleteTodo={deleteTodo}
+              />
+            ))}
+          </ul>
+        </section>
       </form>
     );
   }
 }
 
 TodoApp.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
+  addTodo: PropTypes.func,
+  todos: PropTypes.arrayOf(PropTypes.object),
+  handleToggle: PropTypes.func,
+  handleCheckAll: PropTypes.func,
+  statusAllTodo: PropTypes.func,
+  deleteTodo: PropTypes.func,
+}.isRequired;
 
 export default TodoApp;
