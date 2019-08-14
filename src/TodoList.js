@@ -1,41 +1,33 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import propTypes from './propTypes';
 
-function TodoApp(props) {
+function TodoList(props) {
   const { todo, onCheck, onRemove } = props;
 
   return (
     (
-      <li key={todo.id} className="">
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            onClick={() => onCheck(todo.id)}
-            checked={todo.completed}
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          onChange={() => onCheck(todo.id)}
+          checked={todo.completed}
+        />
+        <span>
+          {todo.todo}
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => {
+              onRemove(todo.id);
+            }}
           />
-          {/* eslint-disable-next-line max-len */}
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control,jsx-a11y/label-has-for */}
-          <label>
-            {todo.todo}
-            <button
-              type="button"
-              className="destroy"
-              onClick={() => {
-                onRemove(todo.id);
-              }}
-            />
-          </label>
-        </div>
-      </li>
+        </span>
+      </div>
     )
   );
 }
 
-TodoApp.propTypes = {
-  todo: propTypes.objectOf(propTypes.object).isRequired,
-  onCheck: propTypes.func.isRequired,
-  onRemove: propTypes.func.isRequired,
-};
+TodoList.propTypes = propTypes.state;
 
-export default TodoApp;
+export default TodoList;
