@@ -216,7 +216,7 @@ body {
   transition: color 0.4s;
 }
 
-.todo-list li.completed label {
+.todo-list li label.completed {
   color: #d9d9d9;
   text-decoration: line-through;
 }
@@ -314,7 +314,7 @@ body {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.filters li a:focus {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
