@@ -11,8 +11,12 @@ class TodoApp extends React.Component {
     event.preventDefault();
 
     const { onSubmit } = this.props;
+    const { title } = this.state;
+    if (title.length < 1) {
+      return;
+    }
 
-    onSubmit(this.state.title);
+    onSubmit(title);
 
     this.setState({
       title: '',
