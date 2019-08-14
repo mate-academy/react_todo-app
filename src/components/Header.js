@@ -4,22 +4,16 @@ import PropTypes from 'prop-types';
 class Header extends React.Component {
   state = {
     title: '',
-    error: '',
   }
 
   handleSubmit = (event) => {
     const { addNewTodo } = this.props;
-    let { error } = this.state;
 
     event.preventDefault();
 
     this.setState((prevState) => {
       if (!prevState.title || prevState.title === ' ') {
-        error = 'Todo is required';
-      }
-
-      if (error) {
-        return error;
+        return;
       }
 
       addNewTodo({
@@ -27,8 +21,6 @@ class Header extends React.Component {
         completed: false,
         id: Date.now(),
       });
-
-      return {};
     });
 
     this.setState({
@@ -41,7 +33,6 @@ class Header extends React.Component {
 
     this.setState({
       title: value.replace(/[^\w ]/, '').replace(/\s+/g, ' '),
-      error: '',
     });
   };
 
