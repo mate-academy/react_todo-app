@@ -20,7 +20,7 @@ class TodoApp extends React.Component {
   addTodo = (event) => {
     event.preventDefault();
 
-    this.state.title.length > 0 && this.props.addTodo({
+    this.state.title.trim() && this.props.addTodo({
       ...this.state,
       id: Date.now(),
     });
