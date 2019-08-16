@@ -329,6 +329,10 @@ body {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
+.selected:active {
+  border-color: rgba(175, 47, 47, 0.2);
+}
+
 .clear-completed,
 html .clear-completed:active {
   float: right;
