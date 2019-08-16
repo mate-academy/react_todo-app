@@ -134,6 +134,10 @@ body {
   transform: rotate(90deg);
 }
 
+.toggle-all + label:hover {
+  cursor: pointer;
+}
+
 .toggle-all + label:before {
   content: '❯';
   font-size: 22px;
@@ -191,6 +195,10 @@ body {
   appearance: none;
 }
 
+.toggle {
+  cursor: pointer;
+}
+
 .todo-list li .toggle {
   opacity: 0;
 }
@@ -217,11 +225,6 @@ body {
   transition: color 0.4s;
 }
 
-/* .todo-list li.completed label {
-  color: #d9d9d9;
-  text-decoration: line-through;
-} */
-
 .todo-list li .destroy {
   display: none;
   position: absolute;
@@ -239,6 +242,7 @@ body {
 
 .todo-list li .destroy:hover {
   color: #af5b5e;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:after {
