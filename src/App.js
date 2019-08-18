@@ -32,7 +32,11 @@ class TodoApp extends React.Component {
   };
 
   addTodo = (todo) => {
-    this.state.title && this.setState(prevState => ({
+    if (!this.state.title.trim()) {
+      return;
+    }
+
+    this.setState(prevState => ({
       todos: [...prevState.todos, todo],
     }));
   };
