@@ -49,16 +49,8 @@ class App extends React.Component {
 
   handleToggle = (id) => {
     this.setState((prevState) => {
-      const task = prevState.todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            completed: !todo.completed,
-          };
-        }
-        return 0;
-      });
-
+      const task = prevState.todos.find(todo => todo.id === id);
+      task.completed = !task.completed;
       if (task.completed) {
         return {
           isCompletedHide: 1,
