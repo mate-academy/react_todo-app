@@ -13,7 +13,7 @@ function TodoList(props) {
           onChange={() => onCheck(todo.id)}
           checked={todo.completed}
         />
-        <span>
+        <span className={todo.completed ? 'active' : ''}>
           {todo.todo}
           <button
             type="button"
