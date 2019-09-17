@@ -240,7 +240,7 @@ body {
   color: #af5b5e;
 }
 
-.todo-list li .destroy:after {
+.todo-list li .destroy::after {
   content: '×';
 }
 
@@ -351,6 +351,10 @@ html .clear-completed:active {
 
 .info a:hover {
   text-decoration: underline;
+}
+
+#todo {
+  padding-right: 50px;
 }
 
 /*
