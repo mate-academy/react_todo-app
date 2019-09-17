@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      listOfTodos: [{ title: 'test', isChecked: false }],
+      listOfTodos: [],
       filteredTodos: [],
       valueOfMainInput: '',
       activeFilter: 'all',
