@@ -9,17 +9,16 @@ const ListOfTodos = ({ listOfTodos, toggleTodoState, removeTodo }) => (
           <input
             type="checkbox"
             className="toggle"
-            id={`todo-${i}`}
             checked={todo.isChecked}
-            onChange={() => toggleTodoState(i)}
+            onChange={() => toggleTodoState(todo.id)}
           />
-          <label htmlFor={`todo-${i}`} id="todo">
+          <label onClick={() => toggleTodoState(todo.id)}>
             {todo.title}
           </label>
           <button
             type="button"
             className="destroy"
-            onClick={() => removeTodo(i)}
+            onClick={() => removeTodo(todo.id)}
           />
         </div>
       </li>

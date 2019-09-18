@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ListOfTodos from './components/ListItem/ListOfTodos';
+import ListOfTodos from './components/ListOfTodos/ListOfTodos';
 import Footer from './components/Footer/Footer';
 
 class App extends Component {
@@ -11,20 +11,26 @@ class App extends Component {
       filteredTodos: [],
       valueOfMainInput: '',
       activeFilter: 'all',
+      counter: 0,
     };
   }
 
   handleChangeMainInput = (value) => {
     this.setState({
-      valueOfMainInput: value,
+      valueOfMainInput: value.replace(/^\s/, ''),
     });
   }
 
   handleSubmit = (keyCode) => {
     if (keyCode === 13) {
-      this.setState(({ listOfTodos, valueOfMainInput }) => ({
+      this.setState(({ listOfTodos, valueOfMainInput, counter }) => ({
+        counter: counter + 1,
         listOfTodos: [
-          { title: valueOfMainInput, isChecked: false },
+          { title: valueOfMainInput, isChecked: false, id: counter },
+          ...listOfTodos,
+        ],
+        filteredTodos: [
+          { title: valueOfMainInput, isChecked: false, id: counter },
           ...listOfTodos,
         ],
         valueOfMainInput: '',
@@ -32,20 +38,31 @@ class App extends Component {
     }
   }
 
-  toggleTodoState = (i) => {
-    this.setState(({ listOfTodos }) => ({
+  toggleTodoState = (id) => {
+    this.setState(({ listOfTodos, filteredTodos, activeFilter }) => ({
       listOfTodos: listOfTodos.map(
-        (todo, index) => (index === i
-          ? { title: todo.title, isChecked: !todo.isChecked }
+        todo => (todo.id === id
+          ? { title: todo.title, isChecked: !todo.isChecked, id: todo.id }
           : todo)
       ),
+      filteredTodos: filteredTodos.map(
+        todo => (todo.id === id
+          ? { title: todo.title, isChecked: !todo.isChecked, id: todo.id }
+          : todo)
+      ).filter(todo => (
+        (activeFilter === 'active' && todo.isChecked === false)
+        || (activeFilter === 'completed' && todo.isChecked)
+      )),
     }));
   }
 
-  removeTodo = (i) => {
+  removeTodo = (id) => {
     this.setState(({ listOfTodos }) => ({
       listOfTodos: listOfTodos.map(
-        (todo, index) => (index !== i ? todo : undefined)
+        todo => (todo.id !== id ? todo : undefined)
+      ).filter(todo => todo !== undefined),
+      filteredTodos: listOfTodos.map(
+        todo => (todo.id !== id ? todo : undefined)
       ).filter(todo => todo !== undefined),
     }));
   }
@@ -53,6 +70,10 @@ class App extends Component {
   toggleAllTodos = () => {
     this.setState(({ listOfTodos }) => ({
       listOfTodos: listOfTodos.map(({ title }) => ({
+        title,
+        isChecked: !listOfTodos.every(({ isChecked }) => isChecked),
+      })),
+      filteredTodos: listOfTodos.map(({ title }) => ({
         title,
         isChecked: !listOfTodos.every(({ isChecked }) => isChecked),
       })),
@@ -70,9 +91,12 @@ class App extends Component {
   }
 
   removeCheckedTodos = () => {
-    this.setState(({ listOfTodos }) => ({
+    this.setState(({ listOfTodos, filteredTodos }) => ({
       listOfTodos: listOfTodos.map(
-        (todo, index) => (!todo.isChecked ? todo : undefined)
+        todo => (!todo.isChecked ? todo : undefined)
+      ).filter(todo => todo !== undefined),
+      filteredTodos: filteredTodos.map(
+        todo => (!todo.isChecked ? todo : undefined)
       ).filter(todo => todo !== undefined),
     }));
   }
@@ -91,6 +115,7 @@ class App extends Component {
         valueOfMainInput,
         activeFilter,
         filteredTodos,
+        counter,
       },
     } = this;
 
@@ -121,6 +146,7 @@ class App extends Component {
             listOfTodos={activeFilter === 'all' ? listOfTodos : filteredTodos}
             toggleTodoState={toggleTodoState}
             removeTodo={removeTodo}
+            counter={counter}
           />
         </section>
 
