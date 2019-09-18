@@ -1,75 +1,166 @@
-import React from 'react';
+import React, { Component } from 'react';
+import TodoApp from './components/TodoApp/TodoApp';
+import TodoList from './components/TodoList/TodoList';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+export default class App extends Component {
+  state = {
+    todoList: [],
+    isFiltered: false,
+    isFilerOnCompleted: false,
+  };
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+  onNewTodoSubmit = (title) => {
+    if (title !== '') {
+      this.setState(({ todoList }) => {
+        const nextId = todoList.length === 0
+          ? 1
+          : Math.max(...todoList.map(todo => todo.id)) + 1;
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        return (
+          {
+            todoList: [
+              ...todoList,
+              {
+                id: nextId,
+                title,
+                completed: false,
+              },
+            ],
+          }
+        );
+      });
+    }
+  };
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  onRemoveTodoClick = id => this.setState(({ todoList }) => (
+    {
+      todoList: todoList.filter(todo => todo.id !== id),
+    }));
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  onCompletedSwitch = id => this.setState(({ todoList }) => {
+    const arr = [...todoList];
+    const ind = arr.findIndex(todo => todo.id === id);
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
-      </section>
+    arr[ind].completed = !arr[ind].completed;
 
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
+    return (
+      {
+        todoList: arr,
+        isCompleted: arr[ind].completed && this.checkIsCompleted(),
+      }
+    );
+  });
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+  numberOfNotCompletedTodos = () => {
+    const num = this.state.todoList
+      .filter(todo => !todo.completed).length;
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+    return num ? `${num} items left` : '';
+  };
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+  onFilterShowAll = () => this.setState({ isFiltered: false });
 
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
+  onFilterShowActive = () => this.setState(
+    {
+      isFiltered: true,
+      isFilerOnCompleted: false,
+    }
   );
-}
 
-export default App;
+  onFilterShowCompleted = () => this.setState(
+    {
+      isFiltered: true,
+      isFilerOnCompleted: true,
+    }
+  );
+
+  onToggleCopmpeted = checked => this.setState(({ todoList }) => (
+    {
+      todoList: todoList.map(todo => ({ ...todo, completed: checked })),
+    }));
+
+  checkIsCompleted = () => this.state.todoList
+    .findIndex(todo => todo.completed) !== -1;
+
+  clearCompleted = () => this.setState(({ todoList }) => (
+    {
+      todoList: todoList.filter(todo => !todo.completed),
+    }));
+
+  render() {
+    const { todoList, isFiltered, isFilerOnCompleted } = this.state;
+
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+
+          <TodoApp onSubmit={this.onNewTodoSubmit} />
+        </header>
+
+        <section className="main" style={{ display: 'block' }}>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={e => this.onToggleCopmpeted(e.target.checked)}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+          <TodoList
+            todoList={isFiltered
+              ? todoList.filter(todo => todo.completed === isFilerOnCompleted)
+              : todoList}
+            removeTodo={this.onRemoveTodoClick}
+            switchCompleted={this.onCompletedSwitch}
+          />
+        </section>
+
+        <footer className="footer" style={{ display: 'block' }}>
+          <span className="todo-count">
+            {this.numberOfNotCompletedTodos()}
+          </span>
+
+          <ul className="filters">
+            <li>
+              <a
+                href="#/"
+                className="selected"
+                onClick={this.onFilterShowAll}
+              >
+                All
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#/active"
+                onClick={this.onFilterShowActive}
+              >
+                Active
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#/completed"
+                onClick={this.onFilterShowCompleted}
+              >
+                Completed
+              </a>
+            </li>
+          </ul>
+          {this.checkIsCompleted() && (
+            <button
+              type="button"
+              className="clear-completed"
+              style={{ display: 'block' }}
+              onClick={this.clearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
+      </section>
+    );
+  }
+}

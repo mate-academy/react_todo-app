@@ -134,10 +134,10 @@ body {
 }
 
 .toggle-all + label:before {
-  content: '❯';
+  content: "❯";
   font-size: 22px;
   color: #e6e6e6;
-  padding: 10px 27px 10px 27px;
+  padding: 10px 27px;
 }
 
 .toggle-all:checked + label:before {
