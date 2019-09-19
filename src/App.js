@@ -42,6 +42,19 @@ class App extends React.Component {
     this.forceUpdate();
   };
 
+  editTodo = (id, todoValue) => {
+    this.setState((state) => {
+      const currentTodo = state.todoList.find(todo => todo.id === id);
+
+      currentTodo.todo = todoValue;
+      currentTodo.completed = false;
+    });
+    this.setState(state => ({
+      checkedAll: state.todoList.every(todo => todo.completed),
+    }));
+    this.forceUpdate();
+  };
+
   addTodo = (event) => {
     event.preventDefault();
     if (this.state.query !== '') {
@@ -55,6 +68,10 @@ class App extends React.Component {
         todoList: state.todoList.concat(todo),
         query: '',
       }));
+    }
+
+    if (this.state.checkedAll) {
+      this.setState({ checkedAll: false });
     }
   };
 
@@ -77,8 +94,10 @@ class App extends React.Component {
   };
 
   deleteChecked = () => {
+    this.todoFilter();
     this.setState(state => ({
       todoList: state.todoList.filter(todo => !todo.completed),
+      selected: 'all',
     }));
   };
 
@@ -102,6 +121,9 @@ class App extends React.Component {
   deleteTodo = (id) => {
     this.setState(state => ({
       todoList: state.todoList.filter(todo => todo.id !== id),
+      checkedAll: state.todoList.every(
+        todo => todo.completed || todo.id === id
+      ),
     }));
   };
 
@@ -115,6 +137,7 @@ class App extends React.Component {
 
     return (
       <TodoApp
+        editTodo={this.editTodo}
         todoList={todoList}
         handleCheckAll={this.handleCheckAll}
         checkedAll={checkedAll}

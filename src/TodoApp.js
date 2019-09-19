@@ -18,6 +18,7 @@ const TodoApp = (
     filterArray,
     deleteChecked,
     filter,
+    editTodo,
   }
 ) => (
   <section className="todoapp">
@@ -45,6 +46,7 @@ const TodoApp = (
               filteredTodoList={filteredTodoList}
               deleteTodo={deleteTodo}
               handleTodoCheck={handleTodoCheck}
+              editTodo={editTodo}
             />
           )
           : []

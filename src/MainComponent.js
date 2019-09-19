@@ -10,6 +10,7 @@ function MainComponent(props) {
     handleCheckAll,
     deleteTodo,
     handleTodoCheck,
+    editTodo,
   } = props;
 
   return (
@@ -45,6 +46,7 @@ function MainComponent(props) {
                   onRemove={deleteTodo}
                   todo={todo}
                   onToggle={handleCheckAll}
+                  editTodo={editTodo}
                 />
               </li>
             ))
