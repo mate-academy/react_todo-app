@@ -1,75 +1,167 @@
 import React from 'react';
+import TodoApp from './TodoApp';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+class App extends React.Component {
+  state = {
+    todoList: [],
+    query: '',
+    checkedAll: false,
+  };
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+  componentWillMount() {
+    if (localStorage.getItem('todoList')) {
+      this.setState(({
+        todoList: JSON.parse(localStorage.getItem('todoList')),
+        checkedAll: JSON.parse(
+          localStorage
+            .getItem('todoList')
+        )
+          .every(todo => todo.completed),
+        selected: 'all',
+      }));
+    }
+  }
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+  componentDidUpdate() {
+    localStorage.setItem('todoList', JSON.stringify(this.state.todoList));
+  }
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  handleChange = (event) => {
+    this.setState({ query: event.target.value });
+  };
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  handleTodoCheck = (id) => {
+    this.setState((state) => {
+      const currentTodo = state.todoList.find(todo => todo.id === id);
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
-      </section>
+      currentTodo.completed = !currentTodo.completed;
+    });
+    this.setState(state => ({
+      checkedAll: state.todoList.every(todo => todo.completed),
+    }));
+    this.forceUpdate();
+  };
 
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
+  editTodo = (id, todoValue) => {
+    if (todoValue === '') {
+      this.deleteTodo(id);
+    } else {
+      this.setState((state) => {
+        const currentTodo = state.todoList.find(todo => todo.id === id);
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+        currentTodo.todo = todoValue;
+        currentTodo.completed = false;
+      });
+      this.setState(state => ({
+        checkedAll: state.todoList.every(todo => todo.completed),
+      }));
+    }
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+    this.forceUpdate();
+  };
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+  addTodo = (event) => {
+    event.preventDefault();
+    if (this.state.query !== '') {
+      const todo = {
+        completed: false,
+        todo: this.state.query,
+        id: Date.now(),
+      };
 
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+      this.setState(state => ({
+        todoList: state.todoList.concat(todo),
+        query: '',
+      }));
+    }
+
+    if (this.state.checkedAll) {
+      this.setState({ checkedAll: false });
+    }
+  };
+
+  handleCheckAll = () => {
+    this.setState(state => (state.todoList.every(todo => todo.completed)
+      ? {
+        todoList: state.todoList.map(todo => ({
+          ...todo,
+          completed: !todo.completed,
+        })),
+        checkedAll: false,
+      }
+      : {
+        todoList: state.todoList.map(todo => ({
+          ...todo,
+          completed: true,
+        })),
+        checkedAll: true,
+      }));
+  };
+
+  deleteChecked = () => {
+    this.todoFilter();
+    this.setState(state => ({
+      todoList: state.todoList.filter(todo => !todo.completed),
+      selected: 'all',
+    }));
+  };
+
+  filter = (event) => {
+    this.setState({ selected: event.target.name });
+  };
+
+  todoFilter = (selected) => {
+    const { todoList } = this.state;
+
+    switch (selected) {
+      case 'active':
+        return todoList.filter(todo => todo.completed === false);
+      case 'completed':
+        return todoList.filter(todo => todo.completed === true);
+      default:
+        return todoList;
+    }
+  };
+
+  deleteTodo = (id) => {
+    this.setState(state => ({
+      todoList: state.todoList.filter(todo => todo.id !== id),
+      checkedAll: state.todoList.every(
+        todo => todo.completed || todo.id === id
+      ),
+    }));
+    if (this.state.todoList.length === 1) {
+      this.setState({ checkedAll: false });
+    }
+  };
+
+  render() {
+    const {
+      todoList, query, selected, checkedAll,
+    } = this.state;
+
+    const filteredTodoList = this.todoFilter(selected);
+    const filterArray = ['All', 'Active', 'Completed'];
+
+    return (
+      <TodoApp
+        editTodo={this.editTodo}
+        todoList={todoList}
+        handleCheckAll={this.handleCheckAll}
+        checkedAll={checkedAll}
+        addTodo={this.addTodo}
+        query={query}
+        handleChange={this.handleChange}
+        filteredTodoList={filteredTodoList}
+        deleteTodo={this.deleteTodo}
+        handleTodoCheck={this.handleTodoCheck}
+        selected={selected}
+        filterArray={filterArray}
+        deleteChecked={this.deleteChecked}
+        filter={this.filter}
+      />
+    );
+  }
 }
 
 export default App;

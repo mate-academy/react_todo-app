@@ -129,6 +129,11 @@ hr {
   transition-duration: 500ms;
 }
 
+.active {
+  text-decoration: line-through;
+  color: #dbdbdb;
+}
+
 @media (min-width: 899px) {
   .learn-bar {
     width: auto;
