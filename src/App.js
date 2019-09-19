@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   handleSubmit = (keyCode) => {
-    if (keyCode === 13) {
+    if (keyCode === 13 && this.state.valueOfMainInput) {
       this.setState(({ listOfTodos, valueOfMainInput, counter }) => ({
         counter: counter + 1,
         listOfTodos: [
@@ -69,13 +69,15 @@ class App extends Component {
 
   toggleAllTodos = () => {
     this.setState(({ listOfTodos }) => ({
-      listOfTodos: listOfTodos.map(({ title }) => ({
+      listOfTodos: listOfTodos.map(({ title, id }) => ({
         title,
         isChecked: !listOfTodos.every(({ isChecked }) => isChecked),
+        id,
       })),
-      filteredTodos: listOfTodos.map(({ title }) => ({
+      filteredTodos: listOfTodos.map(({ title, id }) => ({
         title,
         isChecked: !listOfTodos.every(({ isChecked }) => isChecked),
+        id,
       })),
     }));
   }
