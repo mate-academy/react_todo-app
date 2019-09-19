@@ -12,6 +12,8 @@ export default class TodoItem extends Component {
 
   handleTitleChange = ({ value }) => this.setState({ editableTitle: value });
 
+  handleTitleBlur = () =>  this.setState({ isEdit: false });
+
   handleTitleSubmit = (e) => {
     e.preventDefault();
     this.props.handleTodoTitleEdit(this.props.id, this.state.editableTitle);
@@ -51,12 +53,16 @@ export default class TodoItem extends Component {
             </label>
           )}
           {this.state.isEdit && (
-            <form onSubmit={e => this.handleTitleSubmit(e)}>
+            <form
+              className="todo-item__form"
+              onSubmit={e => this.handleTitleSubmit(e)}
+            >
               <input
-                className="todo-item"
+                className="todo-item__input"
                 type="text"
                 value={this.state.editableTitle}
                 onChange={e => this.handleTitleChange(e.target)}
+                onBlur={this.handleTitleBlur}
               />
             </form>
           )}
