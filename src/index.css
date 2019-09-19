@@ -80,6 +80,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.todo-item,
 .new-todo,
 .edit {
   position: relative;
@@ -99,6 +100,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.todo-item,
 .new-todo {
   padding: 16px 16px 16px 60px;
   border: none;

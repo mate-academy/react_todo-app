@@ -3,7 +3,14 @@ import './TodoList.scss';
 import TodoItem from '../TodoItem/TodoItem';
 import { TodoListTypes } from '../../constants/proptypes';
 
-const TodoList = ({ todoList, removeTodo, switchCompleted }) => (
+const TodoList = (
+  {
+    todoList,
+    removeTodo,
+    switchCompleted,
+    handleTodoTitleEdit,
+  }
+) => (
   <ul className="todo-list">
     {todoList.map(todo => (
       <TodoItem
@@ -11,6 +18,7 @@ const TodoList = ({ todoList, removeTodo, switchCompleted }) => (
         htmlFor={`todo-${todo.id}`}
         removeTodo={removeTodo}
         switchCompleted={switchCompleted}
+        handleTodoTitleEdit={handleTodoTitleEdit}
         {...todo}
       />
     ))}

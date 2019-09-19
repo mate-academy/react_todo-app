@@ -37,6 +37,28 @@ export default class App extends Component {
       todoList: todoList.filter(todo => todo.id !== id),
     }));
 
+  handleTodoTitleEdit = (id, title) => {
+
+    // eslint-disable-next-line no-console
+    console.log(id, title);
+
+    this.setState(({ todoList }) => {
+      const todoArr = [...todoList];
+      const ind = todoList.findIndex(todo => todo.id === id);
+
+      // eslint-disable-next-line no-console
+      console.log(id, title);
+
+      todoArr[ind].title = title;
+
+      return (
+        {
+          todoList: [...todoArr],
+        }
+      );
+    });
+  };
+
   onCompletedSwitch = id => this.setState(({ todoList }) => {
     const arr = [...todoList];
     const ind = arr.findIndex(todo => todo.id === id);
@@ -112,6 +134,7 @@ export default class App extends Component {
               : todoList}
             removeTodo={this.onRemoveTodoClick}
             switchCompleted={this.onCompletedSwitch}
+            handleTodoTitleEdit={this.handleTodoTitleEdit}
           />
         </section>
 
