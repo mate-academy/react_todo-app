@@ -21,6 +21,10 @@ class TodoList extends React.Component {
     }
   };
 
+  blurDiscard = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     const {
       todo,
@@ -64,6 +68,7 @@ class TodoList extends React.Component {
               }}
               >
                 <input
+                  onBlur={this.blurDiscard}
                   onKeyDown={this.discardChange}
                   ref={input => input && input.focus()}
                   type="text"
