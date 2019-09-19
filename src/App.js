@@ -43,15 +43,20 @@ class App extends React.Component {
   };
 
   editTodo = (id, todoValue) => {
-    this.setState((state) => {
-      const currentTodo = state.todoList.find(todo => todo.id === id);
+    if (todoValue === '') {
+      this.deleteTodo(id);
+    } else {
+      this.setState((state) => {
+        const currentTodo = state.todoList.find(todo => todo.id === id);
 
-      currentTodo.todo = todoValue;
-      currentTodo.completed = false;
-    });
-    this.setState(state => ({
-      checkedAll: state.todoList.every(todo => todo.completed),
-    }));
+        currentTodo.todo = todoValue;
+        currentTodo.completed = false;
+      });
+      this.setState(state => ({
+        checkedAll: state.todoList.every(todo => todo.completed),
+      }));
+    }
+
     this.forceUpdate();
   };
 
@@ -125,6 +130,9 @@ class App extends React.Component {
         todo => todo.completed || todo.id === id
       ),
     }));
+    if (this.state.todoList.length === 1) {
+      this.setState({ checkedAll: false });
+    }
   };
 
   render() {
