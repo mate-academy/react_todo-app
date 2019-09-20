@@ -12,7 +12,7 @@ export default class TodoItem extends Component {
 
   handleTitleChange = ({ value }) => this.setState({ editableTitle: value });
 
-  handleTitleBlur = () =>  this.setState({ isEdit: false });
+  handleTitleBlur = () => this.setState({ isEdit: false });
 
   handleTitleSubmit = (e) => {
     e.preventDefault();
@@ -43,29 +43,30 @@ export default class TodoItem extends Component {
             checked={completed}
             onChange={() => switchCompleted(id)}
           />
-          {!this.state.isEdit && (
-            <label
-              htmlFor={htmlFor}
-              onClick={e => e.preventDefault()}
-              onDoubleClick={this.handleTodoDoubleClick}
-            >
-              {title}
-            </label>
-          )}
-          {this.state.isEdit && (
-            <form
-              className="todo-item__form"
-              onSubmit={e => this.handleTitleSubmit(e)}
-            >
-              <input
-                className="todo-item__input"
-                type="text"
-                value={this.state.editableTitle}
-                onChange={e => this.handleTitleChange(e.target)}
-                onBlur={this.handleTitleBlur}
-              />
-            </form>
-          )}
+          {this.state.isEdit
+            ? (
+              <form
+                className="todo-item__form"
+                onSubmit={e => this.handleTitleSubmit(e)}
+              >
+                <input
+                  className="todo-item__input"
+                  type="text"
+                  value={this.state.editableTitle}
+                  onChange={e => this.handleTitleChange(e.target)}
+                  onBlur={this.handleTitleBlur}
+                />
+              </form>
+            )
+            : (
+              <label
+                htmlFor={htmlFor}
+                onClick={e => e.preventDefault()}
+                onDoubleClick={this.handleTodoDoubleClick}
+              >
+                {title}
+              </label>
+            )}
           <button
             type="button"
             className="destroy"

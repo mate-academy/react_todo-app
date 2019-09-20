@@ -9,68 +9,46 @@ export default class App extends Component {
     isFilerOnCompleted: false,
   };
 
-  onNewTodoSubmit = (title) => {
-    if (title !== '') {
-      this.setState(({ todoList }) => {
-        const nextId = todoList.length === 0
+  onNewTodoSubmit = title => this.setState(({ todoList }) => ({
+    todoList: [
+      ...todoList,
+      {
+        id: todoList.length === 0
           ? 1
-          : Math.max(...todoList.map(todo => todo.id)) + 1;
+          : Math.max(...todoList.map(todo => todo.id)) + 1,
+        title,
+        completed: false,
+      },
+    ],
+  }));
 
-        return (
-          {
-            todoList: [
-              ...todoList,
-              {
-                id: nextId,
-                title,
-                completed: false,
-              },
-            ],
-          }
-        );
-      });
-    }
-  };
-
-  onRemoveTodoClick = id => this.setState(({ todoList }) => (
-    {
-      todoList: todoList.filter(todo => todo.id !== id),
-    }));
+  onRemoveTodoClick = id => this.setState(({ todoList }) => ({
+    todoList: todoList.filter(todo => todo.id !== id),
+  }));
 
   handleTodoTitleEdit = (id, title) => {
-
-    // eslint-disable-next-line no-console
-    console.log(id, title);
-
     this.setState(({ todoList }) => {
       const todoArr = [...todoList];
       const ind = todoList.findIndex(todo => todo.id === id);
 
-      // eslint-disable-next-line no-console
-      console.log(id, title);
-
       todoArr[ind].title = title;
 
-      return (
-        {
-          todoList: [...todoArr],
-        }
-      );
+      return ({
+        todoList: [...todoArr],
+      });
     });
   };
 
   onCompletedSwitch = id => this.setState(({ todoList }) => {
     const arr = [...todoList];
-    const ind = arr.findIndex(todo => todo.id === id);
+    const index = arr.findIndex(todo => todo.id === id);
 
-    arr[ind].completed = !arr[ind].completed;
+    arr[index].completed = !arr[index].completed;
 
-    return (
-      {
-        todoList: arr,
-        isCompleted: arr[ind].completed && this.checkIsCompleted(),
-      }
-    );
+    return ({
+      todoList: arr,
+      isCompleted: arr[index].completed && this.checkIsCompleted(),
+    });
   });
 
   numberOfNotCompletedTodos = () => {
@@ -96,18 +74,16 @@ export default class App extends Component {
     }
   );
 
-  onToggleCopmpeted = checked => this.setState(({ todoList }) => (
-    {
-      todoList: todoList.map(todo => ({ ...todo, completed: checked })),
-    }));
+  onToggleCopmpeted = checked => this.setState(({ todoList }) => ({
+    todoList: todoList.map(todo => ({ ...todo, completed: checked })),
+  }));
 
   checkIsCompleted = () => this.state.todoList
     .findIndex(todo => todo.completed) !== -1;
 
-  clearCompleted = () => this.setState(({ todoList }) => (
-    {
-      todoList: todoList.filter(todo => !todo.completed),
-    }));
+  clearCompleted = () => this.setState(({ todoList }) => ({
+    todoList: todoList.filter(todo => !todo.completed),
+  }));
 
   render() {
     const { todoList, isFiltered, isFilerOnCompleted } = this.state;
@@ -147,7 +123,7 @@ export default class App extends Component {
             <li>
               <a
                 href="#/"
-                className="selected"
+                className={isFiltered ? '' : 'selected'}
                 onClick={this.onFilterShowAll}
               >
                 All
@@ -157,6 +133,9 @@ export default class App extends Component {
             <li>
               <a
                 href="#/active"
+                className={isFiltered && !isFilerOnCompleted
+                  ? 'selected'
+                  : ''}
                 onClick={this.onFilterShowActive}
               >
                 Active
@@ -166,6 +145,9 @@ export default class App extends Component {
             <li>
               <a
                 href="#/completed"
+                className={isFiltered && isFilerOnCompleted
+                  ? 'selected'
+                  : ''}
                 onClick={this.onFilterShowCompleted}
               >
                 Completed

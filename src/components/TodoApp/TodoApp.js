@@ -9,8 +9,10 @@ export default class TodoApp extends Component {
 
   onTodoAppSubmit = (e) => {
     e.preventDefault();
-    this.props.onSubmit(this.state.todoTitle);
-    this.setState({ todoTitle: '' });
+    if (this.state.todoTitle) {
+      this.props.onSubmit(this.state.todoTitle);
+      this.setState({ todoTitle: '' });
+    }
   };
 
   onInputChange = (value) => {
