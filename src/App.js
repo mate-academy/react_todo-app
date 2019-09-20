@@ -40,14 +40,18 @@ export default class App extends Component {
   };
 
   onCompletedSwitch = id => this.setState(({ todoList }) => {
-    const arr = [...todoList];
-    const index = arr.findIndex(todo => todo.id === id);
-
-    arr[index].completed = !arr[index].completed;
+    const currentTodo = todoList.find(todo => todo.id === id);
 
     return ({
-      todoList: arr,
-      isCompleted: arr[index].completed && this.checkIsCompleted(),
+      todoList: todoList.map(todo => (
+        todo.id !== id
+          ? todo
+          : {
+            ...todo,
+            completed: !todo.completed,
+          }
+      )),
+      isCompleted: currentTodo.completed && this.checkIsCompleted(),
     });
   });
 
