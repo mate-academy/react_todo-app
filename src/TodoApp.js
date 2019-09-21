@@ -1,5 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+import Header from './Header/Header';
+import Main from './Main/Main';
+import Footer from './Footer/Footer';
 import TodoForm from './TodoForm/TodoForm';
 import TodoList from './TodoList/TodoList';
 import TodoFilter from './TodoFilter/TodoFilter';
@@ -58,7 +60,7 @@ class TodoApp extends React.Component {
     }));
   };
 
-  deleteAllCompletedTodo = () => {
+  deleteAllCompleted = () => {
     this.setState(prevState => ({
       todoList: prevState.todoList.filter(todo => !todo.completed),
     }));
@@ -77,52 +79,29 @@ class TodoApp extends React.Component {
 
   render() {
     const { todoList, filter, todoID } = this.state;
+    const countCompleted = todoList.filter(todo => !todo.completed).length;
     const filteredTodoList = filter
       ? this.getFilteredTodos(todoList, filter)
       : todoList;
 
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-
+        <Header>
           <TodoForm todoID={todoID} onAdd={this.handleAddTodo} />
-        </header>
+        </Header>
 
-        <section className="main" style={{ display: 'block' }}>
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onChange={this.toggleAllTodo}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
+        <Main onMarkAllTodo={this.toggleAllTodo}>
           <TodoList
             todos={filteredTodoList}
             onComplete={this.handleCompleteTodo}
             onDelete={this.handleDeleteTodo}
             onEdit={this.handleEditTodo}
           />
+        </Main>
 
-        </section>
-
-        <footer className="footer" style={{ display: 'block' }}>
-          <span className="todo-count">
-            {`${todoList.filter(todo => !todo.completed).length} items left`}
-          </span>
-
+        <Footer counter={countCompleted} onDeleteAll={this.deleteAllCompleted}>
           <TodoFilter onFilterClick={this.handleFilterTodo} />
-
-          <button
-            type="button"
-            className="clear-completed"
-            style={{ display: 'block' }}
-            onClick={this.deleteAllCompletedTodo}
-          >
-            clear completed
-          </button>
-        </footer>
+        </Footer>
       </section>
     );
   }
