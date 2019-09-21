@@ -15,14 +15,6 @@ class TodoItem extends React.Component {
     this.textInput.current.focus();
   }
 
-  handleChange = () => {
-    this.props.onComplete(this.props.todo.id);
-  };
-
-  deleteTodo = () => {
-    this.props.onDelete(this.props.todo.id);
-  };
-
   showEditField = () => {
     this.setState({ isEdit: true });
   };
@@ -44,7 +36,7 @@ class TodoItem extends React.Component {
   };
 
   render() {
-    const { todo } = this.props;
+    const { todo, onDelete, onComplete } = this.props;
     const { title } = this.state;
     let todoClassList = '';
 
@@ -59,7 +51,7 @@ class TodoItem extends React.Component {
             className="toggle"
             checked={todo.completed}
             id={todo.id}
-            onChange={this.handleChange}
+            onChange={() => onComplete(todo.id)}
           />
           <label
             htmlFor="todo-1"
@@ -67,7 +59,11 @@ class TodoItem extends React.Component {
           >
             {title}
           </label>
-          <button type="button" className="destroy" onClick={this.deleteTodo} />
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => onDelete(todo.id)}
+          />
         </div>
         <input
           type="text"

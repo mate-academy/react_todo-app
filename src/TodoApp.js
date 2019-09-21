@@ -64,23 +64,22 @@ class TodoApp extends React.Component {
     }));
   };
 
-  render() {
-    const { todoList, filter, todoID } = this.state;
-    let filteredTodo = [];
-
+  getFilteredTodos = (todoList, filter) => {
     switch (filter) {
       case 'active':
-        filteredTodo = todoList.filter(todo => !todo.completed);
-
-        break;
+        return todoList.filter(todo => !todo.completed);
       case 'completed':
-        filteredTodo = todoList.filter(todo => todo.completed);
-
-        break;
+        return todoList.filter(todo => todo.completed);
       default:
-        filteredTodo = todoList;
-        break;
+        return todoList;
     }
+  };
+
+  render() {
+    const { todoList, filter, todoID } = this.state;
+    const filteredTodoList = filter
+      ? this.getFilteredTodos(todoList, filter)
+      : todoList;
 
     return (
       <section className="todoapp">
@@ -100,7 +99,7 @@ class TodoApp extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
-            todos={filteredTodo}
+            todos={filteredTodoList}
             onComplete={this.handleCompleteTodo}
             onDelete={this.handleDeleteTodo}
             onEdit={this.handleEditTodo}
