@@ -19,16 +19,10 @@ class TodoItem extends React.Component {
     this.setState({ isEdit: true });
   };
 
-  updateTodoOnBlur = ({ target }) => {
-    this.setState({ isEdit: false, title: target.value });
+  updateTodo = (event) => {
+    event.preventDefault();
+    this.setState({ isEdit: false, title: event.target.value });
     this.props.onEdit(this.props.todo.id, this.state.title);
-  };
-
-  updateTodoOnEnter = (event) => {
-    if (event.key === 'Enter') {
-      this.setState({ isEdit: false, title: event.target.value });
-      this.props.onEdit(this.props.todo.id, this.state.title);
-    }
   };
 
   editTodo = ({ target }) => {
@@ -37,11 +31,11 @@ class TodoItem extends React.Component {
 
   render() {
     const { todo, onDelete, onComplete } = this.props;
-    const { title } = this.state;
+    const { title, isEdit } = this.state;
     let todoClassList = '';
 
     todoClassList += todo.completed ? 'completed ' : '';
-    todoClassList += this.state.isEdit ? 'editing ' : '';
+    todoClassList += isEdit ? 'editing ' : '';
 
     return (
       <li className={todoClassList}>
@@ -71,8 +65,8 @@ class TodoItem extends React.Component {
           ref={this.textInput}
           className="edit"
           onChange={this.editTodo}
-          onKeyPress={this.updateTodoOnEnter}
-          onBlur={this.updateTodoOnBlur}
+          onBlur={this.updateTodo}
+          onKeyPress={e => (e.key === 'Enter' ? this.updateTodo(e) : 0)}
         />
       </li>
     );
