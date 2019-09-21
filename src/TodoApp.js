@@ -9,9 +9,17 @@ import TodoFilter from './TodoFilter/TodoFilter';
 class TodoApp extends React.Component {
   state = {
     todoList: [],
-    filter: '',
-    todoID: 1,
+    filtered: '',
+    todoID: Math.ceil(Math.random() * 1e8),
   };
+
+  componentDidMount() {
+    const initialState = JSON.parse(localStorage.getItem('state'));
+
+    if (initialState) {
+      this.setState({ todoList: initialState.todoList });
+    }
+  }
 
   componentDidUpdate() {
     localStorage.setItem('state', JSON.stringify(this.state));
@@ -20,7 +28,7 @@ class TodoApp extends React.Component {
   handleAddTodo = (newTodo) => {
     this.setState(prevState => ({
       todoList: [...prevState.todoList, newTodo],
-      todoID: prevState.todoID + 1,
+      todoID: Math.ceil(Math.random() * 1e8),
     }));
   };
 
