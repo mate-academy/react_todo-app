@@ -1,75 +1,79 @@
 import React from 'react';
+import NewTodo from './components/NewTodo/NewTodo';
+import TodoItem from './components/TodoItem/TodoItem';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+class App extends React.Component {
+  state = {
+    todos: [],
+    IdCount: 0,
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+  addTodoToData = (inputNewTodoValue) => {
+    this.setState(prevState => {
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      return ({
+        todos: [
+          ...prevState.todos,
+          {
+            id: prevState.IdCount + 1,
+            title: inputNewTodoValue,
+            completed: false,
+          },
+        ],
+        IdCount: ++prevState.IdCount,
+      });
+    })
+  }
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  render() {
+    const { todos } = this.state;
+    // console.log(this.state.todos);
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <NewTodo addTodoToData={this.addTodoToData} />
+        </header>
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+        <section className="main" style={{ display: 'block' }}>
+          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+          <ul className="todo-list">
+            {todos.map(todo => (
+              <TodoItem todo={todo} key={todo.id} />
+            ))}
+          </ul>
+        </section>
+
+        <footer className="footer" style={{ display: 'block' }}>
+          <span className="todo-count">
+            3 items left
+          </span>
+
+          <ul className="filters">
+            <li>
+              <a href="#/" className="selected">All</a>
+            </li>
+
+            <li>
+              <a href="#/active">Active</a>
+            </li>
+
+            <li>
+              <a href="#/completed">Completed</a>
+            </li>
+          </ul>
+
+          <button
+            type="button"
+            className="clear-completed"
+            style={{ display: 'block' }}
+          />
+        </footer>
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
