@@ -19,7 +19,7 @@ class NewTodo extends React.Component {
     }
   }
 
-  onchangeInputNewTodo = ({ target: { value } }) => {
+  onChangeInputNewTodo = ({ target: { value } }) => {
     this.setState({
       inputNewTodoValue: value,
     });
@@ -33,7 +33,7 @@ class NewTodo extends React.Component {
       <form onSubmit={this.addTodo}>
         <input
           value={inputNewTodoValue}
-          onChange={this.onchangeInputNewTodo}
+          onChange={this.onChangeInputNewTodo}
           type="text"
           className="new-todo"
           placeholder="What needs to be done?"

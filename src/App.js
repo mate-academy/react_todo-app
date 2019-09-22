@@ -9,7 +9,7 @@ class App extends React.Component {
     filteredTodos: [],
     idCount: 0,
     filter: 'all',
-    statusOfAllTodos: true,
+    isAllTodosCompleted: false,
   }
 
   changeFilter = (event) => {
@@ -46,7 +46,6 @@ class App extends React.Component {
 
   addTodoToData = (inputNewTodoValue) => {
     this.setState(prevState => {
-
       return ({
         todos: [
           ...prevState.todos,
@@ -59,6 +58,31 @@ class App extends React.Component {
         idCount: ++prevState.idCount,
       });
     });
+    this.checkIsAllTodosCompleted();
+    this.filterTodos();
+  }
+
+  checkIsAllTodosCompleted = () => {
+    this.setState(prevState => {
+      return ({
+        isAllTodosCompleted: prevState.todos.every(todo => todo.completed === true),
+      });
+    })
+  }
+
+  editTodoInData = (id, value) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => {
+        if (todo.id === Number(id)) {
+          return ({
+            ...todo,
+            title: value,
+          });
+        }
+
+        return todo;
+      }),
+    }));
     this.filterTodos();
   }
 
@@ -75,6 +99,7 @@ class App extends React.Component {
         todos: prevState.todos,
       });
     });
+    this.checkIsAllTodosCompleted();
     this.filterTodos();
   }
 
@@ -87,12 +112,14 @@ class App extends React.Component {
 
         return [...acc, todo,];
       }, []),
+      isAllTodosCompleted: false,
     }));
     this.filterTodos();
   }
 
   changeTodoCompleteStatus = ({ target: { dataset: { todoId } } }) => {
     this.setState(prevState => {
+      // const isAllCompleted = prevState.todos.every(todo => todo.completed === true);
       // console.dir(prevState.todos);
       return ({
         todos: prevState.todos.reduce((acc, todo) => {
@@ -106,6 +133,7 @@ class App extends React.Component {
         }, []),
       });
     });
+    this.checkIsAllTodosCompleted();
     this.filterTodos();
   }
 
@@ -113,9 +141,9 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: prevState.statusOfAllTodos
+        completed: !(prevState.isAllTodosCompleted)
       })),
-      statusOfAllTodos: !(prevState.statusOfAllTodos),
+      isAllTodosCompleted: !(prevState.isAllTodosCompleted),
     }));
     this.filterTodos();
   }
@@ -138,10 +166,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { filteredTodos, filter } = this.state;
+    const { filteredTodos, filter, todos, isAllTodosCompleted } = this.state;
     const activeTodosLeft = this.countActiveTodos();
     const isSomeTodoComplete = this.findSomeCompleteTodo();
-    console.dir(this.state.filteredTodos);
+    // console.dir(this.state.filteredTodos);
 
     return (
       <section className="todoapp">
@@ -149,64 +177,72 @@ class App extends React.Component {
           <h1>todos</h1>
           <NewTodo addTodoToData={this.addTodoToData} />
         </header>
-
         <section className="main" style={{ display: 'block' }}>
-          <input type="checkbox" id="toggle-all" className="toggle-all" onClick={this.changeTodosCompleteStatus} />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={this.changeTodosCompleteStatus}
+            checked={isAllTodosCompleted}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
-
           <ul className="todo-list">
             {filteredTodos.map(todo => (
               <TodoItem
                 todo={todo}
                 deleteTodoFromData={this.deleteTodoFromData}
                 changeTodoCompleteStatus={this.changeTodoCompleteStatus}
+                editTodoInData={this.editTodoInData}
                 key={todo.id} />
             ))}
           </ul>
         </section>
 
-        <footer className="footer">
-          {!!activeTodosLeft &&
-            <span className="todo-count">
-              {`${activeTodosLeft} item left`}
-            </span>
-          }
+        {!!(todos.length) &&
+          <footer className="footer">
+            {!!activeTodosLeft &&
+              <span className="todo-count">
+                {`${activeTodosLeft} item left`}
+              </span>
+            }
 
-          <ul className="filters">
-            <FilterItem
-              href="#/"
-              dataFilter="all"
-              onClick={this.changeFilter}
-              anchor="All"
-              filter={filter}
-            />
+            <ul className="filters">
+              <FilterItem
+                href="#/"
+                dataFilter="all"
+                onClick={this.changeFilter}
+                anchor="All"
+                filter={filter}
+              />
 
-            <FilterItem
-              href="#/active"
-              dataFilter="active"
-              onClick={this.changeFilter}
-              anchor="Active"
-              filter={filter}
-            />
+              <FilterItem
+                href="#/active"
+                dataFilter="active"
+                onClick={this.changeFilter}
+                anchor="Active"
+                filter={filter}
+              />
 
-            <FilterItem
-              href="#/completed"
-              dataFilter="completed"
-              onClick={this.changeFilter}
-              anchor="Completed"
-              filter={filter}
-            />
-          </ul>
-          {isSomeTodoComplete &&
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={this.deleteAllCompletedTodoFromData}
-            >
-              Clear completed
-        </button>
-          }
-        </footer>
+              <FilterItem
+                href="#/completed"
+                dataFilter="completed"
+                onClick={this.changeFilter}
+                anchor="Completed"
+                filter={filter}
+              />
+            </ul>
+            {isSomeTodoComplete &&
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={this.deleteAllCompletedTodoFromData}
+              >
+                Clear completed
+              </button>
+            }
+          </footer>
+        }
+
       </section>
     );
   }
