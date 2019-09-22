@@ -10,7 +10,6 @@ const TodoList = ({
   toggleRemoveTodo,
   toggleEditTodo,
   editedTodo,
-  toggleCanceledEditTodo,
 }) => (
   <ul className="todo-list">
     {
