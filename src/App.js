@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
 import ListOfTodos from './components/ListOfTodos/ListOfTodos';
-import Footer from './components/Footer/Footer';
+import TodosFilter from './components/TodosFilter/TodosFilter';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      listOfTodos: [],
-      filteredTodos: [],
+  componentWillMount() {
+    this.setState({
+      listOfTodos: JSON.parse(localStorage.getItem('listOfTodos')) || [],
       valueOfMainInput: '',
       activeFilter: 'all',
-      counter: 0,
-    };
+      counter: JSON.parse(localStorage.getItem('listOfTodos')) || 0,
+      valueOfEditingInput: '',
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const listOfTodos = JSON.stringify(this.state.listOfTodos);
+    const counter = JSON.stringify(this.state.counter);
+
+    if (JSON.stringify(prevState.listOfTodos) !== listOfTodos) {
+      localStorage.setItem('listOfTodos', listOfTodos);
+    }
+
+    if (JSON.stringify(prevState.counter) !== counter) {
+      localStorage.setItem('counter', counter);
+    }
   }
 
   handleChangeMainInput = (value) => {
     this.setState({
-      valueOfMainInput: value.replace(/^\s/, ''),
+      valueOfMainInput: value.replace(/^\s+/, ''),
     });
   }
 
@@ -26,11 +37,12 @@ class App extends Component {
       this.setState(({ listOfTodos, valueOfMainInput, counter }) => ({
         counter: counter + 1,
         listOfTodos: [
-          { title: valueOfMainInput, isChecked: false, id: counter },
-          ...listOfTodos,
-        ],
-        filteredTodos: [
-          { title: valueOfMainInput, isChecked: false, id: counter },
+          {
+            title: valueOfMainInput,
+            isChecked: false,
+            isEditing: false,
+            id: counter,
+          },
           ...listOfTodos,
         ],
         valueOfMainInput: '',
@@ -42,17 +54,14 @@ class App extends Component {
     this.setState(({ listOfTodos, filteredTodos, activeFilter }) => ({
       listOfTodos: listOfTodos.map(
         todo => (todo.id === id
-          ? { title: todo.title, isChecked: !todo.isChecked, id: todo.id }
+          ? {
+            title: todo.title,
+            isChecked: !todo.isChecked,
+            isEditing: todo.isEditing,
+            id: todo.id,
+          }
           : todo)
       ),
-      filteredTodos: filteredTodos.map(
-        todo => (todo.id === id
-          ? { title: todo.title, isChecked: !todo.isChecked, id: todo.id }
-          : todo)
-      ).filter(todo => (
-        (activeFilter === 'active' && todo.isChecked === false)
-        || (activeFilter === 'completed' && todo.isChecked)
-      )),
     }));
   }
 
@@ -61,65 +70,84 @@ class App extends Component {
       listOfTodos: listOfTodos.map(
         todo => (todo.id !== id ? todo : undefined)
       ).filter(todo => todo !== undefined),
-      filteredTodos: listOfTodos.map(
-        todo => (todo.id !== id ? todo : undefined)
-      ).filter(todo => todo !== undefined),
     }));
   }
 
   toggleAllTodos = () => {
     this.setState(({ listOfTodos }) => ({
-      listOfTodos: listOfTodos.map(({ title, id }) => ({
+      listOfTodos: listOfTodos.map(({ title, id, isEditing }) => ({
         title,
         isChecked: !listOfTodos.every(({ isChecked }) => isChecked),
-        id,
-      })),
-      filteredTodos: listOfTodos.map(({ title, id }) => ({
-        title,
-        isChecked: !listOfTodos.every(({ isChecked }) => isChecked),
+        isEditing,
         id,
       })),
     }));
   }
 
   changeActiveFilter = (filter) => {
-    this.setState(({ listOfTodos }) => ({
+    this.setState({
       activeFilter: filter,
-      filteredTodos: listOfTodos.filter(todo => (
-        (filter === 'active' && todo.isChecked === false)
-        || (filter === 'completed' && todo.isChecked)
-      )),
-    }));
+    });
   }
 
   removeCheckedTodos = () => {
-    this.setState(({ listOfTodos, filteredTodos }) => ({
+    this.setState(({ listOfTodos }) => ({
       listOfTodos: listOfTodos.map(
-        todo => (!todo.isChecked ? todo : undefined)
-      ).filter(todo => todo !== undefined),
-      filteredTodos: filteredTodos.map(
         todo => (!todo.isChecked ? todo : undefined)
       ).filter(todo => todo !== undefined),
     }));
   }
 
+  toggleToEditingMode = (id, value) => {
+    this.setState(({ listOfTodos }) => ({
+      listOfTodos: listOfTodos.map(
+        todo => (todo.id === id
+          ? {
+            title: todo.title,
+            isChecked: todo.isChecked,
+            isEditing: !todo.isEditing,
+            id: todo.id,
+          }
+          : todo
+        )
+      ),
+      valueOfEditingInput: value,
+    }));
+  }
+
+  handleEditing = (value) => {
+    this.setState({
+      valueOfEditingInput: value.replace(/^\s+/, ''),
+    });
+  }
+
+  handleEditedSubmit = (id) => {
+    this.setState(({ listOfTodos, valueOfEditingInput }) => ({
+      listOfTodos: listOfTodos.map(
+        todo => (todo.id === id
+          ? {
+            title: valueOfEditingInput,
+            isChecked: todo.isChecked,
+            isEditing: !todo.isEditing,
+            id: todo.id,
+          }
+          : todo)
+      ),
+      valueOfEditingInput: '',
+    }));
+  };
+
   render() {
     const {
-      handleChangeMainInput,
-      handleSubmit,
-      toggleTodoState,
-      removeTodo,
-      toggleAllTodos,
-      changeActiveFilter,
-      removeCheckedTodos,
-      state: {
-        listOfTodos,
-        valueOfMainInput,
-        activeFilter,
-        filteredTodos,
-        counter,
-      },
-    } = this;
+      listOfTodos,
+      valueOfMainInput,
+      activeFilter,
+      valueOfEditingInput,
+    } = this.state;
+
+    const filteredTodos = activeFilter === 'active'
+      ? listOfTodos.filter(todo => !todo.isChecked)
+      : listOfTodos.filter(todo => todo.isChecked);
 
     return (
       <section className="todoapp">
@@ -131,32 +159,40 @@ class App extends Component {
             placeholder="What needs to be done?"
             maxLength={100}
             value={valueOfMainInput}
-            onChange={event => handleChangeMainInput(event.target.value)}
-            onKeyDown={e => handleSubmit(e.keyCode)}
+            onChange={event => this.handleChangeMainInput(event.target.value)}
+            onKeyDown={e => this.handleSubmit(e.keyCode)}
           />
         </header>
 
         <section className="main" style={{ display: 'block' }}>
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onClick={toggleAllTodos}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {listOfTodos.length > 0 && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                checked={listOfTodos.every(todo => todo.isChecked)}
+                onClick={this.toggleAllTodos}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
           <ListOfTodos
             listOfTodos={activeFilter === 'all' ? listOfTodos : filteredTodos}
-            toggleTodoState={toggleTodoState}
-            removeTodo={removeTodo}
-            counter={counter}
+            toggleTodoState={this.toggleTodoState}
+            removeTodo={this.removeTodo}
+            toggleToEditingMode={this.toggleToEditingMode}
+            handleEditing={this.handleEditing}
+            valueOfEditingInput={valueOfEditingInput}
+            handleEditedSubmit={this.handleEditedSubmit}
           />
         </section>
 
-        <Footer
+        <TodosFilter
           listOfTodos={listOfTodos}
           activeFilter={activeFilter}
-          changeActiveFilter={changeActiveFilter}
-          removeCheckedTodos={removeCheckedTodos}
+          changeActiveFilter={this.changeActiveFilter}
+          removeCheckedTodos={this.removeCheckedTodos}
         />
       </section>
     );
