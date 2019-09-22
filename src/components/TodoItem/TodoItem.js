@@ -14,7 +14,14 @@ class TodoItem extends React.Component {
     });
   }
 
-  onChangeInputEditTodo = ({ target: { value, dataset: { todoId } } }) => {
+  onChangeInputEditTodo = ({
+    target: {
+      value,
+      dataset: {
+        todoId,
+      }
+    }
+  }) => {
     this.setState({
       inputNewTodoValue: value,
       editTodoId: todoId,
@@ -42,10 +49,18 @@ class TodoItem extends React.Component {
   }
 
   render() {
-    const { todo: { id, title, completed }, deleteTodoFromData, changeTodoCompleteStatus } = this.props;
+    const {
+      todo: {
+        id,
+        title,
+        completed
+      },
+      deleteTodoFromData,
+      changeTodoCompleteStatus
+    } = this.props;
+
     const { isTodoEditing, inputNewTodoValue } = this.state;
     const itemClass = createClass({ 'completed': completed });
-    console.dir(this.state);
 
     return (
       <li className={itemClass}>
@@ -81,7 +96,12 @@ class TodoItem extends React.Component {
               >
                 {title}
               </label>
-              <button type="button" className="destroy" data-todo-id={`${id}`} onClick={deleteTodoFromData} />
+              <button
+                type="button"
+                className="destroy"
+                data-todo-id={`${id}`}
+                onClick={deleteTodoFromData}
+              />
             </>
           }
         </div>

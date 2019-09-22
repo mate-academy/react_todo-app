@@ -1,4 +1,5 @@
 import React from 'react';
+
 import NewTodo from './components/NewTodo/NewTodo';
 import TodoItem from './components/TodoItem/TodoItem';
 import FilterItem from './components/FilterItem/FilterItem';
@@ -13,28 +14,41 @@ class App extends React.Component {
   }
 
   changeFilter = (event) => {
-    const { target: { dataset: { filter } } } = event;
+    const {
+      target: {
+        dataset: {
+          filter,
+        }
+      }
+    } = event;
 
     event.preventDefault();
+
     this.setState({
       filter: filter,
     });
+
     this.filterTodos();
   }
 
   filterTodos = () => {
     this.setState(prevState => {
       let newFilteredTodos = [];
+      const { filter, todos } = prevState;
 
-      switch (prevState.filter) {
+      switch (filter) {
         case 'active':
-          newFilteredTodos = prevState.todos.filter(todo => todo.completed === false);
+          newFilteredTodos = todos.filter(todo => (
+            todo.completed === false
+          ));
           break;
         case 'completed':
-          newFilteredTodos = prevState.todos.filter(todo => todo.completed === true);
+          newFilteredTodos = todos.filter(todo => (
+            todo.completed === true
+          ));
           break;
         default:
-          newFilteredTodos = prevState.todos;
+          newFilteredTodos = todos;
           break;
       }
 
@@ -45,29 +59,28 @@ class App extends React.Component {
   }
 
   addTodoToData = (inputNewTodoValue) => {
-    this.setState(prevState => {
-      return ({
-        todos: [
-          ...prevState.todos,
-          {
-            id: prevState.idCount + 1,
-            title: inputNewTodoValue,
-            completed: false,
-          },
-        ],
-        idCount: ++prevState.idCount,
-      });
-    });
+    this.setState(prevState => ({
+      todos: [
+        ...prevState.todos,
+        {
+          id: prevState.idCount + 1,
+          title: inputNewTodoValue,
+          completed: false,
+        },
+      ],
+      idCount: ++prevState.idCount,
+    }));
+
     this.checkIsAllTodosCompleted();
     this.filterTodos();
   }
 
   checkIsAllTodosCompleted = () => {
-    this.setState(prevState => {
-      return ({
-        isAllTodosCompleted: prevState.todos.every(todo => todo.completed === true),
-      });
-    })
+    this.setState(prevState => ({
+      isAllTodosCompleted: prevState.todos.every(todo => (
+        todo.completed === true
+      )),
+    }));
   }
 
   editTodoInData = (id, value) => {
@@ -86,8 +99,13 @@ class App extends React.Component {
     this.filterTodos();
   }
 
-  deleteTodoFromData = ({ target: { dataset: { todoId } } }) => {
-    // console.dir(todoId);
+  deleteTodoFromData = ({
+    target: {
+      dataset: {
+        todoId,
+      }
+    }
+  }) => {
     this.setState(prevState => {
       const indexTodoInArray = prevState.todos.findIndex(todo => (
         todo.id === Number(todoId)
@@ -117,10 +135,14 @@ class App extends React.Component {
     this.filterTodos();
   }
 
-  changeTodoCompleteStatus = ({ target: { dataset: { todoId } } }) => {
+  changeTodoCompleteStatus = ({
+    target: {
+      dataset: {
+        todoId,
+      }
+    }
+  }) => {
     this.setState(prevState => {
-      // const isAllCompleted = prevState.todos.every(todo => todo.completed === true);
-      // console.dir(prevState.todos);
       return ({
         todos: prevState.todos.reduce((acc, todo) => {
           if (todo.id === Number(todoId)) {
@@ -133,6 +155,7 @@ class App extends React.Component {
         }, []),
       });
     });
+
     this.checkIsAllTodosCompleted();
     this.filterTodos();
   }
@@ -166,10 +189,15 @@ class App extends React.Component {
   }
 
   render() {
-    const { filteredTodos, filter, todos, isAllTodosCompleted } = this.state;
+    const {
+      filteredTodos,
+      filter,
+      todos,
+      isAllTodosCompleted
+    } = this.state;
+
     const activeTodosLeft = this.countActiveTodos();
     const isSomeTodoComplete = this.findSomeCompleteTodo();
-    // console.dir(this.state.filteredTodos);
 
     return (
       <section className="todoapp">
@@ -177,15 +205,19 @@ class App extends React.Component {
           <h1>todos</h1>
           <NewTodo addTodoToData={this.addTodoToData} />
         </header>
-        <section className="main" style={{ display: 'block' }}>
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onChange={this.changeTodosCompleteStatus}
-            checked={isAllTodosCompleted}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+        <section className="main">
+          {!!(todos.length) &&
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                onChange={this.changeTodosCompleteStatus}
+                checked={isAllTodosCompleted}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          }
           <ul className="todo-list">
             {filteredTodos.map(todo => (
               <TodoItem
