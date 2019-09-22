@@ -80,3 +80,4 @@ Resources:
 You should be writing code in `src/` directory.
 
 - [DEMO LINK](https://igaryok.github.io/react_todo-app/)
+- [PR](https://github.com/mate-academy/react_todo-app/pull/40)
