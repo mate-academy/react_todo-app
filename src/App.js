@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
-import TodoList from './TodoList/TodoList';
+import TodoList from './Components/TodoList/TodoList';
 
 const todos = [
   {

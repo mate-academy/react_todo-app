@@ -5,6 +5,7 @@ const TodoList = ({ todos }) => (
   todos.map(item => (
     <TodoListItem
       key={item.id}
+      labelId={`todo-${item.id}`}
       title={item.title}
       completed={item.completed}
     />
