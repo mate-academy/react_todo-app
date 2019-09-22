@@ -29,7 +29,7 @@ class TodoItem extends Component {
     newInput.value = target.innerText;
     parentLi.classList.add('editing');
     newInput.classList.add('edit');
-    newInput.onkeypress = this.handlePressKeyNewInput;
+    newInput.onkeydown = this.handlePressKeyNewInput;
     parentLi.append(newInput);
   }
 
@@ -42,6 +42,9 @@ class TodoItem extends Component {
 
     if (key === 'Enter') {
       this.props.editTask(idTodo, value);
+      parentLi.classList.remove('editing');
+      parentLi.removeChild(event.target);
+    } else if (key === 'Escape') {
       parentLi.classList.remove('editing');
       parentLi.removeChild(event.target);
     }
