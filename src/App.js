@@ -1,75 +1,80 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { Component } from 'react';
+import TodoList from './TodoList/TodoList';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+const todos = [
+  {
+    id: 1,
+    title: 'first title',
+    completed: false,
+  },
+  {
+    id: 2,
+    title: 'second title',
+    completed: true,
+  },
+  {
+    id: 3,
+    title: 'other title',
+    completed: false,
+  },
+];
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+class App extends Component {
+  state = {
+    todoList: todos,
+  };
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+  render() {
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+          />
+        </header>
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+        <section className="main" style={{ display: 'block' }}>
+          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
-      </section>
+          <ul className="todo-list">
+            <TodoList todos={this.state.todoList} />
+          </ul>
+        </section>
 
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
+        <footer className="footer" style={{ display: 'block' }}>
+          <span className="todo-count">
           3 items left
-        </span>
+          </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+          <ul className="filters">
+            <li>
+              <a href="#/" className="selected">All</a>
+            </li>
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+            <li>
+              <a href="#/active">Active</a>
+            </li>
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+            <li>
+              <a href="#/completed">Completed</a>
+            </li>
+          </ul>
 
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+          <button
+            type="button"
+            className="clear-completed"
+            style={{ display: 'block' }}
+          />
+        </footer>
+      </section>
+    );
+  }
 }
 
 export default App;
