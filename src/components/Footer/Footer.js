@@ -11,9 +11,7 @@ export const Footer = ({
 }) => (
   <footer className="footer" style={{ display: 'block' }}>
     <span className="todo-count">
-      {todos.filter(elem => elem.completed === false).length}
-      {' '}
-items left
+      {todos.filter(elem => elem.completed === false).length} items left
     </span>
 
     <ul className="filters">
