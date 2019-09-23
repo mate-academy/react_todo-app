@@ -3,14 +3,12 @@ import ListOfTodos from './components/ListOfTodos/ListOfTodos';
 import TodosFilter from './components/TodosFilter/TodosFilter';
 
 class App extends Component {
-  componentWillMount() {
-    this.setState({
-      listOfTodos: JSON.parse(localStorage.getItem('listOfTodos')) || [],
-      valueOfMainInput: '',
-      activeFilter: 'all',
-      counter: JSON.parse(localStorage.getItem('listOfTodos')) || 0,
-      valueOfEditingInput: '',
-    });
+  state = {
+    listOfTodos: JSON.parse(localStorage.getItem('listOfTodos')) || [],
+    counter: JSON.parse(localStorage.getItem('listOfTodos')) || 0,
+    valueOfMainInput: '',
+    activeFilter: 'all',
+    valueOfEditingInput: '',
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,8 +30,9 @@ class App extends Component {
     });
   }
 
-  handleSubmit = (keyCode) => {
-    if (keyCode === 13 && this.state.valueOfMainInput) {
+  handleSubmit = (event) => {
+    event.preventDefault();
+    if (this.state.valueOfMainInput) {
       this.setState(({ listOfTodos, valueOfMainInput, counter }) => ({
         counter: counter + 1,
         listOfTodos: [
@@ -51,7 +50,7 @@ class App extends Component {
   }
 
   toggleTodoState = (id) => {
-    this.setState(({ listOfTodos, filteredTodos, activeFilter }) => ({
+    this.setState(({ listOfTodos }) => ({
       listOfTodos: listOfTodos.map(
         todo => (todo.id === id
           ? {
@@ -94,7 +93,7 @@ class App extends Component {
     this.setState(({ listOfTodos }) => ({
       listOfTodos: listOfTodos.map(
         todo => (!todo.isChecked ? todo : undefined)
-      ).filter(todo => todo !== undefined),
+      ).filter(todo => todo),
     }));
   }
 
@@ -152,19 +151,19 @@ class App extends Component {
     return (
       <section className="todoapp">
         <header className="header">
-          <h1>todos</h1>
-
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            maxLength={100}
-            value={valueOfMainInput}
-            onChange={event => this.handleChangeMainInput(event.target.value)}
-            onKeyDown={e => this.handleSubmit(e.keyCode)}
-          />
+          <h1 className="title">todos</h1>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              className="new-todo"
+              placeholder="What needs to be done?"
+              maxLength={100}
+              value={valueOfMainInput}
+              onChange={event => this.handleChangeMainInput(event.target.value)}
+            />
+          </form>
         </header>
 
-        <section className="main" style={{ display: 'block' }}>
+        <section className="main">
           {listOfTodos.length > 0 && (
             <>
               <input

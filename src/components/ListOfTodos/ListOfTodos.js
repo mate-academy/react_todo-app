@@ -29,11 +29,12 @@ const ListOfTodos = ({
                 checked={todo.isChecked}
                 onChange={() => toggleTodoState(todo.id)}
               />
-              <label
+              <span
+                className="todo"
                 onDoubleClick={() => toggleToEditingMode(todo.id, todo.title)}
               >
                 {todo.title}
-              </label>
+              </span>
               <button
                 type="button"
                 className="destroy"
@@ -42,29 +43,24 @@ const ListOfTodos = ({
             </div>
           )
           : (
-            <input
-              type="text"
-              value={valueOfEditingInput}
-              className="edit"
-              onChange={e => handleEditing(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.keyCode === 13 && valueOfEditingInput) {
-                  handleEditedSubmit(todo.id);
+            <form
+              onSubmit={() => (valueOfEditingInput
+                ? handleEditedSubmit(todo.id)
+                : removeTodo(todo.id))
+              }
+            >
+              <input
+                type="text"
+                value={valueOfEditingInput}
+                className="edit"
+                onChange={e => handleEditing(e.target.value)}
+                onBlur={() => (valueOfEditingInput
+                  ? handleEditedSubmit(todo.id)
+                  : removeTodo(todo.id))
                 }
-
-                if (e.keyCode === 13 && !valueOfEditingInput) {
-                  removeTodo(todo.id);
-                }
-              }}
-              onBlur={() => {
-                if (!valueOfEditingInput) {
-                  removeTodo(todo.id);
-                } else {
-                  handleEditedSubmit(todo.id);
-                }
-              }}
-              autoFocus
-            />
+                autoFocus
+              />
+            </form>
           )}
       </li>
     ))}
