@@ -13,7 +13,32 @@ class App extends React.Component {
     textNewTodo: '',
     ruleForAllCompleted: true,
     activeFilter: false,
+    saveStorage: false,
   };
+
+  componentDidMount() {
+    const saveStorage = JSON.parse(localStorage.getItem('saveStorage'));
+
+    if (saveStorage) {
+      const todoList = JSON
+        .parse(localStorage.getItem('todoList'));
+      const todoListFiltered = JSON
+        .parse(localStorage.getItem('todoListFiltered'));
+      const ruleForAllCompleted = JSON
+        .parse(localStorage.getItem('ruleForAllCompleted'));
+
+      this.setState({
+        saveStorage,
+        todoList,
+        todoListFiltered,
+        ruleForAllCompleted,
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    this.handleFormSubmit();
+  }
 
   addNewTodo = (event) => {
     event.preventDefault();
@@ -36,6 +61,7 @@ class App extends React.Component {
           },
         ],
         textNewTodo: '',
+        saveStorage: true,
       }));
     }
   };
@@ -126,6 +152,24 @@ class App extends React.Component {
       todoListFiltered: todoListFiltered.filter(todo => (!todo.completed)),
     }));
   };
+
+  handleFormSubmit() {
+    const {
+      todoList,
+      todoListFiltered,
+      ruleForAllCompleted,
+      saveStorage,
+    } = this.state;
+
+    localStorage.setItem('saveStorage',
+      JSON.stringify(saveStorage));
+    localStorage.setItem('todoList',
+      JSON.stringify(todoList));
+    localStorage.setItem('todoListFiltered',
+      JSON.stringify(todoListFiltered));
+    localStorage.setItem('ruleForAllCompleted',
+      JSON.stringify(ruleForAllCompleted));
+  }
 
   render() {
     const {

@@ -1,5 +1,5 @@
 {
-  "homepage": "http://mate-academy.github.io/react_todo-app",
+  "homepage": "http://youvovk.github.io/react_todo-app",
   "name": "react-todo-app",
   "version": "0.1.0",
   "private": true,
@@ -20,7 +20,7 @@
     "@mate-academy/eslint-config-react": "*",
     "@mate-academy/stylelint-config": "*",
     "eslint": "^5.16.0",
-    "gh-pages": "^2.0.1",
+    "gh-pages": "^2.1.1",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
     "stylelint": "^10.0.0"

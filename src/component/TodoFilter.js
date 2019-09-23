@@ -1,6 +1,13 @@
 import React from 'react';
 
-const TodoFilter = ({ toggleShowActive, toggleShowAll, toggleShowCompleted, activeFilter }) => (
+import PropTypes from 'prop-types';
+
+const TodoFilter = ({
+  toggleShowActive,
+  toggleShowAll,
+  toggleShowCompleted,
+  activeFilter,
+}) => (
   (
     <ul className="filters">
       <li>
@@ -35,5 +42,12 @@ const TodoFilter = ({ toggleShowActive, toggleShowAll, toggleShowCompleted, acti
     </ul>
   )
 );
+
+TodoFilter.propTypes = {
+  toggleShowActive: PropTypes.func.isRequired,
+  toggleShowAll: PropTypes.func.isRequired,
+  toggleShowCompleted: PropTypes.func.isRequired,
+  activeFilter: PropTypes.bool.isRequired,
+};
 
 export default TodoFilter;
