@@ -1,75 +1,115 @@
 import React from 'react';
+import TodoForm from './components/TodoForm';
+import TodoItem from './components/TodoItem';
+import Footer from './components/Footer';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+class App extends React.Component {
+  state = {
+    todos: [],
+    todosToShow: 'all',
+    toggleAllComplete: true,
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+  addTodo = (todo) => {
+    this.setState(prevState => ({
+      todos: [todo, ...prevState.todos],
+    }));
+  }
+
+  toggleComplete = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            complete: !todo.complete,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
+  updateTodoToShow = (string) => {
+    this.setState({
+      todosToShow: string,
+    });
+  }
+
+  handleDeleteTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
+  }
+
+  removeAllCompleteTodos = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.complete),
+    }));
+  }
+
+  toggleAllComplete = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        complete: prevState.toggleAllComplete,
+      })),
+      toggleAllComplete: !prevState.toggleAllComplete,
+    }));
+  }
+
+  render() {
+    const { todosToShow } = this.state;
+
+    let todos = [];
+
+    if (todosToShow === 'all') {
+      todos = this.state.todos;
+    } else if (todosToShow === 'active') {
+      todos = this.state.todos.filter(todo => !todo.complete);
+    } else if (todosToShow === 'completed') {
+      todos = this.state.todos.filter(todo => todo.complete);
+    }
+
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <TodoForm onSubmit={this.addTodo} />
+        </header>
+
+        <section className="main" style={{ display: 'block' }}>
+          <input
+            onClick={this.toggleAllComplete}
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+
+          <ul className="todo-list">
+            {todos.map(todo => (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                id={todo.id}
+                toggleComplete={() => this.toggleComplete(todo.id)}
+                onDelete={() => this.handleDeleteTodo(todo.id)}
+              />
+            ))}
+          </ul>
+        </section>
+
+        <Footer
+          todos={todos}
+          todosToShow={todosToShow}
+          updateTodoToShow={this.updateTodoToShow}
+          removeAllCompleteTodos={this.removeAllCompleteTodos}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
