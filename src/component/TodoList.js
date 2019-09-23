@@ -10,7 +10,6 @@ const TodoList = ({
   todoListFiltered,
   toggleCompleteStatus,
   toggleRemoveTodo,
-  toggleEditTodo,
 }) => (
   <ul className="todo-list">
     {
@@ -19,7 +18,6 @@ const TodoList = ({
           todo={todo}
           toggleCompleteStatus={toggleCompleteStatus}
           toggleRemoveTodo={toggleRemoveTodo}
-          toggleEditTodo={toggleEditTodo}
           key={_.uniqueId('todo-item_')}
         />
       ))
@@ -32,12 +30,11 @@ TodoList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       title: PropTypes.string,
-      completed: PropTypes.string,
+      completed: PropTypes.bool,
     })
   ).isRequired,
   toggleCompleteStatus: PropTypes.func.isRequired,
   toggleRemoveTodo: PropTypes.func.isRequired,
-  toggleEditTodo: PropTypes.func.isRequired,
 };
 
 export default TodoList;

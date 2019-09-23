@@ -38,7 +38,7 @@ TodoItem.propTypes = {
   todo: PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
-    completed: PropTypes.string,
+    completed: PropTypes.bool,
   }).isRequired,
   toggleCompleteStatus: PropTypes.func.isRequired,
   toggleRemoveTodo: PropTypes.func.isRequired,
