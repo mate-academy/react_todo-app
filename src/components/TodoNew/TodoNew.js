@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import './TodoApp.scss';
-import { TodoAppTypes } from '../../constants/proptypes';
+import './TodoNew.scss';
+import { TodoNewTypes } from '../../constants/proptypes';
 
-export default class TodoApp extends Component {
+export default class TodoNew extends Component {
   state = {
     todoTitle: '',
   };
 
   onTodoAppSubmit = (e) => {
     e.preventDefault();
+
     if (this.state.todoTitle) {
       this.props.onSubmit(this.state.todoTitle);
       this.setState({ todoTitle: '' });
@@ -36,4 +37,4 @@ export default class TodoApp extends Component {
   }
 }
 
-TodoApp.propTypes = TodoAppTypes;
+TodoNew.propTypes = TodoNewTypes;

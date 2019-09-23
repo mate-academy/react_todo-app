@@ -28,11 +28,11 @@ Resources:
 
 
 ## Tasks
-1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
+1. Implement `TodoNew` component with an input field to create new todos on submit (Enter). Each item should have:
   - `title` - the text of todo
   - `id` - unique identifier
   - `completed` - current status (`false` by default)
-1. Show the number of not completed todos in `TodoApp`
+1. Show the number of not completed todos in `TodoNew`
 1. Implement `TodoList` component to display a list of todos ({ id, title, completed })
     ```jsx harmony
     <TodoList items={todos} />

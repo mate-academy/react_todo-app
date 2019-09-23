@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import TodoApp from './components/TodoApp/TodoApp';
+import shortid from 'shortid';
+
+import './App.scss';
+import TodoNew from './components/TodoNew/TodoNew';
 import TodoList from './components/TodoList/TodoList';
 
 export default class App extends Component {
@@ -13,9 +16,7 @@ export default class App extends Component {
     todoList: [
       ...todoList,
       {
-        id: todoList.length === 0
-          ? 1
-          : Math.max(...todoList.map(todo => todo.id)) + 1,
+        id: shortid.generate(),
         title,
         completed: false,
       },
@@ -26,18 +27,11 @@ export default class App extends Component {
     todoList: todoList.filter(todo => todo.id !== id),
   }));
 
-  handleTodoTitleEdit = (id, title) => {
-    this.setState(({ todoList }) => {
-      const todoArr = [...todoList];
-      const ind = todoList.findIndex(todo => todo.id === id);
-
-      todoArr[ind].title = title;
-
-      return ({
-        todoList: [...todoArr],
-      });
-    });
-  };
+  handleTodoTitleEdit = (id, title) => this.setState(({ todoList }) => ({
+    todoList: todoList.map(todo => (todo.id === id
+      ? { ...todo, title }
+      : todo)),
+  }));
 
   onCompletedSwitch = id => this.setState(({ todoList }) => {
     const currentTodo = todoList.find(todo => todo.id === id);
@@ -97,10 +91,10 @@ export default class App extends Component {
         <header className="header">
           <h1>todos</h1>
 
-          <TodoApp onSubmit={this.onNewTodoSubmit} />
+          <TodoNew onSubmit={this.onNewTodoSubmit} />
         </header>
 
-        <section className="main" style={{ display: 'block' }}>
+        <section className="main">
           <input
             type="checkbox"
             id="toggle-all"

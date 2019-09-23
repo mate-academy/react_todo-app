@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export const TodoAppTypes = {
+export const TodoNewTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
