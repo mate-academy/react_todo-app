@@ -7,25 +7,32 @@ export const Footer = ({
   filteredCompleted,
   handleReset,
   handleClearCompleted,
+  indexTab,
 }) => (
   <footer className="footer" style={{ display: 'block' }}>
     <span className="todo-count">
-      {todos.filter(elem => elem.completed === false).length} items left
+      {todos.filter(elem => elem.completed === false).length}
+      {' '}
+items left
     </span>
 
     <ul className="filters">
       <li onClick={handleReset}>
-        <a href="#/" className="selected">
+        <a href="#/" className={indexTab === false ? 'selected' : ''}>
           All
         </a>
       </li>
 
       <li onClick={filteredActive}>
-        <a href="#/active">Active</a>
+        <a href="#/active" className={indexTab === 'active' ? 'selected' : ''}>
+          Active
+        </a>
       </li>
 
       <li onClick={filteredCompleted}>
-        <a href="#/completed">Completed</a>
+        <a href="#/completed" className={indexTab === 'completed' ? 'selected' : ''}>
+          Completed
+        </a>
       </li>
     </ul>
 
@@ -41,5 +48,3 @@ export const Footer = ({
     )}
   </footer>
 );
-
-export default Footer;

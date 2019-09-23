@@ -3,7 +3,7 @@ import './TodoItem.css';
 import cx from 'classnames';
 
 export const TodoItem = ({
-  todo, index, checkBoxClick, handleDelete,
+  todo, index, checkBoxClick, handleDelete
 }) => {
   const crossedItem = cx({
     '': true,
@@ -17,7 +17,7 @@ export const TodoItem = ({
           type="checkbox"
           className="toggle"
           id=""
-          onClick={() => checkBoxClick(todo, index)}
+          onClick={() => checkBoxClick(index)}
           checked={todo.completed}
         />
         <label>{todo.title}</label>

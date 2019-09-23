@@ -8,6 +8,7 @@ class App extends React.Component {
   state = {
     todos: [],
     originTodos: [],
+    indexTab: false,
   };
 
   addTodo = (todo) => {
@@ -20,18 +21,21 @@ class App extends React.Component {
   filteredActive = () => {
     this.setState(prevState => ({
       todos: [...prevState.originTodos].filter(elem => elem.completed === false),
+      indexTab: 'active',
     }));
   };
 
   filteredCompleted = () => {
     this.setState(prevState => ({
       todos: [...prevState.originTodos].filter(elem => elem.completed === true),
+      indexTab: 'completed',
     }));
   };
 
   handleReset = () => {
     this.setState(prevState => ({
       todos: [...prevState.originTodos],
+      indexTab: false,
     }));
   };
 
@@ -43,17 +47,25 @@ class App extends React.Component {
 
   handleClearCompleted = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => !todo.completed),
+      todos: [...prevState.todos].filter(todo => !todo.completed),
       originTodos: prevState.originTodos.filter(todo => !todo.completed),
     }));
   };
 
-  checkBoxClick = (todo, index) => {
+  checkBoxClick = (index) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((elem, i) => (i === index
         ? Object.assign(elem, { completed: !prevState.todos[i].completed })
         : elem)),
     }));
+
+    if (this.state.indexTab === 'active') {
+      this.filteredActive();
+    }
+
+    if (this.state.indexTab === 'completed') {
+      this.filteredCompleted();
+    }
   };
 
   handleAllcompleted = () => {
@@ -69,7 +81,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { todos,originTodos } = this.state;
+    const { todos, originTodos, indexTab } = this.state;
 
     return (
       <section className="todoapp">
@@ -104,6 +116,7 @@ class App extends React.Component {
             filteredCompleted={this.filteredCompleted}
             handleReset={this.handleReset}
             handleClearCompleted={this.handleClearCompleted}
+            indexTab={indexTab}
           />
         )}
       </section>
