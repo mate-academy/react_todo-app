@@ -30,7 +30,20 @@ class TodoItem extends Component {
     parentLi.classList.add('editing');
     newInput.classList.add('edit');
     newInput.onkeydown = this.handlePressKeyNewInput;
+    newInput.onblur = this.handleBlurNewInput;
     parentLi.append(newInput);
+    newInput.focus();
+  }
+
+  handleBlurNewInput = (event) => {
+    const { value } = event.target;
+    const idMainInput = event.target.parentNode.children[0].children[0].id;
+    const idTodo = +idMainInput[idMainInput.length - 1];
+    const parentLi = event.target.parentNode;
+
+    this.props.editTask(idTodo, value);
+    parentLi.classList.remove('editing');
+    parentLi.removeChild(event.target);
   }
 
   handlePressKeyNewInput = (event) => {
@@ -43,10 +56,6 @@ class TodoItem extends Component {
     if (key === 'Enter') {
       this.props.editTask(idTodo, value);
       parentLi.classList.remove('editing');
-      parentLi.removeChild(event.target);
-    } else if (key === 'Escape') {
-      parentLi.classList.remove('editing');
-      parentLi.removeChild(event.target);
     }
   }
 

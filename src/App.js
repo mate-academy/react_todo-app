@@ -54,13 +54,17 @@ class App extends Component {
   }
 
   editTask = (id, newTitle) => {
-    this.setState(prevState => ({
-      listTodos: [...prevState.listTodos]
-        .map(item => (item.id === id
-          ? { ...item, title: newTitle }
-          : { ...item }
-        )),
-    }));
+    if (!newTitle) {
+      this.removeTodos([id]);
+    } else {
+      this.setState(prevState => ({
+        listTodos: [...prevState.listTodos]
+          .map(item => (item.id === id
+            ? { ...item, title: newTitle }
+            : { ...item }
+          )),
+      }));
+    }
   }
 
   render() {

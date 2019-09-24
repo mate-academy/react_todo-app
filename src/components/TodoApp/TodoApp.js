@@ -10,7 +10,7 @@ class TodoApp extends Component {
     const { key } = event;
     const { value } = event.target;
 
-    if (key === 'Enter') {
+    if (key === 'Enter' && value) {
       this.props.addTodo(value);
       this.setState({ task: '' });
     }
