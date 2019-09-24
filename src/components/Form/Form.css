@@ -14,3 +14,7 @@
   color: #82857d;
   font-weight: bold;
 }
+
+.enter-submit {
+  display: none;
+}

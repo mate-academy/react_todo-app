@@ -3,32 +3,36 @@ import './Footer.css';
 
 export const Footer = ({
   todos,
-  filteredActive,
-  filteredCompleted,
+  filteredTodos,
   handleReset,
   handleClearCompleted,
-  indexTab,
+  activeTab,
 }) => (
-  <footer className="footer" style={{ display: 'block' }}>
+  <footer className="footer">
     <span className="todo-count">
-      {todos.filter(elem => elem.completed === false).length} items left
+      {todos.filter(elem => !elem.completed).length}
+      {' '}
+items left
     </span>
 
     <ul className="filters">
       <li onClick={handleReset}>
-        <a href="#/" className={indexTab === false ? 'selected' : ''}>
+        <a href="#/" className={!activeTab ? 'selected' : ''}>
           All
         </a>
       </li>
 
-      <li onClick={filteredActive}>
-        <a href="#/active" className={indexTab === 'active' ? 'selected' : ''}>
+      <li onClick={filteredTodos}>
+        <a href="#/active" className={activeTab === 'active' ? 'selected' : ''}>
           Active
         </a>
       </li>
 
-      <li onClick={filteredCompleted}>
-        <a href="#/completed" className={indexTab === 'completed' ? 'selected' : ''}>
+      <li onClick={filteredTodos}>
+        <a
+          href="#/completed"
+          className={activeTab === 'completed' ? 'selected' : ''}
+        >
           Completed
         </a>
       </li>
@@ -38,7 +42,6 @@ export const Footer = ({
       <button
         type="button"
         className="clear-completed"
-        style={{ display: 'block' }}
         onClick={handleClearCompleted}
       >
         Clear completed

@@ -4,7 +4,7 @@ import './Form.css';
 export class Form extends React.Component {
   state = {
     title: '',
-    arrLength: 1,
+    lengthOfTodos: 1,
   };
 
   handleClick = (event) => {
@@ -19,13 +19,16 @@ export class Form extends React.Component {
     const newTodo = {
       title: title.value,
       completed: false,
-      id: this.state.arrLength,
+      id: this.state.lengthOfTodos,
     };
 
     this.setState(prevState => ({
+      ...prevState,
       title: '',
-      arrLength: prevState.arrLength + 1,
+      lengthOfTodos: prevState.lengthOfTodos + 1,
     }));
+
+    console.log(this.state.lengthOfTodos)
 
     addTodo(newTodo);
   };
@@ -46,7 +49,7 @@ export class Form extends React.Component {
           value={this.state.title}
           name="title"
         />
-        <input type="submit" style={{ display: 'none' }} />
+        <input type="submit" className="enter-submit" />
       </form>
     );
   }

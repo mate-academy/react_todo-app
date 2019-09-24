@@ -16,7 +16,6 @@ export const TodoItem = ({
         <input
           type="checkbox"
           className="toggle"
-          id=""
           onClick={() => checkBoxClick(index)}
           checked={todo.completed}
         />

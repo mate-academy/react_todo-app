@@ -6,9 +6,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 export const TodoList = ({
   todos,
   checkBoxClick,
-  className,
   handleDelete,
-  doubleClick,
 }) => (
   <div>
     <ul className="todo-list">
@@ -19,9 +17,7 @@ export const TodoList = ({
           todos={todos}
           index={i}
           checkBoxClick={checkBoxClick}
-          className={className}
           handleDelete={handleDelete}
-          doubleClick={doubleClick}
         />
       ))}
     </ul>

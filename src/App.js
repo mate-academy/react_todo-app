@@ -8,7 +8,7 @@ class App extends React.Component {
   state = {
     todos: [],
     originTodos: [],
-    indexTab: false,
+    activeTab: false,
   };
 
   addTodo = (todo) => {
@@ -18,24 +18,28 @@ class App extends React.Component {
     }));
   };
 
-  filteredActive = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.originTodos].filter(elem => elem.completed === false),
-      indexTab: 'active',
-    }));
-  };
+  filteredTodos = ({ target }) => {
+    const filter = target.getAttribute('href').slice(2) || 'all';
 
-  filteredCompleted = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.originTodos].filter(elem => elem.completed === true),
-      indexTab: 'completed',
-    }));
+    if (filter === 'active') {
+      this.setState(prevState => ({
+        todos: [...prevState.originTodos].filter(elem => !elem.completed),
+        activeTab: filter,
+      }));
+    }
+
+    if (filter === 'completed') {
+      this.setState(prevState => ({
+        todos: [...prevState.originTodos].filter(elem => elem.completed),
+        activeTab: filter,
+      }));
+    }
   };
 
   handleReset = () => {
     this.setState(prevState => ({
       todos: [...prevState.originTodos],
-      indexTab: false,
+      activeTab: false,
     }));
   };
 
@@ -54,21 +58,27 @@ class App extends React.Component {
 
   checkBoxClick = (index) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map((elem, i) => (i === index
-        ? Object.assign(elem, { completed: !prevState.todos[i].completed })
-        : elem)),
+      todos: prevState.todos.map((elem, i) => {
+        if (i === index) {
+          return Object.assign(elem, {
+            completed: !prevState.todos[i].completed,
+          });
+        }
+
+        return elem;
+      }),
     }));
 
-    if (this.state.indexTab === 'active') {
+    if (this.state.activeTab === 'active') {
       this.filteredActive();
     }
 
-    if (this.state.indexTab === 'completed') {
+    if (this.state.activeTab === 'completed') {
       this.filteredCompleted();
     }
   };
 
-  handleAllcompleted = () => {
+  handleAllCompleted = () => {
     this.setState(prevState => ({
       todos:
         prevState.todos.every(item => item.completed)
@@ -81,16 +91,14 @@ class App extends React.Component {
   };
 
   render() {
-    const { todos, originTodos, indexTab } = this.state;
+    const { todos, originTodos, activeTab } = this.state;
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
 
-          <Form
-            addTodo={this.addTodo}
-          />
+          <Form addTodo={this.addTodo} />
         </header>
 
         <section className="main" style={{ display: 'block' }}>
@@ -98,7 +106,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            onClick={this.handleAllcompleted}
+            onClick={this.handleAllCompleted}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -112,11 +120,10 @@ class App extends React.Component {
         {originTodos.length > 0 && (
           <Footer
             todos={todos}
-            filteredActive={this.filteredActive}
-            filteredCompleted={this.filteredCompleted}
+            filteredTodos={this.filteredTodos}
             handleReset={this.handleReset}
             handleClearCompleted={this.handleClearCompleted}
-            indexTab={indexTab}
+            activeTab={activeTab}
           />
         )}
       </section>
