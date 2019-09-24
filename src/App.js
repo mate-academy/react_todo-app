@@ -40,11 +40,17 @@ export default class App extends Component {
     todoList: todoList.filter(todo => todo.id !== id),
   }));
 
-  handleTodoTitleEdit = (id, title) => this.setState(({ todoList }) => ({
-    todoList: todoList.map(todo => (todo.id === id
-      ? { ...todo, title }
-      : todo)),
-  }));
+  handleTodoTitleEdit = (id, title) => {
+    if (title) {
+      this.setState(({ todoList }) => ({
+        todoList: todoList.map(todo => (todo.id === id
+          ? { ...todo, title }
+          : todo)),
+      }));
+    } else {
+      this.onRemoveTodoClick(id);
+    }
+  };
 
   onCompletedSwitch = id => this.setState(({ todoList }) => {
     const currentTodo = todoList.find(todo => todo.id === id);
