@@ -21,8 +21,15 @@ class TodoItem extends React.Component {
 
   updateTodo = (event) => {
     event.preventDefault();
-    this.setState({ isEdit: false, title: event.target.value });
-    this.props.onEdit(this.props.todo.id, this.state.title);
+    const { title } = this.state;
+    const { onEdit, onDelete, todo } = this.props;
+
+    if (title) {
+      this.setState({ isEdit: false, title: event.target.value });
+      onEdit(todo.id, title);
+    } else {
+      onDelete(todo.id);
+    }
   };
 
   editTodo = ({ target }) => {

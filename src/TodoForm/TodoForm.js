@@ -16,8 +16,10 @@ class TodoForm extends React.Component {
     const { title } = this.state;
     const { onAdd, todoID } = this.props;
 
-    onAdd({ id: todoID, title, completed: false });
-    this.setState({ title: '' });
+    if (title) {
+      onAdd({ id: todoID, title, completed: false });
+      this.setState({ title: '' });
+    }
   };
 
   onInputChange = ({ target }) => {
