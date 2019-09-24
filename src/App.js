@@ -206,7 +206,7 @@ class App extends React.Component {
 
         {
           !!todoList.length && (
-            <footer className="footer" style={{ display: 'block' }}>
+            <footer className="footer">
               <span className="todo-count">
                 {countedLeft}
                 {' '}
@@ -226,7 +226,6 @@ class App extends React.Component {
                   <button
                     type="button"
                     className="clear-completed"
-                    style={{ display: 'block' }}
                     onClick={this.toggleRemoveAllCompleted}
                   >
                     Clear completed
