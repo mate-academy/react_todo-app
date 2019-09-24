@@ -11,18 +11,25 @@ class App extends React.Component {
     todoListFiltered: [],
     textNewTodo: '',
     activeFilter: 'All',
+    savedStorage: false,
   };
 
   componentDidMount() {
-    const todoList = JSON
-      .parse(localStorage.getItem('todoList'));
-    const todoListFiltered = JSON
-      .parse(localStorage.getItem('todoList'));
+    const preparedlocalSrotage = Object
+      .fromEntries(Object.entries(localStorage));
+    const preparedState = {};
 
-    this.setState({
-      todoList,
-      todoListFiltered,
-    });
+    for (let state in preparedlocalSrotage) {
+      if (state !== null) {
+        preparedState[state] = JSON.parse(localStorage.getItem(state));
+      }
+    }
+
+    if (preparedState.savedStorage) {
+      this.setState({
+        ...preparedState,
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -51,6 +58,7 @@ class App extends React.Component {
           },
         ],
         textNewTodo: '',
+        savedStorage: true,
       }));
     }
   };
@@ -152,8 +160,11 @@ class App extends React.Component {
     const {
       todoList,
       todoListFiltered,
+      savedStorage,
     } = this.state;
 
+    localStorage.setItem('savedStorage',
+      JSON.stringify(savedStorage));
     localStorage.setItem('todoList',
       JSON.stringify(todoList));
     localStorage.setItem('todoListFiltered',

@@ -41,7 +41,7 @@ const TodoFilter = ({
 
 TodoFilter.propTypes = {
   toggleFilters: PropTypes.func.isRequired,
-  activeFilter: PropTypes.bool.isRequired,
+  activeFilter: PropTypes.string.isRequired,
 };
 
 export default TodoFilter;
