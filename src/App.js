@@ -4,36 +4,25 @@ import TodoList from './component/TodoList';
 import TodoFilter from './component/TodoFilter';
 
 const _ = require('lodash');
-//const classNames = require('classnames');
 
 class App extends React.Component {
   state = {
     todoList: [],
     todoListFiltered: [],
     textNewTodo: '',
-    ruleForAllCompleted: true,
-    activeFilter: false,
-    saveStorage: false,
+    activeFilter: 'All',
   };
 
   componentDidMount() {
-    const saveStorage = JSON.parse(localStorage.getItem('saveStorage'));
+    const todoList = JSON
+      .parse(localStorage.getItem('todoList'));
+    const todoListFiltered = JSON
+      .parse(localStorage.getItem('todoList'));
 
-    if (saveStorage) {
-      const todoList = JSON
-        .parse(localStorage.getItem('todoList'));
-      const todoListFiltered = JSON
-        .parse(localStorage.getItem('todoListFiltered'));
-      const ruleForAllCompleted = JSON
-        .parse(localStorage.getItem('ruleForAllCompleted'));
-
-      this.setState({
-        saveStorage,
-        todoList,
-        todoListFiltered,
-        ruleForAllCompleted,
-      });
-    }
+    this.setState({
+      todoList,
+      todoListFiltered,
+    });
   }
 
   componentDidUpdate() {
@@ -53,6 +42,7 @@ class App extends React.Component {
             completed: false,
           },
         ],
+
         todoListFiltered: [...prevState.todoListFiltered,
           {
             id: idForTodos,
@@ -61,7 +51,6 @@ class App extends React.Component {
           },
         ],
         textNewTodo: '',
-        saveStorage: true,
       }));
     }
   };
@@ -83,6 +72,7 @@ class App extends React.Component {
 
         return todo;
       }),
+
       todoListFiltered: todoListFiltered.map((todo) => {
         if (todo.id === id) {
           return { ...todo, completed: !todo.completed };
@@ -93,50 +83,55 @@ class App extends React.Component {
     }));
 
     if (activeFilter === 'Completed') {
-      this.toggleShowCompleted();
+      this.toggleFilters('Completed');
     }
 
     if (activeFilter === 'Active') {
-      this.toggleShowActive();
+      this.toggleFilters('Active');
     }
   };
 
   toggleCompleteAllStatus = () => {
     this.setState(prevState => ({
       todoListFiltered: prevState.todoListFiltered
-        .map(todo => ({ ...todo,
+        .map(todo => ({
+          ...todo,
           completed: prevState.todoListFiltered
-            .some(todo => todo.completed === false) ? true : false })),
+            .some(todo => todo.completed === false),
+        })),
       todoList: prevState.todoList
-        .map(todo => ({ ...todo,
+        .map(todo => ({
+          ...todo,
           completed: prevState.todoList
-            .some(todo => todo.completed === false) ? true : false })),
-      ruleForAllCompleted: !prevState.ruleForAllCompleted,
+            .some(todo => todo.completed === false),
+        })),
     }));
   };
 
-  toggleShowAll = () => {
-    this.setState(prevState => ({
-      todoListFiltered: prevState.todoList
-        .map(todo => ({ ...todo })),
-      activeFilter: false,
-    }));
-  };
+  toggleFilters = (active) => {
+    if (active === 'All') {
+      this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .map(todo => ({ ...todo })),
+        activeFilter: 'All',
+      }));
+    }
 
-  toggleShowActive = () => {
-    this.setState(prevState => ({
-      todoListFiltered: prevState.todoList
-        .filter(todo => todo.completed === false),
-      activeFilter: 'Active',
-    }));
-  };
+    if (active === 'Active') {
+      this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .filter(todo => todo.completed === false),
+        activeFilter: 'Active',
+      }));
+    }
 
-  toggleShowCompleted = () => {
-    this.setState(prevState => ({
-      todoListFiltered: prevState.todoList
-        .filter(todo => todo.completed === true),
-      activeFilter: 'Completed',
-    }));
+    if (active === 'Completed') {
+      this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .filter(todo => todo.completed === true),
+        activeFilter: 'Completed',
+      }));
+    }
   };
 
   toggleRemoveTodo = (id) => {
@@ -157,18 +152,12 @@ class App extends React.Component {
     const {
       todoList,
       todoListFiltered,
-      ruleForAllCompleted,
-      saveStorage,
     } = this.state;
 
-    localStorage.setItem('saveStorage',
-      JSON.stringify(saveStorage));
     localStorage.setItem('todoList',
       JSON.stringify(todoList));
     localStorage.setItem('todoListFiltered',
       JSON.stringify(todoListFiltered));
-    localStorage.setItem('ruleForAllCompleted',
-      JSON.stringify(ruleForAllCompleted));
   }
 
   render() {
@@ -178,7 +167,7 @@ class App extends React.Component {
       activeFilter,
       todoList,
     } = this.state;
-    const countedLeft = todoListFiltered.filter(item => !item.completed).length;
+    const countedLeft = todoList.filter(item => !item.completed).length;
 
     return (
       <section className="todoapp">
@@ -195,20 +184,18 @@ class App extends React.Component {
           </form>
         </header>
 
-        <section className="main" style={{ display: 'block' }}>
-          {
-            !!todoList.length && (
-              <>
-                <input
-                  type="checkbox"
-                  id="toggle-all"
-                  className="toggle-all"
-                  onChange={this.toggleCompleteAllStatus}
-                />
-                <label htmlFor="toggle-all">Mark all as complete</label>
-              </>
-            )
-          }
+        <section className="main">
+          {!!todoList.length && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                onChange={this.toggleCompleteAllStatus}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
 
           <TodoList
             todoListFiltered={todoListFiltered}
@@ -230,9 +217,7 @@ class App extends React.Component {
               </span>
 
               <TodoFilter
-                toggleShowActive={this.toggleShowActive}
-                toggleShowAll={this.toggleShowAll}
-                toggleShowCompleted={this.toggleShowCompleted}
+                toggleFilters={this.toggleFilters}
                 activeFilter={activeFilter}
               />
 
