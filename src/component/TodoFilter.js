@@ -40,9 +40,7 @@ const TodoFilter = ({
 );
 
 TodoFilter.propTypes = {
-  toggleShowActive: PropTypes.func.isRequired,
-  toggleShowAll: PropTypes.func.isRequired,
-  toggleShowCompleted: PropTypes.func.isRequired,
+  toggleFilters: PropTypes.func.isRequired,
   activeFilter: PropTypes.bool.isRequired,
 };
 
