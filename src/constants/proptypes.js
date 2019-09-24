@@ -1,11 +1,7 @@
 import PropTypes from 'prop-types';
 
-export const TodoNewTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
-
 const TodoShape = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
 };
@@ -15,7 +11,7 @@ export const TodoItemTypes = {
   removeTodo: PropTypes.func.isRequired,
   switchCompleted: PropTypes.func.isRequired,
   handleTodoTitleEdit: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
 };

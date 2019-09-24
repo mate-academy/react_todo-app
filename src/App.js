@@ -2,26 +2,39 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 
 import './App.scss';
-import TodoNew from './components/TodoNew/TodoNew';
 import TodoList from './components/TodoList/TodoList';
 
 export default class App extends Component {
   state = {
+    todoTitle: '',
     todoList: [],
     isFiltered: false,
     isFilerOnCompleted: false,
   };
 
-  onNewTodoSubmit = title => this.setState(({ todoList }) => ({
-    todoList: [
-      ...todoList,
-      {
-        id: shortid.generate(),
-        title,
-        completed: false,
-      },
-    ],
-  }));
+  onInputChange = (value) => {
+    this.setState({ todoTitle: value });
+  };
+
+  onNewTodoSubmit = (e) => {
+    e.preventDefault();
+
+    const { todoTitle } = this.state;
+
+    if (todoTitle) {
+      this.setState(({ todoList }) => ({
+        todoTitle: '',
+        todoList: [
+          ...todoList,
+          {
+            id: shortid.generate(),
+            title: todoTitle,
+            completed: false,
+          },
+        ],
+      }));
+    }
+  };
 
   onRemoveTodoClick = id => this.setState(({ todoList }) => ({
     todoList: todoList.filter(todo => todo.id !== id),
@@ -91,7 +104,15 @@ export default class App extends Component {
         <header className="header">
           <h1>todos</h1>
 
-          <TodoNew onSubmit={this.onNewTodoSubmit} />
+          <form onSubmit={e => this.onNewTodoSubmit(e)}>
+            <input
+              className="new-todo"
+              type="text"
+              placeholder="What needs to be done?"
+              onChange={e => this.onInputChange(e.target.value)}
+              value={this.state.todoTitle}
+            />
+          </form>
         </header>
 
         <section className="main">
@@ -99,6 +120,7 @@ export default class App extends Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            value={this.state.todoTitle}
             onChange={e => this.onToggleCopmpeted(e.target.checked)}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
