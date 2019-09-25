@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import TodoItem from '../TodoItem/TodoItem';
 import './TodoList.css';
 
@@ -24,12 +25,16 @@ class TodoList extends Component {
     });
   }
 
-  handleToogleAll = ({ target }) => {
-    const { checked } = target;
-    const { setCompletedAll } = this.props;
-
-    setCompletedAll(checked);
-  }
+  createFilteredTodos = (list, switcher) => {
+    switch (switcher) {
+      case 'completed':
+        return [...list].filter(item => item.completed);
+      case 'active':
+        return [...list].filter(item => !item.completed);
+      default:
+        return [...list];
+    }
+  };
 
   render() {
     const {
@@ -37,21 +42,10 @@ class TodoList extends Component {
       changeCompleted,
       removeTodos,
       editTask,
+      setCompletedAll,
     } = this.props;
     const { filter } = this.state;
-
-    const createFilteredTodos = (list, switcher) => {
-      switch (switcher) {
-        case 'completed':
-          return [...list].filter(item => item.completed);
-        case 'active':
-          return [...list].filter(item => !item.completed);
-        default:
-          return [...list];
-      }
-    };
-
-    const filteredTodos = createFilteredTodos(items, filter);
+    const filteredTodos = this.createFilteredTodos(items, filter);
 
     return (
       <>
@@ -61,7 +55,7 @@ class TodoList extends Component {
             id="toggle-all"
             className="toggle-all"
             checked={filteredTodos.every(item => item.completed)}
-            onChange={this.handleToogleAll}
+            onChange={event => setCompletedAll(event.target.checked)}
           />
           {filteredTodos.length
             ? <label htmlFor="toggle-all">Mark all as complete</label>
@@ -89,50 +83,33 @@ class TodoList extends Component {
 
           <ul className="filters">
             <li>
-              {filter === 'all'
-                ? (
-                  <a
-                    href="#/"
-                    className="selected"
-                    onClick={this.handleFilters}
-                  >
+              <a
+                href="#/"
+                className={classNames({ selected: filter === 'all' })}
+                onClick={this.handleFilters}
+              >
                     All
-                  </a>
-                )
-                : <a href="#/" onClick={this.handleFilters}>All</a>}
+              </a>
             </li>
 
             <li>
-              {filter === 'active'
-                ? (
-                  <a
-                    href="#/active"
-                    className="selected"
-                    onClick={this.handleFilters}
-                  >
-                    Active
-                  </a>
-                ) : <a href="#/active" onClick={this.handleFilters}>Active</a>}
+              <a
+                href="#/active"
+                className={classNames({ selected: filter === 'active' })}
+                onClick={this.handleFilters}
+              >
+                Active
+              </a>
             </li>
 
             <li>
-              {filter === 'completed'
-                ? (
-                  <a
-                    href="#/completed"
-                    className="selected"
-                    onClick={this.handleFilters}
-                  >
-                    Completed
-                  </a>
-                ) : (
-                  <a
-                    href="#/completed"
-                    onClick={this.handleFilters}
-                  >
-                    Completed
-                  </a>
-                )}
+              <a
+                href="#/completed"
+                className={classNames({ selected: filter === 'completed' })}
+                onClick={this.handleFilters}
+              >
+                Completed
+              </a>
             </li>
           </ul>
 

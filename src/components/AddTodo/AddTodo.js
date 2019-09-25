@@ -6,12 +6,12 @@ class TodoApp extends Component {
     task: '',
   }
 
-  handlePressKey = (event) => {
-    const { key } = event;
-    const { value } = event.target;
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { task } = this.state;
 
-    if (key === 'Enter' && value) {
-      this.props.addTodo(value);
+    if (task) {
+      this.props.addTodo(task);
       this.setState({ task: '' });
     }
   }
@@ -26,14 +26,14 @@ class TodoApp extends Component {
     return (
       <header className="header">
         <h1>todos</h1>
-
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={this.state.task}
-          onKeyPress={this.handlePressKey}
-          onChange={this.handleOnChange}
-        />
+        <form onSubmit={event => this.handleSubmit(event)}>
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+            value={this.state.task}
+            onChange={this.handleOnChange}
+          />
+        </form>
       </header>
     );
   }

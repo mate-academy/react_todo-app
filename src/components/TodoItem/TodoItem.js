@@ -1,10 +1,15 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class TodoItem extends Component {
+  state = {
+    editingInput: '',
+  }
+
   handleClickCheckBox = ({ target }) => {
-    const id = +target.id[target.id.length - 1];
+    const id = Number(target.id[target.id.length - 1]);
     const { changeCompleted } = this.props;
 
     changeCompleted(id);
@@ -12,51 +17,51 @@ class TodoItem extends Component {
 
   handleClickButtonDestroy = ({ target }) => {
     const idInput = target.parentNode.children[0].id;
-    const idTodo = +idInput[idInput.length - 1];
+    const idTodo = Number(idInput[idInput.length - 1]);
     const { removeTodos } = this.props;
 
     removeTodos([idTodo]);
   }
 
-  handleLabelClick = (event) => {
-    event.preventDefault();
-  }
-
   handleLableDoubleClick = ({ target }) => {
     const parentLi = target.closest('li');
-    const newInput = document.createElement('input');
 
-    newInput.value = target.innerText;
     parentLi.classList.add('editing');
-    newInput.classList.add('edit');
-    newInput.onkeydown = this.handlePressKeyNewInput;
-    newInput.onblur = this.handleBlurNewInput;
-    parentLi.append(newInput);
-    newInput.focus();
+    this.setState({ editingInput: target.innerText });
   }
 
   handleBlurNewInput = (event) => {
     const { value } = event.target;
     const idMainInput = event.target.parentNode.children[0].children[0].id;
-    const idTodo = +idMainInput[idMainInput.length - 1];
+    const idTodo = Number(idMainInput[idMainInput.length - 1]);
     const parentLi = event.target.parentNode;
 
     this.props.editTask(idTodo, value);
     parentLi.classList.remove('editing');
-    parentLi.removeChild(event.target);
+    this.setState({ editingInput: '' });
   }
 
   handlePressKeyNewInput = (event) => {
     const { key } = event;
     const { value } = event.target;
     const idMainInput = event.target.parentNode.children[0].children[0].id;
-    const idTodo = +idMainInput[idMainInput.length - 1];
+    const idTodo = Number(idMainInput[idMainInput.length - 1]);
     const parentLi = event.target.parentNode;
 
     if (key === 'Enter') {
       this.props.editTask(idTodo, value);
       parentLi.classList.remove('editing');
+      this.setState({ editingInput: '' });
+    } else if (event.keyCode === 27) {
+      parentLi.classList.remove('editing');
+      this.setState({ editingInput: '' });
     }
+  }
+
+  handleOnChangeNewInput = (event) => {
+    this.setState({
+      editingInput: event.target.value,
+    });
   }
 
   render() {
@@ -74,7 +79,7 @@ class TodoItem extends Component {
           />
           <label
             htmlFor={`todo-${id}`}
-            onClick={this.handleLabelClick}
+            onClick={event => event.preventDefault()}
             onDoubleClick={this.handleLableDoubleClick}
           >
             {title}
@@ -85,6 +90,20 @@ class TodoItem extends Component {
             onClick={this.handleClickButtonDestroy}
           />
         </div>
+        {this.state.editingInput
+          ? (
+            <input
+              type="text"
+              className="edit"
+              value={this.state.editingInput}
+              onChange={this.handleOnChangeNewInput}
+              onKeyDown={this.handlePressKeyNewInput}
+              onBlur={this.handleBlurNewInput}
+              autoFocus
+            />
+          )
+          : null
+        }
       </li>
     );
   }
