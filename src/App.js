@@ -13,7 +13,7 @@ class App extends React.Component {
     isAllTodosCompleted: false,
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     localStorage.setItem('todos', JSON.stringify(this.state.todos));
     localStorage.setItem('idCount', JSON.stringify(this.state.idCount));
   }
