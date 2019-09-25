@@ -28,8 +28,6 @@ export class Form extends React.Component {
       lengthOfTodos: prevState.lengthOfTodos + 1,
     }));
 
-    console.log(this.state.lengthOfTodos)
-
     addTodo(newTodo);
   };
 

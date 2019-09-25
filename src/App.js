@@ -8,7 +8,7 @@ class App extends React.Component {
   state = {
     todos: [],
     originTodos: [],
-    activeTab: false,
+    isTabActive: false,
   };
 
   addTodo = (todo) => {
@@ -18,29 +18,35 @@ class App extends React.Component {
     }));
   };
 
-  filteredTodos = ({ target }) => {
-    const filter = target.getAttribute('href').slice(2) || 'all';
+  changeFilter = ({ target }) => {
+    const filter = target.getAttribute('href').slice(2) || '';
 
-    if (filter === 'active') {
-      this.setState(prevState => ({
-        todos: [...prevState.originTodos].filter(elem => !elem.completed),
-        activeTab: filter,
-      }));
-    }
-
-    if (filter === 'completed') {
-      this.setState(prevState => ({
-        todos: [...prevState.originTodos].filter(elem => elem.completed),
-        activeTab: filter,
-      }));
-    }
+    this.setState({
+      isTabActive: filter,
+    });
+    this.filteredTodos();
   };
 
-  handleReset = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.originTodos],
-      activeTab: false,
-    }));
+  filteredTodos = () => {
+    this.setState((prevState) => {
+      if (prevState.isTabActive === 'active') {
+        return ({
+          todos: [...prevState.originTodos].filter(elem => !elem.completed),
+        });
+      }
+
+      if (prevState.isTabActive === 'completed') {
+        return ({
+          todos: [...prevState.originTodos].filter(elem => elem.completed),
+        });
+      }
+
+      if (!prevState.isTabActive) {
+        return ({
+          todos: [...prevState.originTodos],
+        });
+      }
+    });
   };
 
   handleDelete = (todo) => {
@@ -69,12 +75,12 @@ class App extends React.Component {
       }),
     }));
 
-    if (this.state.activeTab === 'active') {
-      this.filteredActive();
+    if (this.state.isTabActive === 'active') {
+      this.filteredTodos('#/active');
     }
 
-    if (this.state.activeTab === 'completed') {
-      this.filteredCompleted();
+    if (this.state.isTabActive === 'completed') {
+      this.filteredTodos('#/completed');
     }
   };
 
@@ -83,15 +89,13 @@ class App extends React.Component {
       todos:
         prevState.todos.every(item => item.completed)
         || prevState.todos.every(item => !item.completed)
-          ? prevState.todos.map((elem, i) =>
-            Object.assign(elem, { completed: !prevState.todos[i].completed }))
-          : prevState.todos.map(elem =>
-            Object.assign(elem, { completed: true })),
+          ? prevState.todos.map((elem, i) => Object.assign(elem, { completed: !prevState.todos[i].completed }))
+          : prevState.todos.map(elem => Object.assign(elem, { completed: true })),
     }));
   };
 
   render() {
-    const { todos, originTodos, activeTab } = this.state;
+    const { todos, originTodos, isTabActive } = this.state;
 
     return (
       <section className="todoapp">
@@ -120,10 +124,9 @@ class App extends React.Component {
         {originTodos.length > 0 && (
           <Footer
             todos={todos}
-            filteredTodos={this.filteredTodos}
-            handleReset={this.handleReset}
+            filteredTodos={this.changeFilter}
             handleClearCompleted={this.handleClearCompleted}
-            activeTab={activeTab}
+            isTabActive={isTabActive}
           />
         )}
       </section>

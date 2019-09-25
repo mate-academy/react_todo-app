@@ -4,26 +4,23 @@ import './Footer.css';
 export const Footer = ({
   todos,
   filteredTodos,
-  handleReset,
   handleClearCompleted,
-  activeTab,
+  isTabActive,
 }) => (
   <footer className="footer">
     <span className="todo-count">
-      {todos.filter(elem => !elem.completed).length}
-      {' '}
-items left
+      {todos.filter(elem => !elem.completed).length} items left
     </span>
 
     <ul className="filters">
-      <li onClick={handleReset}>
-        <a href="#/" className={!activeTab ? 'selected' : ''}>
+      <li onClick={filteredTodos}>
+        <a href="#/" className={!isTabActive ? 'selected' : ''}>
           All
         </a>
       </li>
 
       <li onClick={filteredTodos}>
-        <a href="#/active" className={activeTab === 'active' ? 'selected' : ''}>
+        <a href="#/active" className={isTabActive === 'active' ? 'selected' : ''}>
           Active
         </a>
       </li>
@@ -31,7 +28,7 @@ items left
       <li onClick={filteredTodos}>
         <a
           href="#/completed"
-          className={activeTab === 'completed' ? 'selected' : ''}
+          className={isTabActive === 'completed' ? 'selected' : ''}
         >
           Completed
         </a>
