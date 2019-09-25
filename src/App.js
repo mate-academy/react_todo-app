@@ -105,39 +105,35 @@ class App extends React.Component {
         .map(todo => ({
           ...todo,
           completed: prevState.todoListFiltered
-            .some(todo => todo.completed === false),
+            .some(todo => !todo.completed),
         })),
       todoList: prevState.todoList
         .map(todo => ({
           ...todo,
           completed: prevState.todoList
-            .some(todo => todo.completed === false),
+            .some(todo => !todo.completed),
         })),
     }));
   };
 
   toggleFilters = (active) => {
-    if (active === 'All') {
-      this.setState(prevState => ({
+    switch (active) {
+      case 'Active': this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .filter(todo => !todo.completed),
+        activeFilter: 'Active',
+      }));
+        break;
+      case 'Completed': this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .filter(todo => todo.completed),
+        activeFilter: 'Completed',
+      }));
+        break;
+      default: this.setState(prevState => ({
         todoListFiltered: prevState.todoList
           .map(todo => ({ ...todo })),
         activeFilter: 'All',
-      }));
-    }
-
-    if (active === 'Active') {
-      this.setState(prevState => ({
-        todoListFiltered: prevState.todoList
-          .filter(todo => todo.completed === false),
-        activeFilter: 'Active',
-      }));
-    }
-
-    if (active === 'Completed') {
-      this.setState(prevState => ({
-        todoListFiltered: prevState.todoList
-          .filter(todo => todo.completed === true),
-        activeFilter: 'Completed',
       }));
     }
   };
@@ -178,7 +174,7 @@ class App extends React.Component {
       activeFilter,
       todoList,
     } = this.state;
-    const countedLeft = todoList.filter(item => !item.completed).length;
+    const activeTodoCounter = todoList.filter(item => !item.completed).length;
 
     return (
       <section className="todoapp">
@@ -219,10 +215,10 @@ class App extends React.Component {
           !!todoList.length && (
             <footer className="footer">
               <span className="todo-count">
-                {countedLeft}
+                {activeTodoCounter }
                 {' '}
                 item
-                {countedLeft !== 1 && 's'}
+                {activeTodoCounter !== 1 && 's'}
                 {' '}
                 left
               </span>

@@ -11,7 +11,7 @@ const TodoFilter = ({
       <a
         href="#/"
         className={activeFilter === 'All' ? 'selected' : ''}
-        onClick={() => toggleFilters('All')}
+        onClick={() => toggleFilters()}
       >
         All
       </a>

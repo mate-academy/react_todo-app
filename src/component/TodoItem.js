@@ -9,7 +9,7 @@ const TodoItem = ({
   toggleCompleteStatus,
   toggleRemoveTodo,
 }) => (
-  <li key={_.uniqueId('todo_')} className="">
+  <li key={_.uniqueId('todo_')}>
     <div className="view">
       <input
         key={_.uniqueId('')}
