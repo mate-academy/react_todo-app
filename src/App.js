@@ -76,11 +76,11 @@ class App extends React.Component {
     }));
 
     if (this.state.isTabActive === 'active') {
-      this.filteredTodos('#/active');
+      this.filteredTodos();
     }
 
     if (this.state.isTabActive === 'completed') {
-      this.filteredTodos('#/completed');
+      this.filteredTodos();
     }
   };
 
