@@ -152,6 +152,31 @@ class App extends React.Component {
     }));
   };
 
+  addEditText = (editText, id) => {
+    this.setState(({ todoListFiltered, todoList }) => ({
+      todoList: todoList.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title: editText,
+          };
+        }
+
+        return todo;
+      }),
+      todoListFiltered: todoListFiltered.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title: editText,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
   handleFormSubmit() {
     const {
       todoList,
@@ -205,6 +230,7 @@ class App extends React.Component {
           )}
 
           <TodoList
+            addEditText={this.addEditText}
             todoListFiltered={todoListFiltered}
             toggleCompleteStatus={this.toggleCompleteStatus}
             toggleRemoveTodo={this.toggleRemoveTodo}

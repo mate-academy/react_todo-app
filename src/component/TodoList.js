@@ -10,6 +10,7 @@ const TodoList = ({
   todoListFiltered,
   toggleCompleteStatus,
   toggleRemoveTodo,
+  addEditText,
 }) => (
   <ul className="todo-list">
     {
@@ -18,6 +19,7 @@ const TodoList = ({
           todo={todo}
           toggleCompleteStatus={toggleCompleteStatus}
           toggleRemoveTodo={toggleRemoveTodo}
+          addEditText={addEditText}
           key={_.uniqueId('todo-item_')}
         />
       ))
@@ -35,6 +37,7 @@ TodoList.propTypes = {
   ).isRequired,
   toggleCompleteStatus: PropTypes.func.isRequired,
   toggleRemoveTodo: PropTypes.func.isRequired,
+  addEditText: PropTypes.func.isRequired,
 };
 
 export default TodoList;
