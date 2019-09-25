@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const classNames = require('classnames');
+
 class TodoItem extends React.Component {
   constructor(props) {
     super(props);
@@ -8,6 +10,7 @@ class TodoItem extends React.Component {
       isEdit: false,
       title: this.props.todo.title,
     };
+
     this.textInput = React.createRef();
   }
 
@@ -25,7 +28,7 @@ class TodoItem extends React.Component {
     const { onEdit, onDelete, todo } = this.props;
 
     if (title) {
-      this.setState({ isEdit: false, title: event.target.value });
+      this.setState({ isEdit: false });
       onEdit(todo.id, title);
     } else {
       onDelete(todo.id);
@@ -39,10 +42,10 @@ class TodoItem extends React.Component {
   render() {
     const { todo, onDelete, onComplete } = this.props;
     const { title, isEdit } = this.state;
-    let todoClassList = '';
-
-    todoClassList += todo.completed ? 'completed ' : '';
-    todoClassList += isEdit ? 'editing ' : '';
+    const todoClassList = classNames({
+      completed: todo.completed,
+      editing: isEdit,
+    });
 
     return (
       <li className={todoClassList}>
@@ -66,15 +69,16 @@ class TodoItem extends React.Component {
             onClick={() => onDelete(todo.id)}
           />
         </div>
-        <input
-          type="text"
-          value={title}
-          ref={this.textInput}
-          className="edit"
-          onChange={this.editTodo}
-          onBlur={this.updateTodo}
-          onKeyPress={e => (e.key === 'Enter' ? this.updateTodo(e) : 0)}
-        />
+        <form action="" onSubmit={e => this.updateTodo(e)}>
+          <input
+            type="text"
+            value={title}
+            ref={this.textInput}
+            className="edit"
+            onChange={this.editTodo}
+            onBlur={this.updateTodo}
+          />
+        </form>
       </li>
     );
   }

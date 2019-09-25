@@ -9,7 +9,6 @@ import TodoFilter from './TodoFilter/TodoFilter';
 class TodoApp extends React.Component {
   state = {
     todoList: [],
-    filtered: '',
     todoID: Math.ceil(Math.random() * 1e8),
   };
 
@@ -34,24 +33,24 @@ class TodoApp extends React.Component {
 
   handleDeleteTodo = (id) => {
     this.setState(prevState => ({
-      todoList: prevState.todoList.filter(todo => todo.id !== +id),
+      todoList: [...prevState.todoList].filter(todo => todo.id !== +id),
     }));
   };
 
   handleEditTodo = (id, newTitle) => {
     this.setState(prevState => ({
-      todoList: prevState.todoList.map(todo => ({
+      todoList: [...prevState.todoList].map(todo => ({
         ...todo,
-        title: todo.id === +id ? newTitle : todo.title,
+        title: todo.id === id ? newTitle : todo.title,
       })),
     }));
   };
 
   handleCompleteTodo = (id) => {
     this.setState(prevState => ({
-      todoList: prevState.todoList.map(todo => ({
+      todoList: [...prevState.todoList].map(todo => ({
         ...todo,
-        completed: todo.id === +id ? !todo.completed : todo.completed,
+        completed: todo.id === id ? !todo.completed : todo.completed,
       })),
     }));
   };
@@ -62,7 +61,7 @@ class TodoApp extends React.Component {
 
   toggleAllTodo = ({ target }) => {
     this.setState(prevState => ({
-      todoList: prevState.todoList.map(todo => ({
+      todoList: [...prevState.todoList].map(todo => ({
         ...todo, completed: !!target.checked,
       })),
     }));
@@ -70,7 +69,7 @@ class TodoApp extends React.Component {
 
   deleteAllCompleted = () => {
     this.setState(prevState => ({
-      todoList: prevState.todoList.filter(todo => !todo.completed),
+      todoList: [...prevState.todoList].filter(todo => !todo.completed),
     }));
   };
 
