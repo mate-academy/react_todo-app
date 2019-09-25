@@ -9,15 +9,15 @@ const Footer = () => {
 
       <ul className="filters">
         <li>
-          <a href="#/" className="selected">All</a>
+          <a href="#" type="button" className="selected">All</a>
         </li>
 
         <li>
-          <a href="#/active">Active</a>
+          <a href="#" type="button">Active</a>
         </li>
 
         <li>
-          <a href="#/completed">Completed</a>
+          <a href="#">Completed</a>
         </li>
       </ul>
 

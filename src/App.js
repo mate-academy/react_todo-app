@@ -15,18 +15,55 @@ class App extends React.Component {
         todosList: [...prevState.todosList, {
           id: prevState.todosList.length + 1,
           value,
-          checked: false,
+          completed: false,
         }],
       }));
     }
   };
 
   handleCheck = (id) => {
-    todosListtodosList.find(todo => todo.id === id);
+    this.setState(prevState => ({
+      todosList: prevState.todosList
+        .map((todo) => {
+          if (todo.id === id) {
+            return {
+              id: todo.id,
+              value: todo.value,
+              completed: !todo.completed,
+            };
+          }
+
+          return todo;
+        }),
+    }));
   };
 
-  render() {
+  handleDestroy = (id) => {
+    this.setState(prevState => ({
+      todosList: prevState.todosList
+        .filter(todo => todo.id !== id),
+    }));
+  };
+
+  handleAllChecked = (checked) => {
+    this.setState(({ todosList }) => ({
+      todosList: todosList.map(todo => ({
+        ...todo, completed: checked,
+      })),
+    }));
+  };
+
+  filterChecked = () => {
     const { todosList } = this.state;
+
+    this.setState({
+      filteredList: todosList
+        .filter(todo => todo.completed === true),
+    });
+  }
+
+  render() {
+    const { todosList, filteredList } = this.state;
 
     return (
       <section className="todoapp">
@@ -37,12 +74,24 @@ class App extends React.Component {
         </header>
 
         <section className="main" style={{ display: 'block' }}>
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={e => this.handleAllChecked(e.target.checked)}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
-          {todosList.map(todo => <TodoList todo={todo} isChecked={this.handleCheck} />)}
+          {todosList.map(todo =>
+            <TodoList
+              key={todo.id}
+              todo={todo}
+              checked={todo.completed}
+              isChecked={this.handleCheck}
+              destroy={this.handleDestroy}
+            />)}
         </section>
 
-        <Footer />
+        <Footer filterChecked={this.filterChecked} />
       </section>
     );
   }
