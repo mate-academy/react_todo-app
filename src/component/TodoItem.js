@@ -13,7 +13,7 @@ class TodoItem extends React.Component {
 
   handleEditedText = ({ target: { value } }) => {
     this.setState({
-      editedText: value,
+      editedText: value.replace(/^\s+/, ''),
     });
   }
 
@@ -24,7 +24,9 @@ class TodoItem extends React.Component {
     }));
   }
 
-  addNewText = () => {
+  addNewText = (event) => {
+    event.preventDefault();
+
     const { addEditText, todo: { id } } = this.props;
     const { editedText } = this.state;
 

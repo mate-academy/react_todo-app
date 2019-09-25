@@ -153,28 +153,30 @@ class App extends React.Component {
   };
 
   addEditText = (editText, id) => {
-    this.setState(({ todoListFiltered, todoList }) => ({
-      todoList: todoList.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            title: editText,
-          };
-        }
+    if (editText.replace(/\s/g, '') !== '') {
+      this.setState(({ todoListFiltered, todoList }) => ({
+        todoList: todoList.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              title: editText,
+            };
+          }
 
-        return todo;
-      }),
-      todoListFiltered: todoListFiltered.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            title: editText,
-          };
-        }
+          return todo;
+        }),
+        todoListFiltered: todoListFiltered.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              title: editText,
+            };
+          }
 
-        return todo;
-      }),
-    }));
+          return todo;
+        }),
+      }));
+    }
   }
 
   handleFormSubmit() {
