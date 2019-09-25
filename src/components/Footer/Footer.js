@@ -1,23 +1,42 @@
 import React from 'react';
 
-const Footer = () => {
+const Footer = ({ filteredCompleted, filteredActive, filteredAll, activeFilter, todosList }) => {
   return (
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
-        3 items left
+        {todosList.filter(todo => !todo.completed).length}
+        :items left
       </span>
 
       <ul className="filters">
         <li>
-          <a href="#" type="button" className="selected">All</a>
+          <a
+            href="#/all"
+            onClick={filteredAll}
+            className={activeFilter === 'all' ? 'selected' : ''}
+          >
+            All
+          </a>
         </li>
 
         <li>
-          <a href="#" type="button">Active</a>
+          <a
+            href="#/active"
+            onClick={filteredActive}
+            className={activeFilter === 'active' ? 'selected' : ''}
+          >
+            Active
+          </a>
         </li>
 
         <li>
-          <a href="#">Completed</a>
+          <a
+            href="#/completed"
+            onClick={filteredCompleted}
+            className={activeFilter === 'completed' ? 'selected' : ''}
+          >
+            Completed
+          </a>
         </li>
       </ul>
 
