@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import uuid from 'uuidv4';
 import TodoList from './components/TodoList/TodoList';
 import ItemAddForm from './components/ItemAddForm/ItemAddForm';
 import ItemStatusFilter from './components/ItemStatusFilter/ItemStatusFilter';
@@ -8,20 +9,28 @@ import RemoveAllDone from './components/RemoveAllDone/RemoveAllDone';
 
 class App extends Component {
   state = {
-    todoData: [],
+    todoData: JSON.parse(localStorage.getItem('todoData')) || [],
     filter: 'all',
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todoData.length !== this.state.todoData.length) {
+      const json = JSON.stringify(this.state.todoData);
+
+      localStorage.setItem('todoData', json);
+    }
+  }
+
+  getTodosfromLocalStorage = (objectFromLS) => {
+    this.setState(({ todoData }) => ({
+      todoData: [...todoData, ...objectFromLS],
+    }));
+  };
+
   deleteItem = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex(el => el.id === id);
-
-      const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
-
-      return {
-        todoData: newArray,
-      };
-    });
+    this.setState(({ todoData }) => ({
+      todoData: todoData.filter(todo => todo.id !== id),
+    }));
   };
 
   removeAllDone = (doneTodos) => {
@@ -58,16 +67,25 @@ class App extends Component {
   };
 
   onToggleDone = (id) => {
+    localStorage.setItem(
+      'todoData', JSON.stringify(
+        this.toggleProperty(this.state.todoData, id, 'completed')
+      )
+    );
+
     this.setState(({ todoData }) => ({
       todoData: this.toggleProperty(todoData, id, 'completed'),
     }));
   };
 
-  onToggleDoneall = (todos) => {
+  onToggleDoneAll = (todos) => {
     todos.map(todo => this.onToggleDone(todo.id));
+    if (todos.length === 0) {
+      this.state.todoData.map(todo => this.onToggleDone(todo.id));
+    }
   };
 
-  filter(items, filter) {
+  filter = (items, filter) => {
     switch (filter) {
       case 'all':
         return items;
@@ -78,7 +96,7 @@ class App extends Component {
       default:
         return items;
     }
-  }
+  };
 
   onFilterChange = (filter) => {
     this.setState({ filter });
@@ -88,7 +106,8 @@ class App extends Component {
     return {
       label,
       completed: false,
-      id: this.state.todoData + 1,
+      isEditing: false,
+      id: this.id = uuid(),
     };
   }
 
@@ -97,10 +116,10 @@ class App extends Component {
 
     const visibleItems = this.filter(todoData, filter);
     const doneTodos = todoData.filter(el => el.completed);
-    console.log('doneTodos:', doneTodos);
+
     const doneCount = doneTodos.length;
     const todos = todoData.filter(el => !el.completed);
-    console.log('todos', todos);
+
     const todoCount = todos.length;
 
     return (
@@ -113,12 +132,13 @@ class App extends Component {
         <section className="main" style={{ display: 'block' }}>
           <SelectAllDone
             todos={todos}
-            onToggleDoneall={this.onToggleDoneall}
+            onToggleDoneAll={this.onToggleDoneAll}
           />
           <TodoList
             todos={visibleItems}
             onDeleted={this.deleteItem}
             onToggleDone={this.onToggleDone}
+            onSubmitEditedChange={this.onSubmitEditedChange}
           />
         </section>
 

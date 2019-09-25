@@ -1,18 +1,15 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 
-const SelectAllDone = ({ todos, onToggleDoneall }) => (
+const SelectAllDone = ({ todos, onToggleDoneAll }) => (
   <>
     <input type="checkbox" id="toggle-all" className="toggle-all" />
     <label
       htmlFor="toggle-all"
-      onClick={() => onToggleDoneall(todos)}
+      onClick={() => onToggleDoneAll(todos)}
     >
       Mark all as complete
     </label>
   </>
 );
-
-// SelectAllDone.propTypes = {};
 
 export default SelectAllDone;

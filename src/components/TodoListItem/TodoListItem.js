@@ -1,42 +1,78 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
+import { TodoListItemProps } from '../../constants/proptypes';
 
-class TodoListenItem extends Component {
+class TodoListItem extends Component {
   constructor() {
     super();
 
     this.state = {
-      completed: false,
+      isEditing: false,
     };
   }
 
+  changeIsEditing = () => {
+    this.setState(prevState => ({
+      isEditing: !prevState.isEditing,
+    }));
+  }
+
   render() {
+    const { isEditing } = this.state;
+
     const {
       id,
       label,
       onDeleted,
       onToggleDone,
-      completed
+      onSubmitEditedChange,
+      completed,
     } = this.props;
 
-    console.log('props', this.props);
-    console.log('props', this.state);
-
-    const classNames = completed ? 'completed' : '';
+    const classes = classNames({
+      completed,
+      editing: isEditing,
+    });
 
     return (
-      <li className={classNames} key={id} onClick={onToggleDone}>
+      <li className={classes} key={id}>
         <div className="view">
-          <input type="checkbox" className="toggle" id={`todo-${id}`} />
-          <label htmlFor={`todo-${id}`}>{label}</label>
+          <input
+            type="checkbox"
+            className="toggle"
+            checked={completed}
+            id={`todo-${id}`}
+            onChange={onToggleDone}
+          />
+          {!isEditing && (
+            <label
+              htmlFor={`todo-${id}`}
+              onDoubleClick={this.changeIsEditing}
+            >
+              {label}
+            </label>
+          )}
           <button
             type="button"
             className="destroy"
             onClick={onDeleted}
           />
         </div>
+        {isEditing && (
+          <form onSubmitEditedChange={onSubmitEditedChange}>
+            <input
+              className="edit"
+              type="text"
+              defaultValue={label}
+            />
+          </form>
+
+        )}
       </li>
     );
   }
 }
 
-export default TodoListenItem;
+TodoListItem.propTypes = TodoListItemProps;
+
+export default TodoListItem;

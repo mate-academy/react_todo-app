@@ -7,7 +7,7 @@ class ItemAddForm extends Component {
 
   onLabelChange = (e) => {
     this.setState({
-      label: e.target.value,
+      label: e.target.value.replace(/^\s+/, ''),
     });
   };
 

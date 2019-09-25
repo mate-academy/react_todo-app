@@ -1,11 +1,12 @@
 import React from 'react';
 import TodoListItem from '../TodoListItem/TodoListItem';
-// import PropTypes from 'prop-types';
+import { TodoListProps } from '../../constants/proptypes';
 
 const TodoList = ({
   todos,
   onDeleted,
   onToggleDone,
+  onSubmitEditedChange,
 }) => {
   const elements = todos.map((item) => {
     const { id, ...itemProps } = item;
@@ -17,6 +18,7 @@ const TodoList = ({
         {...itemProps}
         onDeleted={() => onDeleted(id)}
         onToggleDone={() => onToggleDone(id)}
+        onSubmitEditedChange={() => onSubmitEditedChange(id, item.label)}
       />
     );
   });
@@ -28,6 +30,6 @@ const TodoList = ({
   );
 };
 
-// TodoList.propTypes = {};
+TodoList.propTypes = TodoListProps;
 
 export default TodoList;
