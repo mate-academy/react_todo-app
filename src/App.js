@@ -1,75 +1,113 @@
-import React from 'react';
+import React, { Component } from 'react';
+import AddTodo from './components/AddTodo/AddTodo';
+import TodoList from './components/TodoList/TodoList';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+class App extends Component {
+  state = {
+    listTodos: localStorage.getItem('todos')
+      ? [...JSON.parse(localStorage.getItem('todos'))]
+      : [],
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+  addTodo = (title) => {
+    this.setState((prevState) => {
+      const listTodos = [...prevState.listTodos,
+        {
+          id: prevState.listTodos
+            .map(item => item.id)
+            .sort((a, b) => a - b)[prevState.listTodos.length - 1] + 1 || 0,
+          title,
+          completed: false,
+        },
+      ];
+
+      localStorage.setItem('todos', JSON.stringify(listTodos));
+
+      return ({
+        listTodos,
+      });
+    });
+  }
+
+  removeTodos = (ids) => {
+    this.setState((prevState) => {
+      const listTodos = [...prevState.listTodos]
+        .filter(item => !ids.includes(item.id));
+
+      localStorage.setItem('todos', JSON.stringify(listTodos));
+
+      return ({
+        listTodos,
+      });
+    });
+  }
+
+  changeCompleted = (id) => {
+    this.setState((prevState) => {
+      const listTodos = [...prevState.listTodos]
+        .map(item => (item.id === id
+          ? { ...item, completed: !item.completed }
+          : { ...item }));
+
+      localStorage.setItem('todos', JSON.stringify(listTodos));
+
+      return ({
+        listTodos,
+      });
+    });
+  }
+
+  setCompletedAll = (stateCompleted) => {
+    this.setState((prevState) => {
+      const listTodos = [...prevState.listTodos]
+        .map(item => ({ ...item, completed: stateCompleted }));
+
+      localStorage.setItem('todos', JSON.stringify(listTodos));
+
+      return ({
+        listTodos,
+      });
+    });
+  }
+
+  editTask = (id, newTitle) => {
+    if (!newTitle) {
+      this.removeTodos([id]);
+    } else {
+      this.setState((prevState) => {
+        const listTodos = [...prevState.listTodos]
+          .map(item => (item.id === id
+            ? { ...item, title: newTitle }
+            : { ...item }
+          ));
+
+        localStorage.setItem('todos', JSON.stringify(listTodos));
+
+        return ({
+          listTodos,
+        });
+      });
+    }
+  }
+
+  render() {
+    const { listTodos } = this.state;
+
+    return (
+      <section className="todoapp">
+        <AddTodo addTodo={this.addTodo} />
+
+        <TodoList
+          items={listTodos}
+          changeCompleted={this.changeCompleted}
+          removeTodos={this.removeTodos}
+          setCompletedAll={this.setCompletedAll}
+          editTask={this.editTask}
+          createFilteredTodos={this.createFilteredTodos}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
