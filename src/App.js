@@ -13,6 +13,7 @@ class App extends React.Component {
 
   addTodo = (todo) => {
     this.setState(prevState => ({
+      ...prevState,
       todos: [...prevState.todos, todo],
       todosOrigin: [...prevState.todosOrigin, todo],
     }));
@@ -39,7 +40,7 @@ class App extends React.Component {
     }));
   };
 
-  checkBoxClick = (todo, index) => {
+  checkBoxClick = (index) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((elem, i) => (i === index
         ? Object.assign(elem, { completed: !prevState.todos[i].completed })
@@ -81,6 +82,8 @@ class App extends React.Component {
   };
 
   render() {
+    const { todos, todosOrigin, indexTab } = this.state;
+
     return (
       <section className="todoapp">
         <header className="header">
@@ -88,7 +91,7 @@ class App extends React.Component {
           <NewTodo addTodo={this.addTodo} />
         </header>
 
-        <section className="main" style={{ display: 'block' }}>
+        <section className="main">
           <input
             type="checkbox"
             id="toggle-all"
@@ -97,7 +100,7 @@ class App extends React.Component {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
-            todos={this.state.todos}
+            todos={todos}
             checkBoxClick={this.checkBoxClick}
             destroyClick={this.destroyClick}
           />
@@ -105,12 +108,13 @@ class App extends React.Component {
 
         {(this.state.todosOrigin.length > 0) && (
           <Footer
-            todos={this.state.todos}
+            todos={todos}
             activeClick={this.activeClick}
             allTodosClick={this.allTodosClick}
             completedClick={this.completedClick}
             clearCompleted={this.clearCompleted}
-            indexTab={this.state.indexTab}
+            indexTab={indexTab}
+            originTodos={todosOrigin}
           />
         )}
       </section>

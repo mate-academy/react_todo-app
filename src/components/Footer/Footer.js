@@ -1,26 +1,47 @@
 import React from 'react';
 
-const Footer = ({allTodosClick, activeClick, completedClick, todos, clearCompleted, indexTab}) => (
-  <footer className="footer" style={{ display: 'block' }}>
+const Footer = ({
+  allTodosClick,
+  activeClick,
+  completedClick,
+  todos,
+  clearCompleted,
+  indexTab,
+  originTodos,
+}) => (
+  <footer className="footer">
     <span className="todo-count">
-      {todos.filter(todo => !todo.completed).length}
+      {originTodos.filter(todo => !todo.completed).length}
       {' '}
-              items left
+      items left
     </span>
 
     <ul className="filters">
       <li onClick={allTodosClick}>
-        <a href="#/" className={!indexTab ? 'selected' : ''}>
-            All
+        <a
+          href="#/"
+          className={!indexTab ? 'selected' : ''}
+        >
+          All
         </a>
       </li>
 
       <li onClick={activeClick}>
-        <a href="#/active" className={indexTab === 'active' ? 'selected' : ''}>Active</a>
+        <a
+          href="#/active"
+          className={indexTab === 'active' ? 'selected' : ''}
+        >
+          Active
+        </a>
       </li>
 
       <li onClick={completedClick}>
-        <a href="#/completed" className={indexTab === 'completed' ? 'selected' : ''}>Completed</a>
+        <a
+          href="#/completed"
+          className={indexTab === 'completed' ? 'selected' : ''}
+        >
+          Completed
+        </a>
       </li>
     </ul>
 
@@ -30,7 +51,7 @@ const Footer = ({allTodosClick, activeClick, completedClick, todos, clearComplet
         className="clear-completed"
         onClick={clearCompleted}
       >
-          Clear completed
+        Clear completed
       </button>
     )}
   </footer>
