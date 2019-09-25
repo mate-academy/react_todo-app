@@ -8,7 +8,9 @@ const FilterItem = ({
   anchor,
   filter
 }) => {
-  const linkOfFilterClass = createClass({'selected': dataFilter === filter});
+  const linkOfFilterClass = createClass(
+    { 'selected': dataFilter === filter }
+  );
 
   return (
     <li>

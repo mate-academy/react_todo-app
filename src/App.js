@@ -2,15 +2,20 @@ import React from 'react';
 
 import NewTodo from './components/NewTodo/NewTodo';
 import TodoItem from './components/TodoItem/TodoItem';
-import FilterItem from './components/FilterItem/FilterItem';
+import Footer from './components/Footer/Footer';
 
 class App extends React.Component {
   state = {
-    todos: [],
-    filteredTodos: [],
-    idCount: 0,
+    todos: JSON.parse(localStorage.getItem('todos')) || [],
+    filteredTodos: JSON.parse(localStorage.getItem('todos')) || [],
+    idCount: JSON.parse(localStorage.getItem('idCount')) || 0,
     filter: 'all',
     isAllTodosCompleted: false,
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    localStorage.setItem('idCount', JSON.stringify(this.state.idCount));
   }
 
   changeFilter = (event) => {
@@ -49,7 +54,6 @@ class App extends React.Component {
           break;
         default:
           newFilteredTodos = todos;
-          break;
       }
 
       return ({
@@ -68,6 +72,7 @@ class App extends React.Component {
           completed: false,
         },
       ],
+
       idCount: ++prevState.idCount,
     }));
 
@@ -84,6 +89,11 @@ class App extends React.Component {
   }
 
   editTodoInData = (id, value) => {
+    if (!value) {
+      this.deleteTodoFromData(id);
+      return;
+    }
+
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => {
         if (todo.id === Number(id)) {
@@ -99,24 +109,20 @@ class App extends React.Component {
     this.filterTodos();
   }
 
-  deleteTodoFromData = ({
-    target: {
-      dataset: {
-        todoId,
-      }
-    }
-  }) => {
+  deleteTodoFromData = (todoId) => {
     this.setState(prevState => {
       const indexTodoInArray = prevState.todos.findIndex(todo => (
         todo.id === Number(todoId)
       ));
-
-      prevState.todos.splice(indexTodoInArray, 1);
+      let tempTodos = [...prevState.todos];
+      
+      tempTodos.splice(indexTodoInArray, 1);
 
       return ({
-        todos: prevState.todos,
+        todos: tempTodos,
       });
     });
+
     this.checkIsAllTodosCompleted();
     this.filterTodos();
   }
@@ -130,6 +136,7 @@ class App extends React.Component {
 
         return [...acc, todo,];
       }, []),
+
       isAllTodosCompleted: false,
     }));
     this.filterTodos();
@@ -144,7 +151,8 @@ class App extends React.Component {
   }) => {
     this.setState(prevState => {
       return ({
-        todos: prevState.todos.reduce((acc, todo) => {
+        ...prevState,
+        todos: [...prevState.todos].reduce((acc, todo) => {
           if (todo.id === Number(todoId)) {
             todo.completed = !(todo.completed);
           }
@@ -162,12 +170,13 @@ class App extends React.Component {
 
   changeTodosCompleteStatus = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.map(todo => ({
+      todos: [...prevState.todos].map(todo => ({
         ...todo,
         completed: !(prevState.isAllTodosCompleted)
       })),
       isAllTodosCompleted: !(prevState.isAllTodosCompleted),
     }));
+
     this.filterTodos();
   }
 
@@ -180,7 +189,7 @@ class App extends React.Component {
       .length;
   }
 
-  findSomeCompleteTodo = () => {
+  findSomeCompletedTodo = () => {
     const { todos } = this.state;
 
     return todos.some(todo => (
@@ -197,7 +206,7 @@ class App extends React.Component {
     } = this.state;
 
     const activeTodosLeft = this.countActiveTodos();
-    const isSomeTodoComplete = this.findSomeCompleteTodo();
+    const isSomeTodoCompleted = this.findSomeCompletedTodo();
 
     return (
       <section className="todoapp">
@@ -231,50 +240,14 @@ class App extends React.Component {
         </section>
 
         {!!(todos.length) &&
-          <footer className="footer">
-            {!!activeTodosLeft &&
-              <span className="todo-count">
-                {`${activeTodosLeft} item left`}
-              </span>
-            }
-
-            <ul className="filters">
-              <FilterItem
-                href="#/"
-                dataFilter="all"
-                onClick={this.changeFilter}
-                anchor="All"
-                filter={filter}
-              />
-
-              <FilterItem
-                href="#/active"
-                dataFilter="active"
-                onClick={this.changeFilter}
-                anchor="Active"
-                filter={filter}
-              />
-
-              <FilterItem
-                href="#/completed"
-                dataFilter="completed"
-                onClick={this.changeFilter}
-                anchor="Completed"
-                filter={filter}
-              />
-            </ul>
-            {isSomeTodoComplete &&
-              <button
-                type="button"
-                className="clear-completed"
-                onClick={this.deleteAllCompletedTodoFromData}
-              >
-                Clear completed
-              </button>
-            }
-          </footer>
+          <Footer
+            activeTodosLeft={activeTodosLeft}
+            changeFilter={this.changeFilter}
+            filter={filter}
+            isSomeTodoCompleted={isSomeTodoCompleted}
+            deleteAllCompletedTodoFromData={this.deleteAllCompletedTodoFromData}
+          />
         }
-
       </section>
     );
   }

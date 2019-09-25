@@ -100,7 +100,7 @@ class TodoItem extends React.Component {
                 type="button"
                 className="destroy"
                 data-todo-id={`${id}`}
-                onClick={deleteTodoFromData}
+                onClick={() => deleteTodoFromData(id)}
               />
             </>
           }
