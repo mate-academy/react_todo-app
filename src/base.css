@@ -139,3 +139,7 @@ hr {
     left: 8px;
   }
 }
+
+.clear-completed {
+  display: 'block';
+}
