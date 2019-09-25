@@ -90,17 +90,6 @@ class App extends Component {
     }
   }
 
-  createFilteredTodos = (list, switcher) => {
-    switch (switcher) {
-      case 'completed':
-        return [...list].filter(item => item.completed);
-      case 'active':
-        return [...list].filter(item => !item.completed);
-      default:
-        return [...list];
-    }
-  };
-
   render() {
     const { listTodos } = this.state;
 
