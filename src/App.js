@@ -75,7 +75,10 @@ class App extends Component {
           <input
             disabled={!todoList.length}
             onChange={this.setAllCompleted}
-            checked={isAllChecked}
+            checked={!todoList.length
+              ? false
+              : isAllChecked
+            }
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
