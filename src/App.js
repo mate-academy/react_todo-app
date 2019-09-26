@@ -14,6 +14,7 @@ class App extends Component {
   addNewTodo = (newTodo) => {
     this.setState(prevState => ({
       todoList: [newTodo, ...prevState.todoList],
+      isAllChecked: false,
     }));
   };
 
@@ -72,6 +73,7 @@ class App extends Component {
 
         <section className="main" style={{ display: 'block' }}>
           <input
+            disabled={!todoList.length}
             onChange={this.setAllCompleted}
             checked={isAllChecked}
             type="checkbox"

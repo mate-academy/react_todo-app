@@ -14,17 +14,21 @@ class NewTodo extends Component {
 
   handleSubmitTitle = (event) => {
     event.preventDefault();
-    const {
-      addNewTodo,
-      todoListLength,
-    } = this.props;
+    const { title } = this.state;
 
-    addNewTodo({
-      id: todoListLength + 1,
-      title: this.state.title,
-      completed: false,
-    });
-    this.setState({ title: '' });
+    if (title) {
+      const {
+        addNewTodo,
+        todoListLength,
+      } = this.props;
+
+      addNewTodo({
+        id: todoListLength + 1,
+        title: this.state.title,
+        completed: false,
+      });
+      this.setState({ title: '' });
+    }
   }
 
   render() {
