@@ -9,7 +9,12 @@ class App extends Component {
   state = {
     todoList: [],
     isAllChecked: false,
+    activeFilterName: 'all',
   };
+
+  changeActiveFilter = (filterName) => {
+    this.setState({ activeFilterName: filterName });
+  }
 
   addNewTodo = (newTodo) => {
     this.setState(prevState => ({
@@ -59,7 +64,11 @@ class App extends Component {
   };
 
   render() {
-    const { todoList, isAllChecked } = this.state;
+    const {
+      todoList,
+      isAllChecked,
+      activeFilterName,
+    } = this.state;
 
     return (
       <section className="todoapp">
@@ -105,7 +114,10 @@ class App extends Component {
           <span className="todo-count">
             {`${todoList.length} items left`}
           </span>
-          <TodoFilter />
+          <TodoFilter
+            activeFilterName={activeFilterName}
+            changeActiveFilter={this.changeActiveFilter}
+          />
           <button
             type="button"
             className="clear-completed"
