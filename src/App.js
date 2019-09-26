@@ -7,6 +7,7 @@ import NewTodo from './Components/NewTodo/NewTodo';
 class App extends Component {
   state = {
     todoList: [],
+    isAllChecked: false,
   };
 
   addNewTodo = (newTodo) => {
@@ -38,11 +39,25 @@ class App extends Component {
             })
             : ({ ...todoItem })
         )),
+      isAllChecked: prevState.isAllChecked
+        ? !prevState.isAllChecked
+        : prevState.isAllChecked,
+    }));
+  };
+
+  setAllCompleted = () => {
+    this.setState(prevState => ({
+      todoList: prevState.todoList
+        .map(todoItem => ({
+          ...todoItem,
+          completed: !prevState.isAllChecked,
+        })),
+      isAllChecked: !prevState.isAllChecked,
     }));
   };
 
   render() {
-    const { todoList } = this.state;
+    const { todoList, isAllChecked } = this.state;
 
     return (
       <section className="todoapp">
@@ -56,6 +71,8 @@ class App extends Component {
 
         <section className="main" style={{ display: 'block' }}>
           <input
+            onChange={this.setAllCompleted}
+            checked={isAllChecked}
             type="checkbox"
             id="toggle-all"
             className="toggle-all"

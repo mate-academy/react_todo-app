@@ -16,6 +16,7 @@ const TodoListItem = ({
       <input
         type="checkbox"
         className="toggle"
+        checked={taskCompleted}
         id={labelId}
         onChange={() => setCompleted(id)}
       />
