@@ -5,6 +5,7 @@ import React from 'react';
 class App extends React.Component {
   state = {
     tempTitle: '',
+    todoOriginal: [],
     todo: [],
     sortedTodo: [],
     id: 0,
@@ -20,7 +21,7 @@ class App extends React.Component {
     event.preventDefault();
     if (tempTitle.length > 0 && tempTitle[0] !== ' ') {
       this.setState(prevState => ({
-        todo: [...prevState.todo,
+        todoOriginal: [...prevState.todoOriginal,
           {
             title: tempTitle,
             id: prevState.id,
@@ -56,6 +57,13 @@ class App extends React.Component {
     const id = Number(event.target.id);
 
     this.setState(prevState => ({
+      todoOriginal: prevState.todoOriginal.map(item => (item.id === id
+        ? {
+          title: item.title,
+          id: item.id,
+          status: !item.status,
+        }
+        : item)),
       todo: prevState.todo.map(item => (item.id === id
         ? {
           title: item.title,
@@ -83,12 +91,17 @@ class App extends React.Component {
 
   markAll = () => {
     this.setState(prevState => ({
-      sortedTodo: prevState.sortedTodo.map(item => ({
+      todoOriginal: prevState.todoOriginal.map(item => ({
         title: item.title,
         id: item.id,
         status: !item.status,
       })),
-      todo: prevState.todo.map(item => ({
+      sortedTodo: prevState.todoOriginal.map(item => ({
+        title: item.title,
+        id: item.id,
+        status: !item.status,
+      })),
+      todo: prevState.todoOriginal.map(item => ({
         title: item.title,
         id: item.id,
         status: !item.status,
@@ -100,7 +113,6 @@ class App extends React.Component {
     if (this.state.complete === 'selected') { this.completedTodo(); }
 
     if (this.state.all === 'selected') { this.allTodo(); }
-
   }
 
   countComplet = () => {
@@ -113,6 +125,7 @@ class App extends React.Component {
     const id = Number(event.target.id);
 
     this.setState(prevState => ({
+      todoOriginal: prevState.todoOriginal.filter(item => item.id !== id),
       sortedTodo: prevState.sortedTodo.filter(item => item.id !== id),
       todo: prevState.todo.filter(item => item.id !== id),
     }));
@@ -120,7 +133,8 @@ class App extends React.Component {
 
   copyTodoForOperate = () => {
     this.setState(prevState => ({
-      sortedTodo: [...prevState.todo],
+      todo: [...prevState.todoOriginal],
+      sortedTodo: [...prevState.todoOriginal],
     }));
   }
 
@@ -156,12 +170,13 @@ class App extends React.Component {
     this.setState(prevState => ({
       todo: prevState.todo.filter(item => item.status === false),
       sortedTodo: prevState.sortedTodo.filter(item => item.status === false),
+      todoOriginal: prevState.todoOriginal.filter(item => item.status === false),
     }));
     this.countComplet();
   }
 
   render() {
-    console.log(this.state.completeCount);
+    console.log(this.state.todoOriginal);
 
     return (
       <section className="todoapp">
