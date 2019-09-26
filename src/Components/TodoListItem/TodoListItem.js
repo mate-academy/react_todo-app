@@ -9,10 +9,16 @@ const TodoListItem = ({
   labelId,
   id,
   deleteTodo,
+  setCompleted,
 }) => (
   <li className={ClassNames({ completed: taskCompleted })}>
     <div className="view">
-      <input type="checkbox" className="toggle" id={labelId} />
+      <input
+        type="checkbox"
+        className="toggle"
+        id={labelId}
+        onChange={() => setCompleted(id)}
+      />
       <label htmlFor={labelId}>
         {title}
       </label>
@@ -31,6 +37,7 @@ TodoListItem.propTypes = {
   taskCompleted: PropTypes.bool.isRequired,
   labelId: PropTypes.string.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  setCompleted: PropTypes.func.isRequired,
 };
 
 export default TodoListItem;

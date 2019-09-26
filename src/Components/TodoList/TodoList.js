@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoListItem from '../TodoListItem/TodoListItem';
 
-const TodoList = ({ todos, deleteTodo }) => (
+const TodoList = ({ todos, deleteTodo, setCompleted }) => (
   todos.map(item => (
     <TodoListItem
       id={item.id}
@@ -10,6 +10,7 @@ const TodoList = ({ todos, deleteTodo }) => (
       title={item.title}
       taskCompleted={item.completed}
       deleteTodo={deleteTodo}
+      setCompleted={setCompleted}
     />
   )));
 

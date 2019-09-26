@@ -25,7 +25,21 @@ class App extends Component {
         ...prevState.todoList.slice(index + 1),
       ],
     }));
-  }
+  };
+
+  setCompleted = (id) => {
+    this.setState(prevState => ({
+      todoList: prevState.todoList
+        .map(todoItem => (
+          todoItem.id === id
+            ? ({
+              ...todoItem,
+              completed: !todoItem.completed,
+            })
+            : ({ ...todoItem })
+        )),
+    }));
+  };
 
   render() {
     const { todoList } = this.state;
@@ -41,11 +55,19 @@ class App extends Component {
         </header>
 
         <section className="main" style={{ display: 'block' }}>
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            <TodoList todos={todoList} deleteTodo={this.deleteTodo} />
+            <TodoList
+              todos={todoList}
+              deleteTodo={this.deleteTodo}
+              setCompleted={this.setCompleted}
+            />
           </ul>
         </section>
 
