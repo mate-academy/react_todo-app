@@ -12,10 +12,24 @@ class App extends React.Component {
     complitedAll: false,
   }
 
+  selectedTab = () => {
+    switch (this.state.selected) {
+      case 'completed':
+        this.onClickCompleted();
+        break;
+      case 'active':
+        this.onClickActive();
+        break;
+      default:
+        this.onClickAllTodos();
+        break;
+    }
+  }
+
   addNewTodo = (inputValue) => {
     this.setState(prevState => ({
       id: prevState.id + 1,
-      selected: 'all',
+      selected: prevState.selected,
       originalTodos: [...prevState.originalTodos,
         {
           id: prevState.id + 1,
@@ -31,7 +45,7 @@ class App extends React.Component {
         }],
     }));
 
-    this.onClickAllTodos();
+    this.selectedTab();
   }
 
   checkBoxClick = (todo) => {
@@ -43,17 +57,7 @@ class App extends React.Component {
       todos: [...this.state.originalTodos],
     }));
 
-    switch (this.state.selected) {
-      case 'completed':
-        this.onClickCompleted();
-        break;
-      case 'active':
-        this.onClickActive();
-        break;
-      default:
-        this.onClickAllTodos();
-        break;
-    }
+    this.selectedTab();
   };
 
   onClickActive = () => {
@@ -63,7 +67,7 @@ class App extends React.Component {
     }));
   };
 
-  onClickAllCompleted = () => (
+  onClickAllCompleted = () => {
     this.setState(prevState => ({
       complitedAll: !prevState.complitedAll,
       originalTodos: prevState.originalTodos.map(todo => ({
@@ -75,7 +79,7 @@ class App extends React.Component {
         completed: !prevState.complitedAll,
       })),
     }))
-  );
+  };
 
   onClickCompleted = () => {
     this.setState(prevState => ({
