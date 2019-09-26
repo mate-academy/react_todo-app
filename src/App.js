@@ -5,7 +5,7 @@ import TodosFilter from './components/TodosFilter/TodosFilter';
 class App extends Component {
   state = {
     listOfTodos: JSON.parse(localStorage.getItem('listOfTodos')) || [],
-    counter: JSON.parse(localStorage.getItem('listOfTodos')) || 0,
+    counter: JSON.parse(localStorage.getItem('counter')) || 0,
     valueOfMainInput: '',
     activeFilter: 'all',
     valueOfEditingInput: '',
