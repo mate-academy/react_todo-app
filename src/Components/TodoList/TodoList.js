@@ -1,15 +1,20 @@
 import React from 'react';
 import TodoItem from '../TodoItem/TodoItem';
+import { TodoListProps } from '../PropTypes/PropTypes';
 
-const TodoList = ({ todosList, onChangeCompleted }) => (
+const TodoList = ({
+  todosList, handleTodoStatus, handleDeleteTodo, handleDoubleClickEditTitle,
+}) => (
   <ul className="todo-list">
     {todosList.length
       ? todosList
         .map(({ title, completed, id }) => (
           <TodoItem
+            handleDoubleClickEditTitle={handleDoubleClickEditTitle}
             todoStatus={completed}
             todoTitle={title}
-            onChangeCompleted={onChangeCompleted}
+            handleTodoStatus={handleTodoStatus}
+            handleDeleteTodo={handleDeleteTodo}
             key={id}
             todoId={id}
           />
@@ -18,5 +23,7 @@ const TodoList = ({ todosList, onChangeCompleted }) => (
     }
   </ul>
 );
+
+TodoList.propTypes = TodoListProps;
 
 export default TodoList;

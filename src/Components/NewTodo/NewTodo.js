@@ -1,5 +1,5 @@
 import React from 'react';
-import './NewTodo.css';
+import { NewTodoProps } from '../PropTypes/PropTypes';
 
 const _ = require('lodash');
 
@@ -47,5 +47,7 @@ class NewTodo extends React.Component {
     );
   }
 }
+
+NewTodo.propTypes = NewTodoProps;
 
 export default NewTodo;

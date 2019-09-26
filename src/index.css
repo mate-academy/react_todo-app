@@ -221,6 +221,10 @@ body {
   text-decoration: line-through;
 }
 
+li.editing {
+  display: none;
+}
+
 .todo-list li .destroy {
   display: none;
   position: absolute;
@@ -262,6 +266,10 @@ body {
   height: 20px;
   text-align: center;
   border-top: 1px solid #e6e6e6;
+}
+
+.hedden {
+  display: none;
 }
 
 .footer:before {
@@ -329,6 +337,10 @@ html .clear-completed:active {
 
 .clear-completed:hover {
   text-decoration: underline;
+}
+
+.disable {
+  display: none;
 }
 
 .info {
