@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 
 import TodoAdd from './components/TodoAdd/TodoAdd';
@@ -92,15 +93,13 @@ class App extends React.Component {
         </header>
 
         <section className="main" style={{ display: 'block' }}>
-          <label htmlFor="toggle-all">
-            <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              onChange={e => this.handleAllChecked(e.target.checked)}
-            />
-            Mark all as complete
-          </label>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={e => this.handleAllChecked(e.target.checked)}
+          />
+          <label htmlFor="toggle-all">Mark all as completed</label>
           {filtered.map(todo => (
             <TodoList
               key={todo.id}

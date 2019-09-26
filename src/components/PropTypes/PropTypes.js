@@ -14,15 +14,9 @@ export const FooterProps = {
   todosList: PropTypes.arrayOf(PropTypes.shape(todos)).isRequired,
 };
 
-const todo = PropTypes.object({
-  id: PropTypes.number.isRequired,
-  value: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
-});
-
 export const TodosListProps = {
   isChecked: PropTypes.bool.isRequired,
   destroy: PropTypes.func.isRequired,
   checked: PropTypes.func.isRequired,
-  todo: PropTypes.objectOf(PropTypes.object(todo)).isRequired,
+  todo: PropTypes.object.isRequired,
 };
