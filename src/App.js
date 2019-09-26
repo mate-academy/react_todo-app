@@ -1,75 +1,81 @@
 import React from 'react';
+import NewTodo from './Components/NewTodo/NewTodo';
+import TodoList from './Components/TodoList/TodoList';
+import TodosFilter from './Components/TodosFilter/TodosFilter';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+class App extends React.Component {
+  state = {
+    todos: [],
+    originalTodos: [],
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+  handleAddNewTodo = (todo) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
+      originalTodos: [...prevState.originalTodos, todo],
+    }));
+  }
+
+  handleTodoStatus = (todoId) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos]
+        .map(todo => (
+          todo.id === todoId
+            ? { ...todo, completed: !todo.completed }
+            : todo
+        )),
+      originalTodos: [...prevState.originalTodos]
+        .map(orTodo => (
+          orTodo.id === todoId
+            ? { ...orTodo, completed: !orTodo.completed }
+            : orTodo
+        )),
+    }));
+  }
+
+  handleShowAllTodos = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.originalTodos],
+    }));
+  }
+
+  handleActiveTodos = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.originalTodos].filter(todo => !todo.completed),
+    }));
+  }
+
+  handleCompletedTodos = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.originalTodos].filter(todo => todo.completed),
+    }));
+  }
+
+  render() {
+    const { todos } = this.state;
+
+    return (
+      <section className="todoapp">
+        <NewTodo addNewTodo={this.handleAddNewTodo} />
+
+        <section className="main" style={{ display: 'block' }}>
+          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+
+          <TodoList
+            todosList={todos}
+            onChangeCompleted={this.handleTodoStatus}
+          />
+        </section>
+        <TodosFilter
+          onButtonAllChange={this.handleShowAllTodos}
+          onButtonCompletedChange={this.handleCompletedTodos}
+          onButtonActiveChange={this.handleActiveTodos}
+          todosList={todos}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
