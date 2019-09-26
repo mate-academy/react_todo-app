@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Footer = ({ filteredCompleted, filteredActive, filteredAll, activeFilter, todosList }) => {
+const Footer = ({ handleFilter, activeFilter, filtered, todosList, clearCompleted }) => {
   return (
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
@@ -12,7 +12,7 @@ const Footer = ({ filteredCompleted, filteredActive, filteredAll, activeFilter, 
         <li>
           <a
             href="#/all"
-            onClick={filteredAll}
+            onClick={() => handleFilter('all')}
             className={activeFilter === 'all' ? 'selected' : ''}
           >
             All
@@ -22,7 +22,7 @@ const Footer = ({ filteredCompleted, filteredActive, filteredAll, activeFilter, 
         <li>
           <a
             href="#/active"
-            onClick={filteredActive}
+            onClick={() => handleFilter('active')}
             className={activeFilter === 'active' ? 'selected' : ''}
           >
             Active
@@ -32,7 +32,7 @@ const Footer = ({ filteredCompleted, filteredActive, filteredAll, activeFilter, 
         <li>
           <a
             href="#/completed"
-            onClick={filteredCompleted}
+            onClick={() => handleFilter('completed')}
             className={activeFilter === 'completed' ? 'selected' : ''}
           >
             Completed
@@ -43,6 +43,7 @@ const Footer = ({ filteredCompleted, filteredActive, filteredAll, activeFilter, 
       <button
         type="button"
         className="clear-completed"
+        onClick={clearCompleted}
         style={{ display: 'block' }}
       />
     </footer>
