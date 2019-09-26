@@ -99,7 +99,6 @@ class App extends Component {
         <header className="header">
           <h1>todos</h1>
           <NewTodo
-            todoListLength={todoList.length}
             addNewTodo={this.addNewTodo}
           />
         </header>
