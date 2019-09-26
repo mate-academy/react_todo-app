@@ -353,6 +353,10 @@ html .clear-completed:active {
   text-decoration: underline;
 }
 
+.crossed-label {
+  color: lightgray;
+  text-decoration: line-through;
+}
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox
