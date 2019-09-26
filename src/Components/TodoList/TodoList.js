@@ -7,7 +7,7 @@ const TodoList = ({ todos }) => (
       key={item.id}
       labelId={`todo-${item.id}`}
       title={item.title}
-      completed={item.completed}
+      taskCompleted={item.completed}
     />
   )));
 

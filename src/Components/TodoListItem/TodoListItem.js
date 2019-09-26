@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 
-const TodoListItem = ({ title, completed, labelId }) => (
-  <li className={ClassNames({ completed: !completed })}>
+const TodoListItem = ({ title, taskCompleted, labelId }) => (
+  <li className={ClassNames({ completed: taskCompleted })}>
     <div className="view">
       <input type="checkbox" className="toggle" id={labelId} />
       <label htmlFor={labelId}>
@@ -17,7 +17,7 @@ const TodoListItem = ({ title, completed, labelId }) => (
 
 TodoListItem.propTypes = {
   title: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
+  taskCompleted: PropTypes.bool.isRequired,
   labelId: PropTypes.string.isRequired,
 };
 
