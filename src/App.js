@@ -17,7 +17,7 @@ class App extends React.Component {
         {
           id: prevState.idCounter + 1,
           title,
-          completed: false,
+          isCompleted: false,
         },
         ...prevState.todos,
       ],
@@ -25,7 +25,7 @@ class App extends React.Component {
         {
           id: prevState.idCounter + 1,
           title,
-          completed: false,
+          isCompleted: false,
         },
         ...prevState.todos,
       ],
@@ -37,11 +37,11 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: [...prevState.todos].map(todo => ({
         ...todo,
-        completed: prevState.todos.some(t => !t.completed),
+        isCompleted: prevState.todos.some(t => !t.isCompleted),
       })),
       originalTodos: [...prevState.originalTodos].map(todo => ({
         ...todo,
-        completed: prevState.originalTodos.some(t => !t.completed),
+        isCompleted: prevState.originalTodos.some(t => !t.isCompleted),
       })),
     }));
   };
@@ -52,7 +52,7 @@ class App extends React.Component {
         if (todo.id === id) {
           return {
             ...todo,
-            completed: !todo.completed,
+            isCompleted: !todo.isCompleted,
           };
         }
 
@@ -62,7 +62,7 @@ class App extends React.Component {
         if (todo.id === id) {
           return {
             ...todo,
-            completed: !todo.completed,
+            isCompleted: !todo.isCompleted,
           };
         }
 
@@ -92,38 +92,36 @@ class App extends React.Component {
     this.setState((prevState) => {
       const { filterIdentifier, originalTodos } = prevState;
 
-      if (filterIdentifier === 'all') {
-        return ({
-          todos: [...originalTodos],
-        });
-      }
-
       if (filterIdentifier === 'active') {
         return ({
-          todos: [...originalTodos].filter(todo => !todo.completed),
+          todos: [...originalTodos].filter(todo => !todo.isCompleted),
         });
       }
 
       if (filterIdentifier === 'completed') {
         return ({
-          todos: [...originalTodos].filter(todo => todo.completed),
+          todos: [...originalTodos].filter(todo => todo.isCompleted),
         });
       }
+
+      return ({
+        todos: [...originalTodos],
+      });
     });
   };
 
   removeCompletedTodos = () => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].filter(todo => !todo.completed),
+      todos: [...prevState.todos].filter(todo => !todo.isCompleted),
       originalTodos: [...prevState.originalTodos]
-        .filter(todo => !todo.completed),
+        .filter(todo => !todo.isCompleted),
     }));
   };
 
   render() {
     const { todos, originalTodos, filterIdentifier } = this.state;
     const amountOfActiveTodos = originalTodos
-      .filter(todo => !todo.completed).length;
+      .filter(todo => !todo.isCompleted).length;
 
     return (
       <section className="todoapp">

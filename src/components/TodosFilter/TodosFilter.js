@@ -1,4 +1,5 @@
 import React from 'react';
+import { TodosFilterPropTypes } from '../../constants/proptypes';
 
 const TodosFilter = ({
   todos,
@@ -36,7 +37,7 @@ const TodosFilter = ({
         </a>
       </li>
     </ul>
-    {todos.filter(todo => todo.completed).length > 0 && (
+    {todos.filter(todo => todo.isCompleted).length > 0 && (
       <button
         type="button"
         className="clear-completed"
@@ -48,5 +49,7 @@ const TodosFilter = ({
     )}
   </>
 );
+
+TodosFilter.propTypes = TodosFilterPropTypes;
 
 export default TodosFilter;

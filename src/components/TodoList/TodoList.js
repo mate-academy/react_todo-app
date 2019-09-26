@@ -1,4 +1,5 @@
 import React from 'react';
+import { TodoListPropTypes } from '../../constants/proptypes';
 
 const TodoList = ({
   todos,
@@ -7,12 +8,12 @@ const TodoList = ({
 }) => (
   <ul className="todo-list">
     {todos.map(todo => (
-      <li className={todo.completed ? 'completed' : ''} key={todo.id}>
+      <li className={todo.isCompleted ? 'completed' : ''} key={todo.id}>
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
-            checked={todo.completed}
+            checked={todo.isCompleted}
             onChange={() => toggleTodoCompleteness(todo.id)}
           />
           <label className="todo">{todo.title}</label>
@@ -26,5 +27,7 @@ const TodoList = ({
     ))}
   </ul>
 );
+
+TodoList.propTypes = TodoListPropTypes;
 
 export default TodoList;

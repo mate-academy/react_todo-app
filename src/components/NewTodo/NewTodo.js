@@ -1,4 +1,5 @@
 import React from 'react';
+import { NewTodoPropTypes } from '../../constants/proptypes';
 
 class NewTodo extends React.Component {
   state = {
@@ -43,5 +44,7 @@ class NewTodo extends React.Component {
     );
   }
 }
+
+NewTodo.propTypes = NewTodoPropTypes;
 
 export default NewTodo;
