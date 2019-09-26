@@ -7,10 +7,21 @@ import TodoFilter from './Components/TodosFilter/TodosFilter';
 
 class App extends Component {
   state = {
+    idCounter: 1,
     todoList: [],
     isAllChecked: false,
     activeFilterName: 'all',
   };
+
+  sortTodoList = (todoList) => {
+    const { activeFilterName } = this.state;
+
+    switch (activeFilterName) {
+      case 'completed': return todoList.filter(todo => todo.completed);
+      case 'active': return todoList.filter(todo => !todo.completed);
+      default: return todoList;
+    }
+  }
 
   changeActiveFilter = (filterName) => {
     this.setState({ activeFilterName: filterName });
@@ -18,7 +29,13 @@ class App extends Component {
 
   addNewTodo = (newTodo) => {
     this.setState(prevState => ({
-      todoList: [newTodo, ...prevState.todoList],
+      todoList: [{
+        ...newTodo,
+        id: prevState.idCounter,
+      },
+      ...prevState.todoList,
+      ],
+      idCounter: prevState.idCounter + 1,
       isAllChecked: false,
     }));
   };
@@ -63,6 +80,13 @@ class App extends Component {
     }));
   };
 
+  clearCompleted = () => {
+    this.setState(prevState => ({
+      todoList: prevState.todoList
+        .filter(todo => !todo.completed),
+    }));
+  };
+
   render() {
     const {
       todoList,
@@ -96,7 +120,7 @@ class App extends Component {
 
           <ul className="todo-list">
             <TodoList
-              todos={todoList}
+              todos={this.sortTodoList(todoList)}
               deleteTodo={this.deleteTodo}
               setCompleted={this.setCompleted}
             />
@@ -122,7 +146,11 @@ class App extends Component {
             type="button"
             className="clear-completed"
             style={{ display: 'block' }}
-          />
+            onClick={this.clearCompleted}
+          >
+            Clear completed
+          </button>
+
         </footer>
       </section>
     );

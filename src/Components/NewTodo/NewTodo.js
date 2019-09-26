@@ -19,11 +19,9 @@ class NewTodo extends Component {
     if (title) {
       const {
         addNewTodo,
-        todoListLength,
       } = this.props;
 
       addNewTodo({
-        id: todoListLength + 1,
         title: this.state.title,
         completed: false,
       });
@@ -49,7 +47,6 @@ class NewTodo extends Component {
 
 NewTodo.propTypes = {
   addNewTodo: PropTypes.func.isRequired,
-  todoListLength: PropTypes.number.isRequired,
 };
 
 export default NewTodo;
