@@ -10,7 +10,7 @@ const Footer = ({
   <footer className="footer" style={{ display: 'block' }}>
     <span className="todo-count">
       {todos.filter(todo => !todo.completed).length}
-      items left
+      {' '} items left
     </span>
 
     <ul className="filters">
@@ -45,7 +45,7 @@ const Footer = ({
       </li>
     </ul>
 
-    {todos.filter(todo => todo.completed).length > 0 && (
+    {todos.some(todo => todo.completed) && (
       <button
         type="button"
         className="clear-completed"
