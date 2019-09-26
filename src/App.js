@@ -11,9 +11,21 @@ class App extends Component {
 
   addNewTodo = (newTodo) => {
     this.setState(prevState => ({
-      todoList: [...prevState.todoList, newTodo],
+      todoList: [newTodo, ...prevState.todoList],
     }));
   };
+
+  deleteTodo = (id) => {
+    const { todoList } = this.state;
+    const index = todoList.findIndex(item => item.id === id);
+
+    this.setState(prevState => ({
+      todoList: [
+        ...prevState.todoList.slice(0, index),
+        ...prevState.todoList.slice(index + 1),
+      ],
+    }));
+  }
 
   render() {
     const { todoList } = this.state;
@@ -33,7 +45,7 @@ class App extends Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            <TodoList todos={todoList} />
+            <TodoList todos={todoList} deleteTodo={this.deleteTodo} />
           </ul>
         </section>
 
