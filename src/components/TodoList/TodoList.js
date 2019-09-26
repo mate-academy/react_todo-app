@@ -1,6 +1,9 @@
 import React from 'react';
+import { TodosListProps } from '../PropTypes/PropTypes';
 
-const TodoList = ({ todo, isChecked, destroy, checked }) => {
+const TodoList = ({
+  todo, isChecked, destroy, checked,
+}) => {
   const handleClick = () => isChecked(todo.id);
   const todoDelete = () => destroy(todo.id);
 
@@ -23,4 +26,5 @@ const TodoList = ({ todo, isChecked, destroy, checked }) => {
   );
 };
 
+TodoList.propTypes = TodosListProps;
 export default TodoList;

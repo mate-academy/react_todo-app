@@ -61,7 +61,9 @@ class App extends React.Component {
   };
 
   clearCompleted = () => {
-
+    this.setState(({ todosList }) => ({
+      todosList: todosList.filter(todo => !todo.completed),
+    }));
   };
 
   render() {
@@ -79,7 +81,9 @@ class App extends React.Component {
         filtered = todosList;
         break;
     }
+
     return (
+
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
@@ -87,27 +91,29 @@ class App extends React.Component {
           <TodoAdd addTodo={this.addTodo} />
         </header>
 
-        <section className="main" style={{display: 'block'}}>
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onChange={e => this.handleAllChecked(e.target.checked)}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-          {filtered.map(todo =>
+        <section className="main" style={{ display: 'block' }}>
+          <label htmlFor="toggle-all">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              onChange={e => this.handleAllChecked(e.target.checked)}
+            />
+            Mark all as complete
+          </label>
+          {filtered.map(todo => (
             <TodoList
               key={todo.id}
               todo={todo}
               checked={todo.completed}
               isChecked={this.handleCheck}
               destroy={this.handleDestroy}
-            />)
+            />
+          ))
           }
         </section>
 
         <Footer
-          filtered={filtered}
           todosList={todosList}
           handleFilter={this.handleFilter}
           activeFilter={activeFilter}

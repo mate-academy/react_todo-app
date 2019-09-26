@@ -1,53 +1,61 @@
 import React from 'react';
+import { FooterProps } from '../PropTypes/PropTypes';
 
-const Footer = ({ handleFilter, activeFilter, filtered, todosList, clearCompleted }) => {
-  return (
-    <footer className="footer" style={{ display: 'block' }}>
-      <span className="todo-count">
-        {todosList.filter(todo => !todo.completed).length}
+const Footer = ({
+  handleFilter, activeFilter, todosList, clearCompleted,
+}) => (
+  <footer className="footer" style={{ display: 'block' }}>
+    <span className="todo-count">
+      {todosList.filter(todo => !todo.completed).length}
         :items left
-      </span>
+    </span>
 
-      <ul className="filters">
-        <li>
-          <a
-            href="#/all"
-            onClick={() => handleFilter('all')}
-            className={activeFilter === 'all' ? 'selected' : ''}
-          >
+    <ul className="filters">
+      <li>
+        <a
+          href="#/"
+          onClick={() => handleFilter('all')}
+          className={activeFilter === 'all' ? 'selected' : ''}
+        >
             All
-          </a>
-        </li>
+        </a>
+      </li>
 
-        <li>
-          <a
-            href="#/active"
-            onClick={() => handleFilter('active')}
-            className={activeFilter === 'active' ? 'selected' : ''}
-          >
+      <li>
+        <a
+          href="#/active"
+          onClick={() => handleFilter('active')}
+          className={activeFilter === 'active' ? 'selected' : ''}
+        >
             Active
-          </a>
-        </li>
+        </a>
+      </li>
 
-        <li>
-          <a
-            href="#/completed"
-            onClick={() => handleFilter('completed')}
-            className={activeFilter === 'completed' ? 'selected' : ''}
-          >
+      <li>
+        <a
+          href="#/completed"
+          onClick={() => handleFilter('completed')}
+          className={activeFilter === 'completed' ? 'selected' : ''}
+        >
             Completed
-          </a>
-        </li>
-      </ul>
+        </a>
+      </li>
+    </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={clearCompleted}
-        style={{ display: 'block' }}
-      />
-    </footer>
-  );
-};
+    <button
+      type="button"
+      className="clear-completed"
+      onClick={clearCompleted}
+      style={
+        todosList.some(todo => todo.completed)
+          ? { display: 'block' }
+          : { display: 'none' }
+      }
+    >
+        Clear completed
+    </button>
+  </footer>
+);
 
+Footer.propTypes = FooterProps;
 export default Footer;
