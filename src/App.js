@@ -60,23 +60,23 @@ class App extends React.Component {
   }
 
   render() {
-    const { todosToShow } = this.state;
+    const { todosToShow, todos } = this.state;
 
-    let todos = [];
+    let preparedtTodos = [];
 
     if (todosToShow === 'all') {
-      todos = this.state.todos;
+      preparedtTodos = todos;
     } else if (todosToShow === 'active') {
-      todos = this.state.todos.filter(todo => !todo.complete);
+      preparedtTodos = todos.filter(todo => !todo.complete);
     } else if (todosToShow === 'completed') {
-      todos = this.state.todos.filter(todo => todo.complete);
+      preparedtTodos = todos.filter(todo => todo.complete);
     }
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <TodoForm onSubmit={this.addTodo} />
+          <TodoForm addTodo={this.addTodo} />
         </header>
 
         <section className="main" style={{ display: 'block' }}>
@@ -89,7 +89,7 @@ class App extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            {todos.map(todo => (
+            {preparedtTodos.map(todo => (
               <TodoItem
                 key={todo.id}
                 todo={todo}
@@ -103,6 +103,7 @@ class App extends React.Component {
 
         <Footer
           todos={todos}
+          preparedtTodos={preparedtTodos}
           todosToShow={todosToShow}
           updateTodoToShow={this.updateTodoToShow}
           removeAllCompleteTodos={this.removeAllCompleteTodos}

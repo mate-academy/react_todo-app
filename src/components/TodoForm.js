@@ -14,13 +14,18 @@ export default class TodoForm extends Component {
   }
 
   handleSubmit = (event) => {
-    const { onSubmit } = this.props;
+    const { text } = this.state;
+    const { addTodo } = this.props;
 
     event.preventDefault();
 
-    onSubmit({
+    if (text.length === 0) {
+      return;
+    }
+
+    addTodo({
       id: shortid.generate(),
-      text: this.state.text,
+      text,
       complete: false,
     });
 
@@ -45,5 +50,5 @@ export default class TodoForm extends Component {
 }
 
 TodoForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
 };
