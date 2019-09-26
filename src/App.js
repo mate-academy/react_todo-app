@@ -1,6 +1,6 @@
 import React from 'react';
 // import classNames from 'classnames';
-import { runInThisContext } from 'vm';
+// import { runInThisContext } from 'vm';
 
 class App extends React.Component {
   state = {
@@ -8,6 +8,7 @@ class App extends React.Component {
     todo: [],
     sortedTodo: [],
     id: 0,
+    completeCount: 0,
     all: 'selected',
     complete: '',
     active: '',
@@ -17,17 +18,25 @@ class App extends React.Component {
     const { tempTitle } = this.state;
 
     event.preventDefault();
-    this.setState(prevState => ({
-      todo: [...prevState.todo,
-        {
-          title: tempTitle,
-          id: prevState.id,
-          status: false,
-        }],
-      tempTitle: '',
-      id: prevState.id + 1,
-    }));
-    this.copyTodoForOperate();
+    if (tempTitle.length > 0 && tempTitle[0] !== ' ') {
+      this.setState(prevState => ({
+        todo: [...prevState.todo,
+          {
+            title: tempTitle,
+            id: prevState.id,
+            status: false,
+          }],
+        tempTitle: '',
+        id: prevState.id + 1,
+      }));
+      this.copyTodoForOperate();
+    }
+
+    if (tempTitle.length === 0 || tempTitle[0] === ' ') {
+      this.setState({
+        tempTitle: '',
+      });
+    }
   }
 
   addTodo = (event) => {
@@ -54,12 +63,37 @@ class App extends React.Component {
           status: !item.status,
         }
         : item)),
+
     }));
     if (this.state.active === 'selected') { this.activeTodo(); }
 
     if (this.state.complete === 'selected') { this.completeTodo(); }
 
     if (this.state.all === 'selected') { this.allTodo(); }
+
+    this.countComplet();
+  }
+
+  markAll = () => {
+    this.setState(prevState => ({
+      sortedTodo: prevState.sortedTodo.map(item => ({
+        title: item.title,
+        id: item.id,
+        status: !item.status,
+      })),
+      todo: prevState.todo.map(item => ({
+        title: item.title,
+        id: item.id,
+        status: !item.status,
+      })),
+    }));
+    this.countComplet();
+  }
+
+  countComplet = () => {
+    this.setState(prevState => ({
+      completeCount: [...prevState.todo].filter(item => item.status === true).length,
+    }));
   }
 
   removeTodo = (event) => {
@@ -109,9 +143,12 @@ class App extends React.Component {
       todo: prevState.todo.filter(item => item.status === false),
       sortedTodo: prevState.sortedTodo.filter(item => item.status === false),
     }));
+    this.countComplet();
   }
 
   render() {
+    console.log(this.state.completeCount);
+
     return (
       <section className="todoapp">
         <header className="header">
@@ -127,7 +164,7 @@ class App extends React.Component {
         </header>
 
         <section className="main" style={{ display: 'block' }}>
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input type="checkbox" id="toggle-all" className="toggle-all" onClick={this.markAll} />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
@@ -145,7 +182,7 @@ class App extends React.Component {
 
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
-            {this.state.sortedTodo.length}
+            {this.state.completeCount}
             {' '}
             items left
           </span>
