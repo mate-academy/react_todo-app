@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import TodoList from './Components/TodoList/TodoList';
 import NewTodo from './Components/NewTodo/NewTodo';
+import TodoFilter from './Components/TodosFilter/TodosFilter';
 
 class App extends Component {
   state = {
@@ -99,21 +100,7 @@ class App extends Component {
           <span className="todo-count">
             {`${todoList.length} items left`}
           </span>
-
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
-
-            <li>
-              <a href="#/active">Active</a>
-            </li>
-
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
-
+          <TodoFilter />
           <button
             type="button"
             className="clear-completed"
