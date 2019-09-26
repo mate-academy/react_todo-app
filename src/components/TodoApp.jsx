@@ -86,6 +86,7 @@ class TodoApp extends React.Component {
           onFilterActive={() => this.handleFilterTodos('active')}
           onFilterComplete={() => this.handleFilterTodos('complete')}
           onClearCompleted={this.handleClearCompleted}
+          activeFilter={activeFilter}
           todos={todos}
         />
       </section>

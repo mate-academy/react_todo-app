@@ -12,7 +12,7 @@ const TodoFilters = props => (
         <a
           href="#/"
           onClick={props.onFilterAll}
-          className="selected"
+          className={props.activeFilter === 'all' ? 'selected' : ''}
         >
               All
         </a>
@@ -22,7 +22,7 @@ const TodoFilters = props => (
         <a
           href="#/active"
           onClick={props.onFilterActive}
-
+          className={props.activeFilter === 'active' ? 'selected' : ''}
         >
               Active
         </a>
@@ -32,6 +32,7 @@ const TodoFilters = props => (
         <a
           href="#/completed"
           onClick={props.onFilterComplete}
+          className={props.activeFilter === 'complete' ? 'selected' : ''}
         >
               Completed
         </a>
