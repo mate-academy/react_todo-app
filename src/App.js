@@ -14,12 +14,12 @@ class App extends React.Component {
   handleAddTodo = (title) => {
     this.setState(prevState => ({
       todos: [
-        ...prevState.todos,
         {
           id: prevState.idCounter + 1,
           title,
           completed: false,
         },
+        ...prevState.todos,
       ],
       originalTodos: [
         {
@@ -33,14 +33,18 @@ class App extends React.Component {
     }));
   };
 
-  /*toggleAllTodosCompleted = () => {
+  toggleAllTodosCompleted = () => {
     this.setState(prevState => ({
       todos: [...prevState.todos].map(todo => ({
         ...todo,
         completed: prevState.todos.some(t => !t.completed),
       })),
+      originalTodos: [...prevState.originalTodos].map(todo => ({
+        ...todo,
+        completed: prevState.originalTodos.some(t => !t.completed),
+      })),
     }));
-  };*/
+  };
 
   toggleTodoCompleteness = (id) => {
     this.setState(prevState => ({
@@ -54,18 +58,30 @@ class App extends React.Component {
 
         return todo;
       }),
+      originalTodos: [...prevState.originalTodos].map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
     }));
 
-    //this.filterTodos();
+    this.filterTodos();
   };
 
   removeTodo = (id) => {
     this.setState(prevState => ({
       todos: [...prevState.todos].filter(todo => todo.id !== id),
+      originalTodos: [...prevState.originalTodos]
+        .filter(todo => todo.id !== id),
     }));
   };
 
-  /*toggleFilterIdentifier = (identifier) => {
+  toggleFilterIdentifier = (identifier) => {
     this.setState({
       filterIdentifier: identifier,
     });
@@ -99,13 +115,15 @@ class App extends React.Component {
   removeCompletedTodos = () => {
     this.setState(prevState => ({
       todos: [...prevState.todos].filter(todo => !todo.completed),
-      originalTodos: [...prevState.originalTodos].filter(todo => !todo.completed),
+      originalTodos: [...prevState.originalTodos]
+        .filter(todo => !todo.completed),
     }));
-  };*/
+  };
 
   render() {
-    const { todos, filterIdentifier } = this.state;
-    const amountOfActiveTodos = todos.filter(todo => !todo.completed).length;
+    const { todos, originalTodos, filterIdentifier } = this.state;
+    const amountOfActiveTodos = originalTodos
+      .filter(todo => !todo.completed).length;
 
     return (
       <section className="todoapp">
@@ -119,7 +137,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            //onClick={this.toggleAllTodosCompleted}
+            onClick={this.toggleAllTodosCompleted}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
@@ -129,7 +147,7 @@ class App extends React.Component {
           />
         </section>
 
-        {(todos.length > 0) && (
+        {(originalTodos.length > 0) && (
           <footer className="footer" style={{ display: 'block' }}>
             <span className="todo-count">
               {amountOfActiveTodos}
@@ -142,8 +160,8 @@ class App extends React.Component {
             <TodosFilter
               todos={todos}
               filterIdentifier={filterIdentifier}
-              //toggleFilterIdentifier={this.toggleFilterIdentifier}
-              //removeCompletedTodos={this.removeCompletedTodos}
+              toggleFilterIdentifier={this.toggleFilterIdentifier}
+              removeCompletedTodos={this.removeCompletedTodos}
             />
           </footer>
         )}

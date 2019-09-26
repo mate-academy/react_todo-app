@@ -11,8 +11,8 @@ const TodosFilter = ({
       <li>
         <a
           href="#/"
-          className={filterIdentifier === 'all' ? 'completed' : ''}
-          //onClick={toggleFilterIdentifier('all')}
+          className={filterIdentifier === 'all' ? 'selected' : ''}
+          onClick={() => toggleFilterIdentifier('all')}
         >
           All
         </a>
@@ -20,8 +20,8 @@ const TodosFilter = ({
       <li>
         <a
           href="#/active"
-          className={filterIdentifier === 'active' ? 'completed' : ''}
-          //onClick={toggleFilterIdentifier('active')}
+          className={filterIdentifier === 'active' ? 'selected' : ''}
+          onClick={() => toggleFilterIdentifier('active')}
         >
           Active
         </a>
@@ -29,8 +29,8 @@ const TodosFilter = ({
       <li>
         <a
           href="#/completed"
-          className={filterIdentifier === 'completed' ? 'completed' : ''}
-          //onClick={toggleFilterIdentifier('completed')}
+          className={filterIdentifier === 'completed' ? 'selected' : ''}
+          onClick={() => toggleFilterIdentifier('completed')}
         >
           Completed
         </a>
@@ -41,7 +41,7 @@ const TodosFilter = ({
         type="button"
         className="clear-completed"
         style={{ display: 'block' }}
-        //onClick={removeCompletedTodos}
+        onClick={removeCompletedTodos}
       >
         Clear completed
       </button>

@@ -7,7 +7,7 @@ const TodoList = ({
 }) => (
   <ul className="todo-list">
     {todos.map(todo => (
-      <li className={todo.completed ? 'completed' : ''}>
+      <li className={todo.completed ? 'completed' : ''} key={todo.id}>
         <div className="view">
           <input
             type="checkbox"
