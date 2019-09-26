@@ -30,6 +30,13 @@ class App extends React.Component {
         id: prevState.id + 1,
       }));
       this.copyTodoForOperate();
+      if (this.state.active === 'selected') { this.activeTodo(); }
+
+      if (this.state.complete === 'selected') { this.completedTodo(); }
+
+      if (this.state.all === 'selected') { this.allTodo(); }
+
+      this.countComplet();
     }
 
     if (tempTitle.length === 0 || tempTitle[0] === ' ') {
@@ -67,7 +74,7 @@ class App extends React.Component {
     }));
     if (this.state.active === 'selected') { this.activeTodo(); }
 
-    if (this.state.complete === 'selected') { this.completeTodo(); }
+    if (this.state.complete === 'selected') { this.completedTodo(); }
 
     if (this.state.all === 'selected') { this.allTodo(); }
 
@@ -88,11 +95,17 @@ class App extends React.Component {
       })),
     }));
     this.countComplet();
+    if (this.state.active === 'selected') { this.activeTodo(); }
+
+    if (this.state.complete === 'selected') { this.completedTodo(); }
+
+    if (this.state.all === 'selected') { this.allTodo(); }
+
   }
 
   countComplet = () => {
     this.setState(prevState => ({
-      completeCount: [...prevState.todo].filter(item => item.status === true).length,
+      completeCount: [...prevState.todo].filter(item => item.status === false).length,
     }));
   }
 
@@ -124,8 +137,9 @@ class App extends React.Component {
     this.setState(prevState => ({
       sortedTodo: [...prevState.todo].filter(item => item.status === false),
       all: '',
-      complete: '',
       active: 'selected',
+      complete: '',
+
     }));
   }
 
@@ -133,8 +147,8 @@ class App extends React.Component {
     this.setState(prevState => ({
       sortedTodo: [...prevState.todo].filter(item => item.status === true),
       all: '',
-      complete: 'selected',
       active: '',
+      complete: 'selected',
     }));
   }
 
