@@ -7,10 +7,13 @@
   "author": "Mate Academy",
   "license": "GPL-3.0",
   "dependencies": {
+    "classnames": "^2.2.6",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "shortid": "^2.2.15",
+    "yarn": "^1.17.3"
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react": "*",
