@@ -24,7 +24,7 @@ class NewTodo extends React.Component {
     const { value } = event.target;
 
     this.setState({
-      inputValue: value,
+      inputValue: value.replace(/^\s+/, ''),
     });
   };
 

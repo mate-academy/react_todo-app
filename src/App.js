@@ -13,78 +13,18 @@ class App extends React.Component {
 
   handleAddTodo = (title) => {
     this.setState(prevState => ({
-      todos: [
-        {
-          id: prevState.idCounter + 1,
-          title,
-          isCompleted: false,
-        },
-        ...prevState.todos,
-      ],
       originalTodos: [
+        ...prevState.originalTodos,
         {
           id: prevState.idCounter + 1,
           title,
           isCompleted: false,
         },
-        ...prevState.todos,
       ],
+
       idCounter: prevState.idCounter + 1,
     }));
-  };
 
-  toggleAllTodosCompleted = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos].map(todo => ({
-        ...todo,
-        isCompleted: prevState.todos.some(t => !t.isCompleted),
-      })),
-      originalTodos: [...prevState.originalTodos].map(todo => ({
-        ...todo,
-        isCompleted: prevState.originalTodos.some(t => !t.isCompleted),
-      })),
-    }));
-  };
-
-  toggleTodoCompleteness = (id) => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos].map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            isCompleted: !todo.isCompleted,
-          };
-        }
-
-        return todo;
-      }),
-      originalTodos: [...prevState.originalTodos].map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            isCompleted: !todo.isCompleted,
-          };
-        }
-
-        return todo;
-      }),
-    }));
-
-    this.filterTodos();
-  };
-
-  removeTodo = (id) => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos].filter(todo => todo.id !== id),
-      originalTodos: [...prevState.originalTodos]
-        .filter(todo => todo.id !== id),
-    }));
-  };
-
-  toggleFilterIdentifier = (identifier) => {
-    this.setState({
-      filterIdentifier: identifier,
-    });
     this.filterTodos();
   };
 
@@ -110,12 +50,58 @@ class App extends React.Component {
     });
   };
 
+  toggleAllTodosCompleted = () => {
+    this.setState(prevState => ({
+      originalTodos: [...prevState.originalTodos].map(todo => ({
+        ...todo,
+        isCompleted: prevState.originalTodos.some(t => !t.isCompleted),
+      })),
+    }));
+
+    this.filterTodos();
+  };
+
+  toggleTodoCompleteness = (id) => {
+    this.setState(prevState => ({
+      originalTodos: [...prevState.originalTodos].map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            isCompleted: !todo.isCompleted,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+
+    this.filterTodos();
+  };
+
+  removeTodo = (id) => {
+    this.setState(prevState => ({
+      originalTodos: [...prevState.originalTodos]
+        .filter(todo => todo.id !== id),
+    }));
+
+    this.filterTodos();
+  };
+
+  toggleFilterIdentifier = (identifier) => {
+    this.setState({
+      filterIdentifier: identifier,
+    });
+
+    this.filterTodos();
+  };
+
   removeCompletedTodos = () => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].filter(todo => !todo.isCompleted),
       originalTodos: [...prevState.originalTodos]
         .filter(todo => !todo.isCompleted),
     }));
+
+    this.filterTodos();
   };
 
   render() {
