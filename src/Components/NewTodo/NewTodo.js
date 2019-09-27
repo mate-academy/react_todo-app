@@ -15,19 +15,20 @@ class NewTodo extends Component {
   handleSubmitTitle = (event) => {
     event.preventDefault();
     const { title } = this.state;
+    const spaceBarRule = /\s/g;
 
-    if (title) {
+    if (title.replace(spaceBarRule, '')) {
       const {
         addNewTodo,
       } = this.props;
 
       addNewTodo({
-        title: this.state.title,
+        title: this.state.title.trim(),
         completed: false,
       });
-
-      this.setState({ title: '' });
     }
+
+    this.setState({ title: '' });
   }
 
   render() {
