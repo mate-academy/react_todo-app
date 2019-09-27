@@ -83,9 +83,16 @@ class App extends React.Component {
   handleCompletedAll = () => {
     this.setState(prevState => ({
       todos: [...prevState.todos]
-        .map(todo => ({ ...todo, completed: !todo.completed })),
+        .map(todo => ({
+          ...todo,
+          completed: !prevState.todos.every(({ completed }) => completed),
+        })),
       originalTodos: [...prevState.originalTodos]
-        .map(orTodo => ({ ...orTodo, completed: !orTodo.completed })),
+        .map(orTodo => ({
+          ...orTodo,
+          completed: !prevState.originalTodos
+            .every(({ completed }) => completed),
+        })),
     }));
 
     if (this.state.buttonSelected === 'active') {
