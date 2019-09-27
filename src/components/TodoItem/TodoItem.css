@@ -1,0 +1,24 @@
+.todo-item__input {
+  width: 95.7%;
+  padding: 10px;
+  border: 1px solid #999;
+  line-height: 1.3em;
+  font-size: 1.2em;
+  color: green;
+  text-align: center;
+  background: rgb(57,188,28);
+  background: linear-gradient(45deg, rgba(57,188,28,1) 0%,rgba(255,255,255,1) 8%,rgba(57,188,28,1) 18%,rgba(220,234,225,1) 29%,rgba(184,219,182,1) 38%,rgba(194,226,152,1) 40%,rgba(194,226,152,1) 40%,rgba(221,234,201,1) 48%,rgba(194,226,152,1) 49%,rgba(194,226,152,1) 49%,rgba(198,255,214,1) 64%,rgba(151,244,201,1) 68%,rgba(255,255,255,1) 72%,rgba(111,186,136,1) 88%,rgba(255,255,255,1) 92%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#39bc1c', endColorstr='#ffffff',GradientType=1 );
+  box-shadow: 0px 0px 40px -11px rgba(0,0,0,0.75);
+  border: 2px solid #30932a;
+  text-shadow: 1px -2px 8px rgb(255, 255, 255);
+  font-weight: bold;
+}
+
+.todo-item__input::selection {
+background: rgba(8, 124, 8, 0.8);
+padding: 10px;
+  color: white;
+  text-shadow: 1px -2px 8px rgb(9, 29, 10);
+  width: 100%;
+}

@@ -3,11 +3,21 @@ import React from 'react';
 import TodoItem from '../TodoItem/TodoItem';
 
 const TodoList = ({
-  todos, destroyTodo, changeStatus, changeStatusAll, handleEdit,
+  todos,
+  destroyTodo,
+  changeStatus,
+  changeStatusAll,
+  handleEdit,
+  handleTodoTitleEdit,
 }) => (
   <section className="main" style={{ display: 'block' }}>
     <input type="checkbox" id="toggle-all" className="toggle-all" />
-    <label onClick={changeStatusAll} htmlFor="toggle-all">Mark all as complete</label>
+    <label
+      onClick={changeStatusAll}
+      htmlFor="toggle-all"
+    >
+      Mark all as complete
+    </label>
     <ul className="todo-list">
       { todos.map(todo => (
         <TodoItem
@@ -19,6 +29,7 @@ const TodoList = ({
           key={todo.id}
           id={todo.id}
           todo={todo}
+          handleTodoTitleEdit={handleTodoTitleEdit}
         />
       ))}
     </ul>

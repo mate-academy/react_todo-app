@@ -119,14 +119,35 @@ class App extends React.Component {
     });
   }
 
+  handleTodoTitleEdit = (id, title) => {
+    if (title) {
+      this.setState(({ todoList }) => ({
+        todoList: todoList.map(todo => (todo.id === id
+          ? { ...todo, todoTitle: title }
+          : todo)),
+      }));
+    } else {
+      this.destroyTodo(id);
+    }
+  };
+
+  onInputChange = (value) => {
+    this.setState({ todoTitle: value });
+  };
+
   render() {
     const { todoList } = this.state;
+
+    localStorage.setItem('todoList', JSON.stringify(todoList));
+    const listOfTodos = localStorage.getItem('todoList');
+
+    console.log('listOfTodos=', listOfTodos);
 
     return (
       <section className="todoapp">
         <Form AddTodo={this.AddTodo} />
         <TodoList
-          handleEdit={this.handleEdit}
+          handleTodoTitleEdit={this.handleTodoTitleEdit}
           changeStatusAll={this.changeStatusAll}
           changeStatus={this.changeStatus}
           destroyTodo={this.destroyTodo}

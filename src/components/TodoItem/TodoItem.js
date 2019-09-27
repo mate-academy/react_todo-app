@@ -1,9 +1,26 @@
 import React from 'react';
 
+import './TodoItem.css';
+
 class TodoItem extends React.Component {
   state = {
-    e: 1,
-  }
+    isEditing: false,
+    titleToEdit: this.props.title,
+  };
+
+  handleDoubClick = () => this.setState({ isEditing: true });
+
+  handleTitleChange = ({ value }) => {
+    this.setState({ titleToEdit: value });
+  };
+
+  handleTitleChangeEnd = () => this.setState({ isEditing: false });
+
+  handleTitleSubmit = (e) => {
+    e.preventDefault();
+    this.props.handleTodoTitleEdit(this.props.id, this.state.titleToEdit);
+    this.setState({ isEditing: false });
+  };
 
   render() {
     const {
@@ -25,7 +42,30 @@ class TodoItem extends React.Component {
             checked={completed}
             onChange={() => changeStatus(id)}
           />
-          <label htmlFor={id}>{title}</label>
+          {this.state.isEditing
+            ? (
+              <form
+                className="todo-item__form"
+                onSubmit={e => this.handleTitleSubmit(e)}
+              >
+                <input
+                  className="todo-item__input"
+                  type="text"
+                  value={this.state.titleToEdit}
+                  onChange={e => this.handleTitleChange(e.target)}
+                  onBlur={this.handleTitleChangeEnd}
+                />
+              </form>
+            )
+            : (
+              <label
+                htmlFor={id}
+                onClick={e => e.preventDefault()}
+                onDoubleClick={this.handleDoubClick}
+              >
+                {title}
+              </label>
+            )}
           <button
             type="button"
             className="destroy"
