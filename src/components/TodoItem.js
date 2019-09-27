@@ -19,7 +19,7 @@ const TodoItem = ({
           : {}}
         htmlFor={id}
       >
-        {todo.text}
+        {todo.todoTitle}
       </label>
       <button
         type="button"

@@ -31,9 +31,9 @@ class App extends React.Component {
     }));
   }
 
-  updateTodoToShow = (string) => {
+  updateTodoToShow = (todosToShowName) => {
     this.setState({
-      todosToShow: string,
+      todosToShow: todosToShowName,
     });
   }
 

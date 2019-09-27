@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Footer = ({
-  updateTodoToShow, todosToShow, removeAllCompleteTodos, preparedtTodos, todos,
+  updateTodoToShow,
+  todosToShow,
+  removeAllCompleteTodos,
+  preparedtTodos,
+  todos,
 }) => (
   <footer className="footer" style={{ display: 'block' }}>
     <span className="todo-count">

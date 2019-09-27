@@ -4,7 +4,7 @@ import shortid from 'shortid';
 
 export default class TodoForm extends Component {
   state = {
-    text: '',
+    todoTitle: '',
   }
 
   handleChange = ({ target: { name, value } }) => {
@@ -14,23 +14,23 @@ export default class TodoForm extends Component {
   }
 
   handleSubmit = (event) => {
-    const { text } = this.state;
+    const { todoTitle } = this.state;
     const { addTodo } = this.props;
 
     event.preventDefault();
 
-    if (text.length === 0) {
+    if ([...todoTitle].every(el => el === ' ')) {
       return;
     }
 
     addTodo({
       id: shortid.generate(),
-      text,
+      todoTitle,
       complete: false,
     });
 
     this.setState({
-      text: '',
+      todoTitle: '',
     });
   }
 
@@ -40,8 +40,8 @@ export default class TodoForm extends Component {
         <input
           className="new-todo"
           placeholder="What needs to be done?"
-          name="text"
-          value={this.state.text}
+          name="todoTitle"
+          value={this.state.todoTitle}
           onChange={this.handleChange}
         />
       </form>
