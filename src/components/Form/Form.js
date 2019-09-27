@@ -1,10 +1,12 @@
 import React from 'react';
+
 import shortid from 'shortid';
+import { TodoFormTypes } from '../PropTypes/PropTypes';
 
 class Form extends React.Component {
   state = {
     todoTitle: '',
-    id: '',
+    id: '', // eslint-disable-line
   }
 
   onEnterDown = (event) => {
@@ -38,5 +40,7 @@ class Form extends React.Component {
     );
   }
 }
+
+Form.propTypes = TodoFormTypes;
 
 export default Form;

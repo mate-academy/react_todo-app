@@ -8,7 +8,7 @@ class App extends React.Component {
   state = {
     todoList: [],
     todoListOriginal: [],
-    completedAll: 0,
+    completedAll: 0, // eslint-disable-line
   }
 
   AddTodo = (inputFormValue) => {
@@ -115,7 +115,7 @@ class App extends React.Component {
 
   allTodosToShowSorting = () => {
     this.setState({
-      todoList: this.state.todoListOriginal,
+      todoList: this.state.todoListOriginal, // eslint-disable-line
     });
   }
 
@@ -132,7 +132,7 @@ class App extends React.Component {
   };
 
   onInputChange = (value) => {
-    this.setState({ todoTitle: value });
+    this.setState({ todoTitle: value }); // eslint-disable-line
   };
 
   render() {
@@ -140,8 +140,11 @@ class App extends React.Component {
 
     localStorage.setItem('todoList', JSON.stringify(todoList));
     const listOfTodos = localStorage.getItem('todoList');
-
-    console.log('listOfTodos=', listOfTodos);
+    /* eslint-disable */
+    listOfTodos !== []
+    ? console.log('listOfTodos=', listOfTodos)
+    : '';
+    /* eslint-enable */
 
     return (
       <section className="todoapp">

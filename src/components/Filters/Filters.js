@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { TodoFiltersTypes } from '../PropTypes/PropTypes';
+
 class Filters extends React.Component {
   state = {
     active: '',
@@ -61,5 +63,7 @@ class Filters extends React.Component {
     );
   }
 }
+
+Filters.propTypes = TodoFiltersTypes;
 
 export default Filters;

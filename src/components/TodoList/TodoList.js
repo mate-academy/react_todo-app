@@ -1,7 +1,8 @@
 import React from 'react';
 
 import TodoItem from '../TodoItem/TodoItem';
-
+import { TodoListTypes } from '../PropTypes/PropTypes';
+/* eslint-disable */
 const TodoList = ({
   todos,
   destroyTodo,
@@ -21,7 +22,6 @@ const TodoList = ({
     <ul className="todo-list">
       { todos.map(todo => (
         <TodoItem
-          handleEdit={handleEdit}
           changeStatus={changeStatus}
           destroyTodo={destroyTodo}
           title={todo.todoTitle}
@@ -35,5 +35,8 @@ const TodoList = ({
     </ul>
   </section>
 );
+/* eslint-enable */
+
+TodoList.propTypes = TodoListTypes;
 
 export default TodoList;

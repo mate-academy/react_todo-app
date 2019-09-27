@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './TodoItem.css';
+import { TodoItemTypes } from '../PropTypes/PropTypes';
 
 class TodoItem extends React.Component {
   state = {
@@ -76,5 +77,7 @@ class TodoItem extends React.Component {
     );
   }
 }
+
+TodoItem.propTypes = TodoItemTypes;
 
 export default TodoItem;
