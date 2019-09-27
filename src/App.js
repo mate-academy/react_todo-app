@@ -20,10 +20,6 @@ class App extends React.Component {
       }));
     }
 
-    if (this.state.buttonSelected === 'all') {
-      this.handleShowAllTodos();
-    }
-
     if (this.state.buttonSelected === 'active') {
       this.handleActiveTodos();
     }
@@ -74,6 +70,14 @@ class App extends React.Component {
             : orTodo
         )),
     }));
+
+    if (this.state.buttonSelected === 'active') {
+      this.handleActiveTodos();
+    }
+
+    if (this.state.buttonSelected === 'completed') {
+      this.handleCompletedTodos();
+    }
   }
 
   handleCompletedAll = () => {
@@ -83,6 +87,14 @@ class App extends React.Component {
       originalTodos: [...prevState.originalTodos]
         .map(orTodo => ({ ...orTodo, completed: !orTodo.completed })),
     }));
+
+    if (this.state.buttonSelected === 'active') {
+      this.handleActiveTodos();
+    }
+
+    if (this.state.buttonSelected === 'completed') {
+      this.handleCompletedTodos();
+    }
   }
 
   handleShowAllTodos = () => {
