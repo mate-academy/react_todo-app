@@ -2,7 +2,6 @@ import React from 'react';
 import TodoItem from '../TodoItem/TodoItem';
 
 const TodoList = props => (
-
   <section className="main" style={{ display: 'block' }}>
     <input
       value={props.checked}

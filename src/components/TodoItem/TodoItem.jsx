@@ -1,19 +1,19 @@
 import React from 'react';
 
 const TodoItem = (props) => {
-  function handleCheck() {
+  const handleCheck = () => {
     const idVal = props.id;
     const { onChecked } = props;
 
     onChecked(idVal);
-  }
+  };
 
-  function handleDestroy() {
+  const handleDestroy = () => {
     const idVal = props.id;
     const { onDestroy } = props;
 
     onDestroy(idVal);
-  }
+  };
 
   return (
     <li className={props.checked ? 'completed' : ''}>

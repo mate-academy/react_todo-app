@@ -18,7 +18,6 @@ class TodoForm extends React.Component {
     const valState = this.state.value;
     const { onAdd } = this.props;
 
-    console.log(valState);
     onAdd(valState);
 
     this.setState({
