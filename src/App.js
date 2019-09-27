@@ -12,7 +12,9 @@ class App extends React.Component {
   };
 
   addTodo = (value) => {
-    if (value !== '') {
+    const regexValue = /^\w+/g;
+
+    if (value.match(regexValue)) {
       this.setState(prevState => ({
         todosList: [...prevState.todosList, {
           id: prevState.todosList.length + 1,
@@ -84,7 +86,6 @@ class App extends React.Component {
     }
 
     return (
-
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
