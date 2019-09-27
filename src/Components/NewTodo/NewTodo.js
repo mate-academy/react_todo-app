@@ -25,6 +25,7 @@ class NewTodo extends Component {
         title: this.state.title,
         completed: false,
       });
+
       this.setState({ title: '' });
     }
   }

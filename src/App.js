@@ -35,6 +35,7 @@ class App extends Component {
       },
       ...prevState.todoList,
       ],
+
       idCounter: prevState.idCounter + 1,
       isAllChecked: false,
     }));
@@ -63,6 +64,7 @@ class App extends Component {
             })
             : ({ ...todoItem })
         )),
+
       isAllChecked: prevState.isAllChecked
         ? !prevState.isAllChecked
         : prevState.isAllChecked,
@@ -76,6 +78,7 @@ class App extends Component {
           ...todoItem,
           completed: !prevState.isAllChecked,
         })),
+
       isAllChecked: !prevState.isAllChecked,
     }));
   };
