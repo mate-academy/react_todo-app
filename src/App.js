@@ -1,6 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+
 import React from 'react';
 import AddTodo from './components/AddTodo/AddTodo';
+import ShowTodos from './components/ShowTodo/ShowTodo';
 // import { runInThisContext } from 'vm';
 
 class App extends React.Component {
@@ -142,44 +143,12 @@ class App extends React.Component {
             addTodo={this.addTodo}
           />
         </header>
-
-        <section className="main" style={{ display: 'block' }}>
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onClick={this.markAll}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-          <ul className="todo-list">
-            {sortedTodo.map(item => (
-              <li className={item.status ? 'completed' : ''}>
-                <div className="view">
-                  <input
-                    type="checkbox"
-                    checked={item.status}
-                    className="toggle"
-                    id={item.id}
-                    onClick={() => this.statusChange(item.id)}
-                  />
-                  <label
-                    htmlFor={item.id}
-                    style={{ display: 'block' }}
-                  >
-                    {item.title}
-                  </label>
-                  <button
-                    type="button"
-                    className="destroy"
-                    id={item.id}
-                    onClick={() => this.removeTodo(item.id)}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-
+        <ShowTodos
+          markAll={this.markAll}
+          sortedTodo={sortedTodo}
+          statusChange={this.statusChange}
+          removeTodo={this.removeTodo}
+        />
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
             {todoOriginal
