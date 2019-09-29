@@ -6,7 +6,6 @@ const TodoList = ({
   todos,
   onDeleted,
   onToggleDone,
-  onSubmitEditedChange,
 }) => {
   const elements = todos.map((item) => {
     const { id, ...itemProps } = item;
@@ -18,7 +17,6 @@ const TodoList = ({
         {...itemProps}
         onDeleted={() => onDeleted(id)}
         onToggleDone={() => onToggleDone(id)}
-        onSubmitEditedChange={() => onSubmitEditedChange(id, item.label)}
       />
     );
   });

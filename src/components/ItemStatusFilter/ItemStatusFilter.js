@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ItemStatusFilterProps } from '../../constants/proptypes';
 
 class ItemStatusFilter extends Component {
   links = [
@@ -35,5 +36,7 @@ class ItemStatusFilter extends Component {
     );
   }
 }
+
+ItemStatusFilter.propTypes = ItemStatusFilterProps;
 
 export default ItemStatusFilter;

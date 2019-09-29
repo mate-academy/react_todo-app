@@ -21,12 +21,6 @@ class App extends Component {
     }
   }
 
-  getTodosfromLocalStorage = (objectFromLS) => {
-    this.setState(({ todoData }) => ({
-      todoData: [...todoData, ...objectFromLS],
-    }));
-  };
-
   deleteItem = (id) => {
     this.setState(({ todoData }) => ({
       todoData: todoData.filter(todo => todo.id !== id),
@@ -106,7 +100,6 @@ class App extends Component {
     return {
       label,
       completed: false,
-      isEditing: false,
       id: this.id = uuid(),
     };
   }
@@ -138,7 +131,6 @@ class App extends Component {
             todos={visibleItems}
             onDeleted={this.deleteItem}
             onToggleDone={this.onToggleDone}
-            onSubmitEditedChange={this.onSubmitEditedChange}
           />
         </section>
 

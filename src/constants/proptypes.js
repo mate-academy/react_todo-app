@@ -6,7 +6,6 @@ export const TodoListItemProps = {
   id: PropTypes.string.isRequired,
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
-  onSubmitEditedChange: PropTypes.func.isRequired,
 };
 
 export const TodoListProps = {
@@ -17,5 +16,9 @@ export const TodoListProps = {
   ).isRequired,
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
-  onSubmitEditedChange: PropTypes.func,
+};
+
+export const ItemStatusFilterProps = {
+  filter: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
 };
