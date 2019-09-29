@@ -14,8 +14,21 @@ class App extends React.Component {
   addTodo = (todo) => {
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
-      originalTodos: [...prevState.todos, todo],
+      originalTodos: [...prevState.originalTodos, todo],
     }));
+
+    switch (this.state.activeTab) {
+      case 'active':
+        this.filterActive();
+        break;
+      case 'all':
+        this.filterAll();
+        break;
+      case 'completed':
+        this.filterCompleted();
+        break;
+      default:
+    }
   };
 
   handleDelete = (todo) => {
@@ -33,19 +46,6 @@ class App extends React.Component {
         ? Object.assign(elem, { completed: !prevState.todos[i].completed })
         : elem)),
     }));
-
-    switch (this.state.activeTab) {
-      case 'active':
-        this.filterActive();
-        break;
-      case 'all':
-        this.filterAll();
-        break;
-      case 'completed':
-        this.filterCompleted();
-        break;
-      default:
-    }
   };
 
   filterAll = () => {
@@ -76,6 +76,10 @@ class App extends React.Component {
   handleCheckAll = () => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: prevState.statusAllTodos,
+      })),
+      originalTodos: prevState.originalTodos.map(todo => ({
         ...todo,
         completed: prevState.statusAllTodos,
       })),
@@ -117,6 +121,7 @@ class App extends React.Component {
               {this.state.originalTodos.length > 0 && (
                 <Footer
                   todos={this.state.todos}
+                  originalTodos={this.state.originalTodos}
                   filterAll={this.filterAll}
                   filterActive={this.filterActive}
                   filterCompleted={this.filterCompleted}

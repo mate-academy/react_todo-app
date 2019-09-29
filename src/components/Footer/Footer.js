@@ -2,6 +2,7 @@ import React from 'react';
 
 const Footer = ({
   todos,
+  originalTodos,
   filterAll,
   filterActive,
   filterCompleted,
@@ -10,7 +11,7 @@ const Footer = ({
 }) => (
   <footer className="footer" style={{ display: 'block' }}>
     <span className="todo-count">
-      {todos.filter(elem => elem.completed === false).length}
+      {originalTodos.filter(elem => elem.completed === false).length}
       {' '}
 items left
     </span>
