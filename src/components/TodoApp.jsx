@@ -13,7 +13,7 @@ class TodoApp extends React.Component {
   handleSubmitForm = (todo) => {
     const idForTodo = uuid.v4();
 
-    if (todo !== '') {
+    if (/^[^\s]/.test(todo) === true) {
       this.setState(prevState => ({
         todos: [...prevState.todos, {
           id: idForTodo,
