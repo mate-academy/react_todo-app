@@ -3,56 +3,43 @@ import PropTypes from 'prop-types';
 
 class AddTodo extends React.Component {
   state = {
-    newTitle: '',
+    title: '',
     id: 0,
   }
 
-  handleInputTodo = (event) => {
+  handleInputTodo = ({ target }) => {
     this.setState({
-      newTitle: event.target.value,
+      title: target.value.trimStart(),
     });
   }
 
   handleSubmit = (event) => {
-    const {
-      newTitle,
-      id,
-    } = this.state;
-    const { addTodo } = this.props;
-
     event.preventDefault();
+    const { title, id } = this.state;
 
-    if (newTitle.length > 0 && newTitle[0] !== ' ') {
+    if (title) {
       const todo = {
-        title: newTitle,
+        title,
         id,
         status: false,
       };
 
       this.setState(prevState => ({
-        newTitle: '',
+        title: '',
         id: prevState.id + 1,
       }));
-      addTodo(todo);
-    }
-
-    if (newTitle.length === 0 || newTitle[0] === ' ') {
-      this.setState({
-        newTitle: '',
-      });
+      this.props.addTodo(todo);
     }
   }
 
   render() {
-    const { newTitle } = this.state;
-
     return (
       <form onSubmit={this.handleSubmit}>
         <input
           className="new-todo"
           placeholder="What needs to be done?"
           onChange={this.handleInputTodo}
-          value={newTitle}
+          value={this.state.title}
         />
       </form>
     );
