@@ -12,8 +12,9 @@ class TodoApp extends React.Component {
 
   handleSubmitForm = (todo) => {
     const idForTodo = uuid.v4();
+    const whiteSpaceRegExp = new RegExp(/^[^\s]/);
 
-    if (/^[^\s]/.test(todo) === true) {
+    if (whiteSpaceRegExp.test(todo) === true) {
       this.setState(prevState => ({
         todos: [...prevState.todos, {
           id: idForTodo,
@@ -63,10 +64,7 @@ class TodoApp extends React.Component {
   }
 
   render() {
-    const {
-      todos,
-      activeFilter,
-    } = this.state;
+    const { todos, activeFilter } = this.state;
 
     const filteredTodos = activeFilter === 'active'
       ? todos.filter(todo => !todo.checked)

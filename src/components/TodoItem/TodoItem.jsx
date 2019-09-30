@@ -1,32 +1,36 @@
 import React from 'react';
 
-const TodoItem = (props) => {
+const TodoItem = ({
+  id,
+  checked,
+  todo,
+  onDestroy,
+  onChecked,
+}) => {
   const handleCheck = () => {
-    const idVal = props.id;
-    const { onChecked } = props;
+    const idVal = id;
 
     onChecked(idVal);
   };
 
   const handleDestroy = () => {
-    const idVal = props.id;
-    const { onDestroy } = props;
+    const idVal = id;
 
     onDestroy(idVal);
   };
 
   return (
-    <li className={props.checked ? 'completed' : ''}>
+    <li className={checked ? 'completed' : ''}>
       <div className="view">
         <input
           onChange={handleCheck}
-          checked={props.checked}
+          checked={checked}
           type="checkbox"
           className="toggle"
-          id={props.id}
+          id={id}
         />
-        <label htmlFor={props.id}>
-          {props.todo}
+        <label htmlFor={id}>
+          {todo}
         </label>
         <button onClick={handleDestroy} type="button" className="destroy" />
       </div>

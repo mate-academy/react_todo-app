@@ -5,20 +5,20 @@ class TodoForm extends React.Component {
     value: '',
   }
 
-  handleChange = (e) => {
-    const val = e.target.value;
+  handleChange = ({ target }) => {
+    const { value } = target;
 
     this.setState(prevState => ({
-      value: val,
+      value,
     }));
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const valState = this.state.value;
+  handleSubmit = ({ target }) => {
+    window.event.preventDefault();
+    const { value } = this.state;
     const { onAdd } = this.props;
 
-    onAdd(valState);
+    onAdd(value);
 
     this.setState({
       value: '',

@@ -1,9 +1,16 @@
 import React from 'react';
 
-const TodoFilters = props => (
+const TodoFilters = ({
+  todos,
+  onFilterAll,
+  activeFilter,
+  onFilterComplete,
+  onClearCompleted,
+  onFilterActive,
+}) => (
   <footer className="footer" style={{ display: 'block' }}>
     <span className="todo-count">
-      {`${props.todos
+      {`${todos
         .filter(todo => !todo.checked).length} itmes left`}
     </span>
 
@@ -11,8 +18,8 @@ const TodoFilters = props => (
       <li>
         <a
           href="#/"
-          onClick={props.onFilterAll}
-          className={props.activeFilter === 'all' ? 'selected' : ''}
+          onClick={onFilterAll}
+          className={activeFilter === 'all' ? 'selected' : ''}
         >
               All
         </a>
@@ -21,8 +28,8 @@ const TodoFilters = props => (
       <li>
         <a
           href="#/active"
-          onClick={props.onFilterActive}
-          className={props.activeFilter === 'active' ? 'selected' : ''}
+          onClick={onFilterActive}
+          className={activeFilter === 'active' ? 'selected' : ''}
         >
               Active
         </a>
@@ -31,8 +38,8 @@ const TodoFilters = props => (
       <li>
         <a
           href="#/completed"
-          onClick={props.onFilterComplete}
-          className={props.activeFilter === 'complete' ? 'selected' : ''}
+          onClick={onFilterComplete}
+          className={activeFilter === 'complete' ? 'selected' : ''}
         >
               Completed
         </a>
@@ -42,8 +49,10 @@ const TodoFilters = props => (
     <button
       type="button"
       className="clear-completed"
-      style={props.todos.some(todo => todo.checked) ? { display: 'block' } : { display: 'none' }}
-      onClick={props.onClearCompleted}
+      style={todos.some(todo => todo.checked)
+        ? { display: 'block' }
+        : { display: 'none' }}
+      onClick={onClearCompleted}
     >
               clear completed
     </button>
