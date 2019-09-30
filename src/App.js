@@ -7,7 +7,7 @@ class App extends Component {
   state = {
     todos: [],
     activeTab: 'all',
-    allComplete: true,
+    checkAll: true,
   };
 
   addTodo = (todo) => {
@@ -16,7 +16,7 @@ class App extends Component {
     }));
   };
 
-  complete = id => {
+  toggleComplete  = id => {
     this.setState(({ todos }) => ({
       todos: todos.map((todo) => {
         if (todo.id === id) {
@@ -28,13 +28,14 @@ class App extends Component {
     }));
   };
 
-  allComplete = () => {
+  checkAll = () => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: prevState.allComplete,
+        completed: prevState.checkAll,
       })),
-      allComplete: !prevState.allComplete,
+
+      checkAll: !prevState.checkAll,
     }));
   };
 
@@ -44,15 +45,15 @@ class App extends Component {
     }));
   };
 
-  removeAllComplete = () => {
+  removeAllCompleted = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
 
-  updateActiveTab = (string) => {
+  updateActiveTab = (item) => {
     this.setState({
-      activeTab: string,
+      activeTab: item,
     });
   };
 
@@ -71,8 +72,6 @@ class App extends Component {
       case 'completed':
         todosShow = todos.filter(todo => todo.completed);
         break;
-      default:
-        break;
     }
 
     return (
@@ -87,20 +86,20 @@ class App extends Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            onClick={this.allComplete}
+            onClick={this.checkAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
             todos={todosShow}
-            complete={this.complete}
+            toggleComplete ={this.toggleComplete }
             deleteTodo={this.deleteTodo}
           />
         </section>
 
         <Footer
           todos={todos}
-          removeAllCompleteTodos={this.removeAllComplete}
+          removeAllCompleteTodos={this.removeAllCompleted}
           activeTab={activeTab}
           updateActiveTab={this.updateActiveTab}
         />

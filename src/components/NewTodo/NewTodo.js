@@ -7,7 +7,7 @@ class NewTodo extends Component {
     title: '',
   };
 
-  onClick = (event) => {
+  handleClick = (event) => {
     event.preventDefault();
 
     const { addTodo } = this.props;
@@ -40,7 +40,7 @@ class NewTodo extends Component {
 
   render() {
     return (
-      <form onSubmit={this.onClick}>
+      <form onSubmit={this.handleClick}>
         <input
           className="new-todo"
           placeholder="What needs to be done?"
