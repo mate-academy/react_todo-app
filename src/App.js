@@ -34,13 +34,13 @@ class App extends React.Component {
 
       if (filterIdentifier === 'active') {
         return ({
-          todos: [...originalTodos].filter(todo => !todo.isCompleted),
+          todos: originalTodos.filter(todo => !todo.isCompleted),
         });
       }
 
       if (filterIdentifier === 'completed') {
         return ({
-          todos: [...originalTodos].filter(todo => todo.isCompleted),
+          todos: originalTodos.filter(todo => todo.isCompleted),
         });
       }
 
@@ -52,7 +52,7 @@ class App extends React.Component {
 
   toggleAllTodosCompleted = () => {
     this.setState(prevState => ({
-      originalTodos: [...prevState.originalTodos].map(todo => ({
+      originalTodos: prevState.originalTodos.map(todo => ({
         ...todo,
         isCompleted: prevState.originalTodos.some(t => !t.isCompleted),
       })),
@@ -63,7 +63,7 @@ class App extends React.Component {
 
   toggleTodoCompleteness = (id) => {
     this.setState(prevState => ({
-      originalTodos: [...prevState.originalTodos].map((todo) => {
+      originalTodos: prevState.originalTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -80,7 +80,7 @@ class App extends React.Component {
 
   removeTodo = (id) => {
     this.setState(prevState => ({
-      originalTodos: [...prevState.originalTodos]
+      originalTodos: prevState.originalTodos
         .filter(todo => todo.id !== id),
     }));
 
@@ -97,7 +97,7 @@ class App extends React.Component {
 
   removeCompletedTodos = () => {
     this.setState(prevState => ({
-      originalTodos: [...prevState.originalTodos]
+      originalTodos: prevState.originalTodos
         .filter(todo => !todo.isCompleted),
     }));
 

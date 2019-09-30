@@ -9,10 +9,9 @@ class NewTodo extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { inputValue } = this.state;
-    const { onAdd } = this.props;
 
     if (inputValue) {
-      onAdd(inputValue);
+      this.props.onAdd(inputValue);
 
       this.setState({
         inputValue: '',
@@ -20,9 +19,7 @@ class NewTodo extends React.Component {
     }
   };
 
-  handleInputChange = (event) => {
-    const { value } = event.target;
-
+  handleInputChange = ({ target: { value } }) => {
     this.setState({
       inputValue: value.replace(/^\s+/, ''),
     });
