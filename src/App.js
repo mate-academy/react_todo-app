@@ -7,7 +7,7 @@ class App extends React.Component {
   state = {
     todos: [],
     originalTodos: [],
-    activeTab: '',
+    activeTab: 'all',
     statusAllTodos: true,
   };
 
@@ -19,21 +19,17 @@ class App extends React.Component {
 
     switch (this.state.activeTab) {
       case 'active':
-        this.filterActive();
-        break;
+        return this.filterActive();
       case 'all':
-        this.filterAll();
-        break;
+        return this.filterAll();
       case 'completed':
-        this.filterCompleted();
-        break;
+        return this.filterCompleted();
       default:
+        break;
     }
   };
 
   handleDelete = (todo) => {
-    !todo.comleted
-      && this.setState(prevState => ({ items: prevState.items - 1 }));
     this.setState(prevState => ({
       todos: [...prevState.todos].filter(elem => elem.id !== todo.id),
       originalTodos: [...prevState.todos].filter(elem => elem.id !== todo.id),
@@ -95,6 +91,8 @@ class App extends React.Component {
   };
 
   render() {
+    const { todos, originalTodos, activeTab } = this.state;
+
     return (
       <>
         <section className="todoapp">
@@ -114,18 +112,18 @@ class App extends React.Component {
             <>
               {' '}
               <TodoList
-                todos={this.state.todos}
+                todos={todos}
                 handleDelete={this.handleDelete}
                 handleClickCheckBox={this.handleClickCheckBox}
               />
               {this.state.originalTodos.length > 0 && (
                 <Footer
-                  todos={this.state.todos}
-                  originalTodos={this.state.originalTodos}
+                  todos={todos}
+                  originalTodos={originalTodos}
                   filterAll={this.filterAll}
                   filterActive={this.filterActive}
                   filterCompleted={this.filterCompleted}
-                  activeTab={this.state.activeTab}
+                  activeTab={activeTab}
                   clearAllCompleted={this.clearAllCompleted}
                 />
               )}

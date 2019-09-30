@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class FormTodo extends React.Component {
   state = {
@@ -13,10 +14,11 @@ class FormTodo extends React.Component {
     }
 
     const { addTodo } = this.props;
+    const { title, id } = this.state;
     const newTodo = {
-      title: this.state.title,
+      title,
       completed: false,
-      id: this.state.id,
+      id,
     };
 
     this.setState(prevState => ({ title: '', id: prevState.id + 1 }));
@@ -24,18 +26,20 @@ class FormTodo extends React.Component {
     addTodo(newTodo);
   };
 
-  handleChange = (event) => {
-    this.setState({ title: event.target.value });
+  handleChange = ({ target }) => {
+    this.setState({ title: target.value });
   };
 
   render() {
+    const { title } = this.state;
+
     return (
       <form onSubmit={this.handleClick}>
         <input
           className="new-todo"
           name="text"
           placeholder="What needs to be done?"
-          value={this.state.title}
+          value={title}
           onChange={this.handleChange}
         />
         <input type="submit" style={{ display: 'none' }} />
@@ -43,5 +47,9 @@ class FormTodo extends React.Component {
     );
   }
 }
+
+FormTodo.propTypes = {
+  addTodo: PropTypes.func.isRequired,
+};
 
 export default FormTodo;
