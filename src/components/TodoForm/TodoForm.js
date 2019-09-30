@@ -1,5 +1,6 @@
 import React from 'react';
 import shortid from 'shortid';
+import PropTypes from 'prop-types';
 
 export default class TodoForm extends React.Component {
   state = {
@@ -14,7 +15,6 @@ export default class TodoForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    // eslint-disable-next-line react/prop-types
     this.props.onSubmit({
       id: shortid.generate(),
       text: this.state.text,
@@ -41,3 +41,7 @@ export default class TodoForm extends React.Component {
     );
   }
 }
+
+TodoForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

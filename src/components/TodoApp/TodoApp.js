@@ -1,37 +1,31 @@
 import React from 'react';
 import TodoForm from '../TodoForm/TodoForm';
 import Todo from '../Todo/Todo';
-// import { jsxIdentifier } from '@babel/types';
 
 export default class TodoApp extends React.Component {
   state = {
     todos: [],
-    // eslint-disable-next-line react/no-unused-state
     todosToShow: 'all',
   }
 
   addTodo = (todo) => {
-    if (todo.text !== '') {
-      this.setState({
-        // eslint-disable-next-line react/no-access-state-in-setstate
-        todos: [todo, ...this.state.todos],
-      });
+    if (todo.text.trim() !== '') {
+      this.setState(prevState => ({
+        todos: [todo, ...prevState.todos],
+      }));
     }
   };
 
   handleDelete = (id) => {
-    this.setState({
-      // eslint-disable-next-line react/no-access-state-in-setstate
-      todos: this.state.todos.filter(todo => todo.id !== id),
-    });
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
   }
 
   toggleComplete = (id) => {
-    this.setState({
-      // eslint-disable-next-line react/no-access-state-in-setstate
-      todos: this.state.todos.map((todo) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
         if (todo.id === id) {
-          // suppose to update
           return {
             ...todo,
             complete: !todo.complete,
@@ -40,37 +34,54 @@ export default class TodoApp extends React.Component {
 
         return todo;
       }),
-    });
-    // console.log(this.state.todos);
+    }));
   };
+
+  updateTodoToShow = (value) => {
+    this.setState({
+      todosToShow: value,
+    });
+  }
 
   lengthOfTodos = () => (
     this.state.todos.filter(todo => todo.complete === false).length
   )
 
   render() {
-    // eslint-disable-next-line no-unused-vars
     let todos = [];
 
-    if (this.state.todoToShow === 'all') {
+    if (this.state.todosToShow === 'all') {
       todos = [...this.state.todos];
-    } else if (this.state.todoToShow === 'active') {
+    } else if (this.state.todosToShow === 'active') {
       todos = this.state.todos.filter(todo => !todo.complete);
-    } else if (this.state.todoToShow === 'complete') {
+    } else if (this.state.todosToShow === 'complete') {
       todos = this.state.todos.filter(todo => todo.complete);
     }
 
+    if (this.state.todos.length === 0) {
+      return (
+        <section className="todoapp">
+          <TodoForm className="header" onSubmit={this.addTodo} />
+        </section>
+      );
+    }
     return (
       <section className="todoapp">
         <TodoForm className="header" onSubmit={this.addTodo} />
-        {JSON.stringify(this.state.todos)}
+
         <section className="main" style={{ display: 'block' }}>
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
-          {/* <label htmlFor="toggle-all">Mark all as complete</label> */}
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            // checked={filteredTodos.every(item => item.completed)}
+          />
+          <label htmlFor="toggle-all" id="">Mark all as complete</label>
           <ul className="todo-list">
-            {this.state.todos.map(todo => (
+            {todos.map(todo => (
               <Todo
-                todos={this.state.todos}
+                todos={todos}
+                todo={todo}
                 key={todo.id}
                 text={todo.text}
                 toDelete={() => this.handleDelete(todo.id)}
@@ -87,15 +98,31 @@ export default class TodoApp extends React.Component {
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected">All</a>
+              <a
+                href="#/"
+                className="selected"
+                onClick={() => this.updateTodoToShow('all')}
+              >
+                All
+              </a>
             </li>
 
             <li>
-              <a href="#/active">Active</a>
+              <a
+                href="#/active"
+                onClick={() => this.updateTodoToShow('active')}
+              >
+                Active
+              </a>
             </li>
 
             <li>
-              <a href="#/completed">Completed</a>
+              <a
+                href="#/completed"
+                onClick={() => this.updateTodoToShow('complete')}
+              >
+                Completed
+              </a>
             </li>
           </ul>
 
@@ -105,48 +132,6 @@ export default class TodoApp extends React.Component {
             style={{ display: 'block' }}
           />
         </footer>
-
-        {/* <section className="main" style={{ display: 'block' }}>
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <ul className="todo-list">
-            <li className="">
-              <div className="view">
-                <input type="checkbox" className="toggle" id="todo-1" />
-                <label htmlFor="todo-1">sdfsdfsdf</label>
-                <button type="button" className="destroy" />
-              </div>
-            </li>
-          </ul>
-
-        </section> */}
-        {/*
-        <footer className="footer" style={{ display: 'block' }}>
-          <span className="todo-count">
-            3 items left
-          </span>
-
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
-
-            <li>
-              <a href="#/active">Active</a>
-            </li>
-
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
-
-          <button
-            type="button"
-            className="clear-completed"
-            style={{ display: 'block' }}
-          />
-        </footer> */}
       </section>
     );
   }
