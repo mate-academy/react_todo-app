@@ -31,15 +31,13 @@ class FormTodo extends React.Component {
   };
 
   render() {
-    const { title } = this.state;
-
     return (
       <form onSubmit={this.handleClick}>
         <input
           className="new-todo"
           name="text"
           placeholder="What needs to be done?"
-          value={title}
+          value={this.state.title}
           onChange={this.handleChange}
         />
         <input type="submit" style={{ display: 'none' }} />

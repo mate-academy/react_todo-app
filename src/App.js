@@ -25,46 +25,41 @@ class App extends React.Component {
       case 'completed':
         return this.filterCompleted();
       default:
-        break;
     }
   };
 
   handleDelete = (todo) => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].filter(elem => elem.id !== todo.id),
-      originalTodos: [...prevState.todos].filter(elem => elem.id !== todo.id),
+      todos: prevState.todos.filter(elem => elem.id !== todo.id),
+      originalTodos: prevState.todos.filter(elem => elem.id !== todo.id),
     }));
   };
 
   handleClickCheckBox = (index) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map((elem, i) => (i === index
-        ? Object.assign(elem, { completed: !prevState.todos[i].completed })
-        : elem)),
+      todos: prevState.todos.map((todo, i) => (i === index
+        ? Object.assign(todo, { completed: !prevState.todos[i].completed })
+        : todo)),
     }));
   };
 
   filterAll = () => {
     this.setState(prevState => ({
-      todos: [...prevState.originalTodos],
+      todos: prevState.originalTodos,
       activeTab: 'all',
     }));
   };
 
   filterActive = () => {
     this.setState(prevState => ({
-      todos: [...prevState.originalTodos].filter(
-        todo => todo.completed === false
-      ),
+      todos: prevState.originalTodos.filter(todo => todo.completed === false),
       activeTab: 'active',
     }));
   };
 
   filterCompleted = () => {
     this.setState(prevState => ({
-      todos: [...prevState.originalTodos].filter(
-        todo => todo.completed === true
-      ),
+      todos: prevState.originalTodos.filter(todo => todo.completed === true),
       activeTab: 'completed',
     }));
   };
@@ -116,7 +111,7 @@ class App extends React.Component {
                 handleDelete={this.handleDelete}
                 handleClickCheckBox={this.handleClickCheckBox}
               />
-              {this.state.originalTodos.length > 0 && (
+              {originalTodos.length > 0 && (
                 <Footer
                   todos={todos}
                   originalTodos={originalTodos}
