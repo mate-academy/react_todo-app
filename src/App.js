@@ -32,21 +32,20 @@ class App extends React.Component {
     this.setState((prevState) => {
       const { filterIdentifier, originalTodos } = prevState;
 
-      if (filterIdentifier === 'active') {
-        return ({
-          todos: originalTodos.filter(todo => !todo.isCompleted),
-        });
+      switch (filterIdentifier) {
+        case 'active':
+          return ({
+            todos: originalTodos.filter(todo => !todo.isCompleted),
+          });
+        case 'completed':
+          return ({
+            todos: originalTodos.filter(todo => todo.isCompleted),
+          });
+        default:
+          return ({
+            todos: [...originalTodos],
+          });
       }
-
-      if (filterIdentifier === 'completed') {
-        return ({
-          todos: originalTodos.filter(todo => todo.isCompleted),
-        });
-      }
-
-      return ({
-        todos: [...originalTodos],
-      });
     });
   };
 

@@ -3,30 +3,30 @@ import { NewTodoPropTypes } from '../../constants/proptypes';
 
 class NewTodo extends React.Component {
   state = {
-    inputValue: '',
+    title: '',
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { inputValue } = this.state;
+    const { title } = this.state;
 
-    if (inputValue) {
-      this.props.onAdd(inputValue);
+    if (title) {
+      this.props.onAdd(title);
 
       this.setState({
-        inputValue: '',
+        title: '',
       });
     }
   };
 
   handleInputChange = ({ target: { value } }) => {
     this.setState({
-      inputValue: value.replace(/^\s+/, ''),
+      title: value.replace(/^\s+/, ''),
     });
   };
 
   render() {
-    const { inputValue } = this.state;
+    const { title } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -34,7 +34,7 @@ class NewTodo extends React.Component {
           type="text"
           className="new-todo"
           placeholder="What needs to be done?"
-          value={inputValue}
+          value={title}
           onChange={this.handleInputChange}
         />
       </form>
