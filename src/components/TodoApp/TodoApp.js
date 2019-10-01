@@ -37,16 +37,6 @@ export default class TodoApp extends React.Component {
     }));
   };
 
-  toggleAllComplete = () => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map(todo => ({
-        ...todo,
-        complete: prevState.toggleAllComplete,
-      })),
-      toggleAllComplete: !prevState.toggleAllComplete,
-    }));
-  }
-
   updateTodoToShow = (value) => {
     this.setState({
       todosToShow: value,
@@ -62,6 +52,17 @@ export default class TodoApp extends React.Component {
   lengthOfTodos = () => (
     this.state.todos.filter(todo => todo.complete === false).length
   )
+
+  toggleAllComplete = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        complete: prevState.toggleAllComplete,
+      })),
+      toggleAllComplete: !prevState.toggleAllComplete,
+    }));
+    console.log('here you go');
+  }
 
   render() {
     let todos = [];
@@ -90,10 +91,10 @@ export default class TodoApp extends React.Component {
             onClick={this.toggleAllComplete}
             type="checkbox"
             id="toggle-all"
+            name="toggleAll"
             className="toggle-all"
-            // checked={filteredTodos.every(item => item.completed)}
           />
-          <p htmlFor="toggle-all">Mark all as complete</p>
+          <label htmlFor="toggle-all">Mark all as complete</label>
           <ul className="todo-list">
             {todos.map(todo => (
               <Todo

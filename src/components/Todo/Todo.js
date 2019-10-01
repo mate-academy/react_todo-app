@@ -25,9 +25,9 @@ export default function Todo(props) {
           onChange={props.toggleComplete}
           checked={props.todo.complete ? 'checked' : ''}
         />
-        <p htmlFor="todo-1">
+        <label htmlFor="todo-1">
           {props.text}
-        </p>
+        </label>
         <button
           type="button"
           className="destroy"
