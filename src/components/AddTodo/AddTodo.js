@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'uuidv4';
 
 class AddTodo extends React.Component {
   state = {
     title: '',
-    id: 0,
   }
 
   handleInputTodo = ({ target }) => {
@@ -15,19 +15,18 @@ class AddTodo extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { title, id } = this.state;
+    const { title } = this.state;
 
     if (title) {
       const todo = {
         title,
-        id,
+        id: uuid(),
         status: false,
       };
 
-      this.setState(prevState => ({
+      this.setState({
         title: '',
-        id: prevState.id + 1,
-      }));
+      });
       this.props.addTodo(todo);
     }
   }

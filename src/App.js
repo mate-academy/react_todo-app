@@ -2,39 +2,40 @@
 import React from 'react';
 import AddTodo from './components/AddTodo/AddTodo';
 import ShowTodos from './components/ShowTodo/ShowTodo';
-// import { runInThisContext } from 'vm';
 
 class App extends React.Component {
   state = {
-    todosOriginal: [],
-    todosToShow: [],
+    todos: JSON.parse(localStorage.getItem('todoData')) || [],
+    todosToShow: JSON.parse(localStorage.getItem('todoData')) || [],
     activeTab: 'all',
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todos.length !== this.state.todos.length) {
+      const json = JSON.stringify(this.state.todos);
+
+      localStorage.setItem('todoData', json);
+    }
   }
 
   addTodo = (newTodo) => {
     const { activeTab } = this.state;
 
     this.setState((prevState) => {
-      if (activeTab !== 'complete') {
-        return ({
-          todosOriginal: [...prevState.todosOriginal, newTodo],
-          todosToShow: [...prevState.todosToShow, newTodo],
-        });
-      }
-
-      if (activeTab === 'complete') {
-        return ({
-          todosOriginal: [...prevState.todosOriginal, newTodo],
-        });
-      }
+      return activeTab !== 'complete' ? ({
+        todos: [...prevState.todos, newTodo],
+        todosToShow: [...prevState.todosToShow, newTodo],
+      }) : ({
+        todos: [...prevState.todos, newTodo],
+      });
     });
-  }
+  };
 
   handleTodoStatus = (id) => {
     const { activeTab } = this.state;
 
     this.setState(prevState => ({
-      todosOriginal: prevState.todosOriginal.map(item => (item.id === id
+      todos: prevState.todos.map(item => (item.id === id
         ? {
           title: item.title,
           id: item.id,
@@ -53,12 +54,13 @@ class App extends React.Component {
   }
 
   handleCheckedTodos = () => {
-    const { todosOriginal, activeTab } = this.state;
-    const checkStatus = todosOriginal.every(todo => todo.status
-      === (true || false));
+    const { todos, activeTab } = this.state;
+    const checkStatus = todos.every(todo => (
+      todo.status === (true || false)
+    ));
 
     this.setState(prevState => ({
-      todosOriginal: prevState.todosOriginal.map(item => ({
+      todos: prevState.todos.map(item => ({
         title: item.title,
         id: item.id,
         status: checkStatus ? !item.status : true,
@@ -74,7 +76,7 @@ class App extends React.Component {
 
   removeTodo = (id) => {
     this.setState(prevState => ({
-      todosOriginal: prevState.todosOriginal.filter(item => item.id !== id),
+      todos: prevState.todos.filter(item => item.id !== id),
       todosToShow: prevState.todosToShow.filter(item => item.id !== id),
     }));
   }
@@ -83,10 +85,11 @@ class App extends React.Component {
     const { activeTab } = this.state;
 
     this.setState(prevState => ({
-      todosOriginal: prevState.todosOriginal
+      todos: prevState.todos
         .filter(item => item.status === false),
-      todosToShow: prevState.todosOriginal.filter(item => item.status
-        === false),
+      todosToShow: prevState.todos.filter(item => (
+        item.status === false
+      )),
     }));
     this.showTodo(activeTab);
   }
@@ -95,29 +98,29 @@ class App extends React.Component {
     switch (activeTab) {
       case 'all':
         this.setState(prevState => ({
-          todosToShow: [...prevState.todosOriginal],
+          todosToShow: [...prevState.todos],
           activeTab: 'all',
         }));
         break;
       case 'active':
         this.setState(prevState => ({
-          todosToShow: prevState.todosOriginal
+          todosToShow: prevState.todos
             .filter(item => item.status === false),
           activeTab: 'active',
         }));
         break;
       default:
         this.setState(prevState => ({
-          todosToShow: prevState.todosOriginal.filter(item => item.status
-            === true),
+          todosToShow: prevState.todos.filter(item => (
+            item.status === true
+          )),
           activeTab: 'complete',
         }));
-        break;
     }
   }
 
   render() {
-    const { activeTab, todosToShow, todosOriginal } = this.state;
+    const { activeTab, todosToShow, todos } = this.state;
 
     return (
       <section className="todoapp">
@@ -135,7 +138,7 @@ class App extends React.Component {
         />
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
-            {todosOriginal.filter(item => item.status === false).length}
+            {todos.filter(item => item.status === false).length}
             {' '}
             items left
           </span>
