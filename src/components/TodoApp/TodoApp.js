@@ -37,10 +37,26 @@ export default class TodoApp extends React.Component {
     }));
   };
 
+  toggleAllComplete = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        complete: prevState.toggleAllComplete,
+      })),
+      toggleAllComplete: !prevState.toggleAllComplete,
+    }));
+  }
+
   updateTodoToShow = (value) => {
     this.setState({
       todosToShow: value,
     });
+  }
+
+  clearAllComplete = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.complete),
+    }));
   }
 
   lengthOfTodos = () => (
@@ -71,12 +87,13 @@ export default class TodoApp extends React.Component {
 
         <section className="main" style={{ display: 'block' }}>
           <input
+            onClick={this.toggleAllComplete}
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
             // checked={filteredTodos.every(item => item.completed)}
           />
-          <label htmlFor="toggle-all" id="">Mark all as complete</label>
+          <p htmlFor="toggle-all">Mark all as complete</p>
           <ul className="todo-list">
             {todos.map(todo => (
               <Todo
@@ -130,7 +147,10 @@ export default class TodoApp extends React.Component {
             type="button"
             className="clear-completed"
             style={{ display: 'block' }}
-          />
+            onClick={this.clearAllComplete}
+          >
+            Clear all complete
+          </button>
         </footer>
       </section>
     );
