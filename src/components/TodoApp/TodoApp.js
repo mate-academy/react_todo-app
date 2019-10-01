@@ -57,7 +57,7 @@ export default class TodoApp extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        complete: prevState.toggleAllComplete,
+        complete: !prevState.toggleAllComplete,
       })),
       toggleAllComplete: !prevState.toggleAllComplete,
     }));
