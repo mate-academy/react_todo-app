@@ -3,7 +3,10 @@ import TodoItem from '../TodoItem/TodoItem';
 import { TodoListProps } from '../PropTypes/PropTypes';
 
 const TodoList = ({
-  todosList, handleTodoStatus, handleDeleteTodo, handleDoubleClickEditTitle,
+  todosList,
+  handleTodoStatus,
+  handleDeleteTodo,
+  handleDoubleClickEditTitle,
 }) => (
   <ul className="todo-list">
     {todosList.length
@@ -17,6 +20,7 @@ const TodoList = ({
             handleDeleteTodo={handleDeleteTodo}
             key={id}
             todoId={id}
+            todosList={todosList}
           />
         ))
       : null

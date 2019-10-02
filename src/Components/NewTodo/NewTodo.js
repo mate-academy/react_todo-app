@@ -24,6 +24,7 @@ class NewTodo extends React.Component {
       id: _.uniqueId('id_'),
       completed: false,
     });
+
     this.setState({
       titleOfTodo: '',
     });

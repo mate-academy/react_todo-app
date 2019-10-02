@@ -3,7 +3,7 @@ import React from 'react';
 import { TodosFilterProps } from '../PropTypes/PropTypes';
 
 const TodosFilter = ({
-  onButtonAllChange, onButtonCompletedChange, onButtonActiveChange,
+  handleButtonChange,
   todosList, originalTodos, buttonSelected, handleDeleteAllCompleted,
 }) => {
   const buttonClearStyles = cx('clear-completed', {
@@ -26,7 +26,7 @@ const TodosFilter = ({
           <a
             href="#/"
             className={buttonSelected === 'all' && 'selected'}
-            onClick={onButtonAllChange}
+            onClick={() => handleButtonChange('all')}
           >
             All
           </a>
@@ -35,7 +35,7 @@ const TodosFilter = ({
         <li>
           <a
             href="#/active"
-            onClick={onButtonActiveChange}
+            onClick={() => handleButtonChange('active')}
             className={buttonSelected === 'active' && 'selected'}
           >
             Active
@@ -45,7 +45,7 @@ const TodosFilter = ({
         <li>
           <a
             href="#/completed"
-            onClick={onButtonCompletedChange}
+            onClick={() => handleButtonChange('completed')}
             className={buttonSelected === 'completed' && 'selected'}
           >
             Completed

@@ -9,9 +9,7 @@ class App extends React.Component {
     originalTodos: [],
     buttonSelected: 'all',
   }
-  // componentDidMount() {
 
-  // }
   handleAddNewTodo = (todo) => {
     if (todo.title.length > 0) {
       this.setState(prevState => ({
@@ -20,27 +18,21 @@ class App extends React.Component {
       }));
     }
 
-    if (this.state.buttonSelected === 'active') {
-      this.handleActiveTodos();
-    }
-
-    if (this.state.buttonSelected === 'completed') {
-      this.handleCompletedTodos();
-    }
+    this.handleButtonChange(this.state.buttonSelected);
   }
 
-  handleDoubleClickEditTitle = ({ target }, todoId) => {
+  handleDoubleClickEditTitle = (filmTitle, todoId) => {
     this.setState(prevState => ({
       todos: [...prevState.todos]
         .map(todo => (
           todo.id === todoId
-            ? { ...todo, title: target.value }
+            ? { ...todo, title: filmTitle }
             : todo
         )),
       originalTodos: [...prevState.originalTodos]
         .map(orTodo => (
           orTodo.id === todoId
-            ? { ...orTodo, title: target.value }
+            ? { ...orTodo, title: filmTitle }
             : orTodo
         )),
     }));
@@ -71,13 +63,7 @@ class App extends React.Component {
         )),
     }));
 
-    if (this.state.buttonSelected === 'active') {
-      this.handleActiveTodos();
-    }
-
-    if (this.state.buttonSelected === 'completed') {
-      this.handleCompletedTodos();
-    }
+    this.handleButtonChange(this.state.buttonSelected);
   }
 
   handleCompletedAll = () => {
@@ -95,34 +81,32 @@ class App extends React.Component {
         })),
     }));
 
-    if (this.state.buttonSelected === 'active') {
-      this.handleActiveTodos();
+    this.handleButtonChange(this.state.buttonSelected);
+  }
+
+  handleButtonChange = (value) => {
+    switch (value) {
+      case 'all':
+        this.setState(prevState => ({
+          todos: [...prevState.originalTodos],
+          buttonSelected: 'all',
+        }));
+        break;
+      case 'active':
+        this.setState(prevState => ({
+          todos: [...prevState.originalTodos].filter(todo => !todo.completed),
+          buttonSelected: 'active',
+        }));
+        break;
+      case 'completed':
+        this.setState(prevState => ({
+          todos: [...prevState.originalTodos].filter(todo => todo.completed),
+          buttonSelected: 'completed',
+        }));
+        break;
+      default:
+        break;
     }
-
-    if (this.state.buttonSelected === 'completed') {
-      this.handleCompletedTodos();
-    }
-  }
-
-  handleShowAllTodos = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.originalTodos],
-      buttonSelected: 'all',
-    }));
-  }
-
-  handleActiveTodos = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.originalTodos].filter(todo => !todo.completed),
-      buttonSelected: 'active',
-    }));
-  }
-
-  handleCompletedTodos = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.originalTodos].filter(todo => todo.completed),
-      buttonSelected: 'completed',
-    }));
   }
 
   handleDeleteAllCompleted = () => {
@@ -159,9 +143,7 @@ class App extends React.Component {
           />
         </section>
         <TodosFilter
-          onButtonAllChange={this.handleShowAllTodos}
-          onButtonCompletedChange={this.handleCompletedTodos}
-          onButtonActiveChange={this.handleActiveTodos}
+          handleButtonChange={this.handleButtonChange}
           originalTodos={originalTodos}
           todosList={todos}
           buttonSelected={buttonSelected}

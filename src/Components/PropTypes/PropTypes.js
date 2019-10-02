@@ -24,9 +24,7 @@ export const TodoListProps = {
 };
 
 export const TodosFilterProps = {
-  onButtonAllChange: PropTypes.func,
-  onButtonCompletedChange: PropTypes.func,
-  onButtonActiveChange: PropTypes.func,
+  handleButtonChange: PropTypes.func,
   originalTodos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     id: PropTypes.string,

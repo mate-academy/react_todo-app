@@ -221,9 +221,9 @@ body {
   text-decoration: line-through;
 }
 
-li.editing {
+/* li.editing {
   display: none;
-}
+} */
 
 .todo-list li .destroy {
   display: none;
@@ -252,9 +252,9 @@ li.editing {
   display: block;
 }
 
-.todo-list li .edit {
+/* .todo-list li .edit {
   display: none;
-}
+} */
 
 .todo-list li.editing:last-child {
   margin-bottom: -1px;
