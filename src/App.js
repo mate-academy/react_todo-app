@@ -3,6 +3,8 @@ import React from 'react';
 import TodoList from './components/TodoList/TodoList';
 import Form from './components/Form/Form';
 import Filters from './components/Filters/Filters';
+// import './base.css';
+// import './index.css';
 
 class App extends React.Component {
   state = {
@@ -76,7 +78,7 @@ class App extends React.Component {
   }
 
   nonCompletedCount = (e) => {
-    const count = this.state.todoList
+    const count = this.state.todoListOriginal
       .filter(todo => todo.completed !== true);
 
     if (e) {
@@ -93,7 +95,7 @@ class App extends React.Component {
   }
 
   completedAppears = () => {
-    const arr = this.state.todoList
+    const arr = this.state.todoListOriginal
       .filter(todo => todo.completed === true);
 
     return !!arr.length;
@@ -102,6 +104,15 @@ class App extends React.Component {
   nonCompletedTodosSorting = () => {
     this.setState(prevState => ({
       todoList: prevState.todoListOriginal
+        .filter(todo => todo.completed !== true),
+    }));
+  }
+
+  clearCompleted = () => {
+    this.setState(prevState => ({
+      todoList: prevState.todoListOriginal
+        .filter(todo => todo.completed !== true),
+      todoListOriginal: prevState.todoListOriginal
         .filter(todo => todo.completed !== true),
     }));
   }
@@ -136,14 +147,15 @@ class App extends React.Component {
   };
 
   render() {
-    const { todoList } = this.state;
+    const { todoList, todoListOriginal } = this.state;
 
-    localStorage.setItem('todoList', JSON.stringify(todoList));
-    const listOfTodos = localStorage.getItem('todoList');
+    localStorage.setItem('todoListOriginal', JSON.stringify(todoListOriginal));
+    const listOfTodos = localStorage.getItem('todoListOriginal');
     /* eslint-disable */
-    listOfTodos !== []
-    ? console.log('listOfTodos=', listOfTodos)
-    : '';
+    let footerDisplay = '';
+    listOfTodos !== "[]"
+    ? footerDisplay = 'block'
+    : footerDisplay = 'none';
     /* eslint-enable */
 
     return (
@@ -157,6 +169,8 @@ class App extends React.Component {
           todos={todoList}
         />
         <Filters
+          footerDisplay={footerDisplay}
+          clearCompleted={this.clearCompleted}
           completedAppears={this.completedAppears}
           allTodosToShowSorting={this.allTodosToShowSorting}
           nonCompletedCount={this.nonCompletedCount}

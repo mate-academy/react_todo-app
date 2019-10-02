@@ -9,11 +9,12 @@ class Filters extends React.Component {
 
   render() {
     const { active } = this.state;
+    const { nonCompletedCount } = this.props;
 
     return (
-      <footer className="footer" style={{ display: 'block' }}>
+      <footer className="footer" style={{ display: this.props.footerDisplay }}>
         <span className="todo-count">
-          {this.props.nonCompletedCount()}
+          {nonCompletedCount()}
         </span>
 
         <ul className="filters">
@@ -55,7 +56,7 @@ class Filters extends React.Component {
           type="button"
           className="clear-completed"
           style={{ display: 'block' }}
-          onClick={this.props.nonCompletedCount}
+          onClick={this.props.clearCompleted}
         >
           {this.props.completedAppears() && 'Clear completed' }
         </button>
