@@ -28,7 +28,10 @@ class App extends React.Component {
 
   destroyTodo = (idTodoToDestroy) => {
     this.setState(prevState => ({
-      todoList: prevState.todoList.filter(todo => todo.id !== idTodoToDestroy),
+      todoList: prevState.todoList
+        .filter(todo => todo.id !== idTodoToDestroy),
+      todoListOriginal: prevState.todoList
+        .filter(todo => todo.id !== idTodoToDestroy),
     }));
   }
 
@@ -162,6 +165,7 @@ class App extends React.Component {
       <section className="todoapp">
         <Form AddTodo={this.AddTodo} />
         <TodoList
+          footerDisplay={footerDisplay}
           handleTodoTitleEdit={this.handleTodoTitleEdit}
           changeStatusAll={this.changeStatusAll}
           changeStatus={this.changeStatus}

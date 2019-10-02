@@ -10,12 +10,14 @@ const TodoList = ({
   changeStatusAll,
   handleEdit,
   handleTodoTitleEdit,
+  footerDisplay
 }) => (
-  <section className="main" style={{ display: 'block' }}>
+  <section className="main" style={{ display: footerDisplay }}>
     <input type="checkbox" id="toggle-all" className="toggle-all" />
     <label
       onClick={changeStatusAll}
       htmlFor="toggle-all"
+      style={{ display: 'block' }}
     >
       Mark all as complete
     </label>
