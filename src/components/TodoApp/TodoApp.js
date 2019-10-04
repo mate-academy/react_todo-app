@@ -61,7 +61,6 @@ export default class TodoApp extends React.Component {
       })),
       toggleAllComplete: !prevState.toggleAllComplete,
     }));
-    console.log('here you go');
   }
 
   render() {
@@ -118,8 +117,13 @@ export default class TodoApp extends React.Component {
             <li>
               <a
                 href="#/"
-                className="selected"
                 onClick={() => this.updateTodoToShow('all')}
+                style={{
+                  borderColor:
+                    this.state.todosToShow === 'all'
+                      ? 'rgba(175, 47, 47, 0.2)'
+                      : '',
+                }}
               >
                 All
               </a>
@@ -129,6 +133,12 @@ export default class TodoApp extends React.Component {
               <a
                 href="#/active"
                 onClick={() => this.updateTodoToShow('active')}
+                style={{
+                  borderColor:
+                    this.state.todosToShow === 'active'
+                      ? 'rgba(175, 47, 47, 0.2)'
+                      : '',
+                }}
               >
                 Active
               </a>
@@ -138,6 +148,12 @@ export default class TodoApp extends React.Component {
               <a
                 href="#/completed"
                 onClick={() => this.updateTodoToShow('complete')}
+                style={{
+                  borderColor:
+                    this.state.todosToShow === 'complete'
+                      ? 'rgba(175, 47, 47, 0.2)'
+                      : '',
+                }}
               >
                 Completed
               </a>

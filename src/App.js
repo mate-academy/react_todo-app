@@ -1,10 +1,6 @@
 import React from 'react';
 import TodoApp from './components/TodoApp/TodoApp';
 
-function App() {
-  return (
-    <TodoApp />
-  );
-}
+const App = () => <TodoApp />;
 
 export default App;

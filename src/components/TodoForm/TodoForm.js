@@ -33,7 +33,6 @@ export default class TodoForm extends React.Component {
           name="text"
           className="new-todo"
           placeholder="What needs to be done?"
-          // name={this.state.text}
           onChange={this.handleChange}
           value={this.state.text}
         />
