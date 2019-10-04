@@ -24,16 +24,14 @@ export default class TodoApp extends React.Component {
 
   toggleComplete = (id) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
-        if (todo.id === id) {
-          return {
+      todos: prevState.todos.map(todo => (
+        todo.id === id
+          ? {
             ...todo,
             complete: !todo.complete,
-          };
-        }
-
-        return todo;
-      }),
+          }
+          : { ...todo }
+      )),
     }));
   };
 
@@ -64,17 +62,29 @@ export default class TodoApp extends React.Component {
   }
 
   render() {
-    let todos = [];
+    const {
+      todosToShow,
+      todos,
+    } = this.state;
+    const {
+      toggleAllComplete,
+      handleDelete,
+      toggleComplete,
+      lengthOfTodos,
+      updateTodoToShow,
+      clearAllComplete,
+    } = this;
+    let todosNew = [];
 
-    if (this.state.todosToShow === 'all') {
-      todos = [...this.state.todos];
-    } else if (this.state.todosToShow === 'active') {
-      todos = this.state.todos.filter(todo => !todo.complete);
-    } else if (this.state.todosToShow === 'complete') {
-      todos = this.state.todos.filter(todo => todo.complete);
+    if (todosToShow === 'all') {
+      todosNew = [...todos];
+    } else if (todosToShow === 'active') {
+      todosNew = todos.filter(todo => !todo.complete);
+    } else if (todosToShow === 'complete') {
+      todosNew = todos.filter(todo => todo.complete);
     }
 
-    if (this.state.todos.length === 0) {
+    if (todos.length === 0) {
       return (
         <section className="todoapp">
           <TodoForm className="header" onSubmit={this.addTodo} />
@@ -87,7 +97,7 @@ export default class TodoApp extends React.Component {
 
         <section className="main" style={{ display: 'block' }}>
           <input
-            onClick={this.toggleAllComplete}
+            onClick={toggleAllComplete}
             type="checkbox"
             id="toggle-all"
             name="toggleAll"
@@ -95,14 +105,14 @@ export default class TodoApp extends React.Component {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <ul className="todo-list">
-            {todos.map(todo => (
+            {todosNew.map(todo => (
               <Todo
-                todos={todos}
+                todos={todosNew}
                 todo={todo}
                 key={todo.id}
                 text={todo.text}
-                toDelete={() => this.handleDelete(todo.id)}
-                toggleComplete={() => this.toggleComplete(todo.id)}
+                toDelete={() => handleDelete(todo.id)}
+                toggleComplete={() => toggleComplete(todo.id)}
               />
             ))}
           </ul>
@@ -110,17 +120,17 @@ export default class TodoApp extends React.Component {
 
         <footer className="footer" style={{ display: 'block' }}>
           <span className="todo-count">
-            {`${this.lengthOfTodos()} items left`}
+            {`${lengthOfTodos()} items left`}
           </span>
 
           <ul className="filters">
             <li>
               <a
                 href="#/"
-                onClick={() => this.updateTodoToShow('all')}
+                onClick={() => updateTodoToShow('all')}
                 style={{
                   borderColor:
-                    this.state.todosToShow === 'all'
+                    todosToShow === 'all'
                       ? 'rgba(175, 47, 47, 0.2)'
                       : '',
                 }}
@@ -132,10 +142,10 @@ export default class TodoApp extends React.Component {
             <li>
               <a
                 href="#/active"
-                onClick={() => this.updateTodoToShow('active')}
+                onClick={() => updateTodoToShow('active')}
                 style={{
                   borderColor:
-                    this.state.todosToShow === 'active'
+                    todosToShow === 'active'
                       ? 'rgba(175, 47, 47, 0.2)'
                       : '',
                 }}
@@ -147,10 +157,10 @@ export default class TodoApp extends React.Component {
             <li>
               <a
                 href="#/completed"
-                onClick={() => this.updateTodoToShow('complete')}
+                onClick={() => updateTodoToShow('complete')}
                 style={{
                   borderColor:
-                    this.state.todosToShow === 'complete'
+                    todosToShow === 'complete'
                       ? 'rgba(175, 47, 47, 0.2)'
                       : '',
                 }}
@@ -164,7 +174,7 @@ export default class TodoApp extends React.Component {
             type="button"
             className="clear-completed"
             style={{ display: 'block' }}
-            onClick={this.clearAllComplete}
+            onClick={clearAllComplete}
           >
             Clear all complete
           </button>
