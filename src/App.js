@@ -3,50 +3,34 @@ import React from 'react';
 import TodoList from './components/TodoList/TodoList';
 import Form from './components/Form/Form';
 import Filters from './components/Filters/Filters';
-// import './base.css';
-// import './index.css';
 
 class App extends React.Component {
   state = {
-    todoList: [],
-    todoListOriginal: [],
+    todos: [],
     completedAll: 0, // eslint-disable-line
+    active: 1,
   }
 
   AddTodo = (inputFormValue) => {
-    this.setState(prevState => ({
-      todoListOriginal: [
-        ...prevState.todoListOriginal,
-        inputFormValue,
-      ],
-      todoList: [
-        ...prevState.todoListOriginal,
+    this.setState(({ todos }) => ({
+      todos: [
+        ...todos,
         inputFormValue,
       ],
     }));
   }
 
   destroyTodo = (idTodoToDestroy) => {
-    this.setState(prevState => ({
-      todoList: prevState.todoList
-        .filter(todo => todo.id !== idTodoToDestroy),
-      todoListOriginal: prevState.todoList
+    this.setState(({ todos }) => ({
+      todos: todos
         .filter(todo => todo.id !== idTodoToDestroy),
     }));
   }
 
-  changeStatus = (idTodoToChange) => {
-    this.setState(prevState => ({
-      todoListOriginal: prevState.todoListOriginal.map(todo => (
-        todo.id !== idTodoToChange
-          ? todo
-          : {
-            ...todo,
-            completed: !todo.completed,
-          }
-      )),
-      todoList: prevState.todoList.map(todo => (
-        todo.id !== idTodoToChange
+  changeStatus = (id) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map(todo => (
+        todo.id !== id
           ? todo
           : {
             ...todo,
@@ -57,10 +41,10 @@ class App extends React.Component {
   }
 
   changeStatusAll = () => {
-    this.setState(prevState => (
-      prevState.completedAll === 0
+    this.setState(({ todos, completedAll }) => (
+      completedAll === 0
         ? {
-          todoList: prevState.todoList.map(todo => (
+          todos: todos.map(todo => (
             {
               ...todo,
               completed: true,
@@ -69,7 +53,7 @@ class App extends React.Component {
           completedAll: 1,
         }
         : {
-          todoList: prevState.todoList.map(todo => (
+          todos: todos.map(todo => (
             {
               ...todo,
               completed: false,
@@ -80,63 +64,32 @@ class App extends React.Component {
     ));
   }
 
-  nonCompletedCount = (e) => {
-    const count = this.state.todoListOriginal
-      .filter(todo => todo.completed !== true);
+  nonCompletedCount = () => {
+    const count = this.state.todos
+      .filter(todo => !todo.completed);
 
-    if (e) {
-      this.setState({
-        todoList: count,
-      });
-    }
-
-    if (count.length) {
-      return `${count.length} todos left`;
-    }
-
-    return false;
+    return count.length
+      ? `${count.length} todos left`
+      : false;
   }
 
   completedAppears = () => {
-    const arr = this.state.todoListOriginal
-      .filter(todo => todo.completed === true);
+    const { todos } = this.state;
 
-    return !!arr.length;
-  }
-
-  nonCompletedTodosSorting = () => {
-    this.setState(prevState => ({
-      todoList: prevState.todoListOriginal
-        .filter(todo => todo.completed !== true),
-    }));
+    return Boolean(todos.filter(todo => todo.completed === true).length);
   }
 
   clearCompleted = () => {
-    this.setState(prevState => ({
-      todoList: prevState.todoListOriginal
-        .filter(todo => todo.completed !== true),
-      todoListOriginal: prevState.todoListOriginal
+    this.setState(({ todos }) => ({
+      todos: todos
         .filter(todo => todo.completed !== true),
     }));
-  }
-
-  completedTodosSorting = () => {
-    this.setState(prevState => ({
-      todoList: prevState.todoListOriginal
-        .filter(todo => todo.completed === true),
-    }));
-  }
-
-  allTodosToShowSorting = () => {
-    this.setState({
-      todoList: this.state.todoListOriginal, // eslint-disable-line
-    });
   }
 
   handleTodoTitleEdit = (id, title) => {
     if (title) {
-      this.setState(({ todoList }) => ({
-        todoList: todoList.map(todo => (todo.id === id
+      this.setState(({ todos }) => ({
+        todos: todos.map(todo => (todo.id === id
           ? { ...todo, todoTitle: title }
           : todo)),
       }));
@@ -145,15 +98,29 @@ class App extends React.Component {
     }
   };
 
-  onInputChange = (value) => {
-    this.setState({ todoTitle: value }); // eslint-disable-line
-  };
+  handleFieldChange = (active) => {
+    this.setState({
+      active,
+    });
+  }
+
+  filterTodos = (todos, active) => {
+    switch (active) {
+      case 2:
+        return todos.filter(todo => !todo.completed);
+      case 3:
+        return todos.filter(todo => todo.completed);
+      default:
+        return [...todos];
+    }
+  }
 
   render() {
-    const { todoList, todoListOriginal } = this.state;
+    const { todos, active } = this.state;
+    const filteredTodos = this.filterTodos(todos, active);
 
-    localStorage.setItem('todoListOriginal', JSON.stringify(todoListOriginal));
-    const listOfTodos = localStorage.getItem('todoListOriginal');
+    localStorage.setItem('todos', JSON.stringify(todos));
+    const listOfTodos = localStorage.getItem('todos');
     /* eslint-disable */
     let footerDisplay = '';
     listOfTodos !== "[]"
@@ -170,16 +137,14 @@ class App extends React.Component {
           changeStatusAll={this.changeStatusAll}
           changeStatus={this.changeStatus}
           destroyTodo={this.destroyTodo}
-          todos={todoList}
+          todos={filteredTodos}
         />
         <Filters
+          handleFieldChange={this.handleFieldChange}
           footerDisplay={footerDisplay}
           clearCompleted={this.clearCompleted}
           completedAppears={this.completedAppears}
-          allTodosToShowSorting={this.allTodosToShowSorting}
           nonCompletedCount={this.nonCompletedCount}
-          nonCompletedTodosSorting={this.nonCompletedTodosSorting}
-          completedTodosSorting={this.completedTodosSorting}
         />
       </section>
     );

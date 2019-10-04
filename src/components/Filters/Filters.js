@@ -4,15 +4,25 @@ import { TodoFiltersTypes } from '../PropTypes/PropTypes';
 
 class Filters extends React.Component {
   state = {
-    active: '',
+    active: 1,
+  }
+
+  stateProps = () => {
+    this.props.handleFieldChange(this.state.active);
   }
 
   render() {
     const { active } = this.state;
-    const { nonCompletedCount } = this.props;
+    const {
+      nonCompletedCount,
+      // handleFieldChange,
+      footerDisplay,
+      completedAppears,
+      clearCompleted,
+    } = this.props;
 
     return (
-      <footer className="footer" style={{ display: this.props.footerDisplay }}>
+      <footer className="footer" style={{ display: footerDisplay }}>
         <span className="todo-count">
           {nonCompletedCount()}
         </span>
@@ -22,7 +32,7 @@ class Filters extends React.Component {
             <a
               className={active === 1 ? 'selected' : ''}
               href="#/"
-              onClick={this.props.allTodosToShowSorting}
+              onClick={this.stateProps}
               onFocus={() => this.setState({ active: 1 })}
             >
               All
@@ -33,7 +43,7 @@ class Filters extends React.Component {
             <a
               className={active === 2 ? 'selected' : ''}
               href="#/active"
-              onClick={this.props.nonCompletedTodosSorting}
+              onClick={this.stateProps}
               onFocus={() => this.setState({ active: 2 })}
             >
               Active
@@ -44,7 +54,7 @@ class Filters extends React.Component {
             <a
               className={active === 3 ? 'selected' : ''}
               href="#/completed"
-              onClick={this.props.completedTodosSorting}
+              onClick={this.stateProps}
               onFocus={() => this.setState({ active: 3 })}
             >
               Completed
@@ -56,9 +66,9 @@ class Filters extends React.Component {
           type="button"
           className="clear-completed"
           style={{ display: 'block' }}
-          onClick={this.props.clearCompleted}
+          onClick={clearCompleted}
         >
-          {this.props.completedAppears() && 'Clear completed' }
+          {completedAppears() && 'Clear completed' }
         </button>
       </footer>
     );
