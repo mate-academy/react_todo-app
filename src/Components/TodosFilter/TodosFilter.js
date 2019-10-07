@@ -25,7 +25,7 @@ const TodosFilter = ({
         <li>
           <a
             href="#/"
-            className={buttonSelected === 'all' && 'selected'}
+            className={buttonSelected === 'all' ? 'selected' : ''}
             onClick={() => handleButtonChange('all')}
           >
             All
@@ -36,7 +36,7 @@ const TodosFilter = ({
           <a
             href="#/active"
             onClick={() => handleButtonChange('active')}
-            className={buttonSelected === 'active' && 'selected'}
+            className={buttonSelected === 'active' ? 'selected' : ''}
           >
             Active
           </a>
@@ -46,7 +46,7 @@ const TodosFilter = ({
           <a
             href="#/completed"
             onClick={() => handleButtonChange('completed')}
-            className={buttonSelected === 'completed' && 'selected'}
+            className={buttonSelected === 'completed' ? 'selected' : ''}
           >
             Completed
           </a>

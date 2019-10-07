@@ -10,6 +10,23 @@ class App extends React.Component {
     buttonSelected: 'all',
   }
 
+  componentDidMount() {
+    this.setState({
+      todos: JSON.parse(localStorage.getItem('todosList')) || [],
+      originalTodos: JSON
+        .parse(localStorage.getItem('originalTodosList')) || [],
+    });
+  }
+
+  componentDidUpdate(prevState) {
+    const { todos } = this.state;
+
+    if (todos !== prevState.todos) {
+      localStorage.setItem('originalTodosList', JSON.stringify(todos));
+      localStorage.setItem('todosList', JSON.stringify(todos));
+    }
+  }
+
   handleAddNewTodo = (todo) => {
     if (todo.title.length > 0) {
       this.setState(prevState => ({

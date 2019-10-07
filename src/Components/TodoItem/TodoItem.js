@@ -5,7 +5,7 @@ import { TodoItemProps } from '../PropTypes/PropTypes';
 class TodoItem extends React.Component {
   state = {
     isEditing: false,
-    editedFilmTitle: '',
+    editedFilmTitle: this.props.todoTitle,
   }
 
   handleDoubleClick = () => {
@@ -70,12 +70,13 @@ class TodoItem extends React.Component {
                 checked={todoStatus}
                 onChange={() => handleTodoStatus(todoId)}
               />
-              <label
+              <p
+                className="label"
                 onDoubleClick={this.handleDoubleClick}
                 htmlFor={todoId}
               >
                 {todoTitle}
-              </label>
+              </p>
               <button
                 type="button"
                 className="destroy"

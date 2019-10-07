@@ -1,7 +1,7 @@
 import React from 'react';
 import { NewTodoProps } from '../PropTypes/PropTypes';
 
-const _ = require('lodash');
+const uuidv1 = require('uuid/v1');
 
 class NewTodo extends React.Component {
   state = {
@@ -21,7 +21,7 @@ class NewTodo extends React.Component {
 
     addNewTodo({
       title: titleOfTodo,
-      id: _.uniqueId('id_'),
+      id: uuidv1(),
       completed: false,
     });
 
