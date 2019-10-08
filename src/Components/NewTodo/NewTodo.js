@@ -10,7 +10,7 @@ class NewTodo extends React.Component {
 
   handleChangeInput = ({ target }) => {
     this.setState({
-      titleOfTodo: target.value,
+      titleOfTodo: target.value.replace(/^\s/, ''),
     });
   }
 
