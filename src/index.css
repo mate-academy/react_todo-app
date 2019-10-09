@@ -190,6 +190,10 @@ body {
   appearance: none;
 }
 
+.toggle:hover, .main > label:hover {
+  cursor: pointer;
+}
+
 .todo-list li .toggle {
   opacity: 0;
 }
