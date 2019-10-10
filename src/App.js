@@ -54,11 +54,15 @@ class App extends React.Component {
   }
 
   handleDeleteTodo = (todoId) => {
+    const arrFilter = todo => (
+      todo.id !== todoId
+    );
+
     this.setState(prevState => ({
       todos: prevState.todos
-        .filter(todo => (todo.id !== todoId)),
+        .filter(arrFilter),
       originalTodos: prevState.originalTodos
-        .filter(todo => (todo.id !== todoId)),
+        .filter(arrFilter),
     }));
   }
 
@@ -80,18 +84,16 @@ class App extends React.Component {
   }
 
   handleCompletedAll = () => {
+    const filterFunc = arr => (
+      arr.map(todo => ({
+        ...todo,
+        completed: !arr.every(({ completed }) => completed),
+      }))
+    );
+
     this.setState(prevState => ({
-      todos: prevState.todos
-        .map(todo => ({
-          ...todo,
-          completed: !prevState.todos.every(({ completed }) => completed),
-        })),
-      originalTodos: prevState.originalTodos
-        .map(todo => ({
-          ...todo,
-          completed: !prevState.originalTodos
-            .every(({ completed }) => completed),
-        })),
+      todos: filterFunc(prevState.todos),
+      originalTodos: filterFunc(prevState.originalTodos),
     }));
 
     this.handleButtonChange(this.state.buttonSelected);
@@ -122,10 +124,13 @@ class App extends React.Component {
   }
 
   handleDeleteAllCompleted = () => {
+    const filterFunc = arr => (
+      arr.filter(todo => !todo.completed)
+    );
+
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => !todo.completed),
-      originalTodos: prevState.originalTodos
-        .filter(todo => !todo.completed),
+      todos: filterFunc(prevState.todos),
+      originalTodos: filterFunc(prevState.originalTodos),
     }));
   }
 
