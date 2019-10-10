@@ -120,6 +120,7 @@ class App extends React.Component {
         }));
         break;
       default:
+        break;
     }
   }
 

@@ -94,6 +94,7 @@ class TodoItem extends React.Component {
                 value={editedFilmTitle}
                 onChange={e => this.onEditChange(e)}
                 onBlur={this.handleChangeEdit}
+                autoFocus
               />
             </form>
           )
