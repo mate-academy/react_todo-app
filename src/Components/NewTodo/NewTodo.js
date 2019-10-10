@@ -42,6 +42,7 @@ class NewTodo extends React.Component {
             placeholder="What needs to be done?"
             onChange={this.handleChangeInput}
             value={titleOfTodo}
+            autoFocus
           />
         </form>
       </header>

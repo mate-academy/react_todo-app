@@ -28,7 +28,7 @@ class App extends React.Component {
   }
 
   handleAddNewTodo = (todo) => {
-    if (todo.title.length > 0) {
+    if (todo.title) {
       this.setState(prevState => ({
         todos: [...prevState.todos, todo],
         originalTodos: [...prevState.originalTodos, todo],
@@ -39,19 +39,17 @@ class App extends React.Component {
   }
 
   handleDoubleClickEditTitle = (filmTitle, todoId) => {
+    const mapFuncAddTitle = todo => (
+      todo.id === todoId
+        ? { ...todo, title: filmTitle }
+        : todo
+    );
+
     this.setState(prevState => ({
-      todos: [...prevState.todos]
-        .map(todo => (
-          todo.id === todoId
-            ? { ...todo, title: filmTitle }
-            : todo
-        )),
-      originalTodos: [...prevState.originalTodos]
-        .map(orTodo => (
-          orTodo.id === todoId
-            ? { ...orTodo, title: filmTitle }
-            : orTodo
-        )),
+      todos: prevState.todos
+        .map(mapFuncAddTitle),
+      originalTodos: prevState.originalTodos
+        .map(mapFuncAddTitle),
     }));
   }
 
@@ -60,24 +58,22 @@ class App extends React.Component {
       todos: [...prevState.todos]
         .filter(todo => (todo.id !== todoId)),
       originalTodos: [...prevState.originalTodos]
-        . filter(todo => (todo.id !== todoId)),
+        .filter(todo => (todo.id !== todoId)),
     }));
   }
 
   handleTodoStatus = (todoId) => {
+    const mapFuncCompletedTodo = todo => (
+      todo.id === todoId
+        ? { ...todo, completed: !todo.completed }
+        : todo
+    );
+
     this.setState(prevState => ({
-      todos: [...prevState.todos]
-        .map(todo => (
-          todo.id === todoId
-            ? { ...todo, completed: !todo.completed }
-            : todo
-        )),
-      originalTodos: [...prevState.originalTodos]
-        .map(orTodo => (
-          orTodo.id === todoId
-            ? { ...orTodo, completed: !orTodo.completed }
-            : orTodo
-        )),
+      todos: prevState.todos
+        .map(mapFuncCompletedTodo),
+      originalTodos: prevState.originalTodos
+        .map(mapFuncCompletedTodo),
     }));
 
     this.handleButtonChange(this.state.buttonSelected);
@@ -85,14 +81,14 @@ class App extends React.Component {
 
   handleCompletedAll = () => {
     this.setState(prevState => ({
-      todos: [...prevState.todos]
+      todos: prevState.todos
         .map(todo => ({
           ...todo,
           completed: !prevState.todos.every(({ completed }) => completed),
         })),
-      originalTodos: [...prevState.originalTodos]
-        .map(orTodo => ({
-          ...orTodo,
+      originalTodos: prevState.originalTodos
+        .map(todo => ({
+          ...todo,
           completed: !prevState.originalTodos
             .every(({ completed }) => completed),
         })),
@@ -122,7 +118,6 @@ class App extends React.Component {
         }));
         break;
       default:
-        break;
     }
   }
 
