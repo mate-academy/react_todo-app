@@ -120,7 +120,10 @@ class App extends React.Component {
         }));
         break;
       default:
-        break;
+        this.setState(prevState => ({
+          todos: [...prevState.originalTodos],
+          buttonSelected: 'all',
+        }));
     }
   }
 
