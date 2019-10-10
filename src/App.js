@@ -4,12 +4,20 @@ import TodoList from './Components/TodoList/TodoList';
 import TodoHeader from './Components/TodoHeader/TodoHeader';
 import Footer from './Components/Footer/Footer';
 
+<<<<<<< HEAD
 class App extends React.Component {
   state = {
     todos: [],
     tempValue: '',
     activeFilter: 'all',
   }
+=======
+function App() {
+  return (
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos App</h1>
+>>>>>>> b4ae3916edab124d6c23e6e389c933f2cc5f950e
 
   handleChange = (event) => {
     this.setState({
