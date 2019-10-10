@@ -18,10 +18,11 @@ class App extends React.Component {
   }
 
   handleSubmit = (event) => {
+    event.preventDefault();
+    
     if (this.state.tempValue.length > 0) {
       const id = uuid.v4();
 
-      event.preventDefault();
       this.setState(prevState => ({
         todos: [...prevState.todos, {
           text: prevState.tempValue,
