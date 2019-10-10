@@ -55,9 +55,9 @@ class App extends React.Component {
 
   handleDeleteTodo = (todoId) => {
     this.setState(prevState => ({
-      todos: [...prevState.todos]
+      todos: prevState.todos
         .filter(todo => (todo.id !== todoId)),
-      originalTodos: [...prevState.originalTodos]
+      originalTodos: prevState.originalTodos
         .filter(todo => (todo.id !== todoId)),
     }));
   }
@@ -107,13 +107,13 @@ class App extends React.Component {
         break;
       case 'active':
         this.setState(prevState => ({
-          todos: [...prevState.originalTodos].filter(todo => !todo.completed),
+          todos: prevState.originalTodos.filter(todo => !todo.completed),
           buttonSelected: 'active',
         }));
         break;
       case 'completed':
         this.setState(prevState => ({
-          todos: [...prevState.originalTodos].filter(todo => todo.completed),
+          todos: prevState.originalTodos.filter(todo => todo.completed),
           buttonSelected: 'completed',
         }));
         break;
@@ -123,8 +123,8 @@ class App extends React.Component {
 
   handleDeleteAllCompleted = () => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].filter(todo => !todo.completed),
-      originalTodos: [...prevState.originalTodos]
+      todos: prevState.todos.filter(todo => !todo.completed),
+      originalTodos: prevState.originalTodos
         .filter(todo => !todo.completed),
     }));
   }
