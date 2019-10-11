@@ -101,12 +101,6 @@ class App extends React.Component {
 
   handleButtonChange = (value) => {
     switch (value) {
-      case 'all':
-        this.setState(prevState => ({
-          todos: [...prevState.originalTodos],
-          buttonSelected: 'all',
-        }));
-        break;
       case 'active':
         this.setState(prevState => ({
           todos: prevState.originalTodos.filter(todo => !todo.completed),
@@ -119,6 +113,7 @@ class App extends React.Component {
           buttonSelected: 'completed',
         }));
         break;
+      case 'all':
       default:
         this.setState(prevState => ({
           todos: [...prevState.originalTodos],
