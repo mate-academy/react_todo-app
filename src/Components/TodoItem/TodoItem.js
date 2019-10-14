@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TodoItem = ({
-  handleDestroy,
+  handleRemove,
   id,
   todo,
   handleCheckBox,
@@ -20,7 +20,7 @@ const TodoItem = ({
         {todo.text}
       </label>
       <button
-        onClick={() => handleDestroy(id)}
+        onClick={() => handleRemove(id)}
         type="button"
         className="destroy"
       />
@@ -29,7 +29,7 @@ const TodoItem = ({
 );
 
 TodoItem.propTypes = {
-  handleDestroy: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func.isRequired,
   handleCheckBox: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
 };

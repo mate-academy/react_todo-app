@@ -19,8 +19,8 @@ class App extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    
-    if (this.state.tempValue.length > 0) {
+
+    if (this.state.tempValue.trim().length > 0) {
       const id = uuid.v4();
 
       this.setState(prevState => ({
@@ -37,13 +37,17 @@ class App extends React.Component {
   handleCheckBox = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (id === todo.id
-        ? { text: todo.text, id: todo.id, completed: !todo.completed }
+        ? {
+            text: todo.text,
+            id: todo.id,
+            completed: !todo.completed,
+          }
         : todo
       )),
     }));
   };
 
-  handleDestroy = (id) => {
+  handleRemove = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => id !== todo.id),
     }));
@@ -61,7 +65,7 @@ class App extends React.Component {
     }));
   }
 
-  handleClickArrow = () => {
+  handleClickAll = () => {
     this.setState(prevState => ({
       todos: prevState.todos.some(todo => !todo.completed)
         ? prevState.todos.map(todo => ({ ...todo, completed: true }))
@@ -73,9 +77,9 @@ class App extends React.Component {
     const {
       handleChange,
       handleSubmit,
-      handleClickArrow,
+      handleClickAll,
       handleCheckBox,
-      handleDestroy,
+      handleRemove,
       handleClearCompleted,
       handleActiveFilter,
     } = this;
@@ -86,7 +90,7 @@ class App extends React.Component {
       activeFilter,
     } = this.state;
 
-    let filteredTodos;
+    let filteredTodos = [];
 
     switch (activeFilter) {
       case 'active':
@@ -99,7 +103,6 @@ class App extends React.Component {
 
       default:
         filteredTodos = todos;
-        break;
     }
 
     return (
@@ -114,17 +117,18 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={todos.every(todo => todo.completed)}
+            onClick={handleClickAll}
           />
-          <label
-            htmlFor="toggle-all"
-            onClick={handleClickArrow}
-          >
-            Mark all as complete
-          </label>
+          { todos.length === 0 ||
+            <label htmlFor="toggle-all">
+              Mark all as complete
+            </label>
+          }
           <TodoList
             todos={filteredTodos}
             handleCheckBox={handleCheckBox}
-            handleDestroy={handleDestroy}
+            handleRemove={handleRemove}
           />
         </section>
         {todos.length > 0

@@ -2,14 +2,14 @@ import React from 'react';
 import TodoItem from '../TodoItem/TodoItem';
 
 const TodoList = ({
-  handleDestroy,
+  handleRemove,
   todos,
   handleCheckBox,
 }) => (
   <ul className="todo-list">
     {todos.map(todo => (
       <TodoItem
-        handleDestroy={handleDestroy}
+        handleRemove={handleRemove}
         handleCheckBox={handleCheckBox}
         todo={todo}
         id={todo.id}
