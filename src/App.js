@@ -16,13 +16,15 @@ class App extends React.Component {
       originalTodos: JSON
         .parse(localStorage.getItem('originalTodosList')) || [],
     });
+
+    this.handleButtonChange(this.state.buttonSelected);
   }
 
   componentDidUpdate(prevState) {
-    const { todos } = this.state;
+    const { todos, originalTodos } = this.state;
 
     if (todos !== prevState.todos) {
-      localStorage.setItem('originalTodosList', JSON.stringify(todos));
+      localStorage.setItem('originalTodosList', JSON.stringify(originalTodos));
       localStorage.setItem('todosList', JSON.stringify(todos));
     }
   }
