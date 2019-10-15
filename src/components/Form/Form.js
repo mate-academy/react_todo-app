@@ -11,7 +11,7 @@ class Form extends React.Component {
 
   onEnterDown = (event) => {
     if (event.key === 'Enter') {
-      if (this.state.todoTitle) {
+      if (this.state.todoTitle.trim()) {
         this.props.AddTodo({
           todoTitle: this.state.todoTitle,
           id: shortid.generate(),

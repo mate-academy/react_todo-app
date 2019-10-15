@@ -83,6 +83,7 @@ class App extends React.Component {
     this.setState(({ todos }) => ({
       todos: todos
         .filter(todo => todo.completed !== true),
+      active: 2,
     }));
   }
 
