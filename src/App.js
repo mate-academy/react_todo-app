@@ -7,29 +7,29 @@ import Footer from './Components/Footer/Footer';
 class App extends React.Component {
   state = {
     todos: [],
-    tempValue: '',
+    title: '',
     activeFilter: 'all',
   }
 
-  handleChange = (event) => {
+  handleChange = ({ target }) => {
     this.setState({
-      tempValue: event.target.value,
+      title: target.value,
     });
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    if (this.state.tempValue.trim().length > 0) {
+    if (this.state.title.trim().length > 0) {
       const id = uuid.v4();
 
       this.setState(prevState => ({
         todos: [...prevState.todos, {
-          text: prevState.tempValue,
+          text: prevState.title,
           completed: false,
           id,
         }],
-        tempValue: '',
+        title: '',
       }));
     }
   }
@@ -38,8 +38,7 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (id === todo.id
         ? {
-            text: todo.text,
-            id: todo.id,
+            ...todo,
             completed: !todo.completed,
           }
         : todo
@@ -86,7 +85,7 @@ class App extends React.Component {
 
     const {
       todos,
-      tempValue,
+      title,
       activeFilter,
     } = this.state;
 
@@ -108,7 +107,7 @@ class App extends React.Component {
     return (
       <section className="todoapp">
         <TodoHeader
-          value={tempValue}
+          value={title}
           handleChange={handleChange}
           handleSubmit={handleSubmit}
         />
@@ -120,7 +119,7 @@ class App extends React.Component {
             checked={todos.every(todo => todo.completed)}
             onClick={handleClickAll}
           />
-          { todos.length === 0 ||
+          {todos.length === 0 ||
             <label htmlFor="toggle-all">
               Mark all as complete
             </label>
