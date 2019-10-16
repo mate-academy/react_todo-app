@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 
 import TodoItem from '../TodoItem/TodoItem';
 import { TodoListTypes } from '../PropTypes/PropTypes';
-/* eslint-disable */
+
 const TodoList = ({
   todos,
   destroyTodo,
@@ -10,7 +11,7 @@ const TodoList = ({
   changeStatusAll,
   handleEdit,
   handleTodoTitleEdit,
-  footerDisplay
+  footerDisplay,
 }) => (
   <section className="main" style={{ display: footerDisplay }}>
     <input type="checkbox" id="toggle-all" className="toggle-all" />
@@ -37,7 +38,6 @@ const TodoList = ({
     </ul>
   </section>
 );
-/* eslint-enable */
 
 TodoList.propTypes = TodoListTypes;
 

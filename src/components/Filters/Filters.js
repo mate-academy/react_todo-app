@@ -14,8 +14,7 @@ class Filters extends React.Component {
   render() {
     const { active } = this.state;
     const {
-      nonCompletedCount,
-      // handleFieldChange,
+      activeProblems,
       footerDisplay,
       completedAppears,
       clearCompleted,
@@ -24,7 +23,7 @@ class Filters extends React.Component {
     return (
       <footer className="footer" style={{ display: footerDisplay }}>
         <span className="todo-count">
-          {nonCompletedCount()}
+          {activeProblems()}
         </span>
 
         <ul className="filters">

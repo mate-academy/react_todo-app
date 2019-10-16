@@ -7,14 +7,18 @@ const TodoShape = {
 };
 
 export const TodoItemTypes = {
-  todo: PropTypes.object.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    id: PropTypes.string,
+    completed: PropTypes.bool,
+  })),
   destroyTodo: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
   handleTodoTitleEdit: PropTypes.func.isRequired,
 };
 
 export const TodoListTypes = {
-  todoList: PropTypes.arrayOf(PropTypes.objectOf(TodoShape)),
+  todoList: PropTypes.arrayOf(PropTypes.shape(TodoShape)),
   destroyTodo: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
   changeStatusAll: PropTypes.func.isRequired,

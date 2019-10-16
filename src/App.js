@@ -20,10 +20,9 @@ class App extends React.Component {
     }));
   }
 
-  destroyTodo = (idTodoToDestroy) => {
+  destroyTodo = (id) => {
     this.setState(({ todos }) => ({
-      todos: todos
-        .filter(todo => todo.id !== idTodoToDestroy),
+      todos: todos.filter(todo => todo.id !== id),
     }));
   }
 
@@ -64,7 +63,7 @@ class App extends React.Component {
     ));
   }
 
-  nonCompletedCount = () => {
+  activeProblems = () => {
     const count = this.state.todos
       .filter(todo => !todo.completed);
 
@@ -82,7 +81,7 @@ class App extends React.Component {
   clearCompleted = () => {
     this.setState(({ todos }) => ({
       todos: todos
-        .filter(todo => todo.completed !== true),
+        .filter(todo => !todo.completed),
       active: 2,
     }));
   }
@@ -122,12 +121,12 @@ class App extends React.Component {
 
     localStorage.setItem('todos', JSON.stringify(todos));
     const listOfTodos = localStorage.getItem('todos');
-    /* eslint-disable */
+
     let footerDisplay = '';
-    listOfTodos !== "[]"
-    ? footerDisplay = 'block'
-    : footerDisplay = 'none';
-    /* eslint-enable */
+
+    listOfTodos !== '[]'
+      ? footerDisplay = 'block'
+      : footerDisplay = 'none';
 
     return (
       <section className="todoapp">
@@ -145,7 +144,7 @@ class App extends React.Component {
           footerDisplay={footerDisplay}
           clearCompleted={this.clearCompleted}
           completedAppears={this.completedAppears}
-          nonCompletedCount={this.nonCompletedCount}
+          activeProblems={this.activeProblems}
         />
       </section>
     );

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import './TodoItem.css';
 import { TodoItemTypes } from '../PropTypes/PropTypes';
 
 class TodoItem extends React.Component {
@@ -19,7 +18,9 @@ class TodoItem extends React.Component {
 
   handleTitleSubmit = (e) => {
     e.preventDefault();
-    this.props.handleTodoTitleEdit(this.props.id, this.state.titleToEdit);
+    const { handleTodoTitleEdit, id } = this.props;
+
+    handleTodoTitleEdit(id, this.state.titleToEdit);
     this.setState({ isEditing: false });
   };
 
@@ -32,6 +33,8 @@ class TodoItem extends React.Component {
       changeStatus,
     } = this.props;
 
+    const { isEditing, titleToEdit } = this.state;
+
     return (
       <li className={completed ? 'completed' : ''}>
         <div className="view">
@@ -43,7 +46,7 @@ class TodoItem extends React.Component {
             checked={completed}
             onChange={() => changeStatus(id)}
           />
-          {this.state.isEditing
+          {isEditing
             ? (
               <form
                 className="todo-item__form"
@@ -52,7 +55,7 @@ class TodoItem extends React.Component {
                 <input
                   className="todo-item__input"
                   type="text"
-                  value={this.state.titleToEdit}
+                  value={titleToEdit}
                   onChange={e => this.handleTitleChange(e.target)}
                   onBlur={this.handleTitleChangeEnd}
                 />
