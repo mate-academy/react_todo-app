@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function TodoItem({ item, toggleOne, clearItem }) {
   return (
-    <li className="">
+    <li className={item.completed ? 'completed' : ''}>
       <div className="view">
         <input
           type="checkbox"
