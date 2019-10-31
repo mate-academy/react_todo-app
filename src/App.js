@@ -1,75 +1,138 @@
 import React from 'react';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import Footer from './components/Footer/Footer';
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      todoList: [],
+      todoId: 1,
+      allToggle: false,
+      activeFilter: 'all',
+    };
+  }
+
+  addNewTodo = (todo) => {
+    const fullTodo = {
+      title: todo,
+      id: this.state.todoId,
+      status: false,
+    };
+
+    this.setState((prev) => {
+      return {
+        ...prev,
+        todoList: [...prev.todoList, fullTodo],
+        todoId: prev.todoId + 1,
+      };
+    });
+  }
+
+  deleteTodo = (event) => {
+    const { todoList } = this.state;
+    const workList = [...todoList];
+    const delIndex = workList
+      .map(todo => todo.title === event.target.value);
+    workList.splice (delIndex, 1);
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...workList]
+      }
+    })
+  }
+
+  leftItems = () => {
+    let countLeftItem = 0;
+    this.state.todoList.forEach(todo => {
+      if (todo.status === false) {
+        countLeftItem++
+      }
+    })
+
+    return countLeftItem;
+  }
+
+  chooseFinishTask = (id) => {
+    const { todoList } = this.state;
+    let workList = [...todoList];
+    const chooseTask = workList
+      .findIndex(todo => todo.id === id);
+      workList[chooseTask].status === true
+      ? workList[chooseTask].status = false
+      : workList[chooseTask].status = true;
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...workList]
+      }
+    })
+  }
+
+  toggleAllTodos = () => {
+    const { todoList, allToggle } = this.state;
+    let workList = [...todoList]
+    if (!allToggle) {
+      workList.forEach(todo => todo.status = true);
+    } else {
+      workList.forEach(todo => todo.status = false)
+    }
+
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...workList],
+        allToggle: !prev.allToggle
+      }
+    })
+  }
+
+  clearCompleted = () => {
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: []
+      }
+    })
+  }
+
+  handleActiveFilter = (status) => {
+    this.setState(prev => {
+      return {
+        ...prev,
+        activeFilter: status
+      }
+    })
+  }
+
+
+  render() {
+    const { todoList, activeFilter } = this.state;
+
+    return (
+      <section className="todoapp">
+        <Header onSubmit={this.addNewTodo}/>
+        <Main
+          todoList={todoList}
+          deleteItem={this.deleteTodo}
+          chooseFinishTask={this.chooseFinishTask}
+          toggleAllTodos={this.toggleAllTodos}
+          activeFilter={activeFilter}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+        <Footer
+          todoListLength={this.leftItems()}
+          todoList={this.state.todoList}
+          clearCompleted={this.clearCompleted}
+          activeFilter={activeFilter}
+          handleActiveFilter={this.handleActiveFilter}
+        />
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
