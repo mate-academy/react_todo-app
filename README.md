@@ -1,6 +1,8 @@
 # React ToDo App
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/)
+
 [LINK](https://dsrtf0x-git.github.io/react_todo-app/)
+
 Requirements:
 - when app loads, user sees an input to enter their TODOs
 - when user types some TODO and hits enter, it's added to the list below (see the gif)
