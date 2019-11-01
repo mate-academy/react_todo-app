@@ -1,5 +1,5 @@
 # React ToDo App
-Implement simple [TODO app](http://todomvc.com/examples/vanillajs/)
+Implement simple [TODO app](https://andrii-pavlenko.github.io/react_todo-app/)
 
 Requirements:
 - when app loads, user sees an input to enter their TODOs
