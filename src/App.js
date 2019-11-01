@@ -69,14 +69,23 @@ class App extends React.Component {
     }));
   };
 
-  toggleItem = (index) => {
-    const list = [...this.state.todolist];
+  toggleItem = (id) => {
+    this.setState((PrevState) => {
+      const newTodo = PrevState.todolist.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            done: !item.done,
+          };
+        }
 
-    list[index].done = !list[index].done;
-    this.setState(PrevState => ({
-      ...PrevState,
-      todoList: list,
-    }));
+        return item;
+      });
+
+      return ({
+        todolist: newTodo,
+      });
+    });
   };
 
   toggleAll = () => {
@@ -107,21 +116,20 @@ class App extends React.Component {
   };
 
   render() {
-    const list = [...this.state.todolist];
     let filteredList;
 
     switch (this.state.filter) {
       case 'All':
-        filteredList = list;
+        filteredList = this.state.todolist;
         break;
       case 'Active':
-        filteredList = list.filter(item => item.done === false);
+        filteredList = this.state.todolist.filter(item => item.done === false);
         break;
       case 'Completed':
-        filteredList = list.filter(item => item.done === true);
+        filteredList = this.state.todolist.filter(item => item.done === true);
         break;
       default:
-        filteredList = list;
+        filteredList = this.state.todolist;
     }
 
     return (

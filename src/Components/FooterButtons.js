@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class FooterButtons extends Component {
   render() {
-    const buttons = [{dir: 'All'}, {dir: 'Active'}, {dir: 'Completed'}];
+    const buttons = [{ dir: 'All' }, { dir: 'Active' }, { dir: 'Completed' }];
     const { filter, changeFilter } = this.props;
     return (
       <ul className="filters">
