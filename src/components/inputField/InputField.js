@@ -24,8 +24,12 @@ export default class InputField extends Component {
   render() {
     return (
       <form action="index.html" onSubmit={this.onSubmit}>
-        <input className="new-todo" placeholder="What needs to be done?" onChange={this.onInputChange}
-        value={this.state.text}/>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          onChange={this.onInputChange}
+          value={this.state.text}
+        />
       </form>
     );
   }

@@ -7,8 +7,7 @@ import StatusPanel from './components/statusPanel/StatusPanel';
 export default class App extends Component {
 
   state = {
-    todolist: [
-    ],
+    toDoList: [],
     lastId: 0,
     filterType: 'All'
   }
@@ -22,71 +21,67 @@ export default class App extends Component {
     this.setState(prevState => {
       return {
         ...prevState,
-        todolist: [...this.state.todolist, newItem],
+        toDoList: [...prevState.toDoList, newItem],
         lastId: newItem.id
       }
     })
   }
 
   deleteItem = (id) => {
-    this.setState(({todolist}) => {
-      const index = todolist.findIndex(item => item.id === id);
-
-      const beforeDeletedItem = todolist.slice(0, index);
-      const afterDeletedItem = todolist.slice(index + 1);
-
+    this.setState(({toDoList}) => {
       return {
-        todolist: [...beforeDeletedItem, ...afterDeletedItem]
+        toDoList: [...toDoList.filter(e => e.id !== id)]
       }
     });
   }
 
   onToggleDone = (id) => {
-    this.setState(({todolist}) => {
-      const index = todolist.findIndex(item => item.id === id);
-      const oldToDoItem = todolist.find(todo => todo.id === id);
+    this.setState(({toDoList}) => {
+      const index = toDoList.findIndex(item => item.id === id);
+      const oldToDoItem = toDoList.find(todo => todo.id === id);
 
       const newToDoItem = { ...oldToDoItem,
                             done: !oldToDoItem.done};
+      // Слабо представляю как сделать без слайса.
+      const beforeToggleItem = toDoList.slice(0, index);
+      const afterToggleItem = toDoList.slice(index + 1);
 
-      const beforeToggleItem = todolist.slice(0, index);
-      const afterToggleItem = todolist.slice(index + 1);
       return {
-        todolist: [...beforeToggleItem, newToDoItem, ...afterToggleItem]
+        toDoList: [...beforeToggleItem, newToDoItem, ...afterToggleItem]
       }
     })
   }
 
   toggleAll = () => {
-    this.setState(({todolist}) => {
+    this.setState(({toDoList}) => {
 
-      if (todolist.every(item => item.done === true)) {
-        const newToDoList = todolist.map(item => ({
+      if (toDoList.every(item => item.done === true)) {
+        const newToDoList = toDoList.map(item => ({
           ...item,
           done: false
         }));
 
         return {
-          todolist: newToDoList
+          toDoList: newToDoList
         }
       }
 
-      const newToDoList = todolist.map(item => ({
+      const newToDoList = toDoList.map(item => ({
         ...item,
         done: true
       }));
 
       return {
-        todolist: newToDoList
+        toDoList: newToDoList
       }
     });
   }
 
   clearCompleted = () => {
-    this.setState(({todolist}) => {
-      const clearList = todolist.filter(item => !item.done);
+    this.setState(({toDoList}) => {
+      const clearList = toDoList.filter(item => !item.done);
       return {
-        todolist: clearList
+        toDoList: clearList
       }
     });
   }
@@ -110,8 +105,8 @@ export default class App extends Component {
   }
 
   render() {
-
-    const visibleList = this.filter(this.state.todolist, this.state.filterType)
+    const { toDoList, filterType } = this.state;
+    const visibleList = this.filter(toDoList, filterType)
 
     return (
       <section className="todoapp">
