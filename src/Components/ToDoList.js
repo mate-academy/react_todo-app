@@ -4,12 +4,12 @@ import ToDoItem from './ToDoItem';
 class ToDoList extends Component {
   render() {
     const {
-      todolist, deleteItem, toggleItem, toggleAll,
+      todolist, deleteItem, toggleItem, toggleAll, checked,
     } = this.props;
 
     return (
       <section className="main" style={{ display: `${todolist.length > 0 ? 'block' : 'none'}` }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" onChange={toggleAll} />
+        <input type="checkbox" id="toggle-all" className="toggle-all" onChange={toggleAll} checked={checked()} />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">

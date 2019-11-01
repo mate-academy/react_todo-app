@@ -115,6 +115,13 @@ class App extends React.Component {
     }));
   };
 
+  checked = () => {
+    const completed = this.state.todolist
+      .every(item => item.done === true);
+
+    return completed;
+  };
+
   render() {
     let filteredList;
 
@@ -145,6 +152,7 @@ class App extends React.Component {
           deleteItem={this.deleteItem}
           toggleItem={this.toggleItem}
           toggleAll={this.toggleAll}
+          checked={this.checked}
         />
 
         <Footer
