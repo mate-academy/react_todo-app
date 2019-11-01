@@ -10,7 +10,9 @@ class Main extends React.Component {
       deleteItem,
       chooseFinishTask,
       toggleAllTodos,
-      activeFilter
+      activeFilter,
+      changeTodoItem,
+      editItem
     } = this.props;
 
     return (
@@ -20,12 +22,14 @@ class Main extends React.Component {
           id="toggle-all"
           className="toggle-all"
         />
-        <label htmlFor="mark-all" onClick={() => toggleAllTodos()}>Mark all as complete</label>
+        <label htmlFor="mark-all" onClick={toggleAllTodos}>Mark all as complete</label>
         <TodoList
+          editItem={editItem}
           todoList={todoList}
           deleteItem={deleteItem}
           chooseFinishTask={chooseFinishTask}
           activeFilter={activeFilter}
+          changeTodoItem={changeTodoItem}
         />
       </section>
     )

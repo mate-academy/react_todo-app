@@ -17,10 +17,14 @@ class App extends React.Component {
   }
 
   addNewTodo = (todo) => {
+    if (todo === '') {
+      return
+    }
     const fullTodo = {
       title: todo,
       id: this.state.todoId,
       status: false,
+      edit: false,
     };
 
     this.setState((prev) => {
@@ -32,12 +36,10 @@ class App extends React.Component {
     });
   }
 
-  deleteTodo = (event) => {
+  deleteItem = (id) => {
     const { todoList } = this.state;
-    const workList = [...todoList];
-    const delIndex = workList
-      .map(todo => todo.title === event.target.value);
-    workList.splice (delIndex, 1);
+    const workList = todoList
+      .filter(todo => todo.id !== id);
     this.setState(prev => {
       return {
         ...prev,
@@ -46,15 +48,15 @@ class App extends React.Component {
     })
   }
 
-  leftItems = () => {
-    let countLeftItem = 0;
+  countRelevantTodo = () => {
+    let countRelevantItem = 0;
     this.state.todoList.forEach(todo => {
       if (todo.status === false) {
-        countLeftItem++
+        countRelevantItem++
       }
     })
 
-    return countLeftItem;
+    return countRelevantItem;
   }
 
   chooseFinishTask = (id) => {
@@ -95,9 +97,10 @@ class App extends React.Component {
     this.setState(prev => {
       return {
         ...prev,
-        todoList: []
-      }
-    })
+        todoList: [...prev.todoList
+          .filter(todo => todo.status === false)],
+      };
+    });
   }
 
   handleActiveFilter = (status) => {
@@ -109,6 +112,37 @@ class App extends React.Component {
     })
   }
 
+  changeTodoItem = (id) => {
+    const currentTodo = this.state.todoList.findIndex(todo => todo.id === id)
+    const newTodo = [...this.state.todoList];
+    newTodo[currentTodo].edit = true;
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...newTodo],
+      }
+    })
+  }
+
+  editItem = (inputValue, id) => {
+    const { todoList } = this.state;
+    const copyTodoList = [...todoList];
+    const currentTodo = copyTodoList.findIndex(todo => todo.id === id);
+    copyTodoList[currentTodo] = {
+      ...todoList[currentTodo],
+      title: inputValue,
+      edit: false
+    }
+    if (!inputValue) {
+      copyTodoList.splice(currentTodo, 1)
+    }
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...copyTodoList],
+      }
+    })
+  }
 
   render() {
     const { todoList, activeFilter } = this.state;
@@ -118,13 +152,15 @@ class App extends React.Component {
         <Header onSubmit={this.addNewTodo}/>
         <Main
           todoList={todoList}
-          deleteItem={this.deleteTodo}
+          deleteItem={this.deleteItem}
           chooseFinishTask={this.chooseFinishTask}
           toggleAllTodos={this.toggleAllTodos}
           activeFilter={activeFilter}
+          changeTodoItem={this.changeTodoItem}
+          editItem={this.editItem}
         />
         <Footer
-          todoListLength={this.leftItems()}
+          todoListLength={this.countRelevantTodo()}
           todoList={this.state.todoList}
           clearCompleted={this.clearCompleted}
           activeFilter={activeFilter}
