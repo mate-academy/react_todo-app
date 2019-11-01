@@ -18,10 +18,6 @@ class TodoApp extends PureComponent {
       todos: storageTodos,
       idCounter: storageIdCounter,
     });
-
-    window.addEventListener('beforeunload', (event) => {
-      this.setLocalStorage();
-    });
   }
 
   handleKeyPress = (event) => {
@@ -43,7 +39,7 @@ class TodoApp extends PureComponent {
           todos: [...prevState.todos, newTodo],
           title: '',
         });
-      });
+      }, this.setLocalStorage);
     }
   };
 
@@ -59,7 +55,7 @@ class TodoApp extends PureComponent {
     this.setState((prevState) => ({
       ...prevState,
       todos: prevState.todos.map(todo => ({ ...todo, completed: !!target.checked })),
-    }));
+    }), this.setLocalStorage);
   }
 
   handleTodoCompleteChange = (event) => {
@@ -77,7 +73,7 @@ class TodoApp extends PureComponent {
         ...prevState,
         todos: newTodoList,
       });
-    });
+    }, this.setLocalStorage);
   };
 
   handleTodoBtnDestroyClick = (event) => {
@@ -93,7 +89,7 @@ class TodoApp extends PureComponent {
         ...prevState,
         todos: newTodoList,
       });
-    });
+    }, this.setLocalStorage);
   };
 
   getFiltredTodos = (filterName, todos) => {
@@ -134,7 +130,7 @@ class TodoApp extends PureComponent {
         ...prevState,
         todos: newTodosList,
       });
-    });
+    }, this.setLocalStorage);
   };
 
   handleTodoItemDoubleClick = (event) => {
@@ -153,7 +149,7 @@ class TodoApp extends PureComponent {
         ...prevState,
         todos: newTodos,
       });
-    });
+    }, this.setLocalStorage);
   };
 
   handleEditInpuPressKey = (event) => {
@@ -171,7 +167,7 @@ class TodoApp extends PureComponent {
         return ({
           todos: newTodoList,
         });
-      });
+      }, this.setLocalStorage);
     }
   };
 
