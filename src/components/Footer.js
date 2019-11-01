@@ -12,7 +12,7 @@ const Footer = ({
     <ul className="filters">
       <li>
         <a
-          href="/#"
+          href="#/"
           className={filter === 'all' ? 'selected' : undefined}
           onClick={() => onFilter('all')}
         >
