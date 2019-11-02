@@ -1,8 +1,17 @@
 import React from 'react';
 import ControlPanel from './ControlPanel';
-import TodoItem from "./todoItem";
+import TodoItem from './todoItem';
 
-function TodoList({ list, toDelete, toggled, clearDone, toggledAll, activeFilter, changeClass, props }) {
+function TodoList({
+  list,
+  toDelete,
+  toggled,
+  clearDone,
+  toggledAll,
+  activeFilter,
+  changeClass,
+  props,
+}) {
   return list.length > 0 ? (
     <>
       <section className="main" style={{ display: 'block' }}>
@@ -11,6 +20,7 @@ function TodoList({ list, toDelete, toggled, clearDone, toggledAll, activeFilter
           id="toggle-all"
           className="toggle-all"
           onChange={toggledAll}
+          activeFilter={activeFilter}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 

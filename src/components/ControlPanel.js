@@ -1,7 +1,9 @@
 import React from 'react';
 import Buttons from './Buttons';
 
-function ControlPanel({ list, clearDone, activeFilter, props }) {
+function ControlPanel({
+  list, clearDone, activeFilter, props,
+}) {
   return (
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
@@ -25,6 +27,5 @@ function ControlPanel({ list, clearDone, activeFilter, props }) {
     </footer>
   );
 }
-
 
 export default ControlPanel;

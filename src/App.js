@@ -28,6 +28,7 @@ class App extends React.Component {
         id: prevState.lastId + 1,
       }],
       lastId: prevState.lastId + 1,
+      // toDisplay: prevState.list,
     }));
   };
 
@@ -53,14 +54,14 @@ class App extends React.Component {
         };
       }
 
-      const newList =  list.map(item => ({
+      const newList = list.map(item => ({
         ...item,
         done: false,
       }));
 
       return {
         list: newList,
-      }
+      };
     });
   };
 
@@ -76,7 +77,6 @@ class App extends React.Component {
         }
 
         return item;
-
       })],
     }));
   };
@@ -89,6 +89,7 @@ class App extends React.Component {
   };
 
   activeFilter = (e) => {
+    e.preventDefault();
     const tab = e.target;
     const activeTab = tab.innerText;
 
@@ -96,28 +97,24 @@ class App extends React.Component {
       case 'All':
         this.setState(prevState => ({
           ...prevState,
-          list: prevState.list,
           activeTab: 'All',
         }));
         break;
       case 'Active':
         this.setState(prevState => ({
           ...prevState,
-          list: prevState.list.filter(item => !item.done),
           activeTab: 'Active',
         }));
         break;
       case 'Completed':
         this.setState(prevState => ({
           ...prevState,
-          list: prevState.list.filter(item => item.done),
           activeTab: 'Completed',
         }));
         break;
       default:
         this.setState(prevState => ({
           ...prevState,
-          list: prevState.list,
           activeTab: 'All',
         }));
         break;
@@ -125,12 +122,29 @@ class App extends React.Component {
   };
 
   render() {
+    let filtredList;
+
+    switch (this.state.activeTab) {
+      case 'All':
+        filtredList = this.state.list;
+        break;
+      case 'Active':
+        filtredList = this.state.list.filter(item => !item.done);
+        break;
+      case 'Completed':
+        filtredList = this.state.list.filter(item => item.done);
+        break;
+      default:
+        filtredList = this.state.list;
+        break;
+    }
+
     return (
       <section className="todoapp">
-        <Input onSubmit={this.addTodo} />
+        <Input onSubmit={this.addTodo} activeFilter={this.activeFilter} />
 
         <TodoList
-          list={this.state.list}
+          list={filtredList}
           toDelete={this.toDelete}
           clearDone={this.clearDone}
           toggled={this.toggled}

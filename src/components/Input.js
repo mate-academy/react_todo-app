@@ -10,7 +10,7 @@ class Input extends React.Component {
   }
 
   onSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
     const { onSubmit } = this.props;
     const { text } = this.state;
 
