@@ -8,8 +8,9 @@ export default class ToDoListItem extends Component {
       <li className={isCompleted}>
         <div className="view">
           <input type="checkbox" className="toggle" id={`todo-${item.id}`} checked={item.done} onChange={() => toggleItem(item.id)} />
-          <label htmlFor={`todo-${item.id}`}>{item.text}</label>
-          <button type="button" className="destroy" onClick={() => deleteItem(item.id)}/>
+          <label htmlFor={`todo-${item.id}`}>{item.text}
+          <button type="button" className="destroy" onClick={() => deleteItem(item.id)}/></label>
+
         </div>
       </li>
     );

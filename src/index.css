@@ -211,9 +211,10 @@ body {
 .todo-list li label {
   word-break: break-all;
   padding: 15px 15px 15px 60px;
-  display: block;
   line-height: 1.2;
   transition: color 0.4s;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .todo-list li.completed label {
@@ -245,11 +246,23 @@ body {
 }
 
 .todo-list li:hover .destroy {
-  display: block;
+  display: inline-block;
 }
 
 .todo-list li .edit {
   display: none;
+}
+
+.view .edit-button {
+  display: block;
+  margin-left: auto;
+  margin-right: 30px;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.view .edit-button:hover {
+  opacity: 1;
 }
 
 .todo-list li.editing:last-child {

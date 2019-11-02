@@ -104,6 +104,24 @@ export default class App extends Component {
     this.setState({filterType})
   }
 
+  componentDidMount() {
+    const storageToDoList = JSON.parse(localStorage.getItem('toDoList')) || [];
+    const storageId = localStorage.getItem('lastId');
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        toDoList: [...storageToDoList],
+        lastId: +storageId,
+      };
+    });
+  }
+
+  componentDidUpdate() {
+    const toDoListToStorage = JSON.stringify(this.state.toDoList);
+    localStorage.setItem('toDoList', toDoListToStorage);
+    localStorage.setItem('lastId', this.state.lastId);
+  }
+
   render() {
     const { toDoList, filterType } = this.state;
     const visibleList = this.filter(toDoList, filterType)
@@ -118,11 +136,12 @@ export default class App extends Component {
 
           <ToDoList todolist={visibleList}
           onDelete={this.deleteItem}
-          onToggle={this.onToggleDone}/>
+          onToggle={this.onToggleDone}
+          />
         </section>
         <StatusPanel todolist={visibleList}
         getClearList={this.clearCompleted}
-        filterStatus={this.state.filterType}
+        filterStatus={filterType}
         onFilterChange={this.onFilterChange}/>
       </section>
     );

@@ -21,7 +21,7 @@ export default class StatusPanel extends Component {
       const isActive = filterStatus === name;
       const selectedButton = isActive ? `selected` : ``;
       return (
-        <li>
+        <li key={name}>
           <a href={`#/${name}`}
           className={selectedButton}
           onClick={() => onFilterChange(name)}>{name}</a>

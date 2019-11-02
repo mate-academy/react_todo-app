@@ -10,7 +10,8 @@ export default class ToDoList extends Component {
       <ul className="todo-list">
         {todolist.map(item => <ToDoListItem item={item} key={item.id} deleteItem={onDelete}
         toggleItem={onToggle}
-        fullList={todolist}/>)}
+        fullList={todolist}
+      />)}
       </ul>
     );
   }
