@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
-import ControlPanel from './ControlPanel';
 
 function TodoList(
   {
     items,
     toggleOne,
     toggleAll,
-    handleFilter,
     selectedTab,
     clearItem,
-    clearCompleted,
   }
 ) {
   let filteredItems = [];
@@ -48,11 +45,6 @@ function TodoList(
             ))}
           </ul>
         </section>
-        <ControlPanel
-          items={items}
-          handleFilter={handleFilter}
-          clearCompleted={clearCompleted}
-        />
       </>
     );
   }
@@ -63,11 +55,9 @@ function TodoList(
 TodoList.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   toggleOne: PropTypes.func.isRequired,
-  handleFilter: PropTypes.func.isRequired,
   toggleAll: PropTypes.func.isRequired,
   selectedTab: PropTypes.string.isRequired,
   clearItem: PropTypes.func.isRequired,
-  clearCompleted: PropTypes.func.isRequired,
 };
 
 export default TodoList;

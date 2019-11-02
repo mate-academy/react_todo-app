@@ -7,8 +7,8 @@ function ControlPanel({ items, handleFilter, clearCompleted }) {
     return (
       <footer className="footer" style={{ display: 'block' }}>
         <span className="todo-count">
-          {items.length}
-          items left
+          {items.filter(item => !item.completed).length}
+          <span> items left</span>
         </span>
 
         <ul className="filters">
