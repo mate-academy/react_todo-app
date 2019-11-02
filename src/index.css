@@ -213,8 +213,7 @@ body {
   padding: 15px 15px 15px 60px;
   line-height: 1.2;
   transition: color 0.4s;
-  display: flex;
-  justify-content: flex-end;
+  display: block;
 }
 
 .todo-list li.completed label {
