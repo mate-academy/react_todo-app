@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AddNewTodo from '../AddNewTodo/AddNewTodo';
 
-class Header extends React.Component {
-
-  render () {
+class Header extends React.PureComponent {
+  render() {
     const { onSubmit } = this.props;
 
     return (
@@ -14,5 +14,9 @@ class Header extends React.Component {
     )
   }
 }
+
+Header.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Header;

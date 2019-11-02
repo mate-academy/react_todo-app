@@ -1,10 +1,9 @@
 import React from 'react';
-import TodoList from '../TodoList/TodoList';
 import PropTypes from 'prop-types';
+import TodoList from '../TodoList/TodoList';
 
-class Main extends React.Component {
-
-  render () {
+class Main extends React.PureComponent {
+  render() {
     const {
       todoList,
       deleteItem,
@@ -12,7 +11,7 @@ class Main extends React.Component {
       toggleAllTodos,
       activeFilter,
       changeTodoItem,
-      editItem
+      editItem,
     } = this.props;
 
     return (
@@ -22,7 +21,12 @@ class Main extends React.Component {
           id="toggle-all"
           className="toggle-all"
         />
-        <label htmlFor="mark-all" onClick={toggleAllTodos}>Mark all as complete</label>
+        <label
+          htmlFor="mark-all"
+          onClick={toggleAllTodos}
+        >
+          Mark all as complete
+        </label>
         <TodoList
           editItem={editItem}
           todoList={todoList}
@@ -32,16 +36,18 @@ class Main extends React.Component {
           changeTodoItem={changeTodoItem}
         />
       </section>
-    )
+    );
   }
 }
 
 Main.propTypes = {
-  todoList: PropTypes.array.isRequired,
+  todoList: PropTypes.arrayOf(PropTypes.object).isRequired,
   deleteItem: PropTypes.func.isRequired,
   chooseFinishTask: PropTypes.func.isRequired,
   toggleAllTodos: PropTypes.func.isRequired,
-  activeFilter: PropTypes.string.isRequired
-}
+  activeFilter: PropTypes.string.isRequired,
+  changeTodoItem: PropTypes.func.isRequired,
+  editItem: PropTypes.func.isRequired,
+};
 
 export default Main;

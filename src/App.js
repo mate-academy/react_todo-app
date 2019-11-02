@@ -18,8 +18,9 @@ class App extends React.Component {
 
   addNewTodo = (todo) => {
     if (todo === '') {
-      return
+      return;
     }
+
     const fullTodo = {
       title: todo,
       id: this.state.todoId,
@@ -40,61 +41,64 @@ class App extends React.Component {
     const { todoList } = this.state;
     const workList = todoList
       .filter(todo => todo.id !== id);
-    this.setState(prev => {
+
+    this.setState((prev) => {
       return {
         ...prev,
-        todoList: [...workList]
-      }
-    })
+        todoList: [...workList],
+      };
+    });
   }
 
   countRelevantTodo = () => {
     let countRelevantItem = 0;
-    this.state.todoList.forEach(todo => {
+    this.state.todoList.forEach((todo) => {
       if (todo.status === false) {
-        countRelevantItem++
+        countRelevantItem += 1;
       }
-    })
+    });
 
     return countRelevantItem;
   }
 
   chooseFinishTask = (id) => {
     const { todoList } = this.state;
-    let workList = [...todoList];
+    const workList = [...todoList];
     const chooseTask = workList
       .findIndex(todo => todo.id === id);
-      workList[chooseTask].status === true
+
+    workList[chooseTask].status === true
       ? workList[chooseTask].status = false
       : workList[chooseTask].status = true;
-    this.setState(prev => {
+    this.setState((prev) => {
       return {
         ...prev,
-        todoList: [...workList]
-      }
-    })
+        todoList: [...workList],
+      };
+    });
   }
 
   toggleAllTodos = () => {
     const { todoList, allToggle } = this.state;
-    let workList = [...todoList]
+    const workList = [...todoList];
+
     if (!allToggle) {
-      workList.forEach(todo => todo.status = true);
+      workList.forEach((todo) => todo.status = true);
     } else {
-      workList.forEach(todo => todo.status = false)
+      workList.forEach((todo) => todo.status = false);
     }
 
     this.setState(prev => {
       return {
         ...prev,
         todoList: [...workList],
-        allToggle: !prev.allToggle
-      }
-    })
+        allToggle: !prev.allToggle,
+      };
+    });
   }
 
   clearCompleted = () => {
-    this.setState(prev => {
+    this.setState((prev) => {
       return {
         ...prev,
         todoList: [...prev.todoList
@@ -107,21 +111,23 @@ class App extends React.Component {
     this.setState(prev => {
       return {
         ...prev,
-        activeFilter: status
-      }
-    })
+        activeFilter: status,
+      };
+    });
   }
 
   changeTodoItem = (id) => {
-    const currentTodo = this.state.todoList.findIndex(todo => todo.id === id)
+    const currentTodo = this.state.todoList.findIndex(todo => todo.id === id);
     const newTodo = [...this.state.todoList];
+
     newTodo[currentTodo].edit = true;
-    this.setState(prev => {
+
+    this.setState((prev) => {
       return {
         ...prev,
         todoList: [...newTodo],
-      }
-    })
+      };
+    });
   }
 
   editItem = (inputValue, id) => {
@@ -131,17 +137,37 @@ class App extends React.Component {
     copyTodoList[currentTodo] = {
       ...todoList[currentTodo],
       title: inputValue,
-      edit: false
-    }
+      edit: false,
+    };
+
     if (!inputValue) {
-      copyTodoList.splice(currentTodo, 1)
+      copyTodoList.splice(currentTodo, 1);
     }
-    this.setState(prev => {
+
+    this.setState((prev) => {
       return {
         ...prev,
         todoList: [...copyTodoList],
-      }
-    })
+      };
+    });
+  }
+
+  componentDidMount() {
+    const fromJson = JSON.parse(localStorage.getItem('todoList')) || [];
+    const todoIdFromJson = localStorage.getItem('todoId');
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...fromJson],
+        todoId: +todoIdFromJson,
+      };
+    });
+  }
+
+  componentDidUpdate() {
+    const todoListJson = JSON.stringify(this.state.todoList);
+    localStorage.setItem('todoList', todoListJson);
+    localStorage.setItem('todoId', this.state.todoId);
   }
 
   render() {
@@ -149,7 +175,7 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <Header onSubmit={this.addNewTodo}/>
+        <Header onSubmit={this.addNewTodo} />
         <Main
           todoList={todoList}
           deleteItem={this.deleteItem}
