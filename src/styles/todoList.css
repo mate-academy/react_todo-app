@@ -1,0 +1,11 @@
+main {
+  display: block;
+}
+
+.todo-completed {
+  text-decoration: line-through;
+}
+
+.filters--active:focus {
+  border-color: rgba(175, 47, 47, 0.2);
+}
