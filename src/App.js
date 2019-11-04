@@ -11,9 +11,15 @@ class App extends React.Component {
       lastId: 0,
       activeTab: '',
     };
-    this.toggled = this.toggled.bind(this);
-    this.addTodo = this.addTodo.bind(this);
-    this.toDelete = this.toDelete.bind(this);
+  }
+
+  componentDidMount() {
+    const { lastList, lastLastId } = this.getFromLocalStorage();
+
+    this.setState({
+      list: lastList,
+      lastId: lastLastId,
+    });
   }
 
   addTodo = (item) => {
@@ -26,10 +32,11 @@ class App extends React.Component {
         title: item,
         done: false,
         id: prevState.lastId + 1,
+        editMode: false,
       }],
       lastId: prevState.lastId + 1,
-      // toDisplay: prevState.list,
-    }));
+    }),
+    this.putInLocalStorage);
   };
 
   toDelete = (id) => {
@@ -38,7 +45,8 @@ class App extends React.Component {
       const slicedTodos = list.slice(0, index).concat(list.slice(index + 1));
 
       return { list: slicedTodos };
-    });
+    },
+    this.putInLocalStorage);
   };
 
   toggledAll = () => {
@@ -62,7 +70,8 @@ class App extends React.Component {
       return {
         list: newList,
       };
-    });
+    },
+    this.putInLocalStorage);
   };
 
   toggled = (targetId) => {
@@ -78,14 +87,16 @@ class App extends React.Component {
 
         return item;
       })],
-    }));
+    }),
+    this.putInLocalStorage);
   };
 
-  clearDone = (event) => {
+  clearDone = () => {
     this.setState(prevState => ({
       ...prevState,
       list: [...prevState.list].filter(item => !item.done),
-    }));
+    }),
+    this.putInLocalStorage);
   };
 
   activeFilter = (e) => {
@@ -98,28 +109,89 @@ class App extends React.Component {
         this.setState(prevState => ({
           ...prevState,
           activeTab: 'All',
-        }));
+        }),
+        this.putInLocalStorage);
         break;
       case 'Active':
         this.setState(prevState => ({
           ...prevState,
           activeTab: 'Active',
-        }));
+        }),
+        this.putInLocalStorage);
         break;
       case 'Completed':
         this.setState(prevState => ({
           ...prevState,
           activeTab: 'Completed',
-        }));
+        }),
+        this.putInLocalStorage);
         break;
       default:
         this.setState(prevState => ({
           ...prevState,
           activeTab: 'All',
-        }));
+        }),
+        this.putInLocalStorage);
         break;
     }
   };
+
+  putInLocalStorage = () => {
+    localStorage.setItem('list', JSON.stringify(this.state.list));
+    localStorage.setItem('lastId', JSON.stringify(this.state.lastId));
+  };
+
+  getFromLocalStorage = () => {
+    const list = JSON.parse(localStorage.getItem('list'));
+    const lastId = JSON.parse(localStorage.getItem('lastId'));
+
+    return ({
+      lastList: list || [],
+      lastLastId: lastId || 0,
+    });
+  };
+
+  editText = (itemToEdit) => {
+    this.setState(prevState => ({
+      list: [...prevState.list.map((item) => {
+        if (itemToEdit.id === item.id && item.editMode) {
+          return { ...item, editMode: false };
+        }
+
+        if (itemToEdit.id === item.id && !item.editMode) {
+          return { ...item, editMode: true };
+        }
+
+        return item;
+      })],
+    }),
+    this.putInLocalStorage);
+  };
+
+  editEnter = (event) => {
+    const { key, target } = event;
+    const text = target.value;
+    const id = +(target.id.match(/[0-9]/g).join(''));
+
+    if (key === 'Enter' && text.trim() !== '') {
+      this.setState(prevState => ({
+        list: [...prevState.list.map((item) => {
+          if (id === item.id) {
+            return {
+              ...item,
+              editMode: false,
+              title: text,
+              id: prevState.lastId + 1,
+              done: false,
+            };
+          }
+
+          return item;
+        })],
+      }),
+      this.putInLocalStorage);
+    }
+  }
 
   render() {
     let filtredList;
@@ -141,7 +213,7 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <Input onSubmit={this.addTodo} activeFilter={this.activeFilter} />
+        <Input onSubmit={this.addTodo} />
 
         <TodoList
           list={filtredList}
@@ -151,6 +223,9 @@ class App extends React.Component {
           toggledAll={this.toggledAll}
           activeFilter={this.activeFilter}
           props={this.state}
+          editText={this.editText}
+          editEnter={this.editEnter}
+          addTodo={this.addTodo}
         />
 
       </section>

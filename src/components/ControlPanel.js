@@ -16,14 +16,18 @@ function ControlPanel({
         props={props}
       />
 
-      <button
-        type="button"
-        className="clear-completed"
-        style={{ display: 'block' }}
-        onClick={clearDone}
-      >
+      {list.find(item => item.done) ? (
+        <button
+          type="button"
+          className="clear-completed"
+          style={{ display: 'block' }}
+          onClick={clearDone}
+        >
         Clear completed
-      </button>
+        </button>
+      ) : (
+        ''
+      )}
     </footer>
   );
 }

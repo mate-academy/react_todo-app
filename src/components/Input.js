@@ -17,7 +17,9 @@ class Input extends React.Component {
     onSubmit(text);
     this.setState({
       text: '',
-    });
+    },
+    localStorage.setItem('list', JSON.stringify(this.state.list)),
+    localStorage.setItem('lastId', JSON.stringify(this.state.lastId)));
   }
 
   render() {

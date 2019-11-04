@@ -9,36 +9,45 @@ function TodoList({
   clearDone,
   toggledAll,
   activeFilter,
-  changeClass,
   props,
+  editText,
+  editEnter,
 }) {
-  return list.length > 0 ? (
+  return (
     <>
+
       <section className="main" style={{ display: 'block' }}>
         <input
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
           onChange={toggledAll}
-          activeFilter={activeFilter}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">
           { list.map(item => (
-            <TodoItem item={item} toDelete={toDelete} toggled={toggled} />
+            <TodoItem
+              item={item}
+              toDelete={toDelete}
+              toggled={toggled}
+              editText={editText}
+              editEnter={editEnter}
+            />
           ))}
         </ul>
       </section>
-      <ControlPanel
-        list={list}
-        clearDone={clearDone}
-        activeFilter={activeFilter}
-        changeClass={changeClass}
-        props={props}
-      />
+
+      {list.length > 0 ? (
+        <ControlPanel
+          list={list}
+          clearDone={clearDone}
+          activeFilter={activeFilter}
+          props={props}
+        />
+      ) : ''}
     </>
-  ) : '';
+  );
 }
 
 export default TodoList;

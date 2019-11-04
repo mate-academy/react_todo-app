@@ -1,8 +1,14 @@
 import React from 'react';
 
-function TodoItem({ item, toDelete, toggled }) {
+function TodoItem({
+  item, toDelete, toggled, editText, editEnter,
+}) {
   return (
-    <li className={item.done ? 'completed' : ''}>
+    <li
+      className={item.done ? 'completed' : ''}
+      className={item.editMode ? 'editing' : ''}
+      onDoubleClick={() => editText(item)}
+    >
       <div className="view">
         <input
           type="checkbox"
@@ -18,6 +24,18 @@ function TodoItem({ item, toDelete, toggled }) {
           onClick={() => toDelete(item.id)}
         />
       </div>
+      {item.editMode ? (
+        <input
+          type="text"
+          className="edit"
+          autoFocus={true}
+          defaultValue={item.title}
+          onKeyDown={event => editEnter(event)}
+          id={`todo-${item.id}`}
+        />
+      ) : (
+        ''
+      )}
     </li>
   );
 }
