@@ -30,7 +30,7 @@ export default class App extends Component {
   deleteItem = (id) => {
     this.setState(({toDoList}) => {
       return {
-        toDoList: [...toDoList.filter(e => e.id !== id)]
+        toDoList: [...toDoList.filter(todo => todo.id !== id)]
       }
     });
   }
@@ -58,7 +58,7 @@ export default class App extends Component {
       if (toDoList.every(item => item.done === true)) {
         const newToDoList = toDoList.map(item => ({
           ...item,
-          done: false
+          done: !done
         }));
 
         return {
