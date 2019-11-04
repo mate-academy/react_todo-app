@@ -13,7 +13,7 @@ const Footer = ({
       <li>
         <a
           href="#/"
-          className={filter === 'all' ? 'selected' : undefined}
+          className={filter === 'all' ? 'selected' : ''}
           onClick={() => onFilter('all')}
         >
           All
@@ -23,8 +23,8 @@ const Footer = ({
       <li>
         <a
           href="#/active"
-          className={filter === 'active' ? 'selected' : undefined}
-          onClick={() => onFilter('active')}
+          className={filter === false ? 'selected' : ''}
+          onClick={() => onFilter(false)}
         >
           Active
         </a>
@@ -33,8 +33,8 @@ const Footer = ({
       <li>
         <a
           href="#/completed"
-          className={filter === 'completed' ? 'selected' : undefined}
-          onClick={() => onFilter('completed')}
+          className={filter === true ? 'selected' : ''}
+          onClick={() => onFilter(true)}
         >
           Completed
         </a>

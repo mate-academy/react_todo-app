@@ -6,7 +6,7 @@ const Todo = ({
 }) => (
   <li
     className={
-      complete === 'completed' ? 'completed' : undefined
+      complete ? 'completed' : ''
     }
   >
     <div className="view">
@@ -14,7 +14,7 @@ const Todo = ({
         type="checkbox"
         className="toggle"
         id={`todo-${id}`}
-        checked={complete === 'completed'}
+        checked={complete === true}
         onChange={() => onChangeStatus(id)}
       />
       <label htmlFor={`todo-${id}`}>{text}</label>
