@@ -6,24 +6,24 @@ import TodoApp from './components/todoApp/TodoApp';
 class App extends React.Component {
   state = {
     todos: [],
-    initTodos: [],
-    indexTab: '',
+    originTodos: [],
+    indexTab: 'all',
   };
 
   componentDidMount() {
     this.setState({
       todos: JSON.parse(localStorage.getItem('todoLost')) || [],
-      initTodos: JSON.parse(localStorage.getItem('initTodoList')) || [],
+      originTodos: JSON.parse(localStorage.getItem('originTodoList')) || [],
     });
 
     this.allTodosClick(this.state.indexTab);
   }
 
   componentDidUpdate(prevState) {
-    const { todos, initTodos } = this.state;
+    const { todos, originTodos } = this.state;
 
     if (todos !== prevState.todos) {
-      localStorage.setItem('initTodoList', JSON.stringify(initTodos));
+      localStorage.setItem('originTodoList', JSON.stringify(originTodos));
       localStorage.setItem('todoList', JSON.stringify(todos));
     }
   }
@@ -32,30 +32,28 @@ class App extends React.Component {
     this.setState(prevState => ({
       ...prevState,
       todos: [...prevState.todos, todo],
-      initTodos: [...prevState.initTodos, todo],
+      originTodos: [...prevState.originTodos, todo],
     }));
   };
 
   activeClick = () => {
     this.setState(prevState => ({
-      todos: prevState.initTodos.filter(todo => !todo.completed),
+      todos: prevState.originTodos.filter(todo => !todo.completed),
       indexTab: 'active',
     }));
-
-    this.handleStatusClick(this.state.indexTab);
   };
 
   completedClick = () => {
     this.setState(prevState => ({
-      todos: prevState.initTodos.filter(todo => todo.completed),
+      todos: prevState.originTodos.filter(todo => todo.completed),
       indexTab: 'completed',
     }));
   };
 
   allTodosClick = () => {
     this.setState(prevState => ({
-      todos: [...prevState.initTodos],
-      indexTab: false,
+      todos: [...prevState.originTodos],
+      indexTab: 'all',
     }));
   };
 
@@ -66,7 +64,7 @@ class App extends React.Component {
 
     this.setState(prevState => ({
       todos: prevState.todos.map(statusTodo),
-      initTodos: prevState.initTodos.map(statusTodo),
+      originTodos: prevState.originTodos.map(statusTodo),
     }));
 
     if (this.state.indexTab === 'active') {
@@ -87,40 +85,40 @@ class App extends React.Component {
 
     this.setState(prevState => ({
       todos: prevState.todos.map(findTodo),
-      initTodos: prevState.initTodos.map(findTodo),
+      originTodos: prevState.originTodos.map(findTodo),
     }));
   };
 
-  deleteClick = (id) => {
+  deleteTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(item => item.id !== id),
-      initTodos: prevState.initTodos.filter(item => item.id !== id),
+      originTodos: prevState.originTodos.filter(item => item.id !== id),
     }));
   };
 
   clearCompleted = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
-      initTodos: prevState.initTodos.filter(todo => !todo.completed),
+      originTodos: prevState.originTodos.filter(todo => !todo.completed),
     }));
   };
 
   allCompleted = () => {
-    const completeAll = arr => (
-      arr.map(todo => ({
+    const completeAll = markAll => (
+      markAll.map(todo => ({
         ...todo,
-        completed: !arr.every(({ completed }) => completed),
+        completed: !markAll.every(({ completed }) => completed),
       }))
     );
 
     this.setState(prevState => ({
       todos: completeAll(prevState.todos),
-      initTodos: completeAll(prevState.initTodos),
+      originTodos: completeAll(prevState.originTodos),
     }));
   };
 
   render() {
-    const { todos, initTodos, indexTab } = this.state;
+    const { todos, originTodos, indexTab } = this.state;
 
     return (
       <section className="todoapp">
@@ -147,13 +145,13 @@ class App extends React.Component {
           <TodoList
             todos={todos}
             handleStatusClick={this.handleStatusClick}
-            deleteClick={this.deleteClick}
+            deleteTodo={this.deleteTodo}
             handleEdit={this.handleEdit}
           />
         </section>
         <TodoFilter
           todos={todos}
-          initTodos={initTodos}
+          originTodos={originTodos}
           handleStatusClick={this.handleStatusClick}
           allTodosClick={this.allTodosClick}
           indexTab={indexTab}

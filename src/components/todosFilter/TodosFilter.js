@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 
 const TodoFilter = ({
   todos,
-  initTodos,
+  originTodos,
   allTodosClick,
   indexTab,
+  activeClick,
   completedClick,
   clearCompleted,
-  activeClick,
 }) => (
   <footer className="footer">
     <span className="todo-count">
-      { initTodos.length && initTodos.filter(todo => !todo.completed).length }
+      { originTodos.length
+      && originTodos.filter(todo => !todo.completed).length }
       { ' items left' }
     </span>
 
@@ -20,7 +21,7 @@ const TodoFilter = ({
       <li>
         <a
           href="#/"
-          className={!indexTab ? 'selected' : ''}
+          className={indexTab === 'all' ? 'selected' : ''}
           onClick={allTodosClick}
         >
           All
@@ -28,9 +29,9 @@ const TodoFilter = ({
       </li>
       <li>
         <a
-          href="#/"
-          className={indexTab === 'active' ? 'selected' : ''}
+          href="#/active"
           onClick={activeClick}
+          className={indexTab === 'active' ? 'selected' : ''}
         >
           Active
         </a>
@@ -38,8 +39,8 @@ const TodoFilter = ({
       <li>
         <a
           href="#/completed"
-          className={indexTab === 'completed' ? 'selected' : ''}
           onClick={completedClick}
+          className={indexTab === 'completed' ? 'selected' : ''}
         >
           Completed
         </a>
@@ -64,7 +65,7 @@ TodoFilter.propTypes = {
     id: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   })).isRequired,
-  initTodos: PropTypes.arrayOf(PropTypes.shape({
+  originTodos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,

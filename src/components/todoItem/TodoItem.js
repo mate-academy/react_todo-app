@@ -24,7 +24,7 @@ class TodoItem extends React.Component {
     const {
       id,
       handleEdit,
-      deleteClick,
+      deleteTodo,
     } = this.props;
     const { editedTodo } = this.state;
 
@@ -34,7 +34,7 @@ class TodoItem extends React.Component {
     if (editedTodo !== '') {
       handleEdit(editedTodo, id);
     } else {
-      deleteClick(id);
+      deleteTodo(id);
     }
   };
 
@@ -44,7 +44,7 @@ class TodoItem extends React.Component {
       status,
       id,
       handleStatusClick,
-      deleteClick,
+      deleteTodo,
     } = this.props;
     const { editedTodo } = this.state;
     const liClassName = cx({
@@ -73,7 +73,7 @@ class TodoItem extends React.Component {
               <button
                 type="button"
                 className="destroy"
-                onClick={() => deleteClick(id)}
+                onClick={() => deleteTodo(id)}
               />
             </form>
           ) : (
@@ -97,7 +97,7 @@ TodoItem.propTypes = {
   status: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   handleStatusClick: PropTypes.func.isRequired,
-  deleteClick: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
 };
 

@@ -5,7 +5,7 @@ import TodoItem from '../todoItem/TodoItem';
 const TodoList = ({
   todos,
   handleStatusClick,
-  deleteClick,
+  deleteTodo,
   handleEdit,
 }) => (
   <ul className="todo-list">
@@ -18,7 +18,7 @@ const TodoList = ({
         handleStatusClick={handleStatusClick}
         status={completed}
         handleEdit={handleEdit}
-        deleteClick={deleteClick}
+        deleteTodo={deleteTodo}
       />
     ))}
   </ul>
@@ -31,7 +31,7 @@ TodoList.propTypes = {
     id: PropTypes.string,
   })).isRequired,
   handleStatusClick: PropTypes.func.isRequired,
-  deleteClick: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
 };
 
