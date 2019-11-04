@@ -13,13 +13,11 @@ class TodoInput extends React.Component {
   }
 
   addTodo = (e) => {
-    if (e.which === 13 || e.keyCode === 13) {
-      if (this.state.title !== '') {
-        this.props.addTodoItem(this.state.title);
-        this.setState({
-          title: '',
-        });
-      }
+    if (this.state.title !== '' && (e.which === 13 || e.keyCode === 13)) {
+      this.props.addTodoItem(this.state.title);
+      this.setState({
+        title: '',
+      });
     }
   }
 

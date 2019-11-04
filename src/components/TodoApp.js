@@ -29,16 +29,16 @@ class TodoApp extends React.Component {
   }
 
   toggleOne = (event) => {
-    const eTargetId = +event.target.id;
+    const targetId = +event.target.id;
 
     this.setState(prevState => ({
       ...prevState,
       todos: prevState.todos.map((item) => {
-        if (eTargetId === item.id && item.completed) {
+        if (targetId === item.id && item.completed) {
           return { ...item, completed: false };
         }
 
-        if (eTargetId === item.id && !item.completed) {
+        if (targetId === item.id && !item.completed) {
           return { ...item, completed: true };
         }
 
@@ -65,30 +65,38 @@ class TodoApp extends React.Component {
     const tab = event.target;
     const tabName = tab.innerText;
 
-    if (tabName === 'All') {
-      tab.className = 'selected';
-      this.setState({
-        selectedTab: 'All',
-      });
-    } else if (tabName === 'Active') {
-      tab.className = 'selected';
-      this.setState({
-        selectedTab: 'Active',
-      });
-    } else if (tabName === 'Completed') {
-      tab.className = 'selected';
-      this.setState({
-        selectedTab: 'Completed',
-      });
+    switch (tabName) {
+      case 'All':
+        tab.className = 'selected';
+        this.setState({
+          selectedTab: 'All',
+        });
+        break;
+
+      case 'Active':
+        tab.className = 'selected';
+        this.setState({
+          selectedTab: 'Active',
+        });
+        break;
+
+      case 'Completed':
+        tab.className = 'selected';
+        this.setState({
+          selectedTab: 'Completed',
+        });
+        break;
+
+      default:
     }
   }
 
   clearItem = (event) => {
-    const eTargetId = +event.target.id;
+    const targetId = +event.target.id;
 
     this.setState(prevState => ({
       ...prevState,
-      todos: [...prevState.todos].filter(item => item.id !== eTargetId),
+      todos: [...prevState.todos].filter(item => item.id !== targetId),
     }));
   }
 

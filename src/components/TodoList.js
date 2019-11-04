@@ -13,14 +13,22 @@ function TodoList(
 ) {
   let filteredItems = [];
 
-  if (selectedTab === 'All') {
-    filteredItems = [...items];
-  } else if (selectedTab === 'Active') {
-    filteredItems = [...items]
-      .filter(item => !item.completed);
-  } else if (selectedTab === 'Completed') {
-    filteredItems = [...items]
-      .filter(item => item.completed);
+  switch (selectedTab) {
+    case 'All':
+      filteredItems = [...items];
+      break;
+
+    case 'Active':
+      filteredItems = [...items]
+        .filter(item => !item.completed);
+      break;
+
+    case 'Completed':
+      filteredItems = [...items]
+        .filter(item => item.completed);
+      break;
+
+    default:
   }
 
   if (items.length > 0) {
