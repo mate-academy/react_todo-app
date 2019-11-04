@@ -1,6 +1,8 @@
 # React ToDo App
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/)
 
+[DEMO LINK](http://olesyamogil.github.io/react_todo-app)
+
 Requirements:
 - when app loads, user sees an input to enter their TODOs
 - when user types some TODO and hits enter, it's added to the list below (see the gif)
@@ -65,7 +67,7 @@ Resources:
 - run `npm run lint` to check code style
 - When you finished add correct `homepage` to `package.json` and run `npm run deploy` 
 - Add links to your demo in readme.md.
-  - `[DEMO LINK](https://<your_account>.github.io/<repo_name>/)` - this will be a 
+  - `[DEMO LINK](http://olesyamogil.github.io/react_todo-app)` - this will be a 
   link to your index.html
 - Commit and push all recent changes.
 - Create `Pull Request` from forked repo `(<branch_name>)` to original repo 
