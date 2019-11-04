@@ -1,11 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class ClearCompleted extends Component {
-  render() {
-    return (
-        <button className="clear-completed"  type="button" style={this.props.isVisible ? {display: 'block'} : {display: 'none'} } onClick={this.props.deleteCompleted}>Clear completed</button>
-    );
-  }
+function ClearCompleted({ isVisible, deleteCompleted }) {
+  return (
+    <button
+      className="clear-completed"
+      type="button"
+      style={
+        isVisible
+          ? { display: 'block' }
+          : { display: 'none' }}
+      onClick={deleteCompleted}
+    >
+      Clear completed
+    </button>
+  );
 }
+
+ClearCompleted.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  deleteCompleted: PropTypes.func.isRequired,
+};
 
 export default ClearCompleted;

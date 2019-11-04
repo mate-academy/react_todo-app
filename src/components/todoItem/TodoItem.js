@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class TodoItem extends Component {
   constructor(props) {
@@ -17,17 +18,34 @@ class TodoItem extends Component {
   }
 
   render() {
+    const { id, title, completed } = this.props.todo;
+
     return (
-      <li className={this.props.todo.completed ? 'completed' : ''}>
+      <li className={completed ? 'completed' : ''}>
         <div className="view">
-          <input type="checkbox" onChange={this.isChecked} className="toggle"
-                 id={this.props.todo.id} checked={this.props.todo.completed} />
-          <label htmlFor={this.props.todo.id}>{this.props.todo.title}</label>
+          <input
+            type="checkbox"
+            onChange={this.isChecked}
+            className="toggle"
+            id={id}
+            checked={completed}
+          />
+          <label htmlFor={id} onDoubleClick={this.deleteItem}>{title}</label>
           <button type="button" className="destroy" onClick={this.deleteItem} />
         </div>
       </li>
     );
   }
 }
+
+TodoItem.propTypes = {
+  todo: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  isCompleted: PropTypes.bool.isRequired,
+};
 
 export default TodoItem;

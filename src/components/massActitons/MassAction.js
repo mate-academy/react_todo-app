@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class MassAction extends Component {
-  render() {
-    return (
-      <label onClick={this.props.action}>Mark all as complete</label>
-    );
-  }
+function MassAction({ action }) {
+  return (
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
+    <label onClick={action}>Mark all as complete</label>
+  );
 }
+
+MassAction.propTypes = {
+  action: PropTypes.func.isRequired,
+};
 
 export default MassAction;

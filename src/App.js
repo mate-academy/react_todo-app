@@ -50,7 +50,7 @@ class App extends Component {
     this.setState(prevState => ({
       todoList: prevState.todoList.filter(todo => !todo.completed),
     }));
-}
+  }
 
   isCompleted(obj) {
     this.setState(prevState => ({
@@ -68,13 +68,15 @@ class App extends Component {
   }
 
   toggleAll() {
-    if (this.state.todoList.some(todo => todo.completed === false )) {
+    if (this.state.todoList.some(todo => todo.completed === false)) {
       this.setState(prevState => ({
-        todoList: prevState.todoList.map(todo => ({ ...todo, completed: true })),
+        todoList: prevState.todoList
+          .map(todo => ({ ...todo, completed: true })),
       }));
     } else {
       this.setState(prevState => ({
-        todoList: prevState.todoList.map(todo => ({ ...todo, completed: false })),
+        todoList: prevState.todoList
+          .map(todo => ({ ...todo, completed: false })),
       }));
     }
   }
@@ -87,16 +89,18 @@ class App extends Component {
 
   render() {
     let itemsToDisplay;
+
     switch (this.state.filter) {
       case 'completed':
-        itemsToDisplay = [...this.state.todoList].filter(todo => todo.completed === true);
+        itemsToDisplay = [...this.state.todoList]
+          .filter(todo => todo.completed === true);
         break;
       case 'active':
-        itemsToDisplay = [...this.state.todoList].filter(todo => todo.completed === false);
+        itemsToDisplay = [...this.state.todoList]
+          .filter(todo => todo.completed === false);
         break;
       default:
         itemsToDisplay = [...this.state.todoList];
-
     }
 
     return (
@@ -107,7 +111,12 @@ class App extends Component {
           <AddTodo onSubmit={this.pushItem} />
         </header>
 
-        <section className="main" style={this.state.todoList.length > 0 ? {display: 'block'} : {display: 'none'}}>
+        <section
+          className="main"
+          style={this.state.todoList.length > 0
+            ? { display: 'block' }
+            : { display: 'none' }}
+        >
           <input type="checkbox" id="toggle-all" className="toggle-all" />
           <MassAction action={this.toggleAll} />
 
@@ -118,7 +127,12 @@ class App extends Component {
           />
         </section>
 
-        <footer className="footer" style={this.state.todoList.length > 0 ? {display: 'block'} : {display: 'none'}}>
+        <footer
+          className="footer"
+          style={this.state.todoList.length > 0
+            ? { display: 'block' }
+            : { display: 'none' }}
+        >
           <span className="todo-count">
             {this.state.todoList
               .filter(todo => !todo.completed)
@@ -128,12 +142,18 @@ class App extends Component {
             items left
           </span>
 
-          <TodoFilter statusFilter={this.statusFilter} currentFilter={this.state.filter} />
-          <ClearCompleted deleteCompleted={this.deleteCompleted} isVisible={this.state.todoList.filter(todo => todo.completed).length > 0} />
+          <TodoFilter
+            statusFilter={this.statusFilter}
+            currentFilter={this.state.filter}
+          />
+          <ClearCompleted
+            deleteCompleted={this.deleteCompleted}
+            isVisible={this.state.todoList
+              .filter(todo => todo.completed).length > 0}
+          />
         </footer>
       </section>
     );
-
   }
 }
 
