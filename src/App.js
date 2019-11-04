@@ -1,75 +1,110 @@
 import React from 'react';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+import ToDoItem from './components/ToDoItem';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+class App extends React.Component {
+  state = {
+    toDoItems: [],
+    selectedFilter: 'all',
+  };
+
+  componentDidMount() {
+    if (localStorage.getItem('toDoItems') !== null) {
+      this.saveToLocalSetState({
+        toDoItems: JSON.parse(localStorage.getItem('toDoItems')),
+        selectedFilter: localStorage.getItem('selectedFilter'),
+      });
+    }
+  }
+
+  saveToLocalSetState = (state) => {
+    this.setState({ ...state }, () => {
+      this.saveDataToLocalStorage();
+    });
+  };
+
+  addNewItem = (newItem) => {
+    this.saveToLocalSetState({
+      toDoItems: [...this.state.toDoItems, newItem],
+    });
+  };
+
+  toggleItem = (id) => {
+    const toDoArray = [...this.state.toDoItems];
+    const index = toDoArray.findIndex(item => item.id === id);
+    toDoArray[index] = {
+      ...toDoArray[index],
+      isCompleted: !toDoArray[index].isCompleted,
+    };
+    this.saveToLocalSetState({
+      toDoItems: toDoArray,
+    });
+  };
+
+  deleteToDoItem = (id) => {
+    const toDoItems = [...this.state.toDoItems].filter(toDo => toDo.id !== id);
+    this.saveToLocalSetState({
+      toDoItems,
+    });
+  };
+
+  setSelectedFiler = (selectedFilter) => {
+    this.saveToLocalSetState({
+      selectedFilter,
+    });
+  };
+
+  generateFilteredDataSouce = () => {
+    const { selectedFilter, toDoItems } = this.state;
+    let res = [];
+    switch (selectedFilter) {
+      case 'active':
+        res = toDoItems.filter(item => !item.isCompleted);
+        break;
+      case 'completed':
+        res = toDoItems.filter(item => item.isCompleted);
+        break;
+        default:
+        res = toDoItems;
+        break;
+    }
+
+    return res;
+  };
+
+  saveDataToLocalStorage() {
+    localStorage.setItem('toDoItems', JSON.stringify(this.state.toDoItems));
+    localStorage.setItem('selectedFilter', this.state.selectedFilter);
+  }
+
+  passId() {
+    return this.state.toDoItems.length + 1;
+  }
+
+  render() {
+    let visibleItems = this.generateFilteredDataSouce();
+
+    return (
+      <section className='todoapp'>
+        <Header addNewItem={this.addNewItem} passIdBack={this.passId()}/>
+        <ToDoItem
+          toggleItem={this.toggleItem}
+          deleteToDoItem={this.deleteToDoItem}
+          items={visibleItems}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+        <Footer
+          activeItemsLength={
+            this.state.toDoItems.filter(item => item.isCompleted === false)
+              .length
+          }
+          setSelectedFiler={this.setSelectedFiler}
+          selectedFilter={this.state.selectedFilter}
+        />
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
