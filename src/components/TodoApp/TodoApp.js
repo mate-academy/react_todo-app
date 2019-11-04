@@ -10,7 +10,26 @@ class TodoApp extends Component {
     this.state = {
       todos: [],
       currentId: 1,
+      filterType: 'All',
     };
+  }
+
+  componentDidMount() {
+    const storageToDoList = JSON.parse(localStorage.getItem('todos')) || [];
+    const storageId = localStorage.getItem('currentId');
+
+    this.setState(prevState => ({
+      ...prevState,
+      todos: [...storageToDoList],
+      currentId: +storageId,
+    }));
+  }
+
+  componentDidUpdate() {
+    const toDoListToStorage = JSON.stringify(this.state.todos);
+
+    localStorage.setItem('todos', toDoListToStorage);
+    localStorage.setItem('currentId', this.state.currentId);
   }
 
   handleSubmit = (text) => {
@@ -72,6 +91,23 @@ class TodoApp extends Component {
     }));
   };
 
+  onFilterChange = (filterType) => {
+    this.setState({ filterType });
+  };
+
+  filter = (items, filterType) => {
+    switch (filterType) {
+      case 'All':
+        return items;
+      case 'Active':
+        return items.filter(item => !item.completed);
+      case 'Completed':
+        return items.filter(item => item.completed);
+      default:
+        return items;
+    }
+  };
+
   render() {
     return (
       <section className="todoapp">
@@ -83,7 +119,7 @@ class TodoApp extends Component {
         <section className="main" style={{ display: 'block' }}>
           <ToggleAll handleToggleAll={this.handleToggleAll} />
           <TodoList
-            items={this.state.todos}
+            items={this.filter(this.state.todos, this.state.filterType)}
             handleDestroy={this.handleDestroy}
             handleChecked={this.handleChecked}
           />
@@ -92,6 +128,8 @@ class TodoApp extends Component {
         <AppFooter
           items={this.state.todos}
           handleClear={this.handleClear}
+          onFilterChange={this.onFilterChange}
+          filterState={this.state.filterType}
         />
       </section>
     );
