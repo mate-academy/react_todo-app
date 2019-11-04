@@ -34,12 +34,8 @@ class TodoApp extends React.Component {
     this.setState(prevState => ({
       ...prevState,
       todos: prevState.todos.map((item) => {
-        if (targetId === item.id && item.completed) {
-          return { ...item, completed: false };
-        }
-
-        if (targetId === item.id && !item.completed) {
-          return { ...item, completed: true };
+        if (targetId === item.id) {
+          return { ...item, completed: !item.completed };
         }
 
         return item;
