@@ -17,8 +17,8 @@ class App extends React.Component {
   changeInput = (event) => {
     const { value } = event.target;
 
-    this.setState(PrevState => ({
-      ...PrevState,
+    this.setState(prevState => ({
+      ...prevState,
       currentValue: value,
     }));
   };
@@ -51,13 +51,9 @@ class App extends React.Component {
     }
   };
 
-  deleteItem = (index) => {
-    const list = [...this.state.todolist];
-
-    list.splice(index, 1);
-    this.setState(PrevState => ({
-      ...PrevState,
-      todolist: list,
+  deleteItem = (id) => {
+    this.setState(prevState => ({
+      todolist: prevState.todolist.filter(todo => todo.id !== id),
     }));
   };
 
@@ -70,8 +66,8 @@ class App extends React.Component {
   };
 
   toggleItem = (id) => {
-    this.setState((PrevState) => {
-      const newTodo = PrevState.todolist.map((item) => {
+    this.setState((prevState) => {
+      const newTodo = prevState.todolist.map((item) => {
         if (item.id === id) {
           return {
             ...item,

@@ -3,7 +3,9 @@ import FooterButtons from './FooterButtons';
 
 class Footer extends Component {
   render() {
-    const { todolist, clearDone, filter, changeFilter } = this.props;
+    const {
+      todolist, clearDone, filter, changeFilter,
+    } = this.props;
     const undoneListLength = todolist.filter(item => item.done === false).length;
 
     return (
@@ -12,7 +14,7 @@ class Footer extends Component {
           {`${undoneListLength} items left`}
         </span>
 
-        <FooterButtons filter={filter} changeFilter={changeFilter}/>
+        <FooterButtons filter={filter} changeFilter={changeFilter} />
 
         <button
           type="button"

@@ -10,9 +10,15 @@ class ToDoItem extends Component {
     return (
       <li className={isCompleted}>
         <div className="view">
-          <input type="checkbox" className="toggle" id={`todo-${item.id}`} checked={item.done} onChange={() => toggleItem(item.id)} />
+          <input
+            type="checkbox"
+            className="toggle"
+            id={`todo-${item.id}`}
+            checked={item.done}
+            onChange={() => toggleItem(item.id)}
+          />
           <label htmlFor={`todo-${item.id}`}>{item.text}</label>
-          <button type="button" className="destroy" onClick={() => deleteItem(index)} />
+          <button type="button" className="destroy" onClick={() => deleteItem(item.id)} />
         </div>
       </li>
     );

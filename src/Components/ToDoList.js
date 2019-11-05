@@ -13,7 +13,15 @@ class ToDoList extends Component {
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">
-          {todolist.map((item, index) => <ToDoItem item={item} index={index} deleteItem={deleteItem} key={item.id} toggleItem={toggleItem} />)}
+          {todolist.map((item, index) => (
+            <ToDoItem
+              item={item}
+              index={index}
+              deleteItem={deleteItem}
+              key={item.id}
+              toggleItem={toggleItem}
+            />
+          ))}
         </ul>
       </section>
     );
