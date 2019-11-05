@@ -80,30 +80,22 @@ class TodoApp extends PureComponent {
     const todoId = Number(event.target.dataset.id);
 
     this.setState((prevState) => {
-      const newTodoList = [...prevState.todos];
-      const todoIndex = newTodoList.findIndex(todo => todo.id === Number(todoId));
-
-      newTodoList.splice(todoIndex, 1);
-
-      return ({
+      return {
         ...prevState,
-        todos: newTodoList,
-      });
+        todos: [...prevState.todos].filter(todo => todo.id !== todoId),
+      };
     }, this.setLocalStorage);
   };
 
   getFiltredTodos = (filterName, todos) => {
-    let newFilteredTodos = null;
-
-    if (filterName === 'All') {
-      newFilteredTodos = [...todos];
-    } else if (filterName === 'Active') {
-      newFilteredTodos = [...todos.filter(todo => !todo.completed)];
-    } else if (filterName === 'Completed') {
-      newFilteredTodos = [...todos.filter(todo => todo.completed)];
+    switch (filterName) {
+      case 'All':
+        return [...todos];
+      case 'Active':
+        return [...todos.filter(todo => !todo.completed)];
+      case 'Completed':
+        return [...todos.filter(todo => todo.completed)];
     }
-
-    return newFilteredTodos;
   };
 
   handleTabListClick = (event) => {
@@ -181,8 +173,8 @@ class TodoApp extends PureComponent {
     const idCounter = JSON.parse(localStorage.getItem('idCounter'));
 
     return ({
-      storageTodos: todos ? todos : [],
-      storageIdCounter: idCounter ? idCounter : 0,
+      storageTodos: todos || [],
+      storageIdCounter: idCounter || 0,
     });
   }
 

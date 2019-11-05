@@ -5,8 +5,6 @@ class TodoItem extends PureComponent {
   render() {
     const { id, title, completed, editing } = this.props.todoItem;
     const { checkBoxChange, btnDestroyClick, onDoubleClick, editInputPressKey } = this.props;
-    console.log('render item', id)
-
 
     return (
       <li
@@ -25,7 +23,7 @@ class TodoItem extends PureComponent {
           <label htmlFor={id}>{title}</label>
           <button type="button" className="destroy" data-id={id} onClick={btnDestroyClick} />
         </div>
-        {editing ? (
+        {editing && (
           <input
             className="edit"
             autoFocus={true}
@@ -33,8 +31,6 @@ class TodoItem extends PureComponent {
             onKeyPress={editInputPressKey}
             data-id={id}
           />
-        ) : (
-          ''
         )
         }
       </li>
