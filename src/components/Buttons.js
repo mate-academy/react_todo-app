@@ -6,7 +6,7 @@ function Buttons({ activeFilter, props }) {
       <li>
         <a
           href="#/"
-          onClick={e => activeFilter(e)}
+          onClick={() => activeFilter('All')}
           className={props.activeTab === 'All' ? 'selected' : 'unselected'}
         >
           All
@@ -16,7 +16,7 @@ function Buttons({ activeFilter, props }) {
       <li>
         <a
           href="#/active"
-          onClick={e => activeFilter(e)}
+          onClick={() => activeFilter('Active')}
           className={props.activeTab === 'Active' ? 'selected' : 'unselected'}
         >
           Active
@@ -26,7 +26,7 @@ function Buttons({ activeFilter, props }) {
       <li>
         <a
           href="#/completed"
-          onClick={e => activeFilter(e)}
+          onClick={() => activeFilter('Completed')}
           className={props.activeTab === 'Completed'
             ? 'selected' : 'unselected'}
         >

@@ -41,8 +41,7 @@ class App extends React.Component {
 
   toDelete = (id) => {
     this.setState(({ list }) => {
-      const index = list.findIndex(item => item.id === id);
-      const slicedTodos = list.slice(0, index).concat(list.slice(index + 1));
+      const slicedTodos = list.filter(item => item.id !== id);
 
       return { list: slicedTodos };
     },
@@ -99,12 +98,9 @@ class App extends React.Component {
     this.putInLocalStorage);
   };
 
-  activeFilter = (e) => {
-    e.preventDefault();
-    const tab = e.target;
-    const activeTab = tab.innerText;
+  activeFilter = (filter) => {
 
-    switch (activeTab) {
+    switch (filter) {
       case 'All':
         this.setState(prevState => ({
           ...prevState,
@@ -188,6 +184,7 @@ class App extends React.Component {
 
           return item;
         })],
+        lastId: prevState.lastId + 1,
       }),
       this.putInLocalStorage);
     }
@@ -213,7 +210,7 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <Input onSubmit={this.addTodo} />
+        <Input addTodo={this.addTodo} />
 
         <TodoList
           list={filtredList}

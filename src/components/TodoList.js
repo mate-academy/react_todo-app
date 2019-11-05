@@ -38,14 +38,16 @@ function TodoList({
         </ul>
       </section>
 
-      {list.length > 0 ? (
-        <ControlPanel
-          list={list}
-          clearDone={clearDone}
-          activeFilter={activeFilter}
-          props={props}
-        />
-      ) : ''}
+      {list.length > 0
+        ? (
+          <ControlPanel
+            list={list}
+            clearDone={clearDone}
+            activeFilter={activeFilter}
+            props={props}
+          />
+        )
+        : ''}
     </>
   );
 }

@@ -11,10 +11,10 @@ class Input extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { onSubmit } = this.props;
+    const { addTodo } = this.props;
     const { text } = this.state;
 
-    onSubmit(text);
+    addTodo(text);
     this.setState({
       text: '',
     },

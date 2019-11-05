@@ -24,18 +24,17 @@ function TodoItem({
           onClick={() => toDelete(item.id)}
         />
       </div>
-      {item.editMode ? (
-        <input
-          type="text"
-          className="edit"
-          autoFocus={true}
-          defaultValue={item.title}
-          onKeyDown={event => editEnter(event)}
-          id={`todo-${item.id}`}
-        />
-      ) : (
-        ''
-      )}
+      {item.editMode
+        && (
+          <input
+            type="text"
+            className="edit"
+            autoFocus={true}
+            defaultValue={item.title}
+            onKeyDown={event => editEnter(event)}
+            id={`todo-${item.id}`}
+          />
+        )}
     </li>
   );
 }
