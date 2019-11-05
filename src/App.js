@@ -77,11 +77,11 @@ class App extends React.Component {
     this.setState(prevState => ({
       list: [...prevState.list.map((item) => {
         if (targetId === item.id && item.done) {
-          return { ...item, done: false };
+          return { ...item, done: !item.done };
         }
 
         if (targetId === item.id && !item.done) {
-          return { ...item, done: true };
+          return { ...item, done: !item.done };
         }
 
         return item;
@@ -99,7 +99,6 @@ class App extends React.Component {
   };
 
   activeFilter = (filter) => {
-
     switch (filter) {
       case 'All':
         this.setState(prevState => ({
@@ -148,6 +147,19 @@ class App extends React.Component {
   };
 
   editText = (itemToEdit) => {
+    for (const i of this.state.list) {
+      if (i.editMode) {
+        this.setState(prevState => ({
+          ...prevState,
+          list: [...prevState.list].map((item) => {
+            if (item === i) {
+              return { ...item, editMode: false };
+            }
+          }),
+        }));
+      }
+    }
+
     this.setState(prevState => ({
       list: [...prevState.list.map((item) => {
         if (itemToEdit.id === item.id && item.editMode) {

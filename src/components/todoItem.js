@@ -1,12 +1,15 @@
 import React from 'react';
+import classNames from 'classnames/';
 
 function TodoItem({
   item, toDelete, toggled, editText, editEnter,
 }) {
   return (
     <li
-      className={item.done ? 'completed' : ''}
-      className={item.editMode ? 'editing' : ''}
+      className={classNames(
+        item.done ? 'completed' : '',
+        item.editMode ? 'editing' : '',
+      )}
       onDoubleClick={() => editText(item)}
     >
       <div className="view">
