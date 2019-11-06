@@ -32,7 +32,7 @@ class App extends React.Component {
         title: item,
         done: false,
         id: prevState.lastId + 1,
-        editMode: false,
+        editModeItemIndexItemIndex: null,
       }],
       lastId: prevState.lastId + 1,
     }),
@@ -76,11 +76,7 @@ class App extends React.Component {
   toggled = (targetId) => {
     this.setState(prevState => ({
       list: [...prevState.list.map((item) => {
-        if (targetId === item.id && item.done) {
-          return { ...item, done: !item.done };
-        }
-
-        if (targetId === item.id && !item.done) {
+        if (targetId === item.id) {
           return { ...item, done: !item.done };
         }
 
@@ -146,32 +142,12 @@ class App extends React.Component {
     });
   };
 
-  editText = (itemToEdit) => {
-    for (const i of this.state.list) {
-      if (i.editMode) {
-        this.setState(prevState => ({
-          ...prevState,
-          list: [...prevState.list].map((item) => {
-            if (item === i) {
-              return { ...item, editMode: false };
-            }
-          }),
-        }));
-      }
-    }
-
+  editText = (index) => {
     this.setState(prevState => ({
-      list: [...prevState.list.map((item) => {
-        if (itemToEdit.id === item.id && item.editMode) {
-          return { ...item, editMode: false };
-        }
-
-        if (itemToEdit.id === item.id && !item.editMode) {
-          return { ...item, editMode: true };
-        }
-
-        return item;
-      })],
+      list: [...prevState.list.map(item => ({
+        ...item,
+        editModeItemIndex: index,
+      }))],
     }),
     this.putInLocalStorage);
   };
@@ -187,7 +163,7 @@ class App extends React.Component {
           if (id === item.id) {
             return {
               ...item,
-              editMode: false,
+              editModeItemIndex: false,
               title: text,
               id: prevState.lastId + 1,
               done: false,
@@ -225,6 +201,7 @@ class App extends React.Component {
         <Input addTodo={this.addTodo} />
 
         <TodoList
+          listNotToShow={this.state.list}
           list={filtredList}
           toDelete={this.toDelete}
           clearDone={this.clearDone}

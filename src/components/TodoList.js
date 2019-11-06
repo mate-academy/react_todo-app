@@ -12,6 +12,7 @@ function TodoList({
   props,
   editText,
   editEnter,
+  listNotToShow,
 }) {
   return (
     <>
@@ -26,19 +27,20 @@ function TodoList({
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">
-          { list.map(item => (
+          { list.map((item, index) => (
             <TodoItem
               item={item}
               toDelete={toDelete}
               toggled={toggled}
               editText={editText}
               editEnter={editEnter}
+              index={index}
             />
           ))}
         </ul>
       </section>
 
-      {list.length > 0
+      {listNotToShow.length > 0
         ? (
           <ControlPanel
             list={list}

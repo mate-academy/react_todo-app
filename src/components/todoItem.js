@@ -2,15 +2,15 @@ import React from 'react';
 import classNames from 'classnames/';
 
 function TodoItem({
-  item, toDelete, toggled, editText, editEnter,
+  item, toDelete, toggled, editText, editEnter, index,
 }) {
   return (
     <li
       className={classNames(
         item.done ? 'completed' : '',
-        item.editMode ? 'editing' : '',
+        item.editModeItemIndex === index + 1 ? 'editing' : '',
       )}
-      onDoubleClick={() => editText(item)}
+      onDoubleClick={() => editText(index + 1)}
     >
       <div className="view">
         <input
@@ -27,7 +27,7 @@ function TodoItem({
           onClick={() => toDelete(item.id)}
         />
       </div>
-      {item.editMode
+      {item.editModeItemIndex
         && (
           <input
             type="text"
