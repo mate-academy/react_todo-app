@@ -72,7 +72,6 @@ class Main extends React.Component {
   };
 
   handleFilter = (event) => {
-    // document.querySelector('.filters .selected').className = '';
     const tab = event.target;
     const tabName = tab.innerText;
 
