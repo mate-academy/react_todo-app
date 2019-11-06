@@ -1,39 +1,27 @@
 import React from 'react';
 
-class Input extends React.Component {
-  state = {
-    title: '',
+const Input = ({ addTodoItem }) => {
+  const submit = (e) => {
+    addTodoItem(e.target.toDoItem.value);
+    e.target.reset();
   };
 
-  handleTitleChange = (event) => {
-    this.setState({
-      title: event.target.value,
-    });
-  };
-
-  addTodo = (e) => {
-    if (this.state.title !== '' && (e.which === 13 || e.keyCode === 13)) {
-      this.props.addTodoItem(this.state.title);
-      this.setState({
-        title: '',
-      });
-    }
-  };
-
-  render() {
+  {
     return (
       <header className="header">
         <h1>todos</h1>
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          onChange={this.handleTitleChange}
-          onKeyPress={this.addTodo}
-          value={this.state.title}
-        />
+        <form
+          onSubmit={submit}
+        >
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+            name="toDoItem"
+            autoFocus
+          />
+        </form>
       </header>
     );
   }
-}
-
+};
 export default Input;

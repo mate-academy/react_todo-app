@@ -72,9 +72,10 @@ class Main extends React.Component {
   };
 
   handleFilter = (event) => {
-    document.querySelector('.filters .selected').className = '';
+    // document.querySelector('.filters .selected').className = '';
     const tab = event.target;
     const tabName = tab.innerText;
+
 
     switch (tabName) {
       case 'All':
@@ -137,6 +138,7 @@ class Main extends React.Component {
           items={this.state.todos}
           handleFilter={this.handleFilter}
           clearCompleted={this.clearCompleted}
+          selectedTab={this.state.selectedTab}
         />
       </section>
     );
