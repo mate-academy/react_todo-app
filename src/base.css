@@ -61,7 +61,7 @@ hr {
 
 .quote {
   border: none;
-  margin: 20px 0 60px 0;
+  margin: 20px 0 60px;
 }
 
 .quote p {
@@ -104,17 +104,17 @@ hr {
 .speech-bubble {
   position: relative;
   padding: 10px;
-  background: rgba(0, 0, 0, .04);
+  background: rgba(0, 0, 0, 0.04);
   border-radius: 5px;
 }
 
 .speech-bubble:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   right: 30px;
   border: 13px solid transparent;
-  border-top-color: rgba(0, 0, 0, .04);
+  border-top-color: rgba(0, 0, 0, 0.04);
 }
 
 .learn-bar > .learn {
