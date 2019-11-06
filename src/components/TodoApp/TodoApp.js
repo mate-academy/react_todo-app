@@ -61,12 +61,13 @@ class TodoApp extends Component {
     this.setState(prevState => (
       {
         todos: prevState.todos.map((item) => {
+          const newItem = { ...item };
+
           if (item.id === itemId) {
-            // eslint-disable-next-line no-param-reassign
-            item.completed = !item.completed;
+            newItem.completed = !newItem.completed;
           }
 
-          return item;
+          return newItem;
         }),
       }
     ));
@@ -76,10 +77,11 @@ class TodoApp extends Component {
     this.setState(prevState => (
       {
         todos: prevState.todos.map((item) => {
-          // eslint-disable-next-line no-param-reassign
-          item.completed = !flag;
+          const newItem = { ...item };
 
-          return item;
+          newItem.completed = !flag;
+
+          return newItem;
         }),
       }
     ));
