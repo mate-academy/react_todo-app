@@ -107,6 +107,7 @@ body {
 }
 
 .main {
+  display: block;
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
@@ -236,6 +237,11 @@ body {
   transition: color 0.2s ease-out;
 }
 
+.toggle_line-through {
+  color: #d9d9d9;
+  text-decoration: line-through;
+}
+
 .todo-list li .destroy:hover {
   color: #af5b5e;
 }
@@ -257,6 +263,7 @@ body {
 }
 
 .footer {
+  display: block;
   color: #777;
   padding: 10px 15px;
   height: 20px;
@@ -320,6 +327,7 @@ body {
 
 .clear-completed,
 html .clear-completed:active {
+  display: block;
   float: right;
   position: relative;
   line-height: 20px;

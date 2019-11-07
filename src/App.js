@@ -1,75 +1,279 @@
 import React from 'react';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+import TodoList from './component/TodoList';
+import TodoFilter from './component/TodoFilter';
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+const _ = require('lodash');
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+class App extends React.Component {
+  state = {
+    todoList: [],
+    todoListFiltered: [],
+    textNewTodo: '',
+    activeFilter: 'All',
+    savedStorage: false,
+  };
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  componentDidMount() {
+    const preparedlocalSrotage = Object
+      .fromEntries(Object.entries(localStorage));
+    const preparedState = {};
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+    for (let state in preparedlocalSrotage) {
+      if (state !== null) {
+        preparedState[state] = JSON.parse(localStorage.getItem(state));
+      }
+    }
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+    if (preparedState.savedStorage) {
+      this.setState({
+        ...preparedState,
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    this.handleFormSubmit();
+  }
+
+  addNewTodo = (event) => {
+    event.preventDefault();
+    const idForTodos = _.uniqueId('todo_');
+
+    if (this.state.textNewTodo.replace(/\s/g, '') !== '') {
+      this.setState(prevState => ({
+        todoList: [...prevState.todoList,
+          {
+            id: idForTodos,
+            title: prevState.textNewTodo,
+            completed: false,
+          },
+        ],
+
+        todoListFiltered: [...prevState.todoListFiltered,
+          {
+            id: idForTodos,
+            title: prevState.textNewTodo,
+            completed: false,
+          },
+        ],
+        textNewTodo: '',
+        savedStorage: true,
+      }));
+    }
+  };
+
+  handleNewTodoText = ({ target: { value } }) => {
+    this.setState({
+      textNewTodo: value.replace(/^\s+/, ''),
+    });
+  };
+
+  toggleCompleteStatus = (id) => {
+    const { activeFilter } = this.state;
+
+    this.setState(({ todoList, todoListFiltered }) => ({
+      todoList: todoList.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed: !todo.completed };
+        }
+
+        return todo;
+      }),
+
+      todoListFiltered: todoListFiltered.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed: !todo.completed };
+        }
+
+        return todo;
+      }),
+    }));
+
+    if (activeFilter === 'Completed') {
+      this.toggleFilters('Completed');
+    }
+
+    if (activeFilter === 'Active') {
+      this.toggleFilters('Active');
+    }
+  };
+
+  toggleCompleteAllStatus = () => {
+    this.setState(prevState => ({
+      todoListFiltered: prevState.todoListFiltered
+        .map(todo => ({
+          ...todo,
+          completed: prevState.todoListFiltered
+            .some(todo => !todo.completed),
+        })),
+      todoList: prevState.todoList
+        .map(todo => ({
+          ...todo,
+          completed: prevState.todoList
+            .some(todo => !todo.completed),
+        })),
+    }));
+  };
+
+  toggleFilters = (active) => {
+    switch (active) {
+      case 'Active': this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .filter(todo => !todo.completed),
+        activeFilter: 'Active',
+      }));
+        break;
+      case 'Completed': this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .filter(todo => todo.completed),
+        activeFilter: 'Completed',
+      }));
+        break;
+      default: this.setState(prevState => ({
+        todoListFiltered: prevState.todoList
+          .map(todo => ({ ...todo })),
+        activeFilter: 'All',
+      }));
+    }
+  };
+
+  toggleRemoveTodo = (id) => {
+    this.setState(({ todoList, todoListFiltered }) => ({
+      todoList: todoList.filter(todo => (todo.id !== id)),
+      todoListFiltered: todoListFiltered.filter(todo => (todo.id !== id))
+    }));
+  };
+
+  toggleRemoveAllCompleted = () => {
+    this.setState(({ todoList, todoListFiltered }) => ({
+      todoList: todoList.filter(todo => (!todo.completed)),
+      todoListFiltered: todoListFiltered.filter(todo => (!todo.completed)),
+    }));
+  };
+
+  addEditText = (editText, id) => {
+    if (editText.replace(/\s/g, '') !== '') {
+      this.setState(({ todoListFiltered, todoList }) => ({
+        todoList: todoList.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              title: editText,
+            };
+          }
+
+          return todo;
+        }),
+        todoListFiltered: todoListFiltered.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              title: editText,
+            };
+          }
+
+          return todo;
+        }),
+      }));
+    }
+  }
+
+  handleFormSubmit() {
+    const {
+      todoList,
+      todoListFiltered,
+      savedStorage,
+    } = this.state;
+
+    localStorage.setItem('savedStorage',
+      JSON.stringify(savedStorage));
+    localStorage.setItem('todoList',
+      JSON.stringify(todoList));
+    localStorage.setItem('todoListFiltered',
+      JSON.stringify(todoListFiltered));
+  }
+
+  render() {
+    const {
+      textNewTodo,
+      todoListFiltered,
+      activeFilter,
+      todoList,
+    } = this.state;
+    const activeTodoCounter = todoList.filter(item => !item.completed).length;
+
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+
+          <form onSubmit={this.addNewTodo}>
+            <input
+              value={textNewTodo}
+              onChange={this.handleNewTodoText}
+              className="new-todo"
+              placeholder="What needs to be done?"
+            />
+          </form>
+        </header>
+
+        <section className="main">
+          {!!todoList.length && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                onChange={this.toggleCompleteAllStatus}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
+
+          <TodoList
+            addEditText={this.addEditText}
+            todoListFiltered={todoListFiltered}
+            toggleCompleteStatus={this.toggleCompleteStatus}
+            toggleRemoveTodo={this.toggleRemoveTodo}
+          />
+        </section>
+
+        {
+          !!todoList.length && (
+            <footer className="footer">
+              <span className="todo-count">
+                {activeTodoCounter }
+                {' '}
+                item
+                {activeTodoCounter !== 1 && 's'}
+                {' '}
+                left
+              </span>
+
+              <TodoFilter
+                toggleFilters={this.toggleFilters}
+                activeFilter={activeFilter}
+              />
+
+              {
+                !!todoList.some(todo => todo.completed) && (
+                  <button
+                    type="button"
+                    className="clear-completed"
+                    onClick={this.toggleRemoveAllCompleted}
+                  >
+                    Clear completed
+                  </button>
+                )
+              }
+
+            </footer>
+          )
+        }
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
