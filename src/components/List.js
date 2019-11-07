@@ -29,28 +29,31 @@ function List(
 
     default:
   }
+
   return items
-    && <>
-      <section className="main" style={{display: 'block'}}>
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          onChange={toggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          {filteredItems.map(item => (
-            <Item
-              item={item}
-              key={item.id}
-              toggleOne={toggleOne}
-              clearItem={clearItem}
-            />
-          ))}
-        </ul>
-      </section>
-    </>
+    && (
+      <>
+        <section className="main" style={{display: 'block'}}>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={toggleAll}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+          <ul className="todo-list">
+            {filteredItems.map(item => (
+              <Item
+                item={item}
+                key={item.id}
+                toggleOne={toggleOne}
+                clearItem={clearItem}
+              />
+            ))}
+          </ul>
+        </section>
+      </>
+    );
 }
 
 export default List;
