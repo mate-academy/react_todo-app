@@ -17,7 +17,6 @@ const Input = ({ addTodoItem }) => {
             className="new-todo"
             placeholder="What needs to be done?"
             name="toDoItem"
-            // eslint-disable-next-line
             autoFocus
           />
         </form>
