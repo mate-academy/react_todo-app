@@ -75,31 +75,9 @@ class Main extends React.Component {
     const tab = event.target;
     const tabName = tab.innerText;
 
-
-    switch (tabName) {
-      case 'All':
-        tab.className = 'selected';
-        this.setState({
-          selectedTab: tabName,
-        });
-        break;
-
-      case 'Active':
-        tab.className = 'selected';
-        this.setState({
-          selectedTab: tabName,
-        });
-        break;
-
-      case 'Completed':
-        tab.className = 'selected';
-        this.setState({
-          selectedTab: tabName,
-        });
-        break;
-
-      default:
-    }
+    this.setState({
+      selectedTab: tabName,
+    });
   };
 
   clearItem = (event) => {
