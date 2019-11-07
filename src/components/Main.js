@@ -80,21 +80,21 @@ class Main extends React.Component {
       case 'All':
         tab.className = 'selected';
         this.setState({
-          selectedTab: 'All',
+          selectedTab: tabName,
         });
         break;
 
       case 'Active':
         tab.className = 'selected';
         this.setState({
-          selectedTab: 'Active',
+          selectedTab: tabName,
         });
         break;
 
       case 'Completed':
         tab.className = 'selected';
         this.setState({
-          selectedTab: 'Completed',
+          selectedTab: tabName,
         });
         break;
 
