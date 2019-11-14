@@ -68,10 +68,14 @@ class App extends Component {
   }
 
   selectAll = () => {
-    this.setState(prev => ({
-      ...prev,
-      todos: prev.todos.map(todo => ({ ...todo, isActive: false })),
-    }));
+    this.setState((prev) => {
+      const allCompleted = prev.todos.every(todo => !todo.isActive);
+
+      return {
+        ...prev,
+        todos: prev.todos.map(todo => ({ ...todo, isActive: allCompleted })),
+      };
+    });
   }
 
   render() {
