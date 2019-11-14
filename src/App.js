@@ -6,11 +6,17 @@ import Footer from './components/Footer/Footer';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = JSON.parse(localStorage.getItem('state')) || {
       todos: [],
       id: 1,
       showTodos: 'all',
     };
+  }
+
+  componentDidUpdate() {
+    const stateJson = JSON.stringify(this.state);
+
+    localStorage.setItem('state', stateJson);
   }
 
   newItemSubmitted = (newItem) => {
