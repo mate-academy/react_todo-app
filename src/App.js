@@ -103,7 +103,6 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <section className="todoapp">
         <header className="header">
