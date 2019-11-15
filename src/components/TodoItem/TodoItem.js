@@ -28,13 +28,22 @@ class TodoItem extends Component {
     deleteTodo(todo.id);
   }
 
+  modifyTodo = (id) => {
+    this.props.editTodo(id);
+  }
+
+  doubleClicked = (event, id) => {
+    event.preventDefault();
+    this.modifyTodo(id);
+  }
+
   render() {
     const { todo } = this.props;
 
     return (
       <li
         onClick={this.selectItem}
-        className={todo.isActive ? '' : 'completed'}
+        className={!todo.isActive && 'completed'}
       >
         <div className="view">
           <input
@@ -46,6 +55,7 @@ class TodoItem extends Component {
           <label
             onClick={this.selectItem}
             htmlFor={`todo-${todo.id}`}
+            onDoubleClick={(event) => this.doubleClicked(event, todo.id)}
           >
             {todo.task}
           </label>
@@ -66,6 +76,7 @@ TodoItem.propTypes = {
     id: PropTypes.number,
     isActive: PropTypes.bool,
     task: PropTypes.string,
+    editTodo: PropTypes.string,
   }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
 };

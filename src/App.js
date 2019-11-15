@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import InputForm from './components/InputForm/InputForm';
 import TodoItem from './components/TodoItem/TodoItem';
 import Footer from './components/Footer/Footer';
+import Editor from './components/Editor/Editor';
 
 class App extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class App extends Component {
       todos: [],
       id: 1,
       showTodos: 'all',
+      editTodoId: null,
     };
   }
 
@@ -84,7 +86,24 @@ class App extends Component {
     });
   }
 
+  editTodo = (id) => {
+    this.setState({
+      editTodoId: id,
+    });
+  }
+
+  onEditSubmitted = (newTask) => {
+    this.setState(prev => ({
+      todos: prev.todos.map(todo => (
+        todo.id === this.state.editTodoId
+          ? { ...todo, task: newTask.task, isActive: true }
+          : todo)),
+      editTodoId: null,
+    }));
+  }
+
   render() {
+
     return (
       <section className="todoapp">
         <header className="header">
@@ -99,7 +118,7 @@ class App extends Component {
         <section className="main" style={{ display: 'block' }}>
           <input
             type="checkbox"
-            checked={this.state.todos
+            checked={this.state.todos.length
               ? this.state.todos.every(todo => !todo.isActive)
               : false}
             id="toggle-all"
@@ -110,12 +129,23 @@ class App extends Component {
 
           <ul className="todo-list">
             {this.filterTodos().map(todo => (
-              <TodoItem
-                todo={todo}
-                key={todo.id}
-                deleteTodo={this.deleteTodo}
-                setActive={this.setActive}
-              />
+              this.state.editTodoId === todo.id
+                ? (
+                  <Editor
+                    todos={this.state.todos}
+                    onEditSubmitted={this.onEditSubmitted}
+                    editTodo={this.editTodo}
+                  />
+                )
+                : (
+                  <TodoItem
+                    todo={todo}
+                    key={todo.id}
+                    deleteTodo={this.deleteTodo}
+                    setActive={this.setActive}
+                    editTodo={this.editTodo}
+                  />
+                )
             ))}
           </ul>
         </section>
