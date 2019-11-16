@@ -80,6 +80,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.todo-item__input,
 .new-todo,
 .edit {
   position: relative;
@@ -99,11 +100,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.todo-item__input,
 .new-todo {
   padding: 16px 16px 16px 60px;
   border: none;
   background: rgba(0, 0, 0, 0.003);
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+}
+
+.todo-item__form {
+  width: 95%;
+  margin: 0 auto;
+  background-color: #fff;
+}
+.todo-item__input {
+  padding: 16px;
+  border: 1px solid #999;
+  line-height: 1.3em;
 }
 
 .main {
@@ -134,10 +147,10 @@ body {
 }
 
 .toggle-all + label:before {
-  content: '❯';
+  content: "❯";
   font-size: 22px;
   color: #e6e6e6;
-  padding: 10px 27px 10px 27px;
+  padding: 10px 27px;
 }
 
 .toggle-all:checked + label:before {
