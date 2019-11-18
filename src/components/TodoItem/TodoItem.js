@@ -6,8 +6,14 @@ class TodoItem extends Component {
     super(props);
     this.state = {
       completed: false,
-      task123: '',
+      editTask: '',
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      editTask: this.props.todo.task,
+    });
   }
 
   selectItem = () => {
@@ -29,34 +35,36 @@ class TodoItem extends Component {
     deleteTodo(todo.id);
   }
 
-  modifyTodo = (id) => {
-    this.props.editTodo(id);
-    // console.log(id);
-  }
-
   inputChanged = (event) => {
     this.setState({
-      task123: event.target.value,
+      editTask: event.target.value,
     });
   }
 
   doubleClicked = (event, id) => {
     event.preventDefault();
-    // console.log('doubleClicked');
-    this.modifyTodo(id);
+    this.props.editTodo(id);
   }
 
   render() {
     const { todo, editTodoId, showEditField } = this.props;
+    const { editTask } = this.state;
 
     return (
       <li
         onClick={this.selectItem}
-        className={`${todo.isActive ? '' : 'completed'}${showEditField ? ' editing' : ''}`}
+        className={`
+            ${todo.isActive ? '' : 'completed'}
+            ${showEditField ? ' editing' : ''}
+          `}
       >
         <div
           className="view"
-          style={editTodoId === todo.id ? { display: 'none' } : { display: 'block' }}
+          style={
+            editTodoId === todo.id
+              ? { display: 'none' }
+              : { display: 'block' }
+          }
         >
           <input
             type="checkbox"
@@ -77,13 +85,17 @@ class TodoItem extends Component {
             className="destroy"
           />
         </div>
-        <form onSubmit={this.props.submitEditItem}>
+        <form onSubmit={event => this.props.submitEditItem(event, editTask)}>
           <input
             className="edit"
             onChange={this.inputChanged}
-            value={this.state.task123}
+            value={editTask}
             placeholder="What do you want to change?"
-            style={editTodoId === todo.id ? { display: 'block' } : { display: 'none' }}
+            style={
+              editTodoId === todo.id
+                ? { display: 'block' }
+                : { display: 'none' }
+            }
           />
         </form>
       </li>
@@ -97,9 +109,16 @@ TodoItem.propTypes = {
     id: PropTypes.number,
     isActive: PropTypes.bool,
     task: PropTypes.string,
-    editTodo: PropTypes.string,
   }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  showEditField: PropTypes.bool.isRequired,
+  editTodoId: PropTypes.number,
+  submitEditItem: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
+};
+
+TodoItem.defaultProps = {
+  editTodoId: null,
 };
 
 export default TodoItem;

@@ -16,8 +16,6 @@ class App extends Component {
     };
   }
 
-  // JSON.parse(localStorage.getItem('state')) ||
-
   componentDidUpdate() {
     const stateJson = JSON.stringify(this.state);
 
@@ -44,12 +42,11 @@ class App extends Component {
     });
   }
 
-  submitEditItem = (event) => {
-    console.log(this.state);
+  submitEditItem = (event, value) => {
     event.preventDefault();
 
     const newTask = {
-      task: event.target.value,
+      task: value,
     };
 
     this.onEditSubmitted(newTask);
@@ -58,6 +55,17 @@ class App extends Component {
       task: '',
     });
   };
+
+  onEditSubmitted = (newTask) => {
+    this.setState(prev => ({
+      todos: prev.todos.map(todo => (
+        todo.id === prev.editTodoId
+          ? { ...todo, task: newTask.task, isActive: true }
+          : todo)),
+      editTodoId: null,
+      showEditField: false,
+    }));
+  }
 
   filterTodos = () => this.state.todos.filter((todo) => {
     switch (this.state.showTodos) {
@@ -70,7 +78,7 @@ class App extends Component {
       default:
         return true;
     }
-  })
+  });
 
   setActive = (todoId, status) => {
     this.setState(prev => ({
@@ -79,7 +87,7 @@ class App extends Component {
         ? todo
         : { ...todo, isActive: status })),
     }));
-  }
+  };
 
   onButtonSelected = (type) => {
     this.setState({
@@ -117,17 +125,6 @@ class App extends Component {
     });
   }
 
-  onEditSubmitted = (newTask) => {
-    this.setState(prev => ({
-      todos: prev.todos.map(todo => (
-        todo.id === prev.editTodoId
-          ? { ...todo, task: newTask.task, isActive: true }
-          : todo)),
-      editTodoId: null,
-      showEditField: false,
-    }));
-  }
-
   render() {
     return (
       <section className="todoapp">
@@ -161,7 +158,6 @@ class App extends Component {
                 setActive={this.setActive}
                 editTodo={this.editTodo}
                 showEditField={this.state.showEditField}
-                onEditSubmitted={this.onEditSubmitted}
                 editTodoId={this.state.editTodoId}
                 submitEditItem={this.submitEditItem}
                 task={this.state.task}
