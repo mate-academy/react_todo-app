@@ -5,36 +5,33 @@ function TodosFilter({ todosFilter, selectedPage }) {
   return (
     <ul className="filters">
       <li>
-        {selectedPage === 'All'
-          ? (<a onClick={todosFilter} href="#/" className="selected">
-              All
-            </a>)
-          : (<a onClick={todosFilter} href="#/">
-              All
-            </a>)
-        }
+        <a
+          onClick={todosFilter}
+          href="#/"
+          className={selectedPage === 'All' ? 'selected' : ''}
+        >
+          All
+        </a>
       </li>
 
       <li>
-        {selectedPage === 'Active'
-          ? (<a onClick={todosFilter} href="#/active" className="selected">
-              Active
-            </a>)
-          : (<a onClick={todosFilter} href="#/active">
-              Active
-            </a>)
-        }
+        <a
+          onClick={todosFilter}
+          href="#/active"
+          className={selectedPage === 'Active' ? 'selected' : ''}
+        >
+          Active
+        </a>
       </li>
 
       <li>
-        {selectedPage === 'Completed'
-          ? (<a onClick={todosFilter} href="#/completed" className="selected">
-              Completed
-            </a>)
-          : (<a onClick={todosFilter} href="#/completed">
-              Completed
-            </a>)
-        }
+        <a
+          onClick={todosFilter}
+          href="#/completed"
+          className={selectedPage === 'Completed' ? 'selected' : ''}
+        >
+          Completed
+        </a>
       </li>
     </ul>
   );

@@ -9,6 +9,9 @@ function TodoList(props) {
     changeCompleted,
     selectedPage,
     markAllAsComplete,
+    onInputChange,
+    changeEditMode,
+    editTodo
   } = props;
   let filteredList = [];
 
@@ -30,7 +33,7 @@ function TodoList(props) {
   }
 
   return (
-    <section className="main" style={{ display: 'block' }}>
+    <section className="main">
       <input
         onClick={markAllAsComplete}
         type="checkbox"
@@ -46,6 +49,9 @@ function TodoList(props) {
             key={todo.id}
             removeTodo={removeTodo}
             onCompleted={changeCompleted}
+            onInputChange={onInputChange}
+            changeEditMode={changeEditMode}
+            editTodo={editTodo}
           />
         ))}
       </ul>

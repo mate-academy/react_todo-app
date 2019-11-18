@@ -14,11 +14,9 @@ function TodoItem(props) {
           onChange={onCompleted}
           checked={todo.completed}
         />
-        <label
-          htmlFor={todo.id}
-        >
-          {todo.title}
-        </label>
+
+        <label>{todo.title}</label>
+
         <button
           type="button"
           className="destroy"

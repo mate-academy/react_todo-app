@@ -21,38 +21,36 @@ class App extends React.Component {
   }
 
   addTodo = (event) => {
+    event.preventDefault();
+
     const newItem = {
       id: this.state.id,
       title: this.state.title,
       completed: false,
     };
 
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      event.target.value = '';
-
+    if (this.state.title.trim() !== '') {
       this.setState(prevState => ({
         ...prevState,
         todoList: [...prevState.todoList, newItem],
         id: prevState.id + 1,
         title: '',
-        allTodos: this.state.todoList,
     }))};
   }
 
+  clearInputField = (event) => {
+    if (event.key === "Enter") {
+      event.target.value = '';
+    }
+  }
+
   removeTodo = (todoId) => {
-    const newTodoList = [...this.state.todoList];
-
-    for (const todo of newTodoList) {
-      if (todo.id === todoId) {
-        const removedItem = newTodoList.indexOf(todo);
-        newTodoList.splice(removedItem, 1);
-      }
-    };
-
-    this.setState({
-      todoList: newTodoList,
-    });
+    this.setState(prevState => ({
+      ...prevState,
+      todoList: [...prevState.todoList].filter(todo => (
+        todo.id !== todoId
+      )),
+    }));
   }
 
   changeCompleted = (event) => {
@@ -73,7 +71,7 @@ class App extends React.Component {
   }
 
   todosFilter = (event) => {
-    let page = event.target.innerText;
+    const page = event.target.innerText;
 
     this.setState({
       selectedPage: page,
@@ -108,12 +106,14 @@ class App extends React.Component {
         <header className="header">
           <h1>todos</h1>
 
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onKeyDown={this.addTodo}
-            onChange={this.onInputChange}
-          />
+          <form onSubmit={this.addTodo}>
+            <input
+              className="new-todo"
+              placeholder="What needs to be done?"
+              onChange={this.onInputChange}
+              onKeyDown={this.clearInputField}
+            />
+          </form>
         </header>
 
         <TodoList

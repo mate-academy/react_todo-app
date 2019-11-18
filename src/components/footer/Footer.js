@@ -11,7 +11,7 @@ function Footer(
   }
 ) {
   return (
-    <footer className="footer" style={{ display: 'block' }}>
+    <footer className="footer">
       <span className="todo-count">
         {todoList.filter(todo => (
           !todo.completed
@@ -24,8 +24,9 @@ function Footer(
         selectedPage={selectedPage}
       />
 
-      {todoList.some(todo => todo.completed)
-        ? <button
+      {todoList.some(todo => todo.completed) &&
+        (
+          <button
             type="button"
             onClick={clearCompleted}
             className="clear-completed"
@@ -33,13 +34,7 @@ function Footer(
           >
             Clear completed
           </button>
-        : <button
-            type="button"
-            className="clear-completed"
-            style={{ display: 'none' }}
-          >
-            Clear completed
-          </button>
+        )
       }
     </footer>
   );
