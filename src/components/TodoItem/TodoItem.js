@@ -6,6 +6,7 @@ class TodoItem extends Component {
     super(props);
     this.state = {
       completed: false,
+      task123: '',
     };
   }
 
@@ -30,22 +31,33 @@ class TodoItem extends Component {
 
   modifyTodo = (id) => {
     this.props.editTodo(id);
+    // console.log(id);
+  }
+
+  inputChanged = (event) => {
+    this.setState({
+      task123: event.target.value,
+    });
   }
 
   doubleClicked = (event, id) => {
     event.preventDefault();
+    // console.log('doubleClicked');
     this.modifyTodo(id);
   }
 
   render() {
-    const { todo } = this.props;
+    const { todo, editTodoId, showEditField } = this.props;
 
     return (
       <li
         onClick={this.selectItem}
-        className={!todo.isActive && 'completed'}
+        className={`${todo.isActive ? '' : 'completed'}${showEditField ? ' editing' : ''}`}
       >
-        <div className="view">
+        <div
+          className="view"
+          style={editTodoId === todo.id ? { display: 'none' } : { display: 'block' }}
+        >
           <input
             type="checkbox"
             checked={!todo.isActive}
@@ -55,7 +67,7 @@ class TodoItem extends Component {
           <label
             onClick={this.selectItem}
             htmlFor={`todo-${todo.id}`}
-            onDoubleClick={(event) => this.doubleClicked(event, todo.id)}
+            onDoubleClick={event => this.doubleClicked(event, todo.id)}
           >
             {todo.task}
           </label>
@@ -65,6 +77,15 @@ class TodoItem extends Component {
             className="destroy"
           />
         </div>
+        <form onSubmit={this.props.submitEditItem}>
+          <input
+            className="edit"
+            onChange={this.inputChanged}
+            value={this.state.task123}
+            placeholder="What do you want to change?"
+            style={editTodoId === todo.id ? { display: 'block' } : { display: 'none' }}
+          />
+        </form>
       </li>
     );
   }

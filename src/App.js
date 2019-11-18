@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import InputForm from './components/InputForm/InputForm';
 import TodoItem from './components/TodoItem/TodoItem';
 import Footer from './components/Footer/Footer';
-import Editor from './components/Editor/Editor';
 
 class App extends Component {
   constructor(props) {
@@ -12,8 +11,12 @@ class App extends Component {
       id: 1,
       showTodos: 'all',
       editTodoId: null,
+      showEditField: false,
+      task: '',
     };
   }
+
+  // JSON.parse(localStorage.getItem('state')) ||
 
   componentDidUpdate() {
     const stateJson = JSON.stringify(this.state);
@@ -34,6 +37,27 @@ class App extends Component {
       id: prev.id + 1,
     }));
   }
+
+  inputChanged = (event) => {
+    this.setState({
+      task: event.target.value,
+    });
+  }
+
+  submitEditItem = (event) => {
+    console.log(this.state);
+    event.preventDefault();
+
+    const newTask = {
+      task: event.target.value,
+    };
+
+    this.onEditSubmitted(newTask);
+
+    this.setState({
+      task: '',
+    });
+  };
 
   filterTodos = () => this.state.todos.filter((todo) => {
     switch (this.state.showTodos) {
@@ -88,6 +112,7 @@ class App extends Component {
 
   editTodo = (id) => {
     this.setState({
+      showEditField: true,
       editTodoId: id,
     });
   }
@@ -95,10 +120,11 @@ class App extends Component {
   onEditSubmitted = (newTask) => {
     this.setState(prev => ({
       todos: prev.todos.map(todo => (
-        todo.id === this.state.editTodoId
+        todo.id === prev.editTodoId
           ? { ...todo, task: newTask.task, isActive: true }
           : todo)),
       editTodoId: null,
+      showEditField: false,
     }));
   }
 
@@ -128,23 +154,19 @@ class App extends Component {
 
           <ul className="todo-list">
             {this.filterTodos().map(todo => (
-              this.state.editTodoId === todo.id
-                ? (
-                  <Editor
-                    todos={this.state.todos}
-                    onEditSubmitted={this.onEditSubmitted}
-                    editTodo={this.editTodo}
-                  />
-                )
-                : (
-                  <TodoItem
-                    todo={todo}
-                    key={todo.id}
-                    deleteTodo={this.deleteTodo}
-                    setActive={this.setActive}
-                    editTodo={this.editTodo}
-                  />
-                )
+              <TodoItem
+                todo={todo}
+                key={todo.id}
+                deleteTodo={this.deleteTodo}
+                setActive={this.setActive}
+                editTodo={this.editTodo}
+                showEditField={this.state.showEditField}
+                onEditSubmitted={this.onEditSubmitted}
+                editTodoId={this.state.editTodoId}
+                submitEditItem={this.submitEditItem}
+                task={this.state.task}
+                inputChanged={this.inputChanged}
+              />
             ))}
           </ul>
         </section>
