@@ -60,6 +60,7 @@ class TodoItem extends React.Component {
               </label>
             : <form onSubmit={this.changeTodoTitle}>
                 <input
+                  onBlur={this.changeTodoTitle}
                   type="text"
                   className="edit"
                   onChange={this.onValueChange}
