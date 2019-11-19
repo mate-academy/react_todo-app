@@ -9,9 +9,6 @@ function TodoList(props) {
     changeCompleted,
     selectedPage,
     markAllAsComplete,
-    onInputChange,
-    changeEditMode,
-    editTodo
   } = props;
   let filteredList = [];
 
@@ -49,9 +46,6 @@ function TodoList(props) {
             key={todo.id}
             removeTodo={removeTodo}
             onCompleted={changeCompleted}
-            onInputChange={onInputChange}
-            changeEditMode={changeEditMode}
-            editTodo={editTodo}
           />
         ))}
       </ul>

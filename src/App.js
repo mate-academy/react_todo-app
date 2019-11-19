@@ -23,25 +23,23 @@ class App extends React.Component {
   addTodo = (event) => {
     event.preventDefault();
 
+    if (this.state.title.trim() === '') {
+      return;
+    }
+
     const newItem = {
       id: this.state.id,
       title: this.state.title,
       completed: false,
     };
 
-    if (this.state.title.trim() !== '') {
-      this.setState(prevState => ({
-        ...prevState,
-        todoList: [...prevState.todoList, newItem],
-        id: prevState.id + 1,
-        title: '',
-    }))};
-  }
 
-  clearInputField = (event) => {
-    if (event.key === "Enter") {
-      event.target.value = '';
-    }
+    this.setState(prevState => ({
+      ...prevState,
+      todoList: [...prevState.todoList, newItem],
+      id: prevState.id + 1,
+      title: '',
+    }));
   }
 
   removeTodo = (todoId) => {
@@ -111,7 +109,7 @@ class App extends React.Component {
               className="new-todo"
               placeholder="What needs to be done?"
               onChange={this.onInputChange}
-              onKeyDown={this.clearInputField}
+              value={this.state.title}
             />
           </form>
         </header>
