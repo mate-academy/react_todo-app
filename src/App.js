@@ -96,6 +96,19 @@ class App extends React.Component {
     }));
   }
 
+  editTodo = (value, id) => {
+    this.setState(prevState => ({
+      ...prevState,
+      todoList: prevState.todoList.map(todo => {
+        if (todo.id === id) {
+          return {...todo, title: value}
+        }
+
+        return todo;
+      })
+    }))
+  }
+
   render() {
     const { todoList, selectedPage } = this.state;
 
@@ -120,6 +133,7 @@ class App extends React.Component {
           changeCompleted={this.changeCompleted}
           selectedPage={selectedPage}
           markAllAsComplete={this.markAllAsComplete}
+          editTodo={this.editTodo}
         />
 
         <Footer

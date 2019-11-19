@@ -9,6 +9,7 @@ function TodoList(props) {
     changeCompleted,
     selectedPage,
     markAllAsComplete,
+    editTodo
   } = props;
   let filteredList = [];
 
@@ -46,6 +47,9 @@ function TodoList(props) {
             key={todo.id}
             removeTodo={removeTodo}
             onCompleted={changeCompleted}
+            editTodo={editTodo}
+            title={todo.title}
+            id={todo.id}
           />
         ))}
       </ul>
