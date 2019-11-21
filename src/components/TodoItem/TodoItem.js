@@ -8,6 +8,8 @@ class TodoItem extends Component {
       completed: false,
       editTask: '',
     };
+
+    this.fieldRef = React.createRef();
   }
 
   componentDidMount() {
@@ -16,9 +18,16 @@ class TodoItem extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.showEditField && !prevProps.showEditField) {
+      this.fieldRef.current.focus();
+    }
+  }
+
   selectItem = () => {
-    this.setState((prev) => {
-      const status = !prev.completed;
+    this.setState((prevState) => {
+      const { completed } = prevState;
+      const status = !completed;
       const { setActive, todo } = this.props;
 
       setActive(todo.id, !status);
@@ -46,17 +55,24 @@ class TodoItem extends Component {
     this.props.editTodo(id);
   }
 
+  focusChanged = () => {
+    this.props.onFocusChanged();
+  }
+
+  dropChanges = (event) => {
+    if (event.keyCode === 27) {
+      this.focusChanged();
+    }
+  }
+
   render() {
     const { todo, editTodoId, showEditField } = this.props;
     const { editTask } = this.state;
 
     return (
       <li
-        onClick={this.selectItem}
-        className={`
-            ${todo.isActive ? '' : 'completed'}
-            ${showEditField ? ' editing' : ''}
-          `}
+        className={`${todo.isActive ? '' : 'completed'}
+            ${showEditField ? ' editing' : ''}`}
       >
         <div
           className="view"
@@ -67,6 +83,7 @@ class TodoItem extends Component {
           }
         >
           <input
+            onChange={this.selectItem}
             type="checkbox"
             checked={!todo.isActive}
             className="toggle"
@@ -87,7 +104,10 @@ class TodoItem extends Component {
         </div>
         <form onSubmit={event => this.props.submitEditItem(event, editTask)}>
           <input
+            onBlur={this.focusChanged}
             className="edit"
+            onKeyUp={this.dropChanges}
+            ref={this.fieldRef}
             onChange={this.inputChanged}
             value={editTask}
             placeholder="What do you want to change?"
@@ -115,6 +135,7 @@ TodoItem.propTypes = {
   editTodoId: PropTypes.number,
   submitEditItem: PropTypes.func.isRequired,
   editTodo: PropTypes.func.isRequired,
+  onFocusChanged: PropTypes.func.isRequired,
 };
 
 TodoItem.defaultProps = {

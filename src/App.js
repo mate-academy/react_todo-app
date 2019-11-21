@@ -125,6 +125,13 @@ class App extends Component {
     });
   }
 
+  onFocusChanged = () => {
+    this.setState({
+      showEditField: false,
+      editTodoId: null,
+    });
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -145,7 +152,7 @@ class App extends Component {
               : false}
             id="toggle-all"
             className="toggle-all"
-            onClick={this.selectAll}
+            onChange={this.selectAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -162,6 +169,7 @@ class App extends Component {
                 submitEditItem={this.submitEditItem}
                 task={this.state.task}
                 inputChanged={this.inputChanged}
+                onFocusChanged={this.onFocusChanged}
               />
             ))}
           </ul>
