@@ -87,7 +87,7 @@ const App = () => {
     setChangeValue(todo.title);
   }
 
-  const setItput1 = (id) => {
+  const setTitel = (id) => {
     const todoList = [...listTodo.map(todo => {
       if (todo.id === id) {
         todo.input = !todo.input;
@@ -136,7 +136,7 @@ const App = () => {
             autoFocus
             value={changeValue}
             type="text"
-            onBlur={() => setItput1(todo.id)}
+            onBlur={() => setTitel(todo.id)}
             className={"edit"}
             hidden={!todo.input}
           ></input>
@@ -172,10 +172,10 @@ const App = () => {
           </div>
           <input
             onChange={(event) => changeTitle(event)}
-            autoFocus={true}
-            value={defaultValue()}
+            autoFocus
+            value={changeValue}
             type="text"
-            onBlur={() => setItput(todo.id)}
+            onBlur={() => setTitel(todo.id)}
             className={"edit"}
             hidden={!todo.input}
           ></input>
@@ -200,11 +200,11 @@ const App = () => {
             <button onClick={() => deleted(todo.id)} type="button" className="destroy" />
           </div>
           <input
-            onChange={(event) => changeTitle(todo.id, event)}
-            autoFocus={true}
-            value={defaultValue(todo.id)}
+            onChange={(event) => changeTitle(event)}
+            autoFocus
+            value={changeValue}
             type="text"
-            onBlur={() => setItput(todo.id)}
+            onBlur={() => setTitel(todo.id)}
             className={"edit"}
             hidden={!todo.input}
           ></input>

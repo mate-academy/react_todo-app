@@ -1,4 +1,4 @@
-http://yurabobeshko.github.io/react_todo-app
+https://yurabobeshko.github.io/react_todo-app/
 
 # React ToDo App
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/)
