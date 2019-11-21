@@ -7,6 +7,19 @@ const App = () => {
   const [count, setCount] =  useState({id: 0, complited: 0});
   const [active, setActive] = useState("all");
   const [changeValue, setChangeValue] = useState("");
+  const [sortedlTodo, setSortedlTodo] = useState(listTodo);
+
+  const sortTodo = () => {
+    if(active === "active") {
+      const sorted = [...listTodo.filter(todo => todo.check === false)];
+      return sorted
+    } else if (active === "complited") {
+      const sorted = [...listTodo.filter(todo => todo.check === true)];
+      return sorted
+    } else {
+      return listTodo
+    }
+  }
 
   const allComplited = () => {
     let todoAllComplited;
@@ -108,8 +121,7 @@ const App = () => {
   }
 
   const ShowList = () => {
-    setActive("all");
-    return listTodo.map(todo =>{
+    return sortTodo().map(todo =>{
       return (
         <li
           onDoubleClick={() => setItput(todo.id)}
@@ -146,8 +158,7 @@ const App = () => {
   };
 
   const ShowListActive = () => {
-    setActive("active")
-    return listTodo.map(todo =>{
+    return sortTodo().map(todo =>{
       return (
         <li
           onDoubleClick={() => setItput(todo.id)}
@@ -185,8 +196,7 @@ const App = () => {
   };
 
   const ShowListComplited = () => {
-    setActive("complited");
-    return listTodo.map(todo =>{
+    return sortTodo().map(todo =>{
       return (
         <li
           onDoubleClick={() => setItput(todo.id)}
@@ -252,14 +262,14 @@ const App = () => {
 
         <ul className="filters">
           <li>
-            <A href="/" className={`${active === "all" ? "selected" : ""}`}>
+            <A onClick={() => setActive("all")} href="/" className={`${active === "all" ? "selected" : ""}`}>
               All
             </A>
           </li>
 
           <li>
             <A
-              href="/active"
+              href="/active" onClick={() => setActive("active")}
               className={`${active === "active" ? "selected" : ""}`}
             >
               Active
@@ -268,7 +278,7 @@ const App = () => {
 
           <li>
             <A
-              href="/completed"
+              href="/completed" onClick={() => setActive("complited")}
               className={`${active === "complited" ? "selected" : ""}`}
             >
               Completed
