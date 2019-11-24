@@ -14,6 +14,20 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const todosFromLocalStorage = JSON.parse(localStorage.getItem('todolist')) || [];
+
+    this.setState({
+      todolist: [...todosFromLocalStorage],
+      lastId: +localStorage.getItem('lastId'),
+    });
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todolist', JSON.stringify(this.state.todolist));
+    localStorage.setItem('lastId', this.state.lastId);
+  }
+
   changeInput = (event) => {
     const { value } = event.target;
 

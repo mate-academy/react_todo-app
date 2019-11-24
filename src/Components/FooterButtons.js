@@ -12,7 +12,7 @@ class FooterButtons extends Component {
           const selectedButton = isActive ? `selected` : ``;
 
           return (
-            <li>
+            <li key={dir}>
               <a href={`#/${dir}`} className={selectedButton} onClick={() => changeFilter(dir)}>{dir}</a>
             </li>
           );

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class ToDoItem extends Component {
   render() {
     const {
-      item, index, deleteItem, toggleItem,
+      item, deleteItem, toggleItem,
     } = this.props;
     const isCompleted = item.done ? `completed` : ``;
 
