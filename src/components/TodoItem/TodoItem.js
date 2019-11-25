@@ -1,127 +1,100 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-class TodoItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      completed: false,
-      editTask: '',
-    };
+const TodoItem = ({
+  todo,
+  editTodoId,
+  showEditField,
+  submitEditItem,
+  setActive,
+  deleteTodo,
+  editTodo,
+  onFocusChanged,
+}) => {
+  const [completed, setCompleted] = useState(false);
+  const [editTask, setEditTask] = useState('');
+  const fieldRef = useRef(null);
 
-    this.fieldRef = React.createRef();
-  }
+  const selectItem = () => {
+    const status = !completed;
 
-  componentDidMount() {
-    this.setState({
-      editTask: this.props.todo.task,
-    });
-  }
+    setActive(todo.id, !status);
 
-  componentDidUpdate(prevProps) {
-    if (this.props.showEditField && !prevProps.showEditField) {
-      this.fieldRef.current.focus();
-    }
-  }
+    setCompleted(status);
+  };
 
-  selectItem = () => {
-    this.setState((prevState) => {
-      const { completed } = prevState;
-      const status = !completed;
-      const { setActive, todo } = this.props;
+  useEffect(() => () => setEditTask(todo.task), [todo.task]);
+  useEffect(() => () => fieldRef.current.focus());
 
-      setActive(todo.id, !status);
+  const destroyTodo = () => deleteTodo(todo.id);
 
-      return {
-        completed: status,
-      };
-    });
-  }
+  const inputChanged = event => setEditTask(event.target.value);
 
-  destroyTodo = () => {
-    const { deleteTodo, todo } = this.props;
-
-    deleteTodo(todo.id);
-  }
-
-  inputChanged = (event) => {
-    this.setState({
-      editTask: event.target.value,
-    });
-  }
-
-  doubleClicked = (event, id) => {
+  const doubleClicked = (event, id) => {
     event.preventDefault();
-    this.props.editTodo(id);
-  }
+    editTodo(id);
+  };
 
-  focusChanged = () => {
-    this.props.onFocusChanged();
-  }
+  const focusChanged = () => onFocusChanged();
 
-  dropChanges = (event) => {
+  const dropChanges = (event) => {
     if (event.keyCode === 27) {
-      this.focusChanged();
+      focusChanged();
     }
-  }
+  };
 
-  render() {
-    const { todo, editTodoId, showEditField } = this.props;
-    const { editTask } = this.state;
-
-    return (
-      <li
-        className={`${todo.isActive ? '' : 'completed'}
-            ${showEditField ? ' editing' : ''}`}
+  return (
+    <li
+      className={`${todo.isActive ? '' : 'completed'}
+      ${showEditField ? ' editing' : ''}`}
+    >
+      <div
+        className="view"
+        style={
+          editTodoId === todo.id
+            ? { display: 'none' }
+            : { display: 'block' }
+        }
       >
-        <div
-          className="view"
+        <input
+          onChange={selectItem}
+          type="checkbox"
+          checked={!todo.isActive}
+          className="toggle"
+          id={`todo-${todo.id}`}
+        />
+        <label
+          onClick={selectItem}
+          htmlFor={`todo-${todo.id}`}
+          onDoubleClick={event => doubleClicked(event, todo.id)}
+        >
+          {todo.task}
+        </label>
+        <button
+          onClick={destroyTodo}
+          type="button"
+          className="destroy"
+        />
+      </div>
+      <form onSubmit={event => submitEditItem(event, editTask)}>
+        <input
+          onBlur={focusChanged}
+          className="edit"
+          onKeyUp={dropChanges}
+          ref={fieldRef}
+          onChange={inputChanged}
+          value={editTask}
+          placeholder="What do you want to change?"
           style={
             editTodoId === todo.id
-              ? { display: 'none' }
-              : { display: 'block' }
+              ? { display: 'block' }
+              : { display: 'none' }
           }
-        >
-          <input
-            onChange={this.selectItem}
-            type="checkbox"
-            checked={!todo.isActive}
-            className="toggle"
-            id={`todo-${todo.id}`}
-          />
-          <label
-            onClick={this.selectItem}
-            htmlFor={`todo-${todo.id}`}
-            onDoubleClick={event => this.doubleClicked(event, todo.id)}
-          >
-            {todo.task}
-          </label>
-          <button
-            onClick={this.destroyTodo}
-            type="button"
-            className="destroy"
-          />
-        </div>
-        <form onSubmit={event => this.props.submitEditItem(event, editTask)}>
-          <input
-            onBlur={this.focusChanged}
-            className="edit"
-            onKeyUp={this.dropChanges}
-            ref={this.fieldRef}
-            onChange={this.inputChanged}
-            value={editTask}
-            placeholder="What do you want to change?"
-            style={
-              editTodoId === todo.id
-                ? { display: 'block' }
-                : { display: 'none' }
-            }
-          />
-        </form>
-      </li>
-    );
-  }
-}
+        />
+      </form>
+    </li>
+  );
+};
 
 TodoItem.propTypes = {
   setActive: PropTypes.func.isRequired,

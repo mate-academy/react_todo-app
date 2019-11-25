@@ -20,7 +20,7 @@ const Footer = ({
           <a
             onClick={() => onButtonSelected('all')}
             href="#/"
-            className={active === 'all' && 'selected'}
+            className={active === 'all' ? 'selected' : ''}
           >
             All
           </a>
@@ -51,7 +51,7 @@ const Footer = ({
         type="button"
         className="clear-completed"
         style={isTodoActive ? { display: 'block' } : { display: 'none' }}
-        onClick={() => deleteSelectedTodo()}
+        onClick={deleteSelectedTodo}
       >
         Clear completed
       </button>

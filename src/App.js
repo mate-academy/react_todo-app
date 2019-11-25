@@ -13,13 +13,16 @@ class App extends Component {
       editTodoId: null,
       showEditField: false,
       task: '',
+      editTask: '',
     };
   }
 
-  componentDidUpdate() {
-    const stateJson = JSON.stringify(this.state);
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state !== prevState) {
+      const stateJson = JSON.stringify(this.state);
 
-    localStorage.setItem('state', stateJson);
+      localStorage.setItem('state', stateJson);
+    }
   }
 
   newItemSubmitted = (newItem) => {
@@ -30,8 +33,7 @@ class App extends Component {
     };
 
     this.setState(prev => ({
-      todos: [
-        ...prev.todos, item],
+      todos: [...prev.todos, item],
       id: prev.id + 1,
     }));
   }
@@ -133,22 +135,31 @@ class App extends Component {
   }
 
   render() {
+    const {
+      todos,
+      showEditField,
+      editTodoId,
+      task,
+      showButton,
+      showTodos,
+    } = this.state;
+
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
 
           <InputForm
-            todos={this.state.todos}
+            todos={todos}
             onSubmitted={this.newItemSubmitted}
           />
         </header>
 
-        <section className="main" style={{ display: 'block' }}>
+        <section className="main">
           <input
             type="checkbox"
-            checked={this.state.todos.length
-              ? this.state.todos.every(todo => !todo.isActive)
+            checked={todos.length
+              ? todos.every(todo => !todo.isActive)
               : false}
             id="toggle-all"
             className="toggle-all"
@@ -164,10 +175,10 @@ class App extends Component {
                 deleteTodo={this.deleteTodo}
                 setActive={this.setActive}
                 editTodo={this.editTodo}
-                showEditField={this.state.showEditField}
-                editTodoId={this.state.editTodoId}
+                showEditField={showEditField}
+                editTodoId={editTodoId}
                 submitEditItem={this.submitEditItem}
-                task={this.state.task}
+                task={task}
                 inputChanged={this.inputChanged}
                 onFocusChanged={this.onFocusChanged}
               />
@@ -176,12 +187,12 @@ class App extends Component {
         </section>
 
         <Footer
-          todos={this.state.todos}
-          showButton={this.state.showButton}
+          todos={todos}
+          showButton={showButton}
           deleteSelectedTodo={this.deleteSelectedTodo}
           onButtonSelected={this.onButtonSelected}
           filterTodos={this.filterTodos}
-          active={this.state.showTodos}
+          active={showTodos}
         />
       </section>
     );
