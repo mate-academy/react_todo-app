@@ -23,7 +23,6 @@ const TodoItem = ({
     setCompleted(status);
   };
 
-  useEffect(() => () => setEditTask(todo.task), [todo.task]);
   useEffect(() => () => fieldRef.current.focus());
 
   const destroyTodo = () => deleteTodo(todo.id);
