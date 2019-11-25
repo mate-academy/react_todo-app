@@ -1,6 +1,6 @@
 # React ToDo App
 
- - [SOLUTION DEMO LINK](https://veronika-donets.github.io/react_todo-app/index.html#/)
+ - [SOLUTION DEMO LINK](https://veronika-donets.github.io/react_todo-app/#/)
 
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/)
 
