@@ -1,5 +1,5 @@
 {
-  "homepage": "http://mate-academy.github.io/react_todo-app",
+  "homepage": "http://yurabobeshko.github.io/react_todo-app",
   "name": "react-todo-app",
   "version": "0.1.0",
   "private": true,
@@ -7,9 +7,13 @@
   "author": "Mate Academy",
   "license": "GPL-3.0",
   "dependencies": {
+    "hookrouter": "^1.2.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-router": "^5.1.2",
+    "react-router-config": "^5.1.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.0.1"
   },
   "devDependencies": {
