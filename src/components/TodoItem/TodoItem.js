@@ -34,13 +34,13 @@ const TodoItem = ({
     editTodo(id);
   };
 
-  const focusChanged = () => onFocusChanged();
-
   const dropChanges = (event) => {
     if (event.keyCode === 27) {
-      focusChanged();
+      onFocusChanged();
     }
   };
+
+  const submitChanges = event => submitEditItem(event, editTask);
 
   return (
     <li
@@ -75,9 +75,9 @@ const TodoItem = ({
           className="destroy"
         />
       </div>
-      <form onSubmit={event => submitEditItem(event, editTask)}>
+      <form onSubmit={submitChanges}>
         <input
-          onBlur={focusChanged}
+          onBlur={submitChanges}
           className="edit"
           onKeyUp={dropChanges}
           ref={fieldRef}

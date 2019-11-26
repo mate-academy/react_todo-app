@@ -47,15 +47,19 @@ class App extends Component {
   submitEditItem = (event, value) => {
     event.preventDefault();
 
-    const newTask = {
-      task: value,
-    };
+    if (value.trim() !== '') {
+      const newTask = {
+        task: value,
+      };
 
-    this.onEditSubmitted(newTask);
+      this.onEditSubmitted(newTask);
 
-    this.setState({
-      task: '',
-    });
+      this.setState({
+        task: '',
+      });
+    }
+
+    this.onFocusChanged();
   };
 
   onEditSubmitted = (newTask) => {
