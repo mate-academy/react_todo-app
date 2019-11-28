@@ -84,7 +84,6 @@ body {
 .edit {
   position: relative;
   margin: 0;
-  width: 100%;
   font-size: 24px;
   font-family: inherit;
   font-weight: inherit;
@@ -107,6 +106,7 @@ body {
 }
 
 .main {
+  display: 'block';
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
@@ -152,8 +152,11 @@ body {
 
 .todo-list li {
   position: relative;
-  font-size: 24px;
   border-bottom: 1px solid #ededed;
+}
+
+.buttonHide {
+  visibility: hidden;
 }
 
 .todo-list li:last-child {
@@ -229,7 +232,7 @@ body {
   bottom: 0;
   width: 40px;
   height: 40px;
-  margin: auto 0;
+  margin-top: 11px;
   font-size: 30px;
   color: #cc9a9a;
   margin-bottom: 11px;
@@ -257,6 +260,7 @@ body {
 }
 
 .footer {
+  display: 'block';
   color: #777;
   padding: 10px 15px;
   height: 20px;
@@ -306,7 +310,6 @@ body {
   margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
-  border: 1px solid transparent;
   border-radius: 3px;
 }
 
@@ -315,6 +318,7 @@ body {
 }
 
 .filters li a.selected {
+  border: 1px solid transparent;
   border-color: rgba(175, 47, 47, 0.2);
 }
 
@@ -325,6 +329,7 @@ html .clear-completed:active {
   line-height: 20px;
   text-decoration: none;
   cursor: pointer;
+  display: 'block'
 }
 
 .clear-completed:hover {
