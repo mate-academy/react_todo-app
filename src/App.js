@@ -16,7 +16,7 @@ class App extends React.Component {
         {
           id: new Date().getTime(),
           text: newTodo,
-          complete: false,
+          complete: 'active',
         },
       ],
     }));
@@ -26,7 +26,11 @@ class App extends React.Component {
     const newTodos = [...this.state.todos];
     const todo = newTodos.find(currentTodo => currentTodo.id === id);
 
-    todo.complete = false;
+    if (todo.complete === 'active') {
+      todo.complete = 'completed';
+    } else {
+      todo.complete = 'active';
+    }
 
     this.setState({
       todos: [...newTodos],
@@ -39,12 +43,12 @@ class App extends React.Component {
     if (!toggleAll) {
       newTodos = newTodos.map(todo => ({
         ...todo,
-        complete: true,
+        complete: 'completed',
       }));
     } else {
       newTodos = newTodos.map(todo => ({
         ...todo,
-        complete: false,
+        complete: 'active',
       }));
     }
 
@@ -63,7 +67,7 @@ class App extends React.Component {
 
   clearCompleted = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => todo.complete === false),
+      todos: prevState.todos.filter(todo => todo.complete === 'active'),
     }));
   };
 
@@ -76,7 +80,7 @@ class App extends React.Component {
   render() {
     const { todos, filter } = this.state;
     const countOfActive = todos.filter(
-      todo => todo.complete === false
+      todo => todo.complete === 'active'
     ).length;
     let filteredTodos = [];
 
@@ -90,26 +94,27 @@ class App extends React.Component {
       <section className="todoapp">
         <Header onSubmit={this.handleSubmit} />
 
-        {todos
-        && (
-          <>
-            <TodoList
-              filtredTodos={filteredTodos}
-              onChangeStatus={this.changeStatus}
-              onDestroyTodo={this.handleClear}
-              toggleAll={countOfActive === 0 && true}
-              onChangeAllStatus={this.changeAllStatus}
-            />
+        {(todos.length !== 0)
+          ? (
+            <>
+              <TodoList
+                filtredTodos={filteredTodos}
+                onChangeStatus={this.changeStatus}
+                onDestroyTodo={this.handleClear}
+                toggleAll={countOfActive === 0 && true}
+                onChangeAllStatus={this.changeAllStatus}
+              />
 
-            <Footer
-              active={countOfActive}
-              completed={todos.length - countOfActive > 0}
-              filter={filter}
-              onFilter={this.handleFilter}
-              onClear={this.clearCompleted}
-            />
-          </>
-        )
+              <Footer
+                activ={countOfActive}
+                completed={todos.length - countOfActive > 0}
+                filter={filter}
+                onFilter={this.handleFilter}
+                onClear={this.clearCompleted}
+              />
+            </>
+          )
+          : ''
         }
 
       </section>
