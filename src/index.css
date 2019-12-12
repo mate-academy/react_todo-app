@@ -107,6 +107,7 @@ body {
 }
 
 .main {
+  display: block;
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
@@ -133,6 +134,10 @@ body {
   transform: rotate(90deg);
 }
 
+.toggle-all + label:hover {
+  cursor: pointer;
+}
+
 .toggle-all + label:before {
   content: '❯';
   font-size: 22px;
@@ -140,7 +145,7 @@ body {
   padding: 10px 27px 10px 27px;
 }
 
-.toggle-all:checked + label:before {
+.toggle-all--active + label:before {
   color: #737373;
 }
 
@@ -190,6 +195,10 @@ body {
   appearance: none;
 }
 
+.toggle {
+  cursor: pointer;
+}
+
 .todo-list li .toggle {
   opacity: 0;
 }
@@ -216,11 +225,6 @@ body {
   transition: color 0.4s;
 }
 
-.todo-list li.completed label {
-  color: #d9d9d9;
-  text-decoration: line-through;
-}
-
 .todo-list li .destroy {
   display: none;
   position: absolute;
@@ -238,6 +242,7 @@ body {
 
 .todo-list li .destroy:hover {
   color: #af5b5e;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:after {
@@ -256,7 +261,13 @@ body {
   margin-bottom: -1px;
 }
 
+.todo--completed {
+  color: #d9d9d9;
+  text-decoration: line-through;
+}
+
 .footer {
+  display: block;
   color: #777;
   padding: 10px 15px;
   height: 20px;
@@ -314,7 +325,11 @@ body {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.filters li a.selected:focus {
+  border-color: rgba(175, 47, 47, 0.2);
+}
+
+.selected:active {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
