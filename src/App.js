@@ -3,10 +3,16 @@ import cn from 'classnames';
 import TodoList from './TodoList';
 import TodoFooter from './TodoFooter';
 
-class App extends React.Component {
+export const FILTERS = {
+  all: 'All',
+  completed: 'Completed',
+  active: 'Active',
+};
+
+export class App extends React.Component {
   state = {
     inputValue: '',
-    currentFilter: 'All',
+    currentFilter: FILTERS.all,
     todos: [],
   };
 
@@ -23,6 +29,7 @@ class App extends React.Component {
         },
       ],
       inputValue: '',
+      currentFilter: FILTERS.all,
     }));
   };
 
@@ -78,9 +85,11 @@ class App extends React.Component {
 
   filterArray = () => {
     switch (this.state.currentFilter) {
-      case 'Completed': return this.state.todos.filter(todo => todo.completed);
-      case 'Active': return this.state.todos.filter(todo => !todo.completed);
-      case 'All':
+      case FILTERS.completed:
+        return this.state.todos.filter(todo => todo.completed);
+      case FILTERS.active:
+        return this.state.todos.filter(todo => !todo.completed);
+      case FILTERS.all:
       default: return this.state.todos.filter(todo => todo);
     }
   };
@@ -138,5 +147,3 @@ class App extends React.Component {
     );
   }
 }
-
-export default App;

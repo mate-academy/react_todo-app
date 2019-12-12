@@ -1,7 +1,8 @@
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-import TodosFiltersList from './TodosFiltersList';
+import { FILTERS } from './App';
+import TodoFilter from './TodoFilter';
 
 const TodoFooter = ({
   todosLeft,
@@ -20,11 +21,16 @@ const TodoFooter = ({
           items left
     </span>
 
-    <TodosFiltersList
-      currentFilter={currentFilter}
-      todos={todos}
-      setFilter={setFilter}
-    />
+    <ul className={cn('filters')}>
+      {Object.values(FILTERS).map(value => (
+        <TodoFilter
+          key={value}
+          filter={value}
+          setFilter={setFilter}
+          isFilterSelect={value === currentFilter}
+        />
+      ))}
+    </ul>
 
     <button
       onClick={clearCompletedTodos}
