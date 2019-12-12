@@ -58,6 +58,7 @@ class App extends React.Component {
         {enterTodo && todo.length > 0
           ? (
             <Footer
+              todoState={todo}
               todo={todoFilter}
               handleTodo={this.handleChangeTodo}
               setFilter={this.handleSetFilter}

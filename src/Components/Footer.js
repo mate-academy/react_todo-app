@@ -2,9 +2,9 @@ import React from 'react';
 import PropsTypes from 'prop-types';
 import Filters from './Filters';
 
-const Footer = ({ todo, handleTodo, setFilter }) => {
+const Footer = ({ todo, handleTodo, setFilter, todoState }) => {
   const handleClear = () => (
-    handleTodo(todo.filter(elem => !elem.isCompleted))
+    handleTodo(todoState.filter(elem => !elem.isCompleted))
   );
 
   return (
@@ -38,6 +38,7 @@ Footer.propTypes = {
   todo: PropsTypes.arrayOf.isRequired,
   handleTodo: PropsTypes.func.isRequired,
   setFilter: PropsTypes.func.isRequired,
+  todoState: PropsTypes.arrayOf.isRequired,
 };
 
 export default Footer;
