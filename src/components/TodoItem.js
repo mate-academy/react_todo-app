@@ -18,6 +18,11 @@ const TodoItem = ({ todo, i, isCompleted, deleteTodo }) => (
         onClick={() => deleteTodo(i)}
       />
     </div>
+    <input
+      className="edit"
+      value={todo.title}
+      // onDoubleClick={}
+    />
   </li>
 );
 
