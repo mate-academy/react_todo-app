@@ -18,10 +18,6 @@ class LayoutMain extends React.Component {
     this.props.allDone();
   }
 
-  preventDefault = (e) => {
-    e.preventDefault();
-  }
-
   render() {
     let { listOfTodos } = this.props.getTodos();
 
@@ -66,12 +62,11 @@ class LayoutMain extends React.Component {
                   <input
                     type="checkbox"
                     className="toggle"
-                    id="todo-1"
                     data-id={todo.id}
                     onChange={this.checkDo}
                     checked={todo.isDone === true}
                   />
-                  <label htmlFor="todo-1">
+                  <label htmlFor="noexist">
                     {todo.todoName}
                   </label>
                   <button
