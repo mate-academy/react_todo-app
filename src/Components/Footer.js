@@ -10,7 +10,8 @@ const Footer = ({ todo, handleTodo, setFilter, todoState }) => {
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${todo.length} items left`}
+        {`${todo.filter(item => !item.isCompleted).length}
+        items left`}
       </span>
 
       <ul className="filters">
