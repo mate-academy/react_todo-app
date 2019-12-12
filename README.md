@@ -9,7 +9,7 @@ Requirements:
 - You can implement your own style or take them from the original sources
   - [base.css](http://todomvc.com/examples/vanillajs/node_modules/todomvc-common/base.css)
   - [index.css](http://todomvc.com/examples/vanillajs/node_modules/todomvc-app-css/index.css)
-  
+
 Below are interactions with the app:
 
 ![todoapp](./description/todoapp.gif)
@@ -48,27 +48,27 @@ Resources:
 
 ## Workflow
 - Fork the repository with task
-- Clone forked repository 
+- Clone forked repository
     ```bash
     git clone git@github.com:<user_name>/<task_repository>.git
     ```
 - Run `npm install` to install dependencies.
 - Then develop
 
-## Development mode 
+## Development mode
 - Run `npm start` to start development server on `http://localhost:3000`
-    When you run server the command line window will no longer be available for 
-    writing commands until you stop server (`ctrl + c`). All other commands you 
+    When you run server the command line window will no longer be available for
+    writing commands until you stop server (`ctrl + c`). All other commands you
     need to run in new command line window.
 - Follow [HTML, CSS styleguide](https://mate-academy.github.io/style-guides/htmlcss.html)
 - Follow [the simplified JS styleguide](https://mate-academy.github.io/style-guides/javascript-standard-modified)
 - run `npm run lint` to check code style
-- When you finished add correct `homepage` to `package.json` and run `npm run deploy` 
+- When you finished add correct `homepage` to `package.json` and run `npm run deploy`
 - Add links to your demo in readme.md.
-  - `[DEMO LINK](https://<your_account>.github.io/<repo_name>/)` - this will be a 
+  - `[DEMO LINK](https://IsaacKlark.github.io/react_todo-app/)` - this will be a
   link to your index.html
 - Commit and push all recent changes.
-- Create `Pull Request` from forked repo `(<branch_name>)` to original repo 
+- Create `Pull Request` from forked repo `(<branch_name>)` to original repo
 (`master`).
 - Add a link at `PR` to Google Spreadsheets.
 
