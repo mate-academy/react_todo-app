@@ -30,7 +30,7 @@ const Footer = ({
 
     <ul className="filters">
       {filters.map((filter, i) => (
-        <li>
+        <li key={filter}>
           <a
             href={`#/${filter}`}
             onClick={() => filterHandler(filter, i)}
