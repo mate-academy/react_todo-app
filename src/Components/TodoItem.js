@@ -1,7 +1,7 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
 
-const TodoItem = ({ todo, item, id, changeCompleted }) => {
+const TodoItem = ({ todo, item, id, changeCompleted, todoState }) => {
   const handleCompleted = () => (
     changeCompleted(todo.map(elem => (
       item === elem
@@ -39,7 +39,7 @@ const TodoItem = ({ todo, item, id, changeCompleted }) => {
           type="button"
           className="destroy"
           onClick={() => (
-            changeCompleted(todo.filter(elem => (elem !== item)))
+            changeCompleted(todoState.filter(elem => (elem !== item)))
           )}
         />
       </div>
@@ -52,6 +52,7 @@ TodoItem.propTypes = {
   changeCompleted: PropsTypes.func.isRequired,
   item: PropsTypes.objectOf.isRequired,
   id: PropsTypes.number.isRequired,
+  todoState: PropsTypes.arrayOf.isRequired,
 };
 
 export default TodoItem;

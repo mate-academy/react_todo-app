@@ -37,6 +37,7 @@ const TodoList = ({ todo, allCompleted, todoState }) => {
           <TodoItem
             item={item}
             id={index + 1}
+            todoState={todoState}
             todo={todo}
             changeCompleted={allCompleted}
           />
