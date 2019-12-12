@@ -6,6 +6,7 @@ import TodosFilter from './TodosFilter';
 class App extends React.Component {
   state = {
     todos: [],
+    selectedFilter: 'All',
   };
 
   addNewTodo = (newTodo) => {
@@ -48,7 +49,9 @@ class App extends React.Component {
   };
 
   filterTodos = (filterSelected) => {
-
+    this.setState({
+      selectedFilter: filterSelected,
+    });
   };
 
   deleteTodo = (todoId) => {
@@ -61,6 +64,19 @@ class App extends React.Component {
     this.setState(state => ({
       todos: state.todos.filter(item => item.completed === false),
     }));
+  };
+
+  visibleTodos = (todo) => {
+    switch (this.state.selectedFilter) {
+      case 'All':
+        return true;
+      case 'Active':
+        return todo.completed === false;
+      case 'Completed':
+        return todo.completed === true;
+      default:
+        return true;
+    }
   };
 
   render() {
@@ -86,7 +102,7 @@ class App extends React.Component {
             <label htmlFor="toggle-all">Mark all as complete</label>
 
             <TodoList
-              todos={todos}
+              todos={todos.filter(this.visibleTodos)}
               changeTodoStatus={this.changeTodoStatus}
               deleteTodo={this.deleteTodo}
             />
