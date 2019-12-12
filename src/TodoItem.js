@@ -7,7 +7,7 @@ const TodoItem = ({ todo, handleCheck, handleDestroy }) => (
       <input
         type="checkbox"
         className="toggle"
-        id="todo-1"
+        id="todo"
         checked={todo.completed}
         onChange={() => handleCheck(todo.id)}
       />
