@@ -1,0 +1,145 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background: #f1f1f1;
+  color: #37474f;
+}
+
+.App {
+  width: 550px;
+  min-width: 400px;
+  margin: 20px auto;
+}
+
+.Heading {
+  width: 550px;
+  font-size: 7rem;
+  font-weight: normal;
+  color: #edd7d3;
+  text-align: center;
+}
+
+.TodoForm {
+  width: 550px;
+  height: 70px;
+  border: 1px solid lightgrey;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  box-shadow: 6px 6px 10px grey;
+}
+
+.TodoFormTextBox {
+  font-size: 2rem;
+  height: 100%;
+  width: 450px;
+  border: none;
+  background: inherit;
+  outline: none;
+  margin: 0 10px;
+}
+
+.TodoForm-TextBox::placeholder {
+  color: #d1d1d1;
+  font-size: 80%;
+}
+
+.ToggleForm {
+  font-size: 1.8rem;
+  padding: 2px 8px;
+  outline: none;
+  border: none;
+  background: inherit;
+  color: grey;
+}
+
+.CheckBox input[type="checkbox"] {
+  height: 40px;
+  width: 40px;
+  margin-top: 8px;
+  border-radius: 10px;
+}
+
+.TodoBox {
+  width: 550px;
+  height: 70px;
+  background: white;
+  border: 1px solid lightgrey;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 1.6rem;
+  box-shadow: 6px 6px 10px grey;
+}
+
+p {
+  text-align: left;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.Deleter {
+  background: none;
+  border: none;
+  padding: 10px 12px 10px 20px;
+  opacity: 0;
+}
+
+.Deleter:hover {
+  opacity: 1;
+  color: red;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.Footer {
+  width: 550px;
+  height: 50px;
+  background: white;
+  border: 1px solid lightgrey;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  box-shadow: 6px 6px 10px grey;
+}
