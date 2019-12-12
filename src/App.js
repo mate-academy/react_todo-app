@@ -1,75 +1,200 @@
 import React from 'react';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import Footer from './components/Footer/Footer';
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      todoList: [],
+      todoId: 1,
+      allToggle: false,
+      activeFilter: 'all',
+    };
+  }
+
+  addNewTodo = (todo) => {
+    if (todo === '') {
+      return;
+    }
+
+    const fullTodo = {
+      title: todo,
+      id: this.state.todoId,
+      status: false,
+      edit: false,
+    };
+
+    this.setState((prev) => {
+      return {
+        ...prev,
+        todoList: [...prev.todoList, fullTodo],
+        todoId: prev.todoId + 1,
+      };
+    });
+  }
+
+  deleteItem = (id) => {
+    const { todoList } = this.state;
+    const workList = todoList
+      .filter(todo => todo.id !== id);
+
+    this.setState((prev) => {
+      return {
+        ...prev,
+        todoList: [...workList],
+      };
+    });
+  }
+
+  countRelevantTodo = () => {
+    let countRelevantItem = 0;
+    this.state.todoList.forEach((todo) => {
+      if (todo.status === false) {
+        countRelevantItem += 1;
+      }
+    });
+
+    return countRelevantItem;
+  }
+
+  chooseFinishTask = (id) => {
+    const { todoList } = this.state;
+    const workList = [...todoList];
+    const chooseTask = workList
+      .findIndex(todo => todo.id === id);
+
+    workList[chooseTask].status === true
+      ? workList[chooseTask].status = false
+      : workList[chooseTask].status = true;
+    this.setState((prev) => {
+      return {
+        ...prev,
+        todoList: [...workList],
+      };
+    });
+  }
+
+  toggleAllTodos = () => {
+    const { todoList, allToggle } = this.state;
+    const workList = [...todoList];
+
+    if (!allToggle) {
+      workList.forEach((todo) => todo.status = true);
+    } else {
+      workList.forEach((todo) => todo.status = false);
+    }
+
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...workList],
+        allToggle: !prev.allToggle,
+      };
+    });
+  }
+
+  clearCompleted = () => {
+    this.setState((prev) => {
+      return {
+        ...prev,
+        todoList: [...prev.todoList
+          .filter(todo => todo.status === false)],
+      };
+    });
+  }
+
+  handleActiveFilter = (status) => {
+    this.setState(prev => {
+      return {
+        ...prev,
+        activeFilter: status,
+      };
+    });
+  }
+
+  changeTodoItem = (id) => {
+    const currentTodo = this.state.todoList.findIndex(todo => todo.id === id);
+    const newTodo = [...this.state.todoList];
+
+    newTodo[currentTodo].edit = true;
+
+    this.setState((prev) => {
+      return {
+        ...prev,
+        todoList: [...newTodo],
+      };
+    });
+  }
+
+  editItem = (inputValue, id) => {
+    const { todoList } = this.state;
+    const copyTodoList = [...todoList];
+    const currentTodo = copyTodoList.findIndex(todo => todo.id === id);
+    copyTodoList[currentTodo] = {
+      ...todoList[currentTodo],
+      title: inputValue,
+      edit: false,
+    };
+
+    if (!inputValue) {
+      copyTodoList.splice(currentTodo, 1);
+    }
+
+    this.setState((prev) => {
+      return {
+        ...prev,
+        todoList: [...copyTodoList],
+      };
+    });
+  }
+
+  componentDidMount() {
+    const fromJson = JSON.parse(localStorage.getItem('todoList')) || [];
+    const todoIdFromJson = localStorage.getItem('todoId');
+    this.setState(prev => {
+      return {
+        ...prev,
+        todoList: [...fromJson],
+        todoId: +todoIdFromJson,
+      };
+    });
+  }
+
+  componentDidUpdate() {
+    const todoListJson = JSON.stringify(this.state.todoList);
+    localStorage.setItem('todoList', todoListJson);
+    localStorage.setItem('todoId', this.state.todoId);
+  }
+
+  render() {
+    const { todoList, activeFilter } = this.state;
+
+    return (
+      <section className="todoapp">
+        <Header onSubmit={this.addNewTodo} />
+        <Main
+          todoList={todoList}
+          deleteItem={this.deleteItem}
+          chooseFinishTask={this.chooseFinishTask}
+          toggleAllTodos={this.toggleAllTodos}
+          activeFilter={activeFilter}
+          changeTodoItem={this.changeTodoItem}
+          editItem={this.editItem}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+        <Footer
+          todoListLength={this.countRelevantTodo()}
+          todoList={this.state.todoList}
+          clearCompleted={this.clearCompleted}
+          activeFilter={activeFilter}
+          handleActiveFilter={this.handleActiveFilter}
+        />
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
