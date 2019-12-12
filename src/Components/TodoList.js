@@ -5,7 +5,7 @@ import TodoItem from './TodoItem';
 
 const TodoList = ({ todo, allCompleted, todoState }) => {
   const handleCompleted = () => {
-    const newTodo = todo.map(item => ({
+    const newTodo = todoState.map(item => ({
       ...item,
       isCompleted: !checkCompleted,
     }));

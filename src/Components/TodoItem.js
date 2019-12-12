@@ -3,7 +3,7 @@ import PropsTypes from 'prop-types';
 
 const TodoItem = ({ todo, item, id, changeCompleted, todoState }) => {
   const handleCompleted = () => (
-    changeCompleted(todo.map(elem => (
+    changeCompleted(todoState.map(elem => (
       item === elem
         ? {
           ...elem,
