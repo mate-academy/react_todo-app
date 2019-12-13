@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-import { FILTERS } from './App';
+import { FILTERS_TYPES } from './App';
 import TodoFilter from './TodoFilter';
 
 const TodoFooter = ({
@@ -22,7 +22,7 @@ const TodoFooter = ({
     </span>
 
     <ul className={cn('filters')}>
-      {Object.values(FILTERS).map(value => (
+      {Object.values(FILTERS_TYPES).map(value => (
         <TodoFilter
           key={value}
           filter={value}

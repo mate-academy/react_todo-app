@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
 import TodoList from './TodoList';
+import TodoHeader from './TodoHeader';
 import TodoFooter from './TodoFooter';
 
-export const FILTERS = {
+export const FILTERS_TYPES = {
   all: 'All',
   completed: 'Completed',
   active: 'Active',
@@ -11,31 +12,21 @@ export const FILTERS = {
 
 export class App extends React.Component {
   state = {
-    inputValue: '',
-    currentFilter: FILTERS.all,
+    currentFilter: FILTERS_TYPES.all,
     todos: [],
   };
 
-  addTodo = (e) => {
-    e.preventDefault();
-
-    this.state.inputValue.trim().length > 0 && this.setState(prevState => ({
+  addTodo = (todo) => {
+    this.setState(prevState => ({
       todos: [
         ...prevState.todos,
-        {
-          id: +new Date(),
-          title: prevState.inputValue,
-          completed: false,
-        },
+        todo,
       ],
-      inputValue: '',
-      currentFilter: FILTERS.all,
+      currentFilter: FILTERS_TYPES.all,
     }));
   };
 
-  checkTodo = (e, todoId) => {
-    const { checked } = e.target;
-
+  checkTodo = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id !== todoId) {
@@ -44,7 +35,22 @@ export class App extends React.Component {
 
         return {
           ...todo,
-          completed: checked,
+          completed: !todo.completed,
+        };
+      }),
+    }));
+  };
+
+  editTodoTitle = (todoId, newTitle) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todoId !== todo.id || todo.title === newTitle) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: newTitle,
         };
       }),
     }));
@@ -56,30 +62,22 @@ export class App extends React.Component {
     }));
   };
 
-  clearCompletedTodos =() => {
+  clearCompletedTodos = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
 
-  toggleAllTodos = (e) => {
-    const { checked } = e.target;
-
+  toggleAllTodos = () => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: checked,
+        completed: !this.isAllChecked(),
       })),
     }));
   };
 
   isAllChecked = () => this.state.todos.every(todo => todo.completed);
-
-  handleInputChange = (e) => {
-    this.setState({
-      inputValue: e.target.value,
-    });
-  };
 
   setFilter = (filterValue) => {
     this.setState({
@@ -89,57 +87,39 @@ export class App extends React.Component {
 
   filterArray = () => {
     switch (this.state.currentFilter) {
-      case FILTERS.completed:
+      case FILTERS_TYPES.completed:
         return this.state.todos.filter(todo => todo.completed);
-      case FILTERS.active:
+      case FILTERS_TYPES.active:
         return this.state.todos.filter(todo => !todo.completed);
-      case FILTERS.all:
+      case FILTERS_TYPES.all:
       default: return this.state.todos.filter(todo => todo);
     }
   };
 
   render() {
-    const { todos, inputValue, currentFilter } = this.state;
+    const { todos, currentFilter } = this.state;
     const visibleTodos = this.filterArray();
     const isAllChecked = this.isAllChecked();
+    const todosLength = todos.length;
 
     return (
       <section className={cn('todoapp')}>
         <h1>todos</h1>
-        <form
-          onSubmit={this.addTodo}
-          className={cn('header')}
-        >
-          <input
-            onChange={this.handleInputChange}
-            value={inputValue}
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-
+        <TodoHeader
+          addTodo={this.addTodo}
+          toggleAllTodos={this.toggleAllTodos}
+          isAllChecked={isAllChecked}
+          todosLength={todosLength}
+        />
         <section
           className={cn('main')}
           style={{ display: 'block' }}
         >
-          {todos.length > 0 && (
-            <>
-              <input
-                checked={isAllChecked}
-                onChange={this.toggleAllTodos}
-                type="checkbox"
-                id="toggle-all"
-                className={cn('toggle-all')}
-              />
-              <label htmlFor="toggle-all">Mark all as complete</label>
-            </>
-          )}
-
           <TodoList
             todos={visibleTodos}
             deleteTodo={this.deleteTodo}
             checkTodo={this.checkTodo}
+            editTodoTitle={this.editTodoTitle}
           />
         </section>
 
