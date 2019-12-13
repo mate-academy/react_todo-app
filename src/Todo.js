@@ -22,6 +22,9 @@ class Todo extends React.Component {
 
     if (e.key === 'Escape') {
       selectToEdit(null);
+      this.setState({
+        editValue: this.props.todo.title,
+      });
     }
   };
 
@@ -54,7 +57,6 @@ class Todo extends React.Component {
             id={todo.id}
           />
           <label
-            htmlFor={todo.id}
             onDoubleClick={() => selectToEdit(todo.id)}
           >
             {todo.title}
@@ -65,15 +67,17 @@ class Todo extends React.Component {
             className={cn('destroy')}
           />
         </div>
-        <input
-          style={canEdit ? { display: 'block' } : { display: 'none' }}
-          onChange={this.handleInputChange}
-          onKeyUp={this.handleKeyPress}
-          onBlur={this.editTodo}
-          value={this.state.editValue}
-          type="text"
-          className="edit"
-        />
+        {canEdit && (
+          <input
+            autoFocus
+            onChange={this.handleInputChange}
+            onKeyUp={this.handleKeyPress}
+            onBlur={this.editTodo}
+            value={this.state.editValue}
+            type="text"
+            className="edit"
+          />
+        )}
       </li>
     );
   }
