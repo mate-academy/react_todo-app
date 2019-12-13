@@ -9,13 +9,11 @@ Requirements:
 - You can implement your own style or take them from the original sources
   - [base.css](http://todomvc.com/examples/vanillajs/node_modules/todomvc-common/base.css)
   - [index.css](http://todomvc.com/examples/vanillajs/node_modules/todomvc-app-css/index.css)
-  
-Below are interactions with the app:
 
+Below are interactions with the app:
 ![todoapp](./description/todoapp.gif)
 
 Screenshot:
-
 ![screenshot](./description/todoapp.png)
 
 Resources:
@@ -25,7 +23,6 @@ Resources:
 - Use '✕' symbol to remove TODO item on hover
 - [checked](./public/icons/checked.svg)
 - [unchecked](./public/icons/unchecked.svg)
-
 
 ## Tasks
 1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
@@ -42,33 +39,39 @@ Resources:
 1. Create `TodosFilter` component to switch between `all`/`active`/`completed` todos
 1. Add ability to remove an item.
 1. Add ability to clear completed items from the list
-1. (*) Make inline editing for the TODO item (double click on the TODO item makes it editable)
+1. (*) Make inline editing for the TODO item
+    - double click on the TODO item text makes it editable
+    - `Enter` saves changes
+    - `Ecs` cancels editing
 ![todoedit](./description/edittodo.gif)
 1. (*) Save state of the APP to local storage ([Required theory](https://javascript.info/localstorage))
+1. (*) Implement saving on outside click
+    - when editing a TODO
+    - when creating a TODO
 
 ## Workflow
 - Fork the repository with task
-- Clone forked repository 
+- Clone forked repository
     ```bash
     git clone git@github.com:<user_name>/<task_repository>.git
     ```
 - Run `npm install` to install dependencies.
 - Then develop
 
-## Development mode 
+## Development mode
 - Run `npm start` to start development server on `http://localhost:3000`
-    When you run server the command line window will no longer be available for 
-    writing commands until you stop server (`ctrl + c`). All other commands you 
+    When you run server the command line window will no longer be available for
+    writing commands until you stop server (`ctrl + c`). All other commands you
     need to run in new command line window.
 - Follow [HTML, CSS styleguide](https://mate-academy.github.io/style-guides/htmlcss.html)
 - Follow [the simplified JS styleguide](https://mate-academy.github.io/style-guides/javascript-standard-modified)
 - run `npm run lint` to check code style
-- When you finished add correct `homepage` to `package.json` and run `npm run deploy` 
+- When you finished add correct `homepage` to `package.json` and run `npm run deploy`
 - Add links to your demo in readme.md.
-  - `[DEMO LINK](https://<your_account>.github.io/<repo_name>/)` - this will be a 
+  - `[DEMO LINK](https://<your_account>.github.io/<repo_name>/)` - this will be a
   link to your index.html
 - Commit and push all recent changes.
-- Create `Pull Request` from forked repo `(<branch_name>)` to original repo 
+- Create `Pull Request` from forked repo `(<branch_name>)` to original repo
 (`master`).
 - Add a link at `PR` to Google Spreadsheets.
 
