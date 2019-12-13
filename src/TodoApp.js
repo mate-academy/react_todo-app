@@ -1,24 +1,46 @@
 import React from 'react';
-import TodoList from './components/TodoList';
-import TodosFilter from './components/TodosFilter';
+import TodoHeader from './components/TodoHeader';
+import TodoMain from './components/TodoMain';
+import TodoFooter from './components/TodoFooter';
+
+const FILTER_TYPES = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+};
 
 class TodoApp extends React.Component {
   state = {
     todos: [],
-    todoToAdd: '',
-    filter: '',
+    show: FILTER_TYPES.all,
   }
 
-  setFilter = (filter) => {
+  setFilter = (show) => {
     this.setState({
-      filter,
+      show: FILTER_TYPES[show],
     });
   }
 
-  deleteTodo = (index) => {
+  deleteTodo = (id) => {
     this.setState(state => ({
-      todos: state.todos.filter((el, i) => i !== index),
+      todos: state.todos.filter(todo => todo.id !== id),
     }));
+  }
+
+  fixTodo = (title, id) => {
+    if (!title.trim()) {
+      this.deleteTodo(id);
+    } else {
+      this.setState(state => ({
+        todos: state.todos.map(todo => (todo.id !== id
+          ? todo
+          : {
+            ...todo,
+            title,
+          }
+        )),
+      }));
+    }
   }
 
   isCompleted = (completed, todoId) => {
@@ -45,116 +67,58 @@ class TodoApp extends React.Component {
     }));
   }
 
-  addNew() {
-    if (!this.state.todoToAdd.trim()) {
-      return;
-    }
-
+  addNewTodo = (title) => {
     this.setState(state => ({
       todos: [
         ...state.todos,
         {
-          title: state.todoToAdd,
+          title,
           id: +new Date(),
           completed: false,
         },
       ],
-      todoToAdd: '',
+    }));
+  }
+
+  clearCompleted = () => {
+    this.setState(state => ({
+      todos: state.todos.filter(todo => !todo.completed),
     }));
   }
 
   render() {
-    let todosFiltered;
-
-    switch (this.state.filter) {
-      case 'active':
-        todosFiltered = this.state.todos.filter(todo => !todo.completed);
-        break;
-      case 'completed':
-        todosFiltered = this.state.todos.filter(todo => todo.completed);
-        break;
-      default:
-        todosFiltered = this.state.todos;
-    }
+    const todosFiltered = (() => {
+      switch (this.state.show) {
+        case 'active':
+          return this.state.todos.filter(todo => !todo.completed);
+        case 'completed':
+          return this.state.todos.filter(todo => todo.completed);
+        default:
+          return this.state.todos;
+      }
+    })();
 
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
+        <TodoHeader
+          addNewTodo={this.addNewTodo}
+        />
 
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              this.addNew();
-            }}
-          >
-            <input
-              className="new-todo"
-              placeholder="What needs to be done?"
-              value={this.state.todoToAdd}
-              onChange={event => this.setState({
-                todoToAdd: event.target.value,
-              })}
-            />
-          </form>
-        </header>
+        <TodoMain
+          todos={this.state.todos}
+          selectAll={this.selectAll}
+          todosFiltered={todosFiltered}
+          isCompleted={this.isCompleted}
+          deleteTodo={this.deleteTodo}
+          fixTodo={this.fixTodo}
+        />
 
-        <section
-          className="main"
-          style={this.state.todos.length > 0
-            ? { display: 'block' }
-            : { display: 'none' }}
-        >
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            checked={this.state.todos.every(todo => todo.completed)}
-            onChange={event => this.selectAll(event.target.checked)}
-          />
-          {/* eslint-disable-next-line */}
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <TodoList
-            todos={todosFiltered}
-            isCompleted={this.isCompleted}
-            deleteTodo={this.deleteTodo}
-          />
-        </section>
-
-        <footer
-          className="footer"
-          style={this.state.todos.length > 0
-            ? { display: 'block' }
-            : { display: 'none' }}
-        >
-          <span className="todo-count">
-            {this.state.todos.reduce((amount, todo) => (todo.completed
-              ? amount
-              : amount + 1
-            ), 0)}
-            {' '}
-            items left
-          </span>
-
-          <TodosFilter
-            filter={this.state.filter}
-            setFilter={this.setFilter}
-          />
-
-          {this.state.todos.some(todo => todo.completed) && (
-            <button
-              type="button"
-              className="clear-completed"
-              style={{ display: 'block' }}
-              onClick={() => this.setState(state => ({
-                todos: state.todos.filter(todo => !todo.completed),
-              }))}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+        <TodoFooter
+          todos={this.state.todos}
+          clearCompleted={this.clearCompleted}
+          show={this.state.show}
+          setFilter={this.setFilter}
+        />
       </section>
     );
   }
