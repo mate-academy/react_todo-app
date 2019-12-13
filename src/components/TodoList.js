@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import TodoItem from './TodoItem';
 
-const TodoList = ({ items, onTodoToggled, onTodoDeleted }) => (
-  <ul className="todo-list">
+const TodoList = ({ items, onToggleTodo, onDeleteTodo }) => (
+  <ul className={cn('todo-list')}>
     {items.map(item => (
       <TodoItem
         key={item.id}
         todo={item}
-        onToggled={() => onTodoToggled(item.id)}
-        onDeleted={() => onTodoDeleted(item.id)}
+        onToggle={() => onToggleTodo(item.id)}
+        onDelete={() => onDeleteTodo(item.id)}
       />
     ))}
   </ul>
@@ -17,8 +18,8 @@ const TodoList = ({ items, onTodoToggled, onTodoDeleted }) => (
 
 TodoList.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onTodoToggled: PropTypes.func.isRequired,
-  onTodoDeleted: PropTypes.func.isRequired,
+  onToggleTodo: PropTypes.func.isRequired,
+  onDeleteTodo: PropTypes.func.isRequired,
 };
 
 export default TodoList;

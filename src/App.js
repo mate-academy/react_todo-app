@@ -1,48 +1,28 @@
 import React, { Component } from 'react';
-import TodoList from './components/TodoList';
-import TodosFilter from './components/TodosFilters';
+import TodoHeader from './components/TodoHeader';
+import TodoMain from './components/TodoMain';
+import TodoFooter from './components/TodoFooter';
 
-const FILTERS = [
-  'All',
-  'Active',
-  'Completed',
-];
+export const FILTER_TYPES = {
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
+};
 
 class App extends Component {
   state = {
     todos: [],
-    title: '',
-    selectedFilter: FILTERS[0],
-  }
+    selectedFilter: FILTER_TYPES.all,
+  };
 
-  setTitle = (event) => {
-    const title = event.target.value
-      .replace(/[^A-Za-zА-Яа-яі0-9\s]/, '')
-      .slice(0, 37);
-
-    this.setState({
-      title,
-    });
-  }
-
-  addTodo = (event) => {
-    event.preventDefault();
-
-    this.setState((prevState) => {
-      if (prevState.title.trim() === '') {
-        return '';
-      }
-
-      return {
-        todos: [...prevState.todos, {
-          id: +new Date(),
-          title: prevState.title,
-          completed: false,
-        }],
-        title: '',
-        selectedFilter: FILTERS[0],
-      };
-    });
+  addTodo = (todo) => {
+    this.setState(prevState => ({
+      todos: [
+        ...prevState.todos,
+        todo,
+      ],
+      selectedFilter: FILTER_TYPES.all,
+    }));
   };
 
   deleteTodo = (todoId) => {
@@ -72,7 +52,7 @@ class App extends Component {
     }));
   };
 
-  toggleAllComplete = () => {
+  toggleAllCompleted = () => {
     this.setState((prevState) => {
       if (prevState.todos.every(todo => todo.completed)) {
         return {
@@ -100,84 +80,41 @@ class App extends Component {
 
   filterTodos = () => {
     switch (this.state.selectedFilter) {
-      case FILTERS[1]:
+      case FILTER_TYPES.active:
         return this.state.todos.filter(todo => !todo.completed);
-      case FILTERS[2]:
+      case FILTER_TYPES.completed:
         return this.state.todos.filter(todo => todo.completed);
       default:
         return this.state.todos.filter(todo => todo.id);
     }
-  }
+  };
 
   render = () => {
-    const { todos, title, selectedFilter } = this.state;
-    const completedTodos = todos.filter(todo => !todo.completed).length;
+    const { todos, selectedFilter } = this.state;
     const visibleTodos = this.filterTodos();
-    const isAllCompleted = todos.every(todo => todo.completed);
 
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-
-          <form onSubmit={this.addTodo}>
-            <input
-              className="new-todo"
-              placeholder="What needs to be done?"
-              type="text"
-              onChange={this.setTitle}
-              value={title}
-            />
-          </form>
-
-        </header>
+        <TodoHeader
+          addTodo={this.addTodo}
+        />
 
         {todos.length === 0 || (
           <>
-            <section className="main">
-              <label
-                className={isAllCompleted ? 'label-checked-all' : 'label'}
-                htmlFor="toggle-all"
-              >
-                <input
-                  type="checkbox"
-                  id="toggle-all"
-                  className="toggle-all"
-                  onChange={this.toggleAllComplete}
-                  checked={isAllCompleted}
-                />
-                Mark all as complete
-              </label>
+            <TodoMain
+              todos={todos}
+              visibleTodos={visibleTodos}
+              onToggleAllCompleted={this.toggleAllCompleted}
+              onToggleTodoCompleted={this.toggleTodoCompleted}
+              onDeleteCurrentTodo={this.deleteTodo}
+            />
 
-              <TodoList
-                items={visibleTodos}
-                onTodoToggled={this.toggleTodoCompleted}
-                onTodoDeleted={this.deleteTodo}
-              />
-            </section>
-
-            <footer className="footer">
-              <span className="todo-count">
-                {`${completedTodos} items left`}
-              </span>
-
-              <TodosFilter
-                filters={FILTERS}
-                onFiltered={this.setFilter}
-                selectedFilter={selectedFilter}
-              />
-
-              {todos.some(todo => todo.completed) && (
-                <button
-                  type="button"
-                  className="clear-completed"
-                  onClick={this.clearAllCompleted}
-                >
-                  Clear completed
-                </button>
-              )}
-
-            </footer>
+            <TodoFooter
+              todos={todos}
+              onSetFilter={this.setFilter}
+              currentFilter={selectedFilter}
+              onClearAllCompleted={this.clearAllCompleted}
+            />
           </>
         )}
 

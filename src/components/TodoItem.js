@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
-const TodoItem = ({ todo, onToggled, onDeleted }) => (
-  <li className={todo.completed ? 'completed' : ''}>
-    <div className="view">
+const TodoItem = ({ todo, onToggle, onDelete }) => (
+  <li className={cn(todo.completed && 'completed')}>
+    <div className={cn('view')}>
       <label
-        className={todo.completed ? 'checked' : ''}
+        className={cn(todo.completed && 'checked')}
         htmlFor={`todo-${todo.id}`}
       >
         <input
           type="checkbox"
-          className="toggle"
-          onChange={onToggled}
+          className={cn('toggle')}
+          onChange={onToggle}
           checked={todo.completed}
           id={`todo-${todo.id}`}
         />
@@ -21,8 +22,8 @@ const TodoItem = ({ todo, onToggled, onDeleted }) => (
 
       <button
         type="button"
-        className="destroy"
-        onClick={onDeleted}
+        className={cn('destroy')}
+        onClick={onDelete}
       />
     </div>
   </li>
@@ -34,8 +35,8 @@ TodoItem.propTypes = {
     title: PropTypes.string,
     completed: PropTypes.bool,
   }).isRequired,
-  onToggled: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default TodoItem;
