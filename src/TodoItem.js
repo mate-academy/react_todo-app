@@ -1,21 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import cn from 'classnames';
 
-const TodoItem = ({ todo, handleCheck, handleDestroy }) => (
-  <li className={todo.completed ? 'completed' : ''}>
+const TodoItem = ({ todo, handleCheck, handleDelete }) => (
+  <li className={cn({ completed: todo.completed })}>
     <div className="view">
       <input
         type="checkbox"
         className="toggle"
-        id="todo"
+        id={todo.id}
         checked={todo.completed}
         onChange={() => handleCheck(todo.id)}
       />
-      <label htmlFor="todo-1">{todo.title}</label>
+      <label htmlFor={todo.id}>{todo.title}</label>
       <button
         type="button"
         className="destroy"
-        onClick={() => handleDestroy(todo.id)}
+        onClick={() => handleDelete(todo.id)}
       />
     </div>
   </li>
@@ -29,7 +30,7 @@ TodoItem.propTypes = {
       title: PropTypes.string.isRequired,
     }).isRequired,
   handleCheck: PropTypes.func.isRequired,
-  handleDestroy: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

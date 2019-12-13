@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 const Filter = ({ handleClick, children, selectedFilter }) => (
   <li>
     <a
-      href={`#/${children === 'All' ? '' : children.toLowerCase()}`}
-      className={selectedFilter === children ? 'selected' : ''}
+      href={`#/${selectedFilter === 'all' ? '' : selectedFilter}`}
+      className={cn({ selected: selectedFilter === children.toLowerCase() })}
       onClick={handleClick}
     >
       {children}
