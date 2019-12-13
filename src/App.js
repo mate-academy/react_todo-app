@@ -17,6 +17,8 @@ const getAllTodosFromStorage = () => {
     key => todos.push(JSON.parse(localStorage[key]))
   );
 
+  todos.sort((a, b) => a.id - b.id);
+
   return todos;
 };
 
@@ -27,9 +29,7 @@ export class App extends React.Component {
   };
 
   componentDidUpdate() {
-    if (!this.state.todos.length) {
-      localStorage.clear();
-    }
+    localStorage.clear();
 
     Object.values(this.state.todos).forEach(
       todo => localStorage.setItem(todo.id.toString(), JSON.stringify(todo))
