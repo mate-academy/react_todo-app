@@ -40,6 +40,8 @@ class TodoHeader extends React.Component {
         className={cn('header')}
       >
         <input
+          autoFocus
+          onBlur={this.validateInput}
           onChange={this.handleInputChange}
           value={this.state.inputValue}
           type="text"
