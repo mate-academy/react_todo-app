@@ -10,6 +10,12 @@ class App extends React.Component {
   };
 
   addNewTodo = (newTodo) => {
+    const reg = new RegExp('\x20+');
+
+    if (newTodo === '' || reg.test(newTodo)) {
+      return;
+    }
+
     this.setState(state => ({
       todos: [
         ...state.todos,
@@ -95,10 +101,9 @@ class App extends React.Component {
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
+              checked={todos.every(todo => todo.completed)}
               onChange={this.changeAllStatuses}
             />
-            {/* eslint-disable-next-line max-len */}
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="toggle-all">Mark all as complete</label>
 
             <TodoList
