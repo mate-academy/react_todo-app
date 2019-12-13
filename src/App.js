@@ -99,7 +99,7 @@ class App extends Component {
           addTodo={this.addTodo}
         />
 
-        {todos.length === 0 || (
+        {todos.length > 0 && (
           <>
             <TodoMain
               todos={todos}
