@@ -14,15 +14,10 @@ class Todo extends React.Component {
   };
 
   handleKeyPress = (e) => {
-    const { todo, deleteTodo, editTodoTitle, selectToEdit } = this.props;
+    const { selectToEdit } = this.props;
 
     if (e.key === 'Enter') {
-      if (this.state.editValue.trim().length === 0) {
-        deleteTodo(todo.id);
-      }
-
-      editTodoTitle(todo.id, this.state.editValue);
-      selectToEdit(null);
+      this.editTodo();
     }
 
     if (e.key === 'Escape') {
@@ -30,10 +25,19 @@ class Todo extends React.Component {
     }
   };
 
-  editTodo = () => this.props.selectToEdit(this.props.todo.id);
+  editTodo = () => {
+    const { todo, deleteTodo, editTodoTitle, selectToEdit } = this.props;
+
+    if (this.state.editValue.trim().length === 0) {
+      deleteTodo(todo.id);
+    }
+
+    editTodoTitle(todo.id, this.state.editValue);
+    selectToEdit(null);
+  };
 
   render() {
-    const { todo, deleteTodo, checkTodo, canEdit } = this.props;
+    const { todo, deleteTodo, checkTodo, selectToEdit, canEdit } = this.props;
 
     return (
       <li className={cn(
@@ -50,8 +54,8 @@ class Todo extends React.Component {
             id={todo.id}
           />
           <label
-            htmlFor="todo-1"
-            onDoubleClick={this.editTodo}
+            htmlFor={todo.id}
+            onDoubleClick={() => selectToEdit(todo.id)}
           >
             {todo.title}
           </label>
@@ -62,8 +66,10 @@ class Todo extends React.Component {
           />
         </div>
         <input
+          style={canEdit ? { display: 'block' } : { display: 'none' }}
           onChange={this.handleInputChange}
           onKeyUp={this.handleKeyPress}
+          onBlur={this.editTodo}
           value={this.state.editValue}
           type="text"
           className="edit"
