@@ -34,7 +34,7 @@ export class App extends React.Component {
   };
 
   checkTodo = (e, todoId) => {
-    e.persist();
+    const { checked } = e.target;
 
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
@@ -44,7 +44,7 @@ export class App extends React.Component {
 
         return {
           ...todo,
-          completed: e.target.checked,
+          completed: checked,
         };
       }),
     }));
@@ -62,14 +62,18 @@ export class App extends React.Component {
     }));
   };
 
-  toggleAllTodos = () => {
+  toggleAllTodos = (e) => {
+    const { checked } = e.target;
+
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: !todo.completed,
+        completed: checked,
       })),
     }));
   };
+
+  isAllChecked = () => this.state.todos.every(todo => todo.completed);
 
   handleInputChange = (e) => {
     this.setState({
@@ -97,6 +101,7 @@ export class App extends React.Component {
   render() {
     const { todos, inputValue, currentFilter } = this.state;
     const visibleTodos = this.filterArray();
+    const isAllChecked = this.isAllChecked();
 
     return (
       <section className={cn('todoapp')}>
@@ -118,14 +123,18 @@ export class App extends React.Component {
           className={cn('main')}
           style={{ display: 'block' }}
         >
-          <input
-            onClick={this.toggleAllTodos}
-            type="checkbox"
-            id="toggle-all"
-            className={cn('toggle-all')}
-          />
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {todos.length > 0 && (
+            <>
+              <input
+                checked={isAllChecked}
+                onChange={this.toggleAllTodos}
+                type="checkbox"
+                id="toggle-all"
+                className={cn('toggle-all')}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
 
           <TodoList
             todos={visibleTodos}

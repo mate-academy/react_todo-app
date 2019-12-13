@@ -48,7 +48,7 @@ TodoFooter.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
   clearCompletedTodos: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
-  currentFilter: PropTypes.func.isRequired,
+  currentFilter: PropTypes.string.isRequired,
 };
 
 export default TodoFooter;
