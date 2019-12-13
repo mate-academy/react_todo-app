@@ -12,12 +12,13 @@ class App extends React.Component {
   };
 
   addTodo = (title) => {
-    const startWithSpace = /^[^ ]/;
+    const noStartWithSpace = /^[^ ]/;
+    const notOnlySpaces = /^ *[^ ]/;
 
-    if (title.match(startWithSpace)) {
+    if (title.match(noStartWithSpace) || title.match(notOnlySpaces)) {
       this.setState(prevState => ({
         todos: [...prevState.todos, {
-          title,
+          title: title.trim(),
           id: prevState.maxId + 1,
           completed: false,
         }],
