@@ -1,0 +1,4 @@
+.toggle:checked + label {
+  text-decoration: line-through;
+  color: #dedede;
+}
