@@ -12,38 +12,50 @@ function App() {
         />
       </header>
 
-      <section className="main" style={{ display: 'block' }}>
+      <section className="main">
         <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">
-          <li className="">
+          <li>
             <div className="view">
               <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
+              <label htmlFor="todo-1">asdfghj</label>
               <button type="button" className="destroy" />
             </div>
+            <input type="text" className="edit" />
           </li>
 
-          <li className="">
+          <li className="completed">
             <div className="view">
               <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
+              <label htmlFor="todo-2">qwertyuio</label>
               <button type="button" className="destroy" />
             </div>
+            <input type="text" className="edit" />
           </li>
 
-          <li className="">
+          <li className="editing">
             <div className="view">
               <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
+              <label htmlFor="todo-3">zxcvbnm</label>
               <button type="button" className="destroy" />
             </div>
+            <input type="text" className="edit" />
+          </li>
+
+          <li>
+            <div className="view">
+              <input type="checkbox" className="toggle" id="todo-4" />
+              <label htmlFor="todo-4">1234567890</label>
+              <button type="button" className="destroy" />
+            </div>
+            <input type="text" className="edit" />
           </li>
         </ul>
       </section>
 
-      <footer className="footer" style={{ display: 'block' }}>
+      <footer className="footer">
         <span className="todo-count">
           3 items left
         </span>
@@ -62,11 +74,9 @@ function App() {
           </li>
         </ul>
 
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
+        <button type="button" className="clear-completed">
+          Clear completed
+        </button>
       </footer>
     </section>
   );
