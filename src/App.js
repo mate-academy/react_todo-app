@@ -10,9 +10,7 @@ class App extends React.Component {
   };
 
   addNewTodo = (newTodo) => {
-    const reg = new RegExp('^\x20+');
-
-    if (newTodo === '' || reg.test(newTodo)) {
+    if (newTodo.trim() === '') {
       return;
     }
 
