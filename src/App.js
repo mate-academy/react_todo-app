@@ -10,11 +10,31 @@ export const FILTERS_TYPES = {
   active: 'Active',
 };
 
+const getAllTodosFromStorage = () => {
+  const todos = [];
+
+  Object.keys(localStorage).forEach(
+    key => todos.push(JSON.parse(localStorage[key]))
+  );
+
+  return todos;
+};
+
 export class App extends React.Component {
   state = {
     currentFilter: FILTERS_TYPES.all,
-    todos: [],
+    todos: getAllTodosFromStorage(),
   };
+
+  componentDidUpdate() {
+    if (!this.state.todos.length) {
+      localStorage.clear();
+    }
+
+    Object.values(this.state.todos).forEach(
+      todo => localStorage.setItem(todo.id.toString(), JSON.stringify(todo))
+    );
+  }
 
   addTodo = (todo) => {
     this.setState(prevState => ({
