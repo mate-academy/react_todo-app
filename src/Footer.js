@@ -4,10 +4,10 @@ import TodosFilter from './TodosFilter';
 
 const Footer = ({
   todos,
-  handlerFilterAll,
-  handlerFilterActive,
-  handlerFilterCompleted,
-  handlerClearCompleted,
+  setFilter,
+  removeAllCompleted,
+  filterTypes,
+  currentFilter,
 }) => (
 
   <footer
@@ -21,15 +21,15 @@ items left
     </span>
 
     <TodosFilter
-      handlerFilterAll={handlerFilterAll}
-      handlerFilterActive={handlerFilterActive}
-      handlerFilterCompleted={handlerFilterCompleted}
+      setFilter={setFilter}
+      filterTypes={filterTypes}
+      currentFilter={currentFilter}
     />
 
     <button
       type="button"
       className="clear-completed"
-      onClick={handlerClearCompleted}
+      onClick={removeAllCompleted}
       style={todos.filter(todo => todo.completed).length > 0
         ? { display: 'block' }
         : { display: 'none' }}
@@ -41,10 +41,10 @@ items left
 
 Footer.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handlerFilterAll: PropTypes.func.isRequired,
-  handlerFilterActive: PropTypes.func.isRequired,
-  handlerFilterCompleted: PropTypes.func.isRequired,
-  handlerClearCompleted: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  removeAllCompleted: PropTypes.func.isRequired,
+  filterTypes: PropTypes.string.isRequired,
+  currentFilter: PropTypes.string.isRequired,
 };
 
 export default Footer;

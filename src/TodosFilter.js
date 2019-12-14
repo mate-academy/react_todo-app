@@ -1,28 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodosFilter = (
-  { handlerFilterAll, handlerFilterActive, handlerFilterCompleted }
-) => (
+const TodosFilter = ({
+  setFilter,
+  filterTypes,
+  currentFilter,
+}) => (
   <ul className="filters">
-    <li>
-      <a href="#/" className="selected" onClick={handlerFilterAll}>All</a>
-    </li>
-
-    <li>
-      <a href="#/active" onClick={handlerFilterActive}>Active</a>
-    </li>
-
-    <li>
-      <a href="#/completed" onClick={handlerFilterCompleted}>Completed</a>
-    </li>
+    {Object.values(filterTypes).map(filter => (
+      <li>
+        <a
+          href="#/"
+          onClick={event => setFilter(event.target.innerText)}
+          className={currentFilter === filter ? 'selected' : ''}
+        >
+          {filter}
+        </a>
+      </li>
+    ))}
   </ul>
 );
 
 TodosFilter.propTypes = {
-  handlerFilterAll: PropTypes.func.isRequired,
-  handlerFilterActive: PropTypes.func.isRequired,
-  handlerFilterCompleted: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  filterTypes: PropTypes.string.isRequired,
+  currentFilter: PropTypes.string.isRequired,
 };
 
 export default TodosFilter;

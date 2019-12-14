@@ -4,10 +4,10 @@ import TodoItem from './TodoItem';
 
 const TodoList = ({
   todos,
-  handleCompleted,
-  handleCompletedAll,
+  toggleTodoCompleted,
+  toggleTodoCompletedAll,
   allCompleted,
-  handleDelete,
+  removeTodo,
 }) => (
 
   <section className="main" style={{ display: 'block' }}>
@@ -15,7 +15,7 @@ const TodoList = ({
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      onChange={handleCompletedAll}
+      onChange={toggleTodoCompletedAll}
       checked={allCompleted}
     />
     <label
@@ -28,8 +28,8 @@ const TodoList = ({
       {todos.map(todo => (
         <TodoItem
           todo={todo}
-          handleCompleted={handleCompleted}
-          handleDelete={handleDelete}
+          toggleTodoCompleted={toggleTodoCompleted}
+          removeTodo={removeTodo}
         />
       ))}
     </ul>
@@ -38,10 +38,10 @@ const TodoList = ({
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleCompleted: PropTypes.func.isRequired,
-  handleCompletedAll: PropTypes.func.isRequired,
+  toggleTodoCompleted: PropTypes.func.isRequired,
+  toggleTodoCompletedAll: PropTypes.func.isRequired,
   allCompleted: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
 };
 
 export default TodoList;

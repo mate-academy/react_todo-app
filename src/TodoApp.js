@@ -1,42 +1,33 @@
 import React from 'react';
 import TodoList from './TodoList';
 import Footer from './Footer';
+import Header from './Header';
+
+const filterTypes = {
+  all: 'All',
+  completed: 'Completed',
+  active: 'Active',
+};
 
 class TodoApp extends React.Component {
   state = {
     todos: [],
-    inputValue: '',
     allCompleted: false,
-    filterStatus: undefined,
+    filter: filterTypes.all,
   }
 
-  addInputValue = (event) => {
-    this.setState({
-      inputValue: event.target.value,
-    });
+  addTodo = todo => this.setState(prev => ({
+    todos: [...prev.todos, todo],
+    filter: filterTypes.all,
+  }))
+
+  removeTodo = (todoId) => {
+    this.setState(state => ({
+      todos: state.todos.filter(todo => todo.id !== todoId),
+    }));
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    if (!this.state.inputValue) {
-      return;
-    }
-
-    this.setState((state) => {
-      const newTodo = {
-        title: this.state.inputValue,
-        id: +new Date(),
-        completed: false,
-      };
-
-      return {
-        todos: [...state.todos, newTodo],
-        inputValue: '',
-      };
-    });
-  }
-
-  handleCompleted = (todoId) => {
+  toggleTodoCompleted = (todoId) => {
     this.setState(state => ({
       todos: state.todos.map(todo => (todo.id === todoId
         ? {
@@ -51,13 +42,7 @@ class TodoApp extends React.Component {
     ));
   }
 
-  handleDelete = (todoId) => {
-    this.setState(state => ({
-      todos: state.todos.filter(todo => todo.id !== todoId),
-    }));
-  }
-
-  handleCompletedAll = () => {
+  toggleTodoCompletedAll = () => {
     this.setState(state => ({
       allCompleted: !state.allCompleted,
       todos: state.todos.map(todo => ({
@@ -66,64 +51,47 @@ class TodoApp extends React.Component {
     }));
   }
 
-  handlerFilterAll = () => {
-    this.setState({
-      filterStatus: undefined,
-    });
-  }
-
-  handlerFilterActive = () => {
-    this.setState({
-      filterStatus: false,
-    });
-  }
-
-  handlerFilterCompleted = () => {
-    this.setState({
-      filterStatus: true,
-    });
-  }
-
-  handlerClearCompleted = () => {
+  removeAllCompleted = () => {
     this.setState(state => ({
       todos: state.todos.filter(todo => !todo.completed),
     }));
   }
 
+  setFilter = (currentFilter) => {
+    this.setState({ filter: currentFilter });
+  };
+
   render() {
     return (
       <>
-        <header className="header">
-          <h1>todos</h1>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              className="new-todo"
-              placeholder="What needs to be done?"
-              onChange={this.addInputValue}
-              value={this.state.inputValue}
-              count={this.state.count}
-            />
-          </form>
-        </header>
+        <Header
+          addTodo={this.addTodo}
+        />
         <TodoList
           todos={this.state.todos.filter(
-            todo => (this.state.filterStatus !== undefined
-              ? this.state.filterStatus === todo.completed
-              : true)
+            (todo) => {
+              if (this.state.filter === 'Active') {
+                return todo.completed === false;
+              }
+
+              if (this.state.filter === 'Completed') {
+                return todo.completed === true;
+              }
+
+              return todo;
+            }
           )}
-          handleCompleted={this.handleCompleted}
-          handleCompletedAll={this.handleCompletedAll}
+          toggleTodoCompleted={this.toggleTodoCompleted}
+          toggleTodoCompletedAll={this.toggleTodoCompletedAll}
           allCompleted={this.state.allCompleted}
-          handleDelete={this.handleDelete}
-          handleEditing={this.handleEditing}
-          edit={this.state.edit}
+          removeTodo={this.removeTodo}
         />
         <Footer
           todos={this.state.todos}
-          handlerFilterAll={this.handlerFilterAll}
-          handlerFilterActive={this.handlerFilterActive}
-          handlerFilterCompleted={this.handlerFilterCompleted}
-          handlerClearCompleted={this.handlerClearCompleted}
+          setFilter={this.setFilter}
+          removeAllCompleted={this.removeAllCompleted}
+          filterTypes={filterTypes}
+          currentFilter={this.state.filter}
         />
       </>
     );
