@@ -1,85 +1,125 @@
-import React from 'react';
+import React, { Component } from 'react';
+import TodoHeaderSection from './components/TodoHeaderSection';
+import TodoMainSection from './components/TodoMainSection';
+import TodoFooterSection from './components/TodoFooterSection';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+export const filterTypes = {
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
+};
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+export default class App extends Component {
+  state = {
+    todoList: [],
+    selectedFilter: filterTypes.all,
+  };
+
+  addTodo = (todo) => {
+    this.setState(state => ({
+      todoList: [
+        ...state.todoList,
+        todo,
+      ],
+      selectedFilter: filterTypes.all,
+    }));
+  };
+
+  deleteTodo = (todoId) => {
+    this.setState(state => ({
+      todoList: state.todoList.filter(todo => todo.id !== todoId),
+    }));
+  };
+
+  clearAllCompleted = () => {
+    this.setState(state => ({
+      todoList: state.todoList.filter(todo => !todo.completed),
+    }));
+  };
+
+  setFilter = (filter) => {
+    this.setState({
+      selectedFilter: filter,
+    });
+  };
+
+  filterTodos = () => {
+    switch (this.state.selectedFilter) {
+      case filterTypes.active:
+        return this.state.todoList.filter(todo => !todo.completed);
+      case filterTypes.completed:
+        return this.state.todoList.filter(todo => todo.completed);
+      default:
+        return this.state.todoList.filter(todo => todo.id);
+    }
+  };
+
+  markTodoCompleted = (todoId) => {
+    this.setState(state => ({
+      todoList: state.todoList.map((todo) => {
+        if (todo.id !== todoId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }),
+    }));
+  };
+
+  markListCompleted = () => {
+    this.setState((state) => {
+      if (state.todoList.every(todo => todo.completed)) {
+        return {
+          todoList: state.todoList.map(todo => ({
+            ...todo,
+            completed: false,
+          })),
+        };
+      }
+
+      return {
+        todoList: state.todoList.map(todo => ({
+          ...todo,
+          completed: true,
+        })),
+      };
+    });
+  };
+
+  render = () => {
+    const { todoList, selectedFilter } = this.state;
+    const filteredTodoList = this.filterTodos();
+
+    return (
+      <section className="todoapp">
+
+        <TodoHeaderSection
+          addTodo={this.addTodo}
         />
-      </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {todoList.length > 0 && (
+          <>
+            <TodoMainSection
+              todoList={todoList}
+              onCompletedList={this.markListCompleted}
+              onCompletedTodo={this.markTodoCompleted}
+              onDeletedTodo={this.deleteTodo}
+              filteredTodoList={filteredTodoList}
+            />
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <TodoFooterSection
+              todoList={todoList}
+              currentFilter={selectedFilter}
+              onSetFilter={this.setFilter}
+              onClearedList={this.clearAllCompleted}
+            />
+          </>
+        )}
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
-  );
+    );
+  };
 }
-
-export default App;
