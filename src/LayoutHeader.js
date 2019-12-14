@@ -12,9 +12,9 @@ class LayoutHeader extends React.Component {
     });
   }
 
-  addDoToList = (e) => {
+  addToDoToList = (e) => {
     e.preventDefault();
-    this.props.addDo(this.state.doName);
+    this.props.addToDo(this.state.doName);
     this.setState({ doName: '' });
   }
 
@@ -22,7 +22,7 @@ class LayoutHeader extends React.Component {
     return (
       <header className="header">
         <h1>todos</h1>
-        <form onSubmit={this.addDoToList}>
+        <form onSubmit={this.addToDoToList}>
           <input
             className="new-todo"
             placeholder="What needs to be done?"
@@ -35,6 +35,6 @@ class LayoutHeader extends React.Component {
   }
 }
 
-LayoutHeader.propTypes = { addDo: PropTypes.func.isRequired };
+LayoutHeader.propTypes = { addToDo: PropTypes.func.isRequired };
 
 export default LayoutHeader;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class LayoutFooter extends React.Component {
   render() {
     const checkDoos = this.props.showFooter();
-    const show = this.props.getShow();
+    const show = this.props.getCurrentFilter();
 
     if (checkDoos.length > 0) {
       return (
@@ -20,7 +20,7 @@ class LayoutFooter extends React.Component {
               <a
                 href="#/"
                 className={show === 'All' ? 'selected' : ''}
-                onClick={this.props.showAll}
+                onClick={this.props.showAllToDos}
               >
                 All
               </a>
@@ -30,7 +30,7 @@ class LayoutFooter extends React.Component {
               <a
                 href="#/active"
                 className={show === 'Active' ? 'selected' : ''}
-                onClick={this.props.activeOnly}
+                onClick={this.props.showActiveToDos}
               >
                 Active
               </a>
@@ -40,7 +40,7 @@ class LayoutFooter extends React.Component {
               <a
                 href="#/completed"
                 className={show === 'Completed' ? 'selected' : ''}
-                onClick={this.props.completedOnly}
+                onClick={this.props.showCompletedToDos}
               >
                 Completed
               </a>
@@ -51,7 +51,7 @@ class LayoutFooter extends React.Component {
             type="button"
             className="clear-completed"
             style={{ display: 'block' }}
-            onClick={this.props.clearCompleted}
+            onClick={this.props.clearCompletedToDos}
           >
             Clear completed
           </button>
@@ -65,11 +65,11 @@ class LayoutFooter extends React.Component {
 
 LayoutFooter.propTypes = {
   showFooter: PropTypes.func.isRequired,
-  getShow: PropTypes.func.isRequired,
-  showAll: PropTypes.func.isRequired,
-  activeOnly: PropTypes.func.isRequired,
-  completedOnly: PropTypes.func.isRequired,
-  clearCompleted: PropTypes.func.isRequired,
+  getCurrentFilter: PropTypes.func.isRequired,
+  showAllToDos: PropTypes.func.isRequired,
+  showActiveToDos: PropTypes.func.isRequired,
+  showCompletedToDos: PropTypes.func.isRequired,
+  clearCompletedToDos: PropTypes.func.isRequired,
 };
 
 export default LayoutFooter;

@@ -2,30 +2,31 @@ import React from 'react';
 import LayoutMain from './LayoutMain';
 import LayoutHeader from './LayoutHeader';
 import LayoutFooter from './LayoutFooter';
+import FILTER_TYPES from './filterTypes';
 
 class LayoutAll extends React.Component {
   state = {
     listOfTodos: [],
-    id: 0,
-    show: 'All',
+    lastIdOfTodos: 0,
+    currentFilter: FILTER_TYPES.all,
   };
 
   currentListOfTodos = () => ({
     listOfTodos: this.state.listOfTodos,
-    show: this.state.show,
+    currentFilter: this.state.currentFilter,
   })
 
-  createNewDo = (name) => {
+  createNewDo = (title) => {
     this.setState(state => ({
       listOfTodos: [
         ...state.listOfTodos,
         {
-          todoName: name,
+          todoName: title,
           isDone: false,
-          id: state.id,
+          id: state.lastIdOfTodos,
         },
       ],
-      id: state.id + 1,
+      lastIdOfTodos: state.lastIdOfTodos + 1,
     }));
   }
 
@@ -70,21 +71,21 @@ class LayoutAll extends React.Component {
     return doosData;
   }
 
-  getShow = () => this.state.show;
+  getCurrentFilter = () => this.state.currentFilter;
 
-  activeOnly = () => {
-    this.setState({ show: 'Active' });
+  showActiveToDos = () => {
+    this.setState({ currentFilter: FILTER_TYPES.active });
   }
 
-  showAll = () => {
-    this.setState({ show: 'All' });
+  showAllToDos = () => {
+    this.setState({ currentFilter: FILTER_TYPES.all });
   }
 
-  completedOnly = () => {
-    this.setState({ show: 'Completed' });
+  showCompletedToDos = () => {
+    this.setState({ currentFilter: FILTER_TYPES.completed });
   }
 
-  clearCompleted = () => {
+  clearCompletedToDos = () => {
     this.setState(state => ({
       listOfTodos: state.listOfTodos.filter(doos => doos.isDone === false),
     }));
@@ -93,7 +94,7 @@ class LayoutAll extends React.Component {
   render() {
     return (
       <section className="todoapp">
-        <LayoutHeader addDo={this.createNewDo} />
+        <LayoutHeader addToDo={this.createNewDo} />
         <LayoutMain
           getTodos={this.currentListOfTodos}
           destroyElement={this.destroyElement}
@@ -102,11 +103,11 @@ class LayoutAll extends React.Component {
         />
         <LayoutFooter
           showFooter={this.showFooter}
-          getShow={this.getShow}
-          activeOnly={this.activeOnly}
-          completedOnly={this.completedOnly}
-          showAll={this.showAll}
-          clearCompleted={this.clearCompleted}
+          getCurrentFilter={this.getCurrentFilter}
+          showActiveToDos={this.showActiveToDos}
+          showCompletedToDos={this.showCompletedToDos}
+          showAllToDos={this.showAllToDos}
+          clearCompletedToDos={this.clearCompletedToDos}
         />
       </section>
     );
