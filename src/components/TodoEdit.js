@@ -7,6 +7,7 @@ class TodoEdit extends React.Component {
   }
 
   componentDidMount() {
+    document.querySelector('.edit').focus();
     document.addEventListener('click', this.cancelEditing);
     document.addEventListener('keyup', this.cancelEditing);
   }

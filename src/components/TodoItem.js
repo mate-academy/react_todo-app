@@ -34,12 +34,7 @@ class TodoItem extends React.Component {
           {/* eslint-disable-next-line */}
           <label
             htmlFor={todo.id}
-            onDoubleClick={(event) => {
-              // event.target.focus(); встановлювати фокус не вийшло :(
-              this.setState({
-                editing: true,
-              });
-            }}
+            onDoubleClick={() => this.setState({ editing: true })}
           >
             {todo.title}
           </label>
