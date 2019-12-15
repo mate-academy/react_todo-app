@@ -13,7 +13,7 @@ const TodoApp = ({ createNewTodo, addNewTodo, enterNewTodo }) => (
 );
 
 TodoApp.propTypes = {
-  createNewTodo: PropTypes.func.isRequired,
+  createNewTodo: PropTypes.string.isRequired,
   addNewTodo: PropTypes.func.isRequired,
   enterNewTodo: PropTypes.func.isRequired,
 };

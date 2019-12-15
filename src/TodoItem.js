@@ -8,11 +8,9 @@ const TodoItem = props => (
       checked={props.todo.complete}
       type="checkbox"
       className="toggle"
-      id={`todo-${props.todo.id}`}
     />
     <label
       className={props.todo.complete ? 'view__completed' : ''}
-      htmlFor={`todo-${props.todo.id}`}
     >
       {props.todo.title}
     </label>
@@ -29,7 +27,10 @@ TodoItem.propTypes = {
   deleteTodo: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   todo: PropTypes.shape({
-    complete: PropTypes.string,
+    complete: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool,
+    ]),
     id: PropTypes.number,
     title: PropTypes.string,
   }).isRequired,

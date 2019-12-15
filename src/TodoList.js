@@ -18,7 +18,7 @@ const TodoList = ({ filtresTodos, changeStateComplete, deleteTodo }) => (
 );
 
 TodoList.propTypes = {
-  filtresTodos: PropTypes.objectOf.isRequired,
+  filtresTodos: PropTypes.arrayOf(PropTypes.object).isRequired,
   changeStateComplete: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
 };
