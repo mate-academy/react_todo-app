@@ -1,26 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const NewTodo = ({ valueTitle, InputChangeHandler, addTodoHandler }) => (
-  <header className="header">
-    <form onSubmit={addTodoHandler}>
-      <h1>todos</h1>
+class NewTodo extends React.Component {
+  state = { valueTitle: '' }
 
-      <input
-        type="text"
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={valueTitle}
-        onChange={InputChangeHandler}
-      />
-    </form>
-  </header>
+  inputChangeHandler = (event) => {
+    this.setState({
+      valueTitle: event.target.value,
+    });
+  };
 
-);
+  submitHandler = (event) => {
+    event.preventDefault();
+
+    this.setState((prevState) => {
+      if (!prevState.valueTitle) {
+        return prevState.valueTitle;
+      }
+
+      this.props.addTodo({
+        id: Date.now(),
+        title: prevState.valueTitle,
+        completed: false,
+        editable: false,
+      });
+
+      return { valueTitle: '' };
+    });
+  };
+
+  render() {
+    const { valueTitle } = this.state;
+
+    return (
+      <header className="header">
+        <form onSubmit={this.submitHandler}>
+          <h1>todos</h1>
+
+          <input
+            type="text"
+            className="new-todo"
+            placeholder="What needs to be done?"
+            value={valueTitle}
+            onChange={this.inputChangeHandler}
+          />
+        </form>
+      </header>
+    );
+  }
+}
 
 NewTodo.propTypes = {
-  valueTitle: PropTypes.string.isRequired,
-  InputChangeHandler: PropTypes.func.isRequired,
-  addTodoHandler: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
 };
 export default NewTodo;

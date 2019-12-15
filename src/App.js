@@ -6,18 +6,25 @@ import Footer from './Footer';
 class App extends React.Component {
   state = {
     todos: [],
-    filters: ['all', 'active', 'completed'],
-    valueTitle: '',
-    filterName: '',
-    activeFilterIndex: 0,
+    currentFilter: '',
+    filterTypes: {
+      all: 'all',
+      completed: 'completed',
+      active: 'active',
+    },
   }
 
-  selectAllHandler = () => {
-    this.setState((state) => {
-      const allSelected = state.todos.every(todo => todo.completed);
+  addTodo = todo => this.setState(prevState => ({
+    todos: [...prevState.todos, todo],
+    currentFilter: prevState.filterTypes.all,
+  }))
+
+  selectAllTodos = () => {
+    this.setState((prevState) => {
+      const allSelected = prevState.todos.every(todo => todo.completed);
 
       return {
-        todos: state.todos.map(todo => ({
+        todos: prevState.todos.map(todo => ({
           ...todo,
           completed: !allSelected,
         })),
@@ -25,33 +32,10 @@ class App extends React.Component {
     });
   }
 
-  InputChangeHandler = (event) => {
-    this.setState({
-      valueTitle: event.target.value,
-    });
-  };
-
-  addTodoHandler = (event) => {
-    event.preventDefault();
-    if (this.state.valueTitle) {
-      this.setState(state => ({
-        todos: [
-          ...state.todos,
-          {
-            id: +Date.now(),
-            title: state.valueTitle,
-            completed: state.isCompleted,
-          },
-        ],
-        valueTitle: '',
-      }));
-    }
-  }
-
-  toggleHandler = (todoId) => {
-    this.setState(state => ({
-      todos: state.todos.map((todo) => {
-        if (todo.id !== todoId) {
+  toggleTodoCompleted = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id !== id) {
           return todo;
         }
 
@@ -63,65 +47,63 @@ class App extends React.Component {
     }));
   };
 
-  removeHandler = (todoId) => {
-    this.setState(state => ({
-      todos: state.todos.filter(todo => todo.id !== todoId),
+  deleteTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
     }));
   };
 
   clearCompletedHandler = () => {
-    this.setState(state => ({
-      todos: state.todos.filter(todo => !todo.completed),
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
-  getFilterTodo = (currentFilter) => {
-    const { todos } = this.state;
+  getFilteredTodos = (currentFilter) => {
+    const { todos, filterTypes } = this.state;
 
     switch (currentFilter) {
-      case 'completed': return todos.filter(todo => todo.completed);
-      case 'active': return todos.filter(todo => !todo.completed);
-      case 'all': return todos;
+      case filterTypes.completed: return todos.filter(todo => todo.completed);
+      case filterTypes.active: return todos.filter(todo => !todo.completed);
+      case filterTypes.all: return todos;
       default: return todos;
     }
   }
 
-  filterHandler = (filter, i) => {
+  setCurrentFilter = (filter) => {
+    const { filterTypes } = this.state;
+
     this.setState({
-      filterName: filter,
-      activeFilterIndex: i,
+      currentFilter: filterTypes[filter],
     });
   }
 
   render() {
-    const { todos,
-      valueTitle,
-      filterName,
-      filters,
-      activeFilterIndex } = this.state;
-    const visibleTodos = this.getFilterTodo(filterName);
+    const {
+      todos,
+      currentFilter,
+      filterTypes,
+    } = this.state;
+    const visibleTodos = this.getFilteredTodos(currentFilter);
 
     return (
       <section className="todoapp">
         <NewTodo
-          todos={todos}
-          valueTitle={valueTitle}
-          InputChangeHandler={this.InputChangeHandler}
-          addTodoHandler={this.addTodoHandler}
+          addTodo={this.addTodo}
         />
         <TodoList
           todos={todos}
           visibleTodos={visibleTodos}
-          selectAllHandler={this.selectAllHandler}
-          removeHandler={this.removeHandler}
-          toggleHandler={this.toggleHandler}
+          selectAllTodos={this.selectAllTodos}
+          deleteTodo={this.deleteTodo}
+          toggleTodoCompleted={this.toggleTodoCompleted}
         />
         <Footer
           todos={todos}
           clearCompletedHandler={this.clearCompletedHandler}
-          filterHandler={this.filterHandler}
-          filters={filters}
-          activeFilterIndex={activeFilterIndex}
+          setCurrentFilter={this.setCurrentFilter}
+          filterTypes={filterTypes}
+          currentFilter={currentFilter}
         />
       </section>
     );

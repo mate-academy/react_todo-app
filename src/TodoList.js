@@ -7,9 +7,9 @@ const mark = 'Mark all as complete';
 const TodoList = ({
   visibleTodos,
   todos,
-  selectAllHandler,
-  removeHandler,
-  toggleHandler,
+  selectAllTodos,
+  deleteTodo,
+  toggleTodoCompleted,
 }) => (
 
   <section className={cn(
@@ -19,7 +19,7 @@ const TodoList = ({
   >
     <input
       type="checkbox"
-      onChange={selectAllHandler}
+      onChange={selectAllTodos}
       checked={todos.every(todo => todo.completed)}
       id="toggle-all"
       className="toggle-all"
@@ -32,6 +32,8 @@ const TodoList = ({
             className={cn(
               { completed: todo.completed }
             )}
+            role="presentation"
+            onClick={() => toggleTodoCompleted(todo.id)}
           >
             <div className="view">
               <input
@@ -39,7 +41,7 @@ const TodoList = ({
                 className="toggle"
                 id={todo.id}
                 checked={todo.completed}
-                onChange={() => toggleHandler(todo.id)}
+                readOnly
               />
               <label
                 htmlFor={`todo-${todo.id}`}
@@ -48,7 +50,7 @@ const TodoList = ({
               </label>
               <button
                 type="button"
-                onClick={() => removeHandler(todo.id)}
+                onClick={() => deleteTodo(todo.id)}
                 className="destroy"
               />
             </div>
@@ -61,9 +63,9 @@ const TodoList = ({
 );
 
 TodoList.propTypes = {
-  selectAllHandler: PropTypes.func.isRequired,
-  removeHandler: PropTypes.func.isRequired,
-  toggleHandler: PropTypes.func.isRequired,
+  selectAllTodos: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  toggleTodoCompleted: PropTypes.func.isRequired,
   visibleTodos: PropTypes
     .arrayOf(PropTypes.shape({
       id: PropTypes.number,

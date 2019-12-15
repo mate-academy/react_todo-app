@@ -5,9 +5,9 @@ import cn from 'classnames';
 const Footer = ({
   todos,
   clearCompletedHandler,
-  filterHandler,
-  filters,
-  activeFilterIndex,
+  setCurrentFilter,
+  currentFilter,
+  filterTypes,
 }) => (
   <footer className={cn(
     'footer',
@@ -29,13 +29,13 @@ const Footer = ({
     }
 
     <ul className="filters">
-      {filters.map((filter, i) => (
+      {Object.values(filterTypes).map(filter => (
         <li key={filter}>
           <a
             href={`#/${filter}`}
-            onClick={() => filterHandler(filter, i)}
+            onClick={() => setCurrentFilter(filter)}
             className={cn(
-              { selected: i === activeFilterIndex }
+              { selected: currentFilter === filterTypes[filter] }
             )}
           >
             {filter}
@@ -59,14 +59,14 @@ const Footer = ({
 
 Footer.propTypes = {
   clearCompletedHandler: PropTypes.func.isRequired,
-  filterHandler: PropTypes.func.isRequired,
+  setCurrentFilter: PropTypes.func.isRequired,
   todos: PropTypes
     .arrayOf(PropTypes.shape({
       id: PropTypes.number,
       title: PropTypes.string,
       completed: PropTypes.bool,
     })).isRequired,
-  filters: PropTypes.arrayOf(PropTypes.string).isRequired,
-  activeFilterIndex: PropTypes.number.isRequired,
+  currentFilter: PropTypes.string.isRequired,
+  filterTypes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 export default Footer;
