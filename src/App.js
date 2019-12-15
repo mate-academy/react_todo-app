@@ -94,55 +94,58 @@ class App extends React.Component {
           <h1>todos</h1>
           <Form addToDo={this.addToDo} />
         </header>
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onClick={this.markAllAsComplete}
-            checked={this.isAllChecked()}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-          <ToDoList
-            list={filteredTodos(todoList, currentFilter)}
-            markComplete={this.markItemAsComplete}
-            deleteItem={this.deleteItem}
-          />
-        </section>
         {!!this.state.todoList.length
           && (
-            <footer className="footer">
-              <span className="todo-count">
-                {todoList.filter(({ completed }) => completed === false).length}
-                items left
-              </span>
+            <>
+              <section className="main">
+                <input
+                  type="checkbox"
+                  id="toggle-all"
+                  className="toggle-all"
+                  onClick={this.markAllAsComplete}
+                  checked={this.isAllChecked()}
+                />
+                <label htmlFor="toggle-all">Mark all as complete</label>
+                <ToDoList
+                  list={filteredTodos(todoList, currentFilter)}
+                  markComplete={this.markItemAsComplete}
+                  deleteItem={this.deleteItem}
+                />
+              </section>
+              <footer className="footer">
+                <span className="todo-count">
+                  {todoList.filter(({ completed }) => completed === false)
+                    .length}
+                  items left
+                </span>
 
-              <ul className="filters">
-                <Filter
-                  filterName="all"
-                  filter={this.setFilter}
-                  currentFilter={currentFilter}
-                />
-                <Filter
-                  filterName="completed"
-                  filter={this.setFilter}
-                  currentFilter={currentFilter}
-                />
-                <Filter
-                  filterName="active"
-                  filter={this.setFilter}
-                  currentFilter={currentFilter}
-                />
-              </ul>
+                <ul className="filters">
+                  <Filter
+                    filterName="all"
+                    filter={this.setFilter}
+                    currentFilter={currentFilter}
+                  />
+                  <Filter
+                    filterName="completed"
+                    filter={this.setFilter}
+                    currentFilter={currentFilter}
+                  />
+                  <Filter
+                    filterName="active"
+                    filter={this.setFilter}
+                    currentFilter={currentFilter}
+                  />
+                </ul>
 
-              <button
-                type="button"
-                className="clear-completed"
-                onClick={() => this.clearCompleted()}
-              >
-                Clear completed
-              </button>
-            </footer>
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={() => this.clearCompleted()}
+                >
+                  Clear completed
+                </button>
+              </footer>
+            </>
           )
         }
       </section>
