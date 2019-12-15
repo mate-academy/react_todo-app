@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Footer = (props) => {
-  const { allTodos, filter, toFilter, toClearCompleted } = props;
+  const { allTodos, filter, setFilter, clearCompletedTodos } = props;
   const filterNames = ['all', 'active', 'completed'];
 
   return (
@@ -18,7 +18,7 @@ const Footer = (props) => {
           <li>
             <a
               href={`#/${filterName}`}
-              onClick={() => toFilter(filterName)}
+              onClick={() => setFilter(filterName)}
               className={filter === filterName ? 'selected' : ''}
             >
               {filterName
@@ -34,7 +34,7 @@ const Footer = (props) => {
         <button
           type="button"
           className="clear-completed"
-          onClick={toClearCompleted}
+          onClick={clearCompletedTodos}
         >
           Clear completed
         </button>
@@ -46,8 +46,8 @@ const Footer = (props) => {
 Footer.propTypes = {
   allTodos: PropTypes.oneOfType([PropTypes.object]).isRequired,
   filter: PropTypes.string.isRequired,
-  toFilter: PropTypes.func.isRequired,
-  toClearCompleted: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  clearCompletedTodos: PropTypes.func.isRequired,
 };
 
 export default Footer;

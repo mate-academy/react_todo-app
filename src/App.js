@@ -12,10 +12,7 @@ class App extends React.Component {
   };
 
   addTodo = (title) => {
-    const noStartWithSpace = /^[^ ]/;
-    const notOnlySpaces = /^ *[^ ]/;
-
-    if (title.match(noStartWithSpace) || title.match(notOnlySpaces)) {
+    if (title.trim()) {
       this.setState(prevState => ({
         todos: [...prevState.todos, {
           title: title.trim(),
@@ -27,7 +24,7 @@ class App extends React.Component {
     }
   };
 
-  toMark = (id) => {
+  setTodoCompleted = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos
         .map((todo) => {
@@ -43,13 +40,13 @@ class App extends React.Component {
     }));
   };
 
-  toRemove = (id) => {
+  removeTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== id),
     }));
   };
 
-  toMarkAll = (checked) => {
+  setAllTodosCompleted = (checked) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (
         {
@@ -60,11 +57,11 @@ class App extends React.Component {
     }));
   };
 
-  toFilter = (filter) => {
+  setFilter = (filter) => {
     this.setState(prevState => ({ currentFilter: filter }));
   };
 
-  toClearCompleted = () => {
+  clearCompletedTodos = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
     }));
@@ -98,7 +95,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            onChange={e => this.toMarkAll(e.target.checked)}
+            onChange={event => this.setAllTodosCompleted(event.target.checked)}
             checked={
               todos.length && todos.every(todo => todo.completed)
             }
@@ -108,8 +105,8 @@ class App extends React.Component {
           && <label htmlFor="toggle-all">Mark all as completed</label>}
           <TodoList
             todos={visibleTodos}
-            toMark={this.toMark}
-            toRemove={this.toRemove}
+            setTodoCompleted={this.setTodoCompleted}
+            removeTodo={this.removeTodo}
           />
         </section>
 
@@ -118,8 +115,8 @@ class App extends React.Component {
           <Footer
             allTodos={todos}
             filter={currentFilter}
-            toFilter={this.toFilter}
-            toClearCompleted={this.toClearCompleted}
+            setFilter={this.setFilter}
+            clearCompletedTodos={this.clearCompletedTodos}
           />
         )}
       </section>

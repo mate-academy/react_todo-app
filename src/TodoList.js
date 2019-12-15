@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoList = ({ todos, toMark, toRemove }) => (
+const TodoList = ({ todos, setTodoCompleted, removeTodo }) => (
   <ul className="todo-list">
     {todos.map(todo => (
       <li className="">
@@ -9,12 +9,12 @@ const TodoList = ({ todos, toMark, toRemove }) => (
           <input
             type="checkbox"
             className="toggle"
-            onClick={() => toMark(todo.id)}
+            onClick={() => setTodoCompleted(todo.id)}
             checked={todo.completed}
           />
           <label>{todo.title}</label>
           <button
-            onClick={() => toRemove(todo.id)}
+            onClick={() => removeTodo(todo.id)}
             type="button"
             className="destroy"
           />
@@ -26,8 +26,8 @@ const TodoList = ({ todos, toMark, toRemove }) => (
 
 TodoList.propTypes = {
   todos: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  toMark: PropTypes.func.isRequired,
-  toRemove: PropTypes.func.isRequired,
+  setTodoCompleted: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
 };
 
 export default TodoList;
