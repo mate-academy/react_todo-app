@@ -27,7 +27,7 @@ const TodoList = ({ todo, allCompleted, todoState }) => {
       <label
         htmlFor="toggle-all"
         className={`todo__label
-          ${todo.length ? 'show--toggle' : ''}`}
+          ${todoState.length ? 'show--toggle' : ''}`}
       >
         Mark all as complete
       </label>
