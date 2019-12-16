@@ -6,7 +6,7 @@ import Footer from './Footer';
 class App extends React.Component {
   state = {
     todos: [],
-    currentFilter: '',
+    currentFilter: 'all',
     filterTypes: {
       all: 'all',
       completed: 'completed',
@@ -16,7 +16,6 @@ class App extends React.Component {
 
   addTodo = todo => this.setState(prevState => ({
     todos: [...prevState.todos, todo],
-    currentFilter: prevState.filterTypes.all,
   }))
 
   selectAllTodos = () => {
