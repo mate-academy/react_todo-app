@@ -1,44 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodosFilter = ({ idFiltres, setIdFiltres }) => (
+const TodosFilter = ({ idFiltres, setIdFiltres, filtersList }) => (
   <ul className="filters">
-    <li>
-      <a
-        href="#/"
-        className={idFiltres === 'filtersAll' ? 'selected' : ''}
-        id="filtersAll"
-        onClick={() => setIdFiltres('filtersAll')}
-      >
-      All
-      </a>
-    </li>
-    <li>
-      <a
-        href="#/active"
-        id="filtersActiv"
-        className={idFiltres === 'filtersActiv' ? 'selected' : ''}
-        onClick={() => setIdFiltres('filtersActiv')}
-      >
-      Active
-      </a>
-    </li>
-    <li>
-      <a
-        href="#/completed"
-        id="filtersCompleted"
-        className={idFiltres === 'filtersCompleted' ? 'selected' : ''}
-        onClick={() => setIdFiltres('filtersCompleted')}
-      >
-      Completed
-      </a>
-    </li>
+    {filtersList.map(item => (
+      <li key={item.title}>
+        <a
+          href="#/"
+          className={idFiltres === item.id ? 'selected' : ''}
+          id={item.id}
+          onClick={() => setIdFiltres(item.id)}
+        >
+          {item.title}
+        </a>
+      </li>
+    ))}
   </ul>
 );
 
 TodosFilter.propTypes = {
   idFiltres: PropTypes.string.isRequired,
   setIdFiltres: PropTypes.func.isRequired,
+  filtersList: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default TodosFilter;

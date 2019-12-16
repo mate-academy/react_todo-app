@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoItem = props => (
+const TodoItem = ({ todo, changeStateComplete, deleteTodo, index }) => (
   <div className="view">
     <input
-      onChange={() => props.changeStateComplete(props.todo.id)}
-      checked={props.todo.complete}
+      onChange={() => changeStateComplete(todo.id)}
+      checked={todo.complete}
       type="checkbox"
       className="toggle"
     />
     <label
-      className={props.todo.complete ? 'view__completed' : ''}
+      className={todo.complete ? 'view__completed' : ''}
     >
-      {props.todo.title}
+      {todo.title}
     </label>
     <button
-      onClick={() => props.deleteTodo(props.index)}
+      onClick={() => deleteTodo(index)}
       type="button"
       className="destroy"
     />

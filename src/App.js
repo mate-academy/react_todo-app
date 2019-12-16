@@ -1,55 +1,28 @@
 import React from 'react';
-import TodoApp from './TodoApp';
+import TodoInput from './TodoInput';
 import TodoList from './TodoList';
 import TodosFilter from './TodosFilter';
-
-const todosArr = [];
 
 class App extends React.Component {
   state ={
     idFiltres: '',
-    todosList: todosArr,
-    createNewTodo: '',
-    isCompleted: true,
+    todosList: [],
+    isCompleted: false,
+    filtersList: [{
+      id: 'filtersAll', title: 'All',
+    },
+    {
+      id: 'filtersActive', title: 'Active',
+    },
+    {
+      id: 'filtersCompleted', title: 'Completed',
+    },
+    ],
   }
 
-  clearCompleted = () => {
-    this.setState(state => ({
-      todosList: state.todosList.filter(todo => todo.complete === false),
-    }));
-  }
-
-  lengthCompeletedTodos = x => (
-    this.state.todosList.filter(todo => todo.complete === x).length
-  )
-
-  setIdFiltres = (stateCompleted) => {
-    this.setState({ idFiltres: stateCompleted });
-  }
-
-  filtresTodos = () => {
-    switch (this.state.idFiltres) {
-      case 'filtersActiv':
-        return this.state.todosList.filter(todo => todo.complete === false);
-      case 'filtersCompleted':
-        return this.state.todosList.filter(todo => todo.complete === true);
-      default: return this.state.todosList;
-    }
-  }
-
-  enterNewTodo = (event) => {
-    this.setState({ createNewTodo: event.target.value });
-  }
-
-  addNewTodo = (event) => {
-    event.preventDefault();
-
-    if (!this.state.createNewTodo.length > 0) {
-      return;
-    }
-
+  addNewTodo = (createNewTodo) => {
     this.setState(() => {
-      const { todosList, createNewTodo } = this.state;
+      const { todosList } = this.state;
       const todo = {
         complete: false,
         id: +new Date(),
@@ -63,6 +36,30 @@ class App extends React.Component {
     });
   }
 
+  clearCompleted = () => {
+    this.setState(state => ({
+      todosList: state.todosList.filter(todo => !todo.complete),
+    }));
+  }
+
+  lengthCompeletedTodos = x => (
+    this.state.todosList.filter(todo => todo.complete === x).length
+  )
+
+  setIdFiltres = (stateCompleted) => {
+    this.setState({ idFiltres: stateCompleted });
+  }
+
+  filtresTodos = () => {
+    switch (this.state.idFiltres) {
+      case 'filtersActive':
+        return this.state.todosList.filter(todo => !todo.complete);
+      case 'filtersCompleted':
+        return this.state.todosList.filter(todo => todo.complete === true);
+      default: return this.state.todosList;
+    }
+  }
+
   checkboxValue = (event) => {
     this.setState({ isCompleted: event.target.checked });
     this.allSelectTodo(this.state.isCompleted);
@@ -72,7 +69,7 @@ class App extends React.Component {
     this.setState(state => ({
       todosList: state.todosList.map(todo => (
         {
-          ...todo, complete: x,
+          ...todo, complete: !x,
         })),
     }));
   }
@@ -90,6 +87,17 @@ class App extends React.Component {
         };
       }),
     }));
+
+    if (this.state.todosList
+      .filter(todo => !todo.complete).length < this.state.todosList.length) {
+      this.setState({ isCompleted: false });
+    }
+
+    if (this.state.todosList
+      .filter(todo => todo.complete).length === this.state.todosList
+      .length - 1) {
+      this.setState({ isCompleted: true });
+    }
   }
 
   deleteTodo = (i) => {
@@ -98,24 +106,21 @@ class App extends React.Component {
 
   render() {
     const { todosList,
-      createNewTodo,
       isCompleted,
-      idFiltres } = this.state;
+      idFiltres,
+      filtersList } = this.state;
 
-    const { addNewTodo,
-      enterNewTodo,
-      changeStateComplete,
+    const { changeStateComplete,
       deleteTodo,
-      setIdFiltres } = this;
+      setIdFiltres,
+      addNewTodo } = this;
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <TodoApp
-            createNewTodo={createNewTodo}
+          <TodoInput
             addNewTodo={addNewTodo}
-            enterNewTodo={enterNewTodo}
           />
         </header>
 
@@ -151,6 +156,7 @@ class App extends React.Component {
           <TodosFilter
             setIdFiltres={setIdFiltres}
             idFiltres={idFiltres}
+            filtersList={filtersList}
           />
           <button
             type="button"
