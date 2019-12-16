@@ -34,7 +34,7 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.string),
+  list: PropTypes.arrayOf(PropTypes.object),
 };
 
 Footer.defaultProps = {

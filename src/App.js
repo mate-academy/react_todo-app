@@ -20,6 +20,7 @@ class App extends React.Component {
         {
           id: new Date(),
           note,
+          completed: false,
         },
       ],
     }));
