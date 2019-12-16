@@ -12,7 +12,7 @@ const TodoItem = ({ todo, markTodoCompleted, deleteTodo }) => (
         markTodoCompleted(event.target.checked, todo.id);
       }}
     />
-    <label htmlFor={`todo-${todo.id}`}>{todo.title}</label>
+    <label htmlFor={todo.id}>{todo.title}</label>
     <button
       type="button"
       className="destroy"

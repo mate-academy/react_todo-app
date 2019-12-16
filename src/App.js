@@ -64,17 +64,15 @@ class App extends React.Component {
     event.preventDefault();
 
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => todo.completed === false),
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
   render() {
     const { todos, selectedFilter } = this.state;
 
-    const notCompletedCount = todos
-      .filter(todo => todo.completed === false).length;
-    const completedCount = todos
-      .filter(todo => todo.completed === true).length;
+    const notCompletedCount = todos.filter(todo => !todo.completed).length;
+    const completedCount = todos.filter(todo => todo.completed).length;
     const visibleTodos = todos
       .filter(todo => selectedFilter === 'all'
         || todo.completed === selectedFilter);
@@ -87,10 +85,7 @@ class App extends React.Component {
         </header>
 
         <section
-          className="main"
-          style={todos.length === 0
-            ? { display: 'none' }
-            : { display: 'block' }}
+          className={todos.length === 0 ? 'main hidden' : 'main'}
         >
 
           <CompleteAll

@@ -1,75 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const filters = ['All', 'Active', 'Completed'];
+
 class TodosFilter extends React.Component {
   state = {
-    selected: 'all',
+    selected: 'All',
   }
 
-  handleAllClick = (event) => {
+  handleClick = (event, filter) => {
     event.preventDefault();
 
-    this.props.filterTodos('all');
+    if (filter === 'All') {
+      this.props.filterTodos('all');
+    } else if (filter === 'Active') {
+      this.props.filterTodos(false);
+    } else {
+      this.props.filterTodos(true);
+    }
 
     this.setState({
-      selected: 'all',
-    });
-  }
-
-  handleActiveClick = (event) => {
-    event.preventDefault();
-
-    this.props.filterTodos(false);
-
-    this.setState({
-      selected: 'active',
-    });
-  }
-
-  handleCompletedClick = (event) => {
-    event.preventDefault();
-
-    this.props.filterTodos(true);
-
-    this.setState({
-      selected: 'completed',
+      selected: filter,
     });
   }
 
   render() {
-    const { selected } = this.state;
-
     return (
       <ul className="filters">
-        <li>
-          <a
-            href="#/all"
-            className={selected === 'all' ? 'selected' : ''}
-            onClick={this.handleAllClick}
-          >
-            All
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/active"
-            className={selected === 'active' ? 'selected' : ''}
-            onClick={this.handleActiveClick}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            className={selected === 'completed' ? 'selected' : ''}
-            onClick={this.handleCompletedClick}
-          >
-            Completed
-          </a>
-        </li>
+        {filters.map(filter => (
+          <li key={filter}>
+            <a
+              href="#/"
+              className={this.state.selected === filter ? 'selected' : ''}
+              onClick={event => this.handleClick(event, filter)}
+            >
+              {filter}
+            </a>
+          </li>
+        ))}
       </ul>
     );
   }

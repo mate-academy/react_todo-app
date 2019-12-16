@@ -5,8 +5,9 @@ const ClearCompleted = ({ completedCount, clearCompleted }) => (
 
   <button
     type="button"
-    className="clear-completed"
-    style={completedCount > 0 ? { display: 'block' } : { display: 'none' }}
+    className={completedCount > 0
+      ? 'clear-completed'
+      : 'clear-completed hidden'}
     onClick={clearCompleted}
   >
     Clear completed
