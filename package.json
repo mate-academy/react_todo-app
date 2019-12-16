@@ -26,7 +26,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .jsx,.js ./src/",
+    "lint-js": "eslint --ext .jsx,.js ./src/ --fix",
+    "lint-css": "stylelint src/**/*.css src/**/*.scss --fix",
+    "lint": "npm run lint-js && npm run lint-css",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
@@ -35,7 +37,7 @@
   },
   "lint-staged": {
     "*.css": [
-      "stylelint",
+      "stylelint --fix",
       "git add"
     ],
     "*.js": [
