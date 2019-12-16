@@ -62,7 +62,11 @@ class TodoItem extends React.Component {
 }
 
 TodoItem.propTypes = {
-  item: PropTypes.string,
+  item: PropTypes.objectOf(PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.date,
+  ])),
   i: PropTypes.number,
   list: PropTypes.arrayOf(PropTypes.object),
 };
