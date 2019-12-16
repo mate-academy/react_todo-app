@@ -32,8 +32,6 @@ const TodoList = ({
             className={cn(
               { completed: todo.completed }
             )}
-            role="presentation"
-            onClick={() => toggleTodoCompleted(todo.id)}
           >
             <div className="view">
               <input
@@ -41,7 +39,7 @@ const TodoList = ({
                 className="toggle"
                 id={todo.id}
                 checked={todo.completed}
-                readOnly
+                onChange={() => toggleTodoCompleted(todo.id)}
               />
               <label
                 htmlFor={`todo-${todo.id}`}
