@@ -3,20 +3,14 @@ import Form from './Components/inputHeader';
 import TodoList from './Components/todoList';
 import Footer from './Components/footer';
 
-// const FILTERS = {
-//   all: 'All',
-//   completed: 'Completed',
-//   active: 'Active',
-// };
-
 class App extends React.Component {
   state = {
     list: [],
   }
 
   addTodo = (note) => {
-    this.setState(state => ({
-      list: [...state.list,
+    this.setState(prevState => ({
+      list: [...prevState.list,
         {
           id: +new Date(),
           note,
@@ -27,8 +21,8 @@ class App extends React.Component {
   }
 
   handleRemove =(todoId) => {
-    this.setState(state => ({
-      list: state.list.filter(todo => todo.id !== todoId),
+    this.setState(prevState => ({
+      list: prevState.list.filter(todo => todo.id !== todoId),
     }));
   };
 
@@ -52,7 +46,7 @@ class App extends React.Component {
 
         </section>
 
-        <Footer list={list} />
+        <Footer list={list} handleCompleted={this.handleCompleted} />
 
       </section>
     );

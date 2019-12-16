@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tabs from './tabs';
+import Filters from './filters';
 
 class Footer extends React.Component {
   state = {
-    tabs: [
+    filters: [
       {
         title: `All`,
         href: `#/`,
@@ -24,11 +24,11 @@ class Footer extends React.Component {
   };
 
   render() {
-    const { tabs } = this.state;
+    const { filters } = this.state;
     const { list } = this.props;
 
     return (
-      <Tabs tabs={tabs} list={list} />
+      <Filters filters={filters} list={list} />
     );
   }
 }

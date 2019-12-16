@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Tabs extends React.Component {
+class Filters extends React.Component {
   state = { selectedIndex: 0 };
 
   render() {
-    const { tabs } = this.props;
+    const { filters } = this.props;
     const { selectedIndex } = this.state;
 
     return (
@@ -15,7 +15,7 @@ class Tabs extends React.Component {
         </span>
 
         <ul className="filters">
-          {tabs.map((item, i) => (
+          {filters.map((item, i) => (
             <li key={item.id}>
               <a
                 href={item.href}
@@ -42,12 +42,12 @@ class Tabs extends React.Component {
   }
 }
 
-Tabs.propTypes = {
-  tabs: PropTypes.arrayOf(PropTypes.object),
+Filters.propTypes = {
+  filters: PropTypes.arrayOf(PropTypes.object),
 };
 
-Tabs.defaultProps = {
-  tabs: [],
+Filters.defaultProps = {
+  filters: [],
 };
 
-export default Tabs;
+export default Filters;
