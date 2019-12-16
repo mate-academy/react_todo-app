@@ -36,7 +36,7 @@ class App extends React.Component {
   submitForm = (e) => { 
     e.preventDefault();
 
-    if (!this.state.title || this.state.title.trim() === '') {
+    if (!this.state.title.trim()) {
       return;
     } 
     
@@ -70,7 +70,10 @@ class App extends React.Component {
   checkAll = () => {
     this.setState(({ todos, allCompleted }) => ({
       allCompleted: !allCompleted,
-      todos: todos.map(todo => ({ ...todo, completed: !allCompleted })),
+      todos: todos.map(todo => ({
+         ...todo,
+        completed: !this.state.todos.every(todo => todo.completed)
+      })),
     }));
   };
 

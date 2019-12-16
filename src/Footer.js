@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Footer = ({ howManyTodosLeft, filters, currentFilter, setFilter, clearCompleted }) => ( 
-  <footer className="footer" style={{ display: 'block' }}>
+  <footer className="footer">
       <span className="todo-count">
         <strong>
-          {howManyTodosLeft === 0 ? '' : howManyTodosLeft}
+          {!howManyTodosLeft ? '' : howManyTodosLeft}
         </strong>
           {howManyTodosLeft === 0 ? "all done" : " items left" }
       </span>
