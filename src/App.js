@@ -11,9 +11,13 @@ export const FILTER_TYPES = {
 
 class App extends Component {
   state = {
-    todos: [],
+    todos: JSON.parse(localStorage.getItem('todos')) || [],
     selectedFilter: FILTER_TYPES.all,
   };
+
+  componentDidUpdate() {
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
+  }
 
   addTodo = (todo) => {
     this.setState(prevState => ({
@@ -21,7 +25,6 @@ class App extends Component {
         ...prevState.todos,
         todo,
       ],
-      selectedFilter: FILTER_TYPES.all,
     }));
   };
 
@@ -84,9 +87,64 @@ class App extends Component {
         return this.state.todos.filter(todo => !todo.completed);
       case FILTER_TYPES.completed:
         return this.state.todos.filter(todo => todo.completed);
-      default:
+      case FILTER_TYPES.all:
         return this.state.todos.filter(todo => todo.id);
+      default:
+        return this.state.todos;
     }
+  };
+
+  setEditableState = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id !== id) {
+          return {
+            ...todo,
+            isEditable: false,
+          };
+        }
+
+        return {
+          ...todo,
+          isEditable: true,
+        };
+      }),
+    }));
+  };
+
+  handleKeyPress = (event, id, value) => {
+    if (event.key === 'Escape') {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          isEditable: false,
+        })),
+      }));
+    }
+
+    if (event.key === 'Enter') {
+      this.setEditedValue(event, id, value);
+    }
+  }
+
+  setEditedValue = (event, id, value) => {
+    if (!event.target.value) {
+      this.deleteTodo(id);
+    }
+
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id !== id) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: value || todo.title,
+          isEditable: false,
+        };
+      }),
+    }));
   };
 
   render = () => {
@@ -107,6 +165,9 @@ class App extends Component {
               onToggleAllCompleted={this.toggleAllCompleted}
               onToggleTodoCompleted={this.toggleTodoCompleted}
               onDeleteCurrentTodo={this.deleteTodo}
+              onEditCurrentTodo={this.setEditableState}
+              handleKeyPress={this.handleKeyPress}
+              setEditedValue={this.setEditedValue}
             />
 
             <TodoFooter

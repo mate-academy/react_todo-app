@@ -9,6 +9,9 @@ const TodoMain = ({
   onToggleTodoCompleted,
   onDeleteCurrentTodo,
   onToggleAllCompleted,
+  onEditCurrentTodo,
+  handleKeyPress,
+  setEditedValue,
 }) => {
   const isAllCompleted = todos.every(todo => todo.completed);
 
@@ -32,6 +35,9 @@ const TodoMain = ({
         items={visibleTodos}
         onToggleTodo={onToggleTodoCompleted}
         onDeleteTodo={onDeleteCurrentTodo}
+        onEditTodo={onEditCurrentTodo}
+        handleKeyPress={handleKeyPress}
+        setEditedValue={setEditedValue}
       />
     </section>
   );
@@ -43,6 +49,9 @@ TodoMain.propTypes = {
   onDeleteCurrentTodo: PropTypes.func.isRequired,
   onToggleTodoCompleted: PropTypes.func.isRequired,
   onToggleAllCompleted: PropTypes.func.isRequired,
+  onEditCurrentTodo: PropTypes.func.isRequired,
+  handleKeyPress: PropTypes.func.isRequired,
+  setEditedValue: PropTypes.func.isRequired,
 };
 
 export default TodoMain;

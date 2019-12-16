@@ -7,8 +7,8 @@ class TodoHeader extends Component {
     title: '',
   };
 
-  setTitle = (event) => {
-    const title = event.target.value.slice(0, 37);
+  setTitle = ({ target }) => {
+    const title = target.value.slice(0, 37);
 
     this.setState({
       title,
@@ -27,6 +27,7 @@ class TodoHeader extends Component {
         id: +new Date(),
         title: prevState.title,
         completed: false,
+        isEditable: false,
       });
 
       return {
@@ -48,6 +49,7 @@ class TodoHeader extends Component {
             placeholder="What needs to be done?"
             type="text"
             onChange={this.setTitle}
+            onBlur={this.validateForm}
             value={title}
           />
         </form>
