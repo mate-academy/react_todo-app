@@ -6,9 +6,8 @@ class TodosFilter extends React.Component {
 
   state = { activeTabIndex: 0 };
 
-  handleClick = (event, i) => {
-    event.preventDefault();
-    this.props.filterTodos(event.target.innerText);
+  handleClick = (i, tab) => {
+    this.props.filterTodos(tab);
     this.setState({ activeTabIndex: i });
   };
 
@@ -20,7 +19,7 @@ class TodosFilter extends React.Component {
             <a
               href="#/"
               className={this.state.activeTabIndex === index ? 'selected' : ''}
-              onClick={event => this.handleClick(event, index)}
+              onClick={() => this.handleClick(index, tab)}
             >
               {tab}
             </a>
