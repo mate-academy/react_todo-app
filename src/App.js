@@ -1,75 +1,55 @@
 import React from 'react';
+import Form from './Components/inputHeader';
+import TodoList from './Components/todoList';
+import Footer from './Components/footer';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+// const FILTERS = {
+//   all: 'All',
+//   completed: 'Completed',
+//   active: 'Active',
+// };
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+class App extends React.Component {
+  state = {
+    list: [],
+  }
 
-      <section className="main" style={{ display: 'block' }}>
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+  addTodo = (note) => {
+    this.setState(state => ({
+      list: [...state.list,
+        {
+          id: new Date(),
+          note,
+        },
+      ],
+    }));
+  };
 
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">sdfsdfsdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+  render() {
+    const { list } = this.state;
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">sakgjdfgkhjasgdhjfhs</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
 
-          <li className="">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">sddfgdfgdf</label>
-              <button type="button" className="destroy" />
-            </div>
-          </li>
-        </ul>
+        </header>
+
+        <Form addTodo={this.addTodo} />
+
+        <section className="main" style={{ display: 'block' }}>
+          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+
+          <TodoList list={list} />
+
+        </section>
+
+        <Footer list={list} />
+
       </section>
-
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          style={{ display: 'block' }}
-        />
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
