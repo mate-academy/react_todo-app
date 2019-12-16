@@ -43,6 +43,7 @@ class NewTodo extends React.Component {
             placeholder="What needs to be done?"
             value={valueTitle}
             onChange={this.inputChangeHandler}
+            onBlur={this.submitHandler}
           />
         </form>
       </header>

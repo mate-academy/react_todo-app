@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
@@ -7,10 +8,14 @@ const mark = 'Mark all as complete';
 class TodoList extends React.Component {
   state = { editValue: '' }
 
+  componentWillUpdate() {
+    this.state.editValue = '';
+  }
+
   editChangeHandler = ({ target }) => {
-    this.setState(prevState => ({
+    this.setState({
       editValue: target.value,
-    }));
+    });
   }
 
   render() {
@@ -20,6 +25,7 @@ class TodoList extends React.Component {
       deleteTodo,
       handleKeyPress,
       editTodo,
+      setEditedValue,
       toggleTodoCompleted } = this.props;
 
     return (
@@ -71,12 +77,14 @@ class TodoList extends React.Component {
                   <input
                     type="text"
                     className="edit"
-                    // eslint-disable-next-line jsx-a11y/no-autofocus
                     autoFocus
                     defaultValue={todo.title}
                     onChange={this.editChangeHandler}
                     onKeyDown={
                       e => handleKeyPress(e, todo.id, this.state.editValue)
+                    }
+                    onBlur={
+                      e => setEditedValue(e, todo.id, this.state.editValue)
                     }
                   />
                 )
@@ -96,6 +104,7 @@ TodoList.propTypes = {
   toggleTodoCompleted: PropTypes.func.isRequired,
   editTodo: PropTypes.func.isRequired,
   handleKeyPress: PropTypes.func.isRequired,
+  setEditedValue: PropTypes.func.isRequired,
   visibleTodos: PropTypes
     .arrayOf(PropTypes.shape({
       id: PropTypes.number,

@@ -25,7 +25,11 @@ class App extends React.Component {
     localStorage.setItem('todos', JSON.stringify(this.state.todos));
   }
 
-  setEditedValue = (id, value) => {
+  setEditedValue = (event, id, value) => {
+    if (!event.target.value) {
+      this.deleteTodo(id);
+    }
+
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id !== id) {
@@ -34,7 +38,7 @@ class App extends React.Component {
 
         return {
           ...todo,
-          title: value,
+          title: value || todo.title,
           editable: false,
         };
       }),
@@ -68,7 +72,7 @@ class App extends React.Component {
         })),
       }));
     } else if (event.key === 'Enter') {
-      this.setEditedValue(id, value);
+      this.setEditedValue(event, id, value);
     }
   }
 
@@ -107,7 +111,6 @@ class App extends React.Component {
   };
 
   deleteTodo = (id) => {
-    localStorage.setItem('todos', JSON.stringify(this.state.todos));
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== id),
     }));
@@ -160,6 +163,7 @@ class App extends React.Component {
           handleKeyPress={this.handleKeyPress}
           editChangeHanlder={this.editChangeHanlder}
           editTodo={this.editTodo}
+          setEditedValue={this.setEditedValue}
         />
         <Footer
           todos={todos}
