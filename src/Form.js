@@ -13,8 +13,9 @@ class Form extends React.Component {
     });
   }
 
-  handleEnter = (event) => {
-    if (event.key === 'Enter' && this.state.inputValue !== '') {
+  handleSubmit = (event) => {
+    event.preventDefault();
+    if (this.state.inputValue !== '') {
       this.props.addToDo({
         title: this.state.inputValue,
         idToDo: this.state.idToDo,
@@ -31,13 +32,14 @@ class Form extends React.Component {
     const { inputValue } = this.state;
 
     return (
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={inputValue}
-        onChange={this.onInputChange}
-        onKeyDown={this.handleEnter}
-      />
+      <form onSubmit={this.handleSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          value={inputValue}
+          onChange={this.onInputChange}
+        />
+      </form>
     );
   }
 }

@@ -3,11 +3,11 @@ import Form from './Form';
 import ToDoList from './ToDoList';
 import Filter from './Filter';
 
-const FILTERS = {
-  all: 'all',
-  completed: 'completed',
-  active: 'active',
-};
+const FILTERS = [
+  { name: 'all' },
+  { name: 'completed' },
+  { name: 'active' },
+];
 
 class App extends React.Component {
   state = {
@@ -23,7 +23,7 @@ class App extends React.Component {
     }));
   }
 
-  markAllAsComplete = () => {
+  toggleAllComplete = () => {
     this.setState(state => ({
       everyCompleted: !state.everyCompleted,
       todoList: state.todoList.map(todo => (
@@ -35,7 +35,7 @@ class App extends React.Component {
     }));
   }
 
-  markItemAsComplete = (itemId) => {
+  toggleTodoComplete = (itemId) => {
     this.setState(state => ({
       todoList: state.todoList.map((todo) => {
         if (itemId === todo.idToDo) {
@@ -63,7 +63,7 @@ class App extends React.Component {
 
   setFilter = (name) => {
     this.setState({
-      currentFilter: FILTERS[name],
+      currentFilter: name,
     });
   }
 
@@ -78,9 +78,9 @@ class App extends React.Component {
     const filteredTodos = (todos, filter) => {
       switch (filter) {
         case 'completed':
-          return todos.filter(({ completed }) => completed === true);
+          return todos.filter(({ completed }) => completed);
         case 'active':
-          return todos.filter(({ completed }) => completed === false);
+          return todos.filter(({ completed }) => !completed);
         default:
           return todos;
       }
@@ -92,7 +92,7 @@ class App extends React.Component {
           <h1>todos</h1>
           <Form addToDo={this.addToDo} />
         </header>
-        {!!this.state.todoList.length
+        {this.state.todoList.length !== 0
           && (
             <>
               <section className="main">
@@ -100,39 +100,32 @@ class App extends React.Component {
                   type="checkbox"
                   id="toggle-all"
                   className="toggle-all"
-                  onChange={this.markAllAsComplete}
+                  onChange={this.toggleAllComplete}
                   checked={this.isAllChecked()}
                 />
                 <label htmlFor="toggle-all">Mark all as complete</label>
                 <ToDoList
                   list={filteredTodos(todoList, currentFilter)}
-                  markComplete={this.markItemAsComplete}
+                  markComplete={this.toggleTodoComplete}
                   deleteItem={this.deleteItem}
                 />
               </section>
               <footer className="footer">
                 <span className="todo-count">
-                  {todoList.filter(({ completed }) => completed === false)
+                  {todoList.filter(({ completed }) => !completed)
                     .length}
                   items left
                 </span>
 
                 <ul className="filters">
-                  <Filter
-                    filterName="all"
-                    filter={this.setFilter}
-                    currentFilter={currentFilter}
-                  />
-                  <Filter
-                    filterName="completed"
-                    filter={this.setFilter}
-                    currentFilter={currentFilter}
-                  />
-                  <Filter
-                    filterName="active"
-                    filter={this.setFilter}
-                    currentFilter={currentFilter}
-                  />
+                  {FILTERS.map(item => (
+                    <Filter
+                      filterName={item.name}
+                      filter={this.setFilter}
+                      currentFilter={currentFilter}
+                      key={item.name}
+                    />
+                  ))}
                 </ul>
 
                 <button
