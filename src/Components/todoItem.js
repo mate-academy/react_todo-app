@@ -24,49 +24,52 @@ class TodoItem extends React.Component {
   }
 
   render() {
-    const { list } = this.props;
+    const { item, i } = this.props;
 
     return (
-      list.map((item, i) => (
-        <li
-          key={item.id}
-          className={!this.state.completed[i]
-            ? ''
-            : 'completed'}
-        >
-          <div className="view">
-            <input
-              type="checkbox"
-              className="toggle"
-              id={i}
-              checked={this.i}
-              onChange={() => {
-                this.handleCheck(i);
-              }}
-            />
-            <label
-              htmlFor="todo-1"
-            >
-              {item.note}
-            </label>
-            <button
-              type="button"
-              className="destroy"
-              onClick={() => {
-                this.handleRemove(i);
-              }}
-            />
-          </div>
-        </li>
-      )));
+
+      <li
+        className={!this.state.completed[i]
+          ? ''
+          : 'completed'}
+      >
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id={i}
+            checked={this.i}
+            onChange={() => {
+              this.handleCheck(i);
+            }}
+          />
+          <label
+            htmlFor="todo-1"
+          >
+            {item.note}
+          </label>
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => {
+              this.handleRemove(i);
+            }}
+          />
+        </div>
+      </li>
+    );
   }
 }
 
 TodoItem.propTypes = {
+  item: PropTypes.string,
+  i: PropTypes.number,
   list: PropTypes.arrayOf(PropTypes.object),
 };
 
 TodoItem.defaultProps = {
+  item: '',
+  i: null,
   list: [],
 };
 
