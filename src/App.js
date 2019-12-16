@@ -32,7 +32,7 @@ class App extends React.Component {
     }));
   };
 
-  changeTodoStatus = (todoId, status) => {
+  changeTodoStatus = (todoId) => {
     this.setState(state => ({
       todos: state.todos.map((item) => {
         if (item.id !== todoId) {
@@ -41,7 +41,7 @@ class App extends React.Component {
 
         return {
           ...item,
-          completed: status,
+          completed: !item.completed,
         };
       }),
     }));
