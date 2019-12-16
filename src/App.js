@@ -5,63 +5,64 @@ import Footer from './Components/Footer';
 
 class App extends React.Component {
   state = {
-    todo: [],
+    todos: [],
     filter: '',
-    enterTodo: false,
   }
 
   handleAddTodo = todo => (
     this.setState(state => ({
-      todo: [...state.todo, {
+      todos: [...state.todos, {
         title: todo,
         isCompleted: false,
       }],
-      enterTodo: true,
     }))
   )
 
-  handleChangeTodo = todo => (
-    this.setState({ todo })
+  handleChangeTodo = todos => (
+    this.setState({ todos })
   )
 
-  handleSetFilter = filter => (
+  setCurrentFilter = filter => (
     this.setState({ filter })
   )
 
   filterTodo = () => {
+    const { todos } = this.state;
+
     switch (this.state.filter) {
-      case 'Active':
-        return this.state.todo.filter(
+      case 'active':
+        return todos.filter(
           elem => (!elem.isCompleted)
         );
-      case 'Completed':
-        return this.state.todo.filter(
+      case 'completed':
+        return todos.filter(
           elem => (elem.isCompleted)
         );
       default:
-        return [...this.state.todo];
+        return [...todos];
     }
   }
 
   render() {
     const todoFilter = this.filterTodo();
-    const { enterTodo, todo } = this.state;
+    const { todos, filter } = this.state;
 
     return (
       <section className="todoapp">
         <InputTodo handleTodo={this.handleAddTodo} />
         <TodoList
           todo={todoFilter}
-          todoState={todo}
+          todoState={todos}
           allCompleted={this.handleChangeTodo}
         />
-        {enterTodo && todo.length > 0
+        {todos.length > 0
           ? (
             <Footer
-              todoState={todo}
+              todoState={todos}
               todo={todoFilter}
               handleTodo={this.handleChangeTodo}
-              setFilter={this.handleSetFilter}
+              setFilter={this.setCurrentFilter}
+              selectFilter={filter}
             />
           )
           : ''}

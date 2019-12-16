@@ -1,8 +1,9 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
+import cn from 'classnames';
 import Filters from './Filters';
 
-const Footer = ({ todo, handleTodo, setFilter, todoState }) => {
+const Footer = ({ todo, handleTodo, setFilter, todoState, selectFilter }) => {
   const handleClear = () => (
     handleTodo(todoState.filter(elem => !elem.isCompleted))
   );
@@ -18,6 +19,7 @@ const Footer = ({ todo, handleTodo, setFilter, todoState }) => {
         <Filters
           todo={todo}
           handleFilter={setFilter}
+          selectFilter={selectFilter}
         />
       </ul>
 
@@ -25,9 +27,7 @@ const Footer = ({ todo, handleTodo, setFilter, todoState }) => {
         type="button"
         onClick={handleClear}
         className={`clear-completed
-        ${todo.some(item => item.isCompleted)
-      ? 'show__clear-button'
-      : ''}`}
+        ${cn({ showButton: todo.some(item => item.isCompleted) })}`}
       >
         Clear completed
       </button>
@@ -40,6 +40,7 @@ Footer.propTypes = {
   handleTodo: PropsTypes.func.isRequired,
   setFilter: PropsTypes.func.isRequired,
   todoState: PropsTypes.arrayOf.isRequired,
+  selectFilter: PropsTypes.string.isRequired,
 };
 
 export default Footer;

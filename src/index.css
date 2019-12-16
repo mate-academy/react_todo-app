@@ -337,7 +337,7 @@ html .clear-completed:active {
   display: none;
 }
 
-.show__clear-button {
+.showButton {
   display: block;
 }
 

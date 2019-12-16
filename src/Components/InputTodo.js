@@ -7,8 +7,10 @@ class InputTodo extends React.Component {
   }
 
   enterValue = (event) => {
-    if (event.key === 'Enter' && event.target.value !== '') {
-      this.props.handleTodo(event.target.value);
+    event.preventDefault();
+
+    if (this.state.newTodo !== '') {
+      this.props.handleTodo(this.state.newTodo);
       this.setState({ newTodo: '' });
     }
   }
@@ -22,7 +24,7 @@ class InputTodo extends React.Component {
 
   render() {
     return (
-      <>
+      <form onSubmit={this.enterValue}>
         <header className="header">
           <h1>todos</h1>
           <input
@@ -34,11 +36,10 @@ class InputTodo extends React.Component {
                 newTodo: event.target.value,
               })
             )}
-            onKeyDown={this.enterValue}
             onBlur={this.handleBlur}
           />
         </header>
-      </>
+      </form>
     );
   }
 }
