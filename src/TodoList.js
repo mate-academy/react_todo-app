@@ -79,6 +79,7 @@ class TodoList extends React.Component {
               <input
                 type="text"
                 className="edit"
+                autoFocus
                 value={editingTodoTitle}
                 onChange={this.handleTodoChange}
                 onKeyUp={event => this.handleKeyPress(event, todo)}

@@ -67,10 +67,10 @@ class App extends React.Component {
     }));
   };
 
-  editTodo = (todoId, editedTodoTitle) => {
+  editTodo = (editingTodoId, editedTodoTitle) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
-        if (todoId === todo.id) {
+        if (editingTodoId === todo.id) {
           return {
             ...todo,
             title: editedTodoTitle,
