@@ -18,11 +18,17 @@ class App extends React.Component {
     this.setState(state => ({
       list: [...state.list,
         {
-          id: new Date(),
+          id: +new Date(),
           note,
           completed: false,
         },
       ],
+    }));
+  }
+
+  handleRemove =(todoId) => {
+    this.setState(state => ({
+      list: state.list.filter(todo => todo.id !== todoId),
     }));
   };
 
@@ -42,7 +48,7 @@ class App extends React.Component {
           <input type="checkbox" id="toggle-all" className="toggle-all" />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <TodoList list={list} />
+          <TodoList list={list} handleRemove={this.handleRemove} />
 
         </section>
 

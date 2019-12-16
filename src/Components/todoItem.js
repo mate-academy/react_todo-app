@@ -15,16 +15,8 @@ class TodoItem extends React.Component {
     }));
   }
 
-  handleRemove(index) {
-    const { list } = this.props;
-
-    list.splice(index, 1);
-
-    this.setState({});
-  }
-
   render() {
-    const { item, i } = this.props;
+    const { item, i, handleRemove } = this.props;
 
     return (
 
@@ -52,7 +44,7 @@ class TodoItem extends React.Component {
             type="button"
             className="destroy"
             onClick={() => {
-              this.handleRemove(i);
+              handleRemove(item.id);
             }}
           />
         </div>
@@ -68,13 +60,12 @@ TodoItem.propTypes = {
     PropTypes.date,
   ])),
   i: PropTypes.number,
-  list: PropTypes.arrayOf(PropTypes.object),
+  handleRemove: PropTypes.func.isRequired,
 };
 
 TodoItem.defaultProps = {
   item: '',
   i: null,
-  list: [],
 };
 
 export default TodoItem;
