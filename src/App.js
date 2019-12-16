@@ -1,246 +1,177 @@
 import React from 'react';
+import Header from './Components/Header';
+import TodosList from './Components/TodosList';
+import Footer from './Components/Footer';
 import './App.css';
 
-function Heading() {
-  return <h1 className="Heading"> todos </h1>;
-}
-
-// eslint-disable-next-line react/prop-types
-function TodoForm({ newTodoFN, toggleAll }) {
-  function handleSubmit(e) {
-    e.preventDefault();
-    newTodoFN(e.target.TodoFormTextBox.value);
-    // eslint-disable-next-line no-param-reassign
-    e.target.TodoFormTextBox.value = '';
-  }
-
-  return (
-    <div className="TodoForm">
-      <button
-        className="ToggleForm"
-        type="button"
-        onClick={toggleAll}
-      >
-        ✓
-      </button>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className="TodoFormTextBox"
-          name="TodoFormTextBox"
-          placeholder="What needs to be done?"
-          required
-        />
-      </form>
-    </div>
-  );
-}
-
-// eslint-disable-next-line react/prop-types
-function TodoBox({ todo, completed, deleteTodo, todoId, toggleTodo }) {
-  const completeStyle = {
-    textDecoration: 'line-through',
-    color: 'grey',
-  };
-
-  return (
-    <div className="TodoBox">
-      <div className="CheckBox">
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={() => toggleTodo(todoId)}
-        />
-      </div>
-      <p
-        style={completed ? completeStyle : null}
-      >
-        {todo}
-      </p>
-      <button
-        type="button"
-        className="Deleter"
-        onClick={() => deleteTodo(todoId)}
-      >
-        X
-      </button>
-    </div>
-  );
-}
-
-function TodoList({ todos, toggleTodo, deleteTodo }) {
-  const listOfTodos = (
-    todos.map(todo => (
-      <TodoBox
-        key={todo.id}
-        todoId={todo.id}
-        todo={todo.todoItem}
-        completed={todo.completed}
-        deleteTodo={deleteTodo}
-        toggleTodo={toggleTodo}
-      />
-    ))
-  );
-
-  return (
-    listOfTodos
-  );
-}
-
-// eslint-disable-next-line react/prop-types
-function Footer({ todos, changeViewFilter }) {
-  function handleClick(e) {
-    changeViewFilter(e.target.name);
-  }
-
-  return (
-    <div className="Footer">
-      <p>
-        { todos.length }
-        { todos.length === 1 ? 'todo' : 'total todos' }
-      </p>
-      <button
-        type="button"
-        name="SHOW_ALL"
-        onClick={handleClick}
-      >
-        ALL
-      </button>
-      <button
-        type="button"
-        name="SHOW_ACTIVE"
-        onClick={handleClick}
-      >
-        ACTIVE
-      </button>
-      <button
-        type="button"
-        name="SHOW_COMPLETED"
-        onClick={handleClick}
-      >
-        COMPLETED
-      </button>
-    </div>
-  );
-}
-
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      viewFilter: 'SHOW_ALL',
-      todos: [
-        {
-          id: 0,
-          todoItem: 'Learn HTML',
-          completed: true,
-        },
-        {
-          id: 1,
-          todoItem: 'Learn JS',
-          completed: false,
-        },
-        {
-          id: 2,
-          todoItem: 'Practice web dev',
-          completed: true,
-        },
-      ],
-      nextId: 3,
-    };
-  }
-
-  handleNewTodo = (newTodo) => {
-    const newTodoObj = {
-      id: this.state.nextId,
-      todoItem: newTodo,
-      completed: false,
-    };
-    const todos = [...this.state.todos, newTodoObj];
-    const newNextId = this.state.nextId + 1;
-    const newState = {
-      todos,
-      nextId: newNextId,
-    };
-
-    this.setState(newState, () => this.state);
+  state = {
+    todo: '',
+    currentIndex: 0,
+    todosList: [],
+    filteredTodosList: [],
+    filterField: 'all',
   };
 
-  deleteTodo = (todoId) => {
-    // eslint-disable-next-line react/no-access-state-in-setstate
-    const newTodos = this.state.todos.filter(todo => todo.id !== todoId);
+  handleChange = ({ target }) => {
+    const { value } = target;
 
     this.setState({
-      todos: newTodos,
+      todo: value.trimLeft(),
     });
   };
 
-  toggleTodo = (todoId) => {
-    // eslint-disable-next-line react/no-access-state-in-setstate
-    const todos = this.state.todos.map(todo => ((todo.id === todoId)
-      ? {
-        ...todo,
-        completed: !todo.completed,
-      }
-      : todo));
-
-    this.setState({ todos });
-  };
-
-  toggleAll = () => {
-    const allCompleted = this.state.todos.every(todo => (
-      todo.completed === true
-    ));
-
-    // eslint-disable-next-line react/no-access-state-in-setstate
-    const todos = this.state.todos.map(todo => (allCompleted
-      ? {
-        ...todo,
+  handleSubmit = (todo, currentIndex, event) => {
+    event.preventDefault();
+    if (todo) {
+      const todoItem = {
+        todoTitle: todo,
+        id: currentIndex,
         completed: false,
-      }
-      : {
-        ...todo,
-        completed: true,
-      }));
+      };
 
-    this.setState({ todos });
+      this.setState(prevState => ({
+        ...prevState,
+        todo: '',
+        currentIndex: prevState.currentIndex + 1,
+        todosList: [...prevState.todosList, todoItem],
+        filteredTodosList: [...prevState.todosList, todoItem],
+        filterField: 'all',
+      }));
+    }
   };
 
-  changeViewFilter = (viewFilter) => {
-    this.setState({ viewFilter });
+  handleCheck = (
+    { target },
+    todoItem,
+    filterField,
+    showTodos
+  ) => {
+    function check(list, id, checked) {
+      return list.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            completed: checked,
+          };
+        }
+
+        return item;
+      });
+    }
+
+    this.setState(prevState => ({
+      todosList: check(prevState.todosList, todoItem.id, target.checked),
+      filteredTodosList:
+        check(prevState.filteredTodosList, todoItem.id, target.checked),
+    }));
+
+    if (filterField === 'active') {
+      showTodos(filterField);
+    } else if (filterField === 'completed') {
+      showTodos(filterField);
+    }
+  };
+
+  handleRemove = (todoItem) => {
+    function remove(list, id) {
+      return list.filter(item => item.id !== id);
+    }
+
+    this.setState(prevState => ({
+      todosList: remove(prevState.todosList, todoItem.id),
+      filteredTodosList: remove(prevState.filteredTodosList, todoItem.id),
+    }));
+  };
+
+  showTodos = (filterType) => {
+    switch (filterType) {
+      case 'active':
+        return this.setState(prevState => ({
+          filteredTodosList:
+            prevState.todosList.filter(todo => todo.completed === false),
+          filterField: 'active',
+        }));
+      case 'completed':
+        return this.setState(prevState => ({
+          filteredTodosList:
+            prevState.todosList.filter(todo => todo.completed === true),
+          filterField: 'completed',
+        }));
+      default:
+        return this.setState(prevState => ({
+          filteredTodosList: prevState.todosList,
+          filterField: 'all',
+        }));
+    }
+  };
+
+  toggleCompleted = ({ target }) => {
+    function toggle(list, checked) {
+      return list.map(item => ({
+        ...item,
+        completed: checked,
+      }));
+    }
+
+    this.setState(prevState => ({
+      filteredTodosList: toggle(prevState.filteredTodosList, target.checked),
+      todosList: toggle(prevState.todosList, target.checked),
+    }));
+  };
+
+  deleteAllCompleted = (showTodos) => {
+    this.setState(prevState => ({
+      filteredTodosList:
+        prevState.todosList.filter(todo => todo.completed === false),
+      todosList: prevState.todosList.filter(todo => todo.completed === false),
+    }));
+    showTodos('all');
   };
 
   render() {
-    const { todos, viewFilter } = this.state;
+    const {
+      todosList, todo, filteredTodosList, filterField, currentIndex,
+    } = this.state;
 
-    // eslint-disable-next-line no-shadow
-    function visibleTodos(todos, viewFilter) {
-      switch (viewFilter) {
-        case 'SHOW_ALL':
-          return todos;
-        case 'SHOW_COMPLETED':
-          return todos.filter(todo => todo.completed);
-        case 'SHOW_ACTIVE':
-          return todos.filter(todo => !todo.completed);
-        default:
-          return '';
-      }
+    if (todosList.length < 1) {
+      return (
+        <section className="todoapp">
+          <Header
+            todo={todo}
+            currentIndex={currentIndex}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+          />
+        </section>
+      );
     }
 
     return (
-      <div className="App">
-        <Heading />
-        <TodoForm newTodoFN={this.handleNewTodo} toggleAll={this.toggleAll} />
-        <TodoList
-          todos={visibleTodos(todos, viewFilter)}
-          deleteTodo={this.deleteTodo}
-          toggleTodo={this.toggleTodo}
+      <section className="todoapp">
+        <Header
+          todo={todo}
+          currentIndex={currentIndex}
+          handleChange={this.handleChange}
+          handleSubmit={this.handleSubmit}
         />
-        {(this.state.todos.length !== 0)
-          ? <Footer todos={todos} changeViewFilter={this.changeViewFilter} />
-          : null
-        }
-      </div>
+        <TodosList
+          filteredTodosList={filteredTodosList}
+          handleCheck={this.handleCheck}
+          showTodos={this.showTodos}
+          handleRemove={this.handleRemove}
+          toggleCompleted={this.toggleCompleted}
+          filterField={filterField}
+        />
+
+        <Footer
+          todosList={todosList}
+          filteredTodosList={filteredTodosList}
+          filterField={filterField}
+          showTodos={this.showTodos}
+          deleteAllCompleted={this.deleteAllCompleted}
+        />
+      </section>
     );
   }
 }
