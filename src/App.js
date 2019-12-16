@@ -67,6 +67,23 @@ class App extends React.Component {
     }));
   };
 
+  editTodo = (todoId, editedTodoTitle) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todoId === todo.id) {
+          return {
+            ...todo,
+            title: editedTodoTitle,
+          };
+        }
+
+        return {
+          ...todo,
+        };
+      }),
+    }));
+  };
+
   render() {
     const { currentFilter, todos } = this.state;
     let visibleTodos;
@@ -107,6 +124,7 @@ class App extends React.Component {
             todos={visibleTodos}
             setTodoCompleted={this.setTodoCompleted}
             removeTodo={this.removeTodo}
+            editTodo={this.editTodo}
           />
         </section>
 
