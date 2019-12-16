@@ -10,7 +10,7 @@ const TodoList = ({
 }) => (
 
   <section className="main" style={{ display: 'block' }}>
-    {todos.length > 0 && (
+    {todos.length >= 0 && (
       <>
         <input
           type="checkbox"
