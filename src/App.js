@@ -5,7 +5,14 @@ import Footer from './Footer';
 
 class App extends React.Component {
   state = {
-    todos: [],
+    todos: (() => {
+      if (localStorage.todos !== undefined) {
+        return [...JSON.parse(localStorage.todos)];
+      }
+
+      return [];
+    })(),
+
     currentFilter: 'all',
     filterTypes: {
       all: 'all',
@@ -14,9 +21,62 @@ class App extends React.Component {
     },
   }
 
-  addTodo = todo => this.setState(prevState => ({
-    todos: [...prevState.todos, todo],
-  }))
+  componentDidUpdate() {
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
+  }
+
+  setEditedValue = (id, value) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id !== id) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: value,
+          editable: false,
+        };
+      }),
+    }));
+  }
+
+  editTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id !== id) {
+          return {
+            ...todo,
+            editable: false,
+          };
+        }
+
+        return {
+          ...todo,
+          editable: true,
+        };
+      }),
+    }));
+  };
+
+  handleKeyPress = (event, id, value) => {
+    if (event.key === 'Escape') {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          editable: false,
+        })),
+      }));
+    } else if (event.key === 'Enter') {
+      this.setEditedValue(id, value);
+    }
+  }
+
+  addTodo = (todo) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
+    }));
+  }
 
   selectAllTodos = () => {
     this.setState((prevState) => {
@@ -47,6 +107,7 @@ class App extends React.Component {
   };
 
   deleteTodo = (id) => {
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== id),
     }));
@@ -96,6 +157,9 @@ class App extends React.Component {
           selectAllTodos={this.selectAllTodos}
           deleteTodo={this.deleteTodo}
           toggleTodoCompleted={this.toggleTodoCompleted}
+          handleKeyPress={this.handleKeyPress}
+          editChangeHanlder={this.editChangeHanlder}
+          editTodo={this.editTodo}
         />
         <Footer
           todos={todos}
