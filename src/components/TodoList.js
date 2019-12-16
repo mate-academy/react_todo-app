@@ -12,16 +12,16 @@ const TodoList = ({
   <section className="main" style={{ display: 'block' }}>
     {todos.length > 0 && (
       <>
-        <label htmlFor="toggle-all">
-        Mark all as complete
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            checked={isAllChecked}
-            onChange={() => handleCheckedAll(isAllChecked)}
-          />
-        </label>
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={isAllChecked}
+          onChange={() => handleCheckedAll(isAllChecked)}
+        />
+        {/*eslint-disable */
+        <label htmlFor="toggle-all">Mark all as complete </label>
+        /* eslint-enable */}
       </>
     )}
     <ul className="todo-list">
