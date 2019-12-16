@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TodosFilter from './TodosFilter';
+import TodosFilters from './TodosFilter';
 
 const TodoFooter = ({
   todos,
-  toggleFilterIdentifier,
+  onSetFilter,
+  currentFilter,
   removeCompletedTodos,
-  filterIdentifier,
   amountOfActiveTodos,
 }) => (
   <section className="footer">
@@ -18,25 +18,25 @@ const TodoFooter = ({
         : 'items left'
       }
     </span>
-    <TodosFilter
+    <TodosFilters
       todos={todos}
-      filterIdentifier={filterIdentifier}
-      toggleFilterIdentifier={toggleFilterIdentifier}
+      setFilter={onSetFilter}
+      currentFilter={currentFilter}
       removeCompletedTodos={removeCompletedTodos}
     />
   </section>
 );
 
 TodoFooter.propTypes = {
+  currentFilter: PropTypes.string.isRequired,
+  onSetFilter: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
       isCompleted: PropTypes.bool,
     }).isRequired,
   ).isRequired,
-  filterIdentifier: PropTypes.string.isRequired,
   amountOfActiveTodos: PropTypes.number.isRequired,
-  toggleFilterIdentifier: PropTypes.func.isRequired,
   removeCompletedTodos: PropTypes.func.isRequired,
 };
 

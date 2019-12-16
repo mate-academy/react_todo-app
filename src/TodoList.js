@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-const TodoList = ({ todos, handleDelete, handleCheck }) => (
+const TodoList = ({ filteredTodos, handleDelete, handleCheck }) => (
   <ul className="todo-list">
-    {todos.map(todoItem => (
+    {filteredTodos.map(todoItem => (
       <TodoItem
         todo={todoItem}
         key={todoItem.id}
@@ -16,12 +16,7 @@ const TodoList = ({ todos, handleDelete, handleCheck }) => (
 );
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      isCompleted: PropTypes.bool.isRequired,
-    }).isRequired,
-  ).isRequired,
+  filteredTodos: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleCheck: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

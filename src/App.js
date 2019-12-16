@@ -3,66 +3,58 @@ import TodoList from './TodoList';
 import TodoHeader from './TodoHeader';
 import TodoFooter from './TodoFooter';
 
+export const FILTER_TYPES = {
+  all: 'all',
+  active: 'active',
+  completed: 'completed',
+};
+
 class App extends React.Component {
   state = {
     todoList: [],
-    originalTodoList: [],
-    idCounter: 0,
-    filterIdentifier: 'all',
+    filterIdentifier: FILTER_TYPES.all,
   };
 
   handleAddTodo = (title) => {
     this.setState(prevState => ({
-      originalTodoList: [
-        ...prevState.originalTodoList,
+      todoList: [
+        ...prevState.todoList,
         {
-          id: prevState.idCounter + 1,
+          id: +Date.now(),
           title,
           isCompleted: false,
         },
       ],
-
-      idCounter: prevState.idCounter + 1,
     }));
-
-    this.filterTodoList();
   };
 
-  filterTodoList = () => {
-    this.setState((prevState) => {
-      const { filterIdentifier, originalTodoList } = prevState;
+  deleteTodo = (id) => {
+    this.setState(prevState => ({
+      todoList: prevState.todoList
+        .filter(todoItem => todoItem.id !== id),
+    }));
+  };
 
-      switch (filterIdentifier) {
-        case 'active':
-          return ({
-            todoList: originalTodoList.filter(todo => !todo.isCompleted),
-          });
-        case 'completed':
-          return ({
-            todoList: originalTodoList.filter(todo => todo.isCompleted),
-          });
-        default:
-          return ({
-            todoList: [...originalTodoList],
-          });
-      }
+  setFilter = (currentFilter) => {
+    this.setState({
+      filterIdentifier: currentFilter,
     });
   };
 
-  toggleAllTodosCompleted = () => {
-    this.setState(prevState => ({
-      originalTodoList: prevState.originalTodoList.map(todo => ({
-        ...todo,
-        isCompleted: prevState.originalTodoList.some(t => !t.isCompleted),
-      })),
-    }));
-
-    this.filterTodoList();
+  filterTodos = () => {
+    switch (this.state.filterIdentifier) {
+      case FILTER_TYPES.active:
+        return this.state.todoList.filter(todo => !todo.isCompleted);
+      case FILTER_TYPES.completed:
+        return this.state.todoList.filter(todo => todo.isCompleted);
+      default:
+        return this.state.todoList.filter(todo => todo.id);
+    }
   };
 
   toggleTodoCompleted = (id) => {
     this.setState(prevState => ({
-      originalTodoList: prevState.originalTodoList.map((todo) => {
+      todoList: prevState.todoList.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -73,43 +65,32 @@ class App extends React.Component {
         return todo;
       }),
     }));
-
-    this.filterTodoList();
   };
 
-  deleteTodo = (id) => {
+  toggleAllTodosCompleted = () => {
     this.setState(prevState => ({
-      originalTodoList: prevState.originalTodoList
-        .filter(todoItem => todoItem.id !== id),
+      todoList: prevState.todoList
+        .map(todo => ({
+          ...todo,
+          isCompleted: prevState.todoList
+            .some(todoItem => !todoItem.isCompleted),
+        })),
     }));
-
-    this.filterTodoList();
-  };
-
-  toggleFilterIdentifier = (identifier) => {
-    this.setState({
-      filterIdentifier: identifier,
-    });
-
-    this.filterTodoList();
   };
 
   removeCompletedTodos = () => {
     this.setState(prevState => ({
-      originalTodoList: prevState.originalTodoList
+      todoList: prevState.todoList
         .filter(todoItem => !todoItem.isCompleted),
     }));
-
-    this.filterTodoList();
   };
 
   render() {
     const {
       todoList,
-      originalTodoList,
       filterIdentifier,
     } = this.state;
-    const amountOfActiveTodos = originalTodoList
+    const amountOfActiveTodos = todoList
       .filter(todo => !todo.isCompleted).length;
 
     return (
@@ -121,25 +102,25 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            checked={this.state.todoList.every(todo => todo.isCompleted)}
+            checked={todoList.every(todo => todo.isCompleted)}
             onClick={this.toggleAllTodosCompleted}
           />
-          {originalTodoList.length > 0 && (
+          {todoList.length > 0 && (
             <label htmlFor="toggle-all">Mark all as complete</label>
           )}
           <TodoList
-            todos={todoList}
+            filteredTodos={this.filterTodos()}
             handleCheck={this.toggleTodoCompleted}
             handleDelete={this.deleteTodo}
           />
         </section>
 
-        {(originalTodoList.length > 0) && (
+        {(todoList.length > 0) && (
           <TodoFooter
             todos={todoList}
+            onSetFilter={this.setFilter}
+            currentFilter={filterIdentifier}
             amountOfActiveTodos={amountOfActiveTodos}
-            filterIdentifier={filterIdentifier}
-            toggleFilterIdentifier={this.toggleFilterIdentifier}
             removeCompletedTodos={this.removeCompletedTodos}
           />
         )}

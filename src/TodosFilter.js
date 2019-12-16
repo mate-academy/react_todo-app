@@ -1,41 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FILTER_TYPES } from './App';
 
 const TodosFilter = ({
   todos,
-  filterIdentifier,
-  toggleFilterIdentifier,
+  setFilter,
+  currentFilter,
   removeCompletedTodos,
 }) => (
   <>
     <ul className="filters">
-      <li>
-        <a
-          href="#/"
-          className={filterIdentifier === 'all' ? 'selected' : ''}
-          onClick={() => toggleFilterIdentifier('all')}
-        >
-          All
-        </a>
-      </li>
-      <li>
-        <a
-          href="#/active"
-          className={filterIdentifier === 'active' ? 'selected' : ''}
-          onClick={() => toggleFilterIdentifier('active')}
-        >
-          Active
-        </a>
-      </li>
-      <li>
-        <a
-          href="#/completed"
-          className={filterIdentifier === 'completed' ? 'selected' : ''}
-          onClick={() => toggleFilterIdentifier('completed')}
-        >
-          Completed
-        </a>
-      </li>
+      {Object.values(FILTER_TYPES).map(filter => (
+        <li key={filter}>
+          <a
+            href={`#/${filter}`}
+            onClick={() => setFilter(filter)}
+            className={currentFilter === filter ? 'selected' : ''}
+          >
+            {filter}
+          </a>
+        </li>
+      ))}
     </ul>
     {todos.filter(todo => todo.isCompleted).length > 0 && (
       <button
@@ -57,8 +42,8 @@ TodosFilter.propTypes = {
       isCompleted: PropTypes.bool,
     }).isRequired,
   ).isRequired,
-  filterIdentifier: PropTypes.string.isRequired,
-  toggleFilterIdentifier: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  currentFilter: PropTypes.string.isRequired,
   removeCompletedTodos: PropTypes.func.isRequired,
 };
 
