@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 
 const TodoList = ({ todos, destroy, checked, checkedAll }) => (
 
-  <section className="main" style={{ display: 'block' }}>
-    <label htmlFor="toggle-all">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        checked={todos.every(i => i.completed) && todos.length !== 0}
-        onChange={(event) => {
-          checkedAll(event.target.checked);
-        }
-        }
-      />
-    </label>
+  <section className="main">
+
+    <input
+      type="checkbox"
+      id="toggle-all"
+      className="toggle-all"
+      checked={todos.every(i => i.completed) && todos.length !== 0}
+      onChange={(event) => {
+        checkedAll(event.target.checked);
+      }
+      }
+    />
+    <label htmlFor="toggle-all">Mark</label>
 
     <ul className="todo-list">
       {todos.map(item => (
-        <li key={item.id} className="">
+        <li key={item.id}>
           <div className="view">
             <input
               type="checkbox"

@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoList from './TodoList';
 import Footer from './Footer';
+import Header from './Header';
 
 const FILTER_TYPES = {
   all: 'All',
@@ -10,13 +11,12 @@ const FILTER_TYPES = {
 
 class App extends React.Component {
   state = {
-    inputValue: '',
     todos: [],
     counterId: 1,
     selectedFilter: FILTER_TYPES.all,
   }
 
-  Id = () => {
+  generateId = () => {
     const { counterId } = this.state;
 
     this.setState(state => ({
@@ -26,19 +26,11 @@ class App extends React.Component {
     return counterId;
   }
 
-  hundleInputValue = (event) => {
-    this.setState({
-      inputValue: event.target.value,
-    });
-  }
-
-  onSubmit = (event) => {
-    event.preventDefault();
-    this.setState(state => ({
-      inputValue: '',
-      todos: [...state.todos, {
-        id: this.Id(),
-        title: state.inputValue,
+  add = (title) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos, {
+        id: this.generateId(),
+        title,
         completed: false,
       }],
     }));
@@ -103,13 +95,7 @@ class App extends React.Component {
       <section className="todoapp">
         <form className="header" onSubmit={this.onSubmit}>
           <h1>todos</h1>
-
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={this.state.inputValue}
-            onChange={this.hundleInputValue}
-          />
+          <Header add={this.add} />
         </form>
         <TodoList
           todos={this.getFilterTodos()}
@@ -121,6 +107,7 @@ class App extends React.Component {
           && (
             <Footer
               todos={this.state.todos}
+              FILTER_TYPES={FILTER_TYPES}
               clearCompleted={this.clearCompleted}
               stateComplitedFilter={this.stateComplitedFilter}
               selectedFilter={this.state.selectedFilter}
