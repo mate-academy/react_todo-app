@@ -25,18 +25,13 @@ class App extends React.Component {
 
   markAllAsComplete = () => {
     this.setState(state => ({
-      todoList: state.todoList.map(todo => (
-        state.everyCompleted
-          ? {
-            ...todo,
-            completed: false,
-          }
-          : {
-            ...todo,
-            completed: true,
-          }
-      )),
       everyCompleted: !state.everyCompleted,
+      todoList: state.todoList.map(todo => (
+        {
+          ...todo,
+          completed: !state.everyCompleted,
+        }
+      )),
     }));
   }
 
@@ -52,6 +47,9 @@ class App extends React.Component {
 
         return { ...todo };
       }),
+    }));
+    this.setState(state => ({
+      everyCompleted: state.todoList.every(todo => todo.completed),
     }));
   }
 
@@ -102,7 +100,7 @@ class App extends React.Component {
                   type="checkbox"
                   id="toggle-all"
                   className="toggle-all"
-                  onClick={this.markAllAsComplete}
+                  onChange={this.markAllAsComplete}
                   checked={this.isAllChecked()}
                 />
                 <label htmlFor="toggle-all">Mark all as complete</label>
