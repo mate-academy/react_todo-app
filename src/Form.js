@@ -15,7 +15,7 @@ class Form extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.inputValue !== '') {
+    if (this.state.inputValue.trim() !== '') {
       this.props.addToDo({
         title: this.state.inputValue,
         idToDo: this.state.idToDo,
