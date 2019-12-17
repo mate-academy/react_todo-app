@@ -94,6 +94,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={this.state.toggleActive}
             onClick={() => this.handleToggleAll()}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
