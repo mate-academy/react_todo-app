@@ -9,7 +9,7 @@ const TodoFilters = ({ selectedFilterItem, setItemFilter }) => (
       <a
         href="#/"
         // работа с classnames через cn
-        className={cn({ selected: selectedFilterItem === 'all' })}
+        className={cn({ selected: selectedFilterItem === 'FILTER_TYPES.all' })}
         onClick={() => setItemFilter(FILTER_TYPES.all)}
       >
               All
