@@ -7,7 +7,7 @@ const Footer = ({ filter, setFilter }) => (
       {Object.values(filter).map(filt => (
         <li>
           <a
-            href={`/#${filt}`}
+            href={`/#/${filt}`}
             className={filter === filt
               ? 'selected'
               : ''}
