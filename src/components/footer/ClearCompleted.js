@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ClearCompleted = ({ todos, clearCompleted }) => (
+const ClearCompleted = ({ couldClear, clearCompleted }) => (
   <button
     value="hello"
     type="button"
@@ -9,13 +9,13 @@ const ClearCompleted = ({ todos, clearCompleted }) => (
     style={{ display: 'block' }}
     onClick={() => clearCompleted()}
   >
-    {todos.some(todo => todo.status)
+    {couldClear
     && 'Clear completed'}
   </button>
 );
 
 ClearCompleted.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  couldClear: PropTypes.bool.isRequired,
   clearCompleted: PropTypes.func.isRequired,
 };
 

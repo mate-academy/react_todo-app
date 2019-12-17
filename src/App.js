@@ -1,23 +1,21 @@
 import React from 'react';
 
 import FormInput from './components/header/FormInput';
-import TodoItem from './components/main/TodoItem';
+import TodoList from './components/main/TodoList';
 import Footer from './components/footer/Footer';
 import ItemsLeft from './components/footer/ItemsLeft';
 import ClearCompleted from './components/footer/ClearCompleted';
 
 const FILTERS = {
-  all: 'all',
-  active: 'active',
-  completed: 'completed',
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
 };
 
 class App extends React.Component {
   state = {
     todos: [],
     filter: FILTERS.all,
-
-    itemsMany: true,
     toggleActive: false,
   };
 
@@ -26,7 +24,7 @@ class App extends React.Component {
       const inputedTodo = {
         id: +new Date(),
         title,
-        status: false,
+        completed: false,
       };
 
       return {
@@ -40,20 +38,20 @@ class App extends React.Component {
       toggleActive: !prevState.toggleActive,
       todos: prevState.todos
         .map(todo => ({
-          ...todo, status: !prevState.toggleActive,
+          ...todo, completed: !prevState.toggleActive,
         })),
     }));
   };
 
   setFilter = (type) => {
-    this.setState(() => ({ filter: FILTERS[type] }));
+    this.setState(() => ({ filter: type }));
   };
 
   clearCompleted = () => {
     this.setState(({ todos }) => ({
       toggleActive: false,
       todos: todos
-        .filter(todo => (todo.status === false)),
+        .filter(todo => (!todo.completed)),
     }));
   };
 
@@ -63,7 +61,7 @@ class App extends React.Component {
     }),);
   };
 
-  changeStatus = (todoId) => {
+  changeCompleted = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id !== todoId) {
@@ -72,7 +70,7 @@ class App extends React.Component {
 
         return {
           ...todo,
-          status: !todo.status,
+          completed: !todo.completed,
         };
       }),
     }));
@@ -89,7 +87,7 @@ class App extends React.Component {
           />
         </header>
 
-        <section className="main" style={{ display: 'block' }}>
+        <section className="main">
           <input
             type="checkbox"
             id="toggle-all"
@@ -100,10 +98,10 @@ class App extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            <TodoItem
+            <TodoList
               todos={this.state.todos}
               filter={this.state.filter}
-              changeStatus={this.changeStatus}
+              changeCompleted={this.changeCompleted}
               deleteTodo={this.deleteTodo}
             />
           </ul>
@@ -113,15 +111,15 @@ class App extends React.Component {
         && (
           <footer className="footer" styFormInputle={{ display: 'block' }}>
             <ItemsLeft
-              todos={this.state.todos}
-              itemsMany={this.state.itemsMany}
+              todosLeft={this.state.todos
+                .filter(todo => !todo.completed).length}
             />
             <Footer
-              filter={this.state.filter}
+              filter={FILTERS}
               setFilter={this.setFilter}
             />
             <ClearCompleted
-              todos={this.state.todos}
+              couldClear={this.state.todos.some(todo => todo.completed)}
               clearCompleted={this.clearCompleted}
             />
           </footer>

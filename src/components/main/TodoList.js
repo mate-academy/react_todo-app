@@ -1,29 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ todos, changeStatus, deleteTodo, filter }) => (
+const TodoList = ({ todos, changeCompleted, deleteTodo, filter }) => (
   <div>
     {todos
       .filter((todo) => {
-        if (filter === 'active') {
-          return (todo.status === false);
+        if (filter === 'Active') {
+          return (!todo.completed);
         }
 
-        if (filter === 'completed') {
-          return (todo.status === true);
+        if (filter === 'Completed') {
+          return (todo.completed);
         }
 
-        return (todo.status === false || todo.status === true);
+        return (todo.completed || !todo.completed);
       })
       .map(todo => (
-        <li className="">
+        <li className="" key={todo.id}>
           <div className="view">
             <input
               type="checkbox"
               className="toggle"
               id={`todos-${todo.id}`}
-              checked={todo.status}
-              onClick={() => changeStatus(todo.id)}
+              checked={todo.completed}
+              onClick={() => changeCompleted(todo.id)}
             />
             <label htmlFor={`todos-${todo.id}`}>{todo.title}</label>
             <button
@@ -37,15 +37,15 @@ const TodoItem = ({ todos, changeStatus, deleteTodo, filter }) => (
   </div>
 );
 
-TodoItem.propTypes = {
+TodoList.propTypes = {
   todos: PropTypes.arrayOf({
-    status: PropTypes.bool.isRequired,
+    completed: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
   }).isRequired,
-  changeStatus: PropTypes.func.isRequired,
+  changeCompleted: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };
 
-export default TodoItem;
+export default TodoList;

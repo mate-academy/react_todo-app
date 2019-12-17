@@ -31,14 +31,14 @@ Resources:
 1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
   - `title` - the text of todo
   - `id` - unique identifier
-  - `completed` - current status (`false` by default)
+  - `completed` - current completed (`false` by default)
 1. Show the number of not completed todos in `TodoApp`
 1. Implement `TodoList` component to display a list of todos ({ id, title, completed })
     ```jsx harmony
     <TodoList items={todos} />
     ```
-1. Implement `TodoItem` component with ability to toggle the `complete` status.
-1. Add ability to toggle the completed status of all the todos.
+1. Implement `TodoItem` component with ability to toggle the `complete` completed.
+1. Add ability to toggle the completed completed of all the todos.
 1. Create `TodosFilter` component to switch between `all`/`active`/`completed` todos
 1. Add ability to remove an item.
 1. Add ability to clear completed items from the list

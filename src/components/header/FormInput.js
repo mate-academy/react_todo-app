@@ -24,7 +24,7 @@ class FormInput extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} onBlur={this.handleSubmit}>
         <input
           onChange={this.handleInput}
           value={this.state.inputedValue}
