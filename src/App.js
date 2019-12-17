@@ -4,6 +4,13 @@ import Switcher from './components/Toogler/Switcher';
 import TodoList from './components/Todolist/TodoList';
 import Footer from './components/Footer/Footer';
 
+const FILTER_TYPES = {
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
+
+};
+
 export default class App extends Component {
   static createTodo(label) {
     return {
@@ -15,22 +22,23 @@ export default class App extends Component {
 
   state = {
     todos: [],
-    currentFilter: 'All',
+    currentFilter: FILTER_TYPES.all,
+
   };
 
   addTodo = (label) => {
-    this.setState((state) => {
+    this.setState((prevState) => {
       const todo = App.createTodo(label);
 
       return {
-        todos: [...state.todos, todo],
+        todos: [...prevState.todos, todo],
       };
     });
   };
 
   setDoneStatus = (id) => {
-    this.setState(state => ({
-      todos: state.todos.map((todo) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
         if (id === todo.id) {
           return {
             ...todo,
@@ -44,42 +52,54 @@ export default class App extends Component {
   };
 
   destroyTodo = (id) => {
-    this.setState(state => ({
-      todos: state.todos.filter(todo => todo.id !== id),
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
     }));
   };
 
-  showDoneInFooter = () => this.state.todos.filter(todo => todo.done).length;
+  ActiveTodoCounter = () => this.state.todos.filter(todo => todo.done).length;
 
-  topToggle = (statusChecked) => {
-    this.setState(state => ({
-      todos: state.todos.map(todo => ({
-        ...todo,
-        done: statusChecked,
-      })),
+  topToggle = () => {
+    if (this.state.todos.some(todo => todo.done)) {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          done: false,
+        })),
+      }));
+    }
+
+    if (this.state.todos.some(todo => !todo.done)) {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          done: true,
+        })),
+      }));
+    }
+  };
+
+  clearCompleted = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.done),
     }));
   };
 
-  setStateByEvenTargetValue = (e) => {
-    switch (e.target.textContent) {
-      case 'Clear completed':
-        this.setState(state => ({
-          todos: state.todos.filter(todo => !todo.done),
-        }));
-        break;
-      case 'Active':
+  setFilters = (item) => {
+    switch (item) {
+      case FILTER_TYPES.all:
         this.setState({
-          currentFilter: 'Active',
+          currentFilter: FILTER_TYPES.all,
         });
         break;
-      case 'Completed':
+      case FILTER_TYPES.active:
         this.setState({
-          currentFilter: 'Completed',
+          currentFilter: FILTER_TYPES.active,
         });
         break;
-      case 'All':
+      case FILTER_TYPES.completed:
         this.setState({
-          currentFilter: 'All',
+          currentFilter: FILTER_TYPES.completed,
         });
         break;
 
@@ -92,15 +112,15 @@ export default class App extends Component {
 
     const renderTodos = () => {
       switch (currentFilter) {
-        case 'Active':
+        case FILTER_TYPES.active:
 
           return todos.filter(todo => !todo.done);
-        case 'Completed':
+        case FILTER_TYPES.completed:
 
           return todos.filter(todo => todo.done);
 
         default:
-          return [...todos];
+          return todos;
       }
     };
 
@@ -127,9 +147,11 @@ export default class App extends Component {
         </section>
 
         <Footer
-          todos={todos}
-          setStateByEvenTargetValue={this.setStateByEvenTargetValue}
-          TodosDone={this.showDoneInFooter}
+          clearCompleted={this.clearCompleted}
+          length={todos.length}
+          filterTypes={FILTER_TYPES}
+          setFilters={this.setFilters}
+          TodosDone={this.ActiveTodoCounter}
         />
 
       </section>
