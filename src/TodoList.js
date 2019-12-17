@@ -7,6 +7,7 @@ const TodoList = ({ todos, changeTodoStatus, deleteTodo }) => (
     {todos.map(todo => (
       <TodoItem
         todo={todo}
+        key={todo.id}
         changeTodoStatus={changeTodoStatus}
         deleteTodo={deleteTodo}
       />

@@ -15,7 +15,7 @@ class TodosFilters extends React.Component {
     return (
       <ul className="filters">
         {this.tabs.map((tab, index) => (
-          <li>
+          <li key={tab}>
             <a
               href="#/"
               onClick={() => this.handleClick(index, tab)}

@@ -15,7 +15,7 @@ class TodoItem extends React.Component {
     const { id, title, completed } = todo;
 
     return (
-      <li key={id} className={completed && 'completed'}>
+      <li key={id} className={completed ? 'completed' : ''}>
         <div className="view">
           <input
             type="checkbox"

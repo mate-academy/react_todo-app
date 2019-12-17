@@ -47,10 +47,12 @@ class App extends React.Component {
   };
 
   changeAllStatuses = (e) => {
+    const status = e.target.checked;
+
     this.setState(state => ({
       todos: state.todos.map(todo => ({
         ...todo,
-        completed: e.target.checked,
+        completed: status,
       })),
     }));
   };
@@ -104,7 +106,7 @@ selectVisibleTodos = () => this.state.todos.filter((todo) => {
               onChange={this.changeAllStatuses}
             />
             <label htmlFor="toggle-all">
-Mark all as complete
+            Mark all as complete
             </label>
             <TodoList
               todos={this.selectVisibleTodos()}
