@@ -4,9 +4,10 @@ import TodoList from './components/TodoList';
 class App extends React.Component {
   state = {
     todos: [],
-    todosCopy: [],
+    // todosCopy: [],
     title: '',
     counter: 4,
+    filter: 'All',
   }
 
   onInputChange = (event) => {
@@ -27,7 +28,7 @@ class App extends React.Component {
         todos: [...prevState.todos, newitem],
         counter: prevState.counter + 1,
         title: '',
-        todosCopy: prevState.todos,
+        // todosCopy: [...prevState.todos, newitem],
       }));
     }
   }
@@ -44,28 +45,28 @@ class App extends React.Component {
           completed: !todo.completed,
         };
       }),
-      todosCopy: prevState.todos,
+      // todosCopy: prevState.todos,
     }));
   }
 
   deleteTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => id !== todo.id),
-      todosCopy: prevState.todos,
+      // todosCopy: prevState.todos,
     }));
   }
 
   togleCompleted = () => {
     if (this.state.todos.filter(todo => !todo.completed).length > 0) {
       this.setState(prevState => ({
-        todosCopy: prevState.todos.map(todo => ({
+        todos: prevState.todos.map(todo => ({
           ...todo,
           completed: true,
         })),
       }));
     } else {
       this.setState(prevState => ({
-        todosCopy: prevState.todos.map(todo => ({
+        todos: prevState.todos.map(todo => ({
           ...todo,
           completed: false,
         })),
@@ -73,22 +74,40 @@ class App extends React.Component {
     }
   }
 
-  showAll = () => {
-    this.setState(prevState => ({
-      todosCopy: prevState.todos.filter(todo => true),
-    }));
+  // showAll = () => {
+  //   this.setState(prevState => ({
+  //     todosCopy: prevState.todos.filter(todo => true),
+  //   }));
+  // }
+
+  // showActive = () => {
+  //   this.setState(prevState => ({
+  //     todosCopy: prevState.todos.filter(todo => !todo.completed),
+  //   }));
+  // }
+
+  // showCompleted = () => {
+  //   this.setState(prevState => ({
+  //     todosCopy: prevState.todos.filter(todo => todo.completed),
+  //   }));
+  // }
+
+  filterHandler = (paramtr) => {
+    this.setState({
+      filter: paramtr,
+    });
   }
 
-  showActive = () => {
-    this.setState(prevState => ({
-      todosCopy: prevState.todos.filter(todo => !todo.completed),
-    }));
-  }
+  todosFilter = (item) => {
+    if (this.state.filter === 'Active') {
+      return !item.completed;
+    }
 
-  showCompleted = () => {
-    this.setState(prevState => ({
-      todosCopy: prevState.todos.filter(todo => todo.completed),
-    }));
+    if (this.state.filter === 'Completed') {
+      return item.completed;
+    }
+
+    return true;
   }
 
   removeCompleted = () => {
@@ -124,48 +143,11 @@ class App extends React.Component {
           </label>
 
           <ul className="todo-list">
-
             <TodoList
-              todos={this.state.todosCopy}
+              todos={this.state.todos.filter(this.todosFilter)}
               checkboxChange={this.checkboxChange}
               deleteTodo={this.deleteTodo}
             />
-
-            {/* <li>
-              <div className="view">
-                <input type="checkbox" className="toggle" id="todo-1" />
-                <label htmlFor="todo-1">asdfghj</label>
-                <button type="button" className="destroy" />
-              </div>
-              <input type="text" className="edit" />
-            </li> */}
-
-            {/* <li className="completed">
-              <div className="view">
-                <input type="checkbox" checked className="toggle" id="todo-2" />
-                <label htmlFor="todo-2">qwertyuio</label>
-                <button type="button" className="destroy" />
-              </div>
-              <input type="text" className="edit" />
-            </li>
-
-            <li className="editing">
-              <div className="view">
-                <input type="checkbox" className="toggle" id="todo-3" />
-                <label htmlFor="todo-3">zxcvbnm</label>
-                <button type="button" className="destroy" />
-              </div>
-              <input type="text" className="edit" />
-            </li>
-
-            <li>
-              <div className="view">
-                <input type="checkbox" className="toggle" id="todo-4" />
-                <label htmlFor="todo-4">1234567890</label>
-                <button type="button" className="destroy" />
-              </div>
-              <input type="text" className="edit" />
-            </li> */}
           </ul>
         </section>
 
@@ -176,19 +158,31 @@ class App extends React.Component {
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected" onClick={this.showAll}>
+              <a
+                href="#/"
+                className={this.state.filter === 'All' ? 'selected' : ''}
+                onClick={() => this.filterHandler('All')}
+              >
                 All
               </a>
             </li>
 
             <li>
-              <a href="#/active" onClick={this.showActive}>
+              <a
+                href="#/active"
+                className={this.state.filter === 'Active' ? 'selected' : ''}
+                onClick={() => this.filterHandler('Active')}
+              >
                 Active
               </a>
             </li>
 
             <li>
-              <a href="#/completed" onClick={this.showCompleted}>
+              <a
+                href="#/completed"
+                className={this.state.filter === 'Completed' ? 'selected' : ''}
+                onClick={() => this.filterHandler('Completed')}
+              >
                 Completed
               </a>
             </li>
