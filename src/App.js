@@ -4,9 +4,9 @@ import TodoList from './components/TodoList';
 class App extends React.Component {
   state = {
     todos: [],
+    todosCopy: [],
     title: '',
     counter: 4,
-    itemsLeft: 0,
   }
 
   onInputChange = (event) => {
@@ -22,11 +22,12 @@ class App extends React.Component {
       completed: false,
     };
 
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && this.state.title) {
       this.setState(prevState => ({
         todos: [...prevState.todos, newitem],
         counter: prevState.counter + 1,
         title: '',
+        todosCopy: prevState.todos,
       }));
     }
   }
@@ -43,12 +44,56 @@ class App extends React.Component {
           completed: !todo.completed,
         };
       }),
+      todosCopy: prevState.todos,
     }));
   }
 
   deleteTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => id !== todo.id),
+      todosCopy: prevState.todos,
+    }));
+  }
+
+  togleCompleted = () => {
+    if (this.state.todos.filter(todo => !todo.completed).length > 0) {
+      this.setState(prevState => ({
+        todosCopy: prevState.todos.map(todo => ({
+          ...todo,
+          completed: true,
+        })),
+      }));
+    } else {
+      this.setState(prevState => ({
+        todosCopy: prevState.todos.map(todo => ({
+          ...todo,
+          completed: false,
+        })),
+      }));
+    }
+  }
+
+  showAll = () => {
+    this.setState(prevState => ({
+      todosCopy: prevState.todos.filter(todo => true),
+    }));
+  }
+
+  showActive = () => {
+    this.setState(prevState => ({
+      todosCopy: prevState.todos.filter(todo => !todo.completed),
+    }));
+  }
+
+  showCompleted = () => {
+    this.setState(prevState => ({
+      todosCopy: prevState.todos.filter(todo => todo.completed),
+    }));
+  }
+
+  removeCompleted = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
@@ -68,25 +113,32 @@ class App extends React.Component {
         </header>
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onClick={this.togleCompleted}
+          />
+          <label htmlFor="toggle-all">
+            Mark all as complete
+          </label>
 
           <ul className="todo-list">
 
             <TodoList
-              todos={this.state.todos}
+              todos={this.state.todosCopy}
               checkboxChange={this.checkboxChange}
               deleteTodo={this.deleteTodo}
             />
 
-            <li>
+            {/* <li>
               <div className="view">
                 <input type="checkbox" className="toggle" id="todo-1" />
                 <label htmlFor="todo-1">asdfghj</label>
                 <button type="button" className="destroy" />
               </div>
               <input type="text" className="edit" />
-            </li>
+            </li> */}
 
             {/* <li className="completed">
               <div className="view">
@@ -119,25 +171,36 @@ class App extends React.Component {
 
         <footer className="footer">
           <span className="todo-count">
-            {this.state.itemsLeft}
+            {this.state.todos.filter(todo => !todo.completed).length}
           </span>
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected">All</a>
+              <a href="#/" className="selected" onClick={this.showAll}>
+                All
+              </a>
             </li>
 
             <li>
-              <a href="#/active">Active</a>
+              <a href="#/active" onClick={this.showActive}>
+                Active
+              </a>
             </li>
 
             <li>
-              <a href="#/completed">Completed</a>
+              <a href="#/completed" onClick={this.showCompleted}>
+                Completed
+              </a>
             </li>
           </ul>
 
-          <button type="button" className="clear-completed">
-            Clear completed
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={this.removeCompleted}
+          >
+            {this.state.todos.find(todo => todo.completed)
+              ? 'Clear completed' : ''}
           </button>
         </footer>
       </section>
