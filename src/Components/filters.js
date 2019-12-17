@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Filters
-  = ({ filters, list, clearCompleted, filterTabs, activeFilter }) => (
+  // eslint-disable-next-line max-len
+  = ({ filters, list, clearCompleted, filterTabs, activeFilter, lengthFilteredTodos }) => (
 
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
         items left&nbsp;
-        {list.filter(item => item.completed === false).length}
+        {lengthFilteredTodos}
       </span>
 
       <ul className="filters">
@@ -46,13 +47,14 @@ Filters.propTypes = {
   clearCompleted: PropTypes.func.isRequired,
   filterTabs: PropTypes.func.isRequired,
   activeFilter: PropTypes.arrayOf(PropTypes.string),
-
+  lengthFilteredTodos: PropTypes.number,
 };
 
 Filters.defaultProps = {
   filters: [],
   list: [],
   activeFilter: [],
+  lengthFilteredTodos: null,
 };
 
 export default Filters;

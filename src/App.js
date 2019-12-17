@@ -84,6 +84,8 @@ class App extends React.Component {
 
   render() {
     const { list, activeFilter } = this.state;
+    const lengthFilteredTodos
+      = list.filter(item => item.completed === false).length;
 
     return (
       <section className="todoapp">
@@ -121,6 +123,7 @@ class App extends React.Component {
           activeFilter={activeFilter}
           clearCompleted={this.clearCompleted}
           filterTabs={this.filterTabs}
+          lengthFilteredTodos={lengthFilteredTodos}
         />
 
       </section>
