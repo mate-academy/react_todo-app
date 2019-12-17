@@ -8,7 +8,6 @@ const TodoFilters = ({ selectedFilterItem, setItemFilter }) => (
     <li>
       <a
         href="#/"
-        // работа с classnames через cn
         className={cn({ selected: selectedFilterItem === 'all' })}
         onClick={() => setItemFilter(FILTER_TYPES.all)}
       >
@@ -19,7 +18,7 @@ const TodoFilters = ({ selectedFilterItem, setItemFilter }) => (
     <li>
       <a
         href="#/active"
-        className={selectedFilterItem === 'active' ? 'selected' : ''}
+        className={cn({ selected: selectedFilterItem === 'active' })}
         onClick={() => setItemFilter(FILTER_TYPES.active)}
       >
               Active
@@ -29,7 +28,7 @@ const TodoFilters = ({ selectedFilterItem, setItemFilter }) => (
     <li>
       <a
         href="#/completed"
-        className={selectedFilterItem === 'completed' ? 'selected' : ''}
+        className={cn({ selected: selectedFilterItem === 'completed' })}
         onClick={() => setItemFilter(FILTER_TYPES.completed)}
       >
                 Completed

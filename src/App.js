@@ -69,7 +69,7 @@ export class App extends React.Component {
             };
           }
 
-          return { ...item };
+          return item;
         }),
       }));
     };
@@ -87,8 +87,8 @@ export class App extends React.Component {
     isAllChecked = () => this.state.todos.every(item => item.completed);
 
     clearCompletedItems = () => {
-      this.setState(state => ({
-        todos: state.todos.filter(item => !item.completed),
+      this.setState(prevState => ({
+        todos: prevState.todos.filter(item => !item.completed),
       }));
     };
 
@@ -137,6 +137,7 @@ export class App extends React.Component {
 
           <TodoList
             todos={filteredItems}
+            todosLength={this.state.todos.length !== 0}
             handleItemDestroyer={this.handleItemDestroyer}
             handleItemsCheck={this.handleItemsChecked}
             filterTodoItems={this.filterTodoItems}

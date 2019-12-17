@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TodoList = ({
+  todosLength,
   isAllChecked,
   todos,
   handleItemDestroyer,
@@ -10,7 +11,7 @@ const TodoList = ({
 }) => (
 
   <section className="main" style={{ display: 'block' }}>
-    {todos.length >= 0 && (
+    {todosLength && (
       <>
         <input
           type="checkbox"
@@ -51,6 +52,7 @@ const TodoList = ({
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todosLength: PropTypes.arrayOf(PropTypes.object).isRequired,
   isAllChecked: PropTypes.func.isRequired,
   handleItemDestroyer: PropTypes.func.isRequired,
   handleItemsCheck: PropTypes.func.isRequired,
