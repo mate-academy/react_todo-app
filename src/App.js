@@ -32,6 +32,7 @@ class App extends React.Component {
       return {
         todosList: [...todosList, todo],
         createNewTodo: '',
+        isCompleted: false,
       };
     });
   }
@@ -39,6 +40,7 @@ class App extends React.Component {
   clearCompleted = () => {
     this.setState(state => ({
       todosList: state.todosList.filter(todo => !todo.complete),
+      isCompleted: false,
     }));
   }
 
@@ -137,7 +139,15 @@ class App extends React.Component {
             id="toggle-all"
             className="toggle-all"
           />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          <label
+            htmlFor="toggle-all"
+            style={{
+              display: `${todosList.length > 0
+                ? 'block' : 'none'}`,
+            }}
+          >
+            Mark all as complete
+          </label>
           <TodoList
             filtresTodos={this.filtresTodos()}
             changeStateComplete={changeStateComplete}
