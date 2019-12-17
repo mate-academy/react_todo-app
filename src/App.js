@@ -1,6 +1,7 @@
 import React from 'react';
 import NewTodo from './NewTodo';
 import TodoList from './TodoList';
+import TodosFilters from './TodosFilter';
 
 class App extends React.Component {
   state = {
@@ -50,6 +51,12 @@ class App extends React.Component {
       })),
     }));
   };
+
+  filterTodos = (selectedFilter) => {
+    this.setState({
+      selectedFilter,
+    });
+  }
 
   deleteTodo = (todoId) => {
     this.setState(state => ({
@@ -111,6 +118,8 @@ class App extends React.Component {
               {' '}
               items left
             </span>
+
+            <TodosFilters filterTodos={this.filterTodos} />
 
             {todos.some(item => item.completed === true) && (
               <button
