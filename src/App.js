@@ -26,16 +26,16 @@ class App extends React.Component {
     }));
   };
 
-  changeTodoStatus = (todoId, status) => {
+  changeTodoStatus = (todoId) => {
     this.setState(state => ({
-      todos: state.todos.map((item) => {
-        if (item.id !== todoId) {
-          return item;
+      todos: state.todos.map((todo) => {
+        if (todo.id !== todoId) {
+          return todo;
         }
 
         return {
-          ...item,
-          completed: status,
+          ...todo,
+          completed: !todo.completed,
         };
       }),
     }));
@@ -45,8 +45,8 @@ class App extends React.Component {
     const status = event.target.checked;
 
     this.setState(state => ({
-      todos: state.todos.map(item => ({
-        ...item,
+      todos: state.todos.map(todo => ({
+        ...todo,
         completed: status,
       })),
     }));
@@ -75,9 +75,9 @@ class App extends React.Component {
       case 'All':
         return true;
       case 'isActive':
-        return todo.completed === false;
+        return !todo.completed;
       case 'Completed':
-        return todo.completed === true;
+        return todo.completed;
       default:
         return true;
     }
@@ -87,20 +87,23 @@ class App extends React.Component {
     const { todos } = this.state;
 
     return (
-      <section>
-        <header>
+      <section className="todoapp">
+        <header className="header">
           <h1>todos</h1>
           <NewTodo addNewTodo={this.addNewTodo} />
         </header>
 
         {(todos.length > 0) && (
-          <section style={{ display: 'block' }}>
+          <section className="main" style={{ display: 'block' }}>
             <input
               type="checkbox"
               id="toggle-all"
+              className="toggle-all"
               checked={todos.every(todo => todo.completed)}
               onChange={this.changeAllStatuses}
             />
+
+            <label htmlFor="toggle-all">Complete</label>
 
             <TodoList
               todos={todos.filter(this.visibleTodos)}
@@ -124,6 +127,7 @@ class App extends React.Component {
             {todos.some(item => item.completed === true) && (
               <button
                 type="button"
+                className="clear-completed"
                 style={{ display: 'block' }}
                 onClick={this.clearAllCompletedTodos}
               >

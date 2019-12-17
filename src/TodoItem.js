@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class TodoItem extends React.Component {
-  handleTodoStatus = (event) => {
-    this.props.changeTodoStatus(this.props.todo.id, event.target.checked);
+  handleTodoStatus = () => {
+    this.props.changeTodoStatus(this.props.todo.id);
   };
 
   handleClick = (todoId) => {

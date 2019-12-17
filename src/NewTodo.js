@@ -27,6 +27,7 @@ class NewTodo extends React.Component {
         <input
           value={this.state.inputValue}
           onChange={this.handleChange}
+          className="new-todo"
           placeholder="What needs to be done?"
         />
       </form>
