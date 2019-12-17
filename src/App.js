@@ -3,21 +3,20 @@ import React from 'react';
 import FormInput from './components/header/FormInput';
 import TodoItem from './components/main/TodoItem';
 import Footer from './components/footer/Footer';
+import ItemsLeft from './components/footer/ItemsLeft';
+import ClearCompleted from './components/footer/ClearCompleted';
 
-const todosListArr = [
-  {
-    id: 1,
-    title: 'NewTodo',
-    status: false,
-  },
-];
+const FILTERS = {
+  all: 'all',
+  active: 'active',
+  completed: 'completed',
+};
 
 class App extends React.Component {
   state = {
-    todos: [...todosListArr],
-    // eslint-disable-next-line react/no-unused-state
-    visibleTodos: [...todosListArr],
-    activeLink: 'all',
+    todos: [],
+    filter: FILTERS.all,
+
     itemsMany: true,
     // eslint-disable-next-line react/no-unused-state
     toggleActive: false,
@@ -48,29 +47,8 @@ class App extends React.Component {
     }));
   };
 
-  filterTodosAll = () => {
-    this.setState(({ todos, showingTodos }) => ({
-      activeLink: 'all',
-      todos: [...todos],
-    }));
-  };
-
-  filterTodosActive = () => {
-    this.setState(({ todos }) => ({
-      activeLink: 'active',
-      todos: todos
-        .filter(todo => (todo.status === false)),
-    }));
-  };
-
-  filterTodosCompleted = () => {
-    this.setState(({ todos, showingTodos }) => ({
-      // eslint-disable-next-line react/no-unused-state
-      showingTodos: [...todos],
-      activeLink: 'completed',
-      todos: todos
-        .filter(todo => (todo.status === true)),
-    }));
+  setFilter = (type) => {
+    this.setState(() => ({ filter: FILTERS[type] }));
   };
 
   clearCompleted = () => {
@@ -119,12 +97,12 @@ class App extends React.Component {
             className="toggle-all"
             onClick={() => this.handleToggleAll()}
           />
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
             <TodoItem
               todos={this.state.todos}
+              filter={this.state.filter}
               changeStatus={this.changeStatus}
               deleteTodo={this.deleteTodo}
             />
@@ -133,15 +111,20 @@ class App extends React.Component {
 
         {!!this.state.todos.length
         && (
-          <Footer
-            todos={this.state.todos}
-            itemsMany={this.state.itemsMany}
-            activeLink={this.state.activeLink}
-            filterTodosAll={this.filterTodosAll}
-            filterTodosActive={this.filterTodosActive}
-            filterTodosCompleted={this.filterTodosCompleted}
-            clearCompleted={this.clearCompleted}
-          />
+          <footer className="footer" styFormInputle={{ display: 'block' }}>
+            <ItemsLeft
+              todos={this.state.todos}
+              itemsMany={this.state.itemsMany}
+            />
+            <Footer
+              filter={this.state.filter}
+              setFilter={this.setFilter}
+            />
+            <ClearCompleted
+              todos={this.state.todos}
+              clearCompleted={this.clearCompleted}
+            />
+          </footer>
         )}
       </section>
     );

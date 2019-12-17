@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 const ItemsLeft = ({ todos, itemsMany }) => {
   let counter = 0;
   const todosLeft = todos.map((todo) => {
@@ -19,7 +19,7 @@ const ItemsLeft = ({ todos, itemsMany }) => {
   }
 
   return (
-    <span>
+    <span className="todo-count">
       {counterOfItems}
       &nbsp;
       {!localItemsMany
@@ -28,6 +28,11 @@ const ItemsLeft = ({ todos, itemsMany }) => {
       && (<span>items left</span>)}
     </span>
   );
+};
+
+ItemsLeft.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  itemsMany: PropTypes.bool.isRequired,
 };
 
 export default ItemsLeft;

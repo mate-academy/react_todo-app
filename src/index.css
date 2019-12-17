@@ -149,6 +149,11 @@ body {
   color: #737373;
 }
 
+.toggle:checked + label {
+  text-decoration: line-through;
+  color: #dedede;
+}
+
 .todo-list {
   margin: 0;
   padding: 0;
