@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Filters
-  = ({ filters, list, clearCompleted, filteredList, activeFilter }) => (
+  = ({ filters, list, clearCompleted, filterTabs, activeFilter }) => (
 
     <footer className="footer" style={{ display: 'block' }}>
       <span className="todo-count">
@@ -19,7 +19,7 @@ const Filters
               className={activeFilter === item
                 ? 'selected'
                 : ''}
-              onClick={() => filteredList(item)}
+              onClick={() => filterTabs(item)}
             >
               {item}
             </a>
@@ -44,7 +44,7 @@ Filters.propTypes = {
   filters: PropTypes.objectOf(PropTypes.string),
   list: PropTypes.arrayOf(PropTypes.object),
   clearCompleted: PropTypes.func.isRequired,
-  filteredList: PropTypes.func.isRequired,
+  filterTabs: PropTypes.func.isRequired,
   activeFilter: PropTypes.arrayOf(PropTypes.string),
 
 };

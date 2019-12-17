@@ -39,13 +39,13 @@ class App extends React.Component {
     }));
   };
 
-  filteredList = (filter) => {
+  filterTabs = (filter) => {
     this.setState({
       activeFilter: filter,
     });
   };
 
-  handlerFilterTasks = () => {
+  handleFilterTasks = () => {
     const { list, activeFilter } = this.state;
     const { completed, active } = filters;
 
@@ -108,7 +108,7 @@ class App extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
-            list={this.handlerFilterTasks()}
+            list={this.handleFilterTasks()}
             handleRemove={this.handleRemove}
             handleCheck={this.handleCheck}
           />
@@ -120,7 +120,7 @@ class App extends React.Component {
           list={list}
           activeFilter={activeFilter}
           clearCompleted={this.clearCompleted}
-          filteredList={this.filteredList}
+          filterTabs={this.filterTabs}
         />
 
       </section>
