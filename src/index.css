@@ -45,7 +45,8 @@ body {
   background: #fff;
   margin: 130px 0 40px;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+    0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
 
 .todoapp input::-webkit-input-placeholder {
@@ -94,9 +95,9 @@ body {
   font-family: inherit;
   font-weight: inherit;
   line-height: 1.4em;
-  border: 0;
   color: inherit;
   padding: 6px;
+  border: 1px solid #999;
   box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -114,7 +115,6 @@ body {
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
-  display: block;
 }
 
 .toggle-all {
@@ -200,17 +200,13 @@ body {
 }
 
 .todo-list li .toggle + label {
-  /* eslint-disable */
   background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E");
-  /* eslint-enable */
   background-repeat: no-repeat;
   background-position: center left;
 }
 
 .todo-list li .toggle:checked + label {
-  /* eslint-disable */
   background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E");
-  /* eslint-enable */
 }
 
 .todo-list li label {
@@ -267,7 +263,6 @@ body {
   height: 20px;
   text-align: center;
   border-top: 1px solid #e6e6e6;
-  display: block;
 }
 
 .footer:before {
@@ -331,7 +326,6 @@ html .clear-completed:active {
   line-height: 20px;
   text-decoration: none;
   cursor: pointer;
-  display: block;
 }
 
 .clear-completed:hover {
@@ -379,7 +373,7 @@ html .clear-completed:active {
   .footer {
     height: 50px;
   }
-
+  
   .filters {
     bottom: 10px;
   }

@@ -103,9 +103,9 @@ selectVisibleTodos = () => this.state.todos.filter((todo) => {
               checked={todos.every(todo => todo.completed)}
               onChange={this.changeAllStatuses}
             />
-            {/* eslint-disable-next-line max-len */}
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="toggle-all">Mark all as complete</label>
+            <label htmlFor="toggle-all">
+Mark all as complete
+            </label>
             <TodoList
               todos={this.selectVisibleTodos()}
               changeTodoStatus={this.changeTodoStatus}
