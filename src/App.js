@@ -19,14 +19,21 @@ class App extends React.Component {
       completed: 'completed',
       active: 'active',
     },
+    editValue: '',
   }
 
   componentDidUpdate() {
     localStorage.setItem('todos', JSON.stringify(this.state.todos));
   }
 
+  editChangeHandler = ({ target }) => {
+    this.setState({
+      editValue: target.value,
+    });
+  }
+
   setEditedValue = (event, id, value) => {
-    if (!event.target.value) {
+    if (!event.target.value || event.target.value.trim() === '') {
       this.deleteTodo(id);
     }
 
@@ -42,6 +49,7 @@ class App extends React.Component {
           editable: false,
         };
       }),
+      editValue: '',
     }));
   }
 
@@ -146,6 +154,7 @@ class App extends React.Component {
       todos,
       currentFilter,
       filterTypes,
+      editValue,
     } = this.state;
     const visibleTodos = this.getFilteredTodos(currentFilter);
 
@@ -156,14 +165,15 @@ class App extends React.Component {
         />
         <TodoList
           todos={todos}
+          editValue={editValue}
           visibleTodos={visibleTodos}
           selectAllTodos={this.selectAllTodos}
           deleteTodo={this.deleteTodo}
           toggleTodoCompleted={this.toggleTodoCompleted}
           handleKeyPress={this.handleKeyPress}
-          editChangeHanlder={this.editChangeHanlder}
           editTodo={this.editTodo}
           setEditedValue={this.setEditedValue}
+          editChangeHandler={this.editChangeHandler}
         />
         <Footer
           todos={todos}

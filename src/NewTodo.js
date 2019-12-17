@@ -18,6 +18,10 @@ class NewTodo extends React.Component {
         return prevState.valueTitle;
       }
 
+      if (prevState.valueTitle.trim() === '') {
+        return '';
+      }
+
       this.props.addTodo({
         id: Date.now(),
         title: prevState.valueTitle,
