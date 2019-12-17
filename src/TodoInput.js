@@ -10,12 +10,13 @@ class TodoInput extends React.Component {
     this.setState({ createNewTodo: event.target.value });
   };
 
-  editTodos = (createNewTodo) => {
-    if (!createNewTodo.length) {
+  editTodos = (event) => {
+    event.preventDefault();
+    if (!this.state.createNewTodo.length) {
       return;
     }
 
-    this.props.addNewTodo(createNewTodo);
+    this.props.addNewTodo(this.state.createNewTodo);
     this.setState({ createNewTodo: '' });
   }
 
@@ -23,7 +24,7 @@ class TodoInput extends React.Component {
     const { createNewTodo } = this.state;
 
     return (
-      <form onSubmit={() => this.editTodos(createNewTodo)}>
+      <form onSubmit={this.editTodos}>
         <input
           className="new-todo"
           placeholder="What needs to be done?"

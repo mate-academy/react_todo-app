@@ -87,16 +87,18 @@ class App extends React.Component {
         };
       }),
     }));
+    setTimeout(this.editAllChecked);
+  }
 
+  editAllChecked = () => {
     if (this.state.todosList
-      .filter(todo => !todo.complete).length < this.state.todosList.length) {
-      this.setState({ isCompleted: false });
+      .filter(todo => !todo.complete).length === 0) {
+      this.setState({ isCompleted: true });
     }
 
     if (this.state.todosList
-      .filter(todo => todo.complete).length === this.state.todosList
-      .length - 1) {
-      this.setState({ isCompleted: true });
+      .filter(todo => !todo.complete).length > 0) {
+      this.setState({ isCompleted: false });
     }
   }
 
