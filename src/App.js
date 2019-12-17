@@ -6,6 +6,7 @@ class App extends React.Component {
     todos: [],
     title: '',
     counter: 4,
+    itemsLeft: 0,
   }
 
   onInputChange = (event) => {
@@ -30,6 +31,27 @@ class App extends React.Component {
     }
   }
 
+  checkboxChange = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (id !== todo.id) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }),
+    }));
+  }
+
+  deleteTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => id !== todo.id),
+    }));
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -51,7 +73,11 @@ class App extends React.Component {
 
           <ul className="todo-list">
 
-            <TodoList todos={this.state.todos} />
+            <TodoList
+              todos={this.state.todos}
+              checkboxChange={this.checkboxChange}
+              deleteTodo={this.deleteTodo}
+            />
 
             <li>
               <div className="view">
@@ -62,7 +88,7 @@ class App extends React.Component {
               <input type="text" className="edit" />
             </li>
 
-            <li className="completed">
+            {/* <li className="completed">
               <div className="view">
                 <input type="checkbox" checked className="toggle" id="todo-2" />
                 <label htmlFor="todo-2">qwertyuio</label>
@@ -87,13 +113,13 @@ class App extends React.Component {
                 <button type="button" className="destroy" />
               </div>
               <input type="text" className="edit" />
-            </li>
+            </li> */}
           </ul>
         </section>
 
         <footer className="footer">
           <span className="todo-count">
-            3 items left
+            {this.state.itemsLeft}
           </span>
 
           <ul className="filters">

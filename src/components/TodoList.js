@@ -2,8 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Todo from './Todo';
 
-const TodoList = ({ todos }) => (
-  todos.map(item => <Todo todo={item} key={item.id} />)
+const TodoList = ({ todos, checkboxChange, deleteTodo }) => (
+  todos.map(item => (
+    <Todo
+      todo={item}
+      checkboxChange={checkboxChange}
+      deleteTodo={deleteTodo}
+      key={item.id}
+    />
+  ))
 );
 
 TodoList.propTypes = {
