@@ -120,7 +120,8 @@ selectVisibleTodos = () => this.state.todos.filter((todo) => {
             <span className="todo-count">
               {todos.filter(todo => !todo.completed).length}
               &nbsp;
-               items left
+              {todos.filter(todo => !todo.completed)
+                .length === 1 ? 'item left' : 'items left'}
             </span>
 
             <TodosFilters filterTodos={this.filterTodos} />
