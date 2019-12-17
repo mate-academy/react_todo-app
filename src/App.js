@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from './components/Header/Haeder';
-import Toogler from './components/Toogler/Toogler';
+import Switcher from './components/Toogler/Switcher';
 import TodoList from './components/Todolist/TodoList';
 import Footer from './components/Footer/Footer';
 
@@ -15,8 +15,7 @@ export default class App extends Component {
 
   state = {
     todos: [],
-    curentFilter: 'All',
-
+    currentFilter: 'All',
   };
 
   addTodo = (label) => {
@@ -50,48 +49,56 @@ export default class App extends Component {
     }));
   };
 
-  showDone = () => this.state.todos.filter(todo => todo.done).length;
+  showDoneInFooter = () => this.state.todos.filter(todo => todo.done).length;
 
-  setStateByEtargetValue = (e) => {
-    if (e.target.value === 'toggle-all') {
-      if (this.state.todos.some(todo => todo.done)) {
+  topToggle = (statusChecked) => {
+    this.setState(state => ({
+      todos: state.todos.map(todo => ({
+        ...todo,
+        done: statusChecked,
+      })),
+    }));
+  };
+
+  setStateByEvenTargetValue = (e) => {
+    switch (e.target.textContent) {
+      case 'Clear completed':
         this.setState(state => ({
-          todos: state.todos.map(todo => ({
-            ...todo,
-            done: false,
-          })),
+          todos: state.todos.filter(todo => !todo.done),
         }));
-      }
+        break;
+      case 'Active':
+        this.setState({
+          currentFilter: 'Active',
+        });
+        break;
+      case 'Completed':
+        this.setState({
+          currentFilter: 'Completed',
+        });
+        break;
+      case 'All':
+        this.setState({
+          currentFilter: 'All',
+        });
+        break;
 
-      if (this.state.todos.some(todo => !todo.done)) {
-        this.setState(state => ({
-          todos: state.todos.map(todo => ({
-            ...todo,
-            done: true,
-          })),
-        }));
-      }
+      default:
     }
-
-    if (e.target.textContent === 'Clear completed') {
-      this.setState(state => ({
-        todos: state.todos.filter(todo => !todo.done),
-      }));
-    }
-
-    this.setState({
-      curentFilter: e.target.textContent,
-    });
   };
 
   render() {
-    const { todos, curentFilter } = this.state;
+    const { todos, currentFilter } = this.state;
+
     const renderTodos = () => {
-      switch (curentFilter) {
+      switch (currentFilter) {
         case 'Active':
+
           return todos.filter(todo => !todo.done);
         case 'Completed':
+
           return todos.filter(todo => todo.done);
+
         default:
           return [...todos];
       }
@@ -106,9 +113,9 @@ export default class App extends Component {
 
         <section className="main">
 
-          <Toogler
-            todos={renderTodos()}
-            setStateByEtargetValue={this.setStateByEtargetValue}
+          <Switcher
+            todos={todos}
+            topToggle={this.topToggle}
           />
 
           <TodoList
@@ -121,8 +128,8 @@ export default class App extends Component {
 
         <Footer
           todos={todos}
-          setStateByEtargetValue={this.setStateByEtargetValue}
-          TodosDone={this.showDone}
+          setStateByEvenTargetValue={this.setStateByEvenTargetValue}
+          TodosDone={this.showDoneInFooter}
         />
 
       </section>

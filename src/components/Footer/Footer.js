@@ -8,7 +8,7 @@ export default class Footer extends Component {
 
   render() {
     const { isActive } = this.state;
-    const { todos, TodosDone, setStateByEtargetValue } = this.props;
+    const { todos, TodosDone, setStateByEvenTargetValue } = this.props;
 
     return (
       <div>
@@ -17,7 +17,7 @@ export default class Footer extends Component {
           <footer className="footer">
             <span className="todo-count">
               {todos.length - TodosDone()}
-: items not finished
+              : items not finished
               <br />
 
             </span>
@@ -26,55 +26,60 @@ export default class Footer extends Component {
               <li>
                 <a
                   href="./#"
-                  onClick={(w) => {
-                    setStateByEtargetValue(w); this.setState({
+                  id="buttonALL"
+                  onClick={(event) => {
+                    setStateByEvenTargetValue(event);
+                    this.setState({
                       isActive: 'All',
                     });
                   }}
                   className={isActive === 'All' ? 'selected' : ''}
                 >
-All
+                  All
                 </a>
               </li>
 
               <li>
                 <a
                   href="./#"
-                  onClick={(w) => {
-                    setStateByEtargetValue(w); this.setState({
+                  onClick={(event) => {
+                    setStateByEvenTargetValue(event);
+                    this.setState({
                       isActive: 'Active',
                     });
                   }}
                   className={isActive === 'Active' ? 'selected' : ''}
                 >
-Active
+                  Active
                 </a>
               </li>
 
               <li>
                 <a
                   href="./#"
-                  onClick={(w) => {
-                    setStateByEtargetValue(w); this.setState({
+                  onClick={(event) => {
+                    setStateByEvenTargetValue(event);
+                    this.setState({
                       isActive: 'Completed',
                     });
                   }}
                   className={isActive === 'Completed' ? 'selected' : ''}
                 >
-Completed
+                  Completed
                 </a>
               </li>
             </ul>
-
-            <button
-              onClick={(w) => {
-                setStateByEtargetValue(w);
-              }}
-              type="button"
-              className="clear-completed"
-            >
-            Clear completed
-            </button>
+            {todos.filter(item => item.done).length > 0 && (
+              <button
+                onClick={(event) => {
+                  setStateByEvenTargetValue(event);
+                }}
+                type="button"
+                className="clear-completed"
+              >
+              Clear completed
+              </button>
+            ) }
           </footer>
         )
         }
@@ -85,5 +90,5 @@ Completed
 Footer.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
   TodosDone: PropTypes.func.isRequired,
-  setStateByEtargetValue: PropTypes.func.isRequired,
+  setStateByEvenTargetValue: PropTypes.func.isRequired,
 };
