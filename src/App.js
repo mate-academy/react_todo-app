@@ -87,7 +87,7 @@ export class App extends React.Component {
     isAllChecked = () => this.state.todos.every(item => item.completed);
 
     clearCompletedItems = () => {
-      this.setState(state => ({
+      this.setState(prevState => ({
         todos: state.todos.filter(item => !item.completed),
       }));
     };
