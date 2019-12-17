@@ -69,7 +69,7 @@ export class App extends React.Component {
             };
           }
 
-          return { ...item };
+          return item;
         }),
       }));
     };
