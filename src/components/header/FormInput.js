@@ -15,7 +15,9 @@ class FormInput extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    this.props.addTodo(this.state.inputedValue);
+    if (this.state.inputedValue) {
+      this.props.addTodo(this.state.inputedValue);
+    }
 
     this.setState({
       inputedValue: '',
