@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoList from './components/TodoList';
 import Footer from './components/Footer';
+import Header from './components/Header';
 
 export const FILTER_TYPES = {
   all: 'all',
@@ -10,7 +11,6 @@ export const FILTER_TYPES = {
 export class App extends React.Component {
     state = {
       todos: [],
-      inputText: '',
       counterId: 1,
       selectedFilterItem: FILTER_TYPES.all,
     }
@@ -25,30 +25,14 @@ export class App extends React.Component {
       return currentId;
     }
 
-    handleInputText = (event) => {
-      this.setState({
-        inputText: event.target.value,
-      });
-    }
-
-    handleInputSubmit = (event) => {
-      event.preventDefault();
-      this.setState(state => ({
-        inputText: '',
-        todos: [...state.todos, {
-          title: state.inputText,
-          completed: false,
-          id: this.getTodoId(),
-        }],
-      }));
-    }
-
-    addTodo = (id, title, complited) => {
+    addTodo = (title) => {
       this.setState(state => ({
         todos: [
           ...state.todos,
           {
-            id, inputText: title, complited,
+            id: this.getTodoId(),
+            title,
+            complited: false,
           }],
       }));
     };
@@ -117,22 +101,16 @@ export class App extends React.Component {
     render() {
       const filteredItems = this.filterTodoItems();
       const isAllChecked = this.isAllChecked();
+      const { todos } = this.state;
 
       return (
-
         <section className="todoapp">
           <form
             className="header"
             onSubmit={this.handleInputSubmit}
           >
             <h1>todos</h1>
-
-            <input
-              value={this.state.inputText}
-              className="new-todo"
-              placeholder="What needs to be done?"
-              onChange={this.handleInputText}
-            />
+            <Header addTodo={this.addTodo} />
           </form>
 
           <TodoList
@@ -152,9 +130,9 @@ export class App extends React.Component {
               selectedFilterItem={this.state.selectedFilterItem}
               setItemFilter={this.setItemFilter}
               clearCompletedItems={this.clearCompletedItems}
+              todosLeft={todos.filter(todo => !todo.completed).length}
             />
           )}
-
         </section>
       );
     }

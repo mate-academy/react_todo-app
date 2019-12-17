@@ -4,6 +4,7 @@ import TodoFilters from './TodoFilters';
 
 const Footer = ({
   todos,
+  todosLeft,
   clearCompletedItems,
   selectedFilterItem,
   setItemFilter,
@@ -13,10 +14,9 @@ const Footer = ({
     style={{ display: 'block' }}
   >
     <span className="todo-count">
-          Items left:
-      {todos.filter(todo => (
-        !todo.completed
-      )).length}
+      Items Left:
+      {' '}
+      {todosLeft}
     </span>
 
     <TodoFilters
@@ -39,6 +39,7 @@ const Footer = ({
 
 Footer.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todosLeft: PropTypes.number.isRequired,
   selectedFilterItem: PropTypes.string.isRequired,
   clearCompletedItems: PropTypes.func.isRequired,
   setItemFilter: PropTypes.func.isRequired,
