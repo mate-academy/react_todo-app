@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './todoItem';
 
-const TodoList = ({ list, handleRemove }) => (
+// eslint-disable-next-line react/prop-types
+const TodoList = ({ list, handleRemove, setFilter, handleCheck }) => (
   <ul
     className="todo-list"
   >
@@ -13,6 +14,8 @@ const TodoList = ({ list, handleRemove }) => (
         item={item}
         i={i}
         handleRemove={handleRemove}
+        handleCheck={handleCheck}
+        setFilter={setFilter}
       />
     ))}
   </ul>

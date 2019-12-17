@@ -5,13 +5,15 @@ class Filters extends React.Component {
   state = { selectedIndex: 0 };
 
   render() {
-    const { filters } = this.props;
+    // eslint-disable-next-line react/prop-types
+    const { filters, list, clearCompleted } = this.props;
     const { selectedIndex } = this.state;
 
     return (
       <footer className="footer" style={{ display: 'block' }}>
         <span className="todo-count">
-          3 items left
+        items left&nbsp;
+          {list.filter(item => item.completed === false).length}
         </span>
 
         <ul className="filters">
@@ -23,7 +25,9 @@ class Filters extends React.Component {
                   ? 'selected'
                   : ''}
                 onClick={() => {
-                  this.setState({ selectedIndex: i });
+                  this.setState({
+                    selectedIndex: i,
+                  });
                 }}
               >
                 {item.title}
@@ -35,8 +39,14 @@ class Filters extends React.Component {
         <button
           type="button"
           className="clear-completed"
-          style={{ display: 'block' }}
-        />
+          onClick={clearCompleted}
+          style={list.filter(task => task.completed).length > 0
+            ? { display: 'block' }
+            : { display: 'none' }
+          }
+        >
+          Clear completed
+        </button>
       </footer>
     );
   }

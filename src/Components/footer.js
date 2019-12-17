@@ -2,36 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Filters from './filters';
 
-class Footer extends React.Component {
-  state = {
-    filters: [
-      {
-        title: `All`,
-        href: `#/`,
-        id: 1,
-      },
-      {
-        title: `Active`,
-        href: `#/active`,
-        id: 2,
-      },
-      {
-        title: `Completed`,
-        href: `#/completed`,
-        id: 3,
-      },
-    ],
-  };
+// eslint-disable-next-line react/prop-types
+const Footer = ({ filters, list, clearCompleted, setFilter }) => (
+  <Filters
+    filters={filters}
+    list={list}
+    clearCompleted={clearCompleted}
+    setFilter={setFilter}
 
-  render() {
-    const { filters } = this.state;
-    const { list } = this.props;
-
-    return (
-      <Filters filters={filters} list={list} />
-    );
-  }
-}
+  />
+);
 
 Footer.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object),
