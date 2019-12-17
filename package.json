@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "keywords": [],
-  "author": "Mate Academy",
+  "author": "Vlad Mishchenko",
   "license": "GPL-3.0",
   "dependencies": {
     "prop-types": "^15.7.2",
@@ -26,7 +26,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .jsx,.js ./src/",
+    "lint-js": "eslint --ext .jsx,.js ./src/ --fix",
+    "lint-css": "stylelint src/**/*.css src/**/*.scss --fix",
+    "lint": "npm run lint-js && npm run lint-css",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
@@ -35,7 +37,7 @@
   },
   "lint-staged": {
     "*.css": [
-      "stylelint",
+      "stylelint --fix",
       "git add"
     ],
     "*.js": [
