@@ -18,7 +18,6 @@ class App extends React.Component {
     filter: FILTERS.all,
 
     itemsMany: true,
-    // eslint-disable-next-line react/no-unused-state
     toggleActive: false,
   };
 
@@ -37,12 +36,11 @@ class App extends React.Component {
   };
 
   handleToggleAll = () => {
-    this.setState(({ todos, toggleActive }) => ({
-      // eslint-disable-next-line react/no-unused-state
-      toggleActive: !toggleActive,
-      todos: todos
+    this.setState(prevState => ({
+      toggleActive: !prevState.toggleActive,
+      todos: prevState.todos
         .map(todo => ({
-          ...todo, status: !toggleActive,
+          ...todo, status: !prevState.toggleActive,
         })),
     }));
   };
