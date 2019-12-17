@@ -51,6 +51,7 @@ class App extends React.Component {
 
   clearCompleted = () => {
     this.setState(({ todos }) => ({
+      toggleActive: false,
       todos: todos
         .filter(todo => (todo.status === false)),
     }));
