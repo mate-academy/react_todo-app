@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
 const TodoItem = ({ item, handleRemove, handleCheck }) => (
 
   <li
@@ -37,11 +36,12 @@ const TodoItem = ({ item, handleRemove, handleCheck }) => (
 
 TodoItem.propTypes = {
   item: PropTypes.objectOf(PropTypes.oneOfType([
-    PropTypes.string,
     PropTypes.number,
-    PropTypes.date,
+    PropTypes.string,
+    PropTypes.bool,
   ])),
   handleRemove: PropTypes.func.isRequired,
+  handleCheck: PropTypes.func.isRequired,
 };
 
 TodoItem.defaultProps = {

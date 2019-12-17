@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './todoItem';
 
-// eslint-disable-next-line react/prop-types
-const TodoList = ({ list, handleRemove, setFilter, handleCheck }) => (
+const TodoList = ({ list, handleRemove, handleCheck }) => (
   <ul
     className="todo-list"
   >
@@ -15,7 +14,6 @@ const TodoList = ({ list, handleRemove, setFilter, handleCheck }) => (
         i={i}
         handleRemove={handleRemove}
         handleCheck={handleCheck}
-        setFilter={setFilter}
       />
     ))}
   </ul>
@@ -24,6 +22,7 @@ const TodoList = ({ list, handleRemove, setFilter, handleCheck }) => (
 TodoList.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object),
   handleRemove: PropTypes.func.isRequired,
+  handleCheck: PropTypes.func.isRequired,
 };
 
 TodoList.defaultProps = {

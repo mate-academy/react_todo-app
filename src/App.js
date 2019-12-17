@@ -3,40 +3,29 @@ import Form from './Components/inputHeader';
 import TodoList from './Components/todoList';
 import Footer from './Components/footer';
 
-const filters = [
-  {
-    title: `All`,
-    href: `#/`,
-    id: 1,
-  },
-  {
-    title: `Active`,
-    href: `#/active`,
-    id: 2,
-  },
-  {
-    title: `Completed`,
-    href: `#/completed`,
-    id: 3,
-  },
-];
+const filters = {
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
+};
 
 class App extends React.Component {
   state = {
     list: [],
-  }
+    activeFilter: '',
+  };
 
-  addTodo = (note) => {
-    this.setState(prevState => ({
-      list: [...prevState.list,
-        {
-          id: +new Date(),
-          note,
-          completed: false,
-        },
-      ],
-    }));
-  }
+ addTodo = (note) => {
+   this.setState(prevState => ({
+     list: [...prevState.list,
+       {
+         id: +new Date(),
+         note,
+         completed: false,
+       },
+     ],
+   }));
+ };
 
   handleRemove = (taskId) => {
     this.setState(prevState => ({
@@ -50,27 +39,25 @@ class App extends React.Component {
     }));
   };
 
-  // setFilter = () => {
-  //   const { list } = this.state;
-  //
-  //   if () {
-  //
-  //   }
-  //   if () {
-  //
-  //   }
-  // }
-
-  filterAllChecked = () => {
-    this.setState(prevState => ({
-      list: prevState.list.filter(task => task.completed === false),
-    }));
+  filteredList = (filter) => {
+    this.setState({
+      activeFilter: filter,
+    });
   };
 
-  filterAllActive = () => {
-    this.setState(prevState => ({
-      list: prevState.list.filter(task => task.completed === true),
-    }));
+  handlerFilterTasks = () => {
+    const { list, activeFilter } = this.state;
+    const { completed, active } = filters;
+
+    if (activeFilter === completed) {
+      return list.filter(todo => todo.completed);
+    }
+
+    if (activeFilter === active) {
+      return list.filter(todo => !todo.completed);
+    }
+
+    return list;
   };
 
   checkedAll = (checked) => {
@@ -81,7 +68,7 @@ class App extends React.Component {
       })),
 
     }));
-  }
+  };
 
   handleCheck = (id) => {
     this.setState(state => ({
@@ -93,15 +80,15 @@ class App extends React.Component {
         : task
       )),
     }));
-  }
+  };
 
   render() {
-    const { list } = this.state;
+    const { list, activeFilter } = this.state;
 
     return (
       <section className="todoapp">
         <header className="header">
-          <h1>todos</h1>
+          <h1>Tasks</h1>
 
         </header>
 
@@ -121,7 +108,7 @@ class App extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
-            list={list}
+            list={this.handlerFilterTasks()}
             handleRemove={this.handleRemove}
             handleCheck={this.handleCheck}
           />
@@ -131,7 +118,9 @@ class App extends React.Component {
         <Footer
           filters={filters}
           list={list}
+          activeFilter={activeFilter}
           clearCompleted={this.clearCompleted}
+          filteredList={this.filteredList}
         />
 
       </section>
