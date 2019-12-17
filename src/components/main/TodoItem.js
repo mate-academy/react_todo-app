@@ -21,11 +21,11 @@ const TodoItem = ({ todos, changeStatus, deleteTodo, filter }) => (
             <input
               type="checkbox"
               className="toggle"
-              id="todos-1"
+              id={`todos-${todo.id}`}
               checked={todo.status}
               onClick={() => changeStatus(todo.id)}
             />
-            <label htmlFor="todos-1">{todo.title}</label>
+            <label htmlFor={`todos-${todo.id}`}>{todo.title}</label>
             <button
               type="button"
               className="destroy"
