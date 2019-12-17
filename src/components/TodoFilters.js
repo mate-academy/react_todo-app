@@ -19,7 +19,7 @@ const TodoFilters = ({ selectedFilterItem, setItemFilter }) => (
     <li>
       <a
         href="#/active"
-        className={selectedFilterItem === 'active' ? 'selected' : ''}
+        className={cn({ selected: selectedFilterItem === 'FILTER_TYPES.active' })}
         onClick={() => setItemFilter(FILTER_TYPES.active)}
       >
               Active
