@@ -15,7 +15,7 @@ const Filters
           <li key={item}>
             <a
               style={{ cursor: 'hand' }}
-              href="/#"
+              href="#/"
               className={activeFilter === item
                 ? 'selected'
                 : ''}
