@@ -126,6 +126,8 @@ export class App extends React.Component {
           {this.state.todos.length !== 0 && (
             <Footer
               todos={filteredItems}
+              todosFooter={this.state.todos}
+              todosLength={this.state.todos.length !== 0}
               filterTodoItems={this.filterTodoItems}
               selectedFilterItem={this.state.selectedFilterItem}
               setItemFilter={this.setItemFilter}

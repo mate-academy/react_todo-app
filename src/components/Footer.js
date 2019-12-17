@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TodoFilters from './TodoFilters';
 
 const Footer = ({
-  todos,
+  todosFooter,
   todosLeft,
   clearCompletedItems,
   selectedFilterItem,
@@ -24,7 +24,7 @@ const Footer = ({
       setItemFilter={setItemFilter}
     />
 
-    {todos.some(item => item.completed) && (
+    {todosFooter.some(item => item.completed) && (
       <button
         type="button"
         className="clear-completed"
@@ -38,7 +38,7 @@ const Footer = ({
 );
 
 Footer.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todosFooter: PropTypes.arrayOf(PropTypes.object).isRequired,
   todosLeft: PropTypes.number.isRequired,
   selectedFilterItem: PropTypes.string.isRequired,
   clearCompletedItems: PropTypes.func.isRequired,
