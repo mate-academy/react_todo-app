@@ -7,7 +7,7 @@ const Footer = ({ howManyTodosLeft, filters, currentFilter, setFilter, clearComp
         <strong>
           {!howManyTodosLeft ? '' : howManyTodosLeft}
         </strong>
-          {howManyTodosLeft ? "all done" : " items left" }
+          {!howManyTodosLeft ? "all done" : " items left" }
       </span>
       <ul className="filters">
         {
