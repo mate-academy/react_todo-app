@@ -115,7 +115,8 @@ class App extends React.Component {
                 .filter(todo => !todo.completed).length}
             />
             <Footer
-              filter={FILTERS}
+              FILTERS={FILTERS}
+              filter={this.state.filter}
               setFilter={this.setFilter}
             />
             <ClearCompleted

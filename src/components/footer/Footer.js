@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Footer = ({ filter, setFilter }) => (
+const Footer = ({ FILTERS, filter, setFilter }) => (
   <span>
     <ul className="filters">
-      {Object.values(filter).map(filt => (
+      {Object.values(FILTERS).map(filt => (
         <li>
           <a
             href={`#/${filt}`}
@@ -22,6 +22,7 @@ const Footer = ({ filter, setFilter }) => (
 );
 
 Footer.propTypes = {
+  FILTERS: PropTypes.string.isRequired,
   filter: PropTypes.string.isRequired,
   setFilter: PropTypes.func.isRequired,
 };
