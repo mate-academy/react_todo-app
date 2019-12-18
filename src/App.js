@@ -16,11 +16,10 @@ class App extends React.Component {
   state = {
     todos: [],
     filter: FILTERS.all,
-    toggleActive: false,
   };
 
   addTodo = (title) => {
-    this.setState((state) => {
+    this.setState((prevState) => {
       const inputedTodo = {
         id: +new Date(),
         title,
@@ -28,17 +27,16 @@ class App extends React.Component {
       };
 
       return {
-        todos: [...state.todos, inputedTodo],
+        todos: [...prevState.todos, inputedTodo],
       };
     });
   };
 
   handleToggleAll = () => {
     this.setState(prevState => ({
-      toggleActive: !prevState.toggleActive,
       todos: prevState.todos
         .map(todo => ({
-          ...todo, completed: !prevState.toggleActive,
+          ...todo, completed: !prevState.todos.every(item => item.completed),
         })),
     }));
   };
@@ -49,7 +47,6 @@ class App extends React.Component {
 
   clearCompleted = () => {
     this.setState(({ todos }) => ({
-      toggleActive: false,
       todos: todos
         .filter(todo => (!todo.completed)),
     }));
@@ -88,14 +85,19 @@ class App extends React.Component {
         </header>
 
         <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            checked={this.state.toggleActive}
-            onClick={() => this.handleToggleAll()}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {!!this.state.todos.length
+          && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                checked={this.state.todos.every(item => item.completed)}
+                onClick={() => this.handleToggleAll()}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
 
           <ul className="todo-list">
             <TodoList
@@ -109,7 +111,7 @@ class App extends React.Component {
 
         {!!this.state.todos.length
         && (
-          <footer className="footer" styFormInputle={{ display: 'block' }}>
+          <footer className="footer">
             <ItemsLeft
               todosLeft={this.state.todos
                 .filter(todo => !todo.completed).length}
