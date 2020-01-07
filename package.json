@@ -1,12 +1,12 @@
 {
-  "homepage": "http://mate-academy.github.io/react-jun19-todo-app",
+  "homepage": "http://AlexHodovas.github.io/react_todo-app/",
   "name": "todo-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "^3.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
