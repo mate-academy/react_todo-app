@@ -11,7 +11,7 @@ const Todo = ({ todo, checkboxChange, deleteTodo, fixInput }) => (
         id={`todo-${todo.id}`}
         onChange={() => checkboxChange(todo.id)}
       />
-      <label htmlFor={`todo-${todo.id}`} onDoubleClick={fixInput}>
+      <label onDoubleClick={fixInput}>
         {todo.title}
       </label>
       <button
