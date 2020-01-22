@@ -38,7 +38,11 @@ class Header extends React.Component {
     return (
       <header className="header">
         <h1>todos</h1>
-        <form onSubmit={this.createTodo}>
+        <form onSubmit={async(event) => {
+          await this.createTodo(event);
+          this.props.togleAll();
+        }}
+        >
           <input
             className="new-todo"
             placeholder="What needs to be done?"
@@ -53,6 +57,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   addTodo: PropTypes.func.isRequired,
+  togleAll: PropTypes.func.isRequired,
 };
 
 export default Header;

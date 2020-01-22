@@ -13,19 +13,21 @@ class App extends React.Component {
   state = {
     todos: [],
     filter: 'All',
+    isChecked: false,
   }
 
   checkboxChange = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
-        if (id !== todo.id) {
-          return todo;
+        if (id === todo.id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+            isChecked: false,
+          };
         }
 
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
+        return todo;
       }),
     }));
   }
@@ -49,6 +51,7 @@ class App extends React.Component {
           ...todo,
           completed: true,
         })),
+        isChecked: true,
       }));
     } else {
       this.setState(prevState => ({
@@ -56,7 +59,20 @@ class App extends React.Component {
           ...todo,
           completed: false,
         })),
+        isChecked: false,
       }));
+    }
+  }
+
+  togleAll = () => {
+    if (!this.state.todos.some(todo => !todo.completed)) {
+      this.setState({
+        isChecked: true,
+      });
+    } else {
+      this.setState({
+        isChecked: false,
+      });
     }
   }
 
@@ -89,12 +105,14 @@ class App extends React.Component {
       <section className="todoapp">
         <Header
           addTodo={this.addTodo}
+          togleAll={this.togleAll}
         />
         <section className="main">
           <input
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={this.state.isChecked}
             onClick={this.togleCompleted}
           />
           <label
@@ -108,6 +126,7 @@ class App extends React.Component {
               todos={this.state.todos.filter(this.todosFilter)}
               checkboxChange={this.checkboxChange}
               deleteTodo={this.deleteTodo}
+              togleAll={this.togleAll}
               fixInput={this.fixInput}
             />
           </ul>

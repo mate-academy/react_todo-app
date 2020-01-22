@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Todo = ({ todo, checkboxChange, deleteTodo, fixInput }) => (
+const Todo = ({ todo, checkboxChange, deleteTodo, togleAll, fixInput }) => (
   <li className={todo.completed ? 'completed' : ''} key={todo.id}>
     <div className="view">
       <input
@@ -9,7 +9,10 @@ const Todo = ({ todo, checkboxChange, deleteTodo, fixInput }) => (
         className="toggle"
         checked={todo.completed}
         id={`todo-${todo.id}`}
-        onChange={() => checkboxChange(todo.id)}
+        onChange={async() => {
+          await checkboxChange(todo.id);
+          togleAll();
+        }}
       />
       <label onDoubleClick={fixInput}>
         {todo.title}
@@ -17,7 +20,10 @@ const Todo = ({ todo, checkboxChange, deleteTodo, fixInput }) => (
       <button
         type="button"
         className="destroy"
-        onClick={() => deleteTodo(todo.id)}
+        onClick={async() => {
+          await deleteTodo(todo.id);
+          togleAll();
+        }}
       />
     </div>
     <input
@@ -33,6 +39,7 @@ Todo.propTypes = {
   }).isRequired,
   checkboxChange: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  togleAll: PropTypes.func.isRequired,
   fixInput: PropTypes.func.isRequired,
 };
 
