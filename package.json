@@ -1,5 +1,5 @@
 {
-  "name": "react_todo-app",
+  "name": "todo-app",
   "homepage": ".",
   "version": "0.1.0",
   "private": true,
@@ -7,10 +7,13 @@
   "author": "Mate Academy",
   "license": "GPL-3.0",
   "dependencies": {
+    "classnames": "2.2.6",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "^3.4.0"
+    "react-router-dom": "5.1.2",
+    "react-scripts": "3.4.0",
+    "uuid": "3.4.0"
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react": "*",
@@ -61,5 +64,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "description": ""
 }
