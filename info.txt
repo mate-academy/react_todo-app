@@ -1,0 +1,48 @@
+# default todo
+<li>
+  <div className="view">
+    <input type="checkbox" className="toggle" id="todo-1" />
+    <label htmlFor="todo-1">asdfghj</label>
+    <button type="button" className="destroy" />
+  </div>
+  <input type="text" className="edit" />
+</li>
+
+
+# completed todo
+<li className="completed">
+  <div className="view">
+    <input type="checkbox" className="toggle" id="todo-2" />
+    <label htmlFor="todo-2">qwertyuio</label>
+    <button type="button" className="destroy" />
+  </div>
+  <input type="text" className="edit" />
+</li>
+
+
+# todo in edit
+<li className="editing">
+  <div className="view">
+    <input type="checkbox" className="toggle" id="todo-3" />
+    <label htmlFor="todo-3">zxcvbnm</label>
+    <button type="button" className="destroy" />
+  </div>
+  <input type="text" className="edit" />
+</li>
+
+
+<ul className="filters">
+  <li>
+    <a href="#/" className="selected">
+      All
+    </a>
+  </li>
+
+  <li>
+    <a href="#/active">Active</a>
+  </li>
+
+  <li>
+    <a href="#/completed">Completed</a>
+  </li>
+</ul>
