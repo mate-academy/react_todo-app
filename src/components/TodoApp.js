@@ -12,9 +12,10 @@ export class TodoApp extends React.Component {
     todos: [],
     newTodoText: '',
     isToggleAll: false,
+    activeFilter: 'all',
   };
 
-  handleNewTodoChange = evt => {
+  handleNewTodoChange = (evt) => {
     this.setState({ newTodoText: evt.target.value });
   };
 
@@ -32,9 +33,9 @@ export class TodoApp extends React.Component {
     }));
   };
 
-  toggleTodo = todoId => {
+  toggleTodo = (todoId) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map(todo => {
+      todos: prevState.todos.map((todo) => {
         if (todo.id !== todoId) {
           return todo;
         }
@@ -63,7 +64,7 @@ export class TodoApp extends React.Component {
     }));
   };
 
-  handleRemoveTodoButtonClick = todoId => {
+  handleRemoveTodoButtonClick = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== todoId),
     }));
@@ -71,7 +72,7 @@ export class TodoApp extends React.Component {
 
   handleTodoTextUpdate = (todoId, text) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map(todo => {
+      todos: prevState.todos.map((todo) => {
         if (todo.id !== todoId) {
           return todo;
         }
@@ -84,8 +85,12 @@ export class TodoApp extends React.Component {
     }));
   };
 
+  handleFilterClick = (activeFilter) => {
+    this.setState({ activeFilter });
+  };
+
   render() {
-    const { todos, newTodoText, isToggleAll } = this.state;
+    const { todos, newTodoText, isToggleAll, activeFilter } = this.state;
 
     const leftItemsCount = todos.filter(todo => !todo.completed).length;
 
@@ -115,7 +120,10 @@ export class TodoApp extends React.Component {
 
         <footer className="footer">
           <LeftItems count={leftItemsCount} />
-          <TodosFilter />
+          <TodosFilter
+            activeFilter={activeFilter}
+            onFilterClick={this.handleFilterClick}
+          />
           <ClearButton onClick={this.handleClearButtonClick} />
         </footer>
       </section>
