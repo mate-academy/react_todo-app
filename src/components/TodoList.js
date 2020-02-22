@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = props => {
+export const TodoList = (props) => {
   const { todos, onTodoToggle, onTodoRemove, onTodoTextUpdate } = props;
 
   return (
@@ -24,4 +25,21 @@ export const TodoList = props => {
       })}
     </ul>
   );
+};
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool,
+  })),
+  onTodoToggle: PropTypes.func.isRequired,
+  onTodoRemove: PropTypes.func.isRequired,
+  onTodoTextUpdate: PropTypes.func.isRequired,
+};
+
+TodoList.defaultProps = {
+  todos: [{
+    completed: false,
+  }],
 };

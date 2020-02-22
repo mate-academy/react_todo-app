@@ -1,10 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-const KEYCODE = {
-  ENTER: 13,
-  ESC: 27,
-};
+import { KEYCODE } from '../utils/const';
 
 export class TodoItem extends React.Component {
   state = {
@@ -33,15 +30,15 @@ export class TodoItem extends React.Component {
     });
   };
 
-  handleUpdateInputChange = evt => {
+  handleUpdateInputChange = (evt) => {
     this.setState({ updateText: evt.target.value });
   };
 
-  handleUpdateInputKeyDown = evt => {
+  handleUpdateInputKeyDown = (evt) => {
     const { updateText } = this.state;
     const { id, onUpdate } = this.props;
 
-    const keyCode = evt.keyCode;
+    const { keyCode } = evt;
 
     if (keyCode === KEYCODE.ENTER) {
       onUpdate(id, updateText);
@@ -65,7 +62,7 @@ export class TodoItem extends React.Component {
     return (
       <li
         className={classNames({
-          completed: completed,
+          completed,
           editing: inEdit,
         })}
       >
@@ -100,3 +97,17 @@ export class TodoItem extends React.Component {
     );
   }
 }
+
+TodoItem.propTypes = {
+  onToggle: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  completed: PropTypes.bool,
+  index: PropTypes.number.isRequired,
+};
+
+TodoItem.defaultProps = {
+  completed: false,
+};

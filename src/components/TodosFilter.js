@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { FilterItem } from './FilterItem';
 
 const filters = [
@@ -24,9 +25,10 @@ export const TodosFilter = (props) => {
 
         return (
           <FilterItem
+            key={name}
             href={href}
             content={content}
-            className={name === activeFilter ? 'selected' : ''}
+            className={classNames({ selected: name === activeFilter })}
             onFilterClick={() => onFilterClick(name)}
           />
         );
