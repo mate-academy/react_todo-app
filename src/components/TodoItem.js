@@ -9,6 +9,8 @@ export class TodoItem extends React.PureComponent {
     updateText: '',
   };
 
+  updateInputRef = React.createRef();
+
   handleCheckboxToggle = () => {
     const { onToggle } = this.props;
 
@@ -27,6 +29,8 @@ export class TodoItem extends React.PureComponent {
     this.setState({
       inEdit: true,
       updateText: title,
+    }, () => {
+      this.updateInputRef.current.focus();
     });
   };
 
@@ -89,6 +93,7 @@ export class TodoItem extends React.PureComponent {
         <input
           type="text"
           className="edit"
+          ref={this.updateInputRef}
           value={updateText}
           onChange={this.handleUpdateInputChange}
           onKeyDown={this.handleUpdateInputKeyDown}
