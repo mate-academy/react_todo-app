@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const ToggleAll = (props) => {
+export const ToggleAll = React.memo((props) => {
   const { value, onToggleAllChange } = props;
 
   const handleCheckboxChange = () => onToggleAllChange();
@@ -18,7 +18,7 @@ export const ToggleAll = (props) => {
       <label htmlFor="toggle-all">Mark all as complete</label>
     </>
   );
-};
+});
 
 ToggleAll.propTypes = {
   value: PropTypes.bool.isRequired,

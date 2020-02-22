@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const LeftItems = (props) => {
+export const LeftItems = React.memo((props) => {
   const { count } = props;
 
   const renderContent = () => (
@@ -9,7 +9,7 @@ export const LeftItems = (props) => {
   );
 
   return <span className="todo-count">{renderContent()}</span>;
-};
+});
 
 LeftItems.propTypes = {
   count: PropTypes.number.isRequired,

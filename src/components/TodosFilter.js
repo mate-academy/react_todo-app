@@ -2,25 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FilterItem } from './FilterItem';
+import { FilterUtils } from '../utils/FilterUtils';
 
-const filters = [
-  {
-    name: 'all', href: '#/', content: 'All',
-  },
-  {
-    name: 'active', href: '#/active', content: 'Active',
-  },
-  {
-    name: 'completed', href: '#/completed', content: 'Completed',
-  },
-];
-
-export const TodosFilter = (props) => {
+export const TodosFilter = React.memo((props) => {
   const { activeFilter, onFilterClick } = props;
 
   return (
     <ul className="filters">
-      {filters.map((filter) => {
+      {FilterUtils.filters.map((filter) => {
         const { name, href, content } = filter;
 
         return (
@@ -35,7 +24,7 @@ export const TodosFilter = (props) => {
       })}
     </ul>
   );
-};
+});
 
 TodosFilter.propTypes = {
   activeFilter: PropTypes.string.isRequired,

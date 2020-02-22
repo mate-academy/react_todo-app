@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = (props) => {
+export const TodoList = React.memo((props) => {
   const { todos, onTodoToggle, onTodoRemove, onTodoTextUpdate } = props;
 
   return (
@@ -25,7 +25,7 @@ export const TodoList = (props) => {
       })}
     </ul>
   );
-};
+});
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({

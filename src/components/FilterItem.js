@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const FilterItem = (props) => {
+export const FilterItem = React.memo((props) => {
   const { href, content, className, onFilterClick } = props;
 
   const handleFilterClick = () => onFilterClick();
@@ -17,7 +17,7 @@ export const FilterItem = (props) => {
       </a>
     </li>
   );
-};
+});
 
 FilterItem.propTypes = {
   href: PropTypes.string.isRequired,

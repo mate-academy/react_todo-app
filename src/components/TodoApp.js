@@ -6,30 +6,26 @@ import { TodoList } from './TodoList';
 import { LeftItems } from './LeftItems';
 import { TodosFilter } from './TodosFilter';
 import { ClearButton } from './ClearButton';
+import { FilterUtils } from '../utils/FilterUtils';
+import { TodosUtils } from '../utils/TodosUtils';
 
-export class TodoApp extends React.Component {
+export class TodoApp extends React.PureComponent {
   state = {
     todos: [],
-    newTodoText: '',
     isToggleAll: false,
-    activeFilter: 'all',
+    activeFilter: FilterUtils.FILTER.ALL,
   };
 
-  handleNewTodoChange = (evt) => {
-    this.setState({ newTodoText: evt.target.value });
-  };
-
-  handleNewTodoKeyDown = () => {
+  handleNewTodoKeyDown = (text) => {
     this.setState(prevState => ({
       todos: [
         ...prevState.todos,
         {
           id: uuidv4(),
-          title: prevState.newTodoText,
+          title: text,
           completed: false,
         },
       ],
-      newTodoText: '',
     }));
   };
 
@@ -90,17 +86,17 @@ export class TodoApp extends React.Component {
   };
 
   render() {
-    const { todos, newTodoText, isToggleAll, activeFilter } = this.state;
+    const { todos, isToggleAll, activeFilter } = this.state;
 
     const leftItemsCount = todos.filter(todo => !todo.completed).length;
+
+    const visibleTodos = TodosUtils.getVisibleTodos(todos, activeFilter);
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
           <NewTodo
-            value={newTodoText}
-            onChange={this.handleNewTodoChange}
             onKeyDown={this.handleNewTodoKeyDown}
           />
         </header>
@@ -111,7 +107,7 @@ export class TodoApp extends React.Component {
             onToggleAllChange={this.handleToggleAllChange}
           />
           <TodoList
-            todos={todos}
+            todos={visibleTodos}
             onTodoToggle={this.toggleTodo}
             onTodoRemove={this.handleRemoveTodoButtonClick}
             onTodoTextUpdate={this.handleTodoTextUpdate}

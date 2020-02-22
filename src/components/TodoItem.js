@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { KEYCODE } from '../utils/const';
 
-export class TodoItem extends React.Component {
+export class TodoItem extends React.PureComponent {
   state = {
     inEdit: false,
     updateText: '',

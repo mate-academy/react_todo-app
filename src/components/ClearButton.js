@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const ClearButton = (props) => {
+export const ClearButton = React.memo((props) => {
   const { onClick } = props;
 
   const handleButtonClick = () => onClick();
@@ -15,7 +15,7 @@ export const ClearButton = (props) => {
       Clear completed
     </button>
   );
-};
+});
 
 ClearButton.propTypes = {
   onClick: PropTypes.func.isRequired,

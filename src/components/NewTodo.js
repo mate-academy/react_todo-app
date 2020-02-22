@@ -2,31 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { KEYCODE } from '../utils/const';
 
-export const NewTodo = (props) => {
-  const { value, onChange, onKeyDown } = props;
+export class NewTodo extends React.PureComponent {
+  state = {
+    inputValue: '',
+  };
 
-  const handleInputChange = evt => onChange(evt);
+  handleInputChange = (evt) => {
+    this.setState({ inputValue: evt.target.value });
+  };
 
-  const handleInputKeyDown = (evt) => {
+  handleInputKeyDown = (evt) => {
+    const { inputValue } = this.state;
+    const { onKeyDown } = this.props;
+
     if (evt.keyCode === KEYCODE.ENTER) {
-      onKeyDown();
+      onKeyDown(inputValue);
+
+      this.setState({ inputValue: '' });
     }
   };
 
-  return (
-    <input
-      type="text"
-      className="new-todo"
-      placeholder="What needs to be done?"
-      value={value}
-      onChange={handleInputChange}
-      onKeyDown={handleInputKeyDown}
-    />
-  );
-};
+  render() {
+    const { inputValue } = this.state;
+
+    return (
+      <input
+        type="text"
+        className="new-todo"
+        placeholder="What needs to be done?"
+        value={inputValue}
+        onChange={this.handleInputChange}
+        onKeyDown={this.handleInputKeyDown}
+      />
+    );
+  }
+}
 
 NewTodo.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
 };
