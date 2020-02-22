@@ -7,6 +7,23 @@ export class NewTodo extends React.PureComponent {
     inputValue: '',
   };
 
+  handleGlobalClick = (evt) => {
+    if (evt.target.closest('.js-new-todo')) {
+      return;
+    }
+
+    window.removeEventListener('click', this.handleGlobalClick);
+
+    const { inputValue } = this.state;
+    const { onKeyDown } = this.props;
+
+    if (inputValue !== '') {
+      onKeyDown(inputValue);
+
+      this.setState({ inputValue: '' });
+    }
+  };
+
   handleInputChange = (evt) => {
     this.setState({ inputValue: evt.target.value });
   };
@@ -15,11 +32,15 @@ export class NewTodo extends React.PureComponent {
     const { inputValue } = this.state;
     const { onKeyDown } = this.props;
 
-    if (evt.keyCode === KEYCODE.ENTER) {
+    if (evt.keyCode === KEYCODE.ENTER && inputValue !== '') {
       onKeyDown(inputValue);
 
       this.setState({ inputValue: '' });
     }
+  };
+
+  handleInputFocus = () => {
+    window.addEventListener('click', this.handleGlobalClick);
   };
 
   render() {
@@ -28,11 +49,12 @@ export class NewTodo extends React.PureComponent {
     return (
       <input
         type="text"
-        className="new-todo"
+        className="new-todo js-new-todo"
         placeholder="What needs to be done?"
         value={inputValue}
         onChange={this.handleInputChange}
         onKeyDown={this.handleInputKeyDown}
+        onFocus={this.handleInputFocus}
       />
     );
   }

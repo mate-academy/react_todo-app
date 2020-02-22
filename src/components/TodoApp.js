@@ -12,19 +12,43 @@ import { TodosUtils } from '../utils/TodosUtils';
 export class TodoApp extends React.PureComponent {
   state = {
     todos: [],
-    isToggleAll: false,
+    allTodosCompleted: false,
     activeFilter: FilterUtils.FILTER.ALL,
   };
 
   componentDidMount() {
     const todos = JSON.parse(window.localStorage.getItem('todos'));
+    const allTodosCompleted = JSON.parse(
+      window.localStorage.getItem('allTodosCompleted'),
+    );
 
     if (todos) {
       this.setState({ todos });
     }
+
+    if (allTodosCompleted) {
+      this.setState({ allTodosCompleted });
+    }
   }
 
-  handleNewTodoKeyDown = (text) => {
+  saveInfoToStorage = () => {
+    const { todos, allTodosCompleted } = this.state;
+
+    window.localStorage.setItem('todos', JSON.stringify(todos));
+    window.localStorage.setItem(
+      'allTodosCompleted', JSON.stringify(allTodosCompleted),
+    );
+  };
+
+  setAllTodosCompletedValue = () => {
+    const { todos } = this.state;
+
+    this.setState({
+      allTodosCompleted: todos.length && todos.every(todo => todo.completed),
+    });
+  };
+
+  addNewTodo = (text) => {
     this.setState(prevState => ({
       todos: [
         ...prevState.todos,
@@ -34,9 +58,8 @@ export class TodoApp extends React.PureComponent {
           completed: false,
         },
       ],
-    }), () => {
-      window.localStorage.setItem('todos', JSON.stringify(this.state.todos));
-    });
+      allTodosCompleted: false,
+    }), this.saveInfoToStorage);
   };
 
   toggleTodo = (todoId) => {
@@ -51,32 +74,39 @@ export class TodoApp extends React.PureComponent {
           completed: !todo.completed,
         };
       }),
-    }));
+    }), () => {
+      this.saveInfoToStorage();
+      this.setAllTodosCompletedValue();
+    });
   };
 
   handleToggleAllChange = () => {
     this.setState(prevState => ({
-      isToggleAll: !prevState.isToggleAll,
+      allTodosCompleted: !prevState.allTodosCompleted,
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: !prevState.isToggleAll,
+        completed: !prevState.allTodosCompleted,
       })),
-    }));
+    }), this.saveInfoToStorage);
   };
 
-  handleClearButtonClick = () => {
+  removeAllCompletedTodos = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
-    }));
+      allTodosCompleted: false,
+    }), this.saveInfoToStorage);
   };
 
-  handleRemoveTodoButtonClick = (todoId) => {
+  removeTodo = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== todoId),
-    }));
+    }), () => {
+      this.saveInfoToStorage();
+      this.setAllTodosCompletedValue();
+    });
   };
 
-  handleTodoTextUpdate = (todoId, text) => {
+  updateTodoText = (todoId, text) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id !== todoId) {
@@ -88,15 +118,15 @@ export class TodoApp extends React.PureComponent {
           title: text,
         };
       }),
-    }));
+    }), this.saveInfoToStorage);
   };
 
-  handleFilterClick = (activeFilter) => {
+  setActiveFilter = (activeFilter) => {
     this.setState({ activeFilter });
   };
 
   render() {
-    const { todos, isToggleAll, activeFilter } = this.state;
+    const { todos, allTodosCompleted, activeFilter } = this.state;
 
     const leftItemsCount = todos.filter(todo => !todo.completed).length;
 
@@ -107,20 +137,20 @@ export class TodoApp extends React.PureComponent {
         <header className="header">
           <h1>todos</h1>
           <NewTodo
-            onKeyDown={this.handleNewTodoKeyDown}
+            onKeyDown={this.addNewTodo}
           />
         </header>
 
         <section className="main">
           <ToggleAll
-            value={isToggleAll}
+            value={allTodosCompleted}
             onToggleAllChange={this.handleToggleAllChange}
           />
           <TodoList
             todos={visibleTodos}
             onTodoToggle={this.toggleTodo}
-            onTodoRemove={this.handleRemoveTodoButtonClick}
-            onTodoTextUpdate={this.handleTodoTextUpdate}
+            onTodoRemove={this.removeTodo}
+            onTodoTextUpdate={this.updateTodoText}
           />
         </section>
 
@@ -128,10 +158,10 @@ export class TodoApp extends React.PureComponent {
           <LeftItems count={leftItemsCount} />
           <TodosFilter
             activeFilter={activeFilter}
-            onFilterClick={this.handleFilterClick}
+            onFilterClick={this.setActiveFilter}
           />
           <ClearButton
-            onClick={this.handleClearButtonClick}
+            onClick={this.removeAllCompletedTodos}
             todos={todos}
           />
         </footer>

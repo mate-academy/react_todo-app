@@ -30,10 +30,20 @@ export class TodoItem extends React.PureComponent {
 
     window.removeEventListener('click', this.handleGlobalClick);
 
+    const { updateText } = this.state;
+    const { id, onUpdate } = this.props;
+
     this.setState({
       inEdit: false,
-      updateText: '',
     });
+
+    if (updateText !== '') {
+      onUpdate(id, updateText);
+
+      this.setState({
+        updateText: '',
+      });
+    }
   }
 
   handleLabelDoubleClick = () => {
@@ -59,7 +69,7 @@ export class TodoItem extends React.PureComponent {
 
     const { keyCode } = evt;
 
-    if (keyCode === KEYCODE.ENTER) {
+    if (keyCode === KEYCODE.ENTER && updateText !== '') {
       onUpdate(id, updateText);
 
       window.removeEventListener('click', this.handleGlobalClick);
