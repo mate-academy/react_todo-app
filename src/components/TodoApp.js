@@ -16,6 +16,14 @@ export class TodoApp extends React.PureComponent {
     activeFilter: FilterUtils.FILTER.ALL,
   };
 
+  componentDidMount() {
+    const todos = JSON.parse(window.localStorage.getItem('todos'));
+
+    if (todos) {
+      this.setState({ todos });
+    }
+  }
+
   handleNewTodoKeyDown = (text) => {
     this.setState(prevState => ({
       todos: [
@@ -26,7 +34,9 @@ export class TodoApp extends React.PureComponent {
           completed: false,
         },
       ],
-    }));
+    }), () => {
+      window.localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    });
   };
 
   toggleTodo = (todoId) => {
@@ -120,7 +130,10 @@ export class TodoApp extends React.PureComponent {
             activeFilter={activeFilter}
             onFilterClick={this.handleFilterClick}
           />
-          <ClearButton onClick={this.handleClearButtonClick} />
+          <ClearButton
+            onClick={this.handleClearButtonClick}
+            todos={todos}
+          />
         </footer>
       </section>
     );

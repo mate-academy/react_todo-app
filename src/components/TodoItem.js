@@ -23,6 +23,19 @@ export class TodoItem extends React.PureComponent {
     onRemove();
   };
 
+  handleGlobalClick = (evt) => {
+    if (evt.target.closest('.js-edit-input')) {
+      return;
+    }
+
+    window.removeEventListener('click', this.handleGlobalClick);
+
+    this.setState({
+      inEdit: false,
+      updateText: '',
+    });
+  }
+
   handleLabelDoubleClick = () => {
     const { title } = this.props;
 
@@ -32,6 +45,8 @@ export class TodoItem extends React.PureComponent {
     }, () => {
       this.updateInputRef.current.focus();
     });
+
+    window.addEventListener('click', this.handleGlobalClick);
   };
 
   handleUpdateInputChange = (evt) => {
@@ -47,11 +62,15 @@ export class TodoItem extends React.PureComponent {
     if (keyCode === KEYCODE.ENTER) {
       onUpdate(id, updateText);
 
+      window.removeEventListener('click', this.handleGlobalClick);
+
       this.setState({
         inEdit: false,
         updateText: '',
       });
     } else if (keyCode === KEYCODE.ESC) {
+      window.removeEventListener('click', this.handleGlobalClick);
+
       this.setState({
         inEdit: false,
         updateText: '',
@@ -92,7 +111,7 @@ export class TodoItem extends React.PureComponent {
         </div>
         <input
           type="text"
-          className="edit"
+          className="edit js-edit-input"
           ref={this.updateInputRef}
           value={updateText}
           onChange={this.handleUpdateInputChange}
