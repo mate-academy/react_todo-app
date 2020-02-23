@@ -5,26 +5,29 @@ import { NewTodo } from './components/NewTodo/NewTodo';
 import { Filters } from './components/Filters/Filters';
 
 class App extends Component {
-  todos = [];
-
   state = {
     filtersFlag: 1,
-    count: 0,
-    visibleTodos: this.todos,
-    idItem: 0,
+    count: localStorage.todos
+      ? (JSON.parse(localStorage.getItem('todos'))).length
+      : 0,
+    visibleTodos: localStorage.todos
+      ? JSON.parse(localStorage.getItem('todos'))
+      : [],
   }
 
   filter = (flag) => {
+    const todos = JSON.parse(localStorage.getItem('todos'));
+
     if (flag === 1) {
-      return [...this.todos];
+      return [...todos];
     }
 
     if (flag === 2) {
-      return [...this.todos.filter(item => !item.completed)];
+      return [...todos.filter(item => !item.completed)];
     }
 
     if (flag === 3) {
-      return [...this.todos.filter(item => item.completed)];
+      return [...todos.filter(item => item.completed)];
     }
 
     return undefined;
@@ -38,49 +41,71 @@ class App extends Component {
   }
 
   checkBoxHandler = (id) => {
-    const curentTodo = this.todos.find(todo => todo.id === id);
+    const todos = JSON.parse(localStorage.getItem('todos'));
+    const curentTodo = todos.find(todo => todo.id === id);
 
     curentTodo.completed = !curentTodo.completed;
+    localStorage.setItem('todos', JSON.stringify(todos));
     this.setState(prevState => ({
       visibleTodos: this.filter(prevState.filtersFlag),
     }));
   }
 
   onClearButton = () => {
-    this.todos = this.todos.filter(todo => !todo.completed);
+    let todos = JSON.parse(localStorage.getItem('todos'));
+
+    todos = todos.filter(todo => !todo.completed);
+    localStorage.setItem('todos', JSON.stringify(todos));
     this.setState(prevState => ({
-      count: this.todos.length,
+      count: todos.length,
       visibleTodos: this.filter(prevState.filtersFlag),
     }));
   }
 
   destroyHandler = (id) => {
-    this.todos = this.todos.filter(todo => todo.id !== id);
+    let todos = JSON.parse(localStorage.getItem('todos'));
+
+    todos = todos.filter(todo => todo.id !== id);
+    localStorage.setItem('todos', JSON.stringify(todos));
     this.setState(prevState => ({
-      count: this.todos.length,
+      count: todos.length,
       visibleTodos: this.filter(prevState.filtersFlag),
     }));
   }
 
   editHandler = (id, title) => {
-    (this.todos.find(item => item.id === id)).title = title;
+    const todos = JSON.parse(localStorage.getItem('todos'));
+
+    (todos.find(item => item.id === id)).title = title;
+    localStorage.setItem('todos', JSON.stringify(todos));
     this.setState(prevState => ({
       visibleTodos: this.filter(prevState.filtersFlag),
     }));
   }
 
   newTodoHandler = (title) => {
-    this.todos.push({
-      id: this.state.idItem + 1, title, completed: false,
+    const todos = JSON.parse(localStorage.getItem('todos'));
+    const newId = +localStorage.getItem('todoLastId') + 1;
+
+    todos.push({
+      id: newId,
+      title,
+      completed: false,
     });
+    localStorage.setItem('todos', JSON.stringify(todos));
+    localStorage.setItem('todoLastId', `${newId}`);
     this.setState(prevState => ({
-      idItem: prevState.idItem + 1,
-      count: prevState.count + 1,
+      count: todos.length,
       visibleTodos: this.filter(prevState.filtersFlag),
     }));
   }
 
   render() {
+    if (!localStorage.todos) {
+      localStorage.setItem('todos', '[]');
+      localStorage.setItem('todoLastId', '0');
+    }
+
     return (
       <section className="todoapp">
         <NewTodo onNewTodo={this.newTodoHandler} />
@@ -115,83 +140,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*
- <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
-
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
-    */

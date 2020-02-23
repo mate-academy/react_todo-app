@@ -68,7 +68,10 @@ export class Todo extends Component {
     const { title, completed } = this.props;
 
     return (
-      <li onDoubleClick={this.onEdit}>
+      <li
+        onDoubleClick={this.onEdit}
+        className={completed ? 'completed' : ''}
+      >
         <div className="view">
           <input
             type="checkbox"
