@@ -8,7 +8,11 @@ export const LeftItems = React.memo((props) => {
     `${count} ${count === 1 ? 'item' : 'items'} left`
   );
 
-  return <span className="todo-count">{renderContent()}</span>;
+  return (
+    <span className="todo-count">
+      {renderContent()}
+    </span>
+  );
 });
 
 LeftItems.propTypes = {

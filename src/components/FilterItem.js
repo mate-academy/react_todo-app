@@ -4,14 +4,12 @@ import PropTypes from 'prop-types';
 export const FilterItem = React.memo((props) => {
   const { href, content, className, onFilterClick } = props;
 
-  const handleFilterClick = () => onFilterClick();
-
   return (
     <li>
       <a
         href={href}
         className={className}
-        onClick={handleFilterClick}
+        onClick={onFilterClick}
       >
         {content}
       </a>

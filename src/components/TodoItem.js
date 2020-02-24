@@ -6,22 +6,10 @@ import { KEYCODE } from '../utils/const';
 export class TodoItem extends React.PureComponent {
   state = {
     inEdit: false,
-    updateText: '',
+    updateValue: '',
   };
 
   updateInputRef = React.createRef();
-
-  handleCheckboxToggle = () => {
-    const { onToggle } = this.props;
-
-    onToggle();
-  };
-
-  handleRemoveButtonClick = () => {
-    const { onRemove } = this.props;
-
-    onRemove();
-  };
 
   handleGlobalClick = (evt) => {
     if (evt.target.closest('.js-edit-input')) {
@@ -30,18 +18,18 @@ export class TodoItem extends React.PureComponent {
 
     window.removeEventListener('click', this.handleGlobalClick);
 
-    const { updateText } = this.state;
+    const { updateValue } = this.state;
     const { id, onUpdate } = this.props;
 
     this.setState({
       inEdit: false,
     });
 
-    if (updateText !== '') {
-      onUpdate(id, updateText);
+    if (updateValue !== '') {
+      onUpdate(id, updateValue);
 
       this.setState({
-        updateText: '',
+        updateValue: '',
       });
     }
   }
@@ -51,7 +39,7 @@ export class TodoItem extends React.PureComponent {
 
     this.setState({
       inEdit: true,
-      updateText: title,
+      updateValue: title,
     }, () => {
       this.updateInputRef.current.focus();
     });
@@ -60,37 +48,39 @@ export class TodoItem extends React.PureComponent {
   };
 
   handleUpdateInputChange = (evt) => {
-    this.setState({ updateText: evt.target.value });
+    this.setState({
+      updateValue: evt.target.value,
+    });
   };
 
   handleUpdateInputKeyDown = (evt) => {
-    const { updateText } = this.state;
+    const { updateValue } = this.state;
     const { id, onUpdate } = this.props;
 
     const { keyCode } = evt;
 
-    if (keyCode === KEYCODE.ENTER && updateText !== '') {
-      onUpdate(id, updateText);
+    if (keyCode === KEYCODE.ENTER && updateValue !== '') {
+      onUpdate(id, updateValue);
 
       window.removeEventListener('click', this.handleGlobalClick);
 
       this.setState({
         inEdit: false,
-        updateText: '',
+        updateValue: '',
       });
     } else if (keyCode === KEYCODE.ESC) {
       window.removeEventListener('click', this.handleGlobalClick);
 
       this.setState({
         inEdit: false,
-        updateText: '',
+        updateValue: '',
       });
     }
   };
 
   render() {
-    const { inEdit, updateText } = this.state;
-    const { title, completed, index } = this.props;
+    const { inEdit, updateValue } = this.state;
+    const { title, completed, index, onToggle, onRemove } = this.props;
 
     return (
       <li
@@ -98,6 +88,7 @@ export class TodoItem extends React.PureComponent {
           completed,
           editing: inEdit,
         })}
+        onDoubleClick={this.liClick}
       >
         <div className="view">
           <input
@@ -105,7 +96,7 @@ export class TodoItem extends React.PureComponent {
             className="toggle"
             id={`todo-${index}`}
             checked={completed ? 'checked' : ''}
-            onChange={this.handleCheckboxToggle}
+            onChange={onToggle}
           />
           <label
             htmlFor={`todo-${index}`}
@@ -116,14 +107,14 @@ export class TodoItem extends React.PureComponent {
           <button
             type="button"
             className="destroy"
-            onClick={this.handleRemoveButtonClick}
+            onClick={onRemove}
           />
         </div>
         <input
           type="text"
           className="edit js-edit-input"
           ref={this.updateInputRef}
-          value={updateText}
+          value={updateValue}
           onChange={this.handleUpdateInputChange}
           onKeyDown={this.handleUpdateInputKeyDown}
         />

@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 export const ClearButton = React.memo((props) => {
   const { onClick, todos } = props;
 
-  const handleButtonClick = () => onClick();
-
   const disabledValue = todos.some(todo => todo.completed)
     ? ''
     : 'disabled';
@@ -14,7 +12,7 @@ export const ClearButton = React.memo((props) => {
     <button
       type="button"
       className="clear-completed"
-      onClick={handleButtonClick}
+      onClick={onClick}
       disabled={disabledValue}
     >
       Clear completed

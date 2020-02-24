@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 export const ToggleAll = React.memo((props) => {
   const { value, onToggleAllChange } = props;
 
-  const handleCheckboxChange = () => onToggleAllChange();
-
   return (
     <>
       <input
@@ -13,7 +11,7 @@ export const ToggleAll = React.memo((props) => {
         id="toggle-all"
         className="toggle-all"
         checked={value}
-        onChange={handleCheckboxChange}
+        onChange={() => onToggleAllChange()}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
     </>
