@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { v4 } from 'uuid';
 
 export class AddNewTaskField extends React.Component {
 
@@ -20,7 +21,7 @@ export class AddNewTaskField extends React.Component {
       const newTask = {
         value,
         complited: false,
-        id: this.props.initialTasksList.length + 1,
+        id: v4(),
       };
 
       this.props.updateInitialTasks(newTask);
@@ -52,5 +53,4 @@ AddNewTaskField.defaultProps = {
 
 AddNewTaskField.propTypes = {
   updateInitialTasks: PropTypes.func.isRequired,
-  initialTasksList: PropTypes.arrayOf(PropTypes.shape({})),
 };

@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { v4 } from 'uuid';
 import { TasksItem } from '../TasksItem/TasksItem';
 
 export class TasksList extends React.Component {
   render() {
     const {
       initialTasksList,
-      // showCurrentTasks,
+      updateTasksCondition,
+      deleteTask,
     } = this.props;
 
     return (
@@ -15,8 +17,9 @@ export class TasksList extends React.Component {
           initialTasksList.map(task => (
             <TasksItem
               task={task}
-              key={task.id}
-              updateTasksCondition={this.props.updateTasksCondition}
+              key={v4()}
+              updateTasksCondition={updateTasksCondition}
+              deleteTask={deleteTask}
             />
           ))
         }
@@ -27,12 +30,9 @@ export class TasksList extends React.Component {
 
 TasksList.propTypes = {
   updateTasksCondition: PropTypes.func.isRequired,
-  showCurrentTasks: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    id: PropTypes.number,
-  })).isRequired,
+  deleteTask: PropTypes.func.isRequired,
   initialTasksList: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string,
-    id: PropTypes.number,
+    id: PropTypes.string,
   })).isRequired,
 };

@@ -13,12 +13,22 @@ export class TasksItem extends React.Component {
     updateTasksCondition(updateConditionCheckedTask);
   };
 
+  deleteTask = () => {
+    const { deleteTask, task } = this.props;
+    const updateConditionCheckedTask = {
+      ...task,
+      delete: true,
+    };
+
+    deleteTask(updateConditionCheckedTask);
+  };
+
   render() {
     const { task } = this.props;
 
     return (
       <>
-        <li className={task.completed ? 'completed' : 'view'}>
+        <li className={task.completed ? 'completed' : 'view'} key={task.id}>
           <div className="view">
             <input
               type="checkbox"
@@ -28,7 +38,11 @@ export class TasksItem extends React.Component {
               defaultChecked={task.completed}
             />
             <label htmlFor={`todo-${task.id}`}>{task.value}</label>
-            <button type="button" className="destroy" />
+            <button
+              type="button"
+              className="destroy"
+              onClick={this.deleteTask}
+            />
           </div>
           <input type="text" className="edit" />
         </li>
@@ -40,9 +54,10 @@ export class TasksItem extends React.Component {
 TasksItem.propTypes = {
   task: PropTypes.shape({
     completed: PropTypes.bool,
-    id: PropTypes.number,
+    id: PropTypes.string,
     value: PropTypes.string,
   }).isRequired,
 
   updateTasksCondition: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
 };

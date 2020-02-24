@@ -4,12 +4,12 @@ import { TasksList } from './components/TasksList/TasksList';
 
 const initialTasks = [
   {
-    id: 1,
+    id: '1',
     value: 'task-1',
     completed: false,
   },
   {
-    id: 2,
+    id: '2',
     value: 'task-2',
     completed: true,
   },
@@ -42,6 +42,13 @@ class App extends React.Component {
     }));
   };
 
+  deleteTask = (deletedTask) => {
+    this.setState(prevState => ({
+      initialTasksList: prevState.initialTasksList
+        .filter(task => task.id !== deletedTask.id),
+    }));
+  };
+
   render() {
     return (
       <section className="todoapp">
@@ -49,7 +56,6 @@ class App extends React.Component {
           <h1>todos</h1>
 
           <AddNewTaskField
-            initialTasksList={this.state.initialTasksList}
             updateInitialTasks={this.updateInitialTasks}
           />
 
@@ -63,6 +69,7 @@ class App extends React.Component {
             initialTasksList={this.state.initialTasksList}
             showCurrentTasks={this.state.showCurrentTasks}
             updateTasksCondition={this.updateTasksCondition}
+            deleteTask={this.deleteTask}
           />
 
           {/*<ul className="todo-list">*/}
