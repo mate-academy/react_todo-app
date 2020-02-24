@@ -88,7 +88,6 @@ export class TodoItem extends React.PureComponent {
           completed,
           editing: inEdit,
         })}
-        onDoubleClick={this.liClick}
       >
         <div className="view">
           <input
