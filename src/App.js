@@ -19,6 +19,22 @@ export default class App extends Component {
     filter: 'all',
   };
 
+  componentDidMount() {
+    const persistedTodos = localStorage.getItem('todos');
+
+    if (persistedTodos) {
+      const todos = JSON.parse(persistedTodos);
+
+      this.setState({ todos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todos !== this.state.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
   onHandleFilter = (e) => {
     const filter = e.target.name;
 
