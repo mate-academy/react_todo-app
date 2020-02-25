@@ -43,7 +43,7 @@ export function TodoList(props) {
         className="toggle-all"
         onChange={handleToggleAll}
       />
-      <label htmlFor="toggle-all">Mark all as completed</label>
+      <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">{items}</ul>
     </section>
   );
