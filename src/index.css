@@ -324,6 +324,12 @@ html .clear-completed:active {
   cursor: pointer;
 }
 
+.clear-completed[disabled],
+.clear-completed[disabled]:hover {
+  color: #fff;
+  cursor: default;
+}
+
 .clear-completed:hover {
   text-decoration: underline;
 }

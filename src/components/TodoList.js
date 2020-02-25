@@ -44,7 +44,7 @@ export function TodoList(props) {
         onChange={handleToggleAll}
         checked={list.every(todo => !(todo.completed))}
       />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      <label htmlFor="toggle-all">Mark all as completed</label>
       <ul className="todo-list">{items}</ul>
     </section>
   );

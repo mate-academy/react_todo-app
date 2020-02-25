@@ -107,6 +107,7 @@ class App extends Component {
         </section>
         <TodoFooter
           filter={filter}
+          todos={items}
           counts={items.filter(({ completed }) => completed).length}
           handleToggleTab={this.handleToggleTab}
           handleClearCompleted={this.handleClearCompleted}

@@ -7,6 +7,7 @@ export function TodoFooter(props) {
     counts,
     handleToggleTab,
     handleClearCompleted,
+    todos,
   } = props;
 
   return (
@@ -45,6 +46,7 @@ export function TodoFooter(props) {
         type="button"
         className="clear-completed"
         onClick={handleClearCompleted}
+        disabled={todos.every(todo => todo.completed) ? 'disabled' : ''}
       >
         Clear completed
       </button>
@@ -57,4 +59,8 @@ TodoFooter.propTypes = {
   counts: PropTypes.number.isRequired,
   handleToggleTab: PropTypes.func.isRequired,
   handleClearCompleted: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    completed: PropTypes.number,
+    text: PropTypes.string,
+  })).isRequired,
 };
