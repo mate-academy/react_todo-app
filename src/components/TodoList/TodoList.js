@@ -22,7 +22,11 @@ export const TodoList = (props) => {
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
-    PropTypes.shape(),
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+    }),
   ).isRequired,
   onCheckBox: PropTypes.func.isRequired,
   onDestroy: PropTypes.func.isRequired,

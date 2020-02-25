@@ -12,31 +12,25 @@ export class NewTodo extends React.Component {
     });
   }
 
-  onBlurInput = (event) => {
-    const { target } = event;
+  onBlurInput = () => {
     const title = this.state.tempTitle.trim();
 
     if (title !== '') {
-      this.setState({
-        tempTitle: '',
-      });
-      target.value = '';
       this.props.onNewTodo(title);
-    } else {
-      this.setState({
-        tempTitle: '',
-      });
     }
+
+    this.setState({
+      tempTitle: '',
+    });
   }
 
   onEscape = (event) => {
-    const { keyCode, target } = event;
+    const { keyCode } = event;
 
     if (keyCode === 27) {
       this.setState({
         tempTitle: '',
       });
-      target.value = '';
     }
   }
 
@@ -71,6 +65,7 @@ export class NewTodo extends React.Component {
           onBlur={this.onBlurInput}
           onKeyPress={this.onKeyInput}
           onKeyDown={this.onEscape}
+          value={this.state.tempTitle}
         />
       </header>
     );

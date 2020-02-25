@@ -7,8 +7,7 @@ export class Todo extends Component {
     tempTitle: this.props.title,
   }
 
-   checkBoxClicked = (event) => {
-     event.target.closest('li').classList.toggle('completed');
+   checkBoxClicked = () => {
      this.props.onCheckBox(this.props.id);
    }
 

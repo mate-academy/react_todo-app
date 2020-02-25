@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export class Filters extends Component {
+  state = {
+    currentItem: 1,
+  }
+
   linkList = [
     {
       id: 1, title: 'All',
@@ -10,13 +14,9 @@ export class Filters extends Component {
       id: 2, title: 'Active',
     },
     {
-      id: 3, title: 'Complited',
+      id: 3, title: 'Completed',
     },
   ]
-
-  state = {
-    currentItem: 1,
-  }
 
   clickHandler = (event, id) => {
     event.preventDefault();
