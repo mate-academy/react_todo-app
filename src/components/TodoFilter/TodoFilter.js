@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TodoFilter = ({
-  handleSelect,
+  handleShowAll,
+  handleShowCompleted,
+  handleShowActive,
   handleClearCompleted,
 }) => (
   <>
@@ -12,7 +14,7 @@ const TodoFilter = ({
           href="#/"
           className="selected"
           name="all"
-          onClick={handleSelect}
+          onClick={handleShowAll}
         >
         All
         </a>
@@ -22,7 +24,7 @@ const TodoFilter = ({
         <a
           href="#/active"
           name="false"
-          onClick={handleSelect}
+          onClick={handleShowActive}
         >
        Active
         </a>
@@ -32,7 +34,7 @@ const TodoFilter = ({
         <a
           name="true"
           href="#/completed"
-          onClick={handleSelect}
+          onClick={handleShowCompleted}
         >
        Completed
         </a>
@@ -49,7 +51,9 @@ const TodoFilter = ({
 );
 
 TodoFilter.propTypes = {
-  handleSelect: PropTypes.func.isRequired,
+  handleShowAll: PropTypes.func.isRequired,
+  handleShowActive: PropTypes.func.isRequired,
+  handleShowCompleted: PropTypes.func.isRequired,
   handleClearCompleted: PropTypes.func.isRequired,
 };
 

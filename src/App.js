@@ -6,7 +6,7 @@ import TodoFilter from './components/TodoFilter/TodoFilter';
 const filterTodosWithQuery = (
   todos, filter,
 ) => {
-  if (filter === 'all') {
+  if (filter === '') {
     return todos;
   }
 
@@ -16,7 +16,9 @@ const filterTodosWithQuery = (
 export default class App extends Component {
   state = {
     todos: [],
-    filter: 'all',
+    filter: '',
+    isChecked: false,
+    checkActive: false,
   };
 
   componentDidMount() {
@@ -35,27 +37,22 @@ export default class App extends Component {
     }
   }
 
-  onHandleFilter = (e) => {
-    const filter = e.target.name;
+  onShowAll = () => {
+    this.setState({
+      filter: '',
+    });
+  }
 
-    switch (filter) {
-      case 'false':
-        this.setState({
-          filter: false,
-        });
-        break;
-      case 'true':
-        this.setState({
-          filter: true,
-        });
-        break;
-      case 'all':
-        this.setState({
-          filter: 'all',
-        });
-        break;
-      default:
-    }
+  onShowActive = () => {
+    this.setState({
+      filter: false,
+    });
+  }
+
+  onShowCompleted = () => {
+    this.setState({
+      filter: true,
+    });
   }
 
   countNotCompleted = () => {
@@ -78,9 +75,10 @@ export default class App extends Component {
 
   onUpdateCompleted = (id) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map(todo => (todo.id === id ? {
-        ...todo, completed: !todo.completed,
-      } : todo)),
+      todos: prevState.todos.map(todo => (todo.id === id
+        ? {
+          ...todo, completed: !todo.completed,
+        } : todo)),
     }));
   }
 
@@ -92,15 +90,23 @@ export default class App extends Component {
 
   onHandleToggleAll = () => {
     this.setState(prevState => ({
+      isChecked: !prevState.isChecked,
+      checkActive: !prevState.checkActive,
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: true,
+        completed: !prevState.isChecked,
       })),
     }));
   }
 
+  onBlur = () => {
+    this.setState({
+      checkActive: false,
+    });
+  }
+
   render() {
-    const { filter, todos } = this.state;
+    const { filter, todos, checkActive } = this.state;
     const filteredTodos = filterTodosWithQuery(todos, filter);
 
     return (
@@ -116,19 +122,24 @@ export default class App extends Component {
             deleteTodo={this.onDeleteTodo}
             updateCompleted={this.onUpdateCompleted}
             handleToggleAll={this.onHandleToggleAll}
+            handleBlur={this.onBlur}
+            checked={checkActive}
           />
-
         </section>
-
-        <footer className="footer">
-          <span className="todo-count">
-            {`${this.countNotCompleted()} items left`}
-          </span>
-          <TodoFilter
-            handleSelect={this.onHandleFilter}
-            handleClearCompleted={this.onClearCompleted}
-          />
-        </footer>
+        {todos.length > 0 && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${this.countNotCompleted()} items left`}
+            </span>
+            <TodoFilter
+              handleShowAll={this.onShowAll}
+              handleShowCompleted={this.onShowCompleted}
+              handleShowActive={this.onShowActive}
+              handleSelect={this.onHandleFilter}
+              handleClearCompleted={this.onClearCompleted}
+            />
+          </footer>
+        )}
       </section>
     );
   }

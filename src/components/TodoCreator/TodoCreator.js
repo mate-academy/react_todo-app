@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 const uuidv1 = require('uuid/v1');
 
 export default class TodoCreator extends Component {
-  static propTypes = {
-    addTodo: PropTypes.func.isRequired,
-  }
-
   state = {
     newTodo: '',
   }
@@ -50,3 +46,7 @@ export default class TodoCreator extends Component {
     );
   }
 }
+
+TodoCreator.propTypes = {
+  addTodo: PropTypes.func.isRequired,
+};
