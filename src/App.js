@@ -86,19 +86,19 @@ class App extends Component {
   }
 
   render() {
-    const { filter, items } = this.state;
+    const { filter, items, title } = this.state;
 
     return (
       <section className="todoapp">
         <TodoHeader
           handleAddTodo={this.handleAddTodo}
           handleChange={this.handleChange}
-          inputValue={this.state.title}
+          inputValue={title}
         />
         <section className="main">
           <TodoList
             filter={filter}
-            data={items}
+            todos={items}
             handleEditTodo={this.handleEditTodo}
             handleToggleAll={this.handleToggleAll}
             handleToggleTodo={this.handleToggleTodo}

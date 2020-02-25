@@ -16,18 +16,20 @@ export class TodoItem extends Component {
     }
   }
 
-  onTextInputChange = (e) => {
-    const { value } = e.target;
+  handleTextInputChange = ({ target }) => {
+    const { value } = target;
 
     this.props.handleEditTodo(this.props.index, value);
   }
 
   toggleEditing = () => {
-    if (this.props.data.text === '') {
+    if (this.props.todo.text === '') {
       return this.editingInput.current.focus();
     }
 
-    return this.setState(prevState => ({ isEditing: !prevState.isEditing }));
+    return this.setState(prevState => ({
+      isEditing: !prevState.isEditing,
+    }));
   }
 
   handleEndEditing = (e) => {
@@ -38,8 +40,8 @@ export class TodoItem extends Component {
 
   render() {
     const { isEditing } = this.state;
-    const { data, handleToggleTodo, handleRemoveTodo } = this.props;
-    const { text, completed } = data;
+    const { todo, handleToggleTodo, handleRemoveTodo } = this.props;
+    const { text, completed } = todo;
 
     return (
       <li className={isEditing ? 'editing' : (completed === 0 && 'completed')}>
@@ -54,7 +56,7 @@ export class TodoItem extends Component {
             <input
               type="text"
               className="edit"
-              onChange={this.onTextInputChange}
+              onChange={this.handleTextInputChange}
               onKeyDown={this.handleEndEditing}
               onBlur={this.toggleEditing}
               ref={this.editingInput}
@@ -77,7 +79,7 @@ export class TodoItem extends Component {
 }
 
 TodoItem.propTypes = {
-  data: PropTypes.shape({
+  todo: PropTypes.shape({
     completed: PropTypes.number,
     text: PropTypes.string,
   }).isRequired,

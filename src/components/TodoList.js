@@ -5,25 +5,25 @@ import { TodoItem } from './TodoItem';
 export function TodoList(props) {
   const {
     filter,
-    data,
+    todos,
     handleToggleTodo,
     handleRemoveTodo,
     handleEditTodo,
     handleToggleAll,
   } = props;
 
-  let list = data;
+  let list = todos;
 
   if (filter === 'completed') {
-    list = data.filter(({ completed }) => !completed);
+    list = todos.filter(({ completed }) => !completed);
   } else if (filter === 'active') {
-    list = data.filter(({ completed }) => completed);
+    list = todos.filter(({ completed }) => completed);
   }
 
   const items = list.map((item, index) => (
     <TodoItem
       key={item.id}
-      data={item}
+      todo={item}
       index={index}
       handleEditTodo={handleEditTodo}
       handleToggleTodo={() => {
@@ -51,7 +51,7 @@ export function TodoList(props) {
 
 TodoList.propTypes = {
   filter: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.shape({
+  todos: PropTypes.arrayOf(PropTypes.shape({
     completed: PropTypes.number,
     text: PropTypes.string,
   })).isRequired,
