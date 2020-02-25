@@ -74,13 +74,13 @@ class App extends Component {
     this.setState({ items: [...items] });
   }
 
-  onHandleToggleAll = (event) => {
+  handleToggleAll = (event) => {
     const completed = event.target.checked;
 
     this.setState(prevState => ({
       items: prevState.items.map(item => ({
         ...item,
-        completed: +completed,
+        completed: +(!completed),
       })),
     }));
   }
@@ -100,7 +100,7 @@ class App extends Component {
             filter={filter}
             data={items}
             handleEditTodo={this.handleEditTodo}
-            handleToggleAll={this.onHandleToggleAll}
+            handleToggleAll={this.handleToggleAll}
             handleToggleTodo={this.handleToggleTodo}
             handleRemoveTodo={this.handleRemoveTodo}
           />
