@@ -1,48 +1,115 @@
-import React from 'react';
-import { Header } from './components/Header';
+import React, { Component } from 'react';
+import uuid from 'uuid/v4';
+import './index.css';
+import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { TodoFooter } from './components/TodoFooter';
 
-class App extends React.Component {
+class App extends Component {
   state = {
-    tab: 'all',
-    items: [],
+    filter: 'all',
+    items: [{
+      text: 'sample todo',
+      id: uuid(),
+      completed: 1,
+    }],
+    title: '',
+  };
+
+  handleChange = ({ target }) => {
+    const title = target.value;
+
+    this.setState({
+      title,
+    });
   }
 
-  handleAddTodo = (e) => {
-    const { value } = e.target;
+  handleAddTodo = (event) => {
+    const { value } = event.target;
 
-    if (e.keyCode !== 13 || value === '') {
+    if (event.keyCode !== 13 || value.trim() === '') {
       return;
     }
 
-    const { items } = this.state;
     const item = {
-      text: value, status: 1,
+      text: value,
+      completed: 1,
+      id: uuid(),
     };
 
-    items.push(item);
+    this.setState(prevState => ({
+      items: [...prevState.items, item],
+      title: '',
+    }));
+  }
+
+  handleToggleTodo = (index) => {
+    const { items } = this.state;
+
+    items[index].completed = items[index].completed ? 0 : 1;
     this.setState({ items });
-    // e.target.value = '';
+  }
+
+  handleRemoveTodo = (index) => {
+    const { items } = this.state;
+
+    items.splice(index, 1);
+    this.setState({ items });
+  }
+
+  handleEditTodo = (index, text) => {
+    const { items } = this.state;
+
+    items[index].text = text;
+    this.setState({ items });
+  }
+
+  handleToggleTab = (filter) => {
+    this.setState({ filter });
+  }
+
+  handleClearCompleted = () => {
+    const items = this.state.items.filter(({ completed }) => completed);
+
+    this.setState({ items: [...items] });
+  }
+
+  onHandleToggleAll = (event) => {
+    const completed = event.target.checked;
+
+    this.setState(prevState => ({
+      items: prevState.items.map(item => ({
+        ...item,
+        completed: +completed,
+      })),
+    }));
   }
 
   render() {
-    const { tab, items } = this.state;
+    const { filter, items } = this.state;
 
     return (
       <section className="todoapp">
-        <Header handleAddTodo={this.handleAddTodo} />
+        <TodoHeader
+          handleAddTodo={this.handleAddTodo}
+          handleChange={this.handleChange}
+          inputValue={this.state.title}
+        />
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
-          <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
-            tab={tab}
+            filter={filter}
             data={items}
+            handleEditTodo={this.handleEditTodo}
+            handleToggleAll={this.onHandleToggleAll}
+            handleToggleTodo={this.handleToggleTodo}
+            handleRemoveTodo={this.handleRemoveTodo}
           />
         </section>
-        <Footer
-          tab={tab}
-          counts={items.filter(({ status }) => status).length}
+        <TodoFooter
+          filter={filter}
+          counts={items.filter(({ completed }) => completed).length}
+          handleToggleTab={this.handleToggleTab}
+          handleClearCompleted={this.handleClearCompleted}
         />
       </section>
     );
