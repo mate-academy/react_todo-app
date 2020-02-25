@@ -54,6 +54,8 @@ export class TasksItem extends React.Component {
   changeConditionOnEnter = (event) => {
     if (event.key === 'Enter') {
       this.handleDoubleClick();
+    } else if (event.key === 'Escape') {
+
     }
   };
 
@@ -72,7 +74,14 @@ export class TasksItem extends React.Component {
 
     return (
       <>
-        <li className={classNames(this.state.editIntVisible ? 'editing' : 'view', task.completed ? 'completed' : '')} key={task.id} onDoubleClick={this.handleDoubleClick}>
+        <li
+          className={classNames(this.state.editIntVisible ? 'editing' : 'view', task.completed ? 'completed' : '')}
+          key={task.id}
+          onDoubleClick={this.handleDoubleClick}
+          // onClick={(event)=> {
+          //   event.preventDefault();
+          // }}
+        >
           <div className="view">
             <input
               type="checkbox"
@@ -91,11 +100,7 @@ export class TasksItem extends React.Component {
           <input
             type="text"
             className="edit"
-            defaultValue={
-              this.state.newValueTask
-                ? this.state.newValueTask
-                : this.props.task.value
-            }
+            defaultValue={task.value || this.state.newValueTask}
             onChange={this.editTaskValue}
             onKeyUp={this.changeConditionOnEnter}
             onBlur={this.handleBlur}
