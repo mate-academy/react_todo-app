@@ -9,7 +9,7 @@ export class TasksItem extends React.Component {
   }
 
   state = {
-    newValueTask: '',
+    newValueTask: this.props.task.value,
     editIntVisible: false,
   };
 
@@ -24,12 +24,14 @@ export class TasksItem extends React.Component {
     updateTasksCondition(updateConditionCheckedTask);
   };
 
-  handleDoubleClick = (event) => {
-    const { updateTasksCondition, task } = this.props;
-
+  ToggleEditInput = (event) => {
     this.setState(prevState => ({
       editIntVisible: !prevState.editIntVisible,
     }), () => this.textInput.current.focus());
+  };
+
+  sendNewTaskValue = () => {
+    const { updateTasksCondition, task } = this.props;
 
     const updateConditionCheckedTask = {
       ...task,
@@ -41,8 +43,10 @@ export class TasksItem extends React.Component {
 
   handleBlur = () => {
     if (this.state.editIntVisible) {
-      this.handleDoubleClick();
+      this.ToggleEditInput();
     }
+
+    this.sendNewTaskValue();
   };
 
   editTaskValue = (event) => {
@@ -51,11 +55,14 @@ export class TasksItem extends React.Component {
     });
   };
 
-  changeConditionOnEnter = (event) => {
+  changeConditionOnHotKey = (event) => {
     if (event.key === 'Enter') {
-      this.handleDoubleClick();
+      this.ToggleEditInput();
     } else if (event.key === 'Escape') {
-
+      this.setState({
+        newValueTask: this.props.task.value,
+      });
+      this.ToggleEditInput();
     }
   };
 
@@ -71,13 +78,21 @@ export class TasksItem extends React.Component {
 
   render() {
     const { task } = this.props;
+    const cx = classNames(
+      this.state.editIntVisible
+        ? 'editing'
+        : 'view',
+      task.completed
+        ? 'completed'
+        : '',
+    );
 
     return (
       <>
         <li
-          className={classNames(this.state.editIntVisible ? 'editing' : 'view', task.completed ? 'completed' : '')}
+          className={classNames(cx)}
           key={task.id}
-          onDoubleClick={this.handleDoubleClick}
+          onDoubleClick={this.ToggleEditInput}
           // onClick={(event)=> {
           //   event.preventDefault();
           // }}
@@ -100,9 +115,9 @@ export class TasksItem extends React.Component {
           <input
             type="text"
             className="edit"
-            defaultValue={task.value || this.state.newValueTask}
+            value={this.state.newValueTask || ''}
             onChange={this.editTaskValue}
-            onKeyUp={this.changeConditionOnEnter}
+            onKeyUp={this.changeConditionOnHotKey}
             onBlur={this.handleBlur}
             ref={this.textInput}
           />
