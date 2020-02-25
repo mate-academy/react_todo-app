@@ -11,7 +11,6 @@ export class TasksItem extends React.Component {
   state = {
     newValueTask: '',
     editIntVisible: false,
-    textInput: React.createRef(),
   };
 
   toggleComplited = (event) => {
@@ -30,7 +29,7 @@ export class TasksItem extends React.Component {
 
     this.setState(prevState => ({
       editIntVisible: !prevState.editIntVisible,
-    }), ()=> this.textInput.current.focus());
+    }), () => this.textInput.current.focus());
 
     const updateConditionCheckedTask = {
       ...task,

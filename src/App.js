@@ -49,10 +49,10 @@ class App extends React.Component {
     });
   };
 
-  clearComplitedMark = (clearTasksList) => {
+  clearComplited = (clearTasksList) => {
     this.setState({
       initialTasksList: clearTasksList,
-    })
+    });
   };
 
   deleteTask = (deletedTask) => {
@@ -63,7 +63,6 @@ class App extends React.Component {
   };
 
   render() {
-
     return (
       <section className="todoapp">
         <header className="header">
@@ -85,56 +84,18 @@ class App extends React.Component {
             updateTasksCondition={this.updateTasksCondition}
             deleteTask={this.deleteTask}
           />
-
-          {/*<ul className="todo-list">*/}
-          {/*  <li>*/}
-          {/*    <div className="view">*/}
-          {/*      <input type="checkbox" className="toggle" id="todo-1" />*/}
-          {/*      <label htmlFor="todo-1">asdfghj</label>*/}
-          {/*      <button type="button" className="destroy" />*/}
-          {/*    </div>*/}
-          {/*    <input type="text" className="edit" />*/}
-          {/*  </li>*/}
-          {/*  <li className="completed">*/}
-          {/*    <div className="view">*/}
-          {/*      <input type="checkbox" className="toggle" id="todo-2" />*/}
-          {/*      <label htmlFor="todo-2">qwertyuio</label>*/}
-          {/*      <button type="button" className="destroy" />*/}
-          {/*    </div>*/}
-          {/*    <input type="text" className="edit" />*/}
-          {/*  </li>*/}
-
-          {/*  <li className="editing">*/}
-          {/*    <div className="view">*/}
-          {/*      <input type="checkbox" className="toggle" id="todo-3" />*/}
-          {/*      <label htmlFor="todo-3">zxcvbnm</label>*/}
-          {/*      <button type="button" className="destroy" />*/}
-          {/*    </div>*/}
-          {/*    <input type="text" className="edit" />*/}
-          {/*  </li>*/}
-
-          {/*  <li>*/}
-          {/*    <div className="view">*/}
-          {/*      <input type="checkbox" className="toggle" id="todo-4" />*/}
-          {/*      <label htmlFor="todo-4">1234567890</label>*/}
-          {/*      <button type="button" className="destroy" />*/}
-          {/*    </div>*/}
-          {/*    <input type="text" className="edit" />*/}
-          {/*  </li>*/}
-          {/*</ul>*/}
         </section>
 
         <Footer
           initialTasksList={this.state.initialTasksList}
           showCurrentTasks={this.state.showCurrentTasks}
           updateShowCurrentTaslFlag={this.updateShowCurrentTaslFlag}
-          clearComplitedMark={this.clearComplitedMark}
+          clearComplited={this.clearComplited}
         />
 
       </section>
     );
   }
-
 }
 
 export default App;
