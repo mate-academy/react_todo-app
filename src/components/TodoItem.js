@@ -11,8 +11,11 @@ export class TodoItem extends React.PureComponent {
 
   updateInputRef = React.createRef();
 
-  handleGlobalClick = (evt) => {
-    if (evt.target.closest('.js-edit-input')) {
+  handleGlobalClick = (event) => {
+    if (
+      event.target.closest('.js-edit-input')
+      || event.target.closest('.js-edit-btn')
+    ) {
       return;
     }
 
@@ -34,7 +37,7 @@ export class TodoItem extends React.PureComponent {
     }
   }
 
-  handleLabelDoubleClick = () => {
+  handleEditButtonClick = () => {
     const { title } = this.props;
 
     this.setState({
@@ -47,17 +50,17 @@ export class TodoItem extends React.PureComponent {
     window.addEventListener('click', this.handleGlobalClick);
   };
 
-  handleUpdateInputChange = (evt) => {
+  handleUpdateInputChange = (event) => {
     this.setState({
-      updateValue: evt.target.value,
+      updateValue: event.target.value,
     });
   };
 
-  handleUpdateInputKeyDown = (evt) => {
+  handleUpdateInputKeyDown = (event) => {
     const { updateValue } = this.state;
     const { id, onUpdate } = this.props;
 
-    const { keyCode } = evt;
+    const { keyCode } = event;
 
     if (keyCode === KEYCODE.ENTER && updateValue !== '') {
       onUpdate(id, updateValue);
@@ -97,16 +100,22 @@ export class TodoItem extends React.PureComponent {
             checked={completed ? 'checked' : ''}
             onChange={onToggle}
           />
-          <label
-            htmlFor={`todo-${index}`}
-            onDoubleClick={this.handleLabelDoubleClick}
-          >
+          <label htmlFor={`todo-${index}`}>
             {title}
           </label>
           <button
             type="button"
+            className="edit-btn js-edit-btn"
+            onClick={this.handleEditButtonClick}
+            title="edit"
+          >
+            &#128393;
+          </button>
+          <button
+            type="button"
             className="destroy"
             onClick={onRemove}
+            title="delete"
           />
         </div>
         <input

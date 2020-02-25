@@ -23,11 +23,15 @@ export class TodoApp extends React.PureComponent {
     );
 
     if (todos) {
-      this.setState({ todos });
+      this.setState({
+        todos,
+      });
     }
 
     if (allTodosCompleted) {
-      this.setState({ allTodosCompleted });
+      this.setState({
+        allTodosCompleted,
+      });
     }
   }
 
@@ -122,14 +126,15 @@ export class TodoApp extends React.PureComponent {
   };
 
   setActiveFilter = (activeFilter) => {
-    this.setState({ activeFilter });
+    this.setState({
+      activeFilter,
+    });
   };
 
   render() {
     const { todos, allTodosCompleted, activeFilter } = this.state;
 
     const leftItemsCount = todos.filter(todo => !todo.completed).length;
-
     const visibleTodos = TodosUtils.getVisibleTodos(todos, activeFilter);
 
     return (

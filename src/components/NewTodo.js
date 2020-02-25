@@ -7,8 +7,8 @@ export class NewTodo extends React.PureComponent {
     inputValue: '',
   };
 
-  handleGlobalClick = (evt) => {
-    if (evt.target.closest('.js-new-todo')) {
+  handleGlobalClick = (event) => {
+    if (event.target.closest('.js-new-todo')) {
       return;
     }
 
@@ -20,22 +20,28 @@ export class NewTodo extends React.PureComponent {
     if (inputValue !== '') {
       onKeyDown(inputValue);
 
-      this.setState({ inputValue: '' });
+      this.setState({
+        inputValue: '',
+      });
     }
   };
 
-  handleInputChange = (evt) => {
-    this.setState({ inputValue: evt.target.value });
+  handleInputChange = (event) => {
+    this.setState({
+      inputValue: event.target.value,
+    });
   };
 
-  handleInputKeyDown = (evt) => {
+  handleInputKeyDown = (event) => {
     const { inputValue } = this.state;
     const { onKeyDown } = this.props;
 
-    if (evt.keyCode === KEYCODE.ENTER && inputValue !== '') {
+    if (event.keyCode === KEYCODE.ENTER && inputValue !== '') {
       onKeyDown(inputValue);
 
-      this.setState({ inputValue: '' });
+      this.setState({
+        inputValue: '',
+      });
     }
   };
 
