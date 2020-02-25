@@ -1,23 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { v4 } from 'uuid';
 import { TasksItem } from '../TasksItem/TasksItem';
 
 export class TasksList extends React.Component {
   render() {
     const {
       initialTasksList,
+      showCurrentTasks,
       updateTasksCondition,
       deleteTask,
     } = this.props;
 
+    let showNow = null;
+
+    if (showCurrentTasks === 'all') {
+      showNow = initialTasksList;
+    } else if (showCurrentTasks === 'completed') {
+      showNow = initialTasksList.filter(task => task.completed);
+    } else if (showCurrentTasks === 'active') {
+      showNow = initialTasksList.filter(task => !task.completed);
+    }
+
     return (
       <ul className="todo-list">
         {
-          initialTasksList.map(task => (
+          showNow.map(task => (
             <TasksItem
               task={task}
-              key={v4()}
+              key={task.id}
               updateTasksCondition={updateTasksCondition}
               deleteTask={deleteTask}
             />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AddNewTaskField } from './components/AddBewTaskFiled/AddNewTaskField';
 import { TasksList } from './components/TasksList/TasksList';
+import { Footer } from './components/Footer/Footer';
 
 const initialTasks = [
   {
@@ -18,7 +19,7 @@ const initialTasks = [
 class App extends React.Component {
   state = {
     initialTasksList: initialTasks,
-    showCurrentTasks: null,
+    showCurrentTasks: 'all',
   };
 
   updateInitialTasks = (newTasksItem) => {
@@ -42,6 +43,18 @@ class App extends React.Component {
     }));
   };
 
+  updateShowCurrentTaslFlag = (newFlag) => {
+    this.setState({
+      showCurrentTasks: newFlag,
+    });
+  };
+
+  clearComplitedMark = (clearTasksList) => {
+    this.setState({
+      initialTasksList: clearTasksList,
+    })
+  };
+
   deleteTask = (deletedTask) => {
     this.setState(prevState => ({
       initialTasksList: prevState.initialTasksList
@@ -50,6 +63,7 @@ class App extends React.Component {
   };
 
   render() {
+
     return (
       <section className="todoapp">
         <header className="header">
@@ -110,29 +124,13 @@ class App extends React.Component {
           {/*</ul>*/}
         </section>
 
-        {/*<footer className="footer">*/}
-        {/*  <span className="todo-count">*/}
-        {/*    3 items left*/}
-        {/*  </span>*/}
+        <Footer
+          initialTasksList={this.state.initialTasksList}
+          showCurrentTasks={this.state.showCurrentTasks}
+          updateShowCurrentTaslFlag={this.updateShowCurrentTaslFlag}
+          clearComplitedMark={this.clearComplitedMark}
+        />
 
-        {/*  <ul className="filters">*/}
-        {/*    <li>*/}
-        {/*      <a href="#/" className="selected">All</a>*/}
-        {/*    </li>*/}
-
-        {/*    <li>*/}
-        {/*      <a href="#/active">Active</a>*/}
-        {/*    </li>*/}
-
-        {/*    <li>*/}
-        {/*      <a href="#/completed">Completed</a>*/}
-        {/*    </li>*/}
-        {/*  </ul>*/}
-
-        {/*  <button type="button" className="clear-completed">*/}
-        {/*    Clear completed*/}
-        {/*  </button>*/}
-        {/*</footer>*/}
       </section>
     );
   }

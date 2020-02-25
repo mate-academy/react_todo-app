@@ -1,44 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 
 export class TasksItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.textInput = React.createRef();
+  }
+
   state = {
     newValueTask: '',
     editIntVisible: false,
-    date: new Date(),
+    textInput: React.createRef(),
   };
 
-  changeCondition = (event) => {
+  toggleComplited = (event) => {
     const { updateTasksCondition, task } = this.props;
-    // double click - open edit input
-
-    if (this.checkDoubleClick(event)) {
-      return;
-    }
 
     const updateConditionCheckedTask = {
       ...task,
       completed: !task.completed,
+    };
+
+    updateTasksCondition(updateConditionCheckedTask);
+  };
+
+  handleDoubleClick = (event) => {
+    const { updateTasksCondition, task } = this.props;
+
+    this.setState(prevState => ({
+      editIntVisible: !prevState.editIntVisible,
+    }), ()=> this.textInput.current.focus());
+
+    const updateConditionCheckedTask = {
+      ...task,
       value: this.state.newValueTask || task.value,
     };
 
     updateTasksCondition(updateConditionCheckedTask);
   };
 
-  checkDoubleClick = (event) => {
-    if ((new Date() - this.state.date) < 200) {
-      this.setState(prevState => ({
-        editIntVisible: !prevState.editIntVisible,
-      }));
-
-      return true;
+  handleBlur = () => {
+    if (this.state.editIntVisible) {
+      this.handleDoubleClick();
     }
-
-    this.setState({
-      date: new Date(),
-    });
-
-    return false;
   };
 
   editTaskValue = (event) => {
@@ -49,7 +54,7 @@ export class TasksItem extends React.Component {
 
   changeConditionOnEnter = (event) => {
     if (event.key === 'Enter') {
-      this.changeCondition();
+      this.handleDoubleClick();
     }
   };
 
@@ -68,13 +73,13 @@ export class TasksItem extends React.Component {
 
     return (
       <>
-        <li className={task.completed ? 'completed' : 'view'} key={task.id}>
+        <li className={classNames(this.state.editIntVisible ? 'editing' : 'view', task.completed ? 'completed' : '')} key={task.id} onDoubleClick={this.handleDoubleClick}>
           <div className="view">
             <input
               type="checkbox"
               className="toggle"
               id={`todo-${task.id}`}
-              onClick={this.changeCondition}
+              onChange={this.toggleComplited}
               defaultChecked={task.completed}
             />
             <label htmlFor={`todo-${task.id}`}>{task.value}</label>
@@ -92,11 +97,10 @@ export class TasksItem extends React.Component {
                 ? this.state.newValueTask
                 : this.props.task.value
             }
-            style={{
-              display: `${this.state.editIntVisible ? 'block' : 'none'}`,
-            }}
             onChange={this.editTaskValue}
             onKeyUp={this.changeConditionOnEnter}
+            onBlur={this.handleBlur}
+            ref={this.textInput}
           />
         </li>
       </>

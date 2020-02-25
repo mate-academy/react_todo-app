@@ -20,7 +20,7 @@ export class AddNewTaskField extends React.Component {
     if (event.key === 'Enter' && value.length) {
       const newTask = {
         value,
-        complited: false,
+        completed: false,
         id: v4(),
       };
 
