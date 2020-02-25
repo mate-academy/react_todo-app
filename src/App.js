@@ -106,7 +106,11 @@ export default class App extends Component {
   }
 
   render() {
-    const { filter, todos, checkActive } = this.state;
+    const {
+      filter,
+      todos,
+      checkActive,
+    } = this.state;
     const filteredTodos = filterTodosWithQuery(todos, filter);
 
     return (
