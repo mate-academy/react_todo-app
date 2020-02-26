@@ -93,9 +93,6 @@ export class TasksItem extends React.Component {
           className={classNames(cx)}
           key={task.id}
           onDoubleClick={this.ToggleEditInput}
-          // onClick={(event)=> {
-          //   event.preventDefault();
-          // }}
         >
           <div className="view">
             <input

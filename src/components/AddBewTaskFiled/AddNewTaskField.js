@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { v4 } from 'uuid';
 
 export class AddNewTaskField extends React.Component {
-
   state = {
     value: '',
   };
@@ -46,10 +45,6 @@ export class AddNewTaskField extends React.Component {
     );
   }
 }
-
-AddNewTaskField.defaultProps = {
-  initialTasksList: [],
-};
 
 AddNewTaskField.propTypes = {
   updateInitialTasks: PropTypes.func.isRequired,
