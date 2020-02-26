@@ -1,12 +1,13 @@
 {
   "name": "react_todo-app",
-  "homepage": ".",
+  "homepage": "https://arimazz.github.io/react_todo-app/",
   "version": "0.1.0",
   "private": true,
   "keywords": [],
   "author": "Mate Academy",
   "license": "GPL-3.0",
   "dependencies": {
+    "npm": "^6.14.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
