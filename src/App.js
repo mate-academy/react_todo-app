@@ -139,6 +139,7 @@ export default class App extends Component {
               handleFilter={this.onHanleFilter}
               handleSelect={this.onHandleFilter}
               handleClearCompleted={this.onClearCompleted}
+              filter={filter}
             />
           </footer>
         )}

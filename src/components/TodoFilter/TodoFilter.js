@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 const TodoFilter = ({
   handleFilter,
   handleClearCompleted,
+  filter,
 }) => (
   <>
     <ul className="filters">
       <li>
         <a
           href="#/"
-          className="selected"
+          className={filter === 'all' && 'selected'}
           name="all"
           onClick={handleFilter}
         >
@@ -21,6 +22,7 @@ const TodoFilter = ({
       <li>
         <a
           href="#/active"
+          className={filter === 'active' && 'selected'}
           name="active"
           onClick={handleFilter}
         >
@@ -31,6 +33,7 @@ const TodoFilter = ({
       <li>
         <a
           name="completed"
+          className={filter === 'completed' && 'selected'}
           href="#/completed"
           onClick={handleFilter}
         >
@@ -51,6 +54,7 @@ const TodoFilter = ({
 TodoFilter.propTypes = {
   handleFilter: PropTypes.func.isRequired,
   handleClearCompleted: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
 
 export default TodoFilter;
