@@ -4,16 +4,16 @@ import { TasksList } from './components/TasksList/TasksList';
 import { Footer } from './components/Footer/Footer';
 
 const initialTasks = [
-  {
-    id: '1',
-    value: 'task-1',
-    completed: false,
-  },
-  {
-    id: '2',
-    value: 'task-2',
-    completed: true,
-  },
+  // {
+  //   id: '1',
+  //   value: 'task-1',
+  //   completed: false,
+  // },
+  // {
+  //   id: '2',
+  //   value: 'task-2',
+  //   completed: true,
+  // },
 ];
 
 class App extends React.Component {
@@ -74,24 +74,36 @@ class App extends React.Component {
 
         </header>
 
-        <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+        {
+          this.state.initialTasksList.length
+            ? (
+              <>
+                <section className="main">
+                  <input
+                    type="checkbox"
+                    id="toggle-all"
+                    className="toggle-all"
+                  />
+                  <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <TasksList
-            initialTasksList={this.state.initialTasksList}
-            showCurrentTasks={this.state.showCurrentTasks}
-            updateTasksCondition={this.updateTasksCondition}
-            deleteTask={this.deleteTask}
-          />
-        </section>
+                  <TasksList
+                    initialTasksList={this.state.initialTasksList}
+                    showCurrentTasks={this.state.showCurrentTasks}
+                    updateTasksCondition={this.updateTasksCondition}
+                    deleteTask={this.deleteTask}
+                  />
+                </section>
 
-        <Footer
-          initialTasksList={this.state.initialTasksList}
-          showCurrentTasks={this.state.showCurrentTasks}
-          updateShowCurrentTaslFlag={this.updateShowCurrentTaslFlag}
-          clearComplited={this.clearComplited}
-        />
+                <Footer
+                  initialTasksList={this.state.initialTasksList}
+                  showCurrentTasks={this.state.showCurrentTasks}
+                  updateShowCurrentTaslFlag={this.updateShowCurrentTaslFlag}
+                  clearComplited={this.clearComplited}
+                />
+              </>
+            )
+            : null
+        }
 
       </section>
     );
