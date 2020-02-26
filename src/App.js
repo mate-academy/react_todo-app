@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList/TodoList';
 class App extends React.Component {
   state = {
     task: '',
-    todos: JSON.parse(localStorage.getItem('state')),
+    todos: JSON.parse(localStorage.getItem('state')) || [],
     filtered: [],
     isAnyFiltered: false,
     placeholder: 'What needs to be done?',
