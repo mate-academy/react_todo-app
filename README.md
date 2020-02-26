@@ -49,6 +49,4 @@ Resources:
     - `Ecs` cancels editing
 ![todoedit](./description/edittodo.gif)
 1. (*) Save state of the APP to local storage ([Required theory](https://javascript.info/localstorage))
-1. (*) Implement saving on outside click
-    - when editing a TODO
-    - when creating a TODO
+1. (*) Implement saving an edited todo when you click outside of the input
