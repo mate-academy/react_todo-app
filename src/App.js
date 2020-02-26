@@ -3,24 +3,15 @@ import { AddNewTaskField } from './components/AddBewTaskFiled/AddNewTaskField';
 import { TasksList } from './components/TasksList/TasksList';
 import { Footer } from './components/Footer/Footer';
 
-const initialTasks = [
-  // {
-  //   id: '1',
-  //   value: 'task-1',
-  //   completed: false,
-  // },
-  // {
-  //   id: '2',
-  //   value: 'task-2',
-  //   completed: true,
-  // },
-];
-
 class App extends React.Component {
   state = {
-    initialTasksList: initialTasks,
+    initialTasksList: JSON.parse(localStorage.getItem('myData')) || [],
     showCurrentTasks: 'all',
   };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    localStorage.setItem('myData', JSON.stringify(this.state.initialTasksList));
+  }
 
   updateInitialTasks = (newTasksItem) => {
     this.setState(prevState => ({
