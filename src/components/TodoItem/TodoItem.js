@@ -16,7 +16,12 @@ const TodoItem = ({
       onChange={updateCompleted}
       checked={completed}
     />
-    <label htmlFor={id}>{title}</label>
+    <label
+      htmlFor={id}
+      className={completed === true ? 'checked' : 'todo'}
+    >
+      {title}
+    </label>
     <button
       type="button"
       className="destroy"

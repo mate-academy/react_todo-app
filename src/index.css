@@ -217,7 +217,16 @@ body {
   transition: color 0.4s;
 }
 
-.todo-list li.completed label {
+.todo-list label:checked {
+  color: #d9d9d9;
+  text-decoration: line-through;
+}
+
+.todo {
+  font-size: 24px;
+}
+
+.checked {
   color: #d9d9d9;
   text-decoration: line-through;
 }

@@ -8,18 +8,22 @@ const TodoList = ({
   updateCompleted,
   handleToggleAll,
   checked,
-  handleBlur,
 }) => (
   <>
-    <input
-      type="checkbox"
-      id="toggle-all"
-      className="toggle-all"
-      checked={checked}
-      onChange={handleToggleAll}
-      onBlur={handleBlur}
-    />
-    <label htmlFor="toggle-all">Mark all as complete</label>
+    {
+      todos.length > 0 && (
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={checked}
+            onChange={() => handleToggleAll(checked)}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        </>
+      )
+    }
     <ul className="todo-list">
       {
         todos.map(todo => (
@@ -49,7 +53,6 @@ TodoList.propTypes = {
     }),
   ),
   checked: PropTypes.bool.isRequired,
-  handleBlur: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   updateCompleted: PropTypes.func.isRequired,
   handleToggleAll: PropTypes.func.isRequired,
