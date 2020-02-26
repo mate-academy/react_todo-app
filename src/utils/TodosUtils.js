@@ -1,16 +1,16 @@
-import { FilterUtils } from './FilterUtils';
+import { filterUtils } from './filterUtils';
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
-    case FilterUtils.FILTER.ALL: {
+    case filterUtils.FILTER.ALL: {
       return todos;
     }
 
-    case FilterUtils.FILTER.ACTIVE: {
+    case filterUtils.FILTER.ACTIVE: {
       return todos.filter(todo => !todo.completed);
     }
 
-    case FilterUtils.FILTER.COMPLETED: {
+    case filterUtils.FILTER.COMPLETED: {
       return todos.filter(todo => todo.completed);
     }
 
@@ -20,6 +20,6 @@ const getVisibleTodos = (todos, filter) => {
   }
 };
 
-export const TodosUtils = {
+export const todosUtils = {
   getVisibleTodos,
 };

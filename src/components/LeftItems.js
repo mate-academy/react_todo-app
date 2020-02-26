@@ -4,13 +4,9 @@ import PropTypes from 'prop-types';
 export const LeftItems = React.memo((props) => {
   const { count } = props;
 
-  const renderContent = () => (
-    `${count} ${count === 1 ? 'item' : 'items'} left`
-  );
-
   return (
     <span className="todo-count">
-      {renderContent()}
+      {`${count} ${count === 1 ? 'item' : 'items'} left`}
     </span>
   );
 });

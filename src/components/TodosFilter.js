@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FilterItem } from './FilterItem';
-import { FilterUtils } from '../utils/FilterUtils';
+import { filterUtils } from '../utils/filterUtils';
 
 export const TodosFilter = React.memo((props) => {
   const { activeFilter, onFilterClick } = props;
 
   return (
     <ul className="filters">
-      {FilterUtils.filters.map((filter) => {
+      {filterUtils.filters.map((filter) => {
         const { name, href, content } = filter;
 
         return (

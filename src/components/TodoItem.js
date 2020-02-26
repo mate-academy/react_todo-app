@@ -5,35 +5,23 @@ import { KEYCODE } from '../utils/const';
 
 export class TodoItem extends React.PureComponent {
   state = {
-    inEdit: false,
+    inEditMode: false,
     updateValue: '',
   };
 
   updateInputRef = React.createRef();
 
-  handleGlobalClick = (event) => {
-    if (
-      event.target.closest('.js-edit-input')
-      || event.target.closest('.js-edit-btn')
-    ) {
-      return;
-    }
-
-    window.removeEventListener('click', this.handleGlobalClick);
-
+  handleUpdateInputBlur = () => {
     const { updateValue } = this.state;
     const { id, onUpdate } = this.props;
 
     this.setState({
-      inEdit: false,
+      inEditMode: false,
+      updateValue: '',
     });
 
     if (updateValue !== '') {
       onUpdate(id, updateValue);
-
-      this.setState({
-        updateValue: '',
-      });
     }
   }
 
@@ -41,13 +29,11 @@ export class TodoItem extends React.PureComponent {
     const { title } = this.props;
 
     this.setState({
-      inEdit: true,
+      inEditMode: true,
       updateValue: title,
     }, () => {
       this.updateInputRef.current.focus();
     });
-
-    window.addEventListener('click', this.handleGlobalClick);
   };
 
   handleUpdateInputChange = (event) => {
@@ -65,31 +51,27 @@ export class TodoItem extends React.PureComponent {
     if (keyCode === KEYCODE.ENTER && updateValue !== '') {
       onUpdate(id, updateValue);
 
-      window.removeEventListener('click', this.handleGlobalClick);
-
       this.setState({
-        inEdit: false,
+        inEditMode: false,
         updateValue: '',
       });
     } else if (keyCode === KEYCODE.ESC) {
-      window.removeEventListener('click', this.handleGlobalClick);
-
       this.setState({
-        inEdit: false,
+        inEditMode: false,
         updateValue: '',
       });
     }
   };
 
   render() {
-    const { inEdit, updateValue } = this.state;
+    const { inEditMode, updateValue } = this.state;
     const { title, completed, index, onToggle, onRemove } = this.props;
 
     return (
       <li
         className={classNames({
           completed,
-          editing: inEdit,
+          editing: inEditMode,
         })}
       >
         <div className="view">
@@ -108,9 +90,7 @@ export class TodoItem extends React.PureComponent {
             className="edit-btn js-edit-btn"
             onClick={this.handleEditButtonClick}
             title="edit"
-          >
-            &#128393;
-          </button>
+          />
           <button
             type="button"
             className="destroy"
@@ -125,6 +105,7 @@ export class TodoItem extends React.PureComponent {
           value={updateValue}
           onChange={this.handleUpdateInputChange}
           onKeyDown={this.handleUpdateInputKeyDown}
+          onBlur={this.handleUpdateInputBlur}
         />
       </li>
     );

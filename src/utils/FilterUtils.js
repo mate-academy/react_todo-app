@@ -16,7 +16,7 @@ const filters = [
   },
 ];
 
-export const FilterUtils = {
+export const filterUtils = {
   FILTER,
   filters,
 };
