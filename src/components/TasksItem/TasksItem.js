@@ -10,7 +10,7 @@ export class TasksItem extends React.Component {
     editIntVisible: false,
   };
 
-  toggleComplited = (event) => {
+  toggleCompleted = (event) => {
     const { updateTasksCondition, task } = this.props;
 
     const updateConditionCheckedTask = {
@@ -96,8 +96,8 @@ export class TasksItem extends React.Component {
               type="checkbox"
               className="toggle"
               id={`todo-${task.id}`}
-              onChange={this.toggleComplited}
-              defaultChecked={task.completed}
+              onChange={this.toggleCompleted}
+              checked={task.completed}
             />
             <label htmlFor={`todo-${task.id}`}>{task.value}</label>
             <button

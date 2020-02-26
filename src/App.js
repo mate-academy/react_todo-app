@@ -7,6 +7,7 @@ class App extends React.Component {
   state = {
     initialTasksList: [],
     showCurrentTasks: 'all',
+    toggleCompleted: false,
   };
 
   componentDidMount() {
@@ -46,6 +47,16 @@ class App extends React.Component {
     });
   };
 
+  toggleCompletedAll = () => {
+    this.setState(prevState => ({
+      initialTasksList: prevState.initialTasksList.map(task => ({
+        ...task,
+        completed: !prevState.toggleCompleted,
+      })),
+      toggleCompleted: !prevState.toggleCompleted,
+    }));
+  };
+
   clearCompleted = (clearTasksList) => {
     this.setState({
       initialTasksList: clearTasksList,
@@ -79,6 +90,7 @@ class App extends React.Component {
                     type="checkbox"
                     id="toggle-all"
                     className="toggle-all"
+                    onClick={this.toggleCompletedAll}
                   />
                   <label htmlFor="toggle-all">Mark all as complete</label>
 
