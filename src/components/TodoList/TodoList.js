@@ -13,7 +13,7 @@ export const TodoList = (props) => {
           onDestroy={onDestroy}
           onCheckBox={onCheckBox}
           key={todo.id}
-          {...todo}
+          todo={todo}
         />
       ))}
     </ul>

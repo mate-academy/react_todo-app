@@ -4,34 +4,21 @@ import * as cx from 'classnames';
 
 export class Todo extends Component {
   state = {
-    title: this.props.title,
-    tempTitle: this.props.title,
+    tempTitle: this.props.todo.title,
     isEdit: false,
-    targetInput: undefined,
   }
+
+  textInput = React.createRef();
 
   componentDidUpdate() {
-    const { isEdit, targetInput } = this.state;
-
-    if (isEdit && targetInput) {
-      targetInput.focus();
+    if (this.state.isEdit) {
+      this.textInput.current.focus();
     }
-  }
-
-   checkBoxClicked = () => {
-     const { onCheckBox, id } = this.props;
-
-     onCheckBox(id);
-   }
-
-  onDestroyClick = () => {
-    const { onDestroy, id } = this.props;
-
-    onDestroy(id);
   }
 
   onEdit = () => {
     this.setState({ isEdit: true });
+    this.textInput.current.focus();
   }
 
   onEditInput = (event) => {
@@ -42,8 +29,8 @@ export class Todo extends Component {
 
   onBlurInput = () => {
     let newTitle;
-    const { tempTitle, title } = this.state;
-    const { onEdit, id } = this.props;
+    const { tempTitle } = this.state;
+    const { onEdit, todo: { id, title } } = this.props;
 
     if (tempTitle.trim() !== '') {
       onEdit(id, tempTitle.trim());
@@ -60,18 +47,18 @@ export class Todo extends Component {
 
   onEscape = (event) => {
     if (event.keyCode === 27) {
-      this.setState(prevState => ({
-        tempTitle: prevState.title,
+      this.setState({
+        tempTitle: this.props.todo.title,
         isEdit: false,
-      }));
+      });
     }
   }
 
   onKeyInput = (event) => {
     if (event.key === 'Enter') {
       let newTitle;
-      const { tempTitle, title } = this.state;
-      const { onEdit, id } = this.props;
+      const { tempTitle } = this.state;
+      const { onEdit, todo: { id, title } } = this.props;
 
       if (tempTitle.trim() !== '') {
         onEdit(id, tempTitle.trim());
@@ -87,12 +74,14 @@ export class Todo extends Component {
     }
   }
 
-  refHandler = (ref) => {
-    this.setState({ targetInput: ref });
-  }
-
   render() {
-    const { title, completed } = this.props;
+    const {
+      todo: {
+        title, completed, id,
+      },
+      onCheckBox,
+      onDestroy,
+    } = this.props;
 
     return (
       <li
@@ -106,14 +95,13 @@ export class Todo extends Component {
             type="checkbox"
             className="toggle"
             checked={completed}
-            onClick={this.checkBoxClicked}
+            onClick={() => onCheckBox(id)}
           />
           <label onDoubleClick={this.onEdit}>{title}</label>
           <button
             type="button"
             className="destroy"
-            onClick={this.onDestroyClick}
-
+            onClick={() => onDestroy(id)}
           />
         </div>
         <input
@@ -124,7 +112,7 @@ export class Todo extends Component {
           onBlur={this.onBlurInput}
           onKeyPress={this.onKeyInput}
           onKeyDown={this.onEscape}
-          ref={this.refHandler}
+          ref={this.textInput}
         />
       </li>
     );
@@ -132,9 +120,11 @@ export class Todo extends Component {
 }
 
 Todo.propTypes = {
-  completed: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  todo: PropTypes.shape({
+    completed: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+  }).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDestroy: PropTypes.func.isRequired,
   onCheckBox: PropTypes.func.isRequired,

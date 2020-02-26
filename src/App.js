@@ -101,11 +101,11 @@ class App extends Component {
     }
 
     if (flag === 2) {
-      return [...todos.filter(item => !item.completed)];
+      return todos.filter(item => !item.completed);
     }
 
     if (flag === 3) {
-      return [...todos.filter(item => item.completed)];
+      return todos.filter(item => item.completed);
     }
 
     return undefined;
@@ -121,20 +121,23 @@ class App extends Component {
   handlerToggleAll = (event) => {
     let todos;
     let count;
+    const { rawTodos } = this.state;
 
     if (event.target.checked) {
-      todos = this.state.rawTodos.map((item) => {
+      todos = rawTodos.map((item) => {
         const newItem = {
-          ...item, completed: true,
+          ...item,
+          completed: true,
         };
 
         return newItem;
       });
       count = 0;
     } else {
-      todos = this.state.rawTodos.map((item) => {
+      todos = rawTodos.map((item) => {
         const newItem = {
-          ...item, completed: false,
+          ...item,
+          completed: false,
         };
 
         return newItem;
@@ -150,16 +153,7 @@ class App extends Component {
   }
 
   render() {
-    // localStorage.removeItem('todos')
-    // localStorage.removeItem('todoLastId')
-
-    if (!localStorage.todos) {
-      localStorage.setItem('todos', '[]');
-      localStorage.setItem('todoLastId', '0');
-    }
-
     return (
-
       <section className="todoapp">
         <NewTodo onNewTodo={this.newTodoHandler} />
         <section className="main">
