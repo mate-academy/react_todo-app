@@ -95,7 +95,6 @@ class App extends React.Component {
             )
             : null
         }
-
       </section>
     );
   }
