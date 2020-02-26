@@ -18,7 +18,7 @@ class App extends React.Component {
     const { value } = event.target;
 
     this.setState({
-      task: value.replace(/\s+/g, ' '),
+      task: value.replace(/^\s+$/g, ''),
     });
   }
 
@@ -237,7 +237,7 @@ class App extends React.Component {
           <h1>todos</h1>
 
           <form onSubmit={
-            !task || task === ' ' ? this.validatedForm : this.addTodo
+            !task ? this.validatedForm : this.addTodo
           }
           >
             <input
