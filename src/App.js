@@ -5,9 +5,15 @@ import { Footer } from './components/Footer/Footer';
 
 class App extends React.Component {
   state = {
-    initialTasksList: JSON.parse(localStorage.getItem('myData')) || [],
+    initialTasksList: [],
     showCurrentTasks: 'all',
   };
+
+  componentDidMount() {
+    this.setState({
+      initialTasksList: JSON.parse(localStorage.getItem('myData')) || [],
+    });
+  }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     localStorage.setItem('myData', JSON.stringify(this.state.initialTasksList));
