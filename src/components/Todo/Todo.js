@@ -1,25 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as cx from 'classnames';
 
 export class Todo extends Component {
   state = {
     title: this.props.title,
     tempTitle: this.props.title,
+    isEdit: false,
+    targetInput: undefined,
+  }
+
+  componentDidUpdate() {
+    const { isEdit, targetInput } = this.state;
+
+    if (isEdit && targetInput) {
+      targetInput.focus();
+    }
   }
 
    checkBoxClicked = () => {
-     this.props.onCheckBox(this.props.id);
+     const { onCheckBox, id } = this.props;
+
+     onCheckBox(id);
    }
 
   onDestroyClick = () => {
-    this.props.onDestroy(this.props.id);
+    const { onDestroy, id } = this.props;
+
+    onDestroy(id);
   }
 
-  onEdit = (event) => {
-    if (event.target.tagName === 'LABEL') {
-      event.currentTarget.classList.add('editing');
-      event.currentTarget.querySelector('.edit').focus();
-    }
+  onEdit = () => {
+    this.setState({ isEdit: true });
   }
 
   onEditInput = (event) => {
@@ -28,39 +40,55 @@ export class Todo extends Component {
     });
   }
 
-  onBlurInput = (event) => {
-    if (this.state.tempTitle.trim() !== '') {
-      this.props.onEdit(this.props.id, this.state.tempTitle.trim());
-      event.target.closest('li').classList.remove('editing');
+  onBlurInput = () => {
+    let newTitle;
+    const { tempTitle, title } = this.state;
+    const { onEdit, id } = this.props;
+
+    if (tempTitle.trim() !== '') {
+      onEdit(id, tempTitle.trim());
+      newTitle = tempTitle;
     } else {
-      this.setState(prevState => ({
-        tempTitle: prevState.title,
-      }));
-      event.target.closest('li').classList.remove('editing');
+      newTitle = title;
     }
+
+    this.setState({
+      tempTitle: newTitle,
+      isEdit: false,
+    });
   }
 
   onEscape = (event) => {
     if (event.keyCode === 27) {
       this.setState(prevState => ({
         tempTitle: prevState.title,
+        isEdit: false,
       }));
-      event.target.closest('li').classList.remove('editing');
     }
   }
 
   onKeyInput = (event) => {
     if (event.key === 'Enter') {
-      if (this.state.tempTitle.trim() !== '') {
-        this.props.onEdit(this.props.id, this.state.tempTitle.trim());
-        event.target.closest('li').classList.remove('editing');
+      let newTitle;
+      const { tempTitle, title } = this.state;
+      const { onEdit, id } = this.props;
+
+      if (tempTitle.trim() !== '') {
+        onEdit(id, tempTitle.trim());
+        newTitle = tempTitle;
       } else {
-        this.setState(prevState => ({
-          tempTitle: prevState.title,
-        }));
-        event.target.closest('li').classList.remove('editing');
+        newTitle = title;
       }
+
+      this.setState({
+        tempTitle: newTitle,
+        isEdit: false,
+      });
     }
+  }
+
+  refHandler = (ref) => {
+    this.setState({ targetInput: ref });
   }
 
   render() {
@@ -68,8 +96,10 @@ export class Todo extends Component {
 
     return (
       <li
-        onDoubleClick={this.onEdit}
-        className={completed ? 'completed' : ''}
+        className={cx({
+          completed,
+          editing: this.state.isEdit,
+        })}
       >
         <div className="view">
           <input
@@ -78,11 +108,12 @@ export class Todo extends Component {
             checked={completed}
             onClick={this.checkBoxClicked}
           />
-          <label>{title}</label>
+          <label onDoubleClick={this.onEdit}>{title}</label>
           <button
             type="button"
             className="destroy"
             onClick={this.onDestroyClick}
+
           />
         </div>
         <input
@@ -92,8 +123,8 @@ export class Todo extends Component {
           onChange={this.onEditInput}
           onBlur={this.onBlurInput}
           onKeyPress={this.onKeyInput}
-          onFocus={this.onFocusInput}
           onKeyDown={this.onEscape}
+          ref={this.refHandler}
         />
       </li>
     );
