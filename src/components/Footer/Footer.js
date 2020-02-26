@@ -2,19 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export class Footer extends React.Component {
-
   changeShowFlag = (event) => {
     const { target } = event;
-    const { updateShowCurrentTaslFlag } = this.props;
+    const { updateShowCurrentTaskFlag } = this.props;
 
-    updateShowCurrentTaslFlag(target.name);
+    updateShowCurrentTaskFlag(target.name);
   };
 
-  clearComplited = () => {
-    const { clearComplited, initialTasksList } = this.props;
+  clearCompleted = () => {
+    const { clearCompleted, initialTasksList } = this.props;
     const newInitialTaskList = initialTasksList.filter(task => !task.completed);
 
-    clearComplited(newInitialTaskList);
+    clearCompleted(newInitialTaskList);
   };
 
   render() {
@@ -29,7 +28,6 @@ export class Footer extends React.Component {
               ? `items left ${leftItems.length}`
               : `item left ${leftItems.length}`
           }
-
         </span>
 
         <ul className="filters">
@@ -68,7 +66,7 @@ export class Footer extends React.Component {
         <button
           type="button"
           className="clear-completed"
-          onClick={this.clearComplited}
+          onClick={this.clearCompleted}
         >
           Clear completed
         </button>
@@ -82,7 +80,9 @@ Footer.defaultProps = {
 };
 
 Footer.propTypes = {
-  initialTasksList: PropTypes.arrayOf(PropTypes.shape()),
-  updateShowCurrentTaslFlag: PropTypes.func.isRequired,
-  clearComplited: PropTypes.func.isRequired,
+  initialTasksList: PropTypes.arrayOf(PropTypes.shape({
+    task: PropTypes.bool,
+  })),
+  updateShowCurrentTaskFlag: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
 };

@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 export class TasksItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.textInput = React.createRef();
-  }
+  textInput = React.createRef();
 
   state = {
     newValueTask: this.props.task.value,

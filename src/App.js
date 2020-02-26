@@ -34,13 +34,13 @@ class App extends React.Component {
     }));
   };
 
-  updateShowCurrentTaslFlag = (newFlag) => {
+  updateShowCurrentTaskFlag = (newFlag) => {
     this.setState({
       showCurrentTasks: newFlag,
     });
   };
 
-  clearComplited = (clearTasksList) => {
+  clearCompleted = (clearTasksList) => {
     this.setState({
       initialTasksList: clearTasksList,
     });
@@ -62,7 +62,6 @@ class App extends React.Component {
           <AddNewTaskField
             updateInitialTasks={this.updateInitialTasks}
           />
-
         </header>
 
         {
@@ -88,8 +87,8 @@ class App extends React.Component {
                 <Footer
                   initialTasksList={this.state.initialTasksList}
                   showCurrentTasks={this.state.showCurrentTasks}
-                  updateShowCurrentTaslFlag={this.updateShowCurrentTaslFlag}
-                  clearComplited={this.clearComplited}
+                  updateShowCurrentTaskFlag={this.updateShowCurrentTaskFlag}
+                  clearCompleted={this.clearCompleted}
                 />
               </>
             )

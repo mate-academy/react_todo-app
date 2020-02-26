@@ -32,16 +32,13 @@ export class AddNewTaskField extends React.Component {
 
   render() {
     return (
-      <>
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={this.state.value}
-          onChange={this.handleChange}
-          onKeyUp={this.sendNewTask}
-        />
-
-      </>
+      <input
+        className="new-todo"
+        placeholder="What needs to be done?"
+        value={this.state.value}
+        onChange={this.handleChange}
+        onKeyUp={this.sendNewTask}
+      />
     );
   }
 }
