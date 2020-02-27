@@ -1,0 +1,13 @@
+.stopwatch {
+  padding: 15px 10px 5px;
+}
+
+.stopwatch__time {
+  font-family: monospace;
+  font-size: 2em;
+}
+
+.stopwatch__controls button {
+  margin: 5px;
+  color: white;
+}

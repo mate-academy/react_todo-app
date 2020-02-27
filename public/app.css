@@ -1,0 +1,29 @@
+body {
+  background-color: #fafafa;
+  color: #757575;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+input {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  color: #757575;
+  padding: 0.5em;
+  border-radius: 2px;
+  border: 1px solid lightgray;
+  outline: none;
+}
+
+.main {
+  background: #fff;
+  width: 700px;
+  margin: 70px auto;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+}
+
+i:hover {
+  cursor: pointer;
+}

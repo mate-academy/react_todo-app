@@ -1,0 +1,20 @@
+.todo-add-form {
+  display: flex;
+  background-color: #fafafa;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+.todo-add-form input {
+  flex: 1;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.todo-add-form input:focus {
+  border: 1px solid #00d8ff;
+}
+
+.todo-add-form button {
+  margin-left: 10px;
+}

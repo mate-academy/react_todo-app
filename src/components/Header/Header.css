@@ -1,0 +1,15 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  color: white;
+  background-color: #222;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  display: inline-block;
+  color: #00d8ff;
+  margin: 1rem auto;
+}
