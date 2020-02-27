@@ -241,7 +241,6 @@ body {
 .todo-list li .edit-icon {
   display: none;
   position: absolute;
-  /* padding-left: 5px; */
   top: 0;
   right: 42px;
   bottom: 0;
