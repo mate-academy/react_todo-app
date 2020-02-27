@@ -132,10 +132,11 @@ body {
   height: 34px;
   font-size: 0;
   position: absolute;
-  top: -52px;
+  top: 15px;
   left: -13px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+  cursor: pointer;
 }
 
 .toggle-all + label:before {
@@ -193,6 +194,7 @@ body {
   border: none; /* Mobile Safari */
   -webkit-appearance: none;
   appearance: none;
+  cursor: pointer;
 }
 
 .todo-list li .toggle {
@@ -235,6 +237,7 @@ body {
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:hover {

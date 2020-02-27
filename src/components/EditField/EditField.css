@@ -1,0 +1,3 @@
+.todo-list li .edit.active {
+  display: block;
+}
