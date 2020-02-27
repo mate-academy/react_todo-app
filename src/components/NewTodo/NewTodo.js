@@ -1,5 +1,7 @@
 import React from 'react';
-import uuid from 'uuid/v4';
+// import uuid from 'uuid/v4';
+
+const uuidv4 = require('uuid/v4');
 
 export class NewTodo extends React.Component {
   state = {
@@ -21,7 +23,7 @@ export class NewTodo extends React.Component {
 
     if (event.key === 'Enter') {
       const todo = {
-        id: uuid(),
+        id: uuidv4(),
         title,
         completed: false,
       };
