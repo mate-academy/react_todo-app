@@ -9,10 +9,10 @@ export function TodoList(props) {
     handleRemoveTodo,
     handleEditTodo,
     handleToggleAll,
+    isChecked,
   } = props;
 
   const list = todos;
-  const isChecked = list.every(todo => !(todo.completed));
 
   const items = list.map((item, index) => (
     <TodoItem
@@ -49,6 +49,7 @@ TodoList.propTypes = {
     completed: PropTypes.bool,
     text: PropTypes.string,
   })).isRequired,
+  isChecked: PropTypes.bool.isRequired,
   handleToggleTodo: PropTypes.func.isRequired,
   handleToggleAll: PropTypes.func.isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,

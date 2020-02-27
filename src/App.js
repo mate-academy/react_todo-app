@@ -113,6 +113,7 @@ class App extends Component {
             handleToggleAll={this.handleToggleAll}
             handleToggleTodo={this.handleToggleTodo}
             handleRemoveTodo={this.handleRemoveTodo}
+            isChecked={items.every(todo => !(todo.completed))}
           />
         </section>
         <TodoFooter
