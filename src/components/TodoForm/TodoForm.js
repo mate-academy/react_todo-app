@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 
 export class TodoForm extends Component {
   state = {
@@ -20,7 +21,11 @@ export class TodoForm extends Component {
     const { title } = this.state;
     const { addTodo } = this.props;
 
-    addTodo(title);
+    addTodo({
+      title,
+      id: uuidv4(),
+      completed: false,
+    });
 
     this.setState({
       title: '',

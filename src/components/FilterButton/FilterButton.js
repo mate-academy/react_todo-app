@@ -1,25 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 
 export const FilterButton = (props) => {
-  const { onClick, selectedFilter, children } = props;
+  const { onClick, className, children } = props;
 
   return (
     <li>
-      <a
-        href={`#/${selectedFilter === 'all' ? '' : selectedFilter}`}
-        className={cx({ selected: selectedFilter === children.toLowerCase() })}
+      <button
+        type="button"
+        className={className}
         onClick={onClick}
       >
         {children}
-      </a>
+      </button>
     </li>
   );
 };
 
 FilterButton.propTypes = {
   onClick: PropTypes.func.isRequired,
-  selectedFilter: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
   children: PropTypes.string.isRequired,
 };

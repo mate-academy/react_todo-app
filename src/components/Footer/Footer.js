@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { FilterButton } from '../FilterButton/FilterButton';
 
 export const Footer = (props) => {
   const {
     todos,
-    currentFilter,
-    setFilter,
+    isActiveFilter,
+    setFilteredTodos,
     clearCompletedTodos,
   } = props;
 
@@ -17,20 +18,20 @@ export const Footer = (props) => {
       </span>
       <ul className="filters">
         <FilterButton
-          onClick={() => setFilter('all')}
-          selectedFilter={currentFilter}
+          className={cx({ selected: isActiveFilter === 'all' })}
+          onClick={() => setFilteredTodos('all')}
         >
           All
         </FilterButton>
         <FilterButton
-          onClick={() => setFilter('active')}
-          selectedFilter={currentFilter}
+          className={cx({ selected: isActiveFilter === 'active' })}
+          onClick={() => setFilteredTodos('active')}
         >
           Active
         </FilterButton>
         <FilterButton
-          onClick={() => setFilter('completed')}
-          selectedFilter={currentFilter}
+          className={cx({ selected: isActiveFilter === 'completed' })}
+          onClick={() => setFilteredTodos('completed')}
         >
           Completed
         </FilterButton>
@@ -55,7 +56,7 @@ Footer.propTypes = {
     }),
   ).isRequired,
 
-  setFilter: PropTypes.func.isRequired,
-  currentFilter: PropTypes.string.isRequired,
+  setFilteredTodos: PropTypes.func.isRequired,
+  isActiveFilter: PropTypes.string.isRequired,
   clearCompletedTodos: PropTypes.func.isRequired,
 };

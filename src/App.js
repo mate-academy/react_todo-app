@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoForm } from './components/TodoForm/TodoForm';
 import { Footer } from './components/Footer/Footer';
@@ -8,80 +6,89 @@ import { Footer } from './components/Footer/Footer';
 export class App extends Component {
   state = {
     todos: [],
-    currentFilter: 'all',
+    filteredTodos: [],
+    isActiveFilter: 'all',
   }
 
-  addTodo = (title) => {
-    if (title.trim()) {
+  addTodo = (todo) => {
+    if (todo.title) {
       this.setState(prevState => ({
-        todos: [...prevState.todos, {
-          title: title.trim(),
-          id: uuidv4(),
-          completed: false,
-        }],
+        filteredTodos: [...prevState.filteredTodos, todo],
+        todos: [...prevState.todos, todo],
       }));
     }
   }
 
-  toggleSetCompleted = (id) => {
-    this.setState(prevState => ({
-      todos: prevState.todos
-        .map((todo) => {
-          if (todo.id === id) {
-            return {
-              ...todo,
-              completed: !todo.completed,
-            };
-          }
+  setCompleted = (id) => {
+    const callback = (todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
 
-          return { ...todo };
-        }),
+      return todo;
+    };
+
+    this.setState(prevState => ({
+      todos: prevState.todos.map(callback),
+      filteredTodos: prevState.filteredTodos.map(callback),
     }));
   }
 
-  toggleSetAllCompleted = (checked) => {
+  setAllCompleted = (checked) => {
+    const callback = todo => (
+      {
+        ...todo,
+        completed: checked,
+      }
+    );
+
     this.setState(prevState => ({
-      todos: prevState.todos.map(todo => (
-        {
-          ...todo,
-          completed: checked,
-        }
-      )),
+      todos: prevState.todos.map(callback),
+      filteredTodos: prevState.filteredTodos.map(callback),
     }));
   }
 
   removeTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== id),
+      filteredTodos: prevState.filteredTodos.filter(todo => todo.id !== id),
     }));
   }
 
   clearCompletedTodos = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
+      filteredTodos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
-  setFilter = (filter) => {
-    this.setState(prevState => ({
-      currentFilter: filter,
-    }));
+  setFilteredTodos = (filter) => {
+    switch (filter) {
+      case 'active':
+        this.setState(prevState => ({
+          filteredTodos: prevState.todos.filter(todo => !todo.completed),
+          isActiveFilter: 'active',
+        }));
+        break;
+      case 'completed':
+        this.setState(prevState => ({
+          filteredTodos: prevState.todos.filter(todo => todo.completed),
+          isActiveFilter: 'completed',
+        }));
+        break;
+      default:
+        this.setState(prevState => ({
+          filteredTodos: prevState.todos,
+          isActiveFilter: 'all',
+        }));
+    }
   }
 
   render() {
-    const { todos, currentFilter } = this.state;
-    let filteredTodos;
-
-    switch (currentFilter) {
-      case 'active':
-        filteredTodos = todos.filter(todo => !todo.completed);
-        break;
-      case 'completed':
-        filteredTodos = [...todos].filter(todo => todo.completed);
-        break;
-      default:
-        filteredTodos = [...todos];
-    }
+    const { todos, isActiveFilter, filteredTodos } = this.state;
 
     return (
       <section className="todoapp">
@@ -93,8 +100,8 @@ export class App extends Component {
         <section className="main">
           <TodoList
             todos={filteredTodos}
-            toggleSetCompleted={this.toggleSetCompleted}
-            toggleSetAllCompleted={this.toggleSetAllCompleted}
+            setCompleted={this.setCompleted}
+            setAllCompleted={this.setAllCompleted}
             removeTodo={this.removeTodo}
           />
         </section>
@@ -105,8 +112,8 @@ export class App extends Component {
               <Footer
                 todos={todos}
                 clearCompletedTodos={this.clearCompletedTodos}
-                currentFilter={currentFilter}
-                setFilter={this.setFilter}
+                isActiveFilter={isActiveFilter}
+                setFilteredTodos={this.setFilteredTodos}
               />
             </footer>
           )}

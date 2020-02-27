@@ -4,11 +4,10 @@ import * as cx from 'classnames';
 
 export const Todo = ({
   todo: { title, id, completed },
-  toggleSetCompleted,
+  setCompleted,
   removeTodo,
 }) => (
   <li
-    key={id}
     className={cx({ completed })}
   >
     <div className="view">
@@ -16,7 +15,7 @@ export const Todo = ({
         type="checkbox"
         className="toggle"
         id={id}
-        onChange={() => toggleSetCompleted(id)}
+        onChange={() => setCompleted(id)}
         checked={completed}
       />
       <label
@@ -44,6 +43,6 @@ Todo.propTypes = {
     completed: PropTypes.bool.isRequired,
   }).isRequired,
 
-  toggleSetCompleted: PropTypes.func.isRequired,
+  setCompleted: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
 };
