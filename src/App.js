@@ -5,14 +5,25 @@ import { TodoList } from './components/TodoList/TodoList';
 class App extends React.Component {
   state = {
     task: '',
-    todos: JSON.parse(localStorage.getItem('state')) || [],
+    todos: [],
     filtered: [],
     isAnyFiltered: false,
-    placeholder: 'What needs to be done?',
     isCheckedAll: false,
-    activeLink: 'All',
-    isEdit: '',
+    activeTab: 'All',
   };
+
+  componentDidMount = () => {
+    this.setState({
+      todos: JSON.parse(localStorage.getItem('state')),
+    });
+  }
+
+  componentDidUpdate = () => {
+    const { todos } = this.state;
+    const storage = JSON.stringify(todos);
+
+    localStorage.setItem('state', storage);
+  }
 
   handleChange = (event) => {
     const { value } = event.target;
@@ -28,17 +39,19 @@ class App extends React.Component {
 
     this.setState(prevState => ({
       todos: [...prevState.todos, {
-        id: uuidv4(), task, completed: false,
+        id: uuidv4(),
+        task,
+        completed: false,
       }],
       task: '',
       isAnyFiltered: false,
       filtered: [],
-      placeholder: 'What needs to be done?',
-      activeLink: 'All',
+      activeTab: 'All',
     }));
   }
 
-  changeStatus = (id, status) => {
+  changeStatus = (event) => {
+    const { checked, id } = event.target;
     const { todos, filtered } = this.state;
     let newListFiltered;
 
@@ -46,7 +59,7 @@ class App extends React.Component {
       const newItem = { ...item };
 
       if (newItem.id === id) {
-        newItem.completed = status;
+        newItem.completed = checked;
       }
 
       return newItem;
@@ -57,7 +70,7 @@ class App extends React.Component {
         const newItem = { ...item };
 
         if (newItem.id === id) {
-          newItem.completed = status;
+          newItem.completed = checked;
         }
 
         return newItem;
@@ -67,11 +80,12 @@ class App extends React.Component {
     this.setState({
       todos: [...newList],
       filtered: newListFiltered,
-      isCheckedAll: todos.every(item => item.completed === true),
+      isCheckedAll: newList.every(item => item.completed === true),
     });
   }
 
-  removeTask = (name) => {
+  removeTask = (event) => {
+    const { name } = event.target;
     const { todos, filtered } = this.state;
     const newList = todos.filter(item => item.id !== name);
     let newListFiltered;
@@ -111,7 +125,7 @@ class App extends React.Component {
     this.setState({
       filtered: [],
       isAnyFiltered: false,
-      activeLink: innerText,
+      activeTab: innerText,
     });
   }
 
@@ -124,7 +138,7 @@ class App extends React.Component {
     this.setState({
       filtered: [...newList],
       isAnyFiltered: true,
-      activeLink: innerText,
+      activeTab: innerText,
     });
   }
 
@@ -137,17 +151,12 @@ class App extends React.Component {
     this.setState({
       filtered: [...newList],
       isAnyFiltered: true,
-      activeLink: innerText,
+      activeTab: innerText,
     });
   }
 
   validatedForm = (event) => {
     event.preventDefault();
-
-    this.setState({
-      placeholder: 'Please enter the task',
-      task: '',
-    });
   }
 
   checkedAll = () => {
@@ -165,18 +174,12 @@ class App extends React.Component {
       return newItem;
     });
 
-    this.setState({
+    this.setState(prevState => ({
       todos: [...newList],
       filtered: [],
       isAnyFiltered: false,
-      isCheckedAll: !isCheckedAll,
-    });
-  }
-
-  editTask = (name) => {
-    this.setState({
-      isEdit: name,
-    });
+      isCheckedAll: !prevState.isCheckedAll,
+    }));
   }
 
   taskEdited = (edtiTitle, name) => {
@@ -210,8 +213,6 @@ class App extends React.Component {
     this.setState({
       todos: [...newList],
       filtered: newListFiltered,
-      isCheckedAll: todos.every(item => item.completed === true),
-      isEdit: '',
     });
   }
 
@@ -221,15 +222,10 @@ class App extends React.Component {
       todos,
       filtered,
       isAnyFiltered,
-      placeholder,
       isCheckedAll,
-      activeLink,
-      isEdit,
+      activeTab,
     } = this.state;
-    const activeItems = todos.filter(i => i.completed === false).length;
-    const storage = JSON.stringify(todos);
-
-    localStorage.setItem('state', storage);
+    const activeItems = todos.filter(item => item.completed === false).length;
 
     return (
       <section className="todoapp">
@@ -244,7 +240,7 @@ class App extends React.Component {
               value={task}
               onChange={this.handleChange}
               className="new-todo"
-              placeholder={placeholder}
+              placeholder="What needs to be done?"
             />
           </form>
         </header>
@@ -260,9 +256,7 @@ class App extends React.Component {
           activeItems={activeItems}
           checkedAll={this.checkedAll}
           isCheckedAll={isCheckedAll}
-          activeLink={activeLink}
-          isEdit={isEdit}
-          editTask={this.editTask}
+          activeTab={activeTab}
           taskEdited={this.taskEdited}
         />
       </section>

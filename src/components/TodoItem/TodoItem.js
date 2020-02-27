@@ -4,59 +4,63 @@ import PropTypes from 'prop-types';
 
 export class TodoItem extends Component {
   state = {
-    edtiTitle: this.props.todo.task,
+    editTitle: '',
     placeholder: '',
+    isEdit: '',
   };
-
-  markCompleted = (event) => {
-    const { checked, id } = event.target;
-    const { changeStatus } = this.props;
-
-    changeStatus(id, checked);
-  }
-
-  deleteTask = (event) => {
-    const { name } = event.target;
-    const { removeTask } = this.props;
-
-    removeTask(name);
-  }
 
   handleEdit = (event) => {
     const { name } = event.target;
-    const { editTask } = this.props;
+    const { task } = this.props.todo;
 
-    editTask(name);
+    this.setState({
+      isEdit: name,
+      editTitle: task,
+    });
   }
 
   taskChange = (event) => {
     const { value } = event.target;
 
     this.setState({
-      edtiTitle: value,
+      editTitle: value,
     });
   }
 
   submitChanges = (event) => {
     const { name } = event.target;
-    const { edtiTitle } = this.state;
+    const { editTitle } = this.state;
     const { taskEdited } = this.props;
 
+    if (!editTitle) {
+      this.setState({
+        placeholder: 'Enter the task',
+      });
+
+      return;
+    }
+
     if (event.key === 'Enter' || event.key === 'NumPadEnter') {
-      if (!edtiTitle) {
-        this.setState({
-          placeholder: 'Enter the task',
-        });
-      } else {
-        taskEdited(edtiTitle, name);
-      }
+      taskEdited(editTitle, name);
+      this.setState({
+        isEdit: '',
+      });
+
+      return;
+    }
+
+    if (!event.key) {
+      taskEdited(editTitle, name);
+      this.setState({
+        isEdit: '',
+      });
     }
   }
 
   render() {
     const { task, id, completed } = this.props.todo;
-    const { isEdit } = this.props;
-    const { edtiTitle, placeholder } = this.state;
+    const { changeStatus, removeTask } = this.props;
+    const { editTitle, placeholder, isEdit } = this.state;
 
     return (
       <li className={cx({ editing: id === isEdit })}>
@@ -66,7 +70,7 @@ export class TodoItem extends Component {
             className="toggle"
             id={id}
             checked={completed}
-            onChange={this.markCompleted}
+            onChange={event => changeStatus(event)}
           />
           <label
             htmlFor={id}
@@ -84,17 +88,18 @@ export class TodoItem extends Component {
             type="button"
             className="destroy"
             name={id}
-            onClick={this.deleteTask}
+            onClick={event => removeTask(event)}
           />
         </div>
         <input
           type="text"
           className="edit"
           placeholder={placeholder}
-          value={edtiTitle}
+          value={editTitle}
           name={id}
           onChange={this.taskChange}
           onKeyDown={this.submitChanges}
+          onBlur={this.submitChanges}
         />
       </li>
     );
@@ -107,9 +112,7 @@ TodoItem.propTypes = {
     task: PropTypes.string,
     completed: PropTypes.bool,
   }).isRequired,
-  isEdit: PropTypes.string.isRequired,
   removeTask: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
-  editTask: PropTypes.func.isRequired,
   taskEdited: PropTypes.func.isRequired,
 };

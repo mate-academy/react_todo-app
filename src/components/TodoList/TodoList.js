@@ -15,9 +15,7 @@ export const TodoList = (props) => {
     showActive,
     checkedAll,
     isCheckedAll,
-    activeLink,
-    isEdit,
-    editTask,
+    activeTab,
     taskEdited,
   } = props;
 
@@ -27,7 +25,7 @@ export const TodoList = (props) => {
         <input
           type="checkbox"
           id="toggle-all"
-          checked={isCheckedAll}
+          checked={items.length ? isCheckedAll : false}
           className="toggle-all"
           onChange={checkedAll}
         />
@@ -40,8 +38,6 @@ export const TodoList = (props) => {
               todo={todo}
               changeStatus={changeStatus}
               removeTask={removeTask}
-              isEdit={isEdit}
-              editTask={editTask}
               taskEdited={taskEdited}
             />
           ))}
@@ -57,7 +53,7 @@ export const TodoList = (props) => {
           <li>
             <a
               href="#/"
-              className={cx({ selected: activeLink === 'All' })}
+              className={cx({ selected: activeTab === 'All' })}
               onClick={showAll}
             >
             All
@@ -67,7 +63,7 @@ export const TodoList = (props) => {
           <li>
             <a
               href="#/active"
-              className={cx({ selected: activeLink === 'Active' })}
+              className={cx({ selected: activeTab === 'Active' })}
               onClick={showActive}
             >
             Active
@@ -77,7 +73,7 @@ export const TodoList = (props) => {
           <li>
             <a
               href="#/completed"
-              className={cx({ selected: activeLink === 'Completed' })}
+              className={cx({ selected: activeTab === 'Completed' })}
               onClick={showCompleted}
             >
             Completed
@@ -105,8 +101,7 @@ TodoList.propTypes = {
   })).isRequired,
   activeItems: PropTypes.number.isRequired,
   isCheckedAll: PropTypes.bool.isRequired,
-  activeLink: PropTypes.string.isRequired,
-  isEdit: PropTypes.string.isRequired,
+  activeTab: PropTypes.string.isRequired,
   removeTask: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
   removeCompleted: PropTypes.func.isRequired,
@@ -114,6 +109,5 @@ TodoList.propTypes = {
   showCompleted: PropTypes.func.isRequired,
   showActive: PropTypes.func.isRequired,
   checkedAll: PropTypes.func.isRequired,
-  editTask: PropTypes.func.isRequired,
   taskEdited: PropTypes.func.isRequired,
 };

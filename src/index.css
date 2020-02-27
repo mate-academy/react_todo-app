@@ -232,6 +232,7 @@ body {
   height: 30px;
   margin: auto 0;
   font-size: 30px;
+  line-height: 30px;
   color: #cc9a9a;
   margin-bottom: 12px;
   transition: color 0.2s ease-out;
@@ -240,9 +241,9 @@ body {
 .todo-list li .edit-icon {
   display: none;
   position: absolute;
-  padding-left: 5px;
+  /* padding-left: 5px; */
   top: 0;
-  right: 41px;
+  right: 42px;
   bottom: 0;
   width: 30px;
   height: 30px;
@@ -264,6 +265,7 @@ body {
 .todo-list li .edit-icon:after {
   content: "";
   display: block;
+  margin: 0 auto 3px;
   width: 18px;
   height: 18px;
   background-image: url("./icons/icon-green.png");
