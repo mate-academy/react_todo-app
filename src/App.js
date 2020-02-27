@@ -89,7 +89,7 @@ class App extends Component {
 
     this.setState(prevState => ({
       count: todos.length,
-      rawTodos: [...todos],
+      rawTodos: todos,
       visibleTodos: this.filter(prevState.filtersFlag, todos),
       todoLastId: newId,
     }));
