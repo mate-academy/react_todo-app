@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export const Todo = ({ todo, toggledCheck, deleteTask }) => {
-const { id, title, complited } = todo;
+const { id, title, completed } = todo;
+console.log(completed);
 
   return (
     <li>
