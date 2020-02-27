@@ -109,7 +109,7 @@ export class App extends React.Component {
             todos={this.handleFilters()}
             onDeleteTodo={this.deleteTodo}
             onUpdateCompleted={this.handleCompleted}
-            onToggleCompleted={this.toggleAllCompleted }
+            onToggleCompleted={this.toggleAllCompleted}
           />
         </section>
 
