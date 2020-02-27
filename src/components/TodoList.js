@@ -4,7 +4,6 @@ import { TodoItem } from './TodoItem';
 
 export function TodoList(props) {
   const {
-    filter,
     todos,
     handleToggleTodo,
     handleRemoveTodo,
@@ -12,13 +11,8 @@ export function TodoList(props) {
     handleToggleAll,
   } = props;
 
-  let list = todos;
-
-  if (filter === 'completed') {
-    list = todos.filter(({ completed }) => !completed);
-  } else if (filter === 'active') {
-    list = todos.filter(({ completed }) => completed);
-  }
+  const list = todos;
+  const isChecked = list.every(todo => !(todo.completed));
 
   const items = list.map((item, index) => (
     <TodoItem
@@ -27,10 +21,10 @@ export function TodoList(props) {
       index={index}
       handleEditTodo={handleEditTodo}
       handleToggleTodo={() => {
-        handleToggleTodo(index);
+        handleToggleTodo(item.id);
       }}
       handleRemoveTodo={() => {
-        handleRemoveTodo(index);
+        handleRemoveTodo(item.id);
       }}
     />
   ));
@@ -42,7 +36,7 @@ export function TodoList(props) {
         id="toggle-all"
         className="toggle-all"
         onChange={handleToggleAll}
-        checked={list.every(todo => !(todo.completed))}
+        checked={isChecked}
       />
       <label htmlFor="toggle-all">Mark all as completed</label>
       <ul className="todo-list">{items}</ul>
@@ -51,9 +45,8 @@ export function TodoList(props) {
 }
 
 TodoList.propTypes = {
-  filter: PropTypes.string.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
-    completed: PropTypes.number,
+    completed: PropTypes.bool,
     text: PropTypes.string,
   })).isRequired,
   handleToggleTodo: PropTypes.func.isRequired,

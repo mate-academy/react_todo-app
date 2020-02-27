@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import uuid from 'uuid/v4';
 import './index.css';
 import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
@@ -10,8 +9,8 @@ class App extends Component {
     filter: 'all',
     items: [{
       text: 'sample todo',
-      id: uuid(),
-      completed: 1,
+      id: 1,
+      completed: true,
     }],
     title: '',
   };
@@ -24,44 +23,49 @@ class App extends Component {
     });
   }
 
-  handleAddTodo = (event) => {
-    const { value } = event.target;
-
-    if (event.keyCode !== 13 || value.trim() === '') {
-      return;
-    }
-
-    const item = {
-      text: value,
-      completed: 1,
-      id: uuid(),
-    };
-
+  handleAddTodo = (newTodo) => {
     this.setState(prevState => ({
-      items: [...prevState.items, item],
-      title: '',
+      items: [
+        ...prevState.items,
+        newTodo,
+      ],
     }));
   }
 
-  handleToggleTodo = (index) => {
-    const { items } = this.state;
+  handleToggleTodo = (todoId) => {
+    this.setState(prevState => ({
+      items: prevState.items.map((item) => {
+        if (item.id === todoId) {
+          return {
+            ...item,
+            completed: !item.completed,
+          };
+        }
 
-    items[index].completed = items[index].completed ? 0 : 1;
-    this.setState({ items });
+        return item;
+      }),
+    }));
   }
 
-  handleRemoveTodo = (index) => {
-    const { items } = this.state;
-
-    items.splice(index, 1);
-    this.setState({ items });
+  handleRemoveTodo = (todoId) => {
+    this.setState(prevState => ({
+      items: prevState.items.filter(item => item.id !== todoId),
+    }));
   }
 
   handleEditTodo = (index, text) => {
-    const { items } = this.state;
+    this.setState(prevState => ({
+      items: prevState.items.map((item, ind) => {
+        if (ind === index) {
+          return {
+            ...item,
+            text,
+          };
+        }
 
-    items[index].text = text;
-    this.setState({ items });
+        return item;
+      }),
+    }));
   }
 
   handleToggleTab = (filter) => {
@@ -69,9 +73,9 @@ class App extends Component {
   }
 
   handleClearCompleted = () => {
-    const items = this.state.items.filter(({ completed }) => completed);
-
-    this.setState({ items: [...items] });
+    this.setState(prevState => ({
+      items: prevState.items.filter(({ completed }) => completed),
+    }));
   }
 
   handleToggleAll = (event) => {
@@ -80,7 +84,7 @@ class App extends Component {
     this.setState(prevState => ({
       items: prevState.items.map(item => ({
         ...item,
-        completed: +(!completed),
+        completed: !completed,
       })),
     }));
   }
@@ -88,17 +92,23 @@ class App extends Component {
   render() {
     const { filter, items, title } = this.state;
 
+    let todos = items;
+
+    if (filter === 'completed') {
+      todos = items.filter(({ completed }) => !completed);
+    } else if (filter === 'active') {
+      todos = items.filter(({ completed }) => completed);
+    }
+
     return (
       <section className="todoapp">
         <TodoHeader
           handleAddTodo={this.handleAddTodo}
-          handleChange={this.handleChange}
           inputValue={title}
         />
         <section className="main">
           <TodoList
-            filter={filter}
-            todos={items}
+            todos={todos}
             handleEditTodo={this.handleEditTodo}
             handleToggleAll={this.handleToggleAll}
             handleToggleTodo={this.handleToggleTodo}

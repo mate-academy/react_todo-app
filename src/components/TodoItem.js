@@ -2,32 +2,33 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export class TodoItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+    state = {
       isEditing: false,
     };
-    this.editingInput = React.createRef();
-  }
 
-  componentDidUpdate() {
-    if (this.state.isEditing) {
-      this.editingInput.current.focus();
+    editingInput = React.createRef();
+
+    componentDidUpdate() {
+      if (this.state.isEditing) {
+        this.editingInput.current.focus();
+      }
     }
-  }
 
   handleTextInputChange = ({ target }) => {
     const { value } = target;
+    const { handleEditTodo, index } = this.props;
 
-    this.props.handleEditTodo(this.props.index, value);
+    handleEditTodo(index, value);
   }
 
   toggleEditing = () => {
     if (this.props.todo.text === '') {
-      return this.editingInput.current.focus();
+      this.editingInput.current.focus();
+
+      return;
     }
 
-    return this.setState(prevState => ({
+    this.setState(prevState => ({
       isEditing: !prevState.isEditing,
     }));
   }
@@ -44,12 +45,15 @@ export class TodoItem extends Component {
     const { text, completed } = todo;
 
     return (
-      <li className={isEditing ? 'editing' : (completed === 0 && 'completed')}>
+      <li className={isEditing ? 'editing'
+        : ((completed === false && 'completed')
+        || undefined)}
+      >
         <input
           type="checkbox"
           className="toggle"
           onChange={handleToggleTodo}
-          checked={completed === 0 && 'checked'}
+          checked={completed === false}
         />
         {isEditing
           ? (
@@ -72,7 +76,6 @@ export class TodoItem extends Component {
             type="button"
           />
         </div>
-
       </li>
     );
   }
@@ -80,7 +83,7 @@ export class TodoItem extends Component {
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
-    completed: PropTypes.number,
+    completed: PropTypes.bool,
     text: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,

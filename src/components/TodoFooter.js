@@ -60,7 +60,7 @@ TodoFooter.propTypes = {
   handleToggleTab: PropTypes.func.isRequired,
   handleClearCompleted: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
-    completed: PropTypes.number,
+    completed: PropTypes.bool,
     text: PropTypes.string,
   })).isRequired,
 };
