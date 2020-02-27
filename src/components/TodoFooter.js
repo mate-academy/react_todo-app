@@ -15,31 +15,31 @@ export function TodoFooter(props) {
       <span className="todo-count">{`${counts} items left`}</span>
       <ul className="filters">
         <li>
-          <a
-            href="#/"
+          <button
+            type="button"
             className={filter === 'all' ? 'selected' : ''}
             onClick={() => handleToggleTab('all')}
           >
             All
-          </a>
+          </button>
         </li>
         <li>
-          <a
-            href="#/active"
+          <button
+            type="button"
             className={filter === 'active' ? 'selected' : ''}
             onClick={() => handleToggleTab('active')}
           >
             Active
-          </a>
+          </button>
         </li>
         <li>
-          <a
-            href="#/completed"
+          <button
+            type="button"
             className={filter === 'completed' ? 'selected' : ''}
             onClick={() => handleToggleTab('completed')}
           >
             Completed
-          </a>
+          </button>
         </li>
       </ul>
       <button

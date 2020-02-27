@@ -9,7 +9,7 @@ export class TodoHeader extends React.Component {
 
   handleChange = (event) => {
     this.setState({
-      text: event.target.value.trim(),
+      text: event.target.value,
     });
   }
 
