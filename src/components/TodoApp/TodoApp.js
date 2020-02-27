@@ -6,14 +6,17 @@ export class TodoApp extends React.Component {
     title: '',
     id: 1,
     completed: false,
+    edit: false,
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-
+    const { title } = this.state;
     const { addTodo } = this.props;
 
-    addTodo(this.state);
+    if (title !== '') {
+      addTodo(this.state);
+    }
 
     this.setState(prevState => ({
       title: '',
@@ -25,7 +28,7 @@ export class TodoApp extends React.Component {
     const { value } = target;
 
     this.setState({
-      title: value,
+      title: value.replace(/\s/g, ''),
     });
   };
 

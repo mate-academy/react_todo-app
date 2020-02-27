@@ -2,8 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export const TodoItem = (props) => {
-  const { todo, deleteTodo, handleCompleted } = props;
-  const { title, id } = todo;
+  const {
+    todo,
+    deleteTodo,
+    handleCompleted,
+    handleDoubleEditing,
+    handleChangingEditing,
+  } = props;
+  const { title, id, completed } = todo;
+
+  const handleSubmitEdit = (event) => {
+    event.preventDefault();
+    handleDoubleEditing(id);
+  };
+
+  const handleInputEdit = ({ target }) => {
+    const { value } = target;
+
+    handleChangingEditing(id, value);
+  };
 
   return (
     <>
@@ -13,15 +30,23 @@ export const TodoItem = (props) => {
           type="checkbox"
           className="toggle"
           id={`todo-${id}`}
+          checked={completed}
         />
-        <label htmlFor={`todo-${id}`}>{title}</label>
+        <label onDoubleClick={() => handleDoubleEditing(id)}>{title}</label>
         <button
           onClick={() => deleteTodo(id)}
           type="button"
           className="destroy"
         />
       </div>
-      <input type="text" className="edit" />
+      <form onSubmit={handleSubmitEdit}>
+        <input
+          onChange={handleInputEdit}
+          value={title}
+          type="text"
+          className="edit"
+        />
+      </form>
     </>
   );
 };
@@ -29,14 +54,18 @@ export const TodoItem = (props) => {
 TodoItem.propTypes = {
   todo: PropTypes.shape({
     id: PropTypes.number,
-    check: PropTypes.string,
+    completed: PropTypes.bool,
     title: PropTypes.string,
   }).isRequired,
   deleteTodo: PropTypes.func,
   handleCompleted: PropTypes.func,
+  handleDoubleEditing: PropTypes.func,
+  handleChangingEditing: PropTypes.func,
 };
 
 TodoItem.defaultProps = {
   deleteTodo: () => {},
   handleCompleted: () => {},
+  handleDoubleEditing: () => {},
+  handleChangingEditing: () => {},
 };

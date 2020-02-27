@@ -129,6 +129,10 @@ hr {
   transition-duration: 500ms;
 }
 
+.hidden-but {
+  opacity: 0;
+}
+
 @media (min-width: 899px) {
   .learn-bar {
     width: auto;

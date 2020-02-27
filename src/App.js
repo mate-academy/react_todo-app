@@ -1,10 +1,12 @@
 import React from 'react';
+import cx from 'classnames';
 import { TodoList } from './components/TodoList';
 import { TodoApp } from './components/TodoApp';
 
 class App extends React.Component {
   state = {
     todos: [],
+    isComplete: false,
   };
 
   addTodo = (todo) => {
@@ -19,31 +21,81 @@ class App extends React.Component {
 
   deleteTodo = (id) => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].filter(todo => todo.id !== id),
+      todos: prevState.todos.filter(todo => todo.id !== id),
     }));
   };
 
   clearComponent = () => {
-    this.setState({
-      todos: [],
-    });
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.completed === false),
+    }));
   };
 
   handleCompleted = (id) => {
     this.setState(prevState => ({
-      todos: [...prevState.todos].map((todo) => {
+      todos: prevState.todos.map((todo) => {
         if (todo.id === id) {
-          // console.log(todo.completed);
-
           return {
             ...todo,
-            completed: !prevState.completed,
+            completed: !todo.completed,
           };
         }
 
         return todo;
       }),
     }));
+  };
+
+  handleDoubleEditing = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            edit: !todo.edit,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  };
+
+  handleChangingEditing = (id, value) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title: value,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  };
+
+  handleAllCompleted = () => {
+    this.setState((prevState) => {
+      if (prevState.isComplete === false) {
+        return {
+          todos: prevState.todos.map(todo => ({
+            ...todo,
+            completed: true,
+          })),
+          isComplete: !prevState.isComplete,
+        };
+      }
+
+      return {
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          completed: false,
+        })),
+        isComplete: !prevState.isComplete,
+      };
+    });
   };
 
   render() {
@@ -59,13 +111,20 @@ class App extends React.Component {
         </header>
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            onClick={this.handleAllCompleted}
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
             todos={todos}
             deleteTodo={this.deleteTodo}
             handleCompleted={this.handleCompleted}
+            handleDoubleEditing={this.handleDoubleEditing}
+            handleChangingEditing={this.handleChangingEditing}
           />
 
           {/* <ul className="todo-list"> */}
@@ -110,7 +169,8 @@ class App extends React.Component {
           ? (
             <footer className="footer">
               <span className="todo-count">
-                {`${todos.length} items left`}
+                {`${todos.filter(todo => todo.completed === false)
+                  .length} items left`}
               </span>
 
               <ul className="filters">
@@ -130,7 +190,8 @@ class App extends React.Component {
               <button
                 onClick={this.clearComponent}
                 type="button"
-                className="clear-completed"
+                className={cx('clear-completed', { 'hidden-but': todos
+                  .every(todo => todo.completed === false) })}
               >
             Clear completed
               </button>
