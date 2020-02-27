@@ -15,6 +15,8 @@ export const TodoItem = (props) => {
         className="toggle"
         id={`todo-${todo.id}`}
         onClick={onToogleComplete}
+        checked={todo.completed}
+        onChange={() => {}}
       />
       <label
         htmlFor={`todo-${todo.id}`}

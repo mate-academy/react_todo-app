@@ -1,22 +1,14 @@
 import React from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import './Footer.css';
 
 export const Footer = (props) => {
   const {
-    todos,
     setFilter,
-    handleClearComplited,
+    active,
+    handleClearCompleted,
   } = props;
-
-  const todosLeftCount = todos.filter(todo => !todo.completed);
-  let todosLeftCountText = '';
-
-  if (todosLeftCount.length === 1) {
-    todosLeftCountText = `1 item left`;
-  } else {
-    todosLeftCountText = `${todosLeftCount.length} items left`;
-  }
 
   return (
     <footer
@@ -25,7 +17,7 @@ export const Footer = (props) => {
       <span
         className="todo-count"
       >
-        { todosLeftCountText }
+        {props.todosLeftCount()}
       </span>
 
       <ul
@@ -34,30 +26,36 @@ export const Footer = (props) => {
         <li>
           <button
             type="button"
-            className="footer__button"
+            className={classNames('footer__button', {
+              active: active === 'all',
+            })}
             onClick={() => setFilter('all')}
           >
-                    All
+            All
           </button>
         </li>
 
         <li>
           <button
             type="button"
-            className="footer__button"
+            className={classNames('footer__button', {
+              active: active === 'active',
+            })}
             onClick={() => setFilter('active')}
           >
-                    Active
+            Active
           </button>
         </li>
 
         <li>
           <button
             type="button"
-            className="footer__button"
+            className={classNames('footer__button', {
+              active: active === 'completed',
+            })}
             onClick={() => setFilter('completed')}
           >
-                    Completed
+            Completed
           </button>
         </li>
       </ul>
@@ -65,21 +63,17 @@ export const Footer = (props) => {
       <button
         type="button"
         className="clear-completed"
-        onClick={handleClearComplited}
+        onClick={handleClearCompleted}
       >
-                Clear completed
+        Clear completed
       </button>
     </footer>
   );
 };
 
 Footer.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    title: PropTypes.string,
-    completed: PropTypes.bool,
-  })).isRequired,
-
+  active: PropTypes.string.isRequired,
+  todosLeftCount: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
-  handleClearComplited: PropTypes.func.isRequired,
+  handleClearCompleted: PropTypes.func.isRequired,
 };

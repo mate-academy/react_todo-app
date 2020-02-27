@@ -6,7 +6,7 @@ import { TodoItem } from './TodoItem';
 export const TodoList = (props) => {
   const {
     todos,
-    onToogleComplete,
+    onToggleComplete,
     onDelete,
     toggleAllTodo,
   } = props;
@@ -24,12 +24,12 @@ export const TodoList = (props) => {
           onClick={toggleAllTodo}
         />
         {
-          !todos.length
-                    || (
-                      <label htmlFor="toggle-all">
-                        Mark all as complete
-                      </label>
-                    )
+          todos.length > 0
+            && (
+              <label htmlFor="toggle-all">
+                Mark all as complete
+              </label>
+            )
         }
 
         <ul
@@ -46,7 +46,7 @@ export const TodoList = (props) => {
               <TodoItem
                 todo={todo}
                 onToogleComplete={
-                  () => onToogleComplete(todo)
+                  () => onToggleComplete(todo)
                 }
                 onDelete={
                   () => onDelete(todo)
@@ -71,7 +71,7 @@ TodoList.propTypes = {
     completed: PropTypes.bool,
   })).isRequired,
 
-  onToogleComplete: PropTypes.func.isRequired,
+  onToggleComplete: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   toggleAllTodo: PropTypes.func.isRequired,
 };
