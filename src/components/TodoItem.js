@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { KEYCODE } from '../utils/const';
+import { KEYCODE } from '../utils/constants';
 
 export class TodoItem extends React.PureComponent {
   state = {
-    inEditMode: false,
+    isEditMode: false,
     updateValue: '',
   };
 
@@ -16,7 +16,7 @@ export class TodoItem extends React.PureComponent {
     const { id, onUpdate } = this.props;
 
     this.setState({
-      inEditMode: false,
+      isEditMode: false,
       updateValue: '',
     });
 
@@ -29,7 +29,7 @@ export class TodoItem extends React.PureComponent {
     const { title } = this.props;
 
     this.setState({
-      inEditMode: true,
+      isEditMode: true,
       updateValue: title,
     }, () => {
       this.updateInputRef.current.focus();
@@ -52,26 +52,26 @@ export class TodoItem extends React.PureComponent {
       onUpdate(id, updateValue);
 
       this.setState({
-        inEditMode: false,
+        isEditMode: false,
         updateValue: '',
       });
     } else if (keyCode === KEYCODE.ESC) {
       this.setState({
-        inEditMode: false,
+        isEditMode: false,
         updateValue: '',
       });
     }
   };
 
   render() {
-    const { inEditMode, updateValue } = this.state;
+    const { isEditMode, updateValue } = this.state;
     const { title, completed, index, onToggle, onRemove } = this.props;
 
     return (
       <li
         className={classNames({
           completed,
-          editing: inEditMode,
+          editing: isEditMode,
         })}
       >
         <div className="view">

@@ -17,8 +17,15 @@ export class App extends React.PureComponent {
   };
 
   componentDidMount() {
-    this.extractDataFromStorage('todos');
-    this.extractDataFromStorage('allTodosCompleted');
+    const todos = JSON.parse(window.localStorage.getItem('todos'));
+    const allTodosCompleted = JSON.parse(
+      window.localStorage.getItem('allTodosCompleted'),
+    );
+
+    this.setState({
+      todos: todos || [],
+      allTodosCompleted: allTodosCompleted || false,
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -36,16 +43,6 @@ export class App extends React.PureComponent {
       );
     }
   }
-
-  extractDataFromStorage = (key) => {
-    const data = JSON.parse(window.localStorage.getItem(key));
-
-    if (data) {
-      this.setState({
-        [key]: data,
-      });
-    }
-  };
 
   setAllTodosCompletedValue = () => {
     const { todos } = this.state;

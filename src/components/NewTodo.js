@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { KEYCODE } from '../utils/const';
+import { KEYCODE } from '../utils/constants';
 
 export class NewTodo extends React.PureComponent {
   state = {
