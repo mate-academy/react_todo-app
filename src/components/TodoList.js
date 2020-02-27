@@ -1,46 +1,40 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Todo } from './Todo';
 
-export class TodoList extends Component {
-  state = {
+export const TodoList = (props) => {
+  const {
+    todos,
+    deleteTodo,
+    completedTodo,
+    toggleCompletedAll,
+  } = props;
 
-  }
+  return (
+    <section className="main">
+      <input
+        type="checkbox"
+        id="toggle-all"
+        className="toggle-all"
+        onClick={toggleCompletedAll}
+      />
+      <label htmlFor="toggle-all">Mark all as complete</label>
 
-  render() {
-    const {
-      todos,
-      deleteTodo,
-      completedTodo,
-      toggleCompletedAll,
-    } = this.props;
-
-    return (
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          onClick={toggleCompletedAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          {
-            todos.map(todo => (
-              <Todo
-                {...todo}
-                key={todo.id}
-                completedTodo={completedTodo}
-                deleteTodo={deleteTodo}
-              />
-            ))
-          }
-        </ul>
-      </section>
-    );
-  }
-}
+      <ul className="todo-list">
+        {
+          todos.map(todo => (
+            <Todo
+              {...todo}
+              key={todo.id}
+              completedTodo={completedTodo}
+              deleteTodo={deleteTodo}
+            />
+          ))
+        }
+      </ul>
+    </section>
+  );
+};
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(

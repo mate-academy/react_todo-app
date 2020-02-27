@@ -13,11 +13,14 @@ export class NewTodo extends Component {
     });
   }
 
-  handleSubmitEnter = (event) => {
-    const { task } = this.state;
+  handleSubmit = (event) => {
+    event.preventDefault();
 
-    if (event.key === 'Enter' && task.length > 0) {
-      this.props.addTodo({
+    const { task } = this.state;
+    const { addTodo } = this.props;
+
+    if (task.length > 0) {
+      addTodo({
         task,
         completed: false,
         id: uuid(),
@@ -35,14 +38,16 @@ export class NewTodo extends Component {
     return (
       <header className="header">
         <h1>todos</h1>
-        <input
-          type="text"
-          value={task}
-          className="new-todo"
-          onChange={this.handleChange}
-          onKeyUp={this.handleSubmitEnter}
-          placeholder="What needs to be done?"
-        />
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            value={task}
+            className="new-todo"
+            onChange={this.handleChange}
+            onKeyUp={this.handleSubmitEnter}
+            placeholder="What needs to be done?"
+          />
+        </form>
       </header>
     );
   }

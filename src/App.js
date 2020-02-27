@@ -48,10 +48,6 @@ export class App extends Component {
     }));
   }
 
-  handleLeftItems = () => (
-    this.state.todos.filter(todo => !todo.completed).length
-  )
-
   handleClearAllCompleted = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
@@ -70,21 +66,13 @@ export class App extends Component {
       filter,
     } = this.state;
 
-    let preparedTodos;
-
     switch (filter) {
       case 'active':
-        preparedTodos = [...todos].filter(todo => !todo.completed);
-
-        return preparedTodos;
+        return todos.filter(todo => !todo.completed);
       case 'completed':
-        preparedTodos = [...todos].filter(todo => todo.completed);
-
-        return preparedTodos;
+        return todos.filter(todo => todo.completed);
       default:
-        preparedTodos = todos;
-
-        return preparedTodos;
+        return todos;
     }
   }
 
