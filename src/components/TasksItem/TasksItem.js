@@ -22,6 +22,7 @@ export class TasksItem extends React.Component {
   };
 
   ToggleEditInput = (event) => {
+    event.preventDefault();
     this.setState(prevState => ({
       editIntVisible: !prevState.editIntVisible,
     }), () => this.textInput.current.focus());
@@ -52,14 +53,12 @@ export class TasksItem extends React.Component {
     });
   };
 
-  changeConditionOnHotKey = (event) => {
-    if (event.key === 'Enter') {
-      this.ToggleEditInput();
-    } else if (event.key === 'Escape') {
+  changeConditionEscapeKey = (event) => {
+    if (event.key === 'Escape') {
       this.setState({
         newValueTask: this.props.task.value,
       });
-      this.ToggleEditInput();
+      this.ToggleEditInput(event);
     }
   };
 
@@ -106,15 +105,17 @@ export class TasksItem extends React.Component {
               onClick={this.deleteTask}
             />
           </div>
-          <input
-            type="text"
-            className="edit"
-            value={this.state.newValueTask || ''}
-            onChange={this.editTaskValue}
-            onKeyUp={this.changeConditionOnHotKey}
-            onBlur={this.handleBlur}
-            ref={this.textInput}
-          />
+          <form action="" onSubmit={this.ToggleEditInput}>
+            <input
+              type="text"
+              className="edit"
+              value={this.state.newValueTask || ''}
+              onChange={this.editTaskValue}
+              onKeyUp={this.changeConditionEscapeKey}
+              onBlur={this.handleBlur}
+              ref={this.textInput}
+            />
+          </form>
         </li>
       </>
     );
