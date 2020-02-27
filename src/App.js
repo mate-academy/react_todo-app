@@ -81,6 +81,8 @@ class App extends React.Component {
   };
 
   render() {
+    // console.log(this.state.initialTasksList);
+
     return (
       <section className="todoapp">
         <header className="header">

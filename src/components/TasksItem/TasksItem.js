@@ -31,7 +31,6 @@ export class TasksItem extends React.Component {
 
   sendNewTaskValue = () => {
     const { updateTasksCondition, task } = this.props;
-
     const updateConditionCheckedTask = {
       ...task,
       value: this.state.newValueTask.trim() || task.value.trim(),
