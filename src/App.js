@@ -51,6 +51,24 @@ export class App extends Component {
     }));
   }
 
+  editTodo = (editTodoTitle, editTododId) => {
+    const callback = (todo) => {
+      if (todo.id === editTododId) {
+        return {
+          ...todo,
+          title: editTodoTitle,
+        };
+      }
+
+      return todo;
+    };
+
+    this.setState(prevState => ({
+      todos: prevState.todos.map(callback),
+      filteredTodos: prevState.filteredTodos.map(callback),
+    }));
+  }
+
   removeTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== id),
@@ -103,6 +121,8 @@ export class App extends Component {
             setCompleted={this.setCompleted}
             setAllCompleted={this.setAllCompleted}
             removeTodo={this.removeTodo}
+            completedTodos={this.completedTodos}
+            editTodo={this.editTodo}
           />
         </section>
 

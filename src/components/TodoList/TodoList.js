@@ -7,33 +7,30 @@ export const TodoList = ({
   removeTodo,
   setCompleted,
   setAllCompleted,
-}) => {
-  const completedTodos = todos.every(todo => todo.completed);
-
-  return (
-    <>
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        onChange={evt => setAllCompleted(evt.target.checked)}
-        checked={todos.length && completedTodos}
-      />
-      {todos.length !== 0
-        && <label htmlFor="toggle-all">Mark all as complete</label>}
-      <ul className="todo-list">
-        {todos.map(todo => (
-          <Todo
-            key={todo.id}
-            todo={todo}
-            setCompleted={setCompleted}
-            removeTodo={removeTodo}
-          />
-        ))}
-      </ul>
-    </>
-  );
-};
+  editTodo,
+}) => (
+  <>
+    <input
+      type="checkbox"
+      id="toggle-all"
+      className="toggle-all"
+      onChange={evt => setAllCompleted(evt.target.checked)}
+    />
+    {todos.length !== 0
+      && <label htmlFor="toggle-all">Mark all as complete</label>}
+    <ul className="todo-list">
+      {todos.map(todo => (
+        <Todo
+          key={todo.id}
+          todo={todo}
+          setCompleted={setCompleted}
+          removeTodo={removeTodo}
+          editTodo={editTodo}
+        />
+      ))}
+    </ul>
+  </>
+);
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
@@ -45,4 +42,5 @@ TodoList.propTypes = {
   setCompleted: PropTypes.func.isRequired,
   setAllCompleted: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
 };
