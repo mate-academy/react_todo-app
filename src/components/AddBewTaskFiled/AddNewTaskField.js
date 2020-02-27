@@ -16,6 +16,10 @@ export class AddNewTaskField extends React.Component {
   sendNewTask = (event) => {
     const { value } = this.state;
 
+    if (!value.trim()) {
+      return false;
+    }
+
     if (event.key === 'Enter' && value.length) {
       const newTask = {
         value,
@@ -28,6 +32,8 @@ export class AddNewTaskField extends React.Component {
         value: '',
       });
     }
+
+    return true;
   };
 
   render() {
