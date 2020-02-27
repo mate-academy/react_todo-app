@@ -90,7 +90,6 @@ class App extends React.Component {
             updateInitialTasks={this.updateInitialTasks}
           />
         </header>
-
         {
           this.state.initialTasksList.length
             ? (
