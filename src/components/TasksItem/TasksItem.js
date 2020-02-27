@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 export class TasksItem extends React.Component {
-  textInput = React.createRef();
-
   state = {
     newValueTask: this.props.task.value,
     editIntVisible: false,
   };
+
+  textInput = React.createRef();
 
   toggleCompleted = (event) => {
     const { updateTasksCondition, task } = this.props;
@@ -21,10 +21,11 @@ export class TasksItem extends React.Component {
     updateTasksCondition(updateConditionCheckedTask);
   };
 
-  ToggleEditInput = (event) => {
+  toggleEditInput = (event) => {
     event.preventDefault();
     this.setState(prevState => ({
       editIntVisible: !prevState.editIntVisible,
+      newValueTask: prevState.newValueTask.trim(),
     }), () => this.textInput.current.focus());
   };
 
@@ -33,15 +34,15 @@ export class TasksItem extends React.Component {
 
     const updateConditionCheckedTask = {
       ...task,
-      value: this.state.newValueTask || task.value,
+      value: this.state.newValueTask.trim() || task.value.trim(),
     };
 
     updateTasksCondition(updateConditionCheckedTask);
   };
 
-  handleBlur = () => {
+  handleBlur = (event) => {
     if (this.state.editIntVisible) {
-      this.ToggleEditInput();
+      this.toggleEditInput(event);
     }
 
     this.sendNewTaskValue();
@@ -58,7 +59,7 @@ export class TasksItem extends React.Component {
       this.setState({
         newValueTask: this.props.task.value,
       });
-      this.ToggleEditInput(event);
+      this.toggleEditInput(event);
     }
   };
 
@@ -88,7 +89,7 @@ export class TasksItem extends React.Component {
         <li
           className={classNames(cx)}
           key={task.id}
-          onDoubleClick={this.ToggleEditInput}
+          onDoubleClick={this.toggleEditInput}
         >
           <div className="view">
             <input
@@ -105,11 +106,11 @@ export class TasksItem extends React.Component {
               onClick={this.deleteTask}
             />
           </div>
-          <form action="" onSubmit={this.ToggleEditInput}>
+          <form action="" onSubmit={this.toggleEditInput}>
             <input
               type="text"
               className="edit"
-              value={this.state.newValueTask || ''}
+              value={this.state.newValueTask}
               onChange={this.editTaskValue}
               onKeyUp={this.changeConditionEscapeKey}
               onBlur={this.handleBlur}
@@ -128,7 +129,6 @@ TasksItem.propTypes = {
     id: PropTypes.string,
     value: PropTypes.string,
   }).isRequired,
-
   updateTasksCondition: PropTypes.func.isRequired,
   deleteTask: PropTypes.func.isRequired,
 };

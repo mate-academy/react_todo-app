@@ -24,12 +24,17 @@ export const TasksList = (props) => {
     <ul className="todo-list">
       {
         showNow.map(task => (
-          <TasksItem
-            task={task}
-            key={task.id}
-            updateTasksCondition={updateTasksCondition}
-            deleteTask={deleteTask}
-          />
+          task.value
+            ? (
+              <TasksItem
+                task={task}
+                key={task.id}
+                updateTasksCondition={updateTasksCondition}
+                deleteTask={deleteTask}
+                initialTasksList={initialTasksList}
+              />
+            )
+            : null
         ))
       }
     </ul>

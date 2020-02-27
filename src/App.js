@@ -12,12 +12,22 @@ class App extends React.Component {
 
   componentDidMount() {
     this.setState({
-      initialTasksList: JSON.parse(localStorage.getItem('myData')) || [],
+      initialTasksList:
+        JSON.parse(localStorage.getItem('myData')) || [],
+      toggleCompleted:
+        JSON.parse(localStorage.getItem('myToggleCompleted')) || false,
     });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    localStorage.setItem('myData', JSON.stringify(this.state.initialTasksList));
+    localStorage.setItem(
+      'myData',
+      JSON.stringify(this.state.initialTasksList),
+    );
+    localStorage.setItem(
+      'myToggleCompleted',
+      JSON.stringify(this.state.toggleCompleted),
+    );
   }
 
   updateInitialTasks = (newTasksItem) => {
@@ -91,6 +101,7 @@ class App extends React.Component {
                     id="toggle-all"
                     className="toggle-all"
                     onClick={this.toggleCompletedAll}
+                    defaultChecked={this.state.toggleCompleted}
                   />
                   <label htmlFor="toggle-all">Mark all as complete</label>
 
