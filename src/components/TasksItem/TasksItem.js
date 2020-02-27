@@ -37,6 +37,10 @@ export class TasksItem extends React.Component {
       value: this.state.newValueTask.trim() || task.value.trim(),
     };
 
+    this.setState(prevState => ({
+      newValueTask: prevState.newValueTask || this.props.task.value,
+    }));
+
     updateTasksCondition(updateConditionCheckedTask);
   };
 
