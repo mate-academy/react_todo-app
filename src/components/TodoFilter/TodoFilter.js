@@ -11,7 +11,7 @@ const TodoFilter = ({
       <li>
         <a
           href="#/"
-          className={filter === 'all' && 'selected'}
+          className={filter === 'all' ? 'selected' : ''}
           name="all"
           onClick={handleFilter}
         >
@@ -22,7 +22,7 @@ const TodoFilter = ({
       <li>
         <a
           href="#/active"
-          className={filter === 'active' && 'selected'}
+          className={filter === 'active' ? 'selected' : ''}
           name="active"
           onClick={handleFilter}
         >
@@ -33,7 +33,7 @@ const TodoFilter = ({
       <li>
         <a
           name="completed"
-          className={filter === 'completed' && 'selected'}
+          className={filter === 'completed' ? 'selected' : ''}
           href="#/completed"
           onClick={handleFilter}
         >
