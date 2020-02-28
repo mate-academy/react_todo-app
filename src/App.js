@@ -92,7 +92,7 @@ export class App extends React.Component {
         break;
       case 'completed':
         this.setState(prevState => ({
-          todos: prevState.initialTodos.filter(todo => !todo.completed),
+          todos: prevState.initialTodos.filter(todo => todo.completed),
           buttonSelected: 'completed',
         }));
         break;
