@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList/TodoList';
 export class App extends Component {
   state = {
     todos: [],
-    allTodos: [],
+    visibleTodos: [],
   }
 
   componentDidMount() {
@@ -30,26 +30,26 @@ export class App extends Component {
         ...prevState.todos,
         todo,
       ],
-      allTodos: [
+      visibleTodos: [
         ...prevState.todos,
         todo,
       ],
     }));
   }
 
-  toggledCheck = (id) => {
+  toggledCheck = (id, checked) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (
         todo.id === id
           ? {
-            ...todo, completed: !todo.completed,
+            ...todo, completed: checked,
           }
           : todo
       )),
-      allTodos: prevState.allTodos.map(todo => (
+      visibleTodos: prevState.visibleTodos.map(todo => (
         todo.id === id
           ? {
-            ...todo, completed: !todo.completed,
+            ...todo, completed: checked,
           }
           : todo
       )),
@@ -59,30 +59,37 @@ export class App extends Component {
   filtered = (event) => {
     let filter = event.target.getAttribute('data-filter');
 
-    if (filter === 'Active') {
-      filter = false;
-    }
+    switch (filter) {
+      case 'Active':
+        filter = false;
+        break;
 
-    if (filter === 'Completed') {
-      filter = true;
+      case 'Completed':
+        filter = true;
+        break;
+      default:
     }
 
     this.setState(prevState => ({
-      allTodos: filter === 'All' ? prevState.todos : prevState.todos.filter(todo => todo.completed === Boolean(filter)),
+      visibleTodos: filter === 'All'
+        ? prevState.todos
+        : prevState.todos.filter(todo => todo.completed === Boolean(filter)),
     }));
   }
 
   deleteTask = (id) => {
     this.setState(prevState => ({
-      allTodos: prevState.allTodos.filter(todo => todo.id !== id),
+      visibleTodos: prevState.visibleTodos.filter(todo => todo.id !== id),
       todos: prevState.todos.filter(todo => todo.id !== id),
     }));
   }
 
   clearedCompleted = () => {
     this.setState(prevState => ({
-      allTodos: prevState.allTodos.filter(todo => todo.completed === false),
-      todos: prevState.todos.filter(todo => todo.completed === false),
+      visibleTodos: prevState.visibleTodos.filter(
+        todo => !todo.completed,
+      ),
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
@@ -95,7 +102,7 @@ export class App extends Component {
             completed: true,
           }
         )),
-        allTodos: prevState.allTodos.map(todo => (
+        visibleTodos: prevState.visibleTodos.map(todo => (
           {
             ...todo,
             completed: true,
@@ -110,7 +117,7 @@ export class App extends Component {
             completed: false,
           }
         )),
-        allTodos: prevState.allTodos.map(todo => (
+        visibleTodos: prevState.visibleTodos.map(todo => (
           {
             ...todo,
             completed: false,
@@ -121,9 +128,8 @@ export class App extends Component {
   }
 
   render() {
-    const { todos, allTodos } = this.state;
-    const leftList = todos.filter(todo => todo.completed === false);
-    console.log(allTodos);
+    const { todos, visibleTodos } = this.state;
+    const leftList = todos.filter(todo => !todo.completed);
 
     return (
       <section className="todoapp">
@@ -133,10 +139,15 @@ export class App extends Component {
         </header>
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" onChange={this.checkedAll} />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={this.checkedAll}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
-            todos={allTodos}
+            todos={visibleTodos}
             toggledCheck={this.toggledCheck}
             deleteTask={this.deleteTask}
           />
@@ -150,19 +161,42 @@ export class App extends Component {
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected" data-filter="All" onClick={this.filtered}>All</a>
+              <a
+                href="#/"
+                className="selected"
+                data-filter="All"
+                onClick={this.filtered}
+              >
+                All
+              </a>
             </li>
 
             <li>
-              <a href="#/active" data-filter="Active" onClick={this.filtered}>Active</a>
+              <a
+                href="#/active"
+                data-filter="Active"
+                onClick={this.filtered}
+              >
+              Active
+              </a>
             </li>
 
             <li>
-              <a href="#/completed" data-filter="Completed" onClick={this.filtered}>Completed</a>
+              <a
+                href="#/completed"
+                data-filter="Completed"
+                onClick={this.filtered}
+              >
+              Completed
+              </a>
             </li>
           </ul>
 
-          <button type="button" className="clear-completed" onClick={this.clearedCompleted}>
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={this.clearedCompleted}
+          >
            Clear completed
           </button>
         </footer>

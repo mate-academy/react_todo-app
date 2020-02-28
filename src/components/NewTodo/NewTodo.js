@@ -1,17 +1,14 @@
 import React from 'react';
-// import uuid from 'uuid/v4';
-
-const uuidv4 = require('uuid/v4');
+import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 
 export class NewTodo extends React.Component {
   state = {
     title: '',
-    id: '',
-    complited: false,
   }
 
   handleChange = (event) => {
-    const title = event.target.value;
+    const title = event.target.value.replace(/^\s/, '');
 
     this.setState({
       title,
@@ -32,9 +29,7 @@ export class NewTodo extends React.Component {
 
       this.setState({
         title: '',
-        id: '',
-        complited: false,
-      })
+      });
     }
   }
 
@@ -54,3 +49,7 @@ export class NewTodo extends React.Component {
     );
   }
 }
+
+NewTodo.propTypes = {
+  addTodo: PropTypes.func.isRequired,
+};
