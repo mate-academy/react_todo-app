@@ -4,16 +4,14 @@ import { Todo } from '../Todo/Todo';
 
 export const TodoList = ({ todos, toggledCheck, deleteTask }) => (
   <ul className="todo-list">
-    {todos.map(
-      (todo, index) => (
-        <Todo
-          key={todo.id}
-          todo={todo}
-          toggledCheck={checked => toggledCheck(todo.id, checked)}
-          deleteTask={() => deleteTask(todo.id)}
-        />
-      ),
-    )}
+    {todos.map((todo, index) => (
+      <Todo
+        key={todo.id}
+        todo={todo}
+        toggledCheck={checked => toggledCheck(todo.id, checked)}
+        deleteTask={() => deleteTask(todo.id)}
+      />
+    ))}
   </ul>
 );
 

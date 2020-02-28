@@ -8,20 +8,21 @@ export class NewTodo extends React.Component {
   }
 
   handleChange = (event) => {
-    const title = event.target.value.replace(/^\s/, '');
+    const title = event.target.value;
 
     this.setState({
       title,
     });
   }
 
-  handleKeyPress = (event) => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     const { title } = this.state;
 
-    if (event.key === 'Enter') {
+    if (title.length > 0) {
       const todo = {
         id: uuidv4(),
-        title,
+        title: title.trim(),
         completed: false,
       };
 
@@ -37,15 +38,15 @@ export class NewTodo extends React.Component {
     const { title } = this.state;
 
     return (
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        name={title}
-        value={title}
-        onChange={this.handleChange}
-        onKeyPress={this.handleKeyPress}
-
-      />
+      <form onSubmit={this.handleSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          name={title}
+          value={title}
+          onChange={this.handleChange}
+        />
+      </form>
     );
   }
 }

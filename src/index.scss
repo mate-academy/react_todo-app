@@ -121,6 +121,7 @@ body {
   left: -13px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+  cursor: pointer
 }
 .toggle-all + label:before {
   content: "❯";
@@ -205,6 +206,7 @@ body {
   font-size: 30px;
   color: #cc9a9a;
   margin-bottom: 11px;
+  cursor: pointer;
   transition: color 0.2s ease-out;
 }
 .todo-list li .destroy:hover {
@@ -261,7 +263,7 @@ body {
 .filters li {
   display: inline;
 }
-.filters li a {
+.filters li button {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
@@ -269,10 +271,10 @@ body {
   border: 1px solid transparent;
   border-radius: 3px;
 }
-.filters li a:hover {
+.filters li button:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
-.filters li a.selected {
+.filters li button.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 .clear-completed,

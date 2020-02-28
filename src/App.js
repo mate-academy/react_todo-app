@@ -14,7 +14,7 @@ export class App extends Component {
   componentDidMount() {
     const persistedNotes = localStorage.getItem('todos');
 
-    if (persistedNotes) {
+    if (persistedNotes.length > 0) {
       const todos = JSON.parse(persistedNotes);
 
       this.setState({ todos });
@@ -28,16 +28,22 @@ export class App extends Component {
   }
 
   addTodo = (todo) => {
-    this.setState(prevState => ({
-      todos: [
-        ...prevState.todos,
-        todo,
-      ],
-      visibleTodos: [
-        ...prevState.todos,
-        todo,
-      ],
-    }));
+    const { filter, todos } = this.state;
+    const filteredTodos = [...todos, todo];
+
+    this.setState((prevState) => {
+      const obj = {
+        todos: [...todos, todo],
+        visibleTodos: filter === 'All'
+          ? filteredTodos
+          : filteredTodos.filter(task => task.completed === Boolean(filter)),
+      };
+
+      return {
+        todos: obj.todos,
+        visibleTodos: obj.visibleTodos,
+      };
+    });
   }
 
   toggledCheck = (id, checked) => {
@@ -71,6 +77,8 @@ export class App extends Component {
         filter = true;
         break;
       default:
+        filter = 'All';
+        break;
     }
 
     this.setState(prevState => ({
@@ -88,7 +96,7 @@ export class App extends Component {
     }));
   }
 
-  clearedCompleted = () => {
+  clearCompleted = () => {
     this.setState(prevState => ({
       visibleTodos: prevState.visibleTodos.filter(
         todo => !todo.completed,
@@ -133,7 +141,7 @@ export class App extends Component {
 
   render() {
     const { todos, visibleTodos, filter } = this.state;
-    const leftList = todos.filter(todo => !todo.completed);
+    const activeTodos = todos.filter(todo => !todo.completed);
 
     return (
       <section className="todoapp">
@@ -147,6 +155,7 @@ export class App extends Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={todos.length && todos.every(todo => todo.completed)}
             onChange={this.checkedAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -159,14 +168,14 @@ export class App extends Component {
 
         <footer className="footer">
           <span className="todo-count">
-            {leftList.length}
-             items left
+            {activeTodos.length}
+            items left
           </span>
 
           <ul className="filters">
             <li>
-              <a
-                href="#/"
+              <button
+                type="button"
                 className={
                   cx({ selected: filter === 'All' })
                 }
@@ -174,42 +183,42 @@ export class App extends Component {
                 onClick={this.filtered}
               >
                 All
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
-                href="#/active"
+              <button
+                type="button"
                 className={
                   cx({ selected: filter === false })
                 }
                 data-filter="Active"
                 onClick={this.filtered}
               >
-              Active
-              </a>
+                Active
+              </button>
             </li>
 
             <li>
-              <a
-                href="#/completed"
+              <button
+                type="button"
                 className={
                   cx({ selected: filter === true })
                 }
                 data-filter="Completed"
                 onClick={this.filtered}
               >
-              Completed
-              </a>
+                Completed
+              </button>
             </li>
           </ul>
 
           <button
             type="button"
             className="clear-completed"
-            onClick={this.clearedCompleted}
+            onClick={this.clearCompleted}
           >
-           Clear completed
+            Clear completed
           </button>
         </footer>
       </section>
