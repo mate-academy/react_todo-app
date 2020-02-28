@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export const TodoItem = (props) => {
   const {
     todo,
-    onToogleComplete,
+    onToggleComplete,
     onDelete,
   } = props;
 
@@ -15,7 +15,7 @@ export const TodoItem = (props) => {
         className="toggle"
         id={`todo-${todo.id}`}
         checked={todo.completed}
-        onChange={onToogleComplete}
+        onChange={() => onToggleComplete()}
       />
       <label
         htmlFor={`todo-${todo.id}`}
@@ -38,6 +38,6 @@ TodoItem.propTypes = {
     completed: PropTypes.bool,
   }).isRequired,
 
-  onToogleComplete: PropTypes.func.isRequired,
+  onToggleComplete: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };

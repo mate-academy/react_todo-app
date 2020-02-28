@@ -9,6 +9,7 @@ export const TodoList = (props) => {
     onToggleComplete,
     onDelete,
     toggleAllTodo,
+    isActiveTodos,
   } = props;
 
   return (
@@ -21,9 +22,10 @@ export const TodoList = (props) => {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          checked={todos.filter(todo => !todo.completed).length === 0}
+          checked={isActiveTodos}
           onChange={toggleAllTodo}
         />
+
         {
           todos.length > 0
             && (
@@ -46,8 +48,8 @@ export const TodoList = (props) => {
             >
               <TodoItem
                 todo={todo}
-                onToogleComplete={
-                  () => onToggleComplete(todo)
+                onToggleComplete={
+                  () => onToggleComplete(todo.id)
                 }
                 onDelete={
                   () => onDelete(todo)
@@ -75,4 +77,5 @@ TodoList.propTypes = {
   onToggleComplete: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   toggleAllTodo: PropTypes.func.isRequired,
+  isActiveTodos: PropTypes.bool.isRequired,
 };

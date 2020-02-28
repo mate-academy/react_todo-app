@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import uuid from 'react-uuid';
 import { TodoList } from './TodoList';
-import { Footer } from './Footer/Footer';
+import { Footer } from './Footer';
 
 class App extends Component {
   state = {
     todos: [],
-    filtredTodos: 'all',
     active: 'all',
     title: '',
   }
@@ -22,7 +21,6 @@ class App extends Component {
   handleAddTodo = (event) => {
     event.preventDefault();
     const { title } = this.state;
-    let newTodo = {};
 
     this.setState((prevState) => {
       if (!title.trim()) {
@@ -31,7 +29,7 @@ class App extends Component {
         };
       }
 
-      newTodo = {
+      const newTodo = {
         id: uuid(),
         title,
         completed: false,
@@ -48,10 +46,10 @@ class App extends Component {
     });
   }
 
-  onToggleComplete = (currentTodo) => {
+  onToggleComplete = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => (
-        todo.id === currentTodo.id
+        todo.id === id
           ? {
             ...todo,
             completed: !todo.completed,
@@ -59,6 +57,19 @@ class App extends Component {
           : todo)),
     }));
   }
+
+  toggleAllTodo = (event) => {
+    const { checked } = event.target;
+
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => (
+        {
+          ...todo,
+          completed: checked,
+        }
+      )),
+    }));
+  };
 
   deleteTodo = (currentTodo) => {
     this.setState(prevState => ({
@@ -70,7 +81,6 @@ class App extends Component {
 
   setFilter = (filter) => {
     this.setState({
-      filtredTodos: filter,
       active: filter,
     });
   }
@@ -83,68 +93,53 @@ class App extends Component {
     }));
   }
 
-  toggleAllTodo = (event) => {
-    const { checked } = event.target;
-
-    this.setState((prevState) => {
-      if (checked) {
-        return {
-          todos: prevState.todos.map(todo => (
-            {
-              ...todo,
-              completed: true,
-            }
-          )),
-        };
-      }
-
-      return {
-        todos: prevState.todos.map(todo => (
-          {
-            ...todo,
-            completed: false,
-          }
-        )),
-      };
-    });
-  }
-
-  todosLeftCount = () => {
-    const todosLeftCount = this.state.todos.filter(
+  showActiveTodosCount = () => {
+    const activeTodos = this.state.todos.filter(
       todo => !todo.completed,
     );
-    let todosLeftCountText = '';
+    const activeTodosCount = activeTodos.length === 1
+      ? `1 item left`
+      : `${activeTodos.length} items left`;
 
-    if (todosLeftCount.length === 1) {
-      todosLeftCountText = `1 item left`;
-    } else {
-      todosLeftCountText = `${todosLeftCount.length} items left`;
+    return activeTodosCount;
+  }
+
+  showTodos = () => {
+    const {
+      todos,
+      active,
+    } = this.state;
+    let visibleTodos = [];
+
+    if (active === 'all') {
+      visibleTodos = todos;
+    } else if (active === 'active') {
+      visibleTodos = todos.filter(
+        todo => !todo.completed,
+      );
+    } else if (active === 'completed') {
+      visibleTodos = todos.filter(
+        todo => todo.completed,
+      );
     }
 
-    return todosLeftCountText;
+    return visibleTodos;
+  }
+
+  isActiveTodo = () => {
+    const activeTodos = this.state.todos.filter(
+      todo => !todo.completed,
+    );
+    const isActiveTodos = !activeTodos.length;
+
+    return isActiveTodos;
   }
 
   render() {
     const {
-      todos,
-      filtredTodos,
       active,
       title,
     } = this.state;
-
-    let visibleTodo;
-
-    if (filtredTodos === 'all') {
-      visibleTodo = todos;
-    } else if (filtredTodos === 'active') {
-      visibleTodo = todos.filter(
-        todo => !todo.completed,
-      );
-    } else if (filtredTodos === 'completed') {
-      visibleTodo = todos.filter(
-        todo => todo.completed,
-      );
-    }
 
     return (
       <section className="todoapp">
@@ -157,17 +152,18 @@ class App extends Component {
           />
         </form>
         <TodoList
-          todos={visibleTodo}
+          todos={this.showTodos()}
           onToggleComplete={this.onToggleComplete}
           onDelete={this.deleteTodo}
           toggleAllTodo={this.toggleAllTodo}
+          isActiveTodos={this.isActiveTodo()}
         />
         {this.state.todos.length > 0
         && (
           <Footer
-            todosLeftCount={this.todosLeftCount}
+            showActiveTodosCount={this.showActiveTodosCount()}
             setFilter={this.setFilter}
-            active={active}
+            activeTodos={active}
             handleClearCompleted={this.handleClearCompleted}
           />
         )}
