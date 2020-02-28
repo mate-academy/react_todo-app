@@ -13,6 +13,8 @@ export const TodoList = ({
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
+      checked={todos.length
+      && todos.every(todo => todo.completed)}
       onClick={handleCheckedAll}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
