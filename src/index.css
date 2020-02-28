@@ -295,6 +295,7 @@ body {
 .filters {
   margin: 0;
   padding: 0;
+  transform: translateY(-4px);
   list-style: none;
   position: absolute;
   right: 0;
