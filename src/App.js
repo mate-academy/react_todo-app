@@ -72,7 +72,7 @@ export class App extends Component {
 
   changeFilter = (event) => {
     this.setState({
-      filter: event.target.id,
+      filter: event.target.getAttribute('data-filter'),
     });
   }
 
@@ -104,7 +104,7 @@ export class App extends Component {
               <button
                 type="button"
                 href="#/"
-                id="all"
+                data-filter="all"
                 className={cn({ selected: filter === 'all' })}
                 onClick={this.changeFilter}
               >
@@ -116,7 +116,7 @@ export class App extends Component {
               <button
                 type="button"
                 href="#/active"
-                id="active"
+                data-filter="active"
                 className={cn({ selected: filter === 'active' })}
                 onClick={this.changeFilter}
               >
@@ -128,7 +128,7 @@ export class App extends Component {
               <button
                 type="button"
                 href="#/completed"
-                id="completed"
+                data-filter="completed"
                 className={cn({ selected: filter === 'completed' })}
                 onClick={this.changeFilter}
               >
