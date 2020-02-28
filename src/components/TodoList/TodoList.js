@@ -12,8 +12,6 @@ export const TodoList = (props) => {
     handleChangingEditing,
   } = props;
 
-  // console.log(todos);
-
   return (
     <ul className="todo-list">
       {todos.map(todo => (
