@@ -1,28 +1,42 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList/TodoList';
+import { Footer } from './components/Footer/Footer';
+
+function filter(arr, value, identifier) {
+  return arr.map((item) => {
+    const newItem = { ...item };
+
+    if (newItem.id === identifier) {
+      newItem.completed = value;
+    }
+
+    return newItem;
+  });
+}
 
 class App extends React.Component {
   state = {
     task: '',
     todos: [],
-    filtered: [],
-    isAnyFiltered: false,
+    visibleTodos: [],
     isCheckedAll: false,
     activeTab: 'All',
   };
 
   componentDidMount = () => {
+    const storageTodos = JSON.parse(localStorage.getItem('todos')) || [];
+
     this.setState({
-      todos: JSON.parse(localStorage.getItem('state')),
+      todos: storageTodos,
+      visibleTodos: storageTodos,
     });
   }
 
   componentDidUpdate = () => {
-    const { todos } = this.state;
-    const storage = JSON.stringify(todos);
+    const storage = JSON.stringify(this.state.todos);
 
-    localStorage.setItem('state', storage);
+    localStorage.setItem('todos', storage);
   }
 
   handleChange = (event) => {
@@ -44,175 +58,121 @@ class App extends React.Component {
         completed: false,
       }],
       task: '',
-      isAnyFiltered: false,
-      filtered: [],
+      visibleTodos: [...prevState.todos, {
+        id: uuidv4(),
+        task,
+        completed: false,
+      }],
       activeTab: 'All',
     }));
   }
 
   changeStatus = (event) => {
     const { checked, id } = event.target;
-    const { todos, filtered } = this.state;
-    let newListFiltered;
+    const { todos, visibleTodos } = this.state;
 
-    const newList = todos.map((item) => {
-      const newItem = { ...item };
-
-      if (newItem.id === id) {
-        newItem.completed = checked;
-      }
-
-      return newItem;
-    });
-
-    if (filtered) {
-      newListFiltered = filtered.map((item) => {
-        const newItem = { ...item };
-
-        if (newItem.id === id) {
-          newItem.completed = checked;
-        }
-
-        return newItem;
-      });
-    }
+    const newList = filter(todos, checked, id);
+    const newListFiltered = filter(visibleTodos, checked, id);
 
     this.setState({
       todos: [...newList],
-      filtered: newListFiltered,
+      visibleTodos: [...newListFiltered],
       isCheckedAll: newList.every(item => item.completed === true),
     });
   }
 
   removeTask = (event) => {
     const { name } = event.target;
-    const { todos, filtered } = this.state;
+    const { todos, visibleTodos } = this.state;
     const newList = todos.filter(item => item.id !== name);
-    let newListFiltered;
-
-    if (filtered) {
-      newListFiltered = filtered.filter(item => item.id !== name);
-    } else {
-      newListFiltered = filtered;
-    }
+    const newListFiltered = visibleTodos.filter(item => item.id !== name);
 
     this.setState({
       todos: [...newList],
-      filtered: newListFiltered,
+      visibleTodos: [...newListFiltered],
     });
   }
 
   removeCompleted = () => {
-    const { todos, filtered } = this.state;
+    const { todos } = this.state;
     const newList = todos.filter(item => item.completed === false);
-    let newListFiltered;
-
-    if (filtered) {
-      newListFiltered = filtered.filter(item => item.completed === false);
-    }
 
     this.setState({
       todos: [...newList],
-      filtered: newListFiltered,
+      visibleTodos: [...newList],
       isCheckedAll: false,
     });
   }
 
-  showAll = (event) => {
+  changeFilter = (event) => {
     event.preventDefault();
-    const { innerText } = event.target;
-
-    this.setState({
-      filtered: [],
-      isAnyFiltered: false,
-      activeTab: innerText,
-    });
-  }
-
-  showCompleted = (event) => {
-    event.preventDefault();
-    const { innerText } = event.target;
+    const { name } = event.target;
     const { todos } = this.state;
-    const newList = todos.filter(item => item.completed === true);
+    let newList;
+
+    if (name === 'All') {
+      this.setState({
+        visibleTodos: [...todos],
+        activeTab: name,
+      });
+
+      return;
+    }
+
+    if (name === 'Active') {
+      newList = todos.filter(item => item.completed === false);
+    }
+
+    if (name === 'Completed') {
+      newList = todos.filter(item => item.completed === true);
+    }
 
     this.setState({
-      filtered: [...newList],
-      isAnyFiltered: true,
-      activeTab: innerText,
+      visibleTodos: [...newList],
+      activeTab: name,
     });
   }
 
-  showActive = (event) => {
+  checkTaskValid = (event) => {
     event.preventDefault();
-    const { innerText } = event.target;
-    const { todos } = this.state;
-    const newList = todos.filter(item => item.completed === false);
+    const { task } = this.state;
 
-    this.setState({
-      filtered: [...newList],
-      isAnyFiltered: true,
-      activeTab: innerText,
-    });
+    if (task) {
+      this.addTodo(event);
+    }
   }
 
-  validatedForm = (event) => {
-    event.preventDefault();
-  }
-
-  checkedAll = () => {
+  checkAll = () => {
     const { todos, isCheckedAll } = this.state;
 
-    const newList = todos.map((item) => {
-      const newItem = { ...item };
-
-      if (!isCheckedAll) {
-        newItem.completed = true;
-      } else {
-        newItem.completed = false;
-      }
-
-      return newItem;
-    });
+    const newList = todos.map(item => ({
+      ...item,
+      completed: !isCheckedAll,
+    }));
 
     this.setState(prevState => ({
       todos: [...newList],
-      filtered: [],
-      isAnyFiltered: false,
+      visibleTodos: [...newList],
       isCheckedAll: !prevState.isCheckedAll,
     }));
   }
 
-  taskEdited = (edtiTitle, name) => {
-    const { todos, filtered } = this.state;
-    let newListFiltered;
+  editTask = (newTask, name) => {
+    const { todos } = this.state;
 
     const newList = todos.map((item) => {
       const newItem = { ...item };
 
       if (newItem.id === name) {
-        newItem.task = edtiTitle;
+        newItem.task = newTask;
       }
 
       return newItem;
     });
 
-    if (filtered) {
-      newListFiltered = filtered.map((item) => {
-        const newItem = { ...item };
-
-        if (newItem.id === name) {
-          newItem.task = edtiTitle;
-        }
-
-        return newItem;
-      });
-    } else {
-      newListFiltered = filtered;
-    }
-
     this.setState({
       todos: [...newList],
-      filtered: newListFiltered,
+      visibleTodos: [...newList],
     });
   }
 
@@ -220,22 +180,18 @@ class App extends React.Component {
     const {
       task,
       todos,
-      filtered,
-      isAnyFiltered,
+      visibleTodos,
       isCheckedAll,
       activeTab,
     } = this.state;
-    const activeItems = todos.filter(item => item.completed === false).length;
+    const activeTodos = todos.filter(item => item.completed === false).length;
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
 
-          <form onSubmit={
-            !task ? this.validatedForm : this.addTodo
-          }
-          >
+          <form onSubmit={this.checkTaskValid}>
             <input
               value={task}
               onChange={this.handleChange}
@@ -246,18 +202,19 @@ class App extends React.Component {
         </header>
 
         <TodoList
-          items={!isAnyFiltered ? todos : filtered}
+          todos={visibleTodos}
           changeStatus={this.changeStatus}
           removeTask={this.removeTask}
-          removeCompleted={this.removeCompleted}
-          showAll={this.showAll}
-          showCompleted={this.showCompleted}
-          showActive={this.showActive}
-          activeItems={activeItems}
-          checkedAll={this.checkedAll}
+          checkAll={this.checkAll}
           isCheckedAll={isCheckedAll}
+          editTask={this.editTask}
+        />
+
+        <Footer
+          activeTodos={activeTodos}
           activeTab={activeTab}
-          taskEdited={this.taskEdited}
+          changeFilter={this.changeFilter}
+          removeCompleted={this.removeCompleted}
         />
       </section>
     );
