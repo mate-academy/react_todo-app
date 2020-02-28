@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Li } from './Li';
+import { ListItem } from './ListItem';
 
 export const TodoList = ({
   todos,
@@ -19,7 +19,7 @@ export const TodoList = ({
     {todos.length > 0 && (
       <ul className="todo-list">
         {todos.map(todo => (
-          <Li
+          <ListItem
             key={todo.id}
             todo={todo}
             deleteTodo={() => deleteTodo(todo.id)}

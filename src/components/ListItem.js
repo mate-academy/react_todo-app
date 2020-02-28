@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const Li = ({ todo, deleteTodo, toggleComplited }) => {
+export const ListItem = ({ todo, deleteTodo, toggleComplited }) => {
   const { id, title, completed } = todo;
 
   return (
@@ -22,7 +22,7 @@ export const Li = ({ todo, deleteTodo, toggleComplited }) => {
   );
 };
 
-Li.propTypes = {
+ListItem.propTypes = {
   todo: PropTypes.shape({
     title: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

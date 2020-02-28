@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import cn from 'classnames';
 import { InputTodo } from './components/InputTodo';
 import { TodoList } from './components/TodoList';
+import { NotFinishedTodo } from './components/NotFinishedTodo';
 
 const filterTodos = (todos, filter) => {
   switch (filter) {
@@ -37,7 +38,8 @@ export class App extends Component {
       todos: prevState.todos.map(todo => (
         todo.id === id
           ? {
-            ...todo, completed: !todo.completed,
+            ...todo,
+            completed: !todo.completed,
           }
           : todo
       )),
@@ -48,21 +50,23 @@ export class App extends Component {
     if (event.target.checked) {
       this.setState(prevState => ({
         todos: prevState.todos.map(todo => ({
-          ...todo, completed: true,
+          ...todo,
+          completed: true,
         })),
       }));
     } else {
       this.setState(prevState => ({
         todos: prevState.todos.map(todo => ({
-          ...todo, completed: false,
+          ...todo,
+          completed: false,
         })),
       }));
     }
   }
 
-  clearComplited = () => {
+  clearCompleted = () => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => todo.completed === false),
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
@@ -74,8 +78,8 @@ export class App extends Component {
 
   render() {
     const { todos, filter } = this.state;
-    const notFinishedTodo = todos.filter(todo => todo.completed === false);
-    const prepTodos = filterTodos(todos, filter);
+    const notFinishedTodo = todos.filter(todo => !todo.completed);
+    const preparedTodos = filterTodos(todos, filter);
 
     return (
       <section className="todoapp">
@@ -86,7 +90,7 @@ export class App extends Component {
         </header>
         <section className="main">
           <TodoList
-            todos={prepTodos}
+            todos={preparedTodos}
             deleteTodo={this.deleteTodo}
             toggleComplited={this.toggleComplited}
             handleCheckedAll={this.handleCheckedAll}
@@ -94,49 +98,49 @@ export class App extends Component {
         </section>
 
         <footer className="footer">
-          <span className="todo-count">
-            {`${notFinishedTodo.length} items left`}
-          </span>
-
+          <NotFinishedTodo notFinishedTodo={notFinishedTodo} />
           <ul className="filters">
             <li>
-              <a
+              <button
+                type="button"
                 href="#/"
                 id="all"
                 className={cn({ selected: filter === 'all' })}
                 onClick={this.changeFilter}
               >
               All
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
+              <button
+                type="button"
                 href="#/active"
                 id="active"
                 className={cn({ selected: filter === 'active' })}
                 onClick={this.changeFilter}
               >
               Active
-              </a>
+              </button>
             </li>
 
             <li>
-              <a
+              <button
+                type="button"
                 href="#/completed"
                 id="completed"
                 className={cn({ selected: filter === 'completed' })}
                 onClick={this.changeFilter}
               >
               Completed
-              </a>
+              </button>
             </li>
           </ul>
 
           <button
             type="button"
             className="clear-completed"
-            onClick={this.clearComplited}
+            onClick={this.clearCompleted}
           >
             Clear completed
           </button>
