@@ -14,9 +14,8 @@ export const TodoItem = (props) => {
         type="checkbox"
         className="toggle"
         id={`todo-${todo.id}`}
-        onClick={onToogleComplete}
         checked={todo.completed}
-        onChange={() => {}}
+        onChange={onToogleComplete}
       />
       <label
         htmlFor={`todo-${todo.id}`}

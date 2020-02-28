@@ -21,7 +21,8 @@ export const TodoList = (props) => {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          onClick={toggleAllTodo}
+          checked={todos.filter(todo => !todo.completed).length === 0}
+          onChange={toggleAllTodo}
         />
         {
           todos.length > 0

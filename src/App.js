@@ -25,8 +25,10 @@ class App extends Component {
     let newTodo = {};
 
     this.setState((prevState) => {
-      if (!prevState.title.trim()) {
-        return '';
+      if (!title.trim()) {
+        return {
+          title: '',
+        };
       }
 
       newTodo = {
