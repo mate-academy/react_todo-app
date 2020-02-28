@@ -17,11 +17,11 @@ class App extends React.Component {
     sortBy: '',
   }
 
-  checkAll = () => {
+  checkAll = ({ target }) => {
     this.setState(({ todos, checkedAll }) => {
       const newTodos = todos.map(todo => ({
         ...todo,
-        done: !checkedAll,
+        done: target.checked,
       }));
 
       return {
@@ -114,6 +114,7 @@ class App extends React.Component {
   clearCompleted = () => {
     this.setState(({ todos }) => ({
       todos: todos.filter(todo => !todo.done),
+      checkedAll: false,
     }));
   };
 
@@ -137,7 +138,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, newItemText, sortBy } = this.state;
+    const { todos, newItemText, sortBy, checkedAll } = this.state;
     const activeTodos = todos.filter(todo => !todo.done);
     const filteredTodos = this.todosFilter(todos, sortBy);
 
@@ -156,13 +157,20 @@ class App extends React.Component {
         </header>
 
         <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onChange={this.checkAll}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {!!todos.length && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                checked={checkedAll}
+                className="toggle-all"
+                onChange={this.checkAll}
+              />
+              <label htmlFor="toggle-all">
+                  Mark all as complete
+              </label>
+            </>
+          )}
           <TodoList
             todos={filteredTodos}
             onDelete={this.handleDelete}
