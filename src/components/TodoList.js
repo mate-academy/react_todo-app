@@ -8,7 +8,6 @@ export const TodoList = ({
   toggleComplited,
   handleCheckedAll,
 }) => (
-
   <>
     <input
       type="checkbox"

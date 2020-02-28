@@ -136,6 +136,7 @@ body {
   left: -13px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+  cursor: pointer;
 }
 
 .toggle-all + label:before {
@@ -353,6 +354,20 @@ html .clear-completed:active {
 
 .info a:hover {
   text-decoration: underline;
+}
+
+.error {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #cc9a9a;
+  font-size: 15px;
+  opacity: 0;
+  &--detected {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+  }
 }
 
 /*

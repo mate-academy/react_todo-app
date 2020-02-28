@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cn from 'classnames';
 import { InputTodo } from './components/InputTodo';
 import { TodoList } from './components/TodoList';
 
@@ -16,7 +17,7 @@ const filterTodos = (todos, filter) => {
 export class App extends Component {
   state = {
     todos: [],
-    filter: '',
+    filter: 'all',
   }
 
   addTodo = (todo) => {
@@ -65,7 +66,7 @@ export class App extends Component {
     }));
   }
 
-  handleFilter = (event) => {
+  changeFilter = (event) => {
     this.setState({
       filter: event.target.id,
     });
@@ -101,8 +102,9 @@ export class App extends Component {
             <li>
               <a
                 href="#/"
-                className="selected"
-                onClick={this.handleFilter}
+                id="all"
+                className={cn({ selected: filter === 'all' })}
+                onClick={this.changeFilter}
               >
               All
               </a>
@@ -112,7 +114,8 @@ export class App extends Component {
               <a
                 href="#/active"
                 id="active"
-                onClick={this.handleFilter}
+                className={cn({ selected: filter === 'active' })}
+                onClick={this.changeFilter}
               >
               Active
               </a>
@@ -122,7 +125,8 @@ export class App extends Component {
               <a
                 href="#/completed"
                 id="completed"
-                onClick={this.handleFilter}
+                className={cn({ selected: filter === 'completed' })}
+                onClick={this.changeFilter}
               >
               Completed
               </a>
