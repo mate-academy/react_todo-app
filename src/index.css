@@ -295,11 +295,11 @@ body {
 .filters {
   margin: 0;
   padding: 0;
-  transform: translateY(-4px);
   list-style: none;
   position: absolute;
   right: 0;
   left: 0;
+  bottom: 4px;
 }
 
 .filters li {
