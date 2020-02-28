@@ -25,18 +25,20 @@ class App extends React.Component {
   };
 
   componentDidMount = () => {
-    const storageTodos = JSON.parse(localStorage.getItem('todos')) || [];
+    const storageTodos = localStorage.getItem('todos');
 
-    this.setState({
-      todos: storageTodos,
-      visibleTodos: storageTodos,
-    });
+    if (storageTodos) {
+      this.setState({
+        todos: JSON.parse(storageTodos),
+        visibleTodos: JSON.parse(storageTodos),
+      });
+    }
   }
 
-  componentDidUpdate = () => {
-    const storage = JSON.stringify(this.state.todos);
-
-    localStorage.setItem('todos', storage);
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.todos !== this.state.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
   }
 
   handleChange = (event) => {
@@ -49,22 +51,19 @@ class App extends React.Component {
 
   addTodo = (event) => {
     event.preventDefault();
-    const { task } = this.state;
+    const { task, todos } = this.state;
+    const newTodos = [...todos, {
+      id: uuidv4(),
+      task,
+      completed: false,
+    }];
 
-    this.setState(prevState => ({
-      todos: [...prevState.todos, {
-        id: uuidv4(),
-        task,
-        completed: false,
-      }],
+    this.setState({
+      todos: newTodos,
       task: '',
-      visibleTodos: [...prevState.todos, {
-        id: uuidv4(),
-        task,
-        completed: false,
-      }],
+      visibleTodos: newTodos,
       activeTab: 'All',
-    }));
+    });
   }
 
   changeStatus = (event) => {
