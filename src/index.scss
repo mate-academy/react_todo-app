@@ -264,9 +264,10 @@ body {
   display: inline;
 }
 .filters li button {
+  cursor: pointer;
   color: inherit;
-  margin: 3px;
-  padding: 3px 7px;
+  margin: 1px 3px;
+  padding: 0px 7px;
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 3px;

@@ -29,40 +29,42 @@ export class App extends Component {
 
   addTodo = (todo) => {
     const { filter, todos } = this.state;
-    const filteredTodos = [...todos, todo];
 
     this.setState((prevState) => {
       const obj = {
         todos: [...todos, todo],
-        visibleTodos: filter === 'All'
-          ? filteredTodos
-          : filteredTodos.filter(task => task.completed === Boolean(filter)),
       };
 
       return {
         todos: obj.todos,
-        visibleTodos: obj.visibleTodos,
+        visibleTodos: filter === 'All'
+          ? obj.todos
+          : obj.todos.filter(task => task.completed === Boolean(filter)),
       };
     });
   }
 
   toggledCheck = (id, checked) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map(todo => (
-        todo.id === id
-          ? {
-            ...todo, completed: checked,
-          }
-          : todo
-      )),
-      visibleTodos: prevState.visibleTodos.map(todo => (
-        todo.id === id
-          ? {
-            ...todo, completed: checked,
-          }
-          : todo
-      )),
-    }));
+    const { filter } = this.state;
+
+    this.setState((prevState) => {
+      const obj = {
+        todos: prevState.todos.map(todo => (
+          todo.id === id
+            ? {
+              ...todo, completed: checked,
+            }
+            : todo
+        )),
+      };
+
+      return {
+        todos: obj.todos,
+        visibleTodos: filter === 'All'
+          ? obj.todos
+          : obj.todos.filter(task => task.completed === Boolean(filter)),
+      };
+    });
   }
 
   filtered = (event) => {
@@ -90,52 +92,68 @@ export class App extends Component {
   }
 
   deleteTask = (id) => {
-    this.setState(prevState => ({
-      visibleTodos: prevState.visibleTodos.filter(todo => todo.id !== id),
-      todos: prevState.todos.filter(todo => todo.id !== id),
-    }));
+    const { filter } = this.state;
+
+    this.setState((prevState) => {
+      const obj = {
+        todos: prevState.todos.filter(todo => todo.id !== id),
+      };
+
+      return {
+        todos: obj.todos,
+        visibleTodos: filter === 'All'
+          ? obj.todos
+          : obj.todos.filter(task => task.completed === Boolean(filter)),
+      };
+    });
   }
 
   clearCompleted = () => {
-    this.setState(prevState => ({
-      visibleTodos: prevState.visibleTodos.filter(
-        todo => !todo.completed,
-      ),
-      todos: prevState.todos.filter(todo => !todo.completed),
-    }));
+    this.setState((prevState) => {
+      const obj = {
+        todos: prevState.todos.filter(todo => !todo.completed),
+      };
+
+      return {
+        todos: obj.todos,
+        visibleTodos: obj.todos,
+      };
+    });
   }
 
   checkedAll = (event) => {
     if (event.target.checked) {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => (
-          {
-            ...todo,
-            completed: true,
-          }
-        )),
-        visibleTodos: prevState.visibleTodos.map(todo => (
-          {
-            ...todo,
-            completed: true,
-          }
-        )),
-      }));
+      this.setState((prevState) => {
+        const obj = {
+          todos: prevState.todos.map(todo => (
+            {
+              ...todo,
+              completed: true,
+            }
+          )),
+        };
+
+        return {
+          todos: obj.todos,
+          visibleTodos: obj.todos,
+        };
+      });
     } else {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => (
-          {
-            ...todo,
-            completed: false,
-          }
-        )),
-        visibleTodos: prevState.visibleTodos.map(todo => (
-          {
-            ...todo,
-            completed: false,
-          }
-        )),
-      }));
+      this.setState((prevState) => {
+        const obj = {
+          todos: prevState.todos.map(todo => (
+            {
+              ...todo,
+              completed: false,
+            }
+          )),
+        };
+
+        return {
+          todos: obj.todos,
+          visibleTodos: obj.todos,
+        };
+      });
     }
   }
 
