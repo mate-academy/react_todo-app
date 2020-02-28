@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import * as cx from 'classnames';
+
 import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
 
@@ -6,6 +8,7 @@ export class App extends Component {
   state = {
     todos: [],
     visibleTodos: [],
+    filter: 'All',
   }
 
   componentDidMount() {
@@ -74,6 +77,7 @@ export class App extends Component {
       visibleTodos: filter === 'All'
         ? prevState.todos
         : prevState.todos.filter(todo => todo.completed === Boolean(filter)),
+      filter,
     }));
   }
 
@@ -128,7 +132,7 @@ export class App extends Component {
   }
 
   render() {
-    const { todos, visibleTodos } = this.state;
+    const { todos, visibleTodos, filter } = this.state;
     const leftList = todos.filter(todo => !todo.completed);
 
     return (
@@ -163,7 +167,9 @@ export class App extends Component {
             <li>
               <a
                 href="#/"
-                className="selected"
+                className={
+                  cx({ selected: filter === 'All' })
+                }
                 data-filter="All"
                 onClick={this.filtered}
               >
@@ -174,6 +180,9 @@ export class App extends Component {
             <li>
               <a
                 href="#/active"
+                className={
+                  cx({ selected: filter === false })
+                }
                 data-filter="Active"
                 onClick={this.filtered}
               >
@@ -184,6 +193,9 @@ export class App extends Component {
             <li>
               <a
                 href="#/completed"
+                className={
+                  cx({ selected: filter === true })
+                }
                 data-filter="Completed"
                 onClick={this.filtered}
               >
