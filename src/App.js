@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/TodoFooter';
-import { filterTypes } from './components/Filter';
+import { filterTypes } from './components/const/Filter';
 
 class App extends Component {
   state = {
@@ -58,21 +58,23 @@ class App extends Component {
         return todos.filter(todo => !todo.completed);
       case filterTypes.completed:
         return todos.filter(todo => todo.completed);
+      case filterTypes.all:
+        return [...todos];
       default:
-        return todos.filter(todo => todo.id);
+        return [...todos];
     }
   }
 
-  checkTodo = (todoId) => {
+  checkTodo = (id, checked) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
-        if (todo.id !== todoId) {
+        if (todo.id !== id) {
           return todo;
         }
 
         return {
           ...todo,
-          completed: !todo.completed,
+          completed: checked,
         };
       }),
     }));
@@ -105,6 +107,7 @@ class App extends Component {
     const filteredTodos = this.filterTodos();
 
     const checkComplete = todos.every(todo => todo.completed);
+    const count = todos.filter(todo => !todo.completed).length;
 
     return (
       <section className="todoapp">
@@ -125,15 +128,14 @@ class App extends Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
-            todos={todos}
-            filteredTodos={filteredTodos}
+            todos={filteredTodos}
             deleteTodo={this.deleteTodo}
             checkTodo={this.checkTodo}
           />
         </section>
 
         <Footer
-          todos={todos}
+          count={count}
           activeFilter={activeFilter}
           onSetFilter={this.setFilter}
           onClearCompleted={this.clearAllCompleted}

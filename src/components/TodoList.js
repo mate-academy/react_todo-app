@@ -4,19 +4,19 @@ import { TodoItem } from './TodoItem';
 
 export const TodoList = (props) => {
   const {
-    filteredTodos,
+    todos,
     deleteTodo,
     checkTodo,
   } = props;
 
   return (
     <ul className="todo-list">
-      {filteredTodos.map(todo => (
+      {todos.map(todo => (
         <TodoItem
           key={todo.id}
           todo={todo}
           deleteTodo={() => deleteTodo(todo.id)}
-          checkTodo={() => checkTodo(todo.id)}
+          checkTodo={checked => checkTodo(todo.id, checked)}
         />
       ))}
     </ul>
@@ -24,7 +24,7 @@ export const TodoList = (props) => {
 };
 
 TodoList.propTypes = {
-  filteredTodos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
   deleteTodo: PropTypes.func.isRequired,
   checkTodo: PropTypes.func.isRequired,
 };

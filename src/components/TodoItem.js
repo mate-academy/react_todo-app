@@ -1,23 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 
 export const TodoItem = (props) => {
   const { todo, deleteTodo, checkTodo } = props;
 
   return (
-    <li className={cn(todo.completed && 'completed')}>
+    <li className={todo.completed && 'completed'}>
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           id={todo.id}
-          onChange={checkTodo}
+          onChange={event => checkTodo(event.target.checked)}
           checked={todo.completed}
         />
         <label
           htmlFor={todo.id}
-          className={cn(todo.completed && 'checked')}
+          className={todo.completed && 'checked'}
         >
           {todo.title}
         </label>
