@@ -218,9 +218,18 @@ body {
   min-height: 28px;
 }
 
+.todo-list li label:hover {
+  background-color: #f7f7f7;
+}
+
 .todo-list li.completed label {
   color: #d9d9d9;
   text-decoration: line-through;
+}
+
+.taskLabelPre {
+  margin: 0;
+  padding: 0;
 }
 
 .todo-list li .destroy {

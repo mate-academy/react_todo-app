@@ -21,11 +21,11 @@ export class TasksItem extends React.Component {
     updateTasksCondition(updateConditionCheckedTask);
   };
 
-  toggleEditInput = (event) => {
+  toggleEditInput = (event, escapeValue) => {
     event.preventDefault();
     this.setState(prevState => ({
       editIntVisible: !prevState.editIntVisible,
-      newValueTask: prevState.newValueTask.trim(),
+      newValueTask: escapeValue || prevState.newValueTask.trim(),
     }), () => this.textInput.current.focus());
   };
 
@@ -59,10 +59,7 @@ export class TasksItem extends React.Component {
 
   changeConditionEscapeKey = (event) => {
     if (event.key === 'Escape') {
-      this.setState({
-        newValueTask: this.props.task.value,
-      });
-      this.toggleEditInput(event);
+      this.toggleEditInput(event, this.props.task.value);
     }
   };
 
@@ -102,7 +99,9 @@ export class TasksItem extends React.Component {
               onChange={this.toggleCompleted}
               checked={task.completed}
             />
-            <label htmlFor={`todo-${task.id}`}>{task.value}</label>
+            <label htmlFor={`todo-${task.id}`}>
+              <pre className="taskLabelPre">{task.value}</pre>
+            </label>
             <button
               type="button"
               className="destroy"
