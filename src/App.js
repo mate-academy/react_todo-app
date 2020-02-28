@@ -17,14 +17,16 @@ export class App extends React.PureComponent {
   };
 
   componentDidMount() {
-    const todos = JSON.parse(window.localStorage.getItem('todos'));
-    const allTodosCompleted = JSON.parse(
+    const { todos, allTodosCompleted } = this.state;
+
+    const todosFromStorage = JSON.parse(window.localStorage.getItem('todos'));
+    const allTodosCompletedFromStorage = JSON.parse(
       window.localStorage.getItem('allTodosCompleted'),
     );
 
     this.setState({
-      todos: todos || [],
-      allTodosCompleted: allTodosCompleted || false,
+      todos: todosFromStorage || todos,
+      allTodosCompleted: allTodosCompletedFromStorage || allTodosCompleted,
     });
   }
 
