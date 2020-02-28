@@ -3,6 +3,20 @@ import { AddNewTaskField } from './components/AddBewTaskFiled/AddNewTaskField';
 import { TasksList } from './components/TasksList/TasksList';
 import { Footer } from './components/Footer/Footer';
 
+function updateCurrentTaskCondition(
+  prevInitialList,
+  newTaskCondiniton,
+  property,
+) {
+  return prevInitialList.map((taskObj) => {
+    if (taskObj.id === newTaskCondiniton.id) {
+      return property ? newTaskCondiniton[property] : newTaskCondiniton;
+    }
+
+    return property ? taskObj[property] : taskObj;
+  });
+}
+
 class App extends React.Component {
   state = {
     initialTasksList: [],
@@ -41,13 +55,17 @@ class App extends React.Component {
 
   updateTasksCondition = (newTaskCondiniton) => {
     this.setState(prevState => ({
-      initialTasksList: prevState.initialTasksList.map((taskObj) => {
-        if (taskObj.id === newTaskCondiniton.id) {
-          return newTaskCondiniton;
-        }
-
-        return taskObj;
-      }),
+      initialTasksList:
+        updateCurrentTaskCondition(
+          prevState.initialTasksList,
+          newTaskCondiniton,
+        ),
+      toggleCompleted:
+        updateCurrentTaskCondition(
+          prevState.initialTasksList,
+          newTaskCondiniton,
+          'completed',
+        ).every(item => item) ? 1 : false,
     }));
   };
 
@@ -99,8 +117,8 @@ class App extends React.Component {
                     type="checkbox"
                     id="toggle-all"
                     className="toggle-all"
-                    onClick={this.toggleCompletedAll}
-                    defaultChecked={this.state.toggleCompleted}
+                    onChange={this.toggleCompletedAll}
+                    checked={this.state.toggleCompleted}
                   />
                   <label htmlFor="toggle-all">Mark all as complete</label>
 
