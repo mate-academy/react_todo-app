@@ -16,7 +16,7 @@ export class TodoApp extends React.Component {
   handleKeyPress = (event) => {
     const { title } = this.state;
 
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && title) {
       const newTask = {
         title,
         id: uuid(),

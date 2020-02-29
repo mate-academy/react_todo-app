@@ -24,7 +24,7 @@ export const TodoList = (props) => {
           {todos.map(todo => (
             <TodoItem
               key={todo.id}
-              {...todo}
+              todo={todo}
               onDeleteTodo={() => onDeleteTodo(todo.id)}
               onUpdateCompleted={() => onUpdateCompleted(todo.id)}
             />

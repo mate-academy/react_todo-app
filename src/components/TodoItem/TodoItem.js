@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-export const TodoItem = (props) => {
-  const { title, id, completed, onDeleteTodo, onUpdateCompleted } = props;
+export const TodoItem = ({ todo, onDeleteTodo, onUpdateCompleted }) => {
+  const {
+    title,
+    id,
+    completed,
+  } = todo;
 
   return (
     <li className={cn({ completed })}>
@@ -28,9 +32,11 @@ export const TodoItem = (props) => {
 };
 
 TodoItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
+  todo: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }).isRequired,
   onDeleteTodo: PropTypes.func.isRequired,
   onUpdateCompleted: PropTypes.func.isRequired,
 };

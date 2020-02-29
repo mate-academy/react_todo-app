@@ -9,10 +9,10 @@ export class App extends React.Component {
   }
 
   componentDidMount() {
-    const persistedtodos = localStorage.getItem('todos');
+    const cachedTodos = localStorage.getItem('todos');
 
-    if (persistedtodos) {
-      const todos = JSON.parse(persistedtodos);
+    if (cachedTodos) {
+      const todos = JSON.parse(cachedTodos);
 
       this.setState({ todos });
     }
@@ -95,7 +95,7 @@ export class App extends React.Component {
   render() {
     const { todos } = this.state;
 
-    const uncompletedTodo = [...todos].filter(todo => todo.completed === false);
+    const uncompletedTodo = todos.filter(todo => todo.completed === false);
 
     return (
       <section className="todoapp">
