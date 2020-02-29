@@ -23,13 +23,13 @@ class App extends Component {
     }));
   }
 
-  handleToggleTodo = (todoId) => {
+  handleToggleTodo = (isChecked, todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((item) => {
         if (item.id === todoId) {
           return {
             ...item,
-            completed: !item.completed,
+            completed: !isChecked,
           };
         }
 

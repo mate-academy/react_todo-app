@@ -18,8 +18,8 @@ export function TodoList(props) {
       todo={item}
       id={item.id}
       handleEditTodo={handleEditTodo}
-      handleToggleTodo={() => {
-        handleToggleTodo(item.id);
+      handleToggleTodo={(event) => {
+        handleToggleTodo(event.target.checked, item.id);
       }}
       handleRemoveTodo={() => {
         handleRemoveTodo(item.id);
