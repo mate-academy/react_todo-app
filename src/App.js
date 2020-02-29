@@ -4,43 +4,36 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
-const todos = [
-  {
-    id: v4().substr(0, 4),
-    label: 'drink a coffee',
-    completed: false,
-  },
-  {
-    id: v4().substr(0, 4),
-    label: 'get the world masters',
-    completed: false,
-  },
-  {
-    id: v4().substr(0, 4),
-    label: 'find myself',
-    completed: false,
-  },
-  {
-    id: v4().substr(0, 4),
-    label: 'make somebody happy',
-    completed: false,
-  },
-];
-
 export class App extends PureComponent {
+  todos = [
+    {
+      id: v4().substr(0, 4),
+      text: 'drink a coffee',
+      completed: false,
+    },
+    {
+      id: v4().substr(0, 4),
+      text: 'get the world masters',
+      completed: false,
+    },
+  ];
+
   state = {
-    todoList: todos,
-    isSorted: false,
-    sortedTodos: [],
+    todoList: [...this.todos],
+    visibleTodos: [...this.todos],
+    filterName: 'all',
   };
 
   componentDidMount() {
     if (localStorage.getItem('todos')) {
-      this.setState(prevState => ({
+      this.setState({
         todoList: [
           ...JSON.parse(localStorage.getItem('todos')),
         ],
-      }));
+        visibleTodos: [
+          ...JSON.parse(localStorage.getItem('todos')),
+        ],
+      });
     }
   }
 
@@ -48,159 +41,155 @@ export class App extends PureComponent {
     localStorage.setItem('todos', JSON.stringify(this.state.todoList));
   }
 
-  createTodo = todo => ({
-    id: v4().substr(0, 4),
-    label: todo,
-    completed: false,
-  });
-
   setNewTodo = (todo) => {
-    const createdTodo = this.createTodo(todo);
-
-    if (createdTodo.label.trim()) {
+    if (todo.trim()) {
       this.setState(prevState => ({
         todoList: [
           ...prevState.todoList,
-          createdTodo,
+          {
+            id: v4().substr(0, 4),
+            text: todo,
+            completed: false,
+          },
+        ],
+        visibleTodos: [
+          ...prevState.todoList,
+          {
+            id: v4().substr(0, 4),
+            text: todo,
+            completed: false,
+          },
         ],
       }));
     }
   };
 
   handleCompleted = (event) => {
-    const { todoList } = this.state;
-    const isComplete = event.target.checked;
+    const isCompleted = event.target.checked;
     const todoId = event.target.id;
 
-    const changedItem = todoList
-      .find(todo => todo.id === todoId);
-
-    changedItem.completed = isComplete;
-
     this.setState(prevState => ({
-      todoList: [
-        ...prevState.todoList
-          .slice(0, todoList.indexOf(changedItem)),
-        changedItem,
-        ...prevState.todoList
-          .slice(todoList.indexOf(changedItem) + 1),
-      ],
+      todoList: [...prevState.todoList
+        .map((todo) => {
+          if (todoId === todo.id) {
+            return {
+              ...todo,
+              completed: isCompleted,
+            };
+          }
+
+          return todo;
+        })],
     }));
+
+    this.setFilteredList(this.state.filterName);
   };
 
   handleDestroy = (event) => {
-    const { todoList } = this.state;
-    const { name } = event.target;
-
-    const deletingItem = todoList
-      .find(todo => todo.id === name);
+    const todoId = event.target.dataset.btnIndex;
 
     this.setState(prevState => ({
-      todoList: [
-        ...prevState.todoList
-          .slice(0, todoList.indexOf(deletingItem)),
-        ...prevState.todoList
-          .slice(todoList.indexOf(deletingItem) + 1),
-      ],
+      todoList: prevState.todoList
+        .filter(todo => todo.id !== todoId),
     }));
+
+    this.setFilteredList(this.state.filterName);
   };
 
   setEditedValue = (value, idx) => {
-    const { todoList } = this.state;
-
-    const changedItem = todoList
-      .find(todo => todo.id === idx);
-
     if (value.trim()) {
-      changedItem.label = value;
-      changedItem.completed = false;
-
       this.setState(prevState => ({
-        todoList: [
-          ...prevState.todoList
-            .slice(0, todoList.indexOf(changedItem)),
-          changedItem,
-          ...prevState.todoList
-            .slice(todoList.indexOf(changedItem) + 1),
-        ],
+        todoList: prevState.todoList
+          .map((todo, id) => {
+            if (todo.id === idx) {
+              return {
+                ...todo,
+                text: value,
+                completed: false,
+              };
+            }
+
+            return todo;
+          }),
       }));
     }
+
+    this.setFilteredList(this.state.filterName);
   };
 
   handleSelectAll = (isSelectAll) => {
-    const allTodosCompleted = list => (list
-      .map(todo => ({
-        ...todo,
-        completed: isSelectAll,
-      })));
-
     this.setState(prevState => ({
-      todoList: allTodosCompleted(prevState.todoList),
+      todoList: prevState.todoList
+        .map(todo => ({
+          ...todo,
+          completed: isSelectAll,
+        })),
+      visibleTodos: prevState.todoList
+        .map(todo => ({
+          ...todo,
+          completed: isSelectAll,
+        })),
     }));
   };
 
   clearCompleted = () => {
-    const { todoList } = this.state;
+    this.setState(prevState => ({
+      todoList: prevState.todoList
+        .filter(todo => !todo.completed),
+    }));
 
-    const newTodos = todoList.filter(todo => !todo.completed);
-
-    this.setState({
-      todoList: newTodos,
-    });
+    this.setFilteredList(this.state.filterName);
   };
 
-  handleSort = (name) => {
+  setFilteredList = (name) => {
     this.setState((prevState) => {
       if (name === 'active') {
         return {
-          isSorted: true,
-          sortedTodos: prevState.todoList
+          filterName: 'active',
+          visibleTodos: prevState.todoList
             .filter(todo => !todo.completed),
         };
       }
 
       if (name === 'completed') {
         return {
-          isSorted: true,
-          sortedTodos: prevState.todoList
+          filterName: 'completed',
+          visibleTodos: prevState.todoList
             .filter(todo => todo.completed),
         };
       }
 
       return {
-        isSorted: false,
-        todoList: prevState.todoList,
-        sortedTodos: [],
+        filterName: 'all',
+        visibleTodos: prevState.todoList,
       };
     });
   };
 
   render() {
-    const { todoList, isSorted, sortedTodos } = this.state;
+    const { visibleTodos } = this.state;
 
     return (
       <section className="todoapp">
         <Header
           setNewTodo={todo => this.setNewTodo(todo)}
-          selectAll={checked => this.handleSelectAll(checked)}
+          selectAll={this.handleSelectAll}
+          isSelectAll={visibleTodos.every(todo => todo.completed)}
         />
 
         <section className="main">
           <TodoList
             setEditedValue={(value, id) => this.setEditedValue(value, id)}
-            data={isSorted ? sortedTodos : todoList}
-            onCompleted={event => this.handleCompleted(event)}
+            todos={visibleTodos}
+            onCompleted={e => this.handleCompleted(e)}
             onDestroy={event => this.handleDestroy(event)}
           />
         </section>
 
         <Footer
           clear={this.clearCompleted}
-          length={isSorted
-            ? sortedTodos.length
-            : todoList.length
-          }
-          sort={name => this.handleSort(name)}
+          length={visibleTodos.length}
+          sort={name => this.setFilteredList(name)}
         />
       </section>
     );

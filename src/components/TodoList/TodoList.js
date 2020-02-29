@@ -11,9 +11,9 @@ export class TodoList extends PureComponent {
     editing: false,
   };
 
-  handleEdit = (event, editingId, editingLabel) => {
+  handleEdit = (event, editingId, editingText) => {
     this.setState({
-      editingValue: editingLabel,
+      editingValue: editingText,
       editingField: editingId,
       editing: true,
     });
@@ -30,26 +30,26 @@ export class TodoList extends PureComponent {
 
   render() {
     const { editing, editingField, editingValue } = this.state;
-    const { data, onCompleted, onDestroy } = this.props;
+    const { todos, onCompleted, onDestroy } = this.props;
 
     return (
       <ul className="todo-list">
-        {data.map(({ label, id, completed }) => (
+        {todos.map(({ text, id, completed }) => (
           <li
             key={id}
-            className={cx(``, {
+            className={cx({
               completed,
               editing: editing && editingField === id,
             })}
           >
             <form action="#" className="view">
               <input
-                onClick={this.handleClick}
                 checked={completed}
                 onChange={onCompleted}
                 type="checkbox"
                 className="toggle"
                 id={id}
+                data-index={id}
               />
               <label
                 className="custom-cursor"
@@ -58,16 +58,16 @@ export class TodoList extends PureComponent {
                 <span className="tooltip input-tooltip">
                   <button
                     type="button"
-                    onClick={event => this.handleEdit(event, id, label)}
+                    onClick={event => this.handleEdit(event, id, text)}
                     className="button-tooltip"
                   >
                     Click for edit
                   </button>
                 </span>
-                {label}
+                {text}
               </label>
               <button
-                name={id}
+                data-btn-index={id}
                 type="button"
                 className="destroy"
                 onClick={onDestroy}
@@ -90,7 +90,7 @@ export class TodoList extends PureComponent {
 }
 
 TodoList.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape).isRequired,
   setEditedValue: PropTypes.func.isRequired,
   onCompleted: PropTypes.func.isRequired,
   onDestroy: PropTypes.func.isRequired,

@@ -7,17 +7,13 @@ export class EditField extends PureComponent {
     editingValue: this.props.value,
   };
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.escFunction, false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.escFunction, false);
-  }
-
-  escFunction = (event) => {
+  handleKeyDown = (event) => {
     if (event.keyCode === 27) {
-      this.handleEditSubmit(event);
+      this.props.onClose(this.props.value);
+
+      this.setState({
+        editingValue: this.props.value,
+      });
     }
   };
 
@@ -29,10 +25,8 @@ export class EditField extends PureComponent {
     });
   };
 
-  handleEditSubmit = (e) => {
-    if (e.type === 'blur' || e.type === 'submit') {
-      e.preventDefault();
-    }
+  handleEditSubmit = (event) => {
+    event.preventDefault();
 
     const { editingValue } = this.state;
 
@@ -49,6 +43,7 @@ export class EditField extends PureComponent {
           value={editingValue}
           onBlur={this.handleEditSubmit}
           onChange={this.handleEditorChange}
+          onKeyDown={this.handleKeyDown}
           className="edit"
         />
       </form>

@@ -18,11 +18,12 @@ handleChange = (event) => {
 
 render() {
   const { isChecked } = this.state;
+  const { isSelectAll } = this.props;
 
   return (
     <>
       <input
-        value={this.state.checked}
+        checked={isSelectAll}
         onChange={this.handleChange}
         type="checkbox"
         id="toggle-all"
@@ -41,4 +42,5 @@ render() {
 
 SelectAll.propTypes = {
   selectAll: PropTypes.func.isRequired,
+  isSelectAll: PropTypes.bool.isRequired,
 };
