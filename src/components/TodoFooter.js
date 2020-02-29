@@ -4,21 +4,21 @@ import PropTypes from 'prop-types';
 export function TodoFooter(props) {
   const {
     filter,
-    counts,
-    handleToggleTab,
+    todosCount,
+    handleTab,
     handleClearCompleted,
     todos,
   } = props;
 
   return (
     <footer className="footer">
-      <span className="todo-count">{`${counts} items left`}</span>
+      <span className="todo-count">{`${todosCount} items left`}</span>
       <ul className="filters">
         <li>
           <button
             type="button"
             className={filter === 'all' ? 'selected' : ''}
-            onClick={() => handleToggleTab('all')}
+            onClick={() => handleTab('all')}
           >
             All
           </button>
@@ -27,7 +27,7 @@ export function TodoFooter(props) {
           <button
             type="button"
             className={filter === 'active' ? 'selected' : ''}
-            onClick={() => handleToggleTab('active')}
+            onClick={() => handleTab('active')}
           >
             Active
           </button>
@@ -36,7 +36,7 @@ export function TodoFooter(props) {
           <button
             type="button"
             className={filter === 'completed' ? 'selected' : ''}
-            onClick={() => handleToggleTab('completed')}
+            onClick={() => handleTab('completed')}
           >
             Completed
           </button>
@@ -56,8 +56,8 @@ export function TodoFooter(props) {
 
 TodoFooter.propTypes = {
   filter: PropTypes.string.isRequired,
-  counts: PropTypes.number.isRequired,
-  handleToggleTab: PropTypes.func.isRequired,
+  todosCount: PropTypes.number.isRequired,
+  handleTab: PropTypes.func.isRequired,
   handleClearCompleted: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
     completed: PropTypes.bool,

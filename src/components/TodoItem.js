@@ -5,7 +5,8 @@ export class TodoItem extends Component {
   state = {
     isEditing: false,
     editingText: '',
-    isError: null,
+    isError: false,
+    errorMessage: '',
   };
 
   editingInput = React.createRef();
@@ -16,41 +17,45 @@ export class TodoItem extends Component {
     }
   }
 
-  handleTextInputChange = ({ target }) => {
+  handleInputChange = ({ target }) => {
     this.setState({
       editingText: target.value,
     });
   }
 
-  handleInputKeyDown = ({ keyCode }) => {
+  handleInputKeyDown = (e) => {
+    if (e.keyCode === 27) {
+      this.setState({
+        isEditing: false,
+        editingText: '',
+        isError: false,
+      });
+    }
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
     const { editingText } = this.state;
-    const { index, handleEditTodo } = this.props;
+    const { id, handleEditTodo } = this.props;
 
     if (editingText.trim() === '') {
       this.editingInput.current.focus();
       this.setState({
-        isError: 'Please enter the todo',
+        isError: true,
+        errorMessage: 'Please enter the todo',
       });
 
       return;
     }
 
-    if (keyCode === 13) {
-      handleEditTodo(index, editingText);
+    handleEditTodo(id, editingText);
 
-      this.setState({
-        isEditing: false,
-        editingText: '',
-        isError: null,
-      });
-    } else if (keyCode === 27) {
-      this.setState({
-        isEditing: false,
-        editingText: '',
-        isError: null,
-      });
-    }
-  };
+    this.setState({
+      isEditing: false,
+      editingText: '',
+      isError: false,
+    });
+  }
 
   toggleEditing = () => {
     const { text } = this.props.todo;
@@ -58,39 +63,45 @@ export class TodoItem extends Component {
     this.setState(prevState => ({
       isEditing: !prevState.isEditing,
       editingText: text,
+      isError: false,
     }));
   }
 
   render() {
-    const { isEditing, isError, editingText } = this.state;
+    const {
+      isEditing,
+      isError,
+      editingText,
+      errorMessage,
+    } = this.state;
     const { todo, handleToggleTodo, handleRemoveTodo } = this.props;
     const { text, completed } = todo;
+    const className = isEditing
+      ? 'editing'
+      : (!(completed) && 'completed') || '';
 
     return (
-      <li className={isEditing ? 'editing'
-        : ((completed === false && 'completed') || undefined)
-      }
-      >
+      <li className={className}>
         <input
           type="checkbox"
           className="toggle"
           onChange={handleToggleTodo}
-          checked={completed === false}
+          checked={!completed}
         />
         {isEditing
           ? (
-            <>
+            <form onSubmit={this.handleSubmit}>
               <input
                 type="text"
                 className="edit"
-                onChange={this.handleTextInputChange}
+                onChange={this.handleInputChange}
                 onBlur={this.toggleEditing}
                 ref={this.editingInput}
                 value={editingText}
                 onKeyDown={this.handleInputKeyDown}
               />
-              {isError && <div className="error">{isError}</div>}
-            </>
+              {isError && <div className="error">{errorMessage}</div>}
+            </form>
           )
           : <label onDoubleClick={this.toggleEditing}>{text}</label>
         }
@@ -111,7 +122,7 @@ TodoItem.propTypes = {
     completed: PropTypes.bool,
     text: PropTypes.string,
   }).isRequired,
-  index: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   handleToggleTodo: PropTypes.func.isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
   handleEditTodo: PropTypes.func.isRequired,

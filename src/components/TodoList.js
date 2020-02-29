@@ -12,13 +12,11 @@ export function TodoList(props) {
     isChecked,
   } = props;
 
-  const list = todos;
-
-  const items = list.map((item, index) => (
+  const todoItems = todos.map(item => (
     <TodoItem
       key={item.id}
       todo={item}
-      index={index}
+      id={item.id}
       handleEditTodo={handleEditTodo}
       handleToggleTodo={() => {
         handleToggleTodo(item.id);
@@ -39,7 +37,7 @@ export function TodoList(props) {
         checked={isChecked}
       />
       <label htmlFor="toggle-all">Mark all as completed</label>
-      <ul className="todo-list">{items}</ul>
+      <ul className="todo-list">{todoItems}</ul>
     </section>
   );
 }
