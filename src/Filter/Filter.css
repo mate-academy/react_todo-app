@@ -1,0 +1,15 @@
+.filters {
+  width: 200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters__button {
+  padding: 3px;
+  cursor: pointer;
+}
+
+.filters__active {
+  border: 1px solid #000;
+}
