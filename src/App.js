@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import * as cx from 'classnames';
 
 import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
+import { FilterItems } from './components/FilterItems/FilterItems';
+
+const filterTypes = ['All', 'Active', 'Completed'];
 
 export class App extends Component {
   state = {
@@ -186,51 +188,13 @@ export class App extends Component {
 
         <footer className="footer">
           <span className="todo-count">
-            {activeTodos.length}
-            items left
+            {`${activeTodos.length} items left`}
           </span>
-
-          <ul className="filters">
-            <li>
-              <button
-                type="button"
-                className={
-                  cx({ selected: filter === 'All' })
-                }
-                data-filter="All"
-                onClick={this.filtered}
-              >
-                All
-              </button>
-            </li>
-
-            <li>
-              <button
-                type="button"
-                className={
-                  cx({ selected: filter === false })
-                }
-                data-filter="Active"
-                onClick={this.filtered}
-              >
-                Active
-              </button>
-            </li>
-
-            <li>
-              <button
-                type="button"
-                className={
-                  cx({ selected: filter === true })
-                }
-                data-filter="Completed"
-                onClick={this.filtered}
-              >
-                Completed
-              </button>
-            </li>
-          </ul>
-
+          <FilterItems
+            filtered={this.filtered}
+            filterTypes={filterTypes}
+            filter={filter}
+          />
           <button
             type="button"
             className="clear-completed"
@@ -240,7 +204,6 @@ export class App extends Component {
           </button>
         </footer>
       </section>
-
     );
   }
 }
