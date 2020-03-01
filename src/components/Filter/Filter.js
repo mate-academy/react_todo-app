@@ -1,42 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
-const Filter = ({ handleFilterClick }) => (
+const Filter = ({ handleFilterClick, filter }) => (
   <ul className="filters">
     <li>
-      <a
-        href="#/"
-        className="selected"
+      <button
+        type="button"
+        className={cx({ selected: filter === 'all' })}
         name="all"
         onClick={handleFilterClick}
       >
-            All
-      </a>
+        All
+      </button>
     </li>
     <li>
-      <a
-        href="#/active"
+      <button
+        type="button"
+        className={cx({ selected: filter === 'active' })}
         name="active"
         onClick={handleFilterClick}
       >
-            Active
-      </a>
+        Active
+      </button>
     </li>
     <li>
-      <a
-        href="#/completed"
+      <button
+        type="button"
+        className={cx({ selected: filter === 'completed' })}
         name="completed"
         onClick={handleFilterClick}
       >
-            Completed
-      </a>
+        Completed
+      </button>
     </li>
   </ul>
-
 );
 
 Filter.propTypes = {
   handleFilterClick: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
 
 export default Filter;

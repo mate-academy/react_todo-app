@@ -1,7 +1,14 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import Form from './components/Form/Form';
 import TodoList from './components/TodoList/TodoList';
 import Filter from './components/Filter/Filter';
+
+const FILTERS = {
+  all: 'all',
+  active: 'active',
+  completed: 'completed',
+};
 
 class App extends React.Component {
   state = {
@@ -14,10 +21,13 @@ class App extends React.Component {
       return;
     }
 
+    const uniqeId = uuidv4();
+
     this.setState(prevState => ({
-      todos: [...prevState.todos,
+      todos: [
+        ...prevState.todos,
         {
-          id: +new Date(),
+          id: uniqeId,
           title,
           completed: false,
         },
@@ -75,14 +85,14 @@ class App extends React.Component {
      const { todos, filter } = this.state;
 
      switch (filter) {
-       case 'active': return todos.filter(todo => !todo.completed);
-       case 'completed': return todos.filter(todo => todo.completed);
+       case FILTERS.active: return todos.filter(todo => !todo.completed);
+       case FILTERS.completed: return todos.filter(todo => todo.completed);
        default: return todos;
      }
    };
 
    render() {
-     const { todos } = this.state;
+     const { todos, filter } = this.state;
 
      return (
        <section className="todoapp">
@@ -101,7 +111,11 @@ class App extends React.Component {
                onChange={this.toggleAllTodos}
                checked={todos.every(todo => todo.completed)}
              />
-             <label htmlFor="toggle-all">Mark all as complete</label>
+             <label
+               htmlFor="toggle-all"
+             >
+               Mark all as complete
+             </label>
              <TodoList
                todos={this.visibleTodos()}
                deleteTodo={this.deleteTodo}
@@ -113,10 +127,11 @@ class App extends React.Component {
            <footer className="footer">
              <span className="todo-count">
                {todos.filter(todo => !todo.completed).length}
-              items left
+                items left
              </span>
              <Filter
                handleFilterClick={this.handleFilterClick}
+               filter={filter}
              />
              <button
                type="button"
@@ -127,7 +142,6 @@ class App extends React.Component {
              </button>
            </footer>
          )}
-
        </section>
      );
    }
