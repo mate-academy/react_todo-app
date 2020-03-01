@@ -7,9 +7,7 @@ export class AddTodo extends React.Component {
     title: '',
   }
 
-  handleInputChange = ({ target }) => {
-    const { value } = target;
-
+  handleInputChange = ({ target: { value } }) => {
     this.setState({
       title: value,
     });
@@ -21,7 +19,7 @@ export class AddTodo extends React.Component {
     const { title } = this.state;
     const { addTodo } = this.props;
 
-    if (title.length > 0) {
+    if (title.trim()) {
       addTodo({
         title,
         completed: false,
@@ -45,7 +43,6 @@ export class AddTodo extends React.Component {
             className="new-todo"
             placeholder="What needs to be done?"
             onChange={this.handleInputChange}
-            onKeyUp={this.handleSubmitEnter}
             value={title}
           />
         </form>
