@@ -11,7 +11,7 @@ export class InputTodo extends Component {
 
   handleChange = (event) => {
     this.setState({
-      title: event.target.value.replace(/^\s/, ''),
+      title: event.target.value,
     });
   }
 
@@ -28,7 +28,7 @@ export class InputTodo extends Component {
     }
 
     const todo = {
-      title,
+      title: title.trim(),
       id: uuidv4(),
       completed: false,
     };
