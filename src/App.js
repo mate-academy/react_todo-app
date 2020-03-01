@@ -65,7 +65,7 @@ class App extends React.Component {
           prevState.initialTasksList,
           newTaskCondiniton,
           'completed',
-        ).every(item => item) ? 1 : false,
+        ).every(item => item) ? 1 : 0,
     }));
   };
 

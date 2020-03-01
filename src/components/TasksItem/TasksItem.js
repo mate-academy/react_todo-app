@@ -21,11 +21,11 @@ export class TasksItem extends React.Component {
     updateTasksCondition(updateConditionCheckedTask);
   };
 
-  toggleEditInput = (event, escapeValue) => {
+  toggleEditInput = (event) => {
     event.preventDefault();
     this.setState(prevState => ({
-      editIntVisible: !prevState.editIntVisible,
-      newValueTask: escapeValue || prevState.newValueTask.trim(),
+      editIntVisible: true,
+      newValueTask: prevState.newValueTask.trim(),
     }), () => this.textInput.current.focus());
   };
 
@@ -38,17 +38,16 @@ export class TasksItem extends React.Component {
 
     this.setState(prevState => ({
       newValueTask: prevState.newValueTask || this.props.task.value,
+      editIntVisible: false,
     }));
 
     updateTasksCondition(updateConditionCheckedTask);
   };
 
   handleBlur = (event) => {
-    if (this.state.editIntVisible) {
-      this.toggleEditInput(event);
-    }
-
-    this.sendNewTaskValue();
+    this.setState(prevState => ({
+      editIntVisible: false,
+    }), this.sendNewTaskValue());
   };
 
   editTaskValue = (event) => {
@@ -59,7 +58,10 @@ export class TasksItem extends React.Component {
 
   changeConditionEscapeKey = (event) => {
     if (event.key === 'Escape') {
-      this.toggleEditInput(event, this.props.task.value);
+      this.setState(prevState => ({
+        editIntVisible: false,
+        newValueTask: this.props.task.value,
+      }));
     }
   };
 
@@ -108,7 +110,7 @@ export class TasksItem extends React.Component {
               onClick={this.deleteTask}
             />
           </div>
-          <form action="" onSubmit={this.toggleEditInput}>
+          <form action="" onSubmit={this.sendNewTaskValue}>
             <input
               type="text"
               className="edit"
