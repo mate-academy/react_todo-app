@@ -28,7 +28,7 @@ export class TodoItem extends Component {
 
   submitChanges = (event) => {
     event.preventDefault();
-    const { name } = event.target.closest('form');
+    const { name } = event.target;
     const { newTask } = this.state;
     const { editTask } = this.props;
 
@@ -49,7 +49,11 @@ export class TodoItem extends Component {
     const { newTask, editedTask } = this.state;
 
     return (
-      <li className={cx({ editing: id === editedTask })}>
+      <li className={cx({
+        editing: id === editedTask,
+        completed,
+      })}
+      >
         <div className="view">
           <input
             type="checkbox"
@@ -60,7 +64,6 @@ export class TodoItem extends Component {
           />
           <label
             htmlFor={id}
-            style={{ textDecoration: completed ? 'line-through' : 'none' }}
           >
             {task}
           </label>
@@ -83,6 +86,7 @@ export class TodoItem extends Component {
             placeholder="Enter the task"
             className="edit"
             value={newTask}
+            name={id}
             onChange={this.taskChange}
             onBlur={this.submitChanges}
           />

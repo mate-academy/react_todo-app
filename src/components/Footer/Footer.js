@@ -16,7 +16,7 @@ export const Footer = (props) => {
           <button
             type="button"
             className={cx({ selected: activeTab === 'All' })}
-            name="All"
+            data-name="All"
             onClick={changeFilter}
           >
           All
@@ -27,7 +27,7 @@ export const Footer = (props) => {
           <button
             type="button"
             className={cx({ selected: activeTab === 'Active' })}
-            name="Active"
+            data-name="Active"
             onClick={changeFilter}
           >
           Active
@@ -38,7 +38,7 @@ export const Footer = (props) => {
           <button
             type="button"
             className={cx({ selected: activeTab === 'Completed' })}
-            name="Completed"
+            data-name="Completed"
             onClick={changeFilter}
           >
           Completed
