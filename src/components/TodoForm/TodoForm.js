@@ -11,7 +11,7 @@ export class TodoForm extends Component {
     const { value } = target;
 
     this.setState({
-      title: value,
+      title: value.replace(/^\s/, ''),
     });
   }
 

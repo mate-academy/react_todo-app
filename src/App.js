@@ -6,14 +6,37 @@ import { Footer } from './components/Footer/Footer';
 export class App extends Component {
   state = {
     todos: [],
-    filteredTodos: [],
     isActiveFilter: 'all',
+  }
+
+  componentDidMount() {
+    const savedTodos = localStorage.getItem('todos');
+    const savedFilter = localStorage.getItem('filter');
+
+    const todos = savedTodos ? JSON.parse(savedTodos) : this.state.todos;
+    const isActiveFilter = savedFilter || this.state.isActiveFilter;
+
+    if (todos) {
+      this.setState({
+        todos,
+        isActiveFilter,
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todos !== this.state.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+
+    if (prevState.isActiveFilter !== this.state.isActiveFilter) {
+      localStorage.setItem('filter', this.state.isActiveFilter);
+    }
   }
 
   addTodo = (todo) => {
     if (todo.title) {
       this.setState(prevState => ({
-        filteredTodos: [...prevState.filteredTodos, todo],
         todos: [...prevState.todos, todo],
       }));
     }
@@ -33,7 +56,6 @@ export class App extends Component {
 
     this.setState(prevState => ({
       todos: prevState.todos.map(callback),
-      filteredTodos: prevState.filteredTodos.map(callback),
     }));
   }
 
@@ -47,7 +69,6 @@ export class App extends Component {
 
     this.setState(prevState => ({
       todos: prevState.todos.map(callback),
-      filteredTodos: prevState.filteredTodos.map(callback),
     }));
   }
 
@@ -65,48 +86,42 @@ export class App extends Component {
 
     this.setState(prevState => ({
       todos: prevState.todos.map(callback),
-      filteredTodos: prevState.filteredTodos.map(callback),
     }));
   }
 
   removeTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== id),
-      filteredTodos: prevState.filteredTodos.filter(todo => todo.id !== id),
     }));
   }
 
   clearCompletedTodos = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => !todo.completed),
-      filteredTodos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
-  setFilteredTodos = (filter) => {
-    switch (filter) {
+  setFilter = (filter) => {
+    this.setState({
+      isActiveFilter: filter,
+    });
+  }
+
+  setFilteredTodos = () => {
+    const { todos, isActiveFilter } = this.state;
+
+    switch (isActiveFilter) {
       case 'active':
-        this.setState(prevState => ({
-          filteredTodos: prevState.todos.filter(todo => !todo.completed),
-          isActiveFilter: 'active',
-        }));
-        break;
+        return todos.filter(todo => !todo.completed);
       case 'completed':
-        this.setState(prevState => ({
-          filteredTodos: prevState.todos.filter(todo => todo.completed),
-          isActiveFilter: 'completed',
-        }));
-        break;
+        return todos.filter(todo => todo.completed);
       default:
-        this.setState(prevState => ({
-          filteredTodos: prevState.todos,
-          isActiveFilter: 'all',
-        }));
+        return todos;
     }
   }
 
   render() {
-    const { todos, isActiveFilter, filteredTodos } = this.state;
+    const { todos, isActiveFilter } = this.state;
 
     return (
       <section className="todoapp">
@@ -117,7 +132,7 @@ export class App extends Component {
 
         <section className="main">
           <TodoList
-            todos={filteredTodos}
+            todos={this.setFilteredTodos()}
             setCompleted={this.setCompleted}
             setAllCompleted={this.setAllCompleted}
             removeTodo={this.removeTodo}
@@ -133,7 +148,7 @@ export class App extends Component {
                 todos={todos}
                 clearCompletedTodos={this.clearCompletedTodos}
                 isActiveFilter={isActiveFilter}
-                setFilteredTodos={this.setFilteredTodos}
+                setFilter={this.setFilter}
               />
             </footer>
           )}

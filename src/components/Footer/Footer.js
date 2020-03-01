@@ -7,7 +7,7 @@ export const Footer = (props) => {
   const {
     todos,
     isActiveFilter,
-    setFilteredTodos,
+    setFilter,
     clearCompletedTodos,
   } = props;
 
@@ -19,19 +19,19 @@ export const Footer = (props) => {
       <ul className="filters">
         <FilterButton
           className={cx({ selected: isActiveFilter === 'all' })}
-          onClick={() => setFilteredTodos('all')}
+          onClick={() => setFilter('all')}
         >
           All
         </FilterButton>
         <FilterButton
           className={cx({ selected: isActiveFilter === 'active' })}
-          onClick={() => setFilteredTodos('active')}
+          onClick={() => setFilter('active')}
         >
           Active
         </FilterButton>
         <FilterButton
           className={cx({ selected: isActiveFilter === 'completed' })}
-          onClick={() => setFilteredTodos('completed')}
+          onClick={() => setFilter('completed')}
         >
           Completed
         </FilterButton>
@@ -56,7 +56,7 @@ Footer.propTypes = {
     }),
   ).isRequired,
 
-  setFilteredTodos: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
   isActiveFilter: PropTypes.string.isRequired,
   clearCompletedTodos: PropTypes.func.isRequired,
 };

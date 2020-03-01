@@ -8,16 +8,18 @@ export class Todo extends Component {
     editingTodoTitle: this.props.todo.title,
   }
 
-  handleDoubleClick = () => {
+  changeEditingMode = (bool) => {
     this.setState({
-      isEditing: true,
+      isEditing: bool,
     });
   }
 
-  stopEditHandler = () => {
-    this.setState({
-      isEditing: false,
-    });
+  handleDoubleClick = () => {
+    this.changeEditingMode(true);
+  }
+
+  exitEditingMode = () => {
+    this.changeEditingMode(false);
   }
 
   editTodoHandler = ({ target }) => {
@@ -78,14 +80,13 @@ export class Todo extends Component {
                 onClick={() => removeTodo(id)}
               />
             </div>
-          )
-          : (
+          ) : (
             <form onSubmit={this.submitEditHandler}>
               <input
                 type="text"
                 className="edit"
                 value={editingTodoTitle}
-                onBlur={this.stopEditHandler}
+                onBlur={this.exitEditingMode}
                 onChange={event => this.editTodoHandler(event)}
               />
             </form>

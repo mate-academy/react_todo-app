@@ -16,8 +16,9 @@ export const TodoList = ({
       className="toggle-all"
       onChange={evt => setAllCompleted(evt.target.checked)}
     />
-    {todos.length !== 0
-      && <label htmlFor="toggle-all">Mark all as complete</label>}
+    {todos.length !== 0 && (
+      <label htmlFor="toggle-all">Mark all as completed</label>
+    )}
     <ul className="todo-list">
       {todos.map(todo => (
         <Todo
