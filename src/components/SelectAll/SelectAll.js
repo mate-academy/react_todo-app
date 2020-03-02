@@ -31,8 +31,8 @@ render() {
       />
       <label htmlFor="toggle-all">
         { isChecked
-          ? <span className="tooltip">Mark all as not complete</span>
-          : <span className="tooltip">Mark all as complete</span>
+          ? <span className="tooltip">Uncheck all</span>
+          : <span className="tooltip">Mark all as completed</span>
         }
       </label>
     </>

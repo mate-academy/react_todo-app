@@ -69,10 +69,10 @@ export class App extends PureComponent {
 
   handleCompleted = (event) => {
     const isCompleted = event.target.checked;
-    const todoId = event.target.id;
+    const todoId = event.target.dataset.index;
 
     this.setState(prevState => ({
-      todoList: [...prevState.todoList
+      todoList: prevState.todoList
         .map((todo) => {
           if (todoId === todo.id) {
             return {
@@ -82,7 +82,7 @@ export class App extends PureComponent {
           }
 
           return todo;
-        })],
+        }),
     }));
 
     this.setFilteredList(this.state.filterName);
@@ -178,7 +178,7 @@ export class App extends PureComponent {
     return (
       <section className="todoapp">
         <Header
-          setNewTodo={todo => this.setNewTodo(todo)}
+          setNewTodo={this.setNewTodo}
           selectAll={this.handleSelectAll}
           isSelectedAll={visibleTodos.every(todo => todo.completed)}
         />
@@ -187,15 +187,15 @@ export class App extends PureComponent {
           <TodoList
             setEditedValue={(value, id) => this.setEditedValue(value, id)}
             todos={visibleTodos}
-            onCompleted={e => this.handleCompleted(e)}
-            onDestroy={event => this.handleDestroy(event)}
+            onCompleted={this.handleCompleted}
+            onDestroy={this.handleDestroy}
           />
         </section>
 
         <Footer
           clear={this.clearCompleted}
           length={visibleTodos.length}
-          filter={name => this.setFilteredList(name)}
+          filter={this.setFilteredList}
         />
       </section>
     );
