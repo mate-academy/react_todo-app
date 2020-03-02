@@ -228,21 +228,56 @@ body {
   top: 0;
   right: 10px;
   bottom: 0;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   margin: auto 0;
   font-size: 30px;
+  line-height: 30px;
   color: #cc9a9a;
-  margin-bottom: 11px;
+  margin-bottom: 12px;
   transition: color 0.2s ease-out;
+}
+
+.todo-list li .edit-icon {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 42px;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  margin: auto 0;
+  font-size: 30px;
+  margin-bottom: 11px;
+  opacity: 0.5;
+  transition: color 0.2s ease-out;
+}
+
+.todo-list li .edit-icon:hover {
+  opacity: 1;
 }
 
 .todo-list li .destroy:hover {
   color: #af5b5e;
 }
 
+.todo-list li .edit-icon:after {
+  content: "";
+  display: block;
+  margin: 0 auto 3px;
+  width: 18px;
+  height: 18px;
+  background-image: url("./icons/icon-green.png");
+  background-size: contain;
+  background-position: center;
+}
+
 .todo-list li .destroy:after {
   content: "×";
+}
+
+.todo-list li:hover .edit-icon {
+  display: block;
 }
 
 .todo-list li:hover .destroy {
@@ -296,26 +331,29 @@ body {
   position: absolute;
   right: 0;
   left: 0;
+  bottom: 20px;
+  transform: translateY(50%);
 }
 
 .filters li {
   display: inline;
 }
 
-.filters li a {
+.filters li button {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 3px;
+  cursor: pointer;
 }
 
-.filters li a:hover {
+.filters li button:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.filters li button.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
