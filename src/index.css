@@ -263,6 +263,9 @@ body {
   height: 20px;
   text-align: center;
   border-top: 1px solid #e6e6e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer:before {
