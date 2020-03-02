@@ -107,7 +107,7 @@ export class App extends Component {
                 className={cn({ selected: filter === 'all' })}
                 onClick={this.changeFilter}
               >
-              All
+                All
               </button>
             </li>
 
@@ -118,7 +118,7 @@ export class App extends Component {
                 className={cn({ selected: filter === 'active' })}
                 onClick={this.changeFilter}
               >
-              Active
+                Active
               </button>
             </li>
 
@@ -129,7 +129,7 @@ export class App extends Component {
                 className={cn({ selected: filter === 'completed' })}
                 onClick={this.changeFilter}
               >
-              Completed
+                Completed
               </button>
             </li>
           </ul>
