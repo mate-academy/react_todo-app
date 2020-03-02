@@ -8,7 +8,7 @@ export class NewTodo extends React.Component {
   }
 
   handleChange = (event) => {
-    const title = event.target.value;
+    const { value: title } = event.target;
 
     this.setState({
       title,

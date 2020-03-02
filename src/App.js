@@ -6,6 +6,17 @@ import { FilterItems } from './components/FilterItems/FilterItems';
 
 const filterTypes = ['All', 'Active', 'Completed'];
 
+const filterTodos = (todos, filter) => {
+  switch (filter) {
+    case 'Active':
+      return todos.filter(todo => todo.completed === false);
+    case 'Completed':
+      return todos.filter(todo => todo.completed === true);
+    default:
+      return todos;
+  }
+};
+
 export class App extends Component {
   state = {
     todos: [],
@@ -14,17 +25,19 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    const persistedNotes = localStorage.getItem('todos');
+    const todosFromStorage = localStorage.getItem('todos');
 
-    if (persistedNotes) {
-      const todos = JSON.parse(persistedNotes);
+    if (todosFromStorage) {
+      const todos = JSON.parse(todosFromStorage);
 
       this.setState({ todos });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.todos !== this.state.todos) {
+    const { todos } = this.state;
+
+    if (prevState.todos !== todos) {
       localStorage.setItem('todos', JSON.stringify(this.state.todos));
     }
   }
@@ -33,15 +46,11 @@ export class App extends Component {
     const { filter, todos } = this.state;
 
     this.setState((prevState) => {
-      const obj = {
-        todos: [...todos, todo],
-      };
+      const allTodos = [...todos, todo];
 
       return {
-        todos: obj.todos,
-        visibleTodos: filter === 'All'
-          ? obj.todos
-          : obj.todos.filter(task => task.completed === Boolean(filter)),
+        todos: allTodos,
+        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
@@ -50,113 +59,74 @@ export class App extends Component {
     const { filter } = this.state;
 
     this.setState((prevState) => {
-      const obj = {
-        todos: prevState.todos.map(todo => (
-          todo.id === id
-            ? {
-              ...todo, completed: checked,
-            }
-            : todo
-        )),
-      };
+      const allTodos = prevState.todos.map(todo => (
+        todo.id === id
+          ? {
+            ...todo, completed: checked,
+          }
+          : todo
+      ));
 
       return {
-        todos: obj.todos,
-        visibleTodos: filter === 'All'
-          ? obj.todos
-          : obj.todos.filter(task => task.completed === Boolean(filter)),
+        todos: allTodos,
+        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
 
   filtered = (event) => {
-    let filter = event.target.getAttribute('data-filter');
+    const filter = event.target.getAttribute('data-filter');
+    const { todos } = this.state;
 
-    switch (filter) {
-      case 'Active':
-        filter = false;
-        break;
+    this.setState((prevState) => {
+      const allTodos = [...todos];
 
-      case 'Completed':
-        filter = true;
-        break;
-      default:
-        filter = 'All';
-        break;
-    }
-
-    this.setState(prevState => ({
-      visibleTodos: filter === 'All'
-        ? prevState.todos
-        : prevState.todos.filter(todo => todo.completed === Boolean(filter)),
-      filter,
-    }));
+      return {
+        visibleTodos: filterTodos(allTodos, filter),
+        filter,
+      };
+    });
   }
 
   deleteTask = (id) => {
     const { filter } = this.state;
 
     this.setState((prevState) => {
-      const obj = {
-        todos: prevState.todos.filter(todo => todo.id !== id),
-      };
+      const allTodos = prevState.todos.filter(todo => todo.id !== id);
 
       return {
-        todos: obj.todos,
-        visibleTodos: filter === 'All'
-          ? obj.todos
-          : obj.todos.filter(task => task.completed === Boolean(filter)),
+        todos: allTodos,
+        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
 
   clearCompleted = () => {
+    const { filter } = this.state;
+
     this.setState((prevState) => {
-      const obj = {
-        todos: prevState.todos.filter(todo => !todo.completed),
-      };
+      const allTodos = prevState.todos.filter(todo => !todo.completed);
 
       return {
-        todos: obj.todos,
-        visibleTodos: obj.todos,
+        todos: allTodos,
+        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
 
-  checkedAll = (event) => {
-    if (event.target.checked) {
-      this.setState((prevState) => {
-        const obj = {
-          todos: prevState.todos.map(todo => (
-            {
-              ...todo,
-              completed: true,
-            }
-          )),
-        };
+  checkedAll = ({ target }) => {
+    const { checked } = target;
 
-        return {
-          todos: obj.todos,
-          visibleTodos: obj.todos,
-        };
-      });
-    } else {
-      this.setState((prevState) => {
-        const obj = {
-          todos: prevState.todos.map(todo => (
-            {
-              ...todo,
-              completed: false,
-            }
-          )),
-        };
-
-        return {
-          todos: obj.todos,
-          visibleTodos: obj.todos,
-        };
-      });
-    }
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: checked,
+      })),
+      visibleTodos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: checked,
+      })),
+    }));
   }
 
   render() {
@@ -176,7 +146,7 @@ export class App extends Component {
             id="toggle-all"
             className="toggle-all"
             checked={todos.length && todos.every(todo => todo.completed)}
-            onChange={this.checkedAll}
+            onClick={this.checkedAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList

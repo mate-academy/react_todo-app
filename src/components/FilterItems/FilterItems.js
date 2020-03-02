@@ -4,37 +4,20 @@ import * as cx from 'classnames';
 
 export const FilterItems = ({ filterTypes, filtered, filter }) => (
   <ul className="filters">
-    {filterTypes.map((filterType) => {
-      let filterItem = filterType;
-
-      switch (filterItem) {
-        case 'Active':
-          filterItem = false;
-          break;
-
-        case 'Completed':
-          filterItem = true;
-          break;
-        default:
-          filterItem = 'All';
-          break;
-      }
-
-      return (
-        <li key={filterType}>
-          <button
-            type="button"
-            className={
-              cx({ selected: filter === filterItem })
-            }
-            data-filter={filterType}
-            onClick={filtered}
-          >
-            {filterType}
-          </button>
-        </li>
-      );
-    })}
+    {filterTypes.map(filterType => (
+      <li key={filterType}>
+        <button
+          type="button"
+          className={
+            cx({ selected: filter === filterType })
+          }
+          data-filter={filterType}
+          onClick={filtered}
+        >
+          {filterType}
+        </button>
+      </li>
+    ))}
   </ul>
 );
 
