@@ -4,15 +4,24 @@ import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 
+const TODO_STATUS_ACTIVE = 'active';
+const TODO_STATUS_COMPLETED = 'completed';
+
 class App extends Component {
   state = {
     filter: 'all',
-    todos: [{
-      text: 'sample todo',
-      id: 1,
-      completed: true,
-    }],
+    todos: [],
   };
+
+  componentDidMount() {
+    this.setState({
+      todos: [{
+        text: 'sample todo',
+        id: 1,
+        completed: true,
+      }],
+    });
+  }
 
   handleAddTodo = (newTodo) => {
     this.setState(prevState => ({
@@ -83,9 +92,9 @@ class App extends Component {
   filterTodos = (filter, todos) => {
     let filteredTodos = todos;
 
-    if (filter === 'completed') {
+    if (filter === TODO_STATUS_COMPLETED) {
       filteredTodos = todos.filter(({ completed }) => !completed);
-    } else if (filter === 'active') {
+    } else if (filter === TODO_STATUS_ACTIVE) {
       filteredTodos = todos.filter(({ completed }) => completed);
     }
 

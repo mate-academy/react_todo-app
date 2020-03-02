@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 export class TodoItem extends Component {
   state = {
@@ -76,12 +77,10 @@ export class TodoItem extends Component {
     } = this.state;
     const { todo, handleToggleTodo, handleRemoveTodo } = this.props;
     const { text, completed } = todo;
-    const className = isEditing
-      ? 'editing'
-      : (!(completed) && 'completed') || '';
+    const classnames = cn({ editing: isEditing }, { completed: !(completed) });
 
     return (
-      <li className={className}>
+      <li className={classnames}>
         <input
           type="checkbox"
           className="toggle"
