@@ -1,6 +1,6 @@
 {
   "name": "react_todo-app",
-  "homepage": ".",
+  "homepage": "https://arimazz.github.io/react_todo-app/",
   "version": "0.1.0",
   "private": true,
   "keywords": [],
@@ -10,7 +10,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0"
+    "react-scripts": "^3.4.0",
+    "uuid": "^7.0.1"
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react": "*",
