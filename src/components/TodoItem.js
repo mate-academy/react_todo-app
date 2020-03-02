@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
+import cn from 'classnames';
 
 export class TodoItem extends React.Component {
   state = {
     isEditing: false,
-    editedTitle: this.props.todoTitle,
+    todoTitle: this.props.todoTitle,
   }
 
   handleDoubleClick = () => {
@@ -22,24 +22,24 @@ export class TodoItem extends React.Component {
 
   onEditChange = ({ target: { value } }) => {
     this.setState({
-      editedTitle: value,
+      todoTitle: value,
     });
   }
 
   handleEditSubmit = () => {
     const {
-      handleDoubleClickEditTitle,
+      handleDoubleClick,
       todoId,
       handleDeleteTodo,
     } = this.props;
-    const { editedTitle } = this.state;
+    const { todoTitle } = this.state;
 
     this.setState({
       isEditing: false,
     });
 
-    if (editedTitle !== '') {
-      handleDoubleClickEditTitle(editedTitle, todoId);
+    if (todoTitle !== '') {
+      handleDoubleClick(todoTitle, todoId);
     } else {
       handleDeleteTodo(todoId);
     }
@@ -47,14 +47,13 @@ export class TodoItem extends React.Component {
 
   render() {
     const {
-      todoTitle,
       todoStatus,
       todoId,
       handleTodoStatus,
       handleDeleteTodo,
     } = this.props;
-    const { editedTitle } = this.state;
-    const liClassName = cx({
+    const { todoTitle } = this.state;
+    const liClassName = cn({
       editing: this.state.isEditing,
       completed: todoStatus,
     });
@@ -92,7 +91,7 @@ export class TodoItem extends React.Component {
               <input
                 type="text"
                 className="edit"
-                value={editedTitle}
+                value={todoTitle}
                 onChange={this.onEditChange}
                 onBlur={this.handleChangeEdit}
               />
@@ -110,5 +109,5 @@ TodoItem.propTypes = {
   todoId: PropTypes.string.isRequired,
   handleTodoStatus: PropTypes.func.isRequired,
   handleDeleteTodo: PropTypes.func.isRequired,
-  handleDoubleClickEditTitle: PropTypes.func.isRequired,
+  handleDoubleClick: PropTypes.func.isRequired,
 };

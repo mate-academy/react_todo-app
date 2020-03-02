@@ -23,10 +23,10 @@ export class App extends React.Component {
   };
 
   handlecompletedAll = () => {
-    const filterFunc = arr => (
-      arr.map(todo => ({
+    const filterFunc = todos => (
+      todos.map(todo => ({
         ...todo,
-        completed: !arr.every(({ completed }) => completed),
+        completed: !todos.every(({ completed }) => completed),
       }))
     );
 
@@ -47,38 +47,33 @@ export class App extends React.Component {
     );
 
     this.setState(prevState => ({
-      todos: prevState.todos
-        .map(mapFuncStatusTodo),
-      initialTodos: prevState.initialTodos
-        .map(mapFuncStatusTodo),
+      todos: prevState.todos.map(mapFuncStatusTodo),
+      initialTodos: prevState.initialTodos.map(mapFuncStatusTodo),
     }));
   };
 
   handleDeleteTodo = (todoId) => {
-    const arrFilter = todo => (
+    const todosFilter = todo => (
       todo.id !== todoId
     );
 
     this.setState(prevState => ({
-      todos: prevState.todos
-        .filter(arrFilter),
-      initialTodos: prevState.initialTodos
-        .filter(arrFilter),
+      todos: prevState.todos.filter(todosFilter),
+      initialTodos: prevState.initialTodos.filter(todosFilter),
     }));
   };
 
-  handleDoubleClickEditTitle = (editedTitle, todoId) => {
+  handleDoubleClick = (todoTitle, todoId) => {
     const mapFuncEditTitle = todo => (
       todo.id === todoId
         ? {
-          ...todo, title: editedTitle,
+          ...todo, title: todoTitle,
         }
         : todo
     );
 
     this.setState(prevState => ({
-      todos: prevState.todos
-        .map(mapFuncEditTitle),
+      todos: prevState.todos.map(mapFuncEditTitle),
     }));
   };
 
@@ -106,8 +101,8 @@ export class App extends React.Component {
   };
 
   handleDeleteAllCompleted = () => {
-    const filterFunc = arr => (
-      arr.filter(todo => !todo.completed)
+    const filterFunc = todos => (
+      todos.filter(todo => !todo.completed)
     );
 
     this.setState(prevState => ({
@@ -138,7 +133,7 @@ export class App extends React.Component {
             todosList={todos}
             handleTodoStatus={this.handleTodoStatus}
             handleDeleteTodo={this.handleDeleteTodo}
-            handleDoubleClickEditTitle={this.handleDoubleClickEditTitle}
+            handleDoubleClick={this.handleDoubleClick}
           />
         </div>
         <TodosFilter

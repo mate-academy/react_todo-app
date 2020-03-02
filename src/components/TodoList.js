@@ -6,7 +6,7 @@ export const TodoList = ({
   todosList,
   handleTodoStatus,
   handleDeleteTodo,
-  handleDoubleClickEditTitle,
+  handleDoubleClick,
 }) => (
   <ul className="todo-list">
     {todosList.length
@@ -20,7 +20,7 @@ export const TodoList = ({
             todoId={id}
             handleTodoStatus={handleTodoStatus}
             handleDeleteTodo={handleDeleteTodo}
-            handleDoubleClickEditTitle={handleDoubleClickEditTitle}
+            handleDoubleClick={handleDoubleClick}
           />
         ))
       : null
@@ -36,5 +36,5 @@ TodoList.propTypes = {
   })).isRequired,
   handleTodoStatus: PropTypes.func.isRequired,
   handleDeleteTodo: PropTypes.func.isRequired,
-  handleDoubleClickEditTitle: PropTypes.func.isRequired,
+  handleDoubleClick: PropTypes.func.isRequired,
 };
