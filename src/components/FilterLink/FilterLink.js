@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 const FilterLink = ({ title, active, onClick, icon }) => (
   <button
     type="button"
-    className={active ? 'is-active' : ''}
+    className={classNames({
+      'is-active': active,
+    })}
     onClick={onClick}
     title={title}
   >

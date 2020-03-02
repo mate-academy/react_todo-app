@@ -6,26 +6,26 @@ import './Stopwatch.css';
 
 class Stopwatch extends Component {
   state = {
-    running: false,
-    elapsed: 0,
+    isTimeRunning: false,
+    milliseconds: 0,
     lastTick: 0,
   };
 
   componentDidMount() {
-    this.interval = setInterval(this.tick, 1000);
+    this.interval = setInterval(this.handleTick, 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  tick = () => {
-    if (this.state.running) {
+  handleTick = () => {
+    if (this.state.isTimeRunning) {
       const now = Date.now();
       const diff = now - this.state.lastTick;
 
       this.setState(prevState => ({
-        elapsed: prevState.elapsed + diff,
+        milliseconds: prevState.milliseconds + diff,
         lastTick: now,
       }));
     }
@@ -33,19 +33,19 @@ class Stopwatch extends Component {
 
   handleStart = () => {
     this.setState({
-      running: true,
+      isTimeRunning: true,
       lastTick: Date.now(),
     });
   }
 
   handlePause = () => {
-    this.setState({ running: false });
+    this.setState({ isTimeRunning: false });
   }
 
   handleStop = () => {
     this.setState({
-      running: false,
-      elapsed: 0,
+      isTimeRunning: false,
+      milliseconds: 0,
       lastTick: 0,
     });
   }
@@ -60,14 +60,14 @@ class Stopwatch extends Component {
   }
 
   render() {
-    const time = this.format(this.state.elapsed);
+    const time = this.format(this.state.milliseconds);
 
     return (
       <section className="stopwatch">
         <div className="stopwatch__time">{time}</div>
 
         <div className="stopwatch__controls">
-          {this.state.running
+          {this.state.isTimeRunning
             ? (
               <Button
                 className="icon"

@@ -1,14 +1,13 @@
+import uuid from 'uuid/v4';
+
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
 export const EDIT_TODO = 'EDIT_TODO';
 
-let nextId = 2;
-
 export const addTodo = title => ({
   type: ADD_TODO,
-  // eslint-disable-next-line no-plusplus
-  id: nextId++,
+  id: uuid(),
   title,
 });
 

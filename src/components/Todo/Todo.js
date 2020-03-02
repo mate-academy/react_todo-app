@@ -8,11 +8,11 @@ import './Todo.css';
 
 class Todo extends Component {
   state = {
-    editing: false,
+    isTodoEditing: false,
   };
 
   componentDidUpdate() {
-    if (this.state.editing) {
+    if (this.state.isTodoEditing) {
       this.title.focus();
     }
   }
@@ -23,7 +23,7 @@ class Todo extends Component {
     const title = this.title.value;
 
     this.props.onEdit(this.props.id, title);
-    this.setState({ editing: false });
+    this.setState({ isTodoEditing: false });
   }
 
   handleDelete = () => {
@@ -35,7 +35,7 @@ class Todo extends Component {
   }
 
   handleEdit = () => {
-    this.setState({ editing: true });
+    this.setState({ isTodoEditing: true });
   }
 
   renderDisplay = () => {
@@ -71,12 +71,12 @@ class Todo extends Component {
   )
 
   render() {
-    return this.state.editing ? this.renderForm() : this.renderDisplay();
+    return this.state.isTodoEditing ? this.renderForm() : this.renderDisplay();
   }
 }
 
 Todo.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,

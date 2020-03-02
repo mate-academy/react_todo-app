@@ -28,7 +28,7 @@ const List = ({ todos, onDelete, onToggle, onEdit }) => {
 
 List.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   })).isRequired,

@@ -1,7 +1,7 @@
 {
     "todos": [
       {
-        "id": 1,
+        "id": "1",
         "title": "Go to the grocery store",
         "completed": true
       }

@@ -38,12 +38,9 @@ export default function reducer(state = [], action) {
       return [...state, todoReducer(undefined, action)];
 
     case DELETE_TODO: {
-      const index = state.findIndex(todo => todo.id === action.id);
+      const todos = state.filter(todo => todo.id !== action.id);
 
-      return [
-        ...state.slice(0, index),
-        ...state.slice(index + 1),
-      ];
+      return [...todos];
     }
 
     case TOGGLE_TODO:
