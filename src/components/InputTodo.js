@@ -11,7 +11,7 @@ export class InputTodo extends Component {
 
   handleChange = (event) => {
     this.setState({
-      title: event.target.value,
+      title: event.target.value.replace(/^\s/, ''),
     });
   }
 
