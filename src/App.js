@@ -16,7 +16,7 @@ export class App extends Component {
   componentDidMount() {
     const persistedNotes = localStorage.getItem('todos');
 
-    if (persistedNotes.length > 0) {
+    if (persistedNotes) {
       const todos = JSON.parse(persistedNotes);
 
       this.setState({ todos });
