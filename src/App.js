@@ -145,26 +145,30 @@ export class App extends PureComponent {
 
   setFilteredList = (name) => {
     this.setState((prevState) => {
-      if (name === 'active') {
-        return {
-          filterName: 'active',
-          visibleTodos: prevState.todoList
-            .filter(todo => !todo.completed),
-        };
-      }
+      switch (name) {
+        case 'active': {
+          return {
+            filterName: 'active',
+            visibleTodos: prevState.todoList
+              .filter(todo => !todo.completed),
+          };
+        }
 
-      if (name === 'completed') {
-        return {
-          filterName: 'completed',
-          visibleTodos: prevState.todoList
-            .filter(todo => todo.completed),
-        };
-      }
+        case 'completed': {
+          return {
+            filterName: 'completed',
+            visibleTodos: prevState.todoList
+              .filter(todo => todo.completed),
+          };
+        }
 
-      return {
-        filterName: 'all',
-        visibleTodos: prevState.todoList,
-      };
+        default: {
+          return {
+            filterName: 'all',
+            visibleTodos: prevState.todoList,
+          };
+        }
+      }
     });
   };
 
