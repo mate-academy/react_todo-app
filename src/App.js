@@ -4,9 +4,6 @@ import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 
-const TODO_STATUS_ACTIVE = 'active';
-const TODO_STATUS_COMPLETED = 'completed';
-
 class App extends Component {
   state = {
     filter: 'all',
@@ -90,6 +87,8 @@ class App extends Component {
   }
 
   filterTodos = (filter, todos) => {
+    const TODO_STATUS_ACTIVE = 'active';
+    const TODO_STATUS_COMPLETED = 'completed';
     let filteredTodos = todos;
 
     if (filter === TODO_STATUS_COMPLETED) {
