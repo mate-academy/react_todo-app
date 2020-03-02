@@ -9,7 +9,7 @@ export class TodoItem extends Component {
   };
 
   handleEdit = (event) => {
-    const { name } = event.target;
+    const { name } = event.target.dataset;
     const { task } = this.props.todo;
 
     this.setState({
@@ -70,13 +70,13 @@ export class TodoItem extends Component {
           <button
             type="button"
             className="edit-icon"
-            name={id}
+            data-name={id}
             onClick={this.handleEdit}
           />
           <button
             type="button"
             className="destroy"
-            name={id}
+            data-name={id}
             onClick={removeTask}
           />
         </div>

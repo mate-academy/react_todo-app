@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 
-function filter(arr, value, identifier, property) {
-  return arr.map((item) => {
+function filter(array, value, identifier, property) {
+  return array.map((item) => {
     const newItem = { ...item };
 
     if (newItem.id === identifier) {
@@ -36,8 +36,10 @@ class App extends React.Component {
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.todos !== this.state.todos) {
-      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    const { todos } = this.state;
+
+    if (prevState.todos !== todos) {
+      localStorage.setItem('todos', JSON.stringify(todos));
     }
   }
 
@@ -78,7 +80,7 @@ class App extends React.Component {
   }
 
   removeTask = (event) => {
-    const { name } = event.target;
+    const { name } = event.target.dataset;
 
     this.setState(prevState => ({
       todos: prevState.todos.filter(item => item.id !== name),
@@ -101,27 +103,36 @@ class App extends React.Component {
     const { todos } = this.state;
     let newList;
 
-    if (name === 'All') {
-      this.setState({
-        visibleTodos: [...todos],
-        activeTab: name,
-      });
+    switch (name) {
+      case 'All':
+        this.setState({
+          visibleTodos: [...todos],
+          activeTab: name,
+        });
 
-      return;
+        break;
+
+      case 'Active':
+        newList = todos.filter(item => item.completed === false);
+        this.setState({
+          visibleTodos: [...newList],
+          activeTab: name,
+        });
+
+        break;
+
+      case 'Completed':
+        newList = todos.filter(item => item.completed === true);
+        this.setState({
+          visibleTodos: [...newList],
+          activeTab: name,
+        });
+
+        break;
+
+      default:
+        break;
     }
-
-    if (name === 'Active') {
-      newList = todos.filter(item => item.completed === false);
-    }
-
-    if (name === 'Completed') {
-      newList = todos.filter(item => item.completed === true);
-    }
-
-    this.setState({
-      visibleTodos: [...newList],
-      activeTab: name,
-    });
   }
 
   checkTaskValid = (event) => {
