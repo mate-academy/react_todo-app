@@ -11,18 +11,12 @@ export const Footer = (props) => {
   } = props;
 
   return (
-    <footer
-      className="footer"
-    >
-      <span
-        className="todo-count"
-      >
+    <footer className="footer">
+      <span className="todo-count">
         {showActiveTodosCount}
       </span>
 
-      <ul
-        className="filters"
-      >
+      <ul className="filters">
         <li>
           <Button
             setFilter={setFilter}

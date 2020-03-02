@@ -21,19 +21,17 @@ export const TodoList = (props) => {
         <input
           type="checkbox"
           id="toggle-all"
+          name="toggle-all"
           className="toggle-all"
           checked={isActiveTodos}
           onChange={toggleAllTodo}
         />
 
-        {
-          todos.length > 0
-            && (
-              <label htmlFor="toggle-all">
-                Mark all as complete
-              </label>
-            )
-        }
+        { todos.length > 0 && (
+          <label htmlFor="toggle-all">
+            Mark all as complete
+          </label>
+        )}
 
         <ul
           className="todo-list"

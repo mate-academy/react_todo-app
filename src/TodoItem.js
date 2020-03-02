@@ -13,13 +13,12 @@ export const TodoItem = (props) => {
       <input
         type="checkbox"
         className="toggle"
+        name="toggle"
         id={`todo-${todo.id}`}
         checked={todo.completed}
         onChange={() => onToggleComplete()}
       />
-      <label
-        htmlFor={`todo-${todo.id}`}
-      >
+      <label htmlFor={`todo-${todo.id}`}>
         {todo.title}
       </label>
       <button

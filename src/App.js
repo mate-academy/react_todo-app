@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import uuid from 'react-uuid';
+import { Form } from './Form';
 import { TodoList } from './TodoList';
 import { Footer } from './Footer';
 
@@ -143,14 +144,11 @@ class App extends Component {
 
     return (
       <section className="todoapp">
-        <form onSubmit={this.handleAddTodo}>
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onChange={this.handleInputTodoChange}
-            value={title}
-          />
-        </form>
+        <Form
+          handleAddTodo={this.handleAddTodo}
+          handleInputTodoChange={this.handleInputTodoChange}
+          inputValue={title}
+        />
         <TodoList
           todos={this.showTodos()}
           onToggleComplete={this.onToggleComplete}
