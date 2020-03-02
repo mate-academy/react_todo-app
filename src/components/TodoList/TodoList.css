@@ -1,0 +1,27 @@
+
+.input-tooltip {
+  transform: none;
+  left: 60px;
+  right: auto;
+  top: -20px;
+  background-image: url(./icons/pencil.png);
+  padding: 0;
+}
+
+.button-tooltip {
+  cursor: pointer;
+  padding: 0 8px 0 30px;
+  background-image: url(./icons/pencil.png);
+  background-repeat: no-repeat;
+  background-size: 15px;
+  background-position: left 8px top 6px;
+  line-height: 30px;
+}
+
+.custom-cursor:hover .tooltip {
+  opacity: 0.4;
+}
+
+.custom-cursor .input-tooltip:hover {
+  opacity: 0.6;
+}

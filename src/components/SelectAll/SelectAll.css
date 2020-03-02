@@ -1,0 +1,32 @@
+.tooltip {
+  transform: rotate(-90deg);
+  position: absolute;
+  top: -50px;
+  right: 0;
+  font-size: 12px;
+  background: #000;
+  color: #fff;
+  white-space: nowrap;
+  padding: 0 8px;
+  z-index: 100;
+  border: none;
+  box-shadow: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  line-height: 2;
+}
+
+.tooltip::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top: 5px solid #000;
+  position: absolute;
+  top: 100%;
+  left: 10px;
+}
+
+.header:hover .tooltip {
+  opacity: 0.4;
+}
