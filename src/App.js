@@ -10,27 +10,43 @@ const FILTERS = {
   completed: 'completed',
 };
 
-class App extends React.Component {
+export class App extends React.Component {
   state = {
     todos: [],
     filter: 'all',
   };
 
+  componentDidMount() {
+    const LocallySavedTodos = localStorage.getItem('todos');
+
+    if (LocallySavedTodos) {
+      const todos = JSON.parse(LocallySavedTodos);
+
+      this.setState({ todos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todos !== this.state.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
   addTodo = (title) => {
-    if (title.trim() === '') {
+    if (!title.trim()) {
       return;
     }
 
-    const uniqeId = uuidv4();
+    const todo = {
+      id: uuidv4(),
+      title,
+      completed: false,
+    };
 
     this.setState(prevState => ({
       todos: [
         ...prevState.todos,
-        {
-          id: uniqeId,
-          title,
-          completed: false,
-        },
+        todo,
       ],
     }));
   };
@@ -85,9 +101,14 @@ class App extends React.Component {
      const { todos, filter } = this.state;
 
      switch (filter) {
-       case FILTERS.active: return todos.filter(todo => !todo.completed);
-       case FILTERS.completed: return todos.filter(todo => todo.completed);
-       default: return todos;
+       case FILTERS.active:
+         return todos.filter(todo => !todo.completed);
+
+       case FILTERS.completed:
+         return todos.filter(todo => todo.completed);
+
+       default:
+         return todos;
      }
    };
 
@@ -127,7 +148,7 @@ class App extends React.Component {
            <footer className="footer">
              <span className="todo-count">
                {todos.filter(todo => !todo.completed).length}
-                items left
+               &nbsp;items left
              </span>
              <Filter
                handleFilterClick={this.handleFilterClick}
@@ -146,5 +167,3 @@ class App extends React.Component {
      );
    }
 }
-
-export default App;
