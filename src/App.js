@@ -9,7 +9,8 @@ const handleFilters = (todos, filter) => {
       return todos.filter(todo => !todo.completed);
     case 'Completed':
       return todos.filter(todo => todo.completed);
-    default: return todos;
+    default:
+      return todos;
   }
 };
 
