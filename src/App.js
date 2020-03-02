@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import cn from 'classnames';
 import { InputTodo } from './components/InputTodo';
 import { TodoList } from './components/TodoList';
 import { NotFinishedTodo } from './components/NotFinishedTodo';
+import { Filters } from './components/Filters';
 
 const filterTodos = (todos, filter) => {
   switch (filter) {
@@ -46,22 +46,15 @@ export class App extends Component {
     }));
   }
 
-  handleCheckedAll = (event) => {
-    if (event.target.checked) {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => ({
-          ...todo,
-          completed: true,
-        })),
-      }));
-    } else {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => ({
-          ...todo,
-          completed: false,
-        })),
-      }));
-    }
+  handleCheckedAll = ({ target }) => {
+    const { checked } = target;
+
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: checked,
+      })),
+    }));
   }
 
   clearCompleted = () => {
@@ -99,41 +92,7 @@ export class App extends Component {
 
         <footer className="footer">
           <NotFinishedTodo notFinishedTodo={notFinishedTodo} />
-          <ul className="filters">
-            <li>
-              <button
-                type="button"
-                data-filter="all"
-                className={cn({ selected: filter === 'all' })}
-                onClick={this.changeFilter}
-              >
-                All
-              </button>
-            </li>
-
-            <li>
-              <button
-                type="button"
-                data-filter="active"
-                className={cn({ selected: filter === 'active' })}
-                onClick={this.changeFilter}
-              >
-                Active
-              </button>
-            </li>
-
-            <li>
-              <button
-                type="button"
-                data-filter="completed"
-                className={cn({ selected: filter === 'completed' })}
-                onClick={this.changeFilter}
-              >
-                Completed
-              </button>
-            </li>
-          </ul>
-
+          <Filters filter={filter} changeFilter={this.changeFilter} />
           <button
             type="button"
             className="clear-completed"
