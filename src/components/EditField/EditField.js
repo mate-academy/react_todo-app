@@ -4,7 +4,7 @@ import './EditField.css';
 
 export class EditField extends PureComponent {
   state = {
-    editingValue: this.props.value,
+    todoTitle: this.props.value,
   };
 
   handleKeyDown = (event) => {
@@ -12,7 +12,7 @@ export class EditField extends PureComponent {
       this.props.onClose(this.props.value);
 
       this.setState({
-        editingValue: this.props.value,
+        todoTitle: this.props.value,
       });
     }
   };
@@ -21,26 +21,26 @@ export class EditField extends PureComponent {
     const { value } = event.target;
 
     this.setState({
-      editingValue: value,
+      todoTitle: value,
     });
   };
 
   handleEditSubmit = (event) => {
     event.preventDefault();
 
-    const { editingValue } = this.state;
+    const { todoTitle } = this.state;
 
-    this.props.onClose(editingValue);
+    this.props.onClose(todoTitle);
   };
 
   render() {
-    const { editingValue } = this.state;
+    const { todoTitle } = this.state;
 
     return (
       <form action="#" onSubmit={this.handleEditSubmit} className="edit-form">
         <input
           type="text"
-          value={editingValue}
+          value={todoTitle}
           onBlur={this.handleEditSubmit}
           onChange={this.handleEditorChange}
           onKeyDown={this.handleKeyDown}

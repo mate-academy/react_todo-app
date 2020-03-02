@@ -26,7 +26,7 @@ handleBlur = () => {
 
 render() {
   const { inputValue } = this.state;
-  const { selectAll, isSelectAll } = this.props;
+  const { selectAll, isSelectedAll } = this.props;
 
   return (
     <header className="header">
@@ -39,7 +39,7 @@ render() {
           className="new-todo"
           placeholder="What needs to be done?"
         />
-        <SelectAll selectAll={selectAll} isSelectAll={isSelectAll} />
+        <SelectAll selectAll={selectAll} isSelectedAll={isSelectedAll} />
       </form>
     </header>
   );
@@ -49,5 +49,5 @@ render() {
 Header.propTypes = {
   setNewTodo: PropTypes.func.isRequired,
   selectAll: PropTypes.func.isRequired,
-  isSelectAll: PropTypes.bool.isRequired,
+  isSelectedAll: PropTypes.bool.isRequired,
 };

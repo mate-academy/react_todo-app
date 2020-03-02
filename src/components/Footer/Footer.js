@@ -5,25 +5,22 @@ import './Footer.css';
 
 export class Footer extends PureComponent {
   state = {
-    sorterName: 'all',
+    filterName: 'all',
   };
 
   handleClick =(event) => {
-    const sorterName = event.target.name;
+    const filterName = event.target.dataset.name;
+    const { filter } = this.props;
 
-    event.preventDefault();
-
-    const { sort } = this.props;
-
-    sort(sorterName);
+    filter(filterName);
     this.setState({
-      sorterName,
+      filterName,
     });
   };
 
   render() {
     const { length, clear } = this.props;
-    const { sorterName } = this.state;
+    const { filterName } = this.state;
 
     return (
       <footer className="footer">
@@ -33,36 +30,45 @@ export class Footer extends PureComponent {
 
         <ul className="filters">
           <li>
-            <a
-              href="#/"
-              name="all"
-              className={cx('', { selected: sorterName === 'all' })}
+            <button
+              type="button"
+              data-name="all"
+              className={cx(
+                'filters-btn',
+                { selected: filterName === 'all' },
+              )}
               onClick={this.handleClick}
             >
               All
-            </a>
+            </button>
           </li>
 
           <li>
-            <a
-              href="#/active"
-              name="active"
-              className={cx('', { selected: sorterName === 'active' })}
+            <button
+              type="button"
+              data-name="active"
+              className={cx(
+                'filters-btn',
+                { selected: filterName === 'active' },
+              )}
               onClick={this.handleClick}
             >
               Active
-            </a>
+            </button>
           </li>
 
           <li>
-            <a
-              href="#/completed"
-              name="completed"
-              className={cx('', { selected: sorterName === 'completed' })}
+            <button
+              type="button"
+              data-name="completed"
+              className={cx(
+                'filters-btn',
+                { selected: filterName === 'completed' },
+              )}
               onClick={e => this.handleClick(e)}
             >
               Completed
-            </a>
+            </button>
           </li>
         </ul>
 
@@ -79,7 +85,7 @@ export class Footer extends PureComponent {
 }
 
 Footer.propTypes = {
-  sort: PropTypes.func.isRequired,
+  filter: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   length: PropTypes.number.isRequired,
 };

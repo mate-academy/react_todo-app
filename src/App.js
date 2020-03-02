@@ -4,34 +4,37 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
-export class App extends PureComponent {
-  todos = [
-    {
-      id: v4().substr(0, 4),
-      text: 'drink a coffee',
-      completed: false,
-    },
-    {
-      id: v4().substr(0, 4),
-      text: 'get the world masters',
-      completed: false,
-    },
-  ];
+const todos = [
+  {
+    id: v4().substr(0, 4),
+    text: 'drink a coffee',
+    completed: false,
+  },
+  {
+    id: v4().substr(0, 4),
+    text: 'get the world masters',
+    completed: false,
+  },
+];
 
+export class App extends PureComponent {
   state = {
-    todoList: [...this.todos],
-    visibleTodos: [...this.todos],
+    todoList: [...todos],
+    visibleTodos: [...todos],
     filterName: 'all',
   };
 
   componentDidMount() {
-    if (localStorage.getItem('todos')) {
+    const storageTodos = localStorage.getItem('todos')
+      && JSON.parse(localStorage.getItem('todos'));
+
+    if (storageTodos) {
       this.setState({
         todoList: [
-          ...JSON.parse(localStorage.getItem('todos')),
+          ...storageTodos,
         ],
         visibleTodos: [
-          ...JSON.parse(localStorage.getItem('todos')),
+          ...storageTodos,
         ],
       });
     }
@@ -99,35 +102,34 @@ export class App extends PureComponent {
   setEditedValue = (value, idx) => {
     if (value.trim()) {
       this.setState(prevState => ({
-        todoList: prevState.todoList
-          .map((todo, id) => {
-            if (todo.id === idx) {
-              return {
-                ...todo,
-                text: value,
-                completed: false,
-              };
-            }
+        todoList: prevState.todoList.map((todo, id) => {
+          if (todo.id === idx) {
+            return {
+              ...todo,
+              text: value,
+              completed: false,
+            };
+          }
 
-            return todo;
-          }),
+          return todo;
+        }),
       }));
     }
 
     this.setFilteredList(this.state.filterName);
   };
 
-  handleSelectAll = (isSelectAll) => {
+  handleSelectAll = (isSelectedAll) => {
     this.setState(prevState => ({
       todoList: prevState.todoList
         .map(todo => ({
           ...todo,
-          completed: isSelectAll,
+          completed: isSelectedAll,
         })),
       visibleTodos: prevState.todoList
         .map(todo => ({
           ...todo,
-          completed: isSelectAll,
+          completed: isSelectedAll,
         })),
     }));
   };
@@ -174,7 +176,7 @@ export class App extends PureComponent {
         <Header
           setNewTodo={todo => this.setNewTodo(todo)}
           selectAll={this.handleSelectAll}
-          isSelectAll={visibleTodos.every(todo => todo.completed)}
+          isSelectedAll={visibleTodos.every(todo => todo.completed)}
         />
 
         <section className="main">
@@ -189,7 +191,7 @@ export class App extends PureComponent {
         <Footer
           clear={this.clearCompleted}
           length={visibleTodos.length}
-          sort={name => this.setFilteredList(name)}
+          filter={name => this.setFilteredList(name)}
         />
       </section>
     );
