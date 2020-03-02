@@ -11,9 +11,10 @@ export class App extends Component {
 
   componentDidMount() {
     const savedTodos = localStorage.getItem('todos');
-    const todos = savedTodos ? JSON.parse(savedTodos) : this.state.todos;
 
-    if (savedTodos) {
+    if (savedTodos.length > 0) {
+      const todos = JSON.parse(savedTodos);
+
       this.setState({
         todos,
       });
@@ -53,26 +54,15 @@ export class App extends Component {
     }));
   }
 
-  markAllAsCompleted = (event) => {
-    if (event.target.checked) {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => (
-          {
-            ...todo,
-            completed: true,
-          }
-        )),
-      }));
-    } else {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => (
-          {
-            ...todo,
-            completed: false,
-          }
-        )),
-      }));
-    }
+  markAllAsCompleted = ({ target: { checked } }) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => (
+        {
+          ...todo,
+          completed: checked,
+        }
+      )),
+    }));
   }
 
   handleFilter = (filter) => {
@@ -83,11 +73,13 @@ export class App extends Component {
 
   setFilter = () => {
     const { todos, filter } = this.state;
+    const TODO_STATUS_ACTIVE = 'active';
+    const TODO_STATUS_COMPLETED = 'completed';
 
     switch (filter) {
-      case 'active':
+      case TODO_STATUS_ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'completed':
+      case TODO_STATUS_COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
