@@ -17,7 +17,7 @@ export const TodoItem = ({ todo, onDeleteTodo, onUpdateCompleted }) => {
           className="toggle"
           id={id}
           onChange={onUpdateCompleted}
-          checked={completed ? 'checked' : ''}
+          checked={completed}
         />
         <label htmlFor={id}>{title}</label>
         <button

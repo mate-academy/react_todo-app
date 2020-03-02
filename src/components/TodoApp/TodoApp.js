@@ -13,10 +13,11 @@ export class TodoApp extends React.Component {
     });
   }
 
-  handleKeyPress = (event) => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     const { title } = this.state;
 
-    if (event.key === 'Enter' && title) {
+    if (title.length > 0) {
       const newTask = {
         title,
         id: uuid(),
@@ -35,14 +36,15 @@ export class TodoApp extends React.Component {
     const { title } = this.state;
 
     return (
-      <input
-        type="text"
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={title}
-        onChange={this.handleChange}
-        onKeyPress={this.handleKeyPress}
-      />
+      <form onSubmit={this.handleSubmit}>
+        <input
+          type="text"
+          className="new-todo"
+          placeholder="What needs to be done?"
+          value={title}
+          onChange={this.handleChange}
+        />
+      </form>
     );
   }
 }
