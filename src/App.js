@@ -1,6 +1,17 @@
 import React from 'react';
+import cn from 'classnames';
 import { TodoApp } from './components/TodoApp/TodoApp';
 import { TodoList } from './components/TodoList/TodoList';
+
+const handleFilters = (todos, filter) => {
+  switch (filter) {
+    case 'Active':
+      return todos.filter(todo => !todo.completed);
+    case 'Completed':
+      return todos.filter(todo => todo.completed);
+    default: return todos;
+  }
+};
 
 export class App extends React.Component {
   state = {
@@ -19,7 +30,7 @@ export class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.todos !== this.state.todos) {
+    if (JSON.stringify(prevState.todos) === JSON.stringify(this.state)) {
       localStorage.setItem('todos', JSON.stringify(this.state.todos));
     }
   }
@@ -53,19 +64,14 @@ export class App extends React.Component {
   };
 
   toggleAllCompleted = (event) => {
-    if (event.target.checked) {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => ({
-          ...todo, completed: true,
-        })),
-      }));
-    } else {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => ({
-          ...todo, completed: false,
-        })),
-      }));
-    }
+    const { checked } = event.target;
+
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: checked,
+      })),
+    }));
   }
 
   deleteCompleted = () => {
@@ -82,19 +88,9 @@ export class App extends React.Component {
     });
   }
 
-  handleFilters = () => {
-    const { filter, todos } = this.state;
-
-    switch (filter) {
-      case 'Active': return todos.filter(todo => !todo.completed);
-      case 'Completed': return todos.filter(todo => todo.completed);
-      default: return todos;
-    }
-  }
-
   render() {
-    const { todos } = this.state;
-
+    const { todos, filter } = this.state;
+    const filteredTodos = handleFilters(todos, filter);
     const uncompletedTodo = todos.filter(todo => todo.completed === false);
 
     return (
@@ -106,7 +102,7 @@ export class App extends React.Component {
 
         <section className="main">
           <TodoList
-            todos={this.handleFilters()}
+            todos={filteredTodos}
             onDeleteTodo={this.deleteTodo}
             onUpdateCompleted={this.handleCompleted}
             onToggleCompleted={this.toggleAllCompleted}
@@ -123,7 +119,7 @@ export class App extends React.Component {
             <li>
               <button
                 type="button"
-                className="selected"
+                className={cn({ selected: filter === 'All' })}
                 onClick={this.filterTodos}
                 value="All"
               >
@@ -134,6 +130,7 @@ export class App extends React.Component {
             <li>
               <button
                 type="button"
+                className={cn({ selected: filter === 'Active' })}
                 onClick={this.filterTodos}
                 value="Active"
               >
@@ -144,6 +141,7 @@ export class App extends React.Component {
             <li>
               <button
                 type="button"
+                className={cn({ selected: filter === 'Completed' })}
                 onClick={this.filterTodos}
                 value="Completed"
               >
