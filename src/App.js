@@ -18,13 +18,22 @@ export class App extends Component {
     }));
   }
 
-  toggleCompletedAll = () => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map(todo => ({
-        ...todo,
-        completed: !todo.completed,
-      })),
-    }));
+  toggleCompletedAll = (event) => {
+    if (event.target.checked) {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          completed: true,
+        })),
+      }));
+    } else {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          completed: false,
+        })),
+      }));
+    }
   }
 
   handleCompeletedTodo = (id) => {
