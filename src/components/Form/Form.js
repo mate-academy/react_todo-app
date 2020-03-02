@@ -15,7 +15,7 @@ class Form extends Component {
 
     const { title } = this.state;
 
-    if (title) {
+    if (title.trim().length > 0) {
       this.props.onAdd(title);
       this.setState({ title: '' });
     }

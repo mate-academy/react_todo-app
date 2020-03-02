@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import './FilterLink.css';
+
 const FilterLink = ({ title, active, onClick, icon }) => (
   <button
     type="button"
