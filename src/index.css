@@ -213,6 +213,7 @@ body {
   word-break: break-all;
   padding: 15px 15px 15px 60px;
   display: block;
+  width: fit-content;
   line-height: 1.2;
   transition: color 0.4s;
 }
@@ -225,9 +226,9 @@ body {
 .todo-list li .destroy {
   display: none;
   position: absolute;
-  top: 0;
+  top: 50%;
   right: 10px;
-  bottom: 0;
+  transform: translateY(-50%);
   width: 40px;
   height: 40px;
   margin: auto 0;
@@ -235,6 +236,7 @@ body {
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:hover {
@@ -263,6 +265,9 @@ body {
   height: 20px;
   text-align: center;
   border-top: 1px solid #e6e6e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer:before {
@@ -278,11 +283,6 @@ body {
     0 9px 1px -3px rgba(0, 0, 0, 0.2),
     0 16px 0 -6px #f6f6f6,
     0 17px 2px -6px rgba(0, 0, 0, 0.2);
-}
-
-.todo-count {
-  float: left;
-  text-align: left;
 }
 
 .todo-count strong {
@@ -302,26 +302,26 @@ body {
   display: inline;
 }
 
-.filters li a {
+.filters li button {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 3px;
+  cursor: pointer;
 }
 
-.filters li a:hover {
+.filters li button:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.filters li button.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
 .clear-completed,
 html .clear-completed:active {
-  float: right;
   position: relative;
   line-height: 20px;
   text-decoration: none;
