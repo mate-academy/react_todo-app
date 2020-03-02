@@ -1,61 +1,149 @@
-import React from 'react';
+import React, { Component } from 'react';
+import TodoCreator from './components/TodoCreator/TodoCreator';
+import TodoList from './components/TodoList/TodoList';
+import TodoFilter from './components/TodoFilter/TodoFilter';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos App</h1>
+const filterTodosWithQuery = (
+  todos, filter,
+) => {
+  if (filter === 'all') {
+    return todos;
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus=""
-        />
-      </header>
+  if (filter === 'completed') {
+    return todos.filter(todo => todo.completed);
+  }
 
-      <section className="main" style={{ display: 'block' }}>
-        <input id="toggle-all" className="toggle-all" type="checkbox" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sdfsdfsdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>dsfgsdfgdsrg</label>
-              <button className="destroy"></button></div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sddfgdfgdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-        </ul>
+  return todos.filter(todo => !todo.completed);
+};
+
+export default class App extends Component {
+  state = {
+    todos: [],
+    filter: 'all',
+  };
+
+  componentDidMount() {
+    const persistedTodos = localStorage.getItem('todos');
+
+    if (persistedTodos) {
+      const todos = JSON.parse(persistedTodos);
+
+      this.setState({ todos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todos !== this.state.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
+  onHanleFilter = (e) => {
+    const { name } = e.target;
+
+    switch (name) {
+      case 'all':
+        this.setState({
+          filter: 'all',
+        });
+        break;
+      case 'completed':
+        this.setState({
+          filter: 'completed',
+        });
+        break;
+      case 'active':
+        this.setState({
+          filter: 'active',
+        });
+        break;
+      default:
+    }
+  }
+
+  countNotCompleted = () => {
+    const { todos } = this.state;
+
+    return todos.filter(todo => !todo.completed).length;
+  }
+
+  onAddTodo = (todo) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
+    }));
+  }
+
+  onDeleteTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
+  }
+
+  onUpdateCompleted = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => (todo.id === id
+        ? {
+          ...todo, completed: !todo.completed,
+        } : todo)),
+    }));
+  }
+
+  onClearCompleted = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => !todo.completed),
+    }));
+  }
+
+  isAllChecked = () => this.state.todos.every(todo => todo.completed);
+
+  onHandleToggleAll = (checked) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: !checked,
+      })),
+    }));
+  }
+
+  render() {
+    const {
+      filter,
+      todos,
+    } = this.state;
+    const filteredTodos = filterTodosWithQuery(todos, filter);
+    const isAllChecked = this.isAllChecked();
+
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <TodoCreator addTodo={this.onAddTodo} />
+        </header>
+
+        <section className="main">
+          <TodoList
+            todos={filteredTodos}
+            deleteTodo={this.onDeleteTodo}
+            updateCompleted={this.onUpdateCompleted}
+            handleToggleAll={this.onHandleToggleAll}
+            checked={isAllChecked}
+          />
+        </section>
+        {todos.length > 0 && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${this.countNotCompleted()} items left`}
+            </span>
+            <TodoFilter
+              handleFilter={this.onHanleFilter}
+              handleSelect={this.onHandleFilter}
+              handleClearCompleted={this.onClearCompleted}
+              filter={filter}
+            />
+          </footer>
+        )}
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count"><strong>3</strong> items left</span>
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-        <button className="clear-completed" style={{ display: 'block' }}></button>
-      </footer>
-    </section>
-  );
+    );
+  }
 }
-
-export default App;
