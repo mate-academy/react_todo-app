@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export const TodoItem = (props) => {
-  const { id, title, completed, toggleCompleted, deletetask } = props;
+  const {
+    id,
+    title,
+    completed,
+    deletetask,
+    toggleCompleted,
+  } = props;
 
   return (
     <li className={completed ? 'completed' : ''}>

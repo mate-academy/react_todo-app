@@ -7,7 +7,7 @@ import { todosFromServer } from './components/api/todosFromServer';
 class App extends React.Component {
   state = {
     todos: [...todosFromServer],
-    filterProp: 'all',
+    filterField: 'all',
   }
 
   addTask = (newTask) => {
@@ -30,8 +30,8 @@ class App extends React.Component {
     }));
   }
 
-  filter = (todos, filterProp) => {
-    switch (filterProp) {
+  filter = (todos, filterField) => {
+    switch (filterField) {
       case 'all':
         return todos;
 
@@ -46,9 +46,9 @@ class App extends React.Component {
     }
   }
 
-  setFilterProp = (filterProp) => {
+  setfilterField = (filterField) => {
     this.setState({
-      filterProp,
+      filterField,
     });
   }
 
@@ -67,8 +67,8 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, filterProp } = this.state;
-    const visibleTodos = this.filter(todos, filterProp);
+    const { todos, filterField } = this.state;
+    const visibleTodos = this.filter(todos, filterField);
 
     return (
       <section className="todoapp">
@@ -96,7 +96,7 @@ class App extends React.Component {
 
         <Footer
           todos={this.state.todos}
-          setFilterProp={this.setFilterProp}
+          setfilterField={this.setfilterField}
           clearCompleted={this.clearCompleted}
         />
       </section>

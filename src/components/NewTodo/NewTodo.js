@@ -16,11 +16,12 @@ export class NewTodo extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    const { inputValue } = this.state;
 
-    if (this.state.inputValue !== '') {
+    if (inputValue !== '') {
       this.props.addTask({
         id: uuidv4(),
-        title: this.state.inputValue,
+        title: inputValue,
         completed: false,
       });
       this.setState({
@@ -35,14 +36,17 @@ export class NewTodo extends React.Component {
   }
 
   render() {
+    const { inputValue } = this.state;
+    const placeholder = this.state.inputError
+      ? 'Enter valid Task' : 'What needs to be done?';
+
     return (
       <form onSubmit={this.handleSubmit}>
         <input
           className="new-todo"
-          placeholder={this.state.inputError
-            ? 'Enter valid Task' : 'What needs to be done?'}
+          placeholder={placeholder}
           onChange={this.handleInputChange}
-          value={this.state.inputValue}
+          value={inputValue}
         />
       </form>
     );

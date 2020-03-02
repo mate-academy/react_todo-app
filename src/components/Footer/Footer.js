@@ -11,7 +11,7 @@ export class Footer extends React.Component {
   }
 
   handleClick = ({ target: { name } }) => {
-    this.props.setFilterProp(name);
+    this.props.setfilterField(name);
     this.setState(prevState => ({
       selectedButton: Object.keys(prevState.selectedButton)
         .reduce((acc, key) => ({
@@ -23,7 +23,7 @@ export class Footer extends React.Component {
 
   render() {
     const { todos, clearCompleted } = this.props;
-    const { all, active, completed } = this.state.selectedButton;
+    const { selectedButton } = this.state;
     const uncompletedTasksCount = todos
       .filter(todo => !todo.completed).length;
 
@@ -42,7 +42,7 @@ export class Footer extends React.Component {
               href="#/"
               name="all"
               onClick={this.handleClick}
-              className={all ? 'selected' : ''}
+              className={selectedButton.all ? 'selected' : ''}
             >
               All
             </a>
@@ -53,7 +53,7 @@ export class Footer extends React.Component {
               name="active"
               href="#/active"
               onClick={this.handleClick}
-              className={active ? 'selected' : ''}
+              className={selectedButton.active ? 'selected' : ''}
             >
               Active
             </a>
@@ -64,7 +64,7 @@ export class Footer extends React.Component {
               name="completed"
               href="#/completed"
               onClick={this.handleClick}
-              className={completed ? 'selected' : ''}
+              className={selectedButton.completed ? 'selected' : ''}
             >
               Completed
             </a>
@@ -89,6 +89,6 @@ Footer.propTypes = {
     title: PropTypes.string,
     completed: PropTypes.bool,
   })).isRequired,
-  setFilterProp: PropTypes.func.isRequired,
+  setfilterField: PropTypes.func.isRequired,
   clearCompleted: PropTypes.func.isRequired,
 };
