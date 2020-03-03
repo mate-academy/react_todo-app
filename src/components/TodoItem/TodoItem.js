@@ -6,14 +6,16 @@ export const TodoItem = (props) => {
     todo,
     deleteTodo,
     handleCompleted,
-    handleDoubleEditing,
+    enterEditingMode,
     handleChangingEditing,
   } = props;
   const { title, id, completed } = todo;
 
   const handleSubmitEdit = (event) => {
     event.preventDefault();
-    handleDoubleEditing(id);
+    if (title !== '') {
+      enterEditingMode(id);
+    }
   };
 
   const handleInputEdit = ({ target }) => {
@@ -32,7 +34,7 @@ export const TodoItem = (props) => {
           id={`todo-${id}`}
           checked={completed}
         />
-        <label onDoubleClick={() => handleDoubleEditing(id)}>{title}</label>
+        <label onDoubleClick={() => enterEditingMode(id)}>{title}</label>
         <button
           onClick={() => deleteTodo(id)}
           type="button"
@@ -53,19 +55,12 @@ export const TodoItem = (props) => {
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     completed: PropTypes.bool,
     title: PropTypes.string,
   }).isRequired,
-  deleteTodo: PropTypes.func,
-  handleCompleted: PropTypes.func,
-  handleDoubleEditing: PropTypes.func,
-  handleChangingEditing: PropTypes.func,
-};
-
-TodoItem.defaultProps = {
-  deleteTodo: () => {},
-  handleCompleted: () => {},
-  handleDoubleEditing: () => {},
-  handleChangingEditing: () => {},
+  deleteTodo: PropTypes.func.isRequired,
+  handleCompleted: PropTypes.func.isRequired,
+  enterEditingMode: PropTypes.func.isRequired,
+  handleChangingEditing: PropTypes.func.isRequired,
 };

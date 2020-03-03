@@ -6,8 +6,8 @@ import { TodoFooter } from './components/TodoFooter';
 class App extends React.Component {
   state = {
     todos: [],
-    originalTodos: [],
-    isComplete: false,
+    visibleTodos: [],
+    isCompleted: false,
   };
 
   addTodo = (todo) => {
@@ -15,25 +15,25 @@ class App extends React.Component {
       todos: [
         ...prevState.todos,
         todo,
-      ],
-      originalTodos: [
-        ...prevState.originalTodos,
+      ].filter(todoEach => todoEach.title !== ''),
+      visibleTodos: [
+        ...prevState.visibleTodos,
         todo,
-      ],
+      ].filter(todoEach => todoEach.title !== ''),
     }));
   };
 
   deleteTodo = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.id !== id),
-      originalTodos: prevState.originalTodos.filter(todo => todo.id !== id),
+      visibleTodos: prevState.visibleTodos.filter(todo => todo.id !== id),
     }));
   };
 
-  clearComponent = () => {
+  clearCompleted = () => {
     this.setState(prevState => ({
       todos: prevState.todos.filter(todo => todo.completed === false),
-      originalTodos: prevState.originalTodos
+      visibleTodos: prevState.visibleTodos
         .filter(todo => todo.completed === false),
     }));
   };
@@ -50,7 +50,7 @@ class App extends React.Component {
 
         return todo;
       }),
-      originalTodos: prevState.originalTodos.map((todo) => {
+      visibleTodos: prevState.visibleTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -63,7 +63,7 @@ class App extends React.Component {
     }));
   };
 
-  handleDoubleEditing = (id) => {
+  enterEditingMode = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id === id) {
@@ -75,7 +75,7 @@ class App extends React.Component {
 
         return todo;
       }),
-      originalTodos: prevState.originalTodos.map((todo) => {
+      visibleTodos: prevState.visibleTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -94,18 +94,18 @@ class App extends React.Component {
         if (todo.id === id) {
           return {
             ...todo,
-            title: value,
+            title: value.replace(/\s/g, ''),
           };
         }
 
         return todo;
       }),
 
-      originalTodos: prevState.originalTodos.map((todo) => {
+      visibleTodos: prevState.visibleTodos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
-            title: value,
+            title: value.replace(/\s/g, ''),
           };
         }
 
@@ -116,17 +116,17 @@ class App extends React.Component {
 
   handleAllCompleted = () => {
     this.setState((prevState) => {
-      if (prevState.isComplete === false) {
+      if (prevState.isCompleted === false) {
         return {
           todos: prevState.todos.map(todo => ({
             ...todo,
             completed: true,
           })),
-          originalTodos: prevState.originalTodos.map(todo => ({
+          visibleTodos: prevState.visibleTodos.map(todo => ({
             ...todo,
             completed: true,
           })),
-          isComplete: !prevState.isComplete,
+          isCompleted: !prevState.isCompleted,
         };
       }
 
@@ -135,35 +135,35 @@ class App extends React.Component {
           ...todo,
           completed: false,
         })),
-        originalTodos: prevState.originalTodos.map(todo => ({
+        visibleTodos: prevState.visibleTodos.map(todo => ({
           ...todo,
           completed: false,
         })),
-        isComplete: !prevState.isComplete,
+        isCompleted: !prevState.isCompleted,
       };
     });
   };
 
   handleCompletedFilter = () => {
     this.setState(prevState => ({
-      todos: prevState.originalTodos.filter(todo => todo.completed === true),
+      visibleTodos: prevState.todos.filter(todo => todo.completed),
     }));
   };
 
   handleActiveFilter = () => {
     this.setState(prevState => ({
-      todos: prevState.originalTodos.filter(todo => todo.completed === false),
+      visibleTodos: prevState.todos.filter(todo => !todo.completed),
     }));
   };
 
   handleAll = () => {
     this.setState(prevState => ({
-      todos: prevState.originalTodos,
+      visibleTodos: prevState.todos,
     }));
   };
 
   render() {
-    const { todos } = this.state;
+    const { visibleTodos } = this.state;
 
     return (
       <section className="todoapp">
@@ -184,18 +184,18 @@ class App extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
-            todos={todos}
+            todos={visibleTodos}
             deleteTodo={this.deleteTodo}
             handleCompleted={this.handleCompleted}
-            handleDoubleEditing={this.handleDoubleEditing}
+            enterEditingMode={this.enterEditingMode}
             handleChangingEditing={this.handleChangingEditing}
           />
         </section>
-        {todos.length
+        {visibleTodos.length
           ? (
             <TodoFooter
-              todos={todos}
-              clearComponent={this.clearComponent}
+              todos={visibleTodos}
+              clearCompleted={this.clearCompleted}
               handleCompletedFilter={this.handleCompletedFilter}
               handleActiveFilter={this.handleActiveFilter}
               handleAll={this.handleAll}

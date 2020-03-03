@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 
 export class TodoApp extends React.Component {
   state = {
     title: '',
-    id: 1,
+    id: uuidv4(),
     completed: false,
     edit: false,
   };
@@ -14,14 +15,14 @@ export class TodoApp extends React.Component {
     const { title } = this.state;
     const { addTodo } = this.props;
 
-    if (title !== '') {
+    if (title) {
       addTodo(this.state);
     }
 
-    this.setState(prevState => ({
+    this.setState({
       title: '',
-      id: prevState.id + 1,
-    }));
+      id: uuidv4(),
+    });
   };
 
   handleInput = ({ target }) => {

@@ -8,7 +8,7 @@ export const TodoList = (props) => {
     todos,
     deleteTodo,
     handleCompleted,
-    handleDoubleEditing,
+    enterEditingMode,
     handleChangingEditing,
   } = props;
 
@@ -16,15 +16,18 @@ export const TodoList = (props) => {
     <ul className="todo-list">
       {todos.map(todo => (
         <li
-          className={cx({ completed: todo.completed }, { editing: todo.edit })}
           key={todo.id}
+          className={cx({
+            completed: todo.completed,
+            editing: todo.edit,
+          })}
         >
 
           <TodoItem
             todo={todo}
             deleteTodo={deleteTodo}
             handleCompleted={handleCompleted}
-            handleDoubleEditing={handleDoubleEditing}
+            enterEditingMode={enterEditingMode}
             handleChangingEditing={handleChangingEditing}
           />
         </li>
@@ -34,17 +37,13 @@ export const TodoList = (props) => {
 };
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object),
-  deleteTodo: PropTypes.func,
-  handleCompleted: PropTypes.func,
-  handleDoubleEditing: PropTypes.func,
-  handleChangingEditing: PropTypes.func,
-};
-
-TodoList.defaultProps = {
-  todos: [],
-  deleteTodo: () => {},
-  handleCompleted: () => {},
-  handleDoubleEditing: () => {},
-  handleChangingEditing: () => {},
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    completed: PropTypes.bool,
+    title: PropTypes.string,
+  })).isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  handleCompleted: PropTypes.func.isRequired,
+  enterEditingMode: PropTypes.func.isRequired,
+  handleChangingEditing: PropTypes.func.isRequired,
 };

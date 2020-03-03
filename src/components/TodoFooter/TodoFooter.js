@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export const TodoFooter = (props) => {
   const {
     todos,
-    clearComponent,
+    clearCompleted,
     handleCompletedFilter,
     handleActiveFilter,
     handleAll,
@@ -14,26 +14,44 @@ export const TodoFooter = (props) => {
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${todos.filter(todo => todo.completed === false)
+        {`${todos.filter(todo => !todo.completed)
           .length} items left`}
       </span>
 
       <ul className="filters">
         <li>
-          <a onClick={handleAll} href="#/" className="selected">All</a>
+          <button
+            type="button"
+            onClick={handleAll}
+            className="buttonFooter"
+          >
+            All
+          </button>
         </li>
 
         <li>
-          <a onClick={handleActiveFilter} href="#/active">Active</a>
+          <button
+            type="button"
+            onClick={handleActiveFilter}
+            className="buttonFooter"
+          >
+            Active
+          </button>
         </li>
 
         <li>
-          <a onClick={handleCompletedFilter} href="#/completed">Completed</a>
+          <button
+            type="button"
+            onClick={handleCompletedFilter}
+            className="buttonFooter"
+          >
+            Completed
+          </button>
         </li>
       </ul>
 
       <button
-        onClick={clearComponent}
+        onClick={clearCompleted}
         type="button"
         className={cx('clear-completed', { 'hidden-but': todos
           .every(todo => todo.completed === false) })}
@@ -45,17 +63,13 @@ export const TodoFooter = (props) => {
 };
 
 TodoFooter.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object),
-  clearComponent: PropTypes.func,
-  handleCompletedFilter: PropTypes.func,
-  handleActiveFilter: PropTypes.func,
-  handleAll: PropTypes.func,
-};
-
-TodoFooter.defaultProps = {
-  todos: [],
-  clearComponent: () => {},
-  handleCompletedFilter: () => {},
-  handleActiveFilter: () => {},
-  handleAll: () => {},
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    completed: PropTypes.bool,
+    title: PropTypes.string,
+  })).isRequired,
+  clearCompleted: PropTypes.func.isRequired,
+  handleCompletedFilter: PropTypes.func.isRequired,
+  handleActiveFilter: PropTypes.func.isRequired,
+  handleAll: PropTypes.func.isRequired,
 };

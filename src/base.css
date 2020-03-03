@@ -133,6 +133,11 @@ hr {
   opacity: 0;
 }
 
+.buttonFooter {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
 @media (min-width: 899px) {
   .learn-bar {
     width: auto;
