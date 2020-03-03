@@ -68,6 +68,7 @@ export class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos,
     }));
+    this.filter(this.state.filterState);
   }
 
   onKeyPressed = (event) => {
@@ -88,9 +89,9 @@ export class App extends React.Component {
       });
 
       this.setState({
-        filteredTodos: [...todos],
         title: '',
       });
+      this.filter(this.state.filterState);
     }
   }
 
@@ -113,7 +114,7 @@ export class App extends React.Component {
   }
 
   render() {
-    const { title, filteredTodos, filterState } = this.state;
+    const { title, filteredTodos, filterState, todos } = this.state;
 
     return (
       <section className="todoapp">
@@ -134,17 +135,12 @@ export class App extends React.Component {
           checkedTodo={this.checkedTodo}
           toggleAll={this.toggleAll}
         />
-
-        <footer className="footer">
-          <span className="todo-count">
-            {this.state.todos.length}
-          </span>
-          <Filter
-            filter={this.filter}
-            filterState={filterState}
-            clearCompleted={this.clearCompleted}
-          />
-        </footer>
+        <Filter
+          length={todos.length}
+          filter={this.filter}
+          filterState={filterState}
+          clearCompleted={this.clearCompleted}
+        />
       </section>
     );
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Todo } from '../Todo/Todo';
 
 export const TodoList = ({ todos, deletedTodo, toggleAll, checkedTodo }) => (
   <section className="main">
@@ -12,29 +13,14 @@ export const TodoList = ({ todos, deletedTodo, toggleAll, checkedTodo }) => (
     <label htmlFor="toggle-all">Mark all as complete</label>
     <ul className="todo-list">
 
-      {todos.map((todo, index) => (
-        <li key={todos[index]}>
-          <div className="view">
-            <input
-              type="checkbox"
-              className="toggle"
-              checked={todo.comleted}
-              onClick={() => checkedTodo(index)}
-            />
-            <label
-              htmlFor={`todo-${index}`}
-              className={todo.comleted ? '' : ''}
-            >
-              {todo.title}
-            </label>
-            <button
-              type="button"
-              className="destroy"
-              onClick={() => deletedTodo(todo.id)}
-            />
-          </div>
-          <input type="text" className="edit" />
-        </li>
+      {todos.map(todo => (
+        <Todo
+          id={todo.id}
+          title={todo.title}
+          completed={todo.comleted}
+          checkedTodo={checkedTodo}
+          deletedTodo={deletedTodo}
+        />
       ))}
     </ul>
   </section>
