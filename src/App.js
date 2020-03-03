@@ -11,8 +11,6 @@ export class App extends React.Component {
   }
 
   filter = (fil) => {
-    const { todos } = this.state;
-
     switch (fil) {
       case 'All': {
         this.setState(prevState => ({
@@ -38,12 +36,8 @@ export class App extends React.Component {
         break;
       }
 
-      default: {
-        this.setState({
-          filteredTodos: [...todos],
-          filterState: 'All',
-        });
-      }
+      default:
+        break;
     }
   }
 
@@ -79,7 +73,7 @@ export class App extends React.Component {
 
   newTodo = (title) => {
     const { todos } = this.state;
-    const newTodoId = this.state.todos.length;
+    const newTodoId = todos.length;
 
     if (title.length) {
       todos.push({
