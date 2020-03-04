@@ -109,6 +109,7 @@ export class App extends React.Component {
 
   render() {
     const { title, filteredTodos, filterState, todos } = this.state;
+    const activeTodos = todos.filter(todo => !todo.comleted);
 
     return (
       <section className="todoapp">
@@ -130,7 +131,7 @@ export class App extends React.Component {
           toggleAll={this.toggleAll}
         />
         <Filter
-          length={todos.length}
+          length={activeTodos.length}
           filter={this.filter}
           filterState={filterState}
           clearCompleted={this.clearCompleted}
