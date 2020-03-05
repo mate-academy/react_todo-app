@@ -9,7 +9,7 @@ export class TodoApp extends React.Component {
 
   handleChange = (event) => {
     this.setState({
-      title: event.target.value.trim(),
+      title: event.target.value,
     });
   }
 
@@ -17,7 +17,7 @@ export class TodoApp extends React.Component {
     event.preventDefault();
     const { title } = this.state;
 
-    if (title.length > 0) {
+    if (title.trim().length > 0) {
       const newTask = {
         title,
         id: uuid(),
