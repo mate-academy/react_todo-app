@@ -8,10 +8,14 @@ export class Todo extends React.Component {
     isEditing: false,
   }
 
+  textInput = React.createRef();
+
   startEdit = () => {
     this.setState({
       isEditing: true,
       currentValue: this.props.text,
+    }, () => {
+      this.textInput.current.focus();
     });
   }
 
@@ -26,6 +30,15 @@ export class Todo extends React.Component {
       return;
     }
 
+    this.props.onTextChanged(id, this.state.currentValue);
+
+    this.setState({
+      currentValue: '',
+      isEditing: false,
+    });
+  }
+
+  blurHandler = (id) => {
     this.props.onTextChanged(id, this.state.currentValue);
 
     this.setState({
@@ -68,6 +81,8 @@ export class Todo extends React.Component {
             value={currentValue}
             onChange={this.handleChange}
             onKeyPress={event => this.handleKeyPress(event, id)}
+            onBlur={() => this.blurHandler(id)}
+            ref={this.textInput}
           />
         )}
       </li>

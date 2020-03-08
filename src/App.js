@@ -6,10 +6,14 @@ class App extends React.Component {
   state = {
     todos: [
       {
-        done: false, id: '1', text: 'do exercise',
+        done: false,
+        id: '1',
+        text: 'do exercise',
       },
       {
-        done: true, id: '2', text: 'buy milk',
+        done: true,
+        id: '2',
+        text: 'buy milk',
       },
     ],
     newItemText: '',
@@ -39,8 +43,12 @@ class App extends React.Component {
 
   handleDelete = (id) => {
     this.setState(({ todos }) => ({
-      todos: todos.filter(current => current.id !== id),
-    }));
+      todos: todos.filter(currentTodo => currentTodo.id !== id),
+    }), () => {
+      this.setState(prevState => ({
+        checkedAll: prevState.todos.every(todo => todo.done),
+      }));
+    });
   };
 
   toggleItem = (id) => {
@@ -56,8 +64,11 @@ class App extends React.Component {
         return todo;
       });
 
+      const checkedAll = newTodos.every(todo => todo.done === true);
+
       return {
         todos: newTodos,
+        checkedAll,
       };
     });
   }
@@ -88,9 +99,7 @@ class App extends React.Component {
 
   todosFilter = (todos, sortBy) => {
     switch (sortBy) {
-      case 'all':
-        return todos;
-      case 'done':
+      case 'completed':
         return todos.filter(todo => todo.done);
       case 'active':
         return todos.filter(todo => !todo.done);
@@ -99,16 +108,12 @@ class App extends React.Component {
     }
   };
 
-  handleOnAll = () => {
-    this.setState({ sortBy: 'All' });
-  };
+  clickHandler = (event) => {
+    const sortBy = event.target.name;
 
-  handleOnActive = () => {
-    this.setState({ sortBy: 'active' });
-  };
-
-  handleOnCompleted = () => {
-    this.setState({ sortBy: 'done' });
+    this.setState({
+      sortBy,
+    });
   };
 
   clearCompleted = () => {
@@ -119,7 +124,7 @@ class App extends React.Component {
   };
 
   addItem(text) {
-    if (text === '') {
+    if (text.trim() === '') {
       return;
     }
 
@@ -133,14 +138,15 @@ class App extends React.Component {
       return {
         todos: [...todos, newItem],
         newItemText: '',
+        checkedAll: false,
       };
     });
   }
 
   render() {
-    const { todos, newItemText, sortBy, checkedAll } = this.state;
+    const { todos, newItemText, checkedAll, sortBy } = this.state;
     const activeTodos = todos.filter(todo => !todo.done);
-    const filteredTodos = this.todosFilter(todos, sortBy);
+    // const filteredTodos = this.todosFilter(todos, sortBy);
 
     return (
       <section className="todoapp">
@@ -157,7 +163,7 @@ class App extends React.Component {
         </header>
 
         <section className="main">
-          {!!todos.length && (
+          {todos.length && (
             <>
               <input
                 type="checkbox"
@@ -172,7 +178,7 @@ class App extends React.Component {
             </>
           )}
           <TodoList
-            todos={filteredTodos}
+            todos={this.todosFilter(todos, sortBy)}
             onDelete={this.handleDelete}
             toggleItem={this.toggleItem}
             onTextChanged={this.changeText}
@@ -187,9 +193,10 @@ class App extends React.Component {
           <ul className="filters">
             <li>
               <a
-                onClick={this.handleOnAll}
+                onClick={this.clickHandler}
                 href="#/"
                 className="selected"
+                name="all"
               >
                 All
               </a>
@@ -197,8 +204,9 @@ class App extends React.Component {
 
             <li>
               <a
-                onClick={this.handleOnActive}
+                onClick={this.clickHandler}
                 href="#/active"
+                name="active"
               >
                 Active
               </a>
@@ -206,8 +214,9 @@ class App extends React.Component {
 
             <li>
               <a
-                onClick={this.handleOnCompleted}
+                onClick={this.clickHandler}
                 href="#/completed"
+                name="completed"
               >
                 Completed
               </a>
