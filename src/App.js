@@ -163,20 +163,22 @@ class App extends React.Component {
         </header>
 
         <section className="main">
-          {todos.length && (
-            <>
-              <input
-                type="checkbox"
-                id="toggle-all"
-                checked={checkedAll}
-                className="toggle-all"
-                onChange={this.checkAll}
-              />
-              <label htmlFor="toggle-all">
-                  Mark all as complete
-              </label>
-            </>
-          )}
+          {todos.length
+            ? (
+              <>
+                <input
+                  type="checkbox"
+                  id="toggle-all"
+                  checked={checkedAll}
+                  className="toggle-all"
+                  onChange={this.checkAll}
+                />
+                <label htmlFor="toggle-all">
+                    Mark all as complete
+                </label>
+              </>
+            )
+            : null}
           <TodoList
             todos={this.todosFilter(todos, sortBy)}
             onDelete={this.handleDelete}
