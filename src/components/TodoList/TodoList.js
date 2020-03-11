@@ -4,28 +4,30 @@ import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList = (props) => {
-  const { visibleTodos, deleteTodo, checkedTodo } = props;
+  const { todos, deleteTodo, checkedTodo } = props;
 
   return (
-    <ul className="todo-list">
-      {visibleTodos.map((todo) => {
-        const { id } = todo;
+    <>
+      <ul className="todo-list">
+        {todos.map((todo) => {
+          const { id } = todo;
 
-        return (
-          <TodoItem
-            todo={todo}
-            key={id}
-            onTodoDelete={deleteTodo}
-            onCheckboxChecked={checkedTodo}
-          />
-        );
-      })}
-    </ul>
+          return (
+            <TodoItem
+              todo={todo}
+              key={id}
+              onTodoDelete={deleteTodo}
+              onCheckboxChecked={checked => checkedTodo(id, checked)}
+            />
+          );
+        })}
+      </ul>
+    </>
   );
 };
 
 TodoList.propTypes = {
-  visibleTodos: PropTypes.arrayOf(
+  todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([
         PropTypes.string,

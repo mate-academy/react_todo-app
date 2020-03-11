@@ -1,42 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export class TodoItem extends React.Component {
-  render() {
-    const {
-      todo: {
-        id,
-        title,
-        completed,
-      },
-      onCheckboxChecked,
-      onTodoDelete,
-    } = this.props;
+export const TodoItem = (props) => {
+  const {
+    todo: {
+      id,
+      title,
+      completed,
+    },
+    onCheckboxChecked,
+    onTodoDelete,
+  } = props;
 
-    return (
-      <li
-        className={completed ? 'completed' : ''}
-      >
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            id={title}
-            onChange={this.checkboxHandler}
-            onClick={() => onCheckboxChecked(id)}
-          />
-          <label htmlFor={title}>{title}</label>
-          <button
-            type="button"
-            className="destroy"
-            onClick={() => onTodoDelete(id)}
-          />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-    );
-  }
-}
+  return (
+    <li
+      className={completed ? 'completed' : ''}
+    >
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          id={id}
+          onChange={event => onCheckboxChecked(event.target.checked)}
+          checked={completed}
+        />
+        <label
+          htmlFor={id}
+          className={completed ? 'checked' : ''}
+        >
+          {title}
+        </label>
+        <button
+          type="button"
+          className="destroy"
+          onClick={() => onTodoDelete(id)}
+        />
+      </div>
+      <input type="text" className="edit" />
+    </li>
+  );
+};
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({

@@ -8,7 +8,7 @@ import {
 
 class App extends React.Component {
   state = {
-    visibleTodos: [],
+    todos: [],
     filterButtonsChosed: filterButtons.all,
   };
 
@@ -16,44 +16,28 @@ class App extends React.Component {
     const storedTodos = localStorage.getItem('todos');
 
     if (storedTodos) {
-      const visibleTodos = JSON.parse(storedTodos);
+      const todos = JSON.parse(storedTodos);
 
-      this.setState({ visibleTodos });
+      this.setState({ todos });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.visibleTodos !== this.state.visibleTodos) {
-      localStorage.setItem('todos', JSON.stringify(this.state.visibleTodos));
+    if (prevState.todos !== this.state.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
     }
   }
 
   addTodo = (todo) => {
     this.setState(prevState => ({
-      visibleTodos: [...prevState.visibleTodos, todo],
+      todos: [...prevState.todos, todo],
     }));
   };
-
-  checkedTodo = (id) => {
-    this.setState(prevState => ({
-      visibleTodos: prevState.visibleTodos
-        .map((todo) => {
-          if (todo.id === id) {
-            return {
-              ...todo,
-              completed: !todo.completed,
-            };
-          }
-
-          return todo;
-        }),
-    }));
-  }
 
   deleteTodo = (id) => {
     this.setState(prevState => ({
 
-      visibleTodos: prevState.visibleTodos
+      todos: prevState.todos
         .filter(todo => todo.id !== id),
     }));
   };
@@ -65,27 +49,43 @@ class App extends React.Component {
   }
 
   filterTodos = () => {
-    const { filterButtonsChosed, visibleTodos } = this.state;
+    const { filterButtonsChosed, todos } = this.state;
 
     switch (filterButtonsChosed) {
       case filterButtons.active:
-        return visibleTodos.filter(todo => !todo.completed);
+        return todos.filter(todo => !todo.completed);
       case filterButtons.completed:
-        return visibleTodos.filter(todo => todo.completed);
+        return todos.filter(todo => todo.completed);
       case filterButtons.all:
-        return [...visibleTodos];
+        return [...todos];
       default:
-        return [...visibleTodos];
+        return [...todos];
     }
   }
 
+  checkedTodo = (id, checked) => {
+    this.setState(prevState => ({
+      todos: prevState.todos
+        .map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              completed: checked,
+            };
+          }
+
+          return todo;
+        }),
+    }));
+  }
+
   toggleAll = () => {
-    const { visibleTodos } = this.state;
+    const { todos } = this.state;
 
     this.setState((prevState) => {
-      if (visibleTodos.every(todo => todo.completed)) {
+      if (todos.every(todo => todo.completed)) {
         return {
-          visibleTodos: prevState.visibleTodos.map(todo => ({
+          todos: prevState.todos.map(todo => ({
             ...todo,
             completed: false,
           })),
@@ -93,7 +93,7 @@ class App extends React.Component {
       }
 
       return {
-        visibleTodos: prevState.visibleTodos.map(todo => ({
+        todos: prevState.todos.map(todo => ({
           ...todo,
           completed: true,
         })),
@@ -103,13 +103,14 @@ class App extends React.Component {
 
   clearAllCompleted = () => {
     this.setState(prevState => ({
-      visibleTodos: prevState.visibleTodos.filter(todo => !todo.completed),
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
   }
 
   render() {
-    const { filterButtonsChosed } = this.state;
+    const { todos, filterButtonsChosed } = this.state;
     const filteredTodos = this.filterTodos();
+    const checkComplete = todos.every(todo => todo.completed);
 
     return (
       <section className="todoapp">
@@ -120,24 +121,24 @@ class App extends React.Component {
         </header>
 
         <section className="main">
-          <TodoList
-            visibleTodos={filteredTodos}
-            deleteTodo={this.deleteTodo}
-            checkedTodo={this.checkedTodo}
-          />
           <input
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
             onChange={this.toggleAll}
+            checked={checkComplete}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
+          <TodoList
+            todos={filteredTodos}
+            deleteTodo={this.deleteTodo}
+            checkedTodo={this.checkedTodo}
+          />
         </section>
         <TodosFilter
           filterButtonsChosed={filterButtonsChosed}
-          todos={this.state.visibleTodos}
+          todos={this.state.todos}
           filterHandler={this.filterHandler}
-          onFilters={this.filteredTodos}
           onClearCompleted={this.clearAllCompleted}
         />
       </section>
