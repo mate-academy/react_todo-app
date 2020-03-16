@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 export const TodoItem = (props) => {
   const {
@@ -14,7 +15,7 @@ export const TodoItem = (props) => {
 
   return (
     <li
-      className={completed ? 'completed' : ''}
+      className={cx('', { completed })}
     >
       <div className="view">
         <input
@@ -26,7 +27,7 @@ export const TodoItem = (props) => {
         />
         <label
           htmlFor={id}
-          className={completed ? 'checked' : ''}
+          className={cx('', { completed })}
         >
           {title}
         </label>

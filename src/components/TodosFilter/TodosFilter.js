@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 export const filterButtons = {
   all: 'All',
@@ -30,9 +31,7 @@ export const TodosFilter = (props) => {
             <li key={filterButton}>
               <a
                 href="#/"
-                className={
-                  filterButtonsChosed === filterButton ? 'selected' : ''
-                }
+                className={cx('', { selected: filterButtonsChosed })}
                 onClick={() => filterHandler(filterButton)}
               >
                 {filterButton}

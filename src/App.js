@@ -108,6 +108,7 @@ class App extends React.Component {
   }
 
   render() {
+    // console.log(state);
     const { todos, filterButtonsChosed } = this.state;
     const filteredTodos = this.filterTodos();
     const checkComplete = todos.every(todo => todo.completed);
@@ -117,9 +118,7 @@ class App extends React.Component {
         <header className="header">
           <h1>todos</h1>
           <NewTodo addTodo={this.addTodo} />
-
         </header>
-
         <section className="main">
           <input
             type="checkbox"
