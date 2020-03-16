@@ -3,17 +3,16 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 export const Todo = ({ id, title, completed, checkedTodo, deletedTodo }) => (
-  <li key={id} className={cn({ completed })}>
+  <li className={cn({ completed })} key={id}>
     <div className="view">
       <input
         type="checkbox"
         className="toggle"
         checked={completed}
-        onClick={() => checkedTodo(id)}
+        onChange={() => checkedTodo(id, completed)}
       />
       <label
         htmlFor={`todo-${id}`}
-
       >
         {title}
       </label>

@@ -17,7 +17,7 @@ export const TodoList = ({ todos, deletedTodo, toggleAll, checkedTodo }) => (
         <Todo
           id={todo.id}
           title={todo.title}
-          completed={todo.comleted}
+          completed={todo.completed}
           checkedTodo={checkedTodo}
           deletedTodo={deletedTodo}
         />
@@ -31,7 +31,7 @@ TodoList.propTypes = {
     PropTypes.shape({
       title: PropTypes.string,
       id: PropTypes.string,
-      comleted: PropTypes.bool,
+      completed: PropTypes.bool,
     }),
   ).isRequired,
   deletedTodo: PropTypes.func.isRequired,

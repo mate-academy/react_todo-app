@@ -22,7 +22,7 @@ export class App extends React.Component {
 
       case 'Active': {
         this.setState(prevState => ({
-          filteredTodos: prevState.todos.filter(todo => !todo.comleted),
+          filteredTodos: prevState.todos.filter(todo => !todo.completed),
           filterState: 'Active',
         }));
         break;
@@ -30,7 +30,7 @@ export class App extends React.Component {
 
       case 'Completed': {
         this.setState(prevState => ({
-          filteredTodos: prevState.todos.filter(todo => todo.comleted),
+          filteredTodos: prevState.todos.filter(todo => todo.completed),
           filterState: 'Completed',
         }));
         break;
@@ -50,17 +50,24 @@ export class App extends React.Component {
 
   clearCompleted = (e) => {
     this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => !todo.comleted),
+      todos: prevState.todos.filter(todo => !todo.completed),
     }));
     this.filter(this.state.filterState);
   }
 
-  checkedTodo = (id) => {
-    const { todos } = this.state;
-
-    todos[id].comleted = !todos[id].comleted;
+  checkedTodo = (TodoId, TodoCompleted) => {
     this.setState(prevState => ({
-      todos: prevState.todos,
+      todos: prevState.todos.map((item) => {
+        if (item.id === (Number(TodoId))) {
+          return {
+            ...item,
+            completed: !TodoCompleted,
+          };
+        }
+
+        return item;
+      }),
+
     }));
     this.filter(this.state.filterState);
   }
@@ -79,7 +86,7 @@ export class App extends React.Component {
       todos.push({
         id: newTodoId,
         title,
-        comleted: false,
+        completed: false,
       });
 
       this.setState({
@@ -101,7 +108,7 @@ export class App extends React.Component {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        comleted: !todo.comleted,
+        completed: !todo.completed,
       })),
     }));
     this.filter(this.state.filterState);
@@ -109,7 +116,7 @@ export class App extends React.Component {
 
   render() {
     const { title, filteredTodos, filterState, todos } = this.state;
-    const activeTodos = todos.filter(todo => !todo.comleted);
+    const activeTodos = todos.filter(todo => !todo.completed);
 
     return (
       <section className="todoapp">
