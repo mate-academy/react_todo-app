@@ -12,7 +12,7 @@ export class App extends Component {
   componentDidMount() {
     const savedTodos = localStorage.getItem('todos');
 
-    if (savedTodos.length > 0) {
+    if (savedTodos) {
       const todos = JSON.parse(savedTodos);
 
       this.setState({
