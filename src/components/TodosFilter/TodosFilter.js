@@ -30,8 +30,10 @@ export const TodosFilter = (props) => {
           Object.values(filterButtons).map(filterButton => (
             <li key={filterButton}>
               <a
-                href="#/"
-                className={cx('', { selected: filterButtonsChosed })}
+                href={`#/${filterButtonsChosed}`}
+                className={
+                  cx('', { selected: filterButtonsChosed === filterButton })
+                }
                 onClick={() => filterHandler(filterButton)}
               >
                 {filterButton}
