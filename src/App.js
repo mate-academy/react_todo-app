@@ -79,7 +79,7 @@ class App extends React.Component {
     }));
   }
 
-  toggleAll = () => {
+  toggleAll = (event) => {
     const { todos } = this.state;
 
     this.setState((prevState) => {
@@ -108,7 +108,6 @@ class App extends React.Component {
   }
 
   render() {
-    // console.log(state);
     const { todos, filterButtonsChosed } = this.state;
     const filteredTodos = this.filterTodos();
     const checkComplete = todos.every(todo => todo.completed);
