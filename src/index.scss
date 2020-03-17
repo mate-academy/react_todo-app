@@ -266,7 +266,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   color: #777;
   padding: 10px 15px;
   height: 20px;
@@ -367,14 +367,15 @@ html .clear-completed:active {
 .error {
   position: absolute;
   top: -35px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #cc9a9a;
+  left: 32%;
+  transform: translateX(-30%);
+  color: #cc9a9e;
   font-size: 15px;
   opacity: 0;
   &--detected {
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
+    animation: movingError 2s infinite ;
   }
 }
 
@@ -382,6 +383,16 @@ html .clear-completed:active {
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox
 */
+
+@keyframes movingError {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.3);
+  }
+}
+
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   .toggle-all,
   .todo-list li .toggle {
