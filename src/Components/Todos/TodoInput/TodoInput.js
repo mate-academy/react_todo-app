@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class TodoInput extends React.Component {
   state = {
@@ -10,14 +10,17 @@ class TodoInput extends React.Component {
     const { input } = this.state;
 
     if (event.key === 'Enter' && input) {
+      event.preventDefault();
       this.props.addTodo(input);
       this.setState({ input: '' });
     }
   }
 
   handleInputChange = (event) => {
+    const controlledInput = (event.target.value).trim();
+
     this.setState({
-      input: event.target.value,
+      input: controlledInput,
     });
   }
 
@@ -40,5 +43,9 @@ class TodoInput extends React.Component {
     );
   }
 }
+
+TodoInput.propTypes = {
+  addTodo: PropTypes.func.isRequired,
+};
 
 export default TodoInput;
