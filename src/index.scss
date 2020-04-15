@@ -364,21 +364,6 @@ html .clear-completed:active {
   text-decoration: underline;
 }
 
-.error {
-  position: absolute;
-  top: -35px;
-  left: 32%;
-  transform: translateX(-30%);
-  color: #cc9a9e;
-  font-size: 15px;
-  opacity: 0;
-  &--detected {
-    opacity: 1;
-    transition: opacity 0.2s ease-in-out;
-    animation: movingError 2s infinite ;
-  }
-}
-
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox

@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 
 export class InputTodo extends Component {
   state = {
     title: '',
-    error: false,
   }
 
   handleChange = (event) => {
@@ -19,14 +17,6 @@ export class InputTodo extends Component {
     event.preventDefault();
     const { title } = this.state;
 
-    if (this.state.title.length < 7) {
-      this.setState({
-        error: true,
-      });
-
-      return;
-    }
-
     const todo = {
       title: title.trim(),
       id: uuidv4(),
@@ -37,12 +27,11 @@ export class InputTodo extends Component {
 
     this.setState({
       title: '',
-      error: false,
     });
   }
 
   render() {
-    const { title, error } = this.state;
+    const { title } = this.state;
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -53,12 +42,6 @@ export class InputTodo extends Component {
           onChange={this.handleChange}
           value={title}
         />
-        <p className={cn('error', {
-          'error--detected': error,
-        })}
-        >
-          Enter todo length more 6 char
-        </p>
       </form>
     );
   }
