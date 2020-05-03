@@ -97,6 +97,8 @@ class App extends React.Component {
 
         this.setState(({ currentId: newCurrentId }));
       }
+
+      this.filterTodos();
     });
   }
 
@@ -211,16 +213,16 @@ class App extends React.Component {
           destroyTodo={this.destroyTodo}
           changeTodoValue={this.changeTodoValue}
         />
-        {this.state.todos.length >= 1
-          && (
-            <Footer
-              changePage={this.changePage}
-              todos={todos}
-              activeList={activeList}
-              clearCompletedTodo={this.clearCompletedTodo}
-            />
-          )
-        }
+          {this.state.todos.length >= 1
+            &&
+              <Footer
+                changePage={this.changePage}
+                todos={todos}
+                activeList={activeList}
+                clearCompletedTodo={this.clearCompletedTodo}
+              />
+
+          }
       </section>
     );
   }
