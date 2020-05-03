@@ -84,7 +84,9 @@ class App extends React.Component {
 
     localStorage.removeItem(`${todoId}`);
 
-    this.setState(() => ({ todos: destroyedTodo }), () => {
+    this.setState(() => ({ todos: destroyedTodo }))
+
+    setTimeout(() => {
       localStorage.clear();
       this.state.todos.forEach((todo, i) => (
         localStorage.setItem(`${i + 1}`, JSON.stringify({ ...todo }))
@@ -99,7 +101,7 @@ class App extends React.Component {
       }
 
       this.filterTodos();
-    });
+    }, 0)
   }
 
   changePage = (changeTo) => {
@@ -191,7 +193,7 @@ class App extends React.Component {
       errorIncorrectlyInput, activeList, todos, selectAll, firstStart,
     } = this.state;
     const visibleList = this.choosePage(activeList);
-
+    // localStorage.clear()
     if (firstStart) {
       this.valueOfLocalStorage();
       this.setState(({ firstStart: false }));
@@ -213,16 +215,16 @@ class App extends React.Component {
           destroyTodo={this.destroyTodo}
           changeTodoValue={this.changeTodoValue}
         />
-          {this.state.todos.length >= 1
-            &&
-              <Footer
-                changePage={this.changePage}
-                todos={todos}
-                activeList={activeList}
-                clearCompletedTodo={this.clearCompletedTodo}
-              />
+        {this.state.todos.length >= 1
+          &&
+          <Footer
+            changePage={this.changePage}
+            todos={todos}
+            activeList={activeList}
+            clearCompletedTodo={this.clearCompletedTodo}
+          />
 
-          }
+        }
       </section>
     );
   }
