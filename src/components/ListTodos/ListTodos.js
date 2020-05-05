@@ -18,31 +18,68 @@ class ListTodos extends React.Component {
     this.setState({ editValue: e.target.value });
   }
 
+  lostFocus = () => {
+    const { changeTodoValue } = this.props;
+
+    this.setState((state) => {
+      const editingId = '';
+      const editValue = '';
+      let errorAddNewValue = false;
+
+      if (state.editValue.length < 3) {
+        errorAddNewValue = true;
+
+        return {
+          errorAddNewValue,
+        };
+      }
+
+      changeTodoValue(state.editingId, state.editValue);
+
+      return {
+        errorAddNewValue,
+        editingId,
+        editValue,
+      };
+    });
+  }
+
   saveOrCancel = (e) => {
     const { changeTodoValue } = this.props;
-    const { editingId, editValue } = this.state;
+    const currentKey = e.key;
+    this.setState((state) => {
+      const errorAddNewValue = false;
+      const editingId = '';
+      const editValue = '';
 
-    if (editValue.length >= 3) {
-      this.setState(({ errorAddNewValue: false }));
-    }
+      if (currentKey === 'Enter' && state.editValue.length >= 3) {
+        changeTodoValue(state.editingId, state.editValue);
 
-    if (e.key === 'Enter' && editValue.length >= 3) {
-      changeTodoValue(editingId, editValue);
-      this.setState(() => ({
-        editingId: '',
-        editValue: '',
-      }));
-    } else if (e.key === 'Enter' && editValue.length < 3) {
-      this.setState(({ errorAddNewValue: true }));
-    }
+        return {
+          editingId, editValue, errorAddNewValue: false,
+        };
+      }
 
-    if (e.key === 'Escape') {
-      this.setState(({
-        editingId: '',
-        editValue: '',
-        errorAddNewValue: false,
-      }));
-    }
+      if (currentKey === 'Enter' && state.editValue.length < 3) {
+        return {
+          errorAddNewValue: true,
+        };
+      }
+
+      if (currentKey === 'Escape') {
+        return {
+          editingId: '',
+          editValue: '',
+          errorAddNewValue,
+        };
+      }
+
+      if (state.editValue.length >= 3) {
+        return {
+          errorAddNewValue,
+        };
+      }
+    });
   }
 
   render() {
@@ -88,6 +125,7 @@ class ListTodos extends React.Component {
                 value={editValue}
                 onChange={this.changeTodoValue}
                 onKeyDown={this.saveOrCancel}
+                onBlur={this.lostFocus}
               />
             </li>
           );
