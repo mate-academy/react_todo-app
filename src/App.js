@@ -7,32 +7,7 @@ class App extends React.Component {
   state = {
     activePage: 'All',
     id: 0,
-    ListofTodo: [
-      {
-        id: 123,
-        text: 'newTodoText',
-        elementState: {
-          completed: true,
-          editing: false,
-        },
-      },
-      {
-        id: 124,
-        text: 'some text',
-        elementState: {
-          completed: false,
-          editing: false,
-        },
-      },
-      {
-        id: 125,
-        text: 'another text',
-        elementState: {
-          completed: false,
-          editing: false,
-        },
-      },
-    ],
+    ListofTodo: [],
   }
 
   handleSubmit = (event, newTodoText) => {
