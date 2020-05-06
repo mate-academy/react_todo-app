@@ -9,8 +9,9 @@ class AddForm extends React.Component {
 
   writeNewTodo = (e) => {
     const { errorAddNewTodo, newTodoValue } = this.state;
+    const letter = e.target.value.replace(/^ /, '');
 
-    this.setState({ newTodoValue: e.target.value });
+    this.setState({ newTodoValue: letter });
 
     if (newTodoValue.length >= 2 && errorAddNewTodo) {
       this.setState({ errorAddNewTodo: false });

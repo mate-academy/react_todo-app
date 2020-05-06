@@ -15,7 +15,9 @@ class ListTodos extends React.Component {
   }
 
   changeTodoValue = (e) => {
-    this.setState({ editValue: e.target.value });
+    const letter = e.target.value.replace(/^ /, '');
+
+    this.setState({ editValue: letter });
   }
 
   lostFocus = () => {
@@ -47,6 +49,7 @@ class ListTodos extends React.Component {
   saveOrCancel = (e) => {
     const { changeTodoValue } = this.props;
     const currentKey = e.key;
+
     this.setState((state) => {
       const errorAddNewValue = false;
       const editingId = '';
