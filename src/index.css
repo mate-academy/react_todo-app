@@ -328,6 +328,10 @@ html .clear-completed:active {
   cursor: pointer;
 }
 
+.activeClear {
+  display: none;
+}
+
 .clear-completed:hover {
   text-decoration: underline;
 }
@@ -376,4 +380,13 @@ html .clear-completed:active {
   .filters {
     bottom: 10px;
   }
+}
+
+.inputError {
+  background-color: #d69fa1;
+}
+
+.activeTodo {
+  color: rgb(175, 170, 170);
+  text-decoration: line-through;
 }
