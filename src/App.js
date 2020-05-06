@@ -10,6 +10,18 @@ class App extends React.Component {
     ListofTodo: [],
   }
 
+  componentDidMount() {
+    if (localStorage.getItem('list') !== null) {
+      const s = JSON.parse(localStorage.getItem('list'));
+
+      this.setState(s);
+    }
+  }
+
+  componentDidUpdate = () => {
+    localStorage.setItem('list', JSON.stringify(this.state));
+  }
+
   handleSubmit = (event, newTodoText) => {
     event.preventDefault();
 
@@ -193,7 +205,7 @@ class App extends React.Component {
             className="toggle-all"
             checked={ListofTodo
               .every(todo => todo.elementState.completed === true)}
-            onClick={this.handleToggleAll}
+            onChange={this.handleToggleAll}
           />
           <label
             hidden={ListofTodo.length === 0}

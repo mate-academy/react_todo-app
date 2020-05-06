@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
-class TodoItem extends React.Component {
+export class TodoItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -26,17 +25,13 @@ class TodoItem extends React.Component {
     } = this.props;
 
     return (
-      <li
-        className={classNames(todo.elementState)}
-        key={todo.id}
-      >
+      <div>
         {todo.elementState.editing === false
           ? (
             <div className="View">
               <input
-                defaultChecked={false}
                 checked={todo.elementState.completed}
-                onClick={() => handleCheckboxChange(todo.id)}
+                onChange={() => handleCheckboxChange(todo.id)}
                 type="checkbox"
                 className="toggle"
                 id={`todo-${todo.id}`}
@@ -66,7 +61,7 @@ class TodoItem extends React.Component {
             />
           )
         }
-      </li>
+      </div>
     );
   }
 }
@@ -86,5 +81,3 @@ TodoItem.propTypes = {
   handleClickDestroy: PropTypes.func.isRequired,
   handleLossFocus: PropTypes.func.isRequired,
 };
-
-export default TodoItem;
