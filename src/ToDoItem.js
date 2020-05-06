@@ -22,19 +22,17 @@ const ToDoItem = (props) => {
   }
 
   return (
-    <li key={id} className={liClassName}>
+    <li key={id} className={liClassName} id={id}>
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           checked={!isActive}
-          list-id={id}
           id={`todo-${id}`}
           onChange={handleIsActiveChange}
         />
         <label
           onDoubleClick={handleItemDoubleClick}
-          list-id={id}
           htmlFor={`todo-${id}`}
         >
           {description}
@@ -42,13 +40,11 @@ const ToDoItem = (props) => {
         <button
           type="button"
           className="destroy"
-          list-id={id}
           onClick={deleteToDo}
         />
       </div>
       <input
         value={description}
-        list-id={id}
         type="text"
         className="edit"
         onChange={handleEditFieldChange}

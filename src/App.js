@@ -8,9 +8,10 @@ class App extends React.Component {
     typeOfFilter: 'all',
     isAllButtonActive: true,
     isActiveButtonActive: false,
-    isComplitedButtonActiv: false,
+    isComplitedButtonActive: false,
     isToggleAll: true,
-    FieldValue: '',
+    fieldValue: '',
+    isAnyEditedField: false,
   }
 
   componentDidMount() {
@@ -19,14 +20,16 @@ class App extends React.Component {
     }
 
     const initState = JSON.parse(localStorage.getItem('ToDoAppData'));
-    const { todos,
+    const {
+      todos,
       nextId,
       typeOfFilter,
       isAllButtonActive,
       isActiveButtonActive,
       isComplitedButtonActiv,
       isToggleAll,
-      FieldValue } = initState;
+      fieldValue,
+    } = initState;
 
     this.setState({
       todos,
@@ -36,7 +39,7 @@ class App extends React.Component {
       isActiveButtonActive,
       isComplitedButtonActiv,
       isToggleAll,
-      FieldValue,
+      fieldValue,
     });
   }
 
@@ -45,7 +48,12 @@ class App extends React.Component {
   }
 
   handleIsActiveChange = (event) => {
-    const id = event.target.getAttribute('list-id');
+    // const { todos } = this.state;
+    //   this.setState(prevState => ({
+    //     isToggleAll: !prevState.isToggleAll,
+    //   }));
+    // }
+    const { id } = event.target.parentElement.parentElement;
     const indexOfElement = this.state.todos.findIndex(item => (
       item.id === parseInt(id, 10)));
 
@@ -53,28 +61,34 @@ class App extends React.Component {
       const tempTodos = [...prevState.todos];
 
       tempTodos[indexOfElement].isActive = !tempTodos[indexOfElement].isActive;
+      const trigger = (
+        tempTodos.length === tempTodos.filter(item => item.isActive).length
+      );
 
       return (
         {
           todos: [...tempTodos],
+          isToggleAll: trigger,
         }
+
       );
     });
   }
 
   addNewToDo = (event) => {
-    if (event.key === 'Enter'
-      && this.state.FieldValue.trim() !== '') {
+    if (this.state.fieldValue.trim() !== '') {
       this.setState(prevState => ({
-        todos: [...prevState.todos,
+        todos: [
+          ...prevState.todos,
           {
-            description: prevState.FieldValue,
+            description: prevState.fieldValue,
             isActive: true,
             id: prevState.nextId,
             isEdited: false,
-          }],
+          },
+        ],
         nextId: prevState.nextId + 1,
-        FieldValue: '',
+        fieldValue: '',
       }));
     }
   }
@@ -82,11 +96,11 @@ class App extends React.Component {
   changeAddField = (event) => {
     const { value } = event.target;
 
-    this.setState({ FieldValue: value });
+    this.setState({ fieldValue: value });
   }
 
   deleteToDo = (event) => {
-    const id = event.target.getAttribute('list-id');
+    const { id } = event.target.parentElement.parentElement;
     const indexOfDeletedElement = this
       .state
       .todos
@@ -116,8 +130,7 @@ class App extends React.Component {
       typeOfFilter: 'all',
       isAllButtonActive: true,
       isActiveButtonActive: false,
-      isComplitedButtonActiv: false,
-
+      isComplitedButtonActive: false,
     });
   }
 
@@ -126,8 +139,7 @@ class App extends React.Component {
       typeOfFilter: 'active',
       isAllButtonActive: false,
       isActiveButtonActive: true,
-      isComplitedButtonActiv: false,
-
+      isComplitedButtonActive: false,
     });
   }
 
@@ -136,26 +148,31 @@ class App extends React.Component {
       typeOfFilter: 'completed',
       isAllButtonActive: false,
       isActiveButtonActive: false,
-      isComplitedButtonActiv: true,
-
+      isComplitedButtonActive: true,
     });
   }
 
   handleToggleAllChange = () => {
+    const tempIsToggleAll = this.state.isToggleAll;
+
     this.setState(prevState => ({
-      isToggleAll: !prevState.isToggleAll,
       todos: prevState.todos.map((item) => {
         const tempItem = { ...item };
 
-        tempItem.isActive = !prevState.isToggleAll;
+        tempItem.isActive = !tempIsToggleAll;
 
         return tempItem;
       }),
+      isToggleAll: !tempIsToggleAll,
     }));
   }
 
   handleItemDoubleClick = (event) => {
-    const id = event.target.getAttribute('list-id');
+    if (this.state.isAnyEditedField) {
+      return;
+    }
+
+    const { id } = event.target.parentElement.parentElement;
     const indexOfElement = this
       .state
       .todos
@@ -169,6 +186,7 @@ class App extends React.Component {
       return (
         {
           todos: [...tempTodos],
+          isAnyEditedField: true,
         }
       );
     });
@@ -183,7 +201,7 @@ class App extends React.Component {
       return;
     }
 
-    const id = event.target.getAttribute('list-id');
+    const { id } = event.target.parentElement;
     const indexOfElement = this
       .state
       .todos
@@ -197,13 +215,14 @@ class App extends React.Component {
       return (
         {
           todos: [...tempTodos],
+          isAnyEditedField: false,
         }
       );
     });
   }
 
   handleEditFieldChange = (event) => {
-    const id = event.target.getAttribute('list-id');
+    const { id } = event.target.parentElement;
     const indexOfElement = this
       .state
       .todos
@@ -240,24 +259,26 @@ class App extends React.Component {
       .todos
       .filter(item => item.isActive).length;
 
-    const { isActiveButtonActive,
-      FieldValue,
+    const {
+      isActiveButtonActive,
+      fieldValue,
       isAllButtonActive,
-      isComplitedButtonActiv,
-      isToggleAll } = this.state;
+      isComplitedButtonActive,
+      isToggleAll,
+    } = this.state;
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onKeyDown={this.addNewToDo}
-            onChange={this.changeAddField}
-            value={FieldValue}
-          />
+          <form onSubmit={this.addNewToDo}>
+            <input
+              className="new-todo"
+              placeholder="What needs to be done?"
+              onChange={this.changeAddField}
+              value={fieldValue}
+            />
+          </form>
         </header>
 
         <section className="main">
@@ -277,7 +298,6 @@ class App extends React.Component {
             handleItemDoubleClick={this.handleItemDoubleClick}
             handleEditEnter={this.handleEditEnter}
             handleEditFieldChange={this.handleEditFieldChange}
-
           />
         </section>
 
@@ -312,7 +332,7 @@ class App extends React.Component {
             <li>
               <a
                 href="#/completed"
-                className={isComplitedButtonActiv ? 'selected' : ''}
+                className={isComplitedButtonActive ? 'selected' : ''}
                 onClick={this.setFilterToCompleted}
               >
                 Completed

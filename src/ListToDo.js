@@ -3,17 +3,20 @@ import PropTypes from 'prop-types';
 import ToDoItem from './ToDoItem';
 
 const ListToDo = (props) => {
-  const { todos,
+  const {
+    todos,
     handleEditFieldChange,
     deleteToDo,
     handleIsActiveChange,
     handleItemDoubleClick,
-    handleEditEnter } = props;
+    handleEditEnter,
+  } = props;
 
   return (
     <ul className="todo-list">
       {todos.map(todo => (
         <ToDoItem
+          key={todo.id}
           todo={todo}
           handleIsActiveChange={handleIsActiveChange}
           deleteToDo={deleteToDo}
