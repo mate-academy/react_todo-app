@@ -18,11 +18,9 @@ export class TodoItem extends Component {
     const { id, setTodoValue } = this.props;
     const { inputTitle } = this.state;
 
-    if (inputTitle.trim().length === 0) {
-      return;
+    if (/[A-Za-z]/g.test(inputTitle)) {
+      setTodoValue(id, 'title', inputTitle.trim());
     }
-
-    setTodoValue(id, 'title', inputTitle.trim());
   }
 
   render() {

@@ -20,12 +20,10 @@ export class Header extends Component {
     const { addNewTodo } = this.props;
     const { title } = this.state;
 
-    if (title === '') {
-      return;
+    if (/[A-Za-z]/g.test(title)) {
+      addNewTodo(title);
+      this.reset();
     }
-
-    addNewTodo(title);
-    this.reset();
   }
 
   render() {
