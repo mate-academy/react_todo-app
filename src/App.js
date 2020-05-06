@@ -50,10 +50,11 @@ class App extends React.Component {
   checkerOfToggleAllState = () => {
     this.setState((prevState) => {
       const trigger = (
-        prevState.todos.length === prevState
+        (prevState.todos.length === prevState
           .todos
           .filter(item => !item.isActive)
-          .length);
+          .length)
+        && prevState.todos.length !== 0);
 
       return ({
         isToggleAll: trigger,
@@ -172,6 +173,7 @@ class App extends React.Component {
       }),
       isToggleAll: !tempIsToggleAll,
     }));
+    this.checkerOfToggleAllState();
   }
 
   handleItemDoubleClick = (id) => {
@@ -210,7 +212,7 @@ class App extends React.Component {
     const indexOfElement = this
       .state
       .todos
-      .findIndex(item => (item.id === parseInt(id, 10)));
+      .findIndex(item => (item.id === id));
 
     this.setState((prevState) => {
       const tempTodos = [...prevState.todos];
@@ -226,12 +228,11 @@ class App extends React.Component {
     });
   }
 
-  handleEditFieldChange = (event) => {
-    const { id } = event.target.parentElement;
+  handleEditFieldChange = (event, id) => {
     const indexOfElement = this
       .state
       .todos
-      .findIndex(item => (item.id === parseInt(id, 10)));
+      .findIndex(item => (item.id === id));
     const { value } = event.target;
 
     this.setState((prevState) => {
@@ -242,7 +243,6 @@ class App extends React.Component {
       return (
         {
           todos: [...tempTodos],
-
         }
       );
     });

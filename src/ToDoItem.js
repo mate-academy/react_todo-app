@@ -47,7 +47,7 @@ const ToDoItem = (props) => {
         value={description}
         type="text"
         className="edit"
-        onChange={handleEditFieldChange}
+        onChange={event => handleEditFieldChange(event, id)}
         onKeyDown={event => (handleEditEnter(event, id))}
         onBlur={event => (handleEditEnter(event, id))}
       />
