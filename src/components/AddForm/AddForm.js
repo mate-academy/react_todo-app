@@ -9,7 +9,7 @@ class AddForm extends React.Component {
 
   writeNewTodo = (e) => {
     const { errorAddNewTodo, newTodoValue } = this.state;
-    const letter = e.target.value.replace(/^ /, '');
+    const letter = e.target.value.replace(/^\s+/, '');
 
     this.setState({ newTodoValue: letter });
 
