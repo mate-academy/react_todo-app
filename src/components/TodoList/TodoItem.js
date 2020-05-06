@@ -12,13 +12,34 @@ export class TodoItem extends Component {
     this.setState({ inputTitle: target.value });
   }
 
+  onEdit = (id) => {
+    const { setEditingId } = this.props;
+
+    document.addEventListener('keyup', this.cancelChanges)
+
+    setEditingId(id)
+  }
+
+  cancelChanges =(e) => {
+    const { title, setEditingId } = this.props;
+
+    if (e.code !== 'Escape') {
+      return;
+    }
+
+    this.setState({inputTitle: title })
+    setEditingId();
+
+    document.removeEventListener('keyup', this.cancelChanges);
+  }
+
   sendChanges = (e) => {
     e.preventDefault();
 
-    const { id, setTodoValue } = this.props;
+    const { id, setTodoValue, pattern } = this.props;
     const { inputTitle } = this.state;
 
-    if (/[A-Za-z]/g.test(inputTitle)) {
+    if (pattern.test(inputTitle)) {
       setTodoValue(id, 'title', inputTitle.trim());
     }
   }
@@ -31,7 +52,6 @@ export class TodoItem extends Component {
       toggleTodoStatus,
       editingTodoId,
       deleteTodo,
-      setEditingId,
     } = this.props;
 
     const { inputTitle } = this.state;
@@ -54,7 +74,7 @@ export class TodoItem extends Component {
 
             <label
               htmlFor={`edit-${id}`}
-              onDoubleClick={() => setEditingId(id)}
+              onDoubleClick={() => this.onEdit(id)}
             >
               {title}
             </label>

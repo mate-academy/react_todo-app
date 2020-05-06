@@ -17,10 +17,10 @@ export class Header extends Component {
   sendTodo = (e) => {
     e.preventDefault();
 
-    const { addNewTodo } = this.props;
+    const { addNewTodo, pattern } = this.props;
     const { title } = this.state;
 
-    if (/[A-Za-z]/g.test(title)) {
+    if (pattern.test(title)) {
       addNewTodo(title);
       this.reset();
     }

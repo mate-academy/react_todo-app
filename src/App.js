@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { TodoList } from './components/TodoList';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
 const todosFromServer = JSON.parse(localStorage.getItem('todos')) || [];
+const pattern = /^[A-Za-z0-9\s]+$/giu;
 
-class App extends Component {
+class App extends PureComponent {
   state = {
     todoList: [...todosFromServer],
     editingTodoId: 0,
@@ -13,8 +14,15 @@ class App extends Component {
     selectedAll: false,
   }
 
+  componentDidMount() {
+    this.checkSelectedAll();
+  }
+
   componentDidUpdate() {
-    localStorage.setItem('todos', JSON.stringify([...this.state.todoList]));
+    const { todoList } = this.state;
+
+    localStorage.setItem('todos', JSON.stringify([...todoList]));
+    this.checkSelectedAll();
   }
 
   addNewTodo = (title) => {
@@ -42,7 +50,9 @@ class App extends Component {
           : todo
       )),
       selectedAll: false,
-    }));
+    }), this.checkSelectedAll());
+
+    this.checkSelectedAll();
   };
 
   toggleTodoAllStatus = ({ target }) => {
@@ -54,6 +64,13 @@ class App extends Component {
       })),
       selectedAll: !state.selectedAll,
     }));
+  }
+
+  checkSelectedAll = () => {
+    const { todoList } = this.state;
+    const activeTodos = todoList.filter(todo => todo.completed).length
+
+    this.setState(state => ({ selectedAll: activeTodos === todoList.length }))
   }
 
   setEditingId =(id) => {
@@ -118,7 +135,7 @@ class App extends Component {
 
     return (
       <section className="todoapp">
-        <Header addNewTodo={this.addNewTodo} />
+        <Header addNewTodo={this.addNewTodo} pattern={pattern} />
 
         <TodoList
           todoList={filteredTodoList}
@@ -129,6 +146,7 @@ class App extends Component {
           deleteTodo={this.deleteTodo}
           setEditingId={this.setEditingId}
           setTodoValue={this.setTodoValue}
+          pattern={pattern}
         />
 
         <Footer
