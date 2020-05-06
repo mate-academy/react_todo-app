@@ -13,6 +13,22 @@ class App extends React.Component {
     isCompletedBtnSelected: false,
   }
 
+  componentDidMount() {
+    const cacheTodos = JSON.parse(localStorage.getItem('todos'));
+
+    if (cacheTodos) {
+      this.setState({ todos: cacheTodos });
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    const { todos } = this.state;
+
+    if (prevState.todos !== todos) {
+      this.saveToLocalStorage();
+    }
+  }
+
   handleInputTitle = ({ target }) => {
     this.setState({
       title: target.value,
@@ -190,6 +206,12 @@ class App extends React.Component {
         })),
       }));
     }
+  }
+
+  saveToLocalStorage() {
+    const todos = JSON.stringify(this.state.todos);
+
+    localStorage.setItem('todos', todos);
   }
 
   render() {
