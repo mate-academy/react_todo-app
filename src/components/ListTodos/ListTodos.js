@@ -5,21 +5,21 @@ import cn from 'classnames';
 class ListTodos extends React.Component {
   state = {
     editingId: '',
-    editValue: '',
+    newValue: '',
     inputError: false,
   }
 
   editTodoValue = (id, value) => {
     this.setState(() => ({
       editingId: id,
-      editValue: value,
+      newValue: value,
     }));
   }
 
   changeTodoValue = (e) => {
     const letter = e.target.value.replace(/^ /, '');
 
-    this.setState({ editValue: letter });
+    this.setState({ newValue: letter });
   }
 
   handleLostFocus = () => {
@@ -27,10 +27,10 @@ class ListTodos extends React.Component {
 
     this.setState((state) => {
       const editingId = '';
-      const editValue = '';
+      const newValue = '';
       let inputError = false;
 
-      if (state.editValue.length < 3) {
+      if (state.newValue.length < 3) {
         inputError = true;
 
         return {
@@ -38,12 +38,12 @@ class ListTodos extends React.Component {
         };
       }
 
-      changeTodoValue(state.editingId, state.editValue);
+      changeTodoValue(state.editingId, state.newValue);
 
       return {
         inputError,
         editingId,
-        editValue,
+        newValue,
       };
     });
   }
@@ -55,19 +55,19 @@ class ListTodos extends React.Component {
     this.setState((state) => {
       const inputError = false;
       const editingId = '';
-      const editValue = '';
+      const newValue = '';
 
-      if (currentKey === 'Enter' && state.editValue.length >= 3) {
-        changeTodoValue(state.editingId, state.editValue);
+      if (currentKey === 'Enter' && state.newValue.length >= 3) {
+        changeTodoValue(state.editingId, state.newValue);
 
         return {
           editingId,
-          editValue,
+          newValue,
           inputError: false,
         };
       }
 
-      if (currentKey === 'Enter' && state.editValue.length < 3) {
+      if (currentKey === 'Enter' && state.newValue.length < 3) {
         return {
           inputError: true,
         };
@@ -76,12 +76,12 @@ class ListTodos extends React.Component {
       if (currentKey === 'Escape') {
         return {
           editingId: '',
-          editValue: '',
+          newValue: '',
           inputError,
         };
       }
 
-      if (state.editValue.length >= 3) {
+      if (state.newValue.length >= 3) {
         return {
           inputError,
         };
@@ -91,7 +91,7 @@ class ListTodos extends React.Component {
 
   render() {
     const { list, changeStatusComplete, destroyTodo } = this.props;
-    const { editingId, editValue, inputError } = this.state;
+    const { editingId, newValue, inputError } = this.state;
 
     return (
       <ul className="todo-list">
@@ -122,7 +122,7 @@ class ListTodos extends React.Component {
             <input
               type="text"
               className={inputError ? 'edit new-todo__error' : 'edit'}
-              value={editValue}
+              value={newValue}
               onChange={this.changeTodoValue}
               onKeyDown={this.handleTodoInput}
               onBlur={this.handleLostFocus}

@@ -8,8 +8,6 @@ import Footer from './components/Footer/Footer';
 class App extends React.Component {
   state = {
     todos: [],
-    activeTodo: [],
-    completedTodo: [],
     activeList: 'all',
     currentId: 1,
     selectAll: false,
@@ -27,7 +25,7 @@ class App extends React.Component {
     ));
   }
 
-  validationInput = (newTodoValue) => {
+  validateInput = (newTodoValue) => {
     if (newTodoValue.length >= 3) {
       this.addTodo(newTodoValue);
     }
@@ -40,28 +38,25 @@ class App extends React.Component {
     newTodo.value = newTodoValue;
     newTodo.id = currentId;
     newTodo.completed = false;
-    localStorage.setItem(`${currentId}`, JSON.stringify({ ...newTodo }));
-
     this.setState(state => ({
       todos: [...state.todos, newTodo],
-      activeTodo: [...state.activeTodo, newTodo],
       currentId: state.currentId + 1,
       selectAll: false,
     }));
   }
 
   choosePage = (list) => {
-    const { todos, activeTodo, completedTodo } = this.state;
+    const { todos } = this.state;
 
     switch (list) {
       case 'all':
         return todos;
 
       case 'active':
-        return activeTodo;
+        return todos.filter(todo => !todo.completed);
 
       case 'completed':
-        return completedTodo;
+        return todos.filter(todo => todo.completed);
 
       default:
         return todos;
@@ -110,16 +105,12 @@ class App extends React.Component {
   }
 
   filterTodos = () => {
-    this.setState(state => ({
-      activeTodo: state.todos.filter(todo => !todo.completed),
-      completedTodo: state.todos.filter(todo => todo.completed),
-    }), () => {
-      const { todos, completedTodo } = this.state;
+    const { todos } = this.state;
+    const completedTodo = todos.filter(todo => todo.completed);
 
-      todos.length === completedTodo.length
-        ? this.setState(() => ({ selectAll: true }))
-        : this.setState(() => ({ selectAll: false }));
-    });
+    todos.length === completedTodo.length
+      ? this.setState(() => ({ selectAll: true }))
+      : this.setState(() => ({ selectAll: false }));
   }
 
   clearCompletedTodo = () => {
@@ -128,7 +119,6 @@ class App extends React.Component {
 
     this.setState(() => ({
       todos: clearCompleted,
-      completedTodo: [],
     }));
   }
 
@@ -141,9 +131,7 @@ class App extends React.Component {
         completed: !selectAll,
       }))],
       selectAll: !state.selectAll,
-    }));
-
-    this.filterTodos();
+    }), () => this.filterTodos());
   }
 
   changeTodoValue = (todoId, newValue) => {
@@ -191,7 +179,7 @@ class App extends React.Component {
 
   render() {
     const {
-      activeList, todos, selectAll, activeTodo,
+      activeList, todos, selectAll,
     } = this.state;
     const visibleList = this.choosePage(activeList);
 
@@ -199,7 +187,7 @@ class App extends React.Component {
       <section className="todoapp">
         <Header />
         <AddForm
-          validationInput={this.validationInput}
+          validateInput={this.validateInput}
           todos={todos}
           selectAllTodo={this.selectAllTodo}
           selectAll={selectAll}
@@ -213,9 +201,8 @@ class App extends React.Component {
         {this.state.todos.length >= 1
           && (
             <Footer
-              lengthItemsLeft={activeTodo.length}
+              lengthItemsLeft={todos.filter(todo => !todo.completed).length}
               changePage={this.changePage}
-              todos={todos}
               activeList={activeList}
               clearCompletedTodo={this.clearCompletedTodo}
             />

@@ -19,11 +19,11 @@ class AddForm extends React.Component {
   }
 
   submitTodo = (e) => {
-    const { validationInput } = this.props;
+    const { validateInput } = this.props;
     const { newTodoValue } = this.state;
 
     e.preventDefault();
-    validationInput(newTodoValue);
+    validateInput(newTodoValue);
 
     if (newTodoValue.length >= 3) {
       this.setState(() => ({
@@ -72,7 +72,7 @@ class AddForm extends React.Component {
 }
 
 AddForm.propTypes = {
-  validationInput: PropTypes.func.isRequired,
+  validateInput: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(objectOf(shape({
     value: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
