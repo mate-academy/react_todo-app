@@ -63,7 +63,7 @@ class ListTodos extends React.Component {
         return {
           editingId,
           newValue,
-          inputError: false,
+          inputError,
         };
       }
 
@@ -97,6 +97,7 @@ class ListTodos extends React.Component {
       <ul className="todo-list">
         {list.map(todo => (
           <li
+            key={todo.id}
             onDoubleClick={() => this.editTodoValue(todo.id, todo.value)}
             className={cn({
               editing: editingId === todo.id,
@@ -104,7 +105,7 @@ class ListTodos extends React.Component {
               '': editingId !== todo.id && !todo.completed,
             })}
           >
-            <div className="view" key={todo.id}>
+            <div className="view" >
               <input
                 type="checkbox"
                 className="toggle"

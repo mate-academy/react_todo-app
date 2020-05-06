@@ -14,8 +14,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.valueOfLocalStorage();
     localStorage.setItem(`${0}`, JSON.stringify({ startItem: 'startItem' }));
+    this.valueOfLocalStorage();
+    this.filterTodos();
   }
 
   componentDidUpdate() {
@@ -45,7 +46,7 @@ class App extends React.Component {
     }));
   }
 
-  choosePage = (list) => {
+  applyFilter = (list) => {
     const { todos } = this.state;
 
     switch (list) {
@@ -76,28 +77,28 @@ class App extends React.Component {
 
   destroyTodo = (todoId) => {
     const { todos } = this.state;
-    const destroyedTodo = todos.filter(todo => todo.id !== todoId);
+    const listWithOutDestroyedTodo = todos.filter(todo => todo.id !== todoId);
 
     localStorage.removeItem(`${todoId}`);
 
-    this.setState(() => ({ todos: destroyedTodo }));
+    this.setState(() => ({ todos: listWithOutDestroyedTodo }),
+      () => {
+        const { todos } = this.state;
+        localStorage.clear();
+        todos.forEach((todo, i) => (
+          localStorage.setItem(`${i + 1}`, JSON.stringify({ ...todo }))
+        ));
+        if (!todos.length) {
+          this.setState(({ currentId: 1 }));
+        } else {
+          const lastItem = todos.length - 1;
+          const newCurrentId = todos[lastItem].id + 1;
 
-    setTimeout(() => {
-      localStorage.clear();
-      this.state.todos.forEach((todo, i) => (
-        localStorage.setItem(`${i + 1}`, JSON.stringify({ ...todo }))
-      ));
-      if (!this.state.todos.length) {
-        this.setState(({ currentId: 1 }));
-      } else {
-        const lastItem = this.state.todos.length - 1;
-        const newCurrentId = this.state.todos[lastItem].id + 1;
+          this.setState(({ currentId: newCurrentId }));
+        }
 
-        this.setState(({ currentId: newCurrentId }));
-      }
-
-      this.filterTodos();
-    }, 0);
+        this.filterTodos();
+      });
   }
 
   changePage = (changeTo) => {
@@ -107,7 +108,6 @@ class App extends React.Component {
   filterTodos = () => {
     const { todos } = this.state;
     const completedTodo = todos.filter(todo => todo.completed);
-
     todos.length === completedTodo.length
       ? this.setState(() => ({ selectAll: true }))
       : this.setState(() => ({ selectAll: false }));
@@ -153,18 +153,18 @@ class App extends React.Component {
   }
 
   valueOfLocalStorage = () => {
-    const user = [];
+    const localTodos = [];
 
     for (let i = 1; i < localStorage.length + 1; i += 1) {
       const localTodo = JSON.parse(localStorage.getItem(`${i}`));
 
       if (localTodo) {
-        user.push(localTodo);
+        localTodos.push(localTodo);
       }
     }
 
-    if (user.length) {
-      const currentTodos = user.map((todo, id) => ({
+    if (localTodos.length) {
+      const currentTodos = localTodos.map((todo, id) => ({
         ...todo,
         id: id + 1,
       }));
@@ -172,8 +172,7 @@ class App extends React.Component {
 
       this.setState(() => ({
         todos: currentTodos, currentId: nextId,
-      }));
-      this.filterTodos();
+      }), () => this.filterTodos());
     }
   }
 
@@ -181,10 +180,10 @@ class App extends React.Component {
     const {
       activeList, todos, selectAll,
     } = this.state;
-    const visibleList = this.choosePage(activeList);
+    const visibleList = this.applyFilter(activeList);
 
     return (
-      <section className="todoapp">
+      <section className="todoapp" >
         <Header />
         <AddForm
           validateInput={this.validateInput}
