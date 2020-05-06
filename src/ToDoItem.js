@@ -29,10 +29,10 @@ const ToDoItem = (props) => {
           className="toggle"
           checked={!isActive}
           id={`todo-${id}`}
-          onChange={handleIsActiveChange}
+          onChange={() => (handleIsActiveChange(id))}
         />
         <label
-          onDoubleClick={handleItemDoubleClick}
+          onDoubleClick={() => (handleItemDoubleClick(id))}
           htmlFor={`todo-${id}`}
         >
           {description}
@@ -40,7 +40,7 @@ const ToDoItem = (props) => {
         <button
           type="button"
           className="destroy"
-          onClick={deleteToDo}
+          onClick={() => (deleteToDo(id))}
         />
       </div>
       <input
@@ -48,8 +48,8 @@ const ToDoItem = (props) => {
         type="text"
         className="edit"
         onChange={handleEditFieldChange}
-        onKeyDown={handleEditEnter}
-        onBlur={handleEditEnter}
+        onKeyDown={event => (handleEditEnter(event, id))}
+        onBlur={event => (handleEditEnter(event, id))}
       />
     </li>
   );

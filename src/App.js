@@ -8,7 +8,7 @@ class App extends React.Component {
     typeOfFilter: 'all',
     isAllButtonActive: true,
     isActiveButtonActive: false,
-    isComplitedButtonActive: false,
+    isCompletedButtonActive: false,
     isToggleAll: true,
     fieldValue: '',
     isAnyEditedField: false,
@@ -47,13 +47,21 @@ class App extends React.Component {
     localStorage.setItem('ToDoAppData', JSON.stringify(this.state));
   }
 
-  handleIsActiveChange = (event) => {
-    // const { todos } = this.state;
-    //   this.setState(prevState => ({
-    //     isToggleAll: !prevState.isToggleAll,
-    //   }));
-    // }
-    const { id } = event.target.parentElement.parentElement;
+  checkerOfToggleAllState = () => {
+    this.setState((prevState) => {
+      const trigger = (
+        prevState.todos.length === prevState
+          .todos
+          .filter(item => !item.isActive)
+          .length);
+
+      return ({
+        isToggleAll: trigger,
+      });
+    });
+  }
+
+  handleIsActiveChange = (id) => {
     const indexOfElement = this.state.todos.findIndex(item => (
       item.id === parseInt(id, 10)));
 
@@ -61,21 +69,19 @@ class App extends React.Component {
       const tempTodos = [...prevState.todos];
 
       tempTodos[indexOfElement].isActive = !tempTodos[indexOfElement].isActive;
-      const trigger = (
-        tempTodos.length === tempTodos.filter(item => item.isActive).length
-      );
 
       return (
         {
           todos: [...tempTodos],
-          isToggleAll: trigger,
         }
 
       );
     });
+    this.checkerOfToggleAllState();
   }
 
   addNewToDo = (event) => {
+    event.preventDefault();
     if (this.state.fieldValue.trim() !== '') {
       this.setState(prevState => ({
         todos: [
@@ -90,6 +96,7 @@ class App extends React.Component {
         nextId: prevState.nextId + 1,
         fieldValue: '',
       }));
+      this.checkerOfToggleAllState();
     }
   }
 
@@ -99,8 +106,7 @@ class App extends React.Component {
     this.setState({ fieldValue: value });
   }
 
-  deleteToDo = (event) => {
-    const { id } = event.target.parentElement.parentElement;
+  deleteToDo = (id) => {
     const indexOfDeletedElement = this
       .state
       .todos
@@ -117,6 +123,7 @@ class App extends React.Component {
         }
       );
     });
+    this.checkerOfToggleAllState();
   }
 
   clearComplited = () => {
@@ -125,30 +132,30 @@ class App extends React.Component {
     }));
   }
 
-  setFilterToAll = (event) => {
+  setFilterToAll = () => {
     this.setState({
       typeOfFilter: 'all',
       isAllButtonActive: true,
       isActiveButtonActive: false,
-      isComplitedButtonActive: false,
+      isCompletedButtonActive: false,
     });
   }
 
-  setFilterToActive = (event) => {
+  setFilterToActive = () => {
     this.setState({
       typeOfFilter: 'active',
       isAllButtonActive: false,
       isActiveButtonActive: true,
-      isComplitedButtonActive: false,
+      isCompletedButtonActive: false,
     });
   }
 
-  setFilterToCompleted = (event) => {
+  setFilterToCompleted = () => {
     this.setState({
       typeOfFilter: 'completed',
       isAllButtonActive: false,
       isActiveButtonActive: false,
-      isComplitedButtonActive: true,
+      isCompletedButtonActive: true,
     });
   }
 
@@ -159,7 +166,7 @@ class App extends React.Component {
       todos: prevState.todos.map((item) => {
         const tempItem = { ...item };
 
-        tempItem.isActive = !tempIsToggleAll;
+        tempItem.isActive = tempIsToggleAll;
 
         return tempItem;
       }),
@@ -167,12 +174,11 @@ class App extends React.Component {
     }));
   }
 
-  handleItemDoubleClick = (event) => {
+  handleItemDoubleClick = (id) => {
     if (this.state.isAnyEditedField) {
       return;
     }
 
-    const { id } = event.target.parentElement.parentElement;
     const indexOfElement = this
       .state
       .todos
@@ -192,7 +198,7 @@ class App extends React.Component {
     });
   }
 
-  handleEditEnter = (event) => {
+  handleEditEnter = (event, id) => {
     if (event.key !== 'Enter' && event.type !== 'blur') {
       return;
     }
@@ -201,7 +207,6 @@ class App extends React.Component {
       return;
     }
 
-    const { id } = event.target.parentElement;
     const indexOfElement = this
       .state
       .todos
@@ -263,7 +268,7 @@ class App extends React.Component {
       isActiveButtonActive,
       fieldValue,
       isAllButtonActive,
-      isComplitedButtonActive,
+      isCompletedButtonActive,
       isToggleAll,
     } = this.state;
 
@@ -332,7 +337,7 @@ class App extends React.Component {
             <li>
               <a
                 href="#/completed"
-                className={isComplitedButtonActive ? 'selected' : ''}
+                className={isCompletedButtonActive ? 'selected' : ''}
                 onClick={this.setFilterToCompleted}
               >
                 Completed
