@@ -1,12 +1,10 @@
 import React from 'react';
 import { TodoList } from './components/TodoList';
 
-import todosFromServer from './api/todos';
-
 class App extends React.Component {
   state = {
-    todos: todosFromServer,
-    id: todosFromServer.length,
+    todos: [],
+    id: 0,
     title: '',
     tempTitle: '',
     filter: 'all',
@@ -195,34 +193,24 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos,
+    const {
+      todos,
       title,
       filter,
+      tempTitle,
       isActiveBtnSelected,
       isAllBtnSelected,
-      isCompletedBtnSelected } = this.state;
+      isCompletedBtnSelected,
+    } = this.state;
 
     let currentTodos = [...todos];
 
-    const completedTodos = [];
-    const activeTodos = [];
-
     if (filter === 'active') {
-      todos.forEach((todo) => {
-        if (!todo.completed) {
-          activeTodos.push(todo);
-        }
-      });
-      currentTodos = activeTodos;
+      currentTodos = currentTodos.filter(todo => !todo.completed);
     }
 
     if (filter === 'completed') {
-      todos.forEach((todo) => {
-        if (todo.completed) {
-          completedTodos.push(todo);
-        }
-      });
-      currentTodos = completedTodos;
+      currentTodos = currentTodos.filter(todo => todo.completed);
     }
 
     return (
@@ -258,7 +246,7 @@ class App extends React.Component {
           <TodoList
             todos={currentTodos}
             editTodo={this.editTodo}
-            tempTitle={this.state.tempTitle}
+            tempTitle={tempTitle}
             deleteTodo={this.deleteTodo}
             changeStatus={this.changeStatus}
             editCurrentTitle={this.editCurrentTitle}
