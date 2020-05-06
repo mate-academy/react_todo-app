@@ -13,13 +13,13 @@ class App extends React.Component {
   handleSubmit = (event, newTodoText) => {
     event.preventDefault();
 
-    if (newTodoText === '') {
+    if (newTodoText.replace(/ /g, '') === '') {
       return;
     }
 
     const sample = {
       id: this.state.id + 1,
-      text: newTodoText,
+      text: newTodoText.trim(),
       elementState: {
         completed: false,
         editing: false,
@@ -53,7 +53,7 @@ class App extends React.Component {
       .filter(todo => todo.id !== id) }));
   }
 
-  handleDoubleClick = (id) => {
+  handleDoubleClick = (id, input) => {
     this.setState(state => ({
       ListofTodo: state.ListofTodo.map((todo) => {
         if (todo.id !== id) {
@@ -71,7 +71,7 @@ class App extends React.Component {
     }));
   }
 
-  handleEditing = (event, id) => {
+  handleEditing = (event, id, prevValue) => {
     const { value } = event.target;
 
     if (event.key === 'Enter') {
@@ -83,6 +83,23 @@ class App extends React.Component {
         return {
           ...todo,
           text: value,
+          elementState: {
+            ...todo.elementState,
+            editing: false,
+          },
+        };
+      }) }));
+    }
+
+    if (event.key === 'Escape') {
+      this.setState(state => ({ ListofTodo: state.ListofTodo.map((todo) => {
+        if (todo.id !== id) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          text: prevValue,
           elementState: {
             ...todo.elementState,
             editing: false,
@@ -194,7 +211,7 @@ class App extends React.Component {
           />
         </section>
 
-        <footer className="footer">
+        <footer hidden={ListofTodo.length === 0} className="footer">
           <span className="todo-count">
             {ListofTodo.reduce((acc, todo) => {
               if (todo.elementState.completed) {

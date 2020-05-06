@@ -19,7 +19,6 @@ class Nav extends React.Component {
           <a
             href="#/"
             className={cs({ selected: activePage === 'All' })}
-
             onClick={() => handleSelectAll()}
           >
             All
@@ -31,7 +30,6 @@ class Nav extends React.Component {
             onClick={() => handleSelectActive()}
             href="#/active"
             className={cs({ selected: activePage === 'Active' })}
-
           >
             Active
           </a>

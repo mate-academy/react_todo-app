@@ -6,6 +6,12 @@ class TodoApp extends React.Component {
     text: '',
   }
 
+  inputFocus = React.createRef();
+
+  componentDidMount = () => {
+    this.inputFocus.current.focus();
+  }
+
   handleChangeNewTodoText = (event) => {
     const { value } = event.target;
 
@@ -21,22 +27,19 @@ class TodoApp extends React.Component {
         <h1>todos</h1>
         <form onSubmit={(event) => {
           handleSubmit(event, text);
-
           this.setState({ text: '' });
-        }
-        }
+        }}
         >
           <input
             className="new-todo"
+            ref={this.inputFocus}
             placeholder="What needs to be done?"
             value={text}
             onChange={this.handleChangeNewTodoText}
             onBlur={(event) => {
               handleSubmit(event, text);
-
               this.setState({ text: '' });
-            }
-            }
+            }}
           />
         </form>
       </header>

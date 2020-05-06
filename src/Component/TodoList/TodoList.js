@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import TodoItem from '../TodoItem/TodoItem';
@@ -21,19 +20,14 @@ class TodoList extends React.Component {
       <ul className="todo-list">
         {ListofTodo.length !== 0
           ? ListofTodo.map(todo => (
-            <li
-              className={classNames(todo.elementState)}
-              key={todo ? todo.id : null}
-            >
-              <TodoItem
-                todo={todo}
-                handleCheckboxChange={handleCheckboxChange}
-                handleDoubleClick={handleDoubleClick}
-                handleEditing={handleEditing}
-                handleClickDestroy={handleClickDestroy}
-                handleLossFocus={handleLossFocus}
-              />
-            </li>
+            <TodoItem
+              todo={todo}
+              handleCheckboxChange={handleCheckboxChange}
+              handleDoubleClick={handleDoubleClick}
+              handleEditing={handleEditing}
+              handleClickDestroy={handleClickDestroy}
+              handleLossFocus={handleLossFocus}
+            />
           ))
           : <div />
         }

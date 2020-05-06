@@ -1,8 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 class TodoItem extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.inputText = React.createRef();
+  }
+
+  componentDidUpdate() {
+    if (this.inputText.current) {
+      this.inputText.current.focus();
+    }
+  }
 
   render() {
     const {
@@ -15,39 +26,47 @@ class TodoItem extends React.Component {
     } = this.props;
 
     return (
-      <>
-        <div className="View">
-          <input
-            defaultChecked={false}
-            checked={todo.elementState.editing
-              ? !todo.elementState.editing
-              : todo.elementState.completed
-            }
-            onClick={() => handleCheckboxChange(todo.id)}
-            type="checkbox"
-            className="toggle"
-            id={`todo-${todo.id}`}
-          />
-          <label
-            onDoubleClick={() => handleDoubleClick(todo.id)}
-          >
-            {todo.elementState.editing ? '' : todo.text}
-          </label>
-          <button
-            type="button"
-            className="destroy"
-            onClick={() => handleClickDestroy(todo.id)}
-          />
-        </div>
-        <input
-          type="text"
-          className="edit"
-          defaultValue={todo.text}
-          onKeyDown={event => handleEditing(event, todo.id)}
-          onBlur={event => handleLossFocus(event, todo.id)}
-          // ref={}
-        />
-      </>
+      <li
+        className={classNames(todo.elementState)}
+        key={todo.id}
+      >
+        {todo.elementState.editing === false
+          ? (
+            <div className="View">
+              <input
+                defaultChecked={false}
+                checked={todo.elementState.completed}
+                onClick={() => handleCheckboxChange(todo.id)}
+                type="checkbox"
+                className="toggle"
+                id={`todo-${todo.id}`}
+              />
+              <label
+                onDoubleClick={() => {
+                  handleDoubleClick(todo.id);
+                }}
+              >
+                {todo.text}
+              </label>
+              <button
+                type="button"
+                className="destroy"
+                onClick={() => handleClickDestroy(todo.id)}
+              />
+            </div>
+          )
+          : (
+            <input
+              type="text"
+              className="edit"
+              defaultValue={todo.text}
+              onKeyDown={event => handleEditing(event, todo.id, todo.text)}
+              onBlur={event => handleLossFocus(event, todo.id)}
+              ref={this.inputText}
+            />
+          )
+        }
+      </li>
     );
   }
 }
