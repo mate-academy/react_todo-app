@@ -1,15 +1,17 @@
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 
 class Footer extends React.PureComponent {
   render() {
-    const { todos, activeList, changePage, clearCompletedTodo } = this.props;
+    const {
+      activeList, changePage, clearCompletedTodo, lengthItemsLeft,
+    } = this.props;
     const pageViews = ['all', 'active', 'completed'];
 
     return (
       <footer className="footer">
         <span className="todo-count">
-          {todos.filter(todo => !todo.completed).length}
+          {lengthItemsLeft}
           {' '}
           items left
         </span>
@@ -41,7 +43,7 @@ class Footer extends React.PureComponent {
 }
 
 Footer.propTypes = {
-  todos: PropTypes.arrayOf(object).isRequired,
+  lengthItemsLeft: PropTypes.number.isRequired,
   activeList: PropTypes.string.isRequired,
   changePage: PropTypes.func.isRequired,
   clearCompletedTodo: PropTypes.func.isRequired,

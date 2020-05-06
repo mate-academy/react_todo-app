@@ -13,14 +13,21 @@ class App extends React.Component {
     activeList: 'all',
     currentId: 1,
     selectAll: false,
-    firstStart: true,
   }
 
   componentDidMount() {
+    this.valueOfLocalStorage();
     localStorage.setItem(`${0}`, JSON.stringify({ startItem: 'startItem' }));
   }
 
-  validation = (newTodoValue) => {
+  componentDidUpdate() {
+    localStorage.clear();
+    this.state.todos.forEach((todo, i) => (
+      localStorage.setItem(`${i + 1}`, JSON.stringify({ ...todo }))
+    ));
+  }
+
+  validationInput = (newTodoValue) => {
     if (newTodoValue.length >= 3) {
       this.addTodo(newTodoValue);
     }
@@ -69,13 +76,7 @@ class App extends React.Component {
           ? !todo.completed
           : todo.completed,
       })),
-    }), () => {
-      localStorage.clear();
-      this.state.todos.forEach((todo, i) => (
-        localStorage.setItem(`${i + 1}`, JSON.stringify({ ...todo }))
-      ));
-      this.filterTodos();
-    });
+    }), () => this.filterTodos());
   }
 
   destroyTodo = (todoId) => {
@@ -190,22 +191,15 @@ class App extends React.Component {
 
   render() {
     const {
-      errorIncorrectlyInput, activeList, todos, selectAll, firstStart,
+      activeList, todos, selectAll, activeTodo,
     } = this.state;
     const visibleList = this.choosePage(activeList);
-
-    // localStorage.clear()
-    if (firstStart) {
-      this.valueOfLocalStorage();
-      this.setState(({ firstStart: false }));
-    }
 
     return (
       <section className="todoapp">
         <Header />
         <AddForm
-          validation={this.validation}
-          errorIncorrectlyInput={errorIncorrectlyInput}
+          validationInput={this.validationInput}
           todos={todos}
           selectAllTodo={this.selectAllTodo}
           selectAll={selectAll}
@@ -219,6 +213,7 @@ class App extends React.Component {
         {this.state.todos.length >= 1
           && (
             <Footer
+              lengthItemsLeft={activeTodo.length}
               changePage={this.changePage}
               todos={todos}
               activeList={activeList}

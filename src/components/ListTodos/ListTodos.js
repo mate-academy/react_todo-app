@@ -1,16 +1,18 @@
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes, { objectOf, shape } from 'prop-types';
+import cn from 'classnames';
 
 class ListTodos extends React.Component {
   state = {
     editingId: '',
     editValue: '',
-    errorAddNewValue: false,
+    inputError: false,
   }
 
-  editingValue = (id, value) => {
+  editTodoValue = (id, value) => {
     this.setState(() => ({
-      editingId: id, editValue: value,
+      editingId: id,
+      editValue: value,
     }));
   }
 
@@ -20,38 +22,38 @@ class ListTodos extends React.Component {
     this.setState({ editValue: letter });
   }
 
-  lostFocus = () => {
+  handleLostFocus = () => {
     const { changeTodoValue } = this.props;
 
     this.setState((state) => {
       const editingId = '';
       const editValue = '';
-      let errorAddNewValue = false;
+      let inputError = false;
 
       if (state.editValue.length < 3) {
-        errorAddNewValue = true;
+        inputError = true;
 
         return {
-          errorAddNewValue,
+          inputError,
         };
       }
 
       changeTodoValue(state.editingId, state.editValue);
 
       return {
-        errorAddNewValue,
+        inputError,
         editingId,
         editValue,
       };
     });
   }
 
-  saveOrCancel = (e) => {
+  handleTodoInput = (e) => {
     const { changeTodoValue } = this.props;
     const currentKey = e.key;
 
     this.setState((state) => {
-      const errorAddNewValue = false;
+      const inputError = false;
       const editingId = '';
       const editValue = '';
 
@@ -59,13 +61,15 @@ class ListTodos extends React.Component {
         changeTodoValue(state.editingId, state.editValue);
 
         return {
-          editingId, editValue, errorAddNewValue: false,
+          editingId,
+          editValue,
+          inputError: false,
         };
       }
 
       if (currentKey === 'Enter' && state.editValue.length < 3) {
         return {
-          errorAddNewValue: true,
+          inputError: true,
         };
       }
 
@@ -73,13 +77,13 @@ class ListTodos extends React.Component {
         return {
           editingId: '',
           editValue: '',
-          errorAddNewValue,
+          inputError,
         };
       }
 
       if (state.editValue.length >= 3) {
         return {
-          errorAddNewValue,
+          inputError,
         };
       }
     });
@@ -87,52 +91,44 @@ class ListTodos extends React.Component {
 
   render() {
     const { list, changeStatusComplete, destroyTodo } = this.props;
-    const { editingId, editValue, errorAddNewValue } = this.state;
+    const { editingId, editValue, inputError } = this.state;
 
     return (
       <ul className="todo-list">
-        {list.map((todo) => {
-          let classValue;
-
-          if (editingId === todo.id) {
-            classValue = 'editing';
-          } else if (todo.completed) {
-            classValue = 'completed';
-          } else {
-            classValue = '';
-          }
-
-          return (
-            <li
-              onDoubleClick={() => this.editingValue(todo.id, todo.value)}
-              className={classValue}
-            >
-              <div className="view" key={todo.id}>
-                <input
-                  type="checkbox"
-                  className="toggle"
-                  id={`todo-${todo.id}`}
-                  checked={todo.completed}
-                  onChange={() => changeStatusComplete(todo.id)}
-                />
-                <label htmlFor={`todo-${todo.id}`}>{todo.value}</label>
-                <button
-                  type="button"
-                  className="destroy"
-                  onClick={() => destroyTodo(todo.id)}
-                />
-              </div>
+        {list.map(todo => (
+          <li
+            onDoubleClick={() => this.editTodoValue(todo.id, todo.value)}
+            className={cn({
+              editing: editingId === todo.id,
+              completed: editingId !== todo.id && todo.completed,
+              '': editingId !== todo.id && !todo.completed,
+            })}
+          >
+            <div className="view" key={todo.id}>
               <input
-                type="text"
-                className={errorAddNewValue ? 'edit new-todo__error' : 'edit'}
-                value={editValue}
-                onChange={this.changeTodoValue}
-                onKeyDown={this.saveOrCancel}
-                onBlur={this.lostFocus}
+                type="checkbox"
+                className="toggle"
+                id={`todo-${todo.id}`}
+                checked={todo.completed}
+                onChange={() => changeStatusComplete(todo.id)}
               />
-            </li>
-          );
-        })}
+              <label htmlFor={`todo-${todo.id}`}>{todo.value}</label>
+              <button
+                type="button"
+                className="destroy"
+                onClick={() => destroyTodo(todo.id)}
+              />
+            </div>
+            <input
+              type="text"
+              className={inputError ? 'edit new-todo__error' : 'edit'}
+              value={editValue}
+              onChange={this.changeTodoValue}
+              onKeyDown={this.handleTodoInput}
+              onBlur={this.handleLostFocus}
+            />
+          </li>
+        ))}
       </ul>
     );
   }
@@ -140,7 +136,11 @@ class ListTodos extends React.Component {
 
 ListTodos.propTypes = {
   changeTodoValue: PropTypes.func.isRequired,
-  list: PropTypes.arrayOf(object).isRequired,
+  list: PropTypes.arrayOf(objectOf(shape({
+    value: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }))).isRequired,
   changeStatusComplete: PropTypes.func.isRequired,
   destroyTodo: PropTypes.func.isRequired,
 };

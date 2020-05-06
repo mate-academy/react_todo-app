@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes, { objectOf, shape } from 'prop-types';
 
 class AddForm extends React.Component {
   state = {
@@ -19,11 +19,11 @@ class AddForm extends React.Component {
   }
 
   submitTodo = (e) => {
-    const { validation } = this.props;
+    const { validationInput } = this.props;
     const { newTodoValue } = this.state;
 
     e.preventDefault();
-    validation(newTodoValue);
+    validationInput(newTodoValue);
 
     if (newTodoValue.length >= 3) {
       this.setState(() => ({
@@ -72,8 +72,12 @@ class AddForm extends React.Component {
 }
 
 AddForm.propTypes = {
-  validation: PropTypes.func.isRequired,
-  todos: PropTypes.arrayOf(object).isRequired,
+  validationInput: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(objectOf(shape({
+    value: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }))).isRequired,
   selectAllTodo: PropTypes.func.isRequired,
   selectAll: PropTypes.bool.isRequired,
 };
