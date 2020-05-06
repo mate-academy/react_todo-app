@@ -13,6 +13,7 @@ class ListTodos extends React.Component {
     this.setState(() => ({
       editingId: id,
       newValue: value,
+      inputError: false,
     }));
   }
 
@@ -93,6 +94,7 @@ class ListTodos extends React.Component {
     const { list, changeStatusComplete, destroyTodo } = this.props;
     const { editingId, newValue, inputError } = this.state;
 
+    console.log(this.state.inputError);
     return (
       <ul className="todo-list">
         {list.map(todo => (
