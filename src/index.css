@@ -149,6 +149,10 @@ body {
   color: #737373;
 }
 
+.non-visible {
+  display: none;
+}
+
 .todo-list {
   margin: 0;
   padding: 0;

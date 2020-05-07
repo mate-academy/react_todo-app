@@ -294,8 +294,14 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+
           />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          <label
+            className={this.state.todos.length || 'non-visible'}
+            htmlFor="toggle-all"
+          >
+            Mark all as complete
+          </label>
           <ListToDo
             todos={filteredTodos}
             changeToDo={this.handleChangeToDo}
@@ -307,7 +313,11 @@ class App extends React.Component {
           />
         </section>
 
-        <footer className="footer">
+        <footer
+          className={(this.state.todos.length)
+            ? 'footer'
+            : 'non-visible footer'}
+        >
           <span className="todo-count">
             {activeItemCount}
             {' '}
