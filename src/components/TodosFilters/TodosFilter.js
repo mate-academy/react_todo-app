@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { FILTERS } from '../../constants/index';
 
 class TodosFilter extends Component {
   state = {
-    activeFilter: 'all',
+    activeFilter: FILTERS.all,
   }
 
   handleFilterChange = (appliedFilter) => {
@@ -39,8 +40,8 @@ class TodosFilter extends Component {
           <li>
             <a
               href="#/"
-              className={classNames({ selected: activeFilter === 'all' })}
-              onClick={() => this.handleFilterChange('all')}
+              className={classNames({ selected: activeFilter === FILTERS.all })}
+              onClick={() => this.handleFilterChange(FILTERS.all)}
             >
               All
             </a>
@@ -49,8 +50,10 @@ class TodosFilter extends Component {
           <li>
             <a
               href="#/active"
-              className={classNames({ selected: activeFilter === 'active' })}
-              onClick={() => this.handleFilterChange('active')}
+              className={classNames({
+                selected: activeFilter === FILTERS.active,
+              })}
+              onClick={() => this.handleFilterChange(FILTERS.active)}
             >
               Active
             </a>
@@ -59,8 +62,10 @@ class TodosFilter extends Component {
           <li>
             <a
               href="#/completed"
-              className={classNames({ selected: activeFilter === 'completed' })}
-              onClick={() => this.handleFilterChange('completed')}
+              className={classNames({
+                selected: activeFilter === FILTERS.completed,
+              })}
+              onClick={() => this.handleFilterChange(FILTERS.completed)}
             >
               Completed
             </a>

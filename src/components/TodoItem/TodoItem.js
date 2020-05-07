@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -14,10 +15,15 @@ class TodoItem extends Component {
     });
   }
 
-  handleEditingBlur = () => {
-    this.setState({
-      isEditing: false,
-    });
+  handleEditingBlur = (e) => {
+    const {
+      id,
+      setNewTitle,
+    } = this.props;
+    const newTitle = e.target.value;
+
+    setNewTitle(id, newTitle);
+    this.setState({ isEditing: false });
   }
 
   handleEditingKeyDown = (e) => {
@@ -96,8 +102,6 @@ class TodoItem extends Component {
             onBlur={this.handleEditingBlur}
             onChange={this.handleEditing}
             onKeyDown={this.handleEditingKeyDown}
-            ref={this.myRef}
-            /* eslint-disable jsx-a11y/no-autofocus */
             autoFocus
           />
         )}

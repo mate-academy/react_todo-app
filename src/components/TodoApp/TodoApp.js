@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { FILTERS } from '../../constants/index';
 import TodosFilter from '../TodosFilters/TodosFilter';
 import TodoList from '../TodoList/TodoList';
 
 class TodoApp extends Component {
   state = {
     newTodo: '',
-    activeFilter: 'all',
+    activeFilter: FILTERS.all,
+    toggleAll: false,
     todoList: [],
   }
 
   componentDidMount() {
+    const { todoList } = this.state;
     const previousSessionData = JSON.parse(localStorage.getItem('todoList'));
 
     if (previousSessionData) {
       this.setState({ todoList: previousSessionData });
+    }
+
+    if (todoList.every(({ completed }) => completed)) {
+      this.setAll(true);
+      this.setState({ toggleAll: true });
     }
   }
 
@@ -95,16 +103,16 @@ class TodoApp extends Component {
   }
 
   filterTodoList = (filterName) => {
-    if (filterName === 'completed') {
-      this.setState({ activeFilter: 'completed' });
+    if (filterName === FILTERS.completed) {
+      this.setState({ activeFilter: FILTERS.completed });
     }
 
-    if (filterName === 'active') {
-      this.setState({ activeFilter: 'active' });
+    if (filterName === FILTERS.active) {
+      this.setState({ activeFilter: FILTERS.active });
     }
 
-    if (filterName === 'all') {
-      this.setState({ activeFilter: 'all' });
+    if (filterName === FILTERS.all) {
+      this.setState({ activeFilter: FILTERS.all });
     }
   }
 
@@ -114,6 +122,7 @@ class TodoApp extends Component {
         ...todo,
         completed: val,
       })),
+      toggleAll: val,
     }));
   }
 
@@ -122,31 +131,20 @@ class TodoApp extends Component {
       todoList,
       newTodo,
       activeFilter,
+      toggleAll,
     } = this.state;
 
-    const activeTodoList = [];
-    const completedTodoList = [];
-    let filteredTodoList = [];
-
-    todoList.forEach((todo) => {
-      if (todo.completed) {
-        completedTodoList.push(todo);
-      } else {
-        activeTodoList.push(todo);
+    const preparedTodos = todoList.filter((todo) => {
+      if (activeFilter === FILTERS.active) {
+        return !todo.completed;
       }
+
+      if (activeFilter === FILTERS.completed) {
+        return todo.completed;
+      }
+
+      return todo;
     });
-
-    if (activeFilter === 'all') {
-      filteredTodoList = [...todoList];
-    }
-
-    if (activeFilter === 'active') {
-      filteredTodoList = [...activeTodoList];
-    }
-
-    if (activeFilter === 'completed') {
-      filteredTodoList = [...completedTodoList];
-    }
 
     return (
       <section className="todoapp">
@@ -161,13 +159,24 @@ class TodoApp extends Component {
             placeholder="What needs to be done?"
           />
         </header>
-        <TodoList
-          todoList={filteredTodoList}
-          handleCompleteToggle={this.handleCompleteToggle}
-          handleDeleteTodo={this.handleDeleteTodo}
-          setAll={this.setAll}
-          setNewTitle={this.setNewTitle}
-        />
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={() => this.setAll(!toggleAll)}
+            checked={toggleAll}
+          />
+          <label htmlFor="toggle-all">
+            Mark all as complete
+          </label>
+          <TodoList
+            todoList={preparedTodos}
+            handleCompleteToggle={this.handleCompleteToggle}
+            handleDeleteTodo={this.handleDeleteTodo}
+            setNewTitle={this.setNewTitle}
+          />
+        </section>
         {todoList.length > 0 && (
           <TodosFilter
             todoList={todoList}
