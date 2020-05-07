@@ -4,26 +4,26 @@ import TodoList from './components/TodoList';
 import { Footer } from './components/Footer';
 
 const Exampletodos = [
-  {
-    id: 1,
-    title: 'learn Html',
-    isTodoCompleted: true,
-  },
-  {
-    id: 2,
-    title: 'learn CSS',
-    isTodoCompleted: true,
-  },
-  {
-    id: 3,
-    title: 'learn JS',
-    isTodoCompleted: true,
-  },
-  {
-    id: 4,
-    title: 'learn React',
-    isTodoCompleted: false,
-  },
+  // {
+  //   id: 1,
+  //   title: 'learn Html',
+  //   isTodoCompleted: true,
+  // },
+  // {
+  //   id: 2,
+  //   title: 'learn CSS',
+  //   isTodoCompleted: true,
+  // },
+  // {
+  //   id: 3,
+  //   title: 'learn JS',
+  //   isTodoCompleted: true,
+  // },
+  // {
+  //   id: 4,
+  //   title: 'learn React',
+  //   isTodoCompleted: false,
+  // },
 
 ];
 
