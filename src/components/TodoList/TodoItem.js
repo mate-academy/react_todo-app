@@ -8,13 +8,6 @@ export class TodoItem extends Component {
     inputTitle: this.props.title,
   }
 
-  textInput = React.createRef();
-  focusTextInput = this.focusTextInput.bind(this);
-
-  focusTextInput() {
-    this.textInput.current.focus();
-  }
-
   handleChangeTitleTodo = ({ target }) => {
     this.setState({ inputTitle: target.value });
   }

@@ -2,14 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: '',
-    }
-
-    this.textInput = React.createRef();
-    this.blurInput = this.blurInput.bind(this);
+  state = {
+    title: '',
   }
 
 
@@ -21,14 +15,8 @@ export class Header extends Component {
   handleKeyup =(e) => {
     if (e.code === 'Escape') {
       this.setState({ title: '' });
-      this.blurInput();
-
       document.removeEventListener('keyup', this.handleKeyup);
     }
-  }
-
-  blurInput = () => {
-    this.textInput.current.blurInput();
   }
 
   reset = () => {
@@ -56,7 +44,6 @@ export class Header extends Component {
 
         <form onSubmit={this.sendTodo}>
           <input
-            ref={this.textInput}
             className="new-todo"
             placeholder="What needs to be done?"
             value={title}
