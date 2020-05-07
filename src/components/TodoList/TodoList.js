@@ -20,7 +20,12 @@ export const TodoList = ({ list, deleteItem, switchTaskStatus }) => (
 );
 
 TodoList.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  list: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    checked: PropTypes.bool.isRequired,
+  })).isRequired,
   deleteItem: PropTypes.func.isRequired,
   switchTaskStatus: PropTypes.func.isRequired,
 };

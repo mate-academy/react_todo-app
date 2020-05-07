@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import './FilterListItem.scss';
 import classNames from 'classnames';
 
-export const FilterListItem = ({ item, currentFilter, filterComponents }) => (
+export const FilterListItem = ({ item, currentFilter, filterCurrentValue }) => (
   <li>
     <a
       href={item.href}
       className={classNames({ selected: item.title === currentFilter })}
-      onClick={e => filterComponents(e, item.title)}
+      onClick={() => filterCurrentValue(item.title)}
     >
       {item.title}
     </a>
@@ -21,5 +21,5 @@ FilterListItem.propTypes = {
     href: PropTypes.string.isRequired,
   }).isRequired,
   currentFilter: PropTypes.string.isRequired,
-  filterComponents: PropTypes.func.isRequired,
+  filterCurrentValue: PropTypes.func.isRequired,
 };

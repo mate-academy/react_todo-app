@@ -19,7 +19,6 @@ const listItems = [
 
 class App extends Component {
   state = {
-    todos: [],
     todosLength: 0,
     inputText: '',
     prevId: 0,
@@ -28,28 +27,27 @@ class App extends Component {
   }
 
   addNewTask = (e) => {
-    if (e.key === 'Enter') {
-      if (this.state.inputText.trim() === '') {
-        this.setState({
-          inputText: '',
-        });
-      } else {
-        this.setState(prev => ({
-          allTodos: [
-            ...prev.allTodos,
-            {
-              id: prev.prevId + 1,
-              title: prev.inputText.trim(),
-              status: 'active',
-              checked: false,
-            },
-          ],
-          prevId: prev.prevId + 1,
-          inputText: '',
-          todosLength: prev.todos.length + 1,
-        }));
-        this.filterCurrentValue();
-      }
+    e.preventDefault();
+
+    if (this.state.inputText.trim() === '') {
+      this.setState({
+        inputText: '',
+      });
+    } else {
+      this.setState(prev => ({
+        allTodos: [
+          ...prev.allTodos,
+          {
+            id: prev.prevId + 1,
+            title: prev.inputText.trim(),
+            status: 'active',
+            checked: false,
+          },
+        ],
+        prevId: prev.prevId + 1,
+        inputText: '',
+        todosLength: prev.allTodos.length + 1,
+      }));
     }
   }
 
@@ -59,18 +57,10 @@ class App extends Component {
     });
   }
 
-  filterCurrentValue = () => {
-    if (this.state.currentFilter === 'All') {
-      this.setState(prev => ({
-        todos: [...prev.allTodos],
-      }));
-    } else {
-      this.setState(prev => ({
-        todos: prev.allTodos.filter(item => (
-          item.status === prev.currentFilter.toLowerCase()
-        )),
-      }));
-    }
+  filterCurrentValue = (str) => {
+    this.setState({
+      currentFilter: str,
+    });
   }
 
   changeAllItemsCallback = (status, checked) => {
@@ -83,10 +73,6 @@ class App extends Component {
 
         return newItem;
       }),
-    }));
-
-    this.setState(prev => ({
-      todos: [...prev.allTodos],
     }));
   }
 
@@ -102,8 +88,6 @@ class App extends Component {
     this.setState(prev => ({
       allTodos: prev.allTodos.filter(item => item.id !== id),
     }));
-
-    this.filterCurrentValue();
   }
 
   counterItemsLeft = () => (
@@ -123,58 +107,42 @@ class App extends Component {
         return newItem;
       }),
     }));
-
-    this.filterCurrentValue();
   }
 
   clearCompleted = () => {
     this.setState(prev => ({
       allTodos: prev.allTodos.filter(item => item.status === 'active'),
-      todos: prev.todos.filter(item => item.status === 'active'),
     }));
   }
 
-  filterComponents = (e, method) => {
-    e.preventDefault();
-
-    if (method === 'All') {
-      this.setState(prev => ({
-        todos: [...prev.allTodos],
-      }));
-    } else {
-      this.setState(prev => ({
-        todos: prev.allTodos.filter(item => (
-          item.status === method.toLowerCase()
-        )),
-      }));
-    }
-
-    this.setState({
-      currentFilter: method,
-    });
-  }
-
   render() {
+    let todos = [...this.state.allTodos];
     const counter = this.counterItemsLeft();
     const {
       todosLength,
-      todos,
       inputText,
       currentFilter,
     } = this.state;
+
+    if (currentFilter !== 'All') {
+      todos = this.state.allTodos.filter(item => (
+        item.status === currentFilter.toLowerCase()
+      ));
+    }
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
 
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onKeyPress={e => this.addNewTask(e)}
-            onChange={e => this.changeInput(e)}
-            value={inputText}
-          />
+          <form onSubmit={this.addNewTask}>
+            <input
+              className="new-todo"
+              placeholder="What needs to be done?"
+              onChange={this.changeInput}
+              value={inputText}
+            />
+          </form>
         </header>
 
         <section className="main">
@@ -203,9 +171,9 @@ class App extends Component {
           </span>
 
           <FilterList
-            filterComponents={this.filterComponents}
             listItems={listItems}
             currentFilter={currentFilter}
+            filterCurrentValue={this.filterCurrentValue}
           />
 
           <button
