@@ -22,7 +22,7 @@ export default TodoList;
 
 TodoList.propTypes = {
   deleteItem: PropTypes.func.isRequired,
-  completed: PropTypes.bool.isRequired,
+  completed: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     title: PropTypes.string,

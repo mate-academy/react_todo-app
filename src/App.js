@@ -1,12 +1,20 @@
 import React from 'react';
+import className from 'classnames';
 import TodoList from './TodoList';
+
+const todoLocalStorage = JSON.parse(localStorage.getItem('todoList')) || [];
 
 class App extends React.PureComponent {
   state = {
-    todoList: [],
-    newTodoId: 0,
+    todoList: [...todoLocalStorage],
+    newTodoId: todoLocalStorage.length,
     completed: false,
     title: '',
+    selectedView: 'All',
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todoList', JSON.stringify([...this.state.todoList]));
   }
 
   clearCompleted = () => {
@@ -88,6 +96,29 @@ class App extends React.PureComponent {
     this.resetState();
   }
 
+  viewPort = () => {
+    switch (this.state.selectedView) {
+      case 'Active':
+        return this.state.todoList.filter(el => el.completed === false);
+      case 'Completed':
+        return this.state.todoList.filter(el => el.completed === true);
+      default:
+        return this.state.todoList;
+    }
+  }
+
+  activeView = () => {
+    this.setState({ selectedView: 'Active' });
+  }
+
+  completedView = () => {
+    this.setState({ selectedView: 'Completed' });
+  }
+
+  allView = () => {
+    this.setState({ selectedView: 'All' });
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -111,7 +142,7 @@ class App extends React.PureComponent {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
-            todos={this.state.todoList}
+            todos={this.viewPort()}
             completed={this.makeCompleted}
             deleteItem={this.deleteItem}
           />
@@ -124,10 +155,38 @@ class App extends React.PureComponent {
               </span>
               <ul className="filters">
                 <li>
-                  <a href="#/" className="selected">All</a>
+                  <a
+                    href="#/"
+                    onClick={this.allView}
+                    className={className(this.state.selectedView === 'All'
+                      ? 'selected'
+                      : '')}
+                  >
+                    All
+                  </a>
                 </li>
-                <li><a href="#/active">Active</a></li>
-                <li><a href="#/completed">Completed</a></li>
+                <li>
+                  <a
+                    href="#/active"
+                    onClick={this.activeView}
+                    className={className(this.state.selectedView === 'Active'
+                      ? 'selected'
+                      : '')}
+                  >
+                    Active
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#/completed"
+                    onClick={this.completedView}
+                    className={this.state.selectedView === 'Completed'
+                      ? 'selected'
+                      : ''}
+                  >
+                    Completed
+                  </a>
+                </li>
               </ul>
               <button
                 type="button"
