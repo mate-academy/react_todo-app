@@ -7,6 +7,27 @@ class TodoList extends Component {
     toggleAll: false,
   }
 
+  componentDidUpdate() {
+    const { todoList } = this.props;
+    const { toggleAll } = this.state;
+
+    const activeTodoCount = (todoList
+      .filter(({ completed }) => !completed) || []
+    ).length;
+
+    if (activeTodoCount === 0 && !toggleAll) {
+      this.setToggle(true);
+    }
+
+    if (activeTodoCount !== 0 && toggleAll) {
+      this.setToggle(false);
+    }
+  }
+
+  setToggle = (newState) => {
+    this.setState({ toggleAll: newState });
+  }
+
   handleToggleAll = () => {
     const { toggleAll } = this.state;
     const {

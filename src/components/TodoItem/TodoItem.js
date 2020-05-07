@@ -23,6 +23,12 @@ class TodoItem extends Component {
     const newTitle = e.target.value;
 
     if (e.key === 'Enter') {
+      if (newTitle.trim().length === 0) {
+        this.setState({ isEditing: false });
+
+        return;
+      }
+
       setNewTitle(id, newTitle);
       this.setState({ isEditing: false });
     }
