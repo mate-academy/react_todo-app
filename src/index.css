@@ -33,6 +33,10 @@ body {
   font-weight: 300;
 }
 
+li button {
+  margin: 0 10px;
+}
+
 :focus {
   outline: 0;
 }
