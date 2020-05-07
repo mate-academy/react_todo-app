@@ -17,10 +17,10 @@ class NewTodo extends Component {
   handleSubmitTodo = (evt) => {
     evt.preventDefault();
 
-    if (this.state.title !== '') {
+    if (this.state.title.trim() !== '') {
       const todo = {
         id: `${this.getRandom()}`,
-        title: this.state.title.trim(),
+        title: this.state.title,
         completed: false,
       };
 

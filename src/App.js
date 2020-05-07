@@ -7,7 +7,7 @@ const filterTypes = ['All', 'Active', 'Completed'];
 
 const filterTodos = (todos, filter) => {
   if (filter === 'Active') {
-    return todos.filter(todo => todo.completed === false);
+    return todos.filter(todo => !todo.completed);
   }
 
   if (filter === 'Completed') {
@@ -62,7 +62,8 @@ class App extends React.Component {
       const allTodos = prevState.todos.map(todo => (
         todo.id === id
           ? {
-            ...todo, completed: checked,
+            ...todo,
+            completed: checked,
           }
           : todo
       ));
@@ -74,7 +75,7 @@ class App extends React.Component {
     });
   }
 
-  filtered = (evt) => {
+  filteredItems = (evt) => {
     const filter = evt.target.getAttribute('data-filter');
     const { todos } = this.state;
 
@@ -161,7 +162,7 @@ class App extends React.Component {
             {`${activeTodos.length} items left`}
           </span>
           <TodosFilter
-            filtered={this.filtered}
+            filtered={this.filteredItems}
             filterTypes={filterTypes}
             filter={filter}
           />
