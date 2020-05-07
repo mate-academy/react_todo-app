@@ -41,6 +41,7 @@ class App extends React.Component {
       isToggleAll,
       fieldValue,
     });
+    this.checkerOfToggleAllState();
   }
 
   componentDidUpdate() {
