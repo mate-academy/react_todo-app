@@ -191,23 +191,12 @@ class App extends React.Component {
   }
 
   selectAll = ({ target }) => {
-    if (!target.checked) {
-      this.setState(state => ({
-        isAllSelected: !state.isAllSelected,
-        todos: state.todos.map(todo => ({
-          ...todo,
-          completed: false,
-        })),
-      }));
-    } else {
-      this.setState(state => ({
-        isAllSelected: !state.isAllSelected,
-        todos: state.todos.map(todo => ({
-          ...todo,
-          completed: true,
-        })),
-      }));
-    }
+    this.setState(state => ({
+      todos: state.todos.map(todo => ({
+        ...todo,
+        completed: target.checked,
+      })),
+    }));
   }
 
   saveToLocalStorage() {
