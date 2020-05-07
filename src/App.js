@@ -297,7 +297,10 @@ class App extends React.Component {
 
           />
           <label
-            className={this.state.todos.length || 'non-visible'}
+            className={(this.state.todos.length === 0)
+              ? 'non-visible'
+              : ''
+            }
             htmlFor="toggle-all"
           >
             Mark all as complete
@@ -314,9 +317,10 @@ class App extends React.Component {
         </section>
 
         <footer
-          className={(this.state.todos.length)
-            ? 'footer'
-            : 'non-visible footer'}
+          className={(this.state.todos.length === 0)
+            ? 'footer non-visible'
+            : 'footer'
+          }
         >
           <span className="todo-count">
             {activeItemCount}
