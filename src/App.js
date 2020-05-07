@@ -12,34 +12,18 @@ class App extends React.Component {
     isToggleAll: true,
     fieldValue: '',
     isAnyEditedField: false,
+    vertionOfLocalStorage: 3,
   }
 
   componentDidMount() {
-    if (!localStorage.getItem('ToDoAppData')) {
+    const initState = JSON.parse(localStorage.getItem('ToDoAppData'));
+
+    if (initState.vertionOfLocalStorage !== this.state.vertionOfLocalStorage) {
       return;
     }
 
-    const initState = JSON.parse(localStorage.getItem('ToDoAppData'));
-    const {
-      todos,
-      nextId,
-      typeOfFilter,
-      isAllButtonActive,
-      isActiveButtonActive,
-      isComplitedButtonActiv,
-      isToggleAll,
-      fieldValue,
-    } = initState;
-
     this.setState({
-      todos,
-      nextId,
-      typeOfFilter,
-      isAllButtonActive,
-      isActiveButtonActive,
-      isComplitedButtonActiv,
-      isToggleAll,
-      fieldValue,
+      ...initState,
     });
     this.checkerOfToggleAllState();
   }
