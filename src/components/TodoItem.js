@@ -8,7 +8,7 @@ export class TodoItem extends React.Component {
   }
 
   render() {
-    const { title, id, completed, toggleComplete } = this.props;
+    const { title, id, completed, toggleComplete, removeTodo } = this.props;
     const { titleInList } = this.state;
 
     return (
@@ -31,6 +31,7 @@ export class TodoItem extends React.Component {
             <button
               type="button"
               className="destroy"
+              onClick={() => removeTodo(id)}
             />
           </div>
           <input
@@ -49,4 +50,5 @@ TodoItem.propTypes = {
   id: PropTypes.number.isRequired,
   toggleComplete: PropTypes.func.isRequired,
   completed: PropTypes.bool.isRequired,
+  removeTodo: PropTypes.func.isRequired,
 };

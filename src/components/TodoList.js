@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, toggleComplete }) => (
+export const TodoList = ({ todos, toggleComplete, removeTodo }) => (
 
   <section className="main">
     <input
@@ -18,6 +18,7 @@ export const TodoList = ({ todos, toggleComplete }) => (
           key={todo.id}
           {...todo}
           toggleComplete={toggleComplete}
+          removeTodo={removeTodo}
         />
       ))}
     </ul>
@@ -29,4 +30,5 @@ TodoList.propTypes = {
     PropTypes.object.isRequired,
   ).isRequired,
   toggleComplete: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
 };

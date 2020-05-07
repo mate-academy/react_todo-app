@@ -30,6 +30,12 @@ class App extends React.Component {
     }));
   }
 
+  removeTodo = (id) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].filter(todo => id !== todo.id),
+    }));
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -40,6 +46,7 @@ class App extends React.Component {
         <TodoList
           todos={this.state.todos}
           toggleComplete={this.toggleComplete}
+          removeTodo={this.removeTodo}
         />
         <TodosFilters />
       </section>
