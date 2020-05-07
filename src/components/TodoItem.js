@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import PropTypes from 'prop-types';
 
 export class TodoItem extends React.Component {
@@ -7,17 +8,19 @@ export class TodoItem extends React.Component {
   }
 
   render() {
-    const { title, id } = this.props;
+    const { title, id, completed, toggleComplete } = this.props;
     const { titleInList } = this.state;
 
     return (
-      <li>
+      <li className={cn({ completed })}>
         <form>
           <div className="view">
             <input
               type="checkbox"
               className="toggle"
               id={id}
+              checked={completed}
+              onChange={() => toggleComplete(id)}
             />
             <label
               htmlFor="todo-1"
@@ -44,4 +47,6 @@ export class TodoItem extends React.Component {
 TodoItem.propTypes = {
   title: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  toggleComplete: PropTypes.func.isRequired,
+  completed: PropTypes.bool.isRequired,
 };

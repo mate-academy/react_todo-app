@@ -15,6 +15,21 @@ class App extends React.Component {
     }));
   };
 
+  toggleComplete = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -22,7 +37,10 @@ class App extends React.Component {
           addNewTodo={this.addNewTodo}
           todos={this.state.todos}
         />
-        <TodoList todos={this.state.todos} />
+        <TodoList
+          todos={this.state.todos}
+          toggleComplete={this.toggleComplete}
+        />
         <TodosFilters />
       </section>
     );

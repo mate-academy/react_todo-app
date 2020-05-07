@@ -35,7 +35,7 @@ export class TodoApp extends React.Component {
     const newTodo = {
       title,
       id: todos.length + 1,
-      comleted: false,
+      completed: false,
     };
 
     addNewTodo(newTodo);
