@@ -20,11 +20,11 @@ class Header extends React.Component {
   sumbmitForm = (event) => {
     const { addTodos } = this.props;
 
+    event.preventDefault();
     if (this.state.title === '') {
       return;
     }
 
-    event.preventDefault();
     addTodos(this.state);
     this.reset();
   }
