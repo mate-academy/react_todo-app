@@ -27,11 +27,20 @@ class App extends React.Component {
     }));
   }
 
+  handleTaskRemover = (taskId) => {
+    this.setState(prev => ({
+      todos: [...prev.todos].filter(task => taskId !== task.id),
+    }));
+  }
+
   render() {
     return (
       <section className="todoapp">
         <TodoApp handleSubmit={this.handleSubmit} />
-        <TodoList todosList={this.state.todos} />
+        <TodoList
+          todosList={this.state.todos}
+          handleTaskRemover={this.handleTaskRemover}
+        />
         <TodosFilter />
       </section>
     );
