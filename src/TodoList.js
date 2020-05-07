@@ -22,6 +22,9 @@ class TodoList extends React.PureComponent {
       .find(el => el.id === +event.target.id).completed === false) {
       this.state.todoList
         .find(el => el.id === +event.target.id).completed = true;
+      this.setState(({ todoList }) => ({
+        todoList: [...todoList],
+      }));
     } else {
       this.state.todoList
         .find(el => el.id === +event.target.id).completed = false;
@@ -57,7 +60,8 @@ class TodoList extends React.PureComponent {
                     type="checkbox"
                     className="toggle"
                     id={el.id}
-                    onClick={this.handleComplete}
+                    checked={el.completed}
+                    onChange={this.handleComplete}
                   />
                   <label
                     htmlFor={this.state.listItemId}
