@@ -6,20 +6,7 @@ import TodoInput from './components/TodoInput';
 
 class App extends Component {
   state = {
-    todoData: [
-      // {
-      //   id: 1, label: 'Todo 123', completed: true,
-      // },
-      // {
-      //   id: 2, label: 'Todo 124', completed: true,
-      // },
-      // {
-      //   id: 3, label: 'Todo 125', completed: false,
-      // },
-      this.createTodoItem('Todo 1'),
-      this.createTodoItem('Todo 2'),
-      this.createTodoItem('Todo 3'),
-    ],
+    todoData: [],
     filter: 'all', // all, active, completed
   }
 
@@ -72,6 +59,15 @@ class App extends Component {
     });
   };
 
+  onToggleAllCompleted =({ target }) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map(todo => ({
+        ...todo,
+        completed: target.checked,
+      })),
+    }));
+  }
+
   // eslint-disable-next-line class-methods-use-this
   filter(items, filter) {
     switch (filter) {
@@ -103,6 +99,8 @@ class App extends Component {
     const completedCount = todoData.filter(el => el.completed).length;
     const todoCount = todoData.length - completedCount;
 
+    const allChecked = todoData.every(todo => todo.completed);
+
     return (
       <section className="todoapp">
         <header className="header">
@@ -112,7 +110,13 @@ class App extends Component {
         </header>
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={allChecked}
+            onChange={this.onToggleAllCompleted}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
             todos={visibleData}
