@@ -16,7 +16,7 @@ class App extends React.PureComponent {
     if (title === '') {
       // add error handling
       return;
-    } 
+    }
 
     const newTodo = {
       title,
