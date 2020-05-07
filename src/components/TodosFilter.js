@@ -12,7 +12,7 @@ const TodosFilter = ({ filterTypes, filtered, filter }) => (
             classNames({ selected: filter === filterType })
           }
           data-filter={filterType}
-          onClick={filtered}
+          onClick={evt => filtered(evt.target.getAttribute('data-filter'))}
         >
           {filterType}
         </button>
@@ -26,10 +26,7 @@ TodosFilter.propTypes = {
     PropTypes.string.isRequired,
   ).isRequired,
   filtered: PropTypes.func.isRequired,
-  filter: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]).isRequired,
+  filter: PropTypes.string.isRequired,
 };
 
 export default TodosFilter;

@@ -7,7 +7,7 @@ body {
 button {
   margin: 0;
   padding: 0;
-  border: 0;
+  border: 1px solid transparent;
   background: none;
   font-size: 100%;
   vertical-align: baseline;
@@ -35,10 +35,6 @@ body {
 
 li button {
   padding: 0 10px;
-}
-
-button {
-  border: 1px solid transparent;
 }
 
 :focus {

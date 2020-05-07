@@ -75,8 +75,7 @@ class App extends React.Component {
     });
   }
 
-  filteredItems = (evt) => {
-    const filter = evt.target.getAttribute('data-filter');
+  filteredItems = (filter) => {
     const { todos } = this.state;
 
     this.setState(() => {
