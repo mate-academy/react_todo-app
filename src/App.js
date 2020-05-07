@@ -96,7 +96,7 @@ class App extends React.PureComponent {
     this.resetState();
   }
 
-  viewPort = () => {
+  selectActiveView = () => {
     switch (this.state.selectedView) {
       case 'Active':
         return this.state.todoList.filter(el => el.completed === false);
@@ -142,7 +142,7 @@ class App extends React.PureComponent {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
-            todos={this.viewPort()}
+            todos={this.selectActiveView()}
             completed={this.makeCompleted}
             deleteItem={this.deleteItem}
           />
