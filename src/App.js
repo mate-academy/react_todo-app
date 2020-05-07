@@ -127,27 +127,30 @@ class App extends Component {
           />
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {todoCount}
-            {' '}
-            items left
-          </span>
+        {!todoData.length ? '' : (
+          <footer className="footer">
+            <span className="todo-count">
+              {todoCount}
+              {' '}
+              items left
+            </span>
 
-          <TodosFilter
-            onFilterChange={this.onFilterChange}
-            filter={filter}
-          />
+            <TodosFilter
+              onFilterChange={this.onFilterChange}
+              filter={filter}
+            />
 
-          <button
-            type="button"
-            onClick={this.onClearCompleted}
-            className="clear-completed"
-            disabled={completedCount ? '' : 'disabled'}
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              type="button"
+              onClick={this.onClearCompleted}
+              className="clear-completed"
+              disabled={completedCount ? '' : 'disabled'}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
+
       </section>
     );
   }
