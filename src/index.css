@@ -106,9 +106,13 @@ body {
 
 .new-todo {
   padding: 16px 16px 16px 60px;
-  border: none;
+  border: 1px solid transparent;
   background: rgba(0, 0, 0, 0.01);
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+}
+
+.error {
+  border: 1px solid red;
 }
 
 .main {
@@ -278,6 +282,10 @@ body {
     0 9px 1px -3px rgba(0, 0, 0, 0.2),
     0 16px 0 -6px #f6f6f6,
     0 17px 2px -6px rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .todo-count {
