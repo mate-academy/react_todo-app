@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { Button } from '../Button';
+import { Checkbox, TextInput } from '../Form';
 
 export class TodoItem extends Component {
   state = {
     inputTitle: this.props.title,
   }
 
-  handleChangeTitleTodo = ({ target }) => {
+  changeTitleTodo = ({ target }) => {
     this.setState({ inputTitle: target.value });
   }
 
@@ -62,12 +63,12 @@ export class TodoItem extends Component {
       >
         <form onSubmit={this.sendChanges}>
           <div className="view">
-            <input
-              type="checkbox"
+            <Checkbox 
+              id={`${id}`}
+              name={`${id}`}
               className="toggle"
-              id={id}
               checked={completed}
-              onChange={() => toggleTodoStatus(id)}
+              handleChange={toggleTodoStatus}
             />
 
             <label
@@ -81,18 +82,18 @@ export class TodoItem extends Component {
               id={`destroy-${id}`}
               name={`destroy-${id}`}
               className="destroy"
-              handlerClick={() => deleteTodo(id)}
+              handleClick={() => deleteTodo(id)}
             />
           </div>
           {editingTodoId === id && (
-            <input
-              type="text"
+            <TextInput 
               className="edit"
               id={`edit-${id}`}
+              name={`edit-${id}`}
               value={inputTitle}
               autoFocus={true}
-              onChange={this.handleChangeTitleTodo}
-              onBlur={this.sendChanges}
+              handleChange={this.changeTitleTodo}
+              handleBlur={this.sendChanges}
             />
           )}
         </form>

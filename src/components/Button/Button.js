@@ -6,14 +6,14 @@ export const Button = ({
   name,
   className,
   text,
-  handlerClick,
+  handleClick,
 }) => (
   <button
     id={id}
     name={name}
     type="button"
     className={className}
-    onClick={handlerClick}
+    onClick={handleClick}
   >
     {text}
   </button>
@@ -29,6 +29,6 @@ Button.propTypes = {
   name: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
   text: PropTypes.string,
-  handlerClick: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired,
 
 };

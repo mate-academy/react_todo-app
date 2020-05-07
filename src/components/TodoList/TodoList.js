@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './TodoList.css';
 import { TodoItem } from './TodoItem';
+import { Checkbox } from '../Form/Checkbox';
 
 export const TodoList = ({
   todoList,
@@ -14,12 +15,12 @@ export const TodoList = ({
   setTodoValue,
 }) => (
   <section className="main">
-    <input
-      type="checkbox"
+    <Checkbox 
       id="toggle-all"
+      name="toggle-all"
       className="toggle-all"
       checked={selectedAll}
-      onChange={toggleTodoAllStatus}
+      handleChange={toggleTodoAllStatus}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
 

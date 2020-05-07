@@ -52,7 +52,7 @@ export const Footer = ({
       name="clear-completed"
       className="clear-completed"
       text="Clear completed"
-      handlerClick={clearComplited}
+      handleClick={clearComplited}
     />
   </footer>
 );

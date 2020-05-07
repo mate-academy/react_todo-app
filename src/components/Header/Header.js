@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { TextInput } from '../Form';
 
 export class Header extends Component {
   state = {
@@ -43,12 +44,13 @@ export class Header extends Component {
         <h1>todos</h1>
 
         <form onSubmit={this.sendTodo}>
-          <input
+          <TextInput 
             className="new-todo"
-            placeholder="What needs to be done?"
+            id="new-todo"
+            name="new-todo"
             value={title}
-            onChange={this.handleInput}
-            onBlur={this.sendTodo}
+            handleChange={this.handleInput}
+            handleBlur={this.sendTodo}
           />
         </form>
       </header>

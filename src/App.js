@@ -43,7 +43,9 @@ class App extends PureComponent {
     }));
   }
 
-  toggleTodoStatus = (id) => {
+  toggleTodoStatus = ({ target }) => {
+    const id = parseInt(target.id);
+
     this.setState(state => ({
       todoList: state.todoList.map(todo => (
         (todo.id === id)
@@ -74,8 +76,6 @@ class App extends PureComponent {
     const { todoList } = this.state;
     const activeTodos = todoList.filter(todo => todo.completed).length
     const isSelectedAll = (todoList.length !== 0) ? activeTodos === todoList.length : false;
-
-    console.log(activeTodos, todoList.length, activeTodos === todoList.length)
 
     this.setState({ selectedAll: isSelectedAll });
   }
