@@ -69,7 +69,7 @@ class App extends Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  filter(items, filter) {
+  filterTodos(items, filter) {
     switch (filter) {
       case 'all':
         return items;
@@ -94,12 +94,14 @@ class App extends Component {
   render() {
     const { todoData, filter } = this.state;
 
-    const visibleData = this.filter(todoData, filter);
+    const visibleData = this.filterTodos(todoData, filter);
 
     const completedCount = todoData.filter(el => el.completed).length;
     const todoCount = todoData.length - completedCount;
 
-    const allChecked = todoData.every(todo => todo.completed);
+    const allChecked = todoData.length
+      ? todoData.every(el => el.completed)
+      : false;
 
     return (
       <section className="todoapp">
