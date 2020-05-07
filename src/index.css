@@ -390,3 +390,12 @@ html .clear-completed:active {
   color: rgb(175, 170, 170);
   text-decoration: line-through;
 }
+
+.change {
+  width: 90%;
+  height: 30px;
+  box-sizing: border-box;
+  border: 1px solid grey;
+  border-radius: 4px;
+  font-size: 24px;
+}

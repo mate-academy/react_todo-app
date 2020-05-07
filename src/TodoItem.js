@@ -2,9 +2,64 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-class TodoItem extends React.PureComponent {
+class TodoItem extends React.Component {
+state = {
+  onEdit: false,
+  onEditTodoId: '',
+}
+
+  onEdit = (id) => {
+    this.setState({
+      onEdit: true,
+      onEditTodoId: +id,
+    });
+  }
+
+  saveChangeBlur = (event) => {
+    const id = this.state.onEditTodoId;
+    const newTitle = event.target.value;
+
+    this.setState({
+      onEdit: false,
+    });
+    this.props.changeTitle(id, newTitle);
+  }
+
+  onKeyPress = (event) => {
+    const id = this.state.onEditTodoId;
+    const newTitle = event.target.value;
+
+    if (event.keyCode === 13) {
+      this.setState({
+        onEdit: false,
+      });
+      this.props.changeTitle(id, newTitle);
+    }
+
+    if (event.keyCode === 27) {
+      this.setState({
+        onEdit: false,
+      });
+    }
+  }
+
   render() {
     const { deleteTodo, todo, changeStatus } = this.props;
+    const { onEdit } = this.state;
+    let visibleContent;
+
+    if (!onEdit) {
+      visibleContent = todo.title;
+    } else {
+      visibleContent = (
+        <input
+          className="change"
+          defaultValue={todo.title}
+          onBlur={this.saveChangeBlur}
+          onKeyDown={this.onKeyPress}
+        />
+      );
+    }
 
     return (
 
@@ -16,14 +71,14 @@ class TodoItem extends React.PureComponent {
               className="toggle"
               id={todo.id}
               checked={todo.completed}
-              onChange={() => changeStatus(todo.id)
-              }
+              onChange={() => changeStatus(todo.id)}
             />
             <label
               className={classNames({ activeTodo: todo.completed })}
               htmlFor="todo"
+              onDoubleClick={() => this.onEdit(todo.id)}
             >
-              {todo.title}
+              {visibleContent}
             </label>
             <button
               type="button"
@@ -50,6 +105,7 @@ TodoItem.propTypes = {
   }).isRequired,
   changeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  changeTitle: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

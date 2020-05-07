@@ -29,6 +29,21 @@ class TodoApp extends React.Component {
     }));
   }
 
+  changeTitle = (id, newTitle) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title: newTitle,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
   deleteTodo = (event) => {
     const removeTodoId = this.state.todos
       .findIndex(item => item.id === +event.target.id);
@@ -113,6 +128,7 @@ class TodoApp extends React.Component {
           changeStatus={this.changeStatus}
           deleteTodo={this.deleteTodo}
           selectAllTodo={this.selectAllTodo}
+          changeTitle={this.changeTitle}
         />
 
         <footer

@@ -4,7 +4,13 @@ import TodoItem from './TodoItem';
 
 class TodoList extends React.PureComponent {
   render() {
-    const { todos, changeStatus, deleteTodo, selectAllTodo } = this.props;
+    const {
+      todos,
+      changeStatus,
+      deleteTodo,
+      selectAllTodo,
+      changeTitle,
+    } = this.props;
     const allChecked = todos.every(todo => todo.completed === true);
 
     return (
@@ -20,6 +26,7 @@ class TodoList extends React.PureComponent {
         <ul className="todo-list">
           {todos.map(todo => (
             <TodoItem
+              changeTitle={changeTitle}
               todo={todo}
               key={todo.id}
               changeStatus={changeStatus}
@@ -41,6 +48,7 @@ TodoList.propTypes = {
   changeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   selectAllTodo: PropTypes.func.isRequired,
+  changeTitle: PropTypes.func.isRequired,
 };
 
 export default TodoList;
