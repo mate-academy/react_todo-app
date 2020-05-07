@@ -8,7 +8,6 @@ class App extends React.Component {
     title: '',
     currentId: 1,
     activeItems: 'all',
-    allSelected: false,
   };
 
   handleTitleChange = (event) => {
@@ -29,16 +28,15 @@ class App extends React.Component {
           completed: !todo.completed,
         };
       }),
-    }), () => this.setAllTodosStatus());
+    }));
   }
 
-  toggleAllTodosStatus = () => {
-    this.setState(({ todos, allSelected }) => ({
+  toggleAllTodosStatus = ({ target }) => {
+    this.setState(({ todos }) => ({
       todos: todos.map(todo => ({
         ...todo,
-        completed: !allSelected,
+        completed: target.checked,
       })),
-      allSelected: !allSelected,
     }));
   }
 
@@ -63,20 +61,13 @@ class App extends React.Component {
       todos: [...state.todos, newTodo],
       title: '',
       currentId: state.currentId + 1,
-    }), () => this.setAllTodosStatus());
+    }));
   }
 
   deleteTodo = (todoId) => {
     this.setState(({ todos }) => ({
       todos: todos.filter(todo => todo.id !== todoId),
-    }), () => this.setAllTodosStatus());
-  }
-
-  setAllTodosStatus = () => {
-    const { todos } = this.state;
-    const allSelected = todos.every(todo => todo.completed);
-
-    this.setState({ allSelected });
+    }));
   }
 
   setActiveTodos = (item) => {
@@ -105,7 +96,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, title, allSelected, activeItems } = this.state;
+    const { todos, title, activeItems } = this.state;
     const visibleList = this.listFilter(activeItems);
     const todosFilters = ['all', 'active', 'completed'];
 
@@ -130,7 +121,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            checked={allSelected}
+            checked={todos.every(todo => todo.completed)}
             onChange={this.toggleAllTodosStatus}
           />
           {todos.length > 0 && (
