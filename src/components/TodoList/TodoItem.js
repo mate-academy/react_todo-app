@@ -8,6 +8,13 @@ export class TodoItem extends Component {
     inputTitle: this.props.title,
   }
 
+  textInput = React.createRef();
+  focusTextInput = this.focusTextInput.bind(this);
+
+  focusTextInput() {
+    this.textInput.current.focus();
+  }
+
   handleChangeTitleTodo = ({ target }) => {
     this.setState({ inputTitle: target.value });
   }
@@ -26,7 +33,8 @@ export class TodoItem extends Component {
     if (e.code === 'Escape') {
       this.setState({inputTitle: title })
       setEditingId();
-      document.removeEventListener('keyup', this.cancelChanges);
+
+      document.removeEventListener('keyup', this.handleKeyup);
     }
   }
 
@@ -78,20 +86,22 @@ export class TodoItem extends Component {
 
             <Button
               id={`destroy-${id}`}
+              name={`destroy-${id}`}
               className="destroy"
               handlerClick={() => deleteTodo(id)}
             />
           </div>
-
-          <input
-            type="text"
-            className="edit"
-            id={`edit-${id}`}
-            value={inputTitle}
-            autoFocus={true}
-            onChange={this.handleChangeTitleTodo}
-            onBlur={this.sendChanges}
-          />
+          {editingTodoId === id && (
+            <input
+              type="text"
+              className="edit"
+              id={`edit-${id}`}
+              value={inputTitle}
+              autoFocus={true}
+              onChange={this.handleChangeTitleTodo}
+              onBlur={this.sendChanges}
+            />
+          )}
         </form>
       </li>
     );

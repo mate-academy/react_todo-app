@@ -4,12 +4,17 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
 const todosFromServer = JSON.parse(localStorage.getItem('todos')) || [];
+const FILTER_TYPES = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+}
 
 class App extends PureComponent {
   state = {
     todoList: [...todosFromServer],
     editingTodoId: 0,
-    activeFilter: 'all',
+    activeFilter: FILTER_TYPES.all,
     selectedAll: false,
   }
 
@@ -68,8 +73,11 @@ class App extends PureComponent {
   checkSelectedAll = () => {
     const { todoList } = this.state;
     const activeTodos = todoList.filter(todo => todo.completed).length
+    const isSelectedAll = (todoList.length !== 0) ? activeTodos === todoList.length : false;
 
-    this.setState(state => ({ selectedAll: activeTodos === todoList.length }))
+    console.log(activeTodos, todoList.length, activeTodos === todoList.length)
+
+    this.setState({ selectedAll: isSelectedAll });
   }
 
   setEditingId =(id) => {
@@ -103,19 +111,19 @@ class App extends PureComponent {
   setFilter = (e) => {
     e.preventDefault();
 
-    const { id } = e.target;
+    const { name } = e.target;
 
-    this.setState({ activeFilter: id });
+    this.setState({ activeFilter: name });
   }
 
   getFilteredTodos = () => {
-    const { todoList, activeFilter: filter } = this.state;
+    const { todoList, activeFilter } = this.state;
 
-    if (filter === 'completed') {
+    if (activeFilter === FILTER_TYPES.completed) {
       return todoList.filter(todo => todo.completed);
     }
 
-    if (filter === 'active') {
+    if (activeFilter === FILTER_TYPES.active) {
       return todoList.filter(todo => !todo.completed);
     }
 

@@ -39,6 +39,7 @@ export const Footer = ({
             href={href}
             id={id}
             text={text}
+            name={id}
             activeFilter={activeFilter}
             setFilter={setFilter}
           />
@@ -48,6 +49,7 @@ export const Footer = ({
 
     <Button
       id="clear-completed"
+      name="clear-completed"
       className="clear-completed"
       text="Clear completed"
       handlerClick={clearComplited}
