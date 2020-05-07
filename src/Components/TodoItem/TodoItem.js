@@ -14,23 +14,27 @@ class TodoItem extends React.Component {
   }
 
   render() {
-    const { todo, allTasksSelected, handleTaskRemover } = this.props;
+    const { todo, statusHandler, handleTaskRemover } = this.props;
     const { isFinished } = this.state;
 
     return (
-      <li className={cn({
-        completed: isFinished || allTasksSelected,
-      })}
-      >
+      <li className={cn({ completed: todo.completed })}>
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
             id={`todo-${todo.id}`}
-            checked={isFinished || allTasksSelected}
-            onChange={this.taskStatusHandler}
+            checked={isFinished}
+            onChange={(e) => {
+              this.taskStatusHandler();
+              statusHandler(todo.id);
+            }}
           />
-          <label htmlFor={`todo-${todo.id}`}>{todo.title}</label>
+          <label
+            htmlFor={`todo-${todo.id}`}
+          >
+            {todo.title}
+          </label>
           <button
             type="button"
             className="destroy"
@@ -47,9 +51,10 @@ TodoItem.propTypes = {
   todo: PropTypes.shape({
     title: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
   }).isRequired,
-  allTasksSelected: PropTypes.bool.isRequired,
   handleTaskRemover: PropTypes.func.isRequired,
+  statusHandler: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

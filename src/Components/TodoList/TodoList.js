@@ -5,18 +5,11 @@ import TodoItem from '../TodoItem/TodoItem';
 
 class TodoList extends React.Component {
 state = {
-  allTasksSelected: false,
-}
 
-handleTogglerAll = () => {
-  this.setState(prev => ({
-    allTasksSelected: !prev.allTasksSelected,
-  }));
 }
 
 render() {
-  const { todosList, handleTaskRemover } = this.props;
-  const { allTasksSelected } = this.state;
+  const { todosList, handleTaskRemover, statusHandler } = this.props;
 
   return (
     <section className="main">
@@ -24,7 +17,6 @@ render() {
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
-        onClick={() => this.handleTogglerAll()}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -33,8 +25,8 @@ render() {
           <TodoItem
             todo={todo}
             key={todo.id}
-            allTasksSelected={allTasksSelected}
             handleTaskRemover={handleTaskRemover}
+            statusHandler={statusHandler}
           />
         ))}
       </ul>
@@ -69,6 +61,7 @@ TodoList.propTypes = {
     }),
   }).isRequired,
   handleTaskRemover: PropTypes.func.isRequired,
+  statusHandler: PropTypes.func.isRequired,
 };
 
 export default TodoList;

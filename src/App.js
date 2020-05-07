@@ -33,6 +33,21 @@ class App extends React.Component {
     }));
   }
 
+  statusHandler = (taskId) => {
+    this.setState(prev => ({
+      todos: prev.todos.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            completed: !task.completed,
+          };
+        }
+
+        return task;
+      }),
+    }));
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -40,6 +55,7 @@ class App extends React.Component {
         <TodoList
           todosList={this.state.todos}
           handleTaskRemover={this.handleTaskRemover}
+          statusHandler={this.statusHandler}
         />
         <TodosFilter />
       </section>
