@@ -2,28 +2,46 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-const TodoItem = ({ todo, allTasksSelected, handleTaskRemover }) => (
-  <li className={cn({
-    completed: allTasksSelected,
-  })}
-  >
-    <div className="view">
-      <input
-        type="checkbox"
-        className="toggle"
-        id="todo-1"
-        checked={allTasksSelected}
-      />
-      <label htmlFor="todo-1">{todo.title}</label>
-      <button
-        type="button"
-        className="destroy"
-        onClick={() => handleTaskRemover(todo.id)}
-      />
-    </div>
-    <input type="text" className="edit" />
-  </li>
-);
+class TodoItem extends React.Component {
+  state = {
+    isFinished: false,
+  }
+
+  taskStatusHandler = () => {
+    this.setState(prev => ({
+      isFinished: !prev.isFinished,
+    }));
+  }
+
+  render() {
+    const { todo, allTasksSelected, handleTaskRemover } = this.props;
+    const { isFinished } = this.state;
+
+    return (
+      <li className={cn({
+        completed: isFinished || allTasksSelected,
+      })}
+      >
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id={`todo-${todo.id}`}
+            checked={isFinished || allTasksSelected}
+            onChange={this.taskStatusHandler}
+          />
+          <label htmlFor={`todo-${todo.id}`}>{todo.title}</label>
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => handleTaskRemover(todo.id)}
+          />
+        </div>
+        <input type="text" className="edit" />
+      </li>
+    );
+  }
+}
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
