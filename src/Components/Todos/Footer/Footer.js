@@ -1,43 +1,59 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable quote-props */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const Footer = (props) => {
-  const { todos,
+  const {
+    todos,
     deleteAllCompleted,
     showActive,
     isAll,
     isActive,
     isCompleted,
     showCompleted,
-    showAll } = props;
+    showAll,
+  } = props;
 
-  const oneTodo = todos.filter(todo => !todo.completed).length;
-  const handleAllSelector = classNames('', { 'selected': isAll });
-  const handleActiveSelector = classNames('', { 'selected': isActive });
-  const handleCompletedSelector = classNames('', { 'selected': isCompleted });
+  const todoCount = todos.filter(todo => !todo.completed).length;
+  const allSelector = classNames('', { selected: isAll });
+  const activeSelector = classNames('', { selected: isActive });
+  const completedSelector = classNames('', { selected: isCompleted });
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {oneTodo} items left
+        {todoCount}
+        {' '}
+        items left
       </span>
 
       <ul className="filters">
-        <li onClick={showAll}>
-          <a href="#/" className={handleAllSelector}>All</a>
+        <li>
+          <a
+            onClick={showAll}
+            href="#/"
+            className={allSelector}
+          >
+            All
+          </a>
         </li>
 
-        <li onClick={showActive}>
-          <a href="#/active" className={handleActiveSelector}>Active</a>
+        <li>
+          <a
+            onClick={showActive}
+            href="#/active"
+            className={activeSelector}
+          >
+            Active
+          </a>
         </li>
 
-        <li onClick={showCompleted}>
-          <a href="#/completed" className={handleCompletedSelector}>
+        <li>
+          <a
+            onClick={showCompleted}
+            href="#/completed"
+            className={completedSelector}
+          >
             Completed
           </a>
         </li>

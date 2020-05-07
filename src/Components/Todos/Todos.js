@@ -32,25 +32,11 @@ class Todos extends React.Component {
     const { todos } = this.state;
     const index = todos.map(todo => todo.id).indexOf(id);
 
-    const ifCompleted = todos[index].completed;
+    this.setState((prevState) => {
+      todos[index].completed = !todos[index].completed;
 
-    const setIncompleted = () => {
-      this.setState((prevState) => {
-        todos[index].completed = !todos[index].completed;
-
-        return todos;
-      });
-    };
-
-    const setCompleted = () => {
-      this.setState((prevState) => {
-        todos[index].completed = !todos[index].completed;
-
-        return todos;
-      });
-    };
-
-    ifCompleted ? setIncompleted() : setCompleted();
+      return todos;
+    });
   }
 
   handleDeleteBtn = (id) => {
@@ -155,12 +141,14 @@ class Todos extends React.Component {
   }
 
   render() {
-    const { todos,
+    const {
+      todos,
       isAll,
       isActive,
       isCompleted,
       activeTodos,
-      completedTodos } = this.state;
+      completedTodos,
+    } = this.state;
 
     let conditionalRenderingTodos = todos;
 

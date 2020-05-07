@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const TodoItem = ({ todo, deleteTodo, isCompleted }) => {
-  // eslint-disable-next-line quote-props
-  const completedClassToggle = classNames('', { 'completed': todo.completed });
+  const completedClassToggle = classNames('', { completed: todo.completed });
 
   return (
     <li className={completedClassToggle}>
@@ -30,13 +29,11 @@ const TodoItem = ({ todo, deleteTodo, isCompleted }) => {
 };
 
 TodoItem.propTypes = {
-  todo: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      text: PropTypes.string,
-      completed: PropTypes.bool,
-    }),
-  ).isRequired,
+  todo: PropTypes.shape({
+    id: PropTypes.string,
+    text: PropTypes.string,
+    completed: PropTypes.bool,
+  }).isRequired,
   isCompleted: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
 };

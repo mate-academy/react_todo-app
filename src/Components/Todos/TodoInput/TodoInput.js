@@ -17,10 +17,10 @@ class TodoInput extends React.Component {
   }
 
   handleInputChange = (event) => {
-    const controlledInput = (event.target.value).trim();
+    const { value } = event.target;
 
     this.setState({
-      input: controlledInput,
+      input: value.trim(),
     });
   }
 

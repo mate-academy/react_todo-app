@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ToggleInput = ({ toggleAllCompleted }) => (
-  <>
+  <div>
     <input
       onClick={toggleAllCompleted}
       type="checkbox"
@@ -10,7 +10,7 @@ const ToggleInput = ({ toggleAllCompleted }) => (
       className="toggle-all"
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
-  </>
+  </div>
 );
 
 ToggleInput.propTypes = {

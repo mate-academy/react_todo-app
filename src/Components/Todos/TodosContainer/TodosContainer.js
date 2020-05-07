@@ -4,10 +4,12 @@ import TodoList from './TodosList/TodosList';
 import ToggleInput from './ToggleInput/ToggleInput';
 
 const TodosContainer = (props) => {
-  const { todos,
+  const {
+    todos,
     toggleAllCompleted,
     isCompleted,
-    deleteTodo } = props;
+    deleteTodo,
+  } = props;
 
   return (
     <section className="main">
