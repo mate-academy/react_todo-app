@@ -4,7 +4,6 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
 const todosFromServer = JSON.parse(localStorage.getItem('todos')) || [];
-const pattern = /^[A-Za-z0-9\s]+$/giu;
 
 class App extends PureComponent {
   state = {
@@ -135,7 +134,7 @@ class App extends PureComponent {
 
     return (
       <section className="todoapp">
-        <Header addNewTodo={this.addNewTodo} pattern={pattern} />
+        <Header addNewTodo={this.addNewTodo} />
 
         <TodoList
           todoList={filteredTodoList}
@@ -146,7 +145,6 @@ class App extends PureComponent {
           deleteTodo={this.deleteTodo}
           setEditingId={this.setEditingId}
           setTodoValue={this.setTodoValue}
-          pattern={pattern}
         />
 
         <Footer

@@ -17,11 +17,11 @@ export class Header extends Component {
   sendTodo = (e) => {
     e.preventDefault();
 
-    const { addNewTodo, pattern } = this.props;
+    const { addNewTodo } = this.props;
     const { title } = this.state;
 
-    if (pattern.test(title)) {
-      addNewTodo(title);
+    if (title.trim().length > 0) {
+      addNewTodo(title.trim());
       this.reset();
     }
   }

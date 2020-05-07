@@ -12,7 +12,6 @@ export const TodoList = ({
   deleteTodo,
   setEditingId,
   setTodoValue,
-  pattern,
 }) => (
   <section className="main">
     <input
@@ -33,7 +32,6 @@ export const TodoList = ({
           deleteTodo={deleteTodo}
           setEditingId={setEditingId}
           setTodoValue={setTodoValue}
-          pattern={pattern}
           key={todo.id}
         />
       ))}

@@ -15,31 +15,28 @@ export class TodoItem extends Component {
   onEdit = (id) => {
     const { setEditingId } = this.props;
 
-    document.addEventListener('keyup', this.cancelChanges)
+    document.addEventListener('keyup', this.handleKeyup)
 
     setEditingId(id)
   }
 
-  cancelChanges =(e) => {
+  handleKeyup =(e) => {
     const { title, setEditingId } = this.props;
 
-    if (e.code !== 'Escape') {
-      return;
+    if (e.code === 'Escape') {
+      this.setState({inputTitle: title })
+      setEditingId();
+      document.removeEventListener('keyup', this.cancelChanges);
     }
-
-    this.setState({inputTitle: title })
-    setEditingId();
-
-    document.removeEventListener('keyup', this.cancelChanges);
   }
 
   sendChanges = (e) => {
     e.preventDefault();
 
-    const { id, setTodoValue, pattern } = this.props;
+    const { id, setTodoValue } = this.props;
     const { inputTitle } = this.state;
 
-    if (pattern.test(inputTitle)) {
+    if (inputTitle.trim().length > 0) {
       setTodoValue(id, 'title', inputTitle.trim());
     }
   }
@@ -91,6 +88,7 @@ export class TodoItem extends Component {
             className="edit"
             id={`edit-${id}`}
             value={inputTitle}
+            autoFocus={true}
             onChange={this.handleChangeTitleTodo}
             onBlur={this.sendChanges}
           />
