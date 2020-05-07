@@ -328,8 +328,14 @@ html .clear-completed:active {
   cursor: pointer;
 }
 
-.clear-completed:hover {
-  text-decoration: underline;
+/*.clear-completed:hover {*/
+/*  text-decoration: underline;*/
+/*}*/
+
+.clear-completed:disabled {
+  color: hsla(0,0%,46.7%, 0.4);
+  text-decoration: none;
+  cursor: not-allowed;
 }
 
 .info {
