@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import TodosFilter from './components/TodosFilter';
 import TodoList from './components/TodoList';
 import TodoInput from './components/TodoInput';
@@ -6,15 +7,18 @@ import TodoInput from './components/TodoInput';
 class App extends Component {
   state = {
     todoData: [
-      {
-        id: 1, label: 'Todo 123', completed: true,
-      },
-      {
-        id: 2, label: 'Todo 124', completed: true,
-      },
-      {
-        id: 3, label: 'Todo 125', completed: false,
-      },
+      // {
+      //   id: 1, label: 'Todo 123', completed: true,
+      // },
+      // {
+      //   id: 2, label: 'Todo 124', completed: true,
+      // },
+      // {
+      //   id: 3, label: 'Todo 125', completed: false,
+      // },
+      this.createTodoItem('Todo 1'),
+      this.createTodoItem('Todo 2'),
+      this.createTodoItem('Todo 3'),
     ],
     filter: 'all', // all, active, completed
   }
@@ -48,6 +52,16 @@ class App extends Component {
     }));
   }
 
+  addItem = (text) => {
+    const newItem = this.createTodoItem(text);
+
+    this.setState(({ todoData }) => {
+      const newArr = [...todoData, newItem];
+
+      return { todoData: newArr };
+    });
+  };
+
   deleteItem = (id) => {
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex(el => el.id === id);
@@ -72,6 +86,15 @@ class App extends Component {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  createTodoItem(label) {
+    return {
+      id: uuidv4(),
+      label,
+      completed: false,
+    };
+  }
+
   render() {
     const { todoData, filter } = this.state;
 
@@ -85,7 +108,7 @@ class App extends Component {
         <header className="header">
           <h1>todos</h1>
 
-          <TodoInput />
+          <TodoInput onItemAdded={this.addItem} />
         </header>
 
         <section className="main">

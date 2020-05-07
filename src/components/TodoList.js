@@ -23,7 +23,7 @@ const TodoList = ({ todos, onToggleCompleted, onDeleted }) => {
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     completed: PropTypes.bool,
   })),

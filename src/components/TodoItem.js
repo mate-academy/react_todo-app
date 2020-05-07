@@ -22,7 +22,7 @@ const TodoItem = ({ id, title, completed, onToggleCompleted, onDeleted }) => (
 );
 
 TodoItem.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool,
   onToggleCompleted: PropTypes.func.isRequired,
