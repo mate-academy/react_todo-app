@@ -77,7 +77,7 @@ class TodoApp extends Component {
   }
 
   addNewTodo = () => {
-    if (this.state.newTodo) {
+    if (this.state.newTodo.trim().length !== 0) {
       this.setState(state => ({
         todoList: [
           ...state.todoList,
@@ -89,6 +89,8 @@ class TodoApp extends Component {
         ],
         newTodo: '',
       }));
+    } else {
+      this.setState({ newTodo: '' });
     }
   }
 
