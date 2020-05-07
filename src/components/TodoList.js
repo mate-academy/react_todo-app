@@ -2,13 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, toggleComplete, removeTodo }) => (
+export const TodoList = ({
+  todos,
+  selectAll,
+  toggleComplete,
+  removeTodo,
+  toggleSelectAll,
+}) => (
 
   <section className="main">
     <input
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
+      checked={selectAll}
+      onChange={() => toggleSelectAll(selectAll)}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -31,4 +39,6 @@ TodoList.propTypes = {
   ).isRequired,
   toggleComplete: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
+  selectAll: PropTypes.bool.isRequired,
+  toggleSelectAll: PropTypes.func.isRequired,
 };

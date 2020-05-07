@@ -18,12 +18,12 @@ export class TodoItem extends React.Component {
             <input
               type="checkbox"
               className="toggle"
-              id={id}
+              id={`todo-${id}`}
               checked={completed}
               onChange={() => toggleComplete(id)}
             />
             <label
-              htmlFor="todo-1"
+              htmlFor={id}
             >
               {title}
               {id}

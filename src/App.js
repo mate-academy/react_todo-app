@@ -7,6 +7,7 @@ import todos from './todos';
 class App extends React.Component {
   state = {
     todos: [...todos],
+    selectAll: false,
   }
 
   addNewTodo = (todo) => {
@@ -36,6 +37,16 @@ class App extends React.Component {
     }));
   }
 
+  toggleSelectAll = (selectAll) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: !selectAll,
+      })),
+      selectAll: !selectAll,
+    }));
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -45,8 +56,10 @@ class App extends React.Component {
         />
         <TodoList
           todos={this.state.todos}
+          selectAll={this.state.selectAll}
           toggleComplete={this.toggleComplete}
           removeTodo={this.removeTodo}
+          toggleSelectAll={this.toggleSelectAll}
         />
         <TodosFilters />
       </section>
