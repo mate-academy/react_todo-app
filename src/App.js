@@ -9,6 +9,23 @@ const FILTER_TYPES = {
   completed: 'completed',
   active: 'active',
 }
+const filterButtons = [
+  {
+    type: FILTER_TYPES.all,
+    href: '#/',
+    text: 'All',
+  },
+  {
+    type: FILTER_TYPES.active,
+    href: '#/active',
+    text: 'Active',
+  },
+  {
+    type: FILTER_TYPES.completed,
+    href: '#/completed',
+    text: 'Completed',
+  },
+];
 
 class App extends PureComponent {
   state = {
@@ -157,6 +174,7 @@ class App extends PureComponent {
 
         <Footer
           todoList={todoList}
+          filterButtons={filterButtons}
           activeFilter={activeFilter}
           setFilter={this.setFilter}
           clearComplited={this.clearComplited}

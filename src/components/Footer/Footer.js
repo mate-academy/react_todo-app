@@ -3,26 +3,9 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { ButtonLink, Button } from '../Button';
 
-const filterButtons = [
-  {
-    id: 'all',
-    href: '#/',
-    text: 'All',
-  },
-  {
-    id: 'active',
-    href: '#/active',
-    text: 'Active',
-  },
-  {
-    id: 'completed',
-    href: '#/completed',
-    text: 'Completed',
-  },
-];
-
 export const Footer = ({
   todoList,
+  filterButtons,
   activeFilter,
   setFilter,
   clearComplited,
@@ -33,13 +16,13 @@ export const Footer = ({
     </span>
 
     <ul className="filters">
-      {filterButtons.map(({ id, href, text }) => (
-        <li key={id}>
+      {filterButtons.map(({ type, href, text }) => (
+        <li key={type}>
           <ButtonLink
             href={href}
-            id={id}
+            id={type}
             text={text}
-            name={id}
+            name={type}
             activeFilter={activeFilter}
             handleClick={setFilter}
           />
@@ -61,6 +44,9 @@ Footer.propTypes = {
   todoList: PropTypes.arrayOf(
     PropTypes.object.isRequired,
   ).isRequired,
+  filterButtons: PropTypes.arrayOf(
+    PropTypes.object.isRequired,
+  ),
   activeFilter: PropTypes.string.isRequired,
   setFilter: PropTypes.func.isRequired,
   clearComplited: PropTypes.func.isRequired,

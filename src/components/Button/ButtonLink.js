@@ -19,7 +19,6 @@ export const ButtonLink = ({
   >
     {text}
   </a>
-
 );
 
 ButtonLink.propTypes = {
