@@ -20,6 +20,10 @@ button {
   -moz-osx-font-smoothing: grayscale;
 }
 
+li button {
+  margin: 0 10px;
+}
+
 body {
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.4em;
