@@ -14,6 +14,12 @@ class TodoItem extends Component {
     });
   }
 
+  handleEditingBlur = () => {
+    this.setState({
+      isEditing: false,
+    });
+  }
+
   handleEditingKeyDown = (e) => {
     const {
       id,
@@ -82,13 +88,20 @@ class TodoItem extends Component {
             onClick={() => handleDeleteTodo(id)}
           />
         </div>
-        <input
-          type="text"
-          className="edit"
-          value={newTitle}
-          onChange={this.handleEditing}
-          onKeyDown={this.handleEditingKeyDown}
-        />
+        {isEditing && (
+          <input
+            type="text"
+            className="edit"
+            value={newTitle}
+            onBlur={this.handleEditingBlur}
+            onChange={this.handleEditing}
+            onKeyDown={this.handleEditingKeyDown}
+            ref={this.myRef}
+            /* eslint-disable jsx-a11y/no-autofocus */
+            autoFocus
+          />
+        )}
+
       </li>
     );
   }
