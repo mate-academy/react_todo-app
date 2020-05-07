@@ -35,7 +35,7 @@ class App extends React.Component {
     });
   }
 
-  addNewTodo = () => {
+  addNewTodo = (event) => {
     if (this.state.title.trim() !== '') {
       this.setState(state => ({
         todos: [
@@ -50,6 +50,8 @@ class App extends React.Component {
         title: '',
       }));
     }
+
+    event.preventDefault();
   }
 
   editTodo = (id, title) => {
