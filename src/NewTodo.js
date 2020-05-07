@@ -10,12 +10,11 @@ class NewTodo extends React.Component {
   }
 
   handleSubmit = (event) => {
+    event.preventDefault();
     const { title, id } = this.state;
     const { addTodo } = this.props;
 
-    event.preventDefault();
-
-    if (title.length === 0) {
+    if (title.trim() === '') {
       this.setState({
         inputError: true,
       });
@@ -34,9 +33,16 @@ class NewTodo extends React.Component {
   }
 
   onTitleChange = (event) => {
-    this.setState({
-      title: event.target.value,
-    });
+    if (event.target.value.trim() !== '') {
+      this.setState({
+        title: event.target.value,
+        inputError: false,
+      });
+    } else {
+      this.setState({
+        title: '',
+      });
+    }
   }
 
   render() {

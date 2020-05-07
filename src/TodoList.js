@@ -5,6 +5,7 @@ import TodoItem from './TodoItem';
 class TodoList extends React.PureComponent {
   render() {
     const { todos, changeStatus, deleteTodo, selectAllTodo } = this.props;
+    const allChecked = todos.every(todo => todo.completed === true);
 
     return (
       <section className="main">
@@ -13,6 +14,7 @@ class TodoList extends React.PureComponent {
           id="toggle-all"
           className="toggle-all"
           onChange={selectAllTodo}
+          checked={allChecked}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">

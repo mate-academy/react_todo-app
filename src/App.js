@@ -3,26 +3,10 @@ import classNames from 'classnames';
 import TodoList from './TodoList';
 import NewTodo from './NewTodo';
 
-const test = [
-  {
-    id: 1,
-    title: 'delectus aut autem',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'quis ut nam facilis et officia qui',
-    completed: false,
-  },
-];
-
 class TodoApp extends React.Component {
   state = {
-    todos: test,
+    todos: [],
     filter: 'all',
-    onButtonAllSelect: false,
-    onButtonActiveSelect: false,
-    onButtonCompletedSelect: false,
     onSelectAllTodos: true,
   }
 
@@ -79,27 +63,18 @@ class TodoApp extends React.Component {
   filterViewAll = () => {
     this.setState({
       filter: 'all',
-      onButtonAllSelect: true,
-      onButtonActiveSelect: false,
-      onButtonCompletedSelect: false,
     });
   }
 
   filterActive = () => {
     this.setState({
       filter: 'active',
-      onButtonAllSelect: false,
-      onButtonActiveSelect: true,
-      onButtonCompletedSelect: false,
     });
   }
 
   filterCompleted = () => {
     this.setState({
       filter: 'completed',
-      onButtonAllSelect: false,
-      onButtonActiveSelect: false,
-      onButtonCompletedSelect: true,
     });
   }
 
@@ -107,9 +82,6 @@ class TodoApp extends React.Component {
     const {
       todos,
       filter,
-      onButtonAllSelect,
-      onButtonActiveSelect,
-      onButtonCompletedSelect,
     } = this.state;
 
     const notComplitedTodo = todos.filter(todo => todo.completed === false);
@@ -156,7 +128,7 @@ class TodoApp extends React.Component {
             <li>
               <a
                 href="#/"
-                className={classNames({ selected: onButtonAllSelect })}
+                className={classNames({ selected: filter === 'all' })}
                 onClick={this.filterViewAll}
               >
                 All
@@ -166,7 +138,7 @@ class TodoApp extends React.Component {
               <a
                 href="#/active"
                 onClick={this.filterActive}
-                className={classNames({ selected: onButtonActiveSelect })}
+                className={classNames({ selected: filter === 'active' })}
               >
                 Active
               </a>
@@ -175,7 +147,7 @@ class TodoApp extends React.Component {
               <a
                 href="#/completed"
                 onClick={this.filterCompleted}
-                className={classNames({ selected: onButtonCompletedSelect })}
+                className={classNames({ selected: filter === 'completed' })}
               >
                 Completed
               </a>
