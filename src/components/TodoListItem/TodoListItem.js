@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import './TodoListItem.scss';
 
 export const TodoListItem = ({
@@ -10,11 +11,8 @@ export const TodoListItem = ({
   switchTaskStatus,
   checked,
 }) => (
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
   <li
-    className={status === 'completed' ? 'completed' : 'active'}
-    onClick={e => switchTaskStatus(id)}
+    className={classNames(status)}
   >
     <div className="view">
       <input
@@ -22,13 +20,10 @@ export const TodoListItem = ({
         className="toggle"
         id={`todo-${id}`}
         checked={checked}
-        readOnly
+        onChange={e => switchTaskStatus(id)}
       />
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
       <label
         htmlFor={`todo-${id}`}
-        onClick={e => switchTaskStatus(id)}
       >
         {task}
       </label>

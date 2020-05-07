@@ -1,5 +1,21 @@
 import React, { Component } from 'react';
 import { TodoList } from './components/TodoList/TodoList';
+import { FilterList } from './components/FilterList/FilterList';
+
+const listItems = [
+  {
+    href: '#/',
+    title: 'All',
+  },
+  {
+    href: '#/active',
+    title: 'Active',
+  },
+  {
+    href: '#/completed',
+    title: 'Completed',
+  },
+];
 
 class App extends Component {
   state = {
@@ -8,33 +24,32 @@ class App extends Component {
     inputText: '',
     prevId: 0,
     allTodos: [],
+    currentFilter: 'All',
   }
 
   addNewTask = (e) => {
     if (e.key === 'Enter') {
-      this.setState(prev => ({
-        todos: [
-          ...prev.todos,
-          {
-            id: prev.prevId + 1,
-            title: prev.inputText,
-            status: 'active',
-            checked: false,
-          },
-        ],
-        allTodos: [
-          ...prev.todos,
-          {
-            id: prev.prevId + 1,
-            title: prev.inputText,
-            status: 'active',
-            checked: false,
-          },
-        ],
-        prevId: prev.prevId + 1,
-        inputText: '',
-        todosLength: prev.todos.length + 1,
-      }));
+      if (this.state.inputText.trim() === '') {
+        this.setState({
+          inputText: '',
+        });
+      } else {
+        this.setState(prev => ({
+          allTodos: [
+            ...prev.allTodos,
+            {
+              id: prev.prevId + 1,
+              title: prev.inputText.trim(),
+              status: 'active',
+              checked: false,
+            },
+          ],
+          prevId: prev.prevId + 1,
+          inputText: '',
+          todosLength: prev.todos.length + 1,
+        }));
+        this.filterCurrentValue();
+      }
     }
   }
 
@@ -44,72 +59,109 @@ class App extends Component {
     });
   }
 
-  deleteItemList = (id) => {
+  filterCurrentValue = () => {
+    if (this.state.currentFilter === 'All') {
+      this.setState(prev => ({
+        todos: [...prev.allTodos],
+      }));
+    } else {
+      this.setState(prev => ({
+        todos: prev.allTodos.filter(item => (
+          item.status === prev.currentFilter.toLowerCase()
+        )),
+      }));
+    }
+  }
+
+  changeAllItemsCallback = (status, checked) => {
     this.setState(prev => ({
-      todos: prev.todos.filter(item => item.id !== id),
-      allTodos: prev.todos.filter(item => item.id !== id),
+      allTodos: prev.allTodos.map((item) => {
+        const newItem = { ...item };
+
+        newItem.status = status;
+        newItem.checked = checked;
+
+        return newItem;
+      }),
+    }));
+
+    this.setState(prev => ({
+      todos: [...prev.allTodos],
     }));
   }
 
+  changeAllItems = (count) => {
+    if (!count) {
+      this.changeAllItemsCallback('active', false);
+    } else {
+      this.changeAllItemsCallback('completed', true);
+    }
+  }
+
+  deleteItemList = (id) => {
+    this.setState(prev => ({
+      allTodos: prev.allTodos.filter(item => item.id !== id),
+    }));
+
+    this.filterCurrentValue();
+  }
+
   counterItemsLeft = () => (
-    this.state.todos.filter(item => item.status === 'active').length
+    this.state.allTodos.filter(item => item.status === 'active').length
   )
 
   switchTaskStatus = (id) => {
     this.setState(prev => ({
-      todos: prev.todos.map((item) => {
+      allTodos: prev.allTodos.map((item) => {
+        const newItem = { ...item };
+
         if (item.id === id) {
-          // Шо тут линтер хочет, я не понимаю
-          // eslint-disable-next-line no-param-reassign
-          item.status = item.status === 'completed' ? 'active' : 'completed';
-          // eslint-disable-next-line no-param-reassign
-          item.checked = !item.checked;
+          newItem.status = item.status === 'completed' ? 'active' : 'completed';
+          newItem.checked = !item.checked;
         }
 
-        return item;
+        return newItem;
       }),
-      // allTodos: prev.allTodos.map((item, i , arr) => {
-      //   console.log(arr)
-      //   if (item.id === id) {
-      //     item.status = item.status === 'completed' ? 'active' : 'completed';
-      //     item.checked = !!item.checked;
-      //   }
-      //
-      //   return item;
-      // }),
     }));
+
+    this.filterCurrentValue();
   }
 
   clearCompleted = () => {
     this.setState(prev => ({
+      allTodos: prev.allTodos.filter(item => item.status === 'active'),
       todos: prev.todos.filter(item => item.status === 'active'),
-      allTodos: prev.todos.filter(item => item.status === 'active'),
     }));
   }
 
-  filterComponents = (method) => {
-    if (method === 'all') {
+  filterComponents = (e, method) => {
+    e.preventDefault();
+
+    if (method === 'All') {
       this.setState(prev => ({
-        todos: prev.allTodos,
+        todos: [...prev.allTodos],
+      }));
+    } else {
+      this.setState(prev => ({
+        todos: prev.allTodos.filter(item => (
+          item.status === method.toLowerCase()
+        )),
       }));
     }
 
-    if (method === 'active') {
-      this.setState(prev => ({
-        todos: prev.allTodos.filter(item => item.status === 'active'),
-      }));
-    }
-
-    if (method === 'completed') {
-      this.setState(prev => ({
-        todos: prev.allTodos.filter(item => item.status === 'completed'),
-      }));
-    }
+    this.setState({
+      currentFilter: method,
+    });
   }
 
   render() {
     const counter = this.counterItemsLeft();
-    const { todosLength, todos, inputText } = this.state;
+    const {
+      todosLength,
+      todos,
+      inputText,
+      currentFilter,
+    } = this.state;
 
     return (
       <section className="todoapp">
@@ -126,7 +178,13 @@ class App extends Component {
         </header>
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={!counter && todos.length}
+            onChange={() => this.changeAllItems(counter)}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           {!!todosLength && (
@@ -144,35 +202,11 @@ class App extends Component {
             {`${counter} items left`}
           </span>
 
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className="selected"
-                onClick={() => this.filterComponents('all')}
-              >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                onClick={() => this.filterComponents('active')}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                onClick={() => this.filterComponents('completed')}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
+          <FilterList
+            filterComponents={this.filterComponents}
+            listItems={listItems}
+            currentFilter={currentFilter}
+          />
 
           <button
             type="button"
