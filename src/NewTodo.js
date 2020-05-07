@@ -20,7 +20,7 @@ class NewTodo extends React.Component {
       });
     } else {
       addTodo({
-        id: id + 1,
+        id: id + Math.random() * 100,
         title: title.trim(),
         completed: false,
       });

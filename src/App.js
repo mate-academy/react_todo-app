@@ -10,6 +10,18 @@ class TodoApp extends React.Component {
     onSelectAllTodos: true,
   }
 
+  componentDidMount() {
+    const initialState = JSON.parse(localStorage.getItem('TODOs'));
+
+    this.setState({
+      ...initialState,
+    });
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('TODOs', JSON.stringify(this.state));
+  }
+
   addTodo = (newTodo) => {
     this.setState(prevState => ({ todos: [...prevState.todos, newTodo] }));
   }
