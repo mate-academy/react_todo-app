@@ -73,12 +73,15 @@ class App extends React.Component {
     const { todosList, currentFilter } = this.state;
 
     let preparedTodo = todosList;
-    let selectButton;
+    let selectAllButton;
+    let hideOnStart;
+
+    todosList.length > 0 ? hideOnStart = true : hideOnStart = false;
 
     if (this.checkCompleted(todosList) && todosList.length > 0) {
-      selectButton = true;
+      selectAllButton = true;
     } else {
-      selectButton = false;
+      selectAllButton = false;
     }
 
     if (currentFilter === FILTERS.active) {
@@ -100,14 +103,18 @@ class App extends React.Component {
             deleteTodo={this.deleteTodo}
             changeTodoStatus={this.changeTodoStatus}
             markAll={this.markAll}
-            selectButton={selectButton}
+            selectAllButton={selectAllButton}
+            hideOnStart={hideOnStart}
           />
         </section>
-        <Footer
-          todosList={todosList}
-          handlerChangeList={this.handlerChangeList}
-          handleClearCompleted={this.handleClearCompleted}
-        />
+        {hideOnStart && (
+          <Footer
+            todosList={todosList}
+            handlerChangeList={this.handlerChangeList}
+            handleClearCompleted={this.handleClearCompleted}
+          />
+        )}
+
       </section>
     );
   }
