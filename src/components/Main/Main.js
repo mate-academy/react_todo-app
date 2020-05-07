@@ -17,15 +17,15 @@ export const Main = ({
   const isAllCompleted = todos.every(todo => todo.completed);
 
   return (
-    <section className={cn('main')}>
+    <section className="main">
       <label
-        className={cn(isAllCompleted ? 'label-checked-all' : 'label')}
+        className={cn('label', { 'label-checked-all': isAllCompleted })}
         htmlFor="toggle-all"
       >
         <input
           type="checkbox"
           id="toggle-all"
-          className={cn('toggle-all')}
+          className="toggle-all"
           onChange={onToggleAllCompleted}
           checked={isAllCompleted}
         />
