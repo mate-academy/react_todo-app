@@ -29,9 +29,7 @@ const Footer = ({ noComletedTodo, onFilteredTodos }) => (
       {filterButtons.map(button => (
         <TodosFilter {...button} key={button.text} />
       ))}
-
     </ul>
-
     <button type="button" className="clear-completed">
       Clear completed
     </button>
