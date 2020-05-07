@@ -8,7 +8,7 @@ export class Header extends Component {
   }
 
 
-  handleInput =({ target }) => {
+  handleInputChange =({ target }) => {
     document.addEventListener('keyup', this.handleKeyup)
     this.setState({ title: target.value });
   }
@@ -49,7 +49,7 @@ export class Header extends Component {
             id="new-todo"
             name="new-todo"
             value={title}
-            handleChange={this.handleInput}
+            handleChange={this.handleInputChange}
             handleBlur={this.sendTodo}
           />
         </form>

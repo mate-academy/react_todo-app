@@ -41,7 +41,7 @@ export const Footer = ({
             text={text}
             name={id}
             activeFilter={activeFilter}
-            setFilter={setFilter}
+            handleClick={setFilter}
           />
         </li>
       ))}

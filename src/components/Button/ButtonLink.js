@@ -8,14 +8,14 @@ export const ButtonLink = ({
   name,
   text,
   activeFilter,
-  setFilter,
+  handleClick,
 }) => (
   <a
     id={id}
     name={name}
     href={href}
     className={cn({ selected: id === activeFilter })}
-    onClick={setFilter}
+    onClick={handleClick}
   >
     {text}
   </a>
@@ -28,5 +28,5 @@ ButtonLink.propTypes = {
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   activeFilter: PropTypes.string.isRequired,
-  setFilter: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired,
 };
