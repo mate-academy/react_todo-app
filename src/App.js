@@ -7,7 +7,7 @@ class App extends React.Component {
   state = {
     activePage: 'All',
     id: 0,
-    ListofTodo: [],
+    listOfTodo: [],
   }
 
   componentDidMount() {
@@ -29,7 +29,7 @@ class App extends React.Component {
       return;
     }
 
-    const sample = {
+    const sampleTodo = {
       id: this.state.id + 1,
       text: newTodoText.trim(),
       elementState: {
@@ -39,13 +39,13 @@ class App extends React.Component {
     };
 
     this.setState(state => ({
-      ListofTodo: state.ListofTodo.concat([{ ...sample }]),
+      listOfTodo: [...state.listOfTodo, sampleTodo],
       id: state.id + 1,
     }));
   }
 
   handleCheckboxChange = (id) => {
-    this.setState(state => ({ ListofTodo: state.ListofTodo.map((todo) => {
+    this.setState(state => ({ listOfTodo: state.listOfTodo.map((todo) => {
       if (todo.id !== id) {
         return todo;
       }
@@ -61,13 +61,13 @@ class App extends React.Component {
   }
 
   handleClickDestroy = (id) => {
-    this.setState(state => ({ ListofTodo: state.ListofTodo
+    this.setState(state => ({ listOfTodo: state.listOfTodo
       .filter(todo => todo.id !== id) }));
   }
 
   handleDoubleClick = (id, input) => {
     this.setState(state => ({
-      ListofTodo: state.ListofTodo.map((todo) => {
+      listOfTodo: state.listOfTodo.map((todo) => {
         if (todo.id !== id) {
           return todo;
         }
@@ -87,7 +87,7 @@ class App extends React.Component {
     const { value } = event.target;
 
     if (event.key === 'Enter') {
-      this.setState(state => ({ ListofTodo: state.ListofTodo.map((todo) => {
+      this.setState(state => ({ listOfTodo: state.listOfTodo.map((todo) => {
         if (todo.id !== id) {
           return todo;
         }
@@ -104,7 +104,7 @@ class App extends React.Component {
     }
 
     if (event.key === 'Escape') {
-      this.setState(state => ({ ListofTodo: state.ListofTodo.map((todo) => {
+      this.setState(state => ({ listOfTodo: state.listOfTodo.map((todo) => {
         if (todo.id !== id) {
           return todo;
         }
@@ -124,7 +124,7 @@ class App extends React.Component {
   handleLossFocus = (event, id) => {
     const { value } = event.target;
 
-    this.setState(state => ({ ListofTodo: state.ListofTodo.map((todo) => {
+    this.setState(state => ({ listOfTodo: state.listOfTodo.map((todo) => {
       if (todo.id !== id) {
         return todo;
       }
@@ -143,53 +143,35 @@ class App extends React.Component {
   handleToggleAll = (event) => {
     const { checked } = event.target;
 
-    if (checked) {
-      this.setState(state => ({ ListofTodo: state.ListofTodo.map(todo => ({
-        ...todo,
-        elementState: {
-          ...todo.elementState,
-          completed: true,
-        },
-      })) }));
-    } else {
-      this.setState(state => ({ ListofTodo: state.ListofTodo.map(todo => ({
-        ...todo,
-        elementState: {
-          ...todo.elementState,
-          completed: false,
-        },
-      })) }));
-    }
+    this.setState(state => ({ listOfTodo: state.listOfTodo.map(todo => ({
+      ...todo,
+      elementState: {
+        ...todo.elementState,
+        completed: checked,
+      },
+    })) }));
   }
 
-  handleSelectAll = () => {
-    this.setState({ activePage: 'All' });
+  handleSelectActivePage = (name) => {
+    this.setState({ activePage: name });
   }
 
-  handleSelectActive = () => {
-    this.setState({ activePage: 'Active' });
-  }
-
-  handleSelectComplited = () => {
-    this.setState({ activePage: 'Completed' });
-  }
-
-  hanleClearComplited = () => {
-    this.setState(state => ({ ListofTodo: state.ListofTodo
-      .filter(todo => todo.elementState.completed !== true) }));
+  handleClearCompleted = () => {
+    this.setState(state => ({ listOfTodo: state.listOfTodo
+      .filter(todo => !todo.elementState.completed) }));
   }
 
   render() {
-    const { ListofTodo, activePage } = this.state;
+    const { listOfTodo, activePage } = this.state;
     let visibleList;
 
     if (activePage === 'All') {
-      visibleList = [...ListofTodo];
+      visibleList = [...listOfTodo];
     } else if (activePage === 'Active') {
-      visibleList = [...ListofTodo
+      visibleList = [...listOfTodo
         .filter(todo => todo.elementState.completed === false)];
     } else {
-      visibleList = [...ListofTodo
+      visibleList = [...listOfTodo
         .filter(todo => todo.elementState.completed === true)];
     }
 
@@ -203,18 +185,18 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            checked={ListofTodo
-              .every(todo => todo.elementState.completed === true)}
+            checked={listOfTodo
+              .every(todo => todo.elementState.completed)}
             onChange={this.handleToggleAll}
           />
           <label
-            hidden={ListofTodo.length === 0}
+            hidden={listOfTodo.length === 0}
             htmlFor="toggle-all"
           >
             Mark all as complete
           </label>
           <TodoList
-            ListofTodo={visibleList}
+            listOfTodo={visibleList}
             handleCheckboxChange={this.handleCheckboxChange}
             handleDoubleClick={this.handleDoubleClick}
             handleEditing={this.handleEditing}
@@ -223,28 +205,26 @@ class App extends React.Component {
           />
         </section>
 
-        <footer hidden={ListofTodo.length === 0} className="footer">
+        <footer hidden={listOfTodo.length === 0} className="footer">
           <span className="todo-count">
-            {ListofTodo.reduce((acc, todo) => {
+            {listOfTodo.reduce((acc, todo) => {
               if (todo.elementState.completed) {
                 return acc - 1;
               }
 
               return acc;
-            }, ListofTodo.length)
+            }, listOfTodo.length)
             }
             {' items left'}
           </span>
           <Nav
-            handleSelectAll={this.handleSelectAll}
-            handleSelectActive={this.handleSelectActive}
-            handleSelectComplited={this.handleSelectComplited}
+            handleSelectActivePage={this.handleSelectActivePage}
             activePage={activePage}
           />
           <button
             type="button"
             className="clear-completed"
-            onClick={this.hanleClearComplited}
+            onClick={this.handleClearCompleted}
           >
             Clear completed
           </button>

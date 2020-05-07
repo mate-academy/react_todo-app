@@ -7,9 +7,7 @@ class Nav extends React.Component {
 
   render() {
     const {
-      handleSelectComplited,
-      handleSelectAll,
-      handleSelectActive,
+      handleSelectActivePage,
       activePage,
     } = this.props;
 
@@ -17,9 +15,9 @@ class Nav extends React.Component {
       <ul className="filters">
         <li>
           <a
+            onClick={() => handleSelectActivePage('All')}
             href="#/"
             className={cs({ selected: activePage === 'All' })}
-            onClick={() => handleSelectAll()}
           >
             All
           </a>
@@ -27,7 +25,7 @@ class Nav extends React.Component {
 
         <li>
           <a
-            onClick={() => handleSelectActive()}
+            onClick={() => handleSelectActivePage('Active')}
             href="#/active"
             className={cs({ selected: activePage === 'Active' })}
           >
@@ -37,7 +35,7 @@ class Nav extends React.Component {
 
         <li>
           <a
-            onClick={() => handleSelectComplited()}
+            onClick={() => handleSelectActivePage('Completed')}
             href="#/completed"
             className={cs({ selected: activePage === 'Completed' })}
           >
@@ -50,9 +48,7 @@ class Nav extends React.Component {
 }
 
 Nav.propTypes = {
-  handleSelectComplited: PropTypes.func.isRequired,
-  handleSelectAll: PropTypes.func.isRequired,
-  handleSelectActive: PropTypes.func.isRequired,
+  handleSelectActivePage: PropTypes.func.isRequired,
   activePage: PropTypes.string.isRequired,
 };
 

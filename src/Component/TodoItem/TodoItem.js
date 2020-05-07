@@ -2,11 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export class TodoItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.inputText = React.createRef();
-  }
+  inputText = React.createRef();
 
   componentDidUpdate() {
     if (this.inputText.current) {
@@ -26,7 +22,7 @@ export class TodoItem extends React.Component {
 
     return (
       <div>
-        {todo.elementState.editing === false
+        {!todo.elementState.editing
           ? (
             <div className="View">
               <input

@@ -4,46 +4,38 @@ import classNames from 'classnames';
 
 import { TodoItem } from '../TodoItem/TodoItem';
 
-class TodoList extends React.Component {
-  state = { };
-
-  render() {
-    const {
-      ListofTodo,
-      handleCheckboxChange,
-      handleDoubleClick,
-      handleEditing,
-      handleClickDestroy,
-      handleLossFocus,
-    } = this.props;
-
-    return (
-      <ul className="todo-list">
-        {ListofTodo.length !== 0
-          ? ListofTodo.map(todo => (
-            <li
-              className={classNames(todo.elementState)}
-              key={todo.id}
-            >
-              <TodoItem
-                todo={todo}
-                handleCheckboxChange={handleCheckboxChange}
-                handleDoubleClick={handleDoubleClick}
-                handleEditing={handleEditing}
-                handleClickDestroy={handleClickDestroy}
-                handleLossFocus={handleLossFocus}
-              />
-            </li>
-          ))
-          : <div />
-        }
-      </ul>
-    );
-  }
-}
+const TodoList = ({
+  listOfTodo,
+  handleCheckboxChange,
+  handleDoubleClick,
+  handleEditing,
+  handleClickDestroy,
+  handleLossFocus,
+}) => (
+  <ul className="todo-list">
+    {listOfTodo.length !== 0
+      ? listOfTodo.map(todo => (
+        <li
+          className={classNames(todo.elementState)}
+          key={todo.id}
+        >
+          <TodoItem
+            todo={todo}
+            handleCheckboxChange={handleCheckboxChange}
+            handleDoubleClick={handleDoubleClick}
+            handleEditing={handleEditing}
+            handleClickDestroy={handleClickDestroy}
+            handleLossFocus={handleLossFocus}
+          />
+        </li>
+      ))
+      : <div />
+    }
+  </ul>
+);
 
 TodoList.propTypes = {
-  ListofTodo: PropTypes.arrayOf(Object).isRequired,
+  listOfTodo: PropTypes.arrayOf(Object).isRequired,
   handleCheckboxChange: PropTypes.func.isRequired,
   handleDoubleClick: PropTypes.func.isRequired,
   handleEditing: PropTypes.func.isRequired,
