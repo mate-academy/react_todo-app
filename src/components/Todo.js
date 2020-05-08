@@ -12,12 +12,15 @@ const Todo = ({
 }) => {
   const [isEdit, showTodoInput] = useState(false);
   const [editedTitle, changeInputValue] = useState(title);
-  /* const [isError, showErrorClass] = useState(false); */
-  const ref = useRef(null);
+  const [isError, showErrorClass] = useState(false);
+  const ref = useRef();
 
   const handleInputValue = (e) => {
+    const changedTodoId = +e.target.id;
+
     if (e.key === 'Escape') {
       showTodoInput(false);
+      showErrorClass(false);
 
       return;
     }
@@ -25,17 +28,35 @@ const Todo = ({
     if (e.key === 'Enter') {
       const newTitle = editedTitle.trim();
 
-      if (newTitle) {
-        changeTodoValue(e, newTitle);
-        showTodoInput(false);
+      if (newTitle.length < 2 || newTitle.length > 30) {
+        showErrorClass(true);
+
+        return;
       }
+
+      changeTodoValue(changedTodoId, newTitle);
+      showTodoInput(false);
+      showErrorClass(false);
     }
   };
 
-  const handleClickOutside = (event) => {
-    if (ref.current.id && !ref.current.contains(event.target)) {
-      showTodoInput(false);
+  const handleClickOutside = (e) => {
+    if (ref.current.contains(e.target)) {
+      return;
     }
+
+    const value = ref.current.value.trim();
+    const changedTodoId = +ref.current.id;
+
+    if (value.length < 2 || value.length > 30) {
+      showErrorClass(true);
+
+      return;
+    }
+
+    changeTodoValue(changedTodoId, value);
+    showTodoInput(false);
+    showErrorClass(false);
   };
 
   useEffect(() => {
@@ -44,7 +65,7 @@ const Todo = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  });
+  }, []);
 
   return (
     <li className={classNames({
@@ -74,10 +95,11 @@ const Todo = ({
       </div>
       <input
         type="text"
-        className="edit"
+        className={classNames('edit', { error: isError })}
         ref={ref}
         id={id}
         value={editedTitle}
+        autoComplete="off"
         onChange={e => changeInputValue(e.target.value)}
         onKeyDown={handleInputValue}
       />

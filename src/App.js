@@ -8,12 +8,11 @@ const todosData = JSON.parse(localStorage.getItem('todosData')) || [];
 class App extends React.Component {
   state={
     todos: [...todosData],
-    newTodoId: 1,
+    newTodoId: todosData.length + 1 || 1,
     initialInputValue: '',
     isAllTodos: true,
     isActiveTodos: false,
     isCompletedTodos: false,
-
   }
 
   componentDidUpdate() {
@@ -38,6 +37,7 @@ class App extends React.Component {
       this.setState(state => ({
         todos: [...state.todos, todo],
         newTodoId: state.newTodoId + 1,
+        initialInputValue: '',
       }));
     }
   }
@@ -66,7 +66,10 @@ class App extends React.Component {
         // eslint-disable-next-line
           ...task, id: newId++,
         })),
-      newTodoId: state.todos.length,
+    }));
+
+    this.setState(state => ({
+      newTodoId: state.todos.length + 1,
     }));
   }
 
@@ -82,9 +85,16 @@ class App extends React.Component {
     }));
   }
 
-  changeTodoValue = (e, newTitle) => {
-    const id = +e.target.id;
+  toggleAllTodosStatus = ({ target }) => {
+    this.setState(state => ({
+      todos: state.todos.map(todo => ({
+        ...todo,
+        completed: target.checked,
+      })),
+    }));
+  }
 
+  changeTodoValue = (id, newTitle) => {
     this.setState(state => ({
       todos: state.todos.map(todo => (
         todo.id === id
@@ -166,7 +176,12 @@ class App extends React.Component {
         />
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onClick={this.toggleAllTodosStatus}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList

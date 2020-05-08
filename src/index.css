@@ -177,6 +177,10 @@ body {
   margin: 0 0 0 43px;
 }
 
+.error {
+  border: 1px solid #b83f45;
+}
+
 .todo-list li.editing .view {
   display: none;
 }
