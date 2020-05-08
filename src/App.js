@@ -6,12 +6,35 @@ class App extends React.Component {
   state = {
     todos: [],
     // title: '',
+
   }
 
   newTodo = (todo) => {
-    this.setState(state => ({
-      todos: [...state.todos, todo],
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
     }));
+  }
+
+  handleMarkAll =() => {
+    if (this.state.todos.every(todo => todo.completed === true)) {
+      this.setState(state => ({
+        todos: state.todos.map(todo => (
+          {
+            ...todo,
+            completed: false,
+          }
+        )),
+      }));
+    } else {
+      this.setState(state => ({
+        todos: state.todos.map(todo => (
+          {
+            ...todo,
+            completed: true,
+          }
+        )),
+      }));
+    }
   }
 
   handleChangeStatus = (id) => {
@@ -45,6 +68,10 @@ class App extends React.Component {
   }
 
   render() {
+    const { todos } = this.state;
+    const countOfNotFinishedTodos = todos
+      .filter(todo => todo.completed === false).length;
+
     return (
       <section className="todoapp">
         <header className="header">
@@ -57,32 +84,38 @@ class App extends React.Component {
           todos={this.state.todos}
           handleChangeStatus={this.handleChangeStatus}
           deleteTodo={this.deleteTodo}
+          handleMarkAll={this.handleMarkAll}
         />
-        <footer className="footer">
-          <span className="todo-count">
-            3 items left
-          </span>
+        {todos.length > 0
+          && (
+            <footer className="footer">
+              <span className="todo-count">
+                {countOfNotFinishedTodos}
+                {' '}
+                items left
+              </span>
 
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
+              <ul className="filters">
+                <li>
+                  <a href="#/" className="selected">All</a>
+                </li>
 
-            <li>
-              <a href="#/active">Active</a>
-            </li>
+                <li>
+                  <a href="#/active">Active</a>
+                </li>
 
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
+                <li>
+                  <a href="#/completed">Completed</a>
+                </li>
+              </ul>
 
-          <button type="button" className="clear-completed">
-            Clear completed
-          </button>
-        </footer>
+              <button type="button" className="clear-completed">
+                Clear completed
+              </button>
+            </footer>
+          )
+        }
       </section>
-
     );
   }
 }

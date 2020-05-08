@@ -5,7 +5,8 @@ class NewTodo extends React.Component {
   state = {
     title: '',
     id: 0,
-    // completed: false,
+    completed: false,
+
   }
 
   handleChangeTitle = ({ target }) => {
@@ -19,18 +20,27 @@ class NewTodo extends React.Component {
       {
         title: '',
         id: prevState.id + 1,
-        // completed: false,
+        completed: false,
       }
     ));
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { title, id } = this.state;
+    const { title, id, completed } = this.state;
+
+    if (!title.length) {
+      this.setState({
+        title: '',
+      });
+
+      return;
+    }
 
     this.props.newTodo({
       title,
       id: id + 1,
+      completed,
 
     });
 

@@ -4,7 +4,7 @@ import TodoItem from './TodoItem';
 
 class TodoList extends React.PureComponent {
   render() {
-    const { todos, deleteTodo, handleChangeStatus } = this.props;
+    const { todos, deleteTodo, handleChangeStatus, handleMarkAll } = this.props;
 
     return (
       <section className="main">
@@ -12,6 +12,7 @@ class TodoList extends React.PureComponent {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
+          onChange={handleMarkAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
@@ -37,6 +38,7 @@ TodoList.propTypes = {
   })).isRequired,
   handleChangeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  handleMarkAll: PropTypes.func.isRequired,
 
 };
 
