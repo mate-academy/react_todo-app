@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ id, title, completed, onToggleCompleted, onDeleted }) => (
+const TodoItem = ({
+  id, title, completed,
+  onToggleCompleted, onDeleted,
+}) => (
   <>
     <li className={completed ? 'completed' : 'view'}>
       <div className="view">

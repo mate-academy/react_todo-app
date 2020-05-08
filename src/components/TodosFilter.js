@@ -1,27 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const linksList = [
-  {
-    name: 'all', label: 'All',
-  },
-  {
-    name: 'active', label: 'Active',
-  },
-  {
-    name: 'completed', label: 'Completed',
-  },
-];
+import { filterUtils } from '../utils/FilterUtils';
 
 const TodosFilter = ({ onFilterChange, filter }) => {
-  const links = linksList.map(({ name, label }) => {
+  const links = filterUtils.filters.map(({ name, href, label }) => {
     const isActive = filter === name;
     const linkActive = isActive ? 'selected' : '';
 
     return (
       <li key={name}>
         <a
-          href={`#/${name}`}
+          href={href}
           onClick={() => onFilterChange(name)}
           className={linkActive}
         >

@@ -7,6 +7,12 @@ class TodoInput extends Component {
   };
 
   onLabelChange = (event) => {
+    if (!event.target.value.trim()) {
+      this.setState({ label: '' });
+
+      return;
+    }
+
     this.setState({ label: event.target.value });
   };
 

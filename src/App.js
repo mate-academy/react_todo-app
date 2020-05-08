@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import TodosFilter from './components/TodosFilter';
 import TodoList from './components/TodoList';
 import TodoInput from './components/TodoInput';
+import { filterUtils } from './utils/FilterUtils';
+import TodosFilter from './components/TodosFilter';
 
 class App extends Component {
   state = {
     todoData: [],
-    filter: 'all', // all, active, completed
+    filter: filterUtils.FILTER.ALL,
   }
 
   onToggleCompleted = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex(el => el.id === id);
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((todo) => {
+        if (todo.id !== id) {
+          return todo;
+        }
 
-      const oldItem = todoData[idx];
-      const newItem = {
-        ...oldItem, completed: !oldItem.completed,
-      };
-
-      const newArray = [
-        ...todoData.slice(0, idx),
-        newItem,
-        ...todoData.slice(idx + 1),
-      ];
-
-      return { todoData: newArray };
-    });
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }),
+    }));
   };
 
   onFilterChange = (filter) => {
@@ -40,7 +37,11 @@ class App extends Component {
   }
 
   addItem = (text) => {
-    const newItem = this.createTodoItem(text);
+    const newItem = {
+      id: uuidv4(),
+      label: text,
+      completed: false,
+    };
 
     this.setState(({ todoData }) => {
       const newArr = [...todoData, newItem];
@@ -68,27 +69,17 @@ class App extends Component {
     }));
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  filterTodos(items, filter) {
+  filterTodos = (items, filter) => {
     switch (filter) {
-      case 'all':
+      case filterUtils.FILTER.ALL:
         return items;
-      case 'active':
+      case filterUtils.FILTER.ACTIVE:
         return items.filter(item => !item.completed);
-      case 'completed':
+      case filterUtils.FILTER.COMPLETED:
         return items.filter(item => item.completed);
       default:
         return items;
     }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  createTodoItem(label) {
-    return {
-      id: uuidv4(),
-      label,
-      completed: false,
-    };
   }
 
   render() {
@@ -139,7 +130,6 @@ class App extends Component {
               onFilterChange={this.onFilterChange}
               filter={filter}
             />
-
             <button
               type="button"
               onClick={this.onClearCompleted}
