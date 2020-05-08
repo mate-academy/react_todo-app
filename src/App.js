@@ -4,9 +4,9 @@ import Header from './Header';
 import Footer from './Footer';
 
 class App extends React.Component {
-  state={
+  state = {
     todos: [],
-    typeFilter: '',
+    filterType: '',
   }
 
   addTodo = (todo) => {
@@ -15,7 +15,10 @@ class App extends React.Component {
     }));
   }
 
-  onTodoSelected = (todoId) => {
+  onTodoSelected = (todoId, e) => {
+    // console.log('e.todo',e);
+
+    // e.stopPropagation();
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id === todoId) {
@@ -48,67 +51,69 @@ class App extends React.Component {
     }));
   }
 
-    onFilteredTodos = (typeFilter) => {
-      this.setState({
-        typeFilter,
-      });
+  onFilteredTodos = (filterType) => {
+    this.setState({
+      filterType,
+    });
+  }
+
+  getVisibleTodos = () => {
+    const { todos, filterType } = this.state;
+
+    if (filterType === 'Active') {
+      return todos.filter(todo => !todo.completed);
     }
 
-    selectFilter = () => {
-      const { todos, typeFilter } = this.state;
-
-      if (typeFilter === 'Active') {
-        return todos.filter(todo => !todo.completed);
-      }
-
-      if (typeFilter === 'Completed') {
-        return todos.filter(todo => todo.completed);
-      }
-
-      if (typeFilter === 'All') {
-        return todos;
-      }
-
-      return todos;
+    if (filterType === 'Completed') {
+      return todos.filter(todo => todo.completed);
     }
 
-    deleteTodo = (todoId) => {
-      this.setState((prevState) => {
-        const todoItem = prevState.todos.find(todo => todo.id === todoId);
-        const index = prevState.todos.indexOf(todoItem);
+    return todos;
+  }
 
-        prevState.todos.splice(index, 1);
+  deleteTodo = (todoId) => {
+    // console.log('e.todo',e);
 
-        return {
-          todos: prevState.todos,
-        };
-      });
-    }
+    // e.stopPropagation();
+    this.setState((prevState) => {
+      const todoItem = prevState.todos.find(todo => todo.id === todoId);
+      const index = prevState.todos.indexOf(todoItem);
 
-    render() {
-      const { todos } = this.state;
-      const completedStatus = todos.length === 0
-        ? false
-        : todos.every(todo => todo.completed);
-      const counter = todos.filter(todo => !todo.completed).length;
-      // const visibleTodos = this.selectFilter(typeFilter);
+      prevState.todos.splice(index, 1);
 
-      return (
-        <section className="todoapp">
-          <Header onTodo={this.addTodo} />
-          <TodoList
-            todos={todos}
-            completedStatus={completedStatus}
-            onFilteredTodos={this.onFilteredTodos}
-            onAllSelected={this.onAllSelected}
-            onTodoSelected={this.onTodoSelected}
-            deleteTodo={this.deleteTodo}
-          />
+      return {
+        todos: prevState.todos,
+      };
+    });
+  }
 
-          <Footer noComlpetedTodo={counter} />
-        </section>
-      );
-    }
+  render() {
+    const { todos, filterType } = this.state;
+    const completedStatus = todos.length === 0
+      ? false
+      : todos.every(todo => todo.completed);
+    const counter = todos.filter(todo => !todo.completed).length;
+    const visibleTodos = this.getVisibleTodos(filterType);
+
+    return (
+      <section className="todoapp">
+        <Header onTodo={this.addTodo} />
+        <TodoList
+          todos={visibleTodos}
+          completedStatus={completedStatus}
+          onFilteredTodos={this.onFilteredTodos}
+          onAllSelected={this.onAllSelected}
+          onTodoSelected={this.onTodoSelected}
+          deleteTodo={this.deleteTodo}
+        />
+
+        <Footer
+          noComlpetedTodo={counter}
+          onFilteredTodos={this.onFilteredTodos}
+        />
+      </section>
+    );
+  }
 }
 
 export default App;

@@ -34,7 +34,7 @@ class TodoList extends React.Component {
             <Todo
               {...todo}
               key={todo.id}
-              onSelected={() => onTodoSelected(todo.id)}
+              onSelected={e => onTodoSelected(todo.id, e)}
               deleteTodo={() => deleteTodo(todo.id)}
             />
           ))}

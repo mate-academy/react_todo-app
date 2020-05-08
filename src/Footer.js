@@ -1,21 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TodosFilter from './TodosFilter';
-
-const filterButtons = [
-  {
-    href: '#/',
-    text: 'All',
-  },
-  {
-    href: '#/active',
-    text: 'Active',
-  },
-  {
-    href: '#/completed',
-    text: 'Completed',
-  },
-];
 
 const Footer = ({ noComlpetedTodo, onFilteredTodos }) => (
   <footer className="footer">
@@ -26,9 +10,32 @@ const Footer = ({ noComlpetedTodo, onFilteredTodos }) => (
     </span>
 
     <ul className="filters">
-      {filterButtons.map(button => (
-        <TodosFilter {...button} key={button.text} />
-      ))}
+      <li>
+        <a
+          href="#/"
+          onClick={e => onFilteredTodos(e.target.text)}
+        >
+          All
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/active"
+          onClick={e => onFilteredTodos(e.target.text)}
+        >
+          Active
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/completed"
+          onClick={e => onFilteredTodos(e.target.text)}
+        >
+          Completed
+        </a>
+      </li>
     </ul>
     <button type="button" className="clear-completed">
       Clear completed
