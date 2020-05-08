@@ -22,7 +22,12 @@ class TodosFilter extends React.Component {
   }
 
   render() {
-    const { filterSelector, activeTasksCounter } = this.props;
+    const {
+      filterSelector,
+      activeTasksCounter,
+      clearButonActivity,
+      removeCheckedTasks,
+    } = this.props;
     const { activeFilter } = this.state;
 
     return (
@@ -88,18 +93,26 @@ class TodosFilter extends React.Component {
             </a>
           </li>
         </ul>
+        {clearButonActivity && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={removeCheckedTasks}
+          >
+            Clear completed
+          </button>
+        )}
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
       </footer>
     );
   }
 }
 
 TodosFilter.propTypes = {
+  removeCheckedTasks: PropTypes.func.isRequired,
   activeTasksCounter: PropTypes.func.isRequired,
   filterSelector: PropTypes.func.isRequired,
+  clearButonActivity: PropTypes.bool.isRequired,
 };
 
 export default TodosFilter;

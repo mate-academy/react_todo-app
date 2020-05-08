@@ -20,17 +20,12 @@ class App extends React.Component {
   state = {
     todos: [...todos],
     filtrationType: '',
+    hasActiveTasks: true,
   }
 
   handleSubmit = (newTask) => {
     this.setState(prev => ({
       todos: [...prev.todos, newTask],
-    }));
-  }
-
-  handleTaskRemover = (taskId) => {
-    this.setState(prev => ({
-      todos: [...prev.todos].filter(task => taskId !== task.id),
     }));
   }
 
@@ -56,10 +51,10 @@ class App extends React.Component {
   filterByPattern = () => {
     switch (this.state.filtrationType) {
       case 'active':
-        return this.state.todos.filter(task => task.completed === false);
+        return this.state.todos.filter(task => !task.completed);
 
       case 'completed':
-        return this.state.todos.filter(task => task.completed !== false);
+        return this.state.todos.filter(task => task.completed);
 
       default:
         return this.state.todos;
@@ -69,7 +64,21 @@ class App extends React.Component {
   activeTasksCounter = () => this.state.todos
     .filter(task => !task.completed).length
 
+  handleTaskRemover = (taskId) => {
+    this.setState(prev => ({
+      todos: [...prev.todos].filter(task => taskId !== task.id),
+    }));
+  }
+
+  removeCheckedTasks = () => {
+    this.setState(prev => ({
+      todos: [...prev.todos].filter(task => !task.completed),
+    }));
+  }
+
   render() {
+    const { hasActiveTasks } = this.state;
+
     return (
       <section className="todoapp">
         <TodoApp handleSubmit={this.handleSubmit} />
@@ -81,6 +90,8 @@ class App extends React.Component {
         <TodosFilter
           activeTasksCounter={this.activeTasksCounter}
           filterSelector={this.filterSelector}
+          clearButonActivity={hasActiveTasks}
+          removeCheckedTasks={this.removeCheckedTasks}
         />
       </section>
     );
