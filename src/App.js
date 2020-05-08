@@ -43,7 +43,7 @@ class App extends React.Component {
 
           return todo;
         }),
-        toggleTodosStatus: !state.toggleTodosStatus,
+        toggleTodosStatus: false,
       }
     ));
   };
