@@ -1,27 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
-
-const filtersButton = [
-  {
-    title: 'All',
-    href: '#/',
-    id: 0,
-  },
-  {
-    title: 'Active',
-    href: '#/active',
-    id: 1,
-  },
-  {
-    title: 'Completed',
-    href: '#/completed',
-    id: 2,
-  },
-];
 
 class Footer extends React.Component {
 
-  filteredTodos = (filter) => (
+  filteredTodos = filter => (
     this.props.filterTodo(filter)
   );
 
@@ -37,23 +20,39 @@ class Footer extends React.Component {
         </span>
 
         <ul className="filters">
-          {filtersButton.map(filter => (
-            <span key={filter.id}>
-              <li>
-                <a
-                  href={filter.href}
-                  onClick={() => (this.filteredTodos(filter.title))}
-                  className={ClassNames(
-                    { selected: this.props.isFilterAll },
-                    { selected: this.props.isFilterActive },
-                    { selected: this.props.isFilterCompleted },
-                  )}
-                >
-                  {filter.title}
-                </a>
-              </li>
-            </span>
-          ))}
+          <li>
+            <a
+              href="#/"
+              onClick={() => (this.filteredTodos('All'))}
+              className={ClassNames({
+                selected: this.props.filter === 'All',
+              })}
+            >
+              All
+            </a>
+          </li>
+          <li>
+            <a
+              href="#/active"
+              onClick={() => (this.filteredTodos('Active'))}
+              className={ClassNames({
+                selected: this.props.filter === 'Active',
+              })}
+            >
+              Active
+            </a>
+          </li>
+          <li>
+            <a
+              href="#/completed"
+              onClick={() => (this.filteredTodos('Completed'))}
+              className={ClassNames({
+                selected: this.props.filter === 'Completed',
+              })}
+            >
+              Completed
+            </a>
+          </li>
         </ul>
 
         <button
@@ -67,5 +66,11 @@ class Footer extends React.Component {
     );
   }
 }
+
+Footer.propTypes = {
+  filterTodo: PropTypes.func.isRequired,
+  clearCompletedTodos: PropTypes.func.isRequired,
+  countActive: PropTypes.number.isRequired,
+};
 
 export default Footer;

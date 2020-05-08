@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
+import { todosPropTypes } from './propTypes';
 
 class TodoList extends React.Component {
   сalltoggleAllStatus = () => {
@@ -45,5 +47,14 @@ class TodoList extends React.Component {
     );
   }
 }
+
+TodoList.propTypes = {
+  toggleAllStatus: PropTypes.func.isRequired,
+  todos: todosPropTypes.isRequired,
+  changeCompleted: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  changeTitle: PropTypes.func.isRequired,
+  toggleTodosStatus: PropTypes.bool.isRequired,
+};
 
 export default TodoList;

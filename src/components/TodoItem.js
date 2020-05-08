@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
+import { todosPropTypes } from './propTypes';
 
 class TodoItem extends React.Component {
   state = {
@@ -40,13 +42,13 @@ class TodoItem extends React.Component {
       completed,
       changeCompleted,
       deleteTodo,
-      index
+      index,
     } = this.props;
     const { isEdit, editTitle } = this.state;
 
     return (
-      <div>
-        <li className={ClassNames({
+      <>
+        <li className={ClassNames('item', {
           completed,
           editing: isEdit,
         })}
@@ -79,9 +81,20 @@ class TodoItem extends React.Component {
             value={editTitle}
           />
         </li>
-      </div>
+      </>
     );
   }
 }
+
+TodoItem.propTypes = {
+  todos: todosPropTypes.isRequired,
+  title: PropTypes.string.isRequired,
+  changeTitle: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  completed: PropTypes.bool.isRequired,
+  changeCompleted: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+};
 
 export default TodoItem;

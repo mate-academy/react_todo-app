@@ -1,6 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TodoList from './TodoList';
 import Footer from './Footer';
+import { todosPropTypes } from './propTypes';
 
 class TodoApp extends React.Component {
   state = {
@@ -17,6 +19,10 @@ class TodoApp extends React.Component {
 
   submitTodo = (event) => {
     if (event.key === 'Enter') {
+      if (this.state.title.length === 0) {
+        return;
+      }
+
       this.props.addedTodo(
         {
           id: this.state.id,
@@ -47,10 +53,8 @@ class TodoApp extends React.Component {
       toggleTodosStatus,
       filterTodo,
       countActive,
-      isFilterAll,
-      isFilterActive,
-      isFilterCompleted,
       clearCompletedTodos,
+      filter,
     } = this.props;
 
     return (
@@ -79,14 +83,26 @@ class TodoApp extends React.Component {
         <Footer
           filterTodo={filterTodo}
           countActive={countActive}
-          isFilterAll={isFilterAll}
-          isFilterActive={isFilterActive}
-          isFilterCompleted={isFilterCompleted}
           clearCompletedTodos={clearCompletedTodos}
+          filter={filter}
         />
       </section>
     );
   }
 }
+
+TodoApp.propTypes = {
+  addedTodo: PropTypes.func.isRequired,
+  toggleAllTodos: PropTypes.func.isRequired,
+  todos: todosPropTypes.isRequired,
+  changeCompleted: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  changeTitle: PropTypes.func.isRequired,
+  toggleAllStatus: PropTypes.func.isRequired,
+  toggleTodosStatus: PropTypes.bool.isRequired,
+  filterTodo: PropTypes.func.isRequired,
+  countActive: PropTypes.number.isRequired,
+  clearCompletedTodos: PropTypes.func.isRequired,
+};
 
 export default TodoApp;

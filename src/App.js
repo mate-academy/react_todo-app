@@ -6,9 +6,6 @@ class App extends React.Component {
     todos: [],
     toggleTodosStatus: false,
     filter: 'All',
-    isFilterAll: true,
-    isFilterActive: false,
-    isFilterCompleted: false,
   };
 
   addedTodo = (todo) => {
@@ -83,23 +80,14 @@ class App extends React.Component {
   filterTodo = (filter) => {
     if (filter === 'All') {
       this.setState({
-        isFilterAll: true,
-        isFilterActive: false,
-        isFilterCompleted: false,
         filter,
       });
     } else if (filter === 'Completed') {
       this.setState({
-        isFilterAll: false,
-        isFilterActive: false,
-        isFilterCompleted: true,
         filter,
       });
     } else if (filter === 'Active') {
       this.setState({
-        isFilterAll: false,
-        isFilterActive: true,
-        isFilterCompleted: false,
         filter,
       });
     }
@@ -114,13 +102,13 @@ class App extends React.Component {
   render() {
     const {
       todos,
-      toggleTodosStatus,
       filter,
-      isFilterAll,
-      isFilterActive,
-      isFilterCompleted,
     } = this.state;
+    let { toggleTodosStatus } = this.state;
     let filterTodos = [...todos];
+
+    const countActive = filterTodos.filter(todo => (
+      todo.completed === false)).length;
 
     if (filter === 'All') {
       filterTodos = [...todos];
@@ -134,16 +122,14 @@ class App extends React.Component {
       filterTodos = filterTodos.filter(todo => (todo.completed === false));
     }
 
-    const countActive = filterTodos.filter(todo => (
-      todo.completed === false)).length;
+    if (countActive === 0 && filterTodos.length > 0 && !toggleTodosStatus) {
+      toggleTodosStatus = true;
+    }
 
     return (
       <>
         <TodoApp
           todos={filterTodos}
-          isFilterAll={isFilterAll}
-          isFilterActive={isFilterActive}
-          isFilterCompleted={isFilterCompleted}
           toggleTodosStatus={toggleTodosStatus}
           toggleAllTodos={this.toggleAllTodos}
           addedTodo={this.addedTodo}
@@ -154,6 +140,7 @@ class App extends React.Component {
           filterTodo={this.filterTodo}
           clearCompletedTodos={this.clearCompletedTodos}
           countActive={countActive}
+          filter={filter}
         />
       </>
     );
