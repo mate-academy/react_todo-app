@@ -43,15 +43,6 @@ export class TodoApp extends React.Component {
     this.handleReset();
   }
 
-  // toggleSelectAll = () => {
-  //   this.setState(() => ({
-  //     todos: todos.map(todo => ({
-  //       ...todo,
-
-  //     }))
-  //   }));
-  // }
-
   render() {
     const { title } = this.state;
 

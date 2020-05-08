@@ -4,12 +4,18 @@ import PropTypes from 'prop-types';
 
 export class TodoItem extends React.Component {
   state= {
-    titleInList: this.props.title,
+    targetTitle: this.props.title,
+  }
+
+  handleChangeTargetTitle = (event) => {
+    this.setState({
+      targetTitle: event.target.value,
+    });
   }
 
   render() {
     const { title, id, completed, toggleComplete, removeTodo } = this.props;
-    const { titleInList } = this.state;
+    const { targetTitle } = this.state;
 
     return (
       <li className={cn({ completed })}>
@@ -37,7 +43,8 @@ export class TodoItem extends React.Component {
           <input
             type="text"
             className="edit"
-            value={titleInList}
+            value={targetTitle}
+            handleChange={this.handleChangeTargetTitle}
           />
         </form>
       </li>

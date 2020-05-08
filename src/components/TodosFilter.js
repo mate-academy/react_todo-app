@@ -1,13 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+// import todos from '../todos';
 
 export class TodosFilters extends React.Component {
-  state ={}
+  state ={
+    // todos,
+    // currentFilter,
+  }
 
   render() {
+    const { activeTodoCounter } = this.props;
+
     return (
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {`${activeTodoCounter()} items left`}
         </span>
 
         <ul className="filters">
@@ -31,3 +38,7 @@ export class TodosFilters extends React.Component {
     );
   }
 }
+
+TodosFilters.propTypes = {
+  activeTodoCounter: PropTypes.func.isRequired,
+};
