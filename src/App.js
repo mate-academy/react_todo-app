@@ -135,6 +135,7 @@ export default class App extends React.Component {
   render() {
     const { todos, title, activeItems } = this.state;
     const visibleList = this.listFilter(activeItems);
+    const numOfActiveTodos = todos.filter(todo => !todo.completed).length;
 
     return (
       <section className="todoapp">
@@ -180,9 +181,12 @@ export default class App extends React.Component {
           <footer className="footer">
 
             <span className="todo-count">
-              {todos.filter(todo => !todo.completed).length}
+              {numOfActiveTodos}
               {' '}
-              items left
+              item
+              {numOfActiveTodos !== 1 && 's'}
+              {' '}
+              left
             </span>
 
             <ul className="filters">
