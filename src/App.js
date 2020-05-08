@@ -12,7 +12,7 @@ class App extends React.Component {
 
   handleEditTitle = ({ key, target, type }) => {
     if ((key === 'Enter' && target.value.trim() !== '')
-    || type === 'blur') {
+    || (type === 'blur' && target.value.trim() !== '')) {
       const { id } = target;
 
       this.setState(prev => ({

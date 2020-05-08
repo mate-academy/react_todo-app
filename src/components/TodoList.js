@@ -51,11 +51,7 @@ TodoList.propTypes = {
       completed: PropTypes.bool.isRequired,
     }).isRequired,
   ).isRequired,
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      todo: PropTypes.object.isRequired,
-    }).isRequired,
-  ).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
   statusOfTodo: PropTypes.func.isRequired,
   handleToggleAll: PropTypes.func.isRequired,

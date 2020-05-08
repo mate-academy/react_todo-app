@@ -3,19 +3,13 @@ import PropTypes from 'prop-types';
 
 class TodoItem extends React.Component {
   state = {
-    editTitle: '',
+    editTitle: this.props.todo.title,
   }
 
   editCurrentTitle = (e) => {
-    if (this.state.editTitle === '') {
-      this.setState({
-        editTitle: this.props.todo.title + e.target.value,
-      });
-    } else {
-      this.setState({
-        editTitle: e.target.value,
-      });
-    }
+    this.setState({
+      editTitle: e.target.value,
+    });
   }
 
   render() {
