@@ -71,20 +71,6 @@ class App extends React.Component {
   activeTodoCounter = () => this.state.todos
     .filter(task => !task.completed).length
 
-  // getFilteredTodos = () => {
-  //   const { todoList, activeFilter } = this.state;
-
-  //   if (activeFilter === FILTER_TYPES.completed) {
-  //     return todoList.filter(todo => todo.completed);
-  //   }
-
-  //   if (activeFilter === FILTER_TYPES.active) {
-  //     return todoList.filter(todo => !todo.completed);
-  //   }
-
-  //   return todoList;
-  // }
-
   render() {
     return (
       <section className="todoapp">
