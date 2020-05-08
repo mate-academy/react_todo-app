@@ -6,7 +6,7 @@ import Footer from './Footer';
 class App extends React.Component {
   state = {
     todos: [],
-    filterType: '',
+    filterType: 'All',
   }
 
   addTodo = (todo) => {
@@ -129,6 +129,7 @@ class App extends React.Component {
           onFilteredTodos={this.onFilteredTodos}
           clearCompleted={this.clearCompleted}
           visibleClearCompleted={visibleClearCompleted}
+          filterType={filterType}
         />
       </section>
     );

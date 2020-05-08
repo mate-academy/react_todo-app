@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames/bind';
 
 const Footer = ({
   noComlpetedTodo,
   onFilteredTodos,
   clearCompleted,
   visibleClearCompleted,
+  filterType,
 }) => (
   <footer className="footer">
     <span className="todo-count">
@@ -18,6 +20,7 @@ const Footer = ({
       <li>
         <a
           href="#/"
+          className={cn({ selected: filterType === 'All' })}
           onClick={e => onFilteredTodos(e.target.text)}
         >
           All
@@ -27,6 +30,7 @@ const Footer = ({
       <li>
         <a
           href="#/active"
+          className={cn({ selected: filterType === 'Active' })}
           onClick={e => onFilteredTodos(e.target.text)}
         >
           Active
@@ -36,6 +40,7 @@ const Footer = ({
       <li>
         <a
           href="#/completed"
+          className={cn({ selected: filterType === 'Completed' })}
           onClick={e => onFilteredTodos(e.target.text)}
         >
           Completed
@@ -61,6 +66,7 @@ Footer.propTypes = {
   onFilteredTodos: PropTypes.func.isRequired,
   clearCompleted: PropTypes.func.isRequired,
   visibleClearCompleted: PropTypes.bool.isRequired,
+  filterType: PropTypes.string.isRequired,
 };
 
 export default Footer;
