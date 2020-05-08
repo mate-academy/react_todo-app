@@ -72,9 +72,22 @@ class App extends React.Component {
       return todos;
     }
 
+    deleteTodo = (todoId) => {
+      this.setState((prevState) => {
+        const todoItem = prevState.todos.find(todo => todo.id === todoId);
+        const index = prevState.todos.indexOf(todoItem);
+
+        prevState.todos.splice(index, 1);
+
+        return {
+          todos: prevState.todos,
+        };
+      });
+    }
+
     render() {
       const { todos } = this.state;
-      const comletedStatus = todos.length === 0
+      const completedStatus = todos.length === 0
         ? false
         : todos.every(todo => todo.completed);
       const counter = todos.filter(todo => !todo.completed).length;
@@ -85,13 +98,14 @@ class App extends React.Component {
           <Header onTodo={this.addTodo} />
           <TodoList
             todos={todos}
-            comletedStatus={comletedStatus}
+            completedStatus={completedStatus}
             onFilteredTodos={this.onFilteredTodos}
             onAllSelected={this.onAllSelected}
             onTodoSelected={this.onTodoSelected}
+            deleteTodo={this.deleteTodo}
           />
 
-          <Footer noComletedTodo={counter} />
+          <Footer noComlpetedTodo={counter} />
         </section>
       );
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames/bind';
 import PropTypes from 'prop-types';
 
-const Todo = ({ id, title, completed, onSelected }) => (
+const Todo = ({ id, title, completed, onSelected, deleteTodo }) => (
 // handleChecked = (event) => {
 //   const id = event.target.id;
 // console.log('event.target',event.target);
@@ -23,7 +23,11 @@ const Todo = ({ id, title, completed, onSelected }) => (
         onChange={onSelected}
       />
       <label htmlFor={id}>{title}</label>
-      <button type="button" className="destroy" />
+      <button
+        type="button"
+        className="destroy"
+        onClick={deleteTodo}
+      />
     </div>
     <input type="text" className="edit" />
   </li>
@@ -33,7 +37,13 @@ Todo.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  onSelected: PropTypes.func.isRequired,
+  onSelected: PropTypes.func,
+  deleteTodo: PropTypes.func,
+};
+
+Todo.defaultProps = {
+  onSelected: null,
+  deleteTodo: null,
 };
 
 export default Todo;

@@ -17,10 +17,10 @@ const filterButtons = [
   },
 ];
 
-const Footer = ({ noComletedTodo, onFilteredTodos }) => (
+const Footer = ({ noComlpetedTodo, onFilteredTodos }) => (
   <footer className="footer">
     <span className="todo-count">
-      {noComletedTodo}
+      {noComlpetedTodo}
       {' '}
       items left
     </span>
@@ -37,7 +37,7 @@ const Footer = ({ noComletedTodo, onFilteredTodos }) => (
 );
 
 Footer.propTypes = {
-  noComletedTodo: PropTypes.number.isRequired,
+  noComlpetedTodo: PropTypes.number.isRequired,
   onFilteredTodos: PropTypes.func.isRequired,
 };
 
