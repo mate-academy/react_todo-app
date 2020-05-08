@@ -1,14 +1,25 @@
 import React from 'react';
-import TodoList from './components/TodoList';
-import TodosFilter from './components/TodosFilter';
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFilter';
+import { FILTERS } from './helpers/filters';
 
-class App extends React.Component {
+export default class App extends React.Component {
   state = {
     todos: [],
     title: '',
     currentId: 1,
-    activeItems: 'all',
+    activeItems: FILTERS.all,
   };
+
+  componentDidMount() {
+    const appData = JSON.parse(localStorage.getItem('appData'));
+
+    this.setState(appData);
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('appData', JSON.stringify(this.state));
+  }
 
   handleTitleChange = (event) => {
     this.setState({
@@ -84,10 +95,10 @@ class App extends React.Component {
     const { todos } = this.state;
 
     switch (items) {
-      case 'active':
+      case FILTERS.active:
         return todos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case FILTERS.completed:
         return todos.filter(todo => todo.completed);
 
       default:
@@ -95,10 +106,24 @@ class App extends React.Component {
     }
   }
 
+  editTodo = (itemId, value) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo) => {
+        if (todo.id !== itemId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: value,
+        };
+      }),
+    }));
+  }
+
   render() {
     const { todos, title, activeItems } = this.state;
     const visibleList = this.listFilter(activeItems);
-    const todosFilters = ['all', 'active', 'completed'];
 
     return (
       <section className="todoapp">
@@ -134,6 +159,7 @@ class App extends React.Component {
 
           <TodoList
             items={visibleList}
+            onEditTodo={this.editTodo}
             onStatusToggle={this.toggleTodoStatus}
             onDeleteTodo={this.deleteTodo}
           />
@@ -149,7 +175,7 @@ class App extends React.Component {
             </span>
 
             <ul className="filters">
-              {todosFilters.map(filter => (
+              {Object.values(FILTERS).map(filter => (
                 <TodosFilter
                   key={filter}
                   filterName={filter}
@@ -175,5 +201,3 @@ class App extends React.Component {
     );
   }
 }
-
-export default App;

@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TodoItem from './TodoItem';
+import { TodoItem } from './TodoItem';
 
-const TodoList = ({ items, onStatusToggle, onDeleteTodo }) => (
+export const TodoList = ({
+  items,
+  onStatusToggle,
+  onDeleteTodo,
+  onEditTodo,
+}) => (
   <ul className="todo-list">
     {items.map(({ id, title, completed }) => (
       <TodoItem
@@ -12,6 +17,7 @@ const TodoList = ({ items, onStatusToggle, onDeleteTodo }) => (
         completed={completed}
         statusToggle={onStatusToggle}
         deleteTodo={onDeleteTodo}
+        editTodo={onEditTodo}
       />
     ))}
   </ul>
@@ -27,6 +33,5 @@ TodoList.propTypes = {
   ).isRequired,
   onDeleteTodo: PropTypes.func.isRequired,
   onStatusToggle: PropTypes.func.isRequired,
+  onEditTodo: PropTypes.func.isRequired,
 };
-
-export default TodoList;
