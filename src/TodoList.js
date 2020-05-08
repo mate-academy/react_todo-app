@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Todo from './Todo';
 
 class TodoList extends React.Component {
-  state={
+  state = {
     isToggleOn: true,
   }
 

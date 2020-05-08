@@ -87,11 +87,28 @@ class App extends React.Component {
     });
   }
 
+  clearCompleted = () => {
+    const { todos } = this.state;
+    const copy = todos.filter(todo => !todo.completed);
+
+    this.setState((prevState) => {
+      todos.length = 0;
+
+      return {
+        ...prevState,
+        todos: [...copy],
+      };
+    });
+  }
+
   render() {
+    // console.log('this.state', this.state);
+
     const { todos, filterType } = this.state;
     const completedStatus = todos.length === 0
       ? false
       : todos.every(todo => todo.completed);
+    const visibleClearCompleted = todos.some(todo => todo.completed);
     const counter = todos.filter(todo => !todo.completed).length;
     const visibleTodos = this.getVisibleTodos(filterType);
 
@@ -110,6 +127,8 @@ class App extends React.Component {
         <Footer
           noComlpetedTodo={counter}
           onFilteredTodos={this.onFilteredTodos}
+          clearCompleted={this.clearCompleted}
+          visibleClearCompleted={visibleClearCompleted}
         />
       </section>
     );

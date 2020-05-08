@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Footer = ({ noComlpetedTodo, onFilteredTodos }) => (
+const Footer = ({
+  noComlpetedTodo,
+  onFilteredTodos,
+  clearCompleted,
+  visibleClearCompleted,
+}) => (
   <footer className="footer">
     <span className="todo-count">
       {noComlpetedTodo}
@@ -37,15 +42,25 @@ const Footer = ({ noComlpetedTodo, onFilteredTodos }) => (
         </a>
       </li>
     </ul>
-    <button type="button" className="clear-completed">
-      Clear completed
-    </button>
+    {visibleClearCompleted
+        && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={clearCompleted}
+          >
+            Clear completed
+          </button>
+        )
+    }
   </footer>
 );
 
 Footer.propTypes = {
   noComlpetedTodo: PropTypes.number.isRequired,
   onFilteredTodos: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
+  visibleClearCompleted: PropTypes.bool.isRequired,
 };
 
 export default Footer;

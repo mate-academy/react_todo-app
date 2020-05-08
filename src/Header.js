@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class Header extends React.Component {
-  state={
+  state = {
     title: '',
     id: '',
     completed: false,
@@ -41,7 +41,6 @@ class Header extends React.Component {
           />
         </header>
       </form>
-
     );
   }
 }

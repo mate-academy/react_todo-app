@@ -3,9 +3,9 @@ import cn from 'classnames/bind';
 import PropTypes from 'prop-types';
 
 const Todo = ({ id, title, completed, onSelected, deleteTodo }) => (
-// handleChecked = (event) => {
-//   const id = event.target.id;
-// console.log('event.target',event.target);
+  // handleChecked = (event) => {
+  //   const id = event.target.id;
+  // console.log('event.target',event.target);
 
   //   this.props.onSelected(id);
   //   this.setState(prevState => ({
