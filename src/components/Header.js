@@ -8,6 +8,7 @@ class Header extends React.Component {
       id: 1,
       title: '',
       completed: false,
+      editing: false,
     },
     errors: {
       title: false,
@@ -44,7 +45,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { errors } = this.state;
+    const { values, errors } = this.state;
 
     return (
       <header className="header">
@@ -55,7 +56,7 @@ class Header extends React.Component {
               error: errors.title,
             })}
             placeholder="What needs to be done?"
-            value={this.state.values.title}
+            value={values.title}
             onChange={({ target }) => {
               this.setState(prev => ({
                 values: {

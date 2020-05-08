@@ -7,6 +7,71 @@ class App extends React.Component {
   state = {
     todos: [],
     typeOfFilter: 'all',
+    tempTitle: '',
+  }
+
+  handleEditTitle = ({ key, target, type }) => {
+    if ((key === 'Enter' && target.value.trim() !== '')
+    || type === 'blur') {
+      const { id } = target;
+
+      this.setState(prev => ({
+        todos: prev.todos.map((todo) => {
+          if (todo.id === +id) {
+            return {
+              ...todo,
+              title: target.value,
+              editing: false,
+            };
+          }
+
+          return todo;
+        }),
+      }));
+    }
+
+    if (key === 'Escape') {
+      const { id } = target;
+
+      this.setState(prev => ({
+        todos: prev.todos.map((todo) => {
+          if (todo.id === +id) {
+            return {
+              ...todo,
+              title: prev.tempTitle,
+              editing: false,
+            };
+          }
+
+          return todo;
+        }),
+      }));
+    }
+  }
+
+  handleEditTodo = (id, title) => {
+    this.setState(prev => ({
+      todos: prev.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            editing: !todo.editing,
+          };
+        }
+
+        return todo;
+      }),
+      tempTitle: title,
+    }));
+  }
+
+  handleToggleAll = ({ target }) => {
+    this.setState(prev => ({
+      todos: prev.todos.map(todo => ({
+        ...todo,
+        completed: target.checked,
+      })),
+    }));
   }
 
   handleAddTodo = (newTodo) => {
@@ -65,9 +130,13 @@ class App extends React.Component {
       <section className="todoapp">
         <Header handleAddTodo={this.handleAddTodo} />
         <TodoList
+          todos={todos}
+          visibleTodos={visibleTodos}
           handleRemoveTodo={this.handleRemoveTodo}
           statusOfTodo={this.statusOfTodo}
-          visibleTodos={visibleTodos}
+          handleToggleAll={this.handleToggleAll}
+          handleEditTodo={this.handleEditTodo}
+          handleEditTitle={this.handleEditTitle}
         />
         <Footer
           todos={todos}

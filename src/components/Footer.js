@@ -41,7 +41,11 @@ const Footer = ({
 );
 
 Footer.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  })).isRequired,
   isCompletedPresent: PropTypes.bool.isRequired,
   handleClearCompleted: PropTypes.func.isRequired,
   handleTypeOfFilter: PropTypes.func.isRequired,

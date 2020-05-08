@@ -1,30 +1,62 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ todo, statusOfTodo, handleRemoveTodo }) => {
-  const { id, title, completed } = todo;
+class TodoItem extends React.Component {
+  state = {
+    editTitle: '',
+  }
 
-  return (
-    <>
-      <div className="view">
+  editCurrentTitle = (e) => {
+    if (this.state.editTitle === '') {
+      this.setState({
+        editTitle: this.props.todo.title + e.target.value,
+      });
+    } else {
+      this.setState({
+        editTitle: e.target.value,
+      });
+    }
+  }
+
+  render() {
+    const { todo,
+      statusOfTodo,
+      handleRemoveTodo,
+      handleEditTodo,
+      handleEditTitle } = this.props;
+    const { id, title, completed } = todo;
+    const { editTitle } = this.state;
+
+    return (
+      <>
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id={id}
+            checked={completed}
+            onChange={() => statusOfTodo(id)}
+          />
+          <label onDoubleClick={() => handleEditTodo(id, title)}>{title}</label>
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => handleRemoveTodo(id)}
+          />
+        </div>
         <input
-          type="checkbox"
-          className="toggle"
+          type="text"
+          className="edit"
           id={id}
-          checked={completed}
-          onChange={() => statusOfTodo(id)}
+          value={editTitle}
+          onChange={this.editCurrentTitle}
+          onKeyDown={handleEditTitle}
+          onBlur={handleEditTitle}
         />
-        <label htmlFor={id}>{title}</label>
-        <button
-          type="button"
-          className="destroy"
-          onClick={() => handleRemoveTodo(id)}
-        />
-      </div>
-      <input type="text" className="edit" />
-    </>
-  );
-};
+      </>
+    );
+  }
+}
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
@@ -34,6 +66,8 @@ TodoItem.propTypes = {
   }).isRequired,
   statusOfTodo: PropTypes.func.isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
+  handleEditTodo: PropTypes.func.isRequired,
+  handleEditTitle: PropTypes.func.isRequired,
 };
 
 export default TodoItem;
