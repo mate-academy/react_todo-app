@@ -24,8 +24,8 @@ class TodoItem extends React.Component {
             type="checkbox"
             className="toggle"
             id={`todo-${todo.id}`}
-            checked={isFinished}
-            onChange={(e) => {
+            checked={isFinished || todo.completed}
+            onChange={() => {
               this.taskStatusHandler();
               statusHandler(todo.id);
             }}

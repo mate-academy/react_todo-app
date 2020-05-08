@@ -19,6 +19,7 @@ const todos = [
 class App extends React.Component {
   state = {
     todos: [...todos],
+    filtrationType: '',
   }
 
   handleSubmit = (newTask) => {
@@ -48,19 +49,38 @@ class App extends React.Component {
     }));
   }
 
-  render() {
-    return (
-      <section className="todoapp">
-        <TodoApp handleSubmit={this.handleSubmit} />
-        <TodoList
-          todosList={this.state.todos}
-          handleTaskRemover={this.handleTaskRemover}
-          statusHandler={this.statusHandler}
-        />
-        <TodosFilter />
-      </section>
-    );
-  }
+ filterSelector = (filterType) => {
+   this.setState({ filtrationType: filterType });
+ }
+
+ filterByPattern = () => {
+   switch (this.state.filtrationType) {
+     case 'active':
+       return this.state.todos.filter(task => task.completed === false);
+
+     case 'completed':
+       return this.state.todos.filter(task => task.completed !== false);
+
+     default:
+       return this.state.todos;
+   }
+ }
+
+ render() {
+   return (
+     <section className="todoapp">
+       <TodoApp handleSubmit={this.handleSubmit} />
+       <TodoList
+         todosList={this.filterByPattern()}
+         handleTaskRemover={this.handleTaskRemover}
+         statusHandler={this.statusHandler}
+       />
+       <TodosFilter
+         filterSelector={this.filterSelector}
+       />
+     </section>
+   );
+ }
 }
 
 export default App;
