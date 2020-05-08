@@ -24,7 +24,12 @@ export class Todo extends React.Component {
     const { todo, editCurrentTitle } = this.props;
     const tempTitle = target.value;
 
-    editCurrentTitle(todo.id, tempTitle);
+    if (tempTitle.trim().length !== 0) {
+      editCurrentTitle(todo.id, tempTitle);
+    } else {
+      editCurrentTitle(todo.id, todo.title);
+    }
+
     this.setState({ editMode: false });
   }
 
