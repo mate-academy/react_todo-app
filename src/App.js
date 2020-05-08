@@ -5,19 +5,19 @@ import Filter from './components/Filter/Filter';
 //import todos from './api/todos';
 
 const todos = [
-  {
-    title: '',
-    id: 1,
-    complited: false,
-  },
+  // {
+  //   title: '',
+  //   id: new Date(),
+  //   complited: false,
+  // },
 
 ];
 
 class App extends React.Component {
   state = {
     todos: [...todos],
-  }
 
+  }
 
   addTodoItem = (newTodo) => {
     this.setState({
@@ -25,16 +25,26 @@ class App extends React.Component {
     });
   };
 
+deleteTodo = (id) => {
+console.log(id);
+}
+
    render() {
     const { todos} = this.state;
 
     return (
       <section className="todoapp">
 
-        <Header addTodoItem={this.addTodoItem}
+        <Header
         todos={todos}
+        addTodoItem={this.addTodoItem}
+
          />
-        <TodoList todos={todos} />
+        <TodoList
+        todos={todos}
+        deleteTodo = {this.deleteTodo}
+
+        />
         <Filter />
       </section>
 

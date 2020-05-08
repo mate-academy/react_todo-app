@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 class Header extends React.Component {
   //state = this.state;
   state = {
@@ -33,8 +34,8 @@ class Header extends React.Component {
 
     if (title.trim()) {
       const newTodo = {
-        title,
-        id: todos.length + 1,
+        title: title.trim(),
+        id: new Date(),
         comleted: false,
       };
       addTodoItem(newTodo);

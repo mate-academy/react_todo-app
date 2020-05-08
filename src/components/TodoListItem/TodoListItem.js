@@ -1,25 +1,50 @@
 import React from 'react';
 
-function TodoListItem({ todoListItem }) {
+export default class TodoListItem extends React.Component {
+  state = {
+    completed: false
+  };
 
-  const t = todoListItem || null;
+  onClickCompleted = () => {
+    this.setState(({ completed }) => {
+      return {
+        completed: !completed
+      };
+    });
+  };
 
-  let title = t?.title;
-  let completed = t?.completed;
-  let id = t?.id;
+  render() {
+    const { title, id, onClickDelete } = this.props?.todoListItem;
+    const { completed } = this.state;
 
-  return (
-    <li className={(completed ? "completed" : "view")}>
-      <div className="view">
-        <input type="checkbox" className="toggle" id={id} />
-        <label htmlFor={id}>{title}</label>
-        <button type="button" className="destroy" />
-      </div>
-      <input type="text" className="edit" />
-    </li>
-  )
+    let classNames = '';
+    if (completed) {
+      classNames += 'completed'
+    }
+
+    return (
+      <>
+        <li className={classNames}>
+          <div className="view">
+            <input
+              type="checkbox"
+              className="toggle"
+              id={id}
+              onClick={this.onClickCompleted}
+            />
+            <label htmlFor={id}>{title}</label>
+            <button type="button" className="destroy"
+              onClick={/*this.*/onClickDelete}
+            />
+          </div>
+          <input type="text" className="edit" />
+        </li>
+      </>
+    )
+  }
+
 }
 
-export default TodoListItem;
+
 
 
