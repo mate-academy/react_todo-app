@@ -20,9 +20,9 @@ const TodoList = ({ todos, changeTodoStatus, deleteTodo, changeTodoValue }) => (
 
 TodoList.propTypes = {
   changeTodoStatus: PropTypes.func.isRequired,
-  deleteTask: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf.isRequired,
   changeTodoValue: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
 };
+
 export default TodoList;

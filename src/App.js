@@ -1,7 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
 import TodoList from './components/TodoList';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 const todosData = JSON.parse(localStorage.getItem('todosData')) || [];
 
@@ -192,59 +192,15 @@ class App extends React.Component {
           />
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {todos
-              .filter(todo => !todo.completed)
-              .length
-            }
-            {' '}
-            items left
-          </span>
+        <Footer
+          todos={todos}
+          isAllTodos={isAllTodos}
+          isActiveTodos={isActiveTodos}
+          isCompletedTodos={isCompletedTodos}
+          chooseTypeTodos={this.chooseTypeTodos}
+          deleteCompletedTodos={this.deleteCompletedTodos}
+        />
 
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                title="all"
-                className={classNames({ selected: isAllTodos })}
-                onClick={this.chooseTypeTodos}
-              >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                title="active"
-                className={classNames({ selected: isActiveTodos })}
-                onClick={this.chooseTypeTodos}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                title="completed"
-                className={classNames({ selected: isCompletedTodos })}
-                onClick={this.chooseTypeTodos}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
-
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.deleteCompletedTodos}
-          >
-            Clear completed
-          </button>
-        </footer>
       </section>
     );
   }
