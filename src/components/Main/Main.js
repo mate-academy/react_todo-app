@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { mainType } from '../../typedefs/mainType';
 import { ToDoList } from '../ToDoList';
 import './Main.scss';
 
@@ -33,10 +33,10 @@ export const Main = ({
       </label>
 
       <ToDoList
-        items={visibleTodos}
-        onToggleTodo={onToggleTodoCompleted}
-        onDeleteTodo={onDeleteCurrentTodo}
-        onEditTodo={onEditCurrentTodo}
+        {...{ visibleTodos }}
+        onToggle={onToggleTodoCompleted}
+        onDelete={onDeleteCurrentTodo}
+        onEdit={onEditCurrentTodo}
         handleKeyPress={handleKeyPress}
         setEditedValue={setEditedValue}
       />
@@ -44,13 +44,4 @@ export const Main = ({
   );
 };
 
-Main.propTypes = {
-  visibleTodos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onDeleteCurrentTodo: PropTypes.func.isRequired,
-  onToggleTodoCompleted: PropTypes.func.isRequired,
-  onToggleAllCompleted: PropTypes.func.isRequired,
-  onEditCurrentTodo: PropTypes.func.isRequired,
-  handleKeyPress: PropTypes.func.isRequired,
-  setEditedValue: PropTypes.func.isRequired,
-};
+Main.propTypes = mainType.isRequired;

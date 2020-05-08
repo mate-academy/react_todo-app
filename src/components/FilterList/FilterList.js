@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'classnames';
-import './FilterList.scss';
+import { filterListType } from '../../typedefs/filterListType';
 import { FILTER_TYPES } from '../../constants';
+import './FilterList.scss';
 
-export const FilterList = ({ onFilter, selectedFilter }) => (
+export const FilterList = ({ onSetFilter, selectedFilter }) => (
   <ul className="filters">
     {Object.values(FILTER_TYPES).map(filter => (
       <li key={filter} className="filter">
@@ -13,7 +13,7 @@ export const FilterList = ({ onFilter, selectedFilter }) => (
           className={cn('filter-link', {
             selected: selectedFilter === filter,
           })}
-          onClick={() => onFilter(filter)}
+          onClick={() => onSetFilter(filter)}
         >
           {filter}
         </a>
@@ -22,7 +22,4 @@ export const FilterList = ({ onFilter, selectedFilter }) => (
   </ul>
 );
 
-FilterList.propTypes = {
-  onFilter: PropTypes.func.isRequired,
-  selectedFilter: PropTypes.string.isRequired,
-};
+FilterList.propTypes = filterListType.isRequired;

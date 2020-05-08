@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { footerType } from '../../typedefs/footerType';
 import { FilterList } from '../FilterList';
 import './Footer.scss';
 
@@ -15,7 +15,7 @@ export const Footer = (
       </span>
 
       <FilterList
-        onFilter={onSetFilter}
+        onSetFilter={onSetFilter}
         selectedFilter={currentFilter}
       />
 
@@ -32,9 +32,4 @@ export const Footer = (
   );
 };
 
-Footer.propTypes = {
-  currentFilter: PropTypes.string.isRequired,
-  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onClearCompleted: PropTypes.func.isRequired,
-  onSetFilter: PropTypes.func.isRequired,
-};
+Footer.propTypes = footerType.isRequired;

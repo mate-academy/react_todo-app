@@ -1,24 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { todoListType } from '../../typedefs/todoListType';
 import { ToDoItem } from '../ToDoItem';
 import './ToDoList.scss';
 
 export const ToDoList = ({
-  items,
-  onToggleTodo,
-  onDeleteTodo,
-  onEditTodo,
+  visibleTodos,
+  onToggle,
+  onDelete,
+  onEdit,
   handleKeyPress,
   setEditedValue,
 }) => (
   <ul className="todo-list">
-    {items.map(item => (
+    {visibleTodos.map(todo => (
       <ToDoItem
-        key={item.id}
-        todo={item}
-        onToggle={() => onToggleTodo(item.id)}
-        onDelete={() => onDeleteTodo(item.id)}
-        onEdit={() => onEditTodo(item.id)}
+        key={todo.id}
+        {...{ todo }}
+        onToggle={() => onToggle(todo.id)}
+        onDelete={() => onDelete(todo.id)}
+        onEdit={() => onEdit(todo.id)}
         handleKeyPress={handleKeyPress}
         setEditedValue={setEditedValue}
       />
@@ -26,11 +26,4 @@ export const ToDoList = ({
   </ul>
 );
 
-ToDoList.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onToggleTodo: PropTypes.func.isRequired,
-  onDeleteTodo: PropTypes.func.isRequired,
-  onEditTodo: PropTypes.func.isRequired,
-  handleKeyPress: PropTypes.func.isRequired,
-  setEditedValue: PropTypes.func.isRequired,
-};
+ToDoList.propTypes = todoListType.isRequired;

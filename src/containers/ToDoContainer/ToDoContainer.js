@@ -15,30 +15,21 @@ export class ToDoContainer extends Component {
     localStorage.setItem('todos', JSON.stringify(this.state.todos));
   }
 
-  addTodo = (todo) => {
-    this.setState(prevState => ({
-      todos: [
-        ...prevState.todos,
-        todo,
-      ],
-    }));
-  };
+  addTodo = todo => this.setState(state => ({
+    todos: [...state.todos, todo],
+  }));
 
-  deleteTodo = (todoId) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => todo.id !== todoId),
-    }));
-  };
+  deleteTodo = todoId => this.setState(state => ({
+    todos: state.todos.filter(todo => todo.id !== todoId),
+  }));
 
-  handleClearCompleted = () => {
-    this.setState(prevState => ({
-      todos: prevState.todos.filter(todo => !todo.completed),
-    }));
-  };
+  handleClearCompleted = () => this.setState(state => ({
+    todos: state.todos.filter(todo => !todo.completed),
+  }));
 
   toggleTodoCompleted = (todoId) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
         if (todo.id !== todoId) {
           return todo;
         }
@@ -52,10 +43,10 @@ export class ToDoContainer extends Component {
   };
 
   toggleAllCompleted = () => {
-    this.setState((prevState) => {
-      if (prevState.todos.every(todo => todo.completed)) {
+    this.setState((state) => {
+      if (state.todos.every(todo => todo.completed)) {
         return {
-          todos: prevState.todos.map(todo => ({
+          todos: state.todos.map(todo => ({
             ...todo,
             completed: false,
           })),
@@ -63,7 +54,7 @@ export class ToDoContainer extends Component {
       }
 
       return {
-        todos: prevState.todos.map(todo => ({
+        todos: state.todos.map(todo => ({
           ...todo,
           completed: true,
         })),
@@ -71,28 +62,26 @@ export class ToDoContainer extends Component {
     });
   };
 
-  setFilter = (filter) => {
-    this.setState({
-      selectedFilter: filter,
-    });
-  };
+  setFilter = filter => this.setState({ selectedFilter: filter });
 
   filterTodos = () => {
-    switch (this.state.selectedFilter) {
+    const { selectedFilter, todos } = this.state;
+
+    switch (selectedFilter) {
       case FILTER_TYPES.active:
-        return this.state.todos.filter(todo => !todo.completed);
+        return todos.filter(todo => !todo.completed);
       case FILTER_TYPES.completed:
-        return this.state.todos.filter(todo => todo.completed);
+        return todos.filter(todo => todo.completed);
       case FILTER_TYPES.all:
-        return this.state.todos.filter(todo => todo.id);
+        return todos.filter(todo => todo.id);
       default:
-        return this.state.todos;
+        return todos;
     }
   };
 
   setEditableState = (id) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
         if (todo.id !== id) {
           return {
             ...todo,
@@ -156,7 +145,7 @@ export class ToDoContainer extends Component {
         {todos.length > 0 && (
           <>
             <Main
-              todos={todos}
+              {...{ todos }}
               visibleTodos={visibleTodos}
               onToggleAllCompleted={this.toggleAllCompleted}
               onToggleTodoCompleted={this.toggleTodoCompleted}
@@ -167,7 +156,7 @@ export class ToDoContainer extends Component {
             />
 
             <Footer
-              todos={todos}
+              {...{ todos }}
               onSetFilter={this.setFilter}
               currentFilter={selectedFilter}
               onClearCompleted={this.handleClearCompleted}

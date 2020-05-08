@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { todoItemType } from '../../typedefs/todoItemType';
 import './ToDoItem.scss';
 
 /* eslint-disable jsx-a11y/no-autofocus */
@@ -60,12 +60,8 @@ export class ToDoItem extends Component {
             defaultValue={todo.title}
             autoFocus
             onChange={this.setEditValue}
-            onKeyDown={
-              event => handleKeyPress(event, todo.id, editValue)
-            }
-            onBlur={
-              event => setEditedValue(event, todo.id, editValue)
-            }
+            onKeyDown={event => handleKeyPress(event, todo.id, editValue)}
+            onBlur={event => setEditedValue(event, todo.id, editValue)}
           />
         )}
       </li>
@@ -73,16 +69,4 @@ export class ToDoItem extends Component {
   }
 }
 
-ToDoItem.propTypes = {
-  todo: PropTypes.shape({
-    id: PropTypes.number,
-    title: PropTypes.string,
-    completed: PropTypes.bool,
-    isEditable: PropTypes.bool,
-  }).isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  handleKeyPress: PropTypes.func.isRequired,
-  setEditedValue: PropTypes.func.isRequired,
-};
+ToDoItem.propTypes = todoItemType.isRequired;
