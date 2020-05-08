@@ -386,16 +386,11 @@ html .clear-completed:active {
   background-color: #d69fa1;
 }
 
-.activeTodo {
-  color: rgb(175, 170, 170);
-  text-decoration: line-through;
+.todo-list li.test {
+  padding-bottom: 0;
 }
 
 .change {
-  width: 90%;
-  height: 30px;
-  box-sizing: border-box;
-  border: 1px solid grey;
-  border-radius: 4px;
-  font-size: 24px;
+  height: 60px;
+  border: 1px solid black;
 }

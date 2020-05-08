@@ -42,33 +42,33 @@ class TodoApp extends React.Component {
   }
 
   changeTitle = (id, newTitle) => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            title: newTitle,
-          };
-        }
+    if (newTitle.trim() !== '') {
+      this.setState(prevState => ({
+        todos: prevState.todos.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              title: newTitle,
+            };
+          }
 
-        return todo;
-      }),
-    }));
-  }
+          return todo;
+        }),
+      }));
+    } else {
+      const removeTodoId = this.state.todos
+        .findIndex(todo => todo.id === id);
 
-  deleteTodo = (event) => {
-    const removeTodoId = this.state.todos
-      .findIndex(item => item.id === +event.target.id);
+      this.setState((prevState) => {
+        const remainingTodos = [...prevState.todos];
 
-    this.setState((prevState) => {
-      const remainingTodos = [...prevState.todos];
+        remainingTodos.splice(removeTodoId, 1);
 
-      remainingTodos.splice(removeTodoId, 1);
-
-      return (
-        { todos: [...remainingTodos] }
-      );
-    });
+        return (
+          { todos: [...remainingTodos] }
+        );
+      });
+    }
   }
 
   selectAllTodo = () => {
@@ -102,6 +102,21 @@ class TodoApp extends React.Component {
   filterCompleted = () => {
     this.setState({
       filter: 'completed',
+    });
+  }
+
+  deleteTodo = (event) => {
+    const removeTodoId = this.state.todos
+      .findIndex(item => item.id === +event.target.id);
+
+    this.setState((prevState) => {
+      const remainingTodos = [...prevState.todos];
+
+      remainingTodos.splice(removeTodoId, 1);
+
+      return (
+        { todos: [...remainingTodos] }
+      );
     });
   }
 

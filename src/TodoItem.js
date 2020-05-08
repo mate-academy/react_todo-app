@@ -46,25 +46,18 @@ state = {
   render() {
     const { deleteTodo, todo, changeStatus } = this.props;
     const { onEdit } = this.state;
-    let visibleContent;
-
-    if (!onEdit) {
-      visibleContent = todo.title;
-    } else {
-      visibleContent = (
-        <input
-          className="change"
-          defaultValue={todo.title}
-          onBlur={this.saveChangeBlur}
-          onKeyDown={this.onKeyPress}
-        />
-      );
-    }
 
     return (
 
       <>
-        <li key={todo.id}>
+        <li
+          key={todo.id}
+          className={classNames({
+            view: true,
+            editing: onEdit,
+            completed: todo.completed,
+          })}
+        >
           <div className="view">
             <input
               type="checkbox"
@@ -74,11 +67,10 @@ state = {
               onChange={() => changeStatus(todo.id)}
             />
             <label
-              className={classNames({ activeTodo: todo.completed })}
               htmlFor="todo"
               onDoubleClick={() => this.onEdit(todo.id)}
             >
-              {visibleContent}
+              {todo.title}
             </label>
             <button
               type="button"
@@ -90,6 +82,9 @@ state = {
           <input
             type="text"
             className="edit"
+            defaultValue={todo.title}
+            onBlur={this.saveChangeBlur}
+            onKeyDown={this.onKeyPress}
           />
         </li>
       </>

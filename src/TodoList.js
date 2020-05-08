@@ -11,7 +11,14 @@ class TodoList extends React.PureComponent {
       selectAllTodo,
       changeTitle,
     } = this.props;
-    const allChecked = todos.every(todo => todo.completed === true);
+
+    let allChecked;
+
+    if (todos.length === 0) {
+      allChecked = false;
+    } else {
+      allChecked = todos.every(todo => todo.completed === true);
+    }
 
     return (
       <section className="main">
