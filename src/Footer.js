@@ -2,6 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames/bind';
 
+const buttonsFilter = [
+  {
+    href: '#/',
+    text: 'All',
+  },
+  {
+    href: '#/active',
+    text: 'Active',
+  },
+  {
+    href: '#/completed',
+    text: 'Completed',
+  },
+];
+
 const Footer = ({
   noComlpetedTodo,
   onFilteredTodos,
@@ -17,35 +32,17 @@ const Footer = ({
     </span>
 
     <ul className="filters">
-      <li>
-        <a
-          href="#/"
-          className={cn({ selected: filterType === 'All' })}
-          onClick={e => onFilteredTodos(e.target.text)}
-        >
-          All
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/active"
-          className={cn({ selected: filterType === 'Active' })}
-          onClick={e => onFilteredTodos(e.target.text)}
-        >
-          Active
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/completed"
-          className={cn({ selected: filterType === 'Completed' })}
-          onClick={e => onFilteredTodos(e.target.text)}
-        >
-          Completed
-        </a>
-      </li>
+      {buttonsFilter.map(button => (
+        <li key={button.text}>
+          <a
+            href={button.href}
+            className={cn({ selected: filterType === `${button.text}` })}
+            onClick={e => onFilteredTodos(e.target.text)}
+          >
+            {button.text}
+          </a>
+        </li>
+      ))}
     </ul>
     {visibleClearCompleted
         && (

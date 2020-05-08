@@ -16,7 +16,13 @@ class TodoList extends React.Component {
   }
 
   render() {
-    const { todos, onTodoSelected, deleteTodo } = this.props;
+    const {
+      todos,
+      onTodoChecked,
+      deleteTodo,
+      saveChangesTodo,
+      // selectEditField,
+    } = this.props;
 
     return (
       <section className="main">
@@ -34,8 +40,12 @@ class TodoList extends React.Component {
             <Todo
               {...todo}
               key={todo.id}
-              onSelected={e => onTodoSelected(todo.id, e)}
+              onSelected={e => onTodoChecked(todo.id, e)}
               deleteTodo={() => deleteTodo(todo.id)}
+              saveChangesTodo={e => (
+                saveChangesTodo(e, todo.id, this.state.value)
+              )}
+
             />
           ))}
         </ul>
@@ -45,16 +55,20 @@ class TodoList extends React.Component {
 }
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object),
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  })),
   completedStatus: PropTypes.bool.isRequired,
   onAllSelected: PropTypes.func.isRequired,
-  onTodoSelected: PropTypes.func.isRequired,
+  onTodoChecked: PropTypes.func.isRequired,
+  saveChangesTodo: PropTypes.func,
   deleteTodo: PropTypes.func,
 };
 
 TodoList.defaultProps = {
   todos: [],
   deleteTodo: null,
+  saveChangesTodo: () => {},
 };
 
 export default TodoList;

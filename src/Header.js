@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class Header extends React.Component {
-  state = {
+  state={
     title: '',
     id: '',
     completed: false,
@@ -15,7 +15,14 @@ class Header extends React.Component {
   )
 
   handleSubmit = (event) => {
+    const { title } = this.state;
+
     event.preventDefault();
+
+    if (title.length === 0) {
+      return;
+    }
+
     this.props.onTodo({
       ...this.state,
       id: +new Date(),
@@ -41,6 +48,7 @@ class Header extends React.Component {
           />
         </header>
       </form>
+
     );
   }
 }

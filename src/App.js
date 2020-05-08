@@ -15,10 +15,26 @@ class App extends React.Component {
     }));
   }
 
-  onTodoSelected = (todoId, e) => {
-    // console.log('e.todo',e);
+  saveChangesTodo = (e, todoId, todoTitle) => {
+    const title = e.target.value;
 
-    // e.stopPropagation();
+    if (e.key === 'Enter') {
+      this.setState(prevState => ({
+        todos: prevState.todos.map((todo) => {
+          if (todo.id === todoId) {
+            return {
+              ...todo,
+              title,
+            };
+          }
+
+          return todo;
+        }),
+      }));
+    }
+  }
+
+  onTodoChecked = (todoId, e) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id === todoId) {
@@ -35,19 +51,10 @@ class App extends React.Component {
 
   onAllSelected = (select) => {
     this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
-        if (select) {
-          return {
-            ...todo,
-            completed: true,
-          };
-        }
-
-        return {
-          ...todo,
-          completed: false,
-        };
-      }),
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        completed: select,
+      })),
     }));
   }
 
@@ -72,60 +79,45 @@ class App extends React.Component {
   }
 
   deleteTodo = (todoId) => {
-    // console.log('e.todo',e);
-
-    // e.stopPropagation();
-    this.setState((prevState) => {
-      const todoItem = prevState.todos.find(todo => todo.id === todoId);
-      const index = prevState.todos.indexOf(todoItem);
-
-      prevState.todos.splice(index, 1);
-
-      return {
-        todos: prevState.todos,
-      };
-    });
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== todoId),
+    }));
   }
 
   clearCompleted = () => {
-    const { todos } = this.state;
-    const copy = todos.filter(todo => !todo.completed);
-
-    this.setState((prevState) => {
-      todos.length = 0;
-
-      return {
-        ...prevState,
-        todos: [...copy],
-      };
-    });
+    this.setState(prevState => ({
+      ...prevState,
+      todos: prevState.todos.filter(todo => !todo.completed),
+    }));
   }
 
   render() {
-    // console.log('this.state', this.state);
-
     const { todos, filterType } = this.state;
     const completedStatus = todos.length === 0
       ? false
       : todos.every(todo => todo.completed);
     const visibleClearCompleted = todos.some(todo => todo.completed);
-    const counter = todos.filter(todo => !todo.completed).length;
+    const incompleteTodosSum = todos.filter(todo => !todo.completed).length;
     const visibleTodos = this.getVisibleTodos(filterType);
 
     return (
       <section className="todoapp">
-        <Header onTodo={this.addTodo} />
+        <Header
+          onTodo={this.addTodo}
+        />
         <TodoList
           todos={visibleTodos}
           completedStatus={completedStatus}
           onFilteredTodos={this.onFilteredTodos}
           onAllSelected={this.onAllSelected}
-          onTodoSelected={this.onTodoSelected}
+          onTodoChecked={this.onTodoChecked}
           deleteTodo={this.deleteTodo}
+          saveChangesTodo={this.saveChangesTodo}
+
         />
 
         <Footer
-          noComlpetedTodo={counter}
+          noComlpetedTodo={incompleteTodosSum}
           onFilteredTodos={this.onFilteredTodos}
           clearCompleted={this.clearCompleted}
           visibleClearCompleted={visibleClearCompleted}
