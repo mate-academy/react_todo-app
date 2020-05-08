@@ -1,10 +1,12 @@
 import React from 'react';
 import TodoList from './components/TodoList';
+import TodosFilter from './components/TodosFilter';
 
 class App extends React.PureComponent {
   state={
     todos: [],
     title: '',
+    filter: 'All',
     currentId: 1,
   }
 
@@ -13,8 +15,9 @@ class App extends React.PureComponent {
 
     const { title, currentId } = this.state;
 
-    if (title === '') {
-      // add error handling
+    if (!title.trim()) {
+      this.setState({ title: '' });
+
       return;
     }
 
@@ -56,7 +59,27 @@ class App extends React.PureComponent {
     });
   }
 
+  handleFilter = (filter) => {
+    this.setState({ filter });
+  }
+
+  handleClearCompleted = () => {
+    this.setState(({ todos }) => ({
+      todos: todos.filter(todo => !todo.completed),
+    }));
+  }
+
+  handleRemoveItem = (event) => {
+    const { id } = event.target;
+
+    this.setState(({ todos }) => ({
+      todos: todos.filter(todo => todo.id !== +id),
+    }));
+  }
+
   render() {
+    const { filter } = this.state.filter;
+
     return (
       <section className="todoapp">
         <header className="header">
@@ -75,10 +98,15 @@ class App extends React.PureComponent {
         <section className="main">
           <input type="checkbox" id="toggle-all" className="toggle-all" />
           <label htmlFor="toggle-all">Mark all as complete</label>
-          <TodoList
-            todos={this.state.todos}
-            onComplete={this.handleCompleteChange}
-          />
+          {this.state.todos
+          && (
+            <TodoList
+              todos={this.state.todos}
+              filter={this.state.filter}
+              onComplete={this.handleCompleteChange}
+              onRemove={this.handleRemoveItem}
+            />
+          )}
         </section>
 
         <footer className="footer">
@@ -86,22 +114,15 @@ class App extends React.PureComponent {
             {this.state.todos.filter(todo => !todo.completed).length}
             items left
           </span>
-
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
-
-            <li>
-              <a href="#/active">Active</a>
-            </li>
-
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
-
-          <button type="button" className="clear-completed">
+          <TodosFilter
+            onFilter={this.handleFilter}
+            filter={filter !== undefined ? filter : ''}
+          />
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={this.handleClearCompleted}
+          >
             Clear completed
           </button>
         </footer>
