@@ -6,10 +6,8 @@ class App extends React.Component {
   state = {
     todos: [],
     title: '',
-    filter: 'all',
-    isAllBtnSelected: false,
-    isActiveBtnSelected: false,
-    isCompletedBtnSelected: false,
+    filter: '',
+    activeButton: '',
   }
 
   componentDidMount() {
@@ -87,30 +85,10 @@ class App extends React.Component {
     }));
   }
 
-  filterAll = () => {
+  filter = ({ target: { name } }) => {
     this.setState({
-      filter: 'all',
-      isAllBtnSelected: true,
-      isActiveBtnSelected: false,
-      isCompletedBtnSelected: false,
-    });
-  }
-
-  filterActive = () => {
-    this.setState({
-      filter: 'active',
-      isAllBtnSelected: false,
-      isActiveBtnSelected: true,
-      isCompletedBtnSelected: false,
-    });
-  }
-
-  filterCompleted = () => {
-    this.setState({
-      filter: 'completed',
-      isAllBtnSelected: false,
-      isActiveBtnSelected: false,
-      isCompletedBtnSelected: true,
+      filter: name,
+      activeButton: name,
     });
   }
 
@@ -140,19 +118,19 @@ class App extends React.Component {
       todos,
       title,
       filter,
-      isActiveBtnSelected,
-      isAllBtnSelected,
-      isCompletedBtnSelected,
+      activeButton,
     } = this.state;
 
     let currentTodos = [...todos];
+    const activeTodos = currentTodos.filter(todo => !todo.completed);
+    const completedTodos = currentTodos.filter(todo => todo.completed);
 
     if (filter === 'active') {
-      currentTodos = currentTodos.filter(todo => !todo.completed);
+      currentTodos = activeTodos;
     }
 
     if (filter === 'completed') {
-      currentTodos = currentTodos.filter(todo => todo.completed);
+      currentTodos = completedTodos;
     }
 
     return (
@@ -195,17 +173,19 @@ class App extends React.Component {
         {todos.length > 0 && (
           <footer className="footer">
             <span className="todo-count">
-              {todos.filter(todo => !todo.completed).length}
-              {' '}
-              items left
+              {activeTodos.length === 1
+                ? `${activeTodos.length} todo left`
+                : `${activeTodos.length} todos left`
+              }
             </span>
 
             <ul className="filters">
               <li>
                 <a
+                  name="all"
                   href="#/"
-                  className={isAllBtnSelected ? 'selected' : ''}
-                  onClick={this.filterAll}
+                  className={activeButton === 'all' ? 'selected' : ''}
+                  onClick={this.filter}
                 >
                   All
                 </a>
@@ -213,24 +193,26 @@ class App extends React.Component {
 
               <li>
                 <a
+                  name="active"
                   href="#/active"
-                  className={isActiveBtnSelected ? 'selected' : ''}
-                  onClick={this.filterActive}
+                  className={activeButton === 'active' ? 'selected' : ''}
+                  onClick={this.filter}
                 >
                   Active
                 </a>
               </li>
               <li>
                 <a
+                  name="completed"
                   href="#/completed"
-                  className={isCompletedBtnSelected ? 'selected' : ''}
-                  onClick={this.filterCompleted}
+                  className={activeButton === 'completed' ? 'selected' : ''}
+                  onClick={this.filter}
                 >
                   Completed
                 </a>
               </li>
             </ul>
-            {todos.filter(todo => todo.completed).length > 0 && (
+            {completedTodos.length > 0 && (
               <button
                 type="button"
                 className="clear-completed"
