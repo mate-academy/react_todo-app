@@ -25,7 +25,6 @@ export const Todo = ({
         checked={todo.completed}
       />
       <label
-        htmlFor={todo.id}
         onDoubleClick={() => editTodo(todo.id, todo.title)}
       >
         {todo.title}
@@ -41,7 +40,7 @@ export const Todo = ({
       type="text"
       id={todo.id}
       className="edit"
-      defaultValue={todo.title}
+      value={todo.title}
       onChange={editCurrentTitle}
       onKeyDown={handleEditingTitle}
       onBlur={handleEditingTitle}
@@ -56,7 +55,7 @@ Todo.propTypes = {
   deleteTodo: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
   todo: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     title: PropTypes.string,
     completed: PropTypes.bool,
     edited: PropTypes.bool,

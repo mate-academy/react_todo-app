@@ -1,10 +1,10 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList';
 
 class App extends React.Component {
   state = {
     todos: [],
-    id: 0,
     title: '',
     tempTitle: '',
     filter: 'all',
@@ -15,9 +15,14 @@ class App extends React.Component {
 
   componentDidMount() {
     const cacheTodos = JSON.parse(localStorage.getItem('todos'));
+    const tempTitle = JSON.parse(localStorage.getItem('tempTitle'));
 
     if (cacheTodos) {
       this.setState({ todos: cacheTodos });
+    }
+
+    if (tempTitle) {
+      this.setState({ tempTitle });
     }
   }
 
@@ -41,12 +46,11 @@ class App extends React.Component {
         todos: [
           ...state.todos,
           {
-            id: state.id + 1,
+            id: uuidv4(),
             title: state.title,
             completed: false,
             edited: false,
           }],
-        id: state.id + 1,
         title: '',
       }));
     }
@@ -71,7 +75,7 @@ class App extends React.Component {
   }
 
   editCurrentTitle = ({ target }) => {
-    const id = +target.id;
+    const { id } = target;
     const { value } = target;
 
     this.setState(state => ({
@@ -91,7 +95,7 @@ class App extends React.Component {
   handleEditingTitle = ({ key, target, type }) => {
     if ((key === 'Enter' && target.value.trim() !== '')
       || type === 'blur') {
-      const id = +target.id;
+      const { id } = target;
 
       this.setState(state => ({
         todos: state.todos.map((todo) => {
@@ -108,7 +112,7 @@ class App extends React.Component {
     }
 
     if (key === 'Escape') {
-      const id = +target.id;
+      const { id } = target;
 
       this.setState(state => ({
         todos: state.todos.map((todo) => {
@@ -201,8 +205,10 @@ class App extends React.Component {
 
   saveToLocalStorage() {
     const todos = JSON.stringify(this.state.todos);
+    const tempTitle = JSON.stringify(this.state.tempTitle);
 
     localStorage.setItem('todos', todos);
+    localStorage.setItem('tempTitle', tempTitle);
   }
 
   render() {
