@@ -58,6 +58,12 @@ class App extends React.Component {
     })
   );
 
+  changeToggleAllTodos = () => (
+    this.setState({
+      toggleTodosStatus: true,
+    })
+  );
+
   toggleAllTodos = () => (
     this.setState({
       toggleTodosStatus: false,
