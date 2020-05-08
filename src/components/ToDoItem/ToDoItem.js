@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { todoItemType } from '../../typedefs/todoItemType';
 import './ToDoItem.scss';
 
 /* eslint-disable jsx-a11y/no-autofocus */
 export class ToDoItem extends Component {
   state = { editValue: '' }
 
-  setEditValue = ({ target }) => {
-    this.setState({
-      editValue: target.value,
-    });
+  setEditValue = ({ target: { value } }) => {
+    this.setState({ editValue: value });
   }
 
   render = () => {
     const {
-      todo,
+      id,
+      title,
+      completed,
+      isEditable,
       onToggle,
       onDelete,
       onEdit,
@@ -26,8 +27,8 @@ export class ToDoItem extends Component {
 
     return (
       <li className={cn('todo-item', {
-        completed: todo.completed,
-        editing: todo.isEditable,
+        completed,
+        editing: isEditable,
       })}
       >
         <div className="view">
@@ -35,15 +36,15 @@ export class ToDoItem extends Component {
             type="checkbox"
             className="toggle"
             onChange={onToggle}
-            checked={todo.completed}
+            checked={completed}
           />
 
           <label
-            className={cn('todo-label', { checked: todo.completed })}
-            htmlFor={`todo-${todo.id}`}
+            className={cn('todo-label', { checked: completed })}
+            htmlFor={`todo-${id}`}
             onDoubleClick={onEdit}
           >
-            {todo.title}
+            {title}
           </label>
 
           <button
@@ -53,19 +54,15 @@ export class ToDoItem extends Component {
           />
         </div>
 
-        {todo.isEditable && (
+        {isEditable && (
           <input
             type="text"
             className="edit"
-            defaultValue={todo.title}
+            defaultValue={title}
             autoFocus
             onChange={this.setEditValue}
-            onKeyDown={
-              event => handleKeyPress(event, todo.id, editValue)
-            }
-            onBlur={
-              event => setEditedValue(event, todo.id, editValue)
-            }
+            onKeyDown={event => handleKeyPress(event, id, editValue)}
+            onBlur={event => setEditedValue(event, id, editValue)}
           />
         )}
       </li>
@@ -73,16 +70,4 @@ export class ToDoItem extends Component {
   }
 }
 
-ToDoItem.propTypes = {
-  todo: PropTypes.shape({
-    id: PropTypes.number,
-    title: PropTypes.string,
-    completed: PropTypes.bool,
-    isEditable: PropTypes.bool,
-  }).isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  handleKeyPress: PropTypes.func.isRequired,
-  setEditedValue: PropTypes.func.isRequired,
-};
+ToDoItem.propTypes = todoItemType.isRequired;

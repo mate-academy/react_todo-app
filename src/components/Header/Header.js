@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { headerType } from '../../typedefs/headerType';
 import './Header.scss';
 
 export class Header extends Component {
@@ -8,7 +8,7 @@ export class Header extends Component {
   };
 
   setTitle = ({ target }) => {
-    const title = target.value.slice(0, 37);
+    const title = target.value.slice(0, 30);
 
     this.setState({
       title,
@@ -17,23 +17,21 @@ export class Header extends Component {
 
   validateForm = (event) => {
     event.preventDefault();
+    const { addTodo } = this.props;
+    const trimStr = this.state.title.trim();
 
-    this.setState((prevState) => {
-      if (prevState.title.trim() === '') {
-        return '';
-      }
+    if (trimStr === '') {
+      return;
+    }
 
-      this.props.addTodo({
-        id: +new Date(),
-        title: prevState.title,
-        completed: false,
-        isEditable: false,
-      });
-
-      return {
-        title: '',
-      };
+    addTodo({
+      id: +new Date(),
+      title: trimStr,
+      completed: false,
+      isEditable: false,
     });
+
+    this.setState({ title: '' });
   };
 
   render = () => {
@@ -57,6 +55,4 @@ export class Header extends Component {
   };
 }
 
-Header.propTypes = {
-  addTodo: PropTypes.func.isRequired,
-};
+Header.propTypes = headerType.isRequired;
