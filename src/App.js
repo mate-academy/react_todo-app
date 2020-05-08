@@ -49,38 +49,42 @@ class App extends React.Component {
     }));
   }
 
- filterSelector = (filterType) => {
-   this.setState({ filtrationType: filterType });
- }
+  filterSelector = (filterType) => {
+    this.setState({ filtrationType: filterType });
+  }
 
- filterByPattern = () => {
-   switch (this.state.filtrationType) {
-     case 'active':
-       return this.state.todos.filter(task => task.completed === false);
+  filterByPattern = () => {
+    switch (this.state.filtrationType) {
+      case 'active':
+        return this.state.todos.filter(task => task.completed === false);
 
-     case 'completed':
-       return this.state.todos.filter(task => task.completed !== false);
+      case 'completed':
+        return this.state.todos.filter(task => task.completed !== false);
 
-     default:
-       return this.state.todos;
-   }
- }
+      default:
+        return this.state.todos;
+    }
+  }
 
- render() {
-   return (
-     <section className="todoapp">
-       <TodoApp handleSubmit={this.handleSubmit} />
-       <TodoList
-         todosList={this.filterByPattern()}
-         handleTaskRemover={this.handleTaskRemover}
-         statusHandler={this.statusHandler}
-       />
-       <TodosFilter
-         filterSelector={this.filterSelector}
-       />
-     </section>
-   );
- }
+  activeTasksCounter = () => this.state.todos
+    .filter(task => !task.completed).length
+
+  render() {
+    return (
+      <section className="todoapp">
+        <TodoApp handleSubmit={this.handleSubmit} />
+        <TodoList
+          todosList={this.filterByPattern()}
+          handleTaskRemover={this.handleTaskRemover}
+          statusHandler={this.statusHandler}
+        />
+        <TodosFilter
+          activeTasksCounter={this.activeTasksCounter}
+          filterSelector={this.filterSelector}
+        />
+      </section>
+    );
+  }
 }
 
 export default App;

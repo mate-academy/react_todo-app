@@ -22,13 +22,15 @@ class TodosFilter extends React.Component {
   }
 
   render() {
-    const { filterSelector } = this.props;
+    const { filterSelector, activeTasksCounter } = this.props;
     const { activeFilter } = this.state;
 
     return (
       <footer className="footer">
         <span className="todo-count">
           items left
+          {' '}
+          {activeTasksCounter()}
         </span>
 
         <ul className="filters">
@@ -96,6 +98,7 @@ class TodosFilter extends React.Component {
 }
 
 TodosFilter.propTypes = {
+  activeTasksCounter: PropTypes.func.isRequired,
   filterSelector: PropTypes.func.isRequired,
 };
 
