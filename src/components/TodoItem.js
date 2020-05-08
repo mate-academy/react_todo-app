@@ -9,15 +9,16 @@ export class TodoItem extends React.Component {
   };
 
   handleTitleEditing = ({ target, key, type }) => {
-    const { value } = target;
     const { itemId, editTodo, deleteTodo } = this.props;
+    const value = target.value.trim();
+    const acceptEditing = (key === 'Enter' || type === 'blur');
 
-    if ((key === 'Enter' || type === 'blur') && value.trim()) {
+    if (acceptEditing && value) {
       editTodo(itemId, value);
       this.setEditingMode(false);
     }
 
-    if (type === 'blur' && !value.trim()) {
+    if (acceptEditing && !value) {
       deleteTodo(itemId);
       this.setEditingMode(false);
     }
