@@ -10,10 +10,15 @@ export class TodoItem extends React.Component {
 
   handleTitleEditing = ({ target, key, type }) => {
     const { value } = target;
-    const { itemId, editTodo } = this.props;
+    const { itemId, editTodo, deleteTodo } = this.props;
 
     if ((key === 'Enter' || type === 'blur') && value.trim()) {
       editTodo(itemId, value);
+      this.setEditingMode(false);
+    }
+
+    if (type === 'blur' && !value.trim()) {
+      deleteTodo(itemId);
       this.setEditingMode(false);
     }
 
