@@ -16,6 +16,20 @@ class App extends React.Component {
     ));
   }
 
+  submitEditingTodo = (todoId, todoTitle) => {
+    this.setState(({ todosList }) => ({
+      todosList: todosList.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo, title: todoTitle,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
   deleteTodo = (todoId) => {
     this.setState(({ todosList }) => ({
       todosList: todosList.filter(({ id }) => id !== todoId),
@@ -75,6 +89,7 @@ class App extends React.Component {
     let preparedTodo = todosList;
     let selectAllButton;
     let hideOnStart;
+    const hideClearButton = todosList.some(todo => todo.completed === true);
 
     todosList.length > 0 ? hideOnStart = true : hideOnStart = false;
 
@@ -101,6 +116,7 @@ class App extends React.Component {
           <TodoList
             todos={preparedTodo}
             deleteTodo={this.deleteTodo}
+            submitEditingTodo={this.submitEditingTodo}
             changeTodoStatus={this.changeTodoStatus}
             markAll={this.markAll}
             selectAllButton={selectAllButton}
@@ -110,6 +126,9 @@ class App extends React.Component {
         {hideOnStart && (
           <Footer
             todosList={todosList}
+            hideClearButton={hideClearButton}
+            selectAllButton={selectAllButton}
+            currentFilter={currentFilter}
             handlerChangeList={this.handlerChangeList}
             handleClearCompleted={this.handleClearCompleted}
           />

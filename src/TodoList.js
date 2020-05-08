@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
+
 import Todo from './Todo';
 
 const TodoList = (props) => {
@@ -8,6 +8,7 @@ const TodoList = (props) => {
     markAll,
     todos,
     deleteTodo,
+    submitEditingTodo,
     changeTodoStatus,
     hideOnStart } = props;
 
@@ -32,17 +33,13 @@ const TodoList = (props) => {
 
       <ul className="todo-list">
         {todos.map(todo => (
-          <li
+          <Todo
             key={todo.id}
-            className={cn({ completed: todo.completed })}
-          >
-            <Todo
-              todo={todo}
-              deleteTodo={deleteTodo}
-              changeTodoStatus={changeTodoStatus}
-
-            />
-          </li>
+            todo={todo}
+            deleteTodo={deleteTodo}
+            changeTodoStatus={changeTodoStatus}
+            submitEditingTodo={submitEditingTodo}
+          />
         ))
         }
       </ul>
@@ -61,6 +58,7 @@ TodoList.propTypes = {
   deleteTodo: PropTypes.func.isRequired,
   changeTodoStatus: PropTypes.func.isRequired,
   markAll: PropTypes.func.isRequired,
+  submitEditingTodo: PropTypes.func.isRequired,
   selectAllButton: PropTypes.bool.isRequired,
   hideOnStart: PropTypes.bool.isRequired,
 };

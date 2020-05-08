@@ -2,21 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodosFilter from './TodosFilter';
 
-const Footer = ({ todosList, handleClearCompleted, handlerChangeList }) => (
-  <>
-    <footer className="footer">
-      <span className="todo-count">
-        {`${todosList.filter(todo => !todo.completed).length} items left`}
+const Footer = (props) => {
+  const { todosList,
+    handleClearCompleted,
+    handlerChangeList,
+    currentFilter,
+    hideClearButton,
+    selectAllButton } = props;
 
-      </span>
-      <TodosFilter
-        handlerChangeList={handlerChangeList}
-        handleClearCompleted={handleClearCompleted}
-      />
-    </footer>
+  return (
+    <>
+      <footer className="footer">
+        <span className="todo-count">
+          {`${todosList.filter(todo => !todo.completed).length} items left`}
 
-  </>
-);
+        </span>
+        <TodosFilter
+          currentFilter={currentFilter}
+          handlerChangeList={handlerChangeList}
+          handleClearCompleted={handleClearCompleted}
+          hideClearButton={hideClearButton}
+          selectAllButton={selectAllButton}
+        />
+      </footer>
+
+    </>
+  );
+};
 
 export default Footer;
 
@@ -24,4 +36,7 @@ Footer.propTypes = {
   todosList: PropTypes.arrayOf(PropTypes.object).isRequired,
   handlerChangeList: PropTypes.func.isRequired,
   handleClearCompleted: PropTypes.func.isRequired,
+  currentFilter: PropTypes.string.isRequired,
+  hideClearButton: PropTypes.bool.isRequired,
+  selectAllButton: PropTypes.bool.isRequired,
 };
