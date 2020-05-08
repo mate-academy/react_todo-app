@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { ToDoItem } from '../ToDoItem';
+import './ToDoList.scss';
 
 export const ToDoList = ({
   items,
@@ -11,7 +11,7 @@ export const ToDoList = ({
   handleKeyPress,
   setEditedValue,
 }) => (
-  <ul className={cn('todo-list')}>
+  <ul className="todo-list">
     {items.map(item => (
       <ToDoItem
         key={item.id}

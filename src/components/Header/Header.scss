@@ -1,0 +1,42 @@
+%todo-input {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  font-size: 30px;
+  font-family: "Indie Flower", cursive;
+  font-weight: inherit;
+  letter-spacing: 1px;
+  line-height: 1.45em;
+  color: inherit;
+  padding: 6px;
+  border: 1px solid #999;
+  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.new-todo {
+  @extend %todo-input;
+  padding: 16px 16px 16px 60px;
+  font-weight: bold;
+  border: none;
+  background: rgba(0, 0, 0, 0.01);
+  box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+}
+
+.new-todo::-webkit-input-placeholder,
+.new-todo::placeholder {
+  font-family: "Indie Flower", cursive;
+  color: #e6e6e6;
+}
+
+.new-todo::-moz-placeholder {
+  font-family: "Indie Flower", cursive;
+  color: #e6e6e6;
+}
+
+.new-todo::-ms-input-placeholder {
+  font-family: "Indie Flower", cursive;
+  color: #e6e6e6;
+}

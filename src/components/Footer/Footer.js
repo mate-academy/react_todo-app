@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { FilterList } from '../FilterList';
+import './Footer.scss';
 
 export const Footer = (
   { currentFilter, todos, onClearCompleted, onSetFilter },
@@ -9,8 +9,8 @@ export const Footer = (
   const completedTodos = todos.filter(todo => !todo.completed).length;
 
   return (
-    <footer className={cn('footer')}>
-      <span className={cn('todo-count')}>
+    <footer className="footer">
+      <span className="todo-count">
         {`${completedTodos} items left`}
       </span>
 
@@ -22,7 +22,7 @@ export const Footer = (
       {todos.some(todo => todo.completed) && (
         <button
           type="button"
-          className={cn('clear-completed')}
+          className="clear-completed"
           onClick={onClearCompleted}
         >
           Clear completed

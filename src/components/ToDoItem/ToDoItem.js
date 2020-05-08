@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import './ToDoItem.scss';
 
 /* eslint-disable jsx-a11y/no-autofocus */
 export class ToDoItem extends Component {
@@ -24,21 +25,21 @@ export class ToDoItem extends Component {
     const { editValue } = this.state;
 
     return (
-      <li className={cn(
-        todo.completed && 'completed',
-        todo.isEditable && 'editing',
-      )}
+      <li className={cn('todo-item', {
+        completed: todo.completed,
+        editing: todo.isEditable,
+      })}
       >
-        <div className={cn('view')}>
+        <div className="view">
           <input
             type="checkbox"
-            className={cn('toggle')}
+            className="toggle"
             onChange={onToggle}
             checked={todo.completed}
           />
 
           <label
-            className={cn(todo.completed && 'checked')}
+            className={cn('todo-label', { checked: todo.completed })}
             htmlFor={`todo-${todo.id}`}
             onDoubleClick={onEdit}
           >
@@ -47,7 +48,7 @@ export class ToDoItem extends Component {
 
           <button
             type="button"
-            className={cn('destroy')}
+            className="destroy"
             onClick={onDelete}
           />
         </div>

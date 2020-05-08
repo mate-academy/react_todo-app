@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
+import './Header.scss';
 
 export class Header extends Component {
   state = {
@@ -40,11 +40,11 @@ export class Header extends Component {
     const { title } = this.state;
 
     return (
-      <header className={cn('header')}>
+      <header className="header">
 
         <form onSubmit={this.validateForm}>
           <input
-            className={cn('new-todo')}
+            className="new-todo"
             placeholder="Click to add task"
             type="text"
             onChange={this.setTitle}

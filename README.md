@@ -1,8 +1,8 @@
 # React ToDo App
 - Replace `<your_account>` with your Github username in the links
 
-    - [DEMO LINK](https://andreas-just.github.io/react_article/)
-    - [PULL REQUEST](https://github.com/mate-academy/react_article/pull/59)
+    - [DEMO LINK](https://andreas-just.github.io/react_todo-app/)
+    - [PULL REQUEST](https://github.com/mate-academy/react_todo-app/pull/161)
 
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
