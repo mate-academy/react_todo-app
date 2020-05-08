@@ -1,0 +1,75 @@
+import React, { Component } from 'react';
+import CN from 'classnames';
+
+export class Header extends Component {
+  state = {
+    title: '',
+    completed: false,
+    errorTitle: false,
+  };
+
+  handleChangeTitle = ({ target }) => {
+    this.setState({
+      title: target.value,
+    });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const newTitle = this.state.title.trim();
+
+    if (!newTitle) {
+      this.setState({
+        errorTitle: true,
+      });
+      this.resetInput();
+
+      return;
+    }
+
+    // не знаю как для пропсов проптайп написать
+    // eslint-disable-next-line react/prop-types
+    this.props.newTodo({
+      title: newTitle,
+      // eslint-disable-next-line react/prop-types
+      id: this.props.id,
+      completed: this.state.completed,
+    });
+    this.setState({
+      errorTitle: false,
+    });
+    this.resetInput();
+  };
+
+  resetInput = () => {
+    this.setState({
+      title: '',
+    });
+  };
+
+  render() {
+    const { title, errorTitle } = this.state;
+
+    return (
+      <header className="header">
+        <h1>todos</h1>
+        <form action="" onSubmit={this.handleSubmit}>
+          <label htmlFor="new-todo">
+            <input
+              className={CN({
+                'new-todo new-todo-error': errorTitle,
+                'new-todo': !errorTitle,
+              })}
+              name="new-todo"
+              placeholder={errorTitle
+                ? ('введи хоть чет')
+                : ('What needs to be done?')}
+              value={title}
+              onChange={this.handleChangeTitle}
+            />
+          </label>
+        </form>
+      </header>
+    );
+  }
+}
