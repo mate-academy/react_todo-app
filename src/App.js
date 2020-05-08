@@ -12,13 +12,24 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    const appData = JSON.parse(localStorage.getItem('appData'));
+    const storageTodos = JSON.parse(localStorage.getItem('todos'));
+    const storageId = JSON.parse(localStorage.getItem('currentId'));
 
-    this.setState(appData);
+    if (storageTodos) {
+      this.setState({
+        todos: storageTodos,
+        currentId: storageId,
+      });
+    }
   }
 
-  componentDidUpdate() {
-    localStorage.setItem('appData', JSON.stringify(this.state));
+  componentDidUpdate(prevProps, prevState) {
+    const { todos, currentId } = this.state;
+
+    if (this.state.todos !== prevState.todos) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+      localStorage.setItem('currentId', JSON.stringify(currentId));
+    }
   }
 
   handleTitleChange = (event) => {
