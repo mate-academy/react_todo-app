@@ -6,7 +6,6 @@ class App extends React.Component {
   state = {
     todos: [],
     title: '',
-    tempTitle: '',
     filter: 'all',
     isAllBtnSelected: false,
     isActiveBtnSelected: false,
@@ -15,14 +14,9 @@ class App extends React.Component {
 
   componentDidMount() {
     const cacheTodos = JSON.parse(localStorage.getItem('todos'));
-    const tempTitle = JSON.parse(localStorage.getItem('tempTitle'));
 
     if (cacheTodos) {
       this.setState({ todos: cacheTodos });
-    }
-
-    if (tempTitle) {
-      this.setState({ tempTitle });
     }
   }
 
@@ -49,7 +43,6 @@ class App extends React.Component {
             id: uuidv4(),
             title: state.title,
             completed: false,
-            edited: false,
           }],
         title: '',
       }));
@@ -58,32 +51,13 @@ class App extends React.Component {
     event.preventDefault();
   }
 
-  editTodo = (id, title) => {
+  editCurrentTitle = (id, newTitle) => {
     this.setState(state => ({
       todos: state.todos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
-            edited: !todo.edited,
-          };
-        }
-
-        return todo;
-      }),
-      tempTitle: title,
-    }));
-  }
-
-  editCurrentTitle = ({ target }) => {
-    const { id } = target;
-    const { value } = target;
-
-    this.setState(state => ({
-      todos: state.todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            title: value,
+            title: newTitle,
           };
         }
 
@@ -92,58 +66,10 @@ class App extends React.Component {
     }));
   }
 
-  handleEditingTitle = ({ key, target, type }) => {
-    if ((key === 'Enter' && target.value.trim() !== '')
-      || type === 'blur') {
-      const { id } = target;
-
-      this.setState(state => ({
-        todos: state.todos.map((todo) => {
-          if (todo.id === id) {
-            return {
-              ...todo,
-              edited: false,
-            };
-          }
-
-          return todo;
-        }),
-      }));
-    }
-
-    if (key === 'Escape') {
-      const { id } = target;
-
-      this.setState(state => ({
-        todos: state.todos.map((todo) => {
-          if (todo.id === id) {
-            return {
-              ...todo,
-              title: state.tempTitle,
-              edited: false,
-            };
-          }
-
-          return todo;
-        }),
-      }));
-    }
-  }
-
-  deleteTodo = ({ target }) => {
-    const todoId = this.state.todos.findIndex(todo => todo.id === +target.id);
-
-    this.setState((state) => {
-      const remainingTodos = [...state.todos];
-
-      remainingTodos.splice(todoId, 1);
-
-      return (
-        {
-          todos: [...remainingTodos],
-        }
-      );
-    });
+  deleteTodo = (id) => {
+    this.setState(state => ({
+      todos: state.todos.filter(todo => todo.id !== id),
+    }));
   }
 
   changeStatus = (id) => {
@@ -205,10 +131,8 @@ class App extends React.Component {
 
   saveToLocalStorage() {
     const todos = JSON.stringify(this.state.todos);
-    const tempTitle = JSON.stringify(this.state.tempTitle);
 
     localStorage.setItem('todos', todos);
-    localStorage.setItem('tempTitle', tempTitle);
   }
 
   render() {
@@ -216,7 +140,6 @@ class App extends React.Component {
       todos,
       title,
       filter,
-      tempTitle,
       isActiveBtnSelected,
       isAllBtnSelected,
       isCompletedBtnSelected,
@@ -264,12 +187,9 @@ class App extends React.Component {
 
           <TodoList
             todos={currentTodos}
-            editTodo={this.editTodo}
-            tempTitle={tempTitle}
             deleteTodo={this.deleteTodo}
             changeStatus={this.changeStatus}
             editCurrentTitle={this.editCurrentTitle}
-            handleEditingTitle={this.handleEditingTitle}
           />
         </section>
         {todos.length > 0 && (
