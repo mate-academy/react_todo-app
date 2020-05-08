@@ -11,7 +11,7 @@ const filterTodos = (todos, filter) => {
   }
 
   if (filter === 'Completed') {
-    return todos.filter(todo => todo.completed === true);
+    return todos.filter(todo => todo.completed);
   }
 
   return todos;
@@ -22,6 +22,24 @@ class App extends React.Component {
     todos: [],
     visibleTodos: [],
     filter: 'All',
+  }
+
+  componentDidMount() {
+    const todosFromStorage = localStorage.getItem('todos');
+
+    if (todosFromStorage) {
+      const todos = JSON.parse(todosFromStorage);
+
+      this.setState({ todos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { todos } = this.state;
+
+    if (prevState.todos !== todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
   }
 
   addTodo = (todo) => {
@@ -57,7 +75,7 @@ class App extends React.Component {
     });
   }
 
-  filteredItems = (filter) => {
+  filterItems = (filter) => {
     const { todos } = this.state;
 
     this.setState(() => {
@@ -143,7 +161,7 @@ class App extends React.Component {
             {`${activeTodos.length} items left`}
           </span>
           <TodosFilter
-            filtered={this.filteredItems}
+            filtered={this.filterItems}
             filterTypes={filterTypes}
             filter={filter}
           />
