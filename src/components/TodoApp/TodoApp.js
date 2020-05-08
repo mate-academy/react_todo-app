@@ -12,7 +12,9 @@ class TodoApp extends React.Component {
     });
   };
 
-  handleAddTodo = () => {
+  handleAddTodo = (event) => {
+    event.preventDefault();
+
     this.setState({
       currentValue: '',
     });

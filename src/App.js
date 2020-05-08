@@ -64,23 +64,9 @@ class App extends React.Component {
   };
 
   handleFilter = (filterName) => {
-    if (filterName === 'All') {
-      this.setState({
-        filterName: 'All',
-      });
-    }
-
-    if (filterName === 'Active') {
-      this.setState({
-        filterName: 'Active',
-      });
-    }
-
-    if (filterName === 'Completed') {
-      this.setState({
-        filterName: 'Completed',
-      });
-    }
+    this.setState({
+      filterName,
+    });
   };
 
   remove = (id) => {
