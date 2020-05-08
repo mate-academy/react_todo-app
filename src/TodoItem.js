@@ -4,29 +4,30 @@ import PropTypes from 'prop-types';
 
 class TodoItem extends React.PureComponent {
   render() {
+    const { todo, completed, deleteItem } = this.props;
+
     return (
       <li
-        key={this.props.todo.id}
-        className={classNames({ completed: this.props.todo.completed })}
+        className={classNames({ completed: todo.completed })}
       >
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
-            id={this.props.todo.id}
-            onChange={() => this.props.completed(this.props.todo.id)}
-            checked={this.props.todo.completed}
+            id={todo.id}
+            onChange={() => completed(todo.id)}
+            checked={todo.completed}
           />
           <label
-            htmlFor={this.props.todo.id}
+            htmlFor={todo.id}
           >
-            {this.props.todo.title}
+            {todo.title}
           </label>
           <button
             type="button"
-            id={this.props.todo.id}
+            id={todo.id}
             className="destroy"
-            onClick={() => this.props.deleteItem(this.props.todo.id)}
+            onClick={() => deleteItem(todo.id)}
           />
         </div>
         <input type="text" className="edit" />

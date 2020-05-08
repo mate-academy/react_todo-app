@@ -1,16 +1,20 @@
 import React from 'react';
-import className from 'classnames';
 import TodoList from './TodoList';
+import Footer from './Footer';
 
 const todoLocalStorage = JSON.parse(localStorage.getItem('todoList')) || [];
 
 class App extends React.PureComponent {
   state = {
-    todoList: [...todoLocalStorage],
+    todoList: [],
     newTodoId: todoLocalStorage.length,
     completed: false,
     title: '',
     selectedView: 'All',
+  }
+
+  componentDidMount() {
+    this.setState({ todoList: [...todoLocalStorage] });
   }
 
   componentDidUpdate() {
@@ -19,12 +23,12 @@ class App extends React.PureComponent {
 
   clearCompleted = () => {
     this.setState(state => ({
-      todoList: state.todoList.filter(todo => todo.completed !== true),
+      todoList: state.todoList.filter(todo => !todo.completed),
     }));
   }
 
   makeCompletedAll = () => {
-    if (this.state.todoList.every(todo => todo.completed === true)) {
+    if (this.state.todoList.every(todo => todo.completed)) {
       this.setState(state => ({
         todoList: state.todoList.map(todo => (
           {
@@ -61,7 +65,7 @@ class App extends React.PureComponent {
   }
 
   detectUncompletedItems = () => (
-    this.state.todoList.filter(el => el.completed === false).length
+    this.state.todoList.filter(el => !el.completed).length
   )
 
   deleteItem = (id) => {
@@ -83,50 +87,56 @@ class App extends React.PureComponent {
 
   addNewTodo = (event) => {
     event.preventDefault();
-    this.state.title.trim() && this.setState(state => ({
-      todoList: [
-        ...state.todoList,
-        {
-          title: state.title,
-          id: state.newTodoId + 1,
-          completed: state.completed,
-        },
-      ],
-    }));
+    if (this.state.title.length > 0) {
+      this.setState(state => ({
+        todoList: [
+          ...state.todoList,
+          {
+            title: state.title,
+            id: state.newTodoId + 1,
+            completed: state.completed,
+          },
+        ],
+      }));
+    }
+
     this.resetState();
   }
 
   selectActiveView = () => {
     switch (this.state.selectedView) {
       case 'Active':
-        return this.state.todoList.filter(el => el.completed === false);
+        return this.state.todoList.filter(el => !el.completed);
       case 'Completed':
-        return this.state.todoList.filter(el => el.completed === true);
+        return this.state.todoList.filter(el => el.completed);
       default:
         return this.state.todoList;
     }
   }
 
-  activeView = () => {
-    this.setState({ selectedView: 'Active' });
-  }
-
-  completedView = () => {
-    this.setState({ selectedView: 'Completed' });
-  }
-
-  allView = () => {
-    this.setState({ selectedView: 'All' });
+  setViewMode = (event) => {
+    switch (event.target.id) {
+      case 'active':
+        this.setState({ selectedView: 'Active' });
+        break;
+      case 'completed':
+        this.setState({ selectedView: 'Completed' });
+        break;
+      default:
+        this.setState({ selectedView: 'All' });
+    }
   }
 
   render() {
+    const { todoList, title, selectedView } = this.state;
+
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
           <form onSubmit={this.addNewTodo}>
             <input
-              value={this.state.title}
+              value={title}
               onChange={this.addTitle}
               className="new-todo"
               placeholder="What needs to be done?"
@@ -135,6 +145,7 @@ class App extends React.PureComponent {
         </header>
         <section className="main">
           <input
+            checked={todoList.length > 0 && this.detectUncompletedItems() === 0}
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
@@ -146,56 +157,14 @@ class App extends React.PureComponent {
             completed={this.makeCompleted}
             deleteItem={this.deleteItem}
           />
-          {this.state.todoList.length > 0 && (
-            <footer className="footer">
-              <span className="todo-count">
-                {this.detectUncompletedItems()}
-                {' '}
-                items left
-              </span>
-              <ul className="filters">
-                <li>
-                  <a
-                    href="#/"
-                    onClick={this.allView}
-                    className={className(this.state.selectedView === 'All'
-                      ? 'selected'
-                      : '')}
-                  >
-                    All
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#/active"
-                    onClick={this.activeView}
-                    className={className(this.state.selectedView === 'Active'
-                      ? 'selected'
-                      : '')}
-                  >
-                    Active
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#/completed"
-                    onClick={this.completedView}
-                    className={this.state.selectedView === 'Completed'
-                      ? 'selected'
-                      : ''}
-                  >
-                    Completed
-                  </a>
-                </li>
-              </ul>
-              <button
-                type="button"
-                className="clear-completed"
-                onClick={this.clearCompleted}
-              >
-                Clear completed
-              </button>
-            </footer>
+          {todoList.length > 0 && (
+            <Footer
+              uncompleted={this.detectUncompletedItems}
+              setViewMode={this.setViewMode}
+              selectedView={selectedView}
+              clearCompleted={this.clearCompleted}
+              todoList={this.state.todoList}
+            />
           )}
         </section>
       </section>
