@@ -12,8 +12,7 @@ export class TodoItem extends React.Component {
     const { value } = target;
     const { itemId, editTodo } = this.props;
 
-    if ((key === 'Enter' && value.trim())
-      || type === 'blur') {
+    if ((key === 'Enter' || type === 'blur') && value.trim()) {
       editTodo(itemId, value);
       this.setEditingMode(false);
     }
