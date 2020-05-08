@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-const TodoList = ({ items, doneTask }) => (
+const TodoList = ({ items, doneTask, deleteTodo }) => (
   <>
     <input type="checkbox" id="toggle-all" className="toggle-all" />
     <label htmlFor="toggle-all">Mark all as complete</label>
@@ -11,6 +11,7 @@ const TodoList = ({ items, doneTask }) => (
         <TodoItem
           item={item}
           doneTask={doneTask}
+          deleteTodo={deleteTodo}
           key={item.id}
         />
       ))}
@@ -20,6 +21,7 @@ const TodoList = ({ items, doneTask }) => (
 
 TodoList.propTypes = {
   doneTask: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
   items: PropTypes.arrayOf.isRequired,
 };
 
