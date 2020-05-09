@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class TodoItem extends React.Component {
   state = {
-    editTitle: this.props.todo.title,
+    editTitle: '',
   }
 
   editCurrentTitle = (e) => {
@@ -12,12 +12,38 @@ class TodoItem extends React.Component {
     });
   }
 
+  handleEditTitle = ({ key, target, type }) => {
+    const { setTodoTitle, todo } = this.props;
+
+    if ((key === 'Enter' && target.value.trim() !== '')
+    || (type === 'blur' && target.value.trim() !== '')) {
+      const { id } = target;
+
+      setTodoTitle(id, target.value.trim(), false);
+    }
+
+    if (key === 'Escape') {
+      const { id } = target;
+
+      this.setState({ editTitle: todo.title });
+      setTodoTitle(id, todo.title, false);
+    }
+  }
+
+  handleDoubleClick = () => {
+    const { todo, setEditStatus } = this.props;
+    const { id, title } = todo;
+
+    this.setState({ editTitle: title });
+    setEditStatus(id, title);
+  }
+
   render() {
-    const { todo,
+    const {
+      todo,
       statusOfTodo,
       handleRemoveTodo,
-      handleEditTodo,
-      handleEditTitle } = this.props;
+    } = this.props;
     const { id, title, completed } = todo;
     const { editTitle } = this.state;
 
@@ -31,22 +57,24 @@ class TodoItem extends React.Component {
             checked={completed}
             onChange={() => statusOfTodo(id)}
           />
-          <label onDoubleClick={() => handleEditTodo(id, title)}>{title}</label>
+          <label onDoubleClick={this.handleDoubleClick}>{title}</label>
           <button
             type="button"
             className="destroy"
             onClick={() => handleRemoveTodo(id)}
           />
         </div>
-        <input
-          type="text"
-          className="edit"
-          id={id}
-          value={editTitle}
-          onChange={this.editCurrentTitle}
-          onKeyDown={handleEditTitle}
-          onBlur={handleEditTitle}
-        />
+        {todo.editing && (
+          <input
+            type="text"
+            className="edit"
+            id={id}
+            value={editTitle}
+            onChange={this.editCurrentTitle}
+            onKeyDown={this.handleEditTitle}
+            onBlur={this.handleEditTitle}
+          />
+        )}
       </>
     );
   }
@@ -57,11 +85,12 @@ TodoItem.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
+    editing: PropTypes.bool.isRequired,
   }).isRequired,
-  statusOfTodo: PropTypes.func.isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
-  handleEditTodo: PropTypes.func.isRequired,
-  handleEditTitle: PropTypes.func.isRequired,
+  statusOfTodo: PropTypes.func.isRequired,
+  setEditStatus: PropTypes.func.isRequired,
+  setTodoTitle: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

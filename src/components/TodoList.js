@@ -9,8 +9,8 @@ const TodoList = ({
   handleRemoveTodo,
   statusOfTodo,
   handleToggleAll,
-  handleEditTodo,
-  handleEditTitle,
+  setEditStatus,
+  setTodoTitle,
 }) => (
   <section className="main">
     <input
@@ -35,8 +35,8 @@ const TodoList = ({
             todo={todo}
             handleRemoveTodo={handleRemoveTodo}
             statusOfTodo={statusOfTodo}
-            handleEditTodo={handleEditTodo}
-            handleEditTitle={handleEditTitle}
+            setEditStatus={setEditStatus}
+            setTodoTitle={setTodoTitle}
           />
         </li>
       ))}
@@ -45,18 +45,19 @@ const TodoList = ({
 );
 
 TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   visibleTodos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       completed: PropTypes.bool.isRequired,
+      editing: PropTypes.bool.isRequired,
     }).isRequired,
   ).isRequired,
-  todos: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
   statusOfTodo: PropTypes.func.isRequired,
   handleToggleAll: PropTypes.func.isRequired,
-  handleEditTodo: PropTypes.func.isRequired,
-  handleEditTitle: PropTypes.func.isRequired,
+  setEditStatus: PropTypes.func.isRequired,
+  setTodoTitle: PropTypes.func.isRequired,
 };
 
 export default TodoList;

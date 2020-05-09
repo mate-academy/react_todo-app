@@ -7,49 +7,25 @@ class App extends React.Component {
   state = {
     todos: [],
     typeOfFilter: 'all',
-    tempTitle: '',
   }
 
-  handleEditTitle = ({ key, target, type }) => {
-    if ((key === 'Enter' && target.value.trim() !== '')
-    || (type === 'blur' && target.value.trim() !== '')) {
-      const { id } = target;
+  setTodoTitle = (id, title, editing) => {
+    this.setState(prev => ({
+      todos: prev.todos.map((todo) => {
+        if (todo.id === +id) {
+          return {
+            ...todo,
+            title,
+            editing,
+          };
+        }
 
-      this.setState(prev => ({
-        todos: prev.todos.map((todo) => {
-          if (todo.id === +id) {
-            return {
-              ...todo,
-              title: target.value,
-              editing: false,
-            };
-          }
-
-          return todo;
-        }),
-      }));
-    }
-
-    if (key === 'Escape') {
-      const { id } = target;
-
-      this.setState(prev => ({
-        todos: prev.todos.map((todo) => {
-          if (todo.id === +id) {
-            return {
-              ...todo,
-              title: prev.tempTitle,
-              editing: false,
-            };
-          }
-
-          return todo;
-        }),
-      }));
-    }
+        return todo;
+      }),
+    }));
   }
 
-  handleEditTodo = (id, title) => {
+  setEditStatus = (id) => {
     this.setState(prev => ({
       todos: prev.todos.map((todo) => {
         if (todo.id === id) {
@@ -61,7 +37,6 @@ class App extends React.Component {
 
         return todo;
       }),
-      tempTitle: title,
     }));
   }
 
@@ -139,8 +114,8 @@ class App extends React.Component {
           handleRemoveTodo={this.handleRemoveTodo}
           statusOfTodo={this.statusOfTodo}
           handleToggleAll={this.handleToggleAll}
-          handleEditTodo={this.handleEditTodo}
-          handleEditTitle={this.handleEditTitle}
+          setEditStatus={this.setEditStatus}
+          setTodoTitle={this.setTodoTitle}
         />
         <Footer
           todos={todos}
