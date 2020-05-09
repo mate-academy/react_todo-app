@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
 import './TodoList.scss';
@@ -5,11 +7,20 @@ import TodoItem from '../TodoItem/TodoItem';
 
 class TodoList extends React.Component {
 state = {
+  clicks: 1,
+}
 
+clicksIncrement = () => {
+  this.setState(prev => ({
+    clicks: prev.clicks + 1,
+  }));
 }
 
 render() {
-  const { todosList, handleTaskRemover, statusHandler } = this.props;
+  const { todosList,
+    handleTaskRemover,
+    statusHandler,
+    checkAllTasks } = this.props;
 
   return (
     <section className="main">
@@ -18,7 +29,15 @@ render() {
         id="toggle-all"
         className="toggle-all"
       />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      <label
+        htmlFor="toggle-all"
+        onClick={() => {
+          this.clicksIncrement();
+          checkAllTasks(this.state.clicks);
+        }}
+      >
+        Mark all as complete
+      </label>
 
       <ul className="todo-list">
         {todosList.map(todo => (
@@ -34,23 +53,6 @@ render() {
   );
 }
 }
-/* <li className="completed">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="todo-2" />
-          <label htmlFor="todo-2">qwertyuio</label>
-          <button type="button" className="destroy" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="todo-3" />
-          <label htmlFor="todo-3">zxcvbnm</label>
-          <button type="button" className="destroy" />
-        </div>
-        <input type="text" className="edit" />
-      </li> */
 
 TodoList.propTypes = {
   todosList: PropTypes.arrayOf({
@@ -62,6 +64,7 @@ TodoList.propTypes = {
   }).isRequired,
   handleTaskRemover: PropTypes.func.isRequired,
   statusHandler: PropTypes.func.isRequired,
+  checkAllTasks: PropTypes.func.isRequired,
 };
 
 export default TodoList;

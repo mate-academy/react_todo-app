@@ -58,3 +58,12 @@ TodoItem.propTypes = {
 };
 
 export default TodoItem;
+
+/*    <li className="editing">
+        <div className="view">
+          <input type="checkbox" className="toggle" id="todo-3" />
+          <label htmlFor="todo-3">zxcvbnm</label>
+          <button type="button" className="destroy" />
+        </div>
+        <input type="text" className="edit" />
+      </li> */

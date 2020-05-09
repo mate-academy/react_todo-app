@@ -20,7 +20,6 @@ class App extends React.Component {
   state = {
     todos: [...todos],
     filtrationType: '',
-    hasActiveTasks: true,
   }
 
   handleSubmit = (newTask) => {
@@ -76,23 +75,50 @@ class App extends React.Component {
     }));
   }
 
+  getClearButtonStatus = () => this.state.todos.some(task => task.completed)
+
+  checkAllTasks = (clicks) => {
+    if (clicks % 2 === 0) {
+      this.setState(prev => ({
+        todos: [...prev.todos].map(task => ({
+          ...task,
+          completed: false,
+        })),
+      }));
+    } else {
+      this.setState(prev => ({
+        todos: [...prev.todos].map(task => ({
+          ...task,
+          completed: true,
+        })),
+      }));
+    }
+  }
+
   render() {
-    const { hasActiveTasks } = this.state;
+    const tasksListLength = this.state.todos.length;
 
     return (
       <section className="todoapp">
-        <TodoApp handleSubmit={this.handleSubmit} />
-        <TodoList
-          todosList={this.filterByPattern()}
-          handleTaskRemover={this.handleTaskRemover}
-          statusHandler={this.statusHandler}
+        <TodoApp
+          handleSubmit={this.handleSubmit}
         />
-        <TodosFilter
-          activeTasksCounter={this.activeTasksCounter}
-          filterSelector={this.filterSelector}
-          clearButonActivity={hasActiveTasks}
-          removeCheckedTasks={this.removeCheckedTasks}
-        />
+        {tasksListLength !== 0 && (
+          <TodoList
+            checkAllTasks={this.checkAllTasks}
+            todosList={this.filterByPattern()}
+            handleTaskRemover={this.handleTaskRemover}
+            statusHandler={this.statusHandler}
+          />
+        )}
+        {tasksListLength !== 0 && (
+          <TodosFilter
+            activeTasksCounter={this.activeTasksCounter}
+            filterSelector={this.filterSelector}
+            clearButtonStatus={this.getClearButtonStatus()}
+            removeCheckedTasks={this.removeCheckedTasks}
+          />
+        ) }
       </section>
     );
   }

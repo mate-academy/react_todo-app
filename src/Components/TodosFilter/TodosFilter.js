@@ -25,7 +25,7 @@ class TodosFilter extends React.Component {
     const {
       filterSelector,
       activeTasksCounter,
-      clearButonActivity,
+      clearButtonStatus,
       removeCheckedTasks,
     } = this.props;
     const { activeFilter } = this.state;
@@ -33,7 +33,7 @@ class TodosFilter extends React.Component {
     return (
       <footer className="footer">
         <span className="todo-count">
-          items left
+          unfinished tasks
           {' '}
           {activeTasksCounter()}
         </span>
@@ -93,11 +93,12 @@ class TodosFilter extends React.Component {
             </a>
           </li>
         </ul>
-        {clearButonActivity && (
+        {clearButtonStatus && (
           <button
             type="button"
             className="clear-completed"
             onClick={removeCheckedTasks}
+
           >
             Clear completed
           </button>
@@ -112,7 +113,7 @@ TodosFilter.propTypes = {
   removeCheckedTasks: PropTypes.func.isRequired,
   activeTasksCounter: PropTypes.func.isRequired,
   filterSelector: PropTypes.func.isRequired,
-  clearButonActivity: PropTypes.bool.isRequired,
+  clearButtonStatus: PropTypes.bool.isRequired,
 };
 
 export default TodosFilter;
