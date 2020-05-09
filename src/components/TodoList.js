@@ -8,6 +8,7 @@ export const TodoList = ({
   toggleComplete,
   removeTodo,
   toggleSelectAll,
+  // completedStatus,
 }) => (
 
   <section className="main">
@@ -21,7 +22,7 @@ export const TodoList = ({
     <label htmlFor="toggle-all">Mark all as complete</label>
 
     <ul className="todo-list">
-      {todos.map((todo, index) => (
+      {todos.map(todo => (
         <TodoItem
           key={todo.id}
           {...todo}

@@ -4,32 +4,18 @@ import { TodoList } from './components/TodoList';
 import { TodosFilters } from './components/TodosFilter';
 import todos from './todos';
 
-const filters = {
-  all: 'all',
-  completed: 'completed',
-  active: 'active',
+const filterType = {
+  all: 'All',
+  completed: 'Completed',
+  active: 'Active',
 };
 
 class App extends React.Component {
   state = {
     todos: [...todos],
     selectAll: false,
-    currentFilter: filters.all,
+    currentFilter: filterType.all,
   }
-
-  // handleFilterTodos = () => {
-  //   const { todos, currentFilter } = this.state;
-
-  //   if (currentFilter === filters.complited) {
-  //     return todos.filter(todo => todo.complited);
-  //   }
-
-  //   if (currentFilter === filters.active) {
-  //     return todos.filter(todo => !todo.complited);
-  //   }
-
-  //   return todos;
-  // }
 
   addNewTodo = (todo) => {
     this.setState(state => ({
@@ -71,7 +57,29 @@ class App extends React.Component {
   activeTodoCounter = () => this.state.todos
     .filter(task => !task.completed).length
 
+  filterSelector = (currentFilter) => {
+    this.setState({ currentFilter });
+  }
+
+  filterByStatus = () => {
+    if (this.state.currentFilter === filterType.active) {
+      return this.state.todos.filter(todo => !todo.completed);
+    }
+
+    if (this.state.currentFilter === filterType.completed) {
+      return this.state.todos.filter(todo => todo.completed);
+    }
+
+    return this.state.todos;
+  }
+
   render() {
+    const visibleTodos = this.filterByStatus();
+
+    // const completedStatus = todos.length === 0
+    //   ? false
+    //   : todos.every(todo => todo.completed);
+
     return (
       <section className="todoapp">
         <TodoApp
@@ -79,17 +87,19 @@ class App extends React.Component {
           todos={this.state.todos}
         />
         <TodoList
-          todos={this.handleFilterTodos()}
-          // todos={this.state.todos}
+          todos={visibleTodos}
+          // completedStatus={completedStatus}
           selectAll={this.state.selectAll}
           toggleComplete={this.toggleComplete}
           removeTodo={this.removeTodo}
           toggleSelectAll={this.toggleSelectAll}
         />
         <TodosFilters
+          filterType={filterType}
           todos={this.state.todos}
           currentFilter={this.state.currentFilter}
           activeTodoCounter={this.activeTodoCounter}
+          filterSelector={this.filterSelector}
         />
       </section>
     );

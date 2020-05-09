@@ -1,15 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import todos from '../todos';
+import cn from 'classnames';
 
 export class TodosFilters extends React.Component {
-  state ={
-    // todos,
-    // currentFilter,
-  }
+  buttonsFilter = [
+    {
+      href: '#/',
+      text: 'All',
+    },
+    {
+      href: '#/active',
+      text: 'Active',
+    },
+    {
+      href: '#/completed',
+      text: 'Completed',
+    },
+  ];
 
   render() {
-    const { activeTodoCounter } = this.props;
+    const { activeTodoCounter, currentFilter, filterSelector } = this.props;
 
     return (
       <footer className="footer">
@@ -18,17 +28,17 @@ export class TodosFilters extends React.Component {
         </span>
 
         <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
+          {this.buttonsFilter.map(button => (
+            <li key={button.text}>
+              <a
+                href={button.href}
+                className={cn({ selected: currentFilter === `${button.text}` })}
+                onClick={({ target }) => filterSelector(target.text)}
+              >
+                {button.text}
+              </a>
+            </li>
+          ))}
         </ul>
 
         <button type="button" className="clear-completed">
@@ -41,4 +51,6 @@ export class TodosFilters extends React.Component {
 
 TodosFilters.propTypes = {
   activeTodoCounter: PropTypes.func.isRequired,
+  currentFilter: PropTypes.number.isRequired,
+  filterSelector: PropTypes.func.isRequired,
 };

@@ -63,7 +63,6 @@ export class TodoApp extends React.Component {
 }
 
 TodoApp.propTypes = {
-  // id: PropTypes.number.isRequired,
   addNewTodo: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.object.isRequired,
