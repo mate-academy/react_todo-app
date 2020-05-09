@@ -35,7 +35,7 @@ class TodoItem extends React.Component {
     const { id, title } = todo;
 
     this.setState({ editTitle: title });
-    setEditStatus(id, title);
+    setEditStatus(id);
   }
 
   render() {
