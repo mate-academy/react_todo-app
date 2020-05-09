@@ -29,6 +29,7 @@ export const TodoList = ({
           {...todo}
           toggleComplete={toggleComplete}
           removeTodo={removeTodo}
+          // editTodo={editTodo}
         />
       ))}
     </ul>

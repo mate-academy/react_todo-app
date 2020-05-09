@@ -3,19 +3,19 @@ import cn from 'classnames';
 import PropTypes from 'prop-types';
 
 export class TodoItem extends React.Component {
-  state= {
-    targetTitle: this.props.title,
-  }
+  // state= {
+  //   targetTitle: this.props.title,
+  // }
 
-  handleChangeTargetTitle = (event) => {
-    this.setState({
-      targetTitle: event.target.value,
-    });
-  }
+  // handleChangeTargetTitle = (event) => {
+  //   this.setState({
+  //     targetTitle: event.target.value,
+  //   });
+  // }
 
   render() {
     const { title, id, completed, toggleComplete, removeTodo } = this.props;
-    const { targetTitle } = this.state;
+    // const { targetTitle } = this.state;
 
     return (
       <li className={cn({ completed })}>
@@ -30,6 +30,7 @@ export class TodoItem extends React.Component {
             />
             <label
               htmlFor={id}
+              onDoubleClick={this.handleStartEdit}
             >
               {title}
             </label>
@@ -42,8 +43,7 @@ export class TodoItem extends React.Component {
           <input
             type="text"
             className="edit"
-            value={targetTitle}
-            handleChange={this.handleChangeTargetTitle}
+            defaultValue={title}
           />
         </form>
       </li>

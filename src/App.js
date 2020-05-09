@@ -2,7 +2,6 @@ import React from 'react';
 import { TodoApp } from './components/TodoApp';
 import { TodoList } from './components/TodoList';
 import { TodosFilters } from './components/TodosFilter';
-import todos from './todos';
 
 const filterType = {
   all: 'All',
@@ -12,7 +11,7 @@ const filterType = {
 
 class App extends React.Component {
   state = {
-    todos: [...todos],
+    todos: [],
     selectAll: false,
     currentFilter: filterType.all,
   }
@@ -80,11 +79,11 @@ class App extends React.Component {
   }
 
   render() {
-    const visibleTodos = this.filterByStatus();
+    const filteredTodos = this.filterByStatus();
 
-    // const completedStatus = todos.length === 0
+    // const completedStatus = this.state.todos.length === 0
     //   ? false
-    //   : todos.every(todo => todo.completed);
+    //   : this.state.todos.every(todo => todo.completed);
 
     return (
       <section className="todoapp">
@@ -93,21 +92,32 @@ class App extends React.Component {
           todos={this.state.todos}
         />
         <TodoList
-          todos={visibleTodos}
+          todos={filteredTodos}
           // completedStatus={completedStatus}
           selectAll={this.state.selectAll}
           toggleComplete={this.toggleComplete}
           removeTodo={this.removeTodo}
           toggleSelectAll={this.toggleSelectAll}
         />
-        <TodosFilters
+        {this.state.todos.length > 0 && (
+          <TodosFilters
+            filterType={filterType}
+            todos={this.state.todos}
+            currentFilter={this.state.currentFilter}
+            activeTodoCounter={this.activeTodoCounter}
+            filterSelector={this.filterSelector}
+            removeCompleted={this.removeCompleted}
+          />
+        )}
+
+        {/* <TodosFilters
           filterType={filterType}
           todos={this.state.todos}
           currentFilter={this.state.currentFilter}
           activeTodoCounter={this.activeTodoCounter}
           filterSelector={this.filterSelector}
           removeCompleted={this.removeCompleted}
-        />
+        /> */}
       </section>
     );
   }
