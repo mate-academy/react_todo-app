@@ -37,7 +37,9 @@ export class TodoApp extends React.Component {
 
         <footer className="footer">
           <span className="todo-count">
-            3 items left
+            {todoList.length}
+            {' '}
+            items left
           </span>
 
           <ul className="filters">

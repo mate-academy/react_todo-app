@@ -161,6 +161,10 @@ body {
   border-bottom: 1px solid #ededed;
 }
 
+.todo-list li .completed {
+  text-decoration: line-through;
+}
+
 .todo-list li:last-child {
   border-bottom: none;
 }
