@@ -111,6 +111,10 @@ class App extends React.Component {
     this.setState(prev => ({
       todos: prev.todos.filter(todo => !todo.completed),
     }));
+
+    if (this.state.typeOfFilter === 'completed') {
+      this.handleTypeOfFilter('all');
+    }
   }
 
   render() {
