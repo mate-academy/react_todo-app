@@ -19,7 +19,12 @@ export class TodosFilters extends React.Component {
   ];
 
   render() {
-    const { activeTodoCounter, currentFilter, filterSelector } = this.props;
+    const
+      { activeTodoCounter,
+        currentFilter,
+        filterSelector,
+        removeCompleted }
+      = this.props;
 
     return (
       <footer className="footer">
@@ -41,7 +46,11 @@ export class TodosFilters extends React.Component {
           ))}
         </ul>
 
-        <button type="button" className="clear-completed">
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={removeCompleted}
+        >
           Clear completed
         </button>
       </footer>
@@ -53,4 +62,5 @@ TodosFilters.propTypes = {
   activeTodoCounter: PropTypes.func.isRequired,
   currentFilter: PropTypes.number.isRequired,
   filterSelector: PropTypes.func.isRequired,
+  removeCompleted: PropTypes.func.isRequired,
 };

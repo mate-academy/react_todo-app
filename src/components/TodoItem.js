@@ -32,7 +32,6 @@ export class TodoItem extends React.Component {
               htmlFor={id}
             >
               {title}
-              {id}
             </label>
             <button
               type="button"

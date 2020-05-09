@@ -73,6 +73,12 @@ class App extends React.Component {
     return this.state.todos;
   }
 
+  removeCompleted = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].filter(todo => !todo.completed),
+    }));
+  }
+
   render() {
     const visibleTodos = this.filterByStatus();
 
@@ -100,6 +106,7 @@ class App extends React.Component {
           currentFilter={this.state.currentFilter}
           activeTodoCounter={this.activeTodoCounter}
           filterSelector={this.filterSelector}
+          removeCompleted={this.removeCompleted}
         />
       </section>
     );

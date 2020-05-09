@@ -16,6 +16,7 @@ export const TodoList = ({
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
+      // checked={completedStatus}
       checked={selectAll}
       onChange={() => toggleSelectAll(selectAll)}
     />

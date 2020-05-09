@@ -21,7 +21,7 @@ export class TodoApp extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const { addNewTodo, todos } = this.props;
+    const { addNewTodo } = this.props;
     const { title } = this.state;
 
     if (!title.trim()) {
@@ -34,7 +34,7 @@ export class TodoApp extends React.Component {
 
     const newTodo = {
       title,
-      id: todos.length + 1,
+      id: +new Date(),
       completed: false,
     };
 
@@ -64,7 +64,4 @@ export class TodoApp extends React.Component {
 
 TodoApp.propTypes = {
   addNewTodo: PropTypes.func.isRequired,
-  todos: PropTypes.arrayOf(
-    PropTypes.object.isRequired,
-  ).isRequired,
 };
