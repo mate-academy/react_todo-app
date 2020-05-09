@@ -48,16 +48,25 @@ const Todo = ({
     const value = ref.current.value.trim();
     const changedTodoId = +ref.current.id;
 
-    if (value.length < 2 || value.length > 30) {
-      showErrorClass(true);
+    if (value.length) {
+      if (value.length < 2 || value.length > 30) {
+        showErrorClass(true);
 
-      return;
+        return;
+      }
+
+      changeTodoValue(changedTodoId, value);
     }
 
-    changeTodoValue(changedTodoId, value);
     showTodoInput(false);
     showErrorClass(false);
   };
+
+  useEffect(() => {
+    if (isEdit) {
+      ref.current.focus();
+    }
+  }, [isEdit]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);

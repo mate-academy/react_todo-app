@@ -176,13 +176,17 @@ class App extends React.Component {
         />
 
         <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onClick={this.toggleAllTodosStatus}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {Boolean(todos.length) && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                onClick={this.toggleAllTodosStatus}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
 
           <TodoList
             todos={todos.filter(this.setTypeTodos)}
