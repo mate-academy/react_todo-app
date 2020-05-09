@@ -6,30 +6,30 @@ import { Checkbox, TextInput } from '../Form';
 
 export class TodoItem extends Component {
   state = {
-    inputTitle: this.props.title,
+    inputTitle: '',
   }
 
-  changeTitleTodo = ({ target }) => {
-    this.setState({ inputTitle: target.value });
-  }
 
-  onEdit = (id) => {
+  handleDoubleClick = (id, title) => {
     const { setEditingId } = this.props;
 
-    document.addEventListener('keyup', this.handleKeyup)
-
+    this.setState({ inputTitle: title })
+    document.addEventListener('keyup', this.handleKeyup);
     setEditingId(id)
   }
 
   handleKeyup =(e) => {
-    const { title, setEditingId } = this.props;
+    const { setEditingId } = this.props;
 
     if (e.code === 'Escape') {
-      this.setState({inputTitle: title })
+      this.setState({ inputTitle: '' })
       setEditingId();
-
       document.removeEventListener('keyup', this.handleKeyup);
     }
+  }
+
+  changeTitleTodo = ({ target }) => {
+    this.setState({ inputTitle: target.value });
   }
 
   sendChanges = (e) => {
@@ -41,6 +41,8 @@ export class TodoItem extends Component {
     if (inputTitle.trim().length > 0) {
       setTodoValue(id, 'title', inputTitle.trim());
     }
+
+    this.setState({ inputTitle: '' });
   }
 
   render() {
@@ -73,7 +75,7 @@ export class TodoItem extends Component {
 
             <label
               htmlFor={`edit-${id}`}
-              onDoubleClick={() => this.onEdit(id)}
+              onDoubleClick={() => this.handleDoubleClick(id, title)}
             >
               {title}
             </label>
@@ -86,7 +88,7 @@ export class TodoItem extends Component {
             />
           </div>
           {editingTodoId === id && (
-            <TextInput 
+            <TextInput
               className="edit"
               id={`edit-${id}`}
               name={`edit-${id}`}
@@ -101,8 +103,6 @@ export class TodoItem extends Component {
     );
   }
 }
-
-TodoItem.defaultProps = {};
 
 TodoItem.propTypes = {
   title: PropTypes.string.isRequired,

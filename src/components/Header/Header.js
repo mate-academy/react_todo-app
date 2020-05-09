@@ -33,6 +33,7 @@ export class Header extends Component {
     if (title.trim().length > 0) {
       addNewTodo(title.trim());
       this.reset();
+      document.removeEventListener('keyup', this.handleKeyup);
     }
   }
 

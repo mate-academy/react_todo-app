@@ -56,6 +56,7 @@ class App extends PureComponent {
           completed: false,
         },
       ],
+      activeFilter: FILTER_TYPES.all,
       selectedAll: false,
     }));
   }
@@ -135,16 +136,21 @@ class App extends PureComponent {
 
   getFilteredTodos = () => {
     const { todoList, activeFilter } = this.state;
+    let filteredTodos = [...todoList];
 
     if (activeFilter === FILTER_TYPES.completed) {
-      return todoList.filter(todo => todo.completed);
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
 
     if (activeFilter === FILTER_TYPES.active) {
-      return todoList.filter(todo => !todo.completed);
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
     }
 
-    return todoList;
+    if (filteredTodos.length === 0) {
+      this.setState({ activeFilter: FILTER_TYPES.all })
+    };
+
+    return filteredTodos;
   }
 
   clearComplited = () => {
@@ -155,7 +161,7 @@ class App extends PureComponent {
 
   render() {
     const { todoList, editingTodoId, activeFilter, selectedAll } = this.state;
-    const filteredTodoList = this.getFilteredTodos();
+    let filteredTodoList = this.getFilteredTodos();
 
     return (
       <section className="todoapp">

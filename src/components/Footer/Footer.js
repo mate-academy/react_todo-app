@@ -29,14 +29,15 @@ export const Footer = ({
         </li>
       ))}
     </ul>
-
-    <Button
-      id="clear-completed"
-      name="clear-completed"
-      className="clear-completed"
-      text="Clear completed"
-      handleClick={clearComplited}
-    />
+    {todoList.some(todo => todo.completed) && (
+      <Button
+        id="clear-completed"
+        name="clear-completed"
+        className="clear-completed"
+        text="Clear completed"
+        handleClick={clearComplited}
+      />
+    )}
   </footer>
 );
 

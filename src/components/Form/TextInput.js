@@ -19,6 +19,7 @@ export const TextInput = ({
     className={className}
     placeholder={placeholder}
     autoFocus={autoFocus}
+    autoComplete="off"
     onChange={handleChange}
     onBlur={handleBlur}
   />
