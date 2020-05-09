@@ -2,25 +2,19 @@ import React from 'react';
 
 export default class TodoListItem extends React.Component {
   state = {
-    completed: false
-  };
-
-  onClickCompleted = () => {
-    this.setState(({ completed }) => {
-      return {
-        completed: !completed
-      };
-    });
+    item: this.props.todoListItem
   };
 
   render() {
-    const { title, id, onClickDelete } = this.props?.todoListItem;
-    const { completed } = this.state;
+    const item = this.state.item;
+    const { title, id } = item;
+    const deleteTodo = this.props.deleteTodo;
+    //const { completed } = this.state;
 
     let classNames = '';
-    if (completed) {
+    if (item.comleted) {
       classNames += 'completed'
-    }
+    };
 
     return (
       <>
@@ -30,11 +24,11 @@ export default class TodoListItem extends React.Component {
               type="checkbox"
               className="toggle"
               id={id}
-              onClick={this.onClickCompleted}
+              onClick={() => this.props.onClickCompleted(item)}
             />
             <label htmlFor={id}>{title}</label>
             <button type="button" className="destroy"
-              onClick={/*this.*/onClickDelete}
+              onClick={() => deleteTodo(id)}
             />
           </div>
           <input type="text" className="edit" />

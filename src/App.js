@@ -4,19 +4,24 @@ import TodoList from './components/TodoList/TodoList';
 import Filter from './components/Filter/Filter';
 //import todos from './api/todos';
 
-const todos = [
-  // {
-  //   title: '',
-  //   id: new Date(),
-  //   complited: false,
-  // },
+const todos = [];
 
-];
-
-class App extends React.Component {
+export default class App extends React.Component {
   state = {
     todos: [...todos],
 
+  }
+  deleteTodo = (id) => {
+    const index = this.state.todos.findIndex((el) => el.id === id);
+
+    const newArray = [
+      ...this.state.todos.slice(0, index),
+      ...this.state.todos.slice(index + 1)
+    ];
+
+    this.setState({
+      todos: newArray
+    });
   }
 
   addTodoItem = (newTodo) => {
@@ -25,25 +30,36 @@ class App extends React.Component {
     });
   };
 
-deleteTodo = (id) => {
-console.log(id);
-}
+  onClickCompleted = (elt) => {
+    elt.comleted = !elt.comleted;
+    const index = this.state.todos.findIndex((el) => el.id === elt.id);
 
-   render() {
-    const { todos} = this.state;
+    const newArray = [
+      ...this.state.todos.slice(0, index),
+      elt,
+      ...this.state.todos.slice(index + 1)
+    ];
+
+    this.setState({
+      todos: newArray
+    });
+  };
+
+  render() {
+    const { todos } = this.state;
 
     return (
       <section className="todoapp">
 
         <Header
-        todos={todos}
-        addTodoItem={this.addTodoItem}
+          todos={todos}
+          addTodoItem={this.addTodoItem}
 
-         />
+        />
         <TodoList
-        todos={todos}
-        deleteTodo = {this.deleteTodo}
-
+          todos={todos}
+          deleteTodo={this.deleteTodo}
+          onClickCompleted={this.onClickCompleted}
         />
         <Filter />
       </section>
@@ -51,8 +67,6 @@ console.log(id);
     )
   }
 }
-
-export default App;
 // function App() {
 //   return (
 //     <section className="todoapp">

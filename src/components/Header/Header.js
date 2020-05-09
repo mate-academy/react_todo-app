@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 class Header extends React.Component {
   //state = this.state;
   state = {
-    title: '',
-    id: 0,
+    // title: '',
+    // id: 0,
   }
 
    handleInputChange = (event) => {
@@ -35,7 +35,7 @@ class Header extends React.Component {
     if (title.trim()) {
       const newTodo = {
         title: title.trim(),
-        id: new Date(),
+        id: +(new Date()),
         comleted: false,
       };
       addTodoItem(newTodo);
