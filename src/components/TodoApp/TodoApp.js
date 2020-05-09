@@ -18,11 +18,14 @@ class TodoApp extends React.Component {
     this.setState({
       currentValue: '',
     });
-    this.props.addTodo({
-      title: this.state.currentValue,
-      id: +new Date(),
-      completed: false,
-    });
+
+    if (this.state.currentValue.split(' ').join('')) {
+      this.props.addTodo({
+        title: this.state.currentValue,
+        id: +new Date(),
+        completed: false,
+      });
+    }
   };
 
   render() {

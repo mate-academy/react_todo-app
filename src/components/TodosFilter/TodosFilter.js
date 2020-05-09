@@ -1,66 +1,70 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class TodosFilter extends React.Component {
-  handleFilter = (filterName) => {
-    this.props.handleFilter(filterName);
+const TodosFilter = (
+  {
+    todos,
+    handleFilter,
+    handleClearCompleted,
+    isVisible,
+  },
+) => {
+  const onFilter = (filterName) => {
+    handleFilter(filterName);
   };
 
-  clearCompleted = () => {
-    this.props.clear();
+  const onCompleted = () => {
+    handleClearCompleted();
   };
 
-  render() {
-    return (
-      <footer className="footer">
-        <span className="todo-count">
-          {`${this.props.todos.filter(el => el.completed === false)
-            .length
-          } items left`}
-        </span>
+  return (
+    <footer className="footer">
+      <span className="todo-count">
+        {`${todos.filter(el => el.completed === false)
+          .length} items left`}
+      </span>
 
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className="selected"
-              onClick={() => this.handleFilter('All')}
-            >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/active"
-              onClick={() => this.handleFilter('Active')}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/completed"
-              onClick={() => this.handleFilter('Completed')}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
-        {this.props.isVisible && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.clearCompleted}
+      <ul className="filters">
+        <li>
+          <a
+            href="#/"
+            className="selected"
+            onClick={() => onFilter('All')}
           >
-            Clear completed
-          </button>
-        )}
-      </footer>
-    );
-  }
-}
+            All
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="#/active"
+            onClick={() => onFilter('Active')}
+          >
+            Active
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="#/completed"
+            onClick={() => onFilter('Completed')}
+          >
+            Completed
+          </a>
+        </li>
+      </ul>
+      {isVisible && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={onCompleted}
+        >
+          Clear completed
+        </button>
+      )}
+    </footer>
+  );
+};
 
 export default TodosFilter;
 
@@ -73,6 +77,6 @@ TodosFilter.propTypes = {
     }).isRequired,
   ).isRequired,
   handleFilter: PropTypes.func.isRequired,
-  clear: PropTypes.func.isRequired,
+  handleClearCompleted: PropTypes.func.isRequired,
   isVisible: PropTypes.bool.isRequired,
 };

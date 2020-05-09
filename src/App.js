@@ -3,18 +3,37 @@ import TodoApp from './components/TodoApp/TodoApp';
 import TodoList from './components/TodoList/TodoList';
 import TodosFilter from './components/TodosFilter/TodosFilter';
 
+const LOCALSTORAGE_STATE = 'initialState';
+
 class App extends React.Component {
   state = {
     todos: [],
-    toggleAll: false,
+    isToggledAll: false,
     filterName: 'All',
     isVisible: false,
   };
 
+  componentDidMount() {
+    const initialState = localStorage.getItem(LOCALSTORAGE_STATE);
+    const parsedState = initialState && JSON.parse(initialState);
+
+    if (parsedState) {
+      this.setState({
+        ...parsedState,
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    const stringifiedState = JSON.stringify(this.state);
+
+    localStorage.setItem(LOCALSTORAGE_STATE, stringifiedState);
+  }
+
   addTodo = (newTodo) => {
     this.setState(({ todos }) => ({
       todos: [...todos, newTodo],
-      toggleAll: false,
+      isToggledAll: false,
     }));
   };
 
@@ -22,11 +41,12 @@ class App extends React.Component {
     this.setState(state => ({
       todos: state.todos.map(el => (el.id === id
         ? {
-          ...el, completed: !el.completed,
+          ...el,
+          completed: !el.completed,
         }
         : el)),
-      toggleAll: false,
-    }), () => this.check());
+      isToggledAll: false,
+    }), () => this.checkAnythingCompleted());
   };
 
   changeAllCompleted = () => {
@@ -36,8 +56,8 @@ class App extends React.Component {
           ...el,
           completed: !el.completed,
         })),
-        toggleAll: true,
-      }), () => this.check());
+        isToggledAll: true,
+      }), () => this.checkAnythingCompleted());
 
       return;
     }
@@ -48,8 +68,8 @@ class App extends React.Component {
           ...el,
           completed: !el.completed,
         })),
-        toggleAll: false,
-      }), () => this.check());
+        isToggledAll: false,
+      }), () => this.checkAnythingCompleted());
 
       return;
     }
@@ -59,7 +79,7 @@ class App extends React.Component {
         ...el,
         completed: true,
       })),
-      toggleAll: true,
+      isToggledAll: true,
     }));
   };
 
@@ -69,7 +89,7 @@ class App extends React.Component {
     });
   };
 
-  remove = (id) => {
+  removeTodo = (id) => {
     const { todos } = this.state;
     const newArray = todos.filter(el => el.id !== id);
 
@@ -78,7 +98,7 @@ class App extends React.Component {
     });
   };
 
-  handleClear = () => {
+  handleClearCompleted = () => {
     const { todos } = this.state;
     const newArray = todos.filter(el => !el.completed);
 
@@ -88,7 +108,7 @@ class App extends React.Component {
     });
   };
 
-  check = () => {
+  checkAnythingCompleted = () => {
     const { todos } = this.state;
     const isAnyElementCompleted = todos.some(el => el.completed);
 
@@ -110,15 +130,15 @@ class App extends React.Component {
           items={this.state.todos}
           filter={this.state.filterName}
           changeCompleted={this.changeCompleted}
-          toggleAll={this.state.toggleAll}
+          isToggledAll={this.state.isToggledAll}
           changeAllCompleted={this.changeAllCompleted}
-          remove={this.remove}
+          removeTodo={this.removeTodo}
         />
 
         <TodosFilter
           todos={this.state.todos}
           handleFilter={this.handleFilter}
-          clear={this.handleClear}
+          handleClearCompleted={this.handleClearCompleted}
           isVisible={this.state.isVisible}
         />
       </section>
