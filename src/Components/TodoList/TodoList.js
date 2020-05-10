@@ -20,7 +20,8 @@ render() {
   const { todosList,
     handleTaskRemover,
     statusHandler,
-    checkAllTasks } = this.props;
+    checkAllTasks,
+    updateTask } = this.props;
 
   return (
     <section className="main">
@@ -46,6 +47,7 @@ render() {
             key={todo.id}
             handleTaskRemover={handleTaskRemover}
             statusHandler={statusHandler}
+            updateTask={updateTask}
           />
         ))}
       </ul>
@@ -65,6 +67,7 @@ TodoList.propTypes = {
   handleTaskRemover: PropTypes.func.isRequired,
   statusHandler: PropTypes.func.isRequired,
   checkAllTasks: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
 };
 
 export default TodoList;

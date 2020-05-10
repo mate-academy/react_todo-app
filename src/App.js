@@ -65,7 +65,7 @@ class App extends React.Component {
 
   handleTaskRemover = (taskId) => {
     this.setState(prev => ({
-      todos: [...prev.todos].filter(task => taskId !== task.id),
+      todos: [...prev.todos].filter(task => +taskId !== task.id),
     }));
   }
 
@@ -95,6 +95,21 @@ class App extends React.Component {
     }
   }
 
+  updateTask = (data, id) => {
+    this.setState(prev => ({
+      todos: prev.todos.map((task) => {
+        if (task.id === +id) {
+          return {
+            ...task,
+            title: data,
+          };
+        }
+
+        return task;
+      }),
+    }));
+  }
+
   render() {
     const tasksListLength = this.state.todos.length;
 
@@ -109,6 +124,8 @@ class App extends React.Component {
             todosList={this.filterByPattern()}
             handleTaskRemover={this.handleTaskRemover}
             statusHandler={this.statusHandler}
+            updateTask={this.updateTask}
+
           />
         )}
         {tasksListLength !== 0 && (

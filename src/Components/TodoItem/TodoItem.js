@@ -4,34 +4,54 @@ import cn from 'classnames';
 
 class TodoItem extends React.Component {
   state = {
-    isFinished: false,
+    isEditing: false,
+    editingId: '',
+    actualTodoData: '',
   }
 
-  taskStatusHandler = () => {
-    this.setState(prev => ({
-      isFinished: !prev.isFinished,
-    }));
+  setEditField = (id) => {
+    this.setState({
+      isEditing: true,
+      editingId: id,
+    });
+  }
+
+  updField = (data) => {
+    this.setState({ actualTodoData: data });
+  }
+
+  hideEditField = () => {
+    this.setState({ isEditing: false });
   }
 
   render() {
-    const { todo, statusHandler, handleTaskRemover } = this.props;
-    const { isFinished } = this.state;
+    const { todo, statusHandler, handleTaskRemover, updateTask } = this.props;
+    const { actualTodoData, editingId } = this.state;
 
     return (
-      <li className={cn({ completed: todo.completed })}>
+      <li
+        className={cn({
+          completed: todo.completed,
+          editing: this.state.isEditing,
+        })}
+
+        onDoubleClick={(e) => {
+          this.setState({ actualTodoData: todo.title });
+          this.setEditField(e.target.id);
+        }}
+      >
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
             id={`todo-${todo.id}`}
-            checked={isFinished || todo.completed}
+            checked={todo.completed}
             onChange={() => {
-              this.taskStatusHandler();
               statusHandler(todo.id);
             }}
           />
           <label
-            htmlFor={`todo-${todo.id}`}
+            id={todo.id}
           >
             {todo.title}
           </label>
@@ -41,7 +61,31 @@ class TodoItem extends React.Component {
             onClick={() => handleTaskRemover(todo.id)}
           />
         </div>
-        <input type="text" className="edit" />
+        <input
+          type="text"
+          className="edit"
+          value={this.state.actualTodoData}
+          onChange={(e) => {
+            this.updField(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            const currentKey = e.key;
+
+            if (currentKey === 'Enter' && actualTodoData.length === 0) {
+              handleTaskRemover(editingId);
+              this.hideEditField();
+            } else if (currentKey === 'Enter') {
+              updateTask(actualTodoData, editingId);
+              this.hideEditField();
+            } else if (e.keyCode === 27) {
+              this.hideEditField();
+            }
+          }}
+          onBlur={() => {
+            updateTask(actualTodoData, editingId);
+            this.hideEditField();
+          }}
+        />
       </li>
     );
   }
@@ -55,15 +99,7 @@ TodoItem.propTypes = {
   }).isRequired,
   handleTaskRemover: PropTypes.func.isRequired,
   statusHandler: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
 };
 
 export default TodoItem;
-
-/*    <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="todo-3" />
-          <label htmlFor="todo-3">zxcvbnm</label>
-          <button type="button" className="destroy" />
-        </div>
-        <input type="text" className="edit" />
-      </li> */
