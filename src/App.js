@@ -84,6 +84,10 @@ class App extends React.Component {
   }
 
   handleTypeOfFilter = (type) => {
+    if (this.state.editMode) {
+      return;
+    }
+
     this.setState({
       typeOfFilter: type,
     });
