@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
+import TodosProptypes from './TodosProptypes';
 
 class TodoList extends React.PureComponent {
   render() {
@@ -10,14 +11,15 @@ class TodoList extends React.PureComponent {
       deleteTodo,
       selectAllTodo,
       changeTitle,
+      initialTodos,
     } = this.props;
 
     let allChecked;
 
-    if (todos.length === 0) {
+    if (initialTodos.length === 0) {
       allChecked = false;
     } else {
-      allChecked = todos.every(todo => todo.completed === true);
+      allChecked = initialTodos.every(todo => todo.completed === true);
     }
 
     return (
@@ -47,15 +49,17 @@ class TodoList extends React.PureComponent {
 }
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-    id: PropTypes.number.isRequired,
-  })).isRequired,
+  todos: TodosProptypes,
+  initialTodos: TodosProptypes,
   changeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   selectAllTodo: PropTypes.func.isRequired,
   changeTitle: PropTypes.func.isRequired,
+};
+
+TodoList.defaultProps = {
+  todos: [],
+  initialTodos: [],
 };
 
 export default TodoList;

@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import TodoList from './TodoList';
 import NewTodo from './NewTodo';
+import FilterButtons from './FilterButtons';
 
 class TodoApp extends React.Component {
   state = {
@@ -87,21 +88,9 @@ class TodoApp extends React.Component {
     }));
   }
 
-  filterViewAll = () => {
+  todosFilter = (event) => {
     this.setState({
-      filter: 'all',
-    });
-  }
-
-  filterActive = () => {
-    this.setState({
-      filter: 'active',
-    });
-  }
-
-  filterCompleted = () => {
-    this.setState({
-      filter: 'completed',
+      filter: event.target.id,
     });
   }
 
@@ -127,6 +116,7 @@ class TodoApp extends React.Component {
     } = this.state;
 
     const notComplitedTodo = todos.filter(todo => todo.completed === false);
+
     let preparedTodos;
 
     if (filter === 'all') {
@@ -134,11 +124,11 @@ class TodoApp extends React.Component {
     }
 
     if (filter === 'active') {
-      preparedTodos = [...todos].filter(todo => todo.completed === false);
+      preparedTodos = [...todos].filter(todo => !todo.completed);
     }
 
     if (filter === 'completed') {
-      preparedTodos = [...todos].filter(todo => todo.completed === true);
+      preparedTodos = [...todos].filter(todo => todo.completed);
     }
 
     return (
@@ -152,6 +142,7 @@ class TodoApp extends React.Component {
         />
         <TodoList
           todos={preparedTodos}
+          initialTodos={todos}
           changeStatus={this.changeStatus}
           deleteTodo={this.deleteTodo}
           selectAllTodo={this.selectAllTodo}
@@ -167,35 +158,7 @@ class TodoApp extends React.Component {
             items left
           </span>
 
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className={classNames({ selected: filter === 'all' })}
-                onClick={this.filterViewAll}
-              >
-                All
-              </a>
-            </li>
-            <li>
-              <a
-                href="#/active"
-                onClick={this.filterActive}
-                className={classNames({ selected: filter === 'active' })}
-              >
-                Active
-              </a>
-            </li>
-            <li>
-              <a
-                href="#/completed"
-                onClick={this.filterCompleted}
-                className={classNames({ selected: filter === 'completed' })}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
+          <FilterButtons todosFilter={this.todosFilter} filter={filter} />
 
           <button
             type="button"
@@ -205,6 +168,7 @@ class TodoApp extends React.Component {
           >
             Clear completed
           </button>
+
         </footer>
       </section>
 

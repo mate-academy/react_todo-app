@@ -79,13 +79,16 @@ state = {
               onClick={deleteTodo}
             />
           </div>
-          <input
-            type="text"
-            className="edit"
-            defaultValue={todo.title}
-            onBlur={this.saveChangeBlur}
-            onKeyDown={this.onKeyPress}
-          />
+          {onEdit && (
+            <input
+              type="text"
+              className="edit"
+              defaultValue={todo.title}
+              onBlur={this.saveChangeBlur}
+              onKeyDown={this.onKeyPress}
+              autoFocus
+            />
+          )}
         </li>
       </>
     );

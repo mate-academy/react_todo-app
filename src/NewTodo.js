@@ -24,6 +24,7 @@ class NewTodo extends React.Component {
         title: title.trim(),
         completed: false,
       });
+
       this.setState(prevState => ({
         title: '',
         id: prevState.id + 1,
