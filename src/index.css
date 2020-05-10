@@ -2,6 +2,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+ 
 }
 
 button {
@@ -31,6 +32,20 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
+}
+
+body::after {
+  content: "";
+  background: url(background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 :focus {
@@ -172,9 +187,9 @@ body {
 
 .todo-list li.editing .edit {
   display: block;
-  width: 506px;
+  width: 100%; /*506px;*/
   padding: 12px 16px;
-  margin: 0 0 0 43px;
+  margin: 0; /*0 0 43px;*/
 }
 
 .error {

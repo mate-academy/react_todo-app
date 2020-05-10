@@ -86,10 +86,12 @@ class App extends React.Component {
   }
 
   toggleAllTodosStatus = ({ target }) => {
+    const isCompleted = this.state.todos.some(todo => !todo.completed);
+
     this.setState(state => ({
       todos: state.todos.map(todo => ({
         ...todo,
-        completed: target.checked,
+        completed: isCompleted,
       })),
     }));
   }
@@ -166,6 +168,7 @@ class App extends React.Component {
   render() {
     const { todos, initialInputValue } = this.state;
     const { isActiveTodos, isCompletedTodos, isAllTodos } = this.state;
+    const isAllChecked = todos.every(item => item.completed);
 
     return (
       <section className="todoapp">
@@ -183,6 +186,7 @@ class App extends React.Component {
                 id="toggle-all"
                 className="toggle-all"
                 onClick={this.toggleAllTodosStatus}
+                checked={isAllChecked}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
             </>
