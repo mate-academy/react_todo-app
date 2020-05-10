@@ -62,6 +62,7 @@ class TodoItem extends React.Component {
           />
         </div>
         <input
+          ref={input => input && input.focus()}
           type="text"
           className="edit"
           value={this.state.actualTodoData}
