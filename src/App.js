@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   editTodo = (target, todoId, todoTitle, escapeEditing) => {
-    if (target.keyCode === 13 && todoTitle !== '') {
+    if (target.keyCode === 13) {
       this.setState(({ todosList }) => ({
         todosList: todosList.map((todo) => {
           if (todo.id === todoId) {
@@ -29,6 +29,10 @@ class App extends React.Component {
           return todo;
         }),
       }));
+
+      if (todoTitle === '') {
+        return;
+      }
     }
 
     escapeEditing(target);
