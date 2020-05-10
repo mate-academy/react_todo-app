@@ -7,7 +7,6 @@ class TodoItem extends React.PureComponent {
     const { todo, deleteTodo, handleChangeStatus } = this.props;
 
     return (
-
       <>
         <li
           className={classNames({
@@ -34,13 +33,11 @@ class TodoItem extends React.PureComponent {
               type="button"
               className="destroy"
               onClick={deleteTodo}
-
             />
           </div>
           <input
             type="text"
             className="edit"
-
           />
         </li>
       </>
@@ -57,7 +54,6 @@ TodoItem.propTypes = {
 
   handleChangeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
-
 };
 
 export default TodoItem;

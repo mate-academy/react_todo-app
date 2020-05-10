@@ -12,6 +12,7 @@ class TodoList extends React.PureComponent {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
+          checked={todos.length > 0 && todos.every(todo => todo.completed)}
           onChange={handleMarkAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
@@ -39,7 +40,6 @@ TodoList.propTypes = {
   handleChangeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   handleMarkAll: PropTypes.func.isRequired,
-
 };
 
 export default TodoList;
