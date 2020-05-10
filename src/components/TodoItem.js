@@ -18,12 +18,12 @@ class TodoItem extends React.Component {
 
     if ((key === 'Enter' && target.value.trim() !== '')
     || (type === 'blur' && target.value.trim() !== '')) {
-      setTodoTitle(id, target.value.trim(), false);
+      setTodoTitle(id, target.value.trim());
     }
 
     if (key === 'Escape') {
       this.setState({ editTitle: todo.title });
-      setTodoTitle(id, todo.title, false);
+      setTodoTitle(id, todo.title);
     }
   }
 

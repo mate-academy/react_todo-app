@@ -10,14 +10,14 @@ class App extends React.Component {
     editMode: false,
   }
 
-  setTodoTitle = (id, title, editing) => {
+  setTodoTitle = (id, title) => {
     this.setState(prev => ({
       todos: prev.todos.map((todo) => {
         if (todo.id === +id) {
           return {
             ...todo,
             title,
-            editing,
+            editing: false,
           };
         }
 
