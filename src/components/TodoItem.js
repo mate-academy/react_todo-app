@@ -14,17 +14,14 @@ class TodoItem extends React.Component {
 
   handleEditTitle = ({ key, target, type }) => {
     const { setTodoTitle, todo } = this.props;
+    const { id } = target;
 
     if ((key === 'Enter' && target.value.trim() !== '')
     || (type === 'blur' && target.value.trim() !== '')) {
-      const { id } = target;
-
       setTodoTitle(id, target.value.trim(), false);
     }
 
     if (key === 'Escape') {
-      const { id } = target;
-
       this.setState({ editTitle: todo.title });
       setTodoTitle(id, todo.title, false);
     }

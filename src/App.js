@@ -7,6 +7,7 @@ class App extends React.Component {
   state = {
     todos: [],
     typeOfFilter: 'all',
+    editMode: false,
   }
 
   setTodoTitle = (id, title, editing) => {
@@ -22,10 +23,15 @@ class App extends React.Component {
 
         return todo;
       }),
+      editMode: !prev.editMode,
     }));
   }
 
   setEditStatus = (id) => {
+    if (this.state.editMode) {
+      return;
+    }
+
     this.setState(prev => ({
       todos: prev.todos.map((todo) => {
         if (todo.id === id) {
@@ -37,6 +43,7 @@ class App extends React.Component {
 
         return todo;
       }),
+      editMode: !prev.editMode,
     }));
   }
 
