@@ -7,8 +7,7 @@ const Footer = (props) => {
     handleClearCompleted,
     handlerChangeList,
     currentFilter,
-    hideClearButton,
-    selectAllButton } = props;
+    hideClearButton } = props;
 
   return (
     <>
@@ -22,7 +21,6 @@ const Footer = (props) => {
           handlerChangeList={handlerChangeList}
           handleClearCompleted={handleClearCompleted}
           hideClearButton={hideClearButton}
-          selectAllButton={selectAllButton}
         />
       </footer>
 
@@ -38,5 +36,4 @@ Footer.propTypes = {
   handleClearCompleted: PropTypes.func.isRequired,
   currentFilter: PropTypes.string.isRequired,
   hideClearButton: PropTypes.bool.isRequired,
-  selectAllButton: PropTypes.bool.isRequired,
 };

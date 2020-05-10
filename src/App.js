@@ -16,18 +16,22 @@ class App extends React.Component {
     ));
   }
 
-  submitEditingTodo = (todoId, todoTitle) => {
-    this.setState(({ todosList }) => ({
-      todosList: todosList.map((todo) => {
-        if (todo.id === todoId) {
-          return {
-            ...todo, title: todoTitle,
-          };
-        }
+  editTodo = (target, todoId, todoTitle, escapeEditing) => {
+    if (target.keyCode === 13 && todoTitle !== '') {
+      this.setState(({ todosList }) => ({
+        todosList: todosList.map((todo) => {
+          if (todo.id === todoId) {
+            return {
+              ...todo, title: todoTitle,
+            };
+          }
 
-        return todo;
-      }),
-    }));
+          return todo;
+        }),
+      }));
+    }
+
+    escapeEditing(target);
   }
 
   deleteTodo = (todoId) => {
@@ -116,7 +120,7 @@ class App extends React.Component {
           <TodoList
             todos={preparedTodo}
             deleteTodo={this.deleteTodo}
-            submitEditingTodo={this.submitEditingTodo}
+            editTodo={this.editTodo}
             changeTodoStatus={this.changeTodoStatus}
             markAll={this.markAll}
             selectAllButton={selectAllButton}
@@ -127,7 +131,6 @@ class App extends React.Component {
           <Footer
             todosList={todosList}
             hideClearButton={hideClearButton}
-            selectAllButton={selectAllButton}
             currentFilter={currentFilter}
             handlerChangeList={this.handlerChangeList}
             handleClearCompleted={this.handleClearCompleted}

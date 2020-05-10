@@ -21,17 +21,25 @@ class Todo extends React.Component {
     });
   }
 
-  CompleteEdit = () => {
+  completeEdit = () => {
     this.setState(state => ({
       edit: false,
     }));
+  }
+
+  escapeEditing = (e) => {
+    if (e.keyCode === 13 || e.keyCode === 27) {
+      this.setState({
+        edit: false,
+      });
+    }
   }
 
   render() {
     const { todo,
       changeTodoStatus,
       deleteTodo,
-      submitEditingTodo } = this.props;
+      editTodo } = this.props;
 
     const { title, edit } = this.state;
 
@@ -44,16 +52,16 @@ class Todo extends React.Component {
         {edit
           ? (
             <>
-              <form onSubmit={() => submitEditingTodo(todo.id, title)}>
-                <input
-                  onChange={this.handlerChange}
-                  onBlur={this.CompleteEdit}
-                  id={todo.id}
-                  className="edit"
-                  value={title}
-                  onFocus
-                />
-              </form>
+              <input
+                onChange={this.handlerChange}
+                onBlur={this.completeEdit}
+                className="edit"
+                value={title}
+                onKeyDown={e => editTodo(e, todo.id, title, this.escapeEditing)}
+                // лінтер свариться на autoFocus;
+                // eslint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus
+              />
             </>
           )
 
@@ -67,7 +75,6 @@ class Todo extends React.Component {
                 checked={todo.completed}
               />
               <label
-                htmlFor={todo.id}
                 onDoubleClick={this.activateEditing}
               >
                 {todo.title}
@@ -94,5 +101,5 @@ Todo.propTypes = {
   }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
   changeTodoStatus: PropTypes.func.isRequired,
-  submitEditingTodo: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
 };

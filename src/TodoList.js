@@ -8,7 +8,7 @@ const TodoList = (props) => {
     markAll,
     todos,
     deleteTodo,
-    submitEditingTodo,
+    editTodo,
     changeTodoStatus,
     hideOnStart } = props;
 
@@ -38,7 +38,7 @@ const TodoList = (props) => {
             todo={todo}
             deleteTodo={deleteTodo}
             changeTodoStatus={changeTodoStatus}
-            submitEditingTodo={submitEditingTodo}
+            editTodo={editTodo}
           />
         ))
         }
@@ -58,7 +58,7 @@ TodoList.propTypes = {
   deleteTodo: PropTypes.func.isRequired,
   changeTodoStatus: PropTypes.func.isRequired,
   markAll: PropTypes.func.isRequired,
-  submitEditingTodo: PropTypes.func.isRequired,
   selectAllButton: PropTypes.bool.isRequired,
   hideOnStart: PropTypes.bool.isRequired,
+  editTodo: PropTypes.func.isRequired,
 };

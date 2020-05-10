@@ -6,8 +6,7 @@ const TodosFilter = (props) => {
   const { handlerChangeList,
     handleClearCompleted,
     currentFilter,
-    hideClearButton,
-    selectAllButton } = props;
+    hideClearButton } = props;
 
   return (
 
@@ -24,31 +23,28 @@ const TodosFilter = (props) => {
           </a>
 
         </li>
-        {!selectAllButton && (
-          <li>
-            <a
-              className={currentFilter === FILTERS.active && 'selected'}
-              name="active"
-              href="#/active"
-              onClick={() => handlerChangeList(FILTERS.active)}
-            >
-              Active
-            </a>
-          </li>
-        )}
 
-        { hideClearButton && (
-          <li>
-            <a
-              className={currentFilter === FILTERS.completed && 'selected'}
-              name="completed"
-              href="#/completed"
-              onClick={() => handlerChangeList(FILTERS.completed)}
-            >
-              Completed
-            </a>
-          </li>
-        )}
+        <li>
+          <a
+            className={currentFilter === FILTERS.active ? 'selected' : ''}
+            name="active"
+            href="#/active"
+            onClick={() => handlerChangeList(FILTERS.active)}
+          >
+            Active
+          </a>
+        </li>
+
+        <li>
+          <a
+            className={currentFilter === FILTERS.completed ? 'selected' : ''}
+            name="completed"
+            href="#/completed"
+            onClick={() => handlerChangeList(FILTERS.completed)}
+          >
+            Completed
+          </a>
+        </li>
 
       </ul>
       {hideClearButton && (
@@ -72,5 +68,4 @@ TodosFilter.propTypes = {
   handleClearCompleted: PropTypes.func.isRequired,
   currentFilter: PropTypes.string.isRequired,
   hideClearButton: PropTypes.bool.isRequired,
-  selectAllButton: PropTypes.bool.isRequired,
 };
