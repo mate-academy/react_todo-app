@@ -25,7 +25,8 @@ export class TodoItem extends React.Component {
               type="checkbox"
               className="toggle"
               id={`todo-${id}`}
-              checked={completed}
+              // checked={completed}
+              checked={!!completed}
               onChange={() => toggleComplete(id)}
             />
             <label

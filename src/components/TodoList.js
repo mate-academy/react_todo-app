@@ -8,6 +8,7 @@ export const TodoList = ({
   toggleComplete,
   removeTodo,
   toggleSelectAll,
+  // completedStatus,
 }) => (
 
   <section className="main">
@@ -15,7 +16,9 @@ export const TodoList = ({
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
+      // checked={completedStatus}
       checked={todos.length > 0 && todos.every(todo => todo.completed)}
+      // onChange={() => toggleSelectAll(selectAll)}
       onChange={toggleSelectAll}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>

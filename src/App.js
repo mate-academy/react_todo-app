@@ -43,25 +43,18 @@ class App extends React.Component {
     }));
   }
 
-  AllDone = () => {
-    const completedTodos = this.state.todos
-      .every(todo => todo.completed === true);
-
-    this.state.todos.length === completedTodos.length
-      ? this.setState(() => ({ selectAll: true }))
-      : this.setState(() => ({ selectAll: false }));
-  }
-
-  toggleSelectAll = () => {
-    const { selectAll } = this.state;
-
-    this.setState(prevState => ({
-      todos: prevState.todos.map(todo => ({
+  toggleSelectAll = ({ target }) => {
+    this.setState(({ todos, selectAll }) => {
+      const newTodos = todos.map(todo => ({
         ...todo,
-        completed: !selectAll,
-      })),
-      selectAll: !selectAll,
-    }), () => this.AllDone());
+        completed: target.checked,
+      }));
+
+      return {
+        todos: newTodos,
+        selectAll: !selectAll,
+      };
+    });
   }
 
   activeTodoCounter = () => this.state.todos
@@ -92,6 +85,10 @@ class App extends React.Component {
   render() {
     const filteredTodos = this.filterByStatus();
 
+    // const completedStatus = this.state.todos.length === 0
+    //   ? false
+    //   : this.state.todos.every(todo => todo.completed);
+
     return (
       <section className="todoapp">
         <TodoApp
@@ -100,6 +97,7 @@ class App extends React.Component {
         />
         <TodoList
           todos={filteredTodos}
+          // completedStatus={completedStatus}
           selectAll={this.state.selectAll}
           toggleComplete={this.toggleComplete}
           removeTodo={this.removeTodo}
@@ -115,6 +113,15 @@ class App extends React.Component {
             removeCompleted={this.removeCompleted}
           />
         )}
+
+        {/* <TodosFilters
+          filterType={filterType}
+          todos={this.state.todos}
+          currentFilter={this.state.currentFilter}
+          activeTodoCounter={this.activeTodoCounter}
+          filterSelector={this.filterSelector}
+          removeCompleted={this.removeCompleted}
+        /> */}
       </section>
     );
   }
