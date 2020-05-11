@@ -62,14 +62,18 @@ class App extends React.Component {
     }));
   }
 
-  toggleAll = () => {
+  toggleAll = ({ target }) => {
     this.setState(state => ({
       todos: state.todos.map(todo => ({
         ...todo,
-        completed: !todo.completed,
+        completed: target.checked,
       })),
     }));
   }
+
+  isCompletedAll = () => (
+    this.state.todos.every(todo => todo.completed)
+  )
 
   render() {
     let allTodos = [...this.state.todos];
@@ -89,13 +93,18 @@ class App extends React.Component {
         />
 
         <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onClick={() => this.toggleAll()}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {this.state.todos.length
+            ? (<input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              checked={this.isCompletedAll()}
+              onClick={event => this.toggleAll(event)}
+            />)
+
+            : ''
+          }
+          <label htmlFor="toggle-all" />
           <TodoList
             todos={allTodos}
             removeTodo={this.removeTodo}

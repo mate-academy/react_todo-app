@@ -14,6 +14,7 @@ export class HeaderForm extends React.Component {
   handleOnSubmitForm = (event) => {
     event.preventDefault();
     this.props.addTodo(this.state.title);
+    this.setState({ title: '', })
   }
 
   render() {
