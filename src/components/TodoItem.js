@@ -17,10 +17,11 @@ class TodoItem extends React.Component {
           <input
             type="checkbox"
             className="toggle"
+            checked={task.completed}
             id={task.id}
             onClick={() => toggleCompleteTask(task.id)}
           />
-          <label htmlFor={task.id}>{task.title}</label>
+          <label>{task.title}</label>
           <button
             type="button"
             className="destroy"
