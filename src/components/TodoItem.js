@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ id, title, completed, onComplete, onRemoveItem }) => (
+const TodoItem = ({ id, title, completed, onTaskCompleted, onRemoveItem }) => (
   <li className={completed ? 'completed' : ''}>
     <div className="view">
       <input
         type="checkbox"
         className="toggle"
         id={id}
-        onChange={onComplete}
+        checked={completed}
+        onChange={onTaskCompleted}
       />
       <label htmlFor="todo-1">{title}</label>
       <button
@@ -25,7 +26,7 @@ const TodoItem = ({ id, title, completed, onComplete, onRemoveItem }) => (
 TodoItem.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  onComplete: PropTypes.func.isRequired,
+  onTaskCompleted: PropTypes.func.isRequired,
   completed: PropTypes.bool.isRequired,
   onRemoveItem: PropTypes.func.isRequired,
 };

@@ -40,7 +40,7 @@ class App extends React.PureComponent {
     });
   }
 
-  handleCompleteChange = (event) => {
+  handleCompletedChange = (event) => {
     const { id, checked } = event.target;
     const { todos } = this.state;
 
@@ -77,8 +77,33 @@ class App extends React.PureComponent {
     }));
   }
 
+  toggleAllTodosStatus = (event) => {
+    const { checked } = event.target;
+
+    if (event.target !== null) {
+      this.setState(({ todos }) => ({
+        todos: todos.map(todo => ({
+          ...todo,
+          completed: checked,
+        })),
+      }));
+    }
+  }
+
   render() {
-    const { filter } = this.state.filter;
+    const { filter, title, todos } = this.state;
+
+    const filteredTodos = todos.filter((todo) => {
+      switch (filter) {
+        case 'completed':
+          return todo.completed;
+        case 'active':
+          return !todo.completed;
+        case 'all':
+        default:
+          return true;
+      }
+    });
 
     return (
       <section className="todoapp">
@@ -89,21 +114,27 @@ class App extends React.PureComponent {
               className="new-todo"
               placeholder="What needs to be done?"
               onChange={this.handleTitleChange}
-              value={this.state.title}
+              value={title}
             />
           </form>
 
         </header>
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            // checked={todos.every(todo => todo.checked)}
+            onChange={this.toggleAllTodosStatus}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
           {this.state.todos
           && (
             <TodoList
-              todos={this.state.todos}
-              filter={this.state.filter}
-              onComplete={this.handleCompleteChange}
+              todos={filteredTodos}
+              filter={filter}
+              onTaskCompleted={this.handleCompletedChange}
               onRemove={this.handleRemoveItem}
             />
           )}
