@@ -108,18 +108,19 @@ class App extends React.Component {
     const itemLeft = todos.filter(todo => (
       !todo.completed)).length;
 
-    if (showParam === 'active') {
-      todoView = [...todos].filter(todo => (
-        !todo.completed
-      ));
-    }
-
-    if (showParam === 'completed') {
-      todoView = [...todos].filter(todo => (
-        todo.completed
-      ));
-    } else {
-      todoView = [...todos];
+    switch (showParam) {
+      case 'active':
+        todoView = [...todos].filter(todo => (
+          !todo.completed
+        ));
+        break;
+      case 'completed':
+        todoView = [...todos].filter(todo => (
+          todo.completed
+        ));
+        break;
+      default:
+        todoView = [...todos];
     }
 
     return (
