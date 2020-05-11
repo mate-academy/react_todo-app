@@ -15,23 +15,19 @@ class App extends React.Component {
     }));
   }
 
-  saveChangesTodo = (e, todoId, todoTitle) => {
-    const title = e.target.value;
+  saveChangesTodo = (todoId, todoTitle) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            title: todoTitle,
+          };
+        }
 
-    if (e.key === 'Enter') {
-      this.setState(prevState => ({
-        todos: prevState.todos.map((todo) => {
-          if (todo.id === todoId) {
-            return {
-              ...todo,
-              title,
-            };
-          }
-
-          return todo;
-        }),
-      }));
-    }
+        return todo;
+      }),
+    }));
   }
 
   onTodoChecked = (todoId, e) => {
@@ -49,11 +45,11 @@ class App extends React.Component {
     }));
   }
 
-  onAllSelected = (select) => {
+  onAllSelected = (completedStatusTodos) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: select,
+        completed: !completedStatusTodos,
       })),
     }));
   }
@@ -93,9 +89,11 @@ class App extends React.Component {
 
   render() {
     const { todos, filterType } = this.state;
-    const completedStatus = todos.length === 0
+    const initialDisplay = (todos.length === 0);
+    const completedStatusTodos = this.state.todos.length === 0
       ? false
-      : todos.every(todo => todo.completed);
+      : this.state.todos.every(todo => todo.completed);
+
     const visibleClearCompleted = todos.some(todo => todo.completed);
     const incompleteTodosSum = todos.filter(todo => !todo.completed).length;
     const visibleTodos = this.getVisibleTodos(filterType);
@@ -105,27 +103,50 @@ class App extends React.Component {
         <Header
           onTodo={this.addTodo}
         />
-        <TodoList
-          todos={visibleTodos}
-          completedStatus={completedStatus}
-          onFilteredTodos={this.onFilteredTodos}
-          onAllSelected={this.onAllSelected}
-          onTodoChecked={this.onTodoChecked}
-          deleteTodo={this.deleteTodo}
-          saveChangesTodo={this.saveChangesTodo}
 
-        />
+        <section className="main">
+          {!initialDisplay && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                checked={completedStatusTodos}
+                onChange={() => this.onAllSelected(completedStatusTodos)}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
+          <TodoList
+            todos={visibleTodos}
+            initialDisplay={initialDisplay}
+            onFilteredTodos={this.onFilteredTodos}
+            onTodoChecked={this.onTodoChecked}
+            deleteTodo={this.deleteTodo}
+            saveChangesTodo={this.saveChangesTodo}
+          />
+        </section>
 
-        <Footer
-          noComlpetedTodo={incompleteTodosSum}
-          onFilteredTodos={this.onFilteredTodos}
-          clearCompleted={this.clearCompleted}
-          visibleClearCompleted={visibleClearCompleted}
-          filterType={filterType}
-        />
+        {
+          !initialDisplay
+          && (
+            <Footer
+              noComlpetedTodo={incompleteTodosSum}
+              onFilteredTodos={this.onFilteredTodos}
+              clearCompleted={this.clearCompleted}
+              visibleClearCompleted={visibleClearCompleted}
+              filterType={filterType}
+            />
+          )
+        }
+
       </section>
     );
   }
 }
+
+// App.propTypes = {
+//   completedStatusTodos: PropTypes.bool.isRequired,
+// };
 
 export default App;
