@@ -106,7 +106,10 @@ class App extends React.Component {
 
         </section>
 
-        <footer className="footer">
+        <footer
+          className="footer"
+          hidden={tasks.length === 0}
+        >
           <span className="todo-count">
             {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
             {tasks.filter(task => task.completed === false).length} items left
