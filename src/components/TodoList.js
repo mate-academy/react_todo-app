@@ -4,11 +4,10 @@ import { TodoItem } from './TodoItem';
 
 export const TodoList = ({
   todos,
-  selectAll,
   toggleComplete,
   removeTodo,
   toggleSelectAll,
-  // completedStatus,
+  editTitleTodo,
 }) => (
 
   <section className="main">
@@ -16,9 +15,7 @@ export const TodoList = ({
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      // checked={completedStatus}
       checked={todos.length > 0 && todos.every(todo => todo.completed)}
-      // onChange={() => toggleSelectAll(selectAll)}
       onChange={toggleSelectAll}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
@@ -30,7 +27,7 @@ export const TodoList = ({
           {...todo}
           toggleComplete={toggleComplete}
           removeTodo={removeTodo}
-          // editTodo={editTodo}
+          editTitleTodo={editTitleTodo}
         />
       ))}
     </ul>
@@ -45,4 +42,5 @@ TodoList.propTypes = {
   removeTodo: PropTypes.func.isRequired,
   selectAll: PropTypes.bool.isRequired,
   toggleSelectAll: PropTypes.func.isRequired,
+  editTitleTodo: PropTypes.func.isRequired,
 };

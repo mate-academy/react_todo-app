@@ -45,13 +45,13 @@ class App extends React.Component {
 
   toggleSelectAll = ({ target }) => {
     this.setState(({ todos, selectAll }) => {
-      const newTodos = todos.map(todo => ({
+      const allDone = todos.map(todo => ({
         ...todo,
         completed: target.checked,
       }));
 
       return {
-        todos: newTodos,
+        todos: allDone,
         selectAll: !selectAll,
       };
     });
@@ -82,26 +82,40 @@ class App extends React.Component {
     }));
   }
 
+  editTitleTodo = (title, id) => {
+    if (!title.trim()) {
+      return;
+    }
+
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
   render() {
     const filteredTodos = this.filterByStatus();
-
-    // const completedStatus = this.state.todos.length === 0
-    //   ? false
-    //   : this.state.todos.every(todo => todo.completed);
 
     return (
       <section className="todoapp">
         <TodoApp
-          addNewTodo={this.addNewTodo}
           todos={this.state.todos}
+          addNewTodo={this.addNewTodo}
         />
         <TodoList
           todos={filteredTodos}
-          // completedStatus={completedStatus}
-          selectAll={this.state.selectAll}
           toggleComplete={this.toggleComplete}
-          removeTodo={this.removeTodo}
           toggleSelectAll={this.toggleSelectAll}
+          editTitleTodo={this.editTitleTodo}
+          removeTodo={this.removeTodo}
         />
         {this.state.todos.length > 0 && (
           <TodosFilters
@@ -113,15 +127,6 @@ class App extends React.Component {
             removeCompleted={this.removeCompleted}
           />
         )}
-
-        {/* <TodosFilters
-          filterType={filterType}
-          todos={this.state.todos}
-          currentFilter={this.state.currentFilter}
-          activeTodoCounter={this.activeTodoCounter}
-          filterSelector={this.filterSelector}
-          removeCompleted={this.removeCompleted}
-        /> */}
       </section>
     );
   }
