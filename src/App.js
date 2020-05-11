@@ -1,14 +1,13 @@
 import React from 'react';
 import uuid from 'react-uuid';
-import * as cn from 'classnames';
 import { TodoList } from './components/TodoList';
+import { NewTodo } from './components/NewTodo';
+import { Footer } from './components/Footer';
 
 class App extends React.Component {
   state = {
     todos: [],
-    newItemText: '',
     checkedAll: false,
-    sortBy: '',
     filterSelected: 'all',
   }
 
@@ -40,11 +39,39 @@ class App extends React.Component {
     });
   }
 
-  handleChange = ({ target }) => {
-    this.setState({
-      newItemText: target.value,
+  addItem = (text) => {
+    if (text.trim() === '') {
+      return;
+    }
+
+    this.setState(({ todos }) => {
+      const newItem = {
+        id: uuid(),
+        done: false,
+        text,
+      };
+
+      return {
+        todos: [...todos, newItem],
+        checkedAll: false,
+      };
     });
   }
+
+  clickHandler = (event) => {
+    const filterSelected = event.target.name;
+
+    this.setState({
+      filterSelected,
+    });
+  };
+
+  clearCompleted = () => {
+    this.setState(({ todos }) => ({
+      todos: todos.filter(todo => !todo.done),
+      checkedAll: false,
+    }));
+  };
 
   handleDelete = (id) => {
     this.setState(({ todos }) => ({
@@ -74,11 +101,6 @@ class App extends React.Component {
     });
   }
 
-  handleAddItem = (event) => {
-    event.preventDefault();
-    this.addItem(this.state.newItemText);
-  }
-
   changeText = (id, text) => {
     this.setState(({ todos }) => {
       const newItems = todos.map((todo) => {
@@ -104,8 +126,8 @@ class App extends React.Component {
     });
   };
 
-  todosFilter = (todos, sortBy) => {
-    switch (sortBy) {
+  todosFilter = (todos, filterSelected) => {
+    switch (filterSelected) {
       case 'completed':
         return todos.filter(todo => todo.done);
       case 'active':
@@ -115,67 +137,19 @@ class App extends React.Component {
     }
   };
 
-  clickHandler = (event) => {
-    const sortBy = event.target.name;
-    const filterSelected = event.target.name;
-
-    this.setState({
-      sortBy,
-      filterSelected,
-    });
-  };
-
-  clearCompleted = () => {
-    this.setState(({ todos }) => ({
-      todos: todos.filter(todo => !todo.done),
-      checkedAll: false,
-    }));
-  };
-
-  addItem(text) {
-    if (text.trim() === '') {
-      return;
-    }
-
-    this.setState(({ todos }) => {
-      const newItem = {
-        id: uuid(),
-        done: false,
-        text,
-      };
-
-      return {
-        todos: [...todos, newItem],
-        newItemText: '',
-        checkedAll: false,
-      };
-    });
-  }
-
   render() {
     const {
       todos,
-      newItemText,
       checkedAll,
-      sortBy,
       filterSelected,
     } = this.state;
-    const activeTodos = todos.filter(todo => !todo.done);
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <form onSubmit={this.handleAddItem}>
-            <input
-              className="new-todo"
-              placeholder="What needs to be done?"
-              value={newItemText}
-              onChange={this.handleChange}
-            />
-          </form>
         </header>
-
+        <NewTodo addItem={this.addItem} />
         <section className="main">
           {todos.length
             ? (
@@ -194,7 +168,7 @@ class App extends React.Component {
             )
             : null}
           <TodoList
-            todos={this.todosFilter(todos, sortBy)}
+            todos={this.todosFilter(todos, filterSelected)}
             onDelete={this.handleDelete}
             toggleItem={this.toggleItem}
             onTextChanged={this.changeText}
@@ -203,55 +177,13 @@ class App extends React.Component {
 
         {todos.length
           ? (
-            <footer className="footer">
-              <span className="todo-count">
-                {`${activeTodos.length} items left`}
-              </span>
-              <ul className="filters">
-                <li>
-                  <a
-                    onClick={this.clickHandler}
-                    href="#/"
-                    className={cn({ selected: filterSelected === 'all' })}
-                    name="all"
-                  >
-                    All
-                  </a>
-                </li>
+            <Footer
+              todos={todos}
+              clickHandler={this.clickHandler}
+              clearCompleted={this.clearCompleted}
+              filterSelected={filterSelected}
+            />
 
-                <li>
-                  <a
-                    className={cn({ selected: filterSelected === 'active' })}
-                    onClick={this.clickHandler}
-                    href="#/active"
-                    name="active"
-                  >
-                    Active
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    className={cn({ selected: filterSelected === 'completed' })}
-                    onClick={this.clickHandler}
-                    href="#/completed"
-                    name="completed"
-                  >
-                    Completed
-                  </a>
-                </li>
-              </ul>
-              {todos.some(todo => todo.done === true)
-                && (
-                  <button
-                    type="button"
-                    className="clear-completed"
-                    onClick={this.clearCompleted}
-                  >
-                    Clear completed
-                  </button>
-                )}
-            </footer>
           ) : null}
       </section>
     );

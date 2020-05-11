@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as cn from 'classnames';
+import cn from 'classnames';
 
 export class Todo extends React.Component {
   state = {
@@ -20,14 +20,23 @@ export class Todo extends React.Component {
   }
 
   handleChange = (event) => {
-    this.setState({
-      currentValue: event.target.value,
-    });
+    if (event.target.value.trim().length !== 0) {
+      this.setState({
+        currentValue: event.target.value,
+      });
+    } else {
+      this.setState({
+        currentValue: event.target.value.trim(),
+      });
+    }
   }
 
   handleKeyPress = (event, id) => {
     if (event.key === 'Enter') {
-      this.props.onTextChanged(id, this.state.currentValue);
+      const { currentValue } = this.state;
+      const { onTextChanged } = this.props;
+
+      onTextChanged(id, currentValue);
 
       this.setState({
         currentValue: '',
