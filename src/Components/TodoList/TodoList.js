@@ -29,8 +29,10 @@ render() {
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
+        checked={todosList.every(task => task.completed)}
       />
       <label
+        checked={this.state.checked}
         htmlFor="toggle-all"
         onClick={() => {
           this.clicksIncrement();

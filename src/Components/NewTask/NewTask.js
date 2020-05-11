@@ -8,7 +8,7 @@ class TodoApp extends React.Component {
 
   handleChange = (event) => {
     this.setState({
-      inputData: event.target.value.trimLeft(),
+      inputData: event.target.value.trim(),
     });
   }
 

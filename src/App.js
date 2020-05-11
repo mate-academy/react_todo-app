@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoApp from './Components/TodoApp/TodoApp';
+import NewTask from './Components/NewTask/NewTask';
 import TodoList from './Components/TodoList/TodoList';
 import TodosFilter from './Components/TodosFilter/TodosFilter';
 
@@ -62,7 +62,7 @@ class App extends React.Component {
 
   handleTaskRemover = (taskId) => {
     this.setState(prev => ({
-      todos: [...prev.todos].filter(task => +taskId !== task.id),
+      todos: prev.todos.filter(task => +taskId !== task.id),
     }));
   }
 
@@ -112,7 +112,7 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <TodoApp
+        <NewTask
           handleSubmit={this.handleSubmit}
         />
         {tasksListLength !== 0 && (
