@@ -7,6 +7,7 @@ class App extends React.Component {
   state = {
     todos: [],
     todoFilter: 'All',
+    toggleAll: true,
   }
 
   addTodo = (todo) => {
@@ -46,7 +47,17 @@ class App extends React.Component {
 
   deleteCompleted = (id) => {
     this.setState(state => ({
-      todos: state.todos.filter(item => item.completed !== true),
+      todos: state.todos.filter(item => !item.completed),
+    }));
+  }
+
+  markAll = () => {
+    this.setState(state => ({
+      todos: state.todos.map(item => ({
+        ...item,
+        completed: state.toggleAll,
+      })),
+      toggleAll: !state.toggleAll,
     }));
   }
 
@@ -74,15 +85,20 @@ class App extends React.Component {
                 items={todos}
                 doneTask={this.doneTask}
                 deleteTodo={this.deleteTodo}
+                markAll={this.markAll}
               />
             )}
         </section>
-        <TodosFilter
-          item={todos.filter(item => !item.completed).length}
-          handlFilter={this.handlFilter}
-          filter={this.state.todoFilter}
-          deleteCompleted={this.deleteCompleted}
-        />
+        {this.state.todos.filter(item => item).length >= 1 ? (
+          <TodosFilter
+            item={todos.filter(item => !item.completed).length}
+            completed={todos.filter(item => item.completed).length}
+            handlFilter={this.handlFilter}
+            filter={this.state.todoFilter}
+            deleteCompleted={this.deleteCompleted}
+          />
+        ) : ''}
+
       </section>
     );
   }
