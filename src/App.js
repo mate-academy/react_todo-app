@@ -10,6 +10,18 @@ class App extends React.Component {
     editMode: false,
   }
 
+  componentDidMount() {
+    const init = JSON.parse(localStorage.getItem('todoApp'));
+
+    if (init) {
+      this.setState({ ...init });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todoApp', JSON.stringify(this.state));
+  }
+
   setTodoTitle = (id, title) => {
     this.setState(prev => ({
       todos: prev.todos.map((todo) => {
