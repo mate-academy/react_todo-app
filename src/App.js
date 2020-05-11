@@ -124,17 +124,6 @@ class App extends React.Component {
                 toggleActiveTasks={this.toggleActiveTasks}
               />
             ))}
-            {/* <li>
-              <a href="#/" className="selected">All</a>
-            </li>
-
-            <li>
-              <a href="#/active">Active</a>
-            </li>
-
-            <li>
-              <a href="#/completed">Completed</a>
-            </li> */}
           </ul>
 
           <button
