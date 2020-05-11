@@ -139,24 +139,26 @@ class App extends React.PureComponent {
             />
           )}
         </section>
-
-        <footer className="footer">
-          <span className="todo-count">
-            {this.state.todos.filter(todo => !todo.completed).length}
-            items left
-          </span>
-          <TodosFilter
-            onFilter={this.handleFilter}
-            filter={filter !== undefined ? filter : ''}
-          />
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.handleClearCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
+        {todos.length !== 0
+        && (
+          <footer className="footer">
+            <span className="todo-count">
+              {this.state.todos.filter(todo => !todo.completed).length}
+              items left
+            </span>
+            <TodosFilter
+              onFilter={this.handleFilter}
+              filter={filter !== undefined ? filter : ''}
+            />
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={this.handleClearCompleted}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </section>
     );
   }
