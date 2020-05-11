@@ -29,7 +29,7 @@ class Header extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const { addTodoItem, todos } = this.props;
+    const { addTodoItem } = this.props;
     const { title } = this.state;
 
     if (title.trim()) {

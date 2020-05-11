@@ -9,7 +9,9 @@ const todos = [];
 export default class App extends React.Component {
   state = {
     todos: [...todos],
-
+    counter: 0,
+    count: 0,
+    filter: 'all',
   }
   deleteTodo = (id) => {
     const index = this.state.todos.findIndex((el) => el.id === id);
@@ -18,7 +20,6 @@ export default class App extends React.Component {
       ...this.state.todos.slice(0, index),
       ...this.state.todos.slice(index + 1)
     ];
-
     this.setState({
       todos: newArray
     });
@@ -45,25 +46,52 @@ export default class App extends React.Component {
     });
   };
 
+  onFilterChange = (filter) => {
+    this.setState({
+      filter: filter,
+    });
+  };
+
+  removeCompleted = () => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos].filter(todo => !todo.completed),
+    }));
+  }
+
   render() {
-    const { todos } = this.state;
+    const { todos, filter } = this.state;
+
+    // const comletedStatus = todos.length === 0
+    // ? false
+    // : todos.every(todo => todo.completed);
+
+    const counter = todos.filter(todo => !todo.comleted).length;
+    const count = todos.filter(todo => todo.comleted).length;
 
     return (
       <section className="todoapp">
-
         <Header
           todos={todos}
           addTodoItem={this.addTodoItem}
-
         />
         <TodoList
           todos={todos}
+          filter={filter}
+          //comletedStatus={comletedStatus}
           deleteTodo={this.deleteTodo}
           onClickCompleted={this.onClickCompleted}
+          onAllSelected={this.onAllSelected}
+          //onFilterChange={this.onFilterChange}
         />
-        <Filter />
+        <Filter
+          todos={todos}
+          counter={counter}
+          count={count}
+          filter={filter}
+          onFilterChange={this.onFilterChange}
+          removeCompleted = {this.removeCompleted}
+        />
       </section>
-
     )
   }
 }

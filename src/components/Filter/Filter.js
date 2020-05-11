@@ -1,33 +1,55 @@
 import React from 'react';
 
 class Filter extends React.Component {
+  state = {
+    // counter: this.counter,
+  }
+
+  buttons = [
+    { name: "all", label: "All" },
+    { name: "done", label: "Done" },
+    { name: "active", label: "Active" },
+  ]
+  onFilterChange = (e) =>{
+    e.preventDefault();
+    console.log('По ссылке кликнули.');
+  }
+
+
   render() {
+    const { filter, onFilterChange, removeCompleted } = this.props;
+    const buttons = this.buttons.map(({ name, label }) => {
+      const isActive = filter === name;
+     const classNames = isActive ? "selected" : '';
+      return (
+        <li key={name}  onClick={() => onFilterChange(name)}>
+          <a className={classNames}>
+            {label}
+          </a>
+        </li>
+      )
+    })
     return (
       <footer className="footer">
         <span className="todo-count">
-          3 items left
-              </span>
-
+          {` to do: `}
+          {this.props.counter}
+          {`, done: `}
+          {this.props.count}
+        </span>
         <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
+          {buttons}
         </ul>
-
-        <button type="button" className="clear-completed">
+        <button type="button" className="clear-completed"
+          onClick={removeCompleted}
+        >
           Clear completed
               </button>
       </footer>
     )
   }
 }
+
+
 
 export default Filter;

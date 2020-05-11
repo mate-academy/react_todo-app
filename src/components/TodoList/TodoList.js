@@ -6,8 +6,22 @@ class TodoList extends React.Component {
     todos: this.props.todos
   }
 
+  filter(filter) {
+    switch (filter) {
+      case 'active':
+       return this.props.todos.filter(todo => !todo.comleted);
+       // console.log('2')
+      case 'done':
+         return this.props.todos.filter(todo => todo.comleted);
+       // console.log('3')
+      default:
+        return this.props.todos;
+    }
+  }
   render() {
-    let todoList = this.props.todos.map(todo => {
+    const {filter} = this.props;
+
+    let todoList = this.filter(filter).map(todo => {
       return <TodoListItem
         key={('todo_item_' + todo.id)}
         todoListItem={todo}
