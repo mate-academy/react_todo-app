@@ -18,7 +18,9 @@ const TodoList = ({ editTodo, todos, onItemClick, deleteItem }) => (
 
 TodoList.propTypes = {
   editTodo: PropTypes.func.isRequired,
-  todos: PropTypes.arrayOf.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  })).isRequired,
   onItemClick: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
 };

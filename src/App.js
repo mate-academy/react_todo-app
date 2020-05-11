@@ -4,12 +4,23 @@ import TodoList from './components/TodoList';
 import NewTodo from './components/NewTodo';
 import TodosFilter from './components/TodosFilter';
 
-const todosArr = [];
-
 class App extends Component {
   state = {
-    todos: todosArr,
+    todos: [],
     filter: 'all',
+  }
+
+  componentDidMount() {
+    if (localStorage.todos) {
+      this.setState({
+        todos: JSON.parse(localStorage.todos),
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todos',
+      JSON.stringify(this.state.todos));
   }
 
   addNewTodo = (value) => {
@@ -57,22 +68,14 @@ class App extends Component {
   }
 
   deleteItem = (id) => {
-    this.setState(({ todos }) => {
-      const idx = todos.findIndex(todo => todo.id === id);
-      const newTodos = [
-        ...todos.slice(0, idx),
-        ...todos.slice(idx + 1),
-      ];
-
-      return {
-        todos: newTodos,
-      };
-    });
+    this.setState(({ todos }) => ({
+      todos: todos.filter(todo => todo.id !== id),
+    }));
   }
 
   clearCompleted = () => {
     this.setState(({ todos }) => {
-      const clearCompleted = todos.filter(todo => todo.completed === false);
+      const clearCompleted = todos.filter(todo => !todo.completed);
 
       return {
         todos: clearCompleted,
@@ -120,8 +123,8 @@ class App extends Component {
 
   render() {
     const { todos, filter } = this.state;
-    const remainTask = todos.filter(todo => todo.completed === false).length;
-    const visibleItem = this.filterStatus(todos, filter);
+    const remainingTasks = todos.filter(todo => !todo.completed).length;
+    const visibleTodos = this.filterStatus(todos, filter);
 
     return (
       <section className="todoapp">
@@ -135,7 +138,7 @@ class App extends Component {
             onChange={this.handleToogleAll}
             type="checkbox"
             id="toggle-all"
-            checked={remainTask === 0}
+            checked={remainingTasks === 0 && visibleTodos.length > 0}
             className="toggle-all"
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -143,13 +146,13 @@ class App extends Component {
             onItemClick={this.changeCompleted}
             deleteItem={this.deleteItem}
             editTodo={this.editTodo}
-            todos={visibleItem}
+            todos={visibleTodos}
           />
         </section>
 
         <footer className="footer">
           <span className="todo-count">
-            {remainTask}
+            {remainingTasks}
             {' '}
             items left
           </span>
