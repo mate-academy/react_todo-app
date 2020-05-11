@@ -3,23 +3,20 @@ import TodoApp from './Components/TodoApp/TodoApp';
 import TodoList from './Components/TodoList/TodoList';
 import TodosFilter from './Components/TodosFilter/TodosFilter';
 
-const todos = [
-  {
-    title: 'Clean a car',
-    id: 1,
-    completed: false,
-  },
-  {
-    title: 'Go to the gym',
-    id: 2,
-    completed: false,
-  },
-];
+const tasksArr = localStorage.getItem('todos')
+  ? JSON.parse(localStorage.getItem('todos'))
+  : [];
 
 class App extends React.Component {
   state = {
-    todos: [...todos],
+    todos: [...tasksArr],
     filtrationType: '',
+  }
+
+  componentDidUpdate() {
+    const { todos } = this.state;
+
+    localStorage.setItem('todos', JSON.stringify(todos));
   }
 
   handleSubmit = (newTask) => {

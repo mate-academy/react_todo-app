@@ -36,7 +36,9 @@ class TodoItem extends React.Component {
         })}
 
         onDoubleClick={(e) => {
-          this.setState({ actualTodoData: todo.title });
+          this.setState({
+            actualTodoData: todo.title,
+          });
           this.setEditField(e.target.id);
         }}
       >
@@ -62,7 +64,7 @@ class TodoItem extends React.Component {
           />
         </div>
         <input
-          ref={input => input && input.focus()}
+          ref={input => input && input.focus()} // how works??
           type="text"
           className="edit"
           value={this.state.actualTodoData}
@@ -79,6 +81,9 @@ class TodoItem extends React.Component {
               updateTask(actualTodoData, editingId);
               this.hideEditField();
             } else if (e.keyCode === 27) {
+              this.setState({
+                actualTodoData: todo.title,
+              });
               this.hideEditField();
             }
           }}
