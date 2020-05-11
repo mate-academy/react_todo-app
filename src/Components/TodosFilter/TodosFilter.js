@@ -4,21 +4,11 @@ import cn from 'classnames';
 
 class TodosFilter extends React.Component {
   state = {
-    activeFilter: 'all',
-  };
-
-  extractFilter = (href) => {
-    const res = href.split('/');
-
-    return res[res.length - 1];
+    activeFilter: 'All',
   };
 
   setActiveFilter = (filter) => {
-    if (filter === '') {
-      this.setState({ activeFilter: 'all' });
-    } else {
-      this.setState({ activeFilter: filter });
-    }
+    this.setState({ activeFilter: filter });
   }
 
   render() {
@@ -43,14 +33,13 @@ class TodosFilter extends React.Component {
             <a
               href="#/"
               className={cn({
-                selected: activeFilter === 'all',
+                selected: activeFilter === 'All',
               })}
               onClick={(e) => {
-                const { href } = e.target;
+                const { text } = e.target;
 
-                this.setActiveFilter(this.extractFilter(href));
-
-                return filterSelector(this.extractFilter(href));
+                this.setActiveFilter(text);
+                filterSelector(activeFilter);
               }}
             >
               All
@@ -60,15 +49,14 @@ class TodosFilter extends React.Component {
           <li>
             <a
               className={cn({
-                selected: activeFilter === 'active',
+                selected: activeFilter === 'Active',
               })}
               href="#/active"
               onClick={(e) => {
-                const { href } = e.target;
+                const { text } = e.target;
 
-                this.setActiveFilter(this.extractFilter(href));
-
-                return filterSelector(this.extractFilter(href));
+                this.setActiveFilter(text);
+                filterSelector(activeFilter);
               }}
             >
               Active
@@ -78,15 +66,14 @@ class TodosFilter extends React.Component {
           <li>
             <a
               className={cn({
-                selected: activeFilter === 'completed',
+                selected: activeFilter === 'Completed',
               })}
               href="#/completed"
               onClick={(e) => {
-                const { href } = e.target;
+                const { text } = e.target;
 
-                this.setActiveFilter(this.extractFilter(href));
-
-                return filterSelector(this.extractFilter(href));
+                this.setActiveFilter(text);
+                filterSelector(activeFilter);
               }}
             >
               Completed
@@ -98,7 +85,6 @@ class TodosFilter extends React.Component {
             type="button"
             className="clear-completed"
             onClick={removeCheckedTasks}
-
           >
             Clear completed
           </button>

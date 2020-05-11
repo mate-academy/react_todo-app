@@ -46,10 +46,10 @@ class App extends React.Component {
 
   filterByPattern = () => {
     switch (this.state.filtrationType) {
-      case 'active':
+      case 'Active':
         return this.state.todos.filter(task => !task.completed);
 
-      case 'completed':
+      case 'Completed':
         return this.state.todos.filter(task => task.completed);
 
       default:
