@@ -8,7 +8,7 @@ class TodoApp extends React.Component {
 
   handleChange = (event) => {
     this.setState({
-      inputData: event.target.value.trimLeft(),
+      inputData: event.target.value,
     });
   }
 
@@ -27,7 +27,7 @@ class TodoApp extends React.Component {
           e.preventDefault();
           const taskObj = {
             id: +new Date(),
-            title: inputData,
+            title: inputData.trim(),
             completed: false,
           };
 

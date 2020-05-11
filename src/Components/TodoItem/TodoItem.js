@@ -24,6 +24,24 @@ class TodoItem extends React.Component {
     this.setState({ isEditing: false });
   }
 
+  checkClickedKey = (keyName, keyCode) => {
+    const { editingId, actualTodoData } = this.state;
+    const { updateTask, todo, handleTaskRemover } = this.props;
+
+    if (keyName === 'Enter' && actualTodoData.length === 0) {
+      handleTaskRemover(editingId);
+      this.hideEditField();
+    } else if (keyName === 'Enter') {
+      updateTask(actualTodoData, editingId);
+      this.hideEditField();
+    } else if (keyCode === 27) {
+      this.setState({
+        actualTodoData: todo.title,
+      });
+      this.hideEditField();
+    }
+  }
+
   render() {
     const { todo, statusHandler, handleTaskRemover, updateTask } = this.props;
     const { actualTodoData, editingId } = this.state;
@@ -73,19 +91,9 @@ class TodoItem extends React.Component {
           }}
           onKeyDown={(e) => {
             const currentKey = e.key;
+            const currentKeyCode = e.keyCode;
 
-            if (currentKey === 'Enter' && actualTodoData.length === 0) {
-              handleTaskRemover(editingId);
-              this.hideEditField();
-            } else if (currentKey === 'Enter') {
-              updateTask(actualTodoData, editingId);
-              this.hideEditField();
-            } else if (e.keyCode === 27) {
-              this.setState({
-                actualTodoData: todo.title,
-              });
-              this.hideEditField();
-            }
+            this.checkClickedKey(currentKey, currentKeyCode);
           }}
           onBlur={() => {
             updateTask(actualTodoData, editingId);
