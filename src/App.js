@@ -96,15 +96,17 @@ class TodoApp extends React.Component {
   }
 
   filterTodoList = () => {
-    if (this.state.filter === 'active') {
-      return this.state.todos.filter(todo => !todo.completed);
+    const { filter, todos } = this.state;
+
+    if (filter === 'active') {
+      return todos.filter(todo => !todo.completed);
     }
 
-    if (this.state.filter === 'completed') {
-      return this.state.todos.filter(todo => todo.completed);
+    if (filter === 'completed') {
+      return todos.filter(todo => todo.completed);
     }
 
-    return this.state.todos;
+    return todos;
   }
 
   render() {
