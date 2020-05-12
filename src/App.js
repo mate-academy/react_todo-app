@@ -164,26 +164,28 @@ class App extends Component {
           )}
 
         </section>
+        {todos.length !== 0
+        && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${counter} items left`}
+            </span>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${counter} items left`}
-          </span>
+            <FilterList
+              listItems={listItems}
+              currentFilter={currentFilter}
+              filterCurrentValue={this.filterCurrentValue}
+            />
 
-          <FilterList
-            listItems={listItems}
-            currentFilter={currentFilter}
-            filterCurrentValue={this.filterCurrentValue}
-          />
-
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.clearCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={this.clearCompleted}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </section>
     );
   }
