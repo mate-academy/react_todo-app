@@ -111,6 +111,7 @@ export class TodoApp extends React.Component {
                 id="toggle-all"
                 className="toggle-all"
                 onClick={this.handleToggleAll}
+                checked={todoList.every(todo => todo.completed)}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
             </>
