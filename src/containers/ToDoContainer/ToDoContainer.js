@@ -145,7 +145,7 @@ export class ToDoContainer extends Component {
         {todos.length > 0 && (
           <>
             <Main
-              todos={todos}
+              {...{ todos }}
               visibleTodos={visibleTodos}
               onToggleAllCompleted={this.toggleAllCompleted}
               onToggleTodoCompleted={this.toggleTodoCompleted}
@@ -156,7 +156,7 @@ export class ToDoContainer extends Component {
             />
 
             <Footer
-              todos={todos}
+              {...{ todos }}
               onSetFilter={this.setFilter}
               currentFilter={selectedFilter}
               onClearCompleted={this.handleClearCompleted}
