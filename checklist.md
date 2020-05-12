@@ -8,6 +8,7 @@
 6. Functions names should describe the result, and use verbs for this.
 Bad: `newTodo`, `title`
 Good `addTodo`, `setTitle`
+7. Use `classnames` lib for calculated classes.
 
 #### Task checklist.
 1. App.js code should be split into several components like Header, TodoList, Footer.
