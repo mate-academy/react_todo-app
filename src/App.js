@@ -121,16 +121,14 @@ class App extends React.Component {
       todos,
     } = this.state;
 
-    let Tasks = [...todos];
-    const activeTasks = Tasks.filter(todo => !todo.completed);
-    const completeTasks = Tasks.filter(todo => todo.completed);
+    let tasks = [...todos];
 
     if (filter === 'active') {
-      Tasks = activeTasks;
+      tasks = todos.filter(todo => !todo.completed);
     }
 
     if (filter === 'completed') {
-      Tasks = completeTasks;
+      tasks = todos.filter(todo => todo.completed);
     }
 
     return (
@@ -164,7 +162,7 @@ class App extends React.Component {
           )}
 
           <TodoList
-            todos={Tasks}
+            todos={tasks}
             removeTodo={this.removeTodo}
             changeComplete={this.changeComplete}
             editTitle={this.editTitle}
@@ -173,9 +171,9 @@ class App extends React.Component {
         {todos.length > 0 && (
           <footer className="footer">
             <span className="todo-count">
-              {activeTasks.length === 1
-                ? `${activeTasks.length} todo left`
-                : `${activeTasks.length} todos left`
+              {tasks.length === 1
+                ? `${tasks.length} todo left`
+                : `${tasks.length} todos left`
               }
             </span>
 
@@ -212,7 +210,7 @@ class App extends React.Component {
                 </a>
               </li>
             </ul>
-            {completeTasks.length > 0 && (
+            {tasks.length > 0 && (
               <button
                 type="button"
                 className="clear-completed"
