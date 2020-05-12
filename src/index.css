@@ -14,6 +14,7 @@ button {
   font-family: inherit;
   font-weight: inherit;
   color: inherit;
+  cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
   -webkit-font-smoothing: antialiased;
@@ -39,11 +40,6 @@ li button {
 
 :focus {
   outline: 0;
-}
-
-.selected {
-  border: 1px solid #cc9a9a;
-  border-radius: 10px;
 }
 
 .hidden {
@@ -311,7 +307,7 @@ li button {
   display: inline;
 }
 
-.filters li a {
+.filters li button {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
@@ -320,11 +316,11 @@ li button {
   border-radius: 3px;
 }
 
-.filters li a:hover {
+.filters li button:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.filters li button.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
