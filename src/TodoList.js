@@ -9,6 +9,7 @@ const TodoList = ({ items, doneTask, deleteTodo, markAll }) => (
       id="toggle-all"
       className="toggle-all"
       onClick={markAll}
+      checked={items.every(item => item.completed)}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
     <ul className="todo-list">
