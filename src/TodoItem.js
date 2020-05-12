@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 const TodoItem = ({ todo, changeComplete, deleteTodo }) => {
   const { id, title, completed } = todo;
 
   return (
-    <li>
+    <li className={classNames({
+      completed,
+    })}
+    >
       <div className="view">
         <input
           type="checkbox"
