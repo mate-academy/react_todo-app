@@ -7,7 +7,8 @@ const Footer = (props) => {
     clearCompletedTodo,
     changeVisibleList,
     currentFilter,
-    hideClearButton } = props;
+    hideClearButton }
+    = props;
 
   return (
     <>

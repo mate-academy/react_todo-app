@@ -9,12 +9,12 @@ const TodoList = (props) => {
     todos,
     deleteTodo,
     editTodo,
-    changeTodoStatus,
-    hideOnStart } = props;
+    changeTodoStatus }
+    = props;
 
   return (
     <>
-      {hideOnStart && (
+      {todos.length > 0 && (
         <form>
           <input
             type="checkbox"
@@ -59,6 +59,5 @@ TodoList.propTypes = {
   changeTodoStatus: PropTypes.func.isRequired,
   markAllTodo: PropTypes.func.isRequired,
   selectAllButton: PropTypes.bool.isRequired,
-  hideOnStart: PropTypes.bool.isRequired,
   editTodo: PropTypes.func.isRequired,
 };

@@ -1,47 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FILTERS } from './filters';
+import Filter from './Filter';
 
 const TodosFilter = (props) => {
   const { changeVisibleList,
     clearCompletedTodo,
     currentFilter,
-    hideClearButton } = props;
+    hideClearButton }
+    = props;
 
   return (
 
     <>
       <ul className="filters">
-        <li>
-          <a
-            href="#/"
-            className={currentFilter === FILTERS.all && 'selected'}
-            onClick={() => changeVisibleList(FILTERS.all)}
-          >
-            All
-          </a>
-
-        </li>
-
-        <li>
-          <a
-            className={currentFilter === FILTERS.active ? 'selected' : ''}
-            href="#/active"
-            onClick={() => changeVisibleList(FILTERS.active)}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            className={currentFilter === FILTERS.completed ? 'selected' : ''}
-            href="#/completed"
-            onClick={() => changeVisibleList(FILTERS.completed)}
-          >
-            Completed
-          </a>
-        </li>
+        {Object.values(FILTERS).map(filter => (
+          <li key={filter}>
+            <Filter
+              filter={filter}
+              changeVisibleList={changeVisibleList}
+              currentFilter={currentFilter}
+            />
+          </li>
+        ))}
 
       </ul>
       {hideClearButton && (

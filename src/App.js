@@ -91,29 +91,30 @@ class App extends React.Component {
     });
   }
 
+  getFilteredTodos = (filter, todosList) => {
+    if (filter === FILTERS.active) {
+      return todosList.filter(todo => !todo.completed);
+    }
+
+    if (filter === FILTERS.completed) {
+      return todosList.filter(todo => todo.completed);
+    }
+
+    return todosList;
+  }
+
+  selectAllButton = (todosList) => {
+    if (this.checkCompletedAll(todosList) && todosList.length > 0) {
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
     const { todosList, currentFilter } = this.state;
 
-    let preparedTodos = todosList;
-    let selectAllButton;
-    let hideOnStart;
-    const hideClearButton = preparedTodos.some(todo => todo.completed === true);
-
-    preparedTodos.length > 0 ? hideOnStart = true : hideOnStart = false;
-
-    if (this.checkCompletedAll(preparedTodos) && todosList.length > 0) {
-      selectAllButton = true;
-    } else {
-      selectAllButton = false;
-    }
-
-    if (currentFilter === FILTERS.active) {
-      preparedTodos = preparedTodos.filter(todo => !todo.completed);
-    }
-
-    if (currentFilter === FILTERS.completed) {
-      preparedTodos = preparedTodos.filter(todo => todo.completed);
-    }
+    const hideClearButton = todosList.some(todo => todo.completed === true);
 
     return (
       <section className="todoapp">
@@ -122,16 +123,15 @@ class App extends React.Component {
         <section className="main">
 
           <TodoList
-            todos={preparedTodos}
+            todos={this.getFilteredTodos(currentFilter, todosList)}
             deleteTodo={this.deleteTodo}
             editTodo={this.editTodo}
             changeTodoStatus={this.changeTodoStatus}
             markAllTodo={this.markAllTodo}
-            selectAllButton={selectAllButton}
-            hideOnStart={hideOnStart}
+            selectAllButton={this.selectAllButton(todosList)}
           />
         </section>
-        {hideOnStart && (
+        {todosList.length > 0 && (
           <Footer
             todosList={todosList}
             hideClearButton={hideClearButton}
