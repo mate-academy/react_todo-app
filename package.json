@@ -30,7 +30,7 @@
     "lint-css": "stylelint src/**/*.css src/**/*.scss --fix",
     "lint": "npm run lint-js && npm run lint-css",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "node ./node_modules/gh-pages/bin/gh-pages.js -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
