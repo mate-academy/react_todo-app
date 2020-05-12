@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 
 import TodoList from './components/TodoList';
 import NewTodo from './components/NewTodo';
-import TodosFilter from './components/TodosFilter';
+import { TodosFilter, FILTERS } from './components/TodosFilter';
 
 class App extends Component {
   state = {
     todos: [],
-    filter: 'all',
+    filter: FILTERS.all,
   }
 
   componentDidMount() {
@@ -150,22 +150,24 @@ class App extends Component {
           />
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {remainingTasks}
-            {' '}
-            items left
-          </span>
-          <TodosFilter clickFilter={this.clickFilter} filter={filter} />
+        {visibleTodos.length ? (
+          <footer className="footer">
+            <span className="todo-count">
+              {remainingTasks}
+              {' '}
+              items left
+            </span>
+            <TodosFilter clickFilter={this.clickFilter} filter={filter} />
 
-          <button
-            type="button"
-            onClick={this.clearCompleted}
-            className="clear-completed"
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              type="button"
+              onClick={this.clearCompleted}
+              className="clear-completed"
+            >
+              Clear completed
+            </button>
+          </footer>
+        ) : null }
       </section>
     );
   }

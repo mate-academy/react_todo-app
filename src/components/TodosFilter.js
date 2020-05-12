@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class TodosFilter extends Component {
+export const FILTERS = {
+  all: 'All',
+  completed: 'Completed',
+  active: 'Active',
+};
+
+export class TodosFilter extends Component {
   buttons = [
     {
       name: 'all', label: 'All',
@@ -24,7 +30,7 @@ class TodosFilter extends Component {
 
     return (
       <ul className="filters">
-        {this.buttons.map(({ name, label }) => (
+        {Object.keys(FILTERS).map(name => (
           <li key={name}>
             <a
               href={`#${name}`}
@@ -32,11 +38,10 @@ class TodosFilter extends Component {
               className={filter === name ? 'selected' : null}
               onClick={this.clickFilter}
             >
-              {label}
+              {FILTERS[name]}
             </a>
           </li>
-        ))
-        }
+        ))}
       </ul>
     );
   }
@@ -46,5 +51,3 @@ TodosFilter.propTypes = {
   clickFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };
-
-export default TodosFilter;
