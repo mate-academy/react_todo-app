@@ -30,8 +30,6 @@ export class TodoApp extends React.Component {
     this.setState(state => ({
       todoList: state.todoList.map((todo) => {
         if (todo.id === id) {
-          this.checkIfSomeCompleted();
-
           return ({
             ...todo,
             completed: !todo.completed,
@@ -40,7 +38,7 @@ export class TodoApp extends React.Component {
 
         return todo;
       }),
-    }));
+    }), () => this.checkIfSomeCompleted());
   }
 
   handleToggleAll = () => {
@@ -55,9 +53,7 @@ export class TodoApp extends React.Component {
           }
         ))],
       }
-    ));
-
-    this.checkIfSomeCompleted();
+    ), () => this.checkIfSomeCompleted());
   }
 
   handleChangeViewStatus = (status) => {
@@ -87,9 +83,7 @@ export class TodoApp extends React.Component {
   clearCompletedTodos = () => {
     this.setState(state => ({
       todoList: state.todoList.filter(todo => !todo.completed),
-    }));
-
-    this.checkIfSomeCompleted();
+    }), () => this.checkIfSomeCompleted());
   }
 
   render() {
@@ -110,7 +104,7 @@ export class TodoApp extends React.Component {
                 type="checkbox"
                 id="toggle-all"
                 className="toggle-all"
-                onClick={this.handleToggleAll}
+                onChange={this.handleToggleAll}
                 checked={todoList.every(todo => todo.completed)}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
