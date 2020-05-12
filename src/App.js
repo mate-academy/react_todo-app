@@ -67,9 +67,9 @@ class App extends React.Component {
     });
   }
 
-  handleChangeFilter = (event) => {
+  handleChangeFilter = (filter) => {
     this.setState({
-      typeOfFilter: event,
+      typeOfFilter: filter,
     });
   }
 
