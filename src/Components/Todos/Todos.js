@@ -7,9 +7,7 @@ class Todos extends React.Component {
   state = {
     todos: [],
     allCompleted: false,
-    isAll: true,
-    isActive: false,
-    isCompleted: false,
+    showTodos: 'all',
   };
 
   handleAddTodo = (todo) => {
@@ -48,7 +46,7 @@ class Todos extends React.Component {
   handleAllCompleted = () => {
     const { todos, allCompleted } = this.state;
 
-    const firstClick = () => {
+    const makeAllCompleted = () => {
       const completedTodos = todos.map((todo) => {
         if (todo.completed === false) {
           return {
@@ -66,7 +64,7 @@ class Todos extends React.Component {
       });
     };
 
-    const secondClick = () => {
+    const makeAllActive = () => {
       const activeTodos = todos.map((todo) => {
         if (todo.completed === true) {
           return {
@@ -84,7 +82,7 @@ class Todos extends React.Component {
       });
     };
 
-    !allCompleted ? firstClick() : secondClick();
+    !allCompleted ? makeAllCompleted() : makeAllActive();
   }
 
   handleDeleteAllCompleted = () => {
@@ -95,45 +93,35 @@ class Todos extends React.Component {
     });
   }
 
-  handleActiveFiltering = () => {
-    this.setState({
-      isAll: false,
-      isActive: true,
-      isCompleted: false,
-    });
-  }
-
-  handleCompletedFiltering = () => {
-    this.setState({
-      isAll: false,
-      isActive: false,
-      isCompleted: true,
-    });
-  }
-
-  handleAllFiltering = () => {
-    this.setState({
-      isAll: true,
-      isActive: false,
-      isCompleted: false,
-    });
+  handleShowTodosFiltering = (status) => {
+    if (status === 'all') {
+      this.setState({
+        showTodos: 'all',
+      });
+    } else if (status === 'active') {
+      this.setState({
+        showTodos: 'active',
+      });
+    } else if (status === 'completed') {
+      this.setState({
+        showTodos: 'completed',
+      });
+    }
   }
 
   render() {
     const {
       todos,
-      isAll,
-      isActive,
-      isCompleted,
+      showTodos,
     } = this.state;
 
-    let visibleTodos = [...todos];
+    let visibleTodos;
 
-    if (!isAll && isActive && !isCompleted) {
+    if (showTodos === 'all') {
+      visibleTodos = [...todos];
+    } else if (showTodos === 'active') {
       visibleTodos = todos.filter(todo => todo.completed === false);
-    }
-
-    if (!isAll && !isActive && isCompleted) {
+    } else if (showTodos === 'completed') {
       visibleTodos = todos.filter(todo => todo.completed === true);
     }
 
@@ -155,13 +143,9 @@ class Todos extends React.Component {
           {todos.length > 0 && (
             <Footer
               todos={todos}
-              isAll={isAll}
-              isActive={isActive}
-              isCompleted={isCompleted}
+              showTodos={showTodos}
+              showTodoStatus={this.handleShowTodosFiltering}
               deleteAllCompleted={this.handleDeleteAllCompleted}
-              showAll={this.handleAllFiltering}
-              showActive={this.handleActiveFiltering}
-              showCompleted={this.handleCompletedFiltering}
             />
           )}
 

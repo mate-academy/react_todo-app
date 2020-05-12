@@ -5,21 +5,19 @@ import classNames from 'classnames';
 const Footer = (props) => {
   const {
     todos,
+    showTodos,
+    showTodoStatus,
     deleteAllCompleted,
-    showActive,
-    isAll,
-    isActive,
-    isCompleted,
-    showCompleted,
-    showAll,
   } = props;
 
   const completedTodos = todos.some(todo => todo.completed === true);
   const todoCount = todos.filter(todo => !todo.completed).length;
 
-  const allSelector = classNames({ selected: isAll });
-  const activeSelector = classNames({ selected: isActive });
-  const completedSelector = classNames({ selected: isCompleted });
+  const allSelector = classNames({ selected: (showTodos === 'all') });
+  const activeSelector = classNames({ selected: (showTodos === 'active') });
+  const completedSelector = classNames({ selected: (
+    (showTodos === 'completed')
+  ) });
 
   return (
     <footer className="footer">
@@ -32,7 +30,7 @@ const Footer = (props) => {
       <ul className="filters">
         <li>
           <a
-            onClick={showAll}
+            onClick={() => showTodoStatus('all')}
             href="#/"
             className={allSelector}
           >
@@ -42,7 +40,7 @@ const Footer = (props) => {
 
         <li>
           <a
-            onClick={showActive}
+            onClick={() => showTodoStatus('active')}
             href="#/active"
             className={activeSelector}
           >
@@ -52,7 +50,7 @@ const Footer = (props) => {
 
         <li>
           <a
-            onClick={showCompleted}
+            onClick={() => showTodoStatus('completed')}
             href="#/completed"
             className={completedSelector}
           >
@@ -82,13 +80,9 @@ Footer.propTypes = {
       completed: PropTypes.bool,
     }),
   ).isRequired,
+  showTodos: PropTypes.string.isRequired,
   deleteAllCompleted: PropTypes.func.isRequired,
-  showActive: PropTypes.func.isRequired,
-  isAll: PropTypes.bool.isRequired,
-  isActive: PropTypes.bool.isRequired,
-  isCompleted: PropTypes.bool.isRequired,
-  showCompleted: PropTypes.func.isRequired,
-  showAll: PropTypes.func.isRequired,
+  showTodoStatus: PropTypes.func.isRequired,
 };
 
 export default Footer;

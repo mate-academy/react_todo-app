@@ -11,8 +11,7 @@ const ToggleInput = ({ todos, toggleAllCompleted }) => {
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
-        checked={isAllCompleted && todos.length > 0} // fix this
-        onChange={(e) => {}}
+        checked={isAllCompleted && todos.length > 0}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
     </div>

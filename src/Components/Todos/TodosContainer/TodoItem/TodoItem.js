@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const TodoItem = ({ todo, deleteTodo, isCompleted }) => {
-  const completedClassToggle = classNames('', { completed: todo.completed });
+  const completedClassToggle = classNames({ completed: todo.completed });
 
   return (
     <li className={completedClassToggle}>
