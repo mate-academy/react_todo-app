@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoItem = ({ todo, toggledCheck, deleteCommand }) => {
+const TodoItem = ({ todo, changeComplete, deleteTodo }) => {
   const { id, title, completed } = todo;
 
   return (
@@ -12,10 +12,10 @@ const TodoItem = ({ todo, toggledCheck, deleteCommand }) => {
           className="toggle"
           checked={completed}
           id={id}
-          onChange={e => toggledCheck(e.target.checked)}
+          onChange={e => changeComplete(e.target.checked)}
         />
         <label htmlFor={id}>{title}</label>
-        <button type="button" className="destroy" onClick={deleteCommand} />
+        <button type="button" className="destroy" onClick={deleteTodo} />
       </div>
       <input type="text" className="edit" />
     </li>
@@ -28,8 +28,8 @@ TodoItem.propTypes = {
     id: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   }).isRequired,
-  deleteCommand: PropTypes.func.isRequired,
-  toggledCheck: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  changeComplete: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

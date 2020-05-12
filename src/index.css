@@ -6,7 +6,6 @@ body {
 
 button {
   margin: 0;
-  padding: 0;
   border: 0;
   background: none;
   font-size: 100%;
@@ -18,6 +17,7 @@ button {
   appearance: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 0 5px;
 }
 
 li button {
@@ -88,6 +88,11 @@ body {
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
+}
+
+.selected {
+  border: 1px solid rgba(100, 0, 15, 0.4);
+  border-radius: 5px;
 }
 
 .new-todo,

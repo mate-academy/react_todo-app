@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const TodosFilter = ({ filterTypes, filtered, filter }) => (
+const TodosFilter = ({ filterTypes, filterItem, filter }) => (
   <ul className="filters">
     {filterTypes.map(filterType => (
       <li key={filterType}>
@@ -12,7 +12,7 @@ const TodosFilter = ({ filterTypes, filtered, filter }) => (
             classNames({ selected: filter === filterType })
           }
           data-filter={filterType}
-          onClick={filtered}
+          onClick={e => filterItem(e.target.getAttribute('data-filter'))}
         >
           {filterType}
         </button>
@@ -25,11 +25,8 @@ TodosFilter.propTypes = {
   filterTypes: PropTypes.arrayOf(
     PropTypes.string.isRequired,
   ).isRequired,
-  filtered: PropTypes.func.isRequired,
-  filter: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]).isRequired,
+  filterItem: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
 
 export default TodosFilter;

@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-const TodoList = ({ todos, toggledCheck, deleteCommand }) => (
+const TodoList = ({ todos, changeComplete, deleteTodo }) => (
   <ul className="todo-list">
     {todos.map(todo => (
       <TodoItem
         key={todo.id}
         todo={todo}
-        toggledCheck={checked => toggledCheck(todo.id, checked)}
-        deleteCommand={() => deleteCommand(todo.id)}
+        changeComplete={checked => changeComplete(todo.id, checked)}
+        deleteTodo={() => deleteTodo(todo.id)}
       />
     ))}
   </ul>
@@ -23,8 +23,8 @@ TodoList.propTypes = {
       completed: PropTypes.bool.isRequired,
     }).isRequired,
   ).isRequired,
-  deleteCommand: PropTypes.func.isRequired,
-  toggledCheck: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  changeComplete: PropTypes.func.isRequired,
 };
 
 export default TodoList;

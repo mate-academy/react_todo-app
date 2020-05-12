@@ -1,102 +1,71 @@
 import React from 'react';
-import TodoList from './components/TodoList';
-import TodosFilter from './components/TodosFilter';
-import NewTodo from './components/NewTodo';
+import TodoList from './TodoList';
+import TodosFilter from './TodosFilter';
+import NewTodo from './NewTodo';
 
 const filterTypes = ['All', 'Active', 'Completed'];
-
-const filterTodos = (todos, filter) => {
-  if (filter === 'Active') {
-    return todos.filter(todo => todo.completed === false);
-  }
-
-  if (filter === 'Completed') {
-    return todos.filter(todo => todo.completed === true);
-  }
-
-  return todos;
-};
 
 class App extends React.Component {
   state = {
     todos: [],
-    visibleTodos: [],
     filter: 'All',
   }
 
   addTodo = (todo) => {
-    const { filter, todos } = this.state;
+    const { todos } = this.state;
 
     this.setState(() => {
       const allTodos = [...todos, todo];
 
       return {
         todos: allTodos,
-        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
 
-  toggledCheck = (id, checked) => {
-    const { filter } = this.state;
-
+  changeComplete = (id) => {
     this.setState((prevState) => {
       const allTodos = prevState.todos.map(todo => (
         todo.id === id
           ? {
-            ...todo, completed: checked,
+            ...todo, completed: !todo.completed,
           }
           : todo
       ));
 
       return {
         todos: allTodos,
-        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
 
-  filtered = (evt) => {
-    const filter = evt.target.getAttribute('data-filter');
-    const { todos } = this.state;
-
-    this.setState(() => {
-      const allTodos = [...todos];
-
-      return {
-        visibleTodos: filterTodos(allTodos, filter),
-        filter,
-      };
-    });
+  filterItem = (filter) => {
+    this.setState(() => ({
+      filter,
+    }));
   }
 
-  deleteCommand = (todoId) => {
-    const { filter } = this.state;
-
+  deleteTodo = (todoId) => {
     this.setState((prevState) => {
       const allTodos = prevState.todos.filter(todo => todo.id !== todoId);
 
       return {
         todos: allTodos,
-        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
 
   clearCompleted = () => {
-    const { filter } = this.state;
-
     this.setState((prevState) => {
       const allTodos = prevState.todos.filter(todo => !todo.completed);
 
       return {
         todos: allTodos,
-        visibleTodos: filterTodos(allTodos, filter),
       };
     });
   }
 
-  checkedAll = ({ target }) => {
+  pickAll = ({ target }) => {
     const { checked } = target;
 
     this.setState(prevState => ({
@@ -104,16 +73,23 @@ class App extends React.Component {
         ...todo,
         completed: checked,
       })),
-      visibleTodos: prevState.todos.map(todo => ({
-        ...todo,
-        completed: checked,
-      })),
     }));
   }
 
   render() {
-    const { todos, visibleTodos, filter } = this.state;
+    const { todos, filter } = this.state;
     const activeTodos = todos.filter(todo => !todo.completed);
+    const completeTodos = todos.filter(todo => todo.completed);
+
+    let filterTodos = [...todos];
+
+    if (filter === 'Active') {
+      filterTodos = activeTodos;
+    }
+
+    if (filter === 'Completed') {
+      filterTodos = completeTodos;
+    }
 
     return (
       <section className="todoapp">
@@ -128,13 +104,13 @@ class App extends React.Component {
             id="toggle-all"
             className="toggle-all"
             checked={todos.length && todos.every(todo => todo.completed)}
-            onClick={this.checkedAll}
+            onClick={this.pickAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
-            todos={visibleTodos}
-            toggledCheck={this.toggledCheck}
-            deleteCommand={this.deleteCommand}
+            todos={filterTodos}
+            changeComplete={this.changeComplete}
+            deleteTodo={this.deleteTodo}
           />
         </section>
 
@@ -143,7 +119,7 @@ class App extends React.Component {
             {`${activeTodos.length} items left`}
           </span>
           <TodosFilter
-            filtered={this.filtered}
+            filterItem={this.filterItem}
             filterTypes={filterTypes}
             filter={filter}
           />

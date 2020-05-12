@@ -17,10 +17,10 @@ class NewTodo extends React.Component {
   handleSubmitTodo = (evt) => {
     evt.preventDefault();
 
-    if (this.state.title !== '') {
+    if (this.state.title.replace(/\s/g, '') !== '') {
       const todo = {
         id: `${this.changeId()}`,
-        title: this.state.title.trim(),
+        title: this.state.title,
         completed: false,
       };
 
