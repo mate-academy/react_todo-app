@@ -9,7 +9,7 @@ class App extends React.Component {
     typeOfFilter: 'All',
   }
 
-  newTodo = (todo) => {
+  addNewTodo = (todo) => {
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
     }));
@@ -103,7 +103,7 @@ class App extends React.Component {
           <h1>todos</h1>
         </header>
         <NewTodo
-          newTodo={this.newTodo}
+          addNewTodo={this.addNewTodo}
         />
         <TodoList
           todos={visibleTodos}

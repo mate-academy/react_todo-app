@@ -15,7 +15,9 @@ class TodoList extends React.PureComponent {
           checked={todos.length > 0 && todos.every(todo => todo.completed)}
           onChange={handleMarkAll}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {todos.length > 0 && (
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        )}
         <ul className="todo-list">
           {todos.map(todo => (
             <TodoItem

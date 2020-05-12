@@ -9,7 +9,7 @@ class NewTodo extends React.Component {
 
   }
 
-  handleChangeTitle = ({ target }) => {
+  handleSetTitle = ({ target }) => {
     this.setState({
       title: target.value.trimLeft().replace(/[^a-z\s]/gi, ''),
     });
@@ -28,6 +28,7 @@ class NewTodo extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { title, id, completed } = this.state;
+    const { addNewTodo } = this.props;
 
     if (!title.length) {
       this.setState({
@@ -37,7 +38,7 @@ class NewTodo extends React.Component {
       return;
     }
 
-    this.props.newTodo({
+    addNewTodo({
       title,
       id: id + 1,
       completed,
@@ -55,7 +56,7 @@ class NewTodo extends React.Component {
         <input
           className="new-todo"
           placeholder="What needs to be done?"
-          onChange={this.handleChangeTitle}
+          onChange={this.handleSetTitle}
           value={title}
         />
       </form>
@@ -64,7 +65,7 @@ class NewTodo extends React.Component {
 }
 
 NewTodo.propTypes = {
-  newTodo: PropTypes.func.isRequired,
+  addNewTodo: PropTypes.func.isRequired,
 };
 
 export default NewTodo;
