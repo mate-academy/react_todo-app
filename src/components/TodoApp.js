@@ -18,27 +18,27 @@ class TodoApp extends React.Component {
   );
 
   submitTodo = (event) => {
-    if (event.key === 'Enter') {
-      if (this.state.title.length === 0) {
-        return;
-      }
+    event.preventDefault();
 
-      this.props.addedTodo(
-        {
-          id: this.state.id,
-          title: this.state.title.trim(),
-          completed: this.state.completed,
-        },
-      );
-
-      this.setState(state => ({
-        title: '',
-        id: state.id + 1,
-      }
-      ));
-
-      this.props.toggleAllTodos();
+    if (this.state.title.length === 0) {
+      return;
     }
+
+    this.props.addedTodo(
+      {
+        id: this.state.id,
+        title: this.state.title.trim(),
+        completed: this.state.completed,
+      },
+    );
+
+    this.setState(state => ({
+      title: '',
+      id: state.id + 1,
+    }
+    ));
+
+    this.props.toggleAllTodos();
   };
 
   render() {
@@ -63,13 +63,14 @@ class TodoApp extends React.Component {
         <header className="header">
           <h1>todos</h1>
 
-          <input
-            value={title}
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onChange={this.changeTitle}
-            onKeyDown={this.submitTodo}
-          />
+          <form onSubmit={this.submitTodo}>
+            <input
+              value={title}
+              className="new-todo"
+              placeholder="What needs to be done?"
+              onChange={this.changeTitle}
+            />
+          </form>
         </header>
 
         {originTodos.length > 0

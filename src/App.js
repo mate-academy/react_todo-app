@@ -8,6 +8,22 @@ class App extends React.Component {
     filter: 'All',
   };
 
+  componentDidMount() {
+    let storageState = JSON.parse(localStorage.getItem('storage'));
+
+    if (storageState === null) {
+      storageState = [];
+    }
+
+    this.setState({
+      todos: storageState,
+    });
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('storage', JSON.stringify(this.state.todos));
+  }
+
   addedTodo = (todo) => {
     this.setState(state => ({
       todos: [...state.todos, todo],
@@ -48,14 +64,10 @@ class App extends React.Component {
     ));
   };
 
-  deleteTodo = index => (
-    this.setState((state) => {
-      state.todos.splice(index, 1);
-
-      return {
-        todos: [...state.todos],
-      };
-    })
+  deleteTodo = id => (
+    this.setState(prev => ({
+      todos: prev.todos.filter(todo => todo.id !== id),
+    }))
   );
 
   changeToggleAllTodos = () => (
@@ -115,10 +127,6 @@ class App extends React.Component {
 
     const countActive = filterTodos.filter(todo => (
       todo.completed === false)).length;
-
-    if (filter === 'All') {
-      filterTodos = [...todos];
-    }
 
     if (filter === 'Completed') {
       filterTodos = filterTodos.filter(todo => (todo.completed === true));

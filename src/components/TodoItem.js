@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
-import { todosPropTypes } from './propTypes';
 
 class TodoItem extends React.Component {
   state = {
     isEdit: false,
-    length: this.props.todos.length,
     editTitle: this.props.title,
   };
 
@@ -27,7 +25,7 @@ class TodoItem extends React.Component {
       this.setState({
         isEdit: false,
       });
-    } else if (event.key === 'Enter') {
+    } else if (event.key === 'Enter' && title.length > 0) {
       this.props.changeTitle(title, id);
       this.setState({
         isEdit: false,
@@ -42,7 +40,6 @@ class TodoItem extends React.Component {
       completed,
       changeCompleted,
       deleteTodo,
-      index,
     } = this.props;
     const { isEdit, editTitle } = this.state;
 
@@ -70,7 +67,7 @@ class TodoItem extends React.Component {
             <button
               type="button"
               className="destroy"
-              onClick={() => deleteTodo(index)}
+              onClick={() => deleteTodo(id)}
             />
           </div>
           <input
@@ -87,14 +84,12 @@ class TodoItem extends React.Component {
 }
 
 TodoItem.propTypes = {
-  todos: todosPropTypes.isRequired,
   title: PropTypes.string.isRequired,
   changeTitle: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   completed: PropTypes.bool.isRequired,
   changeCompleted: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
 };
 
 export default TodoItem;
