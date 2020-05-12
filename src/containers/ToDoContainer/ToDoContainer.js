@@ -99,8 +99,8 @@ export class ToDoContainer extends Component {
 
   handleKeyPress = (event, id, value) => {
     if (event.key === 'Escape') {
-      this.setState(prevState => ({
-        todos: prevState.todos.map(todo => ({
+      this.setState(state => ({
+        todos: state.todos.map(todo => ({
           ...todo,
           isEditable: false,
         })),
@@ -113,12 +113,12 @@ export class ToDoContainer extends Component {
   }
 
   setEditedValue = (event, id, value) => {
-    if (!event.target.value) {
+    if (!event.target.value.trim()) {
       this.deleteTodo(id);
     }
 
-    this.setState(prevState => ({
-      todos: prevState.todos.map((todo) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
         if (todo.id !== id) {
           return todo;
         }

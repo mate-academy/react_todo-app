@@ -10,9 +10,7 @@ export class Header extends Component {
   setTitle = ({ target }) => {
     const title = target.value.slice(0, 30);
 
-    this.setState({
-      title,
-    });
+    this.setState({ title });
   };
 
   validateForm = (event) => {
