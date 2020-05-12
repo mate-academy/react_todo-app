@@ -1,5 +1,5 @@
 # React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/)
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://panasiuk-yuriy.github.io/react_todo-app/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
@@ -47,6 +47,6 @@ Resources:
     - double click on the TODO item text makes it editable
     - `Enter` saves changes
     - `Ecs` cancels editing
-![todoedit](./description/edittodo.gif)
+![todoedit](./description/activateEditingodo.gif)
 1. (*) Save state of the APP to local storage ([Required theory](https://javascript.info/localstorage))
 1. (*) Implement saving an edited todo when you click outside of the input
