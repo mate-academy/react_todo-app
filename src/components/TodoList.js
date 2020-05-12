@@ -1,18 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TodoList = ({ todos }) => (
+const TodoList = ({ todos, handleCompleted, deleteTodo }) => (
   <ul className="todo-list">
     {todos.map(todo => (
-      <li>
+      <li
+        key={todo.id}
+        className={todo.completed ? 'completed' : ''}
+      >
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
             id={`todo-${todo.id}`}
+            name={todo.id}
+            checked={todo.completed}
+            onChange={handleCompleted}
           />
-          <label htmlFor={`todo-${todo.id}`}>{todo.title}</label>
-          <button type="button" className="destroy" />
+          <label
+            htmlFor={`todo-${todo.id}`}
+          >
+            {todo.title}
+          </label>
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => deleteTodo(todo.id)}
+          />
         </div>
         <input type="text" className="edit" />
       </li>
@@ -25,6 +39,8 @@ TodoList.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   })).isRequired,
+  handleCompleted: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
 };
 
 export default TodoList;
