@@ -17,9 +17,9 @@ const Footer = (props) => {
   const completedTodos = todos.some(todo => todo.completed === true);
   const todoCount = todos.filter(todo => !todo.completed).length;
 
-  const allSelector = classNames('', { selected: isAll });
-  const activeSelector = classNames('', { selected: isActive });
-  const completedSelector = classNames('', { selected: isCompleted });
+  const allSelector = classNames({ selected: isAll });
+  const activeSelector = classNames({ selected: isActive });
+  const completedSelector = classNames({ selected: isCompleted });
 
   return (
     <footer className="footer">

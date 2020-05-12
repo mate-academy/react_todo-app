@@ -20,7 +20,7 @@ class TodoInput extends React.Component {
     const { value } = event.target;
 
     this.setState({
-      input: value.trim(),
+      input: value.replace(/^\s+/g, ''),
     });
   }
 
