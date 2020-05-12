@@ -100,9 +100,7 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <Header
-          onTodo={this.addTodo}
-        />
+        <Header onTodo={this.addTodo} />
 
         <section className="main">
           {!initialDisplay && (
