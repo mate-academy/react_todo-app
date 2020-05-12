@@ -26,7 +26,7 @@ class TodoApp extends React.Component {
       this.props.addedTodo(
         {
           id: this.state.id,
-          title: this.state.title,
+          title: this.state.title.trim(),
           completed: this.state.completed,
         },
       );
@@ -55,6 +55,7 @@ class TodoApp extends React.Component {
       countActive,
       clearCompletedTodos,
       filter,
+      originTodos,
     } = this.props;
 
     return (
@@ -71,21 +72,27 @@ class TodoApp extends React.Component {
           />
         </header>
 
-        <TodoList
-          todos={todos}
-          changeCompleted={changeCompleted}
-          deleteTodo={deleteTodo}
-          changeTitle={changeTitle}
-          toggleTodosStatus={toggleTodosStatus}
-          toggleAllTodos={toggleAllTodos}
-          toggleAllStatus={toggleAllStatus}
-        />
-        <Footer
-          filterTodo={filterTodo}
-          countActive={countActive}
-          clearCompletedTodos={clearCompletedTodos}
-          filter={filter}
-        />
+        {originTodos.length > 0
+        && (
+          <TodoList
+            todos={todos}
+            changeCompleted={changeCompleted}
+            deleteTodo={deleteTodo}
+            changeTitle={changeTitle}
+            toggleTodosStatus={toggleTodosStatus}
+            toggleAllTodos={toggleAllTodos}
+            toggleAllStatus={toggleAllStatus}
+          />
+        )}
+        {originTodos.length > 0
+        && (
+          <Footer
+            filterTodo={filterTodo}
+            countActive={countActive}
+            clearCompletedTodos={clearCompletedTodos}
+            filter={filter}
+          />
+        )}
       </section>
     );
   }
@@ -103,6 +110,8 @@ TodoApp.propTypes = {
   filterTodo: PropTypes.func.isRequired,
   countActive: PropTypes.number.isRequired,
   clearCompletedTodos: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
+  originTodos: todosPropTypes.isRequired,
 };
 
 export default TodoApp;

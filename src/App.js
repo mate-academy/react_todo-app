@@ -147,6 +147,7 @@ class App extends React.Component {
           clearCompletedTodos={this.clearCompletedTodos}
           countActive={countActive}
           filter={filter}
+          originTodos={todos}
         />
       </>
     );
