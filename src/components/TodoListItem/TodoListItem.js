@@ -13,7 +13,7 @@ export default class TodoListItem extends React.Component {
     //const { completed } = this.state;
 
     let classNames = '';
-    if (item.comleted) {
+    if (item.completed) {
       classNames += 'completed'
     };
 
@@ -24,6 +24,7 @@ export default class TodoListItem extends React.Component {
             <input
               type="checkbox"
               className="toggle"
+              checked={item.completed}
               id={id}
               onClick={() => this.props.onClickCompleted(item)}
             />
@@ -40,8 +41,6 @@ export default class TodoListItem extends React.Component {
 }
 
 TodoListItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   };
 

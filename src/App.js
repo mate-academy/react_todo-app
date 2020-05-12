@@ -33,7 +33,7 @@ export default class App extends React.Component {
   };
 
   onClickCompleted = (elt) => {
-    elt.comleted = !elt.comleted;
+    elt.completed = !elt.completed;
     const index = this.state.todos.findIndex((el) => el.id === elt.id);
 
     const newArray = [
@@ -52,43 +52,40 @@ export default class App extends React.Component {
     });
   };
 
-  // removeCompleted = () => {
-  //   this.setState(prevState => ({
-  //     todos: [...prevState.todos].filter(todo => !todo.completed),
-  //   }));
-  // };
-
   toggleSelectAll = () => {
     this.setState({
-      todos: this.state.todos.map(todo => todo.completed),
-    })
+      todos: this.state.todos.map((todo) => {
+        todo.completed = !todo.completed;
+        return todo;
+      })
+    });
   };
 
   removeCompleted = () => {
     this.setState({
-      todos: this.state.todos.filter(todo => !todo.comleted),
+      todos: this.state.todos.filter(todo => !todo.completed),
     });
   }
 
   render() {
     const { todos, filter } = this.state;
 
-    const counter = todos.filter(todo => !todo.comleted).length;
-    const count = todos.filter(todo => todo.comleted).length;
+    const counter = todos.filter(todo => !todo.completed).length;
+    const count = todos.filter(todo => todo.completed).length;
 
     return (
       <section className="todoapp">
         <Header
           todos={todos}
           addTodoItem={this.addTodoItem}
+          toogleSelection={this.toggleSelectAll}
         />
         <TodoList
           todos={todos}
           filter={filter}
           deleteTodo={this.deleteTodo}
           onClickCompleted={this.onClickCompleted}
-          toggleSelectAll={this.toggleSelectAll}
-          deleteCompleted={this.deleteCompleted}
+         removeCompleted={this.removeCompleted}
         />
         <Filter
           todos={todos}

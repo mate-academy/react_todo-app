@@ -10,17 +10,17 @@ export default class TodoList extends React.Component {
   filter(filter) {
     switch (filter) {
       case 'active':
-       return this.props.todos.filter(todo => !todo.comleted);
-       // console.log('2')
+        return this.props.todos.filter(todo => !todo.completed);
       case 'done':
-         return this.props.todos.filter(todo => todo.comleted);
-       // console.log('3')
+        return this.props.todos.filter(todo => todo.completed);
       default:
         return this.props.todos;
     }
   }
+
+
   render() {
-    const {filter} = this.props;
+    const { filter } = this.props;
 
     let todoList = this.filter(filter).map(todo => {
       return <TodoListItem
@@ -29,20 +29,12 @@ export default class TodoList extends React.Component {
         deleteTodo={this.props.deleteTodo}
         onClickCompleted={this.props.onClickCompleted}
 
-        />
+      />
     })
     return (
       <section className="main">
-        <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-       // onChange={this.props.toggleSelectAll}
-         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
           {todoList}
-
         </ul>
       </section>
     )
@@ -50,6 +42,4 @@ export default class TodoList extends React.Component {
 }
 
 
-TodoList.propTypes = {
-  filter: PropTypes.func.isRequired,
-};
+

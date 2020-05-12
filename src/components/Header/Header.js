@@ -8,12 +8,6 @@ class Header extends React.Component {
     // id: 0,
   }
 
-  handleInputChange = (event) => {
-    this.setState({
-      title: event.target.value,
-    })
-  };
-
   handleInputChange = ({ target }) => {
     this.setState({
       title: target.value,
@@ -36,7 +30,7 @@ class Header extends React.Component {
       const newTodo = {
         title: title.trim(),
         id: +(new Date()),
-        comleted: false,
+        completed: false,
       };
       addTodoItem(newTodo);
     }
@@ -45,11 +39,18 @@ class Header extends React.Component {
 
   render() {
     const { title } = this.state;
-
+    const {toogleSelection} = this.props;
     return (
       <header className="header">
         <h1>todos</h1>
         <form onSubmit={this.handleSubmit}>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={toogleSelection}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
           <input
             type="text"
             className="new-todo"
@@ -57,6 +58,7 @@ class Header extends React.Component {
             value={title}
             onChange={this.handleInputChange}
           />
+
         </form>
       </header>
     )
