@@ -111,6 +111,15 @@ class App extends React.Component {
     }));
   }
 
+  handleCompletedAll = () => {
+    this.setState(state => ({
+      todos: [...state.todos].map(todo => ({
+        ...todo,
+        completed: !todo.completed,
+      })),
+    }));
+  }
+
   render() {
     const { todos } = this.state;
     const { todoTitle, isVisible, filter, todosActive } = this.state;
@@ -134,6 +143,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            onChange={this.handleCompletedAll}
           />
           {isVisible && (
             <label
