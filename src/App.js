@@ -126,7 +126,7 @@ class App extends React.Component {
 
           />
         )}
-        {tasksListLength !== 0 && (
+        {todos.length > 0 && (
           <TodosFilter
             activeTasksCounter={this.activeTasksCounter}
             filterSelector={this.filterSelector}
