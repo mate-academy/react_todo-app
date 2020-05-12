@@ -20,6 +20,7 @@ const TodoList = ({ todos, handleCompleted, deleteTodo }) => (
           <label
             htmlFor={`todo-${todo.id}`}
           >
+
             {todo.title}
           </label>
           <button

@@ -7,11 +7,11 @@ const TodoFooter = ({
   handleAllFilter,
   filter,
   clearCompleted,
-  todosActive,
+  todos,
 }) => (
   <footer className="footer">
     <span className="todo-count">
-      {`${todosActive} items left`}
+      {`${todos.filter(todo => !todo.completed).length} items left`}
     </span>
 
     <ul className="filters">
@@ -57,12 +57,14 @@ const TodoFooter = ({
 );
 
 TodoFooter.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    completed: PropTypes.bool.isRequired,
+  })).isRequired,
   handleCompletedFilter: PropTypes.func.isRequired,
   handleActiveFilter: PropTypes.func.isRequired,
   handleAllFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
   clearCompleted: PropTypes.func.isRequired,
-  todosActive: PropTypes.number.isRequired,
 };
 
 export default TodoFooter;

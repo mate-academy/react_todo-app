@@ -9,7 +9,6 @@ class App extends React.Component {
     todoTitle: '',
     isVisible: false,
     filter: 'All',
-    todosActive: 0,
   }
 
   handleChangeTitle = (event) => {
@@ -33,7 +32,6 @@ class App extends React.Component {
           isVisible: true,
           todoTitle: '',
           filter: 'All',
-          todosActive: state.todosActive + 1,
         };
       });
     }
@@ -75,7 +73,6 @@ class App extends React.Component {
     this.setState(state => ({
       todos: [...state.todosCopied].filter(todo => todo.completed),
       filter: 'Completed',
-      todosActive: 0,
     }));
   }
 
@@ -83,8 +80,6 @@ class App extends React.Component {
     this.setState(state => ({
       todos: [...state.todosCopied].filter(todo => !todo.completed),
       filter: 'Active',
-      todosActive: [...state.todosCopied]
-        .filter(todo => !todo.completed).length,
     }));
   }
 
@@ -92,22 +87,34 @@ class App extends React.Component {
     this.setState(state => ({
       todos: [...state.todosCopied],
       filter: 'All',
-      todosActive: [...state.todosCopied]
-        .filter(todo => !todo.completed).length,
     }));
   }
 
   handleDeleteTodo = (id) => {
+    let footerIsVisible = true;
+
+    if (this.state.todosCopied.length <= 1) {
+      footerIsVisible = false;
+    }
+
     this.setState(state => ({
       todos: [...state.todos.filter(todo => todo.id !== id)],
       todosCopied: [...state.todosCopied.filter(todo => todo.id !== id)],
+      isVisible: footerIsVisible,
     }));
   }
 
   handleClearCompleted = () => {
+    let footerIsVisible = true;
+
+    if (this.state.todosCopied.length <= 1) {
+      footerIsVisible = false;
+    }
+
     this.setState(state => ({
       todos: state.todos.filter(todo => !todo.completed),
       todosCopied: state.todosCopied.filter(todo => !todo.completed),
+      isVisible: footerIsVisible,
     }));
   }
 
@@ -122,7 +129,7 @@ class App extends React.Component {
 
   render() {
     const { todos } = this.state;
-    const { todoTitle, isVisible, filter, todosActive } = this.state;
+    const { todoTitle, isVisible, filter } = this.state;
 
     return (
       <section className="todoapp">
@@ -157,7 +164,6 @@ class App extends React.Component {
             todos={todos}
             deleteTodo={this.handleDeleteTodo}
             handleCompleted={this.handleCompleted}
-            handleEditTodo={this.handleEditTodo}
           />
         </section>
 
@@ -168,7 +174,7 @@ class App extends React.Component {
             handleAllFilter={this.handleAllFilter}
             clearCompleted={this.handleClearCompleted}
             filter={filter}
-            todosActive={todosActive}
+            todos={todos}
           />
         )}
       </section>
