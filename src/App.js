@@ -156,23 +156,25 @@ class App extends React.Component {
           />
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${activeTodos.length} items left`}
-          </span>
-          <TodosFilter
-            filtered={this.filterItems}
-            filterTypes={filterTypes}
-            filter={filter}
-          />
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.clearCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
+        {todos.length > 0 && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${activeTodos.length} items left`}
+            </span>
+            <TodosFilter
+              filtered={this.filterItems}
+              filterTypes={filterTypes}
+              filter={filter}
+            />
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={this.clearCompleted}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </section>
     );
   }
