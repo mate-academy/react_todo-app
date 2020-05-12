@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import classNames from 'class-names';
+import classNames from 'classnames';
 
 export const Todo = ({ todo, removeTodo, changeStatus }) => (
   <li className={classNames(
