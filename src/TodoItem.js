@@ -76,7 +76,7 @@ state = {
               type="button"
               className="destroy"
               id={todo.id}
-              onClick={deleteTodo}
+              onClick={() => deleteTodo(todo.id)}
             />
           </div>
           {onEdit && (

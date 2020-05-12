@@ -1,8 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
 import TodoList from './TodoList';
 import NewTodo from './NewTodo';
-import FilterButtons from './FilterButtons';
+import Footer from './Footer';
 
 const FILTERS = {
   all: 'all',
@@ -13,7 +12,7 @@ const FILTERS = {
 class TodoApp extends React.Component {
   state = {
     todos: [],
-    filter: 'all',
+    filter: FILTERS.all,
     onSelectAllTodos: true,
   }
 
@@ -63,27 +62,17 @@ class TodoApp extends React.Component {
         }),
       }));
     } else {
-      const removeTodoId = this.state.todos
-        .findIndex(todo => todo.id === id);
-
-      this.setState((prevState) => {
-        const remainingTodos = [...prevState.todos];
-
-        remainingTodos.splice(removeTodoId, 1);
-
-        return (
-          { todos: [...remainingTodos] }
-        );
-      });
+      this.setState(prevState => ({
+        todos: prevState.todos.filter(todo => todo.id !== id),
+      }));
     }
   }
 
-  selectAllTodo = () => {
-    this.setState(prevState => ({
-      onSelectAllTodos: !prevState.onSelectAllTodos,
-      todos: prevState.todos.map(todo => ({
+  selectAllTodo = ({ target }) => {
+    this.setState(state => ({
+      todos: state.todos.map(todo => ({
         ...todo,
-        completed: prevState.onSelectAllTodos,
+        completed: target.checked,
       })),
     }));
   }
@@ -100,19 +89,22 @@ class TodoApp extends React.Component {
     });
   }
 
-  deleteTodo = (event) => {
-    const removeTodoId = this.state.todos
-      .findIndex(item => item.id === +event.target.id);
+  deleteTodo = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
+  }
 
-    this.setState((prevState) => {
-      const remainingTodos = [...prevState.todos];
+  filterTodoList = () => {
+    if (this.state.filter === 'active') {
+      return this.state.todos.filter(todo => !todo.completed);
+    }
 
-      remainingTodos.splice(removeTodoId, 1);
+    if (this.state.filter === 'completed') {
+      return this.state.todos.filter(todo => todo.completed);
+    }
 
-      return (
-        { todos: [...remainingTodos] }
-      );
-    });
+    return this.state.todos;
   }
 
   render() {
@@ -120,23 +112,6 @@ class TodoApp extends React.Component {
       todos,
       filter,
     } = this.state;
-
-    const notComplitedTodo = todos.filter(todo => todo.completed === false);
-    const { all, completed, active } = FILTERS;
-
-    let preparedTodos;
-
-    if (filter === all) {
-      preparedTodos = [...todos];
-    }
-
-    if (filter === active) {
-      preparedTodos = [...todos].filter(todo => !todo.completed);
-    }
-
-    if (filter === completed) {
-      preparedTodos = [...todos].filter(todo => todo.completed);
-    }
 
     return (
       <section className="todoapp">
@@ -148,35 +123,20 @@ class TodoApp extends React.Component {
           length={todos.length}
         />
         <TodoList
-          todos={preparedTodos}
+          todos={this.filterTodoList()}
           initialTodos={todos}
           changeStatus={this.changeStatus}
           deleteTodo={this.deleteTodo}
           selectAllTodo={this.selectAllTodo}
           changeTitle={this.changeTitle}
         />
-
-        <footer
-          className={classNames('footer', { activeClear: todos.length === 0 })}
-        >
-          <span className="todo-count">
-            {notComplitedTodo.length}
-            {' '}
-            items left
-          </span>
-
-          <FilterButtons todosFilter={this.todosFilter} filter={filter} />
-
-          <button
-            type="button"
-            className={classNames('clear-completed',
-              { activeClear: todos.length === notComplitedTodo.length })}
-            onClick={this.clearCompleted}
-          >
-            Clear completed
-          </button>
-
-        </footer>
+        <Footer
+          todos={todos}
+          filter={filter}
+          todosFilter={this.todosFilter}
+          clearCompleted={this.clearCompleted}
+          FILTERS={FILTERS}
+        />
       </section>
 
     );
