@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoList from './TodoList';
-import NewTodo from './NewTodo';
-import Filters from './Filters';
+import Header from './Header';
+import Footer from './Footer';
 
 class App extends React.Component {
   state = {
@@ -15,7 +15,7 @@ class App extends React.Component {
     }));
   }
 
-  handleMarkAll =() => {
+  markAll =() => {
     if (this.state.todos.every(todo => todo.completed === true)) {
       this.setState(state => ({
         todos: state.todos.map(todo => (
@@ -37,7 +37,7 @@ class App extends React.Component {
     }
   }
 
-  handleChangeStatus = (id) => {
+  changeStatus = (id) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id === id) {
@@ -52,22 +52,13 @@ class App extends React.Component {
     }));
   }
 
-  deleteTodo = ({ target }) => {
-    const indexOfDeletedTodo = this.state.todos
-      .findIndex(item => item.id === +target.id);
-
-    this.setState((prevState) => {
-      const newListOfTodos = [...prevState.todos];
-
-      newListOfTodos.splice(indexOfDeletedTodo, 1);
-
-      return (
-        { todos: [...newListOfTodos] }
-      );
-    });
+  deleteTodo = (id) => {
+    this.setState(({ todos }) => ({
+      todos: todos.filter(todo => todo.id !== id),
+    }));
   }
 
-  handleChangeFilter = (filter) => {
+  changeFilter = (filter) => {
     this.setState({
       typeOfFilter: filter,
     });
@@ -99,40 +90,24 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-        </header>
-        <NewTodo
-          addNewTodo={this.addNewTodo}
-        />
+
+        <Header addNewTodo={this.addNewTodo} />
         <TodoList
           todos={visibleTodos}
-          handleChangeStatus={this.handleChangeStatus}
+          changeStatus={this.changeStatus}
           deleteTodo={this.deleteTodo}
-          handleMarkAll={this.handleMarkAll}
+          markAll={this.markAll}
         />
         {todos.length > 0
           && (
-            <footer className="footer">
-              <span className="todo-count">
-                {countOfNotFinishedTodos}
-                {' '}
-                items left
-              </span>
-              <Filters
-                typeOfFilter={typeOfFilter}
-                handleChangeFilter={this.handleChangeFilter}
-              />
-              <button
-                type="button"
-                onClick={this.clearCompleted}
-                className="clear-completed"
-              >
-                Clear completed
-              </button>
-            </footer>
-          )
-        }
+            <Footer
+              typeOfFilter={typeOfFilter}
+              changeFilter={this.changeFilter}
+              countOfNotFinishedTodos={countOfNotFinishedTodos}
+              clearCompleted={this.clearCompleted}
+            />
+          )}
+
       </section>
     );
   }

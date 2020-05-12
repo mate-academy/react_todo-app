@@ -11,7 +11,7 @@ class NewTodo extends React.Component {
 
   handleSetTitle = ({ target }) => {
     this.setState({
-      title: target.value.trimLeft().replace(/[^a-z\s]/gi, ''),
+      title: target.value.trimLeft().replace(/[^a-zа-я\s]/gi, ''),
     });
   }
 
