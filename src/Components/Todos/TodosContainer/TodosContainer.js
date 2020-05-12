@@ -13,9 +13,12 @@ const TodosContainer = (props) => {
 
   return (
     <section className="main">
-      <ToggleInput
-        toggleAllCompleted={toggleAllCompleted}
-      />
+      {todos.length > 0 && (
+        <ToggleInput
+          todos={todos}
+          toggleAllCompleted={toggleAllCompleted}
+        />
+      )}
 
       <TodoList
         todos={todos}

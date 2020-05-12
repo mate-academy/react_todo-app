@@ -11,6 +11,7 @@ class TodoInput extends React.Component {
 
     if (event.key === 'Enter' && input) {
       event.preventDefault();
+
       this.props.addTodo(input);
       this.setState({ input: '' });
     }

@@ -6,8 +6,6 @@ import TodoInput from './TodoInput/TodoInput';
 class Todos extends React.Component {
   state = {
     todos: [],
-    activeTodos: [],
-    completedTodos: [],
     allCompleted: false,
     isAll: true,
     isActive: false,
@@ -41,12 +39,9 @@ class Todos extends React.Component {
 
   handleDeleteBtn = (id) => {
     const { todos } = this.state;
-    const index = todos.map(todo => todo.id).indexOf(id);
 
-    this.setState((prevState) => {
-      delete todos[index];
-
-      return todos;
+    this.setState({
+      todos: todos.filter(todo => todo.id !== id),
     });
   }
 
@@ -95,49 +90,33 @@ class Todos extends React.Component {
   handleDeleteAllCompleted = () => {
     const { todos } = this.state;
 
-    const filteredTodos = todos.filter(todo => !todo.completed);
-
-    this.setState(prevState => ({
-      completedTodos: [],
-      todos: filteredTodos,
-    }));
+    this.setState({
+      todos: todos.filter(todo => todo.completed === false),
+    });
   }
 
   handleActiveFiltering = () => {
-    const { todos } = this.state;
-
-    const filteredActiveTodos = todos.filter(todo => !todo.completed);
-
-    this.setState(prevState => ({
-      activeTodos: filteredActiveTodos,
+    this.setState({
       isAll: false,
       isActive: true,
       isCompleted: false,
-    }));
+    });
   }
 
   handleCompletedFiltering = () => {
-    const { todos } = this.state;
-
-    const filteredActiveTodos = todos.filter(todo => todo.completed);
-
-    this.setState(prevState => ({
-      completedTodos: filteredActiveTodos,
+    this.setState({
       isAll: false,
       isActive: false,
       isCompleted: true,
-    }));
+    });
   }
 
   handleAllFiltering = () => {
-    const { todos } = this.state;
-
-    this.setState(prevState => ({
-      todos,
+    this.setState({
       isAll: true,
       isActive: false,
       isCompleted: false,
-    }));
+    });
   }
 
   render() {
@@ -146,35 +125,16 @@ class Todos extends React.Component {
       isAll,
       isActive,
       isCompleted,
-      activeTodos,
-      completedTodos,
     } = this.state;
 
-    let conditionalRenderingTodos = todos;
+    let visibleTodos = [...todos];
 
     if (!isAll && isActive && !isCompleted) {
-      conditionalRenderingTodos = activeTodos;
+      visibleTodos = todos.filter(todo => todo.completed === false);
     }
 
     if (!isAll && !isActive && isCompleted) {
-      conditionalRenderingTodos = completedTodos;
-    }
-
-    let footer = null;
-
-    if (todos.length !== 0) {
-      footer = (
-        <Footer
-          todos={todos}
-          isAll={isAll}
-          isActive={isActive}
-          isCompleted={isCompleted}
-          deleteAllCompleted={this.handleDeleteAllCompleted}
-          showAll={this.handleAllFiltering}
-          showActive={this.handleActiveFiltering}
-          showCompleted={this.handleCompletedFiltering}
-        />
-      );
+      visibleTodos = todos.filter(todo => todo.completed === true);
     }
 
     return (
@@ -187,12 +147,23 @@ class Todos extends React.Component {
 
           <TodosContainer
             toggleAllCompleted={() => this.handleAllCompleted()}
-            todos={conditionalRenderingTodos}
+            todos={visibleTodos}
             isCompleted={this.handleToggleCompletion}
             deleteTodo={this.handleDeleteBtn}
           />
 
-          {footer}
+          {todos.length > 0 && (
+            <Footer
+              todos={todos}
+              isAll={isAll}
+              isActive={isActive}
+              isCompleted={isCompleted}
+              deleteAllCompleted={this.handleDeleteAllCompleted}
+              showAll={this.handleAllFiltering}
+              showActive={this.handleActiveFiltering}
+              showCompleted={this.handleCompletedFiltering}
+            />
+          )}
 
         </section>
       </>

@@ -14,7 +14,9 @@ const Footer = (props) => {
     showAll,
   } = props;
 
+  const completedTodos = todos.some(todo => todo.completed === true);
   const todoCount = todos.filter(todo => !todo.completed).length;
+
   const allSelector = classNames('', { selected: isAll });
   const activeSelector = classNames('', { selected: isActive });
   const completedSelector = classNames('', { selected: isCompleted });
@@ -59,7 +61,7 @@ const Footer = (props) => {
         </li>
       </ul>
 
-      {todos.length > 0 ? (
+      {completedTodos && (
         <button
           onClick={deleteAllCompleted}
           type="button"
@@ -67,7 +69,7 @@ const Footer = (props) => {
         >
           Clear completed
         </button>
-      ) : null}
+      )}
     </footer>
   );
 };

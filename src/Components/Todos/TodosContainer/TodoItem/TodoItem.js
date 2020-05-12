@@ -12,13 +12,13 @@ const TodoItem = ({ todo, deleteTodo, isCompleted }) => {
           type="checkbox"
           className="toggle"
           id={todo.id}
-          onClick={isCompleted}
+          onClick={() => isCompleted(todo.id)}
           checked={todo.completed}
           onChange={(e) => {}}
         />
         <label htmlFor={todo.id}>{todo.text}</label>
         <button
-          onClick={deleteTodo}
+          onClick={() => deleteTodo(todo.id)}
           type="button"
           className="destroy"
         />
