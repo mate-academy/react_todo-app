@@ -9,6 +9,20 @@ class App extends React.Component {
     filterType: 'All',
   }
 
+  componentDidMount() {
+    const data = JSON.parse(localStorage.getItem('todoApp'));
+
+    if (data) {
+      this.setState({
+        ...data,
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todoApp', JSON.stringify(this.state));
+  }
+
   addTodo = (todo) => {
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
@@ -30,7 +44,7 @@ class App extends React.Component {
     }));
   }
 
-  onTodoChecked = (todoId) => {
+  changesStatusTodo = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id === todoId) {
@@ -45,7 +59,7 @@ class App extends React.Component {
     }));
   }
 
-  onAllSelected = (completedStatusTodos) => {
+  selectAllTodos = (completedStatusTodos) => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
@@ -110,14 +124,14 @@ class App extends React.Component {
                 id="toggle-all"
                 className="toggle-all"
                 checked={completedStatusTodos}
-                onChange={() => this.onAllSelected(completedStatusTodos)}
+                onChange={() => this.selectAllTodos(completedStatusTodos)}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
             </>
           )}
           <TodoList
             todos={visibleTodos}
-            onTodoChecked={this.onTodoChecked}
+            changesStatusTodo={this.changesStatusTodo}
             deleteTodo={this.deleteTodo}
             saveChangesTodo={this.saveChangesTodo}
           />

@@ -52,7 +52,7 @@ class Todo extends React.Component {
       id,
       title,
       completed,
-      onSelected,
+      changesStatusTodo,
       deleteTodo,
     } = this.props;
 
@@ -66,7 +66,7 @@ class Todo extends React.Component {
             className="toggle"
             id={id}
             checked={completed}
-            onChange={onSelected}
+            onChange={changesStatusTodo}
           />
           <label
             onDoubleClick={() => this.handleClick(title)}
@@ -100,13 +100,13 @@ Todo.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  onSelected: PropTypes.func,
+  changesStatusTodo: PropTypes.func,
   deleteTodo: PropTypes.func,
   saveChangesTodo: PropTypes.func,
 };
 
 Todo.defaultProps = {
-  onSelected: () => {},
+  changesStatusTodo: () => {},
   deleteTodo: () => {},
   saveChangesTodo: () => {},
 };

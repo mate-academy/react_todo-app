@@ -4,7 +4,7 @@ import Todo from './Todo';
 
 const TodoList = ({
   todos,
-  onTodoChecked,
+  changesStatusTodo,
   deleteTodo,
   saveChangesTodo,
 }) => (
@@ -13,7 +13,7 @@ const TodoList = ({
       <Todo
         {...todo}
         key={todo.id}
-        onSelected={() => onTodoChecked(todo.id)}
+        changesStatusTodo={() => changesStatusTodo(todo.id)}
         deleteTodo={deleteTodo}
         saveChangesTodo={saveChangesTodo}
       />
@@ -25,7 +25,7 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
   })),
-  onTodoChecked: PropTypes.func.isRequired,
+  changesStatusTodo: PropTypes.func.isRequired,
   saveChangesTodo: PropTypes.func,
   deleteTodo: PropTypes.func,
 };
