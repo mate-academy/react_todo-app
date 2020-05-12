@@ -74,7 +74,7 @@ const Todo = ({
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  }, []);
+  });
 
   return (
     <li className={classNames({

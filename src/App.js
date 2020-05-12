@@ -8,11 +8,8 @@ const todosData = JSON.parse(localStorage.getItem('todosData')) || [];
 class App extends React.Component {
   state={
     todos: [...todosData],
-    newTodoId: todosData.length + 1 || 1,
     initialInputValue: '',
-    isAllTodos: true,
-    isActiveTodos: false,
-    isCompletedTodos: false,
+    selectedTodos: 'all',
   }
 
   componentDidUpdate() {
@@ -25,18 +22,16 @@ class App extends React.Component {
     }
 
     const newTodo = this.state.initialInputValue.trim();
-    const { newTodoId } = this.state;
 
     if (newTodo) {
       const todo = {
-        id: newTodoId,
+        id: +new Date(),
         title: newTodo,
         completed: false,
       };
 
       this.setState(state => ({
         todos: [...state.todos, todo],
-        newTodoId: state.newTodoId + 1,
         initialInputValue: '',
       }));
     }
@@ -44,32 +39,14 @@ class App extends React.Component {
 
   deleteTodo = (id) => {
     this.setState(state => ({
-      todos: state.todos.filter(todo => todo.id !== id)
-        .map(item => (
-          (item.id > id)
-            ? {
-              ...item, id: item.id - 1,
-            }
-            : item
-        )),
-      newTodoId: state.todos.length,
+      todos: [...state.todos].filter(todo => todo.id !== id),
     }));
   }
 
   deleteCompletedTodos = () => {
-    let newId = 1;
-
     this.setState(state => ({
-      todos: state.todos
-        .filter(todo => !todo.completed)
-        .map(task => ({
-        // eslint-disable-next-line
-          ...task, id: newId++,
-        })),
-    }));
-
-    this.setState(state => ({
-      newTodoId: state.todos.length + 1,
+      todos: [...state.todos]
+        .filter(todo => !todo.completed),
     }));
   }
 
@@ -117,48 +94,21 @@ class App extends React.Component {
   }
 
   chooseTypeTodos = (e) => {
-    const type = e.target.title;
+    const typeOfTodos = e.target.title;
 
-    switch (type) {
-      case 'all': {
-        this.setState({
-          isAllTodos: true,
-          isActiveTodos: false,
-          isCompletedTodos: false,
-        });
-        break;
-      }
-
-      case 'active': {
-        this.setState({
-          isAllTodos: false,
-          isActiveTodos: true,
-          isCompletedTodos: false,
-        });
-        break;
-      }
-
-      case 'completed': {
-        this.setState({
-          isAllTodos: false,
-          isActiveTodos: false,
-          isCompletedTodos: true,
-        });
-        break;
-      }
-
-      default: break;
-    }
+    this.setState({
+      selectedTodos: typeOfTodos,
+    });
   }
 
   setTypeTodos = (todo) => {
-    const { isActiveTodos, isCompletedTodos } = this.state;
+    const { selectedTodos } = this.state;
 
-    if (isActiveTodos) {
+    if (selectedTodos === 'active') {
       return !todo.completed;
     }
 
-    if (isCompletedTodos) {
+    if (selectedTodos === 'completed') {
       return todo.completed;
     }
 
@@ -166,8 +116,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, initialInputValue } = this.state;
-    const { isActiveTodos, isCompletedTodos, isAllTodos } = this.state;
+    const { todos, initialInputValue, selectedTodos } = this.state;
     const isAllChecked = todos.every(item => item.completed);
 
     return (
@@ -179,7 +128,7 @@ class App extends React.Component {
         />
 
         <section className="main">
-          {Boolean(todos.length) && (
+          {todos.length > 0 && (
             <>
               <input
                 type="checkbox"
@@ -202,13 +151,10 @@ class App extends React.Component {
 
         <Footer
           todos={todos}
-          isAllTodos={isAllTodos}
-          isActiveTodos={isActiveTodos}
-          isCompletedTodos={isCompletedTodos}
+          selectedTodos={selectedTodos}
           chooseTypeTodos={this.chooseTypeTodos}
           deleteCompletedTodos={this.deleteCompletedTodos}
         />
-
       </section>
     );
   }

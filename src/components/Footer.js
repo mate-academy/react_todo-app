@@ -5,13 +5,12 @@ import classNames from 'classnames';
 const Footer = ({
   todos,
   chooseTypeTodos,
-  isActiveTodos,
-  isAllTodos,
-  isCompletedTodos,
   deleteCompletedTodos,
+  selectedTodos,
 }) => {
   const isVisibleFooter = Boolean(todos.length);
   const isVisibleButton = Boolean(todos.filter(todo => todo.completed).length);
+  const todosFilters = ['all', 'active', 'completed'];
 
   return (
     <footer className={classNames('footer', { covert: !isVisibleFooter })}>
@@ -25,38 +24,18 @@ const Footer = ({
       </span>
 
       <ul className="filters">
-        <li>
-          <a
-            href="#/"
-            title="all"
-            className={classNames({ selected: isAllTodos })}
-            onClick={chooseTypeTodos}
-          >
-            All
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/active"
-            title="active"
-            className={classNames({ selected: isActiveTodos })}
-            onClick={chooseTypeTodos}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            title="completed"
-            className={classNames({ selected: isCompletedTodos })}
-            onClick={chooseTypeTodos}
-          >
-            Completed
-          </a>
-        </li>
+        {todosFilters.map(filter => (
+          <li key={filter}>
+            <a
+              href={`#/${filter}`}
+              title={filter}
+              className={classNames({ selected: filter === selectedTodos })}
+              onClick={chooseTypeTodos}
+            >
+              {filter}
+            </a>
+          </li>
+        ))}
       </ul>
 
       <button
@@ -75,9 +54,7 @@ Footer.propTypes = {
   chooseTypeTodos: PropTypes.func.isRequired,
   deleteCompletedTodos: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf.isRequired,
-  isActiveTodos: PropTypes.string.isRequired,
-  isAllTodos: PropTypes.string.isRequired,
-  isCompletedTodos: PropTypes.string.isRequired,
+  selectedTodos: PropTypes.string.isRequired,
 };
 
 export default Footer;
