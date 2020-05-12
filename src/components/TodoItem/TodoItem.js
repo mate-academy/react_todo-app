@@ -1,20 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class TodoItem extends React.Component {
-  state = {
-    ...this.props,
-  }
-
-  toggleChecked = () => {
-    this.setState(prev => ({
-      ...prev,
-      completed: !prev.completed,
-    }));
-  }
-
+class TodoItem extends React.PureComponent {
   render() {
-    const { title, id, completed } = this.state;
+    const { title, id, completed, toggleChecked, destroyItem } = this.props;
 
     return (
       <li
@@ -29,10 +18,15 @@ class TodoItem extends React.Component {
             type="checkbox"
             className="toggle"
             id={id}
-            onChange={this.toggleChecked}
+            checked={completed}
+            onChange={() => toggleChecked(id)}
           />
           <label htmlFor={id}>{title}</label>
-          <button type="button" className="destroy" />
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => destroyItem(id)}
+          />
         </div>
         <input type="text" className="edit" />
       </li>
@@ -46,4 +40,6 @@ TodoItem.propTypes = PropTypes.shape({
   title: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   completed: PropTypes.bool.isRequired,
+  toggleChecked: PropTypes.func.isRequired,
+  destroyItem: PropTypes.func.isRequired,
 }).isRequired;
