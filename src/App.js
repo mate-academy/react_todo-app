@@ -12,6 +12,7 @@ export default class App extends React.Component {
     counter: 0,
     count: 0,
     filter: 'all',
+    selectAll: false,
   }
   deleteTodo = (id) => {
     const index = this.state.todos.findIndex((el) => el.id === id);
@@ -40,7 +41,6 @@ export default class App extends React.Component {
       elt,
       ...this.state.todos.slice(index + 1)
     ];
-
     this.setState({
       todos: newArray
     });
@@ -52,18 +52,26 @@ export default class App extends React.Component {
     });
   };
 
+  // removeCompleted = () => {
+  //   this.setState(prevState => ({
+  //     todos: [...prevState.todos].filter(todo => !todo.completed),
+  //   }));
+  // };
+
+  toggleSelectAll = () => {
+    this.setState({
+      todos: this.state.todos.map(todo => todo.completed),
+    })
+  };
+
   removeCompleted = () => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos].filter(todo => !todo.completed),
-    }));
+    this.setState({
+      todos: this.state.todos.filter(todo => !todo.comleted),
+    });
   }
 
   render() {
     const { todos, filter } = this.state;
-
-    // const comletedStatus = todos.length === 0
-    // ? false
-    // : todos.every(todo => todo.completed);
 
     const counter = todos.filter(todo => !todo.comleted).length;
     const count = todos.filter(todo => todo.comleted).length;
@@ -77,11 +85,10 @@ export default class App extends React.Component {
         <TodoList
           todos={todos}
           filter={filter}
-          //comletedStatus={comletedStatus}
           deleteTodo={this.deleteTodo}
           onClickCompleted={this.onClickCompleted}
-          onAllSelected={this.onAllSelected}
-          //onFilterChange={this.onFilterChange}
+          toggleSelectAll={this.toggleSelectAll}
+          deleteCompleted={this.deleteCompleted}
         />
         <Filter
           todos={todos}
@@ -89,92 +96,11 @@ export default class App extends React.Component {
           count={count}
           filter={filter}
           onFilterChange={this.onFilterChange}
-          removeCompleted = {this.removeCompleted}
+          removeCompleted={this.removeCompleted}
         />
       </section>
     )
   }
 }
-// function App() {
-//   return (
-//     <section className="todoapp">
-//       <header className="header">
-//         <h1>todos</h1>
-
-//         <input
-//           className="new-todo"
-//           placeholder="What needs to be done?"
-//         />
-//       </header>
-
-//       <section className="main">
-//         <input type="checkbox" id="toggle-all" className="toggle-all" />
-//         <label htmlFor="toggle-all">Mark all as complete</label>
-
-//         <ul className="todo-list">
-//           <li>
-//             <div className="view">
-//               <input type="checkbox" className="toggle" id="todo-1" />
-//               <label htmlFor="todo-1">asdfghj</label>
-//               <button type="button" className="destroy" />
-//             </div>
-//             <input type="text" className="edit" />
-//           </li>
-
-//           <li className="completed">
-//             <div className="view">
-//               <input type="checkbox" className="toggle" id="todo-2" />
-//               <label htmlFor="todo-2">qwertyuio</label>
-//               <button type="button" className="destroy" />
-//             </div>
-//             <input type="text" className="edit" />
-//           </li>
-
-//           <li className="editing">
-//             <div className="view">
-//               <input type="checkbox" className="toggle" id="todo-3" />
-//               <label htmlFor="todo-3">zxcvbnm</label>
-//               <button type="button" className="destroy" />
-//             </div>
-//             <input type="text" className="edit" />
-//           </li>
-
-//           <li>
-//             <div className="view">
-//               <input type="checkbox" className="toggle" id="todo-4" />
-//               <label htmlFor="todo-4">1234567890</label>
-//               <button type="button" className="destroy" />
-//             </div>
-//             <input type="text" className="edit" />
-//           </li>
-//         </ul>
-//       </section>
-
-//       <footer className="footer">
-//         <span className="todo-count">
-//           3 items left
-//         </span>
-
-//         <ul className="filters">
-//           <li>
-//             <a href="#/" className="selected">All</a>
-//           </li>
-
-//           <li>
-//             <a href="#/active">Active</a>
-//           </li>
-
-//           <li>
-//             <a href="#/completed">Completed</a>
-//           </li>
-//         </ul>
-
-//         <button type="button" className="clear-completed">
-//           Clear completed
-//         </button>
-//       </footer>
-//     </section>
-//   );
-// }
 
 

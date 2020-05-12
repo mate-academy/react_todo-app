@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-class Filter extends React.Component {
+export default class Filter extends React.Component {
   state = {
     // counter: this.counter,
   }
@@ -14,7 +15,6 @@ class Filter extends React.Component {
     e.preventDefault();
     console.log('По ссылке кликнули.');
   }
-
 
   render() {
     const { filter, onFilterChange, removeCompleted } = this.props;
@@ -50,6 +50,6 @@ class Filter extends React.Component {
   }
 }
 
-
-
-export default Filter;
+Filter.propTypes = {
+ removeCompleted: PropTypes.func.isRequired,
+};

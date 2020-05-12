@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class TodoListItem extends React.Component {
   state = {
@@ -36,9 +37,12 @@ export default class TodoListItem extends React.Component {
       </>
     )
   }
-
 }
 
-
+TodoListItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  };
 
 

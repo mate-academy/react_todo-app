@@ -8,7 +8,7 @@ class Header extends React.Component {
     // id: 0,
   }
 
-   handleInputChange = (event) => {
+  handleInputChange = (event) => {
     this.setState({
       title: event.target.value,
     })
@@ -49,7 +49,7 @@ class Header extends React.Component {
     return (
       <header className="header">
         <h1>todos</h1>
-        <form  onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           <input
             type="text"
             className="new-todo"
