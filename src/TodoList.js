@@ -13,7 +13,7 @@ const TodoList = ({
       <Todo
         {...todo}
         key={todo.id}
-        onSelected={e => onTodoChecked(todo.id, e)}
+        onSelected={() => onTodoChecked(todo.id)}
         deleteTodo={deleteTodo}
         saveChangesTodo={saveChangesTodo}
       />

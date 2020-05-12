@@ -30,7 +30,7 @@ class App extends React.Component {
     }));
   }
 
-  onTodoChecked = (todoId, e) => {
+  onTodoChecked = (todoId) => {
     this.setState(prevState => ({
       todos: prevState.todos.map((todo) => {
         if (todo.id === todoId) {
@@ -90,9 +90,9 @@ class App extends React.Component {
   render() {
     const { todos, filterType } = this.state;
     const initialDisplay = (todos.length === 0);
-    const completedStatusTodos = this.state.todos.length === 0
+    const completedStatusTodos = todos.length === 0
       ? false
-      : this.state.todos.every(todo => todo.completed);
+      : todos.every(todo => todo.completed);
 
     const visibleClearCompleted = todos.some(todo => todo.completed);
     const incompleteTodosSum = todos.filter(todo => !todo.completed).length;
@@ -119,8 +119,6 @@ class App extends React.Component {
           )}
           <TodoList
             todos={visibleTodos}
-            initialDisplay={initialDisplay}
-            onFilteredTodos={this.onFilteredTodos}
             onTodoChecked={this.onTodoChecked}
             deleteTodo={this.deleteTodo}
             saveChangesTodo={this.saveChangesTodo}
@@ -144,9 +142,5 @@ class App extends React.Component {
     );
   }
 }
-
-// App.propTypes = {
-//   completedStatusTodos: PropTypes.bool.isRequired,
-// };
 
 export default App;

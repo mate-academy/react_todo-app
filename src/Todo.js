@@ -8,10 +8,10 @@ class Todo extends React.Component {
     isClicked: false,
   }
 
-  handleClick = (title) => {
+  handleClick = (todoTitle) => {
     this.setState(prevState => ({
       isClicked: !prevState.isClicked,
-      value: title,
+      value: todoTitle,
     }));
   }
 
@@ -21,8 +21,8 @@ class Todo extends React.Component {
     });
   }
 
-   handleBlur = (id) => {
-     this.finishEditedTodo(id);
+   handleBlur = (todoId) => {
+     this.finishEditedTodo(todoId);
    }
 
   finishEditedTodo = (todoId) => {
@@ -37,9 +37,9 @@ class Todo extends React.Component {
     }
   }
 
-  onKeyDown = (e, id) => {
+  onKeyDown = (e, todoId) => {
     if (e.key === 'Enter') {
-      this.finishEditedTodo(id);
+      this.finishEditedTodo(todoId);
     }
 
     if (e.key === 'Escape') {
