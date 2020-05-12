@@ -116,7 +116,7 @@ class App extends React.Component {
         <NewTask
           handleSubmit={this.handleSubmit}
         />
-        {tasksListLength !== 0 && (
+        {todos.length > 0 && (
           <TodoList
             checkAllTasks={this.checkAllTasks}
             todosList={this.filterByPattern()}
