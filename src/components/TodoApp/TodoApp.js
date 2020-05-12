@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import propTypes from 'prop-types';
 
-class TaskAdd extends React.Component {
+class TodoApp extends Component {
   state = {
     input: '',
   };
@@ -39,8 +39,8 @@ class TaskAdd extends React.Component {
   }
 }
 
-TaskAdd.propTypes = {
+TodoApp.propTypes = {
   addTask: propTypes.func.isRequired,
 };
 
-export default TaskAdd;
+export default TodoApp;

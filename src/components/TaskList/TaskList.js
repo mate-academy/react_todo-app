@@ -1,30 +1,37 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
+import TodoItem from '../TaskItem/TaskItem';
 
-const TaskList = ({ tasks }) => (
-  <ul className="todo-list">
-    {tasks.map(task => (
-      <li key={task.id}>
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            checked={task.condition}
-            id={task.id}
+class TodoList extends React.Component {
+  state = {
+
+  }
+
+  render() {
+    const { tasks, changeCondition, deleteTask } = this.props;
+
+    return (
+      <ul className="todo-list">
+        {tasks.map(task => (
+          <TodoItem
+            task={task}
+            changeCondition={changeCondition}
+            deleteTask={deleteTask}
           />
-          <label htmlFor={task.id}>
-            {task.title}
-          </label>
-          <button type="button" className="destroy" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-    ))}
+        ))}
+      </ul>
+    );
+  }
+}
 
-  </ul>
-);
-
-TaskList.propTypes = {
-  tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+TodoList.propTypes = {
+  tasks: propTypes.arrayOf(propTypes.shape({
+    id: propTypes.number.isRequired,
+    title: propTypes.string.isRequired,
+    completed: propTypes.bool.isRequired,
+  })).isRequired,
+  changeCondition: propTypes.func.isRequired,
+  deleteTask: propTypes.func.isRequired,
 };
-export default TaskList;
+
+export default TodoList;
