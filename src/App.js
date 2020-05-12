@@ -3,33 +3,10 @@ import TodoAdd from './components/TodoAdd';
 import TodoList from './components/TodoList';
 import { Footer } from './components/Footer';
 
-const Exampletodos = [
-  {
-    id: 1,
-    title: 'learn Html',
-    isTodoCompleted: true,
-  },
-  {
-    id: 2,
-    title: 'learn CSS',
-    isTodoCompleted: true,
-  },
-  {
-    id: 3,
-    title: 'learn JS',
-    isTodoCompleted: true,
-  },
-  {
-    id: 4,
-    title: 'learn React',
-    isTodoCompleted: false,
-  },
-
-];
-
 class App extends React.Component {
   state = {
-    todos: [...Exampletodos],
+    todos: [],
+    todosToShow: 'all',
   }
 
   updateTodosList = (newTodoTitle) => {
@@ -86,19 +63,57 @@ class App extends React.Component {
     }));
   }
 
+  clearCompletedTodo = () => {
+    this.setState(state => ({
+      todos: state.todos.filter(todo => !todo.isTodoCompleted),
+    }));
+  }
+
+  filterTodos = (whichTodosToShow) => {
+    const { todos } = this.state;
+
+    switch (whichTodosToShow) {
+      case 'active':
+        return todos.filter(todo => !todo.isTodoCompleted);
+      case 'completed':
+        return todos.filter(todo => todo.isTodoCompleted);
+
+      default:
+        return todos;
+    }
+  }
+
+  toggleActiveTodos = (filterName) => {
+    this.setState({ todosToShow: filterName });
+  }
+
   render() {
+    const { todos, todosToShow } = this.state;
+    const visibleTodos = this.filterTodos(todosToShow);
+
     return (
       <section className="todoapp">
         <TodoAdd updateTodosList={this.updateTodosList} />
         <TodoList
-          todos={this.state.todos}
+          todos={todos}
           handlerStatus={this.handlerStatus}
           selectAllTodos={this.selectAllTodos}
           clearTodo={this.clearTodo}
+          tasks={visibleTodos}
         />
-        <Footer
-          todos={this.state.todos}
-        />
+        {this.state.todos.length >= 1
+          && (
+            <Footer
+              todos={this.state.todos}
+              viewAllTodos={this.viewAllTodos}
+              todosToShow={this.todosToShow}
+              toggleActiveTodos={this.toggleActiveTodos}
+              filterTodos={this.filterTodos}
+              clearCompletedTodo={this.clearCompletedTodo}
+            />
+          )
+        }
+
       </section>
     );
   }

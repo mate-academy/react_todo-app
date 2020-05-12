@@ -53,7 +53,7 @@ class TodoAdd extends React.Component {
     return (
       <>
         <header className="header">
-          <h1>todos</h1>
+          <h1>ToDoList</h1>
           <form onSubmit={this.handleFormSubmit}>
             <input
               className="new-todo"

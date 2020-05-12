@@ -7,6 +7,7 @@ const TodoList = ({
   selectAllTodos,
   handlerStatus,
   clearTodo,
+  tasks,
 }) => (
   <>
     <section className="main">
@@ -21,7 +22,7 @@ const TodoList = ({
         Mark all as complete
       </label>
       <ul className="todo-list">
-        {todos.map(todo => (
+        {tasks.map(todo => (
           <Todo
             todo={todo}
             key={todo.id}
@@ -42,6 +43,10 @@ TodoList.propTypes = {
   selectAllTodos: PropTypes.func.isRequired,
   handlerStatus: PropTypes.func.isRequired,
   clearTodo: PropTypes.func.isRequired,
+  tasks: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    isTodoCompleted: PropTypes.bool,
+  })).isRequired,
 };
 
 export default TodoList;
