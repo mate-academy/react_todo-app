@@ -150,7 +150,7 @@ class App extends Component {
           />
         </section>
 
-        {visibleTodos.length ? (
+        {todos.length ? (
           <footer className="footer">
             <span className="todo-count">
               {remainingTasks}
