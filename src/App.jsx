@@ -3,10 +3,16 @@ import TodoList from './TodoList';
 import Header from './Header';
 import Footer from './Footer';
 
+const filterTypes = {
+  active: 'Active',
+  completed: 'Completed',
+  all: 'All',
+};
+
 class App extends React.Component {
   state = {
     todos: [],
-    filterType: 'All',
+    filterType: filterTypes.all,
   }
 
   componentDidMount() {
@@ -27,6 +33,13 @@ class App extends React.Component {
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
     }));
+  }
+
+  makeIdTodo = () => {
+    const maxId = Math.max(...this.state.todos.map(todo => todo.id));
+    const maxIdTodo = maxId !== -Infinity ? maxId : 1;
+
+    return maxIdTodo;
   }
 
   saveChangesTodo = (todoId, todoTitle) => {
@@ -68,7 +81,7 @@ class App extends React.Component {
     }));
   }
 
-  onFilteredTodos = (filterType) => {
+  setFilter = (filterType) => {
     this.setState({
       filterType,
     });
@@ -77,11 +90,11 @@ class App extends React.Component {
   getVisibleTodos = () => {
     const { todos, filterType } = this.state;
 
-    if (filterType === 'Active') {
+    if (filterType === filterTypes.active) {
       return todos.filter(todo => !todo.completed);
     }
 
-    if (filterType === 'Completed') {
+    if (filterType === filterTypes.completed) {
       return todos.filter(todo => todo.completed);
     }
 
@@ -103,6 +116,7 @@ class App extends React.Component {
 
   render() {
     const { todos, filterType } = this.state;
+    const todoId = this.makeIdTodo();
     const initialDisplay = (todos.length === 0);
     const completedStatusTodos = todos.length === 0
       ? false
@@ -114,7 +128,10 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        <Header onTodo={this.addTodo} />
+        <Header
+          addTodo={this.addTodo}
+          todoId={todoId}
+        />
 
         <section className="main">
           {!initialDisplay && (
@@ -142,7 +159,7 @@ class App extends React.Component {
           && (
             <Footer
               noComlpetedTodo={incompleteTodosSum}
-              onFilteredTodos={this.onFilteredTodos}
+              setFilter={this.setFilter}
               clearCompleted={this.clearCompleted}
               visibleClearCompleted={visibleClearCompleted}
               filterType={filterType}

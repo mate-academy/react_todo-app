@@ -16,6 +16,7 @@ class Header extends React.Component {
 
   handleSubmit = (event) => {
     const { title } = this.state;
+    const { todoId } = this.props;
 
     event.preventDefault();
 
@@ -23,9 +24,9 @@ class Header extends React.Component {
       return;
     }
 
-    this.props.onTodo({
+    this.props.addTodo({
       ...this.state,
-      id: +new Date(),
+      id: todoId + 1,
     });
 
     this.setState({
@@ -54,7 +55,8 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  onTodo: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
+  todoId: PropTypes.number.isRequired,
 };
 
 export default Header;

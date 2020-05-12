@@ -19,7 +19,7 @@ const buttonsFilter = [
 
 const Footer = ({
   noComlpetedTodo,
-  onFilteredTodos,
+  setFilter,
   clearCompleted,
   visibleClearCompleted,
   filterType,
@@ -37,7 +37,7 @@ const Footer = ({
           <a
             href={button.href}
             className={cn({ selected: filterType === `${button.text}` })}
-            onClick={e => onFilteredTodos(e.target.text)}
+            onClick={e => setFilter(e.target.text)}
           >
             {button.text}
           </a>
@@ -60,7 +60,7 @@ const Footer = ({
 
 Footer.propTypes = {
   noComlpetedTodo: PropTypes.number.isRequired,
-  onFilteredTodos: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
   clearCompleted: PropTypes.func.isRequired,
   visibleClearCompleted: PropTypes.bool.isRequired,
   filterType: PropTypes.string.isRequired,
