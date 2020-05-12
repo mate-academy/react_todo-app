@@ -1,11 +1,15 @@
 import React from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-const TodosFilter = ({ updateTodosToShow }) => (
+const TodosFilter = ({ showParam, updateTodosToShow }) => (
   <ul className="filters">
     <li>
       <a
         href="#/"
+        className={classNames({
+          selected: showParam === 'all',
+        })}
         onClick={() => (updateTodosToShow('all'))}
       >
         All
@@ -14,6 +18,9 @@ const TodosFilter = ({ updateTodosToShow }) => (
     <li>
       <a
         href="#/active"
+        className={classNames({
+          selected: showParam === 'active',
+        })}
         onClick={() => (updateTodosToShow('active'))}
       >
         Active
@@ -22,6 +29,9 @@ const TodosFilter = ({ updateTodosToShow }) => (
     <li>
       <a
         href="#/completed"
+        className={classNames({
+          selected: showParam === 'completed',
+        })}
         onClick={() => (updateTodosToShow('completed'))}
       >
         Completed
@@ -31,6 +41,7 @@ const TodosFilter = ({ updateTodosToShow }) => (
 );
 
 TodosFilter.propTypes = {
+  showParam: PropTypes.string.isRequired,
   updateTodosToShow: PropTypes.func.isRequired,
 };
 

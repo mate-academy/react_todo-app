@@ -3,22 +3,22 @@ import PropTypes from 'prop-types';
 
 class AddTodoForm extends React.Component {
   state = {
-    content: '',
     id: 1,
+    content: '',
     completed: false,
   }
 
   handleChange = (event) => {
     this.setState({
-      content: event.target.value.trim(),
+      content: event.target.value,
     });
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
 
-    if (this.state.content) {
-      this.props.addTodo(this.state);
+    if (this.state.content.trim().length !== 0) {
+      this.props.addTodoHandle(this.state);
 
       this.setState(prevState => ({
         content: '',
@@ -42,7 +42,7 @@ class AddTodoForm extends React.Component {
 }
 
 AddTodoForm.propTypes = {
-  addTodo: PropTypes.func.isRequired,
+  addTodoHandle: PropTypes.func.isRequired,
 };
 
 export default AddTodoForm;

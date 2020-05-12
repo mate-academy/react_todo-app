@@ -5,6 +5,7 @@ import TodosFilter from '../TodosFilter/TodosFilter';
 const Footer = (
   {
     todos,
+    showParam,
     itemLeft,
     updateTodosShow,
     handleRemoveCompleted,
@@ -14,9 +15,13 @@ const Footer = (
   <footer className="footer">
     <span className="todo-count">
       {itemLeft}
+      {' '}
       item left
     </span>
-    <TodosFilter updateTodosToShow={updateTodosShow} />
+    <TodosFilter
+      showParam={showParam}
+      updateTodosToShow={updateTodosShow}
+    />
     {
       (todos.filter(todo => (
         todo.completed)).length)
@@ -42,6 +47,7 @@ Footer.propTypes = {
       completed: PropTypes.bool.isRequired,
     }),
   ).isRequired,
+  showParam: PropTypes.string.isRequired,
   itemLeft: PropTypes.number.isRequired,
   updateTodosShow: PropTypes.func.isRequired,
   handleRemoveCompleted: PropTypes.func.isRequired,

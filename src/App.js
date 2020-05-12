@@ -10,25 +10,7 @@ class App extends React.Component {
     showParam: 'all',
   };
 
-  componentDidMount() {
-    const storageTodos = JSON.parse(localStorage.getItem('todos'));
-
-    if (storageTodos) {
-      this.setState({
-        todos: storageTodos,
-      });
-    }
-  }
-
-  componentDidUpdate(prevState) {
-    const { todos } = this.state;
-
-    if (this.state.todos !== prevState.todos) {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    }
-  }
-
-  addTodo = (todo) => {
+  addTodoHandle = (todo) => {
     this.setState(prevState => ({
       todos: [...prevState.todos, todo],
     }));
@@ -127,7 +109,9 @@ class App extends React.Component {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <AddTodoForm addTodo={this.addTodo} />
+          <AddTodoForm
+            addTodoHandle={this.addTodoHandle}
+          />
         </header>
         {(todos.length)
           ? (
@@ -150,6 +134,7 @@ class App extends React.Component {
               </section>
               <Footer
                 todos={todos}
+                showParam={showParam}
                 itemLeft={itemLeft}
                 updateTodosShow={this.updateTodosShow}
                 handleRemoveCompleted={this.handleRemoveCompleted}
