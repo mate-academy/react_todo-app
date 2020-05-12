@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoApp from './components/TodoApp';
 import TodoList from './components/TodoList';
-import TodosFilter from './components/TodosFilter';
+import Footer from './components/Footer';
 
 class App extends React.Component {
   state = {
@@ -56,7 +56,6 @@ class App extends React.Component {
     }));
   }
 
-  // filter starts!!!!!!!!!!!!!!!!!!!!!!
   filterTodos = (whichTasksToShow) => {
     const { tasks } = this.state;
 
@@ -72,10 +71,35 @@ class App extends React.Component {
     }
   }
 
+  isAnyActiveTasks = () => (
+    this.state.tasks.filter(task => !task.completed).length
+  );
+
+  toggleAllTasksCompleted = () => {
+    if (this.state.tasks.every(task => task.completed)) {
+      this.setState(prevState => ({
+        tasks: prevState.tasks.map(task => (
+          {
+            ...task,
+            completed: false,
+          }
+        )),
+      }));
+    } else {
+      this.setState(prevState => ({
+        tasks: prevState.tasks.map(task => (
+          {
+            ...task,
+            completed: true,
+          }
+        )),
+      }));
+    }
+  }
+
   toggleActiveTasks = (filterName) => {
     this.setState({ tasksToShow: filterName });
   }
-  // filter ends !!!!!!!!!!!!!!!!!!!!
 
   render() {
     const { tasks, tasksToShow } = this.state;
@@ -91,10 +115,11 @@ class App extends React.Component {
 
         <section className="main">
           <input
+            checked={tasks.length > 0 && this.isAnyActiveTasks() === 0}
+            onChange={this.toggleAllTasksCompleted}
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            // checked={tasks.every(task => task.completed)}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -103,40 +128,15 @@ class App extends React.Component {
             toggleCompleteTask={this.toggleCompleteTask}
             deleteTask={this.deleteTask}
           />
-
         </section>
 
-        <footer
-          className="footer"
-          hidden={tasks.length === 0}
-        >
-          <span className="todo-count">
-            {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-            {tasks.filter(task => task.completed === false).length} items left
-          </span>
-          {/* <TodosFilter /> */}
-
-          {/* above or below only */}
-
-          <ul className="filters">
-            {filteringBtns.map(filter => (
-              <TodosFilter
-                tasksToShow={tasksToShow}
-                key={filter}
-                actualFilter={filter}
-                toggleActiveTasks={this.toggleActiveTasks}
-              />
-            ))}
-          </ul>
-
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.clearCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
+        <Footer
+          tasks={tasks}
+          filteringBtns={filteringBtns}
+          tasksToShow={tasksToShow}
+          clearCompleted={this.clearCompleted}
+          toggleActiveTasks={this.toggleActiveTasks}
+        />
       </section>
     );
   }
