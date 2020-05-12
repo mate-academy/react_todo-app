@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CN from 'classnames';
 
 export class Header extends Component {
   state = {
     title: '',
-    completed: false,
     errorTitle: false,
   };
 
@@ -28,13 +28,9 @@ export class Header extends Component {
     }
 
     // не знаю как для пропсов проптайп написать
-    // eslint-disable-next-line react/prop-types
-    this.props.newTodo({
-      title: newTitle,
-      // eslint-disable-next-line react/prop-types
-      id: this.props.id,
-      completed: this.state.completed,
-    });
+    const currentId = this.props.id;
+
+    this.props.newTodo(newTitle, currentId);
     this.setState({
       errorTitle: false,
     });
@@ -73,3 +69,8 @@ export class Header extends Component {
     );
   }
 }
+
+Header.propTypes = {
+  id: PropTypes.number.isRequired,
+  newTodo: PropTypes.func.isRequired,
+};

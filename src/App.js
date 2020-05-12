@@ -10,15 +10,17 @@ class App extends Component {
     typeOfFilter: '',
   };
 
-  newTodo = ({ id, title, completed }) => {
+  newTodo = (title, id) => {
+    const currentTodo = {
+      id,
+      title,
+      completed: false,
+    };
+
     this.setState(prev => ({
       todos: [
         ...prev.todos,
-        {
-          id,
-          title,
-          completed,
-        },
+        currentTodo,
       ],
       counter: prev.counter + 1,
     }));
@@ -41,6 +43,12 @@ class App extends Component {
 
         return item;
       }),
+    }));
+  };
+
+  clearCompleted = () => {
+    this.setState(prev => ({
+      todos: prev.todos.filter(item => item.completed === false),
     }));
   };
 
@@ -75,8 +83,11 @@ class App extends Component {
           completedTodo={this.completedTodo}
         />
         <Footer
+          invisibleFooter={todos.length}
           countCompleted={todos.filter(item => item.completed === false).length}
           handleTypeOfFilter={this.handleTypeOfFilter}
+          typeOfFilter={typeOfFilter}
+          clearCompleted={this.clearCompleted}
         />
       </section>
     );
