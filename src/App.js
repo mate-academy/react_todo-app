@@ -106,31 +106,36 @@ class App extends React.Component {
             checked={todos.length && todos.every(todo => todo.completed)}
             onClick={this.pickAll}
           />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {todos.length > 0 && (
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          )}
           <TodoList
             todos={filterTodos}
             changeComplete={this.changeComplete}
             deleteTodo={this.deleteTodo}
           />
         </section>
+        {todos.length > 0 && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${activeTodos.length} items left`}
+            </span>
+            <TodosFilter
+              filterItem={this.filterItem}
+              filterTypes={filterTypes}
+              filter={filter}
+            />
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={this.clearCompleted}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )
+        }
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${activeTodos.length} items left`}
-          </span>
-          <TodosFilter
-            filterItem={this.filterItem}
-            filterTypes={filterTypes}
-            filter={filter}
-          />
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.clearCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
       </section>
     );
   }
