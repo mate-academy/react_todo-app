@@ -44,41 +44,39 @@ class TodoItem extends React.Component {
     const { isEdit, editTitle } = this.state;
 
     return (
-      <>
-        <li className={ClassNames('item', {
-          completed,
-          editing: isEdit,
-        })}
-        >
-          <div className="view">
-            <input
-              type="checkbox"
-              className="toggle"
-              id={id}
-              checked={completed}
-              onChange={() => (changeCompleted(id))}
-            />
-            <label
-              htmlFor={id}
-              onDoubleClick={this.activateTextInput}
-            >
-              {title}
-            </label>
-            <button
-              type="button"
-              className="destroy"
-              onClick={() => deleteTodo(id)}
-            />
-          </div>
+      <li className={ClassNames('item', {
+        completed,
+        editing: isEdit,
+      })}
+      >
+        <div className="view">
           <input
-            type="text"
-            className="edit"
-            onKeyDown={event => this.submitChangeTitle(event, editTitle, id)}
-            onChange={this.editTitle}
-            value={editTitle}
+            type="checkbox"
+            className="toggle"
+            id={id}
+            checked={completed}
+            onChange={() => (changeCompleted(id))}
           />
-        </li>
-      </>
+          <label
+            htmlFor={id}
+            onDoubleClick={this.activateTextInput}
+          >
+            {title}
+          </label>
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => deleteTodo(id)}
+          />
+        </div>
+        <input
+          type="text"
+          className="edit"
+          onKeyDown={event => this.submitChangeTitle(event, editTitle, id)}
+          onChange={this.editTitle}
+          value={editTitle}
+        />
+      </li>
     );
   }
 }
