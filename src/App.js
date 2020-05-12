@@ -12,7 +12,7 @@ export default class App extends React.Component {
     counter: 0,
     count: 0,
     filter: 'all',
-    selectAll: false,
+    selectedAll: false,
   }
   deleteTodo = (id) => {
     const index = this.state.todos.findIndex((el) => el.id === id);
@@ -53,9 +53,10 @@ export default class App extends React.Component {
   };
 
   toggleSelectAll = () => {
+    this.state.selectedAll = !this.state.selectedAll;
     this.setState({
       todos: this.state.todos.map((todo) => {
-        todo.completed = !todo.completed;
+        todo.completed = this.state.selectedAll;
         return todo;
       })
     });
