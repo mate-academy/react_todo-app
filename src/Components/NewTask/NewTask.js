@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 class TodoApp extends React.Component {
   state = {
     inputData: '',
-  }
+  };
 
   handleChange = (event) => {
     this.setState({
       inputData: event.target.value,
     });
-  }
+  };
 
   clearField = () => {
     this.setState({ inputData: '' });
@@ -23,21 +23,22 @@ class TodoApp extends React.Component {
     return (
       <header className="header">
         <h1>todos</h1>
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const taskObj = {
-            id: +new Date(),
-            title: inputData.trim(),
-            completed: false,
-          };
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const taskObj = {
+              id: +new Date(),
+              title: inputData.trim(),
+              completed: false,
+            };
 
-          if (inputData.length === 0) {
-            return;
-          }
+            if (inputData.length === 0) {
+              return;
+            }
 
-          handleSubmit(taskObj);
-          this.clearField();
-        }}
+            handleSubmit(taskObj);
+            this.clearField();
+          }}
         >
           <input
             className="new-todo"

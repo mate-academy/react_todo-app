@@ -2,104 +2,89 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-class TodosFilter extends React.Component {
-  state = {
-    activeFilter: 'All',
+const TodosFilter = ({
+  filterSelector,
+  activeTasksCounter,
+  clearButtonStatus,
+  removeCheckedTasks,
+  activeFilter,
+}) => {
+  const activateFiltration = (event, filterSetter) => {
+    const { text } = event.target;
+
+    filterSetter(text);
   };
 
-  setActiveFilter = (filter) => {
-    this.setState({ activeFilter: filter });
-  }
+  return (
+    <footer className="footer">
+      <span className="todo-count">
+        unfinished tasks
+        {' '}
+        {activeTasksCounter()}
+      </span>
 
-  render() {
-    const {
-      filterSelector,
-      activeTasksCounter,
-      clearButtonStatus,
-      removeCheckedTasks,
-    } = this.props;
-    const { activeFilter } = this.state;
-
-    return (
-      <footer className="footer">
-        <span className="todo-count">
-          unfinished tasks
-          {' '}
-          {activeTasksCounter()}
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className={cn({
-                selected: activeFilter === 'All',
-              })}
-              onClick={(e) => {
-                const { text } = e.target;
-
-                this.setActiveFilter(text);
-                filterSelector(activeFilter);
-              }}
-            >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              className={cn({
-                selected: activeFilter === 'Active',
-              })}
-              href="#/active"
-              onClick={(e) => {
-                const { text } = e.target;
-
-                this.setActiveFilter(text);
-                filterSelector(activeFilter);
-              }}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              className={cn({
-                selected: activeFilter === 'Completed',
-              })}
-              href="#/completed"
-              onClick={(e) => {
-                const { text } = e.target;
-
-                this.setActiveFilter(text);
-                filterSelector(activeFilter);
-              }}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
-        {clearButtonStatus && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={removeCheckedTasks}
+      <ul className="filters">
+        <li>
+          <a
+            href="#/"
+            className={cn({
+              selected: activeFilter === 'All',
+            })}
+            onClick={(e) => {
+              activateFiltration(e, filterSelector);
+            }}
           >
-            Clear completed
-          </button>
-        )}
+            All
+          </a>
+        </li>
 
-      </footer>
-    );
-  }
-}
+        <li>
+          <a
+            className={cn({
+              selected: activeFilter === 'Active',
+            })}
+            href="#/active"
+            onClick={(e) => {
+              activateFiltration(e, filterSelector);
+            }}
+          >
+            Active
+          </a>
+        </li>
+
+        <li>
+          <a
+            className={cn({
+              selected: activeFilter === 'Completed',
+            })}
+            href="#/completed"
+            onClick={(e) => {
+              activateFiltration(e, filterSelector);
+            }}
+          >
+            Completed
+          </a>
+        </li>
+      </ul>
+      {clearButtonStatus && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={removeCheckedTasks}
+        >
+          Clear completed
+        </button>
+      )}
+    </footer>
+  );
+};
 
 TodosFilter.propTypes = {
   removeCheckedTasks: PropTypes.func.isRequired,
   activeTasksCounter: PropTypes.func.isRequired,
   filterSelector: PropTypes.func.isRequired,
   clearButtonStatus: PropTypes.bool.isRequired,
+  activeFilter: PropTypes.string.isRequired,
 };
 
 export default TodosFilter;

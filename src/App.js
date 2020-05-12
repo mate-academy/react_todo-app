@@ -10,7 +10,7 @@ const tasksArr = localStorage.getItem('todos')
 class App extends React.Component {
   state = {
     todos: [...tasksArr],
-    filtrationType: '',
+    filtrationType: 'All',
   }
 
   componentDidUpdate() {
@@ -108,7 +108,8 @@ class App extends React.Component {
   }
 
   render() {
-    const tasksListLength = this.state.todos.length;
+    const { filtrationType, todos } = this.state;
+    const tasksListLength = todos.length;
 
     return (
       <section className="todoapp">
@@ -131,6 +132,7 @@ class App extends React.Component {
             filterSelector={this.filterSelector}
             clearButtonStatus={this.getClearButtonStatus()}
             removeCheckedTasks={this.removeCheckedTasks}
+            activeFilter={filtrationType}
           />
         ) }
       </section>

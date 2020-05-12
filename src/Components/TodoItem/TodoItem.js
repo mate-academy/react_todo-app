@@ -7,22 +7,22 @@ class TodoItem extends React.Component {
     isEditing: false,
     editingId: '',
     actualTodoData: '',
-  }
+  };
 
   setEditField = (id) => {
     this.setState({
       isEditing: true,
       editingId: id,
     });
-  }
+  };
 
   updField = (data) => {
     this.setState({ actualTodoData: data });
-  }
+  };
 
   hideEditField = () => {
     this.setState({ isEditing: false });
-  }
+  };
 
   checkClickedKey = (keyName, keyCode) => {
     const { editingId, actualTodoData } = this.state;
@@ -40,7 +40,7 @@ class TodoItem extends React.Component {
       });
       this.hideEditField();
     }
-  }
+  };
 
   render() {
     const { todo, statusHandler, handleTaskRemover, updateTask } = this.props;
@@ -52,7 +52,6 @@ class TodoItem extends React.Component {
           completed: todo.completed,
           editing: this.state.isEditing,
         })}
-
         onDoubleClick={(e) => {
           this.setState({
             actualTodoData: todo.title,
@@ -70,11 +69,7 @@ class TodoItem extends React.Component {
               statusHandler(todo.id);
             }}
           />
-          <label
-            id={todo.id}
-          >
-            {todo.title}
-          </label>
+          <label id={todo.id}>{todo.title}</label>
           <button
             type="button"
             className="destroy"

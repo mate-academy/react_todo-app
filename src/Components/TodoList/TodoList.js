@@ -6,56 +6,58 @@ import './TodoList.scss';
 import TodoItem from '../TodoItem/TodoItem';
 
 class TodoList extends React.Component {
-state = {
-  clicks: 1,
-}
+  state = {
+    clicks: 1,
+  };
 
-clicksIncrement = () => {
-  this.setState(prev => ({
-    clicks: prev.clicks + 1,
-  }));
-}
+  clicksIncrement = () => {
+    this.setState(prev => ({
+      clicks: prev.clicks + 1,
+    }));
+  };
 
-render() {
-  const { todosList,
-    handleTaskRemover,
-    statusHandler,
-    checkAllTasks,
-    updateTask } = this.props;
+  render() {
+    const {
+      todosList,
+      handleTaskRemover,
+      statusHandler,
+      checkAllTasks,
+      updateTask,
+    } = this.props;
 
-  return (
-    <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        checked={todosList.every(task => task.completed)}
-      />
-      <label
-        checked={this.state.checked}
-        htmlFor="toggle-all"
-        onClick={() => {
-          this.clicksIncrement();
-          checkAllTasks(this.state.clicks);
-        }}
-      >
-        Mark all as complete
-      </label>
+    return (
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={todosList.every(task => task.completed)}
+        />
+        <label
+          checked={this.state.checked}
+          htmlFor="toggle-all"
+          onClick={() => {
+            this.clicksIncrement();
+            checkAllTasks(this.state.clicks);
+          }}
+        >
+          Mark all as complete
+        </label>
 
-      <ul className="todo-list">
-        {todosList.map(todo => (
-          <TodoItem
-            todo={todo}
-            key={todo.id}
-            handleTaskRemover={handleTaskRemover}
-            statusHandler={statusHandler}
-            updateTask={updateTask}
-          />
-        ))}
-      </ul>
-    </section>
-  );
-}
+        <ul className="todo-list">
+          {todosList.map(todo => (
+            <TodoItem
+              todo={todo}
+              key={todo.id}
+              handleTaskRemover={handleTaskRemover}
+              statusHandler={statusHandler}
+              updateTask={updateTask}
+            />
+          ))}
+        </ul>
+      </section>
+    );
+  }
 }
 
 TodoList.propTypes = {
