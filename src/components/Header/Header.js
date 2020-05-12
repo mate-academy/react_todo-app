@@ -27,10 +27,9 @@ export class Header extends Component {
       return;
     }
 
-    // не знаю как для пропсов проптайп написать
     const currentId = this.props.id;
 
-    this.props.newTodo(newTitle, currentId);
+    this.props.addTodo(newTitle, currentId);
     this.setState({
       errorTitle: false,
     });
@@ -72,5 +71,5 @@ export class Header extends Component {
 
 Header.propTypes = {
   id: PropTypes.number.isRequired,
-  newTodo: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
 };

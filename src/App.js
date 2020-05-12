@@ -7,10 +7,13 @@ class App extends Component {
   state = {
     todos: [],
     counter: 1,
-    typeOfFilter: '',
+    typeOfFilter: 'all',
+    newValue: '',
+    editingTodo: null,
+    showChangeTitle: false,
   };
 
-  newTodo = (title, id) => {
+  addTodo = (title, id) => {
     const currentTodo = {
       id,
       title,
@@ -58,29 +61,81 @@ class App extends Component {
     });
   };
 
+  handleSubmit = (id) => {
+    const { newValue } = this.state;
+
+    if (!newValue) {
+      this.setState(prev => ({
+        todos: prev.todos.filter(item => item.id !== id),
+      }));
+    }
+
+    this.setState(prev => ({
+      showChangeTitle: false,
+      editingTodo: null,
+      todos: prev.todos.map(item => (item.id === id ? {
+        ...item, title: newValue,
+      } : item)),
+    }));
+  };
+
+  changeTitle = (id) => {
+    this.setState(prev => ({
+      newValue: prev.todos.find(el => el.id === id).title,
+      editingTodo: id,
+      showChangeTitle: true,
+    }));
+  };
+
+  handleChangeTitle = (e) => {
+    this.setState({
+      newValue: e.target.value,
+    });
+  };
+
+  handleCompletedAll = () => {
+    this.setState(prev => ({
+      todos: prev.todos.map(todo => ({
+        ...todo,
+        completed: !todo.completed,
+      })),
+    }));
+  };
+
   render() {
-    const { todos, typeOfFilter } = this.state;
+    const { todos,
+      typeOfFilter,
+      newValue,
+      editingTodo,
+      showChangeTitle } = this.state;
     let visibleTodos = [...todos];
 
     if (typeOfFilter === 'completed') {
-      visibleTodos = todos.filter(todo => todo.completed);
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
     }
 
     if (typeOfFilter === 'active') {
-      visibleTodos = todos.filter(todo => !todo.completed);
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
     }
 
     return (
       <section className="todoapp">
         <Header
           todos={todos}
-          newTodo={this.newTodo}
+          addTodo={this.addTodo}
           id={this.state.counter}
         />
         <TodoList
           visibleTodos={visibleTodos}
           deleteTodo={this.deleteTodo}
           completedTodo={this.completedTodo}
+          handleSubmit={this.handleSubmit}
+          changeTitle={this.changeTitle}
+          newValue={newValue}
+          editingTodo={editingTodo}
+          showChangeTitle={showChangeTitle}
+          handleChangeTitle={this.handleChangeTitle}
+          handleCompletedAll={this.handleCompletedAll}
         />
         <Footer
           invisibleFooter={todos.length}

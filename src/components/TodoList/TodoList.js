@@ -2,44 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CN from 'classnames';
 
-export class TodoList extends React.Component {
-  state = {
-    newValue: '',
-    editingTodo: null,
-    visibleAll: true,
-  };
-
-  changeTitle = (id, title) => {
-    this.setState({
-      newValue: title,
-      editingTodo: id,
-    });
-  };
-
-  handleChangeTitle = (e) => {
-    this.setState({
-      newValue: e.target.value,
-    });
-  };
-
-  handleSubmit = (e) => {
-    // const { newValue } = this.state;
-    //
-    // this.props.newTodo(
-    //   this.props.id,
-    // );
-    // this.resetForm();
-  };
-
-  handleVisibleAll = () => {
-    this.setState(prev => ({
-      visibleAll: !prev.visibleAll,
-    }));
-  };
-
+export const TodoList = {
   render() {
-    const { newValue, editingTodo, visibleAll } = this.state;
-    const { visibleTodos, deleteTodo, completedTodo } = this.props;
+    const {
+      visibleTodos,
+      deleteTodo,
+      completedTodo,
+      handleSubmit,
+      changeTitle,
+      newValue,
+      editingTodo,
+      showChangeTitle,
+      handleChangeTitle,
+      handleCompletedAll,
+    } = this.props;
 
     return (
       <section className="main">
@@ -47,53 +23,54 @@ export class TodoList extends React.Component {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          onClick={this.handleVisibleAll}
+          onClick={handleCompletedAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-        {visibleAll ? (
-          <ul className="todo-list">
-            {visibleTodos.map(item => (
-              <li
-                onDoubleClick={() => this.changeTitle(item.id, item.title)}
-                key={item.id}
-                className={CN({
-                  editing: editingTodo === item.id,
-                  completed: editingTodo !== item.id && item.completed,
-                  '': editingTodo !== item.id && !item.completed,
-                })}
-              >
-                <div className="view">
-                  <input
-                    type="checkbox"
-                    checked={item.completed}
-                    className="toggle"
-                    id={`todo-${item.id}`}
-                    onClick={() => completedTodo(item.id)}
-                  />
-                  <label htmlFor={`todo-${item.id}`}>
-                    {item.title}
-                  </label>
-                  <button
-                    type="button"
-                    className="destroy"
-                    onClick={() => deleteTodo(item.id)}
-                  />
-                </div>
+        <ul className="todo-list">
+          {visibleTodos.map(({ id, title, completed }) => (
+            <li
+              onDoubleClick={() => changeTitle(id)}
+              key={id}
+              className={CN({
+                editing: editingTodo === id,
+                completed: editingTodo !== id && completed,
+                '': editingTodo !== id && !completed,
+              })}
+            >
+              <div className="view">
                 <input
-                  value={newValue}
-                  onChange={this.handleChangeTitle}
-                  type="text"
-                  className="edit"
-                  onKeyDown={this.handleSubmit}
+                  type="checkbox"
+                  checked={completed}
+                  className="toggle"
+                  id={`todo-${id}`}
+                  onClick={() => completedTodo(id)}
                 />
-              </li>
-            ))}
-          </ul>
-        ) : ''}
+                <label htmlFor={`todo-${id}`}>
+                  {title}
+                </label>
+                <button
+                  type="button"
+                  className="destroy"
+                  onClick={() => deleteTodo(id)}
+                />
+              </div>
+              {showChangeTitle && (
+                <form onSubmit={() => handleSubmit(id)}>
+                  <input
+                    value={newValue}
+                    onChange={handleChangeTitle}
+                    type="text"
+                    className="edit"
+                  />
+                </form>
+              )}
+            </li>
+          ))}
+        </ul>
       </section>
     );
-  }
-}
+  },
+};
 
 TodoList.propTypes = {
   deleteTodo: PropTypes.func.isRequired,
@@ -101,8 +78,16 @@ TodoList.propTypes = {
   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
   })),
+  handleSubmit: PropTypes.func.isRequired,
+  changeTitle: PropTypes.func.isRequired,
+  newValue: PropTypes.string.isRequired,
+  editingTodo: PropTypes.number,
+  showChangeTitle: PropTypes.bool.isRequired,
+  handleChangeTitle: PropTypes.func.isRequired,
+  handleCompletedAll: PropTypes.func.isRequired,
 };
 
 TodoList.defaultProps = {
   visibleTodos: [],
+  editingTodo: null,
 };
