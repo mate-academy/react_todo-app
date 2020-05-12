@@ -4,6 +4,12 @@ import TodoList from './TodoList';
 import NewTodo from './NewTodo';
 import FilterButtons from './FilterButtons';
 
+const FILTERS = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+};
+
 class TodoApp extends React.Component {
   state = {
     todos: [],
@@ -116,18 +122,19 @@ class TodoApp extends React.Component {
     } = this.state;
 
     const notComplitedTodo = todos.filter(todo => todo.completed === false);
+    const { all, completed, active } = FILTERS;
 
     let preparedTodos;
 
-    if (filter === 'all') {
+    if (filter === all) {
       preparedTodos = [...todos];
     }
 
-    if (filter === 'active') {
+    if (filter === active) {
       preparedTodos = [...todos].filter(todo => !todo.completed);
     }
 
-    if (filter === 'completed') {
+    if (filter === completed) {
       preparedTodos = [...todos].filter(todo => todo.completed);
     }
 

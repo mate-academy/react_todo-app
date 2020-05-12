@@ -3,49 +3,45 @@ import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 import TodosProptypes from './TodosProptypes';
 
-class TodoList extends React.PureComponent {
-  render() {
-    const {
-      todos,
-      changeStatus,
-      deleteTodo,
-      selectAllTodo,
-      changeTitle,
-      initialTodos,
-    } = this.props;
+function TodoList({
+  todos,
+  changeStatus,
+  deleteTodo,
+  selectAllTodo,
+  changeTitle,
+  initialTodos,
+}) {
+  let allChecked;
 
-    let allChecked;
-
-    if (initialTodos.length === 0) {
-      allChecked = false;
-    } else {
-      allChecked = initialTodos.every(todo => todo.completed === true);
-    }
-
-    return (
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          onChange={selectAllTodo}
-          checked={allChecked}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          {todos.map(todo => (
-            <TodoItem
-              changeTitle={changeTitle}
-              todo={todo}
-              key={todo.id}
-              changeStatus={changeStatus}
-              deleteTodo={deleteTodo}
-            />
-          ))}
-        </ul>
-      </section>
-    );
+  if (initialTodos.length === 0) {
+    allChecked = false;
+  } else {
+    allChecked = initialTodos.every(todo => todo.completed === true);
   }
+
+  return (
+    <section className="main">
+      <input
+        type="checkbox"
+        id="toggle-all"
+        className="toggle-all"
+        onChange={selectAllTodo}
+        checked={allChecked}
+      />
+      <label htmlFor="toggle-all">Mark all as complete</label>
+      <ul className="todo-list">
+        {todos.map(todo => (
+          <TodoItem
+            changeTitle={changeTitle}
+            todo={todo}
+            key={todo.id}
+            changeStatus={changeStatus}
+            deleteTodo={deleteTodo}
+          />
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 TodoList.propTypes = {
