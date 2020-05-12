@@ -20,11 +20,11 @@ export class ToDoContainer extends Component {
   }));
 
   deleteTodo = todoId => this.setState(state => ({
-    todos: state.todos.filter(todo => todo.id !== todoId),
+    todos: state.todos.filter(({ id }) => id !== todoId),
   }));
 
   handleClearCompleted = () => this.setState(state => ({
-    todos: state.todos.filter(todo => !todo.completed),
+    todos: state.todos.filter(({ completed }) => !completed),
   }));
 
   toggleTodoCompleted = (todoId) => {
@@ -69,11 +69,11 @@ export class ToDoContainer extends Component {
 
     switch (selectedFilter) {
       case FILTER_TYPES.active:
-        return todos.filter(todo => !todo.completed);
+        return todos.filter(({ completed }) => !completed);
       case FILTER_TYPES.completed:
-        return todos.filter(todo => todo.completed);
+        return todos.filter(({ completed }) => completed);
       case FILTER_TYPES.all:
-        return todos.filter(todo => todo.id);
+        return todos.filter(({ id }) => id);
       default:
         return todos;
     }
