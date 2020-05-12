@@ -2,36 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-class TodoList extends React.PureComponent {
-  render() {
-    const { todos, deleteTodo, changeStatus, markAll } = this.props;
-
-    return (
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          checked={todos.length > 0 && todos.every(todo => todo.completed)}
-          onChange={() => markAll()}
+const TodoList = ({ todos, deleteTodo, changeStatus, markAll }) => (
+  <section className="main">
+    <input
+      type="checkbox"
+      id="toggle-all"
+      className="toggle-all"
+      checked={todos.length > 0 && todos.every(todo => todo.completed)}
+      onChange={() => markAll()}
+    />
+    {todos.length > 0 && (
+      <label htmlFor="toggle-all">Mark all as complete</label>
+    )}
+    <ul className="todo-list">
+      {todos.map(todo => (
+        <TodoItem
+          todo={todo}
+          changeStatus={changeStatus}
+          key={todo.id}
+          deleteTodo={deleteTodo}
         />
-        {todos.length > 0 && (
-          <label htmlFor="toggle-all">Mark all as complete</label>
-        )}
-        <ul className="todo-list">
-          {todos.map(todo => (
-            <TodoItem
-              todo={todo}
-              changeStatus={changeStatus}
-              key={todo.id}
-              deleteTodo={deleteTodo}
-            />
-          ))}
-        </ul>
-      </section>
-    );
-  }
-}
+      ))}
+    </ul>
+  </section>
+);
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({

@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Filters from './Filters';
 
-/* eslint-disable max-len */
-const Footer = ({ changeFilter, clearCompleted, countOfNotFinishedTodos, typeOfFilter }) => (
+const Footer = ({
+  changeFilter,
+  clearCompleted,
+  countOfNotFinishedTodos,
+  typeOfFilter,
+}) => (
 
   <footer className="footer">
     <span className="todo-count">
@@ -13,7 +17,7 @@ const Footer = ({ changeFilter, clearCompleted, countOfNotFinishedTodos, typeOfF
     </span>
     <Filters
       typeOfFilter={typeOfFilter}
-      handleChangeFilter={changeFilter}
+      changeFilter={changeFilter}
     />
     <button
       type="button"

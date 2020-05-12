@@ -2,42 +2,40 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const Filters = ({ typeOfFilter, handleChangeFilter }) => (
+const buttons = [
+  {
+    name: 'All',
+  },
+  {
+    name: 'Active',
+  },
+  {
+    name: 'Completed',
+  },
+];
+
+const Filters = ({ typeOfFilter, changeFilter }) => (
 
   <ul className="filters">
-    <li>
-      <a
-        href="#/"
-        className={classNames({ selected: typeOfFilter === 'All' })}
-        onClick={() => handleChangeFilter('All')}
-      >
-        All
-      </a>
-    </li>
-    <li>
-      <a
-        href="#/active"
-        className={classNames({ selected: typeOfFilter === 'Active' })}
-        onClick={() => handleChangeFilter('Active')}
-      >
-        Active
-      </a>
-    </li>
-    <li>
-      <a
-        href="#/completed"
-        className={classNames({ selected: typeOfFilter === 'Completed' })}
-        onClick={() => handleChangeFilter('Completed')}
-      >
-        Completed
-      </a>
-    </li>
+    {buttons.map(button => (
+      <li key={button.name}>
+        <a
+          href={`#/${button.name}`}
+          className={classNames({
+            selected: typeOfFilter === `${button.name}`,
+          })}
+          onClick={() => changeFilter(`${button.name}`)}
+        >
+          {button.name}
+        </a>
+      </li>
+    ))}
   </ul>
 );
 
 Filters.propTypes = {
   typeOfFilter: PropTypes.string.isRequired,
-  handleChangeFilter: PropTypes.func.isRequired,
+  changeFilter: PropTypes.func.isRequired,
 };
 
 export default Filters;

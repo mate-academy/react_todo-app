@@ -3,10 +3,16 @@ import TodoList from './TodoList';
 import Header from './Header';
 import Footer from './Footer';
 
+const filters = {
+  active: 'Active',
+  completed: 'Completed',
+  all: 'All',
+};
+
 class App extends React.Component {
   state = {
     todos: [],
-    typeOfFilter: 'All',
+    typeOfFilter: filters.all,
   }
 
   addNewTodo = (todo) => {
@@ -15,7 +21,7 @@ class App extends React.Component {
     }));
   }
 
-  markAll =() => {
+  markAll = () => {
     if (this.state.todos.every(todo => todo.completed === true)) {
       this.setState(state => ({
         todos: state.todos.map(todo => (
@@ -58,6 +64,20 @@ class App extends React.Component {
     }));
   }
 
+  listOfVisibleTodos = () => {
+    const { todos, typeOfFilter } = this.state;
+
+    if (typeOfFilter === filters.completed) {
+      return todos.filter(todo => todo.completed);
+    }
+
+    if (typeOfFilter === filters.active) {
+      return todos.filter(todo => !todo.completed);
+    }
+
+    return todos;
+  }
+
   changeFilter = (filter) => {
     this.setState({
       typeOfFilter: filter,
@@ -71,26 +91,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { todos, typeOfFilter } = this.state;
+    const { todos, typeOfFilter, changeFilter } = this.state;
     const countOfNotFinishedTodos = todos
       .filter(todo => todo.completed === false).length;
-    let visibleTodos = [...todos];
-
-    if (typeOfFilter === 'All') {
-      visibleTodos = [...todos];
-    }
-
-    if (typeOfFilter === 'Completed') {
-      visibleTodos = todos.filter(todo => todo.completed);
-    }
-
-    if (typeOfFilter === 'Active') {
-      visibleTodos = todos.filter(todo => !todo.completed);
-    }
+    const visibleTodos = this.listOfVisibleTodos(changeFilter);
 
     return (
       <section className="todoapp">
-
         <Header addNewTodo={this.addNewTodo} />
         <TodoList
           todos={visibleTodos}
@@ -107,7 +114,6 @@ class App extends React.Component {
               clearCompleted={this.clearCompleted}
             />
           )}
-
       </section>
     );
   }
