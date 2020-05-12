@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-function FilterButtons({ filter, todosFilter }) {
+function FilterButtons({ currentFilter, todosFilter }) {
   return (
     <ul className="filters">
 
@@ -10,7 +10,7 @@ function FilterButtons({ filter, todosFilter }) {
         <a
           href="#/"
           id="all"
-          className={classNames({ selected: filter === 'all' })}
+          className={classNames({ selected: currentFilter === 'all' })}
           onClick={todosFilter}
         >
           All
@@ -22,7 +22,7 @@ function FilterButtons({ filter, todosFilter }) {
           href="#/active"
           id="active"
           onClick={todosFilter}
-          className={classNames({ selected: filter === 'active' })}
+          className={classNames({ selected: currentFilter === 'active' })}
         >
           Active
         </a>
@@ -33,7 +33,7 @@ function FilterButtons({ filter, todosFilter }) {
           href="#/completed"
           id="completed"
           onClick={todosFilter}
-          className={classNames({ selected: filter === 'completed' })}
+          className={classNames({ selected: currentFilter === 'completed' })}
         >
           Completed
         </a>
@@ -44,7 +44,7 @@ function FilterButtons({ filter, todosFilter }) {
 }
 
 FilterButtons.propTypes = {
-  filter: PropTypes.string.isRequired,
+  currentFilter: PropTypes.string.isRequired,
   todosFilter: PropTypes.func.isRequired,
 };
 

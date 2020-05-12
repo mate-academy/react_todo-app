@@ -69,8 +69,8 @@ class TodoApp extends React.Component {
   }
 
   selectAllTodo = ({ target }) => {
-    this.setState(state => ({
-      todos: state.todos.map(todo => ({
+    this.setState(prevState => ({
+      todos: prevState.todos.map(todo => ({
         ...todo,
         completed: target.checked,
       })),
@@ -98,11 +98,11 @@ class TodoApp extends React.Component {
   filterTodoList = () => {
     const { filter, todos } = this.state;
 
-    if (filter === 'active') {
+    if (filter === FILTERS.active) {
       return todos.filter(todo => !todo.completed);
     }
 
-    if (filter === 'completed') {
+    if (filter === FILTERS.completed) {
       return todos.filter(todo => todo.completed);
     }
 
@@ -134,7 +134,7 @@ class TodoApp extends React.Component {
         />
         <Footer
           todos={todos}
-          filter={filter}
+          currentFilter={filter}
           todosFilter={this.todosFilter}
           clearCompleted={this.clearCompleted}
           FILTERS={FILTERS}

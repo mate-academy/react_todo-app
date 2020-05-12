@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import FilterButtons from './FilterButtons';
 import TodosProptypes from './TodosProptypes';
 
-function Footer({ todos, filter, todosFilter, clearCompleted }) {
-  const notComplitedTodo = todos.filter(todo => todo.completed === false);
+function Footer({ todos, currentFilter, todosFilter, clearCompleted }) {
+  const notComplitedTodo = todos.filter(todo => !todo.completed);
 
   return (
     <footer
@@ -19,7 +19,7 @@ function Footer({ todos, filter, todosFilter, clearCompleted }) {
 
       <FilterButtons
         todosFilter={todosFilter}
-        filter={filter}
+        currentFilter={currentFilter}
       />
 
       <button
@@ -39,7 +39,7 @@ Footer.propTypes = {
   todos: TodosProptypes,
   clearCompleted: PropTypes.func.isRequired,
   todosFilter: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
+  currentFilter: PropTypes.string.isRequired,
 };
 
 Footer.defaultProps = {
