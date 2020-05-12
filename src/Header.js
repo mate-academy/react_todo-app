@@ -11,21 +11,26 @@ class Header extends React.Component {
   handleInput = (event) => {
     const { value } = event.target;
 
-    this.setState(state => ({
-      title: value.trimLeft(),
+    this.setState({
+      title: value.trimLeft().replace(/(\s{2,})/, ' '),
       completed: false,
-    }));
+    });
   }
 
   sumbmitForm = (event) => {
-    const { addTodos } = this.props;
+    const { addTodo } = this.props;
+    const { id, title, completed } = this.state;
 
     event.preventDefault();
     if (this.state.title === '') {
       return;
     }
 
-    addTodos(this.state);
+    addTodo({
+      id,
+      title,
+      completed,
+    });
     this.reset();
   }
 
@@ -57,5 +62,5 @@ class Header extends React.Component {
 export default Header;
 
 Header.propTypes = {
-  addTodos: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
 };

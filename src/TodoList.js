@@ -5,7 +5,7 @@ import Todo from './Todo';
 
 const TodoList = (props) => {
   const { selectAllButton,
-    markAll,
+    markAllTodo,
     todos,
     deleteTodo,
     editTodo,
@@ -20,7 +20,7 @@ const TodoList = (props) => {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            onChange={() => markAll()}
+            onChange={() => markAllTodo()}
             checked={selectAllButton}
           />
           <label
@@ -57,7 +57,7 @@ TodoList.propTypes = {
   })).isRequired,
   deleteTodo: PropTypes.func.isRequired,
   changeTodoStatus: PropTypes.func.isRequired,
-  markAll: PropTypes.func.isRequired,
+  markAllTodo: PropTypes.func.isRequired,
   selectAllButton: PropTypes.bool.isRequired,
   hideOnStart: PropTypes.bool.isRequired,
   editTodo: PropTypes.func.isRequired,

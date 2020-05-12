@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { FILTERS } from './filters';
 
 const TodosFilter = (props) => {
-  const { handlerChangeList,
-    handleClearCompleted,
+  const { changeVisibleList,
+    clearCompletedTodo,
     currentFilter,
     hideClearButton } = props;
 
@@ -16,8 +16,7 @@ const TodosFilter = (props) => {
           <a
             href="#/"
             className={currentFilter === FILTERS.all && 'selected'}
-            name="all"
-            onClick={() => handlerChangeList(FILTERS.all)}
+            onClick={() => changeVisibleList(FILTERS.all)}
           >
             All
           </a>
@@ -27,9 +26,8 @@ const TodosFilter = (props) => {
         <li>
           <a
             className={currentFilter === FILTERS.active ? 'selected' : ''}
-            name="active"
             href="#/active"
-            onClick={() => handlerChangeList(FILTERS.active)}
+            onClick={() => changeVisibleList(FILTERS.active)}
           >
             Active
           </a>
@@ -38,9 +36,8 @@ const TodosFilter = (props) => {
         <li>
           <a
             className={currentFilter === FILTERS.completed ? 'selected' : ''}
-            name="completed"
             href="#/completed"
-            onClick={() => handlerChangeList(FILTERS.completed)}
+            onClick={() => changeVisibleList(FILTERS.completed)}
           >
             Completed
           </a>
@@ -51,7 +48,7 @@ const TodosFilter = (props) => {
         <button
           type="button"
           className="clear-completed"
-          onClick={() => handleClearCompleted()}
+          onClick={() => clearCompletedTodo()}
         >
           Clear completed
         </button>
@@ -64,8 +61,8 @@ const TodosFilter = (props) => {
 export default TodosFilter;
 
 TodosFilter.propTypes = {
-  handlerChangeList: PropTypes.func.isRequired,
-  handleClearCompleted: PropTypes.func.isRequired,
+  changeVisibleList: PropTypes.func.isRequired,
+  clearCompletedTodo: PropTypes.func.isRequired,
   currentFilter: PropTypes.string.isRequired,
   hideClearButton: PropTypes.bool.isRequired,
 };

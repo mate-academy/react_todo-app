@@ -4,20 +4,20 @@ import cn from 'classnames';
 
 class Todo extends React.Component {
   state = {
-    title: '',
+    newTitle: '',
     edit: false,
   }
 
   activateEditing =() => {
     this.setState(state => ({
-      title: this.props.todo.title,
+      newTitle: this.props.todo.title,
       edit: !state.edit,
     }));
   }
 
   handlerChange =({ target }) => {
     this.setState({
-      title: target.value,
+      newTitle: target.value.trimLeft().replace(/(\s{2,})/, ' '),
     });
   }
 
@@ -36,17 +36,17 @@ class Todo extends React.Component {
   }
 
   render() {
-    const { todo,
+    const { todo: { id, completed, title },
       changeTodoStatus,
       deleteTodo,
       editTodo } = this.props;
 
-    const { title, edit } = this.state;
+    const { newTitle, edit } = this.state;
 
     return (
       <li
         className={cn({
-          editing: edit, completed: todo.completed,
+          editing: edit, completed,
         })}
       >
         {edit
@@ -56,8 +56,8 @@ class Todo extends React.Component {
                 onChange={this.handlerChange}
                 onBlur={this.completeEdit}
                 className="edit"
-                value={title}
-                onKeyDown={e => editTodo(e, todo.id, title, this.escapeEditing)}
+                value={newTitle}
+                onKeyDown={e => editTodo(e, id, newTitle, this.escapeEditing)}
                 // лінтер свариться на autoFocus;
                 // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus
@@ -68,19 +68,19 @@ class Todo extends React.Component {
           : (
             <div className="view">
               <input
-                onChange={() => changeTodoStatus(todo.id)}
+                onChange={() => changeTodoStatus(id)}
                 type="checkbox"
                 className="toggle"
-                id={todo.id}
-                checked={todo.completed}
+                id={id}
+                checked={completed}
               />
               <label
                 onDoubleClick={this.activateEditing}
               >
-                {todo.title}
+                {title}
               </label>
               <button
-                onClick={() => deleteTodo(todo.id)}
+                onClick={() => deleteTodo(id)}
                 type="button"
                 className="destroy"
               />

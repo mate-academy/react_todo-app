@@ -4,8 +4,8 @@ import TodosFilter from './TodosFilter';
 
 const Footer = (props) => {
   const { todosList,
-    handleClearCompleted,
-    handlerChangeList,
+    clearCompletedTodo,
+    changeVisibleList,
     currentFilter,
     hideClearButton } = props;
 
@@ -18,8 +18,8 @@ const Footer = (props) => {
         </span>
         <TodosFilter
           currentFilter={currentFilter}
-          handlerChangeList={handlerChangeList}
-          handleClearCompleted={handleClearCompleted}
+          changeVisibleList={changeVisibleList}
+          clearCompletedTodo={clearCompletedTodo}
           hideClearButton={hideClearButton}
         />
       </footer>
@@ -32,8 +32,8 @@ export default Footer;
 
 Footer.propTypes = {
   todosList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handlerChangeList: PropTypes.func.isRequired,
-  handleClearCompleted: PropTypes.func.isRequired,
+  changeVisibleList: PropTypes.func.isRequired,
+  clearCompletedTodo: PropTypes.func.isRequired,
   currentFilter: PropTypes.string.isRequired,
   hideClearButton: PropTypes.bool.isRequired,
 };
