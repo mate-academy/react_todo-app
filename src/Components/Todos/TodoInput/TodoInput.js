@@ -7,11 +7,10 @@ class TodoInput extends React.Component {
   };
 
   handleAddInputValue = (event) => {
+    event.preventDefault();
     const { input } = this.state;
 
-    if (event.key === 'Enter' && input) {
-      event.preventDefault();
-
+    if (input) {
       this.props.addTodo(input);
       this.setState({ input: '' });
     }
@@ -30,9 +29,8 @@ class TodoInput extends React.Component {
 
     return (
       <>
-        <form>
+        <form onSubmit={this.handleAddInputValue}>
           <input
-            onKeyPress={this.handleAddInputValue}
             onChange={this.handleInputChange}
             value={input}
             type="text"
