@@ -2,13 +2,19 @@ import React from 'react';
 import TodoList from './components/TodoList';
 import TodoFooter from './components/TodoFooter';
 
+const filters = {
+  all: 'All',
+  completed: 'Completed',
+  active: 'Active',
+};
+
 class App extends React.Component {
   state = {
     todos: [],
     todosCopied: [],
     todoTitle: '',
     isVisible: false,
-    filter: 'All',
+    filter: '',
   }
 
   handleChangeTitle = (event) => {
@@ -20,6 +26,10 @@ class App extends React.Component {
   handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       this.setState((state) => {
+        if (state.todoTitle === '') {
+          return false;
+        }
+
         const newTitle = {
           id: state.todos.length + 1,
           title: state.todoTitle,
@@ -41,10 +51,10 @@ class App extends React.Component {
     const { checked, name } = event.target;
 
     this.setState((state) => {
-      let newObj = state.todos.find(todo => todo.id === +name);
+      let todoCompleted = state.todos.find(todo => todo.id === +name);
 
-      newObj = {
-        ...newObj,
+      todoCompleted = {
+        ...todoCompleted,
         completed: checked,
       };
 
@@ -52,7 +62,7 @@ class App extends React.Component {
         todos: [
           ...state.todos.map((todo) => {
             if (todo.id === +name) {
-              todo = newObj;// eslint-disable-line no-param-reassign
+              todo = todoCompleted;// eslint-disable-line no-param-reassign
             }
 
             return todo;
@@ -60,7 +70,7 @@ class App extends React.Component {
         todosCopied: [
           ...state.todos.map((todo) => {
             if (todo.id === +name) {
-              todo = newObj;// eslint-disable-line no-param-reassign
+              todo = todoCompleted;// eslint-disable-line no-param-reassign
             }
 
             return todo;
@@ -72,21 +82,21 @@ class App extends React.Component {
   handleCompletedFilter = () => {
     this.setState(state => ({
       todos: [...state.todosCopied].filter(todo => todo.completed),
-      filter: 'Completed',
+      filter: filters.completed,
     }));
   }
 
   handleActiveFilter = () => {
     this.setState(state => ({
       todos: [...state.todosCopied].filter(todo => !todo.completed),
-      filter: 'Active',
+      filter: filters.active,
     }));
   }
 
   handleAllFilter = () => {
     this.setState(state => ({
       todos: [...state.todosCopied],
-      filter: 'All',
+      filter: filters.all,
     }));
   }
 
@@ -119,17 +129,28 @@ class App extends React.Component {
   }
 
   handleCompletedAll = () => {
-    this.setState(state => ({
-      todos: [...state.todos].map(todo => ({
-        ...todo,
-        completed: !todo.completed,
-      })),
-    }));
+    this.setState((state) => {
+      let filteredTodos = [...state.todos];
+
+      if (state.todos.length !== state.todos
+        .filter(todo => todo.completed).length) {
+        filteredTodos = [...state.todos].map(todo => ({
+          ...todo,
+          completed: false,
+        }));
+      }
+
+      return {
+        todos: filteredTodos.map(todo => ({
+          ...todo,
+          completed: !todo.completed,
+        })),
+      };
+    });
   }
 
   render() {
-    const { todos } = this.state;
-    const { todoTitle, isVisible, filter } = this.state;
+    const { todoTitle, isVisible, filter, todos } = this.state;
 
     return (
       <section className="todoapp">
@@ -175,6 +196,9 @@ class App extends React.Component {
             clearCompleted={this.handleClearCompleted}
             filter={filter}
             todos={todos}
+            itemsLeft={todos.filter(todo => !todo.completed).length}
+            clearVisibleButton={todos
+              .filter(todo => todo.completed).length >= 1}
           />
         )}
       </section>

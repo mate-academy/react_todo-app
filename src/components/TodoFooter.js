@@ -7,11 +7,12 @@ const TodoFooter = ({
   handleAllFilter,
   filter,
   clearCompleted,
-  todos,
+  itemsLeft,
+  clearVisibleButton,
 }) => (
   <footer className="footer">
     <span className="todo-count">
-      {`${todos.filter(todo => !todo.completed).length} items left`}
+      {`${itemsLeft} items left`}
     </span>
 
     <ul className="filters">
@@ -46,25 +47,26 @@ const TodoFooter = ({
       </li>
     </ul>
 
-    <button
-      type="button"
-      className="clear-completed"
-      onClick={clearCompleted}
-    >
-      Clear completed
-    </button>
+    {clearVisibleButton && (
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={clearCompleted}
+      >
+        Clear completed
+      </button>
+    )}
   </footer>
 );
 
 TodoFooter.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    completed: PropTypes.bool.isRequired,
-  })).isRequired,
+  itemsLeft: PropTypes.number.isRequired,
   handleCompletedFilter: PropTypes.func.isRequired,
   handleActiveFilter: PropTypes.func.isRequired,
   handleAllFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
   clearCompleted: PropTypes.func.isRequired,
+  clearVisibleButton: PropTypes.bool.isRequired,
 };
 
 export default TodoFooter;
