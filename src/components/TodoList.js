@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const TodoList = ({ todos, handleCompleted, deleteTodo }) => (
@@ -6,7 +7,7 @@ const TodoList = ({ todos, handleCompleted, deleteTodo }) => (
     {todos.map(todo => (
       <li
         key={todo.id}
-        className={todo.completed ? 'completed' : ''}
+        className={classnames({ completed: todo.completed })}
       >
         <div className="view">
           <input

@@ -1,14 +1,13 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const TodoFooter = ({
-  handleCompletedFilter,
-  handleActiveFilter,
-  handleAllFilter,
   filter,
   clearCompleted,
   itemsLeft,
   clearVisibleButton,
+  setFilter,
 }) => (
   <footer className="footer">
     <span className="todo-count">
@@ -19,8 +18,9 @@ const TodoFooter = ({
       <li>
         <a
           href="#/"
-          className={filter === 'All' ? 'selected' : ''}
-          onClick={handleAllFilter}
+          name="All"
+          className={classnames({ selected: filter === 'All' })}
+          onClick={event => setFilter(event.target.name)}
         >
           All
         </a>
@@ -29,8 +29,9 @@ const TodoFooter = ({
       <li>
         <a
           href="#/active"
-          className={filter === 'Active' ? 'selected' : ''}
-          onClick={handleActiveFilter}
+          name="Active"
+          className={classnames({ selected: filter === 'Active' })}
+          onClick={event => setFilter(event.target.name)}
         >
           Active
         </a>
@@ -39,8 +40,9 @@ const TodoFooter = ({
       <li>
         <a
           href="#/completed"
-          className={filter === 'Completed' ? 'selected' : ''}
-          onClick={handleCompletedFilter}
+          name="Completed"
+          className={classnames({ selected: filter === 'Completed' })}
+          onClick={event => setFilter(event.target.name)}
         >
           Completed
         </a>
@@ -61,11 +63,9 @@ const TodoFooter = ({
 
 TodoFooter.propTypes = {
   itemsLeft: PropTypes.number.isRequired,
-  handleCompletedFilter: PropTypes.func.isRequired,
-  handleActiveFilter: PropTypes.func.isRequired,
-  handleAllFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
   clearCompleted: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
   clearVisibleButton: PropTypes.bool.isRequired,
 };
 
