@@ -2,9 +2,9 @@ import React from 'react';
 import propTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-const TodoList = ({ tasks, toggleCompleteTask, deleteTask }) => (
+const TodoList = ({ visibleTasks, toggleCompleteTask, deleteTask }) => (
   <ul className="todo-list">
-    {tasks.map(task => (
+    {visibleTasks.map(task => (
       <TodoItem
         key={task.id}
         task={task}
@@ -16,7 +16,7 @@ const TodoList = ({ tasks, toggleCompleteTask, deleteTask }) => (
 );
 
 TodoList.propTypes = {
-  tasks: propTypes.arrayOf(propTypes.shape({
+  visibleTasks: propTypes.arrayOf(propTypes.shape({
     id: propTypes.number.isRequired,
     title: propTypes.string.isRequired,
     completed: propTypes.bool.isRequired,

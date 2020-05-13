@@ -1,7 +1,5 @@
 import React from 'react';
-// import { Header } from './components/Header';
-import AddTodo from './components/AddTodo';
-import TodoList from './components/TodoList';
+import { Header } from './components/Header';
 import Footer from './components/Footer';
 import { FILTERS } from './components/helpers/HELPERS';
 
@@ -107,28 +105,15 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
-        {/* <Header /> */}
-        <header className="header">
-          <h1>todos</h1>
-          <AddTodo addTask={this.addTask} />
-        </header>
-
-        <section className="main">
-          <input
-            checked={tasks.length > 0 && this.isAnyActiveTasks() === 0}
-            onChange={this.toggleAllTasksCompleted}
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <TodoList
-            tasks={visibleTasks}
-            toggleCompleteTask={this.toggleCompleteTask}
-            deleteTask={this.deleteTask}
-          />
-        </section>
+        <Header
+          addTask={this.addTask}
+          tasks={tasks}
+          toggleAllTasksCompleted={this.toggleAllTasksCompleted}
+          isAnyActiveTasks={this.isAnyActiveTasks}
+          visibleTasks={visibleTasks}
+          toggleCompleteTask={this.toggleCompleteTask}
+          deleteTask={this.deleteTask}
+        />
 
         <Footer
           tasks={tasks}
