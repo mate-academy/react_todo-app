@@ -18,12 +18,15 @@ class TodoApp extends React.Component {
 
   handleTodoTitle = (event) => {
     this.setState({
-      newTodoTitle: event.target.value.trim(),
+      newTodoTitle: event.target.value,
     });
   }
 
   handleFormSubmit = (event) => {
     event.preventDefault();
+    if (this.state.newTodoTitle.trim() === '') {
+      return;
+    }
 
     this.setState((prev) => {
       const newTodo = {
@@ -34,6 +37,7 @@ class TodoApp extends React.Component {
 
       return {
         todos: [...prev.todos, newTodo],
+        newTodoTitle: '',
       };
     });
   };
@@ -99,7 +103,7 @@ class TodoApp extends React.Component {
 
   render() {
     let todos = [...this.state.todos];
-    const { filterForTodos } = this.state;
+    const { filterForTodos, newTodoTitle } = this.state;
 
     if (filterForTodos === 'Active') {
       todos = this.state.todos.filter(todo => !todo.completed);
@@ -121,6 +125,7 @@ class TodoApp extends React.Component {
               type="text"
               className="new-todo"
               placeholder="What needs to be done?"
+              value={newTodoTitle}
               onChange={this.handleTodoTitle}
             />
           </form>
@@ -152,7 +157,11 @@ class TodoApp extends React.Component {
             <li>
               <a
                 href="#/all"
-                className="selected"
+                className={
+                  this.state.filterForTodos === 'All'
+                    ? 'selected'
+                    : undefined
+                }
                 onClick={this.handleFilterForTodos}
               >
                 All
@@ -160,12 +169,27 @@ class TodoApp extends React.Component {
             </li>
 
             <li>
-              <a href="#/active" onClick={this.handleFilterForTodos}>Active</a>
+              <a
+                href="#/active"
+                className={
+                  this.state.filterForTodos === 'Active'
+                    ? 'selected'
+                    : undefined
+                }
+                onClick={this.handleFilterForTodos}
+              >
+                Active
+              </a>
             </li>
 
             <li>
               <a
                 href="#/completed"
+                className={
+                  this.state.filterForTodos === 'Completed'
+                    ? 'selected'
+                    : undefined
+                }
                 onClick={this.handleFilterForTodos}
               >
                 Completed

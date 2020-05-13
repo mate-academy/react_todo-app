@@ -1,38 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class TodoItem extends React.PureComponent {
-  render() {
-    const { title, id, completed, toggleChecked, destroyItem } = this.props;
-
-    return (
-      <li
-        className={
-          completed
-            ? 'completed'
-            : 'view'
-        }
-      >
-        <div>
-          <input
-            type="checkbox"
-            className="toggle"
-            id={id}
-            checked={completed}
-            onChange={() => toggleChecked(id)}
-          />
-          <label htmlFor={id}>{title}</label>
-          <button
-            type="button"
-            className="destroy"
-            onClick={() => destroyItem(id)}
-          />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-    );
-  }
-}
+const TodoItem = ({ title, id, completed, toggleChecked, destroyItem }) => (
+  <li
+    className={
+      completed
+        ? 'completed'
+        : 'view'
+    }
+  >
+    <div>
+      <input
+        type="checkbox"
+        className="toggle"
+        id={id}
+        checked={completed}
+        onChange={() => toggleChecked(id)}
+      />
+      <label htmlFor={id}>{title}</label>
+      <button
+        type="button"
+        className="destroy"
+        onClick={() => destroyItem(id)}
+      />
+    </div>
+    <input type="text" className="edit" />
+  </li>
+);
 
 export default TodoItem;
 
