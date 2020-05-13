@@ -164,7 +164,7 @@ class App extends Component {
           )}
 
         </section>
-        {todos.length !== 0
+        {this.state.allTodos.length !== 0
         && (
           <footer className="footer">
             <span className="todo-count">
