@@ -26,6 +26,21 @@ class App extends React.Component {
     }));
   }
 
+  editTodo = (itemId, value) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo) => {
+        if (todo.id !== itemId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: value,
+        };
+      }),
+    }));
+  }
+
   changeStatus = (id) => {
     this.setState(state => ({
       todos: state.todos.map((todo) => {
@@ -107,9 +122,7 @@ class App extends React.Component {
             visibleTodos={visibleTodos}
             deleteTodo={this.deleteTodo}
             changeStatus={this.changeStatus}
-            // editTodo={this.editTodo}
-            // editCurrentTitle={this.editCurrentTitle}
-            // handleEditingTitle={this.handleEditingTitle}
+            onEditTodo={this.editTodo}
           />
         </section>
         <Footer

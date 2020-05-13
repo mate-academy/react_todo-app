@@ -8,6 +8,7 @@ class TodoList extends React.PureComponent {
       deleteTodo,
       changeStatus,
       visibleTodos,
+      onEditTodo,
     } = this.props;
 
     return (
@@ -16,8 +17,10 @@ class TodoList extends React.PureComponent {
           <TodoItem
             todo={todo}
             key={todo.id}
+            itemId={todo.id}
             changeStatus={changeStatus}
             deleteTodo={deleteTodo}
+            onEditTodo={onEditTodo}
           />
         ))
         }
@@ -36,6 +39,7 @@ TodoList.propTypes = {
   ).isRequired,
   deleteTodo: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
+  onEditTodo: PropTypes.func.isRequired,
 };
 
 export default TodoList;
