@@ -1,85 +1,102 @@
 import React from 'react';
+import Header from './components/Header/Header';
+import TodoList from './components/TodoList/TodoList';
+import Filter from './components/Filter/Filter';
+import FILTERS from './common/constants'
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+const todos = [];
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+export default class App extends React.Component {
+  state = {
+    todos: [...todos],
+    counter: 0,
+    count: 0,
+    filter: FILTERS.all,
+    selectedAll: todos.length>0 && !todos.find(t => !t.completed),
+  }
+  deleteTodo = (id) => {
+    this.setState({
+      todos: this.state.todos.filter((el) => el.id !== id)
+    });
+  }
+
+  addTodoItem = (newTodo) => {
+    this.setState({
+      todos: [...this.state.todos, newTodo]
+    });
+  };
+
+  onClickCompleted = (todo) => {
+    todo.completed = !todo.completed;
+    const index = this.state.todos.findIndex((el) => el.id === todo.id);
+
+    const newArray = [
+      ...this.state.todos.slice(0, index),
+      todo,
+      ...this.state.todos.slice(index + 1)
+    ];
+
+    this.setState({
+      todos: newArray,
+      selectedAll: !newArray.find(t => !t.completed),
+    });
+  };
+
+  onFilterChange = (filter) => {
+    this.setState({
+      filter: filter,
+    });
+  };
+
+  toggleSelectAll = () => {
+    this.state.selectedAll = !this.state.selectedAll;
+    this.setState({
+      todos: this.state.todos.map((todo) => {
+        todo.completed = this.state.selectedAll;
+        return todo;
+      })
+    });
+  };
+
+  removeCompleted = () => {
+    this.setState({
+      todos: this.state.todos.filter(todo => !todo.completed),
+    });
+  }
+
+  render() {
+    const { todos, filter } = this.state;
+
+    const counter = todos.filter(todo => !todo.completed).length;
+    const count = todos.filter(todo => todo.completed).length;
+    const isTodosExist = todos.length > 0;
+    return (
+      <section className="todoapp">
+        <Header
+          isTodosExist={isTodosExist}
+          addTodoItem={this.addTodoItem}
+          toogleSelection={this.toggleSelectAll}
+          selectedAll={this.state.selectedAll}
         />
-      </header>
-
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList
+          todos={todos}
+          filter={filter}
+          deleteTodo={this.deleteTodo}
+          onClickCompleted={this.onClickCompleted}
+          removeCompleted={this.removeCompleted}
+        />
+        <Filter
+          todos={todos}
+          isTodosExist={isTodosExist}
+          counter={counter}
+          count={count}
+          filter={filter}
+          onFilterChange={this.onFilterChange}
+          removeCompleted={this.removeCompleted}
+        />
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
-  );
+    )
+  }
 }
 
-export default App;
+
