@@ -4,14 +4,17 @@ import propTypes from 'prop-types';
 class AddTodo extends React.Component {
   state = {
     input: '',
+    currentId: 1,
   };
 
   addTask = () => {
-    const { input } = this.state;
+    const { input, currentId } = this.state;
 
     if (input.trim()) {
-      this.props.addTask(input);
-      this.setState({ input: '' });
+      this.props.addTask(input, currentId);
+      this.setState(prev => ({
+        input: '', currentId: prev.currentId + 1,
+      }));
     }
   }
 

@@ -8,16 +8,14 @@ class App extends React.Component {
     tasks: [],
     tasksToShow: 'all',
     filters: FILTERS,
-    counterID: 1,
   };
 
-  addTask = (taskName) => {
+  addTask = (taskName, currenrId) => {
     this.setState(prevState => ({
       tasks: [
         ...prevState.tasks,
         {
-          id: setTimeout(() => prevState.counterID + 1, 0),
-          // id: prevState.tasks.length !== 0 ? prevState.tasks.length : 0,
+          id: currenrId,
           title: taskName,
           completed: false,
         },
@@ -43,7 +41,6 @@ class App extends React.Component {
   deleteTask = (id) => {
     this.setState(prevState => ({
       tasks: prevState.tasks.filter(task => task.id !== id),
-      counterID: prevState.counterID - 1,
     }));
   }
 
