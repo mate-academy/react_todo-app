@@ -1,0 +1,9 @@
+.complete {
+  text-decoration: line-through;
+  color: darkgray;
+}
+
+.inProgress {
+  color: #4d4d4d;
+  text-decoration: none;
+}
