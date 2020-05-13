@@ -111,25 +111,13 @@ class App extends React.Component {
     }));
   }
 
-  handleCompletedAll = () => {
-    this.setState((state) => {
-      let filteredTodos = [...state.todos];
-
-      if (state.todos.length !== state.todos
-        .filter(todo => todo.completed).length) {
-        filteredTodos = [...state.todos].map(todo => ({
-          ...todo,
-          completed: false,
-        }));
-      }
-
-      return {
-        todos: filteredTodos.map(todo => ({
-          ...todo,
-          completed: !todo.completed,
-        })),
-      };
-    });
+  handleCompletedAll = ({ target }) => {
+    this.setState(state => ({
+      todos: state.todos.map(todo => ({
+        ...todo,
+        completed: target.checked,
+      })),
+    }));
   }
 
   render() {
@@ -157,7 +145,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            onChange={this.handleCompletedAll}
+            onChange={event => this.handleCompletedAll(event)}
           />
           {isVisible && (
             <label
