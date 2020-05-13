@@ -100,14 +100,16 @@ class App extends React.Component {
   }
 
   handleClearCompleted = () => {
+    const filteredTodos = this.state.todos.filter(todo => !todo.completed);
+
     let footerIsVisible = true;
 
-    if (this.state.todos.length <= 1) {
+    if (filteredTodos.length <= 1) {
       footerIsVisible = false;
     }
 
     this.setState(state => ({
-      todos: state.todos.filter(todo => !todo.completed),
+      todos: filteredTodos,
       isVisible: footerIsVisible,
     }));
   }
