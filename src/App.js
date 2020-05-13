@@ -89,15 +89,15 @@ class App extends React.Component {
               />
             )}
         </section>
-        {this.state.todos.filter(item => item).length >= 1 ? (
+        {this.state.todos.length > 0 && (
           <TodosFilter
             item={todos.filter(item => !item.completed).length}
-            completed={todos.filter(item => item.completed).length}
+            completed={todos.some(item => item.completed)}
             handlFilter={this.handlFilter}
             filter={this.state.todoFilter}
             deleteCompleted={this.deleteCompleted}
           />
-        ) : ''}
+        )}
 
       </section>
     );

@@ -8,7 +8,7 @@ class TodoApp extends React.Component {
 
   handlTitleChange = (event) => {
     this.setState({
-      text: event.target.value.trim(),
+      text: event.target.value,
     });
   }
 
@@ -17,12 +17,12 @@ class TodoApp extends React.Component {
 
     this.setState((state) => {
       const newTodo = {
-        text: state.text,
+        text: state.text.replace(/^\s+/, ''),
         id: +new Date(),
         completed: '',
       };
 
-      if (!newTodo.text) {
+      if (newTodo.text === '') {
         return null;
       }
 

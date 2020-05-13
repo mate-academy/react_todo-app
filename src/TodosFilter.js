@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 const TodosFilter = (props) => {
   const { item, handlFilter, filter, deleteCompleted, completed } = props;
+  const all = classNames({ selected: filter === 'All' });
+  const active = classNames({ selected: filter === 'Active' });
+  const done = classNames({ selected: filter === 'Completed' });
 
   return (
     <footer className="footer">
@@ -16,7 +20,7 @@ const TodosFilter = (props) => {
         <li>
           <a
             href="#/"
-            className={filter === 'All' ? 'selected' : ''}
+            className={all}
             onClick={() => handlFilter('All')}
           >
             All
@@ -26,7 +30,7 @@ const TodosFilter = (props) => {
         <li>
           <a
             href="#/active"
-            className={filter === 'Active' ? 'selected' : ''}
+            className={active}
             onClick={() => handlFilter('Active')}
           >
             Active
@@ -36,14 +40,14 @@ const TodosFilter = (props) => {
         <li>
           <a
             href="#/completed"
-            className={filter === 'Completed' ? 'selected' : ''}
+            className={done}
             onClick={() => handlFilter('Completed')}
           >
             Completed
           </a>
         </li>
       </ul>
-      {completed ? (
+      {completed && (
         <button
           type="button"
           className="clear-completed"
@@ -51,7 +55,7 @@ const TodosFilter = (props) => {
         >
           Clear completed
         </button>
-      ) : ''}
+      )}
 
     </footer>
   );
