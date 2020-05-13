@@ -1,26 +1,28 @@
 import React from 'react';
-import TodoApp from './components/TodoApp';
+// import { Header } from './components/Header';
+import AddTodo from './components/AddTodo';
 import TodoList from './components/TodoList';
 import Footer from './components/Footer';
+import { FILTERS } from './components/helpers/HELPERS';
 
 class App extends React.Component {
   state = {
     tasks: [],
     tasksToShow: 'all',
+    filters: FILTERS,
   };
 
   addTask = (taskName) => {
-    this.setState((prevState) => {
-      const { tasks } = prevState;
-
-      tasks.push({
-        id: tasks.length !== 0 ? tasks.length : 0,
-        title: taskName,
-        completed: false,
-      });
-
-      return tasks;
-    });
+    this.setState(prevState => ({
+      tasks: [
+        ...prevState.tasks,
+        {
+          id: prevState.tasks.length !== 0 ? prevState.tasks.length : 0,
+          title: taskName,
+          completed: false,
+        },
+      ],
+    }));
   };
 
   toggleCompleteTask = (id) => {
@@ -39,15 +41,9 @@ class App extends React.Component {
   };
 
   deleteTask = (id) => {
-    const index = this.state.tasks.map(task => task.id).indexOf(id);
-
-    this.setState((prevState) => {
-      const { tasks } = prevState;
-
-      delete tasks[index];
-
-      return tasks;
-    });
+    this.setState(prevState => ({
+      tasks: prevState.tasks.filter(task => task.id !== id),
+    }));
   }
 
   clearCompleted = () => {
@@ -57,13 +53,13 @@ class App extends React.Component {
   }
 
   filterTodos = (whichTasksToShow) => {
-    const { tasks } = this.state;
+    const { tasks, filters } = this.state;
 
     switch (whichTasksToShow) {
-      case 'active':
+      case filters.active:
         return tasks.filter(task => !task.completed);
 
-      case 'completed':
+      case filters.completed:
         return tasks.filter(task => task.completed);
 
       default:
@@ -101,6 +97,9 @@ class App extends React.Component {
     this.setState({ tasksToShow: filterName });
   }
 
+  countActiveTAsks = () => this.state.tasks
+    .filter(task => task.completed === false).length;
+
   render() {
     const { tasks, tasksToShow } = this.state;
     const visibleTasks = this.filterTodos(tasksToShow);
@@ -108,9 +107,10 @@ class App extends React.Component {
 
     return (
       <section className="todoapp">
+        {/* <Header /> */}
         <header className="header">
           <h1>todos</h1>
-          <TodoApp addTask={this.addTask} />
+          <AddTodo addTask={this.addTask} />
         </header>
 
         <section className="main">
@@ -136,6 +136,7 @@ class App extends React.Component {
           tasksToShow={tasksToShow}
           clearCompleted={this.clearCompleted}
           toggleActiveTasks={this.toggleActiveTasks}
+          countActiveTAsks={this.countActiveTAsks}
         />
       </section>
     );

@@ -7,7 +7,8 @@ const Footer = (
     clearCompleted,
     filteringBtns,
     tasksToShow,
-    toggleActiveTasks },
+    toggleActiveTasks,
+    countActiveTAsks },
 ) => (
   <footer
     className="footer"
@@ -15,7 +16,7 @@ const Footer = (
   >
     <span className="todo-count">
       {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-      {tasks.filter(task => task.completed === false).length} items left
+      {countActiveTAsks()} items left
     </span>
 
     <ul className="filters">
@@ -49,6 +50,7 @@ Footer.propTypes = {
   tasksToShow: propTypes.string.isRequired,
   toggleActiveTasks: propTypes.func.isRequired,
   clearCompleted: propTypes.func.isRequired,
+  countActiveTAsks: propTypes.func.isRequired,
 };
 
 export default Footer;

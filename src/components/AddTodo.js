@@ -1,7 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-class TodoApp extends React.Component {
+class AddTodo extends React.Component {
   state = {
     input: '',
   };
@@ -39,8 +39,8 @@ class TodoApp extends React.Component {
   }
 }
 
-TodoApp.propTypes = {
+AddTodo.propTypes = {
   addTask: propTypes.func.isRequired,
 };
 
-export default TodoApp;
+export default AddTodo;
