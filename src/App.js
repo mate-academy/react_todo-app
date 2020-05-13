@@ -11,7 +11,6 @@ const filters = {
 class App extends React.Component {
   state = {
     todos: [],
-    todosCopied: [],
     todoTitle: '',
     isVisible: false,
     selectedFilter: filters.all,
