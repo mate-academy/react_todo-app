@@ -15,7 +15,9 @@ const TodoItem = ({ task, toggleCompleteTask, deleteTask }) => (
         id={task.id}
         onChange={() => toggleCompleteTask(task.id)}
       />
-      <label>{task.title}</label>
+      <label>
+        {task.title}
+      </label>
       <button
         type="button"
         className="destroy"
