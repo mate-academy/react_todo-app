@@ -6,6 +6,7 @@ class TodoApp extends React.Component {
     todos: [],
     newTodoTitle: '',
     filterForTodos: 'All',
+    isToggleAll: false,
   }
 
   handleFilterForTodos = (event) => {
@@ -59,12 +60,13 @@ class TodoApp extends React.Component {
     }));
   }
 
-  toggleAllTodos = () => {
+  toggleAllTodos = (event) => {
     const countOfcompletedTodos = this.state.todos
       .filter(todo => todo.completed).length;
 
-    if (countOfcompletedTodos === 0) {
+    if (countOfcompletedTodos < this.state.todos.length) {
       this.setState(prev => ({
+        isToggleAll: true,
         todos: prev.todos.map(todo => ({
           ...todo,
           completed: true,
@@ -72,21 +74,15 @@ class TodoApp extends React.Component {
       }));
     }
 
-    if (countOfcompletedTodos !== this.state.todos.length) {
+    if (countOfcompletedTodos === this.state.todos.length) {
       this.setState(prev => ({
+        isToggleAll: false,
         todos: prev.todos.map(todo => ({
           ...todo,
           completed: false,
         })),
       }));
     }
-
-    this.setState(prev => ({
-      todos: prev.todos.map(todo => ({
-        ...todo,
-        completed: !todo.completed,
-      })),
-    }));
   }
 
   destroyItem = (todoId) => {
@@ -103,7 +99,7 @@ class TodoApp extends React.Component {
 
   render() {
     let todos = [...this.state.todos];
-    const { filterForTodos, newTodoTitle } = this.state;
+    const { filterForTodos, newTodoTitle, isToggleAll } = this.state;
 
     if (filterForTodos === 'Active') {
       todos = this.state.todos.filter(todo => !todo.completed);
@@ -136,6 +132,7 @@ class TodoApp extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={isToggleAll}
             onChange={this.toggleAllTodos}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
