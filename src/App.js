@@ -50,12 +50,21 @@ class App extends Component {
   }
 
   markAllAsCompleted= () => {
-    this.setState(prevState => ({
-      tasks: prevState.tasks.map(task => ({
-        ...task,
-        completed: true,
-      })),
-    }));
+    if (this.state.tasks.filter(t => t.completed === false).length) {
+      this.setState(prevState => ({
+        tasks: prevState.tasks.map(task => ({
+          ...task,
+          completed: true,
+        })),
+      }));
+    } else {
+      this.setState(prevState => ({
+        tasks: prevState.tasks.map(task => ({
+          ...task,
+          completed: false,
+        })),
+      }));
+    }
   }
 
   filterTasks = (whichTasksToShow) => {
@@ -95,11 +104,9 @@ class App extends Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            disabled={!tasks.filter(
-              t => t.completed === false,
-            )
-              .length}
+            disabled={!tasks.length}
             onClick={this.markAllAsCompleted}
+
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -132,6 +139,7 @@ class App extends Component {
             type="button"
             className="clear-completed"
             onClick={this.clearCompleted}
+
           >
             Clear completed
           </button>
