@@ -104,13 +104,12 @@ class App extends Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+
             checked={
               (!tasks.length
               || this.state.tasks.filter(t => t.completed === false).length > 0)
                 ? ''
                 : 'checked'}
-
-            disabled={!tasks.length}
             onClick={this.markAllAsCompleted}
 
           />
