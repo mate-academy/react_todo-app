@@ -10,7 +10,6 @@ export default class TodoListItem extends React.Component {
     const item = this.state.item;
     const { title, id } = item;
     const deleteTodo = this.props.deleteTodo;
-    //const { completed } = this.state;
 
     let classNames = '';
     if (item.completed) {

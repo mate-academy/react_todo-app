@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class Header extends React.Component {
-  //state = this.state;
   state = {
-    // title: '',
-    // id: 0,
+    title: '',
+
   }
 
   handleInputChange = ({ target }) => {
@@ -39,7 +38,7 @@ class Header extends React.Component {
 
   render() {
     const { title } = this.state;
-    const {toogleSelection} = this.props;
+    const {toogleSelection, isTodosExist, selectedAll} = this.props;
     return (
       <header className="header">
         <h1>todos</h1>
@@ -49,8 +48,11 @@ class Header extends React.Component {
             id="toggle-all"
             className="toggle-all"
             onChange={toogleSelection}
+            checked={selectedAll}
           />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          <label htmlFor="toggle-all"
+           hidden={!isTodosExist}
+          >Mark all as complete</label>
           <input
             type="text"
             className="new-todo"

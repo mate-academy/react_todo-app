@@ -1,23 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import FILTERS from '../../common/constants'
 
 export default class Filter extends React.Component {
   state = {
-    // counter: this.counter,
+     counter: this.counter,
   }
 
   buttons = [
-    { name: "all", label: "All" },
-    { name: "done", label: "Done" },
-    { name: "active", label: "Active" },
+    { name: FILTERS.all , label: "All" },
+    { name: FILTERS.done, label: "Done" },
+    { name: FILTERS.active, label: "Active" },
   ]
-  onFilterChange = (e) =>{
-    e.preventDefault();
-    console.log('По ссылке кликнули.');
-  }
 
   render() {
-    const { filter, onFilterChange, removeCompleted } = this.props;
+    const { filter, onFilterChange, removeCompleted,isTodosExist } = this.props;
     const buttons = this.buttons.map(({ name, label }) => {
       const isActive = filter === name;
      const classNames = isActive ? "selected" : '';
@@ -30,7 +27,8 @@ export default class Filter extends React.Component {
       )
     })
     return (
-      <footer className="footer">
+      <footer className="footer"
+      hidden={!isTodosExist}>
         <span className="todo-count">
           {` to do: `}
           {this.props.counter}

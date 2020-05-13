@@ -1,6 +1,6 @@
 import React from 'react';
 import TodoListItem from '../TodoListItem/TodoListItem';
-import PropTypes from 'prop-types';
+import FILTERS from '../../common/constants'
 
 export default class TodoList extends React.Component {
   state = {
@@ -9,9 +9,9 @@ export default class TodoList extends React.Component {
 
   filter(filter) {
     switch (filter) {
-      case 'active':
+      case FILTERS.active:
         return this.props.todos.filter(todo => !todo.completed);
-      case 'done':
+      case FILTERS.done:
         return this.props.todos.filter(todo => todo.completed);
       default:
         return this.props.todos;

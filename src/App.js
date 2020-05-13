@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/Header/Header';
 import TodoList from './components/TodoList/TodoList';
 import Filter from './components/Filter/Filter';
-//import todos from './api/todos';
+import FILTERS from './common/constants'
 
 const todos = [];
 
@@ -11,18 +11,12 @@ export default class App extends React.Component {
     todos: [...todos],
     counter: 0,
     count: 0,
-    filter: 'all',
-    selectedAll: false,
+    filter: FILTERS.all,
+    selectedAll: todos.length>0 && !todos.find(t => !t.completed),
   }
   deleteTodo = (id) => {
-    const index = this.state.todos.findIndex((el) => el.id === id);
-
-    const newArray = [
-      ...this.state.todos.slice(0, index),
-      ...this.state.todos.slice(index + 1)
-    ];
     this.setState({
-      todos: newArray
+      todos: this.state.todos.filter((el) => el.id !== id)
     });
   }
 
@@ -32,17 +26,19 @@ export default class App extends React.Component {
     });
   };
 
-  onClickCompleted = (elt) => {
-    elt.completed = !elt.completed;
-    const index = this.state.todos.findIndex((el) => el.id === elt.id);
+  onClickCompleted = (todo) => {
+    todo.completed = !todo.completed;
+    const index = this.state.todos.findIndex((el) => el.id === todo.id);
 
     const newArray = [
       ...this.state.todos.slice(0, index),
-      elt,
+      todo,
       ...this.state.todos.slice(index + 1)
     ];
+
     this.setState({
-      todos: newArray
+      todos: newArray,
+      selectedAll: !newArray.find(t => !t.completed),
     });
   };
 
@@ -73,23 +69,25 @@ export default class App extends React.Component {
 
     const counter = todos.filter(todo => !todo.completed).length;
     const count = todos.filter(todo => todo.completed).length;
-
+    const isTodosExist = todos.length > 0;
     return (
       <section className="todoapp">
         <Header
-          todos={todos}
+          isTodosExist={isTodosExist}
           addTodoItem={this.addTodoItem}
           toogleSelection={this.toggleSelectAll}
+          selectedAll={this.state.selectedAll}
         />
         <TodoList
           todos={todos}
           filter={filter}
           deleteTodo={this.deleteTodo}
           onClickCompleted={this.onClickCompleted}
-         removeCompleted={this.removeCompleted}
+          removeCompleted={this.removeCompleted}
         />
         <Filter
           todos={todos}
+          isTodosExist={isTodosExist}
           counter={counter}
           count={count}
           filter={filter}
