@@ -1,21 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TodoItem } from '../TodoItem/TodoItem';
+import TodoItem from '../TodoItem/TodoItem';
 
 class TodoList extends React.PureComponent {
   render() {
     const {
-      todos,
       deleteTodo,
       changeStatus,
-      // changeTitle,
+      visibleTodos,
     } = this.props;
 
     return (
       <ul className="todo-list">
-        {todos.map(todo => (
+        {visibleTodos.map(todo => (
           <TodoItem
-            // changeTitle={changeTitle}
             todo={todo}
             key={todo.id}
             changeStatus={changeStatus}
@@ -29,7 +27,7 @@ class TodoList extends React.PureComponent {
 }
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(
+  visibleTodos: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
