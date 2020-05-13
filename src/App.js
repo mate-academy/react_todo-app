@@ -1,85 +1,157 @@
 import React from 'react';
+import TodoInput from './components/TodoInput/TodoInput';
+import TodoList from './components/TodoList/TodoList';
+import { Footer } from './components/Footer/Footer';
+import { FILTER_TYPES } from './constants';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+class App extends React.Component {
+  state = {
+    todos: [],
+    selectedTodos: FILTER_TYPES.all,
+  };
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+  componentDidMount() {
+    const todosFromStorage = localStorage.getItem('todos');
+
+    if (todosFromStorage) {
+      const todos = JSON.parse(todosFromStorage);
+
+      this.setState({ todos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { todos } = this.state;
+
+    if (prevState.todos !== todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
+  addTodo = (todo) => {
+    const { todos } = this.state;
+
+    this.setState(state => ({
+      todos: [...todos, todo],
+    }));
+  }
+
+  deleteTodo = (id) => {
+    const { todos } = this.state;
+
+    this.setState(() => ({
+      todos: todos.filter(todo => todo.id !== id),
+    }));
+  }
+
+  editTodo = (itemId, value) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo) => {
+        if (todo.id !== itemId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: value,
+        };
+      }),
+    }));
+  }
+
+  changeStatus = (id) => {
+    this.setState(state => ({
+      todos: state.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
+  toggleAllTodoStatus = ({ target }) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map(todo => ({
+        ...todo,
+        completed: target.checked,
+      })),
+    }));
+  }
+
+  setFilter = (filter) => {
+    this.setState({ selectedTodos: filter });
+  }
+
+  filterTodos = () => {
+    const { selectedTodos, todos } = this.state;
+
+    switch (selectedTodos) {
+      case FILTER_TYPES.active:
+        return todos.filter(todo => !todo.completed);
+      case FILTER_TYPES.completed:
+        return todos.filter(todo => todo.completed);
+      case FILTER_TYPES.all:
+        return todos.filter(todo => todo.id);
+      default:
+        return todos;
+    }
+  };
+
+  handleClearCompleted = () => {
+    this.setState(state => ({
+      todos: state.todos.filter(todo => !todo.completed),
+    }));
+  }
+
+  render() {
+    const { todos, selectedTodos } = this.state;
+    const visibleTodos = this.filterTodos(selectedTodos);
+
+    return (
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+
+          <TodoInput addTodo={this.addTodo} />
+        </header>
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={this.toggleAllTodoStatus}
+            checked={todos.every(todo => todo.completed)}
+          />
+          {todos.length > 0 && (
+            <label
+              htmlFor="toggle-all"
+            >
+              Mark all as complete
+            </label>
+          )}
+
+          <TodoList
+            todos={todos}
+            visibleTodos={visibleTodos}
+            deleteTodo={this.deleteTodo}
+            changeStatus={this.changeStatus}
+            onEditTodo={this.editTodo}
+          />
+        </section>
+        <Footer
+          todos={todos}
+          setFilter={this.setFilter}
+          selectedTodos={selectedTodos}
+          onClearCompleted={this.handleClearCompleted}
         />
-      </header>
-
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
