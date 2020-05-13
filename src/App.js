@@ -123,6 +123,7 @@ class App extends React.Component {
   render() {
     const { todoTitle, isVisible, selectedFilter, todos } = this.state;
     const filteredTodos = this.getFilteredTodos();
+    const completedAll = todos.every(todo => todo.completed);
 
     return (
       <section className="todoapp">
@@ -144,6 +145,7 @@ class App extends React.Component {
           <input
             type="checkbox"
             id="toggle-all"
+            checked={completedAll}
             className="toggle-all"
             onChange={event => this.handleCompletedAll(event)}
           />
