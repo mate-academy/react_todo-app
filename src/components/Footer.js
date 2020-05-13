@@ -32,7 +32,7 @@ const Footer = ({
               className={classNames({ selected: filter === selectedTodos })}
               onClick={chooseTypeTodos}
             >
-              {filter}
+              {filter.charAt(0).toUpperCase() + filter.slice(1)}
             </a>
           </li>
         ))}
