@@ -12,14 +12,17 @@ export const TodoList = (
     editingTodo,
     showChangeTitle,
     handleChangeTitle,
-    handleCompletedAll },
+    handleCompletedAll,
+    cancelEditing },
 ) => (
   <section className="main">
     <input
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      onClick={handleCompletedAll}
+      checked={visibleTodos.length > 0
+      && visibleTodos.every(todo => todo.completed)}
+      onChange={handleCompletedAll}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
     <ul className="todo-list">
@@ -53,10 +56,13 @@ export const TodoList = (
           {showChangeTitle && (
             <form onSubmit={() => handleSubmit(id)}>
               <input
+                id={id}
                 value={newValue}
                 onChange={handleChangeTitle}
                 type="text"
                 className="edit"
+                onBlur={event => cancelEditing(event)}
+                onKeyDown={event => cancelEditing(event)}
               />
             </form>
           )}
@@ -79,6 +85,7 @@ TodoList.propTypes = {
   showChangeTitle: PropTypes.bool.isRequired,
   handleChangeTitle: PropTypes.func.isRequired,
   handleCompletedAll: PropTypes.func.isRequired,
+  cancelEditing: PropTypes.func.isRequired,
 };
 
 TodoList.defaultProps = {

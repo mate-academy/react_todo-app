@@ -57,7 +57,7 @@ export class Header extends Component {
               })}
               name="new-todo"
               placeholder={errorTitle
-                ? ('введи хоть чет')
+                ? ('Please enter the value')
                 : ('What needs to be done?')}
               value={title}
               onChange={this.handleChangeTitle}

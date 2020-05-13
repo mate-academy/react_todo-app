@@ -3,11 +3,17 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
+const filters = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+};
+
 class App extends Component {
   state = {
     todos: [],
     counter: 1,
-    typeOfFilter: 'all',
+    typeOfFilter: filters.all,
     newValue: '',
     editingTodo: null,
     showChangeTitle: false,
@@ -64,7 +70,7 @@ class App extends Component {
   handleSubmit = (id) => {
     const { newValue } = this.state;
 
-    if (!newValue) {
+    if (!newValue.trim()) {
       this.setState(prev => ({
         todos: prev.todos.filter(item => item.id !== id),
       }));
@@ -74,9 +80,47 @@ class App extends Component {
       showChangeTitle: false,
       editingTodo: null,
       todos: prev.todos.map(item => (item.id === id ? {
-        ...item, title: newValue,
+        ...item, title: newValue.trim(),
       } : item)),
     }));
+  };
+
+  handleCompletedAll = ({ target }) => {
+    this.setState(prev => ({
+      todos: prev.todos.map(todo => ({
+        ...todo,
+        completed: target.checked,
+      })),
+    }));
+  };
+
+  cancelEditing = ({ key, target, type }) => {
+    // eslint-disable-next-line consistent-return
+    this.setState((prev) => {
+      if (type === 'blur' && target.value.trim() !== '') {
+        return {
+          showChangeTitle: false,
+          editingTodo: null,
+          todos: prev.todos.map((todo) => {
+            if (todo.id === +target.id) {
+              return {
+                ...todo,
+                title: target.value,
+              };
+            }
+
+            return todo;
+          }),
+        };
+      }
+
+      if (key === 'Escape') {
+        return {
+          showChangeTitle: false,
+          editingTodo: null,
+        };
+      }
+    });
   };
 
   changeTitle = (id) => {
@@ -93,13 +137,18 @@ class App extends Component {
     });
   };
 
-  handleCompletedAll = () => {
-    this.setState(prev => ({
-      todos: prev.todos.map(todo => ({
-        ...todo,
-        completed: !todo.completed,
-      })),
-    }));
+  getFilterderTodos = () => {
+    const { typeOfFilter, todos } = this.state;
+
+    if (typeOfFilter === filters.completed) {
+      return [...todos].filter(todo => todo.completed);
+    }
+
+    if (typeOfFilter === filters.active) {
+      return [...todos].filter(todo => !todo.completed);
+    }
+
+    return [...todos];
   };
 
   render() {
@@ -108,15 +157,8 @@ class App extends Component {
       newValue,
       editingTodo,
       showChangeTitle } = this.state;
-    let visibleTodos = [...todos];
 
-    if (typeOfFilter === 'completed') {
-      visibleTodos = visibleTodos.filter(todo => todo.completed);
-    }
-
-    if (typeOfFilter === 'active') {
-      visibleTodos = visibleTodos.filter(todo => !todo.completed);
-    }
+    const visibleTodos = this.getFilterderTodos();
 
     return (
       <section className="todoapp">
@@ -136,8 +178,10 @@ class App extends Component {
           showChangeTitle={showChangeTitle}
           handleChangeTitle={this.handleChangeTitle}
           handleCompletedAll={this.handleCompletedAll}
+          cancelEditing={this.cancelEditing}
         />
         <Footer
+          filters={filters}
           invisibleFooter={todos.length}
           countCompleted={todos.filter(item => item.completed === false).length}
           handleTypeOfFilter={this.handleTypeOfFilter}

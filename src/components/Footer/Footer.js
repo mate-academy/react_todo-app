@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import CN from 'classnames';
 
 export const Footer = (
-  { invisibleFooter,
+  { filters,
+    invisibleFooter,
     countCompleted,
     handleTypeOfFilter,
     typeOfFilter,
@@ -21,35 +22,17 @@ export const Footer = (
     </span>
 
     <ul className="filters">
-      <li>
-        <a
-          href="#/"
-          onClick={() => handleTypeOfFilter('all')}
-          className={CN({ selected: typeOfFilter === 'all' })}
-        >
-          All
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/active"
-          onClick={() => handleTypeOfFilter('active')}
-          className={CN({ selected: typeOfFilter === 'active' })}
-        >
-          Active
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/completed"
-          onClick={() => handleTypeOfFilter('completed')}
-          className={CN({ selected: typeOfFilter === 'completed' })}
-        >
-          Completed
-        </a>
-      </li>
+      {Object.values(filters).map(item => (
+        <li key={item}>
+          <a
+            href="#/"
+            onClick={() => handleTypeOfFilter(item)}
+            className={CN({ selected: typeOfFilter === item })}
+          >
+            {item}
+          </a>
+        </li>
+      ))}
     </ul>
 
     <button
@@ -63,6 +46,7 @@ export const Footer = (
 );
 
 Footer.propTypes = {
+  filters: PropTypes.shape.isRequired,
   invisibleFooter: PropTypes.number.isRequired,
   countCompleted: PropTypes.number.isRequired,
   handleTypeOfFilter: PropTypes.func.isRequired,
