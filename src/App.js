@@ -106,10 +106,7 @@ class App extends Component {
             className="toggle-all"
             disabled={!tasks.length}
             onClick={this.markAllAsCompleted}
-            style={this.state.tasks.filter(t => t.completed === false).length
-            ? { color: 'lightgray' }
-            : { color: 'gray' }}
-          />
+           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
