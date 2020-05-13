@@ -102,7 +102,7 @@ class App extends React.Component {
   handleClearCompleted = () => {
     let footerIsVisible = true;
 
-    if (this.state.todosCopied.length <= 1) {
+    if (this.state.todos.length <= 1) {
       footerIsVisible = false;
     }
 
