@@ -10,17 +10,14 @@ class App extends Component {
   }
 
   addTask = (taskName) => {
-    this.setState((prevState) => {
-      const { tasks } = prevState;
-
-      tasks.push({
-        id: tasks.length + 1,
+    this.setState(prevState => ({
+      ...prevState,
+      tasks: [...prevState.tasks, {
+        id: prevState.tasks.length,
         title: taskName,
         completed: false,
-      });
-
-      return tasks;
-    });
+      }],
+    }));
   };
 
   changeCondition = (id) => {
@@ -39,13 +36,11 @@ class App extends Component {
   };
 
   deleteTask = (id) => {
-    const i = this.state.tasks.map(task => task.id).indexOf(id);
-
-    this.setState((prevState) => {
-      const { tasks } = prevState;
-
-      return tasks.splice(i, 1);
-    });
+    this.setState(prevState => ({
+      tasks: prevState.tasks.filter(task => (
+        task.id !== id
+      )),
+    }));
   }
 
   clearCompleted = () => {
