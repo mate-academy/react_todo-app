@@ -10,9 +10,11 @@ class NewTodo extends React.Component {
   }
 
   handleSetTitle = ({ target }) => {
-    this.setState({
-      title: target.value.trimLeft().replace(/[^a-zа-я\s]/gi, ''),
-    });
+    if (target.value.trim() !== '') {
+      this.setState({
+        title: target.value,
+      });
+    }
   }
 
   resetForm = () => {
