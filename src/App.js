@@ -1,7 +1,7 @@
 import React from 'react';
-import TodoApp from './components/TodoApp/TodoApp';
+import Header from './components/Header/Header';
 import TodoList from './components/TodoList/TodoList';
-import TodosFilter from './components/TodosFilter/TodosFilter';
+import Footer from './components/Footer/Footer';
 
 const LOCALSTORAGE_STATE = 'initialState';
 
@@ -46,7 +46,10 @@ class App extends React.Component {
         }
         : el)),
       isToggledAll: false,
-    }), () => this.checkAnythingCompleted());
+    }), () => {
+      this.checkAnythingCompleted();
+      this.checkAllCompleted();
+    });
   };
 
   changeAllCompleted = () => {
@@ -117,14 +120,19 @@ class App extends React.Component {
     });
   };
 
+  checkAllCompleted = () => {
+    const { todos } = this.state;
+    const areAllElementCompleted = todos.every(el => el.completed);
+
+    this.setState({
+      isToggledAll: areAllElementCompleted,
+    });
+  };
+
   render() {
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-
-          <TodoApp addTodo={this.addTodo} />
-        </header>
+        <Header addTodo={this.addTodo} />
 
         <TodoList
           items={this.state.todos}
@@ -135,11 +143,12 @@ class App extends React.Component {
           removeTodo={this.removeTodo}
         />
 
-        <TodosFilter
+        <Footer
           todos={this.state.todos}
           handleFilter={this.handleFilter}
           handleClearCompleted={this.handleClearCompleted}
           isVisible={this.state.isVisible}
+          filterName={this.state.filterName}
         />
       </section>
     );

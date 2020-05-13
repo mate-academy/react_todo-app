@@ -37,14 +37,19 @@ const TodoList = (
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        checked={isToggledAll}
-        onChange={() => changeAllCompleted()}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      {!!items.length && (
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={isToggledAll}
+          onChange={() => changeAllCompleted()}
+        />
+      )}
+
+      {!!items.length && (
+        <label htmlFor="toggle-all">Mark all as complete</label>
+      )}
 
       <ul className="todo-list">
         {onFiltered(items).length === 0
