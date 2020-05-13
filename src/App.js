@@ -50,7 +50,7 @@ class App extends Component {
   }
 
   markAllAsCompleted= () => {
-    if (this.state.tasks.filter(t => t.completed === false).length) {
+    if (this.state.tasks.filter(t => t.completed === false).length > 0) {
       this.setState(prevState => ({
         tasks: prevState.tasks.map(task => ({
           ...task,
@@ -104,11 +104,21 @@ class App extends Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={
+              (!tasks.length
+              || this.state.tasks.filter(t => t.completed === false).length > 0)
+                ? ''
+                : 'checked'}
+
             disabled={!tasks.length}
             onClick={this.markAllAsCompleted}
 
           />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          <label
+            htmlFor="toggle-all"
+          >
+            Mark all as complete
+          </label>
 
           <TodoList
             tasks={visibleTasks}
