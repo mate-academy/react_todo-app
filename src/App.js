@@ -10,6 +10,24 @@ class App extends React.Component {
     selectedTodos: FILTER_TYPES.all,
   };
 
+  componentDidMount() {
+    const todosFromStorage = localStorage.getItem('todos');
+
+    if (todosFromStorage) {
+      const todos = JSON.parse(todosFromStorage);
+
+      this.setState({ todos });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { todos } = this.state;
+
+    if (prevState.todos !== todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
   addTodo = (todo) => {
     const { todos } = this.state;
 

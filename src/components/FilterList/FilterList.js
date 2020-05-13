@@ -9,10 +9,10 @@ export const FilterList = ({ setFilter, selectedTodos }) => (
       <li key={filter} className="filter">
         <a
           href={`#/${filter}`}
-          className={classNames('filter-link', {
+          onClick={() => setFilter(filter)}
+          className={classNames({
             selected: selectedTodos === filter,
           })}
-          onClick={() => setFilter(filter)}
         >
           {filter}
         </a>

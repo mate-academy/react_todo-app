@@ -15,7 +15,7 @@ export const Footer = (
 
       <FilterList
         setFilter={setFilter}
-        selectedFilter={selectedTodos}
+        selectedTodos={selectedTodos}
       />
 
       {todos.some(todo => todo.completed) && (
