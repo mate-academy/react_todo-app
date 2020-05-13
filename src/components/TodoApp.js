@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 import TodoList from './TodoList';
 import Footer from './Footer';
 import { todosPropTypes } from './propTypes';
 
 class TodoApp extends React.Component {
   state = {
-    id: 0,
+    id: uuidv4(),
     title: '',
     completed: false,
   };
@@ -34,7 +35,7 @@ class TodoApp extends React.Component {
 
     this.setState(state => ({
       title: '',
-      id: state.id + 1,
+      id: uuidv4(),
     }
     ));
 
