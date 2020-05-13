@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 export const FilterTodos = ({ setFilter, clearCompleted, todos, filter }) => (
   <>
@@ -13,7 +14,7 @@ export const FilterTodos = ({ setFilter, clearCompleted, todos, filter }) => (
       <li>
         <a
           href="#/"
-          className={filter === 'All' ? 'selected' : ''}
+          className={classNames({selected: filter.all})}
           onClick={event => setFilter(event.target.text)}
         >
           All
@@ -23,7 +24,7 @@ export const FilterTodos = ({ setFilter, clearCompleted, todos, filter }) => (
       <li>
         <a
           href="#/active"
-          className={filter === 'Active' ? 'selected' : ''}
+          className={classNames({selected: filter.active})}
           onClick={event => setFilter(event.target.text)}
         >
           Active
@@ -33,7 +34,7 @@ export const FilterTodos = ({ setFilter, clearCompleted, todos, filter }) => (
       <li>
         <a
           href="#/completed"
-          className={filter === 'Completed' ? 'selected' : ''}
+          className={classNames({selected: filter.completed})}
           onClick={event => setFilter(event.target.text)}
         >
           Completed

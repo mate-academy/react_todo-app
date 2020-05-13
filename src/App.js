@@ -8,7 +8,11 @@ class App extends React.Component {
   state = {
     todos: [],
     newId: 1,
-    filter: 'All',
+    filter: {
+      all: true,
+      active: false,
+      completed: false,
+    },
   }
 
   addTodo = (title) => {
@@ -53,7 +57,28 @@ class App extends React.Component {
   }
 
   setFilter = (filter) => {
-    this.setState({ filter });
+    this.setState(
+      { 
+        filter: {
+          all: false,
+          active: false,
+          completed: false,
+          [filter.toLowerCase()]: true,
+        },
+      }
+    );
+  }
+
+  getFiltredTodos = (todos) => {
+    if (this.state.filter.completed) {
+      todos = todos.filter(todo => todo.completed);
+    }
+
+    if (this.state.filter.active) {
+      todos = todos.filter(todo => !todo.completed);
+    }
+
+    return todos;
   }
 
   clearCompleted = () => {
@@ -76,15 +101,7 @@ class App extends React.Component {
   )
 
   render() {
-    let allTodos = [...this.state.todos];
-
-    if (this.state.filter === 'Completed') {
-      allTodos = allTodos.filter(todo => todo.completed);
-    }
-
-    if (this.state.filter === 'Active') {
-      allTodos = allTodos.filter(todo => !todo.completed);
-    }
+    const allTodos = this.getFiltredTodos([...this.state.todos]);
 
     return (
       <section className="todoapp">
@@ -93,16 +110,14 @@ class App extends React.Component {
         />
 
         <section className="main">
-          {this.state.todos.length
-            ? (<input
+          {this.state.todos.length > 0 &&
+            (<input
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
               checked={this.isCompletedAll()}
               onClick={event => this.toggleAll(event)}
             />)
-
-            : ''
           }
           <label htmlFor="toggle-all" />
           <TodoList
@@ -112,8 +127,8 @@ class App extends React.Component {
           />
         </section>
 
-        { this.state.todos.length
-          ? (
+        { this.state.todos.length > 0 &&
+           (
             <footer className="footer">
               <FilterTodos
                 filter={this.state.filter}
@@ -123,7 +138,6 @@ class App extends React.Component {
               />
             </footer>
           )
-          : ''
         }
       </section>
     );
