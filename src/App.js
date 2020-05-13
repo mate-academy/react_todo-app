@@ -6,7 +6,7 @@ import { FILTERS } from './components/helpers/HELPERS';
 class App extends React.Component {
   state = {
     tasks: [],
-    tasksToShow: 'all',
+    tasksToShow: FILTERS.all,
     filters: FILTERS,
   };
 
