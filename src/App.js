@@ -147,6 +147,7 @@ class App extends React.Component {
             id="toggle-all"
             className="toggle-all"
             onChange={event => this.handleCompletedAll(event)}
+            checked={todos.length && todos.every(todo => todo.completed)}
           />
           {isVisible && (
             <label
