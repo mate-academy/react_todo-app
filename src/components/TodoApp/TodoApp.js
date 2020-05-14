@@ -39,12 +39,14 @@ class TodoApp extends React.Component {
       return {
         todos: [...prev.todos, newTodo],
         newTodoTitle: '',
+        isToggleAll: false,
       };
     });
   };
 
   toggleChecked = (todoId) => {
     this.setState(prev => ({
+      isToggleAll: false,
       todos: prev.todos.map((todo) => {
         if (todo.id === todoId) {
           return {
@@ -94,19 +96,22 @@ class TodoApp extends React.Component {
   destoyCompletedItems = () => {
     this.setState(prev => ({
       todos: prev.todos.filter(todo => !todo.completed),
+      isToggleAll: false,
     }));
   }
 
   render() {
     let todos = [...this.state.todos];
+    const completedTodos = todos.filter(todo => todo.completed);
+    const notCompletedTodods = todos.filter(todo => !todo.completed);
     const { filterForTodos, newTodoTitle, isToggleAll } = this.state;
 
     if (filterForTodos === 'Active') {
-      todos = this.state.todos.filter(todo => !todo.completed);
+      todos = notCompletedTodods;
     }
 
     if (filterForTodos === 'Completed') {
-      todos = this.state.todos.filter(todo => todo.completed);
+      todos = completedTodos;
     }
 
     return (
@@ -132,7 +137,11 @@ class TodoApp extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            checked={isToggleAll}
+            checked={
+              todos.length === completedTodos.length && todos.length !== 0
+                ? true
+                : isToggleAll
+            }
             onChange={this.toggleAllTodos}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
