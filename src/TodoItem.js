@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import className from 'classnames';
 
 const TodoItem = ({ todo, changeComplete, deleteTodo }) => {
   const { id, title, completed } = todo;
 
   return (
-    <li className={classNames({
+    <li className={className({
       completed,
     })}
     >
