@@ -38,7 +38,7 @@ class TodoItem extends React.Component {
   render() {
     const {
       todo,
-      statusOfTodo,
+      setStatusOfTodo,
       handleRemoveTodo,
     } = this.props;
     const { id, title, completed } = todo;
@@ -52,7 +52,7 @@ class TodoItem extends React.Component {
             className="toggle"
             id={id}
             checked={completed}
-            onChange={() => statusOfTodo(id)}
+            onChange={() => setStatusOfTodo(id)}
           />
           <label onDoubleClick={this.handleDoubleClick}>{title}</label>
           <button
@@ -85,7 +85,7 @@ TodoItem.propTypes = {
     editing: PropTypes.bool.isRequired,
   }).isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
-  statusOfTodo: PropTypes.func.isRequired,
+  setStatusOfTodo: PropTypes.func.isRequired,
   setEditStatus: PropTypes.func.isRequired,
   setTodoTitle: PropTypes.func.isRequired,
 };

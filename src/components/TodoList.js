@@ -7,7 +7,7 @@ const TodoList = ({
   todos,
   visibleTodos,
   handleRemoveTodo,
-  statusOfTodo,
+  setStatusOfTodo,
   handleToggleAll,
   setEditStatus,
   setTodoTitle,
@@ -34,7 +34,7 @@ const TodoList = ({
           <TodoItem
             todo={todo}
             handleRemoveTodo={handleRemoveTodo}
-            statusOfTodo={statusOfTodo}
+            setStatusOfTodo={setStatusOfTodo}
             setEditStatus={setEditStatus}
             setTodoTitle={setTodoTitle}
           />
@@ -54,7 +54,7 @@ TodoList.propTypes = {
     }).isRequired,
   ).isRequired,
   handleRemoveTodo: PropTypes.func.isRequired,
-  statusOfTodo: PropTypes.func.isRequired,
+  setStatusOfTodo: PropTypes.func.isRequired,
   handleToggleAll: PropTypes.func.isRequired,
   setEditStatus: PropTypes.func.isRequired,
   setTodoTitle: PropTypes.func.isRequired,

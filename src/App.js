@@ -68,9 +68,9 @@ class App extends React.Component {
     }));
   }
 
-  handleAddTodo = (newTodo) => {
+  handleAddTodo = (addTodo) => {
     this.setState(prev => ({
-      todos: [...prev.todos, newTodo],
+      todos: [...prev.todos, addTodo],
     }));
   }
 
@@ -80,7 +80,7 @@ class App extends React.Component {
     }));
   }
 
-  statusOfTodo = (id) => {
+  setStatusOfTodo = (id) => {
     this.setState(prev => ({
       todos: prev.todos.map((todo) => {
         if (todo.id === id) {
@@ -135,7 +135,7 @@ class App extends React.Component {
           todos={todos}
           visibleTodos={visibleTodos}
           handleRemoveTodo={this.handleRemoveTodo}
-          statusOfTodo={this.statusOfTodo}
+          setStatusOfTodo={this.setStatusOfTodo}
           handleToggleAll={this.handleToggleAll}
           setEditStatus={this.setEditStatus}
           setTodoTitle={this.setTodoTitle}
