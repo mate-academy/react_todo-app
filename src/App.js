@@ -9,6 +9,22 @@ class App extends React.Component {
     todosToShow: 'all',
   }
 
+  componentDidMount() {
+    const cacheTodos = JSON.parse(localStorage.getItem('todos'));
+
+    if (cacheTodos) {
+      this.setState({ todos: cacheTodos });
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    const { todos } = this.state;
+
+    if (prevState.todos !== todos) {
+      this.saveToLocalStorage();
+    }
+  }
+
   updateTodosList = (newTodoTitle) => {
     this.setState((state) => {
       const newTodo = {
@@ -85,6 +101,12 @@ class App extends React.Component {
 
   toggleActiveTodos = (filterName) => {
     this.setState({ todosToShow: filterName });
+  }
+
+  saveToLocalStorage() {
+    const todos = JSON.stringify(this.state.todos);
+
+    localStorage.setItem('todos', todos);
   }
 
   render() {
