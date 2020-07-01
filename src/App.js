@@ -1,9 +1,7 @@
 import React from 'react';
 import { Todo } from './Todo';
-// import { nominalTypeHack } from 'prop-types';
 
 class App extends React.Component {
-
   state = {
     inputValue: '',
     todoList: [],
@@ -12,12 +10,15 @@ class App extends React.Component {
     hideCompleted: false,
     hideActive: false,
     allSelected: false,
+    selected: 'all',
   }
 
   clear = () => {
     const tempStatus = { ...this.state.completedTodos };
-    const finished = this.state.todoList.filter(todo => this.state.completedTodos[todo] === true);
-    const unfinished = this.state.todoList.filter(todo => !finished.includes(todo));
+    const finished = this.state.todoList
+      .filter(todo => this.state.completedTodos[todo] === true);
+    const unfinished = this.state.todoList
+      .filter(todo => !finished.includes(todo));
     const visibility = (unfinished.length) ? 'block' : 'none';
 
     finished.forEach((todo) => {
@@ -31,6 +32,19 @@ class App extends React.Component {
   }
 
   onComplete = (completed, state) => {
+    const newStates = {
+      ...this.state.completedTodos,
+      [completed]: state,
+    };
+
+    if (Object.values(newStates).every(item => item === true)) {
+      this.selectAll();
+    } else if (this.state.allSelected) {
+      this.setState(() => ({
+        allSelected: false,
+      }));
+    }
+
     this.setState(prevState => ({
       completedTodos: {
         ...prevState.completedTodos,
@@ -55,7 +69,8 @@ class App extends React.Component {
   }
 
   addNewTodo = (ev) => {
-    if (ev.keyCode === 13) {
+    if (ev.keyCode === 13
+      && !this.state.todoList.includes(this.state.inputValue)) {
       (this.setState(prevState => ({
         todoList: (!prevState.todoList.includes(prevState.inputValue))
           ? [...prevState.todoList, prevState.inputValue]
@@ -70,8 +85,25 @@ class App extends React.Component {
     }
   };
 
+  ifAllSelected = () => {
+    const all = Object.values(this.state.completedTodos).every(todo => todo === true);
+    console.log('if all', all)
+    if (all) {
+      this.setState(prevState => ({
+        allSelected: true,
+      }));
+    }
+  }
+
+  controlDecor = () => {
+    this.setState(prevState => ({
+      allSelected: !prevState.allSelected,
+    }));
+  }
+
   showActive = () => {
     (this.setState(() => ({
+      selected: 'active',
       hideCompleted: true,
       hideActive: false,
     })));
@@ -81,12 +113,13 @@ class App extends React.Component {
     (this.setState(() => ({
       hideCompleted: false,
       hideActive: false,
+      selected: 'all',
     })));
   }
 
   selectAll = () => {
     const obj = {};
-
+    console.log('test')
     this.state.todoList.forEach((key) => {
       obj[key] = !this.state.allSelected;
     });
@@ -101,6 +134,7 @@ class App extends React.Component {
     (this.setState(() => ({
       hideCompleted: false,
       hideActive: true,
+      selected: 'completed',
     })));
   }
 
@@ -112,7 +146,8 @@ class App extends React.Component {
   };
 
   render() {
-    const amountOfCompleted = Object.values(this.state.completedTodos).filter(state => state === true).length;
+    const amountOfCompleted = Object.values(this.state.completedTodos)
+      .filter(state => state === true).length;
 
     return (
       <section className="todoapp">
@@ -134,6 +169,7 @@ class App extends React.Component {
             id="toggle-all"
             className="toggle-all"
             onClick={this.selectAll}
+            checked={this.state.allSelected}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -141,6 +177,7 @@ class App extends React.Component {
             {
               this.state.todoList.map(todo => (
                 <Todo
+                  selected={this.state.allSelected}
                   hideActive={this.state.hideActive}
                   hideCompleted={this.state.hideCompleted}
                   key={todo}
@@ -148,6 +185,8 @@ class App extends React.Component {
                   title={todo}
                   onComplete={this.onComplete}
                   deleteTodo={this.deleteTodo}
+                  selectAll={this.controlDecor}
+                  ifAllSelected={this.ifAllSelected}
                 />
               ))
             }
@@ -155,7 +194,10 @@ class App extends React.Component {
           </ul>
         </section>
 
-        <footer className="footer" style={{ display: this.state.visibleFooter }}>
+        <footer
+          className="footer"
+          style={{ display: this.state.visibleFooter }}
+        >
           <span className="todo-count">
             {this.state.todoList.length - amountOfCompleted}
             &nbsp;
@@ -164,19 +206,53 @@ class App extends React.Component {
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected" onClick={this.showAll}>All</a>
+              <a
+                href="#/"
+                className={(
+                  this.state.selected === 'all'
+                    ? 'selected'
+                    : 'non-selected'
+                )}
+                onClick={this.showAll}
+              >
+                All
+              </a>
             </li>
 
             <li>
-              <a href="#/active" onClick={this.showActive}>Active</a>
+              <a
+                href="#/active"
+                className={(
+                  this.state.selected === 'active'
+                    ? 'selected'
+                    : 'non-selected'
+                )}
+                onClick={ev => this.showActive(ev)}
+              >
+                Active
+              </a>
             </li>
 
             <li>
-              <a href="#/completed" onClick={this.showCompleted}>Completed</a>
+              <a
+                href="#/completed"
+                onClick={this.showCompleted}
+                className={(
+                  this.state.selected === 'completed'
+                    ? 'selected'
+                    : 'non-selected'
+                )}
+              >
+                Completed
+              </a>
             </li>
           </ul>
 
-          <button type="button" className="clear-completed" onClick={this.clear}>
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={this.clear}
+          >
             Clear completed
           </button>
         </footer>
