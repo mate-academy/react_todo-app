@@ -28,6 +28,7 @@ class App extends React.Component {
       todoList: [...unfinished],
       completedTodos: { ...tempStatus },
       visibleFooter: visibility,
+      allSelected: false,
     }));
   }
 
@@ -39,10 +40,6 @@ class App extends React.Component {
 
     if (Object.values(newStates).every(item => item === true)) {
       this.selectAll();
-    } else if (this.state.allSelected) {
-      this.setState(() => ({
-        allSelected: false,
-      }));
     }
 
     this.setState(prevState => ({
@@ -61,9 +58,10 @@ class App extends React.Component {
 
     delete completed[el];
 
-    this.setState(() => ({
+    this.setState(prevState => ({
       todoList: [...listWithoutEl],
       visibleFooter: visibility,
+      allSelected: (!listWithoutEl.length) ? false : prevState.allSelected,
       completedTodos: { ...completed },
     }));
   }
@@ -85,22 +83,6 @@ class App extends React.Component {
     }
   };
 
-  ifAllSelected = () => {
-    const all = Object.values(this.state.completedTodos).every(todo => todo === true);
-    console.log('if all', all)
-    if (all) {
-      this.setState(prevState => ({
-        allSelected: true,
-      }));
-    }
-  }
-
-  controlDecor = () => {
-    this.setState(prevState => ({
-      allSelected: !prevState.allSelected,
-    }));
-  }
-
   showActive = () => {
     (this.setState(() => ({
       selected: 'active',
@@ -119,7 +101,7 @@ class App extends React.Component {
 
   selectAll = () => {
     const obj = {};
-    console.log('test')
+
     this.state.todoList.forEach((key) => {
       obj[key] = !this.state.allSelected;
     });
@@ -185,8 +167,6 @@ class App extends React.Component {
                   title={todo}
                   onComplete={this.onComplete}
                   deleteTodo={this.deleteTodo}
-                  selectAll={this.controlDecor}
-                  ifAllSelected={this.ifAllSelected}
                 />
               ))
             }
