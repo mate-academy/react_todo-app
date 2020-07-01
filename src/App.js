@@ -40,6 +40,10 @@ class App extends React.Component {
 
     if (Object.values(newStates).every(item => item === true)) {
       this.selectAll();
+    } else if (this.state.allSelected) {
+      this.setState(() => ({
+        allSelected: false,
+      }));
     }
 
     this.setState(prevState => ({
@@ -68,7 +72,8 @@ class App extends React.Component {
 
   addNewTodo = (ev) => {
     if (ev.keyCode === 13
-      && !this.state.todoList.includes(this.state.inputValue)) {
+      && !this.state.todoList.includes(this.state.inputValue)
+      && this.state.inputValue.trim().length) {
       (this.setState(prevState => ({
         todoList: (!prevState.todoList.includes(prevState.inputValue))
           ? [...prevState.todoList, prevState.inputValue]
