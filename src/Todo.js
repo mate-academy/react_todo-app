@@ -3,7 +3,7 @@ import { ShapeTodo } from './Shapes';
 
 export const Todo = ({
   selected, hideActive, hideCompleted, completed,
-  title, onComplete, deleteTodo,
+  title, onComplete, deleteTodo, startEdition,
 }) => {
   const checkExecution = (ev) => {
     (ev.target.checked)
@@ -39,6 +39,12 @@ export const Todo = ({
           type="button"
           className="destroy"
           onClick={ev => deleteTodo(ev)}
+        />
+        <button
+          type="button"
+          className="edit_btn"
+          onClick={() => startEdition(title)}
+          value="edit"
         />
       </div>
     </li>

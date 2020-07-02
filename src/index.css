@@ -377,3 +377,40 @@ html .clear-completed:active {
     bottom: 10px;
   }
 }
+
+.edit_btn {
+  display: none;
+  width: 40px;
+  height: 20px;
+  background-image: url(./edit.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  top: 20px;
+  right: 50px;
+}
+
+.wrap_li {
+  position: relative;
+  max-height: 60px;
+}
+
+.edition {
+  box-shadow: 7px 7px 5px rgba(0,0,0,0.6);
+  border: 2px solid rgb(194, 182, 182);
+  max-height: 60px;
+  position: relative;
+  top: -60px;
+  line-height: 28px;
+  font-size: 24px;
+  width: 550px;
+  box-sizing: border-box;
+  padding: 13px 15px 13px 60px;
+  font-family: "Helvetica Neue";
+  font-weight: 300;
+
+}
+
+.todo-list li:hover .edit_btn {
+  display: block;
+}

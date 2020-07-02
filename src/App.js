@@ -11,6 +11,7 @@ class App extends React.Component {
     hideActive: false,
     allSelected: false,
     selected: 'all',
+    transformedTodo: '',
   }
 
   clear = () => {
@@ -30,6 +31,12 @@ class App extends React.Component {
       visibleFooter: visibility,
       allSelected: false,
     }));
+  }
+
+  startEdition = (name) => {
+    (this.setState(() => ({
+      transformedTodo: name,
+    })));
   }
 
   onComplete = (completed, state) => {
@@ -79,6 +86,10 @@ class App extends React.Component {
           ? [...prevState.todoList, prevState.inputValue]
           : [...prevState.todoList],
         inputValue: '',
+        editorsId: {
+          ...prevState.editorsId,
+          [prevState.inputValue]: prevState.inputValue,
+        },
         visibleFooter: 'block',
         completedTodos: {
           ...prevState.completedTodos,
@@ -132,6 +143,29 @@ class App extends React.Component {
     })));
   };
 
+  putChanges = (ev, title, value, bool) => {
+    ev.persist();
+    if ((ev.keyCode === 13 || bool) && value.trim()) {
+      const i = this.state.todoList.findIndex(todo => todo === title);
+      const leftPart = this.state.todoList.slice(0, i);
+      const rightPart = this.state.todoList.slice(i + 1, this.state.todoList.length);
+      const changedTodo = [...leftPart, value, ...rightPart];
+
+      (this.setState(() => ({
+        todoList: [...changedTodo],
+      })));
+    } else if (ev.keyCode === 13 && !value.trim()) {
+      (this.setState(prevState => ({
+        todoList: prevState.todoList,
+        transformedTodo: '',
+      })));
+    }
+  }
+
+  // setChanges = (ev, title, value) => {
+  //   console.log(ev, title, value)
+  // }
+
   render() {
     const amountOfCompleted = Object.values(this.state.completedTodos)
       .filter(state => state === true).length;
@@ -155,25 +189,46 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            onClick={this.selectAll}
+            onChange={this.selectAll}
             checked={this.state.allSelected}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
             {
-              this.state.todoList.map(todo => (
-                <Todo
-                  selected={this.state.allSelected}
-                  hideActive={this.state.hideActive}
-                  hideCompleted={this.state.hideCompleted}
-                  key={todo}
-                  completed={this.state.completedTodos[todo]}
-                  title={todo}
-                  onComplete={this.onComplete}
-                  deleteTodo={this.deleteTodo}
-                />
-              ))
+              this.state.todoList.map((todo) => {
+                const editedTodo = (todo === this.state.transformedTodo)
+                  ? (
+                    <input
+                      onKeyUp={ev => this.putChanges(ev, todo, ev.target.value)}
+                      onBlur={ev => this.putChanges(ev, todo, ev.target.value, true)}
+                      // key={1}
+                      defaultValue={todo}
+                      type="text"
+                      className="edition"
+                      id={`${todo}_edit`}
+                      // onChange={(ev) => this.changeTodo(todo, ev.target.value)}
+                    />
+                  )
+                  : <></>;
+
+                return (
+                  <div className="wrap_li">
+                    <Todo
+                      startEdition={this.startEdition}
+                      selected={this.state.allSelected}
+                      hideActive={this.state.hideActive}
+                      hideCompleted={this.state.hideCompleted}
+                      key={todo}
+                      completed={this.state.completedTodos[todo]}
+                      title={todo}
+                      onComplete={this.onComplete}
+                      deleteTodo={this.deleteTodo}
+                    />
+                    {editedTodo}
+                  </div>
+                );
+              })
             }
 
           </ul>
