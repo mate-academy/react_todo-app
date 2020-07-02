@@ -1,11 +1,14 @@
 import React from 'react';
-import { Todo } from './Todo';
+import { Header } from './Header';
+import { Toggler } from './Toggler';
+import { TodoList } from './TodoList';
+import { Footer } from './Footer';
 
 class App extends React.Component {
   state = {
     inputValue: '',
     todoList: [],
-    visibleFooter: 'none',
+    visibleFooter: false,
     completedTodos: {},
     hideCompleted: false,
     hideActive: false,
@@ -14,31 +17,7 @@ class App extends React.Component {
     transformedTodo: '',
   }
 
-  clear = () => {
-    const tempStatus = { ...this.state.completedTodos };
-    const finished = this.state.todoList
-      .filter(todo => this.state.completedTodos[todo] === true);
-    const unfinished = this.state.todoList
-      .filter(todo => !finished.includes(todo));
-    const visibility = (unfinished.length) ? 'block' : 'none';
-
-    finished.forEach((todo) => {
-      delete tempStatus[todo];
-    });
-    this.setState(() => ({
-      todoList: [...unfinished],
-      completedTodos: { ...tempStatus },
-      visibleFooter: visibility,
-      allSelected: false,
-    }));
-  }
-
-  startEdition = (name) => {
-    (this.setState(() => ({
-      transformedTodo: name,
-    })));
-  }
-
+  /// change completed
   onComplete = (completed, state) => {
     const newStates = {
       ...this.state.completedTodos,
@@ -61,14 +40,8 @@ class App extends React.Component {
     }));
   }
 
-  deleteTodo = (ev) => {
-    const el = ev.target.previousElementSibling.textContent;
-    const listWithoutEl = this.state.todoList.filter(item => item !== el);
-    const visibility = (listWithoutEl.length) ? 'block' : 'none';
-    const completed = { ...this.state.completedTodos };
-
-    delete completed[el];
-
+  /// add and delete todos
+  deleteTodo = (listWithoutEl, visibility, completed) => {
     this.setState(prevState => ({
       todoList: [...listWithoutEl],
       visibleFooter: visibility,
@@ -79,25 +52,36 @@ class App extends React.Component {
 
   addNewTodo = (ev) => {
     if (ev.keyCode === 13
-      && !this.state.todoList.includes(this.state.inputValue)
+      && !this.state.todoList.includes(this.state.inputValue.trim())
       && this.state.inputValue.trim().length) {
       (this.setState(prevState => ({
-        todoList: (!prevState.todoList.includes(prevState.inputValue))
-          ? [...prevState.todoList, prevState.inputValue]
+        todoList: (!prevState.todoList.includes(prevState.inputValue.trim()))
+          ? [...prevState.todoList, prevState.inputValue.trim()]
           : [...prevState.todoList],
         inputValue: '',
         editorsId: {
           ...prevState.editorsId,
           [prevState.inputValue]: prevState.inputValue,
         },
-        visibleFooter: 'block',
+        visibleFooter: true,
         completedTodos: {
           ...prevState.completedTodos,
           [prevState.inputValue]: false,
         },
+        allSelected: false,
       })));
     }
   };
+
+  /// buttons clear, show all, show completed, show active
+  clear = (unfinished, tempStatus, visibility) => {
+    this.setState(() => ({
+      todoList: [...unfinished],
+      completedTodos: { ...tempStatus },
+      visibleFooter: visibility,
+      allSelected: false,
+    }));
+  }
 
   showActive = () => {
     (this.setState(() => ({
@@ -115,6 +99,14 @@ class App extends React.Component {
     })));
   }
 
+  showCompleted = () => {
+    (this.setState(() => ({
+      hideCompleted: false,
+      hideActive: true,
+      selected: 'completed',
+    })));
+  }
+
   selectAll = () => {
     const obj = {};
 
@@ -128,14 +120,6 @@ class App extends React.Component {
     }));
   }
 
-  showCompleted = () => {
-    (this.setState(() => ({
-      hideCompleted: false,
-      hideActive: true,
-      selected: 'completed',
-    })));
-  }
-
   handleInputChange = (ev) => {
     ev.persist();
     (this.setState(() => ({
@@ -143,159 +127,73 @@ class App extends React.Component {
     })));
   };
 
-  putChanges = (ev, title, value, bool) => {
-    ev.persist();
-    if ((ev.keyCode === 13 || bool) && value.trim()) {
-      const i = this.state.todoList.findIndex(todo => todo === title);
-      const leftPart = this.state.todoList.slice(0, i);
-      const rightPart = this.state.todoList.slice(i + 1, this.state.todoList.length);
-      const changedTodo = [...leftPart, value, ...rightPart];
+  startEditing = (name) => {
+    (this.setState(() => ({
+      transformedTodo: name,
+    })));
+  }
 
+  putChanges = (action, changedTodo, completed, value, state) => {
+    if (action === 'put') {
       (this.setState(() => ({
         todoList: [...changedTodo],
+        completedTodos: {
+          ...completed,
+          [value]: state,
+        },
       })));
-    } else if (ev.keyCode === 13 && !value.trim()) {
+    } else if (action === 'ignore') {
       (this.setState(prevState => ({
         todoList: prevState.todoList,
         transformedTodo: '',
       })));
+    } else if (action === 'same') {
+      (this.setState(prevState => ({
+        todoList: prevState.todoList,
+        transformedTodo: '',
+        completedTodos: prevState.completedTodos,
+      })));
     }
   }
 
-  // setChanges = (ev, title, value) => {
-  //   console.log(ev, title, value)
-  // }
-
   render() {
-    const amountOfCompleted = Object.values(this.state.completedTodos)
-      .filter(state => state === true).length;
+    const { inputValue, todoList, visibleFooter,
+      completedTodos, hideCompleted, hideActive,
+      allSelected, selected, transformedTodo } = this.state;
 
     return (
       <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onKeyUp={ev => this.addNewTodo(ev)}
-            onChange={ev => this.handleInputChange(ev)}
-            value={this.state.inputValue}
-          />
-        </header>
-
+        <Header
+          addTodo={this.addNewTodo}
+          handleInputChange={this.handleInputChange}
+          value={inputValue}
+        />
         <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            onChange={this.selectAll}
-            checked={this.state.allSelected}
+          <Toggler selectAll={this.selectAll} allSelected={allSelected} />
+          <TodoList
+            todoList={todoList}
+            transformedTodo={transformedTodo}
+            putChanges={this.putChanges}
+            startEditing={this.startEditing}
+            allSelected={allSelected}
+            hideActive={hideActive}
+            hideCompleted={hideCompleted}
+            onComplete={this.onComplete}
+            deleteTodo={this.deleteTodo}
+            completedTodos={completedTodos}
           />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-
-          <ul className="todo-list">
-            {
-              this.state.todoList.map((todo) => {
-                const editedTodo = (todo === this.state.transformedTodo)
-                  ? (
-                    <input
-                      onKeyUp={ev => this.putChanges(ev, todo, ev.target.value)}
-                      onBlur={ev => this.putChanges(ev, todo, ev.target.value, true)}
-                      // key={1}
-                      defaultValue={todo}
-                      type="text"
-                      className="edition"
-                      id={`${todo}_edit`}
-                      // onChange={(ev) => this.changeTodo(todo, ev.target.value)}
-                    />
-                  )
-                  : <></>;
-
-                return (
-                  <div className="wrap_li">
-                    <Todo
-                      startEdition={this.startEdition}
-                      selected={this.state.allSelected}
-                      hideActive={this.state.hideActive}
-                      hideCompleted={this.state.hideCompleted}
-                      key={todo}
-                      completed={this.state.completedTodos[todo]}
-                      title={todo}
-                      onComplete={this.onComplete}
-                      deleteTodo={this.deleteTodo}
-                    />
-                    {editedTodo}
-                  </div>
-                );
-              })
-            }
-
-          </ul>
         </section>
-
-        <footer
-          className="footer"
-          style={{ display: this.state.visibleFooter }}
-        >
-          <span className="todo-count">
-            {this.state.todoList.length - amountOfCompleted}
-            &nbsp;
-            items left
-          </span>
-
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className={(
-                  this.state.selected === 'all'
-                    ? 'selected'
-                    : 'non-selected'
-                )}
-                onClick={this.showAll}
-              >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                className={(
-                  this.state.selected === 'active'
-                    ? 'selected'
-                    : 'non-selected'
-                )}
-                onClick={ev => this.showActive(ev)}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                onClick={this.showCompleted}
-                className={(
-                  this.state.selected === 'completed'
-                    ? 'selected'
-                    : 'non-selected'
-                )}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
-
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.clear}
-          >
-            Clear completed
-          </button>
-        </footer>
+        <Footer
+          todoList={todoList}
+          completedTodos={completedTodos}
+          visibleFooter={visibleFooter}
+          todoListLength={todoList.length}
+          selectedButton={selected}
+          showAll={this.showAll}
+          showActive={this.showActive}
+          showCompleted={this.showCompleted}
+          clear={this.clear}
+        />
       </section>
     );
   }

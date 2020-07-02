@@ -7,3 +7,16 @@ export const ShapeTodo = PropTypes.shape({
   title: PropTypes.string.isRequired,
   onComplete: PropTypes.func.isRequired,
 });
+
+export const ShapeTodoList = PropTypes.shape({
+  todoList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  transformedTodo: PropTypes.string.isRequired,
+  putChanges: PropTypes.func.isRequired,
+  startEditing: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  allSelected: PropTypes.bool.isRequired,
+  hideActive: PropTypes.bool.isRequired,
+  hideCompleted: PropTypes.bool.isRequired,
+  completedTodos: PropTypes.objectOf(PropTypes.bool).isRequired,
+});

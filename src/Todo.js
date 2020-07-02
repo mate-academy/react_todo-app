@@ -3,12 +3,23 @@ import { ShapeTodo } from './Shapes';
 
 export const Todo = ({
   selected, hideActive, hideCompleted, completed,
-  title, onComplete, deleteTodo, startEdition,
+  title, onComplete, deleteTodo, startEditing, todoList, completedTodos,
 }) => {
   const checkExecution = (ev) => {
     (ev.target.checked)
       ? onComplete(ev.target.nextElementSibling.textContent, true)
       : onComplete(ev.target.nextElementSibling.textContent, false);
+  };
+
+  const handleDelete = (ev) => {
+    const el = ev.target.previousElementSibling.textContent;
+    const listWithoutEl = todoList.filter(item => item !== el);
+    const visibility = Boolean(listWithoutEl.length);
+    const completedTasks = { ...completedTodos };
+
+    delete completedTasks[el];
+
+    deleteTodo(listWithoutEl, visibility, completedTasks);
   };
 
   const crossed = (selected || completed)
@@ -38,12 +49,12 @@ export const Todo = ({
         <button
           type="button"
           className="destroy"
-          onClick={ev => deleteTodo(ev)}
+          onClick={ev => handleDelete(ev)}
         />
         <button
           type="button"
           className="edit_btn"
-          onClick={() => startEdition(title)}
+          onClick={() => startEditing(title)}
           value="edit"
         />
       </div>
