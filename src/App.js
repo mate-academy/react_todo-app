@@ -8,7 +8,9 @@ import { Context } from './components/common/Context';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const allCompleted = todos.every(todo => todo.isCompleted);
+  const allCompleted = todos.length
+    ? todos.every(todo => todo.isCompleted)
+    : false;
 
   useEffect(() => {
     todoApi.request().then(setTodos);
