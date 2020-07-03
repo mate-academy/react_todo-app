@@ -147,7 +147,7 @@ class App extends React.Component {
         todoList: prevState.todoList,
         transformedTodo: '',
       })));
-    } else if (action === 'same') {
+    } else if (action === 'same' || action === 'cancel') {
       (this.setState(prevState => ({
         todoList: prevState.todoList,
         transformedTodo: '',
@@ -187,7 +187,6 @@ class App extends React.Component {
           todoList={todoList}
           completedTodos={completedTodos}
           visibleFooter={visibleFooter}
-          todoListLength={todoList.length}
           selectedButton={selected}
           showAll={this.showAll}
           showActive={this.showActive}

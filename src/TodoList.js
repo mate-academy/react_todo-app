@@ -4,13 +4,16 @@ import { Todo } from './Todo';
 
 export const TodoList = ({
   transformedTodo, putChanges, startEditing, allSelected,
-  hideActive, hideCompleted, onComplete, deleteTodo, completedTodos, todoList
+  hideActive, hideCompleted, onComplete, deleteTodo, completedTodos, todoList,
 }) => {
   const changeTodo = (ev, title, value, bool) => {
     ev.persist();
-    if (value.trim() === title && (ev.keyCode === 13 || bool)) {
+    if (ev.keyCode === 27) {
+      putChanges('cancel');
+    } else if (value.trim() === title && (ev.keyCode === 13 || bool)) {
       putChanges('same');
-    } else if ((ev.keyCode === 13 || bool) && !todoList.includes(value.trim())) {
+    } else if ((ev.keyCode === 13 || bool)
+    && !todoList.includes(value.trim())) {
       if (!value.trim()) {
         putChanges('ignore');
       } else if (value.trim()) {
@@ -23,7 +26,7 @@ export const TodoList = ({
 
         delete completed[title];
 
-        putChanges('put', changedTodo, completed, value, state);
+        putChanges('put', changedTodo, completed, value.trim(), state);
       }
     }
   };

@@ -1,7 +1,7 @@
 import React from 'react';
-import { ShapeTodoList } from './Shapes';
+import { ShapeFooter } from './Shapes';
 
-export const Footer = ({ visibleFooter, todoListLength, selectedButton,
+export const Footer = ({ visibleFooter, selectedButton,
   showAll, showActive, showCompleted, clear, completedTodos, todoList }) => {
   const amountOfCompleted = Object.values(completedTodos)
     .filter(state => state === true).length;
@@ -23,10 +23,10 @@ export const Footer = ({ visibleFooter, todoListLength, selectedButton,
   return (
     <footer
       className="footer"
-      style={{ display: (visibleFooter) ? 'block' : 'none' }}
+      style={{ display: visibleFooter ? 'block' : 'none' }}
     >
       <span className="todo-count">
-        {todoListLength - amountOfCompleted}
+        {todoList.length - amountOfCompleted}
         &nbsp;
         items left
       </span>
@@ -35,11 +35,7 @@ export const Footer = ({ visibleFooter, todoListLength, selectedButton,
         <li>
           <a
             href="#/"
-            className={(
-              selectedButton === 'all'
-                ? 'selected'
-                : 'non-selected'
-            )}
+            className={(selectedButton === 'all' ? 'selected' : 'non-selected')}
             onClick={showAll}
           >
             All
@@ -82,4 +78,4 @@ export const Footer = ({ visibleFooter, todoListLength, selectedButton,
   );
 };
 
-Footer.propTypes = ShapeTodoList.isRequired;
+Footer.propTypes = ShapeFooter.isRequired;
