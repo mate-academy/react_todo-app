@@ -1,83 +1,82 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { HashRouter } from 'react-router-dom';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { TodoListWithRouter } from './components/TodoList';
+import { todoApi } from './api/api';
+import { Context } from './components/common/Context';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    todoApi.request().then(setTodos);
+  }, []);
+
+  const addTodo = (title) => {
+    const todo = {
+      title,
+      isCompleted: false,
+    };
+
+    todoApi.send(todo).then(id => setTodos(prev => [
+      ...prev,
+      {
+        ...todo,
+        id,
+      },
+    ]));
+  };
+
+  const setTodoCompleted = (id, isCompleted) => {
+    setTodos(prev => prev.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          isCompleted,
+        };
+      }
+
+      return todo;
+    }));
+
+    todoApi.setCompleted(id, isCompleted);
+  };
+
+  const removeTodo = (id) => {
+    setTodos(prev => prev.filter(todo => todo.id !== id));
+
+    todoApi.removeItem(id);
+  };
+
+  const clearCompleted = () => {
+    todos.forEach((todo) => {
+      if (todo.isCompleted) {
+        removeTodo(todo.id);
+      }
+    });
+  };
+
   return (
     <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <Header addTodo={addTodo} />
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+      <HashRouter>
+        <section className="main">
+          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+          <Context.Provider value={{
+            setTodoCompleted,
+            removeTodo,
+          }}
+          >
+            <TodoListWithRouter todos={todos} />
+          </Context.Provider>
+        </section>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+        <Footer todos={todos} clearCompleted={clearCompleted} />
+      </HashRouter>
     </section>
   );
 }

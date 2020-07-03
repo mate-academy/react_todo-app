@@ -1,6 +1,5 @@
 # React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/)
-- Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
+[DEMO LINK](https://aleksey-10.github.io/react_todo-app/)
 
 ## Description
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/)
@@ -27,26 +26,3 @@ Resources:
 - Use '✕' symbol to remove TODO item on hover
 - [checked](./public/icons/checked.svg)
 - [unchecked](./public/icons/unchecked.svg)
-
-## Tasks
-1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
-  - `title` - the text of todo
-  - `id` - unique identifier
-  - `completed` - current status (`false` by default)
-1. Show the number of not completed todos in `TodoApp`
-1. Implement `TodoList` component to display a list of todos ({ id, title, completed })
-    ```jsx harmony
-    <TodoList items={todos} />
-    ```
-1. Implement `TodoItem` component with ability to toggle the `complete` status.
-1. Add ability to toggle the completed status of all the todos.
-1. Create `TodosFilter` component to switch between `all`/`active`/`completed` todos
-1. Add ability to remove an item.
-1. Add ability to clear completed items from the list
-1. (*) Make inline editing for the TODO item
-    - double click on the TODO item text makes it editable
-    - `Enter` saves changes
-    - `Ecs` cancels editing
-![todoedit](./description/edittodo.gif)
-1. (*) Save state of the APP to local storage ([Required theory](https://javascript.info/localstorage))
-1. (*) Implement saving an edited todo when you click outside of the input
