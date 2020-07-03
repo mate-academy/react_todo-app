@@ -14,7 +14,7 @@ export const Todo = ({
   const handleDelete = (ev) => {
     const el = ev.target.previousElementSibling.textContent;
     const listWithoutEl = todoList.filter(item => item !== el);
-    const visibility = Boolean(listWithoutEl.length);
+    const visibility = !!listWithoutEl.length;
     const completedTasks = { ...completedTodos };
 
     delete completedTasks[el];
@@ -31,7 +31,10 @@ export const Todo = ({
     : 'block';
 
   return (
-    <li style={{ display: invisible }}>
+    <li
+      style={{ display: invisible }}
+      onDoubleClick={() => startEditing(title)}
+    >
       <div className="view">
         <input
           checked={completed}

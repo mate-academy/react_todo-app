@@ -42,6 +42,10 @@ class App extends React.Component {
 
   /// add and delete todos
   deleteTodo = (listWithoutEl, visibility, completed) => {
+    if (Object.values(completed).every(item => item === true)) {
+      this.selectAll();
+    }
+
     this.setState(prevState => ({
       todoList: [...listWithoutEl],
       visibleFooter: visibility,
