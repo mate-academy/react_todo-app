@@ -8,6 +8,7 @@ import { Context } from './components/common/Context';
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const allCompleted = todos.every(todo => todo.isCompleted);
 
   useEffect(() => {
     todoApi.request().then(setTodos);
@@ -72,13 +73,27 @@ function App() {
     todoApi.editItem(id, 'title', title);
   };
 
+  const selectAll = (event) => {
+    const { checked } = event.target;
+
+    todos.forEach((todo) => {
+      setTodoCompleted(todo.id, checked);
+    });
+  };
+
   return (
     <section className="todoapp">
       <Header addTodo={addTodo} />
 
       <HashRouter>
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={selectAll}
+            checked={allCompleted}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <Context.Provider value={{

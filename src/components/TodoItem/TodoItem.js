@@ -6,7 +6,7 @@ import { Context } from '../common/Context';
 export const TodoItem = ({ isCompleted, id, title }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { setTodoCompleted, removeTodo, editTitle } = useContext(Context);
-  const { register, handleSubmit } = useForm();
+  const { register, getValues, handleSubmit } = useForm();
 
   const handleChange = (event) => {
     setTodoCompleted(id, event.target.checked);
@@ -32,6 +32,7 @@ export const TodoItem = ({ isCompleted, id, title }) => {
 
   document.addEventListener('click', function setInput(event) {
     if (event.target.dataset.area !== 'editTitle' && isEditing) {
+      onSubmit(getValues());
       setIsEditing(false);
     }
 
