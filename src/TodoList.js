@@ -38,6 +38,7 @@ export const TodoList = ({
           const editedTodo = (todo === transformedTodo)
             ? (
               <input
+                ref={input => input && input.focus()}
                 onKeyUp={ev => changeTodo(ev, todo, ev.target.value)}
                 onBlur={ev => changeTodo(ev, todo, ev.target.value, true)}
                 defaultValue={todo}
