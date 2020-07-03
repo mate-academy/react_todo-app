@@ -40,7 +40,7 @@ function App() {
       return todo;
     }));
 
-    todoApi.setCompleted(id, isCompleted);
+    todoApi.editItem(id, 'isCompleted', isCompleted);
   };
 
   const removeTodo = (id) => {
@@ -57,6 +57,21 @@ function App() {
     });
   };
 
+  const editTitle = (id, title) => {
+    setTodos(prev => prev.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          title,
+        };
+      }
+
+      return todo;
+    }));
+
+    todoApi.editItem(id, 'title', title);
+  };
+
   return (
     <section className="todoapp">
       <Header addTodo={addTodo} />
@@ -69,6 +84,7 @@ function App() {
           <Context.Provider value={{
             setTodoCompleted,
             removeTodo,
+            editTitle,
           }}
           >
             <TodoListWithRouter todos={todos} />

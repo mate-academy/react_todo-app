@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 import { Context } from '../common/Context';
 
 export const TodoItem = ({ isCompleted, id, title }) => {
-  const { setTodoCompleted, removeTodo } = useContext(Context);
+  const [isEditing, setIsEditing] = useState(false);
+  const { setTodoCompleted, removeTodo, editTitle } = useContext(Context);
+  const { register, handleSubmit } = useForm();
 
   const handleChange = (event) => {
     setTodoCompleted(id, event.target.checked);
@@ -13,8 +16,36 @@ export const TodoItem = ({ isCompleted, id, title }) => {
     removeTodo(id);
   };
 
+  let currentClass = isCompleted ? 'completed' : '';
+
+  if (isEditing) {
+    currentClass = 'editing';
+  }
+
+  const onSubmit = (data) => {
+    if (data.changedTitle) {
+      editTitle(id, data.changedTitle);
+    }
+
+    setIsEditing(false);
+  };
+
+  document.addEventListener('click', function setInput(event) {
+    if (event.target.dataset.area !== 'editTitle' && isEditing) {
+      setIsEditing(false);
+    }
+
+    document.removeEventListener('click', setInput);
+  });
+
+  const onKeyUp = (event) => {
+    if (event.key === 'Escape') {
+      setIsEditing(false);
+    }
+  };
+
   return (
-    <li className={isCompleted ? 'completed' : ''}>
+    <li className={currentClass}>
       <div>
         <input
           type="checkbox"
@@ -23,14 +54,41 @@ export const TodoItem = ({ isCompleted, id, title }) => {
           onChange={handleChange}
           checked={isCompleted}
         />
-        <label htmlFor={id}>{title}</label>
-        <button
-          type="button"
-          className="destroy"
-          onClick={destroy}
-        />
+        {
+          isEditing
+            ? (
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                  name="changedTitle"
+                  ref={(input) => {
+                    input && input.focus();
+                    register()(input);
+                  }}
+                  defaultValue={title}
+                  type="text"
+                  className="edit"
+                  data-area="editTitle"
+                  onKeyUp={onKeyUp}
+                />
+              </form>
+            )
+            : (
+              <>
+                <span
+                  className="title"
+                  onDoubleClick={() => setIsEditing(true)}
+                >
+                  {title}
+                </span>
+                <button
+                  type="button"
+                  className="destroy"
+                  onClick={destroy}
+                />
+              </>
+            )
+        }
       </div>
-      <input type="text" className="edit" />
     </li>
   );
 };

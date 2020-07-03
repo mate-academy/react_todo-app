@@ -25,10 +25,10 @@ export const todoApi = {
       .post('/todos.json', todo)
       .then(response => response.data.name);
   },
-  setCompleted(id, value) {
-    return instance.put(`todos/${id}/isCompleted.json`, value);
-  },
   removeItem(id) {
     return instance.delete(`todos/${id}.json`);
+  },
+  editItem(id, name, value) {
+    return instance.put(`todos/${id}/${name}.json`, JSON.stringify(value));
   },
 };
