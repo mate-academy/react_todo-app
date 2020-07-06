@@ -7,7 +7,7 @@ import Footer from './components/Footer/Footer';
 class App extends React.Component {
   state = {
     todos: [],
-    todoNumber: 0,
+    todoNumber: 1,
     todosFilter: () => true,
   }
 
@@ -18,10 +18,11 @@ class App extends React.Component {
           ...state.todos,
           {
             title: value,
-            id: ++state.todoNumber,
+            id: state.todoNumber,
             completed: false,
           },
         ],
+      todoNumber: state.todoNumber + 1,
     }));
   }
 

@@ -13,7 +13,7 @@ class NewTodo extends React.PureComponent {
   }
 
   onEnter = (evt) => {
-    if (evt.key === 'Enter') {
+    if (evt.key === 'Enter' && this.state.inputValue !== '') {
       this.props.createTodo(this.state.inputValue);
 
       this.setState({

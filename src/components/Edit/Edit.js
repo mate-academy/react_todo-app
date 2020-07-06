@@ -27,6 +27,11 @@ class Edit extends React.PureComponent {
     }
   }
 
+  saveEdit = (evt) => {
+    this.props.editTodo(this.state.editTitle, this.props.id);
+    this.props.offEdit();
+  }
+
   render() {
     return (
       <input
@@ -35,6 +40,7 @@ class Edit extends React.PureComponent {
         value={this.state.editTitle}
         onChange={this.changeTitle}
         onKeyDown={this.closeEdit}
+        onBlur={this.saveEdit}
       />
     );
   }
