@@ -8,13 +8,14 @@ export const TodoList = (props) => {
   return (
     <ul className="todo-list">
       {todos.map(todo => (
-        <li key={todo.id} className={`${todo.completed ? `completed` : ''}`}>
-          <Todo
-            todo={todo}
-            checkedTodo={checkedTodo}
-            deleteTodo={deleteTodo}
-          />
-        </li>
+        <Todo
+          key={todo.id}
+          id={todo.id}
+          completed={todo.completed}
+          title={todo.title}
+          checkedTodo={checkedTodo}
+          deleteTodo={deleteTodo}
+        />
       ))}
     </ul>
   );

@@ -10,19 +10,19 @@ export const Footer = (props) => {
     activeTab,
   } = props;
 
-  const completedTodos = todos.filter(todo => todo.completed);
-  const uncompletedTodos = todos.filter(todo => !todo.completed);
+  const completedLength = todos.filter(todo => todo.completed).length;
+  const uncompletedLength = todos.length - completedLength;
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${uncompletedTodos.length} items left`}
+        {`${uncompletedLength} items left`}
       </span>
       <TodosFilter
         setActiveTab={setActiveTab}
         activeTab={activeTab}
       />
-      {completedTodos.length > 0 && (
+      {completedLength > 0 && (
         <button
           type="button"
           className="clear-completed"
