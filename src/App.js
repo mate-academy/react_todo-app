@@ -124,16 +124,10 @@ class App extends React.Component {
           [value]: state,
         },
       })));
-    } else if (action === 'ignore') {
+    } else {
       (this.setState(prevState => ({
         todoList: prevState.todoList,
         transformedTodo: '',
-      })));
-    } else if (action === 'same' || action === 'cancel') {
-      (this.setState(prevState => ({
-        todoList: prevState.todoList,
-        transformedTodo: '',
-        completedTodos: prevState.completedTodos,
       })));
     }
   }

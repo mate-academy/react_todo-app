@@ -9,14 +9,12 @@ export const TodoList = ({
   const changeTodo = (code, title, value, bool) => {
     const trimmed = value.trim();
 
-    if (code === 27) {
+    if (code === 27 || (trimmed === title && (code === 13 || bool))) {
       putChanges('cancel');
-    } else if (trimmed === title && (code === 13 || bool)) {
-      putChanges('same');
     } else if ((code === 13 || bool)
     && !todoList.includes(trimmed)) {
       if (!trimmed) {
-        putChanges('ignore');
+        putChanges('cancel');
       } else if (trimmed) {
         const i = todoList.findIndex(todo => todo === title);
         const updatedTodoList = [...todoList];
@@ -27,7 +25,7 @@ export const TodoList = ({
 
         delete completed[title];
 
-        putChanges('put', updatedTodoList, completed, trimmed, state);
+        putChanges('put', updatedTodoList, completed, value.trim(), state);
       }
     }
   };
