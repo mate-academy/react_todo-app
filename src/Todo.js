@@ -6,9 +6,12 @@ export const Todo = ({
   title, onComplete, deleteTodo, startEditing, todoList, completedTodos,
 }) => {
   const checkExecution = (checked, name) => {
-    (checked)
-      ? onComplete(name, true)
-      : onComplete(name, false);
+    const newStates = {
+      ...completedTodos,
+      [name]: checked,
+    };
+
+    onComplete(newStates);
   };
 
   const handleDelete = (name) => {

@@ -16,12 +16,7 @@ class App extends React.Component {
     transformedTodo: '',
   }
 
-  onComplete = (completed, state) => {
-    const newStates = {
-      ...this.state.completedTodos,
-      [completed]: state,
-    };
-
+  onComplete = (newStates) => {
     if (Object.values(newStates).every(item => item === true)) {
       this.selectAll();
     } else if (this.state.allSelected) {
@@ -30,15 +25,12 @@ class App extends React.Component {
       }));
     }
 
-    this.setState(prevState => ({
-      completedTodos: {
-        ...prevState.completedTodos,
-        [completed]: state,
-      },
+    this.setState(() => ({
+      completedTodos: { ...newStates },
     }));
   }
 
-  deleteTodo = (listWithoutEl, visibility, completed) => {
+  deleteTodo = (listWithoutEl, completed) => {
     if (Object.values(completed).every(item => item === true)) {
       this.selectAll();
     }
