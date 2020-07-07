@@ -1,5 +1,6 @@
 import React from 'react';
 import { TodoList } from './components/TodoList';
+import { NewTodo } from './components/NewTodo';
 
 const todosFromServer = [
   {
@@ -54,10 +55,11 @@ export class App extends React.Component {
         <header className="header">
           <h1>todos</h1>
 
-          <input
+          {/* <input
             className="new-todo"
             placeholder="What needs to be done?"
-          />
+          /> */}
+          <NewTodo addTodo={this.addTodo} />
         </header>
 
         <section className="main">

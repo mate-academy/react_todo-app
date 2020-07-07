@@ -10,7 +10,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "uuidv4": "^6.1.1"
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react": "*",
