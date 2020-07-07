@@ -5,19 +5,18 @@ export const Todo = ({
   selected, hideActive, hideCompleted, completed,
   title, onComplete, deleteTodo, startEditing, todoList, completedTodos,
 }) => {
-  const checkExecution = (ev) => {
-    (ev.target.checked)
-      ? onComplete(ev.target.nextElementSibling.textContent, true)
-      : onComplete(ev.target.nextElementSibling.textContent, false);
+  const checkExecution = (checked, name) => {
+    (checked)
+      ? onComplete(name, true)
+      : onComplete(name, false);
   };
 
-  const handleDelete = (ev) => {
-    const el = ev.target.previousElementSibling.textContent;
-    const listWithoutEl = todoList.filter(item => item !== el);
+  const handleDelete = (name) => {
+    const listWithoutEl = todoList.filter(item => item !== name);
     const visibility = !!listWithoutEl.length;
     const completedTasks = { ...completedTodos };
 
-    delete completedTasks[el];
+    delete completedTasks[name];
 
     deleteTodo(listWithoutEl, visibility, completedTasks);
   };
@@ -41,7 +40,9 @@ export const Todo = ({
           type="checkbox"
           className="toggle"
           id={title}
-          onChange={ev => checkExecution(ev)}
+          onChange={ev => checkExecution(
+            ev.target.checked, ev.target.nextElementSibling.textContent,
+          )}
         />
         <label
           htmlFor={title}
@@ -52,7 +53,9 @@ export const Todo = ({
         <button
           type="button"
           className="destroy"
-          onClick={ev => handleDelete(ev)}
+          onClick={ev => handleDelete(
+            ev.target.previousElementSibling.textContent,
+          )}
         />
         <button
           type="button"

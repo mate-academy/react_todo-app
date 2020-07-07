@@ -6,27 +6,28 @@ export const TodoList = ({
   transformedTodo, putChanges, startEditing, allSelected,
   hideActive, hideCompleted, onComplete, deleteTodo, completedTodos, todoList,
 }) => {
-  const changeTodo = (ev, title, value, bool) => {
-    ev.persist();
-    if (ev.keyCode === 27) {
+  const changeTodo = (code, title, value, bool) => {
+    const trimmed = value.trim();
+
+    if (code === 27) {
       putChanges('cancel');
-    } else if (value.trim() === title && (ev.keyCode === 13 || bool)) {
+    } else if (trimmed === title && (code === 13 || bool)) {
       putChanges('same');
-    } else if ((ev.keyCode === 13 || bool)
-    && !todoList.includes(value.trim())) {
-      if (!value.trim()) {
+    } else if ((code === 13 || bool)
+    && !todoList.includes(trimmed)) {
+      if (!trimmed) {
         putChanges('ignore');
-      } else if (value.trim()) {
+      } else if (trimmed) {
         const i = todoList.findIndex(todo => todo === title);
-        const leftPart = todoList.slice(0, i);
-        const rightPart = todoList.slice(i + 1, todoList.length);
-        const changedTodo = [...leftPart, value, ...rightPart];
+        const updatedTodoList = [...todoList];
+
+        updatedTodoList.splice(i, 1, trimmed);
         const completed = { ...completedTodos };
         const state = completedTodos[title];
 
         delete completed[title];
 
-        putChanges('put', changedTodo, completed, value.trim(), state);
+        putChanges('put', updatedTodoList, completed, trimmed, state);
       }
     }
   };
@@ -39,8 +40,10 @@ export const TodoList = ({
             ? (
               <input
                 ref={input => input && input.focus()}
-                onKeyUp={ev => changeTodo(ev, todo, ev.target.value)}
-                onBlur={ev => changeTodo(ev, todo, ev.target.value, true)}
+                onKeyUp={ev => changeTodo(ev.keyCode, todo, ev.target.value)}
+                onBlur={ev => changeTodo(
+                  ev.keyCode, todo, ev.target.value, true,
+                )}
                 defaultValue={todo}
                 type="text"
                 className="edition"
