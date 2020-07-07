@@ -26,7 +26,7 @@ export const Footer = (props) => {
         <button
           type="button"
           className="clear-completed"
-          onClick={() => clearCompleted()}
+          onClick={clearCompleted}
         >
           Clear completed
         </button>

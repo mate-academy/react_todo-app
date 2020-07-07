@@ -10,21 +10,13 @@ export class Todo extends React.Component {
     editId: null,
   }
 
-  editInput = null;
+  focusInput = React.createRef();
 
   componentDidUpdate() {
-    this.focusEditInput();
-  }
-
-  focusEditInput = () => {
-    if (this.editInput) {
-      this.editInput.focus();
+    if (this.focusInput) {
+      this.focusInput.current.focus();
     }
-  };
-
-  setInputRef = (element) => {
-    this.editInput = element;
-  };
+  }
 
   setEditTitle = (event) => {
     const { value } = event.target;
@@ -113,7 +105,7 @@ export class Todo extends React.Component {
           name="editInput"
           className="edit"
           value={editTitle}
-          ref={element => this.setInputRef(element)}
+          ref={this.focusInput}
           onChange={event => this.setEditTitle(event)}
           onKeyUp={event => this.onKeyPressed(event)}
           onBlur={this.onBlurInput}

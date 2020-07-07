@@ -6,9 +6,14 @@ import { ToggleAll } from './components/ToggleAll/ToggleAll';
 
 class App extends React.Component {
   state = {
-    todos: [],
+    todos: JSON.parse(localStorage.getItem('storage')) || [],
     activeTab: '',
-    allSelected: true,
+  }
+
+  componentDidUpdate() {
+    const { todos } = this.state;
+
+    localStorage.setItem('storage', JSON.stringify(todos));
   }
 
   addTodo = (todo) => {
@@ -41,13 +46,14 @@ class App extends React.Component {
     }));
   }
 
-  toggleAll = () => {
+  toggleAll = (event) => {
+    const { checked } = event.target;
+
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => ({
         ...todo,
-        completed: prevState.allSelected,
+        completed: checked,
       })),
-      allSelected: !prevState.allSelected,
     }));
   }
 
@@ -65,6 +71,8 @@ class App extends React.Component {
 
   render() {
     const { todos, activeTab } = this.state;
+
+    const allSelected = todos.every(todo => todo.completed);
 
     let visibleTodos = [];
 
@@ -84,7 +92,12 @@ class App extends React.Component {
       <section className="todoapp">
         <Header addTodo={this.addTodo} />
         <section className="main">
-          {todos.length > 0 && <ToggleAll toggleAll={this.toggleAll} />}
+          {todos.length > 0 && (
+            <ToggleAll
+              toggleAll={this.toggleAll}
+              allSelected={allSelected}
+            />
+          )}
           <TodoList
             todos={visibleTodos}
             checkedTodo={this.checkedTodo}
