@@ -1,22 +1,23 @@
 import React from 'react';
+// import classNames from 'classnames/bind';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
 
 const todosFromServer = [
   {
     title: 'Eat',
-    id: 1,
+    id: '1',
     completed: false,
   },
   {
     title: 'Sleep',
-    id: 2,
+    id: '2',
     completed: false,
   },
 ];
 
 export class App extends React.Component {
-  state ={
+  state = {
     todos: todosFromServer,
   };
 
@@ -47,23 +48,50 @@ export class App extends React.Component {
     }));
   }
 
+  checkAll = () => {
+    const { todos } = this.state;
+
+    if (todos.every(todo => todo.completed === true)) {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          completed: false,
+        })),
+      }));
+    } else {
+      this.setState(prevState => ({
+        todos: prevState.todos.map(todo => ({
+          ...todo,
+          completed: true,
+        })),
+      }));
+    }
+  }
+
+  clearCompleted = () => {
+    this.setState(prevstate => ({
+      todos: prevstate.todos.filter(todo => todo.completed === false),
+    }));
+  }
+
   render() {
     const { todos } = this.state;
+    const unfinishedTodos = todos.filter(todo => todo.completed === false);
 
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-
-          {/* <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-          /> */}
           <NewTodo addTodo={this.addTodo} />
         </header>
 
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onClick={this.checkAll}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
@@ -76,7 +104,7 @@ export class App extends React.Component {
 
         <footer className="footer">
           <span className="todo-count">
-            3 items left
+            {`${unfinishedTodos.length} items left`}
           </span>
 
           <ul className="filters">
@@ -93,7 +121,11 @@ export class App extends React.Component {
             </li>
           </ul>
 
-          <button type="button" className="clear-completed">
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={this.clearCompleted}
+          >
             Clear completed
           </button>
         </footer>
