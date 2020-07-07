@@ -21,7 +21,7 @@ export class TodoInput extends React.Component {
     const { title } = this.state;
     const { addTodo } = this.props;
 
-    if (!title) {
+    if (!title || title.trim() === '') {
       this.setState({
         error: true,
       });

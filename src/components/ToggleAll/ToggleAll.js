@@ -11,7 +11,7 @@ export const ToggleAll = (props) => {
         id="toggle-all"
         className="toggle-all"
         checked={allSelected}
-        onClick={event => toggleAll(event)}
+        onChange={event => toggleAll(event)}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
     </>

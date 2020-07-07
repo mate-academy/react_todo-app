@@ -5,7 +5,7 @@ import { TodoShape } from '../../Shapes';
 export class Todo extends React.Component {
   state = {
     isEdit: false,
-    editTitle: this.props.title,
+    editingTitle: this.props.title,
     tempTitle: null,
     editId: null,
   }
@@ -18,11 +18,11 @@ export class Todo extends React.Component {
     }
   }
 
-  setEditTitle = (event) => {
+  setEditingTitle = (event) => {
     const { value } = event.target;
 
     this.setState({
-      editTitle: value.replace(/\s/g, ' ').replace(/^\s/, ''),
+      editingTitle: value.replace(/\s/g, ' ').replace(/^\s/, ''),
     });
   }
 
@@ -30,25 +30,23 @@ export class Todo extends React.Component {
     this.setState(prevState => ({
       isEdit: !prevState.isEdit,
       editId: currentId,
-      tempTitle: prevState.editTitle,
+      tempTitle: prevState.editingTitle,
     }));
   }
 
   onBlurInput = () => {
     this.setState(prevState => ({
-      editTitle: prevState.tempTitle,
+      editingTitle: prevState.tempTitle,
       isEdit: false,
     }));
   }
 
   onKeyPressed = (event) => {
-    const { editId, editTitle } = this.state;
+    const { editId, editingTitle } = this.state;
     const { deleteTodo } = this.props;
 
     if (event.keyCode === 13) {
-      event.preventDefault();
-
-      if (!editTitle) {
+      if (!editingTitle || editingTitle.trim() === '') {
         deleteTodo(editId);
       }
 
@@ -68,10 +66,10 @@ export class Todo extends React.Component {
       deleteTodo,
     } = this.props;
 
-    const { isEdit, editTitle } = this.state;
+    const { isEdit, editingTitle } = this.state;
 
     const classes = classnames({
-      editing: isEdit === true, completed: completed === true,
+      editing: isEdit, completed,
     });
 
     return (
@@ -91,7 +89,7 @@ export class Todo extends React.Component {
             htmlFor={id}
             onDoubleClick={event => this.onDoubleClick(event.target.htmlFor)}
           >
-            {editTitle}
+            {editingTitle}
           </label>
           <button
             type="button"
@@ -104,9 +102,9 @@ export class Todo extends React.Component {
           type="text"
           name="editInput"
           className="edit"
-          value={editTitle}
+          value={editingTitle}
           ref={this.focusInput}
-          onChange={event => this.setEditTitle(event)}
+          onChange={event => this.setEditingTitle(event)}
           onKeyUp={event => this.onKeyPressed(event)}
           onBlur={this.onBlurInput}
         />

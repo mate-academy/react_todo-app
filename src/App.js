@@ -7,7 +7,7 @@ import { ToggleAll } from './components/ToggleAll/ToggleAll';
 class App extends React.Component {
   state = {
     todos: JSON.parse(localStorage.getItem('storage')) || [],
-    activeTab: '',
+    activeTab: 'all',
   }
 
   componentDidUpdate() {
@@ -83,7 +83,6 @@ class App extends React.Component {
       case 'completed':
         visibleTodos = todos.filter(todo => todo.completed);
         break;
-      case 'all':
       default:
         visibleTodos = todos;
     }
