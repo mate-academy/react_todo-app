@@ -12,7 +12,7 @@ export const Todo = ({ todo, toggleCheck, deleteTodo }) => {
           className="toggle"
           id={id}
           checked={completed}
-          onChange={toggleCheck}
+          onChange={() => toggleCheck(id)}
         />
         <label htmlFor={id}>{title}</label>
         <button

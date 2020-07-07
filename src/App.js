@@ -1,20 +1,22 @@
 import React from 'react';
 import { TodoList } from './components/TodoList';
 
+const todosFromServer = [
+  {
+    title: 'Eat',
+    id: 1,
+    completed: false,
+  },
+  {
+    title: 'Sleep',
+    id: 2,
+    completed: false,
+  },
+];
+
 export class App extends React.Component {
   state ={
-    todos: [
-      {
-        title: 'Eat',
-        id: 1,
-        completed: false,
-      },
-      {
-        title: 'Sleep',
-        id: 2,
-        completed: false,
-      },
-    ],
+    todos: todosFromServer,
   };
 
   addTodo = (todo) => {
@@ -29,7 +31,20 @@ export class App extends React.Component {
     }));
   };
 
-  toggleCheck = () => 1;
+  toggleCheck = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
 
   render() {
     const { todos } = this.state;
