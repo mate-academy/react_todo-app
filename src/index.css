@@ -132,10 +132,12 @@ body {
   height: 34px;
   font-size: 0;
   position: absolute;
-  top: -52px;
+  top: 13px;
   left: -13px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+  z-index: 1;
+  cursor: pointer;
 }
 
 .toggle-all + label:before {

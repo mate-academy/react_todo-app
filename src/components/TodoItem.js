@@ -18,6 +18,7 @@ export default function TodoItem({
       <div className="view">
         <input
           type="checkbox"
+          checked={completed}
           onClick={onToggle}
           className="toggle"
           id={`todo-${id}`}

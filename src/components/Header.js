@@ -25,15 +25,15 @@ class Header extends React.Component {
   render() {
     return (
       <header className="header">
-        <ItemToggleAllCompleted
-          onToggleDoneAll={this.props.onToggleDoneAll}
-          todos={this.props.todos}
-        />
         <form
           className="item-add-form"
           onSubmit={this.onSubmit}
         >
           <h1>todos</h1>
+          <ItemToggleAllCompleted
+            onToggleDoneAll={this.props.onToggleDoneAll}
+            todos={this.props.todos}
+          />
           <input
             type="text"
             className="new-todo"
