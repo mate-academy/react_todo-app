@@ -6,7 +6,9 @@ export const TodoList = ({
   transformedTodo, putChanges, startEditing, allSelected,
   hideActive, hideCompleted, onComplete, deleteTodo, completedTodos, todoList,
 }) => {
-  const changeTodo = (code, title, value, bool) => {
+  const changeTodo = (event, title, bool) => {
+    const code = event.keyCode;
+    const { value } = event.target;
     const trimmed = value.trim();
 
     if (code === 27 || (trimmed === title && (code === 13 || bool))) {
@@ -25,7 +27,7 @@ export const TodoList = ({
 
         delete completed[title];
 
-        putChanges('put', updatedTodoList, completed, value.trim(), state);
+        putChanges('put', updatedTodoList, completed, trimmed, state);
       }
     }
   };
@@ -38,10 +40,8 @@ export const TodoList = ({
             ? (
               <input
                 ref={input => input && input.focus()}
-                onKeyUp={ev => changeTodo(ev.keyCode, todo, ev.target.value)}
-                onBlur={ev => changeTodo(
-                  ev.keyCode, todo, ev.target.value, true,
-                )}
+                onKeyUp={event => changeTodo(event, todo)}
+                onBlur={event => changeTodo(event, todo, true)}
                 defaultValue={todo}
                 type="text"
                 className="edition"

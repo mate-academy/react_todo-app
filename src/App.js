@@ -103,7 +103,9 @@ class App extends React.Component {
     }));
   }
 
-  handleInputChange = (value) => {
+  handleInputChange = (event) => {
+    const { value } = event.target;
+
     (this.setState(() => ({
       inputValue: value,
     })));

@@ -5,7 +5,9 @@ export const Todo = ({
   selected, hideActive, hideCompleted, completed,
   title, onComplete, deleteTodo, startEditing, todoList, completedTodos,
 }) => {
-  const checkExecution = (checked, name) => {
+  const checkExecution = (event) => {
+    const { checked } = event.target;
+    const name = event.target.nextElementSibling.textContent;
     const newStates = {
       ...completedTodos,
       [name]: checked,
@@ -14,7 +16,8 @@ export const Todo = ({
     onComplete(newStates);
   };
 
-  const handleDelete = (name) => {
+  const handleDelete = (event) => {
+    const name = event.target.previousElementSibling.textContent;
     const listWithoutEl = todoList.filter(item => item !== name);
     const visibility = !!listWithoutEl.length;
     const completedTasks = { ...completedTodos };
@@ -33,33 +36,19 @@ export const Todo = ({
     : 'block';
 
   return (
-    <li
-      style={{ display: invisible }}
-      onDoubleClick={() => startEditing(title)}
-    >
+    <li style={{ display: invisible }}>
       <div className="view">
         <input
           checked={completed}
           type="checkbox"
           className="toggle"
           id={title}
-          onChange={ev => checkExecution(
-            ev.target.checked, ev.target.nextElementSibling.textContent,
-          )}
+          onChange={checkExecution}
         />
-        <label
-          htmlFor={title}
-          style={{ textDecoration: crossed }}
-        >
+        <label htmlFor={title} style={{ textDecoration: crossed }}>
           {title}
         </label>
-        <button
-          type="button"
-          className="destroy"
-          onClick={ev => handleDelete(
-            ev.target.previousElementSibling.textContent,
-          )}
-        />
+        <button type="button" className="destroy" onClick={handleDelete} />
         <button
           type="button"
           className="edit_btn"

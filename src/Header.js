@@ -3,7 +3,9 @@ import { ShapeHeader } from './Shapes';
 
 export const Header = ({ addTodo, handleInputChange, value, todoList }) => {
   const trimmed = value.trim();
-  const addNewTodo = (code) => {
+  const addNewTodo = (event) => {
+    const code = event.keyCode;
+
     if (code === 13 && !todoList.includes(trimmed) && trimmed.length) {
       addTodo(true);
     }
@@ -17,8 +19,8 @@ export const Header = ({ addTodo, handleInputChange, value, todoList }) => {
         <input
           className="new-todo"
           placeholder="What needs to be done?"
-          onKeyUp={ev => addNewTodo(ev.keyCode)}
-          onChange={ev => handleInputChange(ev.target.value)}
+          onKeyUp={addNewTodo}
+          onChange={handleInputChange}
           value={value}
         />
       </header>

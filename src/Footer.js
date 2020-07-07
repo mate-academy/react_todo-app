@@ -50,7 +50,7 @@ export const Footer = ({ selectedButton,
                   ? 'selected'
                   : 'non-selected'
               )}
-              onClick={ev => showActive(ev)}
+              onClick={showActive}
             >
               Active
             </a>
