@@ -18,7 +18,7 @@ export const Header = ({ addTodo, handleInputChange, value, todoList }) => {
           className="new-todo"
           placeholder="What needs to be done?"
           onKeyUp={ev => addNewTodo(ev.keyCode)}
-          onChange={ev => handleInputChange(ev)}
+          onChange={ev => handleInputChange(ev.target.value)}
           value={value}
         />
       </header>

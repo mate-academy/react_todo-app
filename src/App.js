@@ -111,10 +111,9 @@ class App extends React.Component {
     }));
   }
 
-  handleInputChange = (ev) => {
-    ev.persist();
+  handleInputChange = (value) => {
     (this.setState(() => ({
-      inputValue: ev.target.value,
+      inputValue: value,
     })));
   };
 
