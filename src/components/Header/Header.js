@@ -6,7 +6,7 @@ export const Header = ({ addTodo }) => {
   const { register, setValue, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    addTodo(data.newTodo);
+    addTodo(data.newTodo.trim());
     setValue('newTodo', '');
   };
 
@@ -17,7 +17,10 @@ export const Header = ({ addTodo }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           name="newTodo"
-          ref={register({ required: true })}
+          ref={register({
+            required: true,
+            pattern: /\w+/,
+          })}
           className="new-todo"
           placeholder="What needs to be done?"
         />
