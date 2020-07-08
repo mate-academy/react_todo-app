@@ -11,7 +11,7 @@ export const TodoList = ({ todos, deleteTodo, completeTodo, location }) => {
 
   return (
     <ul className="todo-list">
-      {pathname === './'
+      {pathname === '/#'
         ? todos.map(todo => (
           <li className={todo.isCompleted ? 'completed' : ''} key={todo.id}>
             <TodoItem
