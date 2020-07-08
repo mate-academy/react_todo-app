@@ -6,7 +6,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 import { TodoShapes } from '../../Shapes/TodoShapes';
 
 export const TodosFilter = ({ todos, deleteTodo, completeTodo, pathname }) => {
-  const isCompleted = pathname !== '/active';
+  const isCompleted = pathname !== './active';
 
   const filteredTodos = todos.filter(todo => todo.isCompleted === isCompleted);
 

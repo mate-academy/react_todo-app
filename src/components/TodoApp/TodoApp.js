@@ -123,7 +123,7 @@ export class TodoApp extends React.Component {
         <section className="main">
           <CompleteAllCheckbox completeAll={this.completeAll} />
           <Route
-            path="/"
+            path="./"
             render={({ location }) => (
               <TodoList
                 location={location}
