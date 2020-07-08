@@ -265,6 +265,10 @@ body {
   border-top: 1px solid #e6e6e6;
 }
 
+.footer--hidden {
+  visibility: hidden;
+}
+
 .footer:before {
   content: "";
   position: absolute;
