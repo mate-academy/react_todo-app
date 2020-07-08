@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { todoShape } from './Shapes';
 
 export const Todo = (props) => {
+  const { todoList, todo, todoListCopy } = props;
   const deleteItem = (event) => {
     const searchId = event.target.parentElement.firstElementChild.id;
-    const todos = props.todoList
-      .filter(todo => todo.id !== Number(searchId));
+    const todos = todoList
+      .filter(currentTodo => currentTodo.id !== Number(searchId));
     const todosCopy = props.todoListCopy
-      .filter(todo => todo.id !== Number(searchId));
+      .filter(currentTodo => currentTodo.id !== Number(searchId));
 
     props.getTodos(todos, todosCopy);
   };
@@ -26,20 +27,23 @@ export const Todo = (props) => {
       return currentItem;
     });
 
-    props.getTodos(todos, props.todoListCopy);
+    props.getTodos(todos, todoListCopy);
   };
 
   return (
-    <li key={props.todo.id}>
+    <li
+      className={todo.completed ? 'completed' : ''}
+      key={todo.id}
+    >
       <div className="view">
         <input
-          checked={props.todo.completed}
+          checked={todo.completed}
           type="checkbox"
           className="toggle"
-          id={props.todo.id}
+          id={todo.id}
           onChange={changeStatus}
         />
-        <label htmlFor={props.todo.id}>{props.todo.title}</label>
+        <label htmlFor={todo.id}>{todo.title}</label>
         <button
           type="button"
           className="destroy"
