@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, { shape } from 'prop-types';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { TodoShapes } from '../../Shapes/TodoShapes';
 
@@ -16,6 +16,7 @@ export class TodoApp extends React.Component {
     allCompleted: this.props.todos.every(todo => (
       todo.isCompleted === true
     )),
+    isCompleted: true,
   }
 
   createTodo = (value) => {
@@ -92,7 +93,7 @@ export class TodoApp extends React.Component {
       }));
   }
 
-  taskCounter = (isComplited = false) => {
+  taskCounter = (isComplited) => {
     let counter = 0;
 
     this.state.todos.forEach((todo) => {
@@ -104,13 +105,9 @@ export class TodoApp extends React.Component {
     return counter;
   }
 
-  todosFilter = (isComplited = false) => (
-    this.state.todos.filter(todo => todo.isCompleted === isComplited)
-  )
-
   render() {
-    const activeTaskQuantity = this.taskCounter();
-    const completedTaskQuantity = this.taskCounter(true);
+    const activeTaskQuantity = this.taskCounter(!this.state.isCompleted);
+    const completedTaskQuantity = this.taskCounter(this.state.isCompleted);
     const taskQuantity = this.state.todos.length;
 
     return (
@@ -125,33 +122,20 @@ export class TodoApp extends React.Component {
 
         <section className="main">
           <CompleteAllCheckbox completeAll={this.completeAll} />
-          <Switch>
-            <Route path="/" exact>
+          <Route
+            path="/"
+            render={({ location }) => (
               <TodoList
+                location={location}
                 deleteTodo={this.deleteTodo}
                 todos={this.state.todos}
                 completeTodo={this.changeCompletement}
               />
-            </Route>
-            <Route path="/active">
-              <TodoList
-                deleteTodo={this.deleteTodo}
-                todos={this.todosFilter()}
-                completeTodo={this.changeCompletement}
-              />
-            </Route>
-            <Route path="/completed">
-              <TodoList
-                deleteTodo={this.deleteTodo}
-                todos={this.todosFilter(true)}
-                completeTodo={this.changeCompletement}
-              />
-            </Route>
-          </Switch>
+            )}
+          />
 
-          <ul className="todo-list">
-            {/* <li>
-            {/* <li className="editing">
+          {/* <ul className="todo-list">
+            <li className="editing">
               <div className="view">
                 <input type="checkbox" className="toggle" id="todo-3" />
                 <label htmlFor="todo-3">zxcvbnm</label>
@@ -159,16 +143,7 @@ export class TodoApp extends React.Component {
               </div>
               <input type="text" className="edit" />
             </li>
-
-            <li>
-              <div className="view">
-                <input type="checkbox" className="toggle" id="todo-4" />
-                <label htmlFor="todo-4">1234567890</label>
-                <button type="button" className="destroy" />
-              </div>
-              <input type="text" className="edit" />
-            </li> */}
-          </ul>
+          </ul> */}
         </section>
         {taskQuantity
           ? (

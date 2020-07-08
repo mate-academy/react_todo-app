@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  NavLink,
-} from 'react-router-dom';
+
+import { NavFiltersLink } from '../NavFiltersLink/NavFiltersLink';
 
 export const TodoMenu = ({ activeTasks, clearCompleted, completedTasks }) => (
   <>
@@ -10,17 +9,7 @@ export const TodoMenu = ({ activeTasks, clearCompleted, completedTasks }) => (
       {`${activeTasks} items left`}
     </span>
 
-    <ul className="filters">
-      <li>
-        <NavLink exact to="/" activeClassName="selected">All</NavLink>
-      </li>
-      <li>
-        <NavLink to="/active" activeClassName="selected">Active</NavLink>
-      </li>
-      <li>
-        <NavLink to="/completed" activeClassName="selected">Completed</NavLink>
-      </li>
-    </ul>
+    <NavFiltersLink />
     {completedTasks
       ? (
         <button

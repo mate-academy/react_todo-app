@@ -11,7 +11,6 @@ function App() {
       <BrowserRouter>
         <TodoApp todos={todosFromServer} />
       </BrowserRouter>
-
     </section>
   );
 }
