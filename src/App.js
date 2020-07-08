@@ -8,7 +8,7 @@ import { TodoApp } from './components/TodoApp/TodoApp';
 function App() {
   return (
     <section className="todoapp">
-      <BrowserRouter>
+      <BrowserRouter basename="/react_todo-app/">
         <TodoApp todos={todosFromServer} />
       </BrowserRouter>
     </section>
