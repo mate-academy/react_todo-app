@@ -65,28 +65,20 @@ export class App extends React.Component {
     });
   }
 
-  selectAllAsCompleted = (event) => {
-    const isChecked = event.target.checked;
+  // selectAllAsCompleted = (event) => {
+  //   const isChecked = event.target.checked;
 
-    // this.setState(prevState => ({
-    //   tasks: prevState.tasks.map((task) => {
-    //     return {
-    //       ...task,
-    //       completed: isChecked,
-    //     };
-    //   }),
-    // }));
-    this.setState((prevState) => {
-      const currentTasks = prevState.tasks.map((task) => {
-        return {
-          ...task,
-          completed: isChecked,
-        };
-      });
+  //   this.setState((prevState) => {
+  //     const currentTasks = prevState.tasks.map((task) => {
+  //       return {
+  //         ...task,
+  //         completed: isChecked,
+  //       };
+  //     });
 
-      return { tasks: currentTasks };
-    });
-  }
+  //     return { tasks: currentTasks };
+  //   });
+  // }
 
   // editTask = (event) => {
   //   const isDoubleClicked = event.target.value;
