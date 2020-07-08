@@ -1,85 +1,116 @@
 import React from 'react';
+import { uuid } from 'uuidv4';
+import tasksFromServer from './api/tasks.json';
+import { TodoApp } from './components/TodoApp/TodoApp';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+export class App extends React.Component {
+  state={
+    tasks: tasksFromServer,
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
+  addNewTask = (title) => {
+    const newTask = {
+      title,
+      id: uuid(),
+      completed: false,
+    };
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+    this.setState(prevState => ({
+      tasks: [...prevState.tasks, newTask],
+    }));
+  }
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+  toggleCheck = (event) => {
+    const id = event.target.value;
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+    this.setState((prevState) => {
+      const current = prevState.tasks.map((task) => {
+        if (task.id === Number(id)) {
+          return {
+            ...task,
+            completed: !task.completed,
+          };
+        }
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        return task;
+      });
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+      return { tasks: current };
+    });
+  }
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
+  getOnlyActive = () => {
+    this.setState(prevState => ({
+      tasks: prevState.tasks.filter(task => task.completed === false),
+    }));
+  }
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+  getOnlyCompleted = () => {
+    this.setState(prevState => ({
+      tasks: prevState.tasks.filter(task => task.completed === true),
+    }));
+  }
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+  deleteTask = (event) => {
+    const currentID = Number(event.target.value);
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+    this.setState(prevState => ({
+      tasks: prevState.tasks.filter(task => task.id !== currentID),
+    }));
+  }
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
-  );
+  clearTasks = () => {
+    this.setState({
+      tasks: [],
+    });
+  }
+
+  selectAllAsCompleted = (event) => {
+    const isChecked = event.target.checked;
+
+    // this.setState(prevState => ({
+    //   tasks: prevState.tasks.map((task) => {
+    //     return {
+    //       ...task,
+    //       completed: isChecked,
+    //     };
+    //   }),
+    // }));
+    this.setState((prevState) => {
+      const currentTasks = prevState.tasks.map((task) => {
+        return {
+          ...task,
+          completed: isChecked,
+        };
+      });
+
+      return { tasks: currentTasks };
+    });
+  }
+
+  // editTask = (event) => {
+  //   const isDoubleClicked = event.target.value;
+  //   // console.log(isDoubleClicked);
+  // }
+
+  render() {
+    const { tasks } = this.state;
+    // console.log(tasks);
+
+    return (
+      <TodoApp
+        tasks={tasks}
+        addTask={this.addNewTask}
+        toggle={this.toggleCheck}
+        onActive={this.getOnlyActive}
+        onCompleted={this.getOnlyCompleted}
+        onDeleted={this.deleteTask}
+        onClear={this.clearTasks}
+        onAllSelected={this.selectAllAsCompleted}
+        onEditTask={this.editTask}
+      />
+    );
+  }
 }
 
 export default App;
