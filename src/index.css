@@ -261,6 +261,9 @@ body {
 }
 
 .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: #777;
   padding: 10px 15px;
   height: 20px;
