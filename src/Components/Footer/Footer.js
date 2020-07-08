@@ -1,27 +1,107 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export const Footer = () => (
-  <footer className="footer">
-    <span className="todo-count">
-      3 items left
-    </span>
+export class Footer extends Component {
+  state = {
+    // currentUrl: '#/',
+    // links: [{
+    //   url: '#/',
+    //   value: 'All',
+    //   isSelected: true,
+    // },
+    // {
+    //   url: '#/active',
+    //   value: 'Active',
+    //   isSelected: false,
+    // },
+    // {
+    //   url: '#/completed',
+    //   value: 'Completed',
+    //   isSelected: false,
+    // },
+    // ],
+  }
 
-    <ul className="filters">
-      <li>
-        <a href="#/" className="selected">All</a>
-      </li>
+  // isActiveLink = (event) => {
+  //   const href = event.target.getAttribute('href');
 
-      <li>
-        <a href="#/active">Active</a>
-      </li>
+  //   this.setState({
+  //     currentUrl: href,
+  //   });
+  // }
 
-      <li>
-        <a href="#/completed">Completed</a>
-      </li>
-    </ul>
+  render() {
+    const {
+      todoCount,
+      onClearCompletedTodo,
+      urlPath,
+      onChangeUrlPath,
+    } = this.props;
+    // const { currentUrl } = this.state;
 
-    <button type="button" className="clear-completed">
-      Clear completed
-    </button>
-  </footer>
-);
+    return (
+      <footer className="footer">
+        <span className="todo-count">
+          {`${todoCount} items left`}
+        </span>
+
+        <ul className="filters">
+          <li>
+            <a
+              href="#/"
+              className={urlPath === '#/' ? 'selected' : ''}
+              onClick={(event) => {
+                onChangeUrlPath(event);
+                // this.isActiveLink(event);
+              }}
+            >
+              All
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#/active"
+              // className="selected"
+              className={urlPath === '#/active' ? 'selected' : ''}
+              onClick={(event) => {
+                onChangeUrlPath(event);
+                // this.isActiveLink(event);
+              }}
+            >
+              Active
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#/completed"
+              className={urlPath === '#/completed' ? 'selected' : ''}
+              onClick={(event) => {
+                onChangeUrlPath(event);
+                // this.isActiveLink(event);
+              }}
+            >
+              Completed
+            </a>
+          </li>
+        </ul>
+
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={onClearCompletedTodo}
+        >
+          Clear completed
+        </button>
+      </footer>
+    );
+  }
+}
+
+Footer.propTypes = {
+  todoCount: PropTypes.number.isRequired,
+  onClearCompletedTodo: PropTypes.func.isRequired,
+  urlPath: PropTypes.string.isRequired,
+  onChangeUrlPath: PropTypes.func.isRequired,
+};

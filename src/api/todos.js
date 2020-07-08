@@ -9,6 +9,6 @@ export const todos = [
   {
     id: uuidv4(),
     title: 'quis ut nam facilis et officia qui',
-    completed: false,
+    completed: true,
   },
 ];
