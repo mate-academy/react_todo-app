@@ -1,7 +1,7 @@
 import React from 'react';
-// import classNames from 'classnames/bind';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
+import { FilterList } from './components/FilterList';
 
 const todosFromServer = [
   {
@@ -19,6 +19,7 @@ const todosFromServer = [
 export class App extends React.Component {
   state = {
     todos: todosFromServer,
+    activeFilter: 'All',
   };
 
   addTodo = (todo) => {
@@ -74,9 +75,32 @@ export class App extends React.Component {
     }));
   }
 
+  selectFilter = (name) => {
+    this.setState({
+      activeFilter: name,
+    });
+  }
+
   render() {
-    const { todos } = this.state;
-    const unfinishedTodos = todos.filter(todo => todo.completed === false);
+    const { todos, activeFilter } = this.state;
+    const unfinishedTodos = [...todos].filter(todo => todo.completed === false);
+    const finishedTodos = [...todos].filter(todo => todo.completed === true);
+
+    let visibleTodos = [];
+
+    switch (activeFilter) {
+      case 'All':
+        visibleTodos = todos;
+        break;
+      case 'Completed':
+        visibleTodos = finishedTodos;
+        break;
+      case 'Active':
+        visibleTodos = unfinishedTodos;
+        break;
+      default:
+        visibleTodos = todos;
+    }
 
     return (
       <section className="todoapp">
@@ -95,7 +119,7 @@ export class App extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
-            todos={todos}
+            todos={visibleTodos}
             deleteTodo={this.deleteTodo}
             toggleCheck={this.toggleCheck}
           />
@@ -107,19 +131,10 @@ export class App extends React.Component {
             {`${unfinishedTodos.length} items left`}
           </span>
 
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
-
-            <li>
-              <a href="#/active">Active</a>
-            </li>
-
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
+          <FilterList
+            selectFilter={this.selectFilter}
+            activeFilter={activeFilter}
+          />
 
           <button
             type="button"
