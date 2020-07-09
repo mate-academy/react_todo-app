@@ -1,6 +1,8 @@
 # React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/)
-- Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
+#### [DEMO LINK](https://DeadTR.github.io/react_todo-app/)
+
+
+- [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/)
