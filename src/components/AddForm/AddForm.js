@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+import { AddFormShapes } from '../../Shapes/Shapes';
 
 export const AddForm = ({ onChange, onSubmit }) => (
   <form onSubmit={event => onSubmit(event)}>
@@ -11,7 +12,4 @@ export const AddForm = ({ onChange, onSubmit }) => (
   </form>
 );
 
-AddForm.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-};
+AddForm.propTypes = AddFormShapes;

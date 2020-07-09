@@ -1,27 +1,32 @@
 import React from 'react';
-import PropTypes, { shape } from 'prop-types';
 
 import { TodoItem } from '../TodoItem/TodoItem';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
-import { TodoShapes } from '../../Shapes/TodoShapes';
+import { TodoListShapes } from '../../Shapes/Shapes';
 
-export const TodoList = ({ todos, deleteTodo, completeTodo, location }) => {
+export const TodoList = ({
+  todos,
+  deleteTodo,
+  completeTodo,
+  location,
+  changeTodo,
+}) => {
   const { pathname } = location;
 
   return (
     <ul className="todo-list">
       {pathname === '/'
         ? todos.map(todo => (
-          <li className={todo.isCompleted ? 'completed' : ''} key={todo.id}>
-            <TodoItem
-              deleteTodo={deleteTodo}
-              title={todo.title}
-              id={todo.id}
-              completeTodo={completeTodo}
-              isCompleted={todo.isCompleted}
-            />
-          </li>
+          <TodoItem
+            key={todo.id}
+            changeTodo={changeTodo}
+            deleteTodo={deleteTodo}
+            title={todo.title}
+            id={todo.id}
+            completeTodo={completeTodo}
+            isCompleted={todo.isCompleted}
+          />
         ))
         : (
           <TodosFilter
@@ -32,21 +37,8 @@ export const TodoList = ({ todos, deleteTodo, completeTodo, location }) => {
           />
         )
       }
-
     </ul>
   );
 };
 
-TodoList.propTypes = {
-  todos: PropTypes.arrayOf(shape(
-    TodoShapes,
-  )).isRequired,
-  deleteTodo: PropTypes.func.isRequired,
-  completeTodo: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-    hash: PropTypes.string.isRequired,
-    key: PropTypes.string.isRequired,
-  }).isRequired,
-};
+TodoList.propTypes = TodoListShapes;

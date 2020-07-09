@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+import { CompleteAllCheckboxShapes } from '../../Shapes/Shapes';
 
 export const CompleteAllCheckbox = ({ completeAll }) => (
   <>
@@ -13,6 +14,4 @@ export const CompleteAllCheckbox = ({ completeAll }) => (
   </>
 );
 
-CompleteAllCheckbox.propTypes = {
-  completeAll: PropTypes.func.isRequired,
-};
+CompleteAllCheckbox.propTypes = CompleteAllCheckboxShapes;

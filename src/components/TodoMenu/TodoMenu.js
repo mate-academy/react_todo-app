@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { NavFiltersLink } from '../NavFiltersLink/NavFiltersLink';
+import { TodoMenuShapes } from '../../Shapes/Shapes';
 
 export const TodoMenu = ({ activeTasks, clearCompleted, completedTasks }) => (
   <>
@@ -28,8 +28,4 @@ export const TodoMenu = ({ activeTasks, clearCompleted, completedTasks }) => (
   </>
 );
 
-TodoMenu.propTypes = {
-  activeTasks: PropTypes.number.isRequired,
-  clearCompleted: PropTypes.func.isRequired,
-  completedTasks: PropTypes.number.isRequired,
-};
+TodoMenu.propTypes = TodoMenuShapes;

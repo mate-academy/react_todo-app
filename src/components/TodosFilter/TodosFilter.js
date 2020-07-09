@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { TodoItem } from '../TodoItem/TodoItem';
 
-import { TodoShapes } from '../../Shapes/TodoShapes';
+import { TodosFilterShapes } from '../../Shapes/Shapes';
 
 export const TodosFilter = ({ todos, deleteTodo, completeTodo, pathname }) => {
   const isCompleted = pathname !== '/active';
@@ -13,25 +12,17 @@ export const TodosFilter = ({ todos, deleteTodo, completeTodo, pathname }) => {
   return (
     <>
       {filteredTodos.map(todo => (
-        <li className={todo.isCompleted ? 'completed' : ''} key={todo.id}>
-          <TodoItem
-            deleteTodo={deleteTodo}
-            title={todo.title}
-            id={todo.id}
-            completeTodo={completeTodo}
-            isCompleted={todo.isCompleted}
-          />
-        </li>
+        <TodoItem
+          key={todo.id}
+          deleteTodo={deleteTodo}
+          title={todo.title}
+          id={todo.id}
+          completeTodo={completeTodo}
+          isCompleted={todo.isCompleted}
+        />
       ))}
     </>
   );
 };
 
-TodosFilter.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape(
-    TodoShapes,
-  )).isRequired,
-  deleteTodo: PropTypes.func.isRequired,
-  completeTodo: PropTypes.func.isRequired,
-  pathname: PropTypes.string.isRequired,
-};
+TodosFilter.propTypes = TodosFilterShapes;

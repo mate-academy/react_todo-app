@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes, { shape } from 'prop-types';
 import { Route } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
-import { TodoShapes } from '../../Shapes/TodoShapes';
+import { TodoAppShapes } from '../../Shapes/Shapes';
 
 import { AddForm } from '../AddForm/AddForm';
 import { TodoList } from '../TodoList/TodoList';
@@ -29,7 +29,7 @@ export class TodoApp extends React.Component {
     event.preventDefault();
 
     const newTodo = {
-      id: this.state.todos.length + 1,
+      id: uuidv4(),
       title: this.state.taskTitle,
       isCompleted: false,
     };
@@ -105,6 +105,21 @@ export class TodoApp extends React.Component {
     return counter;
   }
 
+  changeTodo = (taskId, newTitle) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id !== taskId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: newTitle,
+        };
+      }),
+    }));
+  }
+
   render() {
     const activeTaskQuantity = this.taskCounter(!this.state.isCompleted);
     const completedTaskQuantity = this.taskCounter(this.state.isCompleted);
@@ -126,6 +141,7 @@ export class TodoApp extends React.Component {
             path="/"
             render={({ location }) => (
               <TodoList
+                changeTodo={this.changeTodo}
                 location={location}
                 deleteTodo={this.deleteTodo}
                 todos={this.state.todos}
@@ -133,17 +149,6 @@ export class TodoApp extends React.Component {
               />
             )}
           />
-
-          {/* <ul className="todo-list">
-            <li className="editing">
-              <div className="view">
-                <input type="checkbox" className="toggle" id="todo-3" />
-                <label htmlFor="todo-3">zxcvbnm</label>
-                <button type="button" className="destroy" />
-              </div>
-              <input type="text" className="edit" />
-            </li>
-          </ul> */}
         </section>
         {taskQuantity
           ? (
@@ -162,8 +167,4 @@ export class TodoApp extends React.Component {
   }
 }
 
-TodoApp.propTypes = {
-  todos: PropTypes.arrayOf(shape(
-    TodoShapes,
-  )).isRequired,
-};
+TodoApp.propTypes = TodoAppShapes;

@@ -1,27 +1,29 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const todos = [
   {
-    id: 1,
-    title: 'Not completed',
+    id: uuidv4(),
+    title: 'Not completed1',
     isCompleted: false,
   },
   {
-    id: 2,
+    id: uuidv4(),
     title: 'Completed',
     isCompleted: true,
   },
   {
-    id: 3,
+    id: uuidv4(),
     title: 'Completed',
     isCompleted: true,
   },
   {
-    id: 4,
-    title: 'Not completed',
+    id: uuidv4(),
+    title: 'Not completed2',
     isCompleted: false,
   },
   {
-    id: 5,
-    title: 'Not completed',
+    id: uuidv4(),
+    title: 'Not completed3',
     isCompleted: false,
   },
 ];
