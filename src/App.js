@@ -10,19 +10,16 @@ function App() {
       id: 1,
       title: 'Learn HTML/CSS',
       completed: false,
-      filter: 'All',
     },
     {
       id: 2,
       title: 'Learn React',
       completed: false,
-      filter: 'All',
     },
     {
       id: 3,
       title: 'Learn JavaScript',
       completed: false,
-      filter: 'All',
     },
   ]);
 
@@ -109,7 +106,14 @@ function App() {
         </section>
 
         {todos.length
-          ? <Footer todos={allTodos} clearedCompleted={clearedCompleted} />
+          ? (
+            <Footer
+              todos={allTodos}
+              initialTodo={todos}
+              clearedCompleted={clearedCompleted}
+              filterType={filter}
+            />
+          )
           : ''
         }
       </section>
