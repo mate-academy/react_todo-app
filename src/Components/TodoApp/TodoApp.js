@@ -28,9 +28,7 @@ export class TodoApp extends Component {
     }));
   }
 
-  onChangeUrlPath = (event) => {
-    const href = event.target.getAttribute('href');
-
+  onChangeUrlPath = (href) => {
     this.setState({
       urlPath: href,
     });
@@ -53,18 +51,31 @@ export class TodoApp extends Component {
     }));
   }
 
+  onDoneAllTodo = () => {
+    this.setState(prevState => ({
+      todosList: prevState.todosList.map(todo => ({
+        ...todo,
+        completed: true,
+      })),
+    }));
+  }
+
   render() {
     const {
       todosList,
       urlPath,
     } = this.state;
+
     const {
       onAddTodo,
       onChangeCompleted,
       onDeleteTodo,
       onClearCompletedTodo,
       onChangeUrlPath,
+      onDoneAllTodo,
     } = this;
+
+    const activeTodoQuantity = todosList.filter(todo => !todo.completed).length;
 
     let renderedList = todosList;
 
@@ -84,12 +95,12 @@ export class TodoApp extends Component {
           todosList={renderedList}
           onChangeCompleted={onChangeCompleted}
           onDeleteTodo={onDeleteTodo}
+          onDoneAllTodo={onDoneAllTodo}
         />
 
         <Footer
-          // todoCount={todosList.length}
+          todoCount={activeTodoQuantity}
           onClearCompletedTodo={onClearCompletedTodo}
-          urlPath={urlPath}
           onChangeUrlPath={onChangeUrlPath}
         />
       </section>

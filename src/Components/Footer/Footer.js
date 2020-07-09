@@ -1,43 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { FilterLink } from '../FilterLink/FilterLink';
+import { linksData } from './LinksData';
 
 export class Footer extends Component {
   state = {
-    // currentUrl: '#/',
-    // links: [{
-    //   url: '#/',
-    //   value: 'All',
-    //   isSelected: true,
-    // },
-    // {
-    //   url: '#/active',
-    //   value: 'Active',
-    //   isSelected: false,
-    // },
-    // {
-    //   url: '#/completed',
-    //   value: 'Completed',
-    //   isSelected: false,
-    // },
-    // ],
+    currentUrl: '#/',
+    links: linksData,
   }
 
-  // isActiveLink = (event) => {
-  //   const href = event.target.getAttribute('href');
+  isActiveLink = (event) => {
+    const href = event.target.getAttribute('href');
 
-  //   this.setState({
-  //     currentUrl: href,
-  //   });
-  // }
+    this.props.onChangeUrlPath(href);
+    this.setState({
+      currentUrl: href,
+    });
+  }
 
   render() {
     const {
       todoCount,
       onClearCompletedTodo,
-      urlPath,
-      onChangeUrlPath,
     } = this.props;
-    // const { currentUrl } = this.state;
+    const {
+      links,
+      currentUrl,
+    } = this.state;
 
     return (
       <footer className="footer">
@@ -46,45 +35,14 @@ export class Footer extends Component {
         </span>
 
         <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className={urlPath === '#/' ? 'selected' : ''}
-              onClick={(event) => {
-                onChangeUrlPath(event);
-                // this.isActiveLink(event);
-              }}
-            >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/active"
-              // className="selected"
-              className={urlPath === '#/active' ? 'selected' : ''}
-              onClick={(event) => {
-                onChangeUrlPath(event);
-                // this.isActiveLink(event);
-              }}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/completed"
-              className={urlPath === '#/completed' ? 'selected' : ''}
-              onClick={(event) => {
-                onChangeUrlPath(event);
-                // this.isActiveLink(event);
-              }}
-            >
-              Completed
-            </a>
-          </li>
+          {links.map(link => (
+            <FilterLink
+              key={link.url}
+              link={link}
+              currentUrl={currentUrl}
+              isActiveLink={this.isActiveLink}
+            />
+          ))}
         </ul>
 
         <button
@@ -102,6 +60,5 @@ export class Footer extends Component {
 Footer.propTypes = {
   todoCount: PropTypes.number.isRequired,
   onClearCompletedTodo: PropTypes.func.isRequired,
-  urlPath: PropTypes.string.isRequired,
   onChangeUrlPath: PropTypes.func.isRequired,
 };

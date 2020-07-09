@@ -10,12 +10,22 @@ export class TodoItems extends Component {
       todosList,
       onChangeCompleted,
       onDeleteTodo,
+      onDoneAllTodo,
     } = this.props;
 
     return (
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onClick={onDoneAllTodo}
+        />
+        <label
+          htmlFor="toggle-all"
+        >
+          Mark all as complete
+        </label>
 
         <TodoList
           todosList={todosList}
@@ -31,6 +41,7 @@ export class TodoItems extends Component {
 TodoItems.propTypes = {
   onChangeCompleted: PropTypes.func.isRequired,
   onDeleteTodo: PropTypes.func.isRequired,
+  onDoneAllTodo: PropTypes.func.isRequired,
   todosList: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
