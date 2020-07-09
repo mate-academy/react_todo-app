@@ -99,7 +99,7 @@ function App() {
 
   return (
     <Context.Provider value={{
-      todoToggle, removeTodo, addFilter,
+      todoToggle, removeTodo, addFilter, filter,
     }}
     >
       <section className="todoapp">

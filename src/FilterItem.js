@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import Context from './context';
 
 export function FilterItem({ filterName }) {
-  const { addFilter } = useContext(Context);
+  const { addFilter, filter } = useContext(Context);
 
   return (
     <li>
       <a
         href={`#/${filterName}`}
         onClick={() => addFilter(filterName)}
-        className="selected"
+        className={filterName === filter ? 'selected' : ''}
       >
         {filterName}
       </a>
