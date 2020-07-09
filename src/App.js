@@ -14,12 +14,8 @@ export class App extends React.Component {
   };
 
   componentDidMount() {
-    const todosFromStorage = JSON.parse(localStorage.getItem('state')).todos
-      ? JSON.parse(localStorage.getItem('state')).todos
-      : [];
-
     this.setState({
-      todos: todosFromStorage,
+      todos: JSON.parse(localStorage.getItem('state')).todos || [],
     });
   }
 
