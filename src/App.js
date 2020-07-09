@@ -16,6 +16,18 @@ class App extends React.Component {
     transformedTodo: '',
   }
 
+  componentDidMount() {
+    const localState = JSON.parse(localStorage.getItem('todoApp'));
+
+    if (localState) {
+      this.setState({ ...localState });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todoApp', JSON.stringify(this.state));
+  }
+
   onComplete = (newStates) => {
     if (Object.values(newStates).every(item => item === true)) {
       this.selectAll();
