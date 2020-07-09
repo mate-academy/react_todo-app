@@ -1,11 +1,10 @@
 import React from 'react';
 import { Main } from './Main';
 import Footer from './Footer';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 
 class Todo extends React.Component {
   state = {
-    tasks: [],
+    tasks: JSON.parse(localStorage.getItem('savedTasks')) || [],
     taskPattern: {
       title: '',
       id: 0,
@@ -13,27 +12,34 @@ class Todo extends React.Component {
     },
     filteredTasks: null,
     lastId: 0,
+    filterClass: ['selected', '', ''],
+  }
+
+  componentDidUpdate() {
+    const { tasks } = this.state;
+
+    localStorage.setItem('savedTasks', JSON.stringify(tasks));
   }
 
   writeTask = (event) => {
     const title = event.target.value;
 
-    this.setState(prev => ({
+    this.setState(previous => ({
       taskPattern: {
         title: `${title}`,
-        id: prev.lastId,
+        id: previous.lastId,
         completed: false,
       },
-      lastId: prev.lastId + 1,
+      lastId: previous.lastId + 1,
     }));
   };
 
   saveTask = (event) => {
     if (event.key === 'Enter' && this.state.taskPattern.title !== '') {
-      this.setState(prev => ({
+      this.setState(previous => ({
         tasks: [
-          ...prev.tasks,
-          prev.taskPattern,
+          ...previous.tasks,
+          previous.taskPattern,
         ],
         taskPattern: {
           title: '',
@@ -46,8 +52,8 @@ class Todo extends React.Component {
   completedChange = (event) => {
     const targetId = Number(event.target.id.split(/todo-/)[1]);
 
-    this.setState(prev => ({
-      tasks: prev.tasks.map((task) => {
+    this.setState(previous => ({
+      tasks: previous.tasks.map((task) => {
         if (task.id === targetId) {
           return ({
             ...task,
@@ -60,6 +66,15 @@ class Todo extends React.Component {
     }));
   }
 
+  completedAll = () => {
+    this.setState(previous => ({
+      tasks: previous.tasks.map(task => ({
+        ...task,
+        completed: !task.completed,
+      })),
+    }));
+  }
+
   deleteTask = (event) => {
     const activeTask = this.state.tasks.find(task => (
       Number(event
@@ -69,47 +84,37 @@ class Todo extends React.Component {
         .split(/todo-/)[1]) === task.id
     ));
 
-    this.setState(prev => ({
-      tasks: prev.tasks.filter(task => (task !== activeTask)),
+    this.setState(previous => ({
+      tasks: previous.tasks.filter(task => (task !== activeTask)),
     }));
   }
 
   deleteCompleted = (event) => {
-    this.setState(prev => ({
-      tasks: prev.tasks.filter(task => (task.completed === false)),
+    this.setState(previous => ({
+      tasks: previous.tasks.filter(task => (task.completed === false)),
     }));
   }
 
-  filterCompleted = (event) => {
+  filters = (event, condition, ...classFilter) => {
     event.preventDefault();
-    this.setState(prev => ({
-      filteredTasks: prev.tasks.filter(task => (task.completed === true)),
+    this.setState(previous => ({
+      filteredTasks: previous
+        .tasks
+        .filter(task => (task.completed === condition)),
+      filterClass: [...classFilter],
     }));
-  };
-
-  filterActive = (event) => {
-    event.preventDefault();
-    this.setState(prev => ({
-      filteredTasks: prev.tasks.filter(task => (task.completed === false)),
-    }));
-  };
+  }
 
   filterAll = (event) => {
     event.preventDefault();
     this.setState(() => ({
       filteredTasks: null,
+      filterClass: ['selected', '', ''],
     }));
   };
 
   render() {
-    let left = 0;
     const displayTasks = this.state.filteredTasks || [...this.state.tasks];
-
-    this.state.tasks.forEach((task) => {
-      if (task.completed === false) {
-        left += 1;
-      }
-    });
 
     return (
       <section className="todoapp">
@@ -124,27 +129,21 @@ class Todo extends React.Component {
             onKeyUp={this.saveTask}
           />
         </header>
-        <Router>
-          <section className="main">
-            <input type="checkbox" id="toggle-all" className="toggle-all" />
-            <label htmlFor="toggle-all">Mark all as complete</label>
 
-            <Main
-              tasks={displayTasks}
-              completedChange={this.completedChange}
-              deleteTask={this.deleteTask}
-            />
-          </section>
+        <Main
+          tasks={displayTasks}
+          completedChange={this.completedChange}
+          deleteTask={this.deleteTask}
+          completedAll={this.completedAll}
+        />
 
-          <Footer
-            filterAll={this.filterAll}
-            filterCompleted={this.filterCompleted}
-            filterActive={this.filterActive}
-            left={left}
-            tasks={this.state.tasks}
-            deleteCompleted={this.deleteCompleted}
-          />
-        </Router>
+        <Footer
+          filterClass={this.state.filterClass}
+          filterAll={this.filterAll}
+          filters={this.filters}
+          tasks={this.state.tasks}
+          deleteCompleted={this.deleteCompleted}
+        />
 
       </section>
     );

@@ -1,6 +1,18 @@
 import React from 'react';
+import { footerShape } from './shapes';
 
-const Footer = ({ tasks, deleteCompleted, left, filterAll, filterActive, filterCompleted }) => {
+const Footer = ({ filterClass,
+  tasks,
+  deleteCompleted,
+  filterAll,
+  filters }) => {
+  let left = 0;
+
+  tasks.forEach((task) => {
+    if (task.completed === false) {
+      left += 1;
+    }
+  });
 
   if (tasks.length === 0) {
     return null;
@@ -17,7 +29,7 @@ const Footer = ({ tasks, deleteCompleted, left, filterAll, filterActive, filterC
         <li>
           <a
             href="/"
-            className="selected"
+            className={filterClass[0]}
             onClick={event => filterAll(event)}
           >
             All
@@ -27,7 +39,8 @@ const Footer = ({ tasks, deleteCompleted, left, filterAll, filterActive, filterC
         <li>
           <a
             href="/active"
-            onClick={event => filterActive(event)}
+            className={filterClass[1]}
+            onClick={event => filters(event, false, '', 'selected', '')}
           >
             Active
           </a>
@@ -36,7 +49,8 @@ const Footer = ({ tasks, deleteCompleted, left, filterAll, filterActive, filterC
         <li>
           <a
             href="/completed"
-            onClick={event => filterCompleted(event)}
+            className={filterClass[2]}
+            onClick={event => filters(event, true, '', '', 'selected')}
           >
             Completed
           </a>
@@ -54,3 +68,5 @@ const Footer = ({ tasks, deleteCompleted, left, filterAll, filterActive, filterC
 };
 
 export default Footer;
+
+Footer.propTypes = footerShape.isRequired;

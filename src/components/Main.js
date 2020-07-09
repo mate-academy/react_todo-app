@@ -1,12 +1,19 @@
 import React from 'react';
+import { mainShape } from './shapes';
 
-export const Main = ({ tasks, completedChange, deleteTask }) => {
+export const Main = ({ tasks, completedChange, deleteTask, completedAll }) => (
+  <section className="main">
+    <input
+      type="checkbox"
+      id="toggle-all"
+      className="toggle-all"
+      onClick={completedAll}
+    />
+    <label htmlFor="toggle-all">Mark all as complete</label>
 
-  return (
     <ul className="todo-list">
       {
         tasks.map((taskUnit) => {
-
           let activeClass = '';
 
           taskUnit.completed ? activeClass = 'completed' : activeClass = '';
@@ -19,8 +26,13 @@ export const Main = ({ tasks, completedChange, deleteTask }) => {
                   className="toggle"
                   id={`todo-${taskUnit.id}`}
                   onChange={completedChange}
+                  checked={taskUnit.completed}
                 />
-                <label htmlFor={`todo-${taskUnit.id}`}>{taskUnit.title}</label>
+                <label
+                  htmlFor={`todo-${taskUnit.id}`}
+                >
+                  {taskUnit.title}
+                </label>
                 <button
                   type="button"
                   className="destroy"
@@ -33,5 +45,7 @@ export const Main = ({ tasks, completedChange, deleteTask }) => {
         })
       }
     </ul>
-  );
-};
+  </section>
+);
+
+Main.propTypes = mainShape.isRequired;
