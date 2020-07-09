@@ -354,6 +354,10 @@ html .clear-completed:active {
   text-decoration: underline;
 }
 
+.label__completed {
+  text-decoration: line-through;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox

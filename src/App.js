@@ -1,84 +1,119 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { TodoList } from './TodoList';
+import Context from './context';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 function App() {
+  const [todos, setTodos] = useState([
+    {
+      id: 1,
+      title: 'Learn HTML/CSS',
+      completed: false,
+      filter: 'All',
+    },
+    {
+      id: 2,
+      title: 'Learn React',
+      completed: false,
+      filter: 'All',
+    },
+    {
+      id: 3,
+      title: 'Learn JavaScript',
+      completed: false,
+      filter: 'All',
+    },
+  ]);
+
+  const [filter, setFilter] = useState('All');
+
+  function todoToggle(id) {
+    return setTodos(
+      prev => prev.map((todo) => {
+        const { completed } = todo;
+
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !completed,
+          };
+        }
+
+        return todo;
+      }),
+    );
+  }
+
+  function toggleAllTodos(todosItems) {
+    return todosItems.some(todo => todo.completed === false)
+      ? setTodos(todosItems.map(todo => ({
+        ...todo,
+        completed: true,
+      })))
+      : setTodos(todosItems.map(todo => ({
+        ...todo,
+        completed: false,
+      })));
+  }
+
+  function addTodo(value) {
+    return setTodos(
+      [
+        ...todos,
+        {
+          id: Date.now(),
+          title: value,
+          completed: false,
+          filter: 'All',
+        },
+      ],
+    );
+  }
+
+  function removeTodo(id) {
+    return setTodos(prev => prev.filter(todo => todo.id !== id));
+  }
+
+  function clearedCompleted() {
+    return setTodos(prev => prev.filter(todo => todo.completed === false));
+  }
+
+  function addFilter(name) {
+    return setFilter(name);
+  }
+
+  let allTodos = [];
+
+  switch (filter) {
+    case 'Active':
+      allTodos = todos.filter(todo => todo.completed === false);
+      break;
+    case 'Completed':
+      allTodos = todos.filter(todo => todo.completed === true);
+      break;
+    default:
+      allTodos = todos;
+      break;
+  }
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <Context.Provider value={{
+      todoToggle, removeTodo, addFilter,
+    }}
+    >
+      <section className="todoapp">
+        <Header addTodo={addTodo} />
+        <section className="main">
+          <TodoList todos={allTodos} toggleAllTodos={toggleAllTodos} />
+        </section>
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
-
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        {todos.length
+          ? <Footer todos={allTodos} clearedCompleted={clearedCompleted} />
+          : ''
+        }
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
+    </Context.Provider>
   );
 }
 
