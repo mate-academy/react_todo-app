@@ -1,9 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
-import Todo from './Todo';
 
 const Footer = ({ tasks, deleteCompleted, left, filterAll, filterActive, filterCompleted }) => {
-console.log(" -> left", left)
 
   if (tasks.length === 0) {
     return null;
@@ -31,7 +28,9 @@ console.log(" -> left", left)
           <a
             href="/active"
             onClick={event => filterActive(event)}
-          >Active</a>
+          >
+            Active
+          </a>
         </li>
 
         <li>

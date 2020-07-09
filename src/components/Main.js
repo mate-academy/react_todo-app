@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 
 export const Main = ({ tasks, completedChange, deleteTask }) => {
 
@@ -7,8 +6,13 @@ export const Main = ({ tasks, completedChange, deleteTask }) => {
     <ul className="todo-list">
       {
         tasks.map((taskUnit) => {
+
+          let activeClass = '';
+
+          taskUnit.completed ? activeClass = 'completed' : activeClass = '';
+
           return (
-            <li key={taskUnit.id}>
+            <li key={taskUnit.id} className={activeClass}>
               <div className="view">
                 <input
                   type="checkbox"
@@ -30,19 +34,4 @@ export const Main = ({ tasks, completedChange, deleteTask }) => {
       }
     </ul>
   );
-
-}
-
-
-/*
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-*/
+};

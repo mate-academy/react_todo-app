@@ -44,17 +44,20 @@ class Todo extends React.Component {
   };
 
   completedChange = (event) => {
-    const activeTask = this.state.tasks.find(task => (
-      Number(event
-        .target
-        .id
-        .split(/todo-/)[1]) === task.id
-    ));
+    const targetId = Number(event.target.id.split(/todo-/)[1]);
 
-    activeTask.completed = event.target.checked;
-    const li = event.target.closest('LI');
+    this.setState(prev => ({
+      tasks: prev.tasks.map((task) => {
+        if (task.id === targetId) {
+          return ({
+            ...task,
+            completed: !task.completed,
+          });
+        }
 
-    activeTask.completed ? li.className = 'completed' : li.className = '';
+        return task;
+      }),
+    }));
   }
 
   deleteTask = (event) => {
@@ -102,7 +105,7 @@ class Todo extends React.Component {
     let left = 0;
     const displayTasks = this.state.filteredTasks || [...this.state.tasks];
 
-    displayTasks.forEach((task) => {
+    this.state.tasks.forEach((task) => {
       if (task.completed === false) {
         left += 1;
       }
@@ -138,7 +141,7 @@ class Todo extends React.Component {
             filterCompleted={this.filterCompleted}
             filterActive={this.filterActive}
             left={left}
-            tasks={displayTasks}
+            tasks={this.state.tasks}
             deleteCompleted={this.deleteCompleted}
           />
         </Router>
