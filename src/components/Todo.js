@@ -66,13 +66,21 @@ class Todo extends React.Component {
     }));
   }
 
-  completedAll = () => {
+  completedAll = (event) => {
+    const check = event.target;
+
     this.setState(previous => ({
       tasks: previous.tasks.map(task => ({
         ...task,
         completed: !task.completed,
       })),
     }));
+
+    setTimeout(() => {
+      if (check.checked) {
+        check.checked = false;
+      }
+    }, 300);
   }
 
   deleteTask = (event) => {

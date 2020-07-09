@@ -7,7 +7,7 @@ export const Main = ({ tasks, completedChange, deleteTask, completedAll }) => (
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      onClick={completedAll}
+      onClick={event => completedAll(event)}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
 
