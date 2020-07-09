@@ -1,4 +1,4 @@
-# React ToDo App with editing and storage
+# React ToDo App with storage
 [DEMO LINK](https://denkondratiev.github.io/react_todo-app/)
 
 ## Preview
