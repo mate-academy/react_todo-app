@@ -1,6 +1,7 @@
 import React from 'react';
-import Main from './Main';
+import { Main } from './Main';
 import Footer from './Footer';
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 
 class Todo extends React.Component {
   state = {
@@ -10,8 +11,8 @@ class Todo extends React.Component {
       id: 0,
       completed: false,
     },
+    filteredTasks: null,
     lastId: 0,
-    renderFooter: false,
   }
 
   writeTask = (event) => {
@@ -38,8 +39,6 @@ class Todo extends React.Component {
           title: '',
           id: 0,
         },
-
-        renderFooter: true,
       }));
     }
   };
@@ -70,22 +69,44 @@ class Todo extends React.Component {
     this.setState(prev => ({
       tasks: prev.tasks.filter(task => (task !== activeTask)),
     }));
-
-    this.allFilter(event);
   }
 
   deleteCompleted = (event) => {
     this.setState(prev => ({
       tasks: prev.tasks.filter(task => (task.completed === false)),
     }));
-    this.allFilter(event);
   }
 
-  render() {
+  filterCompleted = (event) => {
+    event.preventDefault();
+    this.setState(prev => ({
+      filteredTasks: prev.tasks.filter(task => (task.completed === true)),
+    }));
+  };
 
-    if (this.state.tasks.length === 0) {
-      this.state.renderFooter = false;
-    }
+  filterActive = (event) => {
+    event.preventDefault();
+    this.setState(prev => ({
+      filteredTasks: prev.tasks.filter(task => (task.completed === false)),
+    }));
+  };
+
+  filterAll = (event) => {
+    event.preventDefault();
+    this.setState(() => ({
+      filteredTasks: null,
+    }));
+  };
+
+  render() {
+    let left = 0;
+    const displayTasks = this.state.filteredTasks || [...this.state.tasks];
+
+    displayTasks.forEach((task) => {
+      if (task.completed === false) {
+        left += 1;
+      }
+    });
 
     return (
       <section className="todoapp">
@@ -100,18 +121,27 @@ class Todo extends React.Component {
             onKeyUp={this.saveTask}
           />
         </header>
+        <Router>
+          <section className="main">
+            <input type="checkbox" id="toggle-all" className="toggle-all" />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <Main
-          tasks={this.state.tasks}
-          completedChange={this.completedChange}
-          deleteTask={this.deleteTask}
-        />
+            <Main
+              tasks={displayTasks}
+              completedChange={this.completedChange}
+              deleteTask={this.deleteTask}
+            />
+          </section>
 
-        <Footer
-          renderFooter={this.state.renderFooter}
-          tasks={this.state.tasks}
-          deleteCompleted={this.deleteCompleted}
-        />
+          <Footer
+            filterAll={this.filterAll}
+            filterCompleted={this.filterCompleted}
+            filterActive={this.filterActive}
+            left={left}
+            tasks={displayTasks}
+            deleteCompleted={this.deleteCompleted}
+          />
+        </Router>
 
       </section>
     );

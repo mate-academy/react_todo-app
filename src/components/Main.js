@@ -1,13 +1,12 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 
-const Main = ({ tasks, completedChange, deleteTask }) => (
-  <section className="main">
-    <input type="checkbox" id="toggle-all" className="toggle-all" />
-    <label htmlFor="toggle-all">Mark all as complete</label>
+export const Main = ({ tasks, completedChange, deleteTask }) => {
 
+  return (
     <ul className="todo-list">
       {
-        (tasks).map((taskUnit) => {
+        tasks.map((taskUnit) => {
           return (
             <li key={taskUnit.id}>
               <div className="view">
@@ -30,10 +29,10 @@ const Main = ({ tasks, completedChange, deleteTask }) => (
         })
       }
     </ul>
-  </section>
-);
+  );
 
-export default Main;
+}
+
 
 /*
 

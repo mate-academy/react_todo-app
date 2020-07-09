@@ -1,40 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
+import Todo from './Todo';
 
-const Footer = ({ renderFooter, tasks, deleteCompleted }) => {
+const Footer = ({ tasks, deleteCompleted, left, filterAll, filterActive, filterCompleted }) => {
+console.log(" -> left", left)
 
-  const left = tasks.map(task => {
-    if (task.completed === false) {
-      return task;
-    }
-  });
-
-  if (!renderFooter) {
+  if (tasks.length === 0) {
     return null;
-  }
-
-  const allFilter = (event) => {
-    event.preventDefault();
-    
-  }
-
-  const activeFilter = (event) => {
-    event.preventDefault();
-    this.setState(prev => ({
-      tasksShow: prev.tasksShow.filter(task => (task.completed === false)),
-    }));
-  }
-
-  const completedFilter = (event) => {
-    event.preventDefault();
-    this.setState(prev => ({
-      tasksShow: prev.tasksShow.filter(task => (task.completed === true)),
-    }));
   }
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {left.length}
+        {left}
         &nbsp;
         items left
       </span>
@@ -43,7 +21,7 @@ const Footer = ({ renderFooter, tasks, deleteCompleted }) => {
           <a
             href="/"
             className="selected"
-            onClick={allFilter}
+            onClick={event => filterAll(event)}
           >
             All
           </a>
@@ -52,16 +30,14 @@ const Footer = ({ renderFooter, tasks, deleteCompleted }) => {
         <li>
           <a
             href="/active"
-            onClick={activeFilter}
-          >
-            Active
-          </a>
+            onClick={event => filterActive(event)}
+          >Active</a>
         </li>
 
         <li>
           <a
             href="/completed"
-            onClick={completedFilter}
+            onClick={event => filterCompleted(event)}
           >
             Completed
           </a>
