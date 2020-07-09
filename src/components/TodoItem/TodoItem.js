@@ -2,7 +2,34 @@ import React from 'react';
 import { TodoItemTypes } from '../Shapes/Shapes';
 
 export class TodoItem extends React.Component {
-  state = {};
+  state = {
+    editedTitle: this.props.title,
+  }
+
+  handleValue = (event) => {
+    const titleValue = event.target.value.replace(/\s/, ' ').replace(/^\s/, '');
+
+    this.setState(prevState => ({
+      editedTitle: titleValue,
+    }));
+  }
+
+  handleOuterClick = (event) => {
+    const onAddTask = this.props.onChangeCurrentTask;
+    const editedTitle = event.target.value;
+    const taskId = event.target.name;
+
+    onAddTask(editedTitle, taskId);
+  }
+
+  onSubmit = (event) => {
+    const onAddTask = this.props.onChangeCurrentTask;
+    const taskId = event.target.name;
+    const { editedTitle } = this.state;
+    const currentKeyCode = event.keyCode;
+
+    onAddTask(editedTitle, taskId, currentKeyCode);
+  }
 
   render() {
     const {
@@ -11,13 +38,16 @@ export class TodoItem extends React.Component {
       title,
       toggle,
       onDeleted,
-      onEditTask,
+      onEdit,
     } = this.props;
+
+    const { editedTitle } = this.state;
 
     return (
       <>
         <div className="view">
           <input
+            id={id}
             type="checkbox"
             className="toggle"
             value={id}
@@ -27,7 +57,7 @@ export class TodoItem extends React.Component {
           <label
             htmlFor={id}
             value={id}
-            onDoubleClick={onEditTask}
+            onDoubleClick={onEdit}
           >
             {title}
           </label>
@@ -38,7 +68,16 @@ export class TodoItem extends React.Component {
             onClick={onDeleted}
           />
         </div>
-        <input type="text" className="edit" />
+        <input
+          name={id}
+          type="text"
+          className="edit"
+          ref={input => input && input.focus()}
+          value={editedTitle}
+          onChange={this.handleValue}
+          onKeyDown={this.onSubmit}
+          onBlur={this.handleOuterClick}
+        />
       </>
     );
   }

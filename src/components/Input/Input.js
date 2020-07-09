@@ -1,22 +1,36 @@
 import React from 'react';
+import className from 'classnames';
 import { InputTypes } from '../Shapes/Shapes';
 
 export class Input extends React.Component {
   state = {
     title: '',
+    isValid: true,
   }
 
   handleValue = (event) => {
-    const titleValue = event.target.value;
+    const titleValue = event.target.value.replace(/\s/, ' ').replace(/^\s/, '');
 
     this.setState(prevState => ({
       title: titleValue,
+      isValid: true,
     }));
   }
 
   onSubmit = (event) => {
+    const onAddTask = this.props.addTask;
+    const { title } = this.state;
+
+    if (!title) {
+      this.setState({
+        isValid: false,
+      });
+
+      return;
+    }
+
     if (event.key === 'Enter') {
-      this.props.addTask(this.state.title);
+      onAddTask(title);
       this.setState({
         title: '',
       });
@@ -24,18 +38,24 @@ export class Input extends React.Component {
   }
 
   render() {
-    const { title } = this.state;
-    // console.log(titleValue);
+    const { title, isValid } = this.state;
 
     return (
-      <input
-        name="task"
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={title}
-        onKeyPress={this.onSubmit}
-        onChange={this.handleValue}
-      />
+      <header className="header">
+        <h1>todos</h1>
+        <input
+          name="task"
+          className={className('new-todo ', { 'new-todo--invalid': !isValid })}
+          placeholder={isValid && ('What needs to be done?')}
+          value={title}
+          required
+          onKeyPress={this.onSubmit}
+          onChange={this.handleValue}
+        />
+        {!isValid && (
+          <span className="error-message">Please, type your task</span>
+        )}
+      </header>
     );
   }
 }

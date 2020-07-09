@@ -1,58 +1,58 @@
 import React from 'react';
+
 import { TodoAppTypes } from '../Shapes/Shapes';
 import { Input } from '../Input/Input';
 import { TodoList } from '../TodoList/TodoList';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
-export class TodoApp extends React.Component {
-  state = {}
+export const TodoApp = (props) => {
+  const {
+    tasks,
+    showOnlyActive,
+    showOnlyCompleted,
+    addTask,
+    toggle,
+    onToggleTask,
+    onDeleted,
+    onClear,
+    onAllSelected,
+    onEdit,
+    onChangeCurrentTask,
+  } = props;
 
-  render() {
-    const {
-      tasks,
-      addTask,
-      toggle,
-      onActive,
-      onCompleted,
-      onDeleted,
-      onClear,
-      onAllSelected,
-      onEditTask,
-    } = this.props;
+  const numberOfTask = tasks.length;
 
-    return (
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
+  return (
+    <section className="todoapp">
 
-          <Input addTask={addTask} />
-        </header>
+      <Input addTask={addTask} />
 
-        <section className="main">
-          <TodoList
-            items={tasks}
-            toggle={toggle}
-            onDeleted={onDeleted}
-            onAllSelected={onAllSelected}
-            onEditTask={onEditTask}
-          />
-        </section>
+      <TodoList
+        tasks={tasks}
+        showOnlyActive={showOnlyActive}
+        showOnlyCompleted={showOnlyCompleted}
+        toggle={toggle}
+        onDeleted={onDeleted}
+        onAllSelected={onAllSelected}
+        onEdit={onEdit}
+        onChangeCurrentTask={onChangeCurrentTask}
+      />
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${tasks.length} items left`}
-          </span>
-
+      {(numberOfTask)
+        ? (
           <TodosFilter
-            onActive={onActive}
-            onCompleted={onCompleted}
+            tasks={tasks}
+            onToggleTask={onToggleTask}
+            showOnlyActive={showOnlyActive}
+            showOnlyCompleted={showOnlyCompleted}
             onClear={onClear}
           />
-        </footer>
-      </section>
-    );
-  }
-}
+        )
+        : ''}
+
+    </section>
+  );
+};
 
 TodoApp.propTypes = TodoAppTypes;
 
