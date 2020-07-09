@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TodoList } from '../TodoList/TodoList';
+import { ShapeTodo } from '../../Shapes/Shapes';
 
 export class TodoItems extends Component {
   state = {}
@@ -9,6 +10,7 @@ export class TodoItems extends Component {
     const {
       todosList,
       onChangeCompleted,
+      onChangeUpdate,
       onDeleteTodo,
       onDoneAllTodo,
     } = this.props;
@@ -31,6 +33,7 @@ export class TodoItems extends Component {
           todosList={todosList}
           onChangeCompleted={onChangeCompleted}
           onDeleteTodo={onDeleteTodo}
+          onChangeUpdate={onChangeUpdate}
         />
 
       </section>
@@ -42,9 +45,6 @@ TodoItems.propTypes = {
   onChangeCompleted: PropTypes.func.isRequired,
   onDeleteTodo: PropTypes.func.isRequired,
   onDoneAllTodo: PropTypes.func.isRequired,
-  todosList: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-  })).isRequired,
+  onChangeUpdate: PropTypes.func.isRequired,
+  todosList: PropTypes.arrayOf(ShapeTodo).isRequired,
 };

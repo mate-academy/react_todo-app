@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 export const FilterLink = (props) => {
   const {
     url,
     value,
   } = props.link;
+
   const {
     currentUrl,
     isActiveLink,
@@ -15,7 +17,9 @@ export const FilterLink = (props) => {
     <li>
       <a
         href={url}
-        className={currentUrl === url ? 'selected' : ''}
+        className={classnames({
+          selected: currentUrl === url,
+        })}
         onClick={isActiveLink}
       >
         {value}

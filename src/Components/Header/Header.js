@@ -8,7 +8,9 @@ export class Header extends Component {
   }
 
   onChangeValue = (event) => {
-    const { value } = event.target;
+    let { value } = event.target;
+
+    value = value.replace(/\s+/g, ' ').replace(/^\s+$/, '');
 
     this.setState({
       value,

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Todo } from '../Todo/Todo';
+import { ShapeTodo } from '../../Shapes/Shapes';
 
 export class TodoList extends Component {
   state = {}
@@ -8,34 +10,20 @@ export class TodoList extends Component {
     const {
       todosList,
       onChangeCompleted,
+      onChangeUpdate,
       onDeleteTodo,
     } = this.props;
 
     return (
       <ul className="todo-list">
         {todosList.map(todo => (
-          <li
+          <Todo
             key={todo.id}
-            className={todo.completed ? 'completed' : ''}
-          >
-            <div className="view">
-              <input
-                type="checkbox"
-                className="toggle"
-                id="todo-1"
-                value={todo.id}
-                checked={todo.completed}
-                onChange={onChangeCompleted}
-              />
-              <label htmlFor="todo-1">{todo.title}</label>
-              <button
-                type="button"
-                className="destroy"
-                onClick={() => onDeleteTodo(todo.id)}
-              />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            todo={todo}
+            onChangeCompleted={onChangeCompleted}
+            onDeleteTodo={onDeleteTodo}
+            onChangeUpdate={onChangeUpdate}
+          />
         ))}
       </ul>
     );
@@ -45,9 +33,6 @@ export class TodoList extends Component {
 TodoList.propTypes = {
   onChangeCompleted: PropTypes.func.isRequired,
   onDeleteTodo: PropTypes.func.isRequired,
-  todosList: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-  })).isRequired,
+  onChangeUpdate: PropTypes.func.isRequired,
+  todosList: PropTypes.arrayOf(ShapeTodo).isRequired,
 };

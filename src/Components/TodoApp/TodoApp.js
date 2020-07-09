@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Header } from '../Header/Header';
 import { TodoItems } from '../TodoItems/TodoItems';
 import { Footer } from '../Footer/Footer';
+import { ShapeTodo } from '../../Shapes/Shapes';
 
 export class TodoApp extends Component {
   state = {
@@ -35,14 +36,29 @@ export class TodoApp extends Component {
   }
 
   onChangeCompleted = (event) => {
-    const { value } = event.target;
+    const { value: id } = event.target;
 
     this.setState(prevState => ({
       todosList: prevState.todosList.map((todo) => {
-        if (todo.id === value) {
+        if (todo.id === id) {
           return {
             ...todo,
             completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
+
+  onChangeUpdate = (value, id) => {
+    this.setState(prevState => ({
+      todosList: prevState.todosList.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title: value,
           };
         }
 
@@ -73,6 +89,7 @@ export class TodoApp extends Component {
       onClearCompletedTodo,
       onChangeUrlPath,
       onDoneAllTodo,
+      onChangeUpdate,
     } = this;
 
     const activeTodoQuantity = todosList.filter(todo => !todo.completed).length;
@@ -96,6 +113,7 @@ export class TodoApp extends Component {
           onChangeCompleted={onChangeCompleted}
           onDeleteTodo={onDeleteTodo}
           onDoneAllTodo={onDoneAllTodo}
+          onChangeUpdate={onChangeUpdate}
         />
 
         <Footer
@@ -109,9 +127,5 @@ export class TodoApp extends Component {
 }
 
 TodoApp.propTypes = {
-  todosList: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-  })).isRequired,
+  todosList: PropTypes.arrayOf(ShapeTodo).isRequired,
 };
