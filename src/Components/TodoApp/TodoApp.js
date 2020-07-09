@@ -67,11 +67,13 @@ export class TodoApp extends Component {
     }));
   }
 
-  onDoneAllTodo = () => {
+  onDoneAllTodo = (event) => {
+    const { checked } = event.target;
+
     this.setState(prevState => ({
       todosList: prevState.todosList.map(todo => ({
         ...todo,
-        completed: true,
+        completed: checked,
       })),
     }));
   }
