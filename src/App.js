@@ -5,10 +5,20 @@ import Main from './components/Main/Main';
 import Footer from './components/Footer/Footer';
 
 class App extends React.Component {
-  state = {
-    todos: [],
-    todoNumber: 1,
-    todosFilter: () => true,
+  constructor(props) {
+    super(props);
+
+    const storageState = JSON.parse(localStorage.getItem('state'));
+
+    this.state = {
+      todos: Object.is(null, storageState) ? [] : storageState.todos,
+      todoNumber: Object.is(null, storageState) ? 1 : storageState.todoNumber,
+      todosFilter: () => true,
+    };
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('state', JSON.stringify(this.state));
   }
 
   createTodo = (value) => {
@@ -60,18 +70,22 @@ class App extends React.Component {
   }
 
   editTodo = (title, id) => {
-    this.setState(state => ({
-      todos: state.todos.map((todo) => {
-        if (todo.id === id) {
-          return ({
-            ...todo,
-            title,
-          });
-        }
+    if (title !== '') {
+      this.setState(state => ({
+        todos: state.todos.map((todo) => {
+          if (todo.id === id) {
+            return ({
+              ...todo,
+              title,
+            });
+          }
 
-        return todo;
-      }),
-    }));
+          return todo;
+        }),
+      }));
+    } else {
+      this.destroyTodo(id);
+    }
   }
 
   destroyTodo = (id) => {
@@ -103,7 +117,7 @@ class App extends React.Component {
         <Header createTodo={this.createTodo} />
 
         <Main
-          items={todos}
+          todos={todos}
           todosFilter={todosFilter}
           toggleAllCompleted={this.toggleAllCompleted}
           toggleCompleted={this.toggleCompleted}

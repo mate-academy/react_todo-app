@@ -6,19 +6,19 @@ class Edit extends React.PureComponent {
     editTitle: this.props.title,
   }
 
-  changeTitle = (evt) => {
+  changeTitle = (event) => {
     this.setState({
-      editTitle: evt.target.value,
+      editTitle: event.target.value,
     });
   }
 
-  closeEdit = (evt) => {
-    if (evt.key === 'Enter') {
+  closeEdit = (event) => {
+    if (event.key === 'Enter') {
       this.props.editTodo(this.state.editTitle, this.props.id);
       this.props.offEdit();
     }
 
-    if (evt.key === 'Escape') {
+    if (event.key === 'Escape') {
       this.props.offEdit();
 
       this.setState({
@@ -27,7 +27,7 @@ class Edit extends React.PureComponent {
     }
   }
 
-  saveEdit = (evt) => {
+  saveEdit = () => {
     this.props.editTodo(this.state.editTitle, this.props.id);
     this.props.offEdit();
   }
@@ -41,6 +41,7 @@ class Edit extends React.PureComponent {
         onChange={this.changeTitle}
         onKeyDown={this.closeEdit}
         onBlur={this.saveEdit}
+        autoFocus
       />
     );
   }

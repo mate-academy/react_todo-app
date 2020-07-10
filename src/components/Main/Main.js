@@ -6,7 +6,7 @@ import TodoList from '../TodoList/TodoList';
 
 const Main = (props) => {
   const {
-    items,
+    todos,
     todosFilter,
     toggleAllCompleted,
     toggleCompleted,
@@ -17,13 +17,13 @@ const Main = (props) => {
   return (
     <section className="main">
       {
-        items.length === 0
+        todos.length === 0
           ? ''
-          : <ToggleAll items={items} toggleAllCompleted={toggleAllCompleted} />
+          : <ToggleAll todos={todos} toggleAllCompleted={toggleAllCompleted} />
       }
 
       <TodoList
-        items={items.filter(todosFilter)}
+        items={todos.filter(todosFilter)}
         toggleCompleted={toggleCompleted}
         editTodo={editTodo}
         destroyTodo={destroyTodo}
@@ -35,7 +35,7 @@ const Main = (props) => {
 export default Main;
 
 Main.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
+  todos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     completed: PropTypes.bool.isRequired,

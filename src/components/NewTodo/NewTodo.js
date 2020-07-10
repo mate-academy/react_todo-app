@@ -6,14 +6,14 @@ class NewTodo extends React.PureComponent {
     inputValue: '',
   }
 
-  changeInputValue = (evt) => {
+  changeInputValue = (event) => {
     this.setState({
-      inputValue: evt.target.value,
+      inputValue: event.target.value,
     });
   }
 
-  onEnter = (evt) => {
-    if (evt.key === 'Enter' && this.state.inputValue !== '') {
+  onEnter = (event) => {
+    if (event.key === 'Enter' && this.state.inputValue !== '') {
       this.props.createTodo(this.state.inputValue);
 
       this.setState({

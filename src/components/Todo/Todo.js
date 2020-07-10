@@ -47,12 +47,18 @@ class Todo extends React.PureComponent {
           onEdit={this.onEdit}
           destroyTodo={destroyTodo}
         />
-        <Edit
-          title={item.title}
-          id={item.id}
-          offEdit={this.offEdit}
-          editTodo={editTodo}
-        />
+        {
+          isEditing
+            ? (
+              <Edit
+                title={item.title}
+                id={item.id}
+                offEdit={this.offEdit}
+                editTodo={editTodo}
+              />
+            )
+            : ''
+        }
       </li>
     );
   }

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ToggleAll = ({ items, toggleAllCompleted }) => {
-  const isAllCompleted = items.every(item => item.completed);
+const ToggleAll = ({ todos, toggleAllCompleted }) => {
+  const isAllCompleted = todos.every(item => item.completed);
 
   return (
     <>
@@ -21,7 +21,7 @@ const ToggleAll = ({ items, toggleAllCompleted }) => {
 export default ToggleAll;
 
 ToggleAll.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
+  todos: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     completed: PropTypes.bool.isRequired,
