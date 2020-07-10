@@ -51,7 +51,7 @@ export const TodoList = ({
             : <></>;
 
           return (
-            <div className="wrap_li">
+            <div className="wrap_li" key={todo}>
               <Todo
                 startEditing={startEditing}
                 selected={allSelected}

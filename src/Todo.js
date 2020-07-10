@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { ShapeTodo } from './Shapes';
 

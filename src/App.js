@@ -42,8 +42,9 @@ class App extends React.Component {
     }));
   }
 
-  deleteTodo = (listWithoutEl, completed) => {
-    if (Object.values(completed).every(item => item === true)) {
+  deleteTodo = (listWithoutEl, visibility, completed) => {
+    if (Object.values(completed).every(item => item === true)
+     && !this.state.allSelected) {
       this.selectAll();
     }
 
