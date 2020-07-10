@@ -19,18 +19,10 @@ export class TodoApp extends React.Component {
     isCompleted: true,
   }
 
-  createTodo = (value) => {
-    this.setState({
-      taskTitle: value,
-    });
-  }
-
-  addTodo = (event) => {
-    event.preventDefault();
-
+  addTodo = (taskTitle) => {
     const newTodo = {
       id: uuidv4(),
-      title: this.state.taskTitle,
+      title: taskTitle,
       isCompleted: false,
     };
 
@@ -40,8 +32,6 @@ export class TodoApp extends React.Component {
         { ...newTodo },
       ],
     }));
-
-    event.target.reset();
   }
 
   deleteTodo = (taskId) => {
@@ -130,8 +120,7 @@ export class TodoApp extends React.Component {
         <header className="header">
           <h1>todos</h1>
           <AddForm
-            onChange={this.createTodo}
-            onSubmit={this.addTodo}
+            addTodo={this.addTodo}
           />
         </header>
 
