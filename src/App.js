@@ -114,6 +114,7 @@ export class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={finishedTodos.length === todos.length}
             onClick={this.checkAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -126,24 +127,26 @@ export class App extends React.Component {
 
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${unfinishedTodos.length} items left`}
-          </span>
+        {!!(todos.length) && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${unfinishedTodos.length} items left`}
+            </span>
 
-          <FilterList
-            selectFilter={this.selectFilter}
-            activeFilter={activeFilter}
-          />
+            <FilterList
+              selectFilter={this.selectFilter}
+              activeFilter={activeFilter}
+            />
 
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.clearCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={this.clearCompleted}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </section>
     );
   }
