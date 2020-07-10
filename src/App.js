@@ -24,7 +24,7 @@ export class App extends React.Component {
   }
 
   changeCurrentTask = (title, id, keyCode) => {
-    if (keyCode === 13 || !keyCode) {
+    if (keyCode === 13) {
       this.setState(prevState => ({
         tasks: prevState.tasks.map((task) => {
           if (task.id === id) {
@@ -40,7 +40,7 @@ export class App extends React.Component {
       }));
     }
 
-    if (keyCode === 27) {
+    if (keyCode === 27 || !keyCode) {
       this.setState(prevState => ({
         tasks: prevState.tasks.map((task) => {
           if (task.id === id) {

@@ -14,14 +14,6 @@ export class TodoItem extends React.Component {
     }));
   }
 
-  handleOuterClick = (event) => {
-    const onAddTask = this.props.onChangeCurrentTask;
-    const editedTitle = event.target.value;
-    const taskId = event.target.name;
-
-    onAddTask(editedTitle, taskId);
-  }
-
   onSubmit = (event) => {
     const onAddTask = this.props.onChangeCurrentTask;
     const taskId = event.target.name;
@@ -72,11 +64,12 @@ export class TodoItem extends React.Component {
           name={id}
           type="text"
           className="edit"
+          required
           ref={input => input && input.focus()}
           value={editedTitle}
           onChange={this.handleValue}
           onKeyDown={this.onSubmit}
-          onBlur={this.handleOuterClick}
+          onBlur={this.onSubmit}
         />
       </>
     );

@@ -24,7 +24,7 @@ export const TodoAppTypes = {
   onClear: PropTypes.func.isRequired,
   onAllSelected: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  onchangeCurrentTask: PropTypes.func.isRequired,
+  onChangeCurrentTask: PropTypes.func.isRequired,
 };
 
 export const TodoListTypes = {
@@ -37,7 +37,7 @@ export const TodoListTypes = {
   onDeleted: PropTypes.func.isRequired,
   onAllSelected: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  onchangeCurrentTask: PropTypes.func.isRequired,
+  onChangeCurrentTask: PropTypes.func.isRequired,
 };
 
 export const TodoItemTypes = {
@@ -46,7 +46,7 @@ export const TodoItemTypes = {
   title: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   onDeleted: PropTypes.func.isRequired,
-  onchangeCurrentTask: PropTypes.func.isRequired,
+  onChangeCurrentTask: PropTypes.func.isRequired,
 };
 
 export const TodosFilterTypes = {
