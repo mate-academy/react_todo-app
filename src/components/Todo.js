@@ -72,15 +72,9 @@ class Todo extends React.Component {
     this.setState(previous => ({
       tasks: previous.tasks.map(task => ({
         ...task,
-        completed: !task.completed,
+        completed: check.checked,
       })),
     }));
-
-    setTimeout(() => {
-      if (check.checked) {
-        check.checked = false;
-      }
-    }, 300);
   }
 
   deleteTask = (event) => {
@@ -101,15 +95,22 @@ class Todo extends React.Component {
     this.setState(previous => ({
       tasks: previous.tasks.filter(task => (task.completed === false)),
     }));
+    this.filterAll(event);
   }
 
-  filters = (event, condition, ...classFilter) => {
+  filters = (event, condition) => {
+    let classFilter = [];
+
+    condition === true
+      ? classFilter = ['', '', 'selected']
+      : classFilter = ['', 'selected', ''];
+
     event.preventDefault();
     this.setState(previous => ({
       filteredTasks: previous
         .tasks
         .filter(task => (task.completed === condition)),
-      filterClass: [...classFilter],
+      filterClass: classFilter,
     }));
   }
 
@@ -141,16 +142,16 @@ class Todo extends React.Component {
         <Main
           tasks={displayTasks}
           completedChange={this.completedChange}
-          deleteTask={this.deleteTask}
           completedAll={this.completedAll}
+          deleteTask={this.deleteTask}
         />
 
         <Footer
+          deleteCompleted={this.deleteCompleted}
           filterClass={this.state.filterClass}
           filterAll={this.filterAll}
           filters={this.filters}
           tasks={this.state.tasks}
-          deleteCompleted={this.deleteCompleted}
         />
 
       </section>

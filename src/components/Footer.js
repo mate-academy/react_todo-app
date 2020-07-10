@@ -40,7 +40,7 @@ const Footer = ({ filterClass,
           <a
             href="/active"
             className={filterClass[1]}
-            onClick={event => filters(event, false, '', 'selected', '')}
+            onClick={event => filters(event, false)}
           >
             Active
           </a>
@@ -50,7 +50,7 @@ const Footer = ({ filterClass,
           <a
             href="/completed"
             className={filterClass[2]}
-            onClick={event => filters(event, true, '', '', 'selected')}
+            onClick={event => filters(event, true)}
           >
             Completed
           </a>
