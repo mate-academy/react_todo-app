@@ -14,7 +14,7 @@ class Edit extends React.PureComponent {
 
   closeEdit = (event) => {
     if (event.key === 'Enter') {
-      this.props.editTodo(this.state.editTitle, this.props.id);
+      this.props.editTodo(this.state.editTitle.trim(), this.props.id);
       this.props.offEdit();
     }
 
@@ -28,7 +28,7 @@ class Edit extends React.PureComponent {
   }
 
   saveEdit = () => {
-    this.props.editTodo(this.state.editTitle, this.props.id);
+    this.props.editTodo(this.state.editTitle.trim(), this.props.id);
     this.props.offEdit();
   }
 

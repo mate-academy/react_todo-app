@@ -27,7 +27,7 @@ class App extends React.Component {
         [
           ...state.todos,
           {
-            title: value,
+            title: value.trim(),
             id: state.todoNumber,
             completed: false,
           },
