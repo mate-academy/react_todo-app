@@ -63,6 +63,8 @@ class Todo extends React.Component {
 
         return task;
       }),
+      filteredTasks: null,
+      filterClass: ['selected', '', ''],
     }));
   }
 
