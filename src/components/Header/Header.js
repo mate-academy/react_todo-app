@@ -9,8 +9,7 @@ export class Header extends Component {
 
   handleChange = (event) => {
     this.setState({
-      // попробовать разные варианты регулярок
-      input: event.target.value.replace(/[^\wА-Яа-я\s]|^\s+$/g, ''),
+      input: event.target.value.replace(/[^\w\s]|^\s+$/g, ''),
     });
   }
 
@@ -22,7 +21,7 @@ export class Header extends Component {
       const todo = ({
         title: input,
         id,
-        isCompleted: false,
+        completed: false,
       });
 
       addTodo(todo);
@@ -36,7 +35,7 @@ export class Header extends Component {
 
   render() {
     return (
-      <header className="header">
+      <header>
         <h1>TODOS</h1>
         <input
           className="new-todo"

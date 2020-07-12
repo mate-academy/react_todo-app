@@ -6,7 +6,7 @@ import { todoShape } from '../Shapes';
 export const Footer = ({ todoList, todoListCopy, getTodos }) => {
   const showActiveTodos = () => {
     const uncompletedTodos = todoList
-      .filter(todo => todo.isCompleted === false).length;
+      .filter(todo => todo.completed === false).length;
 
     if (!uncompletedTodos) {
       return '';
@@ -19,9 +19,9 @@ export const Footer = ({ todoList, todoListCopy, getTodos }) => {
     event.preventDefault();
 
     const todos = todoList
-      .filter(todo => todo.isCompleted === false);
+      .filter(todo => todo.completed === false);
     const todosCopy = todoListCopy
-      .filter(todo => todo.isCompleted === false);
+      .filter(todo => todo.completed === false);
 
     getTodos(todos, todosCopy);
   };
