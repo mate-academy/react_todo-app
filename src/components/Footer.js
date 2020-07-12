@@ -30,7 +30,10 @@ const Footer = ({ filterClass,
           <a
             href="/"
             className={filterClass[0]}
-            onClick={event => filterAll(event)}
+            onClick={(event) => {
+              event.preventDefault();
+              filterAll();
+            }}
           >
             All
           </a>

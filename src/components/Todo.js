@@ -63,9 +63,8 @@ class Todo extends React.Component {
 
         return task;
       }),
-      filteredTasks: null,
-      filterClass: ['selected', '', ''],
     }));
+    this.filterAll();
   }
 
   completedAll = (event) => {
@@ -93,11 +92,11 @@ class Todo extends React.Component {
     }));
   }
 
-  deleteCompleted = (event) => {
+  deleteCompleted = () => {
     this.setState(previous => ({
       tasks: previous.tasks.filter(task => (task.completed === false)),
     }));
-    this.filterAll(event);
+    this.filterAll();
   }
 
   filters = (event, condition) => {
@@ -109,15 +108,13 @@ class Todo extends React.Component {
 
     event.preventDefault();
     this.setState(previous => ({
-      filteredTasks: previous
-        .tasks
+      filteredTasks: previous.tasks
         .filter(task => (task.completed === condition)),
       filterClass: classFilter,
     }));
   }
 
-  filterAll = (event) => {
-    event.preventDefault();
+  filterAll = () => {
     this.setState(() => ({
       filteredTasks: null,
       filterClass: ['selected', '', ''],
