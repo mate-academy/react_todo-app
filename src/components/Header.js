@@ -9,7 +9,7 @@ export class Header extends React.Component {
 
     onChange = event => (
       this.setState({
-        inputValue: event.target.value.replace(/[^\w\s]|^\s+$/g, ''),
+        inputValue: event.target.value.replace(/[^\wА-Яа-я\s]|^\s+$/g, ''),
       })
     )
 
