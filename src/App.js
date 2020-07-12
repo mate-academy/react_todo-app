@@ -1,85 +1,82 @@
 import React from 'react';
+import { Header } from './components/Header/Header';
+import { Main } from './components/Main/Main';
+import { Footer } from './components/Footer/Footer';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+class App extends React.Component {
+  state = {
+    todoList: [],
+    todoListCopy: [],
+  }
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
+  addTodo = (todo) => {
+    if (!todo.title.length) {
+      return;
+    }
+
+    this.setState(prevState => ({
+      todoList: [...prevState.todoList, todo],
+      todoListCopy: [...prevState.todoListCopy, todo],
+    }));
+  }
+
+  isAllTodoToggle = () => {
+    this.setState((prevState) => {
+      if (prevState.todoList.some(todo => todo.isCompleted === false)) {
+        const items = prevState.todoList.map((item) => {
+          const currentItem = item;
+
+          currentItem.isCompleted = true;
+
+          return currentItem;
+        });
+
+        return {
+          todoList: items,
+          todoListCopy: items,
+        };
+      }
+
+      const items = prevState.todoList.map((item) => {
+        const currentItem = item;
+
+        currentItem.isCompleted = false;
+
+        return currentItem;
+      });
+
+      return {
+        todoList: items,
+        todoListCopy: items,
+      };
+    });
+  }
+
+  getTodos = (todos, todosCopy) => {
+    this.setState({
+      todoListCopy: todosCopy,
+      todoList: todos,
+    });
+  }
+
+  render() {
+    return (
+      <section className="todoapp">
+        <Header addTodo={this.addTodo} />
+        <Main
+          todoList={this.state.todoList}
+          todoListCopy={this.state.todoListCopy}
+          isAllTodoToggle={this.isAllTodoToggle}
+          getTodos={this.getTodos}
         />
-      </header>
-
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <Footer
+          todoList={this.state.todoList}
+          todoListCopy={this.state.todoListCopy}
+          getTodos={this.getTodos}
+        />
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
