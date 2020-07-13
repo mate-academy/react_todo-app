@@ -128,11 +128,12 @@ body {
 }
 
 .toggle-all + label {
+  z-index: 1;
+  cursor: pointer;
   width: 60px;
   height: 34px;
   font-size: 0;
   position: absolute;
-  top: -52px;
   left: -13px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
@@ -302,7 +303,7 @@ body {
   display: inline;
 }
 
-.filters li a {
+.filters li button {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
@@ -311,11 +312,11 @@ body {
   border-radius: 3px;
 }
 
-.filters li a:hover {
+.filters li button:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.filters li button.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
