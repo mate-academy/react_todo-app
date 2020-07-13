@@ -1,3 +1,3 @@
 export const addHighLight = (index, checkBoxId) => (
-  checkBoxId.get(index) ? 'completed' : ''
+  checkBoxId[index] === true ? 'completed' : ''
 );

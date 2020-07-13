@@ -6,10 +6,17 @@ import { TodoList } from './components/TodoList/TodoList';
 class App extends React.Component {
   state = {
     task: '',
-    dynamicList: [],
-    isSubmitted: false,
-    checkBoxId: new Map(),
+    dynamicList: JSON.parse(localStorage.getItem('dynamicList')) || [],
+    checkBoxId: JSON.parse(localStorage.getItem('checkBoxId')) || {},
     isTouched: false,
+  }
+
+  componentDidUpdate() {
+    const { dynamicList, checkBoxId } = this.state;
+
+    localStorage.setItem('dynamicList', JSON.stringify(dynamicList));
+
+    localStorage.setItem('checkBoxId', JSON.stringify(checkBoxId));
   }
 
   handleAddTask = (event) => {
@@ -26,21 +33,23 @@ class App extends React.Component {
         id: uuid(),
       }],
       task: '',
-      isSubmitted: true,
     }));
   }
 
   handleChecked = (id, event) => {
     this.setState(prevState => ({
-      checkBoxId: prevState.checkBoxId.set(id, event),
+      checkBoxId: {
+        ...prevState.checkBoxId,
+        [id]: event,
+      },
     }));
   }
 
   handleClearCompleted = () => {
     this.setState(prevState => ({
       dynamicList: prevState.dynamicList
-        .filter(task => !prevState.checkBoxId.get(task.id)),
-      checkBoxId: new Map(),
+        .filter(task => !prevState.checkBoxId[task.id] === true),
+      checkBoxId: {},
     }));
   }
 
@@ -49,7 +58,7 @@ class App extends React.Component {
       dynamicList: prevState.dynamicList.filter(task => task.id !== id),
     }));
 
-    return this.state.checkBoxId.delete(id);
+    delete this.state.checkBoxId[id];
   }
 
   handleMarkAll = () => {
@@ -59,12 +68,15 @@ class App extends React.Component {
       if (this.state.isTouched === true) {
         this.state.dynamicList.forEach((currentValue) => {
           this.setState(prevState => ({
-            checkBoxId: prevState.checkBoxId.set(currentValue.id, true),
+            checkBoxId: {
+              ...prevState.checkBoxId,
+              [currentValue.id]: true,
+            },
           }));
         });
       } else {
         this.setState({
-          checkBoxId: new Map(),
+          checkBoxId: {},
         });
       }
     });
@@ -74,7 +86,6 @@ class App extends React.Component {
     const {
       task,
       dynamicList,
-      isSubmitted,
       checkBoxId,
       isTouched,
     } = this.state;
@@ -93,7 +104,6 @@ class App extends React.Component {
           isTouched={isTouched}
           handleMarkAll={this.handleMarkAll}
           handleClearTask={this.handleClearTask}
-          isSubmitted={isSubmitted}
           handleClearCompleted={this.handleClearCompleted}
         />
       </section>

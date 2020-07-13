@@ -1,7 +1,6 @@
 import React from 'react';
-import { uuid } from 'uuidv4';
-import PropTypes from 'prop-types';
 import { TodoFooter } from '../TodoFooter/TodoFooter';
+import { TodoListShape } from '../Shapes/TodoListShape';
 import { addHighLight } from '../Helpers/addHighlight';
 
 export class TodoList extends React.Component {
@@ -10,14 +9,6 @@ export class TodoList extends React.Component {
       onToggle: 'default',
       value: 0,
     };
-
-    // componentDidUpdate(prevProps) {
-    //   if (prevProps.generalList !== this.props.generalList) {
-    //     this.setState({
-    //       defaultList: this.props.generalList,
-    //     });
-    //   }
-    // }
 
     static getDerivedStateFromProps(props, state) {
       if (props.generalList !== state.defaultList) {
@@ -53,7 +44,6 @@ export class TodoList extends React.Component {
     render() {
       const { onToggle, defaultList, value } = this.state;
       const {
-        isSubmitted,
         checkBoxId,
         handleChecked,
         handleClearCompleted,
@@ -61,49 +51,23 @@ export class TodoList extends React.Component {
         handleMarkAll,
         isTouched,
       } = this.props;
-      const completedTasks = Array.from(checkBoxId.values())
+      const completedTasks = Array.from(Object.values(checkBoxId))
         .filter(task => task !== false).length;
       const remainedTasks = defaultList.length - completedTasks;
+      let updatedList = [];
 
-      const taskStructure = (id, task) => (
-        <li className={addHighLight(id, checkBoxId)} key={uuid()}>
-          <div className="view">
-            <input
-              type="checkbox"
-              className="toggle"
-              id={`todo-${id}`}
-              checked={checkBoxId.get(id) === true}
-              onChange={event => handleChecked(id, event.target.checked)}
-            />
-            <label>{task}</label>
-            <button
-              type="button"
-              onClick={() => handleClearTask(id)}
-              className="destroy"
-            />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-      );
-
-      const listDisplaying = (toggle) => {
-        switch (toggle) {
-          case 'active':
-            return defaultList.filter(task => !checkBoxId.get(task.id))
-              .map(task => (
-                taskStructure(task.id, task.task)
-              ));
-          case 'completed':
-            return defaultList.filter(task => checkBoxId.get(task.id))
-              .map(task => (
-                taskStructure(task.id, task.task)
-              ));
-          default:
-            return defaultList.map(task => (
-              taskStructure(task.id, task.task)
-            ));
-        }
-      };
+      switch (onToggle) {
+        case 'active':
+          updatedList = defaultList
+            .filter(task => !checkBoxId[task.id] === true);
+          break;
+        case 'completed':
+          updatedList = defaultList
+            .filter(task => checkBoxId[task.id] === true);
+          break;
+        default:
+          updatedList = defaultList;
+      }
 
       return (
         <>
@@ -116,14 +80,38 @@ export class TodoList extends React.Component {
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
             <ul className="todo-list">
-              {listDisplaying(onToggle)}
+              {updatedList.map(todoItem => (
+                <li
+                  className={addHighLight(todoItem.id, checkBoxId)}
+                  key={todoItem.id}
+                >
+                  <div className="view">
+                    <input
+                      type="checkbox"
+                      className="toggle"
+                      id={`todo-${todoItem.id}`}
+                      checked={checkBoxId[todoItem.id] === true}
+                      onChange={(event) => {
+                        handleChecked(todoItem.id, event.target.checked);
+                      }}
+                    />
+                    <label>{todoItem.task}</label>
+                    <button
+                      type="button"
+                      onClick={() => handleClearTask(todoItem.id)}
+                      className="destroy"
+                    />
+                  </div>
+                  <input type="text" className="edit" />
+                </li>
+              ))}
             </ul>
           </section>
           <TodoFooter
             remainedTasks={remainedTasks}
             value={value}
+            defaultList={defaultList}
             handleClearCompleted={handleClearCompleted}
-            isSubmitted={isSubmitted}
             handleShowActive={this.handleShowActive}
             handleShowCompleted={this.handleShowCompleted}
             handleShowAll={this.handleShowAll}
@@ -133,16 +121,4 @@ export class TodoList extends React.Component {
     }
 }
 
-TodoList.propTypes = {
-  generalList: PropTypes.arrayOf(PropTypes.shape({
-    task: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  })).isRequired,
-  isSubmitted: PropTypes.bool.isRequired,
-  checkBoxId: PropTypes.objectOf(PropTypes.any).isRequired,
-  handleChecked: PropTypes.func.isRequired,
-  handleClearCompleted: PropTypes.func.isRequired,
-  handleClearTask: PropTypes.func.isRequired,
-  handleMarkAll: PropTypes.func.isRequired,
-  isTouched: PropTypes.bool.isRequired,
-};
+TodoList.propTypes = TodoListShape.isRequired;

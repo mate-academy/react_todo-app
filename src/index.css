@@ -206,7 +206,6 @@ body {
   display: block;
   line-height: 1.2;
   transition: color 0.4s;
-  transition-delay: 4s;
 }
 
 .todo-list li.completed label {

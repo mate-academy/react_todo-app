@@ -1,18 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { uuid } from 'uuidv4';
+import { TodoFooterShape } from '../Shapes/TodoFooterShape';
 
 export const TodoFooter = (props) => {
   const {
     remainedTasks,
-    isSubmitted,
     handleShowActive,
     handleShowCompleted,
     handleShowAll,
     handleClearCompleted,
     value,
+    defaultList,
   } = props;
-  const footerDisplaying = isSubmitted
+  const footerDisplaying = defaultList.length
     ? { display: 'block' } : { display: 'none' };
 
   const buttonsList = [
@@ -64,12 +64,4 @@ export const TodoFooter = (props) => {
   );
 };
 
-TodoFooter.propTypes = {
-  remainedTasks: PropTypes.number.isRequired,
-  isSubmitted: PropTypes.bool.isRequired,
-  handleShowActive: PropTypes.func.isRequired,
-  handleShowCompleted: PropTypes.func.isRequired,
-  handleShowAll: PropTypes.func.isRequired,
-  handleClearCompleted: PropTypes.func.isRequired,
-  value: PropTypes.number.isRequired,
-};
+TodoFooter.propTypes = TodoFooterShape.isRequired;
