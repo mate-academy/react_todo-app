@@ -3,12 +3,18 @@ hr {
   border: 0;
   border-top: 1px dashed #c5c5c5;
   border-bottom: 1px dashed #f7f7f7;
+
 }
 
 .learn a {
   font-weight: normal;
   text-decoration: none;
   color: #b83f45;
+}
+
+.quote footer a {
+  margin-left: 5px;
+  vertical-align: middle;
 }
 
 .learn a:hover {
@@ -96,11 +102,6 @@ hr {
   border-radius: 3px;
 }
 
-.quote footer a {
-  margin-left: 5px;
-  vertical-align: middle;
-}
-
 .speech-bubble {
   position: relative;
   padding: 10px;
@@ -127,6 +128,18 @@ hr {
   background-color: rgba(255, 255, 255, 0.6);
   transition-property: left;
   transition-duration: 500ms;
+}
+
+label:hover {
+  cursor: pointer;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+input:hover {
+  cursor: pointer;
 }
 
 @media (min-width: 899px) {
