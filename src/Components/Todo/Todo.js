@@ -39,7 +39,7 @@ export class Todo extends Component {
       return;
     }
 
-    this.updateTodos(value, id);
+    this.updateTodos(chackedValue, id);
   }
 
   handleKeyUp = (event) => {
@@ -48,7 +48,7 @@ export class Todo extends Component {
     const chackedValue = this.#replaceSpace(value);
 
     if (event.key === 'Enter' && chackedValue) {
-      this.updateTodos(value, id);
+      this.updateTodos(chackedValue, id);
     } else if (event.key === 'Escape'
     || (event.key === 'Enter' && !chackedValue)) {
       this.setState({
