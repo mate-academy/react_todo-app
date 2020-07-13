@@ -47,8 +47,9 @@ class App extends React.Component {
   handleClearTask = (id) => {
     this.setState(prevState => ({
       dynamicList: prevState.dynamicList.filter(task => task.id !== id),
-      checkBoxId: new Map(),
     }));
+
+    return this.state.checkBoxId.delete(id);
   }
 
   handleMarkAll = () => {
