@@ -102,52 +102,56 @@ class App extends React.Component {
           />
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${todos.filter(todo => !todo.isCompleted).length} items left`}
-          </span>
+        {todos.length > 0
+        && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${todos.filter(todo => !todo.isCompleted).length} items left`}
+            </span>
 
-          <ul className="filters">
-            <li>
-              <button
-                type="button"
-                className="selected"
-                name="All"
-                onClick={this.changeFilterType}
-              >
-                All
-              </button>
-            </li>
+            <ul className="filters">
+              <li>
+                <button
+                  type="button"
+                  className="selected"
+                  name="All"
+                  onClick={this.changeFilterType}
+                >
+                  All
+                </button>
+              </li>
 
-            <li>
-              <button
-                type="button"
-                name="Active"
-                onClick={this.changeFilterType}
-              >
-                Active
-              </button>
-            </li>
+              <li>
+                <button
+                  type="button"
+                  name="Active"
+                  onClick={this.changeFilterType}
+                >
+                  Active
+                </button>
+              </li>
 
-            <li>
-              <button
-                type="button"
-                name="Completed"
-                onClick={this.changeFilterType}
-              >
-                Completed
-              </button>
-            </li>
-          </ul>
+              <li>
+                <button
+                  type="button"
+                  name="Completed"
+                  onClick={this.changeFilterType}
+                >
+                  Completed
+                </button>
+              </li>
+            </ul>
 
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={this.onClearCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={this.onClearCompleted}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )
+        }
       </section>
     );
   }
