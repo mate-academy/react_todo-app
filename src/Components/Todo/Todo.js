@@ -16,27 +16,41 @@ export class Todo extends Component {
   }
 
   onChangeTodo = (event) => {
-    let { value } = event.target;
+    const { value } = event.target;
 
-    value = value.replace(/\s+/g, ' ').replace(/^\s+$/, '');
+    const chackedValue = this.#replaceSpace(value);
 
     this.setState({
-      value,
+      value: chackedValue,
     });
   }
 
   onBlur = (event) => {
     const { value, id } = event.target;
 
+    const chackedValue = this.#replaceSpace(value);
+
+    if (!chackedValue) {
+      this.setState({
+        value: this.props.todo.title,
+        isEdit: false,
+      });
+
+      return;
+    }
+
     this.updateTodos(value, id);
   }
 
-  handleKeyPress = (event) => {
+  handleKeyUp = (event) => {
     const { value, id } = event.target;
 
-    if (event.key === 'Enter') {
+    const chackedValue = this.#replaceSpace(value);
+
+    if (event.key === 'Enter' && chackedValue) {
       this.updateTodos(value, id);
-    } else if (event.key === 'Escape') {
+    } else if (event.key === 'Escape'
+    || (event.key === 'Enter' && !chackedValue)) {
       this.setState({
         value: this.props.todo.title,
         isEdit: false,
@@ -51,6 +65,8 @@ export class Todo extends Component {
       isEdit: false,
     });
   }
+
+  #replaceSpace = value => value.replace(/\s+/g, ' ').replace(/^\s+$/, '')
 
   render() {
     const {
@@ -97,7 +113,7 @@ export class Todo extends Component {
           value={value}
           onBlur={this.onBlur}
           onChange={this.onChangeTodo}
-          onKeyUp={this.handleKeyPress}
+          onKeyUp={this.handleKeyUp}
         />
       </li>
     );
