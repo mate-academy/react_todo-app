@@ -25,25 +25,23 @@ function App() {
 
   const [filter, setFilter] = useState('All');
 
-  function todoToggle(id) {
-    return setTodos(
-      prev => prev.map((todo) => {
-        const { completed } = todo;
+  const todoToggle = id => setTodos(
+    prev => prev.map((todo) => {
+      const { completed } = todo;
 
-        if (todo.id === id) {
-          return {
-            ...todo,
-            completed: !completed,
-          };
-        }
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !completed,
+        };
+      }
 
-        return todo;
-      }),
-    );
-  }
+      return todo;
+    }),
+  );
 
-  function toggleAllTodos(todosItems) {
-    return todosItems.some(todo => todo.completed === false)
+  const toggleAllTodos = todosItems => (
+    todosItems.some(todo => todo.completed === false)
       ? setTodos(todosItems.map(todo => ({
         ...todo,
         completed: true,
@@ -51,34 +49,30 @@ function App() {
       : setTodos(todosItems.map(todo => ({
         ...todo,
         completed: false,
-      })));
-  }
+      })))
+  );
 
-  function addTodo(value) {
-    return setTodos(
-      [
-        ...todos,
-        {
-          id: Date.now(),
-          title: value,
-          completed: false,
-          filter: 'All',
-        },
-      ],
-    );
-  }
+  const addTodo = value => setTodos(
+    [
+      ...todos,
+      {
+        id: Date.now(),
+        title: value,
+        completed: false,
+        filter: 'All',
+      },
+    ],
+  );
 
-  function removeTodo(id) {
-    return setTodos(prev => prev.filter(todo => todo.id !== id));
-  }
+  const removeTodo = id => setTodos(
+    prev => prev.filter(todo => todo.id !== id),
+  );
 
-  function clearedCompleted() {
-    return setTodos(prev => prev.filter(todo => todo.completed === false));
-  }
+  const clearedCompleted = () => setTodos(
+    prev => prev.filter(todo => todo.completed === false),
+  );
 
-  function addFilter(name) {
-    return setFilter(name);
-  }
+  const addFilter = name => setFilter(name);
 
   let allTodos = [];
 
