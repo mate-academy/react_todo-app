@@ -25,6 +25,10 @@ export class AddTodo extends React.Component {
       value: value.trim(),
     };
 
+    if ((!value.trim())) {
+      return;
+    }
+
     addTodo(todo);
     this.setState({
       value: '',

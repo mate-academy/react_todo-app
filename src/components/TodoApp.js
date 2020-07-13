@@ -11,17 +11,28 @@ export class TodoApp extends React.Component {
   };
 
   componentDidMount() {
-    const todos = JSON.parse(localStorage.getItem('TodoList')) || [];
+    const todos = JSON.parse(
+      localStorage.getItem('TodoList'),
+    ) || [];
+    const isAllTodoCompleted = JSON.parse(
+      localStorage.getItem('TodoCompleteness'),
+    ) || false;
 
     this.setState({
       todos,
+      isAllTodoCompleted,
     });
   }
 
   componentDidUpdate() {
-    const { todos } = this.state;
+    const { todos, isAllTodoCompleted } = this.state;
 
-    localStorage.setItem('TodoList', JSON.stringify(todos));
+    localStorage.setItem(
+      'TodoList', JSON.stringify(todos),
+    );
+    localStorage.setItem(
+      'TodoCompleteness', JSON.stringify(isAllTodoCompleted),
+    );
   }
 
   handleTodoEdit = (id, value) => {
@@ -48,14 +59,7 @@ export class TodoApp extends React.Component {
   }
 
   todoFilterByFilterName = (filterName) => {
-    const { todos, isAllTodoCompleted } = this.state;
-
-    if (isAllTodoCompleted) {
-      return todos.map(todo => ({
-        ...todo,
-        isCompleted: true,
-      }));
-    }
+    const { todos } = this.state;
 
     if (filterName === 'All') {
       return todos;
@@ -111,6 +115,10 @@ export class TodoApp extends React.Component {
   handleIsAllTodoCompleted = () => {
     this.setState(prevState => ({
       isAllTodoCompleted: !prevState.isAllTodoCompleted,
+      todos: prevState.todos.map(todo => ({
+        ...todo,
+        isCompleted: !prevState.isAllTodoCompleted,
+      })),
     }));
   }
 
@@ -122,7 +130,7 @@ export class TodoApp extends React.Component {
       todoFilterByFilterName,
       handleIsAllTodoCompleted,
       clearCompletedTodos, handleTodoEdit } = this;
-    const { todosOnView, todos } = this.state;
+    const { todosOnView, todos, isAllTodoCompleted } = this.state;
     const tasks = todoFilterByFilterName(todosOnView);
     const UnCompletedTodosLeft = todos.filter(
       ({ isCompleted }) => isCompleted === false,
@@ -132,7 +140,8 @@ export class TodoApp extends React.Component {
       <section className="todoapp">
         <Header
           addTodo={handleNewToDo}
-          onClick={handleIsAllTodoCompleted}
+          onChange={handleIsAllTodoCompleted}
+          isChecked={isAllTodoCompleted}
         />
 
         <section className="main">
@@ -144,7 +153,7 @@ export class TodoApp extends React.Component {
           />
         </section>
 
-        {!!UnCompletedTodosLeft && (
+        {!!todos.length && (
           <footer className="footer">
             <span className="todo-count">
               {`${UnCompletedTodosLeft} items left`}

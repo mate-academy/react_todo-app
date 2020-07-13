@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { AddTodo } from './AddTodo';
 
 export const Header = (props) => {
-  const { onClick, addTodo } = props;
+  const { addTodo, isChecked, onChange } = props;
 
   return (
     <header className="header">
@@ -13,13 +13,17 @@ export const Header = (props) => {
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
-        onClick={onClick}
+        onChange={onChange}
+        checked={isChecked}
       />
       <label
         htmlFor="toggle-all"
-        title="Mark all as complete"
+        title={isChecked
+          ? 'Mark all as active'
+          : 'Mark all as complete'
+        }
       >
-        Mark all as complete
+        Mark all
       </label>
 
       <AddTodo addTodo={addTodo} />
@@ -28,6 +32,7 @@ export const Header = (props) => {
 };
 
 Header.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   addTodo: PropTypes.func.isRequired,
+  isChecked: PropTypes.bool.isRequired,
 };
