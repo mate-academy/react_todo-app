@@ -1,0 +1,13 @@
+:focus {
+  outline: 0;
+  background-color: rgb(243, 255, 255);
+}
+
+.clear-completed:focus,
+.filters :focus {
+  border-bottom: rgba(173, 70, 70, 0.1) 1px solid;
+}
+
+.view :hover {
+  cursor: pointer;
+}
