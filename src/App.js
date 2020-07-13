@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
@@ -14,7 +13,7 @@ export class App extends React.Component {
   };
 
   componentDidMount() {
-    const todosFromStorage = JSON.parse(localStorage.getItem('state')) !== null
+    const todosFromStorage = localStorage.getItem('state') !== null
       ? JSON.parse(localStorage.getItem('state')).todos
       : [];
 
@@ -24,10 +23,21 @@ export class App extends React.Component {
   }
 
   addNewTodo = (newTodo) => {
-    this.setState(prevState => ({
-      todos: [...prevState.todos, newTodo],
-    }),
-    () => localStorage.setItem('state', JSON.stringify(this.state)));
+    const newState = {
+      todos: [...JSON.parse(localStorage.getItem('state')).todos, newTodo],
+      isAllSelected: this.state.isAllSelected,
+      isActiveSelected: this.state.isActiveSelected,
+      isCompletedSelected: this.state.isCompletedSelected,
+    };
+
+    if (this.state.isCompletedSelected) {
+      localStorage.setItem('state', JSON.stringify(newState));
+    } else {
+      this.setState(prevState => ({
+        todos: [...prevState.todos, newTodo],
+      }),
+      () => localStorage.setItem('state', JSON.stringify(this.state)));
+    }
   }
 
   handleCheck = (id) => {
@@ -81,10 +91,20 @@ export class App extends React.Component {
   }
 
   clearCompleted = () => {
-    this.setState(prevState => ({
-      todos: JSON.parse(localStorage.getItem('state')).todos.filter(todo => !todo.completed),
-    }),
-    () => localStorage.setItem('state', JSON.stringify(this.state)));
+    const todosAfterClear = JSON.parse(localStorage.getItem('state')).todos
+      .filter(todo => !todo.completed);
+
+    const newState = {
+      todos: todosAfterClear,
+      isAllSelected: this.state.isAllSelected,
+      isActiveSelected: this.state.isActiveSelected,
+      isCompletedSelected: this.state.isCompletedSelected,
+    };
+
+    this.setState({
+      todos: [],
+    },
+    () => localStorage.setItem('state', JSON.stringify(newState)));
   }
 
   handleFilter = (callback, event) => {
@@ -114,6 +134,21 @@ export class App extends React.Component {
     });
   }
 
+  saveEditedTodo = (editedTodo) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        let todoCopy = { ...todo };
+
+        if (todoCopy.id === editedTodo.id) {
+          todoCopy = { ...editedTodo };
+        }
+
+        return todoCopy;
+      }),
+    }),
+    () => localStorage.setItem('state', JSON.stringify(this.state)));
+  }
+
   render() {
     return (
       <section className="todoapp">
@@ -137,6 +172,7 @@ export class App extends React.Component {
             todos={this.state.todos}
             handleCheck={this.handleCheck}
             handleDelete={this.handleDelete}
+            saveEditedTodo={this.saveEditedTodo}
           />
         </section>
 
@@ -144,8 +180,10 @@ export class App extends React.Component {
           <TodoCount
             todoLength={
               this.state.todos
-                ? this.state.todos.filter(todo => !todo.completed).length
-                : 0}
+                ? JSON.parse(localStorage.getItem('state')).todos
+                  .filter(todo => !todo.completed).length
+                : 0
+            }
           />
 
           <TodosFilter
