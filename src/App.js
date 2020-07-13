@@ -1,61 +1,103 @@
 import React from 'react';
+import TodoHeader from './TodoHeader';
+import TodoFooter from './TodoFooter';
+import Content from './Content';
 
-function App() {
-  return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos App</h1>
+const filters = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+};
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus=""
+class App extends React.Component {
+  state = {
+    todos: [],
+    completed: false,
+    filter: filters.all,
+  };
+
+  addTodo = (todo) => {
+    this.setState(prevState => ({
+      todos: [...prevState.todos, todo],
+    }));
+  };
+
+  toggleTodoCompleted = (id) => {
+    this.setState(({ todos }) => (
+      { todos: todos.map(item => (
+        item.id === id
+          ? {
+            ...item, completed: !item.completed,
+          } : item)) }));
+
+    this.setState(({ todos }) => (
+      { completed: todos.every(item => item.completed) }
+    ));
+  };
+
+  deleteTodo = (id) => {
+    this.setState(({ todos }) => (
+      { todos: todos.filter(item => item.id !== id) }
+    ));
+  };
+
+  markAllTodo = () => {
+    this.setState(({ todos, completed }) => ({
+      completed: !completed,
+      todos: todos
+        .map(item => ({
+          ...item, completed: !completed,
+        })),
+    }));
+  };
+
+  clearCompleted= () => {
+    this.setState(({ todos }) => (
+      { todos: todos.filter(item => !item.completed) }
+    ));
+  };
+
+  setFilter = (filter) => {
+    this.setState({ filter: filters[filter] });
+  };
+
+  render() {
+    const { todos, completed, filter } = this.state;
+    const filteredTodos = (filterType) => {
+      switch (filterType) {
+        case 'active':
+          return todos.filter(todo => !todo.completed);
+        case 'completed':
+          return todos.filter(todo => todo.completed);
+        default:
+          return todos;
+      }
+    };
+
+    const visibleTodos = filteredTodos(filter);
+
+    return (
+      <section className="todoapp">
+        <TodoHeader addTodo={this.addTodo} />
+        <Content
+          todos={visibleTodos}
+          completed={completed}
+          onCheck={this.toggleTodoCompleted}
+          onDelete={this.deleteTodo}
+          completeAll={this.markAllTodo}
+          todosLength={todos.length}
         />
-      </header>
-
-      <section className="main" style={{ display: 'block' }}>
-        <input id="toggle-all" className="toggle-all" type="checkbox" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sdfsdfsdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>dsfgsdfgdsrg</label>
-              <button className="destroy"></button></div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sddfgdfgdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-        </ul>
+        {todos.length > 0 && (
+          <TodoFooter
+            todos={todos}
+            currentFilter={filter}
+            setFilter={this.setFilter}
+            onClearTodos={this.clearCompleted}
+          />
+        )}
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count"><strong>3</strong> items left</span>
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-        <button className="clear-completed" style={{ display: 'block' }}></button>
-      </footer>
-    </section>
-  );
+    );
+  }
 }
 
 export default App;
