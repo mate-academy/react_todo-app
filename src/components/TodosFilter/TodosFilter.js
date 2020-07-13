@@ -56,7 +56,7 @@ export class TodosFilter extends Component {
             href="#/active"
             id="Active"
             onFocus={this.setActiveFilter}
-            onClick={this.resetFilter}
+            onClick={this.filterTodos}
           >
             Active
           </a>
@@ -71,7 +71,7 @@ export class TodosFilter extends Component {
             href="#/completed"
             id="Completed"
             onFocus={this.setActiveFilter}
-            onClick={this.resetFilter}
+            onClick={this.showCompletedTodos}
           >
             Completed
           </a>
