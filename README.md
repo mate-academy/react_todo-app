@@ -2,7 +2,7 @@
 
 - HTML, CSS
 - JavaScript, React
-- -Linters:
+- Linters:
      - ESLint,
      - StyleLint
 
