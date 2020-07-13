@@ -1,5 +1,5 @@
-# React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://Mishtal-Andrii.github.io/react_todo-app/)
+# React ToDo App[DEMO LINK](https://Mishtal-Andrii.github.io/react_todo-app/)
+- Replace `<your_account>` with your Github username in the
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
