@@ -75,7 +75,7 @@ export class TodoList extends React.Component {
               checked={checkBoxId.get(id) === true}
               onChange={event => handleChecked(id, event.target.checked)}
             />
-            <label htmlFor={`todo-${id}`}>{task}</label>
+            <label>{task}</label>
             <button
               type="button"
               onClick={() => handleClearTask(id)}
@@ -89,12 +89,12 @@ export class TodoList extends React.Component {
       const listDisplaying = (toggle) => {
         switch (toggle) {
           case 'active':
-            return [...defaultList].filter(task => !checkBoxId.get(task.id))
+            return defaultList.filter(task => !checkBoxId.get(task.id))
               .map(task => (
                 taskStructure(task.id, task.task)
               ));
           case 'completed':
-            return [...defaultList].filter(task => checkBoxId.get(task.id))
+            return defaultList.filter(task => checkBoxId.get(task.id))
               .map(task => (
                 taskStructure(task.id, task.task)
               ));
