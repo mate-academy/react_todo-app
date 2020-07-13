@@ -10,14 +10,10 @@ export class App extends React.Component {
   }
 
   deleteTodo = (id) => {
-    this.setState(({ todos }) => {
-      const index = todos.findIndex(todo => todo.id === id);
-
-      return {
-        todos: [...todos.slice(0, index), ...todos.slice(index + 1)],
-      };
-    });
-  };
+    this.setState(prevState => ({
+      todos: prevState.todos.filter(todo => todo.id !== id),
+    }));
+  }
 
   addNewTodo = (text) => {
     if (text.trim().length > 0) {
@@ -35,18 +31,12 @@ export class App extends React.Component {
     }
   }
 
-  toggleProperty = (arr, id) => {
-    const index = arr.findIndex(todo => todo.id === id);
-
-    return [
-      ...arr.slice(0, index),
-      {
-        ...arr[index],
-        completed: !arr[index].completed,
-      },
-      ...arr.slice(index + 1),
-    ];
-  };
+  toggleProperty = (arr, id) => arr.map(item => (item.id === id
+    ? {
+      ...item,
+      completed: !item.completed,
+    }
+    : item));
 
   onToggle = (id) => {
     this.setState(({ todos }) => ({
