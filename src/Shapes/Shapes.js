@@ -13,8 +13,7 @@ export const TodoAppShapes = {
 };
 
 export const AddFormShapes = {
-  onChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
 };
 
 export const TodosFilterShapes = {

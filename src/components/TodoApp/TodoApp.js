@@ -12,11 +12,23 @@ import { CompleteAllCheckbox }
 
 export class TodoApp extends React.Component {
   state = {
-    todos: [...this.props.todos],
+    todos: [],
     allCompleted: this.props.todos.every(todo => (
       todo.isCompleted === true
     )),
     isCompleted: true,
+  }
+
+  componentDidMount() {
+    const localState = JSON.parse(localStorage.getItem('todoApp'));
+
+    if (localState) {
+      this.setState({ ...localState });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('todoApp', JSON.stringify(this.state));
   }
 
   addTodo = (taskTitle) => {
