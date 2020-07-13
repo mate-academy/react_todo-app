@@ -1,11 +1,11 @@
 :focus {
   outline: 0;
-  background-color: rgb(238, 255, 255);
-  border: rgba(175, 47, 47, 0.1) 1px solid;
+  background-color: rgb(243, 255, 255);
 }
 
+.clear-completed:focus,
 .filters :focus {
-  border: rgba(175, 47, 47, 0.1) 1px solid;
+  border-bottom: rgba(173, 70, 70, 0.1) 1px solid;
 }
 
 .view :hover {
