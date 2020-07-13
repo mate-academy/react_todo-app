@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 export const TodosFilter
 = (
@@ -10,7 +11,7 @@ export const TodosFilter
     <li>
       <button
         type="button"
-        className={isAllSelected ? 'selected' : ''}
+        className={classNames({ selected: isAllSelected })}
         onClick={handleFilterAll}
       >
         All
@@ -20,7 +21,7 @@ export const TodosFilter
     <li>
       <button
         type="button"
-        className={isActiveSelected ? 'selected' : ''}
+        className={classNames({ selected: isActiveSelected })}
         onClick={event => handleFilter(todo => !todo.completed, event)}
       >
         Active
@@ -30,7 +31,7 @@ export const TodosFilter
     <li>
       <button
         type="button"
-        className={isCompletedSelected ? 'selected' : ''}
+        className={classNames({ selected: isCompletedSelected })}
         onClick={event => handleFilter(todo => todo.completed, event)}
       >
         Completed

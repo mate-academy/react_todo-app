@@ -51,6 +51,14 @@ export class TodoItem extends React.Component {
     }
   }
 
+  handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      this.setState({
+        isEditing: false,
+      });
+    }
+  }
+
   render() {
     const { todo, onCheck, onDelete } = this.props;
 
@@ -91,6 +99,8 @@ export class TodoItem extends React.Component {
                 className={classNames({ edit: this.state.isEditing })}
                 onChange={event => this.handleChange(event)}
                 onKeyPress={event => this.handleKeyPress(event, todo.id)}
+                onKeyDown={event => this.handleKeyDown(event)}
+                ref={input => input && input.focus()}
               />
             )
             : (
