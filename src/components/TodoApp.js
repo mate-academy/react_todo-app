@@ -10,19 +10,34 @@ export class TodoApp extends React.Component {
     isAllTodoCompleted: false,
   };
 
-  // componentDidMount() {
-  //   const todos = JSON.parse(localStorage.getItem('TodoList'));
-  //   console.log(todos);
-  //   // this.setState({
-  //   //   todos:
-  //   // })
-  // }
+  componentDidMount() {
+    const todos = JSON.parse(localStorage.getItem('TodoList')) || [];
 
-  // componentWillUnmount() {
-  //   const { todos } = this.state;
+    this.setState({
+      todos,
+    });
+  }
 
-  //   localStorage.setItem('TodoList', JSON.stringify(todos));
-  // }
+  componentDidUpdate() {
+    const { todos } = this.state;
+
+    localStorage.setItem('TodoList', JSON.stringify(todos));
+  }
+
+  handleTodoEdit = (id, value) => {
+    this.setState(prevState => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            value,
+          };
+        }
+
+        return todo;
+      }),
+    }));
+  }
 
   clearCompletedTodos = () => {
     this.setState(prevState => ({
@@ -106,14 +121,12 @@ export class TodoApp extends React.Component {
       handleActiveFilter,
       todoFilterByFilterName,
       handleIsAllTodoCompleted,
-      clearCompletedTodos } = this;
+      clearCompletedTodos, handleTodoEdit } = this;
     const { todosOnView, todos } = this.state;
     const tasks = todoFilterByFilterName(todosOnView);
     const UnCompletedTodosLeft = todos.filter(
       ({ isCompleted }) => isCompleted === false,
     ).length;
-
-    localStorage.setItem('TodoList', JSON.stringify(todos));
 
     return (
       <section className="todoapp">
@@ -127,24 +140,27 @@ export class TodoApp extends React.Component {
             items={tasks}
             changeCompleteness={handleIsCompletedTodo}
             destroyTodo={handleDestroy}
+            handleTodoEdit={handleTodoEdit}
           />
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${UnCompletedTodosLeft} items left`}
-          </span>
+        {!!UnCompletedTodosLeft && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${UnCompletedTodosLeft} items left`}
+            </span>
 
-          <Filters selectedFilter={handleActiveFilter} />
+            <Filters selectedFilter={handleActiveFilter} />
 
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={clearCompletedTodos}
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompletedTodos}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </section>
     );
   }
