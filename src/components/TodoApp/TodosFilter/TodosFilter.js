@@ -12,6 +12,7 @@ export const TodosFilter = (props) => {
     activeTodos,
     onFilter,
     filter,
+    onRemoveCompleted,
   } = props;
 
   return (
@@ -52,7 +53,11 @@ export const TodosFilter = (props) => {
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={onRemoveCompleted}
+      >
         Clear completed
       </button>
     </footer>
@@ -63,4 +68,5 @@ TodosFilter.propTypes = {
   activeTodos: PropTypes.number.isRequired,
   onFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
+  onRemoveCompleted: PropTypes.func.isRequired,
 };

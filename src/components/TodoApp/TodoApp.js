@@ -14,6 +14,7 @@ export const TodoApp = (props) => {
     onRemove,
     onStatusAll,
     onFilter,
+    onRemoveCompleted,
   } = props;
 
   return (
@@ -40,6 +41,7 @@ export const TodoApp = (props) => {
         activeTodos={activeTodos}
         onFilter={onFilter}
         filter={filter}
+        onRemoveCompleted={onRemoveCompleted}
       />
     </section>
   );
@@ -58,5 +60,6 @@ TodoApp.propTypes = {
   onRemove: PropTypes.func.isRequired,
   onStatusAll: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
+  onRemoveCompleted: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };

@@ -72,14 +72,21 @@ class App extends React.Component {
       todos: prevState.todos
         .filter(todo => (todo.id !== id)),
     }));
-  }
+  };
 
   onFilter = (criteria) => {
     this.setState(prevState => ({
       ...prevState,
       filter: criteria,
     }));
-  }
+  };
+
+  onRemoveCompleted = () => {
+    this.setState(prevState => ({
+      todos: prevState.todos
+        .filter(todo => (!todo.completed)),
+    }));
+  };
 
   render() {
     const {
@@ -97,6 +104,7 @@ class App extends React.Component {
         onRemove={this.onRemove}
         onStatusAll={this.onTodoStatusAll}
         onFilter={this.onFilter}
+        onRemoveCompleted={this.onRemoveCompleted}
       />
     );
   }
