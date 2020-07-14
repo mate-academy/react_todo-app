@@ -4,13 +4,23 @@ import todosFromServer from './api/todos';
 
 class App extends React.Component {
   state = {
-
+    todos: [],
   }
+
+  componentDidMount() {
+    this.getTodosFromApi();
+  }
+
+  getTodosFromApi = () => {
+    this.setState({
+      todos: todosFromServer,
+    });
+  };
 
   render() {
     return (
       <TodoApp
-        todos={todosFromServer}
+        todos={this.state.todos}
       />
     );
   }

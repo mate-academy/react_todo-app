@@ -14,9 +14,10 @@ export const TodoItem = (props) => {
           type="checkbox"
           className="toggle"
           id={`todo-${todo.id}`}
+          checked={todo.completed}
         />
         <label htmlFor={`todo-${todo.id}`}>
-          {`todo item ${todo.id}`}
+          {todo.title}
         </label>
         <button type="button" className="destroy" />
       </div>
