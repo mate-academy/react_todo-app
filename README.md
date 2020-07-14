@@ -1,4 +1,4 @@
-# React ToDo App with storage
+# React ToDo App
 [DEMO LINK](https://RammsfanHTW.github.io/react_todo-app/)
 
 ## Preview
