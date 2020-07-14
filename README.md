@@ -23,11 +23,3 @@ Below are interactions with the app:
 
 Screenshot:
 ![screenshot](./description/todoapp.png)
-
-Resources:
-- Font: 'helvetica neue'
-- Font sizes to use: 100px, 24px, 14px
-- implement arrow by rotating '❯' symbol
-- Use '✕' symbol to remove TODO item on hover
-- [checked](./public/icons/checked.svg)
-- [unchecked](./public/icons/unchecked.svg)
