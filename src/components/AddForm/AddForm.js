@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { AddFormShapes } from '../../Shapes/Shapes';
 
 export class AddForm extends React.Component {

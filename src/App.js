@@ -1,8 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-
 import { todos as todosFromServer } from './api/api';
-
 import { TodoApp } from './components/TodoApp/TodoApp';
 
 function App() {

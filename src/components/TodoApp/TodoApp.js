@@ -1,9 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-
 import { TodoAppShapes } from '../../Shapes/Shapes';
-
 import { AddForm } from '../AddForm/AddForm';
 import { TodoList } from '../TodoList/TodoList';
 import { TodoMenu } from '../TodoMenu/TodoMenu';
@@ -151,8 +149,8 @@ export class TodoApp extends React.Component {
             )}
           />
         </section>
-        {taskQuantity
-          ? (
+        {!!taskQuantity
+          && (
             <footer className="footer">
               <TodoMenu
                 activeTasks={activeTaskQuantity}
@@ -161,7 +159,6 @@ export class TodoApp extends React.Component {
               />
             </footer>
           )
-          : (<></>)
         }
       </section>
     );

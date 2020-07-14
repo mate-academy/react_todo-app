@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { CompleteAllCheckboxShapes } from '../../Shapes/Shapes';
 
 export const CompleteAllCheckbox = ({ completeAll }) => (

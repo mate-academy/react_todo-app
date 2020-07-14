@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { NavFiltersLink } from '../NavFiltersLink/NavFiltersLink';
 import { TodoMenuShapes } from '../../Shapes/Shapes';
 
@@ -10,8 +9,8 @@ export const TodoMenu = ({ activeTasks, clearCompleted, completedTasks }) => (
     </span>
 
     <NavFiltersLink />
-    {completedTasks
-      ? (
+    {!!completedTasks
+      && (
         <button
           onClick={clearCompleted}
           type="button"
@@ -20,11 +19,7 @@ export const TodoMenu = ({ activeTasks, clearCompleted, completedTasks }) => (
           Clear completed
         </button>
       )
-      : (
-        <></>
-      )
     }
-
   </>
 );
 

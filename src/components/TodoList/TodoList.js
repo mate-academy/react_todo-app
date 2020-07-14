@@ -33,6 +33,7 @@ export const TodoList = ({
             todos={todos}
             deleteTodo={deleteTodo}
             completeTodo={completeTodo}
+            changeTodo={changeTodo}
             pathname={pathname}
           />
         )
