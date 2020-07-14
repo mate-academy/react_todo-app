@@ -11,8 +11,8 @@ export const Footer = ({ todos, currentFilter, setFilter, onClear }) => {
         <span className="todo-count">
           {
             (todosLeft === 1)
-              ? `${todosLeft} + ' todo to go'}`
-              : `${todosLeft} + ' todos to go'}`
+              ? `${todosLeft} todo to go`
+              : `${todosLeft} todos to go`
           }
         </span>
 
