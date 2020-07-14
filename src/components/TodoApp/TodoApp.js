@@ -9,9 +9,11 @@ export const TodoApp = (props) => {
   const {
     todos,
     activeTodos,
+    filter,
     onStatus,
     onRemove,
     onStatusAll,
+    onFilter,
   } = props;
 
   return (
@@ -28,6 +30,7 @@ export const TodoApp = (props) => {
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodosList
           todos={todos}
+          filter={filter}
           onStatus={onStatus}
           onRemove={onRemove}
         />
@@ -35,6 +38,8 @@ export const TodoApp = (props) => {
 
       <TodosFilter
         activeTodos={activeTodos}
+        onFilter={onFilter}
+        filter={filter}
       />
     </section>
   );
@@ -52,4 +57,6 @@ TodoApp.propTypes = {
   onStatus: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
   onStatusAll: PropTypes.func.isRequired,
+  onFilter: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };

@@ -16,6 +16,7 @@ const isTodoChanged = (todo, id) => {
 class App extends React.Component {
   state = {
     todos: [],
+    filter: 'all',
     activeTodos: 0,
   }
 
@@ -73,19 +74,29 @@ class App extends React.Component {
     }));
   }
 
+  onFilter = (criteria) => {
+    this.setState(prevState => ({
+      ...prevState,
+      filter: criteria,
+    }));
+  }
+
   render() {
     const {
       todos,
       activeTodos,
+      filter,
     } = this.state;
 
     return (
       <TodoApp
         todos={todos}
         activeTodos={activeTodos}
+        filter={filter}
         onStatus={this.onTodoStatus}
         onRemove={this.onRemove}
         onStatusAll={this.onTodoStatusAll}
+        onFilter={this.onFilter}
       />
     );
   }

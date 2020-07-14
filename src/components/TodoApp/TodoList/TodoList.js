@@ -6,13 +6,26 @@ import { TodoItem } from './TodoItem/TodoItem';
 export const TodosList = (props) => {
   const {
     todos,
+    filter,
     onStatus,
     onRemove,
   } = props;
 
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === 'active') {
+      return !todo.completed;
+    }
+
+    if (filter === 'completed') {
+      return todo.completed;
+    }
+
+    return true;
+  });
+
   return (
     <ul className="todo-list">
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem
           key={todo.id}
           todo={todo}
@@ -34,4 +47,5 @@ TodosList.propTypes = {
   ).isRequired,
   onStatus: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
