@@ -162,7 +162,7 @@ body {
   border-bottom: 1px solid #ededed;
 }
 
-.FILTERS li {
+.filters li {
   display: inline;
 }
 
@@ -296,7 +296,7 @@ body {
   font-weight: 300;
 }
 
-.FILTERS {
+.filters {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -311,7 +311,7 @@ body {
   font-weight: 400;
 }
 
-.FILTERS li a {
+.filters li a {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
@@ -324,11 +324,11 @@ body {
   text-decoration: underline;
 }
 
-.FILTERS li a:hover {
+.filters li a:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.FILTERS li a.selected {
+.filters li a.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
@@ -383,7 +383,7 @@ html .clear-completed:active {
   .footer {
     height: 50px;
   }
-  .FILTERS {
+  .filters {
     bottom: 10px;
   }
 }

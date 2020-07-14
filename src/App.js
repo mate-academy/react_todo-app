@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Main from './components/Main';
 import { Footer } from './components/Footer';
 
-const FILTERS = {
+const filters = {
   all: 'all',
   completed: 'completed',
   active: 'active',
@@ -13,7 +13,7 @@ class App extends React.Component {
   state = {
     todos: [],
     completed: false,
-    filter: FILTERS.all,
+    filter: filters.all,
   };
 
   addTodo = (todo) => {
@@ -59,7 +59,7 @@ class App extends React.Component {
   };
 
   setFilter = (filter) => {
-    this.setState({ filter: FILTERS[filter] });
+    this.setState({ filter: filters[filter] });
   };
 
   render() {

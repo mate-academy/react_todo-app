@@ -16,7 +16,7 @@ export const Footer = ({ todos, currentFilter, setFilter, onClear }) => {
           }
         </span>
 
-        <ul className="FILTERS">
+        <ul className="filters">
           <TodoFilter
             onClick={() => setFilter('all')}
             filterType={currentFilter}

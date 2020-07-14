@@ -23,7 +23,7 @@ Good `addTodo`, `setTitle`
 10. Do not rely on the unknown string, make constants for this.
 Example:
 ```
-const FILTERS = {
+const filters = {
   all: ‘all’,
   completed: ‘completed’,
   active: ‘active’,
