@@ -107,10 +107,18 @@ body {
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
 }
 
+.new-todo:focus {
+  box-shadow: 0 10px 30px rgba(17, 58, 150, 0.15);
+}
+
 .main {
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
+}
+
+.toggle:hover {
+  cursor: pointer;
 }
 
 .toggle-all {
@@ -235,6 +243,7 @@ body {
 
 .todo-list li .destroy:hover {
   color: #af5b5e;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:after {
@@ -242,6 +251,7 @@ body {
 }
 
 .todo-list li:hover .destroy {
+  cursor: pointer;
   display: block;
 }
 
@@ -308,6 +318,7 @@ body {
 }
 
 .filters li a:hover {
+  cursor: pointer;
   border-color: rgba(175, 47, 47, 0.1);
 }
 
@@ -325,6 +336,7 @@ html .clear-completed:active {
 }
 
 .clear-completed:hover {
+  cursor: pointer;
   text-decoration: underline;
 }
 
@@ -347,7 +359,12 @@ html .clear-completed:active {
 }
 
 .info a:hover {
+  cursor: pointer;
   text-decoration: underline;
+}
+
+label:hover {
+  cursor: pointer;
 }
 
 /*

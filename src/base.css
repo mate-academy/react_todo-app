@@ -12,6 +12,7 @@ hr {
 }
 
 .learn a:hover {
+  cursor: pointer;
   text-decoration: underline;
   color: #787e7e;
 }
