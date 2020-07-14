@@ -5,13 +5,11 @@ import { uuid } from 'uuidv4';
 export class NewTodo extends React.Component {
   state = {
     todoTitle: '',
-    isTitleValid: true,
   }
 
   handleChange = (event) => {
     this.setState({
-      todoTitle: event.target.value.replace(/[^\s\w]/g, ''),
-      isTitleValid: true,
+      todoTitle: event.target.value,
     });
   }
 
@@ -22,13 +20,7 @@ export class NewTodo extends React.Component {
       const { addNewTodo } = this.props;
       const todoId = uuid();
 
-      if (this.state.todoTitle.replace(/\s+/g, '').length === 0) {
-        this.setState({
-          isTitleValid: false,
-        });
-      }
-
-      if (this.state.isTitleValid) {
+      if (this.state.todoTitle.replace(/\s+/g, '').length !== 0) {
         addNewTodo({
           id: todoId,
           title: this.state.todoTitle,
