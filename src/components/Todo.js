@@ -10,10 +10,6 @@ export class Todo extends React.Component {
     editMode: '',
   }
 
-  componentDidUpdate() {
-
-  }
-
   onChange = () => {
     this.props.changeCompleteness(this.state.id);
     this.setState(prevState => ({

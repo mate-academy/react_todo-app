@@ -132,7 +132,7 @@ export class TodoApp extends React.Component {
       clearCompletedTodos, handleTodoEdit } = this;
     const { todosOnView, todos, isAllTodoCompleted } = this.state;
     const tasks = todoFilterByFilterName(todosOnView);
-    const UnCompletedTodosLeft = todos.filter(
+    const unCompletedTodosLeft = todos.filter(
       ({ isCompleted }) => isCompleted === false,
     ).length;
 
@@ -156,7 +156,7 @@ export class TodoApp extends React.Component {
         {!!todos.length && (
           <footer className="footer">
             <span className="todo-count">
-              {`${UnCompletedTodosLeft} items left`}
+              {`${unCompletedTodosLeft} items left`}
             </span>
 
             <Filters selectedFilter={handleActiveFilter} />
