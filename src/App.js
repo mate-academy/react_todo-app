@@ -22,7 +22,7 @@ class App extends React.Component {
     }));
   }
 
-  handleFlag = (event) => {
+  handleTodoDoneStatus = (event) => {
     const { value } = event.target;
 
     this.setState(prevState => ({
@@ -37,7 +37,7 @@ class App extends React.Component {
     }));
   }
 
-  handleAllFlag = () => {
+  handleSelectAllTodo = () => {
     this.setState(prevState => ({
       checked: !prevState.checked,
       todos: prevState.todos.map(todo => ({
@@ -85,7 +85,7 @@ class App extends React.Component {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            onChange={this.handleAllFlag}
+            onChange={this.handleSelectAllTodo}
             checked={checked}
           />
           <label
@@ -96,7 +96,7 @@ class App extends React.Component {
 
           <TodoList
             filter={filter}
-            handleFlag={this.handleFlag}
+            handleFlag={this.handleTodoDoneStatus}
             todos={todos}
             onDelete={this.onDelete}
           />
