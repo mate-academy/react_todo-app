@@ -10,6 +10,7 @@ export const TodoApp = (props) => {
     todos,
     activeTodos,
     onStatus,
+    onRemove,
     onStatusAll,
   } = props;
 
@@ -28,6 +29,7 @@ export const TodoApp = (props) => {
         <TodosList
           todos={todos}
           onStatus={onStatus}
+          onRemove={onRemove}
         />
       </section>
 
@@ -48,5 +50,6 @@ TodoApp.propTypes = {
   ).isRequired,
   activeTodos: PropTypes.number.isRequired,
   onStatus: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
   onStatusAll: PropTypes.func.isRequired,
 };

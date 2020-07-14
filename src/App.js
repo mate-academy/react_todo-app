@@ -66,6 +66,13 @@ class App extends React.Component {
     }));
   };
 
+  onRemove = (id) => {
+    this.setState(prevState => ({
+      todos: prevState.todos
+        .filter(todo => (todo.id !== id)),
+    }));
+  }
+
   render() {
     const {
       todos,
@@ -77,6 +84,7 @@ class App extends React.Component {
         todos={todos}
         activeTodos={activeTodos}
         onStatus={this.onTodoStatus}
+        onRemove={this.onRemove}
         onStatusAll={this.onTodoStatusAll}
       />
     );

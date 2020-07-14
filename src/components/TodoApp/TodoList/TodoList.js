@@ -7,6 +7,7 @@ export const TodosList = (props) => {
   const {
     todos,
     onStatus,
+    onRemove,
   } = props;
 
   return (
@@ -16,6 +17,7 @@ export const TodosList = (props) => {
           key={todo.id}
           todo={todo}
           onStatus={onStatus}
+          onRemove={onRemove}
         />
       ))}
     </ul>
@@ -31,4 +33,5 @@ TodosList.propTypes = {
     }).isRequired,
   ).isRequired,
   onStatus: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
