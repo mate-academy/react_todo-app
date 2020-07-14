@@ -5,16 +5,13 @@ import { linksData } from './LinksData';
 
 export class Footer extends Component {
   state = {
-    currentUrl: '#/',
-    links: linksData,
+    currentValue: 'All',
   }
 
-  isActiveLink = (event) => {
-    const href = event.target.getAttribute('href');
-
-    this.props.onChangeUrlPath(href);
+  isActiveLink = (value) => {
+    this.props.onChangeFilterValue(value);
     this.setState({
-      currentUrl: href,
+      currentValue: value,
     });
   }
 
@@ -23,9 +20,9 @@ export class Footer extends Component {
       todoCount,
       onClearCompletedTodo,
     } = this.props;
+
     const {
-      links,
-      currentUrl,
+      currentValue,
     } = this.state;
 
     return (
@@ -35,11 +32,11 @@ export class Footer extends Component {
         </span>
 
         <ul className="filters">
-          {links.map(link => (
+          {linksData.map(link => (
             <FilterLink
-              key={link.url}
+              key={link.value}
               link={link}
-              currentUrl={currentUrl}
+              currentValue={currentValue}
               isActiveLink={this.isActiveLink}
             />
           ))}
@@ -60,5 +57,5 @@ export class Footer extends Component {
 Footer.propTypes = {
   todoCount: PropTypes.number.isRequired,
   onClearCompletedTodo: PropTypes.func.isRequired,
-  onChangeUrlPath: PropTypes.func.isRequired,
+  onChangeFilterValue: PropTypes.func.isRequired,
 };

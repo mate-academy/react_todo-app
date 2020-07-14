@@ -9,7 +9,7 @@ export const FilterLink = (props) => {
   } = props.link;
 
   const {
-    currentUrl,
+    currentValue,
     isActiveLink,
   } = props;
 
@@ -18,9 +18,9 @@ export const FilterLink = (props) => {
       <a
         href={url}
         className={classnames({
-          selected: currentUrl === url,
+          selected: currentValue === value,
         })}
-        onClick={isActiveLink}
+        onClick={() => isActiveLink(value)}
       >
         {value}
       </a>
@@ -33,6 +33,6 @@ FilterLink.propTypes = {
     url: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
   }).isRequired,
-  currentUrl: PropTypes.string.isRequired,
+  currentValue: PropTypes.string.isRequired,
   isActiveLink: PropTypes.func.isRequired,
 };

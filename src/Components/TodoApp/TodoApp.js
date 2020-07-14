@@ -8,7 +8,7 @@ import { ShapeTodo } from '../../Shapes/Shapes';
 export class TodoApp extends Component {
   state = {
     todosList: this.props.todosList,
-    urlPath: '#/',
+    filteredValue: 'All',
   }
 
   onAddTodo = (todo) => {
@@ -29,9 +29,9 @@ export class TodoApp extends Component {
     }));
   }
 
-  onChangeUrlPath = (href) => {
+  onChangeFilterValue = (filteredValue) => {
     this.setState({
-      urlPath: href,
+      filteredValue,
     });
   }
 
@@ -81,7 +81,7 @@ export class TodoApp extends Component {
   render() {
     const {
       todosList,
-      urlPath,
+      filteredValue,
     } = this.state;
 
     const {
@@ -89,7 +89,7 @@ export class TodoApp extends Component {
       onChangeCompleted,
       onDeleteTodo,
       onClearCompletedTodo,
-      onChangeUrlPath,
+      onChangeFilterValue,
       onDoneAllTodo,
       onChangeUpdate,
     } = this;
@@ -98,9 +98,9 @@ export class TodoApp extends Component {
 
     let renderedList = todosList;
 
-    if (urlPath === '#/active') {
+    if (filteredValue === 'Active') {
       renderedList = todosList.filter(todo => !todo.completed);
-    } else if (urlPath === '#/completed') {
+    } else if (filteredValue === 'Completed') {
       renderedList = todosList.filter(todo => todo.completed);
     }
 
@@ -121,7 +121,7 @@ export class TodoApp extends Component {
         <Footer
           todoCount={activeTodoQuantity}
           onClearCompletedTodo={onClearCompletedTodo}
-          onChangeUrlPath={onChangeUrlPath}
+          onChangeFilterValue={onChangeFilterValue}
         />
       </section>
     );
