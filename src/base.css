@@ -11,6 +11,11 @@ hr {
   color: #b83f45;
 }
 
+.quote footer a {
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
 .learn a:hover {
   text-decoration: underline;
   color: #787e7e;
@@ -94,11 +99,6 @@ hr {
 
 .quote footer img {
   border-radius: 3px;
-}
-
-.quote footer a {
-  margin-left: 5px;
-  vertical-align: middle;
 }
 
 .speech-bubble {

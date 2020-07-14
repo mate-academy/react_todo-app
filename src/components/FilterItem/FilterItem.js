@@ -13,7 +13,7 @@ export const FilterItem = ({
       handleFilterStatusChange(filterValue);
     }}
   >
-    {filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}
+    {filterValue}
   </a>
 );
 

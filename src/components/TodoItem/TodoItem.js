@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class TodoItem extends React.Component {
+export class TodoItem extends React.Component {
   state = {
     editing: false,
     title: this.props.title,
@@ -38,9 +38,9 @@ class TodoItem extends React.Component {
     this.setState((prevState) => {
       this.props.handleTitleChange(this.props.todoIndex, prevState.title);
 
-      return ({
+      return {
         editing: false,
-      });
+      };
     });
   };
 
@@ -52,11 +52,13 @@ class TodoItem extends React.Component {
   };
 
   render() {
+    const { title, editing } = this.state;
+    const { completed, handleStatusChange, handleTodoRemove } = this.props;
+
     return (
       <li
         className={`${
-          (this.props.completed && 'completed')
-          || (this.state.editing && 'editing') || ''
+          (completed && 'completed') || (editing && 'editing') || ''
         }`}
       >
         <div className="view">
@@ -64,8 +66,8 @@ class TodoItem extends React.Component {
             type="checkbox"
             className="toggle"
             // id={`todo-${this.props.id}`}
-            checked={this.props.completed}
-            onChange={this.props.handleStatusChange}
+            checked={completed}
+            onChange={handleStatusChange}
           />
           <label
             // todo onclick preventDefault causes lint errors -_-
@@ -80,13 +82,13 @@ class TodoItem extends React.Component {
           <button
             type="button"
             className="destroy"
-            onClick={this.props.handleTodoRemove}
+            onClick={handleTodoRemove}
           />
         </div>
         <input
           type="text"
           className="edit"
-          value={this.state.title}
+          value={title}
           onChange={this.handleTodoChange}
           onKeyDown={this.handleTodoChangeImplementation}
           onBlur={this.saveTodo}
@@ -96,8 +98,6 @@ class TodoItem extends React.Component {
     );
   }
 }
-
-export { TodoItem };
 
 TodoItem.propTypes = {
   // id: PropTypes.number.isRequired,

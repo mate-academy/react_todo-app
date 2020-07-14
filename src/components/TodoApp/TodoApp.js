@@ -3,19 +3,25 @@ import { Header } from '../Header/Header';
 import { Main } from '../Main/Main';
 import { Footer } from '../Footer/Footer';
 
-class TodoApp extends React.Component {
+export class TodoApp extends React.Component {
   storageName = 'hvb-todos';
 
   state = {
-    todos: JSON.parse(window.localStorage.getItem(this.storageName)) || [],
-    notCompleted: 0,
+    todos: [],
+    notCompletedAmount: 0,
     filter: 'all',
   };
 
   componentDidMount() {
-    this.setState(prevState => ({
-      notCompleted: this.getNumOfNotCompletedTodos(prevState.todos),
-    }));
+    const storedTodos
+      = JSON.parse(window.localStorage.getItem(this.storageName));
+
+    if (storedTodos) {
+      this.setState({
+        todos: storedTodos,
+        notCompletedAmount: this.getNumOfNotCompletedTodos(storedTodos),
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -31,10 +37,10 @@ class TodoApp extends React.Component {
         completed: false,
       }];
 
-      return ({
+      return {
         todos: updatedList,
-        notCompleted: prevState.notCompleted + 1,
-      });
+        notCompletedAmount: prevState.notCompletedAmount + 1,
+      };
     });
   };
 
@@ -43,10 +49,11 @@ class TodoApp extends React.Component {
       const updatedTodos = [...prevState.todos];
       const removedItem = updatedTodos.splice(todoIndex, 1)[0];
 
-      return ({
+      return {
         todos: updatedTodos,
-        notCompleted: prevState.notCompleted - +(!removedItem.completed),
-      });
+        notCompletedAmount: prevState.notCompletedAmount
+          - +(!removedItem.completed),
+      };
     });
   };
 
@@ -64,11 +71,11 @@ class TodoApp extends React.Component {
 
       updatedTodos[todoIndex].completed = newStatus;
 
-      return ({
+      return {
         todos: updatedTodos,
-        notCompleted: (newStatus) ? (prevState.notCompleted - 1)
-          : (prevState.notCompleted + 1),
-      });
+        notCompletedAmount: (newStatus) ? (prevState.notCompletedAmount - 1)
+          : (prevState.notCompletedAmount + 1),
+      };
     });
   };
 
@@ -83,10 +90,10 @@ class TodoApp extends React.Component {
         updatedTodos[i].completed = allChecked;
       }
 
-      return ({
+      return {
         todos: updatedTodos,
-        notCompleted: allChecked ? 0 : updatedTodos.length,
-      });
+        notCompletedAmount: allChecked ? 0 : updatedTodos.length,
+      };
     });
   };
 
@@ -96,9 +103,9 @@ class TodoApp extends React.Component {
 
       updatedTodos[todoIndex].title = value;
 
-      return ({
+      return {
         todos: updatedTodos,
-      });
+      };
     });
   };
 
@@ -119,27 +126,29 @@ class TodoApp extends React.Component {
   };
 
   render() {
+    const { todos, notCompletedAmount, filter } = this.state;
+
     return (
       <section className="todoapp">
         <Header onAddTodo={this.addTodo} />
         <Main
-          todos={this.state.todos}
+          todos={todos}
           handleStatusChange={this.changeTodoStatus}
           handleTitleChange={this.changeTodoTitle}
           handleTodoRemove={this.removeTodo}
           handleToggleAll={this.toggleEveryTodoStatus}
-          notCompletedTodos={this.state.notCompleted}
-          filter={this.state.filter}
+          notCompletedTodos={notCompletedAmount}
+          filter={filter}
         />
         {
-          !!this.state.todos.length
+          todos.length > 0
           && (
             <Footer
-              todosAmount={this.state.todos.length}
-              notCompletedTodos={this.state.notCompleted}
+              todosAmount={todos.length}
+              notCompletedTodos={notCompletedAmount}
               handleCompletedRemove={this.removeCompleted}
               handleFilterStatusChange={this.changeFilterStatus}
-              activeFilter={this.state.filter}
+              activeFilter={filter}
             />
           )
         }
@@ -147,5 +156,3 @@ class TodoApp extends React.Component {
     );
   }
 }
-
-export { TodoApp };

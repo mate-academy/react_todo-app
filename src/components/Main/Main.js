@@ -15,7 +15,7 @@ export const Main = ({
 }) => (
   <section className="main">
     {
-      !!todos.length
+      todos.length > 0
       && (
         <ToggleAll
           handleToggleAll={handleToggleAll}

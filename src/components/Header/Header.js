@@ -11,9 +11,9 @@ class Header extends React.Component {
       this.setState((prevState) => {
         this.props.onAddTodo(prevState.value);
 
-        return ({
+        return {
           value: '',
-        });
+        };
       });
     }
   };
