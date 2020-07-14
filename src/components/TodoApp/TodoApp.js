@@ -9,6 +9,7 @@ export const TodoApp = (props) => {
   const {
     todos,
     onStatus,
+    onStatusAll,
   } = props;
 
   return (
@@ -16,7 +17,12 @@ export const TodoApp = (props) => {
       <Header />
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onChange={onStatusAll}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodosList
           todos={todos}
@@ -38,4 +44,5 @@ TodoApp.propTypes = {
     }).isRequired,
   ).isRequired,
   onStatus: PropTypes.func.isRequired,
+  onStatusAll: PropTypes.func.isRequired,
 };

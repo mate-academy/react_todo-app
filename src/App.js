@@ -33,13 +33,28 @@ class App extends React.Component {
       todos: prevState.todos
         .map(todo => isTodoChanged(todo, id)),
     }));
-  }
+  };
+
+  onTodoStatusAll = (event) => {
+    const { target: { checked } } = event;
+
+    this.setState(prevState => ({
+      todos: prevState.todos
+        .map(todo => (
+          {
+            ...todo,
+            completed: checked,
+          }
+        )),
+    }));
+  };
 
   render() {
     return (
       <TodoApp
         todos={this.state.todos}
         onStatus={this.onTodoStatus}
+        onStatusAll={this.onTodoStatusAll}
       />
     );
   }
