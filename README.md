@@ -1,5 +1,5 @@
 # React ToDo App
-[DEMO LINK](https:/tanyamoore.github.io/react_todo-app/)
+[DEMO LINK](https://tanyamoore.github.io/react_todo-app/)
 
 ## About
 - App for list of things to be done
