@@ -1,27 +1,36 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export const TodosFilter = () => (
-  <footer className="footer">
-    <span className="todo-count">
-      3 items left
-    </span>
+export const TodosFilter = ({ activeTodos }) => {
+  const active = activeTodos;
 
-    <ul className="filters">
-      <li>
-        <a href="#/" className="selected">All</a>
-      </li>
+  return (
+    <footer className="footer">
+      <span className="todo-count">
+        {`${active} items left`}
+      </span>
 
-      <li>
-        <a href="#/active">Active</a>
-      </li>
+      <ul className="filters">
+        <li>
+          <a href="#/" className="selected">All</a>
+        </li>
 
-      <li>
-        <a href="#/completed">Completed</a>
-      </li>
-    </ul>
+        <li>
+          <a href="#/active">Active</a>
+        </li>
 
-    <button type="button" className="clear-completed">
-      Clear completed
-    </button>
-  </footer>
-);
+        <li>
+          <a href="#/completed">Completed</a>
+        </li>
+      </ul>
+
+      <button type="button" className="clear-completed">
+        Clear completed
+      </button>
+    </footer>
+  );
+};
+
+TodosFilter.propTypes = {
+  activeTodos: PropTypes.number.isRequired,
+};

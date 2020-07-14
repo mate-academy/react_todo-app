@@ -16,11 +16,28 @@ const isTodoChanged = (todo, id) => {
 class App extends React.Component {
   state = {
     todos: [],
+    activeTodos: 0,
   }
 
   componentDidMount() {
     this.getTodosFromApi();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.todos !== prevState.todos) {
+      this.onUpdate();
+    }
+  }
+
+  onUpdate = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      activeTodos: prevState.todos
+        .reduce((counter, todo) => (
+          counter + (todo.completed ? 0 : 1)
+        ), 0),
+    }));
+  };
 
   getTodosFromApi = () => {
     this.setState({
@@ -50,9 +67,15 @@ class App extends React.Component {
   };
 
   render() {
+    const {
+      todos,
+      activeTodos,
+    } = this.state;
+
     return (
       <TodoApp
-        todos={this.state.todos}
+        todos={todos}
+        activeTodos={activeTodos}
         onStatus={this.onTodoStatus}
         onStatusAll={this.onTodoStatusAll}
       />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-// import cn from 'classnames';
+import cn from 'classnames';
 
 export const TodoItem = (props) => {
   const {
@@ -9,7 +9,9 @@ export const TodoItem = (props) => {
   } = props;
 
   return (
-    <li>
+    <li
+      className={cn({ completed: todo.completed })}
+    >
       <div className="view">
         <input
           type="checkbox"

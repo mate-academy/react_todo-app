@@ -8,6 +8,7 @@ import { Header } from './Header/Header';
 export const TodoApp = (props) => {
   const {
     todos,
+    activeTodos,
     onStatus,
     onStatusAll,
   } = props;
@@ -30,7 +31,9 @@ export const TodoApp = (props) => {
         />
       </section>
 
-      <TodosFilter />
+      <TodosFilter
+        activeTodos={activeTodos}
+      />
     </section>
   );
 };
@@ -43,6 +46,7 @@ TodoApp.propTypes = {
       completed: PropTypes.bool.isRequired,
     }).isRequired,
   ).isRequired,
+  activeTodos: PropTypes.number.isRequired,
   onStatus: PropTypes.func.isRequired,
   onStatusAll: PropTypes.func.isRequired,
 };
