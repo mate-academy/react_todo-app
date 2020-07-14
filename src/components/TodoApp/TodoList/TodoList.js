@@ -6,6 +6,7 @@ import { TodoItem } from './TodoItem/TodoItem';
 export const TodosList = (props) => {
   const {
     todos,
+    onStatus,
   } = props;
 
   return (
@@ -14,6 +15,7 @@ export const TodosList = (props) => {
         <TodoItem
           key={todo.id}
           todo={todo}
+          onStatus={onStatus}
         />
       ))}
     </ul>
@@ -28,4 +30,5 @@ TodosList.propTypes = {
       completed: PropTypes.bool.isRequired,
     }).isRequired,
   ).isRequired,
+  onStatus: PropTypes.func.isRequired,
 };

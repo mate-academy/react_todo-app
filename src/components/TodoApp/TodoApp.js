@@ -8,6 +8,7 @@ import { Header } from './Header/Header';
 export const TodoApp = (props) => {
   const {
     todos,
+    onStatus,
   } = props;
 
   return (
@@ -19,6 +20,7 @@ export const TodoApp = (props) => {
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodosList
           todos={todos}
+          onStatus={onStatus}
         />
       </section>
 
@@ -35,4 +37,5 @@ TodoApp.propTypes = {
       completed: PropTypes.bool.isRequired,
     }).isRequired,
   ).isRequired,
+  onStatus: PropTypes.func.isRequired,
 };
