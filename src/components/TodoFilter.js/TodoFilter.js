@@ -19,7 +19,7 @@ export const TodoFilter = ({ todos, filterTodos, clear }) => (
       <li>
         <button
           type="button"
-          onClick={() => filterTodos('inProces')}
+          onClick={() => filterTodos('active')}
         >
           Active
         </button>
