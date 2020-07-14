@@ -6,9 +6,16 @@ import { TodoList } from './components/TodoList/TodoList';
 class App extends React.Component {
   state = {
     task: '',
-    dynamicList: JSON.parse(localStorage.getItem('dynamicList')) || [],
-    checkBoxId: JSON.parse(localStorage.getItem('checkBoxId')) || {},
+    dynamicList: [],
+    checkBoxId: {},
     isTouched: false,
+  }
+
+  componentDidMount() {
+    this.setState({
+      dynamicList: JSON.parse(localStorage.getItem('dynamicList')) || [],
+      checkBoxId: JSON.parse(localStorage.getItem('checkBoxId')) || {},
+    });
   }
 
   componentDidUpdate() {
@@ -36,11 +43,11 @@ class App extends React.Component {
     }));
   }
 
-  handleChecked = (id, event) => {
+  handleChecked = (id, checked) => {
     this.setState(prevState => ({
       checkBoxId: {
         ...prevState.checkBoxId,
-        [id]: event,
+        [id]: checked,
       },
     }));
   }

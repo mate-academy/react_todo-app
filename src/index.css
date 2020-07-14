@@ -217,10 +217,6 @@ body {
   display: none;
 }
 
-/* .todo-list li .toggle {
-  opacity: 0;
-} */
-
 .todo-list li .toggle {
   text-align: center;
   width: 40px;
@@ -329,10 +325,6 @@ body {
 .filters li a.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
-
-/* .clear-completed:hover {
-  text-decoration: underline;
-} */
 
 .clear-completed,
 html .clear-completed:active {
