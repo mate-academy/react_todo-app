@@ -14,7 +14,7 @@ export const TodoListShape = {
 export const TodoShape = {
   todo: PropTypes.shape({
     check: PropTypes.func.isRequired,
-    deleteTodo: PropTypes.funs.isRequired,
+    deleteTodo: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     isCompleted: PropTypes.bool.isRequired,
   }).isRequired,

@@ -24,4 +24,4 @@ export const Todo = ({ todo, check, deleteTodo }) => (
   </>
 );
 
-Todo.propTypes = TodoShape;
+Todo.propTypes = TodoShape.isRequired;
