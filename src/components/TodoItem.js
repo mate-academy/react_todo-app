@@ -6,7 +6,6 @@ import { TodoShape } from './TodoShape';
 export class TodoItem extends React.Component {
   state = {
     todoTitle: '',
-    isTitleValid: true,
     isEditing: false,
   }
 
@@ -19,8 +18,7 @@ export class TodoItem extends React.Component {
 
   handleChange = (event) => {
     this.setState({
-      todoTitle: event.target.value.replace(/[^\s\w]/g, ''),
-      isTitleValid: true,
+      todoTitle: event.target.value,
     });
   }
 
@@ -30,13 +28,7 @@ export class TodoItem extends React.Component {
 
       const { saveEditedTodo } = this.props;
 
-      if (this.state.todoTitle.replace(/\s+/g, '').length === 0) {
-        this.setState({
-          isTitleValid: false,
-        });
-      }
-
-      if (this.state.isTitleValid) {
+      if (this.state.todoTitle.replace(/\s+/g, '').length !== 0) {
         saveEditedTodo({
           id: todoId,
           title: this.state.todoTitle,
