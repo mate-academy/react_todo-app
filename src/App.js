@@ -52,12 +52,6 @@ export class App extends React.Component {
     this.setState({ filter });
   };
 
-  filterAll = (id) => {
-    this.setState(prevState => ({
-      todos: prevState.todos,
-    }));
-  }
-
   filterTodo = (items, filter) => {
     switch (filter) {
       case 'all':
