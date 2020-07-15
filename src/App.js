@@ -22,7 +22,7 @@ class App extends React.Component {
     }));
   }
 
-  handleTodoDoneStatus = (event) => {
+  handleTodoCompletedStatus = (event) => {
     const { value } = event.target;
 
     this.setState(prevState => ({
