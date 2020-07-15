@@ -49,6 +49,40 @@ export class App extends React.Component {
     this.todosBackUp = [...this.state.todos];
   }
 
+  backupCheck = (id) => {
+    this.todosBackUp = this.todosBackUp.map((todo) => {
+      const todoCopy = { ...todo };
+
+      if (todo.id === id) {
+        todoCopy.completed = !todo.completed;
+      }
+
+      return todoCopy;
+    });
+  }
+
+  backupToggleAll = () => {
+    this.todosBackUp = this.todosBackUp.map((todo) => {
+      const todoCopy = { ...todo };
+
+      todoCopy.completed = false;
+
+      return todoCopy;
+    });
+  }
+
+  backupToggle = () => {
+    this.todosBackUp = this.todosBackUp.map((todo) => {
+      const todoCopy = { ...todo };
+
+      if (!todoCopy.completed) {
+        todoCopy.completed = true;
+      }
+
+      return todoCopy;
+    });
+  }
+
   addNewTodo = (newTodo) => {
     if (this.state.isCompletedSelected) {
       this.todosBackUp = [...this.todosBackUp, newTodo];
@@ -72,17 +106,7 @@ export class App extends React.Component {
         return todoCopy;
       }),
     }),
-    () => {
-      this.todosBackUp = this.todosBackUp.map((todo) => {
-        const todoCopy = { ...todo };
-
-        if (todo.id === id) {
-          todoCopy.completed = !todo.completed;
-        }
-
-        return todoCopy;
-      });
-    });
+    () => this.backupCheck(id));
   }
 
   handleDelete = (id) => {
@@ -103,7 +127,7 @@ export class App extends React.Component {
           return todoCopy;
         }),
       }),
-      () => this.backupTodos());
+      () => this.backupToggleAll());
     } else {
       this.setState(prevState => ({
         todos: prevState.todos.map((todo) => {
@@ -116,7 +140,7 @@ export class App extends React.Component {
           return todoCopy;
         }),
       }),
-      () => this.backupTodos());
+      () => this.backupToggle());
     }
   }
 
