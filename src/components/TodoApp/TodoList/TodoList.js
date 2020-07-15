@@ -9,6 +9,7 @@ export const TodosList = (props) => {
     filter,
     onStatus,
     onRemove,
+    onSaveEdit,
   } = props;
 
   const filteredTodos = todos.filter((todo) => {
@@ -31,6 +32,7 @@ export const TodosList = (props) => {
           todo={todo}
           onStatus={onStatus}
           onRemove={onRemove}
+          onSaveEdit={onSaveEdit}
         />
       ))}
     </ul>
@@ -47,5 +49,6 @@ TodosList.propTypes = {
   ).isRequired,
   onStatus: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
+  onSaveEdit: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };

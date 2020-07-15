@@ -12,6 +12,7 @@ export const TodoApp = (props) => {
     filter,
     onStatus,
     onRemove,
+    onSaveEdit,
     onStatusAll,
     onFilter,
     onRemoveCompleted,
@@ -34,6 +35,7 @@ export const TodoApp = (props) => {
           filter={filter}
           onStatus={onStatus}
           onRemove={onRemove}
+          onSaveEdit={onSaveEdit}
         />
       </section>
 
@@ -58,6 +60,7 @@ TodoApp.propTypes = {
   activeTodos: PropTypes.number.isRequired,
   onStatus: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
+  onSaveEdit: PropTypes.func.isRequired,
   onStatusAll: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onRemoveCompleted: PropTypes.func.isRequired,

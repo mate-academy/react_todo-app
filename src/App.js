@@ -88,6 +88,23 @@ class App extends React.Component {
     }));
   };
 
+  handleSaveEdit = (value, id) => {
+    this.setState(prevState => ({
+      ...prevState,
+      todos: prevState.todos
+        .map(todo => (
+          todo.id === id
+            ? ({
+              ...todo,
+              title: value,
+            })
+            : (
+              todo
+            )
+        )),
+    }));
+  };
+
   render() {
     const {
       todos,
@@ -102,6 +119,7 @@ class App extends React.Component {
         filter={filter}
         onStatus={this.onTodoStatus}
         onRemove={this.onRemove}
+        onSaveEdit={this.handleSaveEdit}
         onStatusAll={this.onTodoStatusAll}
         onFilter={this.onFilter}
         onRemoveCompleted={this.onRemoveCompleted}

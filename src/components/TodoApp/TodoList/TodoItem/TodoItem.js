@@ -2,44 +2,96 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import cn from 'classnames';
 
-export const TodoItem = (props) => {
-  const {
-    todo,
-    onStatus,
-    onRemove,
-  } = props;
-  const {
-    id,
-    title,
-    completed,
-  } = todo;
+export class TodoItem extends React.Component {
+  state = {
+    editing: false,
+    todoEditingValue: this.props.todo.title,
+  };
 
-  return (
-    <li
-      className={cn({ completed })}
-    >
-      <div className="view">
+  handleKeyDown = (event) => {
+    const {
+      onSaveEdit,
+      todo,
+    } = this.props;
+
+    if (event.key === 'Escape') {
+      this.setState(prevState => ({
+        ...prevState,
+        todoEditingValue: todo.title,
+        editing: false,
+      }));
+    } else if (event.key === 'Enter') {
+      onSaveEdit(this.state.todoEditingValue, todo.id);
+      this.setState(prevState => ({
+        ...prevState,
+        editing: false,
+      }));
+    }
+  };
+
+  onEdit = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      editing: true,
+    }));
+  };
+
+  onInputTodoTitle = (event) => {
+    const { target: { value } } = event;
+
+    this.setState(prevState => ({
+      ...prevState,
+      todoEditingValue: value,
+    }));
+  };
+
+  render() {
+    const {
+      todo,
+      onStatus,
+      onRemove,
+    } = this.props;
+    const {
+      id,
+      title,
+      completed,
+    } = todo;
+
+    return (
+      <li
+        className={cn({ completed }, { editing: this.state.editing })}
+      >
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id={id}
+            checked={completed}
+            onChange={() => onStatus(id)}
+          />
+          <label
+            htmlFor={id}
+            onDoubleClick={this.onEdit}
+          >
+            {title}
+          </label>
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => onRemove(id)}
+          />
+        </div>
         <input
-          type="checkbox"
-          className="toggle"
-          id={`todo-${id}`}
-          checked={completed}
-          onChange={() => onStatus(id)}
+          type="text"
+          className="edit"
+          value={this.state.todoEditingValue}
+          onKeyDown={this.handleKeyDown}
+          onChange={this.onInputTodoTitle}
         />
-        <label htmlFor={`todo-${id}`}>
-          {title}
-          {` > ${completed.toString()}`}
-        </label>
-        <button
-          type="button"
-          className="destroy"
-          onClick={() => onRemove(id)}
-        />
-      </div>
-      <input type="text" className="edit" />
-    </li>
-  );
-};
+      </li>
+    );
+  }
+}
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
@@ -49,4 +101,5 @@ TodoItem.propTypes = {
   }).isRequired,
   onStatus: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
+  onSaveEdit: PropTypes.func.isRequired,
 };
