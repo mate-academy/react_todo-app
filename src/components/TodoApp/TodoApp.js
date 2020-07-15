@@ -44,15 +44,22 @@ export class TodoApp extends React.Component {
     });
   };
 
-  removeTodo = (todoIndex) => {
+  removeTodo = (todoId) => {
     this.setState((prevState) => {
-      const updatedTodos = [...prevState.todos];
-      const removedItem = updatedTodos.splice(todoIndex, 1)[0];
+      let removedItemIsCompleted;
+
+      const updatedTodos = [...prevState.todos].filter((todo) => {
+        if (todoId === todo.id) {
+          removedItemIsCompleted = todo.completed;
+        }
+
+        return todoId !== todo.id;
+      });
 
       return {
         todos: updatedTodos,
         notCompletedAmount: prevState.notCompletedAmount
-          - +(!removedItem.completed),
+          - +(!removedItemIsCompleted),
       };
     });
   };
@@ -63,13 +70,23 @@ export class TodoApp extends React.Component {
     }));
   };
 
-  changeTodoStatus = (todoIndex, completed) => {
+  changeTodoStatus = (todoId, completed) => {
     this.setState((prevState) => {
-      // todo: is copy needed?
       const updatedTodos = [...prevState.todos];
-      const newStatus = completed || !updatedTodos[todoIndex].completed;
+      const newStatus = completed
+        || !updatedTodos.find(todo => todoId === todo.id).completed;
 
-      updatedTodos[todoIndex].completed = newStatus;
+      updatedTodos.map((todo) => {
+        if (todoId === todo.id) {
+          const updatedTodo = todo;
+
+          updatedTodo.completed = newStatus;
+
+          return updatedTodo;
+        }
+
+        return todo;
+      });
 
       return {
         todos: updatedTodos,
@@ -83,7 +100,6 @@ export class TodoApp extends React.Component {
     const allChecked = event.target.checked;
 
     this.setState((prevState) => {
-      // todo: is copy needed?
       const updatedTodos = [...prevState.todos];
 
       for (let i = 0; i < updatedTodos.length; i += 1) {
@@ -97,11 +113,21 @@ export class TodoApp extends React.Component {
     });
   };
 
-  changeTodoTitle = (todoIndex, value) => {
+  changeTodoTitle = (todoId, value) => {
     this.setState((prevState) => {
       const updatedTodos = [...prevState.todos];
 
-      updatedTodos[todoIndex].title = value;
+      updatedTodos.map((todo) => {
+        if (todoId === todo.id) {
+          const updatedTodo = todo;
+
+          updatedTodo.title = value;
+
+          return updatedTodo;
+        }
+
+        return todo;
+      });
 
       return {
         todos: updatedTodos,

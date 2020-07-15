@@ -36,7 +36,7 @@ export class TodoItem extends React.Component {
 
   saveTodo = () => {
     this.setState((prevState) => {
-      this.props.handleTitleChange(this.props.todoIndex, prevState.title);
+      this.props.handleTitleChange(this.props.id, prevState.title);
 
       return {
         editing: false,
@@ -100,10 +100,9 @@ export class TodoItem extends React.Component {
 }
 
 TodoItem.propTypes = {
-  // id: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  todoIndex: PropTypes.number.isRequired,
   handleStatusChange: PropTypes.func.isRequired,
   handleTitleChange: PropTypes.func.isRequired,
   handleTodoRemove: PropTypes.func.isRequired,

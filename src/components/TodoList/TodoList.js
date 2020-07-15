@@ -11,20 +11,19 @@ export const TodoList = ({
   filter,
 }) => (
   <ul className="todo-list">
-    {items.map((todo, index) => (
+    {items.map(todo => (
       (filter === 'all' || (filter === 'active' && !todo.completed)
         || (filter === 'completed' && todo.completed))
       && (
         <TodoItem
           key={todo.id}
           {...todo}
-          todoIndex={index}
           handleStatusChange={() => {
-            handleStatusChange(index);
+            handleStatusChange(todo.id);
           }}
           handleTitleChange={handleTitleChange}
           handleTodoRemove={() => {
-            handleTodoRemove(index);
+            handleTodoRemove(todo.id);
           }}
         />
       )
