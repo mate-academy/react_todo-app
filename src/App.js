@@ -72,7 +72,17 @@ export class App extends React.Component {
         return todoCopy;
       }),
     }),
-    () => this.backupTodos());
+    () => {
+      this.todosBackUp = this.todosBackUp.map((todo) => {
+        const todoCopy = { ...todo };
+
+        if (todo.id === id) {
+          todoCopy.completed = !todo.completed;
+        }
+
+        return todoCopy;
+      });
+    });
   }
 
   handleDelete = (id) => {
