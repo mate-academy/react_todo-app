@@ -1,4 +1,5 @@
-# React ToDo AppDEMO LINK](https://<your_account>.github.io/react_todo-app/)
+# React ToDo App
+[DEMO LINK](https://kvalenty.github.io/react_todo-app/)
 
 Used technologies
 React
