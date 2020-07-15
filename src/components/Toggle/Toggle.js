@@ -12,7 +12,8 @@ const Toggle = ({ index, title, id, completed, onEdit, toggleCompleted }) => (
     />
     <label
       htmlFor={`todo-${index}`}
-      onClick={evt => evt.preventDefault()}
+      role="presentation"
+      onClick={event => event.preventDefault()}
       onDoubleClick={onEdit}
     >
       {title}

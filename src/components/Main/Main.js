@@ -17,9 +17,13 @@ const Main = (props) => {
   return (
     <section className="main">
       {
-        todos.length === 0
-          ? ''
-          : <ToggleAll todos={todos} toggleAllCompleted={toggleAllCompleted} />
+        todos.length > 0
+          && (
+            <ToggleAll
+              todos={todos}
+              toggleAllCompleted={toggleAllCompleted}
+            />
+          )
       }
 
       <TodoList

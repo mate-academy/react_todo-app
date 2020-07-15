@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { PureComponent, createRef } from 'react';
 import PropTypes from 'prop-types';
 
-class Edit extends React.PureComponent {
-  state = {
-    editTitle: this.props.title,
+class Edit extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.input = createRef();
+
+    this.state = {
+      editTitle: this.props.title,
+    };
+  }
+
+  componentDidMount() {
+    this.input.current.focus();
   }
 
   changeTitle = (event) => {
@@ -38,10 +48,10 @@ class Edit extends React.PureComponent {
         type="text"
         className="edit"
         value={this.state.editTitle}
+        ref={this.input}
         onChange={this.changeTitle}
         onKeyDown={this.closeEdit}
         onBlur={this.saveEdit}
-        autoFocus
       />
     );
   }

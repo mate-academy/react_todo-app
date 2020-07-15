@@ -5,20 +5,27 @@ import Main from './components/Main/Main';
 import Footer from './components/Footer/Footer';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    todos: [],
+    todoNumber: 1,
+    todosFilter: () => true,
+  };
 
+  componentDidMount() {
     const storageState = JSON.parse(localStorage.getItem('state'));
 
-    this.state = {
-      todos: Object.is(null, storageState) ? [] : storageState.todos,
-      todoNumber: Object.is(null, storageState) ? 1 : storageState.todoNumber,
-      todosFilter: () => true,
-    };
+    if (!Object.is(null, storageState)) {
+      this.setState({
+        todos: storageState.todos,
+        todoNumber: storageState.todoNumber,
+      });
+    }
   }
 
-  componentDidUpdate() {
-    localStorage.setItem('state', JSON.stringify(this.state));
+  componentDidUpdate(prevState) {
+    if (this.state.todos !== prevState.todos) {
+      localStorage.setItem('state', JSON.stringify(this.state));
+    }
   }
 
   createTodo = (value) => {
@@ -126,9 +133,8 @@ class App extends React.Component {
         />
 
         {
-          this.state.todos.length === 0
-            ? ''
-            : (
+          this.state.todos.length > 0
+            && (
               <Footer
                 uncompletedLength={todos.filter(todo => (
                   !todo.completed

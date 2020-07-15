@@ -9,16 +9,10 @@ class Todo extends React.PureComponent {
     isEditing: false,
   }
 
-  onEdit = () => {
-    this.setState({
-      isEditing: true,
-    });
-  }
-
-  offEdit = () => {
-    this.setState({
-      isEditing: false,
-    });
+  changeEdit = () => {
+    this.setState(state => ({
+      isEditing: !state.isEditing,
+    }));
   }
 
   render() {
@@ -36,7 +30,9 @@ class Todo extends React.PureComponent {
 
     return (
       <li
-        className={isEditing ? 'editing' : item.completed ? 'completed' : ''}
+        className={
+          (isEditing && 'editing') || (item.completed && 'completed') || ''
+        }
       >
         <View
           index={index}
@@ -44,20 +40,19 @@ class Todo extends React.PureComponent {
           id={item.id}
           completed={item.completed}
           toggleCompleted={toggleCompleted}
-          onEdit={this.onEdit}
+          onEdit={this.changeEdit}
           destroyTodo={destroyTodo}
         />
         {
           isEditing
-            ? (
+            && (
               <Edit
                 title={item.title}
                 id={item.id}
-                offEdit={this.offEdit}
+                offEdit={this.changeEdit}
                 editTodo={editTodo}
               />
             )
-            : ''
         }
       </li>
     );
