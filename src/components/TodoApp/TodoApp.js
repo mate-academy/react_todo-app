@@ -14,7 +14,7 @@ export class TodoApp extends React.Component {
 
   componentDidMount() {
     const storedTodos
-      = JSON.parse(window.localStorage.getItem(this.storageName));
+      = JSON.parse(localStorage.getItem(this.storageName));
 
     if (storedTodos) {
       this.setState({
@@ -27,6 +27,9 @@ export class TodoApp extends React.Component {
   componentDidUpdate() {
     this.updateStorage(this.state.todos);
   }
+
+  // eslint-disable-next-line max-len
+  getNotCompletedAmount = list => list.reduce((sum, item) => ((item.completed) ? sum : sum + 1), 0);
 
   addTodo = (title) => {
     this.setState((prevState) => {
@@ -46,11 +49,11 @@ export class TodoApp extends React.Component {
 
   removeTodo = (todoId) => {
     this.setState((prevState) => {
-      let removedItemIsCompleted;
+      let notCompletedNum = prevState.notCompletedAmount;
 
-      const updatedTodos = [...prevState.todos].filter((todo) => {
-        if (todoId === todo.id) {
-          removedItemIsCompleted = todo.completed;
+      const updatedTodos = prevState.todos.filter((todo) => {
+        if (todoId === todo.id && !todo.completed) {
+          notCompletedNum -= 1;
         }
 
         return todoId !== todo.id;
@@ -58,31 +61,23 @@ export class TodoApp extends React.Component {
 
       return {
         todos: updatedTodos,
-        notCompletedAmount: prevState.notCompletedAmount
-          - +(!removedItemIsCompleted),
+        notCompletedAmount: notCompletedNum,
       };
     });
   };
 
   removeCompleted = () => {
     this.setState(prevState => ({
-      todos: [...prevState.todos.filter(item => !item.completed)],
+      todos: prevState.todos.filter(item => !item.completed),
     }));
   };
 
-  changeTodoStatus = (todoId, completed) => {
+  changeTodoStatus = (todoId) => {
     this.setState((prevState) => {
-      const updatedTodos = [...prevState.todos];
-      const newStatus = completed
-        || !updatedTodos.find(todo => todoId === todo.id).completed;
-
-      updatedTodos.map((todo) => {
+      /* eslint-disable no-param-reassign */
+      const updatedTodos = prevState.todos.map((todo) => {
         if (todoId === todo.id) {
-          const updatedTodo = todo;
-
-          updatedTodo.completed = newStatus;
-
-          return updatedTodo;
+          todo.completed = !todo.completed;
         }
 
         return todo;
@@ -90,8 +85,7 @@ export class TodoApp extends React.Component {
 
       return {
         todos: updatedTodos,
-        notCompletedAmount: (newStatus) ? (prevState.notCompletedAmount - 1)
-          : (prevState.notCompletedAmount + 1),
+        notCompletedAmount: this.getNotCompletedAmount(updatedTodos),
       };
     });
   };
@@ -100,11 +94,12 @@ export class TodoApp extends React.Component {
     const allChecked = event.target.checked;
 
     this.setState((prevState) => {
-      const updatedTodos = [...prevState.todos];
+      /* eslint-disable no-param-reassign */
+      const updatedTodos = prevState.todos.map((todo) => {
+        todo.completed = allChecked;
 
-      for (let i = 0; i < updatedTodos.length; i += 1) {
-        updatedTodos[i].completed = allChecked;
-      }
+        return todo;
+      });
 
       return {
         todos: updatedTodos,
@@ -115,15 +110,10 @@ export class TodoApp extends React.Component {
 
   changeTodoTitle = (todoId, value) => {
     this.setState((prevState) => {
-      const updatedTodos = [...prevState.todos];
-
-      updatedTodos.map((todo) => {
+      /* eslint-disable no-param-reassign */
+      const updatedTodos = prevState.todos.map((todo) => {
         if (todoId === todo.id) {
-          const updatedTodo = todo;
-
-          updatedTodo.title = value;
-
-          return updatedTodo;
+          todo.title = value;
         }
 
         return todo;
@@ -145,7 +135,7 @@ export class TodoApp extends React.Component {
   getNumOfNotCompletedTodos = todos => todos.filter(item => !item.completed).length;
 
   updateStorage = (todos) => {
-    window.localStorage.setItem(
+    localStorage.setItem(
       this.storageName,
       JSON.stringify(todos),
     );
