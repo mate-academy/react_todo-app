@@ -9,7 +9,6 @@ export class TodoItem extends React.Component {
 
   editInput = React.createRef();
 
-  // todo: set focus for editing input - maybe needs refactor
   componentDidUpdate() {
     this.editInput.current.focus();
   }
@@ -65,16 +64,10 @@ export class TodoItem extends React.Component {
           <input
             type="checkbox"
             className="toggle"
-            // id={`todo-${this.props.id}`}
             checked={completed}
             onChange={handleStatusChange}
           />
           <label
-            // todo onclick preventDefault causes lint errors -_-
-            // htmlFor={`todo-${this.props.id}`}
-            // onClick={(event) => {
-            //   event.preventDefault();
-            // }}
             onDoubleClick={this.handleDoubleClick}
           >
             {this.props.title}

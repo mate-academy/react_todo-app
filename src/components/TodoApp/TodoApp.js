@@ -28,8 +28,9 @@ export class TodoApp extends React.Component {
     this.updateStorage(this.state.todos);
   }
 
-  // eslint-disable-next-line max-len
-  getNotCompletedAmount = list => list.reduce((sum, item) => ((item.completed) ? sum : sum + 1), 0);
+  getNotCompletedAmount = list => list.reduce(
+    (sum, item) => ((item.completed) ? sum : sum + 1), 0,
+  );
 
   addTodo = (title) => {
     this.setState((prevState) => {
@@ -131,8 +132,9 @@ export class TodoApp extends React.Component {
     });
   };
 
-  // eslint-disable-next-line max-len
-  getNumOfNotCompletedTodos = todos => todos.filter(item => !item.completed).length;
+  getNumOfNotCompletedTodos = todos => todos.filter(
+    item => !item.completed,
+  ).length;
 
   updateStorage = (todos) => {
     localStorage.setItem(
