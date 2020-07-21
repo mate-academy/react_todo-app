@@ -1,5 +1,4 @@
 import React from 'react';
-import { uuid } from 'uuidv4';
 
 import { TodoAppTypes } from '../Shapes/Shapes';
 import { Input } from '../Input/Input';
@@ -9,8 +8,7 @@ import { TodosFilter } from '../TodosFilter/TodosFilter';
 export class TodoApp extends React.Component {
   state = {
     tasks: this.props.tasksFromServer,
-    showOnlyCompleted: false,
-    showOnlyActive: false,
+    tab: 'all',
   }
 
   componentDidMount() {
@@ -25,13 +23,7 @@ export class TodoApp extends React.Component {
     localStorage.setItem('todoApp', JSON.stringify(this.state));
   }
 
-  addNewTask = (title) => {
-    const newTask = {
-      title,
-      id: uuid(),
-      completed: false,
-    };
-
+  addNewTask = (newTask) => {
     this.setState(prevState => ({
       tasks: [...prevState.tasks, newTask],
     }));
@@ -74,24 +66,21 @@ export class TodoApp extends React.Component {
   }
 
   toggleTask = (event) => {
-    const onToggleTask = event.target.name;
+    const { name } = event.target;
 
-    switch (onToggleTask) {
+    switch (name) {
       case 'active':
         this.setState({
-          showOnlyCompleted: false,
-          showOnlyActive: true,
+          tab: 'active',
         });
         break;
       case 'completed':
         this.setState({
-          showOnlyCompleted: true,
-          showOnlyActive: false,
+          tab: 'completed',
         });
         break;
       default: this.setState({
-        showOnlyCompleted: false,
-        showOnlyActive: false,
+        tab: 'all',
       });
     }
   }
@@ -111,18 +100,18 @@ export class TodoApp extends React.Component {
   }
 
   selectAllAsCompleted = (event) => {
-    const isChecked = event.target.checked;
+    const { checked } = event.target;
 
     this.setState(prevState => ({
       tasks: prevState.tasks.map(task => ({
         ...task,
-        completed: isChecked,
+        completed: checked,
       })),
     }));
   }
 
   render() {
-    const { tasks, showOnlyCompleted, showOnlyActive } = this.state;
+    const { tasks, tab } = this.state;
 
     const numberOfTask = tasks.length;
 
@@ -133,8 +122,7 @@ export class TodoApp extends React.Component {
 
         <TodoList
           tasks={tasks}
-          showOnlyActive={showOnlyActive}
-          showOnlyCompleted={showOnlyCompleted}
+          tab={tab}
           toggle={this.toggleCheck}
           onDeleted={this.deleteTask}
           onAllSelected={this.selectAllAsCompleted}
@@ -146,8 +134,7 @@ export class TodoApp extends React.Component {
             <TodosFilter
               tasks={tasks}
               onToggleTask={this.toggleTask}
-              showOnlyActive={showOnlyActive}
-              showOnlyCompleted={showOnlyCompleted}
+              tab={tab}
               onClear={this.clearCompletedTasks}
             />
           )

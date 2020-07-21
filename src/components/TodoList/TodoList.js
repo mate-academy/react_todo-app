@@ -5,8 +5,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 export const TodoList = (props) => {
   const {
     tasks,
-    showOnlyActive,
-    showOnlyCompleted,
+    tab,
     toggle,
     onDeleted,
     onAllSelected,
@@ -15,9 +14,9 @@ export const TodoList = (props) => {
 
   let tasksToShow = tasks;
 
-  if (showOnlyActive) {
+  if (tab === 'active') {
     tasksToShow = tasks.filter(task => task.completed === false);
-  } else if (showOnlyCompleted) {
+  } else if (tab === 'completed') {
     tasksToShow = tasks.filter(task => task.completed === true);
   }
 

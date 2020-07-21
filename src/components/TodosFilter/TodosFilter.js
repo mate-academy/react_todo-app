@@ -7,23 +7,25 @@ export const TodosFilter = (props) => {
     tasks,
     onToggleTask,
     onClear,
-    showOnlyActive,
-    showOnlyCompleted,
+    tab,
   } = props;
 
-  const activeTasks = tasks.filter(task => task.completed === false).length;
+  const NumberOfActiveTasks = tasks
+    .filter(task => task.completed === false).length;
+
+  const linkClassNames = className({
+    selected: (tab === 'all'),
+  });
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${activeTasks}
-          items left`}
+        {`${NumberOfActiveTasks} items left`}
       </span>
       <ul className="filters">
         <li>
           <a
-            className={className({ selected: !showOnlyActive
-              && !showOnlyCompleted })}
+            className={linkClassNames}
             name="all"
             href="#/"
             onClick={onToggleTask}
@@ -34,7 +36,7 @@ export const TodosFilter = (props) => {
 
         <li>
           <a
-            className={className({ selected: showOnlyActive })}
+            className={className({ selected: (tab === 'active') })}
             name="active"
             href="#/active"
             onClick={onToggleTask}
@@ -45,7 +47,7 @@ export const TodosFilter = (props) => {
 
         <li>
           <a
-            className={className({ selected: showOnlyCompleted })}
+            className={className({ selected: (tab === 'completed') })}
             name="completed"
             href="#/completed"
             onClick={onToggleTask}

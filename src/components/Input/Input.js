@@ -1,5 +1,6 @@
 import React from 'react';
 import className from 'classnames';
+import { uuid } from 'uuidv4';
 import { InputTypes } from '../Shapes/Shapes';
 
 export class Input extends React.Component {
@@ -18,7 +19,7 @@ export class Input extends React.Component {
   }
 
   onSubmit = (event) => {
-    const onAddTask = this.props.addTask;
+    const { addTask } = this.props;
     const { title } = this.state;
 
     if (!title) {
@@ -30,7 +31,14 @@ export class Input extends React.Component {
     }
 
     if (event.key === 'Enter') {
-      onAddTask(title);
+      const newTask = {
+        title,
+        id: uuid(),
+        completed: false,
+      };
+
+      addTask(newTask);
+
       this.setState({
         title: '',
       });
@@ -40,12 +48,17 @@ export class Input extends React.Component {
   render() {
     const { title, isValid } = this.state;
 
+    const inputClassNames = className(
+      'new-todo ',
+      { 'new-todo--invalid': !isValid },
+    );
+
     return (
       <header className="header">
         <h1>todos</h1>
         <input
           name="task"
-          className={className('new-todo ', { 'new-todo--invalid': !isValid })}
+          className={inputClassNames}
           placeholder={isValid && ('What needs to be done?')}
           value={title}
           required
