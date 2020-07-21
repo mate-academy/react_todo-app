@@ -8,23 +8,12 @@ export const TaskTypes = PropTypes.shape({
   title: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  isEdited: PropTypes.bool.isRequired,
 });
 
 export const TodoAppTypes = {
   tasks: PropTypes.arrayOf(
     TaskTypes,
   ),
-  showOnlyActive: PropTypes.bool.isRequired,
-  showOnlyCompleted: PropTypes.bool.isRequired,
-  addTask: PropTypes.func.isRequired,
-  toggle: PropTypes.func.isRequired,
-  onToggleTask: PropTypes.func.isRequired,
-  onDeleted: PropTypes.func.isRequired,
-  onClear: PropTypes.func.isRequired,
-  onAllSelected: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onChangeCurrentTask: PropTypes.func.isRequired,
 };
 
 export const TodoListTypes = {
@@ -36,7 +25,6 @@ export const TodoListTypes = {
   toggle: PropTypes.func.isRequired,
   onDeleted: PropTypes.func.isRequired,
   onAllSelected: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
   onChangeCurrentTask: PropTypes.func.isRequired,
 };
 

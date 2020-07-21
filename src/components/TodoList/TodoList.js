@@ -1,5 +1,4 @@
 import React from 'react';
-import className from 'classnames';
 import { TodoListTypes } from '../Shapes/Shapes';
 import { TodoItem } from '../TodoItem/TodoItem';
 
@@ -11,7 +10,6 @@ export const TodoList = (props) => {
     toggle,
     onDeleted,
     onAllSelected,
-    onEdit,
     onChangeCurrentTask,
   } = props;
 
@@ -34,23 +32,16 @@ export const TodoList = (props) => {
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
         {tasksToShow.map(task => (
-          <li
+          <TodoItem
             key={task.id}
-            className={className({
-              completed: task.completed,
-              editing: task.isEdited,
-            })}
-          >
-            <TodoItem
-              id={task.id}
-              isCompleted={task.completed}
-              title={task.title}
-              toggle={toggle}
-              onDeleted={onDeleted}
-              onEdit={onEdit}
-              onChangeCurrentTask={onChangeCurrentTask}
-            />
-          </li>
+            id={task.id}
+            isCompleted={task.completed}
+            title={task.title}
+            toggle={toggle}
+            onDeleted={onDeleted}
+            onChangeCurrentTask={onChangeCurrentTask}
+          />
+
         ))}
       </ul>
     </section>

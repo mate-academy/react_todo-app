@@ -1,26 +1,52 @@
 import React from 'react';
+import className from 'classnames';
 import { TodoItemTypes } from '../Shapes/Shapes';
 
 export class TodoItem extends React.Component {
   state = {
-    editedTitle: this.props.title,
+    isEdited: false,
+    temporaryTitle: this.props.title,
+  }
+
+  editTask = () => {
+    this.setState(prevState => ({
+      isEdited: !prevState.isEdited,
+    }));
   }
 
   handleValue = (event) => {
     const titleValue = event.target.value.replace(/\s/, ' ').replace(/^\s/, '');
 
     this.setState(prevState => ({
-      editedTitle: titleValue,
+      temporaryTitle: titleValue,
     }));
   }
 
   onSubmit = (event) => {
-    const onAddTask = this.props.onChangeCurrentTask;
     const taskId = event.target.name;
-    const { editedTitle } = this.state;
-    const currentKeyCode = event.keyCode;
+    const editedTitle = event.target.value;
+    const { keyCode } = event;
 
-    onAddTask(editedTitle, taskId, currentKeyCode);
+    const onAddTask = this.props.onChangeCurrentTask;
+    const previousTitle = this.state.temporaryTitle;
+
+    if (keyCode === 27 || !keyCode) { // if user press Esc or click outside
+      onAddTask(previousTitle, taskId);
+
+      onAddTask(editedTitle, taskId);
+      this.setState(prevState => ({
+        isEdited: false,
+      }));
+    }
+
+    if (keyCode === 13) {
+      onAddTask(editedTitle, taskId);
+
+      onAddTask(editedTitle, taskId);
+      this.setState(prevState => ({
+        isEdited: false,
+      }));
+    }
   }
 
   render() {
@@ -30,13 +56,17 @@ export class TodoItem extends React.Component {
       title,
       toggle,
       onDeleted,
-      onEdit,
     } = this.props;
 
-    const { editedTitle } = this.state;
+    const { isEdited, temporaryTitle } = this.state;
 
     return (
-      <>
+      <li
+        className={className({
+          completed: isCompleted,
+          editing: isEdited,
+        })}
+      >
         <div className="view">
           <input
             id={id}
@@ -49,7 +79,7 @@ export class TodoItem extends React.Component {
           <label
             htmlFor={id}
             value={id}
-            onDoubleClick={onEdit}
+            onDoubleClick={this.editTask}
           >
             {title}
           </label>
@@ -66,12 +96,12 @@ export class TodoItem extends React.Component {
           className="edit"
           required
           ref={input => input && input.focus()}
-          value={editedTitle}
+          value={temporaryTitle}
           onChange={this.handleValue}
-          onKeyDown={this.onSubmit}
+          onKeyUp={this.onSubmit}
           onBlur={this.onSubmit}
         />
-      </>
+      </li>
     );
   }
 }
