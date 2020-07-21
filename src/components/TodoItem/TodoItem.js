@@ -34,9 +34,10 @@ export class TodoItem extends React.Component {
       onAddTask(previousTitle, taskId);
 
       onAddTask(editedTitle, taskId);
-      this.setState(prevState => ({
+      this.setState({
         isEdited: false,
-      }));
+        temporaryTitle: this.props.title,
+      });
     }
 
     if (keyCode === 13) {
