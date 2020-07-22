@@ -28,6 +28,7 @@ class App extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.todos !== prevState.todos) {
       this.onUpdate();
+      localStorage.setItem('todoItems', JSON.stringify(this.state.todos));
     }
   }
 
@@ -42,9 +43,15 @@ class App extends React.Component {
   };
 
   getTodosFromApi = () => {
-    this.setState({
-      todos: todosFromServer,
-    });
+    if (localStorage.getItem('todoItems')) {
+      this.setState({
+        todos: JSON.parse(localStorage.getItem('todoItems')),
+      });
+    } else {
+      this.setState({
+        todos: todosFromServer,
+      });
+    }
   };
 
   onTodoStatus = (id) => {
