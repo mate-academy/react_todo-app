@@ -1,4 +1,5 @@
 import React from 'react';
+import uuid from 'react-uuid';
 import { TodoApp } from './components/TodoApp/TodoApp';
 import todosFromServer from './api/todos';
 
@@ -105,6 +106,20 @@ class App extends React.Component {
     }));
   };
 
+  addNewTodo = (todoName) => {
+    this.setState(prevState => ({
+      todos: [
+        {
+          userId: 1,
+          id: uuid(),
+          title: todoName,
+          completed: false,
+        },
+        ...prevState.todos,
+      ],
+    }));
+  }
+
   render() {
     const {
       todos,
@@ -123,6 +138,7 @@ class App extends React.Component {
         onStatusAll={this.onTodoStatusAll}
         onFilter={this.onFilter}
         onRemoveCompleted={this.onRemoveCompleted}
+        onSaveInput={this.addNewTodo}
       />
     );
   }

@@ -8,7 +8,7 @@ export class TodoItem extends React.Component {
     todoEditingValue: this.props.todo.title,
   };
 
-  handleKeyDown = (event) => {
+  handleInputEdit = (event) => {
     const {
       onSaveEdit,
       todo,
@@ -85,7 +85,7 @@ export class TodoItem extends React.Component {
           type="text"
           className="edit"
           value={this.state.todoEditingValue}
-          onKeyDown={this.handleKeyDown}
+          onKeyDown={this.handleInputEdit}
           onChange={this.onInputTodoTitle}
         />
       </li>
@@ -95,7 +95,7 @@ export class TodoItem extends React.Component {
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   }).isRequired,

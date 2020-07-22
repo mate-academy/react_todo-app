@@ -16,11 +16,14 @@ export const TodoApp = (props) => {
     onStatusAll,
     onFilter,
     onRemoveCompleted,
+    onSaveInput,
   } = props;
 
   return (
     <section className="todoapp">
-      <Header />
+      <Header
+        onSaveInput={onSaveInput}
+      />
 
       <section className="main">
         <input
@@ -58,7 +61,7 @@ export const TodoApp = (props) => {
 TodoApp.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       completed: PropTypes.bool.isRequired,
     }).isRequired,
@@ -70,5 +73,6 @@ TodoApp.propTypes = {
   onStatusAll: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onRemoveCompleted: PropTypes.func.isRequired,
+  onSaveInput: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };
