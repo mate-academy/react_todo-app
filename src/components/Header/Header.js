@@ -35,11 +35,11 @@ export class Header extends React.Component {
 
   render() {
     return (
-      <header className="header">
+      <header className="todoapp__header header">
         <h1>todos</h1>
         <input
           type="text"
-          className="new-todo"
+          className="input new-todo"
           value={this.state.todoName}
           placeholder="What needs to be done?"
           onKeyDown={this.onHandleKeydown}

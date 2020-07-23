@@ -6,19 +6,13 @@
     0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
 
-.todoapp input::placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
-}
-
-.main {
+.todoapp__main {
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
 }
 
-.toggle-all {
+.todoapp__toggle-all {
   width: 1px;
   height: 1px;
   border: none; /* Mobile Safari */
@@ -28,7 +22,7 @@
   bottom: 100%;
 }
 
-.toggle-all + label {
+.todoapp__toggle-all + .todoapp__mark {
   width: 60px;
   height: 34px;
   font-size: 0;
@@ -39,7 +33,7 @@
   transform: rotate(90deg);
 }
 
-.toggle-all + label:before {
+.todoapp__toggle-all + .todoapp__mark:before {
   content: "❯";
   font-size: 21px;
   color: #e6e6e6;
@@ -48,11 +42,11 @@
   border-radius: 56%;
 }
 
-.toggle-all:focus + label:before {
+.todoapp__toggle-all:focus + .todoapp__mark:before {
   outline: 0;
   box-shadow: 0 0 3px #8c6060;
 }
 
-.toggle-all:checked + label:before {
+.todoapp__toggle-all:checked + .todoapp__mark:before {
   color: #737373;
 }

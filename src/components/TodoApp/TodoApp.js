@@ -25,14 +25,19 @@ export const TodoApp = (props) => {
         onSaveInput={onSaveInput}
       />
 
-      <section className="main">
+      <section className="todoapp__main">
         <input
           type="checkbox"
           id="toggle-all"
-          className="toggle-all"
+          className="todoapp__toggle-all"
           onChange={onStatusAll}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <label
+          htmlFor="toggle-all"
+          className="todoapp__mark"
+        >
+          Mark all as complete
+        </label>
         <TodosList
           todos={todos}
           filter={filter}

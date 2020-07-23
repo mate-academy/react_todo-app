@@ -99,7 +99,7 @@ export class TodoItem extends React.Component {
         </div>
         <input
           type="text"
-          className="edit"
+          className="input edit"
           value={this.state.todoEditingValue}
           onKeyDown={this.handleInputEdit}
           onChange={this.onInputTodoTitle}

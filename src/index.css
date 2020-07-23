@@ -33,8 +33,7 @@ body {
   font-weight: 300;
 }
 
-.new-todo,
-.edit {
+.input {
   position: relative;
   margin: 0;
   width: 100%;

@@ -19,6 +19,12 @@
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
 }
 
+.new-todo::placeholder {
+  font-style: italic;
+  font-weight: 300;
+  color: #e6e6e6;
+}
+
 .new-todo:focus {
   outline: 0;
   box-shadow: 0 0 15px #948383;
