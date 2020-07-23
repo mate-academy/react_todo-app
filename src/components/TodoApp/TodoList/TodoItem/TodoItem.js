@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import cn from 'classnames';
+import './TodoItem.css';
 
 export class TodoItem extends React.Component {
   state = {
@@ -74,7 +75,7 @@ export class TodoItem extends React.Component {
 
     return (
       <li
-        className={cn({ completed }, { editing: this.state.editing })}
+        className={cn('item', { completed }, { editing: this.state.editing })}
       >
         <div className="view">
           <input
