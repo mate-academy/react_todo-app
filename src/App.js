@@ -97,34 +97,44 @@ class App extends React.Component {
   };
 
   handleSaveEdit = (value, id) => {
-    this.setState(prevState => ({
-      ...prevState,
-      todos: prevState.todos
-        .map(todo => (
-          todo.id === id
-            ? ({
-              ...todo,
-              title: value,
-            })
-            : (
-              todo
-            )
-        )),
-    }));
+    const isValueValid = value.trim().search(/\S/) !== -1;
+
+    if (isValueValid) {
+      this.setState(prevState => ({
+        ...prevState,
+        todos: prevState.todos
+          .map(todo => (
+            todo.id === id
+              ? ({
+                ...todo,
+                title: value,
+              })
+              : (
+                todo
+              )
+          )),
+      }));
+    } else {
+      this.onRemove(id);
+    }
   };
 
   addNewTodo = (todoName) => {
-    this.setState(prevState => ({
-      todos: [
-        {
-          userId: 1,
-          id: uuid(),
-          title: todoName,
-          completed: false,
-        },
-        ...prevState.todos,
-      ],
-    }));
+    const isNameValid = todoName.trim().search(/\S/) !== -1;
+
+    if (isNameValid) {
+      this.setState(prevState => ({
+        todos: [
+          {
+            userId: 1,
+            id: uuid(),
+            title: todoName,
+            completed: false,
+          },
+          ...prevState.todos,
+        ],
+      }));
+    }
   }
 
   render() {
