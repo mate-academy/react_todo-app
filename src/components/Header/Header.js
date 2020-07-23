@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import './Header.css';
 
 export class Header extends React.Component {
   state = {
