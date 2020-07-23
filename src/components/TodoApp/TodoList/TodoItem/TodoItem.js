@@ -8,6 +8,20 @@ export class TodoItem extends React.Component {
     todoEditingValue: this.props.todo.title,
   };
 
+  handleBlur = () => {
+    const {
+      onSaveEdit,
+      todo,
+    } = this.props;
+
+    onSaveEdit(this.state.todoEditingValue, todo.id);
+
+    this.setState(prevState => ({
+      ...prevState,
+      editing: false,
+    }));
+  }
+
   handleInputEdit = (event) => {
     const {
       onSaveEdit,
@@ -22,6 +36,7 @@ export class TodoItem extends React.Component {
       }));
     } else if (event.key === 'Enter') {
       onSaveEdit(this.state.todoEditingValue, todo.id);
+
       this.setState(prevState => ({
         ...prevState,
         editing: false,
@@ -87,6 +102,7 @@ export class TodoItem extends React.Component {
           value={this.state.todoEditingValue}
           onKeyDown={this.handleInputEdit}
           onChange={this.onInputTodoTitle}
+          onBlur={this.handleBlur}
         />
       </li>
     );

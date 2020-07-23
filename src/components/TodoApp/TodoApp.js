@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types';
 import { TodosList } from './TodoList/TodoList';
 import { TodosFilter } from './TodosFilter/TodosFilter';
 import { Header } from './Header/Header';
-// import cn from 'classnames';
 
 export const TodoApp = (props) => {
   const {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { TodoItem } from './TodoItem/TodoItem';
-// import cn from 'classnames';
 
 export const TodosList = (props) => {
   const {

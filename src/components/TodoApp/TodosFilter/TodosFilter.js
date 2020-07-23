@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import './TodoFilter.css';
 
 const handleFilter = (event, callFilter, criteria) => {
   event.preventDefault();
