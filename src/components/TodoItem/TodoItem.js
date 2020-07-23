@@ -9,6 +9,22 @@ export class TodoItem extends React.Component {
     todoEditingValue: this.props.todo.title,
   };
 
+  todoInput = React.createRef();
+
+  componentDidUpdate() {
+    if (this.state.editing) {
+      this.focusTodoInput();
+    }
+  }
+
+  focusTodoInput = () => {
+    const inputNode = this.todoInput;
+
+    if (inputNode) {
+      inputNode.current.focus();
+    }
+  }
+
   handleBlur = () => {
     const {
       onSaveEdit,
@@ -98,6 +114,7 @@ export class TodoItem extends React.Component {
           />
         </div>
         <input
+          ref={this.todoInput}
           type="text"
           className="input edit"
           value={this.state.todoEditingValue}
