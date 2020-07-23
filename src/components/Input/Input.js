@@ -1,7 +1,7 @@
 import React from 'react';
 import className from 'classnames';
 import { uuid } from 'uuidv4';
-import { InputTypes } from '../Shapes/Shapes';
+import { InputTypes } from './InputShape';
 
 export class Input extends React.Component {
   state = {

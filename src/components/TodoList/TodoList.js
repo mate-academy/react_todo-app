@@ -1,5 +1,5 @@
 import React from 'react';
-import { TodoListTypes } from '../Shapes/Shapes';
+import { TodoListTypes } from './TodoListShape';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList = (props) => {
@@ -14,10 +14,10 @@ export const TodoList = (props) => {
 
   let tasksToShow = tasks;
 
-  if (tab === 'active') {
-    tasksToShow = tasks.filter(task => task.completed === false);
-  } else if (tab === 'completed') {
-    tasksToShow = tasks.filter(task => task.completed === true);
+  if (tab !== 'all') {
+    const isActiveFilter = (tab === 'active');
+
+    tasksToShow = tasks.filter(task => task.completed === isActiveFilter);
   }
 
   return (

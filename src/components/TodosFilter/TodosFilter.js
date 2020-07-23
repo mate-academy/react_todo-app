@@ -1,11 +1,11 @@
 import React from 'react';
 import className from 'classnames';
-import { TodosFilterTypes } from '../Shapes/Shapes';
+import { TodosFilterTypes } from './TodosFilterShape';
 
 export const TodosFilter = (props) => {
   const {
     tasks,
-    onToggleTask,
+    onToggleShowedTask,
     onClear,
     tab,
   } = props;
@@ -28,7 +28,7 @@ export const TodosFilter = (props) => {
             className={linkClassNames}
             name="all"
             href="#/"
-            onClick={onToggleTask}
+            onClick={onToggleShowedTask}
           >
             All
           </a>
@@ -39,7 +39,7 @@ export const TodosFilter = (props) => {
             className={className({ selected: (tab === 'active') })}
             name="active"
             href="#/active"
-            onClick={onToggleTask}
+            onClick={onToggleShowedTask}
           >
             Active
           </a>
@@ -50,7 +50,7 @@ export const TodosFilter = (props) => {
             className={className({ selected: (tab === 'completed') })}
             name="completed"
             href="#/completed"
-            onClick={onToggleTask}
+            onClick={onToggleShowedTask}
           >
             Completed
           </a>

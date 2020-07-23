@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { TodoAppTypes } from '../Shapes/Shapes';
+import { TodoAppTypes } from './TodoAppShape';
 import { Input } from '../Input/Input';
 import { TodoList } from '../TodoList/TodoList';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
@@ -65,31 +64,19 @@ export class TodoApp extends React.Component {
     }));
   }
 
-  toggleTask = (event) => {
+  toggleShowedTask = (event) => {
     const { name } = event.target;
 
-    switch (name) {
-      case 'active':
-        this.setState({
-          tab: 'active',
-        });
-        break;
-      case 'completed':
-        this.setState({
-          tab: 'completed',
-        });
-        break;
-      default: this.setState({
-        tab: 'all',
-      });
-    }
+    this.setState({
+      tab: name,
+    });
   }
 
   deleteTask = (event) => {
-    const currentID = event.target.value;
+    const { value } = event.target;
 
     this.setState(prevState => ({
-      tasks: prevState.tasks.filter(task => task.id !== currentID),
+      tasks: prevState.tasks.filter(task => task.id !== value),
     }));
   }
 
@@ -112,8 +99,7 @@ export class TodoApp extends React.Component {
 
   render() {
     const { tasks, tab } = this.state;
-
-    const numberOfTask = tasks.length;
+    const isAnyTask = tasks.length !== 0;
 
     return (
       <section className="todoapp">
@@ -129,16 +115,15 @@ export class TodoApp extends React.Component {
           onChangeCurrentTask={this.changeCurrentTask}
         />
 
-        {(numberOfTask)
-          ? (
+        {isAnyTask
+          && (
             <TodosFilter
               tasks={tasks}
-              onToggleTask={this.toggleTask}
+              onToggleShowedTask={this.toggleShowedTask}
               tab={tab}
               onClear={this.clearCompletedTasks}
             />
-          )
-          : ''}
+          )}
 
       </section>
     );
@@ -148,5 +133,5 @@ export class TodoApp extends React.Component {
 TodoApp.propTypes = TodoAppTypes;
 
 TodoApp.defaultProps = {
-  tasks: [],
+  tasksFromServer: [],
 };

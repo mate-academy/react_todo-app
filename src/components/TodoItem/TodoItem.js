@@ -1,6 +1,6 @@
 import React from 'react';
 import className from 'classnames';
-import { TodoItemTypes } from '../Shapes/Shapes';
+import { TodoItemTypes } from './TodoItemShape';
 
 export class TodoItem extends React.Component {
   state = {
@@ -15,10 +15,11 @@ export class TodoItem extends React.Component {
   }
 
   handleValue = (event) => {
-    const titleValue = event.target.value.replace(/\s/, ' ').replace(/^\s/, '');
+    const { value } = event.target;
+    const title = value.replace(/\s/, ' ').replace(/^\s/, '');
 
     this.setState(prevState => ({
-      temporaryTitle: titleValue,
+      temporaryTitle: title,
     }));
   }
 
