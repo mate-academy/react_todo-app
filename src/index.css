@@ -139,6 +139,7 @@ body {
   font-size: 22px;
   color: #e6e6e6;
   padding: 10px 27px;
+  cursor: pointer;
 }
 
 .toggle-all:checked + label:before {
@@ -231,6 +232,7 @@ body {
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:hover {
@@ -358,6 +360,7 @@ html .clear-completed:active {
   .toggle-all,
   .todo-list li .toggle {
     background: none;
+    cursor: pointer;
   }
 
   .todo-list li .toggle {
