@@ -48,16 +48,15 @@ export const TodoApp = (props) => {
       </section>
 
       {
-        todos.length
-          ? (
-            <TodosFilter
-              activeTodos={activeTodos}
-              onFilter={onFilter}
-              filter={filter}
-              onRemoveCompleted={onRemoveCompleted}
-            />
-          )
-          : (null)
+        todos.length > 0
+        && (
+          <TodosFilter
+            activeTodos={activeTodos}
+            onFilter={onFilter}
+            filter={filter}
+            onRemoveCompleted={onRemoveCompleted}
+          />
+        )
       }
     </section>
   );
