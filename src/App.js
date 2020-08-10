@@ -1,84 +1,97 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import Footer from './components/Footer/Footer';
+import { Context } from './context';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [todoTitle, setTodoTitle] = useState('');
+
+  useEffect(() => {
+    const raw = localStorage.getItem('todos') || [];
+
+    setTodos(JSON.parse(raw));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  function addTodo(event) {
+    if (event.key === 'Enter' && todoTitle !== '') {
+      setTodos([
+        ...todos,
+        {
+          text: todoTitle,
+          id: Date.now(),
+          isDone: false,
+        },
+      ]);
+
+      setTodoTitle('');
+    }
+  }
+
+  function toggleTodo(id) {
+    setTodos(todos.map((todo) => {
+      const result = { ...todo };
+
+      if (result.id === id) {
+        result.isDone = !todo.isDone;
+      }
+
+      return result;
+    }));
+  }
+
+  function checkAll() {
+    if (todos.every(todo => todo.isDone === true)) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        isDone: false,
+      })));
+    } else {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        isDone: true,
+      })));
+    }
+  }
+
+  function removeTodo(id) {
+    setTodos(todos.filter(todo => todo.id !== id));
+  }
+
+  function clearCompleted() {
+    setTodos(todos.filter(todo => todo.isDone === false));
+  }
+
+  function choseAction(action) {
+    setFilter(action);
+  }
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
-      </header>
-
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+    <Context.Provider value={{
+      addTodo,
+      setTodoTitle,
+      toggleTodo,
+      checkAll,
+      removeTodo,
+      clearCompleted,
+      choseAction,
+      todos,
+      todoTitle,
+      filter,
+    }}
+    >
+      <section className="todoapp">
+        <Header />
+        <Main />
+        <Footer />
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
+    </Context.Provider>
   );
 }
 
