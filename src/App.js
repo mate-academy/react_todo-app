@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 import Footer from './components/Footer/Footer';
@@ -8,16 +8,6 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState('all');
   const [todoTitle, setTodoTitle] = useState('');
-
-  useEffect(() => {
-    const raw = localStorage.getItem('todos') || [];
-
-    setTodos(JSON.parse(raw));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
 
   function addTodo(event) {
     if (event.key === 'Enter' && todoTitle !== '') {
