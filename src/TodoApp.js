@@ -9,6 +9,18 @@ class TodoApp extends React.Component {
     view: 'all',
   };
 
+  componentDidMount() {
+    if (localStorage.todoApp) {
+      this.setState({ ...JSON.parse(localStorage.todoApp) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState !== this.state) {
+      localStorage.setItem('todoApp', JSON.stringify(this.state));
+    }
+  }
+
   onCheckboxChange = (event) => {
     const id = event.target.getAttribute('idnumber');
 
