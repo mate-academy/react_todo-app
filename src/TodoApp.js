@@ -46,8 +46,12 @@ class TodoApp extends React.Component {
   onInputSubmit = (event) => {
     event.preventDefault();
     const { id } = this.state;
-    const title = this.input.value;
+    const title = this.input.value.trim();
     const completed = false;
+
+    if (title === '') {
+      return;
+    }
 
     this.setState(prev => ({
       todos: [...prev.todos, {
@@ -101,11 +105,17 @@ class TodoApp extends React.Component {
   }
 
   onEdit = (id, title) => {
+    if (title.trim() === '') {
+      this.setState(prev => ({
+        todos: [...prev.todos.filter(todo => todo.id !== +id)],
+      }));
+    }
+
     this.setState(prev => ({
       todos: [...prev.todos.map((todo) => {
         if (todo.id === id) {
           return {
-            ...todo, title,
+            ...todo, title: title.trim(),
           };
         }
 
