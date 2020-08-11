@@ -153,7 +153,7 @@ class TodoApp extends React.Component {
 
         <footer className={todos.length > 0 ? 'footer' : 'footer hide'}>
           <span className="todo-count">
-            {todos.length}
+            {todos.filter(todo => !todo.completed).length}
             {' '}
             items left
           </span>
