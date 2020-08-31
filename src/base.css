@@ -129,6 +129,27 @@ hr {
   transition-duration: 500ms;
 }
 
+.editing {
+  position: absolute;
+  top: 0;
+  padding: 15px 15px 15px 60px;
+  width: 100%;
+  font-size: 24px;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: 1.4em;
+  color: inherit;
+  border: 1px solid #999;
+  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.view {
+  height: 58px;
+}
+
 @media (min-width: 899px) {
   .learn-bar {
     width: auto;

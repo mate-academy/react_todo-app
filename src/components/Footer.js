@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { todoShape } from './Shapes';
 import { TodosFilter } from './TodosFilter';
 
-export const Footer = ({ todoList, todoListCopy, getTodos }) => {
+export const Footer = ({ todoList,
+  todoListCopy, getTodos, handleStatusChange }) => {
   const showActiveTodos = () => {
     const count = todoList.filter(todo => todo.completed === false).length;
 
@@ -32,6 +32,7 @@ export const Footer = ({ todoList, todoListCopy, getTodos }) => {
         todoList={todoList}
         todoListCopy={todoListCopy}
         getTodos={getTodos}
+        handleStatusChange={handleStatusChange}
       />
 
       <button
@@ -46,7 +47,13 @@ export const Footer = ({ todoList, todoListCopy, getTodos }) => {
 };
 
 Footer.propTypes = {
-  todoList: PropTypes.arrayOf(PropTypes.shape(todoShape)).isRequired,
-  todoListCopy: PropTypes.arrayOf(PropTypes.shape(todoShape)).isRequired,
+  handleStatusChange: PropTypes.func.isRequired,
+  todoList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  todoListCopy: PropTypes.arrayOf(PropTypes.object).isRequired,
   getTodos: PropTypes.func.isRequired,
 };
+
+// Footer.defaultProps = {
+//   todoList: [],
+//   todoListCopy: [],
+// };

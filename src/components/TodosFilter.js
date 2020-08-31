@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { todoShape } from './Shapes';
 
 export class TodosFilter extends React.Component {
   state = {
@@ -13,28 +12,6 @@ export class TodosFilter extends React.Component {
     });
   }
 
-  resetFilter = (event) => {
-    event.preventDefault();
-    this.props.getTodos(this.props.todoList, this.props.todoList);
-  }
-
-  filterTodos = (event) => {
-    event.preventDefault();
-    const todosCopy = this.props.todoList
-      .filter(todo => todo.completed === false);
-
-    this.props.getTodos(this.props.todoList, todosCopy);
-  }
-
-  showComletedTodos = (event) => {
-    event.preventDefault();
-
-    const todosCopy = this.props.todoList
-      .filter(todo => todo.completed === true);
-
-    this.props.getTodos(this.props.todoList, todosCopy);
-  }
-
   render() {
     return (
       <ul className="filters">
@@ -42,7 +19,7 @@ export class TodosFilter extends React.Component {
           <a
             id="All"
             onFocus={this.setActiveFilter}
-            onClick={this.resetFilter}
+            onClick={this.props.handleStatusChange}
             href="#/"
             className={this.state.activeFilter === 'All' ? 'selected' : ''}
           >
@@ -52,7 +29,7 @@ export class TodosFilter extends React.Component {
         <li>
           <a
             id="Active"
-            onClick={this.filterTodos}
+            onClick={this.props.handleStatusChange}
             onFocus={this.setActiveFilter}
             href="#/active"
             className={this.state.activeFilter === 'Active' ? 'selected' : ''}
@@ -65,7 +42,7 @@ export class TodosFilter extends React.Component {
           <a
             id="Completed"
             onFocus={this.setActiveFilter}
-            onClick={this.showComletedTodos}
+            onClick={this.props.handleStatusChange}
             className={this.state.activeFilter === 'Completed'
               ? 'selected' : ''}
             href="#/completed"
@@ -79,6 +56,5 @@ export class TodosFilter extends React.Component {
 }
 
 TodosFilter.propTypes = {
-  getTodos: PropTypes.func.isRequired,
-  todoList: PropTypes.arrayOf(PropTypes.shape(todoShape)).isRequired,
+  handleStatusChange: PropTypes.func.isRequired,
 };

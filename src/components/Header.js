@@ -1,10 +1,10 @@
 import React from 'react';
+import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 
 export class Header extends React.Component {
   state = {
     inputValue: '',
-    id: 0,
   }
 
     onChange = event => (
@@ -19,14 +19,13 @@ export class Header extends React.Component {
       if (event.key === 'Enter') {
         const todo = ({
           title: this.state.inputValue,
-          id: this.state.id,
+          id: uuid(),
           completed: false,
         });
 
         addTodo(todo);
         this.setState(prevState => ({
           inputValue: '',
-          id: prevState.id + 1,
         }));
       }
     }
