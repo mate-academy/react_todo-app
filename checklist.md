@@ -1,14 +1,19 @@
 # Checklist Todo app
 #### Basic React Checklist.
-1. PropTypes should describe objects and arrays which come in the component.
+1. PropTypes should describe objects and arrays, which are passed in the component.
 2. Use destructuring wherever possible. It makes code more readable.
 3. Functions should do one thing. Don't make monsters!)
 4. Variable names should describe what is stored in them.
-5. The functional component should be used if the state doesn't use.
+5. The functional component should be used if the state is not used.
 6. Functions names should describe the result, and use verbs for this.
 Bad: `newTodo`, `title`
 Good `addTodo`, `setTitle`
+
+follow [these](https://medium.com/javascript-in-plain-english/handy-naming-conventions-for-event-handler-functions-props-in-react-fc1cbb791364) naming conventions for functions
+
 7. Use `classnames` lib for calculated classes.
+8. Don't generate key on render ([here](https://medium.com/blackrock-engineering/5-common-mistakes-with-keys-in-react-b86e82020052) is why)
+
 
 #### Task checklist.
 1. App.js code should be split into several components like Header, TodoList, Footer.
