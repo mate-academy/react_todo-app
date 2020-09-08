@@ -1,6 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
+import TodoList from './components/TodoList';
+import TodoFilter from './components/TodoFilter';
 
 function App() {
+  const [todoList, setTodoList] = useState([]);
+  let displayedList = todoList;
+  const [filter, setFilter] = useState('All');
+
+  if (filter === 'All') {
+    displayedList = todoList;
+  } else if (filter === 'Active') {
+    displayedList = todoList.filter(todo => todo.isActive);
+  } else if (filter === 'Completed') {
+    displayedList = todoList.filter(todo => !todo.isActive);
+  }
+
+  function addTodo(target) {
+    if (target.value.trim().length > 0) {
+      setTodoList([
+        ...todoList,
+        {
+          title: target.value,
+          id: todoList.length,
+          isActive: true,
+        },
+      ]);
+      const input = target;
+
+      input.value = '';
+    }
+  }
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -9,74 +39,34 @@ function App() {
         <input
           className="new-todo"
           placeholder="What needs to be done?"
+          onKeyUp={(event) => {
+            if (event.key === 'Enter') {
+              addTodo(event.target);
+            }
+          }}
         />
       </header>
 
       <section className="main">
         <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList
+          displayedList={displayedList}
+          setTodoList={setTodoList}
+          todoList={todoList}
+        />
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {todoList.length}
+          items left
         </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
+        <TodoFilter
+          setFilter={setFilter}
+          setTodoList={setTodoList}
+          todoList={todoList}
+        />
       </footer>
     </section>
   );
