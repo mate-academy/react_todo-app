@@ -59,7 +59,7 @@ function App() {
 
       <footer className="footer">
         <span className="todo-count">
-          {todoList.length.concat(' ')}
+          {todoList.length}
           items left
         </span>
         <TodoFilter
