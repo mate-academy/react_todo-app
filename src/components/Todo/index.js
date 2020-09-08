@@ -37,7 +37,7 @@ function Todo({ todo, setTodoList, todoList }) {
 
 Todo.propTypes = {
   todo: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     isActive: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
