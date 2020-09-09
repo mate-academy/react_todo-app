@@ -6,10 +6,13 @@ function App() {
       <header className="header">
         <h1>todos App</h1>
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-        />
+        <form>
+          <input
+            type="text"
+            className="new-todo"
+            placeholder="What needs to be done?"
+          />
+        </form>
       </header>
 
       <section className="main">
@@ -19,8 +22,8 @@ function App() {
         <ul className="todo-list">
           <li>
             <div className="view">
-              <input type="checkbox" className="toggle" id="todo-1" />
-              <label htmlFor="todo-1">asdfghj</label>
+              <input type="checkbox" className="toggle" />
+              <label>asdfghj</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
@@ -28,8 +31,8 @@ function App() {
 
           <li className="completed">
             <div className="view">
-              <input type="checkbox" className="toggle" id="todo-2" />
-              <label htmlFor="todo-2">qwertyuio</label>
+              <input type="checkbox" className="toggle" />
+              <label>qwertyuio</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
@@ -37,8 +40,8 @@ function App() {
 
           <li className="editing">
             <div className="view">
-              <input type="checkbox" className="toggle" id="todo-3" />
-              <label htmlFor="todo-3">zxcvbnm</label>
+              <input type="checkbox" className="toggle" />
+              <label>zxcvbnm</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
@@ -46,8 +49,8 @@ function App() {
 
           <li>
             <div className="view">
-              <input type="checkbox" className="toggle" id="todo-4" />
-              <label htmlFor="todo-4">1234567890</label>
+              <input type="checkbox" className="toggle" />
+              <label>1234567890</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
