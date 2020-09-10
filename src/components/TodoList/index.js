@@ -1,16 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import Todo from '../Todo';
 
 function TodoList({ todoList, setTodoList, displayedList }) {
   return (
     <ul className="todo-list">
       {displayedList.map(todo => (
-        <li key={todo.id}>
+        <li
+          key={todo.id}
+          className={cn({
+            view: true,
+            completed: !todo.isActive,
+          })}
+        >
           <Todo
             todo={todo}
             setTodoList={setTodoList}
             todoList={todoList}
+
           />
         </li>
       ))}
