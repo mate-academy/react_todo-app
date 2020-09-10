@@ -10,7 +10,6 @@ function TodoList({ todoList, setTodoList, displayedList }) {
         <li
           key={todo.id}
           className={cn({
-            view: true,
             completed: !todo.isActive,
           })}
         >
