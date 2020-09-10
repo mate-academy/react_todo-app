@@ -31,6 +31,16 @@ function App() {
     }
   }
 
+  function toggleAll() {
+    setTodoList(todoList.map(todo => (
+      {
+        id: todo.id,
+        title: todo.title,
+        isActive: !todo.isActive,
+      }
+    )));
+  }
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -48,7 +58,12 @@ function App() {
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onChange={toggleAll}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
           displayedList={displayedList}
@@ -59,10 +74,11 @@ function App() {
 
       <footer className="footer">
         <span className="todo-count">
-          {todoList.length}
+          {String(todoList.filter(todo => todo.isActive).length).concat(' ')}
           items left
         </span>
         <TodoFilter
+          filter={filter}
           setFilter={setFilter}
           setTodoList={setTodoList}
           todoList={todoList}

@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function TodoFilter({ setFilter, setTodoList, todoList }) {
+function TodoFilter({ filter, setFilter, setTodoList, todoList }) {
   return (
     <>
       <ul className="filters">
         <li>
           <a
             href="#/"
-            className="selected"
+            className={filter === 'All' ? 'selected' : ''}
             onClick={() => setFilter('All')}
           >
             All
@@ -19,6 +19,7 @@ function TodoFilter({ setFilter, setTodoList, todoList }) {
           <a
             href="#/active"
             onClick={() => setFilter('Active')}
+            className={filter === 'Active' ? 'selected' : ''}
           >
             Active
           </a>
@@ -28,6 +29,7 @@ function TodoFilter({ setFilter, setTodoList, todoList }) {
           <a
             href="#/completed"
             onClick={() => setFilter('Completed')}
+            className={filter === 'Completed' ? 'selected' : ''}
           >
             Completed
           </a>
@@ -45,6 +47,7 @@ function TodoFilter({ setFilter, setTodoList, todoList }) {
 }
 
 TodoFilter.propTypes = {
+  filter: PropTypes.string.isRequired,
   setFilter: PropTypes.func.isRequired,
   setTodoList: PropTypes.func.isRequired,
   todoList: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
