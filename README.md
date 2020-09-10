@@ -44,7 +44,7 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
 ![todoedit](./description/edittodo.gif)
 
 ## (*) Advanced tasks (Optional)
-Implement saving the todos in [the API](https://github.com/mate-academy/fe-students-api#mate-students-api).
+Implement saving the todos in [the API](https://mate-academy.github.io/fe-students-api/).
 
 **BEFORE you started:**
 1. Create a user by sending a POST request to the `/users`.
