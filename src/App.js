@@ -1,88 +1,142 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function App() {
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState({});
+  const [allTodosActive, setAllTodosActive] = useState(true);
+  const [todosType, setTodosType] = useState('All');
+
+  const uncompletedTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
+
+  const changeCompleted = (todoId) => {
+    const changedTodos = todos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
+
+      return { ...todo, completed: !todo.completed };
+    });
+
+    setTodos(changedTodos);
+  };
+
+  const setStatusAllTodos = () => {
+    setTodos(
+      todos.map(todo => ({
+        ...todo,
+        completed: allTodosActive,
+      })),
+    );
+
+    setAllTodosActive(!allTodosActive);
+  };
+
+  const selectTodosType = (type) => {
+    setTodosType(type);
+  };
+
+  let filteredTodos;
+
+  switch (todosType) {
+    case 'Active':
+      filteredTodos = todos.filter(todo => !todo.completed);
+      break;
+
+    case 'Completed':
+      filteredTodos = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      filteredTodos = todos;
+  }
+
+  const clearCompleted = () => {
+    setTodos(
+      todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })),
+    );
+  };
+
+  const removeTodo = (todoId) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          setTodos([...todos, newTodo]);
+          setNewTodo({ title: '' });
+        }}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={newTodo.title}
+            onChange={event => setNewTodo({
+              id: +new Date(),
+              title: event.target.value.trimLeft(),
+              completed: false,
+            })}
           />
         </form>
       </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length > 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              onChange={setStatusAllTodos}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <TodoList
+              items={filteredTodos}
+              changeCompleted={changeCompleted}
+              removeTodo={removeTodo}
+            />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          </section>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <footer className="footer">
+            <span className="todo-count">
+              {`${uncompletedTodos.length} items left`}
+            </span>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+            <TodoFilter
+              todosType={todosType}
+              selectTodosType={selectTodosType}
+            />
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
+            {completedTodos.length > 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+          </footer>
+        </>
+      )}
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
     </section>
   );
 }
 
-export default App;
+export default TodoApp;
