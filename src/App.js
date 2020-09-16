@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function App() {
   const [title, setTitle] = useState('');
-  const [toggleAll, setToggleAll] = useState(false);
+  const [toggleAll, setToggleAll] = useState(true);
   const [todoList, setTodoList] = useState([]);
   const newTodo = {
     id: +new Date(),
@@ -10,7 +10,8 @@ function App() {
     completed: false,
   };
 
-  // console.log(todoList);
+  useEffect(() => setToggleAll(todoList.every(todo => todo.completed)),
+    [todoList]);
 
   return (
     <section className="todoapp">
@@ -26,6 +27,7 @@ function App() {
               ...todoList,
             ]);
             setTitle('');
+            setToggleAll(todoList.some(todo => !todo.completed));
           }}
         >
           <input
