@@ -1,25 +1,90 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function App() {
+  const [title, setTitle] = useState('');
+  const [toggleAll, setToggleAll] = useState(false);
+  const [todoList, setTodoList] = useState([]);
+  const newTodo = {
+    id: +new Date(),
+    title,
+    completed: false,
+  };
+
+  // console.log(todoList);
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            title
+            && setTodoList([
+              newTodo,
+              ...todoList,
+            ]);
+            setTitle('');
+          }}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={title.trimLeft()}
+            onChange={event => setTitle(event.target.value)}
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={toggleAll}
+          onChange={() => {
+            setToggleAll(!toggleAll);
+            todoList.map((todo, index) => {
+              todoList[index].completed = !toggleAll;
+
+              return { ...todo };
+            });
+            setTodoList([...todoList]);
+          }}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">
+          {todoList.map((todo, index) => (
+            <li
+              key={todo.id}
+              className={todo.completed ? 'completed' : undefined}
+            >
+              <div className="view">
+                <input
+                  type="checkbox"
+                  className="toggle"
+                  checked={todoList[index].completed}
+                  onChange={() => {
+                    todoList[index].completed = !todoList[index].completed;
+                    setTodoList([...todoList]);
+                  }}
+                />
+                <label>{todo.title}</label>
+                <button
+                  type="button"
+                  className="destroy"
+                  onClick={() => {
+                    todoList.splice(index, 1);
+                    setTodoList([...todoList]);
+                  }}
+                />
+              </div>
+              <input type="text" className="edit" />
+            </li>
+          ))}
           <li>
             <div className="view">
               <input type="checkbox" className="toggle" />
@@ -60,7 +125,9 @@ function App() {
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {todoList.filter(todo => !todo.completed).length}
+          {' '}
+          items left
         </span>
 
         <ul className="filters">
