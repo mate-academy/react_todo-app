@@ -2,12 +2,26 @@ import React, { useEffect, useState } from 'react';
 
 function App() {
   const [title, setTitle] = useState('');
+  const [uneditedTitles, setUneditedTitles] = useState({});
   const [toggleAll, setToggleAll] = useState(true);
   const [todoList, setTodoList] = useState([]);
+  const [filter, setFilter] = useState('All');
+  const filteredList = todoList.filter((todo) => {
+    if (filter === 'Active') {
+      return !todo.completed;
+    }
+
+    if (filter === 'Completed') {
+      return todo.completed;
+    }
+
+    return true;
+  });
   const newTodo = {
     id: +new Date(),
     title,
     completed: false,
+    hidden: false,
   };
 
   useEffect(() => setToggleAll(todoList.every(todo => todo.completed)),
@@ -56,21 +70,36 @@ function App() {
             setTodoList([...todoList]);
           }}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <label
+          htmlFor="toggle-all"
+          hidden={!todoList.length}
+        >
+          Mark all as complete
+        </label>
 
         <ul className="todo-list">
-          {todoList.map((todo, index) => (
+          {filteredList.map((todo, index) => (
             <li
+              hidden={todo.hidden}
               key={todo.id}
               className={todo.completed ? 'completed' : undefined}
+              onDoubleClick={(event) => {
+                const clickedTodo = event.target;
+
+                setUneditedTitles({
+                  ...uneditedTitles,
+                  [todo.id]: todo.title,
+                });
+                clickedTodo.closest('li').className = 'editing';
+              }}
             >
               <div className="view">
                 <input
                   type="checkbox"
                   className="toggle"
-                  checked={todoList[index].completed}
+                  checked={todo.completed}
                   onChange={() => {
-                    todoList[index].completed = !todoList[index].completed;
+                    todoList[index].completed = !todo.completed;
                     setTodoList([...todoList]);
                   }}
                 />
@@ -84,48 +113,39 @@ function App() {
                   }}
                 />
               </div>
-              <input type="text" className="edit" />
+              <input
+                type="text"
+                className="edit"
+                value={todo.title}
+                onChange={(event) => {
+                  todoList[index].title = event.target.value;
+                  setTodoList([...todoList]);
+                }}
+                onKeyDown={(event) => {
+                  const clickedTodo = event.target;
+
+                  if (event.key === 'Enter') {
+                    clickedTodo.closest('li').className
+                      = todo.completed ? 'completed' : '';
+                  }
+
+                  if (event.key === 'Escape') {
+                    todoList[index].title = uneditedTitles[todo.id];
+                    setTodoList([...todoList]);
+                    clickedTodo.closest('li').className
+                      = todo.completed ? 'completed' : '';
+                  }
+                }}
+              />
             </li>
           ))}
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
         </ul>
       </section>
 
-      <footer className="footer">
+      <footer
+        className="footer"
+        hidden={!todoList.length}
+      >
         <span className="todo-count">
           {todoList.filter(todo => !todo.completed).length}
           {' '}
@@ -134,19 +154,44 @@ function App() {
 
         <ul className="filters">
           <li>
-            <a href="#/" className="selected">All</a>
+            <a
+              href="#/"
+              className={filter === 'All' ? 'selected' : ''}
+              onClick={() => setFilter('All')}
+            >
+              All
+            </a>
           </li>
 
           <li>
-            <a href="#/active">Active</a>
+            <a
+              href="#/active"
+              className={filter === 'Active' ? 'selected' : ''}
+              onClick={() => setFilter('Active')}
+            >
+              Active
+            </a>
           </li>
 
           <li>
-            <a href="#/completed">Completed</a>
+            <a
+              href="#/completed"
+              className={filter === 'Completed' ? 'selected' : ''}
+              onClick={() => setFilter('Completed')}
+            >
+              Completed
+            </a>
           </li>
         </ul>
 
-        <button type="button" className="clear-completed">
+        <button
+          type="button"
+          hidden={todoList.every(todo => !todo.completed)}
+          className="clear-completed"
+          onClick={() => setTodoList(
+            [...todoList.filter(todo => !todo.completed)],
+          )}
+        >
           Clear completed
         </button>
       </footer>
