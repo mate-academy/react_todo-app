@@ -63,12 +63,12 @@ function App() {
     <Context.Provider value={{ removeTodo, toggleTodo, changeTodo }}>
       <section className="todoapp">
         <header className="header">
-          <h1>todos</h1>
+          <h1>todos App</h1>
 
           <AddTodo onCreate={addTodo} />
         </header>
 
-        <section className="main">
+        <section className="main" style={{ display: 'block' }}>
           <TodoList todos={shownTodos} />
         </section>
 

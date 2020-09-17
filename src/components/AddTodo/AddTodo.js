@@ -17,7 +17,6 @@ export const AddTodo = ({ onCreate }) => {
   return (
     <form onSubmit={submitHandler}>
       <input
-        type="text"
         className="new-todo"
         placeholder="What needs to be done?"
         value={value}
