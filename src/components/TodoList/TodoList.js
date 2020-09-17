@@ -2,7 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
 
-export const TodoList = ({ todos, setTodos }) => {
+export const TodoList = ({ todos, setTodos, filterValue, onTodoChange }) => {
+  let todosToRender;
+
+  switch (filterValue) {
+    case 'Active':
+      todosToRender = todos.filter(todo => !todo.completed);
+      break;
+    case 'Completed':
+      todosToRender = todos.filter(todo => todo.completed);
+      break;
+    default:
+      todosToRender = todos;
+  }
+
   const handleCompletedChange = (id) => {
     setTodos(todos.map((todo) => {
       if (todo.id === id) {
@@ -16,51 +29,22 @@ export const TodoList = ({ todos, setTodos }) => {
     }));
   };
 
+  const handleTodoDeletion = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
   return (
     <ul className="todo-list">
-      {todos.map(todo => (
+      {todosToRender.map(todo => (
         <Todo
           onCompletedChange={handleCompletedChange}
+          onTodoDeletion={handleTodoDeletion}
+          setTodos={setTodos}
+          onTodoChange={onTodoChange}
           key={todo.id}
           {...todo}
         />
       ))}
-
-      {/* <li> */}
-      {/*  <div className="view"> */}
-      {/*    <input type="checkbox" className="toggle" /> */}
-      {/*    <label>asdfghj</label> */}
-      {/*    <button type="button" className="destroy" /> */}
-      {/*  </div> */}
-      {/*  <input type="text" className="edit" /> */}
-      {/* </li> */}
-
-      {/* <li className="completed"> */}
-      {/*  <div className="view"> */}
-      {/*    <input type="checkbox" className="toggle" /> */}
-      {/*    <label>qwertyuio</label> */}
-      {/*    <button type="button" className="destroy" /> */}
-      {/*  </div> */}
-      {/*  <input type="text" className="edit" /> */}
-      {/* </li> */}
-
-      {/* <li className="editing"> */}
-      {/*  <div className="view"> */}
-      {/*    <input type="checkbox" className="toggle" /> */}
-      {/*    <label>zxcvbnm</label> */}
-      {/*    <button type="button" className="destroy" /> */}
-      {/*  </div> */}
-      {/*  <input type="text" className="edit" /> */}
-      {/* </li> */}
-
-      {/* <li> */}
-      {/*  <div className="view"> */}
-      {/*    <input type="checkbox" className="toggle" /> */}
-      {/*    <label>1234567890</label> */}
-      {/*    <button type="button" className="destroy" /> */}
-      {/*  </div> */}
-      {/*  <input type="text" className="edit" /> */}
-      {/* </li> */}
     </ul>
   );
 };
@@ -74,4 +58,6 @@ TodoList.propTypes = {
     }).isRequired,
   ).isRequired,
   setTodos: PropTypes.func.isRequired,
+  filterValue: PropTypes.string.isRequired,
+  onTodoChange: PropTypes.func.isRequired,
 };
