@@ -1,66 +1,84 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { TodoList } from './components/TodoList';
 
-function App() {
+function TodoApp() {
+  const [todoTitle, setTodoTitle] = useState('');
+  const [todos, setTodos] = useState([]);
+  const [toggleAll, setToggleAll] = useState(false);
+  const [completedCount, setCompletedCount] = useState(0);
+
+  function statusToogler(todoId) {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
+
+      return { ...todo, completed: !todo.completed };
+    });
+
+    setTodos(updatedTodos);
+  }
+
+  useEffect(() => {
+    setToggleAll(todos.every(todo => todo.completed));
+    setCompletedCount(todos.filter(todo => !todo.completed).length);
+  }, [todos]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setTodos([
+      ...todos,
+      {
+        id: +new Date(),
+        title: todoTitle.trim(),
+        completed: false,
+      },
+    ]);
+    setTodoTitle('');
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            onChange={event => setTodoTitle(event.target.value)}
+            value={todoTitle}
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={toggleAll}
+          onChange={() => {
+            setToggleAll(!toggleAll);
+            setTodos(todos.map(todo => ({
+              ...todo,
+              completed: !todo.completed,
+            })));
+          }}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList
+          todos={todos}
+          setTodos={setTodos}
+          statusToogler={statusToogler}
+        />
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {completedCount}
+          {' items left'}
         </span>
 
         <ul className="filters">
@@ -85,4 +103,4 @@ function App() {
   );
 }
 
-export default App;
+export default TodoApp;
