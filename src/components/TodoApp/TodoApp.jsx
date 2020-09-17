@@ -5,6 +5,26 @@ import { TodosFilter } from '../TodosFilter';
 export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('All');
+
+  let todosFiltered;
+
+  switch (filter) {
+    case 'All':
+      todosFiltered = todos;
+      break;
+
+    case 'Active':
+      todosFiltered = todos.filter(todo => !todo.completed);
+      break;
+
+    case 'Completed':
+      todosFiltered = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      todosFiltered = todos;
+  }
 
   const changeCompleted = (id) => {
     setTodos(todos.map((todo) => {
@@ -72,12 +92,52 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      <TodoList
-        todos={todos}
-        changeCompleted={changeCompleted}
-        markAllCompleted={markAllCompleted}
-      />
-      <TodosFilter todos={todos} />
+      {(todos.length > 0) && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              onChange={markAllCompleted}
+              checked={todos.every(todo => todo.completed)}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+
+            <TodoList
+              todos={todosFiltered}
+              setTodos={setTodos}
+              changeCompleted={changeCompleted}
+              markAllCompleted={markAllCompleted}
+            />
+
+          </section>
+
+          <footer className="footer">
+            <span className="todo-count">
+              {`${todos.filter(todo => !todo.completed).length} items left`}
+            </span>
+
+            <TodosFilter
+              todos={todos}
+              filter={filter}
+              setFilter={setFilter}
+            />
+
+            {(todos.some(todo => todo.completed)) && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={() => setTodos(
+                  todos.filter(todo => !todo.completed),
+                )}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </>
   );
 };

@@ -1,34 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-export const TodosFilter = ({ todos }) => (
-  <footer className="footer">
-    <span className="todo-count">
-      {`${todos.filter(todo => !todo.completed).length} items left`}
-    </span>
+export const TodosFilter = ({ todos, filter, setFilter }) => (
+  <ul className="filters">
+    <li>
+      <a
+        href="#/"
+        className={classNames({
+          selected: filter === 'All',
+        })}
+        onClick={event => setFilter(event.target.innerText)}
+      >
+        All
+      </a>
+    </li>
 
-    <ul className="filters">
-      <li>
-        <a href="#/" className="selected">All</a>
-      </li>
+    <li>
+      <a
+        href="#/active"
+        className={classNames({
+          selected: filter === 'Active',
+        })}
+        onClick={event => setFilter(event.target.innerText)}
+      >
+        Active
+      </a>
+    </li>
 
-      <li>
-        <a href="#/active">Active</a>
-      </li>
-
-      <li>
-        <a href="#/completed">Completed</a>
-      </li>
-    </ul>
-
-    <button type="button" className="clear-completed">
-      Clear completed
-    </button>
-  </footer>
+    <li>
+      <a
+        href="#/completed"
+        className={classNames({
+          selected: filter === 'Completed',
+        })}
+        onClick={event => setFilter(event.target.innerText)}
+      >
+        Completed
+      </a>
+    </li>
+  </ul>
 );
 
 TodosFilter.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.object.isRequired,
   ).isRequired,
+  setFilter: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };

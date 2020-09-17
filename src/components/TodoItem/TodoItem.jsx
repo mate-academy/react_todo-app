@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export const TodoItem = ({ todos, changeCompleted }) => (
+export const TodoItem = ({ todos, setTodos, changeCompleted }) => (
   <>
     {todos.map(({ id, completed, title }) => (
       <li
@@ -19,12 +19,17 @@ export const TodoItem = ({ todos, changeCompleted }) => (
             onChange={() => changeCompleted(id)}
           />
           <label>{title}</label>
-          <button type="button" className="destroy" />
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => setTodos(
+              todos.filter(todo => todo.id !== id),
+            )}
+          />
         </div>
         <input type="text" className="edit" />
       </li>
     ))}
-
   </>
 );
 
@@ -37,4 +42,5 @@ TodoItem.propTypes = {
     }).isRequired,
   ).isRequired,
   changeCompleted: PropTypes.func.isRequired,
+  setTodos: PropTypes.func.isRequired,
 };
