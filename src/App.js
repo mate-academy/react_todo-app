@@ -4,10 +4,12 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
 function TodoApp() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')));
   const [newTodo, setNewTodo] = useState({});
   const [allTodosActive, setAllTodosActive] = useState(true);
   const [todosType, setTodosType] = useState('All');
+
+  localStorage.setItem('todos', JSON.stringify(todos));
 
   const uncompletedTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
@@ -90,6 +92,7 @@ function TodoApp() {
           event.preventDefault();
           setTodos([...todos, newTodo]);
           setNewTodo({ title: '' });
+          localStorage.setItem('todos', JSON.stringify(todos));
         }}
         >
           <input
@@ -148,11 +151,9 @@ function TodoApp() {
                 Clear completed
               </button>
             )}
-
           </footer>
         </>
       )}
-
     </section>
   );
 }

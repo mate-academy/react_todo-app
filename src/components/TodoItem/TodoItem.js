@@ -64,7 +64,10 @@ export const TodoItem = ({
           }}
           onKeyUp={handleEditing}
           onBlur={() => {
-            changeTodo(id, newTodoTitle);
+            if (newTodoTitle) {
+              changeTodo(id, newTodoTitle);
+            }
+
             setIsEditMode(false);
           }}
         />
