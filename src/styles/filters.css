@@ -33,3 +33,7 @@
     bottom: 10px;
   }
 }
+
+.clear-visibility {
+  visibility: hidden;
+}
