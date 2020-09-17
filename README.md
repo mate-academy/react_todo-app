@@ -5,16 +5,16 @@
 ## Description
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as described below.
 
-> If you are not sure about how a feature should work just open the real TodoApp and look how it works there
+> If you are not sure about how a feature should work just open the real AddTodo and look how it works there
 
 ![todoapp](./description/todoapp.gif)
 
 ## Tasks
-1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
+1. Implement `AddTodo` component with an input field to create new todos on submit (Enter). Each item should have:
     - `id` - unique identifier (`+new Date()` is good enough)
     - `title` - the text of a todo
     - `completed` - current status (`false` by default)
-1. Show the number of not completed todos in `TodoApp`
+1. Show the number of not completed todos in `AddTodo`
 1. Implement `TodoList` component to display a list of todos
     ```jsx harmony
     <TodoList items={todos} />
