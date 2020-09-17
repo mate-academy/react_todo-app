@@ -1,66 +1,88 @@
-import React from 'react';
 
-function App() {
+import React, { useState } from 'react';
+import { TodoList } from './components/TodoList';
+
+const App = () => {
+  const todosTest = [
+    {
+      title: 'make things',
+      id: 1,
+      completed: false,
+    },
+    {
+      title: 'do tasks',
+      id: 2,
+      completed: false,
+    },
+  ];
+
+  const [todos, setTodos] = useState([...todosTest]);
+  const [newTodo, setNewTodo] = useState('');
+
+  const addTodo = (todoToAdd) => {
+    setTodos([...todos, todoToAdd]);
+  };
+
+  const changeStatus = (id) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
+  const changeStatusAll = () => {
+    if (todos.some(todo => !todo.completed)) {
+      setTodos(todos.map(todo => ({ ...todo, completed: true })));
+    } else {
+      setTodos(todos.map(todo => ({ ...todo, completed: false })));
+    }
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            addTodo({
+              title: newTodo,
+              id: +new Date(),
+              completed: false,
+            });
+            setNewTodo('');
+          }}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={newTodo}
+            onChange={(event) => {
+              setNewTodo(event.target.value);
+            }}
           />
         </form>
       </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+      <TodoList
+        todos={todos}
+        changeStatusAll={changeStatusAll}
+        changeStatus={changeStatus}
+      />
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {todos.filter(todo => !todo.completed).length}
+          {' '}
+          items left
         </span>
 
         <ul className="filters">
@@ -83,6 +105,6 @@ function App() {
       </footer>
     </section>
   );
-}
+};
 
 export default App;
