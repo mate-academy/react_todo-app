@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
 function TodoApp() {
-  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')));
+  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState({});
   const [allTodosActive, setAllTodosActive] = useState(true);
   const [todosType, setTodosType] = useState('All');
 
-  localStorage.setItem('todos', JSON.stringify(todos));
+  // localStorage.clear();
+  // console.log(localStorage);
+
+  useEffect(() => {
+    setTodos(JSON.parse(localStorage.getItem('todos')));
+  }, []);
+
+  // localStorage.setItem('todos', JSON.stringify(todos));
 
   const uncompletedTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
