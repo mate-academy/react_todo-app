@@ -10,23 +10,24 @@ function TodoApp() {
   const [todosType, setTodosType] = useState('All');
   const [currentTitle, setCurrentTitle] = useState('');
 
-  // localStorage.clear();
-  // console.log(localStorage);
-
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('todos'))) {
       setTodos(JSON.parse(localStorage.getItem('todos')));
     }
   }, []);
 
-  // localStorage.setItem('todos', JSON.stringify(todos));
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const uncompletedTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
 
-  const all = 'All';
-  const active = 'Active';
-  const completed = 'Completed';
+  const FILTER = {
+    all: 'All',
+    active: 'Active',
+    completed: 'Completed',
+  };
 
   const changeCompleted = (todoId) => {
     const changedTodos = todos.map((todo) => {
@@ -58,11 +59,11 @@ function TodoApp() {
   let filteredTodos;
 
   switch (todosType) {
-    case active:
+    case FILTER.active:
       filteredTodos = uncompletedTodos;
       break;
 
-    case completed:
+    case FILTER.completed:
       filteredTodos = completedTodos;
       break;
 
@@ -81,6 +82,7 @@ function TodoApp() {
 
   const removeTodo = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
+    localStorage.setItem('todos', JSON.stringify(todos));
   };
 
   const changeTodo = (todoId, newValue) => {
@@ -100,9 +102,11 @@ function TodoApp() {
 
         <form onSubmit={(event) => {
           event.preventDefault();
-          setTodos([...todos, newTodo]);
+          if (currentTitle) {
+            setTodos([...todos, newTodo]);
+          }
+
           setCurrentTitle('');
-          localStorage.setItem('todos', JSON.stringify(todos));
         }}
         >
           <input
@@ -150,9 +154,9 @@ function TodoApp() {
             <TodoFilter
               todosType={todosType}
               selectTodosType={selectTodosType}
-              all={all}
-              active={active}
-              completed={completed}
+              all={FILTER.all}
+              active={FILTER.active}
+              completed={FILTER.completed}
             />
 
             {completedTodos.length > 0 && (

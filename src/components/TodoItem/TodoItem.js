@@ -39,7 +39,6 @@ export const TodoItem = ({
           completed,
           editing: isEditMode,
         })}
-        onDoubleClick={() => setIsEditMode(true)}
       >
         <div className="view">
           <input
@@ -48,7 +47,11 @@ export const TodoItem = ({
             onChange={() => changeCompleted(id)}
             checked={completed}
           />
-          <label>{title}</label>
+          <label
+            onDoubleClick={() => setIsEditMode(true)}
+          >
+            {title}
+          </label>
           <button
             type="button"
             className="destroy"
@@ -59,6 +62,7 @@ export const TodoItem = ({
           type="text"
           className="edit"
           value={newTodoTitle}
+          autoFocus={isEditMode}
           onChange={(event) => {
             setNewTodoTitle(event.target.value.trimLeft());
           }}
