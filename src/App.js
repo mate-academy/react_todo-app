@@ -49,30 +49,34 @@ function TodoApp() {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          checked={false}
-          onChange={() => checkAllCompleted()}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList items={todos} setTodos={setTodos} />
-      </section>
+      {todos.length > 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              checked={allCompleted}
+              onChange={() => checkAllCompleted()}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+            <TodoList items={todos} setTodos={setTodos} />
+          </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          {`${todos
-            .filter(todo => todo.completed === false).length} todos left`}
-        </span>
+          <footer className="footer">
+            <span className="todo-count">
+              {`${todos
+                .filter(todo => todo.completed === false).length} todos left`}
+            </span>
 
-        <TodoFilter />
+            <TodoFilter />
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            <button type="button" className="clear-completed">
+              Clear completed
+            </button>
+          </footer>
+        </>
+      )}
     </section>
   );
 }
