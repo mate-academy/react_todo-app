@@ -4,7 +4,7 @@ function App() {
   const [title, setTitle] = useState('');
   const [uneditedTitles, setUneditedTitles] = useState({});
   const [toggleAll, setToggleAll] = useState(true);
-  const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState(JSON.parse(localStorage.list));
   const [filter, setFilter] = useState('All');
   const filteredList = todoList.filter((todo) => {
     if (filter === 'Active') {
@@ -21,8 +21,9 @@ function App() {
     id: +new Date(),
     title,
     completed: false,
-    hidden: false,
   };
+
+  localStorage.list = JSON.stringify(todoList);
 
   useEffect(() => setToggleAll(todoList.every(todo => todo.completed)),
     [todoList]);
