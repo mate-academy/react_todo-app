@@ -72,12 +72,7 @@ function TodoApp() {
   }
 
   const clearCompleted = () => {
-    setTodos(
-      todos.map(todo => ({
-        ...todo,
-        completed: false,
-      })),
-    );
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   const removeTodo = (todoId) => {
