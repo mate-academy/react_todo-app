@@ -61,11 +61,3 @@ Implement saving the todos in [the API](https://mate-academy.github.io/fe-studen
     - you can send only changed fields (`completed` of `title`)
 1. Implement `toggleAll` functionality (try to send as few requests as possible)
 1. Implement `clear completed` sending as few requests as possible
-
-##  If you want to implement styles yourself
-- Font: 'helvetica neue'
-- Font sizes to use: 100px, 24px, 14px
-- implement arrow by rotating '❯' symbol
-- Use '✕' symbol to remove TODO item on hover
-- [checked](./public/icons/checked.svg)
-- [unchecked](./public/icons/unchecked.svg)
