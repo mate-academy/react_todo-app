@@ -44,6 +44,10 @@ export const Todo = ({ todo, changeProperty, editTitle, todosTools }) => {
         type="text"
         className="edit"
         defaultValue={title}
+        onBlur={({ target }) => {
+          changeProperty(id, target.value);
+          editTitle(null);
+        }}
         onKeyDown={({ key, target }) => {
           if (key === 'Enter') {
             changeProperty(id, target.value);
