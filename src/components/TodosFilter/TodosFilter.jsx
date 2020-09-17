@@ -66,12 +66,14 @@ export const TodosFilter = ({
       </ul>
 
       <button
+        hidden={!todos.some(todo => todo.completed)}
         type="button"
         className="clear-completed"
         onClick={() => {
           const updatedTodos = todos.filter(todo => !todo.completed);
 
           updateTodos(updatedTodos);
+          localStorage.setItem('todos', JSON.stringify(updatedTodos));
         }}
       >
         Clear completed

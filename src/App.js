@@ -13,8 +13,15 @@ function App() {
   };
 
   useEffect(() => {
+    const myStorage = localStorage.getItem('todos');
+    const todosFromStorage = !myStorage || JSON.parse(myStorage);
+
+    (!todos.length && todosFromStorage.length)
+      && updateTodos(todosFromStorage);
     updateFiltered(todos);
     filter(selectedFilter);
+    !todos.length
+      || localStorage.setItem('todos', JSON.stringify([...todos]));
   }, [todos]);
 
   function filter(filterBy) {
@@ -103,7 +110,7 @@ function App() {
         />
       </section>
 
-      <footer className="footer">
+      <footer hidden={!todos.length} className="footer">
         <TodosFilter
           todoTools={todoTools}
           filter={filter}

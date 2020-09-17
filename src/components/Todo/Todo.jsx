@@ -9,6 +9,7 @@ export const Todo = ({ todo, changeProperty, editTitle, todosTools }) => {
     const updatedTodos = todos.filter(item => item.id !== todoId);
 
     updateTodos(updatedTodos);
+    localStorage.clear('todos');
   };
 
   return (
