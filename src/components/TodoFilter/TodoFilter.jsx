@@ -1,20 +1,42 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import cn from 'classnames';
 
-export const TodoFilter = () => {
+export const TodoFilter = ({ handleFilter, filter }) => (
+  <ul className="filters">
+    <li>
+      <button
+        type="button"
+        onClick={() => handleFilter('All')}
+        className={cn({ selected: filter === 'All' })}
+      >
+        All
+      </button>
+    </li>
 
-  return (
-    <ul className="filters">
-      <li>
-        <a href="#/" className="selected">All</a>
-      </li>
+    <li>
+      <button
+        type="button"
+        onClick={() => handleFilter('Active')}
+        className={cn({ selected: filter === 'Active' })}
+      >
+        Active
+      </button>
+    </li>
 
-      <li>
-        <a href="#/active">Active</a>
-      </li>
+    <li>
+      <button
+        type="button"
+        onClick={() => handleFilter('Completed')}
+        className={cn({ selected: filter === 'Completed' })}
+      >
+        Completed
+      </button>
+    </li>
+  </ul>
+);
 
-      <li>
-        <a href="#/completed">Completed</a>
-      </li>
-    </ul>
-  )
-}
+TodoFilter.propTypes = {
+  handleFilter: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
+};

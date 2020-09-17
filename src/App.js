@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -7,13 +7,26 @@ function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [allCompleted, setAllCompleted] = useState(false);
+  const [filter, setFilter] = useState('All');
+
+  const filteredTodos = useMemo(() => todos.filter((todo) => {
+    switch (filter) {
+      case 'Completed':
+        return todo.completed;
+      case 'Active':
+        return !todo.completed;
+      default:
+        return todo;
+    }
+  }), [filter, todos]);
 
   const addTodo = (event) => {
+    event.preventDefault();
+
     if (!newTodo) {
       return;
     }
 
-    event.preventDefault();
     setTodos(prevTodos => [...prevTodos,
       {
         id: +new Date(),
@@ -31,6 +44,10 @@ function TodoApp() {
       ...todo,
       completed: !allCompleted,
     })));
+  };
+
+  const clearCompleted = () => {
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
   return (
@@ -60,20 +77,26 @@ function TodoApp() {
               onChange={() => checkAllCompleted()}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
-            <TodoList items={todos} setTodos={setTodos} />
+            <TodoList items={filteredTodos} setTodos={setTodos} />
           </section>
 
           <footer className="footer">
             <span className="todo-count">
-              {`${todos
-                .filter(todo => todo.completed === false).length} todos left`}
+              {`${todos.filter(todo => !todo.completed).length} todos left`}
             </span>
 
-            <TodoFilter />
+            <TodoFilter handleFilter={setFilter} filter={filter} />
 
-            <button type="button" className="clear-completed">
-              Clear completed
-            </button>
+            {todos.some(todo => todo.completed) && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+
           </footer>
         </>
       )}
