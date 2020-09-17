@@ -12,6 +12,10 @@ function TodoApp() {
   const uncompletedTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
 
+  const all = 'All';
+  const active = 'Active';
+  const completed = 'Completed';
+
   const changeCompleted = (todoId) => {
     const changedTodos = todos.map((todo) => {
       if (todo.id !== todoId) {
@@ -42,12 +46,12 @@ function TodoApp() {
   let filteredTodos;
 
   switch (todosType) {
-    case 'Active':
-      filteredTodos = todos.filter(todo => !todo.completed);
+    case active:
+      filteredTodos = uncompletedTodos;
       break;
 
-    case 'Completed':
-      filteredTodos = todos.filter(todo => todo.completed);
+    case completed:
+      filteredTodos = completedTodos;
       break;
 
     default:
@@ -65,6 +69,16 @@ function TodoApp() {
 
   const removeTodo = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
+  const changeTodo = (todoId, newValue) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
+
+      return { ...todo, title: newValue };
+    }));
   };
 
   return (
@@ -107,6 +121,7 @@ function TodoApp() {
               items={filteredTodos}
               changeCompleted={changeCompleted}
               removeTodo={removeTodo}
+              changeTodo={changeTodo}
             />
 
           </section>
@@ -119,6 +134,9 @@ function TodoApp() {
             <TodoFilter
               todosType={todosType}
               selectTodosType={selectTodosType}
+              all={all}
+              active={active}
+              completed={completed}
             />
 
             {completedTodos.length > 0 && (
