@@ -8,12 +8,15 @@ function TodoApp() {
   const [newTodo, setNewTodo] = useState({});
   const [allTodosActive, setAllTodosActive] = useState(true);
   const [todosType, setTodosType] = useState('All');
+  const [currentTitle, setCurrentTitle] = useState('');
 
   // localStorage.clear();
   // console.log(localStorage);
 
   useEffect(() => {
-    setTodos(JSON.parse(localStorage.getItem('todos')));
+    if (JSON.parse(localStorage.getItem('todos'))) {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
   }, []);
 
   // localStorage.setItem('todos', JSON.stringify(todos));
@@ -98,7 +101,7 @@ function TodoApp() {
         <form onSubmit={(event) => {
           event.preventDefault();
           setTodos([...todos, newTodo]);
-          setNewTodo({ title: '' });
+          setCurrentTitle('');
           localStorage.setItem('todos', JSON.stringify(todos));
         }}
         >
@@ -106,12 +109,15 @@ function TodoApp() {
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
-            value={newTodo.title}
-            onChange={event => setNewTodo({
-              id: +new Date(),
-              title: event.target.value.trimLeft(),
-              completed: false,
-            })}
+            value={currentTitle}
+            onChange={(event) => {
+              setCurrentTitle(event.target.value.trimLeft());
+              setNewTodo({
+                id: +new Date(),
+                title: event.target.value.trimLeft(),
+                completed: false,
+              });
+            }}
           />
         </form>
       </header>
