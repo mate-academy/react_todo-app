@@ -84,6 +84,7 @@ body {
 
 .new-todo,
 .edit {
+  outline: none;
   position: relative;
   margin: 0;
   width: 100%;

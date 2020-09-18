@@ -96,7 +96,6 @@ function TodoApp() {
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
         <form onSubmit={event => addTodo(event)}>
           <input
             type="text"
@@ -104,6 +103,7 @@ function TodoApp() {
             placeholder="What needs to be done?"
             value={newTodo}
             onChange={event => setNewTodo(event.target.value)}
+            onBlur={event => addTodo(event)}
           />
         </form>
       </header>
