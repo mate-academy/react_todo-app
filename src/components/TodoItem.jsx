@@ -33,38 +33,41 @@ export const TodoItem = ({ todo, complete, onDelete, todoWasEdited }) => {
           }}
         />
       </div>
-      <input
-        type="text"
-        className="edit"
-        value={newTodo}
-        onBlur={() => setEditing(false)}
-        onChange={({ target }) => {
-          setEditigTodo(target.value);
-        }}
-        onKeyDown={(event) => {
-          switch (event.key) {
-            case 'Enter':
-              if (newTodo) {
-                todoWasEdited(todo.id, newTodo);
-                setCurrentTodo(newTodo);
+      {editing && (
+        <input
+          type="text"
+          className="edit"
+          autoFocus
+          value={newTodo}
+          onBlur={() => setEditing(false)}
+          onChange={({ target }) => {
+            setEditigTodo(target.value);
+          }}
+          onKeyDown={(event) => {
+            switch (event.key) {
+              case 'Enter':
+                if (newTodo) {
+                  todoWasEdited(todo.id, newTodo);
+                  setCurrentTodo(newTodo);
+                  setEditing(false);
+
+                  return;
+                }
+
+                setEditigTodo(currentTodo);
                 setEditing(false);
 
                 return;
-              }
 
-              setEditigTodo(currentTodo);
-              setEditing(false);
+              case 'Escape':
+                setEditing(false);
+                break;
 
-              return;
-
-            case 'Escape':
-              setEditing(false);
-              break;
-
-            default:
-          }
-        }}
-      />
+              default:
+            }
+          }}
+        />
+      )}
     </li>
   );
 };
