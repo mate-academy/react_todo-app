@@ -61,6 +61,15 @@ function TodoApp() {
   const checkAllCompleted = () => {
     setAllCompleted(!allCompleted);
 
+    if (areAllTodosCompleted) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })));
+
+      return;
+    }
+
     setTodos(todos.map(todo => ({
       ...todo,
       completed: !allCompleted,
