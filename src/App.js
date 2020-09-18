@@ -87,7 +87,11 @@ function App() {
         !todos.length
         || (
           <TodosFilter
-            todosLeft={todos.length}
+            todosLeft={
+              todos
+                .filter(todo => todo.completed === false)
+                .length
+            }
             showTodos={setFilterBy}
             clearCompleted={clearCompleted}
             completedTodos={todos.some(todo => todo.completed)}
