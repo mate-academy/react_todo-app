@@ -28,6 +28,8 @@ function TodoApp() {
     }
   }), [filter, todos]);
 
+  const completedTodos = todos.filter(todo => todo.completed);
+
   const addTodo = (event) => {
     event.preventDefault();
 
@@ -81,7 +83,7 @@ function TodoApp() {
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
-              checked={allCompleted}
+              checked={completedTodos.length === todos.length}
               onChange={() => checkAllCompleted()}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
