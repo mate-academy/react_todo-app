@@ -10,29 +10,30 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
-  const handleChanges = (event) => {
-    const [value, key] = event.target;
-    console.log(event);
-
-    if (key === 'Escape') {
-      setEditingTodo(false);
-      return;
-    } else if (event.key === 'Enter') {
-      setTodos(prevTodos => {
+  const handleChanges = (newTitle) => {
+    setTodos(prevTodos => {
       return prevTodos.map(todo => {
         if (todo.id === item.id) {
           return {
             ...todo,
-            title: value
+            title: newTitle,
           }
         }
         return todo;
       })
     })
-    }
-
     setEditingTodo(false)
-    
+  }
+
+  const handleKeyDown = (event) => {
+
+    if (event.key === 'Escape') {
+      setEditingTodo(false);
+      return;
+    } else if (event.key === 'Enter') {
+      handleChanges(event.target.value)
+      setEditingTodo(false);
+    }
   }
 
   return (
@@ -57,15 +58,17 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
           onClick={() => destroyTodo(item.id)}
         />
       </div>
-      <input
-        // onFocus={editingTodo}
-        value={editedTitle}
-        type="text"
-        className="edit"
-        onChange={event => setEditedTitle(event)}
-        onKeyDown={event => handleChanges(event)}
-        onBlur={event => handleChanges(event)}
-      />
+      {editingTodo && (
+        <input
+          autoFocus
+          value={editedTitle}
+          type="text"
+          className="edit"
+          onChange={event => setEditedTitle(event.target.value)}
+          onKeyDown={event => handleKeyDown(event)}
+          onBlur={event => handleChanges(event.target.value)}
+        />
+      )}
     </li>
   );
 };
