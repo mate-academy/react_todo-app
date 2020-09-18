@@ -58,30 +58,27 @@ export const TodoItem = ({
             onClick={() => removeTodo(id)}
           />
         </div>
-        <input
-          type="text"
-          className="edit"
-          value={newTodoTitle}
-          // autoFocus={isEditMode} doesn't work.
-          // Finded in google a way to do it with ref
-          ref={(component) => {
-            if (component) {
-              component.focus();
-            }
-          }}
-          onChange={(event) => {
-            setNewTodoTitle(event.target.value.trimLeft());
-          }}
-          onKeyUp={handleEditing}
-          onFocus={e => e.currentTarget.select()}
-          onBlur={() => {
-            if (newTodoTitle) {
-              changeTodo(id, newTodoTitle);
-            }
+        {isEditMode && (
+          <input
+            type="text"
+            className="edit"
+            value={newTodoTitle}
+            autoFocus
+            onChange={(event) => {
+              setNewTodoTitle(event.target.value.trimLeft());
+            }}
+            onKeyUp={handleEditing}
+            onFocus={e => e.currentTarget.select()}
+            onBlur={() => {
+              if (newTodoTitle) {
+                changeTodo(id, newTodoTitle);
+              }
 
-            setIsEditMode(false);
-          }}
-        />
+              setIsEditMode(false);
+            }}
+          />
+        )}
+
       </li>
     </>
   );

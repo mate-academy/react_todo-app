@@ -77,7 +77,6 @@ function TodoApp() {
 
   const removeTodo = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
-    localStorage.setItem('todos', JSON.stringify(todos));
   };
 
   const changeTodo = (todoId, newValue) => {
