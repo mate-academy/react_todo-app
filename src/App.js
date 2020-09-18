@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -15,6 +15,16 @@ function TodoApp() {
   const [allCompleted, setAllCompleted] = useState(false);
   const [filter, setFilter] = useState(filters.all);
 
+  useEffect(() => {
+    if (localStorage.todos) {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
   const filteredTodos = useMemo(() => todos.filter((todo) => {
     switch (filter) {
       case filters.completed:
@@ -29,6 +39,7 @@ function TodoApp() {
   }), [filter, todos]);
 
   const completedTodos = todos.filter(todo => todo.completed);
+  const areAllTodosCompleted = completedTodos.length === todos.length;
 
   const addTodo = (event) => {
     event.preventDefault();
@@ -83,8 +94,8 @@ function TodoApp() {
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
-              checked={completedTodos.length === todos.length}
-              onChange={() => checkAllCompleted()}
+              checked={areAllTodosCompleted}
+              onChange={checkAllCompleted}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
             <TodoList items={filteredTodos} setTodos={setTodos} />
