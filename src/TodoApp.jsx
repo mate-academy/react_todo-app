@@ -6,6 +6,7 @@ const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, addNewTodo] = useState('');
   const [filter, setFilter] = useState('all');
+  const completedTodos = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     const items = [];
@@ -14,9 +15,9 @@ const TodoApp = () => {
       localStorage.setItem('todos', JSON.stringify(items));
     }
 
-    const data = JSON.parse(localStorage.getItem('todos'));
+    const todosFromStorage = JSON.parse(localStorage.getItem('todos'));
 
-    setTodos(data);
+    setTodos(todosFromStorage);
   }, []);
 
   useEffect(() => {
@@ -123,7 +124,7 @@ const TodoApp = () => {
                   type="checkbox"
                   id="toggle-all"
                   className="toggle-all"
-                  checked={todos.filter(todo => !todo.completed).length === 0}
+                  checked={completedTodos === 0}
                   onChange={toogleAll}
                 />
                 <label htmlFor="toggle-all">Mark all as complete</label>
@@ -139,7 +140,7 @@ const TodoApp = () => {
 
           <footer className="footer">
             <span className="todo-count">
-              {`${todos.filter(todo => !todo.completed).length} items left`}
+              {`${completedTodos} items left`}
             </span>
 
             <TodosFilter
