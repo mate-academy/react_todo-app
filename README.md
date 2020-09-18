@@ -1,5 +1,5 @@
 # React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/)
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://martakupka.github.io/react_todo-app/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
@@ -29,7 +29,7 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
     - Use constants instead of just strings (for example `FILTERS.all`)
 1. Add ability to remove an item.
 1. Add ability to `clear completed` - remove all completed items from the list.
-    - It should be visible if there is at least 1 completed item in the list. 
+    - It should be visible if there is at least 1 completed item in the list.
 1. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
 1. Make inline editing for the TODO item
     - double click on the TODO title makes it editable (just add a class `editing` to a `li`)
