@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-export const TodoFilter = ({ handleFilter, filter }) => (
+export const TodoFilter = ({ handleFilter, filter, filters }) => (
   <ul className="filters">
     <li>
       <button
         type="button"
-        onClick={() => handleFilter('All')}
-        className={cn({ selected: filter === 'All' })}
+        onClick={() => handleFilter(filters.all)}
+        className={cn({ 'selected': filter === filters.all })}
       >
         All
       </button>
@@ -17,8 +17,8 @@ export const TodoFilter = ({ handleFilter, filter }) => (
     <li>
       <button
         type="button"
-        onClick={() => handleFilter('Active')}
-        className={cn({ selected: filter === 'Active' })}
+        onClick={() => handleFilter(filters.active)}
+        className={cn({ 'selected': filter === filters.active })}
       >
         Active
       </button>
@@ -27,8 +27,8 @@ export const TodoFilter = ({ handleFilter, filter }) => (
     <li>
       <button
         type="button"
-        onClick={() => handleFilter('Completed')}
-        className={cn({ selected: filter === 'Completed' })}
+        onClick={() => handleFilter(filters.completed)}
+        className={cn({ 'selected': filter === filters.completed })}
       >
         Completed
       </button>

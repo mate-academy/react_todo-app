@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 export const Todo = ({ item, handleStatus, setTodos }) => {
+  const [editingTodo, setEditingTodo] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(item.title);
+
   const destroyTodo = (id) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
+  const handleChanges = (newTitle) => {
+    setEditingTodo(false)
+    setTodos(prevTodos => {
+      return prevTodos.map(todo => {
+        if (todo.id === item.id) {
+          return {
+            ...todo,
+            title: newTitle
+          }
+        }
+        return todo;
+      })
+    })
+  }
+
   return (
-    <li className={cn({ completed: item.completed })}>
+    <li
+      
+      className={cn({ 'completed': item.completed, 'editing': editingTodo })}>
       <div className="view">
         <input
           type="checkbox"
@@ -16,14 +36,33 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
           checked={item.completed}
           onChange={() => handleStatus(item.id)}
         />
-        <label>{item.title}</label>
+        <label
+          onDoubleClick={() => setEditingTodo(true)}
+        >
+          {item.title}
+        </label>
         <button
           type="button"
           className="destroy"
           onClick={() => destroyTodo(item.id)}
         />
       </div>
-      <input type="text" className="edit" />
+      <input
+        onFocus={setEditingTodo}
+        value={editedTitle}
+        type="text"
+        className="edit"
+        onChange={(event) => setEditedTitle(event.target.value)}
+        onKeyDown={event => {
+          if (event.key === 'Escape') {
+            setEditingTodo(false);
+            return;
+          } else if (event.key === 'Enter') {
+            handleChanges(event.target.value)
+          }
+        }}
+        onBlur={(event) => handleChanges(event.target.value)}
+      />
     </li>
   );
 };

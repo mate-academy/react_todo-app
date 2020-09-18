@@ -3,18 +3,26 @@ import React, { useState, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
+const filters = {
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
+};
+
 function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [allCompleted, setAllCompleted] = useState(false);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState(filters.all);
 
   const filteredTodos = useMemo(() => todos.filter((todo) => {
     switch (filter) {
-      case 'Completed':
+      case filters.completed:
         return todo.completed;
-      case 'Active':
+
+      case filters.active:
         return !todo.completed;
+
       default:
         return todo;
     }
@@ -85,7 +93,11 @@ function TodoApp() {
               {`${todos.filter(todo => !todo.completed).length} todos left`}
             </span>
 
-            <TodoFilter handleFilter={setFilter} filter={filter} />
+            <TodoFilter
+              handleFilter={setFilter}
+              filter={filter}
+              filters={filters}
+            />
 
             {todos.some(todo => todo.completed) && (
               <button
