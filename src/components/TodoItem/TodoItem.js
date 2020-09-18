@@ -24,6 +24,7 @@ export const TodoItem = ({
         break;
 
       case 'Escape':
+        setNewTodoTitle(title);
         setIsEditMode(false);
         break;
 

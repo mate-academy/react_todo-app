@@ -127,6 +127,7 @@ function TodoApp() {
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
+              checked={completedTodos.length === todos.length}
               onChange={setStatusAllTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
