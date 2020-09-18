@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-export const TodoItem = ({ todo, complete, onDelete }) => {
+export const TodoItem = ({ todo, complete, onDelete, todoWasEdited }) => {
+  const [currentTodo, setCurrentTodo] = useState(todo.title);
+  const [newTodo, setEditigTodo] = useState(currentTodo);
+  const [editing, setEditing] = useState(false);
 
   return (
     <li className={classNames({
       completed: todo.completed,
+      editing,
     })}
     >
       <div className="view">
@@ -18,7 +22,9 @@ export const TodoItem = ({ todo, complete, onDelete }) => {
             complete(todo.id);
           }}
         />
-        <label>{todo.title}</label>
+        <label onDoubleClick={() => setEditing(true)}>
+          {currentTodo}
+        </label>
         <button
           type="button"
           className="destroy"
@@ -27,7 +33,38 @@ export const TodoItem = ({ todo, complete, onDelete }) => {
           }}
         />
       </div>
-      <input type="text" className="edit" />
+      <input
+        type="text"
+        className="edit"
+        value={newTodo}
+        onBlur={() => setEditing(false)}
+        onChange={({ target }) => {
+          setEditigTodo(target.value);
+        }}
+        onKeyDown={(event) => {
+          switch (event.key) {
+            case 'Enter':
+              if (newTodo) {
+                todoWasEdited(todo.id, newTodo);
+                setCurrentTodo(newTodo);
+                setEditing(false);
+
+                return;
+              }
+
+              setEditigTodo(currentTodo);
+              setEditing(false);
+
+              return;
+
+            case 'Escape':
+              setEditing(false);
+              break;
+
+            default:
+          }
+        }}
+      />
     </li>
   );
 };
@@ -40,4 +77,5 @@ TodoItem.propTypes = {
   }).isRequired,
   complete: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  todoWasEdited: PropTypes.func.isRequired,
 };

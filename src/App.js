@@ -29,6 +29,12 @@ function App() {
     }]);
   };
 
+  const editingTodo = (id, newTitle) => {
+    setTodos(todos.map(todo => (todo.id === id
+      ? ({ ...todo, title: newTitle })
+      : ({ ...todo }))));
+  };
+
   const changeCompleted = (id) => {
     setTodos(todos.map(todo => ((todo.id === id)
       ? { ...todo, completed: !todo.completed }
@@ -80,6 +86,7 @@ function App() {
           todos={filteredTodos}
           changeCompleted={changeCompleted}
           deleteTodo={deleteTodo}
+          editingTodo={editingTodo}
         />
       </section>
 

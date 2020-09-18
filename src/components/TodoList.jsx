@@ -3,9 +3,18 @@ import PropTypes, { object } from 'prop-types';
 
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, changeCompleted, deleteTodo }) => {
+export const TodoList = ({
+  todos,
+  changeCompleted,
+  deleteTodo,
+  editingTodo,
+}) => {
   const complete = (id) => {
     changeCompleted(id);
+  };
+
+  const todoWasEdited = (id, newTodo) => {
+    editingTodo(id, newTodo);
   };
 
   return (
@@ -16,6 +25,7 @@ export const TodoList = ({ todos, changeCompleted, deleteTodo }) => {
           key={item.id}
           complete={complete}
           onDelete={deleteTodo}
+          todoWasEdited={todoWasEdited}
         />
       ))}
     </ul>
@@ -26,4 +36,5 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(object).isRequired,
   changeCompleted: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  editingTodo: PropTypes.func.isRequired,
 };
