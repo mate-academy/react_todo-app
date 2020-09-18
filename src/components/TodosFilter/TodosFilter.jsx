@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export const TodosFilter = ({ todos, filter, setFilter }) => (
+export const TodosFilter = ({ filter, setFilter }) => (
   <ul className="filters">
     <li>
       <a
@@ -43,9 +43,6 @@ export const TodosFilter = ({ todos, filter, setFilter }) => (
 );
 
 TodosFilter.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.object.isRequired,
-  ).isRequired,
   setFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };

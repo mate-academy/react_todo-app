@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
 
@@ -6,6 +6,10 @@ export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('All');
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   let todosFiltered;
 
@@ -28,14 +32,27 @@ export const TodoApp = () => {
 
   const changeCompleted = (id) => {
     setTodos(todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
+      if (todo.id !== id) {
+        return todo;
       }
 
-      return todo;
+      return {
+        ...todo,
+        completed: !todo.completed,
+      };
+    }));
+  };
+
+  const changeTitle = (id, newTitle) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return {
+        ...todo,
+        title: newTitle,
+      };
     }));
   };
 
@@ -107,6 +124,7 @@ export const TodoApp = () => {
             <TodoList
               todos={todosFiltered}
               setTodos={setTodos}
+              changeTitle={changeTitle}
               changeCompleted={changeCompleted}
               markAllCompleted={markAllCompleted}
             />

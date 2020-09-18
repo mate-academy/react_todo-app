@@ -2,23 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem';
 
-export const TodoList = ({ todos, setTodos, changeCompleted }) => (
+export const TodoList = ({ todos, setTodos, changeCompleted, changeTitle }) => (
   <ul className="todo-list">
-    <TodoItem
-      todos={todos}
-      setTodos={setTodos}
-      changeCompleted={changeCompleted}
-    />
-
-    {/* <li className="editing">
-      <div className="view">
-        <input type="checkbox" className="toggle" />
-        <label>zxcvbnm</label>
-        <button type="button" className="destroy" />
-      </div>
-      <input type="text" className="edit" />
-    </li> */}
-
+    {todos.map(todo => (
+      <TodoItem
+        {...todo}
+        todos={todos}
+        setTodos={setTodos}
+        changeTitle={changeTitle}
+        changeCompleted={changeCompleted}
+      />
+    ))}
   </ul>
 );
 
@@ -27,5 +21,6 @@ TodoList.propTypes = {
     PropTypes.object.isRequired,
   ).isRequired,
   changeCompleted: PropTypes.func.isRequired,
+  changeTitle: PropTypes.func.isRequired,
   setTodos: PropTypes.func.isRequired,
 };
