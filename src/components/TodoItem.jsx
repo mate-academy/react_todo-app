@@ -3,11 +3,10 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 export const TodoItem = ({ todo, complete, onDelete }) => {
-  const [completed, setCompleted] = useState(todo.completed);
 
   return (
     <li className={classNames({
-      completed,
+      completed: todo.completed,
     })}
     >
       <div className="view">
@@ -16,7 +15,6 @@ export const TodoItem = ({ todo, complete, onDelete }) => {
           className="toggle"
           checked={todo.completed}
           onChange={() => {
-            setCompleted(!completed);
             complete(todo.id);
           }}
         />

@@ -43,14 +43,14 @@ function App() {
     setTodos(todos.filter(todo => todo.completed === false));
   };
 
-  const toggleCompleted = async() => {
+  const toggleCompleted = () => {
     if (todos.length && todos.every(todo => todo.completed)) {
-      await setTodos(todos.map(todo => ({ ...todo, completed: false })));
+      setTodos(todos.map(todo => ({ ...todo, completed: false })));
 
       return;
     }
 
-    await setTodos(todos.map(todo => ({ ...todo, completed: true })));
+    setTodos(todos.map(todo => ({ ...todo, completed: true })));
   };
 
   return (
