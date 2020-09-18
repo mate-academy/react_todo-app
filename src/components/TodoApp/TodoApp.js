@@ -50,16 +50,18 @@ export const TodoApp = () => {
   };
 
   const handleTodoChange = (id, editedTitle) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          title: editedTitle,
-        };
-      }
+    if (editedTitle) {
+      setTodos(todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title: editedTitle,
+          };
+        }
 
-      return { ...todo };
-    }));
+        return { ...todo };
+      }));
+    }
   };
 
   return (

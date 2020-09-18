@@ -13,13 +13,26 @@ export const Todo = ({
   const [editing, setEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
+  const handleTodoEditing = (event) => {
+    switch (event.keyCode) {
+      case 13:
+        onTodoChange(id, editedTitle);
+        setEditing(false);
+        break;
+      case 27:
+        setEditing(false);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <li
       className={classNames({
         completed,
         editing,
       })}
-      onDoubleClick={() => setEditing(true)}
     >
       <div className="view">
         <input
@@ -30,7 +43,7 @@ export const Todo = ({
             onCompletedChange(id);
           }}
         />
-        <label>
+        <label onDoubleClick={() => setEditing(true)}>
           {title}
         </label>
         <button
@@ -42,16 +55,26 @@ export const Todo = ({
         />
       </div>
 
-      <input
-        type="text"
-        className="edit"
-        value={editedTitle}
-        onChange={e => setEditedTitle(e.target.value.trimLeft())}
-        onBlur={() => {
-          onTodoChange(id, editedTitle);
-          setEditing(false);
-        }}
-      />
+      {editing && (
+        <input
+          autoFocus={editing}
+          type="text"
+          className="edit"
+          value={editedTitle}
+          onKeyDown={e => handleTodoEditing(e)}
+          onFocus={e => e.currentTarget.select()}
+          onChange={e => setEditedTitle(e.target.value.trimLeft())}
+          onBlur={() => {
+            onTodoChange(id, editedTitle);
+
+            if (!editedTitle) {
+              onTodoDeletion(id);
+            }
+
+            setEditing(false);
+          }}
+        />
+      )}
     </li>
   );
 };
