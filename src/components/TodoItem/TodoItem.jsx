@@ -5,8 +5,8 @@ import classNames from 'classnames';
 export const TodoItem = ({
   id, title, completed, todos, setTodos, changeCompleted, changeTitle,
 }) => {
-  const [edit, setEdit] = useState(false);
-  const [newTitle, setNewTitle] = useState(title);
+  const [editing, setEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
 
   const handleChange = (event) => {
     setNewTitle(event.target.value.trimLeft());
@@ -15,29 +15,32 @@ export const TodoItem = ({
   const handleEdit = (event) => {
     if (event.key === 'Enter' && newTitle) {
       changeTitle(id, newTitle);
-      setEdit(false);
+      setEditing(false);
+      setNewTitle('');
     }
 
     if (event.key === 'Escape') {
-      setEdit(false);
+      setNewTitle('');
+      setEditing(false);
     }
   };
 
   const handleSaveChanges = () => {
     if (newTitle) {
       changeTitle(id, newTitle);
-      setEdit(false);
+      setEditing(false);
+      setNewTitle('');
     } else {
-      setEdit(false);
+      setEditing(false);
+      setNewTitle('');
     }
   };
 
   return (
     <li
-      key={id}
       className={classNames({
         completed,
-        editing: edit,
+        editing,
       })}
     >
       <div className="view">
@@ -48,7 +51,7 @@ export const TodoItem = ({
           onChange={() => changeCompleted(id)}
         />
         <label
-          onDoubleClick={() => setEdit(true)}
+          onDoubleClick={() => setEditing(true)}
         >
           {title}
         </label>
@@ -60,14 +63,17 @@ export const TodoItem = ({
           )}
         />
       </div>
-      <input
-        type="text"
-        className="edit"
-        defaultValue={title}
-        onChange={handleChange}
-        onKeyDown={handleEdit}
-        onBlur={handleSaveChanges}
-      />
+      {(editing === true) && (
+        <input
+          autoFocus
+          type="text"
+          className="edit"
+          defaultValue={title}
+          onChange={handleChange}
+          onKeyDown={handleEdit}
+          onBlur={handleSaveChanges}
+        />
+      )}
     </li>
   );
 };

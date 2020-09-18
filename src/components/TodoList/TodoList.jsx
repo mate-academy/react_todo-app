@@ -6,6 +6,7 @@ export const TodoList = ({ todos, setTodos, changeCompleted, changeTitle }) => (
   <ul className="todo-list">
     {todos.map(todo => (
       <TodoItem
+        key={todo.id}
         {...todo}
         todos={todos}
         setTodos={setTodos}

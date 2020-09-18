@@ -8,6 +8,12 @@ export const TodoApp = () => {
   const [filter, setFilter] = useState('All');
 
   useEffect(() => {
+    if (JSON.parse(localStorage.getItem('todos'))) {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
