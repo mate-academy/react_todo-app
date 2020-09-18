@@ -5,10 +5,16 @@ import ClassNames from 'classnames';
 export const TodosFilter = ({
   todoTools,
   filter,
+  FILTER_OPT: { all, active, completed },
   selectedFilter,
   selectFilter,
 }) => {
   const { todos, updateTodos } = todoTools;
+
+  const changeFilter = (filterType) => {
+    selectFilter(filterType);
+    filter(filterType);
+  };
 
   return (
     <>
@@ -20,12 +26,11 @@ export const TodosFilter = ({
         <li>
           <button
             className={ClassNames(
-              { selected: selectedFilter === 'All' },
+              { selected: selectedFilter === all },
             )}
-            value="All"
             type="button"
-            onClick={({ target }) => {
-              filter(target.value);
+            onClick={() => {
+              changeFilter(all);
             }}
           >
             All
@@ -35,13 +40,11 @@ export const TodosFilter = ({
         <li>
           <button
             className={ClassNames(
-              { selected: selectedFilter === 'Active' },
+              { selected: selectedFilter === active },
             )}
-            value="Active"
             type="button"
-            onClick={({ target }) => {
-              selectFilter(target.value);
-              filter(target.value);
+            onClick={() => {
+              changeFilter(active);
             }}
           >
             Active
@@ -51,13 +54,11 @@ export const TodosFilter = ({
         <li>
           <button
             className={ClassNames(
-              { selected: selectedFilter === 'Completed' },
+              { selected: selectedFilter === completed },
             )}
-            value="Completed"
             type="button"
-            onClick={({ target }) => {
-              selectFilter(target.value);
-              filter(target.value);
+            onClick={() => {
+              changeFilter(completed);
             }}
           >
             Completed
@@ -70,10 +71,9 @@ export const TodosFilter = ({
         type="button"
         className="clear-completed"
         onClick={() => {
-          const updatedTodos = todos.filter(todo => !todo.completed);
-
-          updateTodos(updatedTodos);
-          localStorage.setItem('todos', JSON.stringify(updatedTodos));
+          updateTodos(
+            todos.filter(todo => !todo.completed),
+          );
         }}
       >
         Clear completed
@@ -88,6 +88,7 @@ TodosFilter.propTypes = {
     updateTodos: PropTypes.func.isRequired,
   }).isRequired,
   filter: PropTypes.func.isRequired,
+  FILTER_OPT: PropTypes.objectOf(PropTypes.string).isRequired,
   selectedFilter: PropTypes.string.isRequired,
   selectFilter: PropTypes.func.isRequired,
 };

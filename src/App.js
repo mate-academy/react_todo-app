@@ -5,71 +5,80 @@ import { TodosFilter } from './components/TodosFilter';
 
 function App() {
   const [todos, updateTodos] = useState([]);
-  const [filteredTodos, updateFiltered] = useState([]);
-  const [selectedFilter, selectFilter] = useState('All');
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('todos')).length > 0) {
+      updateTodos(
+        JSON.parse(localStorage.getItem('todos')),
+      );
+    }
+  }, []);
+
+  let filteredTodos = [...todos];
+
+  const FILTER = {
+    all: 'All',
+    active: 'Active',
+    completed: 'Completed',
+  };
+  const [selectedFilter, selectFilter] = useState(FILTER.all);
+
+  filter(selectedFilter);
+
+  filter(selectedFilter);
   const todoTools = {
     todos,
     updateTodos,
   };
 
   useEffect(() => {
-    const myStorage = localStorage.getItem('todos');
-    const todosFromStorage = !myStorage || JSON.parse(myStorage);
-
-    (!todos.length && todosFromStorage.length)
-      && updateTodos(todosFromStorage);
-    updateFiltered(todos);
-    filter(selectedFilter);
-    !todos.length
-      || localStorage.setItem('todos', JSON.stringify([...todos]));
+    // filteredTodos = [...todos];
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   function filter(filterBy) {
-    selectFilter(filterBy);
-
-    const filterdTodos = todos.filter((todo) => {
-      switch (filterBy) {
-        case 'Active':
-          return !todo.completed;
-
-        case 'Completed':
-          return todo.completed;
-
-        default:
-          return todo;
-      }
-    });
-
-    return updateFiltered(filterdTodos);
+    switch (filterBy) {
+      case FILTER.active:
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        break;
+      case FILTER.completed:
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        break;
+      default:
+        filteredTodos = [...todos];
+        break;
+    }
   }
 
   function changeProperty(todoId, property) {
-    const updatedTodos = todos.map((todo) => {
-      const thisTodo = todo;
+    updateTodos(
+      todos.map((todo) => {
+        if (todo.id !== todoId) {
+          return todo;
+        }
 
-      if (todo.id === todoId) {
         if (property) {
-          thisTodo.title = property;
+          return {
+            ...todo, title: property,
+          };
         }
 
         if (!property) {
-          thisTodo.completed = !todo.completed;
+          return {
+            ...todo, completed: !todo.completed,
+          };
         }
-      }
 
-      return thisTodo;
-    });
-
-    updateTodos(updatedTodos);
+        return todo;
+      }),
+    );
   }
 
   function receiveTodo(newTodo) {
-    !todos
-      ? updateTodos([newTodo])
-      : updateTodos([
-        newTodo,
-        ...todos,
-      ]);
+    updateTodos([
+      newTodo,
+      ...todos,
+    ]);
   }
 
   return (
@@ -82,42 +91,48 @@ function App() {
         />
       </header>
 
-      <section hidden={todos.length === 0} className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          checked={todos.every(todo => todo.completed)}
-          onChange={() => {
-            const toggleAll = document.getElementById('toggle-all');
-            const updatedTodos = todos.map((todo) => {
-              const curTodo = todo;
+      {todos.length > 0
+      && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={todos.every(todo => todo.completed)}
+            onChange={({ target }) => {
+              updateTodos(
+                todos.map((todo) => {
+                  if (todo.completed === target.checked) {
+                    return todo;
+                  }
 
-              curTodo.completed = toggleAll.checked;
+                  return { ...todo, completed: !todo.completed };
+                }),
+              );
+            }}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-              return curTodo;
-            });
-
-            updateTodos(updatedTodos);
-          }}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <TodoList
-          changeProperty={changeProperty}
-          todosTools={todoTools}
-          todos={filteredTodos}
-        />
-      </section>
-
-      <footer hidden={!todos.length} className="footer">
-        <TodosFilter
-          todoTools={todoTools}
-          filter={filter}
-          selectedFilter={selectedFilter}
-          selectFilter={selectFilter}
-        />
-      </footer>
+          <TodoList
+            changeProperty={changeProperty}
+            todosTools={todoTools}
+            todos={filteredTodos}
+          />
+        </section>
+      )
+      }
+      {todos.length > 0
+      && (
+        <footer className="footer">
+          <TodosFilter
+            todoTools={todoTools}
+            filter={filter}
+            FILTER_OPT={{ ...FILTER }}
+            selectedFilter={selectedFilter}
+            selectFilter={selectFilter}
+          />
+        </footer>
+      )}
     </section>
   );
 }

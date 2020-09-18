@@ -18,9 +18,9 @@ export const TodoList = ({ changeProperty, todosTools, todos }) => {
             )}
           >
             <Todo
-              todo={todo}
+              todo={{ ...todo }}
               changeProperty={changeProperty}
-              editTitle={changeStatusEdit}
+              editTitleTools={[todoEdited, changeStatusEdit]}
               todosTools={todosTools}
             />
           </li>
