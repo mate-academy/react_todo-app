@@ -41,6 +41,9 @@ function TodoApp() {
   const completedTodos = todos.filter(todo => todo.completed);
   const areAllTodosCompleted = completedTodos.length === todos.length;
 
+  const uncompletedTodos = todos.filter(todo => !todo.completed);
+  const areAllTodosUncompleted = uncompletedTodos.length === todos.length;
+
   const addTodo = (event) => {
     event.preventDefault();
 
@@ -65,6 +68,15 @@ function TodoApp() {
       setTodos(todos.map(todo => ({
         ...todo,
         completed: false,
+      })));
+
+      return;
+    }
+
+    if (areAllTodosUncompleted) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: true,
       })));
 
       return;
