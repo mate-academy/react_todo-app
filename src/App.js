@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
-const filters = {
+const FILTERS = {
   all: 'All',
   active: 'Active',
   completed: 'Completed',
@@ -13,7 +13,7 @@ function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [allCompleted, setAllCompleted] = useState(false);
-  const [filter, setFilter] = useState(filters.all);
+  const [filter, setFilter] = useState(FILTERS.all);
 
   useEffect(() => {
     if (localStorage.todos) {
@@ -27,10 +27,10 @@ function TodoApp() {
 
   const filteredTodos = useMemo(() => todos.filter((todo) => {
     switch (filter) {
-      case filters.completed:
+      case FILTERS.completed:
         return todo.completed;
 
-      case filters.active:
+      case FILTERS.active:
         return !todo.completed;
 
       default:
@@ -130,7 +130,7 @@ function TodoApp() {
             <TodoFilter
               handleFilter={setFilter}
               filter={filter}
-              filters={filters}
+              FILTERS={FILTERS}
             />
 
             {todos.some(todo => todo.completed) && (
