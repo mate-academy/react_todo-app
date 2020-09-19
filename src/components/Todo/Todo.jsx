@@ -11,7 +11,6 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
   };
 
   const handleChanges = (newTitle) => {
-    console.log(editedTitle);
     if (!newTitle) {
       destroyTodo(item.id)
     }
