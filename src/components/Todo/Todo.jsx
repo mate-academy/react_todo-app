@@ -11,6 +11,10 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
   };
 
   const handleChanges = (newTitle) => {
+    if (!newTitle) {
+      destroyTodo(item.id)
+    }
+
     setTodos(prevTodos => {
       return prevTodos.map(todo => {
         if (todo.id === item.id) {
@@ -26,13 +30,15 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
   }
 
   const handleKeyDown = (event) => {
+    const {value} = event.target;
+    const {key} = event;
 
-    if (event.key === 'Escape') {
+    if (key === 'Escape') {
       setEditedTitle(item.title);
       setEditingTodo(false);
       return;
-    } else if (event.key === 'Enter') {
-      handleChanges(event.target.value)
+    } else if (key === 'Enter') {
+      handleChanges(value);
       setEditingTodo(false);
     }
   }
