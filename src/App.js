@@ -124,7 +124,9 @@ function TodoApp() {
 
           <footer className="footer">
             <span className="todo-count">
-              {`${todos.filter(todo => !todo.completed).length} todos left`}
+              {`${uncompletedTodos.length > 1
+                ? `${uncompletedTodos.length} todos left`
+                : `${uncompletedTodos.length} todo left`}`}
             </span>
 
             <TodoFilter
