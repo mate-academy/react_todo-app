@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
+import { FILTER } from '../../constants/FILTER';
 
 export const TodoList = ({ todos, setTodos, filterValue, onTodoChange }) => {
-  let todosToRender;
-
-  switch (filterValue) {
-    case 'Active':
-      todosToRender = todos.filter(todo => !todo.completed);
-      break;
-    case 'Completed':
-      todosToRender = todos.filter(todo => todo.completed);
-      break;
-    default:
-      todosToRender = todos;
-  }
+  const filteredTodos = useMemo(() => {
+    switch (filterValue) {
+      case FILTER.active:
+        return todos.filter(todo => !todo.completed);
+      case FILTER.completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [filterValue, todos]);
 
   const handleCompletedChange = (id) => {
     setTodos(todos.map((todo) => {
@@ -35,7 +34,7 @@ export const TodoList = ({ todos, setTodos, filterValue, onTodoChange }) => {
 
   return (
     <ul className="todo-list">
-      {todosToRender.map(todo => (
+      {filteredTodos.map(todo => (
         <Todo
           onCompletedChange={handleCompletedChange}
           onTodoDeletion={handleTodoDeletion}

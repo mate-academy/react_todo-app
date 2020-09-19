@@ -6,7 +6,6 @@ import { TodosToggler } from '../TodosToggler';
 import { TodoCount } from '../TodoCount';
 
 export const TodoApp = () => {
-  const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState([]);
   const [toggleAll, setToggleAll] = useState(false);
   const [filterValue, setFilterValue] = useState('All');
@@ -15,16 +14,14 @@ export const TodoApp = () => {
   const completedTodos = todos.filter(todo => todo.completed);
 
   useEffect(() => {
-    setToggleAll(todos.every(todo => todo.completed));
-  }, [todos]);
-
-  useEffect(() => {
     if (localStorage.getItem('todos')) {
       setTodos([...JSON.parse(localStorage.getItem('todos'))]);
     }
   }, []);
 
   useEffect(() => {
+    setToggleAll(todos.every(todo => todo.completed));
+
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
@@ -36,8 +33,6 @@ export const TodoApp = () => {
         completed: false,
       }]);
     }
-
-    setInputValue('');
   };
 
   const handleToggleTodosStatus = () => {
@@ -70,51 +65,49 @@ export const TodoApp = () => {
         <h1>todos</h1>
 
         <NewTodo
-          inputValue={inputValue}
-          setInputValue={setInputValue}
           onTodoAddition={handleTodoAddition}
         />
       </header>
 
       {todos.length > 0 && (
-        <section className="main">
-          <TodosToggler
-            toggleAll={toggleAll}
-            onToggleTodosStatus={handleToggleTodosStatus}
-          />
+        <>
+          <section className="main">
+            <TodosToggler
+              toggleAll={toggleAll}
+              onToggleTodosStatus={handleToggleTodosStatus}
+            />
 
-          <TodoList
-            filterValue={filterValue}
-            setToggleAll={setToggleAll}
-            toggleAll={toggleAll}
-            setTodos={setTodos}
-            todos={todos}
-            onTodoChange={handleTodoChange}
-          />
-        </section>
-      )}
+            <TodoList
+              filterValue={filterValue}
+              setToggleAll={setToggleAll}
+              toggleAll={toggleAll}
+              setTodos={setTodos}
+              todos={todos}
+              onTodoChange={handleTodoChange}
+            />
+          </section>
 
-      {todos.length > 0 && (
-        <footer className="footer">
-          <TodoCount activeTodos={activeTodos} />
+          <footer className="footer">
+            <TodoCount activeTodos={activeTodos.length} />
 
-          <TodosFilter
-            filterValue={filterValue}
-            setFilter={setFilterValue}
-          />
+            <TodosFilter
+              filterValue={filterValue}
+              setFilter={setFilterValue}
+            />
 
-          {completedTodos.length > 0 && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={() => {
-                setTodos(todos.filter(todo => !todo.completed));
-              }}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            {completedTodos.length > 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={() => {
+                  setTodos(activeTodos);
+                }}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
       )}
     </section>
   );

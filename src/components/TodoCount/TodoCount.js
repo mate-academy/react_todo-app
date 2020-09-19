@@ -3,22 +3,16 @@ import PropTypes from 'prop-types';
 
 export const TodoCount = ({ activeTodos }) => (
   <span className="todo-count">
-    {activeTodos.length === 1 && (
-      `${activeTodos.length} item left`
+    {activeTodos === 1 && (
+      `${activeTodos} item left`
     )}
 
-    {activeTodos.length !== 1 && (
-      `${activeTodos.length} items left`
+    {activeTodos !== 1 && (
+      `${activeTodos} items left`
     )}
   </span>
 );
 
 TodoCount.propTypes = {
-  activeTodos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      completed: PropTypes.bool,
-    }).isRequired,
-  ).isRequired,
+  activeTodos: PropTypes.number.isRequired,
 };
