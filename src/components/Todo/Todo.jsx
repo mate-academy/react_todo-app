@@ -38,8 +38,8 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
 
   return (
     <li
-      
-      className={cn({ 'completed': item.completed, 'editing': editingTodo })}>
+      className={cn({ 'completed': item.completed, 'editing': editingTodo })}
+    >
       <div className="view">
         <input
           type="checkbox"

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './TodoList.scss';
+import './TodoList.css';
 import { Todo } from '../Todo';
 
 export const TodoList = ({ items, setTodos }) => {

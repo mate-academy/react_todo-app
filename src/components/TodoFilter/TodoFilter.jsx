@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
+import './filters.css';
+
 export const TodoFilter = ({ handleFilter, filter, FILTERS }) => (
   <ul className="filters">
     <li>
