@@ -11,6 +11,7 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
   };
 
   const handleChanges = (newTitle) => {
+    console.log(editedTitle);
     if (!newTitle) {
       destroyTodo(item.id)
     }
@@ -26,7 +27,8 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
         return todo;
       })
     })
-    setEditingTodo(false)
+    setEditedTitle(newTitle.trim());
+    setEditingTodo(false);
   }
 
   const handleKeyDown = (event) => {
@@ -39,6 +41,7 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
       return;
     } else if (key === 'Enter') {
       handleChanges(value);
+      setEditedTitle(value.trim())
       setEditingTodo(false);
     }
   }
