@@ -5,7 +5,7 @@ import { TodoItem } from '../TodoItem';
 
 export const TodoList = ({
   items,
-  changeCompleted,
+  changeStatus,
   removeTodo,
   changeTodo,
 }) => (
@@ -14,7 +14,7 @@ export const TodoList = ({
       <TodoItem
         key={item.id}
         {...item}
-        changeCompleted={changeCompleted}
+        changeStatus={changeStatus}
         removeTodo={removeTodo}
         changeTodo={changeTodo}
       />
@@ -28,7 +28,7 @@ TodoList.propTypes = {
       id: PropTypes.number.isRequired,
     }).isRequired,
   ).isRequired,
-  changeCompleted: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
   changeTodo: PropTypes.func.isRequired,
 };

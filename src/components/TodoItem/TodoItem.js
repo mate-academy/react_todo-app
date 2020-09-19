@@ -6,7 +6,7 @@ export const TodoItem = ({
   id,
   title,
   completed,
-  changeCompleted,
+  changeStatus,
   removeTodo,
   changeTodo,
 }) => {
@@ -18,6 +18,8 @@ export const TodoItem = ({
       case 'Enter':
         if (newTodoTitle) {
           changeTodo(id, newTodoTitle);
+        } else {
+          setNewTodoTitle(title);
         }
 
         setIsEditMode(false);
@@ -45,7 +47,7 @@ export const TodoItem = ({
           <input
             type="checkbox"
             className="toggle"
-            onChange={() => changeCompleted(id)}
+            onChange={() => changeStatus(id)}
             checked={completed}
           />
           <label
@@ -89,7 +91,7 @@ TodoItem.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  changeCompleted: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
   changeTodo: PropTypes.func.isRequired,
 };

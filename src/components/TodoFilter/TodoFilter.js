@@ -2,23 +2,19 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-export const TodoFilter = ({
-  todosType,
-  selectTodosType,
-  all,
-  active,
-  completed,
-}) => (
+import { FILTER } from '../../constants';
+
+export const TodoFilter = ({ todosType, selectTodosType }) => (
   <ul className="filters">
     <li>
       <a
         href="#/"
         className={classNames({
-          selected: todosType === all,
+          selected: todosType === FILTER.all,
         })}
-        onClick={event => selectTodosType(event.target.innerText)}
+        onClick={() => selectTodosType(FILTER.all)}
       >
-        {all}
+        {FILTER.all}
       </a>
     </li>
 
@@ -26,11 +22,11 @@ export const TodoFilter = ({
       <a
         href="#/active"
         className={classNames({
-          selected: todosType === active,
+          selected: todosType === FILTER.active,
         })}
-        onClick={event => selectTodosType(event.target.innerText)}
+        onClick={() => selectTodosType(FILTER.active)}
       >
-        {active}
+        {FILTER.active}
       </a>
     </li>
 
@@ -38,11 +34,11 @@ export const TodoFilter = ({
       <a
         href="#/completed"
         className={classNames({
-          selected: todosType === completed,
+          selected: todosType === FILTER.completed,
         })}
-        onClick={event => selectTodosType(event.target.innerText)}
+        onClick={() => selectTodosType(FILTER.completed)}
       >
-        {completed}
+        {FILTER.completed}
       </a>
     </li>
   </ul>
@@ -51,7 +47,4 @@ export const TodoFilter = ({
 TodoFilter.propTypes = {
   todosType: PropTypes.string.isRequired,
   selectTodosType: PropTypes.func.isRequired,
-  all: PropTypes.string.isRequired,
-  active: PropTypes.string.isRequired,
-  completed: PropTypes.string.isRequired,
 };
