@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
 
@@ -17,24 +17,24 @@ export const TodoApp = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  let todosFiltered;
+  const FILTER = {
+    all: 'All',
+    active: 'Active',
+    completed: 'Completed',
+  };
 
-  switch (filter) {
-    case 'All':
-      todosFiltered = todos;
-      break;
+  const todosFiltered = useMemo(() => {
+    switch (filter) {
+      case FILTER.active:
+        return todos.filter(todo => !todo.completed);
 
-    case 'Active':
-      todosFiltered = todos.filter(todo => !todo.completed);
-      break;
+      case FILTER.completed:
+        return todos.filter(todo => todo.completed);
 
-    case 'Completed':
-      todosFiltered = todos.filter(todo => todo.completed);
-      break;
-
-    default:
-      todosFiltered = todos;
-  }
+      default:
+        return todos;
+    }
+  }, [todos, filter]);
 
   const changeCompleted = (id) => {
     setTodos(todos.map((todo) => {
@@ -91,6 +91,12 @@ export const TodoApp = () => {
     }
   };
 
+  const handleDelete = (id) => {
+    setTodos(
+      todos.filter(todo => todo.id !== id),
+    );
+  };
+
   return (
     <>
       <header className="header">
@@ -115,7 +121,7 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      {(todos.length > 0) && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <input
@@ -129,8 +135,8 @@ export const TodoApp = () => {
 
             <TodoList
               todos={todosFiltered}
-              setTodos={setTodos}
               changeTitle={changeTitle}
+              handleDelete={handleDelete}
               changeCompleted={changeCompleted}
               markAllCompleted={markAllCompleted}
             />
@@ -145,6 +151,7 @@ export const TodoApp = () => {
             <TodosFilter
               todos={todos}
               filter={filter}
+              {...FILTER}
               setFilter={setFilter}
             />
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export const TodoItem = ({
-  id, title, completed, todos, setTodos, changeCompleted, changeTitle,
+  id, title, completed, handleDelete, changeCompleted, changeTitle,
 }) => {
   const [editing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -58,9 +58,7 @@ export const TodoItem = ({
         <button
           type="button"
           className="destroy"
-          onClick={() => setTodos(
-            todos.filter(todo => todo.id !== id),
-          )}
+          onClick={() => handleDelete(id)}
         />
       </div>
       {(editing === true) && (
@@ -79,13 +77,10 @@ export const TodoItem = ({
 };
 
 TodoItem.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.object.isRequired,
-  ).isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
   changeTitle: PropTypes.func.isRequired,
   changeCompleted: PropTypes.func.isRequired,
-  setTodos: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };

@@ -2,17 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export const TodosFilter = ({ filter, setFilter }) => (
+export const TodosFilter = ({ all, active, completed, filter, setFilter }) => (
   <ul className="filters">
     <li>
       <a
         href="#/"
         className={classNames({
-          selected: filter === 'All',
+          selected: filter === all,
         })}
-        onClick={event => setFilter(event.target.innerText)}
+        onClick={() => setFilter(all)}
       >
-        All
+        {all}
       </a>
     </li>
 
@@ -20,11 +20,11 @@ export const TodosFilter = ({ filter, setFilter }) => (
       <a
         href="#/active"
         className={classNames({
-          selected: filter === 'Active',
+          selected: filter === active,
         })}
-        onClick={event => setFilter(event.target.innerText)}
+        onClick={() => setFilter(active)}
       >
-        Active
+        {active}
       </a>
     </li>
 
@@ -32,11 +32,11 @@ export const TodosFilter = ({ filter, setFilter }) => (
       <a
         href="#/completed"
         className={classNames({
-          selected: filter === 'Completed',
+          selected: filter === completed,
         })}
-        onClick={event => setFilter(event.target.innerText)}
+        onClick={() => setFilter(completed)}
       >
-        Completed
+        {completed}
       </a>
     </li>
   </ul>
@@ -45,4 +45,7 @@ export const TodosFilter = ({ filter, setFilter }) => (
 TodosFilter.propTypes = {
   setFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
+  all: PropTypes.string.isRequired,
+  active: PropTypes.string.isRequired,
+  completed: PropTypes.string.isRequired,
 };
