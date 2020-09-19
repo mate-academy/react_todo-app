@@ -28,6 +28,7 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
   const handleKeyDown = (event) => {
 
     if (event.key === 'Escape') {
+      setEditedTitle(item.title);
       setEditingTodo(false);
       return;
     } else if (event.key === 'Enter') {

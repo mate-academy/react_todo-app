@@ -179,6 +179,7 @@ body {
 }
 
 .clear-completed {
+  outline: none;
   float: right;
   position: relative;
   line-height: 20px;
