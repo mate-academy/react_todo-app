@@ -13,7 +13,7 @@ const basicTodos = [
 
 function App() {
   const [todos, setTodos] = useState(basicTodos);
-  const [filterForTodos, setFilterForTodos] = useState([...todos]);
+  // const [filterForTodos, setFilterForTodos] = useState([...todos]);
 
   // useEffect(() => {
   //   setFilterForTodos(todos => (
@@ -31,8 +31,8 @@ function App() {
     <TodoApp
       todos={todos}
       setTodos={setTodos}
-      filterForTodos={filterForTodos}
-      setFilterForTodos={setFilterForTodos}
+      // filterForTodos={filterForTodos}
+      // setFilterForTodos={setFilterForTodos}
     />
   );
 }

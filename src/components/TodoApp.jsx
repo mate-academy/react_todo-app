@@ -23,17 +23,28 @@ export const TodoApp = ({
     setAllTodosToogler(() => todos.every(item => item.completed === true));
   }, [todos]);
 
-  const markAllTodos = () => {
-  // console.log(todos);
+  // const markAllTodos = () => {
+  // // console.log(todos);
 
-    if (!allTodosToogler) {
-      setTodos((pervTodos) => {
-        pervTodos.map(todo => ({ ...todo, completed: true }));
-      });
-    }
+  //   if (allTodosToogler) {
+  //     setTodos(() => {
+  //       todos.map(todo => {
+  //         console.log(todo)
+  //         return ({ ...todo, completed: true })
+  //       });
+  //     });
+  //   }
 
-    // console.log(todos);
-  };
+  //   // console.log(todos);
+  // };
+
+  // useEffect(() => {
+  //   if (allTodosToogler) {
+  //     setTodos(() => {
+  //       todos.map(todo => ({ ...todo, completed: true }));
+  //     });
+  //   }
+  // }, [allTodosToogler]);
 
   return (
     <section className="todoapp">
@@ -51,10 +62,7 @@ export const TodoApp = ({
           id="toggle-all"
           className="toggle-all"
           checked={allTodosToogler}
-          onChange={() => {
-            setAllTodosToogler(!allTodosToogler);
-            markAllTodos(todos);
-          }}
+          onChange={() => setAllTodosToogler(!allTodosToogler)}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
