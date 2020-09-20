@@ -4,25 +4,40 @@ import classNames from 'classnames';
 
 export const TodoItem = ({ todo, checkTodo, removeTodo, updateTitle }) => {
   const [isEditable, setEditing] = useState(false);
-  const [title, setTitle] = useState(todo.title);
+  const [newTitle, setTitle] = useState(todo.title);
 
-  const handleEditing = () => {
-    setEditing(!isEditable);
-  };
-
-  const handleKeyDown = (event) => {
+  const handleEditing = (event) => {
     const { key } = event;
 
-    if (!title || key === 'Escape') {
-      setEditing(false);
+    switch (key) {
+      case 'Enter':
+        if (newTitle) {
+          updateTitle(todo.id, newTitle);
+        } else {
+          setTitle(todo.title);
+        }
 
-      return;
+        setEditing(false);
+        break;
+
+      case 'Escape':
+        setEditing(false);
+        setTitle(todo.title);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleBlur = () => {
+    if (newTitle) {
+      updateTitle(todo.id, newTitle);
+    } else {
+      setTitle(todo.title);
     }
 
-    if (key === 'Enter') {
-      updateTitle(todo.id, title);
-      setEditing(false);
-    }
+    setEditing(false);
   };
 
   return (
@@ -31,7 +46,7 @@ export const TodoItem = ({ todo, checkTodo, removeTodo, updateTitle }) => {
         { completed: todo.completed },
         { editing: isEditable },
       )}
-      onDoubleClick={handleEditing}
+      onDoubleClick={() => setEditing(!isEditable)}
     >
       <div className="view">
         <input
@@ -47,13 +62,17 @@ export const TodoItem = ({ todo, checkTodo, removeTodo, updateTitle }) => {
           onClick={() => removeTodo(todo.id)}
         />
       </div>
-      <input
-        type="text"
-        className="edit"
-        value={title}
-        onChange={event => setTitle(event.target.value)}
-        onKeyDown={handleKeyDown}
-      />
+      {isEditable && (
+        <input
+          type="text"
+          className="edit"
+          autoFocus
+          value={newTitle}
+          onChange={event => setTitle(event.target.value.trim())}
+          onKeyUp={handleEditing}
+          onBlur={handleBlur}
+        />
+      )}
     </li>
   );
 };

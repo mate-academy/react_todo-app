@@ -1,23 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
+import { FILTERS } from './constants';
+
+const getfilteredTodos = (items, status) => {
+  switch (status) {
+    case FILTERS.all:
+      return items;
+    case FILTERS.active:
+      return items.filter(item => !item.completed);
+    case FILTERS.completed:
+      return items.filter(item => item.completed);
+    default:
+      return 'Error!';
+  }
+};
 
 const TodoApp = () => {
   const [todos, setTodos] = useState([]);
-  const [newTodo, addNewTodo] = useState('');
+  const [newTodo, setNewTodo] = useState('');
   const [filter, setFilter] = useState('all');
   const completedTodos = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
-    const items = [];
-
-    if (localStorage.length === 0) {
-      localStorage.setItem('todos', JSON.stringify(items));
+    if (!localStorage.todos) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    } else {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
     }
-
-    const todosFromStorage = JSON.parse(localStorage.getItem('todos'));
-
-    setTodos(todosFromStorage);
   }, []);
 
   useEffect(() => {
@@ -40,7 +50,7 @@ const TodoApp = () => {
       },
     ]);
 
-    addNewTodo('');
+    setNewTodo('');
   };
 
   const updateTodoStatus = (todoId) => {
@@ -78,18 +88,10 @@ const TodoApp = () => {
     )));
   };
 
-  const filterTodos = (items, status) => {
-    switch (status) {
-      case 'all':
-        return items;
-      case 'active':
-        return items.filter(item => !item.completed);
-      case 'completed':
-        return items.filter(item => item.completed);
-      default:
-        return 'Error!';
-    }
-  };
+  const filteredTodos = useMemo(
+    () => getfilteredTodos(todos, filter),
+    [todos, filter],
+  );
 
   const deleteTodo = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
@@ -110,7 +112,7 @@ const TodoApp = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={newTodo}
-            onChange={event => addNewTodo(event.target.value)}
+            onChange={event => setNewTodo(event.target.value)}
           />
         </form>
       </header>
@@ -131,7 +133,7 @@ const TodoApp = () => {
               </>
             )}
             <TodoList
-              items={filterTodos(todos, filter)}
+              items={filteredTodos}
               checkTodo={updateTodoStatus}
               removeTodo={deleteTodo}
               updateTitle={updateTodoTitle}
