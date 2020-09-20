@@ -10,6 +10,8 @@ export const TodoApp = ({
   setTodos,
   // fileteForTodos,
   // setFilterForTodos,
+  filterForTodos,
+  setFilterForTodos,
 }) => {
   // console.log(todos);
   const [completedTodos, setCompletedTodos] = useState('');
@@ -67,7 +69,15 @@ export const TodoApp = ({
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
-          todos={todos}
+          // todos={todos}
+          todos={filterForTodos === 'All'
+            ? todos
+            : todos.filter(todo => (
+              filterForTodos === 'Completed'
+                ? todo.completed
+                : !todo.completed
+            ))}
+
           setTodos={setTodos}
         />
       </section>
@@ -81,8 +91,9 @@ export const TodoApp = ({
 
         <TodosFilter
           todos={todos}
-          // filterForTodos={filterForTodos}
-          // setFilterForTodos={setFilterForTodos}
+
+          filterForTodos={filterForTodos}
+          setFilterForTodos={setFilterForTodos}
         />
 
         {/* <ul className="filters">
@@ -113,6 +124,8 @@ TodoApp.propTypes = {
     completed: PropTypes.bool.isRequired,
   })).isRequired,
   setTodos: PropTypes.func.isRequired,
+  filterForTodos: PropTypes.string.isRequired,
+  setFilterForTodos: PropTypes.func.isRequired,
 };
 
 // (

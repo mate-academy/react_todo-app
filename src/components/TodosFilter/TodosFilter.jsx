@@ -1,36 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line arrow-body-style
-export const TodosFilter = () => {
-  // const [filterForTodos, setFilterForTodos] = useState('All');
-  // const [filteredTodos, setFilteredTodos] = useState();
-
-  // useEffect(() => {
-  //   setFilteredTodos(prevTodos => (
-  //     filterForTodos === 'All'
-  //       ? prevTodos
-  //       : prevTodos.filter(todo => (
-  //         filterForTodos === 'Comleted'
-  //           ? todo.completed
-  //           : !todo.completed
-  //       ))
-  //   ));
-  // }, [filterForTodos]);
-
-  // const selectTodosFilter = (event) => {
-  //   event.preventDefault();
-  //   console.log(event.target.value);
-  //   setFilterForTodos(event.target.value);
-  // };
+export const TodosFilter = ({
+  filterForTodos,
+  setFilterForTodos,
+}) => {
+  const selectTodosFilter = (event, value) => {
+    event.preventDefault();
+    setFilterForTodos(value);
+  };
 
   return (
     <ul className="filters">
       <li>
         <a
           href="#/"
-          className="selected"
-          // onClick={event => selectTodosFilter(event)}
-          // value="All"
+          className={filterForTodos === 'All' ? 'selected' : ''}
+          onClick={event => selectTodosFilter(event, 'All')}
         >
           All
         </a>
@@ -39,8 +25,8 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/active"
-          // onClick={event => selectTodosFilter(event)}
-          // value="Active"
+          className={filterForTodos === 'Active' ? 'selected' : ''}
+          onClick={event => selectTodosFilter(event, 'Active')}
         >
           Active
         </a>
@@ -49,12 +35,17 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/completed"
-          // onClick={event => selectTodosFilter(event)}
-          // value="Completed"
+          className={filterForTodos === 'Completed' ? 'selected' : ''}
+          onClick={event => selectTodosFilter(event, 'Completed')}
         >
           Completed
         </a>
       </li>
     </ul>
   );
+};
+
+TodosFilter.propTypes = {
+  filterForTodos: PropTypes.string.isRequired,
+  setFilterForTodos: PropTypes.func.isRequired,
 };

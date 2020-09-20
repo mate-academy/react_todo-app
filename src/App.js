@@ -12,27 +12,17 @@ const basicTodos = [
 ];
 
 function App() {
-  const [todos, setTodos] = useState(basicTodos);
-  // const [filterForTodos, setFilterForTodos] = useState([...todos]);
+  const [todos, setTodos] = useState([...basicTodos]);
 
-  // useEffect(() => {
-  //   setFilterForTodos(todos => (
-  //     fileteforTodos === 'All'
-  //       ? prevTodos
-  //       : prevTodos.filter(todo => (
-  //         fileteforTodos === 'Comleted'
-  //           ? todo.completed
-  //           : !todo.completed
-  //       ))
-  //   ));
-  // }, [fileteforTodos]);
+  const [filterForTodos, setFilterForTodos] = useState('All');
 
   return (
     <TodoApp
       todos={todos}
       setTodos={setTodos}
-      // filterForTodos={filterForTodos}
-      // setFilterForTodos={setFilterForTodos}
+
+      filterForTodos={filterForTodos}
+      setFilterForTodos={setFilterForTodos}
     />
   );
 }
