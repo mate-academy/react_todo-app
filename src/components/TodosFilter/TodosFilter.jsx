@@ -18,7 +18,7 @@ export const TodosFilter = ({
         <a
           href="#/"
           className={classNames({
-            active: filterForTodos === FILTERS.all,
+            selected: filterForTodos === FILTERS.all,
           })}
           onClick={event => selectTodosFilter(event, FILTERS.all)}
         >
@@ -30,7 +30,7 @@ export const TodosFilter = ({
         <a
           href="#/active"
           className={classNames({
-            active: filterForTodos === FILTERS.active,
+            selected: filterForTodos === FILTERS.active,
           })}
           onClick={event => selectTodosFilter(event, FILTERS.active)}
         >
@@ -42,7 +42,7 @@ export const TodosFilter = ({
         <a
           href="#/completed"
           className={classNames({
-            active: filterForTodos === FILTERS.completed,
+            selected: filterForTodos === FILTERS.completed,
           })}
           onClick={event => selectTodosFilter(event, FILTERS.completed)}
         >
