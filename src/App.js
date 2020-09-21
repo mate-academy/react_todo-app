@@ -2,13 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFIlter';
 
+const FILTERS = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+};
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [todoTitle, setTodoTitle] = useState('');
-  const [notCompletedTodos, setNotCompletedTodos] = useState([]);
+  const [visibleTodos, setVisibleTodos] = useState([]);
+  const [todosStatus, setTodosStatus] = useState('');
 
   useEffect(() => {
-    getNotCompletedTodos(todos);
+    setTodos(todos);
+    setVisibleTodos(todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const createTodo = (title) => {
@@ -18,14 +27,28 @@ function App() {
         title,
         id: +new Date(),
         completed: false,
+        editing: false,
       },
     ]);
   };
 
-  const getNotCompletedTodos = (allTodos) => {
-    setNotCompletedTodos(
-      allTodos.filter(todo => todo.completed === false),
-    );
+  const getTodos = (status) => {
+    switch (status) {
+      case FILTERS.all:
+        setVisibleTodos(todos);
+        setTodosStatus('all');
+        break;
+      case FILTERS.completed:
+        setVisibleTodos([...todos].filter(todo => todo.completed));
+        setTodosStatus('completed');
+        break;
+      case FILTERS.active:
+        setVisibleTodos([...todos].filter(todo => !todo.completed));
+        setTodosStatus('active');
+        break;
+      default:
+        break;
+    }
   };
 
   const changeTodoStatus = (todoId) => {
@@ -55,6 +78,46 @@ function App() {
     }
   };
 
+  const activeTodos = [...todos].filter(todo => !todo.completed);
+
+  const deleteTodo = (todoId) => {
+    setTodos([...todos].filter(todo => todo.id !== todoId));
+  };
+
+  const completedTodos = [...todos].filter(todo => todo.completed);
+
+  const clearCompleted = () => {
+    setTodos([...todos].filter(todo => !todo.completed));
+  };
+
+  const onTodoEdit = (todoId) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          editing: !todo.editing,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
+  const changeTitle = (todoId, newTitle) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          title: newTitle,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos(newTodos);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -74,8 +137,8 @@ function App() {
               setTodoTitle(event.target.value);
             }}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' && todoTitle) {
-                createTodo(todoTitle);
+              if (event.key === 'Enter' && todoTitle.trim()) {
+                createTodo(todoTitle.trim());
                 setTodoTitle('');
               }
             }}
@@ -96,16 +159,23 @@ function App() {
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
-          todos={todos}
+          todos={visibleTodos}
           changeStatus={changeTodoStatus}
+          deleteTodo={deleteTodo}
+          onTodoEdit={onTodoEdit}
+          changeTitle={changeTitle}
+          getTodos={getTodos}
         />
       </section>
 
       {todos.length > 0 && (
         <footer className="footer">
           <TodosFilter
-            todos={todos}
-            uncomplitedTodos={notCompletedTodos}
+            activeTodos={activeTodos}
+            completedTodos={completedTodos}
+            getTodos={getTodos}
+            clearCompleted={clearCompleted}
+            todosStatus={todosStatus}
           />
         </footer>
       )}
