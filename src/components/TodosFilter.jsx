@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { FILTERS } from '../constants';
 
 export const TodosFilter = ({ handleFilter, selectedFilter }) => (
@@ -7,7 +8,7 @@ export const TodosFilter = ({ handleFilter, selectedFilter }) => (
     <li>
       <a
         href="#/"
-        className={selectedFilter === FILTERS.all ? 'selected' : ''}
+        className={classNames({ selected: selectedFilter === FILTERS.all })}
         onClick={() => handleFilter(FILTERS.all)}
       >
         All

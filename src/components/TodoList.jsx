@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ items, checkTodo, removeTodo, updateTitle }) => (
+export const TodoList = ({ items, updateTodo, removeTodo }) => (
   <ul className="todo-list">
     {items.map(item => (
       <TodoItem
         key={item.id}
         todo={item}
-        checkTodo={checkTodo}
+        updateTodo={updateTodo}
         removeTodo={removeTodo}
-        updateTitle={updateTitle}
       />
     ))}
   </ul>
@@ -22,7 +21,6 @@ TodoList.propTypes = {
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   })).isRequired,
-  checkTodo: PropTypes.func.isRequired,
+  updateTodo: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
-  updateTitle: PropTypes.func.isRequired,
 };

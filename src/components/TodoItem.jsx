@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export const TodoItem = ({ todo, checkTodo, removeTodo, updateTitle }) => {
+export const TodoItem = ({ todo, removeTodo, updateTodo }) => {
   const [isEditable, setEditing] = useState(false);
   const [newTitle, setTitle] = useState(todo.title);
 
@@ -12,7 +12,7 @@ export const TodoItem = ({ todo, checkTodo, removeTodo, updateTitle }) => {
     switch (key) {
       case 'Enter':
         if (newTitle) {
-          updateTitle(todo.id, newTitle);
+          updateTodo(todo.id, newTitle);
         } else {
           setTitle(todo.title);
         }
@@ -32,7 +32,7 @@ export const TodoItem = ({ todo, checkTodo, removeTodo, updateTitle }) => {
 
   const handleBlur = () => {
     if (newTitle) {
-      updateTitle(todo.id, newTitle);
+      updateTodo(todo.id, newTitle);
     } else {
       setTitle(todo.title);
     }
@@ -53,7 +53,7 @@ export const TodoItem = ({ todo, checkTodo, removeTodo, updateTitle }) => {
           type="checkbox"
           className="toggle"
           checked={todo.completed}
-          onChange={() => checkTodo(todo.id)}
+          onChange={() => updateTodo(todo.id)}
         />
         <label>{todo.title}</label>
         <button
@@ -83,7 +83,6 @@ TodoItem.propTypes = {
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   }).isRequired,
-  checkTodo: PropTypes.func.isRequired,
+  updateTodo: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
-  updateTitle: PropTypes.func.isRequired,
 };

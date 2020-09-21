@@ -1,26 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
-import { FILTERS } from './constants';
-
-const getfilteredTodos = (items, status) => {
-  switch (status) {
-    case FILTERS.all:
-      return items;
-    case FILTERS.active:
-      return items.filter(item => !item.completed);
-    case FILTERS.completed:
-      return items.filter(item => item.completed);
-    default:
-      return 'Error!';
-  }
-};
+import { getfilteredTodos } from './helpers';
 
 const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [filter, setFilter] = useState('all');
-  const completedTodos = todos.filter(todo => !todo.completed).length;
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed).length,
+    [todos],
+  );
+  const activedTodos = useMemo(
+    () => todos.filter(todo => !todo.completed).length,
+    [todos],
+  );
 
   useEffect(() => {
     if (!localStorage.todos) {
@@ -53,28 +47,22 @@ const TodoApp = () => {
     setNewTodo('');
   };
 
-  const updateTodoStatus = (todoId) => {
+  const updateTodoItem = (todoId, newTitle) => {
     setTodos(todos.map((todo) => {
       if (todo.id !== todoId) {
         return { ...todo };
+      }
+
+      if (newTitle) {
+        return {
+          ...todo,
+          title: newTitle,
+        };
       }
 
       return {
         ...todo,
         completed: !todo.completed,
-      };
-    }));
-  };
-
-  const updateTodoTitle = (todoId, newTitle) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id !== todoId) {
-        return { ...todo };
-      }
-
-      return {
-        ...todo,
-        title: newTitle,
       };
     }));
   };
@@ -112,7 +100,7 @@ const TodoApp = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={newTodo}
-            onChange={event => setNewTodo(event.target.value)}
+            onChange={event => setNewTodo(event.target.value.trim())}
           />
         </form>
       </header>
@@ -120,36 +108,31 @@ const TodoApp = () => {
       {todos.length > 0 && (
         <>
           <section className="main">
-            {todos.length > 0 && (
-              <>
-                <input
-                  type="checkbox"
-                  id="toggle-all"
-                  className="toggle-all"
-                  checked={completedTodos === 0}
-                  onChange={toogleAll}
-                />
-                <label htmlFor="toggle-all">Mark all as complete</label>
-              </>
-            )}
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              checked={completedTodos === 0}
+              onChange={toogleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
             <TodoList
               items={filteredTodos}
-              checkTodo={updateTodoStatus}
+              updateTodo={updateTodoItem}
               removeTodo={deleteTodo}
-              updateTitle={updateTodoTitle}
             />
           </section>
 
           <footer className="footer">
             <span className="todo-count">
-              {`${completedTodos} items left`}
+              {`${activedTodos} items left`}
             </span>
 
             <TodosFilter
               handleFilter={status => setFilter(status)}
               selectedFilter={filter}
             />
-            {todos.length > 0 && (
+            {completedTodos > 0 && (
               <button
                 type="button"
                 className="clear-completed"
