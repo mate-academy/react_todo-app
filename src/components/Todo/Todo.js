@@ -14,12 +14,13 @@ export const Todo = ({
   const [editedTitle, setEditedTitle] = useState(title);
 
   const handleTodoEditing = (event) => {
-    switch (event.keyCode) {
-      case 13:
+    switch (event.key) {
+      case 'Enter':
         onTodoChange(id, editedTitle);
         setEditing(false);
         break;
-      case 27:
+      case 'Escape':
+        setEditedTitle(title);
         setEditing(false);
         break;
       default:
@@ -39,9 +40,7 @@ export const Todo = ({
           checked={completed}
           type="checkbox"
           className="toggle"
-          onChange={() => {
-            onCompletedChange(id);
-          }}
+          onChange={() => onCompletedChange(id)}
         />
         <label onDoubleClick={() => setEditing(true)}>
           {title}

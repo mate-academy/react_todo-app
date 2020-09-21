@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { FILTER } from '../../constants/FILTER';
 
 export const TodosFilter = ({ setFilter, filterValue }) => (
   <ul className="filters">
@@ -8,7 +9,7 @@ export const TodosFilter = ({ setFilter, filterValue }) => (
       <a
         href="#/"
         className={classNames({
-          selected: filterValue === 'All',
+          selected: filterValue === FILTER.all,
         })}
         onClick={e => setFilter(e.target.innerText)}
       >
@@ -20,7 +21,7 @@ export const TodosFilter = ({ setFilter, filterValue }) => (
       <a
         href="#/active"
         className={classNames({
-          selected: filterValue === 'Active',
+          selected: filterValue === FILTER.active,
         })}
         onClick={e => setFilter(e.target.innerText)}
       >
@@ -32,7 +33,7 @@ export const TodosFilter = ({ setFilter, filterValue }) => (
       <a
         href="#/completed"
         className={classNames({
-          selected: filterValue === 'Completed',
+          selected: filterValue === FILTER.completed,
         })}
         onClick={e => setFilter(e.target.innerText)}
       >

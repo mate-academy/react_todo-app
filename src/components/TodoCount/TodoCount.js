@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const TodoCount = ({ activeTodos }) => (
+export const TodoCount = ({ activeTodosLength }) => (
   <span className="todo-count">
-    {activeTodos === 1 && (
-      `${activeTodos} item left`
+    {activeTodosLength === 1 && (
+      `${activeTodosLength} item left`
     )}
 
-    {activeTodos !== 1 && (
-      `${activeTodos} items left`
+    {activeTodosLength !== 1 && (
+      `${activeTodosLength} items left`
     )}
   </span>
 );
 
 TodoCount.propTypes = {
-  activeTodos: PropTypes.number.isRequired,
+  activeTodosLength: PropTypes.number.isRequired,
 };

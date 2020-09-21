@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
 import { FILTER } from '../../constants/FILTER';
 
-export const TodoList = ({ todos, setTodos, filterValue, onTodoChange }) => {
+export const TodoList = ({
+  todos,
+  setTodos,
+  filterValue,
+  onTodoChange,
+  setToggleAll,
+}) => {
   const filteredTodos = useMemo(() => {
     switch (filterValue) {
       case FILTER.active:
@@ -16,7 +22,7 @@ export const TodoList = ({ todos, setTodos, filterValue, onTodoChange }) => {
   }, [filterValue, todos]);
 
   const handleCompletedChange = (id) => {
-    setTodos(todos.map((todo) => {
+    const changedTodos = todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
@@ -25,7 +31,15 @@ export const TodoList = ({ todos, setTodos, filterValue, onTodoChange }) => {
       }
 
       return { ...todo };
-    }));
+    });
+
+    setTodos(changedTodos);
+
+    if (changedTodos.every(todo => todo.completed)) {
+      setToggleAll(true);
+    } else {
+      setToggleAll(false);
+    }
   };
 
   const handleTodoDeletion = (id) => {
@@ -59,4 +73,5 @@ TodoList.propTypes = {
   setTodos: PropTypes.func.isRequired,
   filterValue: PropTypes.string.isRequired,
   onTodoChange: PropTypes.func.isRequired,
+  setToggleAll: PropTypes.func.isRequired,
 };

@@ -1,27 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
 import { NewTodo } from '../NewTodo';
 import { TodosToggler } from '../TodosToggler';
 import { TodoCount } from '../TodoCount';
+import { FILTER } from '../../constants/FILTER';
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [toggleAll, setToggleAll] = useState(false);
-  const [filterValue, setFilterValue] = useState('All');
+  const [filterValue, setFilterValue] = useState(FILTER.all);
 
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
+  const activeTodos = useMemo(() => todos
+    .filter(todo => !todo.completed), [todos]);
+  const completedTodos = useMemo(() => todos
+    .filter(todo => todo.completed), [todos]);
 
   useEffect(() => {
+    if (
+      JSON.parse(localStorage.getItem('todos')).every(todo => todo.completed)
+    ) {
+      setToggleAll(true);
+    }
+
     if (localStorage.getItem('todos')) {
       setTodos([...JSON.parse(localStorage.getItem('todos'))]);
     }
   }, []);
 
   useEffect(() => {
-    setToggleAll(todos.every(todo => todo.completed));
-
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
@@ -36,12 +43,12 @@ export const TodoApp = () => {
   };
 
   const handleToggleTodosStatus = () => {
-    setToggleAll(!toggleAll);
-
     setTodos(todos.map(todo => ({
       ...todo,
       completed: !toggleAll,
     })));
+
+    setToggleAll(!toggleAll);
   };
 
   const handleTodoChange = (id, editedTitle) => {
@@ -73,6 +80,7 @@ export const TodoApp = () => {
         <>
           <section className="main">
             <TodosToggler
+              activeTodosLenght={activeTodos.length}
               toggleAll={toggleAll}
               onToggleTodosStatus={handleToggleTodosStatus}
             />
@@ -88,7 +96,7 @@ export const TodoApp = () => {
           </section>
 
           <footer className="footer">
-            <TodoCount activeTodos={activeTodos.length} />
+            <TodoCount activeTodosLength={activeTodos.length} />
 
             <TodosFilter
               filterValue={filterValue}

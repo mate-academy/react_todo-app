@@ -1,5 +1,5 @@
 export const FILTER = {
-  all: 'ALL',
+  all: 'All',
   active: 'Active',
   completed: 'Completed',
 };
