@@ -98,7 +98,6 @@ export const TodoApp = () => {
           <TodosFilter
             filter={filter}
             setFilter={setFilter}
-            FILTERS={FILTERS}
           />
 
           {completedTodos.length > 0 && (
