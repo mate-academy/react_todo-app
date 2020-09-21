@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes, { shape } from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, setTodos }) => {
+export const TodoList = ({
+  todos,
+  setTodos,
+  removeTodo,
+  changeTodo,
+}) => {
   const onToggleToDo = (event, todoId) => {
     setTodos(
       prevTodos => prevTodos.map(todo => (todo.id === todoId
@@ -16,12 +21,13 @@ export const TodoList = ({ todos, setTodos }) => {
 
   return (
     <ul className="todo-list">
-      {/* { console.log(todos)} */}
       {todos.map(todo => (
         <TodoItem
           key={todo.id}
           todo={todo}
           onToggleToDo={onToggleToDo}
+          removeTodo={removeTodo}
+          changeTodo={changeTodo}
         />
       ))}
     </ul>
@@ -34,4 +40,6 @@ TodoList.propTypes = {
     completed: PropTypes.bool.isRequired,
   })).isRequired,
   setTodos: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
+  changeTodo: PropTypes.func.isRequired,
 };
