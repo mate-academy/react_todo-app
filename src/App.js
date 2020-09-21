@@ -3,7 +3,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilters } from './components/TodoFilters';
 import { FILTERS } from './constants';
 
-function TodoApp() {
+function App() {
   const [todoTitle, setTodoTitle] = useState('');
   const [todos, setTodos] = useState(null);
   const [toggleAll, setToggleAll] = useState(false);
@@ -106,4 +106,4 @@ function TodoApp() {
   );
 }
 
-export default TodoApp;
+export default App;

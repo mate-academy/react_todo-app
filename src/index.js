@@ -5,9 +5,9 @@ import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
 
-import TodoApp from './TodoApp';
+import App from './App';
 
 ReactDOM.render(
-  <TodoApp />,
+  <App />,
   document.getElementById('root'),
 );
