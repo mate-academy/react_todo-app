@@ -9,7 +9,10 @@ export function TodoList({ todos, setTodos }) {
         return todo;
       }
 
-      return { ...todo, completed: !todo.completed };
+      return {
+        ...todo,
+        completed: !todo.completed,
+      };
     });
 
     setTodos(changedTodos);
@@ -47,6 +50,8 @@ export function TodoList({ todos, setTodos }) {
 }
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.object.isRequired,
+  ).isRequired,
   setTodos: PropTypes.func.isRequired,
 };

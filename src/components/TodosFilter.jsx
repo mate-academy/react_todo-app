@@ -1,13 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ClassNames from 'classnames';
 
-export function TodosFilter({ filter, setFilter, FILTERS }) {
+import { FILTERS } from './constants';
+
+export function TodosFilter({ filter, setFilter }) {
   return (
     <ul className="filters">
       <li>
         <a
           href="#/"
-          className={filter === FILTERS.all ? 'selected' : ''}
+          className={ClassNames({
+            selected: filter === FILTERS.all,
+          })}
           onClick={() => setFilter(FILTERS.all)}
         >
           {FILTERS.all}
@@ -17,7 +22,9 @@ export function TodosFilter({ filter, setFilter, FILTERS }) {
       <li>
         <a
           href="#/active"
-          className={filter === FILTERS.active ? 'selected' : ''}
+          className={ClassNames({
+            selected: filter === FILTERS.active,
+          })}
           onClick={() => setFilter(FILTERS.active)}
         >
           {FILTERS.active}
@@ -27,7 +34,9 @@ export function TodosFilter({ filter, setFilter, FILTERS }) {
       <li>
         <a
           href="#/completed"
-          className={filter === FILTERS.completed ? 'selected' : ''}
+          className={ClassNames({
+            selected: filter === FILTERS.completed,
+          })}
           onClick={() => setFilter(FILTERS.completed)}
         >
           {FILTERS.completed}
@@ -40,5 +49,4 @@ export function TodosFilter({ filter, setFilter, FILTERS }) {
 TodosFilter.propTypes = {
   setFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
-  FILTERS: PropTypes.objectOf(PropTypes.string.isRequired).isRequired,
 };
