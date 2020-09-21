@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilters } from './components/TodoFilters';
 import { FILTERS } from './components/constants';
@@ -7,6 +7,16 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [filter, setFilter] = useState(FILTERS.all);
+
+  useEffect(() => {
+    if (localStorage.getItem('data')) {
+      setTodos(JSON.parse(localStorage.getItem('data')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('data', JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = (todoToAdd) => {
     setTodos([...todos, todoToAdd]);
@@ -112,7 +122,7 @@ const App = () => {
               </span>
 
               <TodoFilters
-                FILTERS={FILTERS}
+                filter={filter}
                 setFilter={setFilter}
               />
 
