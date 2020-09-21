@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { AddingForm } from './components/form';
+import { TodoList } from './components/TodoList';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    if (localStorage.todos) {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const completedTodosCounter = x => (x
+    .filter(elem => elem.completed).length);
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <AddingForm setTodos={setTodos} />
       </header>
 
       <section className="main">
@@ -20,14 +30,10 @@ function App() {
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <TodoList
+            todos={todos}
+            setTodos={setTodos}
+          />
 
           <li className="completed">
             <div className="view">
@@ -47,20 +53,12 @@ function App() {
             <input type="text" className="edit" />
           </li>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
         </ul>
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {`${completedTodosCounter(todos)} items left`}
         </span>
 
         <ul className="filters">
