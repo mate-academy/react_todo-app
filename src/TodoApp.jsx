@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 import { getfilteredTodos } from './helpers';
@@ -11,7 +11,7 @@ const TodoApp = () => {
     () => todos.filter(todo => todo.completed).length,
     [todos],
   );
-  const activedTodos = useMemo(
+  const activeTodos = useMemo(
     () => todos.filter(todo => !todo.completed).length,
     [todos],
   );
@@ -47,25 +47,28 @@ const TodoApp = () => {
     setNewTodo('');
   };
 
-  const updateTodoItem = (todoId, newTitle) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id !== todoId) {
-        return { ...todo };
-      }
+  const updateTodoItem = useCallback(
+    (todoId, newTitle) => {
+      setTodos(todos.map((todo) => {
+        if (todo.id !== todoId) {
+          return { ...todo };
+        }
 
-      if (newTitle) {
+        if (newTitle) {
+          return {
+            ...todo,
+            title: newTitle,
+          };
+        }
+
         return {
           ...todo,
-          title: newTitle,
+          completed: !todo.completed,
         };
-      }
-
-      return {
-        ...todo,
-        completed: !todo.completed,
-      };
-    }));
-  };
+      }));
+    },
+    [todos],
+  );
 
   const toogleAll = (event) => {
     setTodos(todos.map(todo => (
@@ -81,9 +84,12 @@ const TodoApp = () => {
     [todos, filter],
   );
 
-  const deleteTodo = (todoId) => {
-    setTodos(todos.filter(todo => todo.id !== todoId));
-  };
+  const deleteTodo = useCallback(
+    (todoId) => {
+      setTodos(todos.filter(todo => todo.id !== todoId));
+    },
+    [todos],
+  );
 
   const clearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
@@ -108,14 +114,18 @@ const TodoApp = () => {
       {todos.length > 0 && (
         <>
           <section className="main">
-            <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              checked={completedTodos === 0}
-              onChange={toogleAll}
-            />
-            <label htmlFor="toggle-all">Mark all as complete</label>
+            {todos.length > 0 && (
+              <>
+                <input
+                  type="checkbox"
+                  id="toggle-all"
+                  className="toggle-all"
+                  checked={activeTodos === 0}
+                  onChange={toogleAll}
+                />
+                <label htmlFor="toggle-all">Mark all as complete</label>
+              </>
+            )}
             <TodoList
               items={filteredTodos}
               updateTodo={updateTodoItem}
@@ -125,7 +135,7 @@ const TodoApp = () => {
 
           <footer className="footer">
             <span className="todo-count">
-              {`${activedTodos} items left`}
+              {`${activeTodos} items left`}
             </span>
 
             <TodosFilter

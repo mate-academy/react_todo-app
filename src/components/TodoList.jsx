@@ -2,17 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ items, updateTodo, removeTodo }) => (
-  <ul className="todo-list">
-    {items.map(item => (
-      <TodoItem
-        key={item.id}
-        todo={item}
-        updateTodo={updateTodo}
-        removeTodo={removeTodo}
-      />
-    ))}
-  </ul>
+export const TodoList = React.memo(
+  ({ items, updateTodo, removeTodo }) => (
+    <ul className="todo-list">
+      {items.map(item => (
+        <TodoItem
+          key={item.id}
+          todo={item}
+          updateTodo={updateTodo}
+          removeTodo={removeTodo}
+        />
+      ))}
+    </ul>
+  ),
 );
 
 TodoList.propTypes = {
