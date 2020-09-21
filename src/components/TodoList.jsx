@@ -3,14 +3,19 @@ import PropTypes from 'prop-types';
 
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, changeStatusAll, changeStatus }) => (
+export const TodoList = ({
+  filteredTodos,
+  changeStatusAll,
+  changeStatus,
+  deleteTodo,
+}) => (
   <section className="main">
 
     <input
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      checked={todos.every(todo => todo.completed)}
+      checked={filteredTodos.every(todo => todo.completed)}
       onChange={() => {
         changeStatusAll();
       }}
@@ -18,13 +23,14 @@ export const TodoList = ({ todos, changeStatusAll, changeStatus }) => (
 
     <label htmlFor="toggle-all">Mark all as complete</label>
     <ul className="todo-list">
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem
           key={todo.id}
           title={todo.title}
           id={todo.id}
           completed={todo.completed}
           changeStatus={changeStatus}
+          deleteTodo={deleteTodo}
         />
       ))}
 
@@ -63,7 +69,7 @@ export const TodoList = ({ todos, changeStatusAll, changeStatus }) => (
 );
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(
+  filteredTodos: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
@@ -72,4 +78,5 @@ TodoList.propTypes = {
   ).isRequired,
   changeStatus: PropTypes.func.isRequired,
   changeStatusAll: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
 };

@@ -1,23 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 
 const App = () => {
-  const todosTest = [
-    {
-      title: 'make things',
-      id: 1,
-      completed: false,
-    },
-    {
-      title: 'do tasks',
-      id: 2,
-      completed: false,
-    },
-  ];
-
-  const [todos, setTodos] = useState([...todosTest]);
+  const FILTERS = { all: 'all', active: 'active', completed: 'completed' };
+  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
+  const [filter, setFilter] = useState(FILTERS.all);
 
   const addTodo = (todoToAdd) => {
     setTodos([...todos, todoToAdd]);
@@ -42,6 +31,32 @@ const App = () => {
     } else {
       setTodos(todos.map(todo => ({ ...todo, completed: false })));
     }
+  };
+
+  const changeFilter = (todosList, filters) => {
+    switch (filters) {
+      case FILTERS.active:
+        return todosList.filter(item => !item.completed);
+
+      case FILTERS.completed:
+        return todosList.filter(item => item.completed);
+
+      default:
+        return todosList;
+    }
+  };
+
+  const filteredTodos = useMemo(
+    () => changeFilter(todos, filter),
+    [todos, filter],
+  );
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const deleteAllCompleted = () => {
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   return (
@@ -72,37 +87,79 @@ const App = () => {
         </form>
       </header>
 
-      <TodoList
-        todos={todos}
-        changeStatusAll={changeStatusAll}
-        changeStatus={changeStatus}
-      />
+      {todos.length > 0
+        && (
+          <>
+            <TodoList
+              filteredTodos={filteredTodos}
+              changeStatusAll={changeStatusAll}
+              changeStatus={changeStatus}
+              deleteTodo={deleteTodo}
+            />
 
-      <footer className="footer">
-        <span className="todo-count">
-          {todos.filter(todo => !todo.completed).length}
-          {' '}
-          items left
-        </span>
+            <footer className="footer">
+              <span className="todo-count">
+                {todos.filter(todo => !todo.completed).length}
+                {' '}
+                items left
+              </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+              <ul className="filters">
+                <li>
+                  <a
+                    href="#/"
+                    className={
+                      filter === FILTERS.all ? 'selected' : ''
+                    }
+                    onClick={() => setFilter(FILTERS.all)
+                    }
+                  >
+                    All
+                  </a>
+                </li>
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+                <li>
+                  <a
+                    href="#/active"
+                    className={
+                      filter === FILTERS.active ? 'selected' : ''
+                    }
+                    onClick={() => setFilter(FILTERS.active)
+                    }
+                  >
+                    Active
+                  </a>
+                </li>
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+                <li>
+                  <a
+                    href="#/completed"
+                    className={
+                      filter === FILTERS.completed ? 'selected' : ''
+                    }
+                    onClick={() => setFilter(FILTERS.completed)
+                    }
+                  >
+                    Completed
+                  </a>
+                </li>
+              </ul>
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+              {todos.filter(todo => todo.completed).length > 0
+              && (
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={() => deleteAllCompleted()}
+                >
+                  Clear completed
+                </button>
+              )
+              }
+            </footer>
+          </>
+        )
+      }
     </section>
   );
 };
