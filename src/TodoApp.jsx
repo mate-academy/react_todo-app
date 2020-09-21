@@ -114,18 +114,14 @@ const TodoApp = () => {
       {todos.length > 0 && (
         <>
           <section className="main">
-            {todos.length > 0 && (
-              <>
-                <input
-                  type="checkbox"
-                  id="toggle-all"
-                  className="toggle-all"
-                  checked={activeTodos === 0}
-                  onChange={toogleAll}
-                />
-                <label htmlFor="toggle-all">Mark all as complete</label>
-              </>
-            )}
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              checked={activeTodos === 0}
+              onChange={toogleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
             <TodoList
               items={filteredTodos}
               updateTodo={updateTodoItem}

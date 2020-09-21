@@ -184,6 +184,7 @@ body {
   line-height: 20px;
   text-decoration: none;
   cursor: pointer;
+  outline: none;
 }
 
 .clear-completed:hover {

@@ -18,7 +18,7 @@ export const TodosFilter = ({ handleFilter, selectedFilter }) => (
     <li>
       <a
         href="#/active"
-        className={classNames({ selected: selectedFilter === FILTERS.all })}
+        className={classNames({ selected: selectedFilter === FILTERS.active })}
         onClick={() => handleFilter(FILTERS.active)}
       >
         Active
@@ -28,7 +28,9 @@ export const TodosFilter = ({ handleFilter, selectedFilter }) => (
     <li>
       <a
         href="#/completed"
-        className={classNames({ selected: selectedFilter === FILTERS.all })}
+        className={classNames(
+          { selected: selectedFilter === FILTERS.completed },
+        )}
         onClick={() => handleFilter(FILTERS.completed)}
       >
         Completed
