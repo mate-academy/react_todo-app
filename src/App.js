@@ -10,8 +10,8 @@ const FILTERS = {
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [todoTitle, setTodoTitle] = useState('');
   const [visibleTodos, setVisibleTodos] = useState([]);
+  const [todoTitle, setTodoTitle] = useState('');
   const [todosStatus, setTodosStatus] = useState('');
 
   useEffect(() => {
@@ -90,25 +90,12 @@ function App() {
     setTodos([...todos].filter(todo => !todo.completed));
   };
 
-  const onTodoEdit = (todoId) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          editing: !todo.editing,
-        };
-      }
-
-      return todo;
-    }));
-  };
-
-  const changeTitle = (todoId, newTitle) => {
+  const changeTitle = (todoId, t) => {
     const newTodos = todos.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
-          title: newTitle,
+          title: t,
         };
       }
 
@@ -162,9 +149,8 @@ function App() {
           todos={visibleTodos}
           changeStatus={changeTodoStatus}
           deleteTodo={deleteTodo}
-          onTodoEdit={onTodoEdit}
           changeTitle={changeTitle}
-          getTodos={getTodos}
+
         />
       </section>
 
@@ -173,9 +159,9 @@ function App() {
           <TodosFilter
             activeTodos={activeTodos}
             completedTodos={completedTodos}
-            getTodos={getTodos}
             clearCompleted={clearCompleted}
             todosStatus={todosStatus}
+            getTodos={getTodos}
           />
         </footer>
       )}

@@ -6,13 +6,12 @@ export const TodoItem = ({
   id,
   title,
   completed,
-  editing,
   changeStatus,
   deleteTodo,
-  onTodoEdit,
   changeTitle,
 }) => {
   const [newTitle, setNewTitle] = useState(title);
+  const [editing, setEditing] = useState(false);
 
   return (
     <li
@@ -33,7 +32,7 @@ export const TodoItem = ({
         />
         <label
           onDoubleClick={() => {
-            onTodoEdit(id);
+            setEditing(true);
           }}
         >
           {title}
@@ -54,16 +53,20 @@ export const TodoItem = ({
           setNewTitle(event.target.value);
         }}
         onKeyDown={(event) => {
-          if (event.key === 'Enter') {
+          if (event.key === 'Enter' && newTitle.trim()) {
             changeTitle(id, newTitle);
 
             setNewTitle('');
-            onTodoEdit(id);
+            setEditing(false);
+          }
+
+          if (event.key === 'Enter' && newTitle.trim() === '') {
+            deleteTodo(id);
           }
 
           if (event.key === 'Escape') {
             setNewTitle('');
-            onTodoEdit(id);
+            setEditing(false);
           }
         }}
       />
@@ -75,9 +78,7 @@ TodoItem.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  editing: PropTypes.bool.isRequired,
   changeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
-  onTodoEdit: PropTypes.func.isRequired,
   changeTitle: PropTypes.func.isRequired,
 };

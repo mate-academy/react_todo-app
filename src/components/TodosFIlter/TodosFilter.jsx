@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 
 export const TodosFilter = ({
   activeTodos,
-  getTodos,
   clearCompleted,
   completedTodos,
   todosStatus,
+  getTodos,
 }) => (
   <>
     <span className="todo-count">
@@ -70,10 +70,10 @@ export const TodosFilter = ({
 
 TodosFilter.propTypes = {
   activeTodos: PropTypes.arrayOf(PropTypes.object),
-  getTodos: PropTypes.func.isRequired,
   clearCompleted: PropTypes.func.isRequired,
   completedTodos: PropTypes.arrayOf(PropTypes.object),
   todosStatus: PropTypes.string.isRequired,
+  getTodos: PropTypes.func.isRequired,
 };
 
 TodosFilter.defaultProps = {

@@ -6,7 +6,6 @@ export const TodoList = ({
   todos,
   changeStatus,
   deleteTodo,
-  onTodoEdit,
   changeTitle,
 }) => (
   <ul className="todo-list">
@@ -16,7 +15,6 @@ export const TodoList = ({
         {...todo}
         changeStatus={changeStatus}
         deleteTodo={deleteTodo}
-        onTodoEdit={onTodoEdit}
         changeTitle={changeTitle}
       />
     ))}
@@ -33,7 +31,6 @@ TodoList.propTypes = {
   ),
   changeStatus: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
-  onTodoEdit: PropTypes.func.isRequired,
   changeTitle: PropTypes.func.isRequired,
 };
 
