@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const TodosToggler = ({ toggleAll, onToggleTodosStatus }) => (
+export const TodosToggler = ({ onToggleTodosStatus, activeTodosLength }) => (
   <>
     <input
-      checked={toggleAll}
+      checked={activeTodosLength === 0}
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      onChange={() => {
-        onToggleTodosStatus();
+      onChange={(e) => {
+        onToggleTodosStatus(e);
       }}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
@@ -17,6 +17,6 @@ export const TodosToggler = ({ toggleAll, onToggleTodosStatus }) => (
 );
 
 TodosToggler.propTypes = {
-  toggleAll: PropTypes.bool.isRequired,
   onToggleTodosStatus: PropTypes.func.isRequired,
+  activeTodosLength: PropTypes.number.isRequired,
 };

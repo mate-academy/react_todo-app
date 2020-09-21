@@ -8,21 +8,14 @@ import { FILTER } from '../../constants/FILTER';
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
-  const [toggleAll, setToggleAll] = useState(false);
   const [filterValue, setFilterValue] = useState(FILTER.all);
 
-  const activeTodos = useMemo(() => todos
-    .filter(todo => !todo.completed), [todos]);
-  const completedTodos = useMemo(() => todos
-    .filter(todo => todo.completed), [todos]);
+  const activeTodosLength = useMemo(() => todos
+    .filter(todo => !todo.completed).length, [todos]);
+  const completedTodosLength = useMemo(() => todos
+    .filter(todo => todo.completed).length, [todos]);
 
   useEffect(() => {
-    if (
-      JSON.parse(localStorage.getItem('todos')).every(todo => todo.completed)
-    ) {
-      setToggleAll(true);
-    }
-
     if (localStorage.getItem('todos')) {
       setTodos([...JSON.parse(localStorage.getItem('todos'))]);
     }
@@ -42,13 +35,11 @@ export const TodoApp = () => {
     }
   };
 
-  const handleToggleTodosStatus = () => {
+  const handleToggleTodosStatus = (e) => {
     setTodos(todos.map(todo => ({
       ...todo,
-      completed: !toggleAll,
+      completed: e.target.checked,
     })));
-
-    setToggleAll(!toggleAll);
   };
 
   const handleTodoChange = (id, editedTitle) => {
@@ -80,15 +71,12 @@ export const TodoApp = () => {
         <>
           <section className="main">
             <TodosToggler
-              activeTodosLenght={activeTodos.length}
-              toggleAll={toggleAll}
+              activeTodosLength={activeTodosLength}
               onToggleTodosStatus={handleToggleTodosStatus}
             />
 
             <TodoList
               filterValue={filterValue}
-              setToggleAll={setToggleAll}
-              toggleAll={toggleAll}
               setTodos={setTodos}
               todos={todos}
               onTodoChange={handleTodoChange}
@@ -96,19 +84,19 @@ export const TodoApp = () => {
           </section>
 
           <footer className="footer">
-            <TodoCount activeTodosLength={activeTodos.length} />
+            <TodoCount activeTodosLength={activeTodosLength} />
 
             <TodosFilter
               filterValue={filterValue}
               setFilter={setFilterValue}
             />
 
-            {completedTodos.length > 0 && (
+            {completedTodosLength > 0 && (
               <button
                 type="button"
                 className="clear-completed"
                 onClick={() => {
-                  setTodos(activeTodos);
+                  setTodos(todos.filter(todo => !todo.completed));
                 }}
               >
                 Clear completed

@@ -8,7 +8,6 @@ export const TodoList = ({
   setTodos,
   filterValue,
   onTodoChange,
-  setToggleAll,
 }) => {
   const filteredTodos = useMemo(() => {
     switch (filterValue) {
@@ -34,12 +33,6 @@ export const TodoList = ({
     });
 
     setTodos(changedTodos);
-
-    if (changedTodos.every(todo => todo.completed)) {
-      setToggleAll(true);
-    } else {
-      setToggleAll(false);
-    }
   };
 
   const handleTodoDeletion = (id) => {
@@ -73,5 +66,4 @@ TodoList.propTypes = {
   setTodos: PropTypes.func.isRequired,
   filterValue: PropTypes.string.isRequired,
   onTodoChange: PropTypes.func.isRequired,
-  setToggleAll: PropTypes.func.isRequired,
 };
