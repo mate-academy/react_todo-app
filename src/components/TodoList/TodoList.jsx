@@ -12,7 +12,7 @@ export const TodoList = ({
     {todos.map(todo => (
       <TodoItem
         key={todo.id}
-        {...todo}
+        todo={todo}
         changeTitle={changeTitle}
         handleDelete={handleDelete}
         changeCompleted={changeCompleted}

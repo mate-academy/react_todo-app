@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export const TodoItem = ({
-  id, title, completed, handleDelete, changeCompleted, changeTitle,
+  todo, handleDelete, changeCompleted, changeTitle,
 }) => {
   const [editing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -14,9 +14,11 @@ export const TodoItem = ({
 
   const handleEdit = (event) => {
     if (event.key === 'Enter' && newTitle) {
-      changeTitle(id, newTitle);
+      changeTitle(todo.id, newTitle);
       setEditing(false);
       setNewTitle('');
+    } else if (event.key === 'Enter' && !newTitle) {
+      handleDelete(todo.id);
     }
 
     if (event.key === 'Escape') {
@@ -27,7 +29,7 @@ export const TodoItem = ({
 
   const handleSaveChanges = () => {
     if (newTitle) {
-      changeTitle(id, newTitle);
+      changeTitle(todo.id, newTitle);
       setEditing(false);
       setNewTitle('');
     } else {
@@ -39,7 +41,7 @@ export const TodoItem = ({
   return (
     <li
       className={classNames({
-        completed,
+        completed: todo.completed,
         editing,
       })}
     >
@@ -47,26 +49,26 @@ export const TodoItem = ({
         <input
           type="checkbox"
           className="toggle"
-          checked={completed}
-          onChange={() => changeCompleted(id)}
+          checked={todo.completed}
+          onChange={() => changeCompleted(todo.id)}
         />
         <label
           onDoubleClick={() => setEditing(true)}
         >
-          {title}
+          {todo.title}
         </label>
         <button
           type="button"
           className="destroy"
-          onClick={() => handleDelete(id)}
+          onClick={() => handleDelete(todo.id)}
         />
       </div>
-      {(editing === true) && (
+      {editing && (
         <input
           autoFocus
           type="text"
           className="edit"
-          defaultValue={title}
+          defaultValue={todo.title}
           onChange={handleChange}
           onKeyDown={handleEdit}
           onBlur={handleSaveChanges}
@@ -77,9 +79,11 @@ export const TodoItem = ({
 };
 
 TodoItem.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
+  todo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }).isRequired,
   changeTitle: PropTypes.func.isRequired,
   changeCompleted: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,

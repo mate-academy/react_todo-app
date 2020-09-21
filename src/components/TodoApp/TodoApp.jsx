@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
+import { FILTER } from '../constants';
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
@@ -16,12 +17,6 @@ export const TodoApp = () => {
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
-
-  const FILTER = {
-    all: 'All',
-    active: 'Active',
-    completed: 'Completed',
-  };
 
   const todosFiltered = useMemo(() => {
     switch (filter) {
@@ -64,7 +59,10 @@ export const TodoApp = () => {
 
   const markAllCompleted = () => {
     if (todos.every(todo => todo.completed)) {
-      setTodos(todos.map(todo => ({ ...todo, completed: !todo.completed })));
+      setTodos(todos.map(todo => (
+        { ...todo,
+          completed: !todo.completed }
+      )));
     } else {
       setTodos(todos.map((todo) => {
         if (!todo.completed) {
@@ -80,7 +78,7 @@ export const TodoApp = () => {
     setQuery(event.target.value.trimLeft());
   };
 
-  const handleAdd = () => {
+  const handleAddTodo = () => {
     if (query) {
       setTodos([{
         id: +new Date(),
@@ -91,7 +89,7 @@ export const TodoApp = () => {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDeleteTodo = (id) => {
     setTodos(
       todos.filter(todo => todo.id !== id),
     );
@@ -114,7 +112,7 @@ export const TodoApp = () => {
             onChange={handleChange}
             onKeyUp={(event) => {
               if (event.key === 'Enter') {
-                handleAdd();
+                handleAddTodo();
               }
             }}
           />
@@ -136,7 +134,7 @@ export const TodoApp = () => {
             <TodoList
               todos={todosFiltered}
               changeTitle={changeTitle}
-              handleDelete={handleDelete}
+              handleDelete={handleDeleteTodo}
               changeCompleted={changeCompleted}
               markAllCompleted={markAllCompleted}
             />
@@ -151,7 +149,6 @@ export const TodoApp = () => {
             <TodosFilter
               todos={todos}
               filter={filter}
-              {...FILTER}
               setFilter={setFilter}
             />
 
