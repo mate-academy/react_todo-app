@@ -13,7 +13,7 @@ export const TodoList = ({
     {items.map(item => (
       <TodoItem
         key={item.id}
-        {...item}
+        item={item}
         changeStatus={changeStatus}
         removeTodo={removeTodo}
         changeTodo={changeTodo}

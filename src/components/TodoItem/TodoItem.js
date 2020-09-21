@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export const TodoItem = ({
-  id,
-  title,
-  completed,
+  item,
   changeStatus,
   removeTodo,
   changeTodo,
 }) => {
+  const { id, title, completed } = item;
   const [isEditMode, setIsEditMode] = useState(false);
   const [newTodoTitle, setNewTodoTitle] = useState(title);
 
@@ -88,9 +87,11 @@ export const TodoItem = ({
 };
 
 TodoItem.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
+  item: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }).isRequired,
   changeStatus: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
   changeTodo: PropTypes.func.isRequired,

@@ -20,8 +20,14 @@ function TodoApp() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const uncompletedTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
+  const uncompletedTodos = useMemo(
+    () => todos.filter(todo => !todo.completed),
+    [todos],
+  );
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed),
+    [todos],
+  );
 
   const changeStatus = (todoId) => {
     const changedTodos = todos.map((todo) => {
@@ -128,7 +134,6 @@ function TodoApp() {
               removeTodo={removeTodo}
               changeTodo={changeTodo}
             />
-
           </section>
 
           <footer className="footer">
