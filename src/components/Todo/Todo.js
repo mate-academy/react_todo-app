@@ -17,6 +17,11 @@ export const Todo = ({
     switch (event.key) {
       case 'Enter':
         onTodoChange(id, editedTitle);
+
+        if (!editedTitle) {
+          onTodoDeletion(id);
+        }
+
         setEditing(false);
         break;
       case 'Escape':
