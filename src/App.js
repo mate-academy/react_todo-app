@@ -1,9 +1,9 @@
-
 import React, { useState, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
+import { TodoFilters } from './components/TodoFilters';
+import { FILTERS } from './components/constants';
 
 const App = () => {
-  const FILTERS = { all: 'all', active: 'active', completed: 'completed' };
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [filter, setFilter] = useState(FILTERS.all);
@@ -12,8 +12,15 @@ const App = () => {
     setTodos([...todos, todoToAdd]);
   };
 
-  const changeStatus = (id) => {
+  const changeTodo = (id, title) => {
     setTodos(todos.map((todo) => {
+      if (title && todo.id === id) {
+        return {
+          ...todo,
+          title,
+        };
+      }
+
       if (todo.id === id) {
         return {
           ...todo,
@@ -93,7 +100,7 @@ const App = () => {
             <TodoList
               filteredTodos={filteredTodos}
               changeStatusAll={changeStatusAll}
-              changeStatus={changeStatus}
+              changeTodo={changeTodo}
               deleteTodo={deleteTodo}
             />
 
@@ -104,46 +111,10 @@ const App = () => {
                 items left
               </span>
 
-              <ul className="filters">
-                <li>
-                  <a
-                    href="#/"
-                    className={
-                      filter === FILTERS.all ? 'selected' : ''
-                    }
-                    onClick={() => setFilter(FILTERS.all)
-                    }
-                  >
-                    All
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="#/active"
-                    className={
-                      filter === FILTERS.active ? 'selected' : ''
-                    }
-                    onClick={() => setFilter(FILTERS.active)
-                    }
-                  >
-                    Active
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="#/completed"
-                    className={
-                      filter === FILTERS.completed ? 'selected' : ''
-                    }
-                    onClick={() => setFilter(FILTERS.completed)
-                    }
-                  >
-                    Completed
-                  </a>
-                </li>
-              </ul>
+              <TodoFilters
+                FILTERS={FILTERS}
+                setFilter={setFilter}
+              />
 
               {todos.filter(todo => todo.completed).length > 0
               && (

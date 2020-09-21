@@ -1,20 +1,49 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 export const TodoItem = ({
   title,
   id,
   completed,
-  changeStatus,
+  changeTodo,
   deleteTodo,
 }) => {
-  const [changingTitle, setChangingTitle] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [editTitle, setEditTitle] = useState(false);
+
+  const edit = (event) => {
+    if (event.key === 'Enter' && newTitle) {
+      changeTodo(id, newTitle);
+      setEditTitle(false);
+      setNewTitle('');
+    }
+
+    if (event.key === 'Escape') {
+      setNewTitle('');
+      setEditTitle(false);
+    }
+  };
+
+  const saveChanges = (event) => {
+    if (newTitle) {
+      changeTodo(id, newTitle);
+      setEditTitle(false);
+      setNewTitle('');
+    } else {
+      setEditTitle(false);
+      setNewTitle('');
+    }
+  };
 
   return (
     <li
-      className={completed ? 'completed' : ''}
+      className={classNames({
+        completed,
+        editing: editTitle,
+      })}
       onDoubleClick={() => {
-        setChangingTitle(!changingTitle);
+        setEditTitle(!editTitle);
       }}
     >
       <div className="view">
@@ -22,20 +51,28 @@ export const TodoItem = ({
           type="checkbox"
           className="toggle"
           checked={completed}
-          onChange={() => {
-            changeStatus(id);
-          }}
+          onChange={() => changeTodo(id)
+          }
         />
         <label>{title}</label>
         <button
           type="button"
           className="destroy"
-          onClick={() => {
-            deleteTodo(id);
-          }}
+          onClick={() => deleteTodo(id)
+          }
         />
       </div>
-      <input type="text" className="edit" />
+      {editTitle && (
+        <input
+          autoFocus
+          type="text"
+          className="edit"
+          defaultValue={title}
+          onChange={event => setNewTitle(event.target.value.trim())}
+          onKeyDown={edit}
+          onBlur={saveChanges}
+        />
+      )}
     </li>
   );
 };
@@ -44,6 +81,6 @@ TodoItem.propTypes = {
   title: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   completed: PropTypes.bool.isRequired,
-  changeStatus: PropTypes.func.isRequired,
+  changeTodo: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
 };
