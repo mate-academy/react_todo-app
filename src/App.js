@@ -39,7 +39,8 @@ function TodoApp() {
   }), [filter, todos]);
 
   const completedTodos = useMemo(
-    () => todos.filter(todo => todo.completed), [todos],
+    () => todos.filter(todo => todo.completed),
+    [todos],
   );
   const areAllTodosCompleted = useMemo(
     () => completedTodos.length === todos.length, [completedTodos],
