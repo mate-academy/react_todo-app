@@ -1,9 +1,11 @@
 import React from 'react';
+import { TodoApp } from './components/TodoApp';
 
 function App() {
   return (
     <section className="todoapp">
-      <header className="header">
+      <TodoApp />
+      {/* <header className="header">
         <h1>todos</h1>
 
         <form>
@@ -80,7 +82,7 @@ function App() {
         <button type="button" className="clear-completed">
           Clear completed
         </button>
-      </footer>
+      </footer> */}
     </section>
   );
 }
