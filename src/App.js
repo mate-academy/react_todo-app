@@ -43,6 +43,14 @@ function App() {
     }
   };
 
+  const toggleTodos = () => {
+    setToggleAll(!toggleAll);
+    setTodos(todos.map(todo => ({
+      ...todo,
+      completed: !todo.completed,
+    })));
+  };
+
   function deleteCompleted() {
     setTodos(todos.filter(todo => !todo.completed));
   }
@@ -70,13 +78,7 @@ function App() {
               id="toggle-all"
               className="toggle-all"
               checked={todos.every(todo => todo.completed)}
-              onChange={() => {
-                setToggleAll(!toggleAll);
-                setTodos(todos.map(todo => ({
-                  ...todo,
-                  completed: !todo.completed,
-                })));
-              }}
+              onChange={toggleTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
           </>

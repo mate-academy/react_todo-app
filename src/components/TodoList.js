@@ -8,23 +8,12 @@ export const TodoList = (
     setTodos,
     filter },
 ) => {
-  const statusToogler = (todoId) => {
+  const editTodo = (todoId, value) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === todoId) {
         return { ...todo,
-          completed: !todo.completed };
-      }
-
-      return todo;
-    });
-
-    setTodos(updatedTodos);
-  };
-
-  const editTodosTitle = (todoId, title) => {
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === todoId) {
-        return { ...todo, title };
+          title: typeof value === 'string' ? value : todo.title,
+          completed: typeof value === 'boolean' ? value : todo.completed };
       }
 
       return todo;
@@ -58,8 +47,7 @@ export const TodoList = (
             key={todo.id}
             todo={todo}
             deleteTodo={deleteTodo}
-            statusToogler={statusToogler}
-            editTodosTitle={editTodosTitle}
+            editTodo={editTodo}
           />
         ))}
     </ul>

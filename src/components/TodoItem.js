@@ -5,15 +5,14 @@ import classNames from 'classnames';
 export const TodoItem = (
   { todo,
     deleteTodo,
-    editTodosTitle,
-    statusToogler },
+    editTodo },
 ) => {
   const [editedTitle, setEditedTitle] = useState('');
   const [editing, setEditing] = useState(false);
 
   const editNonEmptyTitle = () => {
     if (editedTitle) {
-      editTodosTitle(todo.id, editedTitle);
+      editTodo(todo.id, editedTitle);
       setEditing(false);
     }
   };
@@ -44,7 +43,7 @@ export const TodoItem = (
         <input
           type="checkbox"
           className="toggle"
-          onChange={() => statusToogler(todo.id)}
+          onChange={() => editTodo(todo.id, !todo.completed)}
           checked={todo.completed}
         />
         <label onDoubleClick={() => setEditing(true)}>
@@ -75,7 +74,6 @@ TodoItem.propTypes = {
   todo: PropTypes.shape({ id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired }).isRequired,
-  statusToogler: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
-  editTodosTitle: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
 };
