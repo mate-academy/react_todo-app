@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -10,7 +10,7 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
-  const handleChanges = (newTitle) => {
+  const handleChanges = useCallback((newTitle) => {
     if (!newTitle) {
       destroyTodo(item.id)
     }
@@ -28,9 +28,9 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
     })
     setEditedTitle(newTitle.trim());
     setEditingTodo(false);
-  }
+  }, [editedTitle])
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = useCallback((event) => {
     const {value} = event.target;
     const {key} = event;
 
@@ -43,7 +43,7 @@ export const Todo = ({ item, handleStatus, setTodos }) => {
       setEditedTitle(value.trim())
       setEditingTodo(false);
     }
-  }
+  }, [editedTitle])
 
   return (
     <li

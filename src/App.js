@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -38,13 +38,25 @@ function TodoApp() {
     }
   }), [filter, todos]);
 
-  const completedTodos = todos.filter(todo => todo.completed);
-  const areAllTodosCompleted = completedTodos.length === todos.length;
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed), [todos],
+  );
+  const areAllTodosCompleted = useMemo(
+    () => completedTodos.length === todos.length, [completedTodos],
+  );
 
-  const uncompletedTodos = todos.filter(todo => !todo.completed);
-  const areAllTodosUncompleted = uncompletedTodos.length === todos.length;
+  const uncompletedTodos = useMemo(
+    () => todos.filter(todo => !todo.completed), [todos],
+  );
+  const areAllTodosUncompleted = useMemo(
+    () => uncompletedTodos.length === todos.length, [uncompletedTodos],
+  );
 
-  const addTodo = (event) => {
+  const isSomeCompleted = useMemo(
+    () => todos.some(todo => todo.completed), [todos],
+  );
+
+  const addTodo = useCallback((event) => {
     event.preventDefault();
 
     if (!newTodo.trim()) {
@@ -59,9 +71,9 @@ function TodoApp() {
       },
     ]);
     setNewTodo('');
-  };
+  }, [newTodo]);
 
-  const checkAllCompleted = () => {
+  const checkAllCompleted = useCallback(() => {
     setAllCompleted(!allCompleted);
 
     if (areAllTodosCompleted) {
@@ -86,7 +98,7 @@ function TodoApp() {
       ...todo,
       completed: !allCompleted,
     })));
-  };
+  }, [todos]);
 
   const clearCompleted = () => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
@@ -135,7 +147,7 @@ function TodoApp() {
               FILTERS={FILTERS}
             />
 
-            {todos.some(todo => todo.completed) && (
+            {isSomeCompleted && (
               <button
                 type="button"
                 className="clear-completed"

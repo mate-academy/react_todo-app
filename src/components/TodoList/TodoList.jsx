@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import './TodoList.css';
 import { Todo } from '../Todo';
 
 export const TodoList = ({ items, setTodos }) => {
-  const handleStatus = (id) => {
+  const handleStatus = useCallback((id) => {
     setTodos(prevTodos => prevTodos
       .map((item) => {
         if (id !== item.id) {
@@ -17,7 +17,7 @@ export const TodoList = ({ items, setTodos }) => {
           completed: !item.completed,
         };
       }));
-  };
+  }, [items]);
 
   return (
     <ul className="todo-list">
