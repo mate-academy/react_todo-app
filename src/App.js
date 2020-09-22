@@ -26,7 +26,10 @@ function App() {
     completed: false,
   };
 
-  useEffect(() => setTodoList(JSON.parse(localStorage.list)), []);
+  useEffect(
+    () => localStorage.list && setTodoList(JSON.parse(localStorage.list)),
+    [],
+  );
 
   useEffect(() => {
     localStorage.list = JSON.stringify(todoList);
