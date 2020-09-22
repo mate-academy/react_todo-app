@@ -21,15 +21,20 @@ function App() {
 
   const addTodo = (event) => {
     event.preventDefault();
-    if (todoTitle) {
+    const newTodo = {
+      id: +new Date(),
+      title: todoTitle.trim(),
+      completed: false,
+    };
+
+    if (todoTitle && todos) {
       setTodos([
         ...todos,
-        {
-          id: +new Date(),
-          title: todoTitle.trim(),
-          completed: false,
-        },
+        newTodo,
       ]);
+      setTodoTitle('');
+    } else if (todoTitle) {
+      setTodos([newTodo]);
       setTodoTitle('');
     }
   };
