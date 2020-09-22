@@ -4,7 +4,7 @@ import { TodoItem } from './TodoItem';
 
 export const TodoList = ({ todos, setTodos }) => {
   const toggleStatus = (id) => {
-    setTodos([...todos].map((todo) => {
+    setTodos(todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todos,
@@ -23,7 +23,10 @@ export const TodoList = ({ todos, setTodos }) => {
   const editTitle = (id, title) => {
     setTodos(todos.map((todo) => {
       if (todo.id === id) {
-        return { ...todo, title };
+        return {
+          ...todo,
+          title,
+        };
       }
 
       return todo;

@@ -1,5 +1,6 @@
 /* eslint-disable arrow-body-style */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export const TodoItem = ({
   todo,
@@ -26,4 +27,11 @@ export const TodoItem = ({
       <input type="text" className="edit" />
     </li>
   );
+};
+
+TodoItem.propTypes = {
+  todo: PropTypes.objectOf().isRequired,
+  toggleStatus: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  editTitle: PropTypes.func.isRequired,
 };
