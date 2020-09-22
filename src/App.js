@@ -23,7 +23,7 @@ function App() {
   };
   const [selectedFilter, selectFilter] = useState(FILTER.all);
 
-  useMemo(() => filter(selectedFilter), [selectedFilter]);
+  useMemo(() => filter(selectedFilter), [selectedFilter, todos]);
 
   const todoTools = {
     todos,
