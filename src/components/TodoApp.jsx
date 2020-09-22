@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { TodoFilter } from './TodoFilter';
+import { TodoList } from './TodoList';
 // import { Filter } from '../constants/Filter';
 
 export const TodoApp = () => {
@@ -39,11 +41,30 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      <footer className="footer">
-        <span className="todo-count">
-          {todos.length}
-        </span>
-      </footer>
+      {todos && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+
+          <TodoList
+            todos={todos}
+            setTodos={setTodos}
+          />
+        </section>
+      )}
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count">
+            {`${todos.length} item(s) left`}
+          </span>
+
+          <TodoFilter todos={todos} />
+        </footer>
+      )}
     </>
   );
 };
