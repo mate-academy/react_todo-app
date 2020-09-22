@@ -33,3 +33,16 @@
     bottom: 10px;
   }
 }
+
+.clear-visibility {
+  visibility: hidden;
+}
+
+.edit_start {
+  opacity: 0;
+  width: 0;
+}
+
+.edit_end {
+  visibility: hidden;
+}
