@@ -8,6 +8,10 @@ export const AddTodo = ({ sendTodo }) => {
     <form
       onSubmit={(event) => {
         event.preventDefault();
+        if (todoTitle.trim().length <= 0) {
+          return;
+        }
+
         sendTodo({
           id: +new Date(),
           title: todoTitle.trim(),

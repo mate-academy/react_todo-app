@@ -15,8 +15,13 @@ export const Todo = ({
   };
 
   const confirmChanges = (target) => {
+    if (target.length === 0) {
+      return deleteTodo(id);
+    }
+
     changeProperty(id, target);
-    changeStatusEdit(null);
+
+    return changeStatusEdit(null);
   };
 
   const keyPressed = (key, target) => {

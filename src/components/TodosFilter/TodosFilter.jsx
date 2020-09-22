@@ -10,6 +10,7 @@ export const TodosFilter = ({
   selectFilter,
 }) => {
   const { todos, updateTodos } = todoTools;
+  const todosLeft = todos.filter(todo => !todo.completed).length;
 
   const changeFilter = (filterType) => {
     selectFilter(filterType);
@@ -19,12 +20,13 @@ export const TodosFilter = ({
   return (
     <>
       <span className="todo-count">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${todosLeft} ${todosLeft !== 1 ? 'items' : 'item'} left`}
       </span>
 
       <ul className="filters">
         <li>
-          <button
+          <a
+            href={`#/${all}`}
             className={ClassNames(
               { selected: selectedFilter === all },
             )}
@@ -34,11 +36,12 @@ export const TodosFilter = ({
             }}
           >
             All
-          </button>
+          </a>
         </li>
 
         <li>
-          <button
+          <a
+            href={`#/${active}`}
             className={ClassNames(
               { selected: selectedFilter === active },
             )}
@@ -48,11 +51,12 @@ export const TodosFilter = ({
             }}
           >
             Active
-          </button>
+          </a>
         </li>
 
         <li>
-          <button
+          <a
+            href={`#/${completed}`}
             className={ClassNames(
               { selected: selectedFilter === completed },
             )}
@@ -62,7 +66,7 @@ export const TodosFilter = ({
             }}
           >
             Completed
-          </button>
+          </a>
         </li>
       </ul>
 
