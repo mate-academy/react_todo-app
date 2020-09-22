@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
-import { FILTERS } from '../constants';
 
 export const TodoList = (
-  { todos,
-    setTodos,
-    filter },
+  { setTodos,
+    todos },
 ) => {
   const editTodo = (todoId, value) => {
     const updatedTodos = todos.map((todo) => {
@@ -32,16 +30,7 @@ export const TodoList = (
 
   return (
     <ul className="todo-list">
-      {todos.filter((todo) => {
-        switch (filter) {
-          case (FILTERS.active):
-            return !todo.completed;
-          case (FILTERS.completed):
-            return todo.completed;
-          default:
-            return todo;
-        }
-      })
+      {todos
         .map(todo => (
           <TodoItem
             key={todo.id}
@@ -55,11 +44,9 @@ export const TodoList = (
 };
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object.isRequired),
   setTodos: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object.isRequired),
 };
-
 TodoList.defaultProps = {
-  todos: null,
+  todos: PropTypes.arrayOf(PropTypes.object.isRequired),
 };

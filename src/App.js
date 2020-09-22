@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilters } from './components/TodoFilters';
 import { FILTERS } from './constants';
@@ -55,6 +55,28 @@ function App() {
     setTodos(todos.filter(todo => !todo.completed));
   }
 
+  const filteredTodos = (unfilteredTodos, currentFilter) => {
+    if (unfilteredTodos) {
+      return unfilteredTodos.filter((todo) => {
+        switch (currentFilter) {
+          case (FILTERS.active):
+            return !todo.completed;
+          case (FILTERS.completed):
+            return todo.completed;
+          default:
+            return todo;
+        }
+      });
+    }
+
+    return unfilteredTodos;
+  };
+
+  const preparedTodos = useMemo(
+    () => filteredTodos(todos, filter),
+    [todos, filter],
+  );
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -85,9 +107,8 @@ function App() {
         )}
 
         <TodoList
-          todos={todos}
           setTodos={setTodos}
-          filter={filter}
+          todos={preparedTodos}
         />
       </section>
 
