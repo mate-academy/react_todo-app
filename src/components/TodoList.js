@@ -37,9 +37,13 @@ export const TodoList = (
     setTodos(todos.filter(todo => todo.id !== todoId));
   };
 
+  if (!todos) {
+    return null;
+  }
+
   return (
     <ul className="todo-list">
-      {todos && todos.filter((todo) => {
+      {todos.filter((todo) => {
         switch (filter) {
           case (FILTERS.active):
             return !todo.completed;
