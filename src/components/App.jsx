@@ -46,7 +46,7 @@ const App = () => {
   const markAllTodos = useCallback(() => {
     setTodos(prev => prev
       .map(todo => ({ ...todo, completed: !allTodosToogler })));
-  }, [todos]);
+  }, [allTodosToogler]);
 
   const removeTodo = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
