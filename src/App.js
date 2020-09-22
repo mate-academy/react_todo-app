@@ -2,12 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { TodoApp } from './components/TodoApp';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
-
-const FILTERS = {
-  all: 'all',
-  active: 'active',
-  completed: 'completed',
-};
+import { FILTERS } from './constants';
 
 function App() {
   const [todoList, setTodoList] = useState([]);
@@ -34,15 +29,27 @@ function App() {
     );
   };
 
-  const notCompleted = todoList.filter(todo => !todo.completed);
+  const notCompletedTodos = useMemo(() => (
+    todoList.filter(todo => !todo.completed)
+  ));
 
   useEffect(() => {
-    if (notCompleted.length === 0) {
+    if (notCompletedTodos.length === 0) {
       setToggleAll(true);
     } else {
       setToggleAll(false);
     }
-  }, [notCompleted]);
+  }, [notCompletedTodos]);
+
+  useEffect(() => {
+    if (localStorage.todoList) {
+      setTodoList(JSON.parse(localStorage.getItem('todoList')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todoList', JSON.stringify(todoList));
+  }, [todoList]);
 
   return (
     <section className="todoapp">
@@ -52,7 +59,7 @@ function App() {
         <TodoApp setTodoList={setTodoList} />
       </header>
 
-      {!!todoList.length && (
+      {todoList.length !== 0 && (
         <>
           <section className="main">
             <input
@@ -73,8 +80,8 @@ function App() {
 
           <footer className="footer">
             <span className="todo-count">
-              {notCompleted.length}
-              {notCompleted.length > 1 || notCompleted.length === 0
+              {notCompletedTodos.length}
+              {notCompletedTodos.length > 1 || notCompletedTodos.length === 0
                 ? ' todos left'
                 : ' todo left'}
             </span>
@@ -82,14 +89,13 @@ function App() {
             <TodosFilter
               filter={filter}
               setFilter={setFilter}
-              FILTERS={FILTERS}
             />
 
-            {notCompleted.length !== todoList.length && (
+            {notCompletedTodos.length !== todoList.length && (
               <button
                 type="button"
                 className="clear-completed"
-                onClick={() => setTodoList(notCompleted)}
+                onClick={() => setTodoList(notCompletedTodos)}
               >
                 Clear completed
               </button>
