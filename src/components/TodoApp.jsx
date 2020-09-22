@@ -8,8 +8,13 @@ export const TodoApp = ({ getTodo }) => {
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        getTodo(+new Date(), todo);
-        setTodo('');
+
+        if (todo.length > 0) {
+          getTodo(+new Date(), todo.trim());
+          setTodo('');
+        }
+
+        return;
       }}
     >
       <input

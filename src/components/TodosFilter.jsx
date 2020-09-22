@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -7,63 +7,82 @@ export const TodosFilter = ({
   showTodos,
   clearCompleted,
   completedTodos,
-}) => (
-  <footer className="footer">
-    <span className="todo-count">
-      {`${todosLeft} items left`}
-    </span>
+}) => {
+  const [selectedFilter, setSelectedFilter] = useState('All');
 
-    <ul className="filters">
-      <li>
-        <a
-          href="#/"
-          className="selected"
-          onClick={(event) => {
-            event.preventDefault();
-            showTodos('all');
-          }}
-        >
-          All
-        </a>
-      </li>
+  return (
+    <footer className="footer">
+      <span className="todo-count">
+        {
+          (todosLeft===1)
+          ? `${todosLeft} item left`
+          : `${todosLeft} items left`
+        }
+      </span>
 
-      <li>
-        <a
-          href="#/active"
-          onClick={(event) => {
-            event.preventDefault();
-            showTodos(false);
-          }}
-        >
-          Active
-        </a>
-      </li>
+      <ul className="filters">
+        <li>
+          <a
+            href="#/"
+            className={classNames({
+              selected: selectedFilter === 'All',
+            })}
+            onClick={(event) => {
+              event.preventDefault();
+              setSelectedFilter('All');
+              showTodos('all');
+            }}
+          >
+            All
+          </a>
+        </li>
 
-      <li>
-        <a
-          href="#/completed"
-          onClick={(event) => {
-            event.preventDefault();
-            showTodos(true);
-          }}
-        >
-          Completed
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            href="#/active"
+            className={classNames({
+              selected: selectedFilter === 'Active',
+            })}
+            onClick={(event) => {
+              event.preventDefault();
+              setSelectedFilter('Active');
+              showTodos(false);
+            }}
+          >
+            Active
+          </a>
+        </li>
 
-    <button
-      type="button"
-      className={classNames({
-        'clear-completed': true,
-        'clear-visibility': !completedTodos,
-      })}
-      onClick={() => clearCompleted()}
-    >
-      Clear completed
-    </button>
-  </footer>
-);
+        <li>
+          <a
+            href="#/completed"
+            className={classNames({
+              selected: selectedFilter === 'Completed',
+            })}
+            onClick={(event) => {
+              event.preventDefault();
+              setSelectedFilter('Completed');
+              showTodos(true);
+            }}
+          >
+            Completed
+          </a>
+        </li>
+      </ul>
+
+      <button
+        type="button"
+        className={classNames({
+          'clear-completed': true,
+          'clear-visibility': !completedTodos,
+        })}
+        onClick={() => clearCompleted()}
+      >
+        Clear completed
+      </button>
+    </footer>
+  );
+}
 
 TodosFilter.propTypes = {
   todosLeft: PropTypes.number.isRequired,

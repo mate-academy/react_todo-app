@@ -54,12 +54,13 @@ export const TodoItem = ({ todo, complete, onDelete, todoWasEdited }) => {
                   return;
                 }
 
-                setEditigTodo(currentTodo);
+                onDelete(todo.id);
                 setEditing(false);
 
                 return;
 
               case 'Escape':
+                setEditigTodo(currentTodo);
                 setEditing(false);
                 break;
 

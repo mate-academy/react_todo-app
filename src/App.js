@@ -72,7 +72,7 @@ function App() {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          checked={todos.every(todo => todo.completed)}
+          checked={todos.length > 0 && todos.every(todo => todo.completed)}
           onClick={() => toggleCompleted()}
           readOnly
         />
