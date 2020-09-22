@@ -90,12 +90,12 @@ function App() {
     setTodos([...todos].filter(todo => !todo.completed));
   };
 
-  const changeTitle = (todoId, t) => {
+  const changeTitle = (todoId, newTitle) => {
     const newTodos = todos.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
-          title: t,
+          title: newTitle,
         };
       }
 
