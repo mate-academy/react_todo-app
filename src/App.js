@@ -1,86 +1,170 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFIlter';
+
+const FILTERS = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+};
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [visibleTodos, setVisibleTodos] = useState([]);
+  const [todoTitle, setTodoTitle] = useState('');
+  const [todosStatus, setTodosStatus] = useState('');
+
+  useEffect(() => {
+    setTodos(todos);
+    setVisibleTodos(todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const createTodo = (title) => {
+    setTodos([
+      ...todos,
+      {
+        title,
+        id: +new Date(),
+        completed: false,
+        editing: false,
+      },
+    ]);
+  };
+
+  const getTodos = (status) => {
+    switch (status) {
+      case FILTERS.all:
+        setVisibleTodos(todos);
+        setTodosStatus('all');
+        break;
+      case FILTERS.completed:
+        setVisibleTodos([...todos].filter(todo => todo.completed));
+        setTodosStatus('completed');
+        break;
+      case FILTERS.active:
+        setVisibleTodos([...todos].filter(todo => !todo.completed));
+        setTodosStatus('active');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const changeTodoStatus = (todoId) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
+  const toggleAll = () => {
+    if (todos.every(todo => todo.completed)) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })));
+    } else {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: true,
+      })));
+    }
+  };
+
+  const activeTodos = [...todos].filter(todo => !todo.completed);
+
+  const deleteTodo = (todoId) => {
+    setTodos([...todos].filter(todo => todo.id !== todoId));
+  };
+
+  const completedTodos = [...todos].filter(todo => todo.completed);
+
+  const clearCompleted = () => {
+    setTodos([...todos].filter(todo => !todo.completed));
+  };
+
+  const changeTitle = (todoId, newTitle) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          title: newTitle,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos(newTodos);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+          }}
+        >
           <input
             type="text"
             className="new-todo"
+            value={todoTitle}
             placeholder="What needs to be done?"
+            onChange={(event) => {
+              setTodoTitle(event.target.value);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && todoTitle.trim()) {
+                createTodo(todoTitle.trim());
+                setTodoTitle('');
+              }
+            }}
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          checked={todos.length > 0 && todos.every(todo => todo.completed)}
+          className="toggle-all"
+          onChange={() => {
+            toggleAll();
+          }}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <TodoList
+          todos={visibleTodos}
+          changeStatus={changeTodoStatus}
+          deleteTodo={deleteTodo}
+          changeTitle={changeTitle}
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {todos.length > 0 && (
+        <footer className="footer">
+          <TodosFilter
+            activeTodos={activeTodos}
+            completedTodos={completedTodos}
+            clearCompleted={clearCompleted}
+            todosStatus={todosStatus}
+            getTodos={getTodos}
+          />
+        </footer>
+      )}
     </section>
   );
 }
