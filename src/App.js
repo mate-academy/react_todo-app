@@ -43,18 +43,22 @@ function TodoApp() {
     [todos],
   );
   const areAllTodosCompleted = useMemo(
-    () => completedTodos.length === todos.length, [completedTodos],
+    () => completedTodos.length === todos.length,
+    [completedTodos],
   );
 
   const uncompletedTodos = useMemo(
-    () => todos.filter(todo => !todo.completed), [todos],
+    () => todos.filter(todo => !todo.completed),
+    [todos],
   );
   const areAllTodosUncompleted = useMemo(
-    () => uncompletedTodos.length === todos.length, [uncompletedTodos],
+    () => uncompletedTodos.length === todos.length,
+    [uncompletedTodos],
   );
 
   const isSomeCompleted = useMemo(
-    () => todos.some(todo => todo.completed), [todos],
+    () => todos.some(todo => todo.completed),
+    [todos],
   );
 
   const addTodo = useCallback((event) => {
