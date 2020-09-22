@@ -19,7 +19,8 @@ function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const addTodo = () => {
+  const addTodo = (event) => {
+    event.preventDefault();
     if (todoTitle) {
       setTodos([
         ...todos,
