@@ -6,8 +6,9 @@ import { FILTERS } from './constants';
 function App() {
   const [todoTitle, setTodoTitle] = useState('');
   const [todos, setTodos] = useState(null);
-  const [toggleAll, setToggleAll] = useState(false);
   const [filter, setFilter] = useState(FILTERS.all);
+  const completedTodosCount = todos
+    ? todos.filter(todo => !todo.completed).length : 0;
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('todos'))) {
@@ -43,11 +44,10 @@ function App() {
     }
   };
 
-  const toggleTodos = () => {
-    setToggleAll(!toggleAll);
+  const toggleTodos = (event) => {
     setTodos(todos.map(todo => ({
       ...todo,
-      completed: !todo.completed,
+      completed: event.target.checked,
     })));
   };
 
@@ -115,8 +115,8 @@ function App() {
       {todos && (
         <footer className="footer">
           <span className="todo-count">
-            {todos.filter(todo => !todo.completed).length}
-            {' items left'}
+            {completedTodosCount}
+            {completedTodosCount === 1 ? ' item left' : ' items left'}
           </span>
 
           <TodoFilters
