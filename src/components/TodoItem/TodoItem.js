@@ -18,7 +18,7 @@ export const TodoItem = ({
         if (newTodoTitle) {
           changeTodo(id, newTodoTitle);
         } else {
-          setNewTodoTitle(title);
+          removeTodo(id);
         }
 
         setIsEditMode(false);
@@ -70,7 +70,6 @@ export const TodoItem = ({
               setNewTodoTitle(event.target.value.trimLeft());
             }}
             onKeyUp={handleEditing}
-            onFocus={e => e.currentTarget.select()}
             onBlur={() => {
               if (newTodoTitle) {
                 changeTodo(id, newTodoTitle);
