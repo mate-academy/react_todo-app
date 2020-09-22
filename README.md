@@ -1,68 +1,71 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React ToDo App
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://zarichnyi.github.io/react_todo-app/)
+- Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
-## Available Scripts
+## Description
+Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as described below.
 
-In the project directory, you can run:
+> If you are not sure about how a feature should work just open the real TodoApp and look how it works there
 
-### `npm start`
+![todoapp](./description/todoapp.gif)
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Tasks
+1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
+    - `id` - unique identifier (`+new Date()` is good enough)
+    - `title` - the text of a todo
+    - `completed` - current status (`false` by default)
+1. Show the number of not completed todos in `TodoApp`
+1. Implement `TodoList` component to display a list of todos
+    ```jsx harmony
+    <TodoList items={todos} />
+    ```
+1. Implement `TodoItem` component with ability to toggle the `completed` status.
+    - move the `li` tag inside the `TodoItem`
+    - add class `completed` if todo is completed
+1. Add ability to toggle the completed status of all the todos.
+    - `toggleAll` checkbox is active only if all the todos are completed
+    - if you click the checkbox all the items should be marked as `comlpeted`/`not completed`  depending on `toggleAll` status
+1. Create `TodosFilter` component to switch between `all`/`active`/`completed` todos (add it to the `App`)
+    - Use constants instead of just strings (for example `FILTERS.all`)
+1. Add ability to remove an item.
+1. Add ability to `clear completed` - remove all completed items from the list.
+    - It should be visible if there is at least 1 completed item in the list.
+1. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
+1. Make inline editing for the TODO item
+    - double click on the TODO title makes it editable (just add a class `editing` to a `li`)
+    - DON'T add `htmlFor` to the label!!!
+    - `Enter` saves changes
+    - `Ecs` cancels editing
+    - Todo title can't be empty!
+    - (*) save changes `onBlur`
+1. Save state of the APP to the `localStorage` ([Required theory](https://javascript.info/localstorage))
+    - use `JSON.stringify` before saving and `JSON.parse` on reading
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+![todoedit](./description/edittodo.gif)
 
-### `npm test`
+## (*) Advanced tasks (Optional)
+Implement saving the todos in [the API](https://mate-academy.github.io/fe-students-api/).
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**BEFORE you started:**
+1. Create a user by sending a POST request to the `/users`.
+1. Save the `userId` in your code and use it for all the future request where it is required
 
-### `npm run build`
+**Tasks**
+1. Load a user from `/users/:userId` and show your name on the page
+1. Load all the todos from `/todos` and filter them by `userId` to show only your todos in the App
+1. Save new todos by sending POST request to `/todos` (don't forget to add `userId`)
+    - use `JSON.stringify` when sending a `body`
+    - Think what to do in case of a server error (at least notify the user)
+1. Delete the todo by sending DELETE to `/todos/:todoId`
+1. Toggle completed status or rename the todo by sending `PATCH` to the `/todos/:todoId`
+    - you can send only changed fields (`completed` of `title`)
+1. Implement `toggleAll` functionality (try to send as few requests as possible)
+1. Implement `clear completed` sending as few requests as possible
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+##  If you want to implement styles yourself
+- Font: 'helvetica neue'
+- Font sizes to use: 100px, 24px, 14px
+- implement arrow by rotating '❯' symbol
+- Use '✕' symbol to remove TODO item on hover
+- [checked](./public/icons/checked.svg)
+- [unchecked](./public/icons/unchecked.svg)

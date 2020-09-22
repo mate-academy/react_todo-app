@@ -1,59 +1,125 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Filters } from './components/Filters/Filters';
+import { TodoList } from './components/TodoList/TodoList';
 
 function App() {
+  const [currentTitleValue, setCurrentTitleValue] = useState('');
+  const [todos, setTodos] = useState([]);
+  const [visibleTodos, setVisibleTodos] = useState([]);
+  const [typeFilter, setTypeFilter] = useState('All');
+
+  function addTodo(todo) {
+    setTodos([
+      ...todos,
+      {
+        todo,
+        id: Date.now(),
+        todos: currentTitleValue,
+        completed: false,
+      },
+    ]);
+    setCurrentTitleValue('');
+  }
+
+  useEffect(() => {
+    setVisibleTodos([
+      todos,
+    ]);
+  }, [todos]);
+
+  function changeProcessTodo(todoId) {
+    if (typeof todoId === 'number') {
+      setTodos(todos.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }));
+    } else {
+      setTodos(todos.map(todo => (
+        todos.every(item => (item.completed))
+          ? ({
+            ...todo,
+            completed: false,
+          })
+          : ({
+            ...todo,
+            completed: true,
+          })
+      )));
+    }
+  }
+
+  useEffect(() => {
+    switch (typeFilter) {
+      case 'All':
+        setVisibleTodos(todos);
+        break;
+      case 'Active':
+        setVisibleTodos(todos.filter(item => !item.completed));
+        break;
+      case 'Completed':
+        setVisibleTodos(todos.filter(item => item.completed));
+        break;
+      case 'Clear completed':
+        setVisibleTodos(visibleTodos.filter(item => item.completed));
+        setTodos(visibleTodos);
+        break;
+      default:
+        break;
+    }
+  }, [typeFilter, todos]);
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos App</h1>
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus=""
-        />
+        <form onSubmit={(event) => {
+          event.preventDefault();
+        }}
+        >
+          <input
+            type="text"
+            className="new-todo"
+            placeholder="What needs to be done?"
+            value={currentTitleValue}
+            onChange={({ target }) => setCurrentTitleValue(target.value)}
+            onKeyDown={(event) => {
+              (event.key === 'Enter') && (addTodo(currentTitleValue));
+            }}
+          />
+        </form>
       </header>
 
-      <section className="main" style={{ display: 'block' }}>
-        <input id="toggle-all" className="toggle-all" type="checkbox" />
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onClick={() => changeProcessTodo()}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sdfsdfsdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>dsfgsdfgdsrg</label>
-              <button className="destroy"></button></div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sddfgdfgdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-        </ul>
+
+        <TodoList
+          todos={visibleTodos}
+          changeProcessTodo={changeProcessTodo}
+        />
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count"><strong>3</strong> items left</span>
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-        <button className="clear-completed" style={{ display: 'block' }}></button>
-      </footer>
+      {(todos.length > 0)
+        && (
+          <footer className="footer">
+            <Filters
+              todos={visibleTodos}
+              setTypeFilter={setTypeFilter}
+            />
+          </footer>
+        )
+      }
     </section>
   );
 }
