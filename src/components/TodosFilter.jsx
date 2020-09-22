@@ -1,11 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
+import { FILTERS } from '../constants';
 
 export const TodosFilter = ({
   filter,
   setFilter,
-  FILTERS,
 }) => (
   <ul className="filters">
     <li>
@@ -43,5 +43,4 @@ export const TodosFilter = ({
 TodosFilter.propTypes = {
   filter: PropTypes.string.isRequired,
   setFilter: PropTypes.func.isRequired,
-  FILTERS: PropTypes.objectOf(PropTypes.string).isRequired,
 };
