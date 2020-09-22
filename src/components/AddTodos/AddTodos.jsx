@@ -7,7 +7,7 @@ export const AddTodos = ({ todos, setTodos }) => {
   const addNewTodo = (event) => {
     event.preventDefault();
 
-    if (newTodoTitle === '') {
+    if (newTodoTitle.trim() === '') {
       return;
     }
 
