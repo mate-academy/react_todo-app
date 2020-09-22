@@ -34,7 +34,7 @@ export const TodoApp = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (todoTitle) {
+    if (todoTitle.trim()) {
       setTodos([
         ...todos,
         {
@@ -43,6 +43,8 @@ export const TodoApp = () => {
           completed: false,
         },
       ]);
+      setTodoTitle('');
+    } else {
       setTodoTitle('');
     }
   };
@@ -69,7 +71,7 @@ export const TodoApp = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={todoTitle}
-            onChange={({ target }) => setTodoTitle(target.value.trimLeft())}
+            onChange={({ target }) => setTodoTitle(target.value)}
           />
         </form>
       </header>

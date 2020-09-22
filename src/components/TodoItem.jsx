@@ -4,34 +4,37 @@ import ClassNames from 'classnames';
 
 export function TodoItem({ todo, completedToggle, deleteTodo, changeTodo }) {
   const [editing, setEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState('');
+  const [newTitle, setNewTitle] = useState(todo.title);
 
   const handleChange = (event) => {
-    setNewTitle(event.target.value.trimLeft());
+    setNewTitle(event.target.value.trim());
   };
 
   const handleEdit = (event) => {
-    if (event.key === 'Enter' && newTitle) {
+    if (event.key === 'Enter') {
       changeTodo(todo.id, newTitle);
+
+      if (!newTitle) {
+        deleteTodo(todo.id);
+      }
+
       setEditing(false);
-      setNewTitle('');
     }
 
     if (event.key === 'Escape') {
-      setNewTitle('');
+      setNewTitle(todo.title);
       setEditing(false);
     }
   };
 
   const handleSaveChanges = () => {
-    if (newTitle) {
-      changeTodo(todo.id, newTitle);
-      setEditing(false);
-      setNewTitle('');
-    } else {
-      setEditing(false);
-      setNewTitle('');
+    changeTodo(todo.id, newTitle);
+
+    if (!newTitle) {
+      deleteTodo(todo.id);
     }
+
+    setEditing(false);
   };
 
   return (
@@ -40,7 +43,6 @@ export function TodoItem({ todo, completedToggle, deleteTodo, changeTodo }) {
         completed: todo.completed,
         editing,
       })}
-      key={todo.id}
     >
       <div className="view">
         <input

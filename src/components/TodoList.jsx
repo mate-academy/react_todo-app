@@ -40,6 +40,7 @@ export function TodoList({ todos, setTodos }) {
       {todos.map(todo => (
         <TodoItem
           todo={todo}
+          key={todo.id}
           completedToggle={completedToggle}
           deleteTodo={deleteTodo}
           changeTodo={changeTodo}
