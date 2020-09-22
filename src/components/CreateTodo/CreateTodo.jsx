@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 export const CreateTodo = ({ todos, pushTodo }) => {
   const [newTodo, setNewTodo] = useState({
-    id: 3,
     title: '',
     completed: false,
   });
@@ -17,6 +16,7 @@ export const CreateTodo = ({ todos, pushTodo }) => {
 
   const handleKey = (event) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       setNewTodo({
         ...newTodo,
         id: todos.length + 1,
