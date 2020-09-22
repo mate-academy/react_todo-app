@@ -19,6 +19,10 @@ export const TodoItem = ({
       setNewTitle('');
     }
 
+    if (event.key === 'Enter' && !newTitle) {
+      deleteTodo(id)
+    }
+
     if (event.key === 'Escape') {
       setNewTitle('');
       setEditTitle(false);
@@ -51,15 +55,13 @@ export const TodoItem = ({
           type="checkbox"
           className="toggle"
           checked={completed}
-          onChange={() => changeTodo(id)
-          }
+          onChange={() => changeTodo(id)}
         />
         <label>{title}</label>
         <button
           type="button"
           className="destroy"
-          onClick={() => deleteTodo(id)
-          }
+          onClick={() => deleteTodo(id)}
         />
       </div>
       {editTitle && (

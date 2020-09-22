@@ -19,6 +19,10 @@ const App = () => {
   }, [todos]);
 
   const addTodo = (todoToAdd) => {
+    if (!todoToAdd.title) {
+      return;
+    }
+
     setTodos([...todos, todoToAdd]);
   };
 
@@ -76,6 +80,8 @@ const App = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
+  const completedLenght = todos.filter(todo => !todo.completed).length;
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -108,6 +114,7 @@ const App = () => {
         && (
           <>
             <TodoList
+              todos={todos}
               filteredTodos={filteredTodos}
               changeStatusAll={changeStatusAll}
               changeTodo={changeTodo}
@@ -116,9 +123,9 @@ const App = () => {
 
             <footer className="footer">
               <span className="todo-count">
-                {todos.filter(todo => !todo.completed).length}
+                {completedLenght}
                 {' '}
-                items left
+                {completedLenght === 1 ? 'item left' : 'items left'}
               </span>
 
               <TodoFilters

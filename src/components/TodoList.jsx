@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
 export const TodoList = ({
+  todos,
   filteredTodos,
   changeStatusAll,
   changeTodo,
@@ -15,7 +16,7 @@ export const TodoList = ({
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      checked={filteredTodos.every(todo => todo.completed)}
+      checked={todos.every(todo => todo.completed)}
       onChange={() => {
         changeStatusAll();
       }}
