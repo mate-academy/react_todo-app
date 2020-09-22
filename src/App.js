@@ -47,7 +47,7 @@ function TodoApp() {
   const addTodo = (event) => {
     event.preventDefault();
 
-    if (!newTodo) {
+    if (!newTodo.trim()) {
       return;
     }
 
