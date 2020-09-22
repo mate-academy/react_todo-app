@@ -1,25 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { TodoList } from './components/TodoList';
+import { CreateTodo } from './components/CreateTodo';
 
 function App() {
+  const [todos, pushTodo] = useState([]);
+
+  const setTodos = (title) => {
+    pushTodo([
+      ...todos,
+      {
+        id: todos.length + 1,
+        title,
+        completed: false,
+      },
+    ]);
+  };
+
   return (
     <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <CreateTodo
+        todos={todos}
+        pushTodo={setTodos}
+      />
 
       <section className="main">
         <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
+        {/* <ul className="todo-list">
           <li>
             <div className="view">
               <input type="checkbox" className="toggle" />
@@ -55,7 +64,9 @@ function App() {
             </div>
             <input type="text" className="edit" />
           </li>
-        </ul>
+        </ul> */}
+
+        <TodoList todos={todos} />
       </section>
 
       <footer className="footer">
