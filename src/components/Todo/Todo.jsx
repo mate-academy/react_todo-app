@@ -79,7 +79,7 @@ export const Todo = ({
               confirmChanges(target.defaultValue);
             }}
             onKeyDown={({ key, target }) => {
-              keyPressed(key, target.value);
+              keyPressed(key, target.value.trim());
             }}
           />
         )
