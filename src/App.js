@@ -7,7 +7,7 @@ function App() {
   const [todos, updateTodos] = useState([]);
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem('todos')).length > 0) {
+    if (localStorage.getItem('todos')) {
       updateTodos(
         JSON.parse(localStorage.getItem('todos')),
       );
