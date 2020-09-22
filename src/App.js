@@ -1,86 +1,136 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { AddTodo } from './components/AddTodo';
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFilter';
 
 function App() {
+  const [todos, updateTodos] = useState([]);
+
+  useEffect(() => {
+    if (localStorage.getItem('todos')) {
+      updateTodos(
+        JSON.parse(localStorage.getItem('todos')),
+      );
+    }
+  }, []);
+
+  let filteredTodos = [...todos];
+
+  const FILTER = {
+    all: 'All',
+    active: 'Active',
+    completed: 'Completed',
+  };
+  const [selectedFilter, selectFilter] = useState(FILTER.all);
+
+  useMemo(() => filter(selectedFilter), [selectedFilter, todos]);
+
+  const todoTools = {
+    todos,
+    updateTodos,
+  };
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  function filter(filterBy) {
+    switch (filterBy) {
+      case FILTER.active:
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        break;
+      case FILTER.completed:
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        break;
+      default:
+        filteredTodos = [...todos];
+        break;
+    }
+  }
+
+  function changeProperty(todoId, property) {
+    updateTodos(
+      todos.map((todo) => {
+        if (todo.id !== todoId) {
+          return todo;
+        }
+
+        if (property) {
+          return {
+            ...todo, title: property,
+          };
+        }
+
+        if (!property) {
+          return {
+            ...todo, completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    );
+  }
+
+  function receiveTodo(newTodo) {
+    updateTodos([
+      newTodo,
+      ...todos,
+    ]);
+  }
+
   return (
     <section className="todoapp">
       <header className="header">
-        <h1>todos</h1>
+        <h1>todos App</h1>
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <AddTodo
+          sendTodo={receiveTodo}
+        />
       </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length > 0
+      && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={todos.every(todo => todo.completed)}
+            onChange={({ target }) => {
+              updateTodos(
+                todos.map((todo) => {
+                  if (todo.completed === target.checked) {
+                    return todo;
+                  }
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+                  return { ...todo, completed: !todo.completed };
+                }),
+              );
+            }}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          <TodoList
+            changeProperty={changeProperty}
+            todosTools={todoTools}
+            todos={filteredTodos}
+          />
+        </section>
+      )
+      }
+      {todos.length > 0
+      && (
+        <footer className="footer">
+          <TodosFilter
+            todoTools={todoTools}
+            filter={filter}
+            FILTER_OPT={{ ...FILTER }}
+            selectedFilter={selectedFilter}
+            selectFilter={selectFilter}
+          />
+        </footer>
+      )}
     </section>
   );
 }
