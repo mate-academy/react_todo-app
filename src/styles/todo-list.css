@@ -52,6 +52,7 @@
   -webkit-appearance: none;
   appearance: none;
   opacity: 0;
+  cursor: pointer;
 }
 
 .todo-list li label {
@@ -94,6 +95,7 @@
 
 .todo-list li .destroy:hover {
   color: #af5b5e;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:after {

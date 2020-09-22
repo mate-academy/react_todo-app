@@ -1,88 +1,166 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
-function App() {
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFilter';
+
+import { todosList } from './api/todos';
+import { FILTERS } from './api/FILTERS';
+
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [todoTitle, setTodoTitle] = useState('');
+  const [areAllToggled, setTogglingAll] = useState(false);
+  const [choosenFilter, setChoosenFilter] = useState(FILTERS.all);
+
+  useEffect(() => {
+    setTodos(todosList);
+  }, []);
+
+  const addTodo = (event) => {
+    event.preventDefault();
+
+    if (!todoTitle) {
+      return;
+    }
+
+    setTodos(prevTodos => ([
+      ...prevTodos,
+      {
+        id: +new Date(),
+        title: todoTitle,
+        completed: false,
+      },
+    ]));
+
+    setTodoTitle('');
+  };
+
+  const deleteTodo = (todoId) => {
+    const newTodos = [...todos].filter(todo => todo.id !== todoId);
+
+    setTodos(newTodos);
+  };
+
+  const changeCompleteness = (todoId) => {
+    const newTodoList = [...todos].map(
+      (todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      },
+    );
+
+    setTodos(newTodoList);
+  };
+
+  const togglingAll = () => {
+    if (!areAllToggled) {
+      return setTodos([...todos].map(
+        todo => ({
+          ...todo,
+          completed: true,
+        }),
+      ));
+    }
+
+    return setTodos([...todos].map(
+      todo => ({
+        ...todo,
+        completed: false,
+      }),
+    ));
+  };
+
+  const clearCompleted = () => {
+    setTodos(
+      [...todos].filter(todo => todo.completed === false),
+    );
+    setTogglingAll(false);
+  };
+
+  const filteredTodos = useMemo(() => {
+    switch (choosenFilter) {
+      case FILTERS.active:
+        return todos.filter(todo => !todo.completed);
+      case FILTERS.completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, choosenFilter]);
+
   return (
     <section className="todoapp">
       <header className="header">
-        <h1>todos</h1>
+        <h1>todos App</h1>
 
-        <form>
+        <form
+          onSubmit={addTodo}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={todoTitle}
+            onChange={event => setTodoTitle(event.target.value)}
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={areAllToggled}
+          onChange={() => {
+            setTogglingAll(!areAllToggled);
+            togglingAll();
+          }}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList
+          todos={filteredTodos}
+          deleteTodo={deleteTodo}
+          changeCompleteness={changeCompleteness}
+        />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
+      {todos.length === 0
+        ? null
+        : (
+          <footer className="footer">
+            <span className="todo-count">
+              {todos.filter(todo => !todo.completed).length}
+              {todos.filter(todo => !todo.completed).length === 1
+                ? ' item left'
+                : ' items left'}
+            </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+            <TodosFilter
+              choosenFilter={choosenFilter}
+              setChoosenFilter={setChoosenFilter}
+            />
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            {todos.some(todo => todo.completed === true) && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        )}
     </section>
   );
-}
+};
 
 export default App;
