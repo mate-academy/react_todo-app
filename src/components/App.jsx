@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TodoList } from './TodoList/TodoList';
 import { AddTodos } from './AddTodos/AddTodos';
@@ -6,25 +6,34 @@ import { TodosFilter } from './TodosFilter/TodosFilter';
 import { FILTERS } from '../constants';
 
 const App = () => {
-  const [todos = [], setTodos] = useState(
-    JSON.parse(localStorage.getItem('todos'))
-      ? JSON.parse(localStorage.getItem('todos'))
-      : [],
-  );
-
-  const [filterForTodos, setFilterForTodos] = useState('All');
+  const [todos, setTodos] = useState([]);
+  const [filterForTodos, setFilterForTodos] = useState(FILTERS.all);
   const [unCompletedTodos, setUnCompletedTodos] = useState('');
   const [completedTodos, setCompletedTodos] = useState('');
-
   const [allTodosToogler, setAllTodosToogler] = useState(false);
 
-  const filteredTodos = filterForTodos === FILTERS.all
-    ? todos
-    : todos.filter(todo => (
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('todos'))) {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  const filterTodosByCompleteStatus = () => {
+    if (filterForTodos === FILTERS.all) {
+      return todos;
+    }
+
+    return todos.filter(todo => (
       filterForTodos === FILTERS.completed
         ? todo.completed
         : !todo.completed
     ));
+  };
+
+  const filteredTodos = useMemo(
+    () => filterTodosByCompleteStatus(),
+    [filterForTodos, todos],
+  );
 
   useEffect(() => {
     setUnCompletedTodos(() => todos.filter(todo => !todo.completed));
@@ -34,10 +43,10 @@ const App = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const markAllTodos = () => {
+  const markAllTodos = useCallback(() => {
     setTodos(prev => prev
       .map(todo => ({ ...todo, completed: !allTodosToogler })));
-  };
+  }, [todos]);
 
   const removeTodo = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
