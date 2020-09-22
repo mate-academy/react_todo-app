@@ -22,6 +22,7 @@ export function TodoItem({
           [todo.id]: todo.title,
         });
         clickedTodo.closest('li').className = 'editing';
+        clickedTodo.closest('li').lastChild.focus();
       }}
     >
       <div className="view">
@@ -30,7 +31,9 @@ export function TodoItem({
           className="toggle"
           checked={todo.completed}
           onChange={() => {
-            list[index].completed = !todo.completed;
+            const switchedTodo = todo;
+
+            switchedTodo.completed = !todo.completed;
             setTodoList([...todoList]);
           }}
         />
@@ -56,8 +59,13 @@ export function TodoItem({
           const clickedTodo = event.target;
 
           if (event.key === 'Enter') {
-            clickedTodo.closest('li').className
-              = todo.completed ? 'completed' : '';
+            if (!event.target.value) {
+              todoList.splice(index, 1);
+              setTodoList([...todoList]);
+            } else {
+              clickedTodo.closest('li').className
+                = todo.completed ? 'completed' : '';
+            }
           }
 
           if (event.key === 'Escape') {
@@ -66,6 +74,12 @@ export function TodoItem({
             clickedTodo.closest('li').className
               = todo.completed ? 'completed' : '';
           }
+        }}
+        onBlur={({ target }) => {
+          const field = target;
+
+          field.closest('li').className
+            = todo.completed ? 'completed' : '';
         }}
       />
     </li>

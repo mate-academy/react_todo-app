@@ -9,12 +9,12 @@ function App() {
   const [todoList, setTodoList] = useState([]);
   const [filter, setFilter] = useState('All');
   const filteredList = todoList.filter((todo) => {
-    if (filter === 'Active') {
-      return !todo.completed;
-    }
-
     if (filter === 'Completed') {
       return todo.completed;
+    }
+
+    if (filter === 'Active') {
+      return !todo.completed;
     }
 
     return true;
@@ -44,21 +44,22 @@ function App() {
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            title
-            && setTodoList([
-              newTodo,
-              ...todoList,
-            ]);
-            setTitle('');
-            setToggleAll(todoList.some(todo => !todo.completed));
+            if (title) {
+              setTodoList([
+                newTodo,
+                ...todoList,
+              ]);
+              setTitle('');
+              setToggleAll(todoList.some(todo => !todo.completed));
+            }
           }}
         >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
-            value={title.trimLeft()}
-            onChange={event => setTitle(event.target.value)}
+            value={title}
+            onChange={event => setTitle(event.target.value.trimLeft())}
           />
         </form>
       </header>

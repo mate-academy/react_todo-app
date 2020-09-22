@@ -15,7 +15,9 @@ export function TodosFilter({
       <span className="todo-count">
         {todoList.filter(todo => !todo.completed).length}
         {' '}
-        items left
+        item
+        {todoList.filter(todo => !todo.completed).length !== 1 ? 's ' : ' '}
+        left
       </span>
 
       <ul className="filters">
