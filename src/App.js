@@ -94,6 +94,19 @@ const App = () => {
     }
   }, [todos, choosenFilter]);
 
+  const changeTodoTitle = (todoId, newTitle) => setTodos([...todos].map(
+    (todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          title: newTitle,
+        };
+      }
+
+      return todo;
+    },
+  ));
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -129,6 +142,7 @@ const App = () => {
           todos={filteredTodos}
           deleteTodo={deleteTodo}
           changeCompleteness={changeCompleteness}
+          changeTodoTitle={changeTodoTitle}
         />
       </section>
 

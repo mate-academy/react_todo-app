@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -6,67 +6,74 @@ export const TodoItem = ({
   todo,
   deleteTodo,
   changeCompleteness,
-  // setChoosenTodoId,
-}) => (
-  <li className={cn({ completed: todo.completed })}>
-    <div className="view">
-      <input
-        type="checkbox"
-        className="toggle"
-        checked={todo.completed}
-        onChange={() => {
-          changeCompleteness(todo.id);
-          // setChoosenTodoId(todo.id);
-        }}
-      />
+  changeTodoTitle,
+}) => {
+  const [isEditingNow, setEditing] = useState(false);
+  const [choosenTodoId, setChoosenTodoId] = useState(null);
+  const [newTitle, setNewTitle] = useState(todo.title);
 
-      <label>{todo.title}</label>
+  const handleKeysPressing = (event) => {
+    switch (event.key) {
+      case 'Escape':
+        setNewTitle(todo.title);
+        setEditing(!isEditingNow);
+        break;
+      case 'Enter':
+        if (newTitle.trim()) {
+          changeTodoTitle(choosenTodoId, newTitle.trim());
+          setEditing(!isEditingNow);
+          break;
+        }
 
-      <button
-        type="button"
-        className="destroy"
-        onClick={() => deleteTodo(todo.id)}
-      />
-    </div>
-    <input type="text" className="edit" />
-  </li>
+        break;
+      default:
+    }
+  };
 
-  // <li>
-  //   <div className="view">
-  //     <input type="checkbox" className="toggle" />
-  //     <label>asdfghj</label>
-  //     <button type="button" className="destroy" />
-  //   </div>
-  //   <input type="text" className="edit" />
-  // </li>
+  return (
+    <li
+      className={cn({
+        completed: todo.completed,
+        editing: choosenTodoId === todo.id && isEditingNow,
+      })}
+      onDoubleClick={() => {
+        setEditing(true);
+        setChoosenTodoId(todo.id);
+      }}
+    >
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          checked={todo.completed}
+          onChange={() => {
+            changeCompleteness(todo.id);
+          }}
+        />
 
-  // <li className="completed">
-  //   <div className="view">
-  //     <input type="checkbox" className="toggle" />
-  //     <label>qwertyuio</label>
-  //     <button type="button" className="destroy" />
-  //   </div>
-  //   <input type="text" className="edit" />
-  // </li>
+        <label>{todo.title}</label>
 
-  // <li className="editing">
-  //   <div className="view">
-  //     <input type="checkbox" className="toggle" />
-  //     <label>zxcvbnm</label>
-  //     <button type="button" className="destroy" />
-  //   </div>
-  //   <input type="text" className="edit" />
-  // </li>
+        <button
+          type="button"
+          className="destroy"
+          onClick={() => deleteTodo(todo.id)}
+        />
+      </div>
 
-  // <li>
-  //   <div className="view">
-  //     <input type="checkbox" className="toggle" />
-  //     <label>1234567890</label>
-  //     <button type="button" className="destroy" />
-  //   </div>
-  //   <input type="text" className="edit" />
-  // </li>
-);
+      {isEditingNow && (
+        <input
+          type="text"
+          className="edit"
+          autoFocus
+          onBlur={() => setEditing(!isEditingNow)}
+          value={newTitle}
+          onChange={event => setNewTitle(event.target.value)}
+          onKeyDown={event => handleKeysPressing(event)}
+        />
+      )}
+    </li>
+  );
+};
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
@@ -76,4 +83,5 @@ TodoItem.propTypes = {
   }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
   changeCompleteness: PropTypes.func.isRequired,
+  changeTodoTitle: PropTypes.func.isRequired,
 };
