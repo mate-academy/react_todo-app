@@ -5,29 +5,36 @@ import {TodoList } from './components/TodoList/TodoList'
 
 function App() {
   const [todoItems, updateList] = useState([]);
-  const [todoItem, setItem] = useState('');
+  const [todoValue, todoSetValue] = useState('');
 
-  const handleSet = (todoItem) => {
+  const handleSet = (todoValue) => {
 
     return ({
-    id: +new Date,
-    title: todoItem.trim(),
+    id: +new Date(),
+    title: todoValue.trim(),
     completed: false,
     });
   };
+
+  const itemsLeft = () => {
+
+  return todoItems.filter(item => !item.completed).length;
+  }
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if(!todoItem || todoItem.trim() === '' ) {
-      setItem('');
+    if(!todoValue || todoValue.trim() === '' ) {
+      todoSetValue('');
       return null;
     }
 
-    updateList([...todoItems, handleSet(todoItem)]);
-    setItem('');
+    updateList([...todoItems, handleSet(todoValue)]);
+    todoSetValue('');
   }
+
+useEffect(()=> console.log(todoItems));
 
   return (
     <section className="todoapp">
@@ -41,8 +48,8 @@ function App() {
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
-            value={todoItem}
-            onChange={event => setItem(event.target.value)}
+            value={todoValue}
+            onChange={event => todoSetValue(event.target.value)}
           />
         </form>
       </header>
@@ -51,12 +58,15 @@ function App() {
         <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList itemsList={todoItems} />
+        <TodoList
+          itemsList={todoItems}
+          updateList={updateList}
+        />
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {itemsLeft()}
         </span>
 
         <ul className="filters">
