@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
@@ -6,30 +6,57 @@ function App() {
   const [title, setTitle] = useState('');
   const [uneditedTitles, setUneditedTitles] = useState({});
   const [toggleAll, setToggleAll] = useState(true);
+  const filters = {
+    all: 'All',
+    active: 'Active',
+    completed: 'Completed',
+  };
   const [todoList, setTodoList] = useState([]);
-  const [filter, setFilter] = useState('All');
-  const filteredList = todoList.filter((todo) => {
-    if (filter === 'Completed') {
+  const [filter, setFilter] = useState(filters.all);
+
+  const filteredList = useMemo(() => todoList.filter((todo) => {
+    if (filter === filters.completed) {
       return todo.completed;
     }
 
-    if (filter === 'Active') {
+    if (filter === filters.active) {
       return !todo.completed;
     }
 
     return true;
-  });
+  }));
 
   const newTodo = {
     id: +new Date(),
-    title,
+    title: title.trim(),
     completed: false,
   };
 
-  useEffect(
-    () => localStorage.list && setTodoList(JSON.parse(localStorage.list)),
-    [],
-  );
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (newTodo.title) {
+      setTodoList([
+        ...todoList,
+        newTodo,
+      ]);
+      setTitle('');
+      setToggleAll(todoList.some(todo => !todo.completed));
+    }
+  };
+
+  const handleToggleAllChange = () => {
+    setToggleAll(!toggleAll);
+    todoList.map((todo, index) => {
+      todoList[index].completed = !toggleAll;
+
+      return { ...todo };
+    });
+    setTodoList([...todoList]);
+  };
+
+  useEffect(() => (
+    localStorage.list && setTodoList(JSON.parse(localStorage.list))
+  ), []);
 
   useEffect(() => {
     localStorage.list = JSON.stringify(todoList);
@@ -42,24 +69,14 @@ function App() {
         <h1>todos App</h1>
 
         <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            if (title) {
-              setTodoList([
-                newTodo,
-                ...todoList,
-              ]);
-              setTitle('');
-              setToggleAll(todoList.some(todo => !todo.completed));
-            }
-          }}
+          onSubmit={handleSubmit}
         >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
             value={title}
-            onChange={event => setTitle(event.target.value.trimLeft())}
+            onChange={event => setTitle(event.target.value)}
           />
         </form>
       </header>
@@ -70,15 +87,7 @@ function App() {
           id="toggle-all"
           className="toggle-all"
           checked={toggleAll}
-          onChange={() => {
-            setToggleAll(!toggleAll);
-            todoList.map((todo, index) => {
-              todoList[index].completed = !toggleAll;
-
-              return { ...todo };
-            });
-            setTodoList([...todoList]);
-          }}
+          onChange={handleToggleAllChange}
         />
         <label
           htmlFor="toggle-all"
@@ -97,6 +106,7 @@ function App() {
       <TodosFilter
         todoList={todoList}
         setTodoList={setTodoList}
+        filters={filters}
         filter={filter}
         setFilter={setFilter}
       />

@@ -5,6 +5,7 @@ export function TodosFilter({
   todoList,
   setTodoList,
   filter,
+  filters,
   setFilter,
 }) {
   return (
@@ -24,8 +25,8 @@ export function TodosFilter({
         <li>
           <a
             href="#/"
-            className={filter === 'All' ? 'selected' : ''}
-            onClick={() => setFilter('All')}
+            className={filter === filters.all ? 'selected' : ''}
+            onClick={() => setFilter(filters.all)}
           >
             All
           </a>
@@ -34,8 +35,8 @@ export function TodosFilter({
         <li>
           <a
             href="#/active"
-            className={filter === 'Active' ? 'selected' : ''}
-            onClick={() => setFilter('Active')}
+            className={filter === filters.active ? 'selected' : ''}
+            onClick={() => setFilter(filters.active)}
           >
             Active
           </a>
@@ -44,8 +45,8 @@ export function TodosFilter({
         <li>
           <a
             href="#/completed"
-            className={filter === 'Completed' ? 'selected' : ''}
-            onClick={() => setFilter('Completed')}
+            className={filter === filters.completed ? 'selected' : ''}
+            onClick={() => setFilter(filters.completed)}
           >
             Completed
           </a>
@@ -70,5 +71,6 @@ TodosFilter.propTypes = {
   todoList: PropTypes.arrayOf(PropTypes.object).isRequired,
   setTodoList: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
+  filters: PropTypes.shape(PropTypes.string.isRequired).isRequired,
   setFilter: PropTypes.func.isRequired,
 };
