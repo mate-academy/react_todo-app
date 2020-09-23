@@ -1,86 +1,115 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFilter';
 
 function App() {
+  const [title, setTitle] = useState('');
+  const [uneditedTitles, setUneditedTitles] = useState({});
+  const [toggleAll, setToggleAll] = useState(true);
+  const filters = {
+    all: 'All',
+    active: 'Active',
+    completed: 'Completed',
+  };
+  const [todoList, setTodoList] = useState([]);
+  const [filter, setFilter] = useState(filters.all);
+
+  const filteredList = useMemo(() => todoList.filter((todo) => {
+    if (filter === filters.completed) {
+      return todo.completed;
+    }
+
+    if (filter === filters.active) {
+      return !todo.completed;
+    }
+
+    return true;
+  }));
+
+  const newTodo = {
+    id: +new Date(),
+    title: title.trim(),
+    completed: false,
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (newTodo.title) {
+      setTodoList([
+        ...todoList,
+        newTodo,
+      ]);
+      setTitle('');
+      setToggleAll(todoList.some(todo => !todo.completed));
+    }
+  };
+
+  const handleToggleAllChange = () => {
+    setToggleAll(!toggleAll);
+    todoList.map((todo, index) => {
+      todoList[index].completed = !toggleAll;
+
+      return { ...todo };
+    });
+    setTodoList([...todoList]);
+  };
+
+  useEffect(() => (
+    localStorage.list && setTodoList(JSON.parse(localStorage.list))
+  ), []);
+
+  useEffect(() => {
+    localStorage.list = JSON.stringify(todoList);
+    setToggleAll(todoList.every(todo => todo.completed));
+  }, [todoList]);
+
   return (
     <section className="todoapp">
       <header className="header">
-        <h1>todos</h1>
+        <h1>todos App</h1>
 
-        <form>
+        <form
+          onSubmit={handleSubmit}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={title}
+            onChange={event => setTitle(event.target.value)}
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={toggleAll}
+          onChange={handleToggleAllChange}
+        />
+        <label
+          htmlFor="toggle-all"
+          hidden={!todoList.length}
+        >
+          Mark all as complete
+        </label>
+        <TodoList
+          filteredList={filteredList}
+          setUneditedTitles={setUneditedTitles}
+          uneditedTitles={uneditedTitles}
+          todoList={todoList}
+          setTodoList={setTodoList}
+        />
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <TodosFilter
+        todoList={todoList}
+        setTodoList={setTodoList}
+        filters={filters}
+        filter={filter}
+        setFilter={setFilter}
+      />
     </section>
   );
 }
