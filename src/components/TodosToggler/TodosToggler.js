@@ -8,9 +8,7 @@ export const TodosToggler = ({ onToggleTodosStatus, activeTodosLength }) => (
       type="checkbox"
       id="toggle-all"
       className="toggle-all"
-      onChange={(e) => {
-        onToggleTodosStatus(e);
-      }}
+      onChange={onToggleTodosStatus}
     />
     <label htmlFor="toggle-all">Mark all as complete</label>
   </>
