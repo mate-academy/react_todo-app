@@ -12,16 +12,12 @@
 }
 
 .todo-list li:last-child {
-  border-bottom: none;
+  border-color: transparent;
 }
 
 .todo-list li.editing {
   border-bottom: none;
   padding: 0;
-}
-
-.todo-list li.editing:last-child {
-  margin-bottom: -1px;
 }
 
 .todo-list li .edit {
@@ -33,6 +29,7 @@
   width: 506px;
   padding: 12px 16px;
   margin: 0 0 0 43px;
+  outline: none;
 }
 
 .todo-list li.editing .view {
@@ -52,6 +49,7 @@
   -webkit-appearance: none;
   appearance: none;
   opacity: 0;
+  cursor: pointer;
 }
 
 .todo-list li label {
@@ -94,6 +92,7 @@
 
 .todo-list li .destroy:hover {
   color: #af5b5e;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:after {
