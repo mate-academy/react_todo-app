@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
-import { todosList } from './api/todos';
 import { FILTERS } from './api/FILTERS';
 
 const App = () => {
@@ -13,8 +12,14 @@ const App = () => {
   const [choosenFilter, setChoosenFilter] = useState(FILTERS.all);
 
   useEffect(() => {
-    setTodos(todosList);
+    !localStorage.todos
+      ? localStorage.setItem('todos', JSON.stringify([]))
+      : setTodos(JSON.parse(localStorage.getItem('todos')));
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = (event) => {
     event.preventDefault();
