@@ -50,9 +50,7 @@ export const TodoApp = () => {
   };
 
   useEffect(() => {
-    if (!localStorage.todos) {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    } else {
+    if (JSON.parse(localStorage.getItem('todos'))) {
       setTodos(JSON.parse(localStorage.getItem('todos')));
     }
   }, []);
