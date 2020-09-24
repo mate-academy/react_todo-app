@@ -7,7 +7,7 @@ export const TodoList = ({ todos, setTodos }) => {
     setTodos(todos.map((todo) => {
       if (todo.id === id) {
         return {
-          ...todos,
+          ...todo,
           completed: !todo.completed,
         };
       }
