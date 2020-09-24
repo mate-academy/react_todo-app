@@ -1,5 +1,4 @@
 # React ToDo App
-[DEMO LINK](https://oleg-ozerov.github.io/react_todo-app/)
 
 Project was created, using:
 
