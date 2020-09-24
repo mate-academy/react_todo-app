@@ -12,9 +12,23 @@ export const TodoList = ({ todos, setTodos }) => {
         };
       }
 
-      return { ...todo };
+      return todo;
     }));
   };
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  /* const changeTodo = (id, title) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return { ...todo, title };
+    }));
+  }; */
 
   return (
     <ul className="todo-list">
@@ -23,6 +37,8 @@ export const TodoList = ({ todos, setTodos }) => {
           todo={item}
           key={item.id}
           handleStatus={handleStatus}
+          deleteTodo={deleteTodo}
+          // changeTodo={changeTodo}
         />
       ))}
     </ul>
