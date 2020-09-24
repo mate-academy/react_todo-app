@@ -98,6 +98,7 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  outline: none;
 }
 
 .new-todo {
@@ -132,6 +133,7 @@ body {
   left: -13px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+  cursor: pointer;
 }
 
 .toggle-all + label:before {
