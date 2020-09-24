@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilters } from './components/TodoFilters';
 import { FILTERS } from './constants';
@@ -26,6 +26,11 @@ function App() {
 
   const addTodo = (event) => {
     event.preventDefault();
+
+    if (todoTitle === ' ') {
+      return;
+    }
+
     const newTodo = {
       id: +new Date(),
       title: todoTitle.trim(),
@@ -38,35 +43,73 @@ function App() {
         newTodo,
       ]);
       setTodoTitle('');
-    } else if (todoTitle) {
+    } else if (!todos) {
       setTodos([newTodo]);
       setTodoTitle('');
     }
   };
 
-  const toggleTodos = (event) => {
-    setTodos(todos.map(todo => ({
-      ...todo,
-      completed: event.target.checked,
-    })));
-  };
+  const todoStatusToggle = useCallback(
+    (todoId) => {
+      const updatedTodos = todos.map((todo) => {
+        if (todo.id === todoId) {
+          return { ...todo,
+            completed: !todo.completed };
+        }
 
-  function deleteCompleted() {
-    setTodos(todos.filter(todo => !todo.completed));
-  }
+        return todo;
+      });
+
+      setTodos(updatedTodos);
+    }, [todos],
+  );
+
+  const editTodoTitle = useCallback(
+    (todoId, title) => {
+      const updatedTodos = todos.map((todo) => {
+        if (todo.id === todoId) {
+          return { ...todo,
+            title };
+        }
+
+        return todo;
+      });
+
+      setTodos(updatedTodos);
+    }, [todos],
+  );
+
+  const toggleTodos = useCallback(
+    (event) => {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: event.target.checked,
+      })));
+    }, [todos],
+  );
+
+  const deleteCompleted = useCallback(
+    () => {
+      setTodos(todos.filter(todo => !todo.completed));
+    }, [todos],
+  );
+
+  const deleteTodo = useCallback(
+    (todoId) => {
+      setTodos(todos.filter(todo => todo.id !== todoId));
+    }, [todos],
+  );
 
   const filteredTodos = (unfilteredTodos, currentFilter) => {
     if (unfilteredTodos) {
-      return unfilteredTodos.filter((todo) => {
-        switch (currentFilter) {
-          case (FILTERS.active):
-            return !todo.completed;
-          case (FILTERS.completed):
-            return todo.completed;
-          default:
-            return todo;
-        }
-      });
+      switch (currentFilter) {
+        case FILTERS.active:
+          return unfilteredTodos.filter(item => !item.completed);
+        case FILTERS.completed:
+          return unfilteredTodos.filter(item => item.completed);
+        default:
+          return unfilteredTodos;
+      }
     }
 
     return unfilteredTodos;
@@ -87,7 +130,7 @@ function App() {
             className="new-todo"
             placeholder="What needs to be done?"
             onChange={event => setTodoTitle(event.target.value)}
-            value={todoTitle}
+            value={todoTitle.trimLeft()}
           />
         </form>
       </header>
@@ -109,6 +152,9 @@ function App() {
         <TodoList
           setTodos={setTodos}
           todos={preparedTodos}
+          todoStatusToggle={todoStatusToggle}
+          editTodoTitle={editTodoTitle}
+          deleteTodo={deleteTodo}
         />
       </section>
 

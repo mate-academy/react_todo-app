@@ -5,21 +5,24 @@ import classNames from 'classnames';
 export const TodoItem = (
   { todo,
     deleteTodo,
-    editTodo },
+    todoStatusToggle,
+    editTodoTitle },
 ) => {
   const [editedTitle, setEditedTitle] = useState('');
   const [editing, setEditing] = useState(false);
 
-  const editNonEmptyTitle = () => {
+  const handleEditTitle = () => {
     if (editedTitle) {
-      editTodo(todo.id, editedTitle);
+      editTodoTitle(todo.id, editedTitle);
       setEditing(false);
+    } else {
+      deleteTodo(todo.id);
     }
   };
 
   const handleSubmit = (event) => {
     if (event.key === 'Enter') {
-      editNonEmptyTitle();
+      handleEditTitle();
     }
 
     if (event.key === 'Escape') {
@@ -28,7 +31,11 @@ export const TodoItem = (
   };
 
   const outFocused = () => {
-    editNonEmptyTitle();
+    handleEditTitle();
+    if (!editedTitle) {
+      deleteTodo(todo.id);
+    }
+
     setEditing(false);
   };
 
@@ -43,7 +50,7 @@ export const TodoItem = (
         <input
           type="checkbox"
           className="toggle"
-          onChange={() => editTodo(todo.id, !todo.completed)}
+          onChange={() => todoStatusToggle(todo.id)}
           checked={todo.completed}
         />
         <label onDoubleClick={() => setEditing(true)}>
@@ -62,7 +69,7 @@ export const TodoItem = (
           className="edit"
           defaultValue={todo.title}
           onKeyDown={handleSubmit}
-          onChange={event => setEditedTitle(event.target.value)}
+          onChange={event => setEditedTitle(event.target.value.trimLeft())}
           onBlur={outFocused}
         />
       )}
@@ -75,5 +82,6 @@ TodoItem.propTypes = {
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
-  editTodo: PropTypes.func.isRequired,
+  editTodoTitle: PropTypes.func.isRequired,
+  todoStatusToggle: PropTypes.func.isRequired,
 };

@@ -3,27 +3,11 @@ import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
 export const TodoList = (
-  { setTodos,
-    todos },
+  { deleteTodo,
+    todos,
+    todoStatusToggle,
+    editTodoTitle },
 ) => {
-  const editTodo = (todoId, value) => {
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === todoId) {
-        return { ...todo,
-          title: typeof value === 'string' ? value : todo.title,
-          completed: typeof value === 'boolean' ? value : todo.completed };
-      }
-
-      return todo;
-    });
-
-    setTodos(updatedTodos);
-  };
-
-  const deleteTodo = (todoId) => {
-    setTodos(todos.filter(todo => todo.id !== todoId));
-  };
-
   if (!todos) {
     return null;
   }
@@ -36,7 +20,8 @@ export const TodoList = (
             key={todo.id}
             todo={todo}
             deleteTodo={deleteTodo}
-            editTodo={editTodo}
+            todoStatusToggle={todoStatusToggle}
+            editTodoTitle={editTodoTitle}
           />
         ))}
     </ul>
@@ -44,9 +29,11 @@ export const TodoList = (
 };
 
 TodoList.propTypes = {
-  setTodos: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  todoStatusToggle: PropTypes.func.isRequired,
+  editTodoTitle: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.object.isRequired),
 };
 TodoList.defaultProps = {
-  todos: PropTypes.arrayOf(PropTypes.object.isRequired),
+  todos: [],
 };
