@@ -8,6 +8,9 @@ export const TodoApp = () => {
   const [newTodo, setNewTodo] = useState('');
   const [filter, setFilter] = useState(FILTER.all);
 
+  const uncompletedTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
+
   const filtredTodos = todos.filter((todo) => {
     switch (filter) {
       case FILTER.active:
@@ -51,9 +54,7 @@ export const TodoApp = () => {
   };
 
   useEffect(() => {
-    if (!localStorage.todos) {
-      localStorage.setItem('todos', JSON.stringify('todos'));
-    } else {
+    if (JSON.parse(localStorage.getItem('todos'))) {
       setTodos(JSON.parse(localStorage.getItem('todos')));
     }
   }, []);
@@ -92,6 +93,7 @@ export const TodoApp = () => {
             </label>
 
             <TodoList
+              todos={todos}
               filtredTodos={filtredTodos}
               setTodos={setTodos}
             />
@@ -99,7 +101,10 @@ export const TodoApp = () => {
 
           <footer className="footer">
             <span className="todo-count">
-              {`${todos.filter(todo => !todo.completed).length} items left`}
+              {(uncompletedTodos.length === 1)
+              && `${uncompletedTodos.length} item left`}
+              {(uncompletedTodos.length !== 1)
+              && `${uncompletedTodos.length} items left`}
             </span>
 
             <TodosFilter
@@ -107,13 +112,15 @@ export const TodoApp = () => {
               setFilter={setFilter}
             />
 
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={() => setTodos(todos.filter(todo => !todo.completed))}
-            >
-              Clear completed
-            </button>
+            {completedTodos.length > 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={() => setTodos(uncompletedTodos)}
+              >
+                Clear completed
+              </button>
+            )}
           </footer>
         </>
       )}

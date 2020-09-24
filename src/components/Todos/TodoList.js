@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { TodoItem } from '../TodoItem/TodoItem';
 
-export const TodoList = ({ filtredTodos, setTodos }) => {
+export const TodoList = ({ todos, filtredTodos, setTodos }) => {
   const handleDelete = (id) => {
     setTodos(filtredTodos.filter(todo => todo.id !== id));
   };
@@ -22,7 +22,7 @@ export const TodoList = ({ filtredTodos, setTodos }) => {
   };
 
   const todosToggler = (id) => {
-    setTodos(filtredTodos.map((todo) => {
+    const changedTodos = todos.map((todo) => {
       if (todo.id !== id) {
         return todo;
       }
@@ -31,7 +31,9 @@ export const TodoList = ({ filtredTodos, setTodos }) => {
         ...todo,
         completed: !todo.completed,
       };
-    }));
+    });
+
+    setTodos(changedTodos);
   };
 
   return (
@@ -50,6 +52,11 @@ export const TodoList = ({ filtredTodos, setTodos }) => {
 };
 
 TodoList.propTypes = {
+  todos: PropTypes.arrayOf({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }).isRequired,
   filtredTodos: PropTypes.arrayOf({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,

@@ -16,27 +16,29 @@ export const TodoItem = ({
   };
 
   const handleEdit = (event) => {
-    if (event.key === 'Enter' && newTitle) {
+    if (event.key === 'Enter') {
       changeTodoTitle(todo.id, newTitle);
+      if (!newTitle) {
+        handleDelete(todo.id);
+      }
+
       setEditing(false);
-      setNewTitle('');
     }
 
     if (event.key === 'Escape') {
-      setNewTitle('');
+      setNewTitle(todo.title);
       setEditing(false);
     }
   };
 
   const handleSaveChanges = () => {
-    if (newTitle) {
-      changeTodoTitle(todo.id, newTitle);
-      setEditing(false);
-      setNewTitle('');
-    } else {
-      setEditing(false);
-      setNewTitle('');
+    changeTodoTitle(todo.id, newTitle);
+
+    if (!newTitle) {
+      handleDelete(todo.id);
     }
+
+    setEditing(false);
   };
 
   return (
