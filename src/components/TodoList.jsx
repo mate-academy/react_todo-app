@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, setTodos }) => {
+export const TodoList = ({ todos, filteredTodos, setTodos }) => {
   const toggleStatus = (id) => {
     setTodos(todos.map((todo) => {
       if (todo.id === id) {
@@ -35,9 +35,10 @@ export const TodoList = ({ todos, setTodos }) => {
 
   return (
     <ul className="todo-list">
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem
           todo={todo}
+          key={todo.id}
           toggleStatus={toggleStatus}
           deleteTodo={deleteTodo}
           editTitle={editTitle}
@@ -48,6 +49,19 @@ export const TodoList = ({ todos, setTodos }) => {
 };
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf().isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
+  filteredTodos: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+    }),
+  ).isRequired,
   setTodos: PropTypes.func.isRequired,
 };

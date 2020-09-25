@@ -26,14 +26,17 @@ export const TodoApp = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setTodos([
-      ...todos,
-      {
-        title,
-        id: +new Date(),
-        completed: false,
-      },
-    ]);
+
+    if (title.trim()) {
+      setTodos([
+        ...todos,
+        {
+          title,
+          id: +new Date(),
+          completed: false,
+        },
+      ]);
+    }
 
     setTitle('');
   };
@@ -71,19 +74,20 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      {todos && (
+      {todos.length > 0 && (
         <section className="main">
           <input
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
             checked={todos.every(todo => todo.completed)}
-            onClick={toggleAll}
+            onChange={toggleAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <TodoList
-            todos={filteredTodos}
+            todos={todos}
+            filteredTodos={filteredTodos}
             setTodos={setTodos}
           />
         </section>
@@ -92,7 +96,9 @@ export const TodoApp = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count">
-            {`${uncompletedTodos.length} item(s) left`}
+            {uncompletedTodos.length === 1
+              ? '1 item left'
+              : `${uncompletedTodos.length} items left`}
           </span>
 
           <TodoFilter

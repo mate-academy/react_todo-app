@@ -38,5 +38,5 @@ export const TodoFilter = ({ filter, setFilter }) => (
 
 TodoFilter.propTypes = {
   filter: PropTypes.string.isRequired,
-  setFilter: PropTypes.string.isRequired,
+  setFilter: PropTypes.func.isRequired,
 };
