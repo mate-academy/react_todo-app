@@ -35,7 +35,6 @@ export const TodoItem = ({
 
         return todo;
       }));
-      // item.title = todoText;
       setEditing(false);
     }
   };

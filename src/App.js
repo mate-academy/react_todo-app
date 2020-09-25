@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { MakeTodo } from './components/MakeTodo/index';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodosFilter } from './components/TodosFilter';
@@ -12,7 +12,8 @@ const FILTERS = {
 function App() {
   const [todoList, setTodoList] = useState([]);
   const [toggleAll, setToggleAll] = useState(false);
-  const [filter, setfilter] = useState(FILTERS.all);
+  const [filter, setFilter] = useState(FILTERS.all);
+  const notCompleted = todoList.filter(item => !item.completed);
 
   useEffect(() => {
     if (localStorage.todoList) {
@@ -35,16 +36,14 @@ function App() {
     }
   }), [filter, todoList]);
 
-  const changeToggleAll = () => {
+  const changeToggleAll = useCallback(() => {
     setTodoList(
       todoList.map(todo => ({
         ...todo,
         completed: !toggleAll,
       })),
     );
-  };
-
-  const notCompleted = todoList.filter(item => !item.completed);
+  }, [notCompleted]);
 
   useEffect(() => {
     if (notCompleted.length === 0) {
@@ -62,7 +61,7 @@ function App() {
         <MakeTodo setTodoList={setTodoList} />
       </header>
 
-      {!!todoList.length && (
+      {todoList.length > 0 && (
         <>
           <section className="main">
             <input
@@ -90,7 +89,7 @@ function App() {
             </span>
 
             <TodosFilter
-              setfilter={setfilter}
+              setFilter={setFilter}
               FILTERS={FILTERS}
               filter={filter}
             />

@@ -2,13 +2,13 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-export const TodosFilter = ({ setfilter, FILTERS, filter }) => (
+export const TodosFilter = ({ setFilter, FILTERS, filter }) => (
   <ul className="filters">
     <li>
       <a
         href="#/"
         className={classnames({ selected: filter === FILTERS.all })}
-        onClick={() => setfilter(FILTERS.all)}
+        onClick={() => setFilter(FILTERS.all)}
       >
         All
       </a>
@@ -18,7 +18,7 @@ export const TodosFilter = ({ setfilter, FILTERS, filter }) => (
       <a
         href="#/active"
         className={classnames({ selected: filter === FILTERS.active })}
-        onClick={() => setfilter(FILTERS.active)}
+        onClick={() => setFilter(FILTERS.active)}
       >
         Active
       </a>
@@ -28,7 +28,7 @@ export const TodosFilter = ({ setfilter, FILTERS, filter }) => (
       <a
         href="#/completed"
         className={classnames({ selected: filter === FILTERS.completed })}
-        onClick={() => setfilter(FILTERS.completed)}
+        onClick={() => setFilter(FILTERS.completed)}
       >
         Completed
       </a>
@@ -37,7 +37,7 @@ export const TodosFilter = ({ setfilter, FILTERS, filter }) => (
 );
 
 TodosFilter.propTypes = {
-  setfilter: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
   FILTERS: PropTypes.objectOf(PropTypes.string).isRequired,
   filter: PropTypes.string.isRequired,
 };
