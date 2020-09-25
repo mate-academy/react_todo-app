@@ -29,34 +29,13 @@ export function deleteTodo(todoId) {
   });
 }
 
-export async function changeCompletedTodoTrue(todoId) {
+export async function changeCompletedTodo(todoId, completed) {
   const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
     method: 'PATCH',
     body: JSON.stringify({
-      completed: true,
+      completed,
     }),
   });
 
   return response;
-}
-
-export async function changeCompletedTodoFalse(todoId) {
-  const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
-    method: 'PATCH',
-    body: JSON.stringify({
-      completed: false,
-    }),
-  });
-
-  return response;
-}
-
-export async function filterActiveTodos() {
-  const response = await fetch(`${BASE_URL}/todos/`);
-  const result = await response.json();
-  const todos = await result.data;
-  const filterByCompleted = todos
-    .filter(todo => todo.userId === 158 && !todo.completed);
-
-  return filterByCompleted;
 }

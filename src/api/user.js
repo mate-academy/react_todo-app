@@ -25,10 +25,10 @@ export async function getUsers() {
   return users;
 }
 
-export async function getUser(userId) {
-  const response = await fetch(`${BASE_URL}/users/${userId}`);
-  const result = await response.json();
-  const usersId = await result.data;
+// export async function getUser(userId) {
+//   const response = await fetch(`${BASE_URL}/users/${userId}`);
+//   const result = await response.json();
+//   const usersId = await result.data;
 
-  return usersId;
-}
+//   return usersId;
+// }

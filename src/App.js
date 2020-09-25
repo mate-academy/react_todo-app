@@ -12,10 +12,16 @@ function App() {
   // const [user, setUser] = useState(null);
   const [currentFilter, setCurrentFilter] = useState('all');
   const getId = localStorage.getItem('id');
+  // const [allCompleted, setAllCompleted] = useState(false);
 
   function upDateUserTodos() {
     getTodos(userId)
       .then(todosUpdate => setTodos(todosUpdate));
+  }
+
+  function promiseAll(answerFromServer) {
+    Promise.all(answerFromServer)
+      .then(() => upDateUserTodos());
   }
 
   function handleInput(e, value) {
@@ -78,6 +84,7 @@ function App() {
         <TodoList
           todos={filteredTodos()}
           upDateUserTodos={upDateUserTodos}
+          promiseAll={promiseAll}
         />
       </section>
 
@@ -87,6 +94,7 @@ function App() {
           upDateUserTodos={upDateUserTodos}
           getCurrentFilter={filter => setCurrentFilter(filter)}
           currentFilter={currentFilter}
+          promiseAll={promiseAll}
         />
       </footer>
     </section>

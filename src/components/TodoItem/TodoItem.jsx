@@ -1,17 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import classNames from 'classnames';
 import { deleteTodo } from '../../api/todos';
-import { changeCompletedTodoFalse, changeCompletedTodoTrue } from '../../api/todos';
+import { changeCompletedTodo } from '../../api/todos';
 
 export function TodoItem({ title, completed, id, upDateUserTodos }) {
 
-  function handleCompleted(e) {
+  const [value, setValue] = useState('');
+  const [isEditMode, setEditMode] = useState(true);
+  const inputRef = useRef(null);
+
+  const editTodo = () => {
+    setEditMode(!isEditMode);
+
+    console.log(isEditMode);
+  }
+
+  function handleCompleted() {
     if (completed) {
-      changeCompletedTodoFalse(id)
+      changeCompletedTodo(id, false)
         .then(() => upDateUserTodos());
 
     } else {
-      changeCompletedTodoTrue(id)
+      changeCompletedTodo(id, true)
         .then(() => upDateUserTodos());
     }
   }
@@ -23,21 +33,30 @@ export function TodoItem({ title, completed, id, upDateUserTodos }) {
 
   return (
     <li>
-      <div className={classNames("view", {"completed": completed})}>
+      <div
+        className={classNames("view", {"completed": completed})}
+      >
         <input
           type="checkbox"
           className="toggle"
           checked={completed}
-          onChange={(e) => handleCompleted(e)}
+          onChange={handleCompleted}
         />
-        <label>{ title }</label>
+        <label
+            onDoubleClick={() => editTodo()}
+        >
+          { title }
+        </label>
         <button
           type="button"
           className="destroy"
           onClick={() => handleDeleteItem(id)}
         />
       </div>
-      <input type="text" className="edit" />
+      <input
+        type="text"
+        className="edit"
+      />
     </li>
   );
 }
