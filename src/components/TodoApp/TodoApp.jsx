@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TodoList } from '../TodoList/TodoList';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
@@ -54,6 +54,18 @@ export const TodoApp = () => {
   const deleteCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
+
+  useEffect(() => {
+    if (!localStorage.todos) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    } else {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <section className="todoApp">
