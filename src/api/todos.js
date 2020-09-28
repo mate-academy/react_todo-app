@@ -7,7 +7,8 @@ export async function getTodos(userId) {
 
   const filterTodosById = todos
     .filter(todo => todo.userId === +userId)
-    .sort((curr, next) => curr.id - next.id);
+    .sort((curr, next) => curr.id - next.id)
+    .filter(todo => todo.title);
 
   return filterTodosById;
 }
@@ -39,3 +40,16 @@ export async function changeCompletedTodo(todoId, completed) {
 
   return response;
 }
+
+export async function changeTitileTodo(todoId, title) {
+  const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      title,
+    }),
+  });
+
+  return response;
+}
+
+// придумать как сделать один запрос и не создавать два практических одинаковых
