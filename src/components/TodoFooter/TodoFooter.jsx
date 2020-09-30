@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 import { deleteTodo } from '../../api/todos';
 
@@ -10,6 +12,7 @@ export function TodoFooter({
     promiseAll,
     getCurrentFilter
   }) {
+
   const allCompleted = todos.filter(todo => todo.completed);;
 
   function deleteAllTodos() {
@@ -17,6 +20,7 @@ export function TodoFooter({
 
     promiseAll(deleteTodos);
   }
+
   return (
     <>
       <span className="todo-count">
@@ -67,4 +71,16 @@ export function TodoFooter({
       }
     </>
   )
+}
+
+TodoFooter.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    completed: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    userId: PropTypes.number.isRequired
+  })).isRequired,
+  deleteAllTodos: PropTypes.func.isRequired,
+  promiseAll: PropTypes.func.isRequired,
+  getCurrentFilter: PropTypes.func.isRequired,
+  currentFilter: PropTypes.string.isRequired
 }

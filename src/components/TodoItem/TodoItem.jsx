@@ -1,25 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
 import { deleteTodo } from '../../api/todos';
-import { changeCompletedTodo, changeTitileTodo } from '../../api/todos';
+import { changeTodoField } from '../../api/todos';
 
 export function TodoItem({ title, completed, id, upDateUserTodos }) {
-
   const [value, setValue] = useState(title);
   const [isEditMode, setEditMode] = useState(false);
-  const inputRef = useRef(null);
-
-  const editTodo = () => {
-    setEditMode(true);
-  }
 
   function handleCompleted() {
     if (completed) {
-      changeCompletedTodo(id, false)
+      changeTodoField(id, false, "completed")
         .then(() => upDateUserTodos());
 
     } else {
-      changeCompletedTodo(id, true)
+      changeTodoField(id, true, "completed")
         .then(() => upDateUserTodos());
     }
   }
@@ -35,16 +32,11 @@ export function TodoItem({ title, completed, id, upDateUserTodos }) {
     }
 
     if (e.key === 'Enter') {
-      changeTitileTodo(id, value)
+      changeTodoField(id, value, "title")
         .then(() => upDateUserTodos());
       setEditMode(false);
     }
   }
-
-  function handleChangeTodo(chanhgedValue) {
-    setValue(chanhgedValue);
-  }
-  
 
   return (
     <li>
@@ -58,7 +50,7 @@ export function TodoItem({ title, completed, id, upDateUserTodos }) {
          { !isEditMode
            ? (
              <>
-              <label onDoubleClick={() => editTodo()}>
+              <label onDoubleClick={() => setEditMode(true)}>
                 { title }
               </label>
                 <button
@@ -72,13 +64,20 @@ export function TodoItem({ title, completed, id, upDateUserTodos }) {
               <input
                 type="text"
                 className="todo__edit"
-                onChange={(e) => handleChangeTodo(e.target.value)}
+                onChange={(e) => setValue(e.target.value)}
                 onKeyDown={(e) => handleCloseEdit(e)}
                 autoFocus
                 value={value}
+                onBlur={() => setEditMode(false)}
               />
             )}
       </div>
     </li>
   );
+}
+
+TodoItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  completed: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
 }

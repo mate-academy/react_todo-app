@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 import { TodoItem } from '../TodoItem/TodoItem';
-import { changeCompletedTodo } from '../../api/todos';
+import { changeTodoField } from '../../api/todos';
 
 export function TodoList({ todos, upDateUserTodos , promiseAll}) {
   const everyCompleted = todos.every(todo => todo.completed);
 
   function flagComplited() {
     const some = todos.some(todo => !todo.completed);
+    let changeCompleted = [];
 
     if (some) {
-      const changeCompleted = todos
-        .map(todo => changeCompletedTodo(todo.id, true));
-      promiseAll(changeCompleted);
+      changeCompleted = todos
+        .map(todo => changeTodoField(todo.id, true, "completed"));
     } else {
-      const changeCompleted = todos
-        .map(todo => changeCompletedTodo(todo.id, false));
-      promiseAll(changeCompleted);
+      changeCompleted = todos
+        .map(todo => changeTodoField(todo.id, false, "completed"));
     }
-
-    // подумать как упростить это код когда буду сдавать,
-    // здесь можно много что повыносить так как код такой же
-    // только true false разные
+    promiseAll(changeCompleted);
   }
 
   return (
@@ -49,4 +47,10 @@ export function TodoList({ todos, upDateUserTodos , promiseAll}) {
       </ul>
     </>
   )
+}
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object),
+  upDateUserTodos: PropTypes.func.isRequired,
+  promiseAll: PropTypes.func.isRequired,
 }

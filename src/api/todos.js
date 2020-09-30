@@ -30,26 +30,13 @@ export function deleteTodo(todoId) {
   });
 }
 
-export async function changeCompletedTodo(todoId, completed) {
+export async function changeTodoField(todoId, value, name) {
   const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
     method: 'PATCH',
     body: JSON.stringify({
-      completed,
+      [name]: value,
     }),
   });
 
   return response;
 }
-
-export async function changeTitileTodo(todoId, title) {
-  const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
-    method: 'PATCH',
-    body: JSON.stringify({
-      title,
-    }),
-  });
-
-  return response;
-}
-
-// придумать как сделать один запрос и не создавать два практических одинаковых
