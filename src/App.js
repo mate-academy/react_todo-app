@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { createUser } from './api/user';
 import { getTodos, addTodo } from './api/todos';
 
@@ -9,13 +10,17 @@ import { TodoFooter } from './components/TodoFooter/TodoFooter';
 function App() {
   const [userId, setUserId] = useState(null);
   const [todos, setTodos] = useState([]);
-  // const [user, setUser] = useState(null);
   const [currentFilter, setCurrentFilter] = useState('all');
   const getId = localStorage.getItem('id');
 
   function upDateUserTodos() {
     getTodos(userId)
       .then(todosUpdate => setTodos(todosUpdate));
+  }
+
+  function promiseAll(answerFromServer) {
+    Promise.all(answerFromServer)
+      .then(() => upDateUserTodos());
   }
 
   function handleInput(e, value) {
@@ -59,8 +64,6 @@ function App() {
 
   useEffect(() => {
     if (userId) {
-      // getUser(userId)
-      //   .then(user => setUser(user));
       upDateUserTodos();
     }
   }, [userId]);
@@ -78,6 +81,7 @@ function App() {
         <TodoList
           todos={filteredTodos()}
           upDateUserTodos={upDateUserTodos}
+          promiseAll={promiseAll}
         />
       </section>
 
@@ -87,6 +91,7 @@ function App() {
           upDateUserTodos={upDateUserTodos}
           getCurrentFilter={filter => setCurrentFilter(filter)}
           currentFilter={currentFilter}
+          promiseAll={promiseAll}
         />
       </footer>
     </section>

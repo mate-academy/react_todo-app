@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
 import { deleteTodo } from '../../api/todos';
-import { changeCompletedTodoFalse, changeCompletedTodoTrue } from '../../api/todos';
+import { changeTodoField } from '../../api/todos';
 
 export function TodoItem({ title, completed, id, upDateUserTodos }) {
+  const [value, setValue] = useState(title);
+  const [isEditMode, setEditMode] = useState(false);
 
-  function handleCompleted(e) {
+  function handleCompleted() {
     if (completed) {
-      changeCompletedTodoFalse(id)
+      changeTodoField(id, false, "completed")
         .then(() => upDateUserTodos());
 
     } else {
-      changeCompletedTodoTrue(id)
+      changeTodoField(id, true, "completed")
         .then(() => upDateUserTodos());
     }
   }
@@ -21,6 +26,18 @@ export function TodoItem({ title, completed, id, upDateUserTodos }) {
       .then(() => upDateUserTodos())
   }
 
+  function handleCloseEdit(e) {
+    if (e.keyCode === 27) {
+      setEditMode(false);
+    }
+
+    if (e.key === 'Enter') {
+      changeTodoField(id, value, "title")
+        .then(() => upDateUserTodos());
+      setEditMode(false);
+    }
+  }
+
   return (
     <li>
       <div className={classNames("view", {"completed": completed})}>
@@ -28,16 +45,39 @@ export function TodoItem({ title, completed, id, upDateUserTodos }) {
           type="checkbox"
           className="toggle"
           checked={completed}
-          onChange={(e) => handleCompleted(e)}
+          onChange={handleCompleted}
         />
-        <label>{ title }</label>
-        <button
-          type="button"
-          className="destroy"
-          onClick={() => handleDeleteItem(id)}
-        />
+         { !isEditMode
+           ? (
+             <>
+              <label onDoubleClick={() => setEditMode(true)}>
+                { title }
+              </label>
+                <button
+                type="button"
+                className="destroy"
+                onClick={() => handleDeleteItem(id)}
+              />
+            </>
+           )
+           : (
+              <input
+                type="text"
+                className="todo__edit"
+                onChange={(e) => setValue(e.target.value)}
+                onKeyDown={(e) => handleCloseEdit(e)}
+                autoFocus
+                value={value}
+                onBlur={() => setEditMode(false)}
+              />
+            )}
       </div>
-      <input type="text" className="edit" />
     </li>
   );
+}
+
+TodoItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  completed: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
 }

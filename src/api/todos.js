@@ -7,7 +7,8 @@ export async function getTodos(userId) {
 
   const filterTodosById = todos
     .filter(todo => todo.userId === +userId)
-    .sort((curr, next) => curr.id - next.id);
+    .sort((curr, next) => curr.id - next.id)
+    .filter(todo => todo.title);
 
   return filterTodosById;
 }
@@ -29,34 +30,13 @@ export function deleteTodo(todoId) {
   });
 }
 
-export async function changeCompletedTodoTrue(todoId) {
+export async function changeTodoField(todoId, value, name) {
   const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
     method: 'PATCH',
     body: JSON.stringify({
-      completed: true,
+      [name]: value,
     }),
   });
 
   return response;
-}
-
-export async function changeCompletedTodoFalse(todoId) {
-  const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
-    method: 'PATCH',
-    body: JSON.stringify({
-      completed: false,
-    }),
-  });
-
-  return response;
-}
-
-export async function filterActiveTodos() {
-  const response = await fetch(`${BASE_URL}/todos/`);
-  const result = await response.json();
-  const todos = await result.data;
-  const filterByCompleted = todos
-    .filter(todo => todo.userId === 158 && !todo.completed);
-
-  return filterByCompleted;
 }

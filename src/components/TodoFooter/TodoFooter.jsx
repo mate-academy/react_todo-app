@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
-import { deleteTodo } from '../../api/todos';
-import classNames from 'classnames';
+import React from 'react';
 
-export function TodoFooter({ todos, deleteAllTodos, currentFilter, upDateUserTodos, getCurrentFilter }) {
-  // const [clearCompleted, setClearCompleted] = useState(false);
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
+import { deleteTodo } from '../../api/todos';
+
+export function TodoFooter({
+    todos,
+    deleteAllTodos,
+    currentFilter,
+    promiseAll,
+    getCurrentFilter
+  }) {
+
+  const allCompleted = todos.filter(todo => todo.completed);;
 
   function deleteAllTodos() {
-    const allCompleted = todos.filter(todo => todo.completed);
     const deleteTodos = allCompleted.map(todo => deleteTodo(todo.id));
 
-    Promise.all(deleteTodos)
-      .then(() => upDateUserTodos());
+    promiseAll(deleteTodos);
   }
+
   return (
     <>
       <span className="todo-count">
-        {`${todos.length} items left`}
+        {`${allCompleted.length} items left`}
       </span>
 
       <ul className="filters">
@@ -51,7 +60,7 @@ export function TodoFooter({ todos, deleteAllTodos, currentFilter, upDateUserTod
       </ul>
 
       {
-        // clearCompleted  &&
+        allCompleted.length > 0  &&
         <button
           type="button"
           className="clear-completed"
@@ -62,4 +71,16 @@ export function TodoFooter({ todos, deleteAllTodos, currentFilter, upDateUserTod
       }
     </>
   )
+}
+
+TodoFooter.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    completed: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    userId: PropTypes.number.isRequired
+  })).isRequired,
+  deleteAllTodos: PropTypes.func.isRequired,
+  promiseAll: PropTypes.func.isRequired,
+  getCurrentFilter: PropTypes.func.isRequired,
+  currentFilter: PropTypes.string.isRequired
 }
