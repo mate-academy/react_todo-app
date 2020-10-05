@@ -1,60 +1,107 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import { TodoList } from './components/TodoList/TodoList';
+import { Context } from './context';
+import { AddTodo } from './components/AddTodo/AddTodo';
+import { TodosFilter } from './components/TodosFilter/TodosFilter';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState('ALL');
+
+  // useEffect(() => {
+  //   fetch('https://mate-api.herokuapp.com/todos')
+  //     .then(response => response.json)
+  //     .then(todos => {
+  //       setTodos(todos.data)
+  //     })
+  // }, [])
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, completed: !todo.completed };
+      }
+
+      return todo;
+    }));
+  };
+
+  const removeTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const addTodo = (title) => {
+    setTodos(todos.concat([{
+      title,
+      id: Date.now(),
+      completed: false,
+    }]));
+  };
+
+  const shownTodos = useMemo(() => todos.filter((todo) => {
+    switch (filter) {
+      case 'ACTIVE':
+        return !todo.completed;
+      case 'COMPLETED':
+        return todo.completed;
+      default:
+        return todo;
+    }
+  }), [filter, todos]);
+
+  const changeTodo = (id, title) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return { ...todo, title };
+    }));
+  };
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos App</h1>
+    <Context.Provider value={{ removeTodo, toggleTodo, changeTodo }}>
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos App</h1>
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus=""
-        />
-      </header>
+          <AddTodo onCreate={addTodo} />
+        </header>
 
-      <section className="main" style={{ display: 'block' }}>
-        <input id="toggle-all" className="toggle-all" type="checkbox" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sdfsdfsdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>dsfgsdfgdsrg</label>
-              <button className="destroy"></button></div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sddfgdfgdf</label>
-              <button className="destroy"></button>
-            </div>
-          </li>
-        </ul>
+        <section className="main" style={{ display: 'block' }}>
+          <TodoList todos={shownTodos} />
+        </section>
+
+        {todos.length !== 0
+        && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${
+                (todos.filter(todo => todo.completed === false)).length
+              } items left`
+              }
+            </span>
+
+            <TodosFilter setFilter={setFilter} />
+
+            {(todos.filter(todo => todo.completed)).length > 0
+              && (
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={() => {
+                    setTodos(shownTodos.filter(todo => !todo.completed));
+                  }}
+                >
+                  Clear completed
+                </button>
+              )
+            }
+          </footer>
+        )
+        }
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count"><strong>3</strong> items left</span>
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-        <button className="clear-completed" style={{ display: 'block' }}></button>
-      </footer>
-    </section>
+    </Context.Provider>
   );
 }
 
