@@ -1,15 +1,17 @@
-React ToDo App
-Features:
+# React ToDo App
 
-when app loads, user sees an input to enter TODO
-when user types some TODO and hits enter, it's added to the list below
-TODO has two states: Active and Completed
-user can filter between All, Active, and Completed TODOs
-saving state in local storage
-ability to toggle the completed status of all the todos.
-ability to remove an item.
-ability to clear completed items from the list
-ability to toggle the completed status of all the todos.
-double click on the TODO item text makes it editable
-Enter saves changes
-Esc cancels editing
+<a href="https://romamykhalchuk.github.io/react_todo-app/">DEMO</a>
+
+Features:
+- when app loads, user sees an input to enter TODO
+- when user types some TODO and hits enter, it's added to the list below
+- TODO has two states: Active and Completed
+- user can filter between All, Active, and Completed TODOs
+- saving state in local storage
+- ability to toggle the completed status of all the todos.
+- ability to remove an item.
+- ability to clear completed items from the list
+- ability to toggle the completed status of all the todos.
+ - double click on the TODO item text makes it editable
+    - `Enter` saves changes
+    - `Esc` cancels editing
