@@ -1,50 +1,69 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { TodoItem } from './TodoItem';
+import { Todo } from './Todo';
+import { Filter } from '../constants/Filter';
 
-export const TodoList = ({ todos, changeCompleted, markAllCompleted }) => (
-  <section className="main">
-    <input
-      type="checkbox"
-      id="toggle-all"
-      className="toggle-all"
-      onChange={markAllCompleted}
-      checked={todos.every(todo => todo.completed)}
-    />
-    <label htmlFor="toggle-all">Mark all as complete</label>
+export const TodoList = ({
+  todos,
+  setTodos,
+  filterValue,
+  onTodoChange,
+}) => {
+  const filteredTodos = useMemo(() => {
+    switch (filterValue) {
+      case Filter.active:
+        return todos.filter(todo => !todo.completed);
+      case Filter.completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [filterValue, todos]);
 
+  const handleCompletedChange = (id) => {
+    const changedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return { ...todo };
+    });
+
+    setTodos(changedTodos);
+  };
+
+  const handleTodoDeletion = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  return (
     <ul className="todo-list">
-      <TodoItem
-        todos={todos}
-        changeCompleted={changeCompleted}
-      />
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" />
-          <label>asdfghj</label>
-          <button type="button" className="destroy" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" />
-          <label>zxcvbnm</label>
-          <button type="button" className="destroy" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
+      {filteredTodos.map(todo => (
+        <Todo
+          onCompletedChange={handleCompletedChange}
+          onTodoDeletion={handleTodoDeletion}
+          setTodos={setTodos}
+          onTodoChange={onTodoChange}
+          key={todo.id}
+          {...todo}
+        />
+      ))}
     </ul>
-  </section>
-);
+  );
+};
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
-    PropTypes.object.isRequired,
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool,
+    }).isRequired,
   ).isRequired,
-  changeCompleted: PropTypes.func.isRequired,
-  markAllCompleted: PropTypes.func.isRequired,
+  setTodos: PropTypes.func.isRequired,
+  filterValue: PropTypes.string.isRequired,
+  onTodoChange: PropTypes.func.isRequired,
 };
