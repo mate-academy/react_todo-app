@@ -48,6 +48,20 @@ function App() {
     setTodos(activeTodos);
   };
 
+  const toggleAll = () => {
+    const completed = activeTodos.length !== 0;
+
+    const newTodos = todos.map((todo) => {
+      if (todo.completed === completed) {
+        return todo;
+      }
+
+      return { ...todo, completed };
+    });
+
+    setTodos(newTodos);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -68,7 +82,13 @@ function App() {
 
       {todos.length > 0 && (
         <section className="main">
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={activeTodos.length === 0}
+            onChange={toggleAll}
+          />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
