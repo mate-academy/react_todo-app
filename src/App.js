@@ -230,15 +230,15 @@ function App() {
             </li>
 
             <li>
-            <a 
+              <a 
                 href="#/"
                 className={classNames({'selected': filterStatus === FILTERS.completed})}
                 onClick={()=> setFilterStatus(FILTERS.completed)}
               >
                 {FILTERS.completed}
               </a>
-            </li>
-          </ul>
+          </li>
+        </ul>
 
           {todos.length > activeTodos.length && (
             <button
