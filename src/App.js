@@ -4,6 +4,7 @@ import classNames from 'classnames';
 function App() {
   const [newTitle, setNewTitle] = useState('');
   const [todos, setTodos] = useState([]);
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   const addTodo = (title) => {
     const todo = {
@@ -15,6 +16,23 @@ function App() {
     setTodos([...todos, todo]);
   };
 
+  const toggleTodo = (todoId) => {
+    const callback = (todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    };
+
+    const newTodos = todos.map(callback);
+
+    setTodos(newTodos);
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -23,6 +41,7 @@ function App() {
     }
 
     addTodo(newTitle);
+    setNewTitle('');
   };
 
   return (
@@ -33,7 +52,9 @@ function App() {
         <form onSubmit={onSubmit}>
           <input
             value={newTitle}
-            onChange={({ target }) => setNewTitle(target.value)}
+            onChange={({ target }) => {
+              setNewTitle(target.value);
+            }}
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
@@ -60,6 +81,9 @@ function App() {
                     type="checkbox"
                     className="toggle"
                     checked={todo.completed}
+                    onChange={() => {
+                      toggleTodo(todo.id);
+                    }}
                   />
                   <label>{todo.title}</label>
                   <button type="button" className="destroy" />
@@ -74,7 +98,10 @@ function App() {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count">
-            3 items left
+            {activeTodos.length === 1
+              ? `1 item left`
+              : `${activeTodos.length} items left`
+            }
           </span>
 
           <ul className="filters">
