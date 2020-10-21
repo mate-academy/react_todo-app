@@ -6,6 +6,17 @@ function App() {
   const [todos, setTodos] = useState([]);
   const activeTodos = todos.filter(todo => !todo.completed);
 
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    if (!newTitle) {
+      return;
+    }
+
+    addTodo(newTitle);
+    setNewTitle('');
+  };
+
   const addTodo = (title) => {
     const todo = {
       id: +new Date(),
@@ -33,15 +44,8 @@ function App() {
     setTodos(newTodos);
   };
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-
-    if (!newTitle) {
-      return;
-    }
-
-    addTodo(newTitle);
-    setNewTitle('');
+  const clearCompleted = () => {
+    setTodos(activeTodos);
   };
 
   return (
@@ -118,9 +122,15 @@ function App() {
             </li>
           </ul>
 
-          <button type="button" className="clear-completed">
-            Clear completed
-          </button>
+          {todos.length > activeTodos.length && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
         </footer>
       )}
     </section>
