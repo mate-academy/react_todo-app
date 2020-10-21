@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+const FILTERS = {
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
+};
+
 function App() {
   const [newTitle, setNewTitle] = useState('');
   const [todos, setTodos] = useState([]);
+  const [filterStatus, setFilterStatus] = useState(FILTERS.all);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editId, setEditId] = useState(0);
   const activeTodos = todos.filter(todo => !todo.completed);
+
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -62,6 +72,50 @@ function App() {
     setTodos(newTodos);
   };
 
+  const deleteTodo = (todoId) => {
+    setTodos(todos.filter(todo=> todo.id !== todoId))
+  }
+
+  const filterTodos = (filterStatus) => {
+    debugger;
+    switch (filterStatus) {
+      case FILTERS.active:
+        return todos.filter(todo=> !todo.completed)
+      case FILTERS.completed:
+        return todos.filter(todo=> todo.completed);
+      default:
+        return todos;
+    }
+  }
+
+  const changeTitle = (todoId, title) => {
+    debugger;
+    const newTodos = todos.map(todo => {
+      if(todoId === todo.id) {
+        todo.title = title;
+      }
+
+      return todo;
+    })
+
+    setTodos(newTodos);
+  }
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    if (!event.target.value) {
+      return deleteTodo(editId);
+    }
+
+    if (event.key === 'Enter' || event.type === 'blur') {
+      changeTitle(editId, editedTitle);
+
+      return setEditId(0);
+    }
+
+    return setEditId(0);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -92,12 +146,12 @@ function App() {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            {todos.map(todo => (
+            {filterTodos(filterStatus).map(todo => (
               <li
                 key={todo.id}
                 className={classNames({
                   completed: todo.completed,
-                  editing: false,
+                  editing: editId === todo.id,
                 })}
               >
                 <div className="view">
@@ -109,10 +163,36 @@ function App() {
                       toggleTodo(todo.id);
                     }}
                   />
-                  <label>{todo.title}</label>
-                  <button type="button" className="destroy" />
+                  {editId !== todo.id && (<label
+                    onDoubleClick={()=> {
+                      setEditId(todo.id);
+                      setEditedTitle(todo.title);
+                    }}
+                  >
+                    {todo.title}
+                  </label>)}
+                  <button 
+                    type="button"
+                    className="destroy"
+                    onClick={()=> deleteTodo(todo.id)}
+                  />
                 </div>
-                <input type="text" className="edit" />
+                {editId === todo.id && (
+                <input
+                  type="text"
+                  className="edit"
+                  autoFocus
+                  value={editedTitle}
+                  onChange={({target})=> setEditedTitle(target.value.trimLeft())}
+                  onKeyDown={({target})=> changeTitle(todo.id, target.value.trimLeft())}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === 'Escape') {
+                      handleClick(event);
+                    }
+                  }
+                  }
+                  onBlur={handleClick}
+                />)}
               </li>
             ))}
           </ul>
@@ -130,15 +210,33 @@ function App() {
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected">All</a>
+              <a 
+                href="#/"
+                className={classNames({'selected': filterStatus === FILTERS.all})}
+                onClick={()=> setFilterStatus(FILTERS.all)}
+              >
+                {FILTERS.all}
+              </a>
             </li>
 
             <li>
-              <a href="#/active">Active</a>
+            <a 
+                href="#/"
+                className={classNames({'selected': filterStatus === FILTERS.active})}
+                onClick={()=> setFilterStatus(FILTERS.active)}
+              >
+                {FILTERS.active}
+              </a>
             </li>
 
             <li>
-              <a href="#/completed">Completed</a>
+            <a 
+                href="#/"
+                className={classNames({'selected': filterStatus === FILTERS.completed})}
+                onClick={()=> setFilterStatus(FILTERS.completed)}
+              >
+                {FILTERS.completed}
+              </a>
             </li>
           </ul>
 
