@@ -1,13 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 
 function App() {
+  const [newTitle, setNewTitle] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  const addTodo = (title) => {
+    const todo = {
+      id: +new Date(),
+      title,
+      completed: false,
+    };
+
+    setTodos([...todos, todo]);
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    if (!newTitle) {
+      return;
+    }
+
+    addTodo(newTitle);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={onSubmit}>
           <input
+            value={newTitle}
+            onChange={({ target }) => setNewTitle(target.value)}
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
@@ -15,72 +41,61 @@ function App() {
         </form>
       </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length > 0 && (
+        <section className="main">
+          <input type="checkbox" id="toggle-all" className="toggle-all" />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <ul className="todo-list">
+            {todos.map(todo => (
+              <li
+                key={todo.id}
+                className={classNames({
+                  completed: todo.completed,
+                  editing: false,
+                })}
+              >
+                <div className="view">
+                  <input
+                    type="checkbox"
+                    className="toggle"
+                    checked={todo.completed}
+                  />
+                  <label>{todo.title}</label>
+                  <button type="button" className="destroy" />
+                </div>
+                <input type="text" className="edit" />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count">
+            3 items left
+          </span>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <ul className="filters">
+            <li>
+              <a href="#/" className="selected">All</a>
+            </li>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+            <li>
+              <a href="#/active">Active</a>
+            </li>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
+            <li>
+              <a href="#/completed">Completed</a>
+            </li>
+          </ul>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          <button type="button" className="clear-completed">
+            Clear completed
+          </button>
+        </footer>
+      )}
     </section>
   );
 }
