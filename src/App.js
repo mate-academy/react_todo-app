@@ -24,7 +24,19 @@ function App() {
   const [newTitle, setNewTitle] = useState('');
   const [todos, setTodos] = useState([]);
   const [filterValue, setFilterValue] = useState(FILTERS.all);
-  const activeTodos = todos.filter(todo => !todo.completed);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+
+  const renameTodo = (todoId, title) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
+
+      return { ...todo, title };
+    });
+
+    setTodos(newTodos);
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -48,18 +60,16 @@ function App() {
   };
 
   const toggleTodo = (todoId) => {
-    const callback = (todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
+    const newTodos = todos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
       }
 
-      return todo;
-    };
-
-    const newTodos = todos.map(callback);
+      return {
+        ...todo,
+        completed: !todo.completed,
+      };
+    });
 
     setTodos(newTodos);
   };
@@ -87,6 +97,8 @@ function App() {
       todos.filter(todo => todo.id !== todoId),
     );
   };
+
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   const filteredTodos = useMemo(
     () => getFilteredTodos(todos, filterValue),
@@ -128,7 +140,7 @@ function App() {
                 key={todo.id}
                 className={classNames({
                   completed: todo.completed,
-                  editing: false,
+                  editing: todo.id === selectedTodoId,
                 })}
               >
                 <div className="view">
@@ -141,7 +153,13 @@ function App() {
                     }}
                   />
 
-                  <label>{todo.title}</label>
+                  <label
+                    onDoubleClick={() => {
+                      setSelectedTodoId(todo.id);
+                    }}
+                  >
+                    {todo.title}
+                  </label>
 
                   <button
                     type="button"
@@ -152,7 +170,17 @@ function App() {
                   />
                 </div>
 
-                <input type="text" className="edit" />
+                <input
+                  defaultValue={todo.title}
+                  type="text"
+                  className="edit"
+                  onKeyDown={({ key, target }) => {
+                    if (key === 'Enter') {
+                      renameTodo(todo.id, target.value);
+                      setSelectedTodoId(0);
+                    }
+                  }}
+                />
               </li>
             ))}
           </ul>
