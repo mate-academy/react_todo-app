@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import classNames from 'classnames';
 
 const FILTERS = {
@@ -7,10 +7,23 @@ const FILTERS = {
   completed: 'completed',
 };
 
+const getFilteredTodos = (todos, filterValue) => {
+  switch (filterValue) {
+    case FILTERS.active:
+      return todos.filter(todo => !todo.completed);
+
+    case FILTERS.completed:
+      return todos.filter(todo => todo.completed);
+
+    default:
+      return todos;
+  }
+};
+
 function App() {
   const [newTitle, setNewTitle] = useState('');
   const [todos, setTodos] = useState([]);
-  const [filter, setFilter] = useState(FILTERS.all);
+  const [filterValue, setFilterValue] = useState(FILTERS.all);
   const activeTodos = todos.filter(todo => !todo.completed);
 
   const onSubmit = (event) => {
@@ -75,16 +88,10 @@ function App() {
     );
   };
 
-  const filteredTodos = todos.filter((todo) => {
-    switch (filter) {
-      case FILTERS.active:
-        return !todo.completed;
-      case FILTERS.completed:
-        return todo.completed;
-      default:
-        return todo;
-    }
-  });
+  const filteredTodos = useMemo(
+    () => getFilteredTodos(todos, filterValue),
+    [todos, filterValue],
+  );
 
   return (
     <section className="todoapp">
@@ -165,9 +172,11 @@ function App() {
             <li>
               <a
                 href="#/"
-                className={classNames({ selected: filter === FILTERS.all })}
+                className={classNames({
+                  selected: filterValue === FILTERS.all,
+                })}
                 onClick={() => {
-                  setFilter(FILTERS.all);
+                  setFilterValue(FILTERS.all);
                 }}
               >
                 All
@@ -177,9 +186,11 @@ function App() {
             <li>
               <a
                 href="#/active"
-                className={classNames({ selected: filter === FILTERS.active })}
+                className={classNames({
+                  selected: filterValue === FILTERS.active,
+                })}
                 onClick={() => {
-                  setFilter(FILTERS.active);
+                  setFilterValue(FILTERS.active);
                 }}
               >
                 Active
@@ -189,11 +200,11 @@ function App() {
             <li>
               <a
                 href="#/completed"
-                className={classNames(
-                  { selected: filter === FILTERS.completed },
-                )}
+                className={classNames({
+                  selected: filterValue === FILTERS.completed,
+                })}
                 onClick={() => {
-                  setFilter(FILTERS.completed);
+                  setFilterValue(FILTERS.completed);
                 }}
               >
                 Completed
