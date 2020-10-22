@@ -62,6 +62,13 @@ function App() {
     setTodos(newTodos);
   };
 
+  const deleteTodo = (todoId) => {
+    const callback = todo => todo.id !== todoId;
+    const newTodos = todos.filter(callback);
+
+    setTodos(newTodos);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -110,7 +117,13 @@ function App() {
                     }}
                   />
                   <label>{todo.title}</label>
-                  <button type="button" className="destroy" />
+                  <button
+                    type="button"
+                    className="destroy"
+                    onClick={() => {
+                      deleteTodo(todo.id);
+                    }}
+                  />
                 </div>
                 <input type="text" className="edit" />
               </li>
