@@ -63,10 +63,9 @@ function App() {
   };
 
   const deleteTodo = (todoId) => {
-    const callback = todo => todo.id !== todoId;
-    const newTodos = todos.filter(callback);
-
-    setTodos(newTodos);
+    setTodos(
+      todos.filter(todo => todo.id !== todoId),
+    );
   };
 
   return (
@@ -116,7 +115,9 @@ function App() {
                       toggleTodo(todo.id);
                     }}
                   />
+
                   <label>{todo.title}</label>
+
                   <button
                     type="button"
                     className="destroy"
@@ -125,6 +126,7 @@ function App() {
                     }}
                   />
                 </div>
+
                 <input type="text" className="edit" />
               </li>
             ))}
