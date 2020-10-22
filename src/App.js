@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import classNames from 'classnames';
+import { AddTodoForm } from './components/AddTodoForm';
 
 const FILTERS = {
   all: 'all',
@@ -21,7 +22,6 @@ const getFilteredTodos = (todos, filterValue) => {
 };
 
 function App() {
-  const [newTitle, setNewTitle] = useState('');
   const [todos, setTodos] = useState([]);
   const [filterValue, setFilterValue] = useState(FILTERS.all);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
@@ -36,17 +36,6 @@ function App() {
     });
 
     setTodos(newTodos);
-  };
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-
-    if (!newTitle) {
-      return;
-    }
-
-    addTodo(newTitle);
-    setNewTitle('');
   };
 
   const addTodo = (title) => {
@@ -110,17 +99,7 @@ function App() {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={onSubmit}>
-          <input
-            value={newTitle}
-            onChange={({ target }) => {
-              setNewTitle(target.value);
-            }}
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <AddTodoForm onTodoAdded={addTodo} />
       </header>
 
       {todos.length > 0 && (
