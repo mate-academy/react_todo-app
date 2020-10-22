@@ -170,17 +170,27 @@ function App() {
                   />
                 </div>
 
-                <input
-                  defaultValue={todo.title}
-                  type="text"
-                  className="edit"
-                  onKeyDown={({ key, target }) => {
-                    if (key === 'Enter') {
+                {todo.id === selectedTodoId && (
+                  <input
+                    defaultValue={todo.title}
+                    type="text"
+                    className="edit"
+                    onBlur={({ target }) => {
                       renameTodo(todo.id, target.value);
                       setSelectedTodoId(0);
-                    }
-                  }}
-                />
+                    }}
+                    onKeyDown={({ key, target }) => {
+                      if (key === 'Enter') {
+                        renameTodo(todo.id, target.value);
+                        setSelectedTodoId(0);
+                      }
+
+                      if (key === 'Escape') {
+                        setSelectedTodoId(0);
+                      }
+                    }}
+                  />
+                )}
               </li>
             ))}
           </ul>
