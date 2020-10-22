@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+const FILTERS = {
+  all: 'all',
+  active: 'active',
+  completed: 'completed',
+};
+
 function App() {
   const [newTitle, setNewTitle] = useState('');
   const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState(FILTERS.all);
   const activeTodos = todos.filter(todo => !todo.completed);
 
   const onSubmit = (event) => {
@@ -68,6 +75,17 @@ function App() {
     );
   };
 
+  const filteredTodos = todos.filter((todo) => {
+    switch (filter) {
+      case FILTERS.active:
+        return !todo.completed;
+      case FILTERS.completed:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -98,7 +116,7 @@ function App() {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            {todos.map(todo => (
+            {filteredTodos.map(todo => (
               <li
                 key={todo.id}
                 className={classNames({
@@ -145,15 +163,41 @@ function App() {
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected">All</a>
+              <a
+                href="#/"
+                className={classNames({ selected: filter === FILTERS.all })}
+                onClick={() => {
+                  setFilter(FILTERS.all);
+                }}
+              >
+                All
+              </a>
             </li>
 
             <li>
-              <a href="#/active">Active</a>
+              <a
+                href="#/active"
+                className={classNames({ selected: filter === FILTERS.active })}
+                onClick={() => {
+                  setFilter(FILTERS.active);
+                }}
+              >
+                Active
+              </a>
             </li>
 
             <li>
-              <a href="#/completed">Completed</a>
+              <a
+                href="#/completed"
+                className={classNames(
+                  { selected: filter === FILTERS.completed },
+                )}
+                onClick={() => {
+                  setFilter(FILTERS.completed);
+                }}
+              >
+                Completed
+              </a>
             </li>
           </ul>
 
