@@ -101,7 +101,7 @@ function App() {
     setTodos(newTodos);
   }
 
-  const handleClick = (event) => {
+  const setChangedTitle = (event) => {
     event.preventDefault();
     if (!event.target.value) {
       return deleteTodo(editId);
@@ -187,11 +187,11 @@ function App() {
                   onKeyDown={({target})=> changeTitle(todo.id, target.value.trimLeft())}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter' || event.key === 'Escape') {
-                      handleClick(event);
+                      setChangedTitle(event);
                     }
                   }
                   }
-                  onBlur={handleClick}
+                  onBlur={setChangedTitle}
                 />)}
               </li>
             ))}
