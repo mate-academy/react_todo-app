@@ -1,13 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import classNames from 'classnames';
 import { AddTodoForm } from './components/AddTodoForm';
-import { FilterTodos } from './components/FilterTodos';
-
-const FILTERS = {
-  all: 'all',
-  active: 'active',
-  completed: 'completed',
-};
+import { TodosFilter, FILTERS } from './components/TodosFilter';
 
 const getFilteredTodos = (todos, filterValue) => {
   switch (filterValue) {
@@ -38,7 +32,6 @@ function App() {
 
     setTodos(newTodos);
   };
-
   const addTodo = (title) => {
     const todo = {
       id: +new Date(),
@@ -48,7 +41,6 @@ function App() {
 
     setTodos([...todos, todo]);
   };
-
   const toggleTodo = (todoId) => {
     const newTodos = todos.map((todo) => {
       if (todo.id !== todoId) {
@@ -63,11 +55,9 @@ function App() {
 
     setTodos(newTodos);
   };
-
   const clearCompleted = () => {
     setTodos(activeTodos);
   };
-
   const toggleAll = () => {
     const completed = activeTodos.length !== 0;
 
@@ -81,15 +71,12 @@ function App() {
 
     setTodos(newTodos);
   };
-
   const deleteTodo = (todoId) => {
     setTodos(
       todos.filter(todo => todo.id !== todoId),
     );
   };
-
   const activeTodos = todos.filter(todo => !todo.completed);
-
   const filteredTodos = useMemo(
     () => getFilteredTodos(todos, filterValue),
     [todos, filterValue],
@@ -186,10 +173,9 @@ function App() {
             }
           </span>
 
-          <FilterTodos
-            FILTERS={FILTERS}
-            filterValue={filterValue}
-            setFilterValue={setFilterValue}
+          <TodosFilter
+            value={filterValue}
+            onChange={setFilterValue}
           />
 
           {todos.length > activeTodos.length && (
