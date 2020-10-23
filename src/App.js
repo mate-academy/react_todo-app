@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import classNames from 'classnames';
 import { AddTodoForm } from './components/AddTodoForm';
+import { FilterTodos } from './components/FilterTodos';
 
 const FILTERS = {
   all: 'all',
@@ -185,49 +186,11 @@ function App() {
             }
           </span>
 
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className={classNames({
-                  selected: filterValue === FILTERS.all,
-                })}
-                onClick={() => {
-                  setFilterValue(FILTERS.all);
-                }}
-              >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                className={classNames({
-                  selected: filterValue === FILTERS.active,
-                })}
-                onClick={() => {
-                  setFilterValue(FILTERS.active);
-                }}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                className={classNames({
-                  selected: filterValue === FILTERS.completed,
-                })}
-                onClick={() => {
-                  setFilterValue(FILTERS.completed);
-                }}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
+          <FilterTodos
+            FILTERS={FILTERS}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
+          />
 
           {todos.length > activeTodos.length && (
             <button
