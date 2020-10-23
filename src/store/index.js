@@ -6,6 +6,7 @@ import filterReducer from './filter';
 import todosReducer from './todos';
 
 export const getFilterValue = state => state.filter;
+export const getTodos = state => state.todos;
 
 const reducer = combineReducers({
   filter: filterReducer,

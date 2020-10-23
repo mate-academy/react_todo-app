@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { FILTERS } from './constants';
 
@@ -7,7 +7,7 @@ import { AddTodoForm } from './components/AddTodoForm';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
-import { getFilterValue } from './store';
+import { getFilterValue, getTodos } from './store';
 
 const getFilteredTodos = (todos, filterValue) => {
   switch (filterValue) {
@@ -23,8 +23,13 @@ const getFilteredTodos = (todos, filterValue) => {
 };
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const dispatch = useDispatch();
+  const todos = useSelector(getTodos);
   const filterValue = useSelector(getFilterValue);
+
+  const setTodos = (newTodos) => {
+    dispatch({ type: 'SET_TODOS', payload: newTodos });
+  };
 
   const renameTodo = (todoId, title) => {
     const newTodos = todos.map((todo) => {
