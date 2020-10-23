@@ -8,6 +8,18 @@ export const addTodo = title => ({
   },
 });
 
+export const toggleAllTodos = (todos, completed) => ({
+  type: 'TOGGLE_ALL',
+  payload:
+    [...todos].map((todo) => {
+      if (todo.completed === completed) {
+        return todo;
+      }
+
+      return { ...todo, completed };
+    }),
+});
+
 const SET_TODOS = 'todos/SET_TODOS';
 
 export const setTodos = todos => ({
@@ -23,6 +35,7 @@ export default (todos = [], action) => {
         action.payload,
       ];
 
+    case 'TOGGLE_ALL':
     case SET_TODOS:
       return action.payload;
 

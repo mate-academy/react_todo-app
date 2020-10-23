@@ -42,16 +42,6 @@ function App() {
     setTodos(newTodos);
   };
 
-  const addTodo = (title) => {
-    const todo = {
-      id: +new Date(),
-      title,
-      completed: false,
-    };
-
-    setTodos([...todos, todo]);
-  };
-
   const toggleTodo = (todoId) => {
     const newTodos = todos.map((todo) => {
       if (todo.id !== todoId) {
@@ -73,16 +63,9 @@ function App() {
 
   const toggleAll = () => {
     const completed = activeTodos.length !== 0;
+    const action = todosActions.toggleAllTodos(todos, completed);
 
-    const newTodos = todos.map((todo) => {
-      if (todo.completed === completed) {
-        return todo;
-      }
-
-      return { ...todo, completed };
-    });
-
-    setTodos(newTodos);
+    dispatch(action);
   };
 
   const deleteTodo = (todoId) => {
@@ -103,7 +86,7 @@ function App() {
       <header className="header">
         <h1>todos</h1>
 
-        <AddTodoForm onTodoAdded={addTodo} />
+        <AddTodoForm />
       </header>
 
       {todos.length > 0 && (
