@@ -8,6 +8,7 @@ import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
 import { getFilterValue, getTodos } from './store';
+import * as todosActions from './store/todos';
 
 const getFilteredTodos = (todos, filterValue) => {
   switch (filterValue) {
@@ -28,7 +29,9 @@ function App() {
   const filterValue = useSelector(getFilterValue);
 
   const setTodos = (newTodos) => {
-    dispatch({ type: 'SET_TODOS', payload: newTodos });
+    const action = todosActions.setTodos(newTodos);
+
+    dispatch(action);
   };
 
   const renameTodo = (todoId, title) => {
