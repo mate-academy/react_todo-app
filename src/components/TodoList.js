@@ -2,14 +2,13 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export const TodoList = ({ todos }) => {
+export const TodoList = ({
+  todos,
+  onTodoDelete,
+  onTodoRename,
+  onTodoToggle,
+}) => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
-
-  const onTodoDelete = () => {};
-
-  const onTodoRename = () => {};
-
-  const onTodoToggle = () => {};
 
   return (
     <ul className="todo-list">
@@ -77,4 +76,7 @@ export const TodoList = ({ todos }) => {
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onTodoDelete: PropTypes.func.isRequired,
+  onTodoRename: PropTypes.func.isRequired,
+  onTodoToggle: PropTypes.func.isRequired,
 };
