@@ -1,7 +1,13 @@
 import React, { useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+
+import { FILTERS } from './constants';
+
 import { AddTodoForm } from './components/AddTodoForm';
 import { TodoList } from './components/TodoList';
-import { TodosFilter, FILTERS } from './components/TodosFilter';
+import { TodosFilter } from './components/TodosFilter';
+
+import { getFilterValue } from './store';
 
 const getFilteredTodos = (todos, filterValue) => {
   switch (filterValue) {
@@ -18,7 +24,7 @@ const getFilteredTodos = (todos, filterValue) => {
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [filterValue, setFilterValue] = useState(FILTERS.all);
+  const filterValue = useSelector(getFilterValue);
 
   const renameTodo = (todoId, title) => {
     const newTodos = todos.map((todo) => {
@@ -31,6 +37,7 @@ function App() {
 
     setTodos(newTodos);
   };
+
   const addTodo = (title) => {
     const todo = {
       id: +new Date(),
@@ -40,6 +47,7 @@ function App() {
 
     setTodos([...todos, todo]);
   };
+
   const toggleTodo = (todoId) => {
     const newTodos = todos.map((todo) => {
       if (todo.id !== todoId) {
@@ -54,9 +62,11 @@ function App() {
 
     setTodos(newTodos);
   };
+
   const clearCompleted = () => {
     setTodos(activeTodos);
   };
+
   const toggleAll = () => {
     const completed = activeTodos.length !== 0;
 
@@ -70,11 +80,13 @@ function App() {
 
     setTodos(newTodos);
   };
+
   const deleteTodo = (todoId) => {
     setTodos(
       todos.filter(todo => todo.id !== todoId),
     );
   };
+
   const activeTodos = todos.filter(todo => !todo.completed);
 
   const filteredTodos = useMemo(
@@ -119,10 +131,7 @@ function App() {
             }
           </span>
 
-          <TodosFilter
-            value={filterValue}
-            onChange={setFilterValue}
-          />
+          <TodosFilter />
 
           {todos.length > activeTodos.length && (
             <button

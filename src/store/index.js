@@ -1,13 +1,16 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
+import filterReducer from './filter';
+import todosReducer from './todos';
+
+export const getFilterValue = state => state.filter;
+
+const reducer = combineReducers({
+  filter: filterReducer,
+  todos: todosReducer,
+});
 
 const store = createStore(
   reducer,
