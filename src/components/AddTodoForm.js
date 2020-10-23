@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../store/todos';
 
-export const AddTodoForm = ({ onTodoAdded }) => {
+export const AddTodoForm = () => {
   const [newTitle, setNewTitle] = useState('');
+  const dispatch = useDispatch();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -11,7 +13,9 @@ export const AddTodoForm = ({ onTodoAdded }) => {
       return;
     }
 
-    onTodoAdded(newTitle);
+    const action = addTodo(newTitle);
+
+    dispatch(action);
     setNewTitle('');
   };
 
@@ -28,8 +32,4 @@ export const AddTodoForm = ({ onTodoAdded }) => {
       />
     </form>
   );
-};
-
-AddTodoForm.propTypes = {
-  onTodoAdded: PropTypes.func.isRequired,
 };

@@ -1,12 +1,9 @@
 import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { FILTERS } from './constants';
-
 import { AddTodoForm } from './components/AddTodoForm';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
-
 import { getFilterValue, getTodos } from './store';
 import * as todosActions from './store/todos';
 
@@ -27,7 +24,6 @@ function App() {
   const dispatch = useDispatch();
   const todos = useSelector(getTodos);
   const filterValue = useSelector(getFilterValue);
-
   const setTodos = (newTodos) => {
     const action = todosActions.setTodos(newTodos);
 
