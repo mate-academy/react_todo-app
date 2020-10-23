@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import classNames from 'classnames';
 import { AddTodoForm } from './components/AddTodoForm';
+import { TodoList } from './components/TodoList';
 import { TodosFilter, FILTERS } from './components/TodosFilter';
 
 const getFilteredTodos = (todos, filterValue) => {
@@ -19,7 +19,6 @@ const getFilteredTodos = (todos, filterValue) => {
 function App() {
   const [todos, setTodos] = useState([]);
   const [filterValue, setFilterValue] = useState(FILTERS.all);
-  const [selectedTodoId, setSelectedTodoId] = useState(0);
 
   const renameTodo = (todoId, title) => {
     const newTodos = todos.map((todo) => {
@@ -77,6 +76,7 @@ function App() {
     );
   };
   const activeTodos = todos.filter(todo => !todo.completed);
+
   const filteredTodos = useMemo(
     () => getFilteredTodos(todos, filterValue),
     [todos, filterValue],
@@ -101,66 +101,12 @@ function App() {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <ul className="todo-list">
-            {filteredTodos.map(todo => (
-              <li
-                key={todo.id}
-                className={classNames({
-                  completed: todo.completed,
-                  editing: todo.id === selectedTodoId,
-                })}
-              >
-                <div className="view">
-                  <input
-                    type="checkbox"
-                    className="toggle"
-                    checked={todo.completed}
-                    onChange={() => {
-                      toggleTodo(todo.id);
-                    }}
-                  />
-
-                  <label
-                    onDoubleClick={() => {
-                      setSelectedTodoId(todo.id);
-                    }}
-                  >
-                    {todo.title}
-                  </label>
-
-                  <button
-                    type="button"
-                    className="destroy"
-                    onClick={() => {
-                      deleteTodo(todo.id);
-                    }}
-                  />
-                </div>
-
-                {todo.id === selectedTodoId && (
-                  <input
-                    defaultValue={todo.title}
-                    type="text"
-                    className="edit"
-                    onBlur={({ target }) => {
-                      renameTodo(todo.id, target.value);
-                      setSelectedTodoId(0);
-                    }}
-                    onKeyDown={({ key, target }) => {
-                      if (key === 'Enter') {
-                        renameTodo(todo.id, target.value);
-                        setSelectedTodoId(0);
-                      }
-
-                      if (key === 'Escape') {
-                        setSelectedTodoId(0);
-                      }
-                    }}
-                  />
-                )}
-              </li>
-            ))}
-          </ul>
+          <TodoList
+            todos={filteredTodos}
+            onTodoDelete={deleteTodo}
+            onTodoRename={renameTodo}
+            onTodoToggle={toggleTodo}
+          />
         </section>
       )}
 
