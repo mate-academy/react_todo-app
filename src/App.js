@@ -63,7 +63,7 @@ function App() {
 
   const toggleAll = () => {
     const completed = activeTodos.length !== 0;
-    const action = todosActions.toggleAllTodos(todos, completed);
+    const action = todosActions.toggleAllTodos(completed);
 
     dispatch(action);
   };
