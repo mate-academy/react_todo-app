@@ -1,6 +1,17 @@
+const SET_TODOS = 'todos/SET_TODOS';
+const ADD_TODO = 'todos/ADD_TODO';
+const DELETE_TODO = 'todos/DELETE';
+const RENAME_TODO = 'todos/RENAME_TODO';
+const TOGGLE_TODO = 'TOGGLE_TODO';
+const CLEAR_COMPLETED = 'CLEAR_COMPLETED';
+
+export const setTodos = todos => ({
+  type: SET_TODOS,
+  payload: todos,
+});
 
 export const addTodo = title => ({
-  type: 'ADD_TODO',
+  type: ADD_TODO,
   payload: {
     id: +new Date(),
     title,
@@ -13,16 +24,31 @@ export const toggleAllTodos = completed => ({
   payload: completed,
 });
 
-const SET_TODOS = 'todos/SET_TODOS';
+export const setDeleteTodo = todoId => ({
+  type: DELETE_TODO,
+  payload: todoId,
+});
 
-export const setTodos = todos => ({
-  type: SET_TODOS,
-  payload: todos,
+export const renameTodo = (todoId, title) => ({
+  type: RENAME_TODO,
+  payload: { todoId, title },
+});
+
+export const toggleTodo = todoId => ({
+  type: TOGGLE_TODO,
+  payload: todoId,
+});
+
+export const clearCompleted = () => ({
+  type: CLEAR_COMPLETED,
 });
 
 export default (todos = [], action) => {
   switch (action.type) {
-    case 'ADD_TODO':
+    case SET_TODOS:
+      return action.payload;
+
+    case ADD_TODO:
       return [
         ...todos,
         action.payload,
@@ -39,8 +65,35 @@ export default (todos = [], action) => {
         return { ...todo, completed };
       });
 
-    case SET_TODOS:
-      return action.payload;
+    case DELETE_TODO:
+      return todos.filter(todo => todo.id !== action.payload);
+
+    case RENAME_TODO:
+      return todos.map((todo) => {
+        if (todo.id !== action.payload.todoId) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          title: action.payload.title,
+        };
+      });
+
+    case TOGGLE_TODO:
+      return todos.map((todo) => {
+        if (todo.id !== action.payload) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      });
+
+    case CLEAR_COMPLETED:
+      return todos.filter(todo => !todo.completed);
 
     default:
       return todos;

@@ -1,14 +1,27 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { setDeleteTodo, renameTodo } from '../store/todos';
 
 export const TodoList = ({
   todos,
-  onTodoDelete,
-  onTodoRename,
   onTodoToggle,
 }) => {
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const dispatch = useDispatch();
+
+  const onTodoDelete = (todoId) => {
+    const action = setDeleteTodo(todoId);
+
+    dispatch(action);
+  };
+
+  const onTodoRename = (todoId, title) => {
+    const action = renameTodo(todoId, title);
+
+    dispatch(action);
+  };
 
   return (
     <ul className="todo-list">
@@ -76,7 +89,5 @@ export const TodoList = ({
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onTodoDelete: PropTypes.func.isRequired,
-  onTodoRename: PropTypes.func.isRequired,
   onTodoToggle: PropTypes.func.isRequired,
 };

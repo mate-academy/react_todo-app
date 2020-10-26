@@ -24,41 +24,17 @@ function App() {
   const dispatch = useDispatch();
   const todos = useSelector(getTodos);
   const filterValue = useSelector(getFilterValue);
-  const setTodos = (newTodos) => {
-    const action = todosActions.setTodos(newTodos);
+
+  const toggleTodo = (todoId) => {
+    const action = todosActions.toggleTodo(todoId);
 
     dispatch(action);
   };
 
-  const renameTodo = (todoId, title) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id !== todoId) {
-        return todo;
-      }
-
-      return { ...todo, title };
-    });
-
-    setTodos(newTodos);
-  };
-
-  const toggleTodo = (todoId) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id !== todoId) {
-        return todo;
-      }
-
-      return {
-        ...todo,
-        completed: !todo.completed,
-      };
-    });
-
-    setTodos(newTodos);
-  };
-
   const clearCompleted = () => {
-    setTodos(activeTodos);
+    const action = todosActions.clearCompleted();
+
+    dispatch(action);
   };
 
   const toggleAll = () => {
@@ -66,12 +42,6 @@ function App() {
     const action = todosActions.toggleAllTodos(completed);
 
     dispatch(action);
-  };
-
-  const deleteTodo = (todoId) => {
-    setTodos(
-      todos.filter(todo => todo.id !== todoId),
-    );
   };
 
   const activeTodos = todos.filter(todo => !todo.completed);
@@ -102,8 +72,6 @@ function App() {
 
           <TodoList
             todos={filteredTodos}
-            onTodoDelete={deleteTodo}
-            onTodoRename={renameTodo}
             onTodoToggle={toggleTodo}
           />
         </section>
