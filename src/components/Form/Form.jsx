@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FormShape } from '../../shapes/FormShape';
 
 export const Form = ({ addNewTodo }) => {
   const [newTodo, setNewTodo] = useState('');
@@ -30,3 +31,5 @@ export const Form = ({ addNewTodo }) => {
     </form>
   );
 };
+
+Form.propTypes = FormShape;

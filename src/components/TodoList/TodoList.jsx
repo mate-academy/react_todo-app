@@ -1,5 +1,6 @@
 import React from 'react';
-import { TodoItem } from './TodoItem';
+import { TodoItem } from '../TodoItem';
+import { TodoListShape } from '../../shapes/TodoListShape';
 
 export const TodoList = ({
   todoList,
@@ -21,3 +22,5 @@ export const TodoList = ({
     ))}
   </ul>
 );
+
+TodoList.propTypes = TodoListShape;

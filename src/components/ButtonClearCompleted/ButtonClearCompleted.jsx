@@ -1,4 +1,6 @@
 import React from 'react';
+import { ButtonClearCompletedShape } from
+  '../../shapes/ButtonClearCompletedShape';
 
 export const ButtonClearCompleted = ({ clearCompleted }) => (
   <button
@@ -9,3 +11,5 @@ export const ButtonClearCompleted = ({ clearCompleted }) => (
     Clear completed
   </button>
 );
+
+ButtonClearCompleted.propTypes = ButtonClearCompletedShape;

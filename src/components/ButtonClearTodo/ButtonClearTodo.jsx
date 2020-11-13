@@ -1,4 +1,5 @@
 import React from 'react';
+import { ButtonClearTodoShape } from '../../shapes/ButtonClearTodoShape';
 
 export const ButtonClearTodo = ({
   id,
@@ -10,3 +11,5 @@ export const ButtonClearTodo = ({
     onClick={() => deleteTodo(id)}
   />
 );
+
+ButtonClearTodo.propTypes = ButtonClearTodoShape;

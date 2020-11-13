@@ -1,4 +1,5 @@
 import React from 'react';
+import { InputShape } from '../../shapes/InputShape';
 
 export const Input = ({
   id,
@@ -12,3 +13,5 @@ export const Input = ({
     onChange={() => handleChecked(id, !completed)}
   />
 );
+
+Input.propTypes = InputShape;

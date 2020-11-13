@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Input } from './Input';
-import { ButtonClearTodo } from './ButtonClearTodo';
+import { Input } from '../Input';
+import { ButtonClearTodo } from '../ButtonClearTodo';
+import { TodoItemShape } from '../../shapes/TodoItemShape';
 
 export const TodoItem = ({
   id,
@@ -57,3 +58,5 @@ export const TodoItem = ({
     </li>
   );
 };
+
+TodoItem.propTypes = TodoItemShape;

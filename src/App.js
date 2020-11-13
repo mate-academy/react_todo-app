@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
-import { Form } from './Form';
-import { TodoList } from './TodoList';
-import { ButtonClearCompleted } from './ButtonClearCompleted';
+import { Form } from './components/Form';
+import { TodoList } from './components/TodoList';
+import { ButtonClearCompleted } from './components/ButtonClearCompleted';
+
+const useLocalStorage = (key, initialValue) => {
+  const [value, setValue] = useState(
+    JSON.parse(localStorage.getItem(key)) || initialValue,
+  );
+
+  const save = (newValue) => {
+    setValue(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
+  };
+
+  return [value, save];
+};
 
 function App() {
-  const [todoList, setTodoList] = useState([]);
-  const [initialTodoList, setInitialTodoList] = useState([]);
+  const [initialTodoList, setInitialTodoList] = useLocalStorage('todos', []);
+  const [todoList, setTodoList] = useLocalStorage('todos', []);
   const [leftTodo, setLeftTodo] = useState(0);
   const [isShowedList, setIsShowedList] = useState(true);
   const [filterClass, setFilterClass] = useState('all');
