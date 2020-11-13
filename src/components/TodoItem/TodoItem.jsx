@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input } from '../Input';
 import { ButtonClearTodo } from '../ButtonClearTodo';
 import { TodoItemShape } from '../../shapes/TodoItemShape';
+import './TodoItem.css';
 
 export const TodoItem = ({
   id,
@@ -13,6 +14,7 @@ export const TodoItem = ({
 }) => {
   const [classOfLi, setClassOfLi] = useState('');
   const [editedTitle, setEditedTitle] = useState(title);
+  const [lineThrough, setLineThrough] = useState(false);
 
   const updateEditedTitle = (event) => {
     const { value } = event.target;
@@ -31,6 +33,10 @@ export const TodoItem = ({
     }
   };
 
+  const isTextThrough = (lineThroughBool) => {
+    setLineThrough(lineThroughBool);
+  };
+
   return (
     <li
       className={classOfLi}
@@ -41,8 +47,11 @@ export const TodoItem = ({
           id={id}
           completed={completed}
           handleChecked={handleChecked}
+          isTextThrough={isTextThrough}
         />
-        <label>{title}</label>
+        <label className={lineThrough ? 'line-through' : ''}>
+          {title}
+        </label>
         <ButtonClearTodo
           id={id}
           deleteTodo={deleteTodo}
