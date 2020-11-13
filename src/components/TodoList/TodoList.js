@@ -19,7 +19,7 @@ export function TodoList({ todos, changeStatus }) {
           ))}
 
           {/* NEED TO DELETE SOME ELEMENTS UNDER THE COMMENT */}
-          <li>
+          {/* <li>
             <div className="view">
               <input type="checkbox" className="toggle" />
               <label>asdfghj</label>
@@ -53,38 +53,12 @@ export function TodoList({ todos, changeStatus }) {
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
-          </li>
+          </li> */}
 
           {/* NEED TO DELETE SOME ELEMENTS ABOVE THE COMMENT */}
 
         </ul>
       </section>
-
-      <footer className="footer">
-        {todos.length !== 0 && (
-          <span className="todo-count">
-            {`${todos.length} item(s) left`}
-          </span>
-        )}
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
     </>
   );
 }

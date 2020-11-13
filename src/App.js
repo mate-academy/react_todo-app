@@ -3,16 +3,17 @@ import { TodoList } from './components/TodoList';
 
 // DELETE INITIAL TODO?
 
-const initialTodos = [{
-  completed: false, id: 'yqpsi41da', title: '1212123',
-}, {
-  completed: false, id: '3wonnlkkn', title: 'xcvnslk',
-}, { completed: false, id: 'i0b54y3z9', title: '-9adsf0' },
-];
+// const initialTodos = [{
+//   completed: false, id: 'yqpsi41da', title: '1212123',
+// }, {
+//   completed: false, id: '3wonnlkkn', title: 'xcvnslk',
+// }, { completed: false, id: 'i0b54y3z9', title: '-9adsf0' },
+// ];
 
 function App() {
   const [title, setTitle] = useState('');
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState([]);
+  // const [filterStatus, setFilterStatus] = useState(['']);
 
   const addTodo = (value) => {
     setTitle(value);
@@ -47,6 +48,10 @@ function App() {
     setTodos(todosCopy);
   };
 
+  // const addFilterStatus = useCallback((value) => {
+  //   setFilterStatus(value);
+  // }, []);
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -62,10 +67,55 @@ function App() {
           />
         </form>
       </header>
-      <TodoList
-        todos={todos}
-        changeStatus={changeStatus}
-      />
+      {todos.length !== 0 && (
+        <>
+          <TodoList
+            todos={todos}
+            changeStatus={changeStatus}
+          />
+
+          <footer className="footer">
+            {todos.length !== 0 && (
+              <span className="todo-count">
+                {`${todos.length} item(s) left`}
+              </span>
+            )}
+
+            <ul className="filters">
+              <li>
+                <a
+                  href="#/"
+                  className="selected"
+                // onClick={addFilterStatus('All')}
+                >
+                  All
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/active"
+                >
+                  Active
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/completed"
+                >
+                  Completed
+                </a>
+              </li>
+            </ul>
+
+            <button type="button" className="clear-completed">
+              Clear completed
+            </button>
+
+          </footer>
+        </>
+      )}
     </section>
   );
 }
