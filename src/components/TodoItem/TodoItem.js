@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export function TodoItem({ todo, changeStatus, deleteTodo }) {
-  // console.log('TodoItem test');
-
   return (
     <li
       className={classNames({ completed: todo.completed })}
@@ -15,7 +13,7 @@ export function TodoItem({ todo, changeStatus, deleteTodo }) {
           className="toggle"
           value={todo.id}
           onClick={event => changeStatus(event.target.value)}
-          defaultChecked={todo.completed}
+          checked={todo.completed}
         />
         <label>{todo.title}</label>
         <button

@@ -27,8 +27,6 @@ function App() {
   const [filterStatus, setFilterStatus] = useState('');
   const [activeSelectAll, setActiveSelectAll] = useState(false);
 
-  // console.log('App test');
-
   const addTodo = (value) => {
     setTitle(value);
   };
@@ -48,21 +46,19 @@ function App() {
     setTitle('');
   };
 
+  const toggleAll = () => {
+    const uncheckedTodos = todos.map(todo => (
+      {
+        ...todo,
+        completed: false,
+      }
+    ));
+
+    setTodos(uncheckedTodos);
+    setfilteredTodos(uncheckedTodos);
+  };
+
   const changeStatus = (checkedTodoId) => {
-    if (checkedTodoId === 'all') {
-      const uncheckedTodos = todos.map(todo => (
-        {
-          ...todo,
-          completed: false,
-        }
-      ));
-
-      setTodos(uncheckedTodos);
-      setfilteredTodos(uncheckedTodos);
-
-      return;
-    }
-
     const checkedTodo = todos.find(todo => (
       todo.id === checkedTodoId
     ));
@@ -127,6 +123,10 @@ function App() {
 
     setTodos(fileredList);
     setfilteredTodos(fileredList);
+
+    if (filterStatus === 'completed') {
+      setFilterStatus('all');
+    }
   };
 
   return (
@@ -150,6 +150,7 @@ function App() {
             todos={filteredTodos}
             changeStatus={changeStatus}
             deleteTodo={deleteTodo}
+            forToggleAll={toggleAll}
           />
 
           <footer className="footer">

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem';
 
-export function TodoList({ todos, changeStatus, deleteTodo }) {
+export function TodoList({ todos, changeStatus, deleteTodo, forToggleAll }) {
   const [allCompleted, setAllCompleted] = useState(false);
-  // console.log('TodoList test');
 
   useEffect(() => {
     const completedStatusCheck = todos.every(todo => (
@@ -18,7 +17,7 @@ export function TodoList({ todos, changeStatus, deleteTodo }) {
 
   const toggleAll = () => {
     if (allCompleted) {
-      changeStatus('all');
+      forToggleAll();
       setAllCompleted(false);
     }
   };
@@ -30,7 +29,7 @@ export function TodoList({ todos, changeStatus, deleteTodo }) {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          defaultChecked={allCompleted}
+          checked={allCompleted}
           onClick={toggleAll}
         />
         <label
@@ -97,6 +96,7 @@ export function TodoList({ todos, changeStatus, deleteTodo }) {
 
 TodoList.propTypes = {
   changeStatus: PropTypes.func.isRequired,
+  forToggleAll: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
