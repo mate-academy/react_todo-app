@@ -13,7 +13,6 @@ export const Input = ({
     checked={completed}
     onChange={() => {
       handleChecked(id, !completed);
-      isTextThrough(!completed);
     }}
   />
 );

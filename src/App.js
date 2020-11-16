@@ -8,20 +8,20 @@ const useLocalStorage = (key, initialValue) => {
     JSON.parse(localStorage.getItem(key)) || initialValue,
   );
 
-  const save = (newValue) => {
+  const saveValue = (newValue) => {
     setValue(newValue);
     localStorage.setItem(key, JSON.stringify(newValue));
   };
 
-  return [value, save];
+  return [value, saveValue];
 };
 
 function App() {
   const [initialTodoList, setInitialTodoList] = useLocalStorage('todos', []);
   const [todoList, setTodoList] = useLocalStorage('todos', []);
   const [leftTodo, setLeftTodo] = useState(0);
-  const [isShowedList, setIsShowedList] = useState(true);
   const [filterClass, setFilterClass] = useState('all');
+  const [markAll, setMarkAll] = useState(false);
 
   const addNewTodo = (newTodo) => {
     const newTodoObj = {
@@ -29,7 +29,8 @@ function App() {
       title: newTodo,
       completed: false,
     };
-    const left = initialTodoList.filter(
+
+    const leftActiveTodos = initialTodoList.filter(
       todo => todo.completed === false,
     ).length + 1;
 
@@ -38,27 +39,27 @@ function App() {
     }
 
     setInitialTodoList([...initialTodoList, newTodoObj]);
-    setLeftTodo(left);
+    setLeftTodo(leftActiveTodos);
   };
 
-  const handleChecked = (idOfTodo, changedCompleted) => {
+  const handleChecked = (id, isCompleted) => {
     const changedInitialTodos = initialTodoList.map((todo) => {
-      if (todo.id === idOfTodo) {
+      if (todo.id === id) {
         return {
           ...todo,
-          completed: changedCompleted,
+          completed: isCompleted,
         };
       }
 
       return { ...todo };
     });
 
-    const left = changedInitialTodos.filter(
+    const leftActiveTodos = changedInitialTodos.filter(
       todo => todo.completed === false,
     ).length;
 
     setInitialTodoList(changedInitialTodos);
-    setLeftTodo(left);
+    setLeftTodo(leftActiveTodos);
 
     if (filterClass === 'all') {
       setTodoList(changedInitialTodos);
@@ -70,6 +71,12 @@ function App() {
 
       setTodoList(filteredList);
     }
+
+    const markedAll = changedInitialTodos.every(
+      todo => todo.completed === true,
+    );
+
+    setMarkAll(markedAll);
   };
 
   const deleteTodo = (idOfTodo) => {
@@ -81,13 +88,13 @@ function App() {
       todo => todo.id !== idOfTodo,
     );
 
-    const left = initialTodoListAfterDelete.filter(
+    const leftActiveTodos = initialTodoListAfterDelete.filter(
       todo => todo.completed === false,
     ).length;
 
     setInitialTodoList(initialTodoListAfterDelete);
     setTodoList(todoListAfterDelete);
-    setLeftTodo(left);
+    setLeftTodo(leftActiveTodos);
   };
 
   const changeTodoTitle = (idOfTodo, editedTitle) => {
@@ -141,6 +148,33 @@ function App() {
     }
   };
 
+  const markAllAsComplete = () => {
+    const updatedMarkAll = !markAll;
+
+    const markedAllTodos = initialTodoList.map((todo) => {
+      const markedTodo = {
+        ...todo,
+        completed: updatedMarkAll,
+      };
+
+      return { ...markedTodo };
+    });
+
+    setInitialTodoList(markedAllTodos);
+    setMarkAll(updatedMarkAll);
+
+    if (filterClass === 'all') {
+      setTodoList(markedAllTodos);
+    } else {
+      const filter = filterClass === 'completed';
+      const filteredList = markedAllTodos.filter(
+        todo => todo.completed === filter,
+      );
+
+      setTodoList(filteredList);
+    }
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -148,68 +182,63 @@ function App() {
         <Form addNewTodo={addNewTodo} />
       </header>
 
-      {!!initialTodoList.length && (
-        <>
-          <section className="main">
-            <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              onChange={() => setIsShowedList(!isShowedList)}
-            />
-            <label htmlFor="toggle-all">Mark all as complete</label>
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={markAll}
+          onChange={markAllAsComplete}
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
 
-            {isShowedList && (
-              <TodoList
-                todoList={todoList}
-                handleChecked={handleChecked}
-                deleteTodo={deleteTodo}
-                changeTodoTitle={changeTodoTitle}
-              />
-            )}
-          </section>
+        <TodoList
+          todoList={todoList}
+          handleChecked={handleChecked}
+          deleteTodo={deleteTodo}
+          changeTodoTitle={changeTodoTitle}
+        />
+      </section>
 
-          <footer className="footer">
-            <span className="todo-count">
-              {`${leftTodo} items left`}
-            </span>
+      <footer className="footer">
+        <span className="todo-count">
+          {`${leftTodo} items left`}
+        </span>
 
-            <ul className="filters">
-              <li>
-                <a
-                  href="#/"
-                  className={filterClass === 'all' ? 'selected' : ''}
-                  onClick={() => filterBy('all')}
-                >
-                  All
-                </a>
-              </li>
+        <ul className="filters">
+          <li>
+            <a
+              href="#/"
+              className={filterClass === 'all' ? 'selected' : ''}
+              onClick={() => filterBy('all')}
+            >
+              All
+            </a>
+          </li>
 
-              <li>
-                <a
-                  href="#/active"
-                  className={filterClass === 'active' ? 'selected' : ''}
-                  onClick={() => filterBy('active')}
-                >
-                  Active
-                </a>
-              </li>
+          <li>
+            <a
+              href="#/active"
+              className={filterClass === 'active' ? 'selected' : ''}
+              onClick={() => filterBy('active')}
+            >
+              Active
+            </a>
+          </li>
 
-              <li>
-                <a
-                  href="#/completed"
-                  className={filterClass === 'completed' ? 'selected' : ''}
-                  onClick={() => filterBy('completed')}
-                >
-                  Completed
-                </a>
-              </li>
-            </ul>
+          <li>
+            <a
+              href="#/completed"
+              className={filterClass === 'completed' ? 'selected' : ''}
+              onClick={() => filterBy('completed')}
+            >
+              Completed
+            </a>
+          </li>
+        </ul>
 
-            <ButtonClearCompleted clearCompleted={clearCompleted} />
-          </footer>
-        </>
-      )}
+        <ButtonClearCompleted clearCompleted={clearCompleted} />
+      </footer>
     </section>
   );
 }

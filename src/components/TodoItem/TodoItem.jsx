@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import cn from 'classnames';
 import { Input } from '../Input';
 import { ButtonClearTodo } from '../ButtonClearTodo';
 import { TodoItemShape } from '../../shapes/TodoItemShape';
@@ -12,9 +13,9 @@ export const TodoItem = ({
   deleteTodo,
   changeTodoTitle,
 }) => {
-  const [classOfLi, setClassOfLi] = useState('');
+  const [todoClass, setTodoClass] = useState('');
   const [editedTitle, setEditedTitle] = useState(title);
-  const [lineThrough, setLineThrough] = useState(false);
+  const lineThrough = completed;
 
   const updateEditedTitle = (event) => {
     const { value } = event.target;
@@ -23,33 +24,30 @@ export const TodoItem = ({
   };
 
   const pushEditedTitle = (event) => {
-    if (event.keyCode === 13 && editedTitle !== '') {
+    if (event.key === 'Enter' && editedTitle !== '') {
       changeTodoTitle(id, editedTitle);
-      setClassOfLi('');
+      setTodoClass('');
     }
 
-    if (event.keyCode === 27) {
-      setClassOfLi('');
+    if (event.key === 'Escape') {
+      setTodoClass('');
     }
-  };
-
-  const isTextThrough = (lineThroughBool) => {
-    setLineThrough(lineThroughBool);
   };
 
   return (
     <li
-      className={classOfLi}
-      onDoubleClick={() => setClassOfLi('editing')}
+      className={todoClass}
+      onDoubleClick={() => setTodoClass('editing')}
     >
       <div className="view">
         <Input
           id={id}
           completed={completed}
           handleChecked={handleChecked}
-          isTextThrough={isTextThrough}
         />
-        <label className={lineThrough ? 'line-through' : ''}>
+        <label
+          className={cn({ 'line-through': lineThrough })}
+        >
           {title}
         </label>
         <ButtonClearTodo
