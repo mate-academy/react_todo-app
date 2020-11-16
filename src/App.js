@@ -1,18 +1,12 @@
 import React from 'react';
+import { NewTodoComponent } from './components/NewTodo/NewTodoComponent';
 
 function App() {
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <NewTodoComponent />
       </header>
 
       <section className="main">
