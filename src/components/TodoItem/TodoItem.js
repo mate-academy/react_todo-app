@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export function TodoItem({ todo, changeStatus }) {
+export function TodoItem({ todo, changeStatus, deleteTodo }) {
   // console.log('TodoItem test');
 
   return (
@@ -18,7 +18,11 @@ export function TodoItem({ todo, changeStatus }) {
           checked={todo.completed}
         />
         <label>{todo.title}</label>
-        <button type="button" className="destroy" />
+        <button
+          type="button"
+          className="destroy"
+          onClick={() => deleteTodo(todo.id)}
+        />
       </div>
       <input type="text" className="edit" />
     </li>
@@ -27,6 +31,7 @@ export function TodoItem({ todo, changeStatus }) {
 
 TodoItem.propTypes = {
   changeStatus: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
   todo: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

@@ -88,6 +88,15 @@ function App() {
     }
   }, [filterStatus, todos]);
 
+  const deleteTodo = (todoIdForDelete) => {
+    const filteredList = todos.filter(todo => (
+      todo.id !== todoIdForDelete
+    ));
+
+    setTodos(filteredList);
+    setfilteredTodos(filteredList);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -107,6 +116,7 @@ function App() {
         <TodoList
           todos={filteredTodos}
           changeStatus={changeStatus}
+          deleteTodo={deleteTodo}
         />
       )}
 

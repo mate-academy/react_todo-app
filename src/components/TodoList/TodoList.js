@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem';
 
-export function TodoList({ todos, changeStatus }) {
+export function TodoList({ todos, changeStatus, deleteTodo }) {
   const [allCompleted, setAllCompleted] = useState(false);
   // console.log('TodoList test');
 
@@ -46,6 +46,7 @@ export function TodoList({ todos, changeStatus }) {
               todo={todo}
               changeStatus={changeStatus}
               key={todo.id}
+              deleteTodo={deleteTodo}
             />
           ))}
 
@@ -96,6 +97,7 @@ export function TodoList({ todos, changeStatus }) {
 
 TodoList.propTypes = {
   changeStatus: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isReuired,
