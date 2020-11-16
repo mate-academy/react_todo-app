@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 
 // DELETE INITIAL TODO?
@@ -24,6 +25,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [filteredTodos, setfilteredTodos] = useState(todos);
   const [filterStatus, setFilterStatus] = useState('all');
+  const [activeSelectAll, setActiveSelectAll] = useState(false);
 
   // console.log('App test');
 
@@ -97,6 +99,25 @@ function App() {
     setfilteredTodos(filteredList);
   };
 
+  useEffect(() => {
+    const checkStatus = todos.some(todo => (
+      todo.completed === true
+    ));
+
+    if (checkStatus) {
+      setActiveSelectAll(true);
+    }
+  }, [todos]);
+
+  const clearAllCompleted = () => {
+    const fileredList = todos.filter(todo => (
+      todo.completed === false
+    ));
+
+    setTodos(fileredList);
+    setfilteredTodos(fileredList);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -131,7 +152,7 @@ function App() {
           <li>
             <a
               href="#/"
-              className="selected"
+              className={classNames({ selected: filterStatus === 'all' })}
               onClick={() => setFilterStatus('all')}
             >
               All
@@ -141,6 +162,7 @@ function App() {
           <li>
             <a
               href="#/active"
+              className={classNames({ selected: filterStatus === 'active' })}
               onClick={() => setFilterStatus('active')}
             >
               Active
@@ -150,6 +172,7 @@ function App() {
           <li>
             <a
               href="#/completed"
+              className={classNames({ selected: filterStatus === 'completed' })}
               onClick={() => setFilterStatus('completed')}
             >
               Completed
@@ -157,9 +180,15 @@ function App() {
           </li>
         </ul>
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
+        {activeSelectAll && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={clearAllCompleted}
+          >
+            Clear completed
+          </button>
+        )}
 
       </footer>
     </section>
