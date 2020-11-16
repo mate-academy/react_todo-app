@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TodoList } from './components/TodoList';
 
 // DELETE INITIAL TODO?
-
 // const initialTodos = [{
 //   completed: false, id: 'yqpsi41da', title: '1212123',
 // }, {
