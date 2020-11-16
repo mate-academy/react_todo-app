@@ -15,7 +15,7 @@ export function TodoItem({ todo, changeStatus, deleteTodo }) {
           className="toggle"
           value={todo.id}
           onClick={event => changeStatus(event.target.value)}
-          checked={todo.completed}
+          defaultChecked={todo.completed}
         />
         <label>{todo.title}</label>
         <button

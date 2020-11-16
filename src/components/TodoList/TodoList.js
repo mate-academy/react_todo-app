@@ -30,7 +30,7 @@ export function TodoList({ todos, changeStatus, deleteTodo }) {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          checked={allCompleted}
+          defaultChecked={allCompleted}
           onClick={toggleAll}
         />
         <label

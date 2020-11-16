@@ -24,7 +24,7 @@ function App() {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useState([]);
   const [filteredTodos, setfilteredTodos] = useState(todos);
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('');
   const [activeSelectAll, setActiveSelectAll] = useState(false);
 
   // console.log('App test');
@@ -74,10 +74,11 @@ function App() {
     todosCopy.splice(index, 1, checkedTodo);
 
     setTodos(todosCopy);
+    setfilteredTodos(todosCopy);
   };
 
   useEffect(() => {
-    if (filterStatus === 'all') {
+    if (filterStatus === 'all' || filterStatus === '') {
       setfilteredTodos(todos);
     } else {
       const filter = filterStatus === 'completed';
@@ -100,12 +101,22 @@ function App() {
   };
 
   useEffect(() => {
-    const checkStatus = todos.some(todo => (
-      todo.completed === true
-    ));
+    if (!activeSelectAll) {
+      const checkStatus = todos.some(todo => (
+        todo.completed === true
+      ));
 
-    if (checkStatus) {
-      setActiveSelectAll(true);
+      if (checkStatus) {
+        setActiveSelectAll(true);
+      }
+    } else {
+      const checkStatus = todos.every(todo => (
+        todo.completed === false
+      ));
+
+      if (checkStatus) {
+        setActiveSelectAll(false);
+      }
     }
   }, [todos]);
 
@@ -133,64 +144,74 @@ function App() {
           />
         </form>
       </header>
-      {!!filteredTodos.length && (
-        <TodoList
-          todos={filteredTodos}
-          changeStatus={changeStatus}
-          deleteTodo={deleteTodo}
-        />
+      {!!todos.length && (
+        <>
+          <TodoList
+            todos={filteredTodos}
+            changeStatus={changeStatus}
+            deleteTodo={deleteTodo}
+          />
+
+          <footer className="footer">
+            {filteredTodos.length !== 0 && (
+              <span className="todo-count">
+                {`${filteredTodos.length} item(s) left`}
+              </span>
+            )}
+
+            <ul className="filters">
+              <li>
+                <a
+                  href="#/"
+                  className={classNames({ selected: filterStatus === 'all' })}
+                  onClick={() => setFilterStatus('all')}
+                >
+                  All
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/active"
+                  className={classNames({
+                    selected: filterStatus === 'active',
+                  })}
+                  onClick={() => setFilterStatus('active')}
+                >
+                  Active
+                </a>
+              </li>
+
+              {activeSelectAll && (
+                <li>
+                  <a
+                    href="#/completed"
+                    className={classNames({
+                      selected: filterStatus === 'completed',
+                    })}
+                    onClick={() => setFilterStatus('completed')}
+                  >
+                    Completed
+                  </a>
+                </li>
+              )}
+
+            </ul>
+
+            {activeSelectAll && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearAllCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+
+          </footer>
+        </>
       )}
 
-      <footer className="footer">
-        {filteredTodos.length !== 0 && (
-          <span className="todo-count">
-            {`${filteredTodos.length} item(s) left`}
-          </span>
-        )}
-
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className={classNames({ selected: filterStatus === 'all' })}
-              onClick={() => setFilterStatus('all')}
-            >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/active"
-              className={classNames({ selected: filterStatus === 'active' })}
-              onClick={() => setFilterStatus('active')}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/completed"
-              className={classNames({ selected: filterStatus === 'completed' })}
-              onClick={() => setFilterStatus('completed')}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
-
-        {activeSelectAll && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={clearAllCompleted}
-          >
-            Clear completed
-          </button>
-        )}
-
-      </footer>
     </section>
   );
 }
