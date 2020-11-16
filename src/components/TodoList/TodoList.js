@@ -1,13 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem';
 
 export function TodoList({ todos, changeStatus }) {
+  const [allCompleted, setAllCompleted] = useState(false);
+  // console.log('TodoList test');
+
+  useEffect(() => {
+    const completedStatusCheck = todos.every(todo => (
+      todo.completed === true
+    ));
+
+    if (completedStatusCheck) {
+      setAllCompleted(true);
+    }
+  }, [todos]);
+
+  const toggleAll = () => {
+    if (allCompleted) {
+      changeStatus('all');
+      setAllCompleted(false);
+    }
+  };
+
   return (
     <>
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={allCompleted}
+          onClick={toggleAll}
+        />
+        <label
+          htmlFor="toggle-all"
+          title="Mark all as completed"
+        >
+          Mark all as completed
+        </label>
 
         <ul className="todo-list">
           {todos.map(todo => (
