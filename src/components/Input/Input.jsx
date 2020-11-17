@@ -5,7 +5,6 @@ export const Input = ({
   id,
   completed,
   handleChecked,
-  isTextThrough,
 }) => (
   <input
     type="checkbox"

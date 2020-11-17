@@ -23,23 +23,23 @@ function App() {
   const [filterClass, setFilterClass] = useState('all');
   const [markAll, setMarkAll] = useState(false);
 
-  const addNewTodo = (newTodo) => {
-    const newTodoObj = {
+  const addNewTodo = (todo) => {
+    const newTodo = {
       id: +new Date(),
-      title: newTodo,
+      title: todo,
       completed: false,
     };
 
-    const leftActiveTodos = initialTodoList.filter(
-      todo => todo.completed === false,
+    const activeTodosCount = initialTodoList.filter(
+      initialTodo => initialTodo.completed === false,
     ).length + 1;
 
     if (filterClass !== 'completed') {
-      setTodoList([...todoList, newTodoObj]);
+      setTodoList([...todoList, newTodo]);
     }
 
-    setInitialTodoList([...initialTodoList, newTodoObj]);
-    setLeftTodo(leftActiveTodos);
+    setInitialTodoList([...initialTodoList, newTodo]);
+    setLeftTodo(activeTodosCount);
   };
 
   const handleChecked = (id, isCompleted) => {
@@ -54,12 +54,12 @@ function App() {
       return { ...todo };
     });
 
-    const leftActiveTodos = changedInitialTodos.filter(
+    const activeTodosCount = changedInitialTodos.filter(
       todo => todo.completed === false,
     ).length;
 
     setInitialTodoList(changedInitialTodos);
-    setLeftTodo(leftActiveTodos);
+    setLeftTodo(activeTodosCount);
 
     if (filterClass === 'all') {
       setTodoList(changedInitialTodos);
@@ -88,13 +88,13 @@ function App() {
       todo => todo.id !== idOfTodo,
     );
 
-    const leftActiveTodos = initialTodoListAfterDelete.filter(
+    const activeTodosCount = initialTodoListAfterDelete.filter(
       todo => todo.completed === false,
     ).length;
 
     setInitialTodoList(initialTodoListAfterDelete);
     setTodoList(todoListAfterDelete);
-    setLeftTodo(leftActiveTodos);
+    setLeftTodo(activeTodosCount);
   };
 
   const changeTodoTitle = (idOfTodo, editedTitle) => {
