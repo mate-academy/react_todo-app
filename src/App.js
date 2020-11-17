@@ -23,10 +23,10 @@ function App() {
   const [filterClass, setFilterClass] = useState('all');
   const [markAll, setMarkAll] = useState(false);
 
-  const addNewTodo = (todo) => {
+  const addNewTodo = (title) => {
     const newTodo = {
       id: +new Date(),
-      title: todo,
+      title,
       completed: false,
     };
 
@@ -129,8 +129,18 @@ function App() {
       todo => todo.completed === false,
     );
 
-    setTodoList(todoListWithoutCompleted);
     setInitialTodoList(todoListWithoutCompleted);
+
+    if (filterClass === 'all') {
+      setTodoList(todoListWithoutCompleted);
+    } else {
+      const filter = filterClass === 'completed';
+      const filteredList = todoListWithoutCompleted.filter(
+        todo => todo.completed === filter,
+      );
+
+      setTodoList(filteredList);
+    }
   };
 
   const filterBy = (parametr) => {
