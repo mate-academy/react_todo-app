@@ -2,14 +2,6 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 
-// DELETE INITIAL TODO?
-// const initialTodos = [{
-//   completed: false, id: 'yqpsi41da', title: '1212123',
-// }, {
-//   completed: false, id: '3wonnlkkn', title: 'xcvnslk',
-// }, { completed: false, id: 'i0b54y3z9', title: '-9adsf0' },
-// ];
-
 // DEBOUNCE
 // const debounce = (f, delay) => {
 //   let timerId;
@@ -20,9 +12,22 @@ import { TodoList } from './components/TodoList';
 //   };
 // };
 
+const useLocalStorage = (key, initialValue) => {
+  const [value, setValue] = useState(
+    JSON.parse(localStorage.getItem(key)) || initialValue,
+  );
+
+  const save = (newValue) => {
+    setValue(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
+  };
+
+  return [value, save];
+};
+
 function App() {
   const [title, setTitle] = useState('');
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [filteredTodos, setfilteredTodos] = useState(todos);
   const [filterStatus, setFilterStatus] = useState('');
   const [activeSelectAll, setActiveSelectAll] = useState(false);
