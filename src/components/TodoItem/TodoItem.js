@@ -7,7 +7,6 @@ export function TodoItem({ todo, changeStatus, deleteTodo }) {
   // const [labelValue, setlabelValue] = useState('');
 
   // const updateTodoTitle = () => {
-
   // }
 
   return (
