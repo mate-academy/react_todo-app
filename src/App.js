@@ -32,6 +32,10 @@ function App() {
   };
 
   const onSubmit = (event) => {
+    if (title.length === 0) {
+      return;
+    }
+
     event.preventDefault();
 
     const newTodo = {
@@ -114,7 +118,7 @@ function App() {
         setActiveSelectAll(false);
       }
     }
-  }, [todos]);
+  }, [todos, activeSelectAll]);
 
   const clearAllCompleted = () => {
     const fileredList = todos.filter(todo => (
@@ -127,6 +131,22 @@ function App() {
     if (filterStatus === 'completed') {
       setFilterStatus('all');
     }
+  };
+
+  const updateTodoItem = (todoId, newTitle) => {
+    const todosCopy = todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          title: newTitle,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos(todosCopy);
+    setfilteredTodos(todosCopy);
   };
 
   return (
@@ -151,6 +171,7 @@ function App() {
             changeStatus={changeStatus}
             deleteTodo={deleteTodo}
             forToggleAll={toggleAll}
+            updateTodoItem={updateTodoItem}
           />
 
           <footer className="footer">

@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem';
 
-export function TodoList({ todos, changeStatus, deleteTodo, forToggleAll }) {
+export function TodoList({
+  todos,
+  changeStatus,
+  deleteTodo,
+  forToggleAll,
+  updateTodoItem,
+}) {
   const [allCompleted, setAllCompleted] = useState(false);
 
   useEffect(() => {
@@ -30,7 +36,7 @@ export function TodoList({ todos, changeStatus, deleteTodo, forToggleAll }) {
           id="toggle-all"
           className="toggle-all"
           checked={allCompleted}
-          onClick={toggleAll}
+          onChange={toggleAll}
         />
         <label
           htmlFor="toggle-all"
@@ -46,6 +52,7 @@ export function TodoList({ todos, changeStatus, deleteTodo, forToggleAll }) {
               changeStatus={changeStatus}
               key={todo.id}
               deleteTodo={deleteTodo}
+              updateTodoItem={updateTodoItem}
             />
           ))}
 
@@ -96,6 +103,7 @@ export function TodoList({ todos, changeStatus, deleteTodo, forToggleAll }) {
 
 TodoList.propTypes = {
   changeStatus: PropTypes.func.isRequired,
+  updateTodoItem: PropTypes.func.isRequired,
   forToggleAll: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
