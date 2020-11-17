@@ -1,18 +1,35 @@
 import React, { useState } from 'react';
-
-// eslint-disable-next-line no-unused-vars
+import { TodoList } from './components/TodoList';
 import { Form } from './components/Form';
 
 function App() {
   // eslint-disable-next-line no-undef
   const [initialTodoList, setInitialTodoList] = useLocalStorage('todos', []);
   // eslint-disable-next-line no-undef
-  const [setTodoList] = useLocalStorage('todos', []);
+  const [todoList, setTodoList] = useLocalStorage('todos', []);
   const [setLeftTodo] = useState(0);
   const [filterClass] = useState('all');
-  const [setMarkAll] = useState(false);
+  const [markAll, setMarkAll] = useState(false);
 
-  // eslint-disable-next-line no-unused-vars
+  const addNewTodo = (title) => {
+    const newTodo = {
+      id: +new Date(),
+      title,
+      completed: false,
+    };
+
+    const activeTodosCount = initialTodoList.filter(
+      initialTodo => initialTodo.completed === false,
+    ).length + 1;
+
+    if (filterClass !== 'completed') {
+      setTodoList([...todoList, newTodo]);
+    }
+
+    setInitialTodoList([...initialTodoList, newTodo]);
+    setLeftTodo(activeTodosCount);
+  };
+
   const handleChecked = (id, isCompleted) => {
     const changedInitialTodos = initialTodoList.map((todo) => {
       if (todo.id === id) {
@@ -50,61 +67,54 @@ function App() {
     setMarkAll(markedAll);
   };
 
+  const markAllAsComplete = () => {
+    const updatedMarkAll = !markAll;
+
+    const markedAllTodos = initialTodoList.map((todo) => {
+      const markedTodo = {
+        ...todo,
+        completed: updatedMarkAll,
+      };
+
+      return { ...markedTodo };
+    });
+
+    setInitialTodoList(markedAllTodos);
+    setMarkAll(updatedMarkAll);
+
+    if (filterClass === 'all') {
+      setTodoList(markedAllTodos);
+    } else {
+      const filter = filterClass === 'completed';
+      const filteredList = markedAllTodos.filter(
+        todo => todo.completed === filter,
+      );
+
+      setTodoList(filteredList);
+    }
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <Form addNewTodo={addNewTodo} />
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          checked={markAll}
+          onChange={markAllAsComplete}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList
+          todoList={todoList}
+          handleChecked={handleChecked}
+        />
       </section>
 
       <footer className="footer">
