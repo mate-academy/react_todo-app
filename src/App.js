@@ -2,16 +2,6 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 
-// DEBOUNCE
-// const debounce = (f, delay) => {
-//   let timerId;
-
-//   return (...args) => {
-//     clearTimeout(timerId);
-//     timerId = setTimeout(f, delay, ...args);
-//   };
-// };
-
 const useLocalStorage = (key, initialValue) => {
   const [value, setValue] = useState(
     JSON.parse(localStorage.getItem(key)) || initialValue,
