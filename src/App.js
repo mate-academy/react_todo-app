@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList';
+import { Filters } from './components/Filters';
 
 const useLocalStorage = (key, initialValue) => {
   const [value, setValue] = useState(
     JSON.parse(localStorage.getItem(key)) || initialValue,
   );
-
   const save = (newValue) => {
     setValue(newValue);
     localStorage.setItem(key, JSON.stringify(newValue));
@@ -27,15 +27,15 @@ function App() {
   };
 
   const onSubmit = (event) => {
+    event.preventDefault();
+
     if (title.length === 0) {
       return;
     }
 
-    event.preventDefault();
-
     const newTodo = {
       title,
-      id: Math.random().toString(36).substr(2, 9),
+      id: uuidv4(),
       completed: false,
     };
 
@@ -58,15 +58,16 @@ function App() {
   };
 
   const changeStatus = (checkedTodoId) => {
-    const checkedTodo = todos.find(todo => (
-      todo.id === checkedTodoId
-    ));
-    const index = todos.indexOf(checkedTodo);
-    const todosCopy = [...todos];
+    const todosCopy = todos.map((todo) => {
+      if (todo.id === checkedTodoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
 
-    checkedTodo.completed = !checkedTodo.completed;
-
-    todosCopy.splice(index, 1, checkedTodo);
+      return todo;
+    });
 
     setTodos(todosCopy);
     setfilteredTodos(todosCopy);
@@ -176,44 +177,11 @@ function App() {
               </span>
             )}
 
-            <ul className="filters">
-              <li>
-                <a
-                  href="#/"
-                  className={classNames({ selected: filterStatus === 'all' })}
-                  onClick={() => setFilterStatus('all')}
-                >
-                  All
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#/active"
-                  className={classNames({
-                    selected: filterStatus === 'active',
-                  })}
-                  onClick={() => setFilterStatus('active')}
-                >
-                  Active
-                </a>
-              </li>
-
-              {activeSelectAll && (
-                <li>
-                  <a
-                    href="#/completed"
-                    className={classNames({
-                      selected: filterStatus === 'completed',
-                    })}
-                    onClick={() => setFilterStatus('completed')}
-                  >
-                    Completed
-                  </a>
-                </li>
-              )}
-
-            </ul>
+            <Filters
+              setFilterStatus={setFilterStatus}
+              filterStatus={filterStatus}
+              activeSelectAll={activeSelectAll}
+            />
 
             {activeSelectAll && (
               <button
@@ -221,7 +189,7 @@ function App() {
                 className="clear-completed"
                 onClick={clearAllCompleted}
               >
-                Clear completed
+                Clear completed tasks
               </button>
             )}
 
