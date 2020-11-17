@@ -40,9 +40,9 @@ export function TodoList({
         />
         <label
           htmlFor="toggle-all"
-          title="Mark all as completed"
+          title="Mark all as not completed"
         >
-          Mark all as completed
+          Mark all as not completed
         </label>
 
         <ul className="todo-list">

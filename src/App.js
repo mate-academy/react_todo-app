@@ -117,12 +117,12 @@ function App() {
   }, [todos, activeSelectAll]);
 
   const clearAllCompleted = () => {
-    const fileredList = todos.filter(todo => (
+    const filteredList = todos.filter(todo => (
       todo.completed === false
     ));
 
-    setTodos(fileredList);
-    setfilteredTodos(fileredList);
+    setTodos(filteredList);
+    setfilteredTodos(filteredList);
 
     if (filterStatus === 'completed') {
       setFilterStatus('all');
