@@ -1,66 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { NewTodoForm } from './components/NewTodoForm';
+import { TodoList } from './components/TodoList';
 
-function App() {
+const App = () => {
+  const [todoList, setTodoList] = useState([]);
+  const [activeTodos, setActiveTodos] = useState(0);
+
+  const addNewTodo = (title) => {
+    const newTodo = {
+      id: +new Date(),
+      completed: false,
+      title,
+    };
+
+    const currentActiveTodos = todoList.filter(
+      todo => !todo.completed,
+    ).length + 1;
+
+    setTodoList([...todoList, newTodo]);
+
+    setActiveTodos(currentActiveTodos);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <NewTodoForm addNewTodo={addNewTodo} />
       </header>
 
       <section className="main">
         <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList items={todoList} />
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {`${activeTodos} items left`}
         </span>
 
         <ul className="filters">
@@ -83,6 +62,6 @@ function App() {
       </footer>
     </section>
   );
-}
+};
 
 export default App;
