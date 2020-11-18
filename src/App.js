@@ -133,14 +133,18 @@ const App = () => {
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          checked={isAllTodosMarked}
-          onChange={markAllTodos}
-          id="toggle-all"
-          className="toggle-all"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {!!originalTodoList.length && (
+          <>
+            <input
+              type="checkbox"
+              checked={isAllTodosMarked}
+              onChange={markAllTodos}
+              id="toggle-all"
+              className="toggle-all"
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          </>
+        )}
 
         <TodoList
           items={todoList}
