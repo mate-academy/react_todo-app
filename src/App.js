@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NewTodoForm } from './components/NewTodoForm';
 import { TodoList } from './components/TodoList';
 import { TodoFilters } from './components/TodoFilters';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
 const App = () => {
-  const [originalTodoList, setOriginalTodolist] = useLocalStorage('todos', []);
+  const [originalTodoList, setOriginalTodolist] = useLocalStorage(
+    'originalTodos', [],
+  );
   const [todoList, setTodoList] = useLocalStorage('todos', []);
   const [activeTodos, setActiveTodos] = useLocalStorage('activeTodos', 0);
   const [isAllTodosMarked, setIsAllTodoMarked] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
+
+  useEffect(() => {
+    filterTodosByStatus(activeFilter);
+  }, [originalTodoList, activeFilter]);
 
   const addNewTodo = (title) => {
     const newTodo = {
@@ -24,7 +30,6 @@ const App = () => {
 
     setActiveTodos(currentActiveTodos);
     setOriginalTodolist([...originalTodoList, newTodo]);
-    filterTodosByStatus(activeFilter);
   };
 
   const updateTodos = (newTodos) => {
@@ -34,7 +39,6 @@ const App = () => {
 
     setActiveTodos(newActiveTodosCount);
     setOriginalTodolist(newTodos);
-    filterTodosByStatus(activeFilter);
   };
 
   const filterTodosByStatus = (filter) => {
@@ -42,19 +46,19 @@ const App = () => {
 
     switch (filter) {
       case 'completed':
-        setTodoList([...originalTodoList].filter(
+        setTodoList(originalTodoList.filter(
           todo => todo.completed,
         ));
         break;
 
       case 'active':
-        setTodoList([...originalTodoList].filter(
+        setTodoList(originalTodoList.filter(
           todo => !todo.completed,
         ));
         break;
 
       default:
-        setTodoList([...originalTodoList]);
+        setTodoList(originalTodoList);
     }
   };
 
