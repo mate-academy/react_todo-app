@@ -2,27 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList';
 import { Filters } from './components/Filters';
-
-const useLocalStorage = (key, initialValue) => {
-  const [value, setValue] = useState(
-    JSON.parse(localStorage.getItem(key)) || initialValue,
-  );
-  const save = (newValue) => {
-    setValue(newValue);
-    localStorage.setItem(key, JSON.stringify(newValue));
-  };
-
-  return [value, save];
-};
+import { useLocalStorage } from './custom_hooks/useLocalStorage';
 
 function App() {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [filteredTodos, setfilteredTodos] = useState(todos);
-  const [filterStatus, setFilterStatus] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [activeSelectAll, setActiveSelectAll] = useState(false);
+  const [allCompleted, setAllCompleted] = useState(false);
 
-  const addTodo = (value) => {
+  const addTitle = (value) => {
     setTitle(value);
   };
 
@@ -45,17 +35,28 @@ function App() {
     setTitle('');
   };
 
-  const toggleAll = () => {
+  const toggleAll = (status) => {
     const uncheckedTodos = todos.map(todo => (
       {
         ...todo,
-        completed: false,
+        completed: status,
       }
     ));
 
+    setAllCompleted(status);
     setTodos(uncheckedTodos);
     setfilteredTodos(uncheckedTodos);
   };
+
+  useEffect(() => {
+    if (todos.every(todo => todo.completed === true)) {
+      setAllCompleted(true);
+    }
+
+    if (todos.every(todo => todo.completed === false)) {
+      setAllCompleted(false);
+    }
+  }, [todos]);
 
   const changeStatus = (checkedTodoId) => {
     const todosCopy = todos.map((todo) => {
@@ -74,7 +75,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (filterStatus === 'all' || filterStatus === '') {
+    if (filterStatus === 'all') {
       setfilteredTodos(todos);
     } else {
       const filter = filterStatus === 'completed';
@@ -156,19 +157,35 @@ function App() {
             className="new-todo"
             placeholder="What needs to be done?"
             value={title}
-            onChange={event => addTodo(event.target.value)}
+            onChange={event => addTitle(event.target.value)}
           />
         </form>
       </header>
       {!!todos.length && (
         <>
-          <TodoList
-            todos={filteredTodos}
-            changeStatus={changeStatus}
-            deleteTodo={deleteTodo}
-            forToggleAll={toggleAll}
-            updateTodoItem={updateTodoItem}
-          />
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              checked={allCompleted}
+              onChange={event => toggleAll(event.target.checked)}
+            />
+            <label
+              htmlFor="toggle-all"
+              title="Mark all as completed/not completed"
+            >
+              Mark all as completed/not completed
+            </label>
+
+            <TodoList
+              todos={filteredTodos}
+              changeStatus={changeStatus}
+              deleteTodo={deleteTodo}
+              toggleAll={toggleAll}
+              updateTodoItem={updateTodoItem}
+            />
+          </section>
 
           <footer className="footer">
             {filteredTodos.length !== 0 && (
