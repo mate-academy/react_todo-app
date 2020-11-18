@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { NewTodoForm } from './components/NewTodoForm';
 import { TodoList } from './components/TodoList';
 import { TodoFilters } from './components/TodoFilters';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 const App = () => {
-  const [originalTodoList, setOriginalTodolist] = useState([]);
-  const [todoList, setTodoList] = useState([]);
-  const [activeTodos, setActiveTodos] = useState(0);
+  const [originalTodoList, setOriginalTodolist] = useLocalStorage('todos', []);
+  const [todoList, setTodoList] = useLocalStorage('todos', []);
+  const [activeTodos, setActiveTodos] = useLocalStorage('activeTodos', 0);
   const [isAllTodosMarked, setIsAllTodoMarked] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
 
@@ -23,9 +24,7 @@ const App = () => {
 
     setActiveTodos(currentActiveTodos);
     setOriginalTodolist([...originalTodoList, newTodo]);
-    if (activeFilter !== 'completed') {
-      setTodoList([...todoList, newTodo]);
-    }
+    filterTodosByStatus(activeFilter);
   };
 
   const updateTodos = (newTodos) => {
@@ -35,7 +34,28 @@ const App = () => {
 
     setActiveTodos(newActiveTodosCount);
     setOriginalTodolist(newTodos);
-    setTodoList(newTodos);
+    filterTodosByStatus(activeFilter);
+  };
+
+  const filterTodosByStatus = (filter) => {
+    setActiveFilter(filter);
+
+    switch (filter) {
+      case 'completed':
+        setTodoList([...originalTodoList].filter(
+          todo => todo.completed,
+        ));
+        break;
+
+      case 'active':
+        setTodoList([...originalTodoList].filter(
+          todo => !todo.completed,
+        ));
+        break;
+
+      default:
+        setTodoList([...originalTodoList]);
+    }
   };
 
   const changeTodoStatus = (id, isTodoActive) => {
@@ -63,8 +83,8 @@ const App = () => {
       completed: markAllValue,
     }));
 
-    updateTodos(markedTodoList);
     setIsAllTodoMarked(markAllValue);
+    updateTodos(markedTodoList);
   };
 
   const deleteTodo = (id) => {
@@ -83,29 +103,21 @@ const App = () => {
     updateTodos(onlyActiveTodos);
   };
 
-  const filterTodosByStatus = (filter) => {
-    setActiveFilter(filter);
+  const changeTodoTitle = (id, newTitle) => {
+    const todoListWithEditedElement = originalTodoList.map(
+      (todo) => {
+        if (todo.id !== id) {
+          return todo;
+        }
 
-    switch (filter) {
-      case 'all':
-        setTodoList([...originalTodoList]);
-        break;
+        return {
+          ...todo,
+          title: newTitle,
+        };
+      },
+    );
 
-      case 'completed':
-        setTodoList([...originalTodoList].filter(
-          todo => todo.completed,
-        ));
-        break;
-
-      case 'active':
-        setTodoList([...originalTodoList].filter(
-          todo => !todo.completed,
-        ));
-        break;
-
-      default:
-        setTodoList([...originalTodoList]);
-    }
+    updateTodos(todoListWithEditedElement);
   };
 
   return (
@@ -130,6 +142,7 @@ const App = () => {
           items={todoList}
           changeTodoStatus={changeTodoStatus}
           deleteTodo={deleteTodo}
+          changeTodoTitle={changeTodoTitle}
         />
       </section>
 
@@ -144,7 +157,7 @@ const App = () => {
             activeFilter={activeFilter}
           />
 
-          {(todoList.some(todo => todo.completed)) && (
+          {(originalTodoList.some(todo => todo.completed)) && (
             <button
               type="button"
               className="clear-completed"
