@@ -10,7 +10,7 @@ export const TodoItem = ({
   changeTodoTitle,
 }) => {
   const [newTitle, setNewTitle] = useState(item.title);
-  const [isInputEditing, setIsInputEditing] = useState(false);
+  const [isInputEditing, setInputEditing] = useState(false);
 
   const updateNewTitle = (event) => {
     const { value } = event.target;
@@ -22,15 +22,28 @@ export const TodoItem = ({
     const { id } = item;
     const { key } = event;
 
-    if (key === 'Enter' && newTitle === '') {
-      deleteTodo(id);
-      setIsInputEditing(false);
-    } else if (key === 'Enter' && newTitle !== '') {
-      changeTodoTitle(id, newTitle);
-      setIsInputEditing(false);
-    } else if (key === 'Escape') {
-      setNewTitle(item.title);
-      setIsInputEditing(false);
+    if (!newTitle.length) {
+      if (key === 'Enter') {
+        deleteTodo(id);
+        setInputEditing(false);
+
+        return;
+      }
+    }
+
+    switch (key) {
+      case 'Enter':
+        changeTodoTitle(id, newTitle);
+        setInputEditing(false);
+        break;
+
+      case 'Escape':
+        setNewTitle(item.title);
+        setInputEditing(false);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -38,8 +51,13 @@ export const TodoItem = ({
     const { value } = event.target;
     const { id } = item;
 
-    changeTodoTitle(id, value);
-    setIsInputEditing(false);
+    if (!value) {
+      deleteTodo(id);
+    } else {
+      changeTodoTitle(id, value);
+    }
+
+    setInputEditing(false);
   };
 
   return (
@@ -48,7 +66,7 @@ export const TodoItem = ({
         completed: item.completed,
         editing: isInputEditing,
       })}
-      onDoubleClick={() => setIsInputEditing(true)}
+      onDoubleClick={() => setInputEditing(true)}
     >
       <div className="view">
         <input

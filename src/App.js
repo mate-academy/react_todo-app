@@ -1,21 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { NewTodoForm } from './components/NewTodoForm';
 import { TodoList } from './components/TodoList';
 import { TodoFilters } from './components/TodoFilters';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { FILTERS } from './constants/constants';
 
 const App = () => {
-  const [originalTodoList, setOriginalTodolist] = useLocalStorage(
-    'originalTodos', [],
+  const [todoList, setTodoList] = useLocalStorage(
+    'todoList', [],
   );
-  const [todoList, setTodoList] = useLocalStorage('todos', []);
-  const [activeTodos, setActiveTodos] = useLocalStorage('activeTodos', 0);
+  const [todosFilter, setTodosFilter] = useState(FILTERS.all);
   const [isAllTodosMarked, setIsAllTodoMarked] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('all');
 
-  useEffect(() => {
-    filterTodosByStatus(activeFilter);
-  }, [originalTodoList, activeFilter]);
+  const filterTodosByStatus = () => {
+    switch (todosFilter) {
+      case 'all':
+        return todoList;
+
+      case 'active':
+        return todoList.filter(todo => !todo.completed);
+
+      case 'completed':
+        return todoList.filter(todo => todo.completed);
+
+      default:
+        return todoList;
+    }
+  };
+
+  const filteredTodos = useMemo(
+    () => filterTodosByStatus(),
+    [todosFilter, todoList],
+  );
+
+  const activeTodos = useMemo(
+    () => todoList.filter(todo => !todo.completed).length,
+    [todoList],
+  );
 
   const addNewTodo = (title) => {
     const newTodo = {
@@ -24,94 +45,14 @@ const App = () => {
       title,
     };
 
-    const currentActiveTodos = originalTodoList.filter(
-      todo => !todo.completed,
-    ).length + 1;
-
-    setActiveTodos(currentActiveTodos);
-    setOriginalTodolist([...originalTodoList, newTodo]);
-  };
-
-  const updateTodos = (newTodos) => {
-    const newActiveTodosCount = newTodos.filter(
-      todo => !todo.completed,
-    ).length;
-
-    setActiveTodos(newActiveTodosCount);
-    setOriginalTodolist(newTodos);
-  };
-
-  const filterTodosByStatus = (filter) => {
-    setActiveFilter(filter);
-
-    switch (filter) {
-      case 'completed':
-        setTodoList(originalTodoList.filter(
-          todo => todo.completed,
-        ));
-        break;
-
-      case 'active':
-        setTodoList(originalTodoList.filter(
-          todo => !todo.completed,
-        ));
-        break;
-
-      default:
-        setTodoList(originalTodoList);
-    }
-  };
-
-  const changeTodoStatus = (id, isTodoActive) => {
-    const updatedTodoList = originalTodoList.map((todo) => {
-      if (todo.id !== id) {
-        return {
-          ...todo,
-        };
-      }
-
-      return {
-        ...todo,
-        completed: !isTodoActive,
-      };
-    });
-
-    updateTodos(updatedTodoList);
-  };
-
-  const markAllTodos = () => {
-    const markAllValue = !isAllTodosMarked;
-
-    const markedTodoList = originalTodoList.map(todo => ({
-      ...todo,
-      completed: markAllValue,
-    }));
-
-    setIsAllTodoMarked(markAllValue);
-    updateTodos(markedTodoList);
-  };
-
-  const deleteTodo = (id) => {
-    const todoListWithoutDeletedTodo = originalTodoList.filter(
-      todo => todo.id !== id,
-    );
-
-    updateTodos(todoListWithoutDeletedTodo);
-  };
-
-  const clearCompleted = () => {
-    const onlyActiveTodos = originalTodoList.filter(
-      todo => !todo.completed,
-    );
-
-    updateTodos(onlyActiveTodos);
+    setTodoList([...todoList, newTodo]);
   };
 
   const changeTodoTitle = (id, newTitle) => {
-    const todoListWithEditedElement = originalTodoList.map(
+    const todoListWithEditedElement = todoList.map(
       (todo) => {
         if (todo.id !== id) {
-          return todo;
+          return { ...todo };
         }
 
         return {
@@ -121,7 +62,40 @@ const App = () => {
       },
     );
 
-    updateTodos(todoListWithEditedElement);
+    setTodoList(todoListWithEditedElement);
+  };
+
+  const changeTodoStatus = (id, isTodoActive) => {
+    const updatedTodoList = todoList.map((todo) => {
+      if (todo.id !== id) {
+        return { ...todo };
+      }
+
+      return {
+        ...todo,
+        completed: !isTodoActive,
+      };
+    });
+
+    setTodoList(updatedTodoList);
+  };
+
+  const markAllTodos = () => {
+    const markedTodoList = todoList.map(todo => ({
+      ...todo,
+      completed: isAllTodosMarked,
+    }));
+
+    setIsAllTodoMarked(!isAllTodosMarked);
+    setTodoList(markedTodoList);
+  };
+
+  const deleteTodo = (id) => {
+    setTodoList(todoList.filter(todo => todo.id !== id));
+  };
+
+  const clearCompleted = () => {
+    setTodoList(todoList.filter(todo => !todo.completed));
   };
 
   return (
@@ -133,7 +107,7 @@ const App = () => {
       </header>
 
       <section className="main">
-        {!!originalTodoList.length && (
+        {!!todoList.length && (
           <>
             <input
               type="checkbox"
@@ -147,25 +121,26 @@ const App = () => {
         )}
 
         <TodoList
-          items={todoList}
+          items={filteredTodos}
           changeTodoStatus={changeTodoStatus}
           deleteTodo={deleteTodo}
           changeTodoTitle={changeTodoTitle}
         />
       </section>
 
-      {!!originalTodoList.length && (
+      {!!todoList.length && (
         <footer className="footer">
           <span className="todo-count">
             {`${activeTodos} items left`}
           </span>
 
           <TodoFilters
-            filterTodosByStatus={filterTodosByStatus}
-            activeFilter={activeFilter}
+            todosFilter={todosFilter}
+            setTodosFilter={setTodosFilter}
+            FILTERS={FILTERS}
           />
 
-          {(originalTodoList.some(todo => todo.completed)) && (
+          {(todoList.some(todo => todo.completed)) && (
             <button
               type="button"
               className="clear-completed"

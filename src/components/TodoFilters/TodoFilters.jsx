@@ -2,17 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export const TodoFilters = ({ filterTodosByStatus, activeFilter }) => (
+export const TodoFilters = ({ FILTERS, setTodosFilter, todosFilter }) => (
   <ul className="filters">
     <li>
       <a
         href="#/"
         className={classnames({
-          selected: activeFilter === 'all',
+          selected: todosFilter === FILTERS.all,
         })}
-        onClick={() => {
-          filterTodosByStatus('all');
-        }}
+        onClick={() => setTodosFilter(FILTERS.all)}
       >
         All
       </a>
@@ -22,11 +20,9 @@ export const TodoFilters = ({ filterTodosByStatus, activeFilter }) => (
       <a
         href="#/active"
         className={classnames({
-          selected: activeFilter === 'active',
+          selected: todosFilter === FILTERS.active,
         })}
-        onClick={() => {
-          filterTodosByStatus('active');
-        }}
+        onClick={() => setTodosFilter(FILTERS.active)}
 
       >
         Active
@@ -37,11 +33,9 @@ export const TodoFilters = ({ filterTodosByStatus, activeFilter }) => (
       <a
         href="#/completed"
         className={classnames({
-          selected: activeFilter === 'completed',
+          selected: todosFilter === FILTERS.completed,
         })}
-        onClick={() => {
-          filterTodosByStatus('completed');
-        }}
+        onClick={() => setTodosFilter(FILTERS.completed)}
       >
         Completed
       </a>
@@ -50,10 +44,11 @@ export const TodoFilters = ({ filterTodosByStatus, activeFilter }) => (
 );
 
 TodoFilters.propTypes = {
-  filterTodosByStatus: PropTypes.func.isRequired,
-  activeFilter: PropTypes.string,
-};
-
-TodoFilters.defaultProps = {
-  activeFilter: 'all',
+  setTodosFilter: PropTypes.func.isRequired,
+  todosFilter: PropTypes.string.isRequired,
+  FILTERS: PropTypes.shape({
+    all: PropTypes.string.isRequired,
+    active: PropTypes.string.isRequired,
+    completed: PropTypes.string.isRequired,
+  }).isRequired,
 };

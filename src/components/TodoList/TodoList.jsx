@@ -19,15 +19,6 @@ export const TodoList = ({
         changeTodoTitle={changeTodoTitle}
       />
     ))}
-
-    {/* <li className="editing"> */}
-    {/*  <div className="view"> */}
-    {/*    <input type="checkbox" className="toggle" /> */}
-    {/*    <label>zxcvbnm</label> */}
-    {/*    <button type="button" className="destroy" /> */}
-    {/*  </div> */}
-    {/*  <input type="text" className="edit" /> */}
-    {/* </li> */}
   </ul>
 );
 
