@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
-import { TodoList } from './components/TodoList';
 import { Form } from './components/Form';
+import { TodoList } from './components/TodoList';
+import { ButtonClearCompleted } from './components/ButtonClearCompleted';
+
+const useLocalStorage = (key, initialValue) => {
+  const [value, setValue] = useState(
+    JSON.parse(localStorage.getItem(key)) || initialValue,
+  );
+
+  const saveValue = (newValue) => {
+    setValue(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
+  };
+
+  return [value, saveValue];
+};
 
 function App() {
-  // eslint-disable-next-line no-undef
   const [initialTodoList, setInitialTodoList] = useLocalStorage('todos', []);
-  // eslint-disable-next-line no-undef
   const [todoList, setTodoList] = useLocalStorage('todos', []);
-  const [setLeftTodo] = useState(0);
-  const [filterClass] = useState('all');
+  const [leftTodo, setLeftTodo] = useState(0);
+  const [filterClass, setFilterClass] = useState('all');
   const [markAll, setMarkAll] = useState(false);
 
   const addNewTodo = (title) => {
@@ -42,12 +54,12 @@ function App() {
       return { ...todo };
     });
 
-    const leftActiveTodos = changedInitialTodos.filter(
+    const activeTodosCount = changedInitialTodos.filter(
       todo => todo.completed === false,
     ).length;
 
     setInitialTodoList(changedInitialTodos);
-    setLeftTodo(leftActiveTodos);
+    setLeftTodo(activeTodosCount);
 
     if (filterClass === 'all') {
       setTodoList(changedInitialTodos);
@@ -65,6 +77,85 @@ function App() {
     );
 
     setMarkAll(markedAll);
+  };
+
+  const deleteTodo = (idOfTodo) => {
+    const initialTodoListAfterDelete = initialTodoList.filter(
+      todo => todo.id !== idOfTodo,
+    );
+
+    const todoListAfterDelete = todoList.filter(
+      todo => todo.id !== idOfTodo,
+    );
+
+    const activeTodosCount = initialTodoListAfterDelete.filter(
+      todo => todo.completed === false,
+    ).length;
+
+    setInitialTodoList(initialTodoListAfterDelete);
+    setTodoList(todoListAfterDelete);
+    setLeftTodo(activeTodosCount);
+  };
+
+  const changeTodoTitle = (idOfTodo, editedTitle) => {
+    const changedInitialTodos = initialTodoList.map((todo) => {
+      if (todo.id === idOfTodo) {
+        return {
+          ...todo,
+          title: editedTitle,
+        };
+      }
+
+      return { ...todo };
+    });
+
+    const changedTodos = todoList.map((todo) => {
+      if (todo.id === idOfTodo) {
+        return {
+          ...todo,
+          title: editedTitle,
+        };
+      }
+
+      return { ...todo };
+    });
+
+    setInitialTodoList(changedInitialTodos);
+    setTodoList(changedTodos);
+  };
+
+  const clearCompleted = () => {
+    const todoListWithoutCompleted = initialTodoList.filter(
+      todo => todo.completed === false,
+    );
+
+    setInitialTodoList(todoListWithoutCompleted);
+
+    if (filterClass === 'all') {
+      setTodoList(todoListWithoutCompleted);
+    } else {
+      const filter = filterClass === 'completed';
+      const filteredList = todoListWithoutCompleted.filter(
+        todo => todo.completed === filter,
+      );
+
+      setTodoList(filteredList);
+    }
+  };
+
+  const filterBy = (parametr) => {
+    setFilterClass(parametr);
+
+    if (parametr === 'all') {
+      setTodoList(initialTodoList);
+    } else {
+      const filter = parametr === 'completed';
+      const filteredList = initialTodoList.filter(
+        todo => todo.completed === filter,
+      );
+
+      setTodoList(filteredList);
+    }
   };
 
   const markAllAsComplete = () => {
@@ -114,31 +205,49 @@ function App() {
         <TodoList
           todoList={todoList}
           handleChecked={handleChecked}
+          deleteTodo={deleteTodo}
+          changeTodoTitle={changeTodoTitle}
         />
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {`${leftTodo} items left`}
         </span>
 
         <ul className="filters">
           <li>
-            <a href="#/" className="selected">All</a>
+            <a
+              href="#/"
+              className={filterClass === 'all' ? 'selected' : ''}
+              onClick={() => filterBy('all')}
+            >
+              All
+            </a>
           </li>
 
           <li>
-            <a href="#/active">Active</a>
+            <a
+              href="#/active"
+              className={filterClass === 'active' ? 'selected' : ''}
+              onClick={() => filterBy('active')}
+            >
+              Active
+            </a>
           </li>
 
           <li>
-            <a href="#/completed">Completed</a>
+            <a
+              href="#/completed"
+              className={filterClass === 'completed' ? 'selected' : ''}
+              onClick={() => filterBy('completed')}
+            >
+              Completed
+            </a>
           </li>
         </ul>
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
+        <ButtonClearCompleted clearCompleted={clearCompleted} />
       </footer>
     </section>
   );
