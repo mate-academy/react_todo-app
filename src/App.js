@@ -78,7 +78,7 @@ function App() {
           renameTitle={renameTodo}
           deleteTodo={deleteTodo}
           checkTodo={checkTodo}
-        /> 
+        />
       }
       <ControlBar
         itemsCount={todos.filter(todo => !todo.completed).length}
