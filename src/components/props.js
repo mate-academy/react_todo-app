@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 export const commonProps = {
-  toggleAll: PropTypes.func.isRequired,
+  toggleAll: PropTypes.bool.isRequired,
   changeToggle: PropTypes.func.isRequired,
   destroyTodo: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,

@@ -1,25 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { NewTodo } from './components/newTodo';
 import { TodoList } from './components/todoList';
 import { FilterTodos } from './components/filterTodos';
-
-const useLocalStorage = (key) => {
-  let initialValue = localStorage.getItem(key)
-    ? JSON.parse(localStorage.getItem(key))
-    : [];
-
-  localStorage.setItem(key, JSON.stringify(initialValue));
-
-  const [value, setValue] = useState(initialValue);
-
-  const addValue = (newValue) => {
-    setValue(newValue);
-    initialValue = newValue;
-    localStorage.setItem(key, JSON.stringify(initialValue));
-  };
-
-  return [value, addValue];
-};
+import { useLocalStorage } from './components/localStorage';
 
 function App() {
   const [todos, setTodos] = useLocalStorage('todosArr');
@@ -39,7 +22,7 @@ function App() {
     setTodos(updatedTodos);
   };
 
-  const addTodo = (value) => {
+  const addTodo = useCallback((value) => {
     const todo = {
       id: +new Date(),
       title: value,
@@ -51,9 +34,9 @@ function App() {
     }
 
     setTodos([...todos, todo]);
-  };
+  }, [todos]);
 
-  const destroyTodo = (event) => {
+  const destroyTodo = useCallback((event) => {
     const { name } = event.target;
     const index = todos.findIndex(todo => todo.id === +name);
     const updatedTodos = [...todos];
@@ -61,14 +44,14 @@ function App() {
     updatedTodos.splice(index, 1);
 
     setTodos(updatedTodos);
-  };
+  }, [todos]);
 
-  const clearCompleted = () => {
+  const clearCompleted = useCallback(() => {
     const updatedTodos = [...todos].filter(todo => !todo.completed);
 
     setTodos(updatedTodos);
     setToggleAll(false);
-  };
+  }, [todos]);
 
   const changeTitle = (id, title) => {
     const index = todos.findIndex(todo => todo.id === id);
