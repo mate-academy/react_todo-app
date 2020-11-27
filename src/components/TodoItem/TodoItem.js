@@ -25,13 +25,15 @@ export function TodoItem({
       return;
     }
 
-    if (eventKey === 'Enter') {
-      updateTodoItem(todoId, newTitle);
-    }
-
-    if (eventKey === 'Escape') {
-      setEditingMode('');
-      setNewTitle(todo.title);
+    switch (eventKey) {
+      case 'Enter':
+        updateTodoItem(todoId, newTitle);
+        break;
+      case 'Escape':
+        setEditingMode('');
+        setNewTitle(todo.title);
+        break;
+      default:
     }
   };
 
