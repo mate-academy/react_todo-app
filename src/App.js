@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList';
 import { Filters } from './components/Filters';
 import { useLocalStorage } from './custom_hooks/useLocalStorage';
+import { AddTodoForm } from './components/AddTodoForm';
 
 function App() {
   const [title, setTitle] = useState('');
@@ -117,7 +118,7 @@ function App() {
     }
   }, [todos, activeSelectAll]);
 
-  const clearAllCompleted = () => {
+  const clearAllCompleted = useCallback(() => {
     const filteredList = todos.filter(todo => (
       todo.completed === false
     ));
@@ -128,9 +129,9 @@ function App() {
     if (filterStatus === 'completed') {
       setFilterStatus('all');
     }
-  };
+  }, [filterStatus, setTodos, todos]);
 
-  const updateTodoItem = (todoId, newTitle) => {
+  const updateTodoItem = useCallback((todoId, newTitle) => {
     const todosCopy = todos.map((todo) => {
       if (todo.id === todoId) {
         return {
@@ -144,22 +145,18 @@ function App() {
 
     setTodos(todosCopy);
     setfilteredTodos(todosCopy);
-  };
+  }, [setTodos, todos]);
 
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={onSubmit}>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={title}
-            onChange={event => addTitle(event.target.value)}
-          />
-        </form>
+        <AddTodoForm
+          addTitle={addTitle}
+          onSubmit={onSubmit}
+          title={title}
+        />
       </header>
       {!!todos.length && (
         <>
