@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { filtersNames } from '../../js/filtersNames';
 
 export const Filters = ({ setFilterStatus, filterStatus, activeSelectAll }) => (
   <ul className="filters">
@@ -8,9 +9,9 @@ export const Filters = ({ setFilterStatus, filterStatus, activeSelectAll }) => (
       <button
         type="button"
         className={classNames('filter', {
-          selected: filterStatus === 'all',
+          selected: filterStatus === filtersNames.all,
         })}
-        onClick={() => setFilterStatus('all')}
+        onClick={() => setFilterStatus(filtersNames.all)}
       >
         All
       </button>
@@ -20,9 +21,9 @@ export const Filters = ({ setFilterStatus, filterStatus, activeSelectAll }) => (
       <button
         type="button"
         className={classNames('filter', {
-          selected: filterStatus === 'active',
+          selected: filterStatus === filtersNames.active,
         })}
-        onClick={() => setFilterStatus('active')}
+        onClick={() => setFilterStatus(filtersNames.active)}
       >
         Active
       </button>
@@ -33,9 +34,9 @@ export const Filters = ({ setFilterStatus, filterStatus, activeSelectAll }) => (
         <button
           type="button"
           className={classNames('filter', {
-            selected: filterStatus === 'completed',
+            selected: filterStatus === filtersNames.completed,
           })}
-          onClick={() => setFilterStatus('completed')}
+          onClick={() => setFilterStatus(filtersNames.completed)}
         >
           Completed
         </button>

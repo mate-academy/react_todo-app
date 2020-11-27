@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export function TodoItem({ todo, changeStatus, deleteTodo, updateTodoItem }) {
-  const [editingId, setEditingId] = useState('');
+export function TodoItem({
+  todo,
+  changeStatus,
+  deleteTodo,
+  updateTodoItem,
+}) {
+  const [editingMode, setEditingMode] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
   useEffect(() => {
-    setEditingId('');
+    setEditingMode('');
     setNewTitle(todo.title);
   }, [todo]);
 
@@ -25,7 +30,7 @@ export function TodoItem({ todo, changeStatus, deleteTodo, updateTodoItem }) {
     }
 
     if (eventKey === 'Escape') {
-      setEditingId('');
+      setEditingMode('');
       setNewTitle(todo.title);
     }
   };
@@ -37,9 +42,10 @@ export function TodoItem({ todo, changeStatus, deleteTodo, updateTodoItem }) {
   return (
     <li
       className={classNames({
-        completed: todo.completed, editing: editingId === todo.id,
+        completed: todo.completed,
+        editing: editingMode === true,
       })}
-      onDoubleClick={() => setEditingId(todo.id)}
+      onDoubleClick={() => setEditingMode(true)}
     >
       <div className="view">
         <input

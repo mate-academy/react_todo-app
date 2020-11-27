@@ -16,5 +16,5 @@ export const AddTodoForm = ({ title, onSubmit, addTitle }) => (
 AddTodoForm.propTypes = {
   title: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  addTitle: PropTypes.bool.isRequired,
+  addTitle: PropTypes.func.isRequired,
 };

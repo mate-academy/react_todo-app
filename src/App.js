@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList';
-import { Filters } from './components/Filters';
 import { useLocalStorage } from './custom_hooks/useLocalStorage';
 import { AddTodoForm } from './components/AddTodoForm';
+import { Footer } from './components/Footer';
 
 function App() {
   const [title, setTitle] = useState('');
@@ -184,30 +184,13 @@ function App() {
             />
           </section>
 
-          <footer className="footer">
-            {filteredTodos.length !== 0 && (
-              <span className="todo-count">
-                {`${filteredTodos.length} item(s) left`}
-              </span>
-            )}
-
-            <Filters
-              setFilterStatus={setFilterStatus}
-              filterStatus={filterStatus}
-              activeSelectAll={activeSelectAll}
-            />
-
-            {activeSelectAll && (
-              <button
-                type="button"
-                className="clear-completed"
-                onClick={clearAllCompleted}
-              >
-                Clear completed tasks
-              </button>
-            )}
-
-          </footer>
+          <Footer
+            filteredTodos={filteredTodos}
+            setFilterStatus={setFilterStatus}
+            filterStatus={filterStatus}
+            activeSelectAll={activeSelectAll}
+            clearAllCompleted={clearAllCompleted}
+          />
         </>
       )}
     </section>
