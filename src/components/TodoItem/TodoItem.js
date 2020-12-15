@@ -9,15 +9,20 @@ export function TodoItem({
   deleteTodo,
   updateTodoItem,
   filterStatus,
+  allCompleted,
 }) {
   const [editingMode, setEditingMode] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
   const [completed, setCompleted] = useState(todo.completed);
 
   useEffect(() => {
-    setEditingMode('');
+    setCompleted(allCompleted);
+  }, [allCompleted]);
+
+  useEffect(() => {
+    setEditingMode(false);
     setNewTitle(todo.title);
-  }, [todo]);
+  }, []);
 
   const updateTodoTitle = (title) => {
     setNewTitle(title);
@@ -33,14 +38,14 @@ export function TodoItem({
         updateTodoItem(todoId, newTitle);
         break;
       case 'Escape':
-        setEditingMode('');
+        setEditingMode(false);
         setNewTitle(todo.title);
         break;
       default:
     }
   };
 
-  const hiddenItem = () => {
+  const setItemHidden = () => {
     switch (filterStatus) {
       case filtersNames.active:
         return completed;
@@ -67,7 +72,7 @@ export function TodoItem({
         editing: editingMode === true,
       })}
       onDoubleClick={() => setEditingMode(true)}
-      hidden={hiddenItem()}
+      hidden={setItemHidden()}
     >
       <div className="view">
         <input
@@ -99,6 +104,7 @@ export function TodoItem({
 }
 
 TodoItem.propTypes = {
+  allCompleted: PropTypes.bool.isRequired,
   filterStatus: PropTypes.string.isRequired,
   changeStatus: PropTypes.func.isRequired,
   updateTodoItem: PropTypes.func.isRequired,

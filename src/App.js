@@ -34,7 +34,7 @@ function App() {
   };
 
   const toggleAll = (status) => {
-    const uncheckedTodos = todos.map(todo => (
+    const changedStatusTodos = todos.map(todo => (
       {
         ...todo,
         completed: status,
@@ -42,7 +42,7 @@ function App() {
     ));
 
     setAllCompleted(status);
-    setTodos(uncheckedTodos);
+    setTodos(changedStatusTodos);
   };
 
   useEffect(() => {
@@ -140,6 +140,7 @@ function App() {
               deleteTodo={deleteTodo}
               toggleAll={toggleAll}
               updateTodoItem={updateTodoItem}
+              allCompleted={allCompleted}
             />
           </section>
 

@@ -8,6 +8,7 @@ export const TodoList = ({
   deleteTodo,
   updateTodoItem,
   filterStatus,
+  allCompleted,
 }) => (
   <>
     <ul className="todo-list">
@@ -19,6 +20,7 @@ export const TodoList = ({
           key={todo.id}
           deleteTodo={deleteTodo}
           updateTodoItem={updateTodoItem}
+          allCompleted={allCompleted}
         />
       ))}
     </ul>
@@ -26,6 +28,7 @@ export const TodoList = ({
 );
 
 TodoList.propTypes = {
+  allCompleted: PropTypes.bool.isRequired,
   filterStatus: PropTypes.string.isRequired,
   changeStatus: PropTypes.func.isRequired,
   updateTodoItem: PropTypes.func.isRequired,
