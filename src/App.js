@@ -8,11 +8,9 @@ import { Footer } from './components/Footer';
 function App() {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useLocalStorage('todos', []);
-  // const [filteredTodos, setfilteredTodos] = useState(todos);
   const [filterStatus, setFilterStatus] = useState('all');
   const [activeSelectAll, setActiveSelectAll] = useState(false);
   const [allCompleted, setAllCompleted] = useState(false);
-  // let filteredTodos = todos;
 
   const addTitle = (value) => {
     setTitle(value);
@@ -32,7 +30,6 @@ function App() {
     };
 
     setTodos([...todos, newTodo]);
-    // setfilteredTodos([...todos, newTodo]);
 
     setTitle('');
   };
@@ -47,7 +44,6 @@ function App() {
 
     setAllCompleted(status);
     setTodos(uncheckedTodos);
-    // setfilteredTodos(uncheckedTodos);
   };
 
   useEffect(() => {
@@ -73,22 +69,7 @@ function App() {
     });
 
     setTodos(todosCopy);
-    // setfilteredTodos(todosCopy);
   };
-
-  // useEffect(() => {
-  //   if (filterStatus === 'all') {
-  //     filteredTodos = todos;
-  //   } else {
-  //     const filter = filterStatus === 'completed';
-
-  //     const filteredList = todos.filter(todo => (
-  //       todo.completed === filter
-  //     ));
-
-  //     filteredTodos = filteredList;
-  //   }
-  // }, [filterStatus, todos]);
 
   const deleteTodo = (todoIdForDelete) => {
     const filteredList = todos.filter(todo => (
@@ -96,7 +77,6 @@ function App() {
     ));
 
     setTodos(filteredList);
-    // setfilteredTodos(filteredList);
   };
 
   useEffect(() => {
@@ -125,7 +105,6 @@ function App() {
     ));
 
     setTodos(filteredList);
-    // setfilteredTodos(filteredList);
 
     if (filterStatus === 'completed') {
       setFilterStatus('all');
@@ -145,7 +124,6 @@ function App() {
     });
 
     setTodos(todosCopy);
-    // setfilteredTodos(todosCopy);
   }, [setTodos, todos]);
 
   return (
