@@ -23,15 +23,15 @@ function App() {
   };
 
   const addTodo = useCallback((value) => {
+    if (!value) {
+      return;
+    }
+
     const todo = {
       id: +new Date(),
       title: value,
       completed: false,
     };
-
-    if (!value) {
-      return;
-    }
 
     setTodos([...todos, todo]);
   }, [todos]);
@@ -54,17 +54,20 @@ function App() {
   }, [todos]);
 
   const changeTitle = (id, title) => {
-    const index = todos.findIndex(todo => todo.id === id);
-    const updatedTodos = [...todos];
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          title,
+        };
+      }
 
-    updatedTodos[index].title = title;
-    setTodos(updatedTodos);
+      return todo;
+    }));
   };
 
   useEffect(() => {
-    const uncompleteTodos = todos.filter(todo => !todo.completed);
-
-    setUncomplete(uncompleteTodos);
+    setUncomplete(todos.filter(todo => !todo.completed));
   }, [todos, toggleAll]);
 
   return (
