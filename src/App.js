@@ -8,10 +8,11 @@ import { Footer } from './components/Footer';
 function App() {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useLocalStorage('todos', []);
-  const [filteredTodos, setfilteredTodos] = useState(todos);
+  // const [filteredTodos, setfilteredTodos] = useState(todos);
   const [filterStatus, setFilterStatus] = useState('all');
   const [activeSelectAll, setActiveSelectAll] = useState(false);
   const [allCompleted, setAllCompleted] = useState(false);
+  // let filteredTodos = todos;
 
   const addTitle = (value) => {
     setTitle(value);
@@ -31,7 +32,7 @@ function App() {
     };
 
     setTodos([...todos, newTodo]);
-    setfilteredTodos([...todos, newTodo]);
+    // setfilteredTodos([...todos, newTodo]);
 
     setTitle('');
   };
@@ -46,7 +47,7 @@ function App() {
 
     setAllCompleted(status);
     setTodos(uncheckedTodos);
-    setfilteredTodos(uncheckedTodos);
+    // setfilteredTodos(uncheckedTodos);
   };
 
   useEffect(() => {
@@ -72,22 +73,22 @@ function App() {
     });
 
     setTodos(todosCopy);
-    setfilteredTodos(todosCopy);
+    // setfilteredTodos(todosCopy);
   };
 
-  useEffect(() => {
-    if (filterStatus === 'all') {
-      setfilteredTodos(todos);
-    } else {
-      const filter = filterStatus === 'completed';
+  // useEffect(() => {
+  //   if (filterStatus === 'all') {
+  //     filteredTodos = todos;
+  //   } else {
+  //     const filter = filterStatus === 'completed';
 
-      const filteredList = todos.filter(todo => (
-        todo.completed === filter
-      ));
+  //     const filteredList = todos.filter(todo => (
+  //       todo.completed === filter
+  //     ));
 
-      setfilteredTodos(filteredList);
-    }
-  }, [filterStatus, todos]);
+  //     filteredTodos = filteredList;
+  //   }
+  // }, [filterStatus, todos]);
 
   const deleteTodo = (todoIdForDelete) => {
     const filteredList = todos.filter(todo => (
@@ -95,7 +96,7 @@ function App() {
     ));
 
     setTodos(filteredList);
-    setfilteredTodos(filteredList);
+    // setfilteredTodos(filteredList);
   };
 
   useEffect(() => {
@@ -124,7 +125,7 @@ function App() {
     ));
 
     setTodos(filteredList);
-    setfilteredTodos(filteredList);
+    // setfilteredTodos(filteredList);
 
     if (filterStatus === 'completed') {
       setFilterStatus('all');
@@ -144,7 +145,7 @@ function App() {
     });
 
     setTodos(todosCopy);
-    setfilteredTodos(todosCopy);
+    // setfilteredTodos(todosCopy);
   }, [setTodos, todos]);
 
   return (
@@ -176,7 +177,8 @@ function App() {
             </label>
 
             <TodoList
-              todos={filteredTodos}
+              todos={todos}
+              filterStatus={filterStatus}
               changeStatus={changeStatus}
               deleteTodo={deleteTodo}
               toggleAll={toggleAll}
@@ -185,7 +187,7 @@ function App() {
           </section>
 
           <Footer
-            filteredTodos={filteredTodos}
+            filteredTodos={todos}
             setFilterStatus={setFilterStatus}
             filterStatus={filterStatus}
             activeSelectAll={activeSelectAll}

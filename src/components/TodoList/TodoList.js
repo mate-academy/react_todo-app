@@ -6,14 +6,15 @@ export const TodoList = ({
   todos,
   changeStatus,
   deleteTodo,
-  toggleAll,
   updateTodoItem,
+  filterStatus,
 }) => (
   <>
     <ul className="todo-list">
       {todos.map(todo => (
         <TodoItem
           todo={todo}
+          filterStatus={filterStatus}
           changeStatus={changeStatus}
           key={todo.id}
           deleteTodo={deleteTodo}
@@ -25,9 +26,9 @@ export const TodoList = ({
 );
 
 TodoList.propTypes = {
+  filterStatus: PropTypes.string.isRequired,
   changeStatus: PropTypes.func.isRequired,
   updateTodoItem: PropTypes.func.isRequired,
-  toggleAll: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({

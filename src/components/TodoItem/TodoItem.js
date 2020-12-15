@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { filtersNames } from '../../js/filtersNames';
 
 export function TodoItem({
   todo,
   changeStatus,
   deleteTodo,
   updateTodoItem,
+  filterStatus,
 }) {
   const [editingMode, setEditingMode] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
+  const [completed, setCompleted] = useState(todo.completed);
 
   useEffect(() => {
     setEditingMode('');
@@ -37,6 +40,22 @@ export function TodoItem({
     }
   };
 
+  const hiddenItem = () => {
+    switch (filterStatus) {
+      case filtersNames.active:
+        return completed;
+      case filtersNames.completed:
+        return !completed;
+      default:
+        return false;
+    }
+  };
+
+  const handleChange = (event) => {
+    changeStatus(event.target.value);
+    setCompleted(!completed);
+  };
+
   const onBlurTitleChange = (todoId) => {
     updateTodoItem(todoId, newTitle);
   };
@@ -48,13 +67,14 @@ export function TodoItem({
         editing: editingMode === true,
       })}
       onDoubleClick={() => setEditingMode(true)}
+      hidden={hiddenItem()}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           value={todo.id}
-          onChange={event => changeStatus(event.target.value)}
+          onChange={event => handleChange(event)}
           checked={todo.completed}
         />
         <label>
@@ -79,6 +99,7 @@ export function TodoItem({
 }
 
 TodoItem.propTypes = {
+  filterStatus: PropTypes.string.isRequired,
   changeStatus: PropTypes.func.isRequired,
   updateTodoItem: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
