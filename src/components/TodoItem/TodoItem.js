@@ -23,7 +23,7 @@ export function TodoItem({
     setNewTitle(title);
   };
 
-  const titleChange = (eventKey, todoId) => {
+  const handleKeyDown = (eventKey, todoId) => {
     if (newTitle.length === 0) {
       return;
     }
@@ -56,7 +56,7 @@ export function TodoItem({
     setCompleted(!completed);
   };
 
-  const onBlurTitleChange = (todoId) => {
+  const handleBlur = (todoId) => {
     updateTodoItem(todoId, newTitle);
   };
 
@@ -91,8 +91,8 @@ export function TodoItem({
         className="edit"
         value={newTitle}
         onChange={event => updateTodoTitle(event.target.value)}
-        onKeyDown={event => titleChange(event.key, todo.id)}
-        onBlur={() => onBlurTitleChange(todo.id)}
+        onKeyDown={event => handleKeyDown(event.key, todo.id)}
+        onBlur={() => handleBlur(todo.id)}
       />
     </li>
   );
