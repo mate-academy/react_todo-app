@@ -1,42 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Filters } from '../Filters';
 
-export const Footer = ({
-  filteredTodos,
+export function Footer({
+  todos,
   setFilterStatus,
   filterStatus,
-  activeSelectAll,
   clearAllCompleted,
-}) => (
-  <footer className="footer">
-    {!!filteredTodos.length && (
-      <span className="todo-count">
-        {`${filteredTodos.length} item(s) left`}
-      </span>
-    )}
+}) {
+  const [haveCompletedTodos, setHaveCompletedTodos] = useState(false);
 
-    <Filters
-      setFilterStatus={setFilterStatus}
-      filterStatus={filterStatus}
-      activeSelectAll={activeSelectAll}
-    />
+  useEffect(() => {
+    const haveCompleted = todos.some(todo => (
+      todo.completed === true
+    ));
 
-    {activeSelectAll && (
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={clearAllCompleted}
-      >
-        Clear completed tasks
-      </button>
-    )}
+    setHaveCompletedTodos(haveCompleted);
+  }, [todos]);
 
-  </footer>
-);
+  return (
+    <footer className="footer">
+      {!!todos.length && (
+        <span className="todo-count">
+          {`${todos.length} item(s) left`}
+        </span>
+      )}
+
+      <Filters
+        setFilterStatus={setFilterStatus}
+        filterStatus={filterStatus}
+        haveCompletedTodos={haveCompletedTodos}
+      />
+
+      {haveCompletedTodos && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={clearAllCompleted}
+        >
+          Clear completed tasks
+        </button>
+      )}
+
+    </footer>
+  );
+}
 
 Footer.propTypes = {
-  filteredTodos: PropTypes.arrayOf(
+  todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isReuired,
       title: PropTypes.string.isReuired,
@@ -45,6 +56,5 @@ Footer.propTypes = {
   ).isRequired,
   setFilterStatus: PropTypes.func.isRequired,
   filterStatus: PropTypes.string.isRequired,
-  activeSelectAll: PropTypes.bool.isRequired,
   clearAllCompleted: PropTypes.func.isRequired,
 };

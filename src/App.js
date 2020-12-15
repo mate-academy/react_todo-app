@@ -9,7 +9,6 @@ function App() {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [filterStatus, setFilterStatus] = useState('all');
-  const [activeSelectAll, setActiveSelectAll] = useState(false);
   const [allCompleted, setAllCompleted] = useState(false);
 
   const addTitle = (value) => {
@@ -79,26 +78,6 @@ function App() {
     setTodos(filteredList);
   };
 
-  useEffect(() => {
-    if (!activeSelectAll) {
-      const checkStatus = todos.some(todo => (
-        todo.completed === true
-      ));
-
-      if (checkStatus) {
-        setActiveSelectAll(true);
-      }
-    } else {
-      const checkStatus = todos.every(todo => (
-        todo.completed === false
-      ));
-
-      if (checkStatus) {
-        setActiveSelectAll(false);
-      }
-    }
-  }, [todos, activeSelectAll]);
-
   const clearAllCompleted = useCallback(() => {
     const filteredList = todos.filter(todo => (
       todo.completed === false
@@ -165,10 +144,9 @@ function App() {
           </section>
 
           <Footer
-            filteredTodos={todos}
+            todos={todos}
             setFilterStatus={setFilterStatus}
             filterStatus={filterStatus}
-            activeSelectAll={activeSelectAll}
             clearAllCompleted={clearAllCompleted}
           />
         </>

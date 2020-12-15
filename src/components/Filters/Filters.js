@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { filtersNames } from '../../js/filtersNames';
 
-export const Filters = ({ setFilterStatus, filterStatus, activeSelectAll }) => (
+export const Filters = ({
+  setFilterStatus,
+  filterStatus,
+  haveCompletedTodos,
+}) => (
   <ul className="filters">
     <li>
       <button
@@ -29,7 +33,7 @@ export const Filters = ({ setFilterStatus, filterStatus, activeSelectAll }) => (
       </button>
     </li>
 
-    {activeSelectAll && (
+    {haveCompletedTodos && (
       <li>
         <button
           type="button"
@@ -48,6 +52,6 @@ export const Filters = ({ setFilterStatus, filterStatus, activeSelectAll }) => (
 
 Filters.propTypes = {
   setFilterStatus: PropTypes.func.isRequired,
-  activeSelectAll: PropTypes.bool.isRequired,
+  haveCompletedTodos: PropTypes.bool.isRequired,
   filterStatus: PropTypes.string.isRequired,
 };
