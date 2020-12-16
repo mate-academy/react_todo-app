@@ -7,20 +7,16 @@ export const TodoList = ({
   changeStatus,
   deleteTodo,
   updateTodoItem,
-  filterStatus,
-  allCompleted,
 }) => (
   <>
     <ul className="todo-list">
       {todos.map(todo => (
         <TodoItem
           todo={todo}
-          filterStatus={filterStatus}
           changeStatus={changeStatus}
           key={todo.id}
           deleteTodo={deleteTodo}
           updateTodoItem={updateTodoItem}
-          allCompleted={allCompleted}
         />
       ))}
     </ul>
@@ -28,8 +24,6 @@ export const TodoList = ({
 );
 
 TodoList.propTypes = {
-  allCompleted: PropTypes.bool.isRequired,
-  filterStatus: PropTypes.string.isRequired,
   changeStatus: PropTypes.func.isRequired,
   updateTodoItem: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,

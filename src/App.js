@@ -76,6 +76,19 @@ function App() {
     ))
   ), [todos]);
 
+  const filteredTodos = useMemo(() => {
+    if (filterStatus === 'all') {
+      return todos;
+    }
+
+    const filter = filterStatus === 'completed';
+    const filteredList = todos.filter(todo => (
+      todo.completed === filter
+    ));
+
+    return filteredList;
+  }, [todos, filterStatus]);
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -104,13 +117,11 @@ function App() {
             </label>
 
             <TodoList
-              todos={todos}
-              filterStatus={filterStatus}
+              todos={filteredTodos}
               changeStatus={changeStatus}
               deleteTodo={deleteTodo}
               toggleAll={toggleAll}
               updateTodoItem={updateTodoItem}
-              allCompleted={allCompleted}
             />
           </section>
 

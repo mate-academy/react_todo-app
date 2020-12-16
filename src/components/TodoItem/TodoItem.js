@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { FILTERS } from '../../js/filtersNames';
 
 export function TodoItem({
   todo,
   changeStatus,
   deleteTodo,
   updateTodoItem,
-  filterStatus,
-  allCompleted,
 }) {
   const [editingMode, setEditingMode] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
-  const [completed, setCompleted] = useState(todo.completed);
-
-  useEffect(() => {
-    setCompleted(allCompleted);
-  }, [allCompleted]);
 
   useEffect(() => {
     setEditingMode(false);
@@ -35,6 +27,7 @@ export function TodoItem({
 
     switch (eventKey) {
       case 'Enter':
+        setEditingMode(false);
         updateTodoItem(todoId, newTitle);
         break;
       case 'Escape':
@@ -42,23 +35,12 @@ export function TodoItem({
         setNewTitle(todo.title);
         break;
       default:
-    }
-  };
-
-  const setItemHidden = () => {
-    switch (filterStatus) {
-      case FILTERS.active:
-        return completed;
-      case FILTERS.completed:
-        return !completed;
-      default:
-        return false;
+        break;
     }
   };
 
   const handleChange = (event) => {
     changeStatus(event.target.value);
-    setCompleted(!completed);
   };
 
   const handleBlur = (todoId) => {
@@ -72,7 +54,6 @@ export function TodoItem({
         editing: editingMode === true,
       })}
       onDoubleClick={() => setEditingMode(true)}
-      hidden={setItemHidden()}
     >
       <div className="view">
         <input
@@ -104,8 +85,6 @@ export function TodoItem({
 }
 
 TodoItem.propTypes = {
-  allCompleted: PropTypes.bool.isRequired,
-  filterStatus: PropTypes.string.isRequired,
   changeStatus: PropTypes.func.isRequired,
   updateTodoItem: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
