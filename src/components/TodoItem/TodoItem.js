@@ -44,6 +44,10 @@ export function TodoItem({
   };
 
   const handleBlur = (todoId) => {
+    if (newTitle.trim().length === 0) {
+      return;
+    }
+
     setEditingTodoId(0);
     updateTodoItem(todoId, newTitle);
   };
