@@ -1,59 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Filters } from '../Filters';
 
-export function Footer({
-  todos,
+export const Footer = ({
+  completedTodosQty,
   setFilterStatus,
   filterStatus,
   clearAllCompleted,
-}) {
-  const [haveCompletedTodos, setHaveCompletedTodos] = useState(false);
+}) => (
+  <footer className="footer">
+    {!!completedTodosQty && (
+      <span className="todo-count">
+        {`${completedTodosQty} item(s) left`}
+      </span>
+    )}
 
-  useEffect(() => {
-    const haveCompleted = todos.some(todo => (
-      todo.completed === true
-    ));
+    <Filters
+      setFilterStatus={setFilterStatus}
+      filterStatus={filterStatus}
+      haveCompletedTodos={!!completedTodosQty}
+    />
 
-    setHaveCompletedTodos(haveCompleted);
-  }, [todos]);
+    {!!completedTodosQty && (
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={clearAllCompleted}
+      >
+        Clear completed tasks
+      </button>
+    )}
 
-  return (
-    <footer className="footer">
-      {!!todos.length && (
-        <span className="todo-count">
-          {`${todos.length} item(s) left`}
-        </span>
-      )}
-
-      <Filters
-        setFilterStatus={setFilterStatus}
-        filterStatus={filterStatus}
-        haveCompletedTodos={haveCompletedTodos}
-      />
-
-      {haveCompletedTodos && (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={clearAllCompleted}
-        >
-          Clear completed tasks
-        </button>
-      )}
-
-    </footer>
-  );
-}
+  </footer>
+);
 
 Footer.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isReuired,
-      title: PropTypes.string.isReuired,
-      completed: PropTypes.bool.isReuired,
-    }).isRequired,
-  ).isRequired,
+  completedTodosQty: PropTypes.number.isRequired,
   setFilterStatus: PropTypes.func.isRequired,
   filterStatus: PropTypes.string.isRequired,
   clearAllCompleted: PropTypes.func.isRequired,

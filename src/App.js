@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 
 import { TodoList } from './components/TodoList';
 import { useLocalStorage } from './custom_hooks/useLocalStorage';
@@ -70,6 +70,12 @@ function App() {
     setTodos(todosCopy);
   }, [setTodos, todos]);
 
+  const completedTodos = useMemo(() => (
+    todos.filter(todo => (
+      todo.completed
+    ))
+  ), [todos]);
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -109,7 +115,7 @@ function App() {
           </section>
 
           <Footer
-            todos={todos}
+            completedTodosQty={completedTodos.length}
             setFilterStatus={setFilterStatus}
             filterStatus={filterStatus}
             clearAllCompleted={clearAllCompleted}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { filtersNames } from '../../js/filtersNames';
+import { FILTERS } from '../../js/filtersNames';
 
 export function TodoItem({
   todo,
@@ -47,9 +47,9 @@ export function TodoItem({
 
   const setItemHidden = () => {
     switch (filterStatus) {
-      case filtersNames.active:
+      case FILTERS.active:
         return completed;
-      case filtersNames.completed:
+      case FILTERS.completed:
         return !completed;
       default:
         return false;
