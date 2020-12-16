@@ -1,37 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, useCallback } from 'react';
+
 import { TodoList } from './components/TodoList';
 import { useLocalStorage } from './custom_hooks/useLocalStorage';
 import { AddTodoForm } from './components/AddTodoForm';
 import { Footer } from './components/Footer';
 
 function App() {
-  const [title, setTitle] = useState('');
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [filterStatus, setFilterStatus] = useState('all');
   const [allCompleted, setAllCompleted] = useState(false);
-
-  const addTitle = (value) => {
-    setTitle(value);
-  };
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-
-    if (title.length === 0) {
-      return;
-    }
-
-    const newTodo = {
-      title,
-      id: uuidv4(),
-      completed: false,
-    };
-
-    setTodos([...todos, newTodo]);
-
-    setTitle('');
-  };
 
   const toggleAll = (status) => {
     const changedStatusTodos = todos.map(todo => (
@@ -44,16 +21,6 @@ function App() {
     setAllCompleted(status);
     setTodos(changedStatusTodos);
   };
-
-  useEffect(() => {
-    if (todos.every(todo => todo.completed === true)) {
-      setAllCompleted(true);
-    }
-
-    if (todos.every(todo => todo.completed === false)) {
-      setAllCompleted(false);
-    }
-  }, [todos]);
 
   const changeStatus = (checkedTodoId) => {
     const todosCopy = todos.map((todo) => {
@@ -79,9 +46,7 @@ function App() {
   };
 
   const clearAllCompleted = useCallback(() => {
-    const filteredList = todos.filter(todo => (
-      todo.completed === false
-    ));
+    const filteredList = todos.filter(todo => !todo.completed);
 
     setTodos(filteredList);
 
@@ -111,9 +76,8 @@ function App() {
         <h1>todos</h1>
 
         <AddTodoForm
-          addTitle={addTitle}
-          onSubmit={onSubmit}
-          title={title}
+          todos={todos}
+          setTodos={setTodos}
         />
       </header>
       {!!todos.length && (
