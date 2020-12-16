@@ -7,12 +7,12 @@ export function TodoItem({
   changeStatus,
   deleteTodo,
   updateTodoItem,
+  editingTodoId,
+  setEditingTodoId,
 }) {
-  const [editingMode, setEditingMode] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
   useEffect(() => {
-    setEditingMode(false);
     setNewTitle(todo.title);
   }, []);
 
@@ -21,17 +21,17 @@ export function TodoItem({
   };
 
   const handleKeyDown = (eventKey, todoId) => {
-    if (newTitle.length === 0) {
+    if (newTitle.trim().length === 0) {
       return;
     }
 
     switch (eventKey) {
       case 'Enter':
-        setEditingMode(false);
+        setEditingTodoId(0);
         updateTodoItem(todoId, newTitle);
         break;
       case 'Escape':
-        setEditingMode(false);
+        setEditingTodoId(0);
         setNewTitle(todo.title);
         break;
       default:
@@ -44,6 +44,7 @@ export function TodoItem({
   };
 
   const handleBlur = (todoId) => {
+    setEditingTodoId(0);
     updateTodoItem(todoId, newTitle);
   };
 
@@ -51,9 +52,9 @@ export function TodoItem({
     <li
       className={classNames({
         completed: todo.completed,
-        editing: editingMode === true,
+        editing: editingTodoId === todo.id,
       })}
-      onDoubleClick={() => setEditingMode(true)}
+      onDoubleClick={() => setEditingTodoId(todo.id)}
     >
       <div className="view">
         <input
@@ -85,6 +86,8 @@ export function TodoItem({
 }
 
 TodoItem.propTypes = {
+  editingTodoId: PropTypes.number.isRequired,
+  setEditingTodoId: PropTypes.func.isRequired,
   changeStatus: PropTypes.func.isRequired,
   updateTodoItem: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,

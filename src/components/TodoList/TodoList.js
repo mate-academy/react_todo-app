@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem';
 
-export const TodoList = ({
+export function TodoList({
   todos,
   changeStatus,
   deleteTodo,
   updateTodoItem,
-}) => (
-  <>
+}) {
+  const [editingTodoId, setEditingTodoId] = useState(0);
+
+  return (
     <ul className="todo-list">
       {todos.map(todo => (
         <TodoItem
@@ -17,11 +19,13 @@ export const TodoList = ({
           key={todo.id}
           deleteTodo={deleteTodo}
           updateTodoItem={updateTodoItem}
+          editingTodoId={editingTodoId}
+          setEditingTodoId={setEditingTodoId}
         />
       ))}
     </ul>
-  </>
-);
+  );
+}
 
 TodoList.propTypes = {
   changeStatus: PropTypes.func.isRequired,

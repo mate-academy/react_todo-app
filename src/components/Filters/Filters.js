@@ -10,40 +10,40 @@ export const Filters = ({
 }) => (
   <ul className="filters">
     <li>
-      <button
-        type="button"
+      <a
+        href="/#"
         className={classNames('filter', {
           selected: filterStatus === FILTERS.all,
         })}
         onClick={() => setFilterStatus(FILTERS.all)}
       >
         All
-      </button>
+      </a>
     </li>
 
     <li>
-      <button
-        type="button"
+      <a
+        href="/#"
         className={classNames('filter', {
           selected: filterStatus === FILTERS.active,
         })}
         onClick={() => setFilterStatus(FILTERS.active)}
       >
         Active
-      </button>
+      </a>
     </li>
 
     {haveCompletedTodos && (
       <li>
-        <button
-          type="button"
+        <a
+          href="/#"
           className={classNames('filter', {
             selected: filterStatus === FILTERS.completed,
           })}
           onClick={() => setFilterStatus(FILTERS.completed)}
         >
           Completed
-        </button>
+        </a>
       </li>
     )}
 

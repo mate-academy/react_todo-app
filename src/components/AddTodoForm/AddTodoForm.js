@@ -12,7 +12,7 @@ export function AddTodoForm({ setTodos, todos }) {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (title.length === 0) {
+    if (title.trim().length === 0) {
       return;
     }
 

@@ -7,15 +7,11 @@
   left: 0;
 }
 
-.filter {
-  cursor: pointer;
-}
-
 .filters li {
   display: inline;
 }
 
-.filters li button {
+.filters li a {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
@@ -24,11 +20,11 @@
   border-radius: 3px;
 }
 
-.filters li button:hover {
+.filters li a:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li button.selected {
+.filters li a.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
