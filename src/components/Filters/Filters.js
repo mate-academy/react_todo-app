@@ -11,7 +11,7 @@ export const Filters = ({
   <ul className="filters">
     <li>
       <a
-        href="/#"
+        href="#/"
         className={classNames('filter', {
           selected: filterStatus === FILTERS.all,
         })}
@@ -23,7 +23,7 @@ export const Filters = ({
 
     <li>
       <a
-        href="/#"
+        href="#/"
         className={classNames('filter', {
           selected: filterStatus === FILTERS.active,
         })}
@@ -36,7 +36,7 @@ export const Filters = ({
     {haveCompletedTodos && (
       <li>
         <a
-          href="/#"
+          href="#/"
           className={classNames('filter', {
             selected: filterStatus === FILTERS.completed,
           })}
