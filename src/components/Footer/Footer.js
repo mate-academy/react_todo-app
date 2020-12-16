@@ -7,11 +7,12 @@ export const Footer = ({
   setFilterStatus,
   filterStatus,
   clearAllCompleted,
+  uncompletedTodos,
 }) => (
   <footer className="footer">
-    {!!completedTodosQty && (
+    {!!uncompletedTodos && (
       <span className="todo-count">
-        {`${completedTodosQty} item(s) left`}
+        {`${uncompletedTodos} item(s) left`}
       </span>
     )}
 
@@ -36,6 +37,7 @@ export const Footer = ({
 
 Footer.propTypes = {
   completedTodosQty: PropTypes.number.isRequired,
+  uncompletedTodos: PropTypes.number.isRequired,
   setFilterStatus: PropTypes.func.isRequired,
   filterStatus: PropTypes.string.isRequired,
   clearAllCompleted: PropTypes.func.isRequired,

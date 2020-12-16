@@ -76,6 +76,12 @@ function App() {
     ))
   ), [todos]);
 
+  const uncompletedTodos = useMemo(() => (
+    todos.filter(todo => (
+      !todo.completed
+    ))
+  ), [todos]);
+
   const filteredTodos = useMemo(() => {
     if (filterStatus === 'all') {
       return todos;
@@ -126,6 +132,7 @@ function App() {
           </section>
 
           <Footer
+            uncompletedTodos={uncompletedTodos.length}
             completedTodosQty={completedTodos.length}
             setFilterStatus={setFilterStatus}
             filterStatus={filterStatus}
