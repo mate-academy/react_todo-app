@@ -193,6 +193,17 @@ body {
   text-decoration: none;
 }
 
+.info {
+  font-size: 12px;
+  text-align: center;
+  color: #777;
+}
+
+.error {
+  font-size: 18px;
+  color: red;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox

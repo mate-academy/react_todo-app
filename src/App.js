@@ -1,88 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { HashRouter, useLocation } from 'react-router-dom';
+import { AddTodo } from './components/AddTodo';
+import { Footer } from './components/Footer';
+import { TodoList } from './components/TodoList';
 
-function App() {
+import { getTodos, getUser } from './api/api';
+import { FILTERS } from './api/constant';
+import { getFilteringTodos } from './api/helper';
+
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [user, setUser] = useState({});
+  const [error, setError] = useState('');
+  const [filter, setFilter] = useState(FILTERS.all);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // setTodos(JSON.parse(localStorage.getItem('todos')) || []);
+    getTodos()
+      .then(todosServer => setTodos(todosServer || []));
+    getUser()
+      .then(userServer => setUser(userServer));
+  }, []);
+
+  useEffect(() => {
+    switch (location.hash) {
+      case '#/':
+        setFilter(FILTERS.all);
+        break;
+      case '#/active':
+        setFilter(FILTERS.active);
+        break;
+      case '#/completed':
+        setFilter(FILTERS.completed);
+        break;
+      default:
+        break;
+    }
+  }, [location]);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <HashRouter>
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
+          <AddTodo
+            onAddTodo={setTodos}
+            setError={setError}
           />
-        </form>
-      </header>
+        </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <section className="main">
+          <TodoList
+            todos={getFilteringTodos(filter, todos)}
+            onSetTodos={setTodos}
+          />
+        </section>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <footer
+          className="footer"
+          style={{ display: !todos.length ? 'none' : 'block' }}
+        >
+          <Footer
+            todos={todos}
+            setTodos={setTodos}
+            setFilter={setFilter}
+          />
+        </footer>
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
+      <section className="info">
+        <section className="error">
+          <p>{error}</p>
+        </section>
+        <p>{user.name}</p>
+      </section>
+    </HashRouter>
   );
-}
+};
 
 export default App;
