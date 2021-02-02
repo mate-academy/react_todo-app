@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
+import { TodoList } from './TodoList';
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState('');
+  const [countNotCompleted, setCountNotCompleted] = useState(0);
 
   const addTodo = () => {
-    const todo = {
-      id: +new Date(),
-      title,
-      completed: false,
-    };
+    if (title.trim()) {
+      const todo = { id: +new Date(),
+        title,
+        completed: false };
 
-    setTodos([...todos, todo]);
+      setTodos([...todos, todo]);
+      setCountNotCompleted(count => count + 1);
+    }
 
     setTitle('');
   };
@@ -21,7 +24,10 @@ export const TodoApp = () => {
       <header className="header">
         <h1>todos</h1>
         <form
-          onSubmit={() => addTodo()}
+          onSubmit={(event) => {
+            event.preventDefault();
+            addTodo();
+          }}
         >
           <input
             type="text"
@@ -34,62 +40,14 @@ export const TodoApp = () => {
           />
         </form>
       </header>
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <ul className="todo-list">
-          {todos.map(todo => (
-            <li key={todo.id}>
-              <div className="view">
-                <input type="checkbox" className="toggle" />
-                <label>{todo.title}</label>
-                <button type="button" className="destroy" />
-              </div>
-            </li>
-          ))}
-        </ul>
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+      <TodoList items={todos} />
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {countNotCompleted}
+          {' '}
+          items left
         </span>
 
         <ul className="filters">
