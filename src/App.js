@@ -1,86 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { InputField } from './components/InputField';
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/Footer';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [allStatus, setAllStatus] = useState(false);
+
+  const addNewTodo = (newTodo) => {
+    setTodos([newTodo, ...todos]);
+  };
+
+  const toggleCompletedStatus = (todoId) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          isCompleted: !todo.isCompleted,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
+  const removeItem = (todoId) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
+  const clearCompleted = () => {
+    setTodos(todos.filter(todo => !todo.isCompleted));
+  };
+
+  const toggleAll = () => {
+    if (allStatus) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        isCompleted: false,
+      })));
+    } else {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        isCompleted: true,
+      })));
+    }
+
+    setAllStatus(!allStatus);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <InputField addNewTodo={addNewTodo} />
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onChange={toggleAll}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList
+          removeItem={removeItem}
+          toggleCompletedStatus={toggleCompletedStatus}
+          todos={todos}
+        />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <Footer clearCompleted={clearCompleted} todos={todos} />
     </section>
   );
 }
