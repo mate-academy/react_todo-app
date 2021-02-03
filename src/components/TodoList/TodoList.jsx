@@ -10,18 +10,26 @@ export const TodoList = ({
 }) => (
   <ul className="todo-list">
     {todos.map(todo => (
-      <li key={todo.id}>
-        <div className={cn({
-          view: !todo.isCompleted,
+      <li key={todo.id}
+        className={cn({
           completed: todo.isCompleted,
           editing: todo.isBeingEdited,
         })}
-        >
-          <input
-            type="checkbox"
-            className="toggle"
-            onChange={() => toggleCompletedStatus(todo.id)}
-          />
+      >
+        <div className="view">
+          {todo.isCompleted
+          ? (<input
+              type="checkbox"
+              className="toggle"
+              onChange={() => toggleCompletedStatus(todo.id)}
+              checked
+            />)
+          : (<input
+              type="checkbox"
+              className="toggle"
+              onChange={() => toggleCompletedStatus(todo.id)}
+            />)
+          }
           <label>
             {todo.title}
           </label>
