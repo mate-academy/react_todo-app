@@ -17,19 +17,12 @@ export const TodoList = ({
         })}
       >
         <div className="view">
-          {todo.isCompleted
-          ? (<input
-              type="checkbox"
-              className="toggle"
-              onChange={() => toggleCompletedStatus(todo.id)}
-              checked
-            />)
-          : (<input
-              type="checkbox"
-              className="toggle"
-              onChange={() => toggleCompletedStatus(todo.id)}
-            />)
-          }
+          <input
+            type="checkbox"
+            className="toggle"
+            onChange={() => toggleCompletedStatus(todo.id)}
+            checked={todo.isCompleted}
+          />
           <label>
             {todo.title}
           </label>
