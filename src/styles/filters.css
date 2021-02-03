@@ -11,7 +11,8 @@
   display: inline;
 }
 
-.filters li a {
+/*.filters li a,*/
+.basic {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
