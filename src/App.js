@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
-import classNames from 'classnames';
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFilter';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [newTodoTitle, setNewTodo] = useState('');
   const [status, setStatus] = useState(false);
   const [selectedFilter, setFilter] = useState('All');
-  const [isEditable, setEditing] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setTodos(prevTodos => (
-      [...prevTodos,
-        {
-          id: +new Date(),
-          title: newTodoTitle,
-          completed: false,
-        },
-      ]
-    ));
-    setNewTodo('');
+
+    if (newTodoTitle.length > 0) {
+      setTodos(prevTodos => (
+        [...prevTodos,
+          {
+            id: +new Date(),
+            title: newTodoTitle,
+            completed: false,
+          },
+        ]
+      ));
+      setNewTodo('');
+    }
   };
 
   const deleteTodo = (todoId) => {
@@ -55,6 +58,19 @@ function App() {
     setStatus(!status);
   };
 
+  const updateTitle = (id, title) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todos,
+          title,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
   const uncompletedTodos = todos.filter(todo => !todo.completed);
   const clearCompleted = () => {
     setTodos(uncompletedTodos);
@@ -73,11 +89,6 @@ function App() {
   };
 
   const filteredTodos = filterTodos();
-
-  const changeFilter = (event) => {
-    event.preventDefault();
-    setFilter(event.target.name);
-  };
 
   return (
     <section className="todoapp">
@@ -106,47 +117,14 @@ function App() {
         />
 
         <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          {filteredTodos.map(todo => (
-            <li
-              key={todo.id}
-              className={classNames(
-                { completed: todo.completed },
-                { editing: isEditable },
-              )}
-              onDoubleClick={() => setEditing(!isEditable)}
-            >
-              <div className="view">
-                <input
-                  type="checkbox"
-                  className="toggle"
-                  onClick={() => toggleCompletedStatus(todo.id)}
-                  checked={todo.completed}
-                />
-                <label
-                  htmlFor="toggler"
-                >
-                  {todo.title}
-                </label>
-                <button
-                  type="button"
-                  className="destroy"
-                  onClick={() => deleteTodo(todo.id)}
-                />
-              </div>
-              <input
-                id="toggler"
-                type="text"
-                className="edit"
-
-              />
-            </li>
-          ))}
-
-        </ul>
+        <TodoList
+          filteredTodos={filteredTodos}
+          deleteTodo={deleteTodo}
+          status={toggleCompletedStatus}
+          updateTitle={updateTitle}
+        />
       </section>
-      {filteredTodos.length > 0 && (
+      {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count">
             {uncompletedTodos.length}
@@ -154,38 +132,10 @@ function App() {
             items left
           </span>
 
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className="selected"
-                name="All"
-                onClick={changeFilter}
-              >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                name="Active"
-                onClick={changeFilter}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                name="Completed"
-                onClick={changeFilter}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
+          <TodosFilter
+            setFilter={setFilter}
+            selectedFilter={selectedFilter}
+          />
 
           {completedTodos.length > 0 && (
             <button
