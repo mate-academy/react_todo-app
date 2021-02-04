@@ -1,4 +1,4 @@
-# TodoApp Checklist
+# TodoList Checklist
 
 ## Basic React Checklist.
 1. PropTypes should describe objects and arrays, which are passed in the component.
