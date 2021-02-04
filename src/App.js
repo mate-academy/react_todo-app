@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [newTodoTitle, setNewTodo] = useState('');
   const [status, setStatus] = useState(false);
-  // const [selectedFilter, setFilter] = useState('All');
+  const [selectedFilter, setFilter] = useState('All');
+  const [isEditable, setEditing] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -60,20 +62,22 @@ function App() {
 
   const completedTodos = todos.filter(todo => todo.completed);
 
-  const filterTodos = (selectedFilter) => {
+  const filterTodos = () => {
     const FILTERS = {
       All: todos,
-      Active: todos.filter(todo => !todo.completed),
-      Completed: todos.filter(todo => todo.completed),
+      Active: uncompletedTodos,
+      Completed: completedTodos,
     };
 
-    setTodos(FILTERS[selectedFilter]);
+    return FILTERS[selectedFilter];
   };
 
-  // const changeFilter = (event) => {
-  //   event.preventDefault();
-  //   setFilter(event.target.name);
-  // };
+  const filteredTodos = filterTodos();
+
+  const changeFilter = (event) => {
+    event.preventDefault();
+    setFilter(event.target.name);
+  };
 
   return (
     <section className="todoapp">
@@ -104,8 +108,15 @@ function App() {
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list">
-          {todos.map(todo => (
-            <li key={todo.id}>
+          {filteredTodos.map(todo => (
+            <li
+              key={todo.id}
+              className={classNames(
+                { completed: todo.completed },
+                { editing: isEditable },
+              )}
+              onDoubleClick={() => setEditing(!isEditable)}
+            >
               <div className="view">
                 <input
                   type="checkbox"
@@ -113,20 +124,29 @@ function App() {
                   onClick={() => toggleCompletedStatus(todo.id)}
                   checked={todo.completed}
                 />
-                <label>{todo.title}</label>
+                <label
+                  htmlFor="toggler"
+                >
+                  {todo.title}
+                </label>
                 <button
                   type="button"
                   className="destroy"
                   onClick={() => deleteTodo(todo.id)}
                 />
               </div>
-              <input type="text" className="edit" />
+              <input
+                id="toggler"
+                type="text"
+                className="edit"
+
+              />
             </li>
           ))}
 
         </ul>
       </section>
-      {todos.length > 0 && (
+      {filteredTodos.length > 0 && (
         <footer className="footer">
           <span className="todo-count">
             {uncompletedTodos.length}
@@ -140,7 +160,7 @@ function App() {
                 href="#/"
                 className="selected"
                 name="All"
-                onClick={() => filterTodos('All')}
+                onClick={changeFilter}
               >
                 All
               </a>
@@ -150,7 +170,7 @@ function App() {
               <a
                 href="#/active"
                 name="Active"
-                onClick={() => filterTodos('Active')}
+                onClick={changeFilter}
               >
                 Active
               </a>
@@ -160,7 +180,7 @@ function App() {
               <a
                 href="#/completed"
                 name="Completed"
-                onClick={() => filterTodos('Completed')}
+                onClick={changeFilter}
               >
                 Completed
               </a>
