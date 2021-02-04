@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
-import data from './data/data.json';
+// import data from './data/data.json';
 
 function App() {
-  const [todos, setTodos] = useState(data);
-  // const [isFooterVisible, setIsFooterVisible] = useState(true);
-  // const [isChecked, setIsChecked] = useState(false);
-
-  localStorage.setItem('todos', JSON.stringify(todos));
+  const [todos, setTodos] = useState([]);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
     const saveTodos = localStorage.getItem('todos');
@@ -19,25 +16,38 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+
+    if (todos.length > 0) {
+      setIsFooterVisible(true);
+    } else {
+      setIsFooterVisible(false);
+    }
+
+    setIsFooterVisible(todos.length > 0);
+  }, [todos]);
+
   const onAll = () => {
-    setTodos([...todos]);
+    setTodos(todos);
   };
 
   const onActive = () => {
-    setTodos([...todos].filter(todo => (
-      todo.completed === false
-    )));
+    const active = [...todos].filter(t => !t.completed);
+
+    setTodos(active);
   };
 
   const onCompleted = () => {
-    const filteredByCompleted = [...todos]
-      .filter(todo => (todo.completed === true));
+    const completed = [...todos].filter(t => t.completed);
 
-    setTodos(filteredByCompleted);
+    setTodos(completed);
   };
 
   const onClearAll = () => {
-    setTodos([]);
+    const clearCompleted = [...todos].filter(t => !t.completed);
+
+    setTodos(clearCompleted);
   };
 
   const addTodo = (newTodo) => {
@@ -46,7 +56,7 @@ function App() {
       return;
     }
 
-    if (todos) {
+    if (newTodo.title) {
       setTodos([...todos, newTodo]);
     }
   };
@@ -57,6 +67,8 @@ function App() {
     setTodos(newTodos);
   };
 
+  const leftTodos = [...todos].filter(t => t.completed).length;
+
   return (
     <section className="todoapp">
       <Header todos={todos} onAddNewTodo={addTodo} />
@@ -66,12 +78,15 @@ function App() {
         onDeleteTodo={deleteTodo}
       />
 
-      <Footer
-        onAll={onAll}
-        onActive={onActive}
-        onCompleted={onCompleted}
-        onClearAll={onClearAll}
-      />
+      {isFooterVisible && (
+        <Footer
+          leftTodos={leftTodos}
+          onAll={onAll}
+          onActive={onActive}
+          onCompleted={onCompleted}
+          onClearAll={onClearAll}
+        />
+      )}
 
     </section>
   );

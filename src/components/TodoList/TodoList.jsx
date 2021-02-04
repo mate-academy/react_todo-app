@@ -1,20 +1,9 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {Header} from "../Header/Header";
+import { TodoItem } from './TodoItem/TodoItem';
 
 export const TodoList = ({ todos, onDeleteTodo }) => {
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target.value;
-
-    setIsChecked({
-      [name]: type === 'checkbox' ? checked : value,
-    });
-  };
-
-  console.log(isChecked);
 
   return (
     <section className="main">
@@ -27,23 +16,7 @@ export const TodoList = ({ todos, onDeleteTodo }) => {
 
       <ul className="todo-list">
         {todos && todos.map((todo, idx) => (
-          <li key={todo.id} className={todo.completed ? 'completed' : ''}>
-            <div className="view">
-              <input
-                type="checkbox"
-                className="toggle"
-                checked={todo.select}
-                onChange={handleChange}
-              />
-              <label>{todo.title}</label>
-              <button
-                onClick={() => onDeleteTodo(idx)}
-                type="button"
-                className="destroy"
-              />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <TodoItem key={idx} todo={todo} idx={idx} onDeleteTodo={onDeleteTodo} />
         ))}
       </ul>
     </section>
