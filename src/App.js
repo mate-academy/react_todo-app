@@ -160,12 +160,25 @@ function App() {
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          onChange={toggleAll}
-        />
+        {(todos.length > 0 && todos.every(todo => todo.isCompleted === true))
+          ? (
+            <input
+              checked
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              onChange={toggleAll}
+            />
+          )
+          : (
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              onChange={toggleAll}
+            />
+          )
+        }
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
@@ -179,12 +192,14 @@ function App() {
         />
       </section>
 
-      <Footer
-        filter={filter}
-        clearCompleted={clearCompleted}
-        todos={todos}
-        handleFilter={handleFilter}
-      />
+      {(todos.length >= 1) && (
+        <Footer
+          filter={filter}
+          clearCompleted={clearCompleted}
+          todos={todos}
+          handleFilter={handleFilter}
+        />
+      )}
     </section>
   );
 }

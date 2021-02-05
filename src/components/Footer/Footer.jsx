@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { TypeTodo } from '../../types';
 
 export const Footer = ({
-  filter,
   todos,
   clearCompleted,
   handleFilter,
