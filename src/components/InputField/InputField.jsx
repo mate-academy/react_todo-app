@@ -15,7 +15,10 @@ export const InputField = ({ addNewTodo }) => {
       isBeingEdited: false,
     };
 
-    addNewTodo(newTodo);
+    if (newTodo.title.trim()) {
+      addNewTodo(newTodo);
+    }
+
     setInputValue('');
   };
 

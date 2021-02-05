@@ -1,39 +1,27 @@
 import React from 'react';
-import cn from 'classnames';
 import PropTypes from 'prop-types';
 import { TypeTodo } from '../../types';
+import { Todo } from '../Todo';
 
 export const TodoList = ({
   removeItem,
   todos,
   toggleCompletedStatus,
+  handleEditingTodo,
+  handleEnter,
+  handleEscape,
 }) => (
   <ul className="todo-list">
     {todos.map(todo => (
-      <li key={todo.id}
-        className={cn({
-          completed: todo.isCompleted,
-          editing: todo.isBeingEdited,
-        })}
-      >
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            onChange={() => toggleCompletedStatus(todo.id)}
-            checked={todo.isCompleted}
-          />
-          <label>
-            {todo.title}
-          </label>
-          <button
-            type="button"
-            className="destroy"
-            onClick={() => removeItem(todo.id)}
-          />
-        </div>
-        <input type="text" className="edit" />
-      </li>
+      <Todo
+        handleEscape={handleEscape}
+        key={todo.id}
+        removeItem={removeItem}
+        toggleCompletedStatus={toggleCompletedStatus}
+        handleEditingTodo={handleEditingTodo}
+        handleEnter={handleEnter}
+        todo={todo}
+      />
     ))}
   </ul>
 );
@@ -42,4 +30,7 @@ TodoList.propTypes = {
   removeItem: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(TypeTodo).isRequired,
   toggleCompletedStatus: PropTypes.func.isRequired,
+  handleEditingTodo: PropTypes.func.isRequired,
+  handleEnter: PropTypes.func.isRequired,
+  handleEscape: PropTypes.func.isRequired,
 };
