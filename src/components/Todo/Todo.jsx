@@ -49,6 +49,14 @@ export const Todo = ({
         />
       </div>
       <input
+        onBlur={(e) => {
+          const value = e.target.value;
+          if (value.trim()) {
+            handleEnter(id, value)
+          } else {
+            handleEscape(id);
+          }
+        }}
         value={inputValue}
         onChange={e => setInputValue(e.target.value)}
         onKeyDown={e => keyDownHandler(e)}
