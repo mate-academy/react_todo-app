@@ -1,66 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { TodoList } from './TodoList';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [todoTitle, setTodoTitle] = useState('');
+  const [isComplited, setIsComplited] = useState(false);
+
+  const addTodo = () => {
+    if (todoTitle.trim().length > 0) {
+      const newTodo = {
+        id: +new Date(),
+        title: todoTitle,
+        completed: false,
+      };
+
+      setTodos([...todos, newTodo]);
+    }
+
+    setTodoTitle('');
+  };
+
+  const notCompleted = todos.filter(todo => !todo.completed);
+
+  const onChangeStatus = () => {
+    if (isComplited) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })));
+    } else {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: true,
+      })));
+    }
+
+    setIsComplited(!isComplited);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          addTodo();
+        }}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={todoTitle}
+            onChange={(event) => {
+              setTodoTitle(event.target.value);
+            }}
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onChange={onChangeStatus}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList todos={todos} />
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {notCompleted.length}
+          {' '}
+          items left
         </span>
 
         <ul className="filters">
