@@ -20,9 +20,28 @@ function App() {
     setTodoTitle('');
   };
 
-  const notCompleted = todos.filter(todo => !todo.completed);
+  const unCompleted = todos.filter(todo => !todo.completed);
 
-  const onChangeStatus = () => {
+  const onChangeStatus = (todoId) => {
+    setTodos(prevTodos => prevTodos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    }));
+
+    if (todos.every(todo => todo.completed)) {
+      setIsComplited(true);
+    } else {
+      setIsComplited(false);
+    }
+  };
+
+  const toggleAll = () => {
     if (isComplited) {
       setTodos(todos.map(todo => ({
         ...todo,
@@ -41,7 +60,7 @@ function App() {
   return (
     <section className="todoapp">
       <header className="header">
-        <h1>todos App</h1>
+        <h1>todos</h1>
 
         <form onSubmit={(event) => {
           event.preventDefault();
@@ -65,15 +84,19 @@ function App() {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          onChange={onChangeStatus}
+          onChange={toggleAll}
+          checked={isComplited}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList todos={todos} />
+        <TodoList
+          todos={todos}
+          onChangeStatus={onChangeStatus}
+        />
       </section>
 
       <footer className="footer">
         <span className="todo-count">
-          {notCompleted.length}
+          {unCompleted.length}
           {' '}
           items left
         </span>
