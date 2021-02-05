@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import '../../styles/todo-list.css';
+import '../../styles/index.css';
+import '../../styles/filters.css';
 
 export const TodoItem = (props) => {
+  const [isCompleted, setIsCompleted] = useState(false);
+
   const {
     completeTodo,
     itemId,
   } = props;
+
+  const soldCheckbox = ({ target: { checked } }) => {
+    setIsCompleted(checked);
+
+    completeTodo(itemId);
+  };
 
   return (
 
@@ -14,10 +25,11 @@ export const TodoItem = (props) => {
       type="checkbox"
       className={classNames({
         toggle: true,
-        completed: true,
-        uncompleted: false,
+        completed: isCompleted,
+        uncompleted: !isCompleted,
       })}
-      onClick={() => completeTodo(itemId)}
+      checked={isCompleted}
+      onChange={soldCheckbox}
     />
 
   );

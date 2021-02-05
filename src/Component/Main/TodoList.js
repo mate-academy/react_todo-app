@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
+import '../../styles/todo-list.css';
+import '../../styles/index.css';
+import '../../styles/filters.css';
 
 export const TodoList = (props) => {
   const [statusCompleteAllTodo, setStatusCompleteAllTodo] = useState(true);
@@ -24,8 +27,11 @@ export const TodoList = (props) => {
     }
   };
 
+  // const isAnyTodos = todos.lengt > 0;
+
   return (
     <>
+      {}
       <input
         type="checkbox"
         id="toggle-all"

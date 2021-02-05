@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import '../../styles/todo-list.css';
+import '../../styles/index.css';
+import '../../styles/filters.css';
 
 export const TodoApp = ({ onAdd, todos }) => {
   const [title, setTitle] = useState('');

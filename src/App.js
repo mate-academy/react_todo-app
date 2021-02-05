@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { TodoApp } from './Component/Header/TodoApp';
 import { TodoList } from './Component/Main/TodoList';
 import { TodoFilter } from './Component/Footer/TodosFilter';
+import './styles/filters.css';
+import './styles/index.css';
+import './styles/todo-list.css';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -32,7 +35,7 @@ function App() {
   };
 
   const onRemoveCompleted = () => {
-    setTodos(todos.filter(todo => todo.completed === true));
+    setTodos(todos.filter(todo => todo.completed === false));
   };
 
   const addTodo = (newTodo) => {
@@ -76,7 +79,6 @@ function App() {
       </header>
 
       <section className="main">
-
         <TodoList
           items={items}
           deleteTodo={deleteTodo}

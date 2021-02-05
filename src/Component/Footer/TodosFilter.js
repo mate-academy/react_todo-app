@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import '../../styles/todo-list.css';
+import '../../styles/index.css';
+import '../../styles/filters.css';
 
 const handleFilter = (event, callFilter, criteria) => {
   event.preventDefault();
@@ -9,6 +12,7 @@ const handleFilter = (event, callFilter, criteria) => {
 
 export const TodoFilter = (props) => {
   const [todosCompletedCount, settodosCompletedCount] = useState(0);
+  const [isAnyCompleted, setIsAnyCompleted] = useState(0);
 
   const {
     todos,
@@ -24,6 +28,13 @@ export const TodoFilter = (props) => {
   useEffect(() => {
     settodosCompletedCount(filterCompleted);
   }, [filterCompleted]);
+
+  const filterIsAnyCompleted = todos
+    .some(todo => todo.completed === true);
+
+  useEffect(() => {
+    setIsAnyCompleted(filterIsAnyCompleted);
+  }, [filterIsAnyCompleted]);
 
   return (
 
@@ -64,13 +75,15 @@ export const TodoFilter = (props) => {
         </li>
       </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={onRemoveCompleted}
-      >
-        Clear completed
-      </button>
+      {isAnyCompleted && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={onRemoveCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

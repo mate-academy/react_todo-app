@@ -1,5 +1,5 @@
 # React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/)
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://sasha39612.github.io/react_todo-app/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
@@ -69,3 +69,22 @@ Implement saving the todos in [the API](https://mate-academy.github.io/fe-studen
 - Use '✕' symbol to remove TODO item on hover
 - [checked](./public/icons/checked.svg)
 - [unchecked](./public/icons/unchecked.svg)
+
+
+4. Implement `TodoItem` component with ability to toggle the `completed` status.
+    - add class `completed` if todo is completed
+5. Add ability to toggle the completed status of all the todos.
+    - `toggleAll` checkbox is active only if all the todos are completed
+    - if you click the checkbox all the items should be marked as `comlpeted`/`not completed`  depending on `toggleAll` status
+6. Create `TodosFilter` component to switch between `all`/`active`/`completed` todos (add it to the `App`)
+    - Use constants instead of just strings (for example `FILTERS.all`)
+9. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
+10. Make inline editing for the TODO item
+    - double click on the TODO title makes it editable (just add a class `editing` to a `li`)
+    - DON'T add `htmlFor` to the label!!!
+    - `Enter` saves changes
+    - `Ecs` cancels editing
+    - Todo title can't be empty!
+    - (*) save changes `onBlur`
+11. Save state of the APP to the `localStorage` ([Required theory](https://javascript.info/localstorage))
+    - use `JSON.stringify` before saving and `JSON.parse` on reading
