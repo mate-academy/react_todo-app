@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import '../../styles/index.css';
 
 export const TodoItem = (props) => {
-  const [isCompleted, setIsCompleted] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [editStatus, setEditStatus] = useState(false);
 
@@ -17,14 +16,12 @@ export const TodoItem = (props) => {
     onAddNewTitle,
   } = props;
 
-  const soldCheckbox = ({ target: { checked } }) => {
-    setIsCompleted(checked);
-
+  const soldCheckbox = () => {
     completeTodo(itemId);
   };
 
   const onBlur = () => {
-    if (editStatus) {
+    if (editStatus && (newTitle.length > 0)) {
       const obj = {
         id: itemId,
         title: newTitle,
@@ -51,17 +48,16 @@ export const TodoItem = (props) => {
   return (
     <>
       <li className={classNames({
-        view: !itemCompleted && !editStatus,
-        completed: itemCompleted && !editStatus,
-        editing: !itemCompleted && editStatus,
+        completed: itemCompleted,
+        editing: editStatus,
       })}
       >
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
-            checked={isCompleted}
-            onChange={soldCheckbox}
+            checked={itemCompleted}
+            onChange={() => soldCheckbox()}
           />
 
           {!editStatus && (

@@ -8,15 +8,17 @@ export const TodoApp = ({ onAdd }) => {
   const addTodo = (event) => {
     event.preventDefault();
 
-    const newTodo = {
-      id: +new Date(),
-      title,
-      completed: false,
-    };
+    if (title.length > 0) {
+      const newTodo = {
+        id: +new Date(),
+        title,
+        completed: false,
+      };
 
-    onAdd(newTodo);
+      onAdd(newTodo);
 
-    setTitle('');
+      setTitle('');
+    }
   };
 
   return (
