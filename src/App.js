@@ -12,21 +12,27 @@ function App() {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
+    if (localStorage.todos) {
+      setTodos(JSON.parse(localStorage.getItem('todos') || '[]'));
+    }
+  }, []);
+
+  useEffect(() => {
     setItems([...todos]);
   }, [todos]);
+
+  const showFotter = todos.length > 0;
 
   const onFilter = (comand) => {
     setFilter(comand);
     switch (comand) {
       case 'active':
-        setItems([...todos]);
 
-        return setItems(items.filter(item => item.completed === false));
+        return setItems(todos.filter(todo => todo.completed === false));
 
       case 'completed':
-        setItems([...todos]);
 
-        return setItems(items.filter(item => item.completed === true));
+        return setItems(todos.filter(todo => todo.completed === true));
 
       default:
 
@@ -66,6 +72,19 @@ function App() {
     })));
   };
 
+  const onAddNewTitle = (newTitle) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === newTitle.id) {
+        return {
+          ...todo,
+          title: newTitle.title,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
   return (
 
     <section className="todoapp">
@@ -84,6 +103,8 @@ function App() {
           deleteTodo={deleteTodo}
           completeTodo={completeTodo}
           completeAllTodo={completeAllTodo}
+          showFotter={showFotter}
+          onAddNewTitle={onAddNewTitle}
         />
       </section>
 
@@ -92,6 +113,7 @@ function App() {
         filter={filter}
         onFilter={onFilter}
         onRemoveCompleted={onRemoveCompleted}
+        showFotter={showFotter}
       />
 
     </section>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 import '../../styles/todo-list.css';
@@ -13,6 +14,8 @@ export const TodoList = (props) => {
     deleteTodo,
     completeTodo,
     completeAllTodo,
+    showFotter,
+    onAddNewTitle,
   } = props;
 
   const handleClick = () => {
@@ -27,42 +30,35 @@ export const TodoList = (props) => {
     }
   };
 
-  // const isAnyTodos = todos.lengt > 0;
-
   return (
     <>
-      {}
       <input
         type="checkbox"
         id="toggle-all"
-        className="toggle-all"
+        className={
+          classNames({
+            'toggle-all': showFotter,
+            hidden: !showFotter,
+          })}
         onClick={handleClick}
       />
-      <label htmlFor="toggle-all">
-        Mark all as complete
-      </label>
+      {showFotter && (
+        <label htmlFor="toggle-all">
+          Mark all as complete
+        </label>
+      )}
 
       <ul className="todo-list">
         {items.map(item => (
-          <li
-            className="todo-list-item"
+          <TodoItem
             key={item.id}
-          >
-            <div className="view">
-              <TodoItem
-                completeTodo={completeTodo}
-                itemId={item.id}
-              />
-              <label>{item.title}</label>
-              <button
-                type="button"
-                className="destroy"
-                value={item.id}
-                onClick={event => deleteTodo(event.target.value)}
-              />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            completeTodo={completeTodo}
+            itemId={item.id}
+            itemTitle={item.title}
+            deleteTodo={deleteTodo}
+            itemCompleted={item.completed}
+            onAddNewTitle={onAddNewTitle}
+          />
         ))}
       </ul>
     </>
@@ -70,6 +66,8 @@ export const TodoList = (props) => {
 };
 
 TodoList.propTypes = {
+  onAddNewTitle: PropTypes.func.isRequired,
+  showFotter: PropTypes.bool.isRequired,
   completeTodo: PropTypes.func.isRequired,
   completeAllTodo: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,

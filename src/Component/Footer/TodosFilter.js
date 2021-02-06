@@ -19,6 +19,7 @@ export const TodoFilter = (props) => {
     filter,
     onFilter,
     onRemoveCompleted,
+    showFotter,
   } = props;
 
   const filterCompleted = todos
@@ -38,7 +39,13 @@ export const TodoFilter = (props) => {
 
   return (
 
-    <footer className="footer">
+    <footer
+      className={
+        classNames({
+          footer: showFotter,
+          hidden: !showFotter,
+        })}
+    >
       <span className="todo-count">
         {`${todosCompletedCount}  items left`}
       </span>
@@ -89,6 +96,7 @@ export const TodoFilter = (props) => {
 };
 
 TodoFilter.propTypes = {
+  showFotter: PropTypes.bool.isRequired,
   filter: PropTypes.string.isRequired,
   onFilter: PropTypes.func.isRequired,
   onRemoveCompleted: PropTypes.func.isRequired,

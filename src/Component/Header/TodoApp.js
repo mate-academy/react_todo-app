@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import '../../styles/todo-list.css';
 import '../../styles/index.css';
-import '../../styles/filters.css';
 
-export const TodoApp = ({ onAdd, todos }) => {
+export const TodoApp = ({ onAdd }) => {
   const [title, setTitle] = useState('');
 
   const addTodo = (event) => {
@@ -41,15 +39,4 @@ export const TodoApp = ({ onAdd, todos }) => {
 
 TodoApp.propTypes = {
   onAdd: PropTypes.func.isRequired,
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      completed: PropTypes.bool.isRequired,
-    }),
-  ),
-};
-
-TodoApp.defaultProps = {
-  todos: [],
 };
