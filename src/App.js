@@ -3,27 +3,31 @@ import { InputField } from './components/InputField';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
+const useLocalStorage = (key, initialValue) => {
+  const [value, setValue] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(key)) || initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  const save = (newValue) => {
+    setValue(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
+  };
+
+  return [value, save];
+};
+
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [allStatus, setAllStatus] = useState(false);
   const [filter, setFilter] = useState('all');
   const [todosOnPage, setTodosOnPage] = useState([...todos]);
 
   useEffect(() => {
-    if (localStorage.todos) {
-      let todosFromStorage = JSON.parse(localStorage.getItem('todos'));
-
-      todosFromStorage = todosFromStorage.map(todo => JSON.parse(todo));
-      setTodos(todosFromStorage);
-    }
-  }, []);
-
-  useEffect(() => {
     setTodosOnPage([...todos]);
-
-    const storedTodos = [...todos].map(todo => JSON.stringify(todo));
-
-    localStorage.setItem('todos', JSON.stringify(storedTodos));
   }, [todos]);
 
   const addNewTodo = (newTodo) => {
@@ -94,11 +98,12 @@ function App() {
     }));
   };
 
-  const handleEscape = (todoId) => {
+  const handleEscape = (todoId, value) => {
     setTodos(todos.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
+          title: value,
           isBeingEdited: false,
         };
       }
