@@ -17,7 +17,8 @@ export const Todo = ({
     if (e.key === 'Enter' && inputValue.trim()) {
       handleEnter(id, inputValue);
     } else if (e.key === 'Escape') {
-      handleEscape(id);
+      setInputValue(title);
+      handleEscape(id, title);
     }
   };
 
@@ -38,7 +39,9 @@ export const Todo = ({
           checked={isCompleted}
         />
         <label
-          onDoubleClick={() => handleEditingTodo(id)}
+          onDoubleClick={() => {
+            handleEditingTodo(id);
+          }}
         >
           {title}
         </label>
@@ -55,12 +58,16 @@ export const Todo = ({
           if (value.trim()) {
             handleEnter(id, value);
           } else {
-            handleEscape(id);
+            handleEscape(id, title);
           }
         }}
         value={inputValue}
-        onChange={e => setInputValue(e.target.value)}
-        onKeyDown={e => keyDownHandler(e, inputValue)}
+        onChange={(e) => {
+          setInputValue(e.target.value);
+        }}
+        onKeyDown={(e) => {
+          keyDownHandler(e);
+        }}
         type="text"
         className="edit"
       />

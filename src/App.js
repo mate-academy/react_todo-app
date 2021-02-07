@@ -101,11 +101,12 @@ function App() {
     }));
   };
 
-  const handleEscape = (todoId) => {
+  const handleEscape = (todoId, title) => {
     setTodos(todos.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
+          title,
           isBeingEdited: false,
         };
       }
