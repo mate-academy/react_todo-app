@@ -14,7 +14,7 @@ export const Todo = ({
   const [inputValue, setInputValue] = useState('');
 
   const keyDownHandler = (e) => {
-    if (e.key === 'Enter' && inputValue) {
+    if (e.key === 'Enter' && inputValue.trim()) {
       handleEnter(id, inputValue);
     } else if (e.key === 'Escape') {
       handleEscape(id);
@@ -50,16 +50,17 @@ export const Todo = ({
       </div>
       <input
         onBlur={(e) => {
-          const value = e.target.value;
+          const { value } = e.target;
+
           if (value.trim()) {
-            handleEnter(id, value)
+            handleEnter(id, value);
           } else {
             handleEscape(id);
           }
         }}
         value={inputValue}
         onChange={e => setInputValue(e.target.value)}
-        onKeyDown={e => keyDownHandler(e)}
+        onKeyDown={e => keyDownHandler(e, inputValue)}
         type="text"
         className="edit"
       />

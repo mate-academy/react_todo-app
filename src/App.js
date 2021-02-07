@@ -80,7 +80,10 @@ function App() {
         };
       }
 
-      return todo;
+      return {
+        ...todo,
+        isBeingEdited: false,
+      };
     }));
   };
 
@@ -98,12 +101,11 @@ function App() {
     }));
   };
 
-  const handleEscape = (todoId, value) => {
+  const handleEscape = (todoId) => {
     setTodos(todos.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
-          title: value,
           isBeingEdited: false,
         };
       }
