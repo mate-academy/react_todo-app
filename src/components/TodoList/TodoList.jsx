@@ -1,7 +1,7 @@
 import React from 'react';
+import { Todo } from '../Todo';
 import PropTypes from 'prop-types';
 import { TypeTodo } from '../../types';
-import { Todo } from '../Todo';
 
 export const TodoList = ({
   removeItem,

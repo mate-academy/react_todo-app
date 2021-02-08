@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { InputField } from './components/InputField';
-import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
+import { TodoList } from './components/TodoList';
 import { FILTERS } from './constants';
 
 function App() {

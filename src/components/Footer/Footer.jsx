@@ -1,7 +1,7 @@
 import React from 'react';
+import { FILTERS } from '../../constants';
 import PropTypes from 'prop-types';
 import { TypeTodo } from '../../types';
-import { FILTERS } from '../../constants';
 
 export const Footer = ({
   todos,
@@ -17,9 +17,7 @@ export const Footer = ({
   return (
     <footer className="footer">
       <span className="todo-count">
-        {todosInProgress.length}
-        {' '}
-        items left
+        {`${todosInProgress.length} items left`}
       </span>
 
       <ul
