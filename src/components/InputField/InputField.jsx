@@ -11,7 +11,7 @@ export const InputField = ({ addNewTodo }) => {
     const newTodo = {
       title: inputValue,
       id: uuidv4(),
-      isCompleted: false,
+      completed: false,
       isBeingEdited: false,
     };
 

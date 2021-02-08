@@ -8,18 +8,16 @@ export const TodoList = ({
   todos,
   toggleCompletedStatus,
   handleEditingTodo,
-  handleEnter,
-  handleEscape,
+  handleEditedTodo,
 }) => (
   <ul className="todo-list">
     {todos.map(todo => (
       <Todo
-        handleEscape={handleEscape}
         key={todo.id}
         removeItem={removeItem}
         toggleCompletedStatus={toggleCompletedStatus}
         handleEditingTodo={handleEditingTodo}
-        handleEnter={handleEnter}
+        handleEditedTodo={handleEditedTodo}
         todo={todo}
       />
     ))}
@@ -31,6 +29,5 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(TypeTodo).isRequired,
   toggleCompletedStatus: PropTypes.func.isRequired,
   handleEditingTodo: PropTypes.func.isRequired,
-  handleEnter: PropTypes.func.isRequired,
-  handleEscape: PropTypes.func.isRequired,
+  handleEditedTodo: PropTypes.func.isRequired,
 };

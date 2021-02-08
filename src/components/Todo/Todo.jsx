@@ -4,29 +4,32 @@ import PropTypes from 'prop-types';
 import { TypeTodo } from '../../types';
 
 export const Todo = ({
-  todo: { id, title, isCompleted, isBeingEdited },
+  todo: { id, title, completed, isBeingEdited },
   removeItem,
   toggleCompletedStatus,
   handleEditingTodo,
-  handleEnter,
-  handleEscape,
+  handleEditedTodo,
 }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [todoTitle, setTodoTitle] = useState('');
 
   const keyDownHandler = (e) => {
-    if (e.key === 'Enter' && inputValue.trim()) {
-      handleEnter(id, inputValue);
+    if (e.key === 'Enter' && todoTitle.trim()) {
+      handleEditedTodo(id, todoTitle);
     } else if (e.key === 'Escape') {
-      setInputValue(title);
-      handleEscape(id, title);
+      setTodoTitle(title);
+      handleEditedTodo(id, title);
     }
+  };
+
+  const handleBlur = (newTitle, todoId) => {
+    handleEditedTodo(todoId, newTitle);
   };
 
   return (
     <li
       key={id}
       className={cn({
-        completed: isCompleted,
+        completed,
         editing: isBeingEdited,
       })}
 
@@ -36,7 +39,7 @@ export const Todo = ({
           type="checkbox"
           className="toggle"
           onChange={() => toggleCompletedStatus(id)}
-          checked={isCompleted}
+          checked={completed}
         />
         <label
           onDoubleClick={() => {
@@ -52,22 +55,12 @@ export const Todo = ({
         />
       </div>
       <input
-        onBlur={(e) => {
-          const { value } = e.target;
-
-          if (value.trim()) {
-            handleEnter(id, value);
-          } else {
-            handleEscape(id, title);
-          }
-        }}
-        value={inputValue}
+        onBlur={e => handleBlur(e.target.value, id)}
+        value={todoTitle}
         onChange={(e) => {
-          setInputValue(e.target.value);
+          setTodoTitle(e.target.value);
         }}
-        onKeyDown={(e) => {
-          keyDownHandler(e);
-        }}
+        onKeyDown={keyDownHandler}
         type="text"
         className="edit"
       />
@@ -80,6 +73,5 @@ Todo.propTypes = {
   removeItem: PropTypes.func.isRequired,
   toggleCompletedStatus: PropTypes.func.isRequired,
   handleEditingTodo: PropTypes.func.isRequired,
-  handleEnter: PropTypes.func.isRequired,
-  handleEscape: PropTypes.func.isRequired,
+  handleEditedTodo: PropTypes.func.isRequired,
 };

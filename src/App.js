@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { InputField } from './components/InputField';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
@@ -12,47 +12,33 @@ const useLocalStorage = (key, initialValue) => {
     }
   });
 
-  const save = (newValue) => {
+  const saveValue = (newValue) => {
     setValue(newValue);
     localStorage.setItem(key, JSON.stringify(newValue));
   };
 
-  return [value, save];
+  return [value, saveValue];
 };
 
 function App() {
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [allStatus, setAllStatus] = useState(false);
   const [filter, setFilter] = useState('all');
-  const [todosOnPage, setTodosOnPage] = useState([...todos]);
 
-  useEffect(() => {
-    setTodosOnPage([...todos]);
-
-    let filtered = [...todos];
-
+  const getTodos = (todosList) => {
     switch (filter) {
       case ('active'):
-        filtered = filtered
-          .filter(todo => todo.isCompleted === false);
-        setTodosOnPage(filtered);
-        break;
+        return todosList.filter(todo => todo.completed === false);
 
       case ('completed'):
-        filtered = filtered
-          .filter(todo => todo.isCompleted === true);
-        setTodosOnPage(filtered);
-        break;
-
-      case ('all'):
-        setTodosOnPage([...todos]);
-        break;
+        return todosList.filter(todo => todo.completed === true);
 
       default:
-        setTodosOnPage([...todos]);
-        break;
+        return todosList;
     }
-  }, [todos, filter]);
+  };
+
+  const filteredTodos = useMemo(() => getTodos(todos), [todos, filter]);
 
   const addNewTodo = (newTodo) => {
     setTodos([newTodo, ...todos]);
@@ -63,7 +49,7 @@ function App() {
       if (todo.id === todoId) {
         return {
           ...todo,
-          isCompleted: !todo.isCompleted,
+          completed: !todo.completed,
         };
       }
 
@@ -76,19 +62,19 @@ function App() {
   };
 
   const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.isCompleted));
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   const toggleAll = () => {
     if (allStatus) {
       setTodos(todos.map(todo => ({
         ...todo,
-        isCompleted: false,
+        completed: false,
       })));
     } else {
       setTodos(todos.map(todo => ({
         ...todo,
-        isCompleted: true,
+        completed: true,
       })));
     }
 
@@ -111,51 +97,28 @@ function App() {
     }));
   };
 
-  const handleEnter = (todoId, value) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          isBeingEdited: false,
-          title: value,
-        };
-      }
+  const handleEditedTodo = (todoId, title) => {
+    if (title.trim()) {
+      setTodos(todos.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            isBeingEdited: false,
+            title,
+          };
+        }
 
-      return todo;
-    }));
-  };
+        return todo;
+      }));
 
-  const handleEscape = (todoId, title) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          title,
-          isBeingEdited: false,
-        };
-      }
+      return todos;
+    }
 
-      return todo;
-    }));
+    return todos;
   };
 
   const handleFilter = (value) => {
-    switch (value) {
-      case ('active'):
-        setFilter('active');
-
-        return filter;
-      case ('completed'):
-        setFilter('completed');
-
-        return filter;
-      case ('all'):
-        setFilter('all');
-
-        return filter;
-      default:
-        return filter;
-    }
+    setFilter(value);
   };
 
   return (
@@ -167,43 +130,48 @@ function App() {
       </header>
 
       <section className="main">
-        {(todos.length > 0 && todos.every(todo => todo.isCompleted === true))
-          ? (
+        {todos.length === 0 && (<></>)}
+        {(todos.length > 0 && todos.every(todo => todo.completed === true)) && (
+          <>
             <input
               checked
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
-              onChange={e => toggleAll(e)}
+              onChange={toggleAll}
               value={allStatus}
             />
-          )
-          : (
-            <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              onChange={e => toggleAll(e)}
-              value={allStatus}
-            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          </>
+        ) }
+        {(todos.length > 0 && !todos
+          .every(todo => todo.completed === true))
+          && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                onChange={toggleAll}
+                value={allStatus}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
           )
         }
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
           filter={filter}
-          handleEnter={handleEnter}
+          handleEditedTodo={handleEditedTodo}
           handleEditingTodo={handleEditingTodo}
           removeItem={removeItem}
           toggleCompletedStatus={toggleCompletedStatus}
-          todos={todosOnPage}
-          handleEscape={handleEscape}
+          todos={filteredTodos}
         />
       </section>
 
-      {(todos.length >= 1) && (
+      {(todos.length > 0) && (
         <Footer
-          filter={filter}
           clearCompleted={clearCompleted}
           todos={todos}
           handleFilter={handleFilter}

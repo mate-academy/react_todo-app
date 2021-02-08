@@ -7,17 +7,10 @@ export const Footer = ({
   clearCompleted,
   handleFilter,
 }) => {
-  const todosInProgress = todos.filter(todo => !todo.isCompleted);
+  const todosInProgress = todos.filter(todo => !todo.completed);
 
-  const handleFilterClick = (e) => {
-    const arr = e.target.href.split('/');
-    let value = arr[arr.length - 1];
-
-    if (!value) {
-      value = 'all';
-    }
-
-    handleFilter(value);
+  const onClickHandleFilter = (filter) => {
+    handleFilter(filter);
   };
 
   return (
@@ -33,7 +26,7 @@ export const Footer = ({
       >
         <li>
           <a
-            onClick={e => handleFilterClick(e)}
+            onClick={() => onClickHandleFilter('all')}
             href="#/"
           >
             All
@@ -42,7 +35,7 @@ export const Footer = ({
 
         <li>
           <a
-            onClick={e => handleFilterClick(e)}
+            onClick={() => onClickHandleFilter('active')}
             href="#/active"
           >
             Active
@@ -51,7 +44,7 @@ export const Footer = ({
 
         <li>
           <a
-            onClick={e => handleFilterClick(e)}
+            onClick={() => onClickHandleFilter('completed')}
             href="#/completed"
           >
             Completed
@@ -73,6 +66,5 @@ export const Footer = ({
 Footer.propTypes = {
   todos: PropTypes.arrayOf(TypeTodo).isRequired,
   clearCompleted: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
   handleFilter: PropTypes.func.isRequired,
 };
