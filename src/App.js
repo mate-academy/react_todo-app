@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { TodoList } from './TodoList';
+import { TodosFilter } from './TodosFilter';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [todoTitle, setTodoTitle] = useState('');
-  const [isComplited, setIsComplited] = useState(false);
+  const [toggleStatus, setToggle] = useState(true);
+  const [selectedFilter, setFilter] = useState('All');
 
   const addTodo = () => {
     if (todoTitle.trim().length > 0) {
@@ -21,6 +23,7 @@ function App() {
   };
 
   const unCompleted = todos.filter(todo => !todo.completed);
+  const completed = todos.filter(todo => todo.completed);
 
   const onChangeStatus = (todoId) => {
     setTodos(prevTodos => prevTodos.map((todo) => {
@@ -35,27 +38,42 @@ function App() {
     }));
 
     if (todos.every(todo => todo.completed)) {
-      setIsComplited(true);
+      setToggle(false);
     } else {
-      setIsComplited(false);
+      setToggle(true);
     }
   };
 
   const toggleAll = () => {
-    if (isComplited) {
-      setTodos(todos.map(todo => ({
-        ...todo,
-        completed: false,
-      })));
-    } else {
-      setTodos(todos.map(todo => ({
-        ...todo,
-        completed: true,
-      })));
-    }
-
-    setIsComplited(!isComplited);
+    setTodos(todos.map(todo => (
+      { ...todo, completed: toggleStatus }
+    )));
+    setToggle(!toggleStatus);
   };
+
+  const FILTERS = {
+    All: 'All',
+    Active: 'Active',
+    Completed: 'Completed',
+  };
+
+  const filterTodos = (key) => {
+    switch (key) {
+      case 'All':
+        return todos;
+
+      case 'Active':
+        return unCompleted;
+
+      case 'Completed':
+        return completed;
+
+      default:
+        return todos;
+    }
+  };
+
+  const filteredTodos = filterTodos(FILTERS[selectedFilter]);
 
   return (
     <section className="todoapp">
@@ -85,11 +103,11 @@ function App() {
           id="toggle-all"
           className="toggle-all"
           onChange={toggleAll}
-          checked={isComplited}
+          checked={!unCompleted.length > 0}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
-          todos={todos}
+          todos={filteredTodos}
           onChangeStatus={onChangeStatus}
         />
       </section>
@@ -101,19 +119,10 @@ function App() {
           items left
         </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+        <TodosFilter
+          setFilter={setFilter}
+          selectedFilter={selectedFilter}
+        />
 
         <button type="button" className="clear-completed">
           Clear completed
