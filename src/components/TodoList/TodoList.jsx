@@ -6,7 +6,7 @@ import { Todo } from '../Todo';
 export const TodoList = ({
   removeItem,
   todos,
-  toggleCompletedStatus,
+  checkTodo,
   handleEditingTodo,
   handleEditedTodo,
 }) => (
@@ -15,7 +15,7 @@ export const TodoList = ({
       <Todo
         key={todo.id}
         removeItem={removeItem}
-        toggleCompletedStatus={toggleCompletedStatus}
+        checkTodo={checkTodo}
         handleEditingTodo={handleEditingTodo}
         handleEditedTodo={handleEditedTodo}
         todo={todo}
@@ -27,7 +27,7 @@ export const TodoList = ({
 TodoList.propTypes = {
   removeItem: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(TypeTodo).isRequired,
-  toggleCompletedStatus: PropTypes.func.isRequired,
+  checkTodo: PropTypes.func.isRequired,
   handleEditingTodo: PropTypes.func.isRequired,
   handleEditedTodo: PropTypes.func.isRequired,
 };

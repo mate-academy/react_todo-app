@@ -6,7 +6,7 @@ import { TypeTodo } from '../../types';
 export const Todo = ({
   todo: { id, title, completed, isBeingEdited },
   removeItem,
-  toggleCompletedStatus,
+  checkTodo,
   handleEditingTodo,
   handleEditedTodo,
 }) => {
@@ -38,7 +38,7 @@ export const Todo = ({
         <input
           type="checkbox"
           className="toggle"
-          onChange={() => toggleCompletedStatus(id)}
+          onChange={() => checkTodo(id)}
           checked={completed}
         />
         <label
@@ -71,7 +71,7 @@ export const Todo = ({
 Todo.propTypes = {
   todo: TypeTodo.isRequired,
   removeItem: PropTypes.func.isRequired,
-  toggleCompletedStatus: PropTypes.func.isRequired,
+  checkTodo: PropTypes.func.isRequired,
   handleEditingTodo: PropTypes.func.isRequired,
   handleEditedTodo: PropTypes.func.isRequired,
 };
