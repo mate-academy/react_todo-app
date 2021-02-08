@@ -28,7 +28,31 @@ function App() {
 
   useEffect(() => {
     setTodosOnPage([...todos]);
-  }, [todos]);
+
+    let filtered = [...todos];
+
+    switch (filter) {
+      case ('active'):
+        filtered = filtered
+          .filter(todo => todo.isCompleted === false);
+        setTodosOnPage(filtered);
+        break;
+
+      case ('completed'):
+        filtered = filtered
+          .filter(todo => todo.isCompleted === true);
+        setTodosOnPage(filtered);
+        break;
+
+      case ('all'):
+        setTodosOnPage([...todos]);
+        break;
+
+      default:
+        setTodosOnPage([...todos]);
+        break;
+    }
+  }, [todos, filter]);
 
   const addNewTodo = (newTodo) => {
     setTodos([newTodo, ...todos]);
@@ -119,43 +143,18 @@ function App() {
     switch (value) {
       case ('active'):
         setFilter('active');
-        break;
+
+        return filter;
       case ('completed'):
         setFilter('completed');
-        break;
+
+        return filter;
       case ('all'):
         setFilter('all');
-        break;
+
+        return filter;
       default:
         return filter;
-    }
-
-    return filterTodos();
-  };
-
-  const filterTodos = () => {
-    let filtered = [...todos];
-
-    switch (filter) {
-      case ('active'):
-        filtered = filtered
-          .filter(todo => todo.isCompleted === false);
-        setTodosOnPage(filtered);
-
-        return todosOnPage;
-      case ('completed'):
-        filtered = filtered
-          .filter(todo => todo.isCompleted === true);
-        setTodosOnPage(filtered);
-
-        return todosOnPage;
-      case ('all'):
-        setTodosOnPage([...todos]);
-
-        return todosOnPage;
-
-      default:
-        return todosOnPage;
     }
   };
 
@@ -175,7 +174,8 @@ function App() {
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
-              onChange={toggleAll}
+              onChange={e => toggleAll(e)}
+              value={allStatus}
             />
           )
           : (
@@ -183,7 +183,8 @@ function App() {
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
-              onChange={toggleAll}
+              onChange={e => toggleAll(e)}
+              value={allStatus}
             />
           )
         }
