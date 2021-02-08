@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
@@ -7,6 +7,18 @@ function App() {
   const [newTodoTitle, setNewTodo] = useState('');
   const [status, setStatus] = useState(false);
   const [selectedFilter, setFilter] = useState('All');
+
+  useEffect(() => {
+    if (!localStorage.todos) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    } else {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -71,24 +83,36 @@ function App() {
     }));
   };
 
+  const completedTodos = todos.filter(todo => todo.completed);
   const uncompletedTodos = todos.filter(todo => !todo.completed);
   const clearCompleted = () => {
     setTodos(uncompletedTodos);
   };
 
-  const completedTodos = todos.filter(todo => todo.completed);
-
-  const filterTodos = () => {
-    const FILTERS = {
-      All: todos,
-      Active: uncompletedTodos,
-      Completed: completedTodos,
-    };
-
-    return FILTERS[selectedFilter];
+  const FILTERS = {
+    All: 'All',
+    Active: 'Active',
+    Completed: 'Completed',
   };
 
-  const filteredTodos = filterTodos();
+  // eslint-disable-next-line consistent-return
+  const filterTodos = (key) => {
+    switch (key) {
+      case 'All':
+        return todos;
+
+      case 'Active':
+        return uncompletedTodos;
+
+      case 'Completed':
+        return completedTodos;
+
+      default:
+        break;
+    }
+  };
+
+  const filteredTodos = filterTodos(FILTERS[selectedFilter]);
 
   return (
     <section className="todoapp">
@@ -103,7 +127,7 @@ function App() {
             className="new-todo"
             placeholder="What needs to be done?"
             value={newTodoTitle}
-            onChange={event => setNewTodo(event.target.value)}
+            onChange={event => setNewTodo(event.target.value.trimLeft())}
           />
         </form>
       </header>
