@@ -1,3 +1,14 @@
+@font-face {
+  font-family: "Helvetica Neue";
+  src: local(helvetica neue bold),
+    local(helveticaneuecyr-bold),
+    url(./fonts/HelveticaNeueCyr-Bold.woff2) format("woff2"),
+    url(./fonts/HelveticaNeueCyr-Bold.woff) format("woff"),
+    url(./fonts/HelveticaNeueCyr-Bold.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -11,9 +22,24 @@ button {
   background: none;
   font-size: 100%;
   vertical-align: baseline;
-  font-family: inherit;
   font-weight: inherit;
+  font-family: inherit;
   color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.button-new {
+  margin: 5px, 0, 0;
+  padding: 0;
+  background: green;
+  font-size: 12px;
+  vertical-align: baseline;
+  font-weight: inherit;
+  border: 1px groove black;
+  color: white;
   -webkit-appearance: none;
   appearance: none;
   -webkit-font-smoothing: antialiased;
@@ -31,6 +57,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
+}
+
+.conteiner-button {
+  display: flex;
+  justify-content: space-between;
 }
 
 .hidden {

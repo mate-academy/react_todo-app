@@ -2,20 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { TodoApp } from './Component/Header/TodoApp';
 import { TodoList } from './Component/Main/TodoList';
 import { TodoFilter } from './Component/Footer/TodosFilter';
+import * as api from './Component/API/api';
 import './styles/filters.css';
 import './styles/index.css';
 import './styles/todo-list.css';
 
 function App() {
-  const [todos, setTodos] = useState([]);
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState('');
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     if (localStorage.todos) {
       setTodos(JSON.parse(localStorage.getItem('todos') || '[]'));
     }
   }, []);
+
+  const addTodo = (newTodo) => {
+    setTodos(prevTodos => [...prevTodos, newTodo]);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  };
 
   useEffect(() => {
     setItems([...todos]);
@@ -42,10 +48,6 @@ function App() {
 
   const onRemoveCompleted = () => {
     setTodos(todos.filter(todo => todo.completed === false));
-  };
-
-  const addTodo = (newTodo) => {
-    setTodos(prevTodos => [...prevTodos, newTodo]);
   };
 
   const deleteTodo = (removeTodoID) => {
@@ -89,6 +91,29 @@ function App() {
 
     <section className="todoapp">
       <header className="header">
+
+        <div className="conteiner-button">
+          <button
+            type="button"
+            className="button-new"
+            onClick={() => {
+              api.addUser();
+            }}
+          >
+            ADD USER
+          </button>
+
+          <button
+            type="button"
+            className="button-new"
+            onClick={() => {
+              api.addUser();
+            }}
+          >
+            GET USERID
+          </button>
+        </div>
+
         <h1>todos</h1>
 
         <TodoApp
