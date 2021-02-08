@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { InputField } from './components/InputField';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
+import { FILTERS } from './constants';
 
 const useLocalStorage = (key, initialValue) => {
   const [value, setValue] = useState(() => {
@@ -23,14 +24,14 @@ const useLocalStorage = (key, initialValue) => {
 function App() {
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [allStatus, setAllStatus] = useState(false);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(FILTERS.all);
 
   const getTodos = (todosList) => {
     switch (filter) {
-      case ('active'):
+      case (FILTERS.active):
         return todosList.filter(todo => todo.completed === false);
 
-      case ('completed'):
+      case (FILTERS.completed):
         return todosList.filter(todo => todo.completed === true);
 
       default:

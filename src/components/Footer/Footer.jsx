@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TypeTodo } from '../../types';
+import { FILTERS } from '../../constants';
 
 export const Footer = ({
   todos,
@@ -26,7 +27,7 @@ export const Footer = ({
       >
         <li>
           <a
-            onClick={() => onClickHandleFilter('all')}
+            onClick={() => onClickHandleFilter(FILTERS.all)}
             href="#/"
           >
             All
@@ -35,7 +36,7 @@ export const Footer = ({
 
         <li>
           <a
-            onClick={() => onClickHandleFilter('active')}
+            onClick={() => onClickHandleFilter(FILTERS.active)}
             href="#/active"
           >
             Active
@@ -44,7 +45,7 @@ export const Footer = ({
 
         <li>
           <a
-            onClick={() => onClickHandleFilter('completed')}
+            onClick={() => onClickHandleFilter(FILTERS.completed)}
             href="#/completed"
           >
             Completed
