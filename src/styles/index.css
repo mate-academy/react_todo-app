@@ -37,6 +37,11 @@ body {
   display: none;
 }
 
+input,
+textarea {
+  outline: none;
+}
+
 .todoapp {
   background: #fff;
   margin: 130px 0 40px;
