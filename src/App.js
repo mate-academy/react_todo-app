@@ -123,7 +123,6 @@ function App() {
       </header>
 
       <section className="main">
-        {todos.length === 0 && (<></>)}
         {todos.length > 0 && (
           <>
             <input
@@ -132,7 +131,6 @@ function App() {
               id="toggle-all"
               className="toggle-all"
               onChange={toggleAll}
-              value={allStatus}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
           </>

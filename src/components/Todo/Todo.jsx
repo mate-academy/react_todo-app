@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
-import { TypeTodo } from '../../types';
 import PropTypes from 'prop-types';
+import { TypeTodo } from '../../types';
 
 export const Todo = ({
   todo: { id, title, completed, isBeingEdited },
@@ -28,7 +28,7 @@ export const Todo = ({
   return (
     <li
       key={id}
-      className={cn({
+      className={cn('Todo', {
         completed,
         editing: isBeingEdited,
       })}
