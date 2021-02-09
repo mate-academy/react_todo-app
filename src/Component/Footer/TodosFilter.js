@@ -18,7 +18,7 @@ export const TodoFilter = (props) => {
     todos,
     filter,
     onFilter,
-    onRemoveCompleted,
+    clearCompleted,
     showFotter,
   } = props;
 
@@ -86,7 +86,7 @@ export const TodoFilter = (props) => {
         <button
           type="button"
           className="clear-completed"
-          onClick={onRemoveCompleted}
+          onClick={clearCompleted}
         >
           Clear completed
         </button>
@@ -99,7 +99,7 @@ TodoFilter.propTypes = {
   showFotter: PropTypes.bool.isRequired,
   filter: PropTypes.string.isRequired,
   onFilter: PropTypes.func.isRequired,
-  onRemoveCompleted: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

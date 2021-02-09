@@ -61,7 +61,7 @@ body {
 
 .conteiner-button {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .hidden {
@@ -238,4 +238,9 @@ body {
   .footer {
     height: 50px;
   }
+}
+
+.user-name {
+  display: block;
+  text-align: center;
 }

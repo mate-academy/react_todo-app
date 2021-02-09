@@ -53,10 +53,8 @@ export const TodoList = (props) => {
           <TodoItem
             key={item.id}
             completeTodo={completeTodo}
-            itemId={item.id}
-            itemTitle={item.title}
+            item={item}
             deleteTodo={deleteTodo}
-            itemCompleted={item.completed}
             onAddNewTitle={onAddNewTitle}
           />
         ))}

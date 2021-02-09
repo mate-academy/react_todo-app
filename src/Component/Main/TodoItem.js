@@ -8,22 +8,16 @@ export const TodoItem = (props) => {
   const [editStatus, setEditStatus] = useState(false);
 
   const {
+    item,
     completeTodo,
-    itemId,
-    itemTitle,
     deleteTodo,
-    itemCompleted,
     onAddNewTitle,
   } = props;
-
-  const soldCheckbox = () => {
-    completeTodo(itemId);
-  };
 
   const onBlur = () => {
     if (editStatus && (newTitle.length > 0)) {
       const obj = {
-        id: itemId,
+        id: item.id,
         title: newTitle,
       };
 
@@ -38,7 +32,7 @@ export const TodoItem = (props) => {
     if (keyPush === 'Enter') {
       onBlur();
     } else if (keyPush === 'Escape') {
-      onAddNewTitle(itemTitle);
+      onAddNewTitle(item.title);
 
       setEditStatus(false);
       setNewTitle('');
@@ -48,7 +42,7 @@ export const TodoItem = (props) => {
   return (
     <>
       <li className={classNames({
-        completed: itemCompleted,
+        completed: item.completed,
         editing: editStatus,
       })}
       >
@@ -56,23 +50,22 @@ export const TodoItem = (props) => {
           <input
             type="checkbox"
             className="toggle"
-            checked={itemCompleted}
-            onChange={() => soldCheckbox()}
+            checked={item.completed}
+            onChange={() => completeTodo(item.id)}
           />
 
           {!editStatus && (
             <label
-              onDoubleClick={() => setEditStatus(true)}
+              onDoubleClick={() => setEditStatus(!editStatus)}
             >
-              {itemTitle}
+              {item.title}
             </label>
           )}
 
           <button
             type="button"
             className="destroy"
-            value={itemId}
-            onClick={event => deleteTodo(event.target.value)}
+            onClick={() => deleteTodo(item.id)}
           />
         </div>
 
@@ -82,7 +75,7 @@ export const TodoItem = (props) => {
             className="edit"
             value={newTitle}
             onChange={(event => setNewTitle(event.target.value))}
-            onKeyDown={event => onKeyPush(event.key)}
+            onKeyDown={onKeyPush}
             onBlur={onBlur}
           />
         )}
@@ -93,9 +86,15 @@ export const TodoItem = (props) => {
 
 TodoItem.propTypes = {
   onAddNewTitle: PropTypes.func.isRequired,
-  itemCompleted: PropTypes.bool.isRequired,
   completeTodo: PropTypes.func.isRequired,
-  itemId: PropTypes.number.isRequired,
-  itemTitle: PropTypes.string.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  item: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }),
+};
+
+TodoItem.defaultProps = {
+  item: {},
 };

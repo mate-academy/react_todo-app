@@ -72,17 +72,13 @@ Implement saving the todos in [the API](https://mate-academy.github.io/fe-studen
 
 
 **BEFORE you started:**
-1. Create a user by sending a POST request to the `/users`.
-1. Save the `userId` in your code and use it for all the future request where it is required
 
-**Tasks**
-1. Load a user from `/users/:userId` and show your name on the page
-1. Load all the todos from `/todos` and filter them by `userId` to show only your todos in the App
-1. Save new todos by sending POST request to `/todos` (don't forget to add `userId`)
+4. Load all the todos from `/todos` and filter them by `userId` to show only your todos in the App
+5. Save new todos by sending POST request to `/todos` (don't forget to add `userId`)
     - use `JSON.stringify` when sending a `body`
     - Think what to do in case of a server error (at least notify the user)
-1. Delete the todo by sending DELETE to `/todos/:todoId`
-1. Toggle completed status or rename the todo by sending `PATCH` to the `/todos/:todoId`
+6. Delete the todo by sending DELETE to `/todos/:todoId`
+7. Toggle completed status or rename the todo by sending `PATCH` to the `/todos/:todoId`
     - you can send only changed fields (`completed` of `title`)
-1. Implement `toggleAll` functionality (try to send as few requests as possible)
-1. Implement `clear completed` sending as few requests as possible
+8. Implement `toggleAll` functionality (try to send as few requests as possible)
+9. Implement `clear completed` sending as few requests as possible
