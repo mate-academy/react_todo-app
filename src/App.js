@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
+import { FILTERS } from './Const';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [todoTitle, setTodoTitle] = useState('');
-  const [toggleStatus, setToggle] = useState(true);
-  const [selectedFilter, setFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState('All');
 
   const addTodo = () => {
     if (todoTitle.trim().length > 0) {
@@ -22,10 +22,10 @@ function App() {
     setTodoTitle('');
   };
 
-  const unCompleted = todos.filter(todo => !todo.completed);
-  const completed = todos.filter(todo => todo.completed);
+  const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
 
-  const onChangeStatus = (todoId) => {
+  const onStatusChange = (todoId) => {
     setTodos(prevTodos => prevTodos.map((todo) => {
       if (todo.id === todoId) {
         return {
@@ -36,37 +36,23 @@ function App() {
 
       return todo;
     }));
-
-    if (todos.every(todo => todo.completed)) {
-      setToggle(false);
-    } else {
-      setToggle(true);
-    }
   };
 
-  const toggleAll = () => {
-    setTodos(todos.map(todo => (
-      { ...todo, completed: toggleStatus }
+  const toggleAll = (event) => {
+    const eventChecked = event.target.checked;
+
+    setTodos(prevTodos => prevTodos.map(todo => (
+      { ...todo, completed: eventChecked }
     )));
-    setToggle(!toggleStatus);
-  };
-
-  const FILTERS = {
-    All: 'All',
-    Active: 'Active',
-    Completed: 'Completed',
   };
 
   const filterTodos = (key) => {
     switch (key) {
-      case 'All':
-        return todos;
+      case FILTERS.Active:
+        return activeTodos;
 
-      case 'Active':
-        return unCompleted;
-
-      case 'Completed':
-        return completed;
+      case FILTERS.Completed:
+        return completedTodos;
 
       default:
         return todos;
@@ -74,6 +60,27 @@ function App() {
   };
 
   const filteredTodos = filterTodos(FILTERS[selectedFilter]);
+
+  const deleteTodo = (todoID) => {
+    setTodos(todos.filter(todo => todo.id !== todoID));
+  };
+
+  const clearCompleted = () => {
+    setTodos(activeTodos);
+  };
+
+  const updateTitle = (todoId, title) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todos,
+          title,
+        };
+      }
+
+      return todo;
+    }));
+  };
 
   return (
     <section className="todoapp">
@@ -103,31 +110,42 @@ function App() {
           id="toggle-all"
           className="toggle-all"
           onChange={toggleAll}
-          checked={!unCompleted.length > 0}
+          checked={activeTodos.length === 0}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
           todos={filteredTodos}
-          onChangeStatus={onChangeStatus}
+          onStatusChange={onStatusChange}
+          deleteTodo={deleteTodo}
+          updateTitle={updateTitle}
         />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          {unCompleted.length}
-          {' '}
-          items left
-        </span>
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count">
+            {activeTodos.length}
+            {' '}
+            items left
+          </span>
 
-        <TodosFilter
-          setFilter={setFilter}
-          selectedFilter={selectedFilter}
-        />
+          <TodosFilter
+            setSelectedFilter={setSelectedFilter}
+            selectedFilter={selectedFilter}
+          />
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          {completedTodos.length > 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+
+        </footer>
+      )}
     </section>
   );
 }

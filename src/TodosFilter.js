@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { FILTERS } from './Const';
 
-export const TodosFilter = ({ selectedFilter, setFilter }) => {
+export const TodosFilter = ({ selectedFilter, setSelectedFilter }) => {
   const handleFilter = (event) => {
     event.preventDefault();
 
-    setFilter(event.target.name);
+    setSelectedFilter(event.target.name);
   };
 
   return (
@@ -14,7 +15,7 @@ export const TodosFilter = ({ selectedFilter, setFilter }) => {
       <li>
         <a
           href="#/"
-          className={classnames({ selected: selectedFilter === 'All' })}
+          className={classnames({ selected: selectedFilter === FILTERS.All })}
           name="All"
           onClick={handleFilter}
         >
@@ -25,7 +26,9 @@ export const TodosFilter = ({ selectedFilter, setFilter }) => {
       <li>
         <a
           href="#/active"
-          className={classnames({ selected: selectedFilter === 'Active' })}
+          className={classnames(
+            { selected: selectedFilter === FILTERS.Active },
+          )}
           name="Active"
           onClick={handleFilter}
         >
@@ -36,7 +39,9 @@ export const TodosFilter = ({ selectedFilter, setFilter }) => {
       <li>
         <a
           href="#/completed"
-          className={classnames({ selected: selectedFilter === 'Completed' })}
+          className={classnames(
+            { selected: selectedFilter === FILTERS.Completed },
+          )}
           name="Completed"
           onClick={handleFilter}
         >
@@ -49,5 +54,5 @@ export const TodosFilter = ({ selectedFilter, setFilter }) => {
 
 TodosFilter.propTypes = {
   selectedFilter: PropTypes.string.isRequired,
-  setFilter: PropTypes.func.isRequired,
+  setSelectedFilter: PropTypes.func.isRequired,
 };
