@@ -11,7 +11,7 @@
     - All your changes are saved to the localhost.
 
 # Used Technologies and methodologies:
-# HTML5/CSS3, JavaScript (ECMAScript 2020), React:
+  HTML5/CSS3, JavaScript (ECMAScript 2020), React:
 
  - functional components
  - conntrolled components in form element
