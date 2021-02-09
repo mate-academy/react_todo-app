@@ -10,3 +10,14 @@
     - You can mark all todos as completed and remove the mark with the help of the arrow that will be located at the top of the form.
     - All your changes are saved to the localhost.
 
+Used Technologies and methodologies:
+HTML5/CSS3, JavaScript (ECMAScript 2020), React:
+
+functional components
+conntrolled components in form element
+lifting state up; state & lifecycle
+React hooks: useEffect, useState, useMemo
+Custom React hooks: useLocalStorage
+Web storage object localStorage
+propTypes validation
+classnames utility for conditional rendering
