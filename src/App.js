@@ -1,16 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (newTodo.length > 0) {
+      setTodos(prevTodos => (
+        [...prevTodos, {
+          id: +new Date(),
+          title: newTodo,
+          completed: false,
+        }]
+      ));
+
+      setNewTodo('');
+    }
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form
+          onSubmit={handleSubmit}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={newTodo}
+            onChange={event => setNewTodo(event.target.value)}
           />
         </form>
       </header>
