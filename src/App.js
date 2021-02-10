@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 import { FILTERS } from './Const';
@@ -7,6 +7,18 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [todoTitle, setTodoTitle] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('All');
+
+  useEffect(() => {
+    if (!localStorage.todos) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    } else {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
     if (todoTitle.trim().length > 0) {
@@ -69,9 +81,9 @@ function App() {
     setTodos(activeTodos);
   };
 
-  const updateTitle = (todoId, title) => {
+  const updateTitle = (id, title) => {
     setTodos(todos.map((todo) => {
-      if (todo.id === todoId) {
+      if (todo.id === id) {
         return {
           ...todos,
           title,
@@ -112,7 +124,7 @@ function App() {
           onChange={toggleAll}
           checked={activeTodos.length === 0}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <label>Mark all as complete</label>
         <TodoList
           todos={filteredTodos}
           onStatusChange={onStatusChange}

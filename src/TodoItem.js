@@ -4,14 +4,20 @@ import PropTypes from 'prop-types';
 
 export const TodoItem = ({ todo, onStatusChange, deleteTodo, updateTitle }) => {
   const [isEditable, setIsEditable] = useState(false);
-  const [newTitle, setNewTitle] = useState('');
+  const [newTitle, setNewTitle] = useState(todo.title);
 
   const keyDownHandler = (event) => {
     const { key } = event;
 
     switch (key) {
       case 'Enter':
-        updateTitle(todo.id, newTitle);
+        if (newTitle.length > 0) {
+          updateTitle(todo.id, newTitle);
+          setNewTitle(todo.title);
+        } else {
+          deleteTodo(todo.id);
+        }
+
         setIsEditable(false);
         break;
 
@@ -51,7 +57,7 @@ export const TodoItem = ({ todo, onStatusChange, deleteTodo, updateTitle }) => {
         <button
           type="button"
           className="destroy"
-          onChange={() => deleteTodo(todo.id)}
+          onClick={() => deleteTodo(todo.id)}
         />
       </div>
       <input
@@ -60,7 +66,7 @@ export const TodoItem = ({ todo, onStatusChange, deleteTodo, updateTitle }) => {
         value={newTitle}
         onChange={event => setNewTitle(event.target.value.trim())}
         onKeyUp={keyDownHandler}
-        onBlur={handleBlur}
+        onBlur={event => handleBlur(event.target.value, todo.id)}
       />
     </li>
   );
