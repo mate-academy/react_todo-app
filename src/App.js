@@ -124,7 +124,7 @@ function App() {
           onChange={toggleAll}
           checked={activeTodos.length === 0}
         />
-        <label>Mark all as complete</label>
+        <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
           todos={filteredTodos}
           onStatusChange={onStatusChange}

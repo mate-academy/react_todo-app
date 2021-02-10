@@ -13,7 +13,6 @@ export const TodoItem = ({ todo, onStatusChange, deleteTodo, updateTitle }) => {
       case 'Enter':
         if (newTitle.length > 0) {
           updateTitle(todo.id, newTitle);
-          setNewTitle(todo.title);
         } else {
           deleteTodo(todo.id);
         }
@@ -22,8 +21,7 @@ export const TodoItem = ({ todo, onStatusChange, deleteTodo, updateTitle }) => {
         break;
 
       case 'Escape':
-        setNewTitle(todo.title);
-        updateTitle(todo.id, todo.title);
+        // setNewTitle(todo.title);
         setIsEditable(false);
         break;
 
