@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../../styles/index.css';
 
-export const TodoApp = ({ onAdd }) => {
+export const TodoApp = ({ onAdd, userId }) => {
   const [title, setTitle] = useState('');
 
   const addTodo = (event) => {
@@ -10,6 +10,7 @@ export const TodoApp = ({ onAdd }) => {
 
     if (title.length > 0) {
       const newTodo = {
+        userId,
         id: +new Date(),
         title,
         completed: false,
@@ -41,4 +42,5 @@ export const TodoApp = ({ onAdd }) => {
 
 TodoApp.propTypes = {
   onAdd: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 };

@@ -4,6 +4,7 @@ import { TodoList } from './Component/Main/TodoList';
 import { TodoFilter } from './Component/Footer/TodosFilter';
 import * as api from './Component/API/api';
 import * as apiUsers from './Component/API/users';
+import * as apiTodos from './Component/API/todos';
 // import * as apiTodos from './Component/API/todos';
 import './styles/filters.css';
 import './styles/index.css';
@@ -12,12 +13,9 @@ import './styles/todo-list.css';
 function App() {
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState('');
-  // const [todosFromServer, setTodosFromServer] = useState([]);
   const [userId, setUserId] = useState(0);
   const [userName, setUserName] = useState('');
   const [todos, setTodos] = useState([]);
-
-  // const [todos, setTodos] = useLocalStorage({});
 
   // function useLocalStorage(key, initialValue) {
   //   const [storedValues, setStoredValues] = useState(() => {
@@ -48,32 +46,28 @@ function App() {
   //   return [storedValues, setValue];
   // }
 
-  // const addTodo = (newTodo) => {
-  //   setTodos(prevTodos => [...prevTodos, newTodo]);
-  // };
+  const loadTodosFromServer = (userID) => {
+    apiTodos.getTodos(userID).then((todosFromServer) => {
+      setTodos([...todosFromServer]);
+    });
+  };
 
   useEffect(() => {
-    if (localStorage.todos) {
-      setTodos(JSON.parse(localStorage.getItem('todos') || '[]'));
-    }
-  }, []);
+    loadTodosFromServer(userId);
+  }, [userId]);
 
-  const addTodo = (newTodo) => {
-    setTodos(prevTodos => [...prevTodos, newTodo]);
-    localStorage.setItem('todos', JSON.stringify(todos));
+  // eslint-disable-next-line no-shadow
+  const addTodo = (userId, newTodo) => {
+    apiTodos.addTodo(userId, newTodo);
+    loadTodosFromServer(userId);
   };
 
   useEffect(() => {
     setItems([...todos]);
   }, [todos]);
 
-  const showFotter = todos.length > 0;
-
-  useEffect(() => {
-    setFilter();
-  }, []);
-
   const onFilter = (comand) => {
+    setFilter(comand);
     switch (comand) {
       case 'active':
 
@@ -94,7 +88,8 @@ function App() {
   };
 
   const deleteTodo = (removeTodoID) => {
-    setTodos(todos.filter(todo => todo.id !== +removeTodoID));
+    apiTodos.removeTodo(removeTodoID);
+    loadTodosFromServer(userId);
   };
 
   const completeTodo = (isCopleted) => {
@@ -139,13 +134,6 @@ function App() {
     apiUsers.getUserId(api.userSetUpName)
       .then(result => setUserName(result.name));
   }, []);
-
-  // useEffect(() => {
-  //   apiTodos.getTodos(userId)
-  //     .then(result => setTodosFromServer(result));
-  // }, [userId]);
-
-  // console.log(todosFromServer, userId)
 
   return (
 
@@ -197,6 +185,7 @@ function App() {
         <TodoApp
           onAdd={addTodo}
           todos={todos}
+          userId={userId}
         />
       </header>
 
@@ -206,7 +195,7 @@ function App() {
           deleteTodo={deleteTodo}
           completeTodo={completeTodo}
           completeAllTodo={completeAllTodo}
-          showFotter={showFotter}
+          showFotter={todos.length > 0}
           onAddNewTitle={onAddNewTitle}
         />
       </section>
@@ -216,7 +205,7 @@ function App() {
         filter={filter}
         onFilter={onFilter}
         clearCompleted={clearCompleted}
-        showFotter={showFotter}
+        showFotter={todos.length > 0}
       />
 
     </section>
