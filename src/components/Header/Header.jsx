@@ -1,7 +1,6 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { usePrevious } from 'react-hanger';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 export const Header = ({ onAddNewTodo, todos }) => {
   const [title, setTitle] = useState('');
@@ -18,14 +17,9 @@ export const Header = ({ onAddNewTodo, todos }) => {
   useEffect(() => {
     localStorage.setItem('title', title);
   }, [title]);
-
-  const onHandle = (e) => {
-    setTitle(e.target.value);
-  };
-
   const addNewTodo = (e) => {
     e.preventDefault();
-//...
+
     const newTodo = {
       id: prevTodos && prevTodos.length + 1,
       title,
@@ -36,6 +30,8 @@ export const Header = ({ onAddNewTodo, todos }) => {
     setTitle('');
   };
 
+  const onHandle = e => setTitle(e.target.value);
+
   return (
     <header className="header">
       <h1>todos</h1>
@@ -44,10 +40,6 @@ export const Header = ({ onAddNewTodo, todos }) => {
         <input
           value={title}
           onChange={onHandle}
-          // onKeyDown={(e) => {
-          //   if (e.key === 'Enter') {
-          //   }
-          // }}
           type="text"
           className="new-todo"
           placeholder="What needs to be done?"
@@ -56,13 +48,12 @@ export const Header = ({ onAddNewTodo, todos }) => {
     </header>
   );
 };
-//
-// Header.propTypes = {
-//   onAddNewTodo: PropTypes.func.isRequired,
-//   title: PropTypes.string.isRequired,
-//   todos: PropTypes.arrayOf(PropTypes.shape({
-//     id: PropTypes.number.isRequired,
-//     title: PropTypes.string,
-//     completed: PropTypes.bool.isRequired,
-//   })),
-// };
+
+Header.propTypes = {
+  onAddNewTodo: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  })).isRequired,
+};

@@ -1,12 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
-import { Footer } from './components/Footer/Footer';
-// import data from './data/data.json';
+import { Filter } from './components/Filter/Filter';
+
+const filters = {
+  all: 'all',
+  active: 'active',
+  completed: 'completed',
+};
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const [activeCount, setActiveCount] = useState(0);
+  const [filter, setFilter] = useState(filters.all);
+
+  const filteredByStatus = () => {
+    switch (filter) {
+      case filters.active:
+        return todos.filter(todo => !todo.completed);
+      case filters.completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  };
+
+  const filteredTodos = useMemo(() => filteredByStatus(), [filter, todos]);
 
   useEffect(() => {
     const saveTodos = localStorage.getItem('todos');
@@ -28,28 +48,6 @@ function App() {
     setIsFooterVisible(todos.length > 0);
   }, [todos]);
 
-  const onAll = () => {
-    setTodos(todos);
-  };
-
-  const onActive = () => {
-    const active = [...todos].filter(t => !t.completed);
-
-    setTodos(active);
-  };
-
-  const onCompleted = () => {
-    const completed = [...todos].filter(t => t.completed);
-
-    setTodos(completed);
-  };
-
-  const onClearAll = () => {
-    const clearCompleted = [...todos].filter(t => !t.completed);
-
-    setTodos(clearCompleted);
-  };
-
   const addTodo = (newTodo) => {
     if (todos && todos
       .some(todo => (todo.title === newTodo.title))) {
@@ -59,33 +57,66 @@ function App() {
     if (newTodo.title) {
       setTodos([...todos, newTodo]);
     }
+
+    setActiveCount(activeCount + 1);
   };
 
-  const deleteTodo = (idx) => {
-    const newTodos = todos.filter((_, index) => index !== idx);
+  const deleteTodo = (todoId) => {
+    const newTodos = [...todos].filter(todo => todo.id !== todoId);
 
     setTodos(newTodos);
   };
 
-  const leftTodos = [...todos].filter(t => t.completed).length;
+  const changeCompleted = (todoId) => {
+    const newTodoList = [...todos].map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos(newTodoList);
+  };
+
+  const leftTodos = [...todos].filter(t => !t.completed);
 
   return (
     <section className="todoapp">
       <Header todos={todos} onAddNewTodo={addTodo} />
 
       <TodoList
-        todos={todos}
+        todos={filteredTodos}
         onDeleteTodo={deleteTodo}
+        changeCompleted={changeCompleted}
       />
 
       {isFooterVisible && (
-        <Footer
-          leftTodos={leftTodos}
-          onAll={onAll}
-          onActive={onActive}
-          onCompleted={onCompleted}
-          onClearAll={onClearAll}
-        />
+        <footer className="footer">
+          <span className="todo-count">
+            {leftTodos.length}
+            {leftTodos.length > 1 || leftTodos.length === 0
+              ? ' todos left'
+              : ' todo left'}
+          </span>
+
+          <Filter
+            filter={filter}
+            setFilter={setFilter}
+            filters={filters}
+          />
+
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={() => setTodos(leftTodos)}
+          >
+            Clear completed
+          </button>
+        </footer>
       )}
 
     </section>
