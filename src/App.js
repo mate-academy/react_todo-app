@@ -1,6 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ToDoList } from './components/ToDoList';
 
 function App() {
+  const [listOfToDos, setListOfToDos] = useState([]);
+  const [newToDoTitle, setNewToDoTitle] = useState('');
+
+  function addTodo(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setListOfToDos(prevState => [
+        ...listOfToDos,
+        { title: newToDoTitle, id: +new Date(), completed: false },
+      ]);
+    }
+  }
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -11,6 +25,11 @@ function App() {
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={newToDoTitle}
+            onChange={event => setNewToDoTitle(event.target.value)}
+            onKeyDown={(event) => {
+              addTodo(event);
+            }}
           />
         </form>
       </header>
@@ -19,43 +38,10 @@ function App() {
         <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <ToDoList
+          listOfToDos={listOfToDos}
+        />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
       </section>
 
       <footer className="footer">
