@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { TodoItem } from '../TodoItem';
 
 export const ToDoList = ({
   listOfToDos
@@ -9,20 +10,9 @@ export const ToDoList = ({
     setToDosToShow(listOfToDos);
   }, [listOfToDos]);
 
-  console.log(toDosToShow);
-
   return (
     <ul className="todo-list">
-      {toDosToShow.map(todo => (
-        <li key={todo.id}>
-          <div className="view">
-            <input type="checkbox" className="toggle" />
-            <label>{todo.title}</label>
-            <button type="button" className="destroy" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-      ))}
+      <TodoItem toDosToShow={toDosToShow}/>
     </ul>
   );
 }
