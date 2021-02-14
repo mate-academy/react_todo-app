@@ -40,41 +40,45 @@ export const TodoItem = ({ todo }) => {
           />
         </div>
 
-        <input
-          type="text"
-          className="edit"
-          value={newTitleToSet}
-          onChange={(event) => setNewTitleToSet(event.target.value)}
-
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault();
+        {isBeingEdited && (
+          <input
+            type="text"
+            className="edit"
+            id="editingInput"
+            name="editInput"
+            value={newTitleToSet}
+            autoFocus
+            onChange={(event) => setNewTitleToSet(event.target.value)}
+            focus={true}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                if (newTitleToSet.trim().length > 0) {
+                  changeTodoTitle(todo.id, newTitleToSet);
+                } else {
+                  setNewTitleToSet(todo.title);
+                }
+                setIsBeingEdited(false);
+              }
+  
+              if (event.key === 'Escape') {
+                setIsBeingEdited(false);
+              }
+            }}
+            onBlur={(event) => {
               if (newTitleToSet.trim().length > 0) {
                 changeTodoTitle(todo.id, newTitleToSet);
               } else {
                 setNewTitleToSet(todo.title);
               }
               setIsBeingEdited(false);
-            }
-
-            if (event.key === 'Escape') {
-              setIsBeingEdited(false);
-            }
-          }}
-
-          onBlur={(event) => {
-            if (newTitleToSet.trim().length > 0) {
-              changeTodoTitle(todo.id, newTitleToSet);
-            } else {
-              setNewTitleToSet(todo.title);
-            }
-            setIsBeingEdited(false);
-
-            if (event.key === 'Escape') {
-              setIsBeingEdited(false);
-            }
-          }}
-        />
+  
+              if (event.key === 'Escape') {
+                setIsBeingEdited(false);
+              }
+            }}
+          />
+        )}
 
       </li>
     </>
