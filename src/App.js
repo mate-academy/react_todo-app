@@ -4,22 +4,27 @@ import { Context } from './context';
 
 export function App() {
   const [listOfToDos, setListOfToDos] = useState([]);
+  const [toDosToShow, setToDosToShow] = useState(listOfToDos);
   const [notCompletedToDos, setNotCompletedToDos] = useState([]);
   const [newToDoTitle, setNewToDoTitle] = useState('');
+  const [statusToShow, setStatusToShow] = useState('all');
 
   useEffect(() => {
     setNotCompletedToDos(
       listOfToDos.filter(todo => todo.completed === false),
     );
+
+    setToDosToShow(listOfToDos);
   }, [listOfToDos]);
 
   function addTodo(event) {
-    event.preventDefault();
-    setListOfToDos(prevState => [
-      ...listOfToDos,
-      { title: newToDoTitle, id: +new Date(), completed: false },
-    ]);
-    setNewToDoTitle('');
+    if (newToDoTitle.trim().length > 0) {
+      setListOfToDos(prevState => [
+        ...listOfToDos,
+        { title: newToDoTitle, id: +new Date(), completed: false },
+      ]);
+      setNewToDoTitle('');
+    }
   }
 
   const changeTodoStatus = (todoId) => {
@@ -36,6 +41,22 @@ export function App() {
     setListOfToDos(listOfToDos.map(
       todo => ({ ...todo, completed: statusToSet }),
     ));
+  };
+
+  const filterTodosByStatus = (statusToFilterBy) => {
+    if (statusToFilterBy === undefined) {
+      setToDosToShow(listOfToDos);
+      setStatusToShow('all');
+    } else {
+      setToDosToShow(listOfToDos.filter(
+        todo => todo.completed === statusToFilterBy,
+      ));
+      if (statusToFilterBy) {
+        setStatusToShow('completed');
+      } else {
+        setStatusToShow('active');
+      }
+    }
   };
 
   return (
@@ -56,7 +77,8 @@ export function App() {
               value={newToDoTitle}
               onChange={event => setNewToDoTitle(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' && newToDoTitle.trim().length > 0) {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
                   addTodo(event);
                 }
               }}
@@ -77,6 +99,7 @@ export function App() {
                 type="checkbox"
                 id="toggle-all"
                 className="toggle-all"
+                checked={notCompletedToDos.length === 0}
                 onChange={() => {
                   if (notCompletedToDos.length === 0) {
                     changeAllTodosStatus(false);
@@ -90,7 +113,7 @@ export function App() {
           )}
 
           <ToDoList
-            listOfToDos={listOfToDos}
+            toDosToShow={toDosToShow}
           />
 
         </section>
@@ -105,15 +128,57 @@ export function App() {
 
             <ul className="filters">
               <li>
-                <a href="#/" className="selected">All</a>
+                <a
+                  href="#/"
+                  className={statusToShow === 'all' ? 'selected' : ''}
+                  onClick={() => filterTodosByStatus()}
+                  onKeyDown={(event) => {
+                    event.preventDefault();
+                    filterTodosByStatus(true);
+                  }}
+                >
+                  All
+                </a>
               </li>
 
               <li>
-                <a href="#/active">Active</a>
+                <a
+                  href="#/active"
+                  className={
+                    (statusToShow === 'active'
+                      && notCompletedToDos.length > 0
+                    )
+                      ? 'selected'
+                      : ''
+                  }
+                  onClick={() => filterTodosByStatus(false)}
+                  onKeyDown={(event) => {
+                    event.preventDefault();
+                    filterTodosByStatus(true);
+                  }}
+                >
+                  Active
+                </a>
               </li>
 
               <li>
-                <a href="#/completed">Completed</a>
+                <a
+                  href="#/completed"
+                  className={
+                    (statusToShow === 'completed'
+                      && notCompletedToDos.length !== listOfToDos.length
+                    )
+                      ? 'selected'
+                      : ''
+                  }
+                  onClick={() => filterTodosByStatus(true)}
+                  onKeyDown={(event) => {
+                    event.preventDefault();
+                    filterTodosByStatus(true);
+                  }}
+                >
+                  Completed
+                </a>
               </li>
             </ul>
 

@@ -2,13 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { TodoItem } from '../TodoItem';
 
 export const ToDoList = ({
-  listOfToDos
+  toDosToShow
 }) => {
-  const [toDosToShow, setToDosToShow] = useState(listOfToDos);
 
-  useEffect(() => {
-    setToDosToShow(listOfToDos);
-  }, [listOfToDos]);
 
   return (
     <ul className="todo-list">
