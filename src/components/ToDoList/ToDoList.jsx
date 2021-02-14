@@ -8,7 +8,9 @@ export const ToDoList = ({
 
   return (
     <ul className="todo-list">
-      <TodoItem toDosToShow={toDosToShow}/>
+      {toDosToShow.map(todo => (
+       <TodoItem todo={todo}/>
+      ))}
     </ul>
   );
 }

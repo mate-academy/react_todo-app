@@ -60,10 +60,15 @@ export function App() {
     }
   };
 
+  const removeTodo = (todoId) => {
+    setListOfToDos(listOfToDos.filter(todo => todo.id !== todoId));
+  };
+
   return (
     <Context.Provider
       value={{
         changeTodoStatus,
+        removeTodo,
       }}
     >
 
@@ -118,7 +123,6 @@ export function App() {
           />
 
         </section>
-
         {listOfToDos.length > 0 && (
           <Footer
             listOfToDos={listOfToDos}
@@ -128,7 +132,6 @@ export function App() {
             filterTodosByStatus={filterTodosByStatus}
           />
         )}
-
       </section>
 
     </Context.Provider>

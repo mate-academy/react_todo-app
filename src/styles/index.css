@@ -181,6 +181,7 @@ body {
   line-height: 20px;
   text-decoration: none;
   cursor: pointer;
+  color: rgb(214, 18, 18);
 }
 
 .clear-completed:hover {
