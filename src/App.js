@@ -42,23 +42,29 @@ export function App() {
     setListOfToDos(listOfToDos.map(
       todo => ({ ...todo, completed: statusToSet }),
     ));
-  };
 
-  const filterTodosByStatus = (statusToFilterBy) => {
-    if (statusToFilterBy === undefined) {
-      setToDosToShow(listOfToDos);
-      setStatusToShow('all');
-    } else {
-      setToDosToShow(listOfToDos.filter(
-        todo => todo.completed === statusToFilterBy,
-      ));
-      if (statusToFilterBy) {
+    if (statusToShow !== 'all') {
+      if (statusToSet) {
         setStatusToShow('completed');
       } else {
         setStatusToShow('active');
       }
     }
   };
+
+  useEffect(() => {
+    if (statusToShow === 'all') {
+      setToDosToShow(listOfToDos);
+    } else if (statusToShow === 'active') {
+      setToDosToShow(listOfToDos.filter(
+        todo => todo.completed === false,
+      ));
+    } else {
+      setToDosToShow(listOfToDos.filter(
+        todo => todo.completed === true,
+      ));
+    }
+  }, [statusToShow, listOfToDos]);
 
   const removeTodo = (todoId) => {
     setListOfToDos(listOfToDos.filter(todo => todo.id !== todoId));
@@ -129,7 +135,7 @@ export function App() {
             setListOfToDos={setListOfToDos}
             notCompletedToDos={notCompletedToDos}
             statusToShow={statusToShow}
-            filterTodosByStatus={filterTodosByStatus}
+            setStatusToShow={setStatusToShow}
           />
         )}
       </section>

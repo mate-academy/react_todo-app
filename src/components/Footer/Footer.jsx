@@ -5,7 +5,7 @@ export const Footer = ({
   setListOfToDos,
   notCompletedToDos,
   statusToShow,
-  filterTodosByStatus,
+  setStatusToShow,
 }) => {
 
   return (
@@ -22,10 +22,10 @@ export const Footer = ({
           <a
             href="#/"
             className={statusToShow === 'all' ? 'selected' : ''}
-            onClick={() => filterTodosByStatus()}
+            onClick={() => setStatusToShow('all')}
             onKeyDown={(event) => {
               event.preventDefault();
-              filterTodosByStatus(true);
+              setStatusToShow('all');
             }}
           >
             All
@@ -37,15 +37,14 @@ export const Footer = ({
             href="#/active"
             className={
               (statusToShow === 'active'
-                && notCompletedToDos.length > 0
               )
                 ? 'selected'
                 : ''
             }
-            onClick={() => filterTodosByStatus(false)}
+            onClick={() => setStatusToShow('active')}
             onKeyDown={(event) => {
               event.preventDefault();
-              filterTodosByStatus(true);
+              setStatusToShow('active');
             }}
           >
             Active
@@ -57,15 +56,14 @@ export const Footer = ({
             href="#/completed"
             className={
               (statusToShow === 'completed'
-                && notCompletedToDos.length !== listOfToDos.length
               )
                 ? 'selected'
                 : ''
             }
-            onClick={() => filterTodosByStatus(true)}
+            onClick={() => setStatusToShow('completed')}
             onKeyDown={(event) => {
               event.preventDefault();
-              filterTodosByStatus(true);
+              setStatusToShow('completed');
             }}
           >
             Completed
