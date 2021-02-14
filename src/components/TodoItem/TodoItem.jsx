@@ -1,16 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Context } from '../../context';
 
 export const TodoItem = ({ todo }) => {
   const { changeTodoStatus } = useContext(Context);
   const { removeTodo } = useContext(Context);
+  const { changeTodoTitle } = useContext(Context);
+
+  const [isBeingEdited, setIsBeingEdited] = useState(false);
+  const [titleInputValue, setTitleInputValue] = useState(todo.title);
+  const [newTitleToSet, setNewTitleToSet] = useState(todo.title);
 
   return (
     <>
       <li
         key={todo.id}
-        className={todo.completed ? 'completed' : ''}
+        className={(
+          todo.completed ? 'completed' : ''
+          ) + (
+            isBeingEdited ? ' editing ' : ''
+        )}
       >
+
         <div className="view">
           <input
             type="checkbox"
@@ -18,14 +28,54 @@ export const TodoItem = ({ todo }) => {
             checked={todo.completed}
             onChange={() => changeTodoStatus(todo.id)}
           />
-          <label>{todo.title}</label>
+          <label
+            onDoubleClick={() => setIsBeingEdited(true)}
+          >
+            {todo.title}
+          </label>
           <button
             type="button"
             className="destroy"
             onClick={() => removeTodo(todo.id)}
           />
         </div>
-        <input type="text" className="edit" />
+
+        <input
+          type="text"
+          className="edit"
+          value={newTitleToSet}
+          onChange={(event) => setNewTitleToSet(event.target.value)}
+
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              if (newTitleToSet.trim().length > 0) {
+                changeTodoTitle(todo.id, newTitleToSet);
+              } else {
+                setNewTitleToSet(todo.title);
+              }
+              setIsBeingEdited(false);
+            }
+
+            if (event.key === 'Escape') {
+              setIsBeingEdited(false);
+            }
+          }}
+
+          onBlur={(event) => {
+            if (newTitleToSet.trim().length > 0) {
+              changeTodoTitle(todo.id, newTitleToSet);
+            } else {
+              setNewTitleToSet(todo.title);
+            }
+            setIsBeingEdited(false);
+
+            if (event.key === 'Escape') {
+              setIsBeingEdited(false);
+            }
+          }}
+        />
+
       </li>
     </>
   );

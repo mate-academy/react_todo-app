@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { TodoItem } from '../TodoItem';
 
 export const ToDoList = ({

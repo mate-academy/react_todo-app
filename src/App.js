@@ -38,6 +38,16 @@ export function App() {
     }));
   };
 
+  const changeTodoTitle = (todoId, newTitleToSet) => {
+    setListOfToDos(listOfToDos.map((todo) => {
+      if (todo.id === todoId) {
+        return { ...todo, title: newTitleToSet };
+      }
+
+      return todo;
+    }));
+  };
+
   const changeAllTodosStatus = (statusToSet) => {
     setListOfToDos(listOfToDos.map(
       todo => ({ ...todo, completed: statusToSet }),
@@ -75,6 +85,7 @@ export function App() {
       value={{
         changeTodoStatus,
         removeTodo,
+        changeTodoTitle,
       }}
     >
 
