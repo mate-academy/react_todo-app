@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ToDoList } from './components/ToDoList';
 import { Context } from './context';
 
-function App() {
+export function App() {
   const [listOfToDos, setListOfToDos] = useState([]);
   const [notCompletedToDos, setNotCompletedToDos] = useState([]);
   const [newToDoTitle, setNewToDoTitle] = useState('');
@@ -20,6 +20,7 @@ function App() {
         ...listOfToDos,
         { title: newToDoTitle, id: +new Date(), completed: false },
       ]);
+      setNewToDoTitle('');
     }
   }
 
@@ -33,12 +34,19 @@ function App() {
     }));
   };
 
+  const changeAllTodosStatus = (statusToSet) => {
+    setListOfToDos(listOfToDos.map(
+      todo => ({ ...todo, completed: statusToSet }),
+    ));
+  };
+
   return (
     <Context.Provider
       value={{
         changeTodoStatus,
       }}
     >
+
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
@@ -58,8 +66,28 @@ function App() {
 
         <section className="main">
 
-          <input type="checkbox" id="toggle-all" className="toggle-all" />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          {(
+            (notCompletedToDos.length === 0
+              && listOfToDos.length !== 0)
+            || (notCompletedToDos.length === listOfToDos.length
+                && listOfToDos.length !== 0)
+          ) && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                onChange={() => {
+                  if (notCompletedToDos.length === 0) {
+                    changeAllTodosStatus(false);
+                  } else {
+                    changeAllTodosStatus(true);
+                  }
+                }}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
 
           <ToDoList
             listOfToDos={listOfToDos}
@@ -67,38 +95,43 @@ function App() {
 
         </section>
 
-        <footer className="footer">
-          <span className="todo-count">
-            {notCompletedToDos.length}
-            {' '}
-            items left
-          </span>
+        {listOfToDos.length > 0 && (
+          <footer className="footer">
+            <span className="todo-count">
+              {notCompletedToDos.length}
+              {' '}
+              items left
+            </span>
 
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
+            <ul className="filters">
+              <li>
+                <a href="#/" className="selected">All</a>
+              </li>
 
-            <li>
-              <a href="#/active">Active</a>
-            </li>
+              <li>
+                <a href="#/active">Active</a>
+              </li>
 
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
+              <li>
+                <a href="#/completed">Completed</a>
+              </li>
+            </ul>
 
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={() => setListOfToDos(notCompletedToDos)}
-          >
-            Clear completed
-          </button>
-        </footer>
+            {(notCompletedToDos.length !== listOfToDos.length) && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={() => setListOfToDos(notCompletedToDos)}
+              >
+                Clear completed
+              </button>
+            )}
+
+          </footer>
+        )}
+
       </section>
+
     </Context.Provider>
   );
 }
-
-export default App;
