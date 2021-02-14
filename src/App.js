@@ -14,14 +14,12 @@ export function App() {
   }, [listOfToDos]);
 
   function addTodo(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      setListOfToDos(prevState => [
-        ...listOfToDos,
-        { title: newToDoTitle, id: +new Date(), completed: false },
-      ]);
-      setNewToDoTitle('');
-    }
+    event.preventDefault();
+    setListOfToDos(prevState => [
+      ...listOfToDos,
+      { title: newToDoTitle, id: +new Date(), completed: false },
+    ]);
+    setNewToDoTitle('');
   }
 
   const changeTodoStatus = (todoId) => {
@@ -58,7 +56,9 @@ export function App() {
               value={newToDoTitle}
               onChange={event => setNewToDoTitle(event.target.value)}
               onKeyDown={(event) => {
-                addTodo(event);
+                if (event.key === 'Enter' && newToDoTitle.trim().length > 0) {
+                  addTodo(event);
+                }
               }}
             />
           </form>
