@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToDoList } from './components/ToDoList';
 import { Footer } from './components/Footer';
 import { Context } from './context';
 
 export function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')));
 
   const filters = {
     All: 'all',
@@ -17,6 +17,10 @@ export function App() {
 
   const active = todos.filter(todo => todo.completed === false);
   const completed = todos.filter(todo => todo.completed === true);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   function toDosToShow() {
     if (statusToShow === filters.Completed) {

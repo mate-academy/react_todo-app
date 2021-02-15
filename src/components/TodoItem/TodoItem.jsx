@@ -10,6 +10,35 @@ export const TodoItem = ({ todo }) => {
   const [isBeingEdited, setIsBeingEdited] = useState(false);
   const [newTitleToSet, setNewTitleToSet] = useState(todo.title);
 
+  function endEditing(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (newTitleToSet.trim().length > 0) {
+        changeTodoTitle(todo.id, newTitleToSet);
+      } else {
+        setNewTitleToSet(todo.title);
+      }
+      setIsBeingEdited(false);
+    }
+
+    if (event.key === 'Escape') {
+      setIsBeingEdited(false);
+    }
+  }
+
+  function endEditingByBlur(event) {
+    if (newTitleToSet.trim().length > 0) {
+      changeTodoTitle(todo.id, newTitleToSet);
+    } else {
+      setNewTitleToSet(todo.title);
+    }
+    setIsBeingEdited(false);
+
+    if (event.key === 'Escape') {
+      setIsBeingEdited(false);
+    }
+  }
+
   return (
     <>
       <li
@@ -50,33 +79,8 @@ export const TodoItem = ({ todo }) => {
             autoFocus
             onChange={(event) => setNewTitleToSet(event.target.value)}
             focus={true}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                if (newTitleToSet.trim().length > 0) {
-                  changeTodoTitle(todo.id, newTitleToSet);
-                } else {
-                  setNewTitleToSet(todo.title);
-                }
-                setIsBeingEdited(false);
-              }
-  
-              if (event.key === 'Escape') {
-                setIsBeingEdited(false);
-              }
-            }}
-            onBlur={(event) => {
-              if (newTitleToSet.trim().length > 0) {
-                changeTodoTitle(todo.id, newTitleToSet);
-              } else {
-                setNewTitleToSet(todo.title);
-              }
-              setIsBeingEdited(false);
-  
-              if (event.key === 'Escape') {
-                setIsBeingEdited(false);
-              }
-            }}
+            onKeyDown={(event) => endEditing(event)}
+            onBlur={(event) => endEditingByBlur(event)}
           />
         )}
 
