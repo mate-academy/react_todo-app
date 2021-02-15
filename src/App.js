@@ -4,7 +4,7 @@ import { Footer } from './components/Footer';
 import { Context } from './context';
 
 export function App() {
-  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')));
+  const [todos, setTodos] = useState([]);
 
   const filters = {
     All: 'all',
@@ -17,6 +17,12 @@ export function App() {
 
   const active = todos.filter(todo => todo.completed === false);
   const completed = todos.filter(todo => todo.completed === true);
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('todos'))) {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
