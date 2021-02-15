@@ -1,88 +1,156 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { ToDoList } from './components/ToDoList';
+import { Footer } from './components/Footer';
+import { Context } from './context';
 
-function App() {
+export function App() {
+  const [listOfToDos, setListOfToDos] = useState([]);
+  const [toDosToShow, setToDosToShow] = useState(listOfToDos);
+  const [notCompletedToDos, setNotCompletedToDos] = useState([]);
+  const [newToDoTitle, setNewToDoTitle] = useState('');
+  const [statusToShow, setStatusToShow] = useState('all');
+
+  useEffect(() => {
+    setNotCompletedToDos(
+      listOfToDos.filter(todo => todo.completed === false),
+    );
+
+    setToDosToShow(listOfToDos);
+  }, [listOfToDos]);
+
+  function addTodo(event) {
+    if (newToDoTitle.trim().length > 0) {
+      setListOfToDos(prevState => [
+        ...listOfToDos,
+        { title: newToDoTitle, id: +new Date(), completed: false },
+      ]);
+      setNewToDoTitle('');
+    }
+  }
+
+  const changeTodoStatus = (todoId) => {
+    setListOfToDos(listOfToDos.map((todo) => {
+      if (todo.id === todoId) {
+        return { ...todo, completed: !todo.completed };
+      }
+
+      return todo;
+    }));
+  };
+
+  const changeTodoTitle = (todoId, newTitleToSet) => {
+    setListOfToDos(listOfToDos.map((todo) => {
+      if (todo.id === todoId) {
+        return { ...todo, title: newTitleToSet };
+      }
+
+      return todo;
+    }));
+  };
+
+  const changeAllTodosStatus = (statusToSet) => {
+    setListOfToDos(listOfToDos.map(
+      todo => ({ ...todo, completed: statusToSet }),
+    ));
+
+    if (statusToShow !== 'all') {
+      if (statusToSet) {
+        setStatusToShow('completed');
+      } else {
+        setStatusToShow('active');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (statusToShow === 'all') {
+      setToDosToShow(listOfToDos);
+    } else if (statusToShow === 'active') {
+      setToDosToShow(listOfToDos.filter(
+        todo => todo.completed === false,
+      ));
+    } else {
+      setToDosToShow(listOfToDos.filter(
+        todo => todo.completed === true,
+      ));
+    }
+  }, [statusToShow, listOfToDos]);
+
+  const removeTodo = (todoId) => {
+    setListOfToDos(listOfToDos.filter(todo => todo.id !== todoId));
+  };
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <Context.Provider
+      value={{
+        changeTodoStatus,
+        removeTodo,
+        changeTodoTitle,
+      }}
+    >
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <form>
+            <input
+              type="text"
+              className="new-todo"
+              placeholder="What needs to be done?"
+              value={newToDoTitle}
+              onChange={event => setNewToDoTitle(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  addTodo(event);
+                }
+              }}
+            />
+          </form>
+        </header>
+
+        <section className="main">
+
+          {(
+            (notCompletedToDos.length === 0
+              && listOfToDos.length !== 0)
+            || (notCompletedToDos.length === listOfToDos.length
+                && listOfToDos.length !== 0)
+          ) && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                checked={notCompletedToDos.length === 0}
+                onChange={() => {
+                  if (notCompletedToDos.length === 0) {
+                    changeAllTodosStatus(false);
+                  } else {
+                    changeAllTodosStatus(true);
+                  }
+                }}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )}
+
+          <ToDoList
+            toDosToShow={toDosToShow}
           />
-        </form>
-      </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        </section>
+        {listOfToDos.length > 0 && (
+          <Footer
+            listOfToDos={listOfToDos}
+            setListOfToDos={setListOfToDos}
+            notCompletedToDos={notCompletedToDos}
+            statusToShow={statusToShow}
+            setStatusToShow={setStatusToShow}
+          />
+        )}
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
+    </Context.Provider>
   );
 }
-
-export default App;

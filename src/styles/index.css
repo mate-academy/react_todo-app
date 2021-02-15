@@ -128,14 +128,12 @@ body {
   height: 34px;
   font-size: 0;
   position: absolute;
-  top: -52px;
+  top: -43px;
   left: -13px;
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
 }
 
 .toggle-all + label:before {
-  content: "❯";
+  content: "✔";
   font-size: 22px;
   color: #e6e6e6;
   padding: 10px 27px;
@@ -183,6 +181,7 @@ body {
   line-height: 20px;
   text-decoration: none;
   cursor: pointer;
+  color: rgb(214, 18, 18);
 }
 
 .clear-completed:hover {
