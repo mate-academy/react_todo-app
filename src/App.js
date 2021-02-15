@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter, useLocation } from 'react-router-dom';
-import { AddTodo } from './components/AddTodo';
+import { NewTodo } from './components/NewTodo';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 
 import { getTodos, getUser } from './api/api';
 import { FILTERS } from './api/constant';
-import { getFilteringTodos } from './api/helper';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
@@ -50,16 +49,17 @@ const App = () => {
         <header className="header">
           <h1>todos</h1>
 
-          <AddTodo
-            onAddTodo={setTodos}
-            setError={setError}
+          <NewTodo
+            onNewTodoAdd={setTodos}
+            onErrorSet={setError}
           />
         </header>
 
         <section className="main">
           <TodoList
-            todos={getFilteringTodos(filter, todos)}
-            onSetTodos={setTodos}
+            todos={todos}
+            typeFilteringTodos={filter}
+            onTodosSet={setTodos}
           />
         </section>
 
@@ -69,8 +69,8 @@ const App = () => {
         >
           <Footer
             todos={todos}
-            setTodos={setTodos}
-            setFilter={setFilter}
+            onTodosSet={setTodos}
+            onFilterSet={setFilter}
           />
         </footer>
       </section>

@@ -5,7 +5,7 @@ import classNames from 'classname';
 import { TodoTypes } from './TodoTypes';
 import { removeTodo, deleteTodo } from '../../api/api';
 
-export const TodoItem = ({ todo, onSetTodos }) => {
+export const Todo = ({ todo, onTodosSet }) => {
   const [editingTodoId, setIsEditingTodoId] = useState(0);
   const [title, setTitle] = useState(todo.title);
 
@@ -15,33 +15,37 @@ export const TodoItem = ({ todo, onSetTodos }) => {
     myRef.current.focus();
   }, [editingTodoId]);
 
-  const handleCompletedTodo = (event) => {
+  const handleTodoCompleted = (event) => {
+    const { checked } = event.target;
+
     event.persist();
-    removeTodo(todo.id, 'completed', event.target.checked);
-    onSetTodos(prevTodos => prevTodos.map(
+    removeTodo(todo.id, 'completed', checked);
+    onTodosSet(prevTodos => prevTodos.map(
       item => (item.id === todo.id
         ? ({
           ...item,
-          completed: event.target.checked,
+          completed: checked,
         })
         : item),
     ));
   };
 
-  const handleDeleteTodo = (todoId) => {
+  const handleTodoDelete = (todoId) => {
     deleteTodo(todoId);
-    onSetTodos(prevTodos => prevTodos.filter(
+    onTodosSet(prevTodos => prevTodos.filter(
       item => item.id !== todoId,
     ));
   };
 
-  const handleEditTodo = (event) => {
-    if (event.key === 'Enter') {
+  const handleTodoEdit = (event) => {
+    const { key } = event;
+
+    if (key === 'Enter') {
       event.persist();
       editSelectedTodo();
     }
 
-    if (event.key === 'Escape') {
+    if (key === 'Escape') {
       setIsEditingTodoId(0);
     }
   };
@@ -49,7 +53,7 @@ export const TodoItem = ({ todo, onSetTodos }) => {
   const editSelectedTodo = () => {
     if (title) {
       removeTodo(todo.id, 'title', title);
-      onSetTodos(prevTodos => prevTodos.map(
+      onTodosSet(prevTodos => prevTodos.map(
         item => (item.id === todo.id ? {
           ...item,
           title,
@@ -72,7 +76,7 @@ export const TodoItem = ({ todo, onSetTodos }) => {
           type="checkbox"
           className="toggle"
           checked={todo.completed}
-          onChange={handleCompletedTodo}
+          onChange={handleTodoCompleted}
         />
         <label
           onDoubleClick={() => setIsEditingTodoId(todo.id)}
@@ -82,7 +86,7 @@ export const TodoItem = ({ todo, onSetTodos }) => {
         <button
           type="button"
           className="destroy"
-          onClick={handleDeleteTodo}
+          onClick={() => handleTodoDelete(todo.id)}
         />
       </div>
       <input
@@ -91,14 +95,14 @@ export const TodoItem = ({ todo, onSetTodos }) => {
         className="edit"
         value={title}
         onChange={event => setTitle(event.target.value)}
-        onKeyDown={handleEditTodo}
+        onKeyDown={handleTodoEdit}
         onBlur={editSelectedTodo}
       />
     </li>
   );
 };
 
-TodoItem.propTypes = {
+Todo.propTypes = {
   todo: PropTypes.shape(TodoTypes).isRequired,
-  onSetTodos: PropTypes.func.isRequired,
+  onTodosSet: PropTypes.func.isRequired,
 };

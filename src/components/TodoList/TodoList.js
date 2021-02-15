@@ -1,17 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { TodoTypes } from '../TodoItem/TodoTypes';
-import { TodoItem } from '../TodoItem';
+import { TodoTypes } from '../Todo/TodoTypes';
+import { Todo } from '../Todo';
 import { removeTodo } from '../../api/api';
 
-export const TodoList = ({ todos, onSetTodos }) => {
+import { getFilteringTodos } from '../../api/helper';
+
+export const TodoList = ({ todos, typeFilteringTodos, onTodosSet }) => {
   const handleChange = (event) => {
+    const { checked } = event.target;
+
     event.persist();
     todos.forEach(todo => removeTodo(todo.id, 'completed', !todo.completed));
-    onSetTodos(() => todos.map(todo => ({
+    onTodosSet(() => todos.map(todo => ({
       ...todo,
-      completed: event.target.checked,
+      completed: checked,
     })));
   };
 
@@ -20,6 +24,7 @@ export const TodoList = ({ todos, onSetTodos }) => {
       <input
         type="checkbox"
         id="toggle-all"
+        checked={!todos.some(todo => !todo.completed)}
         className="toggle-all"
         onChange={handleChange}
       />
@@ -31,11 +36,11 @@ export const TodoList = ({ todos, onSetTodos }) => {
       </label>
 
       <ul className="todo-list">
-        {todos.map(todo => (
-          <TodoItem
+        {getFilteringTodos(typeFilteringTodos, todos).map(todo => (
+          <Todo
             key={todo.id}
             todo={todo}
-            onSetTodos={onSetTodos}
+            onTodosSet={onTodosSet}
           />
         ))}
       </ul>
@@ -47,5 +52,6 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape(TodoTypes),
   ).isRequired,
-  onSetTodos: PropTypes.func.isRequired,
+  typeFilteringTodos: PropTypes.string.isRequired,
+  onTodosSet: PropTypes.func.isRequired,
 };

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { FILTERS } from '../../api/constant';
 
-export const TodosFilter = ({ setFilter }) => (
+export const Filter = ({ onFilterSet }) => (
   <ul className="filters">
     <li>
       <NavLink
         to="/"
         exact
         activeClassName="selected"
-        onClick={() => setFilter(FILTERS.all)}
+        onClick={() => onFilterSet(FILTERS.all)}
       >
         All
       </NavLink>
@@ -21,7 +21,7 @@ export const TodosFilter = ({ setFilter }) => (
         to="/active"
         exact
         activeClassName="selected"
-        onClick={() => setFilter(FILTERS.active)}
+        onClick={() => onFilterSet(FILTERS.active)}
       >
         Active
       </NavLink>
@@ -32,7 +32,7 @@ export const TodosFilter = ({ setFilter }) => (
         to="/completed"
         exact
         activeClassName="selected"
-        onClick={() => setFilter(FILTERS.completed)}
+        onClick={() => onFilterSet(FILTERS.completed)}
       >
         Completed
       </NavLink>
@@ -40,6 +40,6 @@ export const TodosFilter = ({ setFilter }) => (
   </ul>
 );
 
-TodosFilter.propTypes = {
-  setFilter: PropTypes.func.isRequired,
+Filter.propTypes = {
+  onFilterSet: PropTypes.func.isRequired,
 };

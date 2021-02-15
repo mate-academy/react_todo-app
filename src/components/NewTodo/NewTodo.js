@@ -1,34 +1,36 @@
 import React, { useState } from 'react';
 import { createTodo } from '../../api/api';
 
-import { AddTodoTypes } from './AddTodoTypes';
+import { NewTodoTypes } from './NewTodoTypes';
 
-export const AddTodo = ({
-  onAddTodo,
-  setError,
+export const NewTodo = ({
+  onNewTodoAdd,
+  onErrorSet,
 }) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    const { key } = event;
+
+    if (key === 'Enter') {
       event.preventDefault();
-      handleAddTodo(inputValue);
+      handleNewTodoAdd(inputValue);
     }
   };
 
-  const handleAddTodo = (value) => {
+  const handleNewTodoAdd = (value) => {
     if (value) {
       createTodo({
         title: value,
         completed: false,
       })
         .then((newTodo) => {
-          onAddTodo(prevTodo => [
+          onNewTodoAdd(prevTodo => [
             ...prevTodo,
             newTodo,
           ]);
         })
-        .catch(error => setError(error.toString()));
+        .catch(error => onErrorSet(error.toString()));
       setInputValue('');
     }
   };
@@ -42,10 +44,10 @@ export const AddTodo = ({
         placeholder="What needs to be done?"
         onChange={event => setInputValue(event.target.value)}
         onKeyPress={handleKeyPress}
-        onBlur={event => handleAddTodo(event.target.value)}
+        onBlur={event => handleNewTodoAdd(event.target.value)}
       />
     </form>
   );
 };
 
-AddTodo.propTypes = AddTodoTypes;
+NewTodo.propTypes = NewTodoTypes;

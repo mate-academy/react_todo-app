@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { TodosFilter } from '../TodosFilter';
-import { TodoTypes } from '../TodoItem/TodoTypes';
+import { Filter } from '../Filter';
+import { TodoTypes } from '../Todo/TodoTypes';
 import { deleteTodo } from '../../api/api';
 
 export const Footer = ({
   todos,
-  setTodos,
-  setFilter,
+  onTodosSet,
+  onFilterSet,
 }) => {
   const [hasCompletedTodos, setHasCompletedTodos] = useState(false);
   const [count, setCount] = useState(0);
@@ -21,9 +21,9 @@ export const Footer = ({
     ));
   }, [todos]);
 
-  const handleClearCompleted = () => {
+  const handleTodosCompletedClear = () => {
     todos.forEach(todo => todo.completed && (deleteTodo(todo.id)));
-    setTodos(() => todos.filter(todo => todo.completed === false));
+    onTodosSet(() => todos.filter(todo => !todo.completed));
   };
 
   return (
@@ -32,15 +32,15 @@ export const Footer = ({
         {`${count} item${count > 1 ? 's' : ''} left`}
       </span>
 
-      <TodosFilter
-        setFilter={setFilter}
+      <Filter
+        onFilterSet={onFilterSet}
       />
 
       <button
         type="button"
         className="clear-completed"
         style={{ display: hasCompletedTodos ? 'none' : 'block' }}
-        onClick={handleClearCompleted}
+        onClick={handleTodosCompletedClear}
       >
         Clear completed
       </button>
@@ -52,6 +52,6 @@ Footer.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape(TodoTypes),
   ).isRequired,
-  setTodos: PropTypes.func.isRequired,
-  setFilter: PropTypes.func.isRequired,
+  onTodosSet: PropTypes.func.isRequired,
+  onFilterSet: PropTypes.func.isRequired,
 };

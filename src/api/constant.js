@@ -1,7 +1,7 @@
 export const FILTERS = {
-  all: 'ALL',
-  active: 'ACTIVE',
-  completed: 'COMPLETED',
+  all: 'all',
+  active: 'active',
+  completed: 'completed',
 };
 
 export const USER = {
