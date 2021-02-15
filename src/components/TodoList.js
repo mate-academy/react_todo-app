@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, onToggle, onDelete }) => (
+export const TodoList = ({ todos, onToggle, onDelete, onSubmit }) => (
   <ul className="todo-list">
     {[...todos].map(todo => (
       <TodoItem
@@ -10,6 +10,7 @@ export const TodoList = ({ todos, onToggle, onDelete }) => (
         todo={todo}
         onToggle={onToggle}
         onDelete={onDelete}
+        onSubmit={onSubmit}
       />
     ))}
   </ul>
@@ -23,4 +24,5 @@ TodoList.propTypes = {
   })).isRequired,
   onToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };

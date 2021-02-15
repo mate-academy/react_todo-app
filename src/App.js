@@ -64,6 +64,16 @@ function App() {
     setFilteredTodos([...todos].filter(todo => !todo.completed));
   };
 
+  const handleChangeTitle = (changedTodo) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === changedTodo.id) {
+        return changedTodo;
+      }
+
+      return todo;
+    }));
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -87,6 +97,7 @@ function App() {
             : todos}
           onToggle={handleToggle}
           onDelete={handleDelete}
+          onSubmit={handleChangeTitle}
         />
 
       </section>
@@ -103,20 +114,6 @@ function App() {
           handleShowCompleted={handleShowCompleted}
           handleShowActive={handleShowActive}
         />
-
-        {/* <ul className="filters">
-          <li>
-            <a href="#/" className="selected" onClick={handleShowAll}>All</a>
-          </li>
-
-          <li>
-            <a href="#/active" onClick={handleShowActive}>Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed" onClick={handleShowCompleted}>Completed</a>
-          </li>
-        </ul> */}
 
         <button type="button" className="clear-completed" onClick={handleClear}>
           Clear completed
