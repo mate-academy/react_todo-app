@@ -1,27 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ToDoList } from './components/ToDoList';
 import { Footer } from './components/Footer';
 import { Context } from './context';
 
 export function App() {
-  const [listOfToDos, setListOfToDos] = useState([]);
-  const [toDosToShow, setToDosToShow] = useState(listOfToDos);
-  const [notCompletedToDos, setNotCompletedToDos] = useState([]);
+  const [todos, setTodos] = useState([]);
+
+  const filters = {
+    All: 'all',
+    Active: 'active',
+    Completed: 'completed',
+  };
+
+  const [statusToShow, setStatusToShow] = useState(filters.All);
   const [newToDoTitle, setNewToDoTitle] = useState('');
-  const [statusToShow, setStatusToShow] = useState('all');
 
-  useEffect(() => {
-    setNotCompletedToDos(
-      listOfToDos.filter(todo => todo.completed === false),
-    );
+  const active = todos.filter(todo => todo.completed === false);
+  const completed = todos.filter(todo => todo.completed === true);
 
-    setToDosToShow(listOfToDos);
-  }, [listOfToDos]);
+  function toDosToShow() {
+    if (statusToShow === filters.Completed) {
+      return completed;
+    }
+
+    if (statusToShow === filters.Active) {
+      return active;
+    }
+
+    return todos;
+  }
 
   function addTodo(event) {
     if (newToDoTitle.trim().length > 0) {
-      setListOfToDos(prevState => [
-        ...listOfToDos,
+      setTodos([
+        ...todos,
         { title: newToDoTitle, id: +new Date(), completed: false },
       ]);
       setNewToDoTitle('');
@@ -29,7 +41,7 @@ export function App() {
   }
 
   const changeTodoStatus = (todoId) => {
-    setListOfToDos(listOfToDos.map((todo) => {
+    setTodos(todos.map((todo) => {
       if (todo.id === todoId) {
         return { ...todo, completed: !todo.completed };
       }
@@ -39,7 +51,7 @@ export function App() {
   };
 
   const changeTodoTitle = (todoId, newTitleToSet) => {
-    setListOfToDos(listOfToDos.map((todo) => {
+    setTodos(todos.map((todo) => {
       if (todo.id === todoId) {
         return { ...todo, title: newTitleToSet };
       }
@@ -49,40 +61,34 @@ export function App() {
   };
 
   const changeAllTodosStatus = (statusToSet) => {
-    setListOfToDos(listOfToDos.map(
+    setTodos(todos.map(
       todo => ({ ...todo, completed: statusToSet }),
     ));
 
-    if (statusToShow !== 'all') {
+    if (statusToShow !== filters.All) {
       if (statusToSet) {
-        setStatusToShow('completed');
+        setStatusToShow(filters.Completed);
       } else {
-        setStatusToShow('active');
+        setStatusToShow(filters.Active);
       }
     }
   };
 
-  useEffect(() => {
-    if (statusToShow === 'all') {
-      setToDosToShow(listOfToDos);
-    } else if (statusToShow === 'active') {
-      setToDosToShow(listOfToDos.filter(
-        todo => todo.completed === false,
-      ));
-    } else {
-      setToDosToShow(listOfToDos.filter(
-        todo => todo.completed === true,
-      ));
-    }
-  }, [statusToShow, listOfToDos]);
+  function shouldToddleAllBeVisible() {
+    return (
+      active.length === todos.length
+        || completed.length === todos.length
+    ) && todos.length > 0;
+  }
 
   const removeTodo = (todoId) => {
-    setListOfToDos(listOfToDos.filter(todo => todo.id !== todoId));
+    setTodos(todos.filter(todo => todo.id !== todoId));
   };
 
   return (
     <Context.Provider
       value={{
+        filters,
         changeTodoStatus,
         removeTodo,
         changeTodoTitle,
@@ -111,20 +117,15 @@ export function App() {
 
         <section className="main">
 
-          {(
-            (notCompletedToDos.length === 0
-              && listOfToDos.length !== 0)
-            || (notCompletedToDos.length === listOfToDos.length
-                && listOfToDos.length !== 0)
-          ) && (
+          {shouldToddleAllBeVisible() && (
             <>
               <input
                 type="checkbox"
                 id="toggle-all"
                 className="toggle-all"
-                checked={notCompletedToDos.length === 0}
+                checked={active.length === 0}
                 onChange={() => {
-                  if (notCompletedToDos.length === 0) {
+                  if (active.length === 0) {
                     changeAllTodosStatus(false);
                   } else {
                     changeAllTodosStatus(true);
@@ -136,15 +137,16 @@ export function App() {
           )}
 
           <ToDoList
-            toDosToShow={toDosToShow}
+            toDosToShow={toDosToShow()}
           />
 
         </section>
-        {listOfToDos.length > 0 && (
+        {todos.length > 0 && (
           <Footer
-            listOfToDos={listOfToDos}
-            setListOfToDos={setListOfToDos}
-            notCompletedToDos={notCompletedToDos}
+            filters={filters}
+            todos={todos}
+            setTodos={setTodos}
+            active={active}
             statusToShow={statusToShow}
             setStatusToShow={setStatusToShow}
           />

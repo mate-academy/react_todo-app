@@ -1,9 +1,10 @@
 import React from 'react';
 
 export const Footer = ({
-  listOfToDos,
-  setListOfToDos,
-  notCompletedToDos,
+  todos,
+  filters,
+  setTodos,
+  active,
   statusToShow,
   setStatusToShow,
 }) => {
@@ -12,7 +13,7 @@ export const Footer = ({
     <footer className="footer">
 
       <span className="todo-count">
-        {notCompletedToDos.length}
+        {active.length}
         {' '}
         items left
       </span>
@@ -21,11 +22,11 @@ export const Footer = ({
         <li>
           <a
             href="#/"
-            className={statusToShow === 'all' ? 'selected' : ''}
-            onClick={() => setStatusToShow('all')}
+            className={statusToShow === filters.All ? 'selected' : ''}
+            onClick={() => setStatusToShow(filters.All)}
             onKeyDown={(event) => {
               event.preventDefault();
-              setStatusToShow('all');
+              setStatusToShow(filters.All);
             }}
           >
             All
@@ -35,16 +36,11 @@ export const Footer = ({
         <li>
           <a
             href="#/active"
-            className={
-              (statusToShow === 'active'
-              )
-                ? 'selected'
-                : ''
-            }
-            onClick={() => setStatusToShow('active')}
+            className={statusToShow === filters.Active ? 'selected' : ''}
+            onClick={() => setStatusToShow(filters.Active)}
             onKeyDown={(event) => {
               event.preventDefault();
-              setStatusToShow('active');
+              setStatusToShow(filters.Active);
             }}
           >
             Active
@@ -54,16 +50,11 @@ export const Footer = ({
         <li>
           <a
             href="#/completed"
-            className={
-              (statusToShow === 'completed'
-              )
-                ? 'selected'
-                : ''
-            }
-            onClick={() => setStatusToShow('completed')}
+            className={statusToShow === filters.Completed ? 'selected' : ''}
+            onClick={() => setStatusToShow(filters.Completed)}
             onKeyDown={(event) => {
               event.preventDefault();
-              setStatusToShow('completed');
+              setStatusToShow(filters.Completed);
             }}
           >
             Completed
@@ -71,11 +62,11 @@ export const Footer = ({
         </li>
       </ul>
 
-      {(notCompletedToDos.length !== listOfToDos.length) && (
+      {(active.length !== todos.length) && (
         <button
           type="button"
           className="clear-completed"
-          onClick={() => setListOfToDos(notCompletedToDos)}
+          onClick={() => setTodos(active)}
         >
           Clear completed
         </button>

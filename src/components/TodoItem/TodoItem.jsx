@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Context } from '../../context';
 
 export const TodoItem = ({ todo }) => {
   const { changeTodoStatus } = useContext(Context);
   const { removeTodo } = useContext(Context);
   const { changeTodoTitle } = useContext(Context);
+  const { filters } = useContext(Context);
 
   const [isBeingEdited, setIsBeingEdited] = useState(false);
-  const [titleInputValue, setTitleInputValue] = useState(todo.title);
   const [newTitleToSet, setNewTitleToSet] = useState(todo.title);
 
   return (
@@ -15,7 +15,7 @@ export const TodoItem = ({ todo }) => {
       <li
         key={todo.id}
         className={(
-          todo.completed ? 'completed' : ''
+          todo.completed ? filters.Completed : ''
           ) + (
             isBeingEdited ? ' editing ' : ''
         )}
