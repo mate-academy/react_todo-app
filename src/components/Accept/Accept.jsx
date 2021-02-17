@@ -7,45 +7,51 @@ export const Accept = ({
 
   return (
     <div
-      className="accept"
+     className="accept-container"
     >
 
-      <p
-        className="accept__text"
-      >
-        Mark all as:
-      </p>
-
       <div
-        className="accept__buttons"
+        className="accept"
       >
-        <button
-          className="accept__button"
-          onClick={() => {
-            changeAllTodosStatus(true);
-            setIsAcceptVisible(false);
-          }}
-        >
-          completed
-        </button>
 
-        <button
-          className="accept__button"
-          onClick={() => {
-            changeAllTodosStatus(false);
-            setIsAcceptVisible(false);
-          }}
+        <p
+          className="accept__text"
         >
-          active
-        </button>
+          Mark all as:
+        </p>
 
-        <button
-          className="accept__button accept__button-canсel"
-          onClick={() => setIsAcceptVisible(false)}
+        <div
+          className="accept__buttons"
         >
-          canсel
-        </button>
+          <button
+            className="accept__button"
+            onClick={() => {
+              changeAllTodosStatus(true);
+              setIsAcceptVisible(false);
+            }}
+          >
+            completed
+          </button>
+
+          <button
+            className="accept__button"
+            onClick={() => {
+              changeAllTodosStatus(false);
+              setIsAcceptVisible(false);
+            }}
+          >
+            active
+          </button>
+
+          <button
+            className="accept__button accept__button-canсel"
+            onClick={() => setIsAcceptVisible(false)}
+          >
+            canсel
+          </button>
+        </div>
       </div>
+
     </div>
   );
 }

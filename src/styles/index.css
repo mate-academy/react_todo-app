@@ -192,6 +192,17 @@ body {
   text-decoration: none;
 }
 
+.accept-container {
+  z-index: 3;
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(131, 123, 128, 0.15);
+  backdrop-filter: blur(5px);
+}
+
 .accept {
   position: absolute;
   z-index: 3;
@@ -201,7 +212,7 @@ body {
   top: 30px;
   transform: translate(50%, 0);
 
-  background-color: rgba(175, 112, 147, 0.15);
+  background-color: rgb(250, 249, 249);
   backdrop-filter: blur(5px);
 
   border-radius: 10px;
