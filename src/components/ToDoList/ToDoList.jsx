@@ -1,10 +1,7 @@
 import React from 'react';
 import { TodoItem } from '../TodoItem';
 
-export const ToDoList = ({
-  toDosToShow
-}) => {
-
+export const ToDoList = ({ toDosToShow }) => {
 
   return (
     <ul className="todo-list">

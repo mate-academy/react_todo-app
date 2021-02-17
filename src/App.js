@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ToDoList } from './components/ToDoList';
+import { Accept } from './components/Accept';
 import { Footer } from './components/Footer';
 import { Context } from './context';
 
@@ -13,7 +14,8 @@ export function App() {
   };
 
   const [statusToShow, setStatusToShow] = useState(filters.All);
-  const [newToDoTitle, setNewToDoTitle] = useState('');
+  const [newTitle, setNewToDoTitle] = useState('');
+  const [isAcceptVisible, setIsAcceptVisible] = useState(false);
 
   const active = todos.filter(todo => todo.completed === false);
   const completed = todos.filter(todo => todo.completed === true);
@@ -29,22 +31,23 @@ export function App() {
   }, [todos]);
 
   function toDosToShow() {
-    if (statusToShow === filters.Completed) {
-      return completed;
-    }
+    switch (statusToShow) {
+      case filters.Completed:
+        return completed;
 
-    if (statusToShow === filters.Active) {
-      return active;
-    }
+      case filters.Active:
+        return active;
 
-    return todos;
+      default:
+        return todos;
+    }
   }
 
   function addTodo(event) {
-    if (newToDoTitle.trim().length > 0) {
+    if (newTitle.trim().length > 0) {
       setTodos([
         ...todos,
-        { title: newToDoTitle, id: +new Date(), completed: false },
+        { title: newTitle, id: +new Date(), completed: false },
       ]);
       setNewToDoTitle('');
     }
@@ -84,13 +87,6 @@ export function App() {
     }
   };
 
-  function shouldToddleAllBeVisible() {
-    return (
-      active.length === todos.length
-        || completed.length === todos.length
-    ) && todos.length > 0;
-  }
-
   const removeTodo = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
   };
@@ -106,6 +102,14 @@ export function App() {
     >
 
       <section className="todoapp">
+
+        {isAcceptVisible && (
+          <Accept
+            setIsAcceptVisible={setIsAcceptVisible}
+            changeAllTodosStatus={changeAllTodosStatus}
+          />
+        )}
+
         <header className="header">
           <h1>todos</h1>
           <form>
@@ -113,7 +117,7 @@ export function App() {
               type="text"
               className="new-todo"
               placeholder="What needs to be done?"
-              value={newToDoTitle}
+              value={newTitle}
               onChange={event => setNewToDoTitle(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
@@ -127,22 +131,18 @@ export function App() {
 
         <section className="main">
 
-          {shouldToddleAllBeVisible() && (
+          {todos.length > 0 && (
             <>
               <input
                 type="checkbox"
                 id="toggle-all"
                 className="toggle-all"
                 checked={active.length === 0}
-                onChange={() => {
-                  if (active.length === 0) {
-                    changeAllTodosStatus(false);
-                  } else {
-                    changeAllTodosStatus(true);
-                  }
-                }}
+                onClick={() => setIsAcceptVisible(true)}
               />
-              <label htmlFor="toggle-all">Mark all as complete</label>
+              <label htmlFor="toggle-all">
+                Mark all as complete
+              </label>
             </>
           )}
 
