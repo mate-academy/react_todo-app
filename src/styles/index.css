@@ -272,4 +272,27 @@ body {
   .footer {
     height: 50px;
   }
+
+  .accept__button {
+    width: 150px;
+    height: 40px;
+  }
+
+  .accept {
+    height: 250px;
+  }
+
+  .accept__buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .accept__button-canсel {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 70px;
+
+    background-color: rgb(179, 100, 100);
+  }
 }
