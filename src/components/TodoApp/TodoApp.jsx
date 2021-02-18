@@ -1,19 +1,31 @@
-import React, {useState, useEffect}  from 'react';
+import React, {useState}  from 'react';
 import {TodoList} from '../TodoList'
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState('');
-  //console.log(todo, todos)
+  const [checkboxDisabled, setcheckboxState] = useState(true);
+
+  const getCheckedTodoId = (chosenId) => {
+   const chosenTodo = todos.find(todo=>todo.id === chosenId);
+   chosenTodo.completed = !chosenTodo.completed;
+     if (todos.every(todo=> todo.completed)){
+        setcheckboxState(false)
+    } else {
+      setcheckboxState(true)
+    }
+  }
+
   const changeHandler = (e) => {
     setTodo(e.target.value)
   }
   const preparedTodo = {
     todo: todo,
     completed: false,
-    id: +(new Date),
+    id: +(new Date()),
   }
-  const submitHandler = () => {
+  const submitHandler = (e) => {
+    e.preventDefault();
     setTodos(currentState => ([
       ...currentState,
       preparedTodo
@@ -42,46 +54,19 @@ export const TodoApp = () => {
     </header>
 
     <section className="main">
-      <input type="checkbox" id="toggle-all" className="toggle-all" />
+      <input 
+        type="checkbox" 
+        id="toggle-all" 
+        className="toggle-all" 
+        disabled={checkboxDisabled}
+        /*onChange={handleCheck}*/
+      />
       <label htmlFor="toggle-all">Mark all as complete</label>
-
-      <ul className="todo-list">
-        <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" />
-            <label>asdfghj</label>
-            <button type="button" className="destroy" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="completed">
-          <div className="view">
-            <input type="checkbox" className="toggle" />
-            <label>qwertyuio</label>
-            <button type="button" className="destroy" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="editing">
-          <div className="view">
-            <input type="checkbox" className="toggle" />
-            <label>zxcvbnm</label>
-            <button type="button" className="destroy" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" />
-            <label>1234567890</label>
-            <button type="button" className="destroy" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-      </ul>
+      <TodoList 
+        items={todos}
+        getCheckedTodoId={getCheckedTodoId}
+       />
+      
     </section>
 
     <footer className="footer">
@@ -107,7 +92,7 @@ export const TodoApp = () => {
         Clear completed
       </button>
     </footer>
-    <TodoList items={todos} />
+    
   </section>
   )
 }
