@@ -1,25 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { TodoList } from './Components/TodoList/TodoList';
+import { TodoFilter } from './Components/TodosFilter/TodosFilter';
+import { FILTERS } from './vars';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (query.trim().length > 0) {
+      const todo = {
+        id: +new Date(),
+        title: query,
+        completed: false,
+      };
+
+      setTodos([todo, ...todos]);
+    }
+
+    setQuery('');
+  };
+
+  const changeChecked = (id) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return {
+        ...todo,
+        completed: !todo.completed,
+      };
+    }));
+  };
+
+  const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
+
+  const filterTodos = (key) => {
+    switch (key) {
+      case FILTERS.active:
+        return activeTodos;
+
+      case FILTERS.completed:
+        return completedTodos;
+
+      default:
+        return todos;
+    }
+  };
+
+  const filteredTodos = filterTodos(filter);
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             className="new-todo"
+            value={query}
+            onChange={event => setQuery(event.target.value)}
             placeholder="What needs to be done?"
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
+        {
+          <TodoList items={filteredTodos} changeChecked={changeChecked} />
+        }
 
-        <ul className="todo-list">
+        {/* <ul className="todo-list">
           <li>
             <div className="view">
               <input type="checkbox" className="toggle" />
@@ -55,32 +118,26 @@ function App() {
             </div>
             <input type="text" className="edit" />
           </li>
-        </ul>
+        </ul> */}
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
+      {
+        !!todos.length && (
+          <footer className="footer">
+            <span className="todo-count">
+              {activeTodos.length}
+              {' '}
+              items left
+            </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+            <TodoFilter changeFilter={setFilter} />
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            <button type="button" className="clear-completed">
+              Clear completed
+            </button>
+          </footer>
+        )
+      }
     </section>
   );
 }
