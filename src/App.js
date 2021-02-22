@@ -3,8 +3,22 @@ import { TodoApp } from './components/TodoApp';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
+const useLocalStorage = (key, initValue) => {
+  const [value, setValue] = useState(
+    JSON.parse(localStorage.getItem(key))
+      || initValue,
+  );
+
+  const save = (val) => {
+    setValue(val);
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+
+  return [value, save];
+};
+
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [isAllTrue, setIsAllTrue] = useState(false);
   const [filteredTodos, setFilteredTodos] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
@@ -102,23 +116,30 @@ function App() {
 
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          {[...todos].filter(todo => !todo.completed).length}
-          {' '}
-          items left
-        </span>
+      {todos.length > 0
+        && (
+          <footer className="footer">
+            <span className="todo-count">
+              {[...todos].filter(todo => !todo.completed).length}
+              {' '}
+              items left
+            </span>
 
-        <TodosFilter
-          handleShowAll={handleShowAll}
-          handleShowCompleted={handleShowCompleted}
-          handleShowActive={handleShowActive}
-        />
+            <TodosFilter
+              handleShowAll={handleShowAll}
+              handleShowCompleted={handleShowCompleted}
+              handleShowActive={handleShowActive}
+            />
 
-        <button type="button" className="clear-completed" onClick={handleClear}>
-          Clear completed
-        </button>
-      </footer>
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleClear}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
     </section>
   );
 }

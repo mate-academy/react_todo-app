@@ -8,53 +8,39 @@ export const TodoItem = ({ todo, onToggle, onDelete, onSubmit }) => {
   const [value, setValue] = useState(title);
 
   const handleChange = (ev) => {
-    setValue(ev.target.value);
+    setValue(ev.target.value.trim());
   };
 
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
+  const handleEditing = (ev) => {
+    switch (ev.key) {
+      case 'Enter':
+        if (value.length === 0) {
+          return;
+        }
 
-    if (value.length === 0) {
-      return;
+        // const changedTodo = { ...todo, title: value };
+
+        onSubmit({ ...todo, title: value });
+        setIsEditing(false);
+        break;
+
+      case 'Escape':
+        setIsEditing(false);
+        setValue(title);
+        break;
+
+      default:
+        setValue(ev.target.value.trim());
+        break;
     }
+  };
 
+  const handleBlur = () => {
     const changedTodo = { ...todo, title: value };
 
     onSubmit(changedTodo);
-    setValue('');
     setIsEditing(false);
   };
-
-  // const handleEditing = (ev) => {
-  //   switch (ev.key) {
-  //     case 'Enter':
-  //       if (value.length === 0) {
-  //         return;
-  //       }
-
-  //       const changedTodo = { ...todo, title: value };
-
-  //       onSubmit(changedTodo);
-  //       setValue('');
-  //       setIsEditing(false);
-  //       break;
-
-  //     case 'Escape':
-  //       setIsEditing(false);
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-  // };
-
-  // const handleBlur = () => {
-  //   const changedTodo = { ...todo, title: value };
-
-  //   onSubmit(changedTodo);
-  //   setValue('');
-  //   setIsEditing(false);
-  // };
 
   return (
     <li
@@ -64,6 +50,7 @@ export const TodoItem = ({ todo, onToggle, onDelete, onSubmit }) => {
         editing: isEditing,
       })}
     >
+
       <div className="view">
         <input
           type="checkbox"
@@ -83,16 +70,14 @@ export const TodoItem = ({ todo, onToggle, onDelete, onSubmit }) => {
         />
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          className="edit"
-          type="text"
-          value={value}
-          onChange={handleChange}
-          // onKeyUp={handleEditing}
-          // onBlur={handleBlur}
-        />
-      </form>
+      <input
+        className="edit"
+        type="text"
+        value={value}
+        onChange={handleChange}
+        onKeyUp={handleEditing}
+        onBlur={handleBlur}
+      />
     </li>
   );
 };

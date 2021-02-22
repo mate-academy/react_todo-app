@@ -5,7 +5,7 @@ export const TodoApp = ({ onSubmit }) => {
   const [value, setValue] = useState('');
 
   const handleChange = (ev) => {
-    setValue(ev.target.value);
+    setValue(ev.target.value.trim());
   };
 
   const handleSubmit = (ev) => {
