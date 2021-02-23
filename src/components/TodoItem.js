@@ -18,8 +18,6 @@ export const TodoItem = ({ todo, onToggle, onDelete, onSubmit }) => {
           return;
         }
 
-        // const changedTodo = { ...todo, title: value };
-
         onSubmit({ ...todo, title: value });
         setIsEditing(false);
         break;
@@ -55,7 +53,7 @@ export const TodoItem = ({ todo, onToggle, onDelete, onSubmit }) => {
         <input
           type="checkbox"
           className="toggle"
-          checked={!!completed}
+          checked={completed}
           onChange={() => onToggle(id)}
         />
 
@@ -84,9 +82,9 @@ export const TodoItem = ({ todo, onToggle, onDelete, onSubmit }) => {
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
-    title: PropTypes.string,
-    id: PropTypes.number,
-    completed: PropTypes.bool,
+    title: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
   }).isRequired,
   onToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,

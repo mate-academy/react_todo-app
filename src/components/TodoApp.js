@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export const TodoApp = ({ onSubmit }) => {
+export const NewTodo = ({ onSubmit }) => {
   const [value, setValue] = useState('');
 
   const handleChange = (ev) => {
@@ -34,6 +34,6 @@ export const TodoApp = ({ onSubmit }) => {
   );
 };
 
-TodoApp.propTypes = {
+NewTodo.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };

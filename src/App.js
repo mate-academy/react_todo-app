@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { TodoApp } from './components/TodoApp';
+import React, { useState } from 'react';
+import { NewTodo } from './components/TodoApp';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
@@ -19,13 +19,9 @@ const useLocalStorage = (key, initValue) => {
 
 function App() {
   const [todos, setTodos] = useLocalStorage('todos', []);
-  const [isAllTrue, setIsAllTrue] = useState(false);
+  const [isAllCompleted, setIsAllCompleted] = useState(false);
   const [filteredTodos, setFilteredTodos] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
-
-  useEffect(() => {
-
-  }, [todos]);
 
   const handleSubmit = (todoText) => {
     setTodos([
@@ -35,16 +31,16 @@ function App() {
   };
 
   const handleToggleAll = () => {
-    if (isAllTrue) {
+    if (isAllCompleted) {
       setTodos([...todos].map(todo => (
         { ...todo, completed: false }
       )));
-      setIsAllTrue(false);
+      setIsAllCompleted(false);
     } else {
       setTodos([...todos].map(todo => (
         { ...todo, completed: true }
       )));
-      setIsAllTrue(true);
+      setIsAllCompleted(true);
     }
   };
 
@@ -93,7 +89,7 @@ function App() {
       <header className="header">
         <h1>todos</h1>
 
-        <TodoApp onSubmit={handleSubmit} />
+        <NewTodo onSubmit={handleSubmit} />
       </header>
 
       <section className="main">
