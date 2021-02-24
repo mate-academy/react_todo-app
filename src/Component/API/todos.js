@@ -71,7 +71,7 @@ export const patch = (todoId, data) => {
 };
 
 export const completeTodo = ({ completed }) => {
-  post('/todos', {
+  patch('/todos', {
     completed,
   });
 };

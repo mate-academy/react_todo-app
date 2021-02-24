@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TodoApp } from './Component/Header/TodoApp';
 import { TodoList } from './Component/Main/TodoList';
 import { TodoFilter } from './Component/Footer/TodosFilter';
+// import { useLocalStorage } from './Component/useLocalState';
 import * as api from './Component/API/api';
 import * as apiUsers from './Component/API/users';
 import * as apiTodos from './Component/API/todos';
@@ -15,51 +16,28 @@ function App() {
   const [filter, setFilter] = useState('');
   const [userId, setUserId] = useState(0);
   const [userName, setUserName] = useState('');
+  // const [todos, setTodos] = useLocalStorage('todos', []);
   const [todos, setTodos] = useState([]);
 
-  // function useLocalStorage(key, initialValue) {
-  //   const [storedValues, setStoredValues] = useState(() => {
-  //     try {
-  //       const item = window.localStorage.getItem(key);
+  // useEffect(() => {
+  //   if (localStorage.todos) {
+  //     setTodos(JSON.parse(localStorage.getItem('todos')));
+  //   } else { apiTodos.getTodos()
+  //   .then(setTodos);
+  // }}, []);
+  const loadTodosFromServer = async(userID) => {
+    const result = await apiTodos.getTodos(userID);
 
-  //       return item ? JSON.parse(item) : initialValue;
-  //     } catch (error) {
-  //       console.log(error);
-
-  //       return initialValue;
-  //     }
-  //   });
-
-  //   const setValue = (value) => {
-  //     try {
-  //       const valueToStore
-  //         = value instanceof Function ? value(storedValues) : value;
-
-  //       setStoredValues(valueToStore);
-
-  //       window.localStorage.setItem(key, JSON.stringify(valueToStore));
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   return [storedValues, setValue];
-  // }
-
-  const loadTodosFromServer = (userID) => {
-    apiTodos.getTodos(userID).then((todosFromServer) => {
-      setTodos([...todosFromServer]);
-    });
+    setTodos(result);
   };
 
   useEffect(() => {
     loadTodosFromServer(userId);
   }, [userId]);
+  const addTodo = async(newTodo) => {
+    await apiTodos.addTodo(newTodo);
 
-  // eslint-disable-next-line no-shadow
-  const addTodo = (userId, newTodo) => {
-    apiTodos.addTodo(userId, newTodo);
-    loadTodosFromServer(userId);
+    await loadTodosFromServer(userId);
   };
 
   useEffect(() => {
@@ -136,7 +114,6 @@ function App() {
   }, []);
 
   return (
-
     <section className="todoapp">
       <header className="header">
 

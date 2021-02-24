@@ -55,10 +55,10 @@ export const removeUser = (todoId) => {
     .then(result => result.data);
 };
 
-export const addTodo = ({ userId, title }) => {
-  post('/todos', {
-    userId,
-    title,
-    completed: false,
-  });
-};
+// export const addTodo = ({ userId, title }) => {
+//   post('/todos', {
+//     userId,
+//     title,
+//     completed: false,
+//   });
+// };
