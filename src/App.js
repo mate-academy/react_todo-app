@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import { Footer } from './Components/Footer/Footer';
 import { TodoList } from './Components/TodoList/TodoList';
-import { TodoFilter } from './Components/TodosFilter/TodosFilter';
 import { FILTERS } from './vars';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
+  const [status, setStatus] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -53,7 +54,27 @@ function App() {
     }
   };
 
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
   const filteredTodos = filterTodos(filter);
+
+  const changeAllTodosStatus = () => {
+    if (status) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: true,
+      })));
+    } else {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })));
+    }
+
+    setStatus(!status);
+  };
 
   return (
     <section className="todoapp">
@@ -72,70 +93,40 @@ function App() {
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
         {
-          <TodoList items={filteredTodos} changeChecked={changeChecked} />
+          !!todos.length && (
+            <>
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                checked={todos.length === completedTodos.length}
+                onChange={() => {
+                  changeAllTodosStatus();
+                  setStatus(!status);
+                }
+                }
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
+            </>
+          )
         }
 
-        {/* <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul> */}
+        <TodoList
+          items={filteredTodos}
+          changeChecked={changeChecked}
+          deleteTodo={deleteTodo}
+        />
       </section>
 
       {
         !!todos.length && (
-          <footer className="footer">
-            <span className="todo-count">
-              {activeTodos.length}
-              {' '}
-              items left
-            </span>
-
-            <TodoFilter changeFilter={setFilter} />
-
-            <button type="button" className="clear-completed">
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            completedTodos={completedTodos}
+            activeTodos={activeTodos}
+            setFilter={setFilter}
+            setTodos={setTodos}
+          />
         )
       }
     </section>
