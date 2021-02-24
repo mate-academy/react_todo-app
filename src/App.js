@@ -32,12 +32,12 @@ function App() {
 
   const handleToggleAll = () => {
     if (isAllCompleted) {
-      setTodos([...todos].map(todo => (
+      setTodos(todos.map(todo => (
         { ...todo, completed: false }
       )));
       setIsAllCompleted(false);
     } else {
-      setTodos([...todos].map(todo => (
+      setTodos(todos.map(todo => (
         { ...todo, completed: true }
       )));
       setIsAllCompleted(true);
@@ -45,7 +45,7 @@ function App() {
   };
 
   const handleToggle = (id) => {
-    setTodos([...todos].map(
+    setTodos(todos.map(
       todo => (todo.id === id
         ? { ...todo, completed: !todo.completed }
         : todo),
@@ -53,11 +53,11 @@ function App() {
   };
 
   const handleDelete = (title) => {
-    setTodos([...todos].filter(todo => todo.title !== title));
+    setTodos(todos.filter(todo => todo.title !== title));
   };
 
   const handleClear = () => {
-    setTodos([...todos].filter(todo => !todo.completed));
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   const handleShowAll = () => {
@@ -66,12 +66,12 @@ function App() {
 
   const handleShowCompleted = () => {
     setIsFiltered(true);
-    setFilteredTodos([...todos].filter(todo => todo.completed));
+    setFilteredTodos(todos.filter(todo => todo.completed));
   };
 
   const handleShowActive = () => {
     setIsFiltered(true);
-    setFilteredTodos([...todos].filter(todo => !todo.completed));
+    setFilteredTodos(todos.filter(todo => !todo.completed));
   };
 
   const handleChangeTitle = (changedTodo) => {

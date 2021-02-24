@@ -34,10 +34,14 @@ export const TodoItem = ({ todo, onToggle, onDelete, onSubmit }) => {
   };
 
   const handleBlur = () => {
-    const changedTodo = { ...todo, title: value };
+    if (value.length === 0) {
+      setIsEditing(false);
+    } else {
+      const changedTodo = { ...todo, title: value };
 
-    onSubmit(changedTodo);
-    setIsEditing(false);
+      onSubmit(changedTodo);
+      setIsEditing(false);
+    }
   };
 
   return (

@@ -18,9 +18,9 @@ export const TodoList = ({ todos, onToggle, onDelete, onSubmit }) => (
 
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string,
-    id: PropTypes.number,
-    completed: PropTypes.bool,
+    title: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
   })).isRequired,
   onToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
