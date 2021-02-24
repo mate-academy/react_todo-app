@@ -111,7 +111,6 @@ function App() {
             </>
           )
         }
-
         <TodoList
           items={filteredTodos}
           changeChecked={changeChecked}
