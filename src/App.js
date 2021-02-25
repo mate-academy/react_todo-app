@@ -3,11 +3,32 @@ import { Footer } from './Components/Footer/Footer';
 import { TodoList } from './Components/TodoList/TodoList';
 import { FILTERS } from './vars';
 
+function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
+
+  const setValue = (value) => {
+    const valueToStore
+      = value instanceof Function ? value(storedValue) : value;
+
+    setStoredValue(valueToStore);
+    window.localStorage.setItem(key, JSON.stringify(valueToStore));
+  };
+
+  return [storedValue, setValue];
+}
+
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
-  const [status, setStatus] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -60,20 +81,24 @@ function App() {
 
   const filteredTodos = filterTodos(filter);
 
-  const changeAllTodosStatus = () => {
-    if (status) {
-      setTodos(todos.map(todo => ({
-        ...todo,
-        completed: true,
-      })));
-    } else {
-      setTodos(todos.map(todo => ({
-        ...todo,
-        completed: false,
-      })));
-    }
+  const changeAllTodosStatus = (event) => {
+    setTodos(todos.map(todo => ({
+      ...todo,
+      completed: event.target.checked,
+    })));
+  };
 
-    setStatus(!status);
+  const changeTitle = (id, title) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return {
+        ...todo,
+        title,
+      };
+    }));
   };
 
   return (
@@ -101,11 +126,7 @@ function App() {
                 id="toggle-all"
                 className="toggle-all"
                 checked={todos.length === completedTodos.length}
-                onChange={() => {
-                  changeAllTodosStatus();
-                  setStatus(!status);
-                }
-                }
+                onChange={changeAllTodosStatus}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
             </>
@@ -115,6 +136,7 @@ function App() {
           items={filteredTodos}
           changeChecked={changeChecked}
           deleteTodo={deleteTodo}
+          changeTitle={changeTitle}
         />
       </section>
 
