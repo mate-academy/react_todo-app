@@ -1,18 +1,21 @@
 import React from 'react';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { TodoInput } from './Components/TodoInput';
+import { ToDoList } from './Components/ToDoList/ToDoList';
 
 function App() {
+  const [todosList, addToList] = useLocalStorage('todos', []);
+
+  const addTodo = (todo) => {
+    addToList(prev => [todo, ...prev]);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <TodoInput addTodo={addTodo} />
       </header>
 
       <section className="main">
@@ -57,6 +60,7 @@ function App() {
           </li>
         </ul>
       </section>
+      <ToDoList todos={todosList} />
 
       <footer className="footer">
         <span className="todo-count">
