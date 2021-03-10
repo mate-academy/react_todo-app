@@ -1,48 +1,38 @@
 import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Todo } from '../Todo';
-import { EDIT_TODO, DELETE_TODO, COMPLETE_TODO } from '../../constants';
 
-export const TodoList = ({ todos, setTodos }) => {
-  const isAllTodosStatusSame = useMemo(() => (
+export const TodoList = ({ todos = [], setTodos }) => {
+  const isAllTodosCompleted = useMemo(() => (
     todos.every(todo => todo.completed === true)
   ), [todos]);
 
-  const handleTodo = (handleType, id, title, status) => {
-    switch (handleType) {
-      case DELETE_TODO:
-        setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
-        break;
+  const deleteTodo = (id) => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  };
 
-      case EDIT_TODO:
-        setTodos(prevTodos => prevTodos.map((todo) => {
-          if (todo.id !== id) {
-            return todo;
-          }
+  const editTodo = (id, title) => {
+    setTodos(prevTodos => prevTodos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
 
-          if (title.trim().length === 0) {
-            setTodos(prevtodos => (
-              prevtodos.filter(currentTodo => currentTodo.id !== id)
-            ));
-          }
+      if (title.trim().length === 0) {
+        deleteTodo(id);
+      }
 
-          return { ...todo, title };
-        }));
-        break;
+      return { ...todo, title };
+    }));
+  };
 
-      case COMPLETE_TODO:
-        setTodos(prevTodos => prevTodos.map((todo) => {
-          if (todo.id !== id) {
-            return todo;
-          }
+  const completeTodo = (id, status) => {
+    setTodos(prevTodos => prevTodos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
 
-          return { ...todo, completed: status };
-        }));
-        break;
-
-      default:
-        break;
-    }
+      return { ...todo, completed: status };
+    }));
   };
 
   const changeAllTodosStatus = useCallback((status) => {
@@ -60,8 +50,8 @@ export const TodoList = ({ todos, setTodos }) => {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          checked={isAllTodosStatusSame}
-          onChange={() => changeAllTodosStatus(!isAllTodosStatusSame)}
+          checked={isAllTodosCompleted}
+          onChange={() => changeAllTodosStatus(!isAllTodosCompleted)}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
       </>
@@ -72,7 +62,9 @@ export const TodoList = ({ todos, setTodos }) => {
           <Todo
             key={todo.id}
             todo={todo}
-            handleTodo={handleTodo}
+            deleteTodo={deleteTodo}
+            editTodo={editTodo}
+            completeTodo={completeTodo}
           />
         ))}
       </ul>
@@ -87,10 +79,6 @@ TodoList.propTypes = {
       title: PropTypes.string.isRequired,
       completed: PropTypes.bool.isRequired,
     }),
-  ),
+  ).isRequired,
   setTodos: PropTypes.func.isRequired,
-};
-
-TodoList.defaultProps = {
-  todos: [],
 };

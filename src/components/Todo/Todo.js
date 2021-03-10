@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { EDIT_TODO, DELETE_TODO, COMPLETE_TODO } from '../../constants';
 
-export const Todo = ({ todo, handleTodo }) => {
+export const Todo = ({ todo, completeTodo, editTodo, deleteTodo }) => {
   const [tempTitle, setTempTitle] = useState('');
   const [isTodoEditing, setisTodoEditing] = useState(false);
 
@@ -18,7 +17,7 @@ export const Todo = ({ todo, handleTodo }) => {
   };
 
   const handleBlur = (id) => {
-    handleTodo(EDIT_TODO, id, tempTitle, null);
+    editTodo(id, tempTitle);
     setisTodoEditing(false);
   };
 
@@ -50,7 +49,7 @@ export const Todo = ({ todo, handleTodo }) => {
             className="toggle"
             checked={todo.completed}
             onChange={() => (
-              handleTodo(COMPLETE_TODO, todo.id, null, !todo.completed)
+              completeTodo(todo.id, !todo.completed)
             )}
           />
           <label onDoubleClick={(event) => {
@@ -62,7 +61,7 @@ export const Todo = ({ todo, handleTodo }) => {
           <button
             type="button"
             className="destroy"
-            onClick={() => handleTodo(DELETE_TODO, todo.id, null, null)}
+            onClick={() => deleteTodo(todo.id)}
           />
         </div>
         {isTodoEditing
@@ -88,7 +87,10 @@ Todo.propTypes = {
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   }),
-  handleTodo: PropTypes.func.isRequired,
+  // handleTodo: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
+  completeTodo: PropTypes.func.isRequired,
 };
 
 Todo.defaultProps = {

@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-export const NewTodo = ({ setTodos }) => {
+export const NewTodo = ({ addTodo }) => {
   const [title, setTitle] = useState('');
-  const [counter, setCounter] = useState(1);
 
-  const createTodo = () => ({
-    id: counter,
+  const createTodo = useCallback(() => ({
+    id: +new Date(),
     title: title.trim(),
     completed: false,
-  });
+  }
+  ), [title]);
+
+  const newTodo = useMemo(() => createTodo(), [createTodo]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -17,8 +19,7 @@ export const NewTodo = ({ setTodos }) => {
       return;
     }
 
-    setTodos(todos => [...todos, createTodo()]);
-    setCounter(prevCounter => prevCounter + 1);
+    addTodo(newTodo);
     setTitle('');
   };
 
@@ -41,5 +42,5 @@ export const NewTodo = ({ setTodos }) => {
 };
 
 NewTodo.propTypes = {
-  setTodos: PropTypes.func.isRequired,
+  addTodo: PropTypes.func.isRequired,
 };

@@ -9,6 +9,10 @@ function App() {
   const location = useLocation();
   const { pathname } = location;
 
+  const addTodo = (newTodo) => {
+    setTodos(prevTodos => [...prevTodos, newTodo]);
+  };
+
   const filteredTodos = useMemo(() => {
     let tempTodos = [...todos];
 
@@ -20,7 +24,7 @@ function App() {
         tempTodos = todos.filter(todo => todo.completed);
         break;
       default:
-        tempTodos = [...todos];
+        tempTodos = todos;
         break;
     }
 
@@ -31,7 +35,7 @@ function App() {
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-        <NewTodo setTodos={setTodos} />
+        <NewTodo addTodo={addTodo} />
       </header>
 
       <section className="main">
