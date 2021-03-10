@@ -33,3 +33,11 @@
     bottom: 10px;
   }
 }
+
+.firstLetter {
+  display: inline-block;
+}
+
+.firstLetter:first-letter {
+  text-transform: capitalize;
+}
