@@ -8,24 +8,27 @@ export const TodosFilter = () => {
   const [value, setValue] = useState('All');
 
   useEffect(() => {
-    visibleTodos = [{title: 1}]
+    visibleTodos = todos
   }, []);
-let fun = useMemo(() => JSON.parse(localStorage.getItem('todos')), []);
+
+  let todosFromStorage = useMemo(() => JSON.parse(localStorage.getItem('todos')), []);
+  console.log(todosFromStorage);
+  // let todosFromStorage = JSON.parse(localStorage.getItem('todos'))
   const handleClick = (event) => {
     const newValue = event.target.innerText;
     setValue(newValue);
 
     let show;
-    console.log(fun);
+    console.log(todosFromStorage);
     switch (newValue) {
       case 'All':
-        show = fun;
+        show = todosFromStorage;
         break;
       case 'Active':
-        show = fun.filter(todo => !todo.completed);
+        show = todosFromStorage.filter(todo => !todo.completed);
         break;
       case 'Completed':
-        show = fun.filter(todo => todo.completed);
+        show = todosFromStorage.filter(todo => todo.completed);
         break;
     };
     setTodo(show)

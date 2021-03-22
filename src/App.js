@@ -5,7 +5,7 @@ import { TodosFilter } from './TodosFilter';
 
 function App() {
   const [title, setTitle] = useState('');
-let {visibleTodos} = useContext(TodoContext);
+  let {visibleTodos} = useContext(TodoContext);
   const [todos, setTodo] = useLocalStorage('todos', []);
 
   const createTodo = (event) => {

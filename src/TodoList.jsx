@@ -4,7 +4,7 @@ import { TodoItem } from './TodoItem';
 
 export const TodoList = () => {
   let {todos, visibleTodos} = useContext(TodoContext);
-  console.log(todos);
+  // console.log(todos);
 
   return (
     <ul className="todo-list">
