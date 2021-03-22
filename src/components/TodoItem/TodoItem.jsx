@@ -75,9 +75,14 @@ export const TodoItem = ({ id, title, completed }) => {
           (event) => {
             if (event.key === 'Escape') {
               setIsEditing(false);
+              setEditingValue(title);
             }
 
             if (event.key === 'Enter') {
+              if (editingInputValue === '') {
+                return;
+              }
+
               setNewTodos([
                 ...todos.slice(0, currentIndex),
                 {
