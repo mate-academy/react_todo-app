@@ -85,7 +85,10 @@ export const TodoApp = () => {
           checked={toggleAll}
           onChange={toggleAllItems}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {!!todos.length && (
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        )}
+
         <TodoList
           items={currentTodos}
         />
