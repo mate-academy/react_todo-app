@@ -1,18 +1,13 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { TodosContext, GlobalState } from '../../TodosContext';
+import { TodosContext } from '../../TodosContext';
 
 export const TodoItem = ({ id, title, completed }) => {
   const { todos, setNewTodos } = useContext(TodosContext);
-  const state = useContext(GlobalState);
   const [editing, setIsEditing] = useState(false);
   const [editingInputValue, setEditingValue] = useState(title);
   const currentIndex = todos.findIndex(todo => todo.id === id);
-
-  state.fun = () => {
-    setIsEditing(false);
-  };
 
   const checkboxChangeHandle = () => {
     setNewTodos([
@@ -31,6 +26,16 @@ export const TodoItem = ({ id, title, completed }) => {
       ...todos.slice(currentIndex + 1),
     ]);
   };
+
+  document.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (event.target.classList.contains('edit')
+      || event.target.classList.contains('new-todo')) {
+      return;
+    }
+
+    setIsEditing(false);
+  });
 
   return (
     <li

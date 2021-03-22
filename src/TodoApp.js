@@ -1,11 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { TodosContext, GlobalState } from './TodosContext';
+import { TodosContext } from './TodosContext';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
 export const TodoApp = () => {
   const { todos, setNewTodos } = useContext(TodosContext);
-  const state = useContext(GlobalState);
   const isAllChecked = todos.every(todo => todo.completed === true);
   const [currentTodos, setCurrentTodos] = useState(todos);
   const [inputedValue, setIputValue] = useState('');
@@ -36,6 +35,10 @@ export const TodoApp = () => {
 
   const writeTodo = (event) => {
     event.preventDefault();
+    if (inputedValue === '') {
+      return;
+    }
+
     setNewTodos([
       ...todos,
       {
@@ -55,17 +58,6 @@ export const TodoApp = () => {
     /* eslint-disable */
     <section
       className="todoapp"
-      onClick={
-        (event)=> {
-          if(event.target.classList.contains('edit')
-            || event.target.classList.contains('new-todo')) {
-            return;
-          } else {
-            state.fun();
-          }
-
-        }
-      }
     >
       <header className="header">
         <h1>todos</h1>
@@ -101,7 +93,7 @@ export const TodoApp = () => {
 
       <footer className="footer">
         <span className="todo-count">
-          {`${todos.length} items left`}
+          {`${todos.filter(todo => todo.completed === false).length} items left`}
         </span>
 
         <TodosFilter
