@@ -52,7 +52,6 @@ export function Footer({
               { selected: sortedTodos === 'active' },
             )}
             onClick={handleSortByActive}
-
           >
             Active
           </a>

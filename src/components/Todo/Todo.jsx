@@ -83,6 +83,7 @@ export function Todo({
         onBlur={modifyTodo}
         onKeyPress={checkPressedButton}
         onKeyDown={undoChanges}
+        ref={input => input && input.focus()}
       />
     </li>
 

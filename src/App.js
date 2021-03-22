@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
 import { Header } from './components/Header';
 import { Form } from './components/Form';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
   const [todos, setNewTodo] = useLocalStorage('todos', []);
@@ -71,7 +69,6 @@ export function App() {
 
   return (
     <section className="todoapp">
-      <ToastContainer autoClose={3000} />
       <Header />
       <Form onAddTodo={addNewTodo} />
       <Main
