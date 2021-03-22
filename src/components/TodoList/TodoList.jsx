@@ -9,6 +9,7 @@ export const TodoList = ({ todos,
   activeTodos,
   setAllTodosCompleted,
   setTitleEditing }) => {
+
   const [saveTodos, setSaveTodos] = useState(todos);
 
   useEffect(() => {

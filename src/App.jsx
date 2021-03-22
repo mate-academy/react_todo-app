@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import useLocalStorage from "use-local-storage";
 
 import { Form } from './components/Form';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [todoTitle, setTodoTitle] = useState('');
 
   const handleSubmit = (e) => {
@@ -101,12 +102,12 @@ function App() {
 
       {todos.length > 0
         && (
-        <Footer
-          todos={todos}
-          activeTodos={activeTodos}
-          completedTodos={completedTodos}
-          clearCompletedTodos={clearCompletedTodos}
-        />
+          <Footer
+            todos={todos}
+            activeTodos={activeTodos}
+            completedTodos={completedTodos}
+            clearCompletedTodos={clearCompletedTodos}
+          />
         )
       }
     </section>
