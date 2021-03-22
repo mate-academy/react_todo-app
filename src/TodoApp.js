@@ -91,14 +91,15 @@ export const TodoApp = () => {
         />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          {`${todos.filter(todo => todo.completed === false).length} items left`}
-        </span>
 
-        <TodosFilter
+        {!!todos.length && (
+          <footer className="footer">
+          <span className="todo-count">
+            {`${todos.filter(todo => todo.completed === false).length} items left`}
+          </span>
+          <TodosFilter
           filterTodos={setCurrentTodos}
-        />
+          />
         <button
           type="button"
           className="clear-completed"
@@ -107,6 +108,7 @@ export const TodoApp = () => {
           Clear completed
         </button>
       </footer>
+        )}
     </section>
   );
 }
