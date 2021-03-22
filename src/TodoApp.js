@@ -100,13 +100,14 @@ export const TodoApp = () => {
           <TodosFilter
           filterTodos={setCurrentTodos}
           />
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={clearCompleted}
-        >
-          Clear completed
-        </button>
+          {!!todos.filter(todo => todo.completed === true).length && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={clearCompleted}
+          >
+            Clear completed
+          </button>)}
       </footer>
         )}
     </section>
