@@ -1,46 +1,42 @@
-import React, { useContext, useState, useEffect, useMemo } from "react";
-import { TodoContext } from "./TodoContext";
+import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { TodoContext } from './TodoContext';
 
-export const TodosFilter = () => {
-  let {todos, visibleTodos, setTodo} = useContext(TodoContext);
-
+export const TodosFilter = ({ setVisibleTodos }) => {
+  const { todos } = useContext(TodoContext);
   const [value, setValue] = useState('All');
 
-  useEffect(() => {
-    visibleTodos = todos
-  }, []);
-
-  let todosFromStorage = useMemo(() => JSON.parse(localStorage.getItem('todos')), []);
-  console.log(todosFromStorage);
-  // let todosFromStorage = JSON.parse(localStorage.getItem('todos'))
   const handleClick = (event) => {
     const newValue = event.target.innerText;
+
     setValue(newValue);
 
-    let show;
-    console.log(todosFromStorage);
+    let todosToBeShown;
+
     switch (newValue) {
       case 'All':
-        show = todosFromStorage;
+        todosToBeShown = todos;
         break;
       case 'Active':
-        show = todosFromStorage.filter(todo => !todo.completed);
+        todosToBeShown = todos.filter(todo => !todo.completed);
         break;
       case 'Completed':
-        show = todosFromStorage.filter(todo => todo.completed);
+        todosToBeShown = todos.filter(todo => todo.completed);
         break;
-    };
-    setTodo(show)
+      default:
+        todosToBeShown = todos;
+    }
 
-  }
+    setVisibleTodos(todosToBeShown);
+  };
 
   return (
     <ul className="filters">
       <li>
         <a
           href="#/"
-          className={classNames({'selected': value === 'All'})}
+          className={classNames({ selected: value === 'All' })}
           onClick={handleClick}
         >
           All
@@ -50,7 +46,7 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/active"
-          className={classNames({'selected': value === 'Active'})}
+          className={classNames({ selected: value === 'Active' })}
           onClick={handleClick}
         >
           Active
@@ -60,7 +56,7 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/completed"
-          className={classNames({'selected': value === 'Completed'})}
+          className={classNames({ selected: value === 'Completed' })}
           onClick={handleClick}
         >
           Completed
@@ -68,4 +64,8 @@ export const TodosFilter = () => {
       </li>
     </ul>
   );
+};
+
+TodosFilter.propTypes = {
+  setVisibleTodos: PropTypes.func.isRequired,
 };

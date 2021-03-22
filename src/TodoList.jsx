@@ -1,17 +1,18 @@
-import React, {useContext} from 'react';
-import { TodoContext } from './TodoContext';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { TodoItem } from './TodoItem';
 
-export const TodoList = () => {
-  let {todos, visibleTodos} = useContext(TodoContext);
-  // console.log(todos);
+export const TodoList = ({ visibleTodos }) => (
+  <ul className="todo-list">
+    {visibleTodos.map(todo => <TodoItem todo={todo} />)}
 
-  return (
-    <ul className="todo-list">
-      {todos.map(todo =>
-        <TodoItem todo={todo} />
-        )}
+  </ul>
+);
 
-    </ul>
-  );
+TodoList.propTypes = {
+  visibleTodos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bul.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
 };

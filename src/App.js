@@ -1,23 +1,27 @@
-import React, {useState, useContext} from 'react';
-import { TodoContext, useLocalStorage} from './TodoContext';
-import {TodoList} from './TodoList';
+import React, { useState, useEffect } from 'react';
+import { TodoContext, useLocalStorage } from './TodoContext';
+import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 
 function App() {
   const [title, setTitle] = useState('');
-  let {visibleTodos} = useContext(TodoContext);
   const [todos, setTodo] = useLocalStorage('todos', []);
+  const [visibleTodos, setVisibleTodos] = useState([]);
+
+  useEffect(() => {
+    setVisibleTodos(todos);
+  }, [todos]);
 
   const createTodo = (event) => {
     event.preventDefault();
     const newTodo = {
       id: +new Date(),
-      title: title,
-      completed: false
+      title,
+      completed: false,
     };
 
     if (title === '') {
-      return
+      return;
     }
 
     setTodo([...todos, newTodo]);
@@ -25,10 +29,9 @@ function App() {
     setTitle('');
   };
 
-  let contextValue = {
+  const contextValue = {
     todos,
-    visibleTodos,
-    setTodo
+    setTodo,
   };
 
   return (
@@ -43,58 +46,60 @@ function App() {
               placeholder="What needs to be done?"
               value={title}
               onChange={(event) => {
-
-                setTitle(event.target.value)
+                setTitle(event.target.value);
               }}
             />
           </form>
         </header>
 
+        {todos.length > 0
+          && (
+          <>
+            <section className="main">
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                checked={todos.every(todo => todo.completed)}
+                onChange={() => {
+                  setTodo(todos.map(todoThis => ({
+                    ...todoThis,
+                    completed: !todos.every(todoThis => todoThis.completed),
+                  })));
+                }}
+              />
+              <label htmlFor="toggle-all">
+                Mark all as complete
+              </label>
+              <TodoList visibleTodos={visibleTodos} />
+            </section>
 
+            <footer className="footer">
+              <span className="todo-count">
+                {`${todos.filter(todoThis => (
+                  !todoThis.completed
+                )).length} items left`}
+              </span>
 
-        {todos.length > 0 && <>
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            checked={todos.every(todoThis => todoThis.completed)}
-            onChange={() => {
-              todos.every(todoThis => todoThis.completed)
-              ? setTodo(todos.map(todoThis => ({
-                ...todoThis,
-                completed: false
-              })))
-              : setTodo(todos.map(todoThis => ({
-                ...todoThis,
-                completed: true
-              })))
-            }}
-          />
-          <label htmlFor="toggle-all">
-            Mark all as complete
-            </label>
-          <TodoList items={todos} />
-        </section>
+              <TodosFilter setVisibleTodos={setVisibleTodos} />
 
-        <footer className="footer">
-          <span className="todo-count">
-            {`${todos.filter(todoThis => !todoThis.completed).length} items left`}
-          </span>
-
-          <TodosFilter />
-
-          {todos.some(todoThis => todoThis.completed) && <button
-          type="button"
-          className="clear-completed"
-          onClick={() => {
-            setTodo(todos.filter(todoThis => !todoThis.completed))
-          }}
-          >
-            Clear completed
-          </button>}
-        </footer>
-        </>}
+              {todos.some(todoThis => todoThis.completed)
+                && (
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={() => {
+                    setTodo(todos.filter(todoThis => !todoThis.completed));
+                  }}
+                >
+                  Clear completed
+                </button>
+                )
+              }
+            </footer>
+          </>
+          )
+        }
       </section>
     </TodoContext.Provider>
   );
