@@ -17,7 +17,7 @@ function App() {
       const todo = {
         title: todoTitle,
         id: +new Date(),
-        completed: null,
+        completed: false,
       };
 
       setTodos([todo, ...todos]);
@@ -61,13 +61,7 @@ function App() {
   };
 
   const clearCompletedTodos = () => {
-    setTodos(activeTodos);
-  };
-
-  const setAllTodosCompleted = () => {
-    setTodos(prevState => prevState.map(todo => (
-      { ...todo, completed: !todo.completed }
-    )));
+    setTodos(todos.find(todo => !todo.completed));
   };
 
   const setTitleEditing = (todoId, title) => {
@@ -93,11 +87,11 @@ function App() {
 
       <TodoList
         todos={filterTodos}
+        setTodos={setTodos}
         setStatus={setStatus}
         destroyTodo={destroyTodo}
-        activeTodos={activeTodos}
-        setAllTodosCompleted={setAllTodosCompleted}
         setTitleEditing={setTitleEditing}
+        activeTodos={activeTodos}
       />
 
       {todos.length > 0

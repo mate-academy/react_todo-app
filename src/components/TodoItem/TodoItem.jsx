@@ -69,14 +69,17 @@ export const TodoItem = ({ todo, setStatus, destroyTodo, setTitleEditing }) => {
           onClick={() => destroyTodo(todo.id)}
         />
       </div>
-      <input
-        type="text"
-        className="edit"
-        value={newTitle}
-        onChange={handleEdit}
-        onKeyUp={handleKeyUp}
-        onBlur={handleBlur}
-      />
+      {editTitle &&
+        <input
+          autoFocus
+          type="text"
+          className="edit"
+          value={newTitle}
+          onChange={handleEdit}
+          onKeyUp={handleKeyUp}
+          onBlur={handleBlur}
+        />
+      }
     </li>
   );
 };

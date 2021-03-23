@@ -6,26 +6,38 @@ import { TodoItem } from '../TodoItem';
 export const TodoList = ({ todos,
   setStatus,
   destroyTodo,
-  activeTodos,
-  setAllTodosCompleted,
-  setTitleEditing }) => {
+  setTitleEditing,
+  activeTodos }) => {
 
-  const [saveTodos, setSaveTodos] = useState(todos);
+  const [saveTodos, setSaveTodos] = useState([])
 
   useEffect(() => {
-    setSaveTodos(todos);
-  }, [todos]);
+    setSaveTodos(todos)
+  }, [todos])
+
+  const status = saveTodos.every(todo => todo.completed === true);
+
+  const changeAllTodosStatus = (status) => {
+    setSaveTodos(prevState => prevState.map(todo => (
+      { ...todo, completed: status }
+    )))
+  };
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        checked={activeTodos.length}
-        onChange={setAllTodosCompleted}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+
+      {saveTodos.length > 0 &&
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={status}
+            onChange={() => changeAllTodosStatus(!status)}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        </>
+      }
 
       <ul className="todo-list">
         {saveTodos.map(todo => (
@@ -46,7 +58,5 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.shape().isRequired).isRequired,
   setStatus: PropTypes.func.isRequired,
   destroyTodo: PropTypes.func.isRequired,
-  activeTodos: PropTypes.arrayOf(PropTypes.shape().isRequired).isRequired,
-  setAllTodosCompleted: PropTypes.func.isRequired,
   setTitleEditing: PropTypes.func.isRequired,
 };

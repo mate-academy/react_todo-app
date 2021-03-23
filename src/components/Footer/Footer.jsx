@@ -5,16 +5,16 @@ import { Filters } from '../Filters/Filters';
 export const Footer = ({ activeTodos,
   completedTodos,
   clearCompletedTodos }) => (
-    <footer className="footer">
-      <span className="todo-count">
-        {activeTodos.length}
-        {' '}
+  <footer className="footer">
+    <span className="todo-count">
+      {activeTodos.length}
+      {' '}
         items left
       </span>
 
-      <Filters />
+    <Filters />
 
-      {completedTodos.length > 0 && (
+    {completedTodos.length > 0 && (
       <button
         type="button"
         className="clear-completed"
@@ -22,9 +22,9 @@ export const Footer = ({ activeTodos,
       >
         Clear completed
       </button>
-      )
+    )
     }
-    </footer>
+  </footer>
 );
 
 Footer.propTypes = {
