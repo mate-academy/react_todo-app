@@ -11,8 +11,12 @@ export const TodoList = ({ visibleTodos }) => (
 
 TodoList.propTypes = {
   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bul.isRequired,
-    title: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
+    id: PropTypes.number,
+    completed: PropTypes.bul,
+    title: PropTypes.string,
+  })),
+};
+
+TodoList.defaultProps = {
+  visibleTodos: [],
 };

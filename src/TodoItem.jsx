@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { TodoContext } from './TodoContext';
+import { useFocus } from './hooks';
 
 export const TodoItem = ({ todo }) => {
   const { todos, setTodo } = useContext(TodoContext);
@@ -10,18 +11,56 @@ export const TodoItem = ({ todo }) => {
 
   const useMountEffect = fun => useEffect(fun, [isEditable]);
 
-  const useFocus = () => {
-    const htmlElRef = useRef(null);
-    const setFocus = () => {
-      htmlElRef.current && htmlElRef.current.focus();
-    };
-
-    return [htmlElRef, setFocus];
-  };
-
   const [inputRef, setInputFocus] = useFocus();
 
   useMountEffect(setInputFocus);
+
+  const handleChange = () => {
+    setTodo(todos.map((todoCurrent) => {
+      if (todoCurrent.id === todo.id) {
+        return ({
+          ...todoCurrent,
+          completed: !todoCurrent.completed,
+        });
+      }
+
+      return todoCurrent;
+    }));
+  };
+
+  const deleteTodo = () => {
+    setTodo(todos.filter(todoCurrent => todoCurrent.id !== todo.id));
+  };
+
+  const updateTodo = () => {
+    if (changedValue !== '') {
+      setTodo(todos.map((todoCurrent) => {
+        if (todoCurrent.id === todo.id) {
+          return ({
+            ...todoCurrent,
+            title: changedValue,
+          });
+        }
+
+        return todoCurrent;
+      }));
+      setIsEditable(false);
+    } else {
+      setTodo(todos.filter(todoCurrent => todoCurrent.id !== todo.id));
+      setIsEditable(false);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      updateTodo();
+    }
+
+    if (event.key === 'Escape') {
+      setChangedValue(todo.title);
+      setIsEditable(false);
+    }
+  };
 
   return (
     <li
@@ -39,22 +78,13 @@ export const TodoItem = ({ todo }) => {
           type="checkbox"
           className="toggle"
           checked={todo.completed}
-          onChange={() => {
-            setTodo(todos.map(todoThis => (todoThis.id === todo.id
-              ? {
-                ...todoThis,
-                completed: !todoThis.completed,
-              }
-              : todoThis)));
-          }}
+          onChange={handleChange}
         />
         <label>{todo.title}</label>
         <button
           type="button"
           className="destroy"
-          onClick={() => {
-            setTodo(todos.filter(todoThis => todoThis.id !== todo.id));
-          }}
+          onClick={deleteTodo}
         />
       </div>
       <input
@@ -63,43 +93,8 @@ export const TodoItem = ({ todo }) => {
         onChange={event => setChangedValue(event.target.value)}
         value={changedValue}
         ref={inputRef}
-        onBlur={() => {
-          if (changedValue !== '') {
-            setTodo(todos.map(todoThis => (todoThis.id === todo.id
-              ? {
-                ...todoThis,
-                title: changedValue,
-              }
-              : todoThis)));
-            setIsEditable(false);
-          } else {
-            setTodo(todos.filter(todoThis => todoThis.id !== todo.id));
-            setIsEditable(false);
-          }
-
-          setIsEditable(false);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            if (changedValue !== '') {
-              setTodo(todos.map(todoThis => (todoThis.id === todo.id
-                ? {
-                  ...todoThis,
-                  title: changedValue,
-                }
-                : todoThis)));
-              setIsEditable(false);
-            } else {
-              setTodo(todos.filter(todoThis => todoThis.id !== todo.id));
-              setIsEditable(false);
-            }
-          }
-
-          if (event.key === 'Escape') {
-            setChangedValue(todo.title);
-            setIsEditable(false);
-          }
-        }}
+        onBlur={updateTodo}
+        onKeyDown={handleKeyPress}
       />
     </li>
   );

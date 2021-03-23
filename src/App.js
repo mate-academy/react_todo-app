@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TodoContext, useLocalStorage } from './TodoContext';
+import { useLocalStorage } from './hooks';
+import { TodoContext } from './TodoContext';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 
@@ -34,6 +35,17 @@ function App() {
     setTodo,
   };
 
+  const handleToggleAllCheckbox = () => {
+    setTodo(todos.map(todo => ({
+      ...todo,
+      completed: !todos.every(todo => todo.completed),
+    })));
+  };
+
+  const handleClearButton = () => {
+    setTodo(todos.filter(todo => !todo.completed));
+  };
+
   return (
     <TodoContext.Provider value={contextValue}>
       <section className="todoapp">
@@ -61,12 +73,7 @@ function App() {
                 id="toggle-all"
                 className="toggle-all"
                 checked={todos.every(todo => todo.completed)}
-                onChange={() => {
-                  setTodo(todos.map(todoThis => ({
-                    ...todoThis,
-                    completed: !todos.every(todoThis => todoThis.completed),
-                  })));
-                }}
+                onChange={handleToggleAllCheckbox}
               />
               <label htmlFor="toggle-all">
                 Mark all as complete
@@ -76,21 +83,19 @@ function App() {
 
             <footer className="footer">
               <span className="todo-count">
-                {`${todos.filter(todoThis => (
-                  !todoThis.completed
+                {`${todos.filter(todo => (
+                  !todo.completed
                 )).length} items left`}
               </span>
 
               <TodosFilter setVisibleTodos={setVisibleTodos} />
 
-              {todos.some(todoThis => todoThis.completed)
+              {todos.some(todo => todo.completed)
                 && (
                 <button
                   type="button"
                   className="clear-completed"
-                  onClick={() => {
-                    setTodo(todos.filter(todoThis => !todoThis.completed));
-                  }}
+                  onClick={handleClearButton}
                 >
                   Clear completed
                 </button>

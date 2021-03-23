@@ -15,15 +15,13 @@ export const TodosFilter = ({ setVisibleTodos }) => {
     let todosToBeShown;
 
     switch (newValue) {
-      case 'All':
-        todosToBeShown = todos;
-        break;
       case 'Active':
         todosToBeShown = todos.filter(todo => !todo.completed);
         break;
       case 'Completed':
         todosToBeShown = todos.filter(todo => todo.completed);
         break;
+      case 'All':
       default:
         todosToBeShown = todos;
     }
