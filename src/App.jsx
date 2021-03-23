@@ -61,7 +61,7 @@ function App() {
   };
 
   const clearCompletedTodos = () => {
-    setTodos(todos.find(todo => !todo.completed));
+    setTodos(activeTodos);
   };
 
   const setTitleEditing = (todoId, title) => {
@@ -75,6 +75,15 @@ function App() {
 
       return todo;
     }));
+  };
+
+
+  const status = todos.every(todo => todo.completed === true);
+
+  const changeAllTodosStatus = (status) => {
+    setTodos(prevState => prevState.map(todo => (
+      { ...todo, completed: status }
+    )))
   };
 
   return (
@@ -91,7 +100,8 @@ function App() {
         setStatus={setStatus}
         destroyTodo={destroyTodo}
         setTitleEditing={setTitleEditing}
-        activeTodos={activeTodos}
+        status={status}
+        changeAllTodosStatus={changeAllTodosStatus}
       />
 
       {todos.length > 0

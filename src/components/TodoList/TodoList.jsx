@@ -7,21 +7,14 @@ export const TodoList = ({ todos,
   setStatus,
   destroyTodo,
   setTitleEditing,
-  activeTodos }) => {
+  changeAllTodosStatus,
+  status }) => {
 
   const [saveTodos, setSaveTodos] = useState([])
 
   useEffect(() => {
     setSaveTodos(todos)
   }, [todos])
-
-  const status = saveTodos.every(todo => todo.completed === true);
-
-  const changeAllTodosStatus = (status) => {
-    setSaveTodos(prevState => prevState.map(todo => (
-      { ...todo, completed: status }
-    )))
-  };
 
   return (
     <section className="main">
