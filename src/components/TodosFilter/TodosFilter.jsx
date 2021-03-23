@@ -4,7 +4,7 @@ import { TodosContext } from '../../TodosContext';
 
 export const TodosFilter = ({ filterTodos }) => {
   const { todos } = useContext(TodosContext);
-  const [active, setActive] = useState('all');
+  const [isActive, setActive] = useState('all');
 
   const showAllTodosHandler = () => {
     filterTodos(todos);
@@ -34,7 +34,7 @@ export const TodosFilter = ({ filterTodos }) => {
       <li>
         <a
           href="#/"
-          className={active === 'all' && 'selected'}
+          className={isActive === 'all' && 'selected'}
           onClick={showAllTodosHandler}
         >
           All
@@ -44,7 +44,7 @@ export const TodosFilter = ({ filterTodos }) => {
       <li>
         <a
           href="#/active"
-          className={active === 'active' && 'selected'}
+          className={isActive === 'active' && 'selected'}
           onClick={showActiveTodosHandler}
         >
           Active
@@ -54,7 +54,7 @@ export const TodosFilter = ({ filterTodos }) => {
       <li>
         <a
           href="#/completed"
-          className={active === 'completed' && 'selected'}
+          className={isActive === 'completed' && 'selected'}
           onClick={showComplitedTodos}
         >
           Completed

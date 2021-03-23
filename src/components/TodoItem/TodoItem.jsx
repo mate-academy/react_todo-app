@@ -4,13 +4,13 @@ import classNames from 'classnames';
 import { TodosContext } from '../../TodosContext';
 
 export const TodoItem = ({ id, title, completed }) => {
-  const { todos, setNewTodos } = useContext(TodosContext);
-  const [editing, setIsEditing] = useState(false);
+  const { todos, setTodos } = useContext(TodosContext);
+  const [isEditing, setIsEditing] = useState(false);
   const [editingInputValue, setEditingValue] = useState(title);
   const currentIndex = todos.findIndex(todo => todo.id === id);
 
   const checkboxChangeHandle = () => {
-    setNewTodos([
+    setTodos([
       ...todos.slice(0, currentIndex),
       {
         ...todos[currentIndex],
@@ -21,10 +21,33 @@ export const TodoItem = ({ id, title, completed }) => {
   };
 
   const deleteTodoHandle = () => {
-    setNewTodos([
+    setTodos([
       ...todos.slice(0, currentIndex),
       ...todos.slice(currentIndex + 1),
     ]);
+  };
+
+  const pressKeyHandler = (event) => {
+    if (event.key === 'Escape') {
+      setIsEditing(false);
+      setEditingValue(title);
+    }
+
+    if (event.key === 'Enter') {
+      if (editingInputValue === '') {
+        return;
+      }
+
+      setTodos([
+        ...todos.slice(0, currentIndex),
+        {
+          ...todos[currentIndex],
+          title: editingInputValue,
+        },
+        ...todos.slice(currentIndex + 1),
+      ]);
+      setIsEditing(false);
+    }
   };
 
   document.addEventListener('click', (event) => {
@@ -40,7 +63,7 @@ export const TodoItem = ({ id, title, completed }) => {
   return (
     <li
       key={id}
-      className={classNames({ completed }, { editing })}
+      className={classNames({ completed }, { editing: isEditing })}
       onDoubleClick={
         () => {
           setIsEditing(true);
@@ -71,30 +94,7 @@ export const TodoItem = ({ id, title, completed }) => {
             setEditingValue(event.target.value);
           }
         }
-        onKeyDown={
-          (event) => {
-            if (event.key === 'Escape') {
-              setIsEditing(false);
-              setEditingValue(title);
-            }
-
-            if (event.key === 'Enter') {
-              if (editingInputValue === '') {
-                return;
-              }
-
-              setNewTodos([
-                ...todos.slice(0, currentIndex),
-                {
-                  ...todos[currentIndex],
-                  title: editingInputValue,
-                },
-                ...todos.slice(currentIndex + 1),
-              ]);
-              setIsEditing(false);
-            }
-          }
-        }
+        onKeyDown={pressKeyHandler}
       />
     </li>
   );

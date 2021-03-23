@@ -4,7 +4,7 @@ import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
 export const TodoApp = () => {
-  const { todos, setNewTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
   const isAllChecked = todos.every(todo => todo.completed === true);
   const [currentTodos, setCurrentTodos] = useState(todos);
   const [inputedValue, setIputValue] = useState('');
@@ -16,21 +16,12 @@ export const TodoApp = () => {
   }, [todos]);
 
   const toggleAllItems = () => {
-    if (!isAllChecked) {
-      setNewTodos(
-        todos.map(todo => ({
-          ...todo,
-          completed: true,
-        })),
-      );
-    } else {
-      setNewTodos(
-        todos.map(todo => ({
-          ...todo,
-          completed: false,
-        })),
-      );
-    }
+    setTodos(
+      todos.map(todo => ({
+        ...todo,
+        completed: !isAllChecked,
+      })),
+    );
   };
 
   const writeTodo = (event) => {
@@ -39,7 +30,7 @@ export const TodoApp = () => {
       return;
     }
 
-    setNewTodos([
+    setTodos([
       ...todos,
       {
         id: +new Date(),
@@ -51,20 +42,15 @@ export const TodoApp = () => {
   };
 
   const clearCompleted = () => {
-    setNewTodos(todos.filter(todo => todo.completed === false));
+    setTodos(todos.filter(todo => todo.completed === false));
   };
 
   return (
-    /* eslint-disable */
-    <section
-      className="todoapp"
-    >
+    <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form
-          onSubmit={writeTodo}
-        >
+        <form onSubmit={writeTodo}>
           <input
             type="text"
             className="new-todo"
@@ -93,26 +79,27 @@ export const TodoApp = () => {
           items={currentTodos}
         />
       </section>
-
-
-        {!!todos.length && (
-          <footer className="footer">
+      {!!todos.length && (
+        <footer className="footer">
           <span className="todo-count">
-            {`${todos.filter(todo => todo.completed === false).length} items left`}
+            {`${todos.filter(todo => todo.completed === false).length}
+            items left`}
           </span>
           <TodosFilter
-          filterTodos={setCurrentTodos}
+            filterTodos={setCurrentTodos}
           />
-          {!!todos.filter(todo => todo.completed === true).length && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={clearCompleted}
-          >
-            Clear completed
-          </button>)}
-      </footer>
-        )}
+          {!!todos.filter(todo => todo.completed === true).length
+          && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
     </section>
   );
-}
+};

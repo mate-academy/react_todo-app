@@ -5,7 +5,6 @@ import { TodoItem } from '../TodoItem';
 export const TodoList = ({ items }) => (
   <ul className="todo-list">
     {items.map(item => (
-
       <TodoItem
         id={item.id}
         title={item.title}

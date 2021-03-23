@@ -4,15 +4,15 @@ import { useLocalStorage } from './customHooks';
 
 export const TodosContext = React.createContext({
   todos: [],
-  setNewTodos: () => {},
+  setTodos: () => {},
 });
 
 export const TodosProvider = ({ children }) => {
-  const [todos, setNewTodos] = useLocalStorage('todos', []);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const contextValue = useMemo(() => (
     {
       todos,
-      setNewTodos,
+      setTodos,
     }
   ), [todos]);
 
@@ -24,6 +24,5 @@ export const TodosProvider = ({ children }) => {
 };
 
 TodosProvider.propTypes = {
-  /* eslint-disable */
-  children: PropTypes.object.isRequired,
+  children: PropTypes.node.isRequired,
 };
