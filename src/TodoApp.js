@@ -5,7 +5,7 @@ import { TodosFilter } from './components/TodosFilter';
 
 export const TodoApp = () => {
   const { todos, setTodos } = useContext(TodosContext);
-  const isAllChecked = todos.every(todo => todo.completed === true);
+  const isAllChecked = todos.every(todo => todo.completed);
   const [currentTodos, setCurrentTodos] = useState(todos);
   const [inputedValue, setIputValue] = useState('');
   const [toggleAll, setToggleAll] = useState(isAllChecked);
@@ -24,7 +24,7 @@ export const TodoApp = () => {
     );
   };
 
-  const writeTodo = (event) => {
+  const addTodo = (event) => {
     event.preventDefault();
     if (inputedValue === '') {
       return;
@@ -50,7 +50,7 @@ export const TodoApp = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={writeTodo}>
+        <form onSubmit={addTodo}>
           <input
             type="text"
             className="new-todo"
