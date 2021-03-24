@@ -9,7 +9,7 @@ export const TodoItem = ({ id, title, completed }) => {
   const [editingInputValue, setEditingValue] = useState(title);
   const currentIndex = todos.findIndex(todo => todo.id === id);
 
-  const checkboxChangeHandle = () => {
+  const handleCheckboxChange = () => {
     setTodos([
       ...todos.slice(0, currentIndex),
       {
@@ -75,7 +75,7 @@ export const TodoItem = ({ id, title, completed }) => {
           type="checkbox"
           className="toggle"
           checked={completed}
-          onChange={checkboxChangeHandle}
+          onChange={handleCheckboxChange}
 
         />
         <label>{title}</label>

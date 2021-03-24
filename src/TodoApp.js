@@ -32,17 +32,15 @@ export const TodoApp = () => {
 
     setTodos([
       ...todos,
-      {
-        id: +new Date(),
+      { id: +new Date(),
         title: inputedValue,
-        completed: false,
-      },
+        completed: false },
     ]);
     setIputValue('');
   };
 
   const clearCompleted = () => {
-    setTodos(todos.filter(todo => todo.completed === false));
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   return (
@@ -76,19 +74,19 @@ export const TodoApp = () => {
         )}
 
         <TodoList
-          items={currentTodos}
+          todos={currentTodos}
         />
       </section>
       {!!todos.length && (
         <footer className="footer">
           <span className="todo-count">
-            {`${todos.filter(todo => todo.completed === false).length}
+            {`${todos.filter(todo => !todo.completed).length}
             items left`}
           </span>
           <TodosFilter
             filterTodos={setCurrentTodos}
           />
-          {!!todos.filter(todo => todo.completed === true).length
+          {!!todos.filter(todo => todo.completed).length
           && (
             <button
               type="button"
