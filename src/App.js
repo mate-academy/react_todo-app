@@ -3,9 +3,10 @@ import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodosFilter } from './components/TodosFilter/TodosFilter';
 import { ToggleAll } from './components/ToggleAll/ToggleAll';
+import { useLocalStorage } from './components/useLocalStorege/useLocalStorage';
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [render, setRender] = useState([]);
 
   useEffect(() => {
