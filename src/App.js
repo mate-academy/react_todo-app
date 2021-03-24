@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocalStorage } from './hooks';
 import { TodoContext } from './TodoContext';
 import { TodoList } from './TodoList';
@@ -8,9 +8,11 @@ function App() {
   const [title, setTitle] = useState('');
   const [todos, setTodo] = useLocalStorage('todos', []);
   const [visibleTodos, setVisibleTodos] = useState([]);
+  const [isAllCompleted, setIsAllCompleted] = useState(false);
 
   useEffect(() => {
     setVisibleTodos(todos);
+    setIsAllCompleted(todos.every(todo => todo.completed));
   }, [todos]);
 
   const createTodo = (event) => {
@@ -33,13 +35,16 @@ function App() {
   const contextValue = {
     todos,
     setTodo,
+    isAllCompleted,
+    setIsAllCompleted,
   };
 
   const handleToggleAllCheckbox = () => {
     setTodo(todos.map(todo => ({
       ...todo,
-      completed: !todos.every(todo => todo.completed),
+      completed: !isAllCompleted,
     })));
+    setIsAllCompleted(!isAllCompleted);
   };
 
   const handleClearButton = () => {
@@ -72,7 +77,7 @@ function App() {
                 type="checkbox"
                 id="toggle-all"
                 className="toggle-all"
-                checked={todos.every(todo => todo.completed)}
+                checked={isAllCompleted}
                 onChange={handleToggleAllCheckbox}
               />
               <label htmlFor="toggle-all">
