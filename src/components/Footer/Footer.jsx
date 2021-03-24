@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export function Footer({
-  quantity,
+  activeTodos,
   onFilterTodos,
   onRemoveCompleted,
   todos,
@@ -11,25 +11,15 @@ export function Footer({
   const [sortedTodos, setSortedTodos] = useState('all');
   const isCompleted = todos.some(({ completed }) => completed);
 
-  const handleSortByAll = () => {
-    setSortedTodos('all');
-    onFilterTodos('all');
-  };
-
-  const handleSortByActive = () => {
-    setSortedTodos('active');
-    onFilterTodos('active');
-  };
-
-  const handleSortByCompleted = () => {
-    setSortedTodos('completed');
-    onFilterTodos('completed');
+  const handleSortByState = (currentState) => {
+    setSortedTodos(currentState);
+    onFilterTodos(currentState);
   };
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${quantity} items left`}
+        {`${activeTodos} items left`}
       </span>
 
       <ul className="filters">
@@ -39,7 +29,7 @@ export function Footer({
             className={classNames(
               { selected: sortedTodos === 'all' },
             )}
-            onClick={handleSortByAll}
+            onClick={() => handleSortByState('all')}
           >
             All
           </a>
@@ -51,7 +41,7 @@ export function Footer({
             className={classNames(
               { selected: sortedTodos === 'active' },
             )}
-            onClick={handleSortByActive}
+            onClick={() => handleSortByState('active')}
           >
             Active
           </a>
@@ -63,7 +53,7 @@ export function Footer({
             className={classNames(
               { selected: sortedTodos === 'completed' },
             )}
-            onClick={handleSortByCompleted}
+            onClick={() => handleSortByState('completed')}
           >
             Completed
           </a>
@@ -91,7 +81,7 @@ Footer.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  quantity: PropTypes.number.isRequired,
+  activeTodos: PropTypes.number.isRequired,
   onRemoveCompleted: PropTypes.func.isRequired,
   onFilterTodos: PropTypes.func.isRequired,
 };

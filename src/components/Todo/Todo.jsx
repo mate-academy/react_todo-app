@@ -39,8 +39,8 @@ export function Todo({
     }
   };
 
-  const undoChanges = (e) => {
-    if (e.key === 'Escape') {
+  const undoChanges = (event) => {
+    if (event.key === 'Escape') {
       setValue(title);
       setIsEditing(false);
     }

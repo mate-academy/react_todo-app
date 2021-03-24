@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Form } from './components/Form';
 import { Main } from './components/Main';
@@ -13,59 +13,55 @@ export function App() {
     setRenderedTodos(todos);
   }, [todos]);
 
-  const addNewTodo = todo => setNewTodo([...todos, todo]);
+  const addNewTodo = useCallback(todo => setNewTodo([...todos, todo]), [todos]);
 
-  const handleCheckedTodos = (todo) => {
+  const handleCheckedTodos = useCallback((todo) => {
     const checkedTodos = todos.map(
       item => ((item.id === todo.id) ? todo : item),
     );
 
     setNewTodo(checkedTodos);
-  };
+  }, [todos]);
 
-  const pendingToDo = todos.filter(
+  const activeTodos = todos.filter(
     todo => !todo.completed,
   ).length;
 
-  const toggleAllTodos = (currentState) => {
+  const toggleAllTodos = useCallback((currentState) => {
     setNewTodo(todos.map(todo => ({
       ...todo,
       completed: currentState,
     })));
-  };
+  }, [todos]);
 
-  const handleFilterTodosByState = (currentState) => {
-    let filtered;
-
+  const handleFilterTodosByState = useCallback((currentState) => {
     switch (currentState) {
       case 'active':
-        filtered = todos.filter(todo => !todo.completed);
+        setRenderedTodos(todos.filter(todo => !todo.completed));
         break;
 
       case 'completed':
-        filtered = todos.filter(todo => todo.completed);
+        setRenderedTodos(todos.filter(todo => todo.completed));
         break;
 
       default:
-        filtered = [...todos];
+        setRenderedTodos([...todos]);
     }
+  }, [todos]);
 
-    setRenderedTodos(filtered);
-  };
-
-  const handlerRemoveTodo = (id) => {
+  const handlerRemoveTodo = useCallback((id) => {
     setNewTodo(todos.filter(todo => todo.id !== id));
-  };
+  }, [todos]);
 
-  const handlerRemoveCompletedTodos = () => {
+  const handlerRemoveCompletedTodos = useCallback(() => {
     setNewTodo(todos.filter(todo => !todo.completed));
-  };
+  }, [todos]);
 
-  const handlerEditTodoTitle = (modifiedTodo) => {
+  const handlerEditTodoTitle = useCallback((modifiedTodo) => {
     setNewTodo(todos.map(todo => (
       todo.id === modifiedTodo.id ? modifiedTodo : todo
     )));
-  };
+  }, [todos]);
 
   return (
     <section className="todoapp">
@@ -75,14 +71,15 @@ export function App() {
         todos={renderedTodos}
         onAddChecked={handleCheckedTodos}
         onRemoveTodo={handlerRemoveTodo}
-        pendingToDo={pendingToDo}
+        pendingToDo={activeTodos}
+        activeTodos={activeTodos}
         onToggleTodos={toggleAllTodos}
         onEditTitle={handlerEditTodoTitle}
       />
       {todos.length > 0
         && (
           <Footer
-            quantity={pendingToDo}
+            activeTodos={activeTodos}
             onFilterTodos={handleFilterTodosByState}
             onRemoveCompleted={handlerRemoveCompletedTodos}
             todos={todos}

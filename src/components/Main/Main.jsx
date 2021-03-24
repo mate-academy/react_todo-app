@@ -6,7 +6,7 @@ import { ToggleAll } from '../ToggleAll';
 export function Main({
   todos,
   onAddChecked,
-  pendingToDo,
+  activeTodos,
   onToggleTodos,
   onRemoveTodo,
   onEditTitle,
@@ -16,7 +16,7 @@ export function Main({
       {todos.length > 0
         && (
           <ToggleAll
-            pendingToDo={pendingToDo}
+            activeTodos={activeTodos}
             onToggleTodos={onToggleTodos}
           />
         )
@@ -37,7 +37,7 @@ export function Main({
 }
 
 Main.propTypes = {
-  pendingToDo: PropTypes.number.isRequired,
+  activeTodos: PropTypes.number.isRequired,
   onToggleTodos: PropTypes.func.isRequired,
   onAddChecked: PropTypes.func.isRequired,
   onRemoveTodo: PropTypes.func.isRequired,

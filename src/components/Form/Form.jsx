@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,8 +6,8 @@ export function Form({ onAddTodo }) {
   const [value, setValue] = useState('');
   const handleInputValue = event => setValue(event.target.value);
 
-  const handleKeypress = (e) => {
-    if (e.key === 'Enter' && value.trim()) {
+  const handleKeypress = (keyPressEvent) => {
+    if (keyPressEvent.key === 'Enter' && value.trim()) {
       const newTodo = {
         id: `${+new Date()}`,
         title: value,

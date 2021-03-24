@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-export function ToggleAll({ onToggleTodos, pendingToDo }) {
+export function ToggleAll({ onToggleTodos, activeTodos }) {
   const [isChecked, setIsChecked] = useState(false);
-  const isFalse = !pendingToDo;
+  const isFalse = !activeTodos;
 
   useEffect(() => {
     setIsChecked(isFalse);
@@ -30,5 +30,5 @@ export function ToggleAll({ onToggleTodos, pendingToDo }) {
 
 ToggleAll.propTypes = {
   onToggleTodos: PropTypes.func.isRequired,
-  pendingToDo: PropTypes.number.isRequired,
+  activeTodos: PropTypes.number.isRequired,
 };
