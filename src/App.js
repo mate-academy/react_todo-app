@@ -81,13 +81,17 @@ function App() {
           onEditTodo={onEditTodo}
         />
       </section>
-      <footer className="footer">
-        <TodosFilter
-          checkCompeted={checkCompeted}
-          onFilter={onFilter}
-          handleClearCompleted={handleClearCompleted}
-        />
-      </footer>
+      {todos.length > 0
+      && (
+        <footer className="footer">
+          <TodosFilter
+            checkCompeted={checkCompeted}
+            onFilter={onFilter}
+            handleClearCompleted={handleClearCompleted}
+          />
+        </footer>
+      )
+      }
     </section>
 
   );
