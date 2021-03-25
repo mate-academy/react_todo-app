@@ -34,11 +34,11 @@ export const TodoList = TodoListRoute(({
             return todo.completed;
           }
 
-          if (status === 'all') {
-            return todo;
+          if (status === 'active') {
+            return !todo.completed;
           }
 
-          return !todo.completed;
+          return todo;
         }).map(todo => (
           <TodoItem
             key={todo.id}
