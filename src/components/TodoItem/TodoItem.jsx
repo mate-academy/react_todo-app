@@ -2,7 +2,11 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export const TodoItem = ({ todo, completeTodo, removeTodo }) => {
+export const TodoItem = ({
+  todo,
+  onComplete,
+  onRemove,
+}) => {
   const [isEditable, setIsEditable] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [inputQuery, setInputQuery] = useState(title);
@@ -60,7 +64,7 @@ export const TodoItem = ({ todo, completeTodo, removeTodo }) => {
           readOnly
           className="toggle"
           checked={todo.completed}
-          onClick={() => completeTodo(todo.id)}
+          onClick={() => onComplete(todo.id)}
         />
         <label onDoubleClick={handleEditing}>
           {title}
@@ -68,7 +72,7 @@ export const TodoItem = ({ todo, completeTodo, removeTodo }) => {
         <button
           type="button"
           className="destroy"
-          onClick={() => removeTodo(todo.id)}
+          onClick={() => onRemove(todo.id)}
         />
       </div>
       <input
@@ -89,8 +93,8 @@ TodoItem.propTypes = {
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   }),
-  completeTodo: PropTypes.func.isRequired,
-  removeTodo: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
 TodoItem.defaultProps = {

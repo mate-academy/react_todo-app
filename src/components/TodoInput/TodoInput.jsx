@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-export const TodoInput = ({ addTodo }) => {
+export const TodoInput = ({ onCreate }) => {
   const [inputQuery, setInputQuery] = useState('');
 
   const handleTodo = useCallback(
@@ -15,10 +15,10 @@ export const TodoInput = ({ addTodo }) => {
   const handleSumbit = useCallback(
     (event) => {
       if (event.keyCode === 13 && inputQuery) {
-        addTodo(inputQuery);
+        onCreate(inputQuery);
         setInputQuery('');
       }
-    }, [inputQuery, addTodo],
+    }, [inputQuery, onCreate],
   );
 
   return (
@@ -37,5 +37,5 @@ export const TodoInput = ({ addTodo }) => {
 };
 
 TodoInput.propTypes = {
-  addTodo: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired,
 };

@@ -1,24 +1,19 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { TodoList } from '../TodoList';
 
-const active = 'active';
-const completed = 'completed';
-const all = 'all';
+const todosData = [
+  { status: 'all', id: +new Date(), title: 'All' },
+  { status: 'active', id: +new Date(), title: 'Active' },
+  { status: 'completed', id: +new Date(), title: 'Completed' },
+];
 
 export const TodoFilter = ({
   todos,
-  filterTodos,
   clearCompletedTodos,
 }) => {
-  const [isSelected, setIsSelected] = useState('all');
-
-  const handleFilter = useCallback(
-    (type) => {
-      filterTodos(type);
-      setIsSelected(type);
-    }, [filterTodos],
-  );
+  console.log(todosData)
 
   return (
     <footer className="footer">
@@ -30,41 +25,16 @@ export const TodoFilter = ({
       </span>
 
       <ul className="filters">
-        <li>
-          <a
-            href="#/"
-            className={classNames({
-              selected: isSelected === all,
-            })}
-            onClick={() => handleFilter(all)}
-          >
-            All
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/active"
-            className={classNames({
-              selected: isSelected === active,
-            })}
-            onClick={() => handleFilter(active)}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            className={classNames({
-              selected: isSelected === completed,
-            })}
-            onClick={() => handleFilter(completed)}
-          >
-            Completed
-          </a>
-        </li>
+        {todosData.map(todo => (
+          <li key={todo.id}>
+            <NavLink
+              to={TodoList.link({ status: todo.status })}
+              activeClassName="selected"
+            >
+              {todo.title}
+            </NavLink>
+          </li>
+        ))}
       </ul>
 
       {todos.some(todo => todo.completed) && (

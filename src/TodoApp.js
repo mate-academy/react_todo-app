@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { Switch, Redirect } from 'react-router-dom';
 import { useLocalStorage } from './helpers/useLocalStorage';
 
 import { TodoInput } from './components/TodoInput';
@@ -9,7 +10,7 @@ function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [storageTodos, setStorageTodos] = useLocalStorage('todos', todos);
 
-  const addTodo = useCallback(
+  const onCreate = useCallback(
     (title) => {
       setTodos(prevTodos => [...prevTodos, {
         completed: false,
@@ -23,9 +24,9 @@ function TodoApp() {
     setStorageTodos(todos);
   }, [todos]);
 
-  const completeTodo = useCallback(
+  const onComplete = useCallback(
     (id) => {
-      const newTodos = [...todos].map(todo => (todo.id === id ? ({
+      const newTodos = todos.map(todo => (todo.id === id ? ({
         ...todo,
         completed: !todo.completed,
       })
@@ -35,57 +36,28 @@ function TodoApp() {
     }, [todos],
   );
 
-  const completeTodos = useCallback(
-    () => {
-      const isCompleted = todos.every(todo => todo.completed);
-
-      if (!isCompleted) {
-        const newTodos = [...todos].map(todo => ({
-          ...todo,
-          completed: true,
-        }));
-
-        setTodos(newTodos);
-      } else {
-        const newTodos = [...todos].map(todo => ({
-          ...todo,
-          completed: false,
-        }));
-
-        setTodos(newTodos);
-      }
-    }, [todos],
-  );
-
-  const removeTodo = useCallback(
-    (id) => {
-      const newTodos = [...todos].filter(todo => todo.id !== id);
+  const onToggle = useCallback(
+    (completed) => {
+      const newTodos = todos.map(todo => ({
+        ...todo,
+        completed: !completed,
+      }));
 
       setTodos(newTodos);
     }, [todos],
   );
 
-  const filterTodos = useCallback(
-    (type) => {
-      switch (type) {
-        case 'active':
-          setStorageTodos(todos.filter(todo => !todo.completed));
-          break;
+  const onRemove = useCallback(
+    (id) => {
+      const newTodos = todos.filter(todo => todo.id !== id);
 
-        case 'completed':
-          setStorageTodos(todos.filter(todo => todo.completed));
-          break;
-
-        default:
-          setStorageTodos(todos);
-          break;
-      }
+      setTodos(newTodos);
     }, [todos],
   );
 
   const clearCompletedTodos = useCallback(
     () => {
-      const newTodos = [...todos].filter(todo => !todo.completed);
+      const newTodos = todos.filter(todo => !todo.completed);
 
       setTodos(newTodos);
     }, [todos],
@@ -93,42 +65,27 @@ function TodoApp() {
 
   return (
     <section className="todoapp">
-      <TodoInput addTodo={addTodo} />
+      <TodoInput onCreate={onCreate} />
       <section className="main">
-        {todos.length > 0
-          && (
-          <TodoList
-            todos={storageTodos}
-            completeTodo={completeTodo}
-            completeTodos={completeTodos}
-            removeTodo={removeTodo}
-          />
-          )}
-        {/* <Switch>
-          <Route path="/all">
-            <TodoList todos={todos} />
-          </Route>
 
-          <Route path="/active">
-            <TodoList
-              todos={setStorageTodos(todos.filter(todo => !todo.completed))}
-            />
-          </Route>
-
-          <Route path="/completed">
-            <TodoList
-              todos={setStorageTodos(todos.filter(todo => todo.completed))}
-            />
-          </Route>
-
-        </Switch> */}
+        <Switch>
+          {todos.length > 0
+            && (
+              <TodoList
+                todos={storageTodos}
+                onComplete={onComplete}
+                onToggle={onToggle}
+                onRemove={onRemove}
+              />
+            )}
+          <Redirect to={TodoList.link({ status: 'all' })} />
+        </Switch>
       </section>
 
       {todos.length > 0
         && (
           <TodoFilter
             todos={storageTodos}
-            filterTodos={filterTodos}
             clearCompletedTodos={clearCompletedTodos}
           />
         )}
