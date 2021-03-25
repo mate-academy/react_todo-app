@@ -46,6 +46,7 @@ export const Todo = ({ todo, onCheckedTodos, onDelete, onEditTodo }) => {
 
   return (
     <li className={classNames({
+      completed: todo.completed,
       editing: isEding,
     })}
     >

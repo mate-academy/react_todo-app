@@ -71,10 +71,12 @@ function App() {
     <section className="todoapp">
       <Header onAddTodo={addTodo} />
       <section className="main">
+        {todos.length > 0 && (
         <ToggleAll
           checkCompeted={checkCompeted}
           onToggleTodos={onToggleTodos}
         />
+        )}
         <TodoList
           todos={render}
           onCheckedTodos={onCheckedTodos}
