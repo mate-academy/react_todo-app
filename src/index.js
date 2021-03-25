@@ -9,7 +9,7 @@ import './styles/filters.css';
 import TodoApp from './TodoApp';
 
 ReactDOM.render(
-  <HashRouter basename="/">
+  <HashRouter>
     <TodoApp />
   </HashRouter>,
   document.getElementById('root'),
