@@ -11,15 +11,14 @@ const todosData = [
 
 export const TodoFilter = ({
   todos,
-  clearCompletedTodos,
+  onRemoveCompleted,
 }) => {
   console.log(todosData)
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {todos.filter(todo => (
-          !todo.completed)).length > 0
+        {todos.filter(todo => !todo.completed).length > 0
           ? `${todos.filter(todo => (!todo.completed)).length} not completed`
           : `all done`}
       </span>
@@ -41,7 +40,7 @@ export const TodoFilter = ({
       <button
         type="button"
         className="clear-completed"
-        onClick={clearCompletedTodos}
+        onClick={onRemoveCompleted}
       >
         Clear completed
       </button>
@@ -56,8 +55,7 @@ TodoFilter.propTypes = {
       completed: PropTypes.bool.isRequired,
     }),
   ),
-  clearCompletedTodos: PropTypes.func.isRequired,
-  filterTodos: PropTypes.func.isRequired,
+  onRemoveCompleted: PropTypes.func.isRequired,
 };
 
 TodoFilter.defaultProps = {

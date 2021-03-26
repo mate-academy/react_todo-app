@@ -55,7 +55,7 @@ function TodoApp() {
     }, [todos],
   );
 
-  const clearCompletedTodos = useCallback(
+  const onRemoveCompleted = useCallback(
     () => {
       const newTodos = todos.filter(todo => !todo.completed);
 
@@ -86,7 +86,7 @@ function TodoApp() {
         && (
           <TodoFilter
             todos={storageTodos}
-            clearCompletedTodos={clearCompletedTodos}
+            onRemoveCompleted={onRemoveCompleted}
           />
         )}
     </section>
