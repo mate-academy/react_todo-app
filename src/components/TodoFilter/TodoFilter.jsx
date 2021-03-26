@@ -13,13 +13,13 @@ export const TodoFilter = ({
   todos,
   onRemoveCompleted,
 }) => {
-  console.log(todosData)
+  const uncompletedTodos = todos.filter(todo => !todo.completed);
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {todos.filter(todo => !todo.completed).length > 0
-          ? `${todos.filter(todo => (!todo.completed)).length} not completed`
+        {uncompletedTodos.length > 0
+          ? `${uncompletedTodos.length} not completed`
           : `all done`}
       </span>
 

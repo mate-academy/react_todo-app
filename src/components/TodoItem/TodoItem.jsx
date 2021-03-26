@@ -15,7 +15,7 @@ export const TodoItem = ({
     setIsEditable(true);
   };
 
-  const handleTodo = useCallback(
+  const handleInput = useCallback(
     (event) => {
       const { value } = event.target;
 
@@ -25,14 +25,14 @@ export const TodoItem = ({
 
   const handleSubmit = useCallback(
     (event) => {
-      if (event.keyCode === 27) {
+      if (event.key === 'Escape') {
         setIsEditable(false);
         setInputQuery(title);
 
         return;
       }
 
-      if (event.keyCode === 13 && inputQuery) {
+      if (event.key === 'Enter' && inputQuery) {
         setTitle(inputQuery);
         setIsEditable(false);
       }
@@ -79,7 +79,7 @@ export const TodoItem = ({
         type="text"
         className="edit"
         value={inputQuery}
-        onChange={handleTodo}
+        onChange={handleInput}
         onKeyDown={handleSubmit}
         onBlur={handleOnBLur}
       />

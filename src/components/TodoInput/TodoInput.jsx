@@ -14,7 +14,7 @@ export const TodoInput = ({ onCreate }) => {
 
   const handleSumbit = useCallback(
     (event) => {
-      if (event.keyCode === 13 && inputQuery) {
+      if (event.key === 'Enter' && inputQuery) {
         onCreate(inputQuery);
         setInputQuery('');
       }
