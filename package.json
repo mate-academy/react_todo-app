@@ -10,7 +10,10 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
+    "react-router-dom": "^5.2.0",
+    "react-router-hoc": "^0.1.9",
+    "react-scripts": "3.4.3",
+    "react-use-localstorage": "^3.5.3"
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react": "*",
