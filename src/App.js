@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useGetLocalStorage, useSetLocalStorage } from './Components/localStorage';
 import { Form } from './Components/Form/Form';
 import { TodoList } from './Components/TodoList/TodoList';
 import { TodosFilter } from './Components/TodosFilter/TodosFilter';
-import { useLocalStorage } from './Components/localStorage';
 
 function App() {
   const [query, handleQuery] = useState('');
   const [activeCheckbox, checkboxHandler] = useState(false);
   const [filterBy, selectFilterType] = useState('');
 
-  const [todos, handleChangeTodos] = useLocalStorage('todos', [])
+  const [storage, setStorage] = useState([]);
+  const [todos, setTodos] = useState([]);
+
+  useSetLocalStorage('todos', todos)
+
+  const currentStorageData = useGetLocalStorage('todos');
+
+  useEffect(() => { 
+    setStorage(currentStorageData)
+  }, [todos])
+
+  console.log(storage);
+
+  
+
+  // console.log(useGetLocalStorage('todos'));
 
   const getFilteredTodos = (value) => {
     switch(value) {
@@ -37,14 +52,14 @@ function App() {
 
   useEffect(() => {
     if (activeCheckbox) {
-      handleChangeTodos(todos
+      setTodos(todos
         .map(todo => ({
           ...todo,
           completed: true,
         }))
       )
     } else {
-      handleChangeTodos(todos
+      setTodos(todos
         .map(todo => ({
           ...todo,
           completed: false,
@@ -65,7 +80,7 @@ function App() {
         <Form
           handleQuery={handleQuery}
           query={query}
-          handleChangeTodos={handleChangeTodos}
+          setTodos={setTodos}
           todos={todos}
         />
       </header>
@@ -83,7 +98,7 @@ function App() {
         {todos.length !== 0 && (
           <TodoList
             todos={filteredTodos}
-            handleChangeTodos={handleChangeTodos}
+            setTodos={setTodos}
           />
         )}
       </section>
@@ -92,7 +107,7 @@ function App() {
       <TodosFilter
         todos={todos}
         selectFilterType={selectFilterType}
-        removeCompleted={handleChangeTodos}
+        removeCompleted={setTodos}
         filterBy={filterBy}
       />
       )}

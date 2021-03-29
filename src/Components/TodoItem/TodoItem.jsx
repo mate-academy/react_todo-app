@@ -6,13 +6,13 @@ export function TodoItem({
   title,
   completed,
   todos,
-  handleChangeTodos,
+  setTodos,
 }) {
   const [clickCounter, clickHandler] = useState(0);
   const [currentTitle, handleChangeTitle] = useState(title)
 
   const deleteTodo = () => {
-    handleChangeTodos(todos.filter(todo => {
+    setTodos(todos.filter(todo => {
       if (todo.id !== id) {
         return todo;
       }
@@ -22,7 +22,7 @@ export function TodoItem({
   }
 
   const editTodo = (value) => {
-    handleChangeTodos(todos.map(todo => {
+    setTodos(todos.map(todo => {
       if (todo.id !== id) {
         return todo;
       }
@@ -35,7 +35,7 @@ export function TodoItem({
   }
 
   const addTodo = () => {
-    handleChangeTodos(todos.map(todo => {
+    setTodos(todos.map(todo => {
       if (todo.id !== id) {
         return todo;
       }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function Form({ handleQuery, query, handleChangeTodos, todos }) {
+export function Form({ handleQuery, query, setTodos, todos }) {
   return (
     <form onKeyDown={(e) => {
       if (e.key === 'Enter') {
@@ -14,7 +14,7 @@ export function Form({ handleQuery, query, handleChangeTodos, todos }) {
           }
 
           handleQuery('')
-          handleChangeTodos([...todos, newTodo])
+          setTodos([...todos, newTodo])
         }
       }
     }}>

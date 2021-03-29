@@ -1,7 +1,7 @@
 import React from 'react'
 import { TodoItem } from '../TodoItem/TodoItem';
 
-export function TodoList({ todos, handleChangeTodos}) {
+export function TodoList({ todos, setTodos}) {
   return (
     <ul className="todo-list">
       {todos.map(todo => (
@@ -10,7 +10,7 @@ export function TodoList({ todos, handleChangeTodos}) {
           id={todo.id}
           title={todo.title}
           completed={todo.completed}
-          handleChangeTodos={handleChangeTodos}
+          setTodos={setTodos}
           todos={todos}
         />
       ))}

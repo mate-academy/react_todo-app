@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-export const useLocalStorage = (key, value) => {
-  const [storage, setStorage] = useState(
-    () => JSON.parse(window.localStorage.getItem(key)) ?? value
-  );
-
+export const useSetLocalStorage = (key, value) => {
   useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(storage))
-  }, [storage, key]);
-  
-  return [storage, setStorage]
+    window.localStorage.setItem(key, JSON.stringify(value))
+  }, [key, value]);
+}
+
+export const useGetLocalStorage = (key) => {
+  try {
+    return JSON.parse(window.localStorage.getItem(key));
+  } catch {
+    return null;
+  }
 }
