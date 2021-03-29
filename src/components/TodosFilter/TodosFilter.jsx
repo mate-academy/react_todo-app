@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export function TodosFilter({
-  checkCompeted,
-  onFilter,
-  handleClearCompleted,
+  todosCompletedLength,
+  filteredTodos,
+  clearCompleted,
 }) {
   return (
     <>
       <span className="todo-count">
-        {`${checkCompeted} items left`}
+        {`${todosCompletedLength} items left`}
       </span>
 
       <ul className="filters">
@@ -18,7 +18,7 @@ export function TodosFilter({
             href="#/"
             name="All"
             className="selected"
-            onClick={e => onFilter(e.target.name)}
+            onClick={e => filteredTodos(e.target.name)}
           >
             All
           </a>
@@ -28,7 +28,7 @@ export function TodosFilter({
           <a
             href="#/active"
             name="active"
-            onClick={e => onFilter(e.target.name)}
+            onClick={e => filteredTodos(e.target.name)}
           >
             Active
           </a>
@@ -38,7 +38,7 @@ export function TodosFilter({
           <a
             name="completed"
             href="#/completed"
-            onClick={e => onFilter(e.target.name)}
+            onClick={e => filteredTodos(e.target.name)}
           >
             Completed
           </a>
@@ -48,7 +48,7 @@ export function TodosFilter({
       <button
         type="button"
         className="clear-completed"
-        onClick={handleClearCompleted}
+        onClick={clearCompleted}
       >
         Clear completed
       </button>
@@ -57,7 +57,7 @@ export function TodosFilter({
 }
 
 TodosFilter.propTypes = {
-  checkCompeted: PropTypes.number.isRequired,
-  onFilter: PropTypes.func.isRequired,
-  handleClearCompleted: PropTypes.func.isRequired,
+  todosCompletedLength: PropTypes.number.isRequired,
+  filteredTodos: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
 };

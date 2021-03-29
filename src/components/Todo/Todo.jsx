@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-export const Todo = ({ todo, onCheckedTodos, onDelete, onEditTodo }) => {
+export const Todo = ({ todo, onSwitchTodos, onDelete, onEditTodo }) => {
   const [value, setValue] = useState(todo.title);
   const [isEding, setIsEding] = useState(false);
 
   const toggleTodo = () => {
-    onCheckedTodos({
+    onSwitchTodos({
       ...todo,
       completed: !todo.completed,
     });
@@ -86,7 +86,7 @@ Todo.propTypes = {
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
   }).isRequired,
-  onCheckedTodos: PropTypes.func.isRequired,
+  onSwitchTodos: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onEditTodo: PropTypes.func.isRequired,
 };

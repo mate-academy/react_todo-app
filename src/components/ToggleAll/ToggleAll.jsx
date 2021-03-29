@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 
-export const ToggleAll = ({ checkCompeted, onToggleTodos }) => {
-  const isNotCompeted = !checkCompeted;
+export const ToggleAll = ({ todosCompletedLength, onToggleTodos }) => {
+  const isNotCompeted = !todosCompletedLength;
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
@@ -29,6 +29,6 @@ export const ToggleAll = ({ checkCompeted, onToggleTodos }) => {
 };
 
 ToggleAll.propTypes = {
-  checkCompeted: PropTypes.number.isRequired,
+  todosCompletedLength: PropTypes.number.isRequired,
   onToggleTodos: PropTypes.func.isRequired,
 };

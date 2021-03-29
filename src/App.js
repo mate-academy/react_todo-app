@@ -6,91 +6,98 @@ import { ToggleAll } from './components/ToggleAll/ToggleAll';
 import { useLocalStorage } from './components/useLocalStorege/useLocalStorage';
 
 function App() {
-  const [todos, setTodos] = useLocalStorage('todos', []);
-  const [render, setRender] = useState([]);
+  const [storageTodos, setStorageTodos] = useLocalStorage('todos', []);
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    setRender(todos);
-  }, [todos]);
+    setTodos(storageTodos);
+  }, [storageTodos]);
 
   const addTodo = (todo) => {
-    setTodos([...todos, todo]);
+    setStorageTodos([...storageTodos, todo]);
   };
 
   const onDelete = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    setStorageTodos(storageTodos.filter(todo => todo.id !== id));
   };
 
-  const checkCompeted = todos.filter(
+  const todosCompletedLength = storageTodos.filter(
     todo => !todo.completed,
   ).length;
 
-  const onToggleTodos = (currentCompleted) => {
-    setTodos(todos.map(todo => ({
+  const onToggleTodos = (isCompleted) => {
+    setStorageTodos(storageTodos.map(todo => ({
       ...todo,
-      completed: currentCompleted,
+      completed: isCompleted,
     })));
   };
 
-  const handleClearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed));
+  const clearCompleted = () => {
+    setStorageTodos(setStorageTodos.filter(todo => !todo.completed));
   };
 
-  const onCheckedTodos = (currentTodo) => {
-    const checkedTodos = todos.map(
+  const onSwitchTodos = (currentTodo) => {
+    const checkedTodos = storageTodos.map(
       todo => ((todo.id === currentTodo.id) ? currentTodo : todo),
     );
 
-    setTodos(checkedTodos);
+    setStorageTodos(checkedTodos);
   };
 
-  const onFilter = (field) => {
+  const filteredTodos = (fielerType) => {
     let filteredTodo;
 
-    switch (field) {
+    switch (fielerType) {
       case 'active':
-        filteredTodo = todos.filter(todo => !todo.completed);
+        filteredTodo = storageTodos.filter(todo => !todo.completed);
         break;
       case 'completed':
-        filteredTodo = todos.filter(todo => todo.completed);
+        filteredTodo = storageTodos.filter(todo => todo.completed);
         break;
       default:
-        filteredTodo = [...todos];
+        filteredTodo = [...storageTodos];
     }
 
-    setRender(filteredTodo);
+    setTodos(filteredTodo);
   };
 
   const onEditTodo = (editTodo) => {
-    setTodos(todos.map(todo => (
-      todo.id === editTodo.id ? editTodo : todo
-    )));
+    setStorageTodos(storageTodos.map((todo) => {
+      if (todo.id !== editTodo.id) {
+        return todo;
+      }
+
+      return {
+        ...todo,
+        ...editTodo,
+      };
+    }));
   };
 
   return (
     <section className="todoapp">
       <Header onAddTodo={addTodo} />
       <section className="main">
-        {todos.length > 0 && (
+        {storageTodos.length > 0 && (
         <ToggleAll
-          checkCompeted={checkCompeted}
+          checkCompeted={todosCompletedLength}
           onToggleTodos={onToggleTodos}
         />
         )}
         <TodoList
-          todos={render}
-          onCheckedTodos={onCheckedTodos}
+          todos={todos}
+          onSwitchTodos={onSwitchTodos}
           onDelete={onDelete}
           onEditTodo={onEditTodo}
         />
       </section>
-      {todos.length > 0
+      {storageTodos.length > 0
       && (
         <footer className="footer">
           <TodosFilter
-            checkCompeted={checkCompeted}
-            onFilter={onFilter}
-            handleClearCompleted={handleClearCompleted}
+            checkCompeted={todosCompletedLength}
+            filteredTodos={filteredTodos}
+            clearCompleted={clearCompleted}
           />
         </footer>
       )

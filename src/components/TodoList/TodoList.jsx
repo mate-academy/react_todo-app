@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Todo } from '../Todo/Todo';
 
-export function TodoList({ todos, onCheckedTodos, onDelete, onEditTodo }) {
+export function TodoList({ todos, onSwitchTodos, onDelete, onEditTodo }) {
   return (
     <ul className="todo-list">
       {todos.map(todo => (
         <Todo
           key={todo.id}
           todo={todo}
-          onCheckedTodos={onCheckedTodos}
+          onSwitchTodos={onSwitchTodos}
           onDelete={onDelete}
           onEditTodo={onEditTodo}
         />
@@ -26,7 +26,7 @@ TodoList.propTypes = {
       completed: PropTypes.bool.isRequired,
     }),
   ).isRequired,
-  onCheckedTodos: PropTypes.func.isRequired,
+  onSwitchTodos: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onEditTodo: PropTypes.func.isRequired,
 };
