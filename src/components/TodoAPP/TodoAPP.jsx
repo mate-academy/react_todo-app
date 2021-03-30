@@ -1,14 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { TodosContext } from '../../utils/TodosContext';
 
-export const TodoAPP = React.memo(() => {
+export const TodoApp = React.memo(() => {
   const [title, setTitle] = useState('');
-  const { todos, setTodos } = useContext(TodosContext);
+  const { setTodos } = useContext(TodosContext);
 
-  const addTodos = (todo) => {
-    const arr = [...todos, todo];
-
-    setTodos(arr);
+  const addTodo = (todo) => {
+    setTodos(prev => [...prev, todo]);
   };
 
   const handleOnSubmit = (event) => {
@@ -18,7 +16,7 @@ export const TodoAPP = React.memo(() => {
         return;
       }
 
-      addTodos({
+      addTodo({
         id: +new Date(),
         title,
         completed: false,

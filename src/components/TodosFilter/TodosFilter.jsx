@@ -2,13 +2,13 @@ import React, { useContext, useMemo, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { TodosContext } from '../../utils/TodosContext';
-import { notCompleted } from '../../utils/helpers';
+import { getNotCompleted } from '../../utils/helpers';
 import { FILTERS, ClearCompleted } from '../../utils/constants';
 
 export const TodosFilter = React.memo(() => {
   const { todos, setTodos } = useContext(TodosContext);
 
-  const leftTodos = useMemo(() => notCompleted(todos), [todos]);
+  const leftTodos = useMemo(() => getNotCompleted(todos), [todos]);
   const clearCompleted = useCallback(() => {
     setTodos(todos.filter(todo => !todo.completed));
   }, [todos]);

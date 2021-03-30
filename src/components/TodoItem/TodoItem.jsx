@@ -4,8 +4,8 @@ import classNames from 'classnames';
 
 export const TodoItem = React.memo(({ id, title,
   completed, onCompletedTodos, onRemoveTodo, onTitleChange }) => {
-  const [edit, setEdit] = useState(false);
-  const [newValue, setValue] = useState(title);
+  const [isEditing, setEdit] = useState(false);
+  const [newValue, setNewValue] = useState(title);
 
   const handleBlur = ({ value }) => {
     onTitleChange(value, id);
@@ -31,12 +31,12 @@ export const TodoItem = React.memo(({ id, title,
         break;
       }
     }
-  }, [edit]);
+  }, [isEditing]);
 
   return (
     <li
       key={id}
-      className={classNames({ completed, editing: edit })}
+      className={classNames({ completed, editing: isEditing })}
       onDoubleClick={() => setEdit(currentState => !currentState)}
       onBlur={e => handleBlur(e.target.value)}
     >
@@ -60,7 +60,7 @@ export const TodoItem = React.memo(({ id, title,
         type="text"
         className="edit"
         value={newValue}
-        onChange={e => setValue(e.target.value)}
+        onChange={e => setNewValue(e.target.value)}
         onKeyDown={e => handleKeyDown(e)}
       />
     </li>

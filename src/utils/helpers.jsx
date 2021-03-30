@@ -1,4 +1,4 @@
-export const notCompleted = todos => ((todos.length)
+export const getNotCompleted = todos => ((todos.length)
   ? todos.filter(todo => todo.completed === false).length
   : 0);
 

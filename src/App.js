@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { TodoAPP } from './components/TodoAPP';
+import { TodoApp } from './components/TodoApp';
 import { MainStatusControl } from './components/MainStatusControl';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <section className="todoapp">
-      <TodoAPP />
+      <TodoApp />
       {todos.length > 0 && (
       <>
         <section className="main">
