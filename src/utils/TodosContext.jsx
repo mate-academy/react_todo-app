@@ -8,7 +8,7 @@ export const TodosContext = React.createContext({
 });
 
 export const TodosProvider = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [todos, setTodos] = useLocalStorage([]);
 
   const contextValue = useMemo(() => ({
     todos,

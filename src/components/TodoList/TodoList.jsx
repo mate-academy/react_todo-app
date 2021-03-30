@@ -1,8 +1,10 @@
-import React, { useContext, useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { TodoItem } from '../TodoItem';
 import { TodosContext } from '../../utils/TodosContext';
+
+import { deleteTodo, updateTodo } from '../../utils/api';
 
 export const TodoList = () => {
   const { pathname } = useLocation();
@@ -19,12 +21,14 @@ export const TodoList = () => {
     });
 
     setTodos(todosModified);
+    updateTodo(id, { completed: checked });
   }, [todos, setTodos]);
 
   const onRemoveTodo = useCallback((id) => {
     const todosModified = todos.filter(todo => todo.id !== id);
 
     setTodos(todosModified);
+    deleteTodo(id);
   }, [todos, setTodos]);
 
   const filteredTodo = useMemo(() => {

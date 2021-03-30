@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from 'react';
+
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+
+import { updateTodo } from '../../utils/api';
 
 export const TodoItem = React.memo(({ id, title,
   completed, onCompletedTodos, onRemoveTodo, onTitleChange }) => {
@@ -9,6 +12,7 @@ export const TodoItem = React.memo(({ id, title,
 
   const handleBlur = ({ value }) => {
     onTitleChange(value, id);
+    updateTodo(id, { title: value });
     setEdit(false);
   };
 
@@ -18,6 +22,7 @@ export const TodoItem = React.memo(({ id, title,
         const { value } = e.target;
 
         onTitleChange(value, id);
+        updateTodo(id, { title: value });
         setEdit(false);
         break;
       }
@@ -38,7 +43,7 @@ export const TodoItem = React.memo(({ id, title,
       key={id}
       className={classNames({ completed, editing: isEditing })}
       onDoubleClick={() => setEdit(currentState => !currentState)}
-      onBlur={e => handleBlur(e.target.value)}
+      onBlur={e => handleBlur(e.target)}
     >
       <div className="view">
         <input

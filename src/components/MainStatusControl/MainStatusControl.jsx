@@ -3,6 +3,7 @@ import React, { useContext, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { TodosContext } from '../../utils/TodosContext';
 import { toggleAll } from '../../utils/helpers';
+import { updateAllTodos } from '../../utils/api';
 
 export const MainStatusControl = React.memo(() => {
   const { todos, setTodos } = useContext(TodosContext);
@@ -12,7 +13,8 @@ export const MainStatusControl = React.memo(() => {
     const newTodos = todos.map(todo => ({ ...todo, completed: !status }));
 
     setTodos(newTodos);
-  }, [todos]);
+    updateAllTodos(newTodos);
+  }, [todos, setTodos]);
 
   return (
     <>

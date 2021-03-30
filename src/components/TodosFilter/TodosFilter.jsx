@@ -1,20 +1,25 @@
-import React, { useContext, useMemo, useCallback } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { TodosContext } from '../../utils/TodosContext';
 import { getNotCompleted } from '../../utils/helpers';
 import { FILTERS, ClearCompleted } from '../../utils/constants';
+import { deleteAllTodos } from '../../utils/api';
 
 export const TodosFilter = React.memo(() => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const leftTodos = useMemo(() => getNotCompleted(todos), [todos]);
-  const clearCompleted = useCallback(() => {
-    setTodos(todos.filter(todo => !todo.completed));
-  }, [todos]);
+  const clearCompleted = () => {
+    const notCompletedTodos = todos.filter(todo => !todo.completed);
+    const completedTodos = todos.filter(todo => todo.completed);
+
+    setTodos(notCompletedTodos);
+    deleteAllTodos(completedTodos);
+  };
 
   return (
-    <>
+    <footer className="footer">
       <span className="todo-count">
         {`${leftTodos} items left`}
       </span>
@@ -54,6 +59,6 @@ export const TodosFilter = React.memo(() => {
       >
         {ClearCompleted}
       </button>
-    </>
+    </footer>
   );
 });

@@ -1,20 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { getTodos } from './api';
+import { userId } from './constants';
+import { LoadingErrorConext } from './LoadingErrorContext';
 
-export const useLocalStorage = (key, initValue) => {
-  const [value, setValue] = useState(() => {
+export const useLocalStorage = (initValue) => {
+  const [value, setValue] = useState(initValue);
+  const { setLoadingError } = useContext(LoadingErrorConext);
+
+  const loadData = async() => {
+    setLoadingError(false);
     try {
-      return JSON.parse(localStorage.getItem(key)) || initValue;
-    } catch {
-      return initValue;
+      const listOfTodos = await getTodos();
+      const filteredTodosServer = listOfTodos.filter(
+        todo => todo.userId === userId,
+      );
+
+      setValue(filteredTodosServer);
+    } catch (error) {
+      setLoadingError(true);
     }
-  });
+  };
+
   const save = (todos) => {
     setValue(todos);
   };
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [value]);
+    loadData();
+  }, []);
 
   return [value, save];
 };
