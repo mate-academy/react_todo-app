@@ -82,6 +82,32 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.todoapp p {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  font-size: 50px;
+  font-weight: 200;
+  text-align: center;
+  color: rgba(12, 3, 3, 0.15);
+}
+
+.signature {
+  display: inline-block;
+  background-color: rgba(193, 84, 84, 0.01);
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.posted {
+  display: inline-block;
+  color: rgb(179, 21, 21);
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
 .new-todo,
 .edit {
   position: relative;
