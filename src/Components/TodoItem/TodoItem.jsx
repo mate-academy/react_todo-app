@@ -1,56 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { TodoType } from '../../types';
 
-export function TodoItem({
-  id,
-  title,
-  completed,
-  todos,
-  setTodos,
-}) {
-  const [clickCounter, clickHandler] = useState(0);
-  const [currentTitle, handleChangeTitle] = useState(title)
+export const TodoItem = ({
+  todo,
+  handleCompleteTodo,
+  handleChangeTodo,
+  handleDeleteTodo,
+}) => {
+  const [onDoubleClick, clickHandler] = useState(0);
+  const [currentTitle, handleChangeTitle] = useState(todo.title);
 
-  const deleteTodo = () => {
-    setTodos(todos.filter(todo => {
-      if (todo.id !== id) {
-        return todo;
-      }
+  const setClicksQuantity = (e) => {
+    handleChangeTitle(e.target.value);
+  };
 
-      return false
-    }))
-  }
+  const handleEditTodo = (e) => {
+    if (e.key === 'Enter' && currentTitle !== '') {
+      clickHandler(0);
+      handleChangeTodo(todo.id, currentTitle);
+    }
 
-  const editTodo = (value) => {
-    setTodos(todos.map(todo => {
-      if (todo.id !== id) {
-        return todo;
-      }
+    if (e.key === 'Escape') {
+      clickHandler(0);
+      handleChangeTitle(todo.title);
+    }
+  };
 
-      return {
-        ...todo,
-        title: value
-      }
-    }))
-  }
-
-  const addTodo = () => {
-    setTodos(todos.map(todo => {
-      if (todo.id !== id) {
-        return todo;
-      }
-
-      return {
-        ...todo,
-        completed: !completed
-      }
-    }))
-  }
+  const { completed, id } = todo;
 
   return (
     <li className={classNames({
       completed,
-      editing: clickCounter === 2
+      editing: onDoubleClick === 2,
     })}
     >
       <div className="view">
@@ -58,17 +41,16 @@ export function TodoItem({
           type="checkbox"
           checked={completed}
           className="toggle"
-          onChange={addTodo}
-          
+          onChange={() => handleCompleteTodo(id)}
         />
         <label onClick={() => {
-            clickHandler(currentNo => currentNo + 1);
-          }}
+          clickHandler(currentNo => currentNo + 1);
+        }}
         >
           {currentTitle}
         </label>
         <button
-          onClick={deleteTodo}
+          onClick={() => handleDeleteTodo(id)}
           type="button"
           className="destroy"
         />
@@ -77,21 +59,16 @@ export function TodoItem({
         type="text"
         className="edit"
         value={currentTitle}
-        onChange={(e) => {
-          handleChangeTitle(e.target.value)
-        }}
-        onKeyUp={(e) => {
-          if (e.key === 'Enter' && currentTitle !== '') {
-            clickHandler(0)
-            editTodo(currentTitle)
-          }
-
-          if (e.key === 'Escape') {
-            clickHandler(0)
-            handleChangeTitle(title)
-          }
-        }}
+        onChange={setClicksQuantity}
+        onKeyUp={handleEditTodo}
       />
     </li>
-  )
-}
+  );
+};
+
+TodoItem.propTypes = {
+  todo: TodoType.isRequired,
+  handleCompleteTodo: PropTypes.func.isRequired,
+  handleChangeTodo: PropTypes.func.isRequired,
+  handleDeleteTodo: PropTypes.func.isRequired,
+};

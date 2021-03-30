@@ -1,16 +1,31 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { TodoType } from '../../types';
 
-export function TodosFilter({ selectFilterType, todos, removeCompleted, filterBy }) {
+export const TodosFilter = React.memo(({
+  setFilter,
+  removeCompletedTodos,
+  todos,
+  filterBy,
+}) => {
   const filteredTodosLength = todos.filter(todo => !todo.completed).length;
+
+  const removeHandler = () => {
+    removeCompletedTodos(todos.filter(todo => !todo.completed));
+    setFilter('');
+  };
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {filteredTodosLength > 0 ? `${filteredTodosLength} items left` : `nothing to do`}
+        {(filteredTodosLength > 0
+          ? `${filteredTodosLength} items left`
+          : `nothing to do`
+        )}
       </span>
 
       <ul className="filters">
-        <li onClick={() => selectFilterType('all')}>
+        <li onClick={() => setFilter('all')}>
           <a
             href="#/"
             className={filterBy === 'all' ? 'selected' : ''}
@@ -19,7 +34,7 @@ export function TodosFilter({ selectFilterType, todos, removeCompleted, filterBy
           </a>
         </li>
 
-        <li onClick={() => selectFilterType('uncompleted')}>
+        <li onClick={() => setFilter('uncompleted')}>
           <a
             href="#/active"
             className={filterBy === 'uncompleted' ? 'selected' : ''}
@@ -28,7 +43,7 @@ export function TodosFilter({ selectFilterType, todos, removeCompleted, filterBy
           </a>
         </li>
 
-        <li onClick={() => selectFilterType('completed')}>
+        <li onClick={() => setFilter('completed')}>
           <a
             href="#/completed"
             className={filterBy === 'completed' ? 'selected' : ''}
@@ -38,14 +53,26 @@ export function TodosFilter({ selectFilterType, todos, removeCompleted, filterBy
         </li>
       </ul>
 
-      {todos.some(todo => todo.completed) && <button
-      onClick={() => removeCompleted(todos.filter(todo => !todo.completed))}
+      {todos.some(todo => todo.completed) && (
+      <button
+        onClick={removeHandler}
         type="button"
         className="clear-completed"
       >
         Clear completed
-      </button>}
+      </button>
+      )}
     </footer>
-  )
-}
+  );
+});
 
+TodosFilter.propTypes = {
+  setFilter: PropTypes.func.isRequired,
+  removeCompletedTodos: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(TodoType.isRequired),
+  filterBy: PropTypes.string.isRequired,
+};
+
+TodosFilter.defaultProps = {
+  todos: [],
+};
