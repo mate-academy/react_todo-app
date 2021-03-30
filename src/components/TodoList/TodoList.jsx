@@ -19,13 +19,13 @@ export const TodoList = () => {
     });
 
     setTodos(todosModified);
-  }, [todos]);
+  }, [todos, setTodos]);
 
   const onRemoveTodo = useCallback((id) => {
     const todosModified = todos.filter(todo => todo.id !== id);
 
     setTodos(todosModified);
-  }, []);
+  }, [todos, setTodos]);
 
   const filteredTodo = useMemo(() => {
     switch (pathname) {
@@ -62,22 +62,21 @@ export const TodoList = () => {
   };
 
   if (!todos.length) {
-    return (<></>);
+    return null;
   }
 
   return (
     <ul className="todo-list">
       {filteredTodo.map(({ id, title, completed }) => (
-        <React.Fragment key={id}>
-          <TodoItem
-            id={id}
-            title={title}
-            completed={completed}
-            onCompletedTodos={onCompleteTodos}
-            onRemoveTodo={onRemoveTodo}
-            onTitleChange={onTitleChange}
-          />
-        </React.Fragment>
+        <TodoItem
+          key={id}
+          id={id}
+          title={title}
+          completed={completed}
+          onCompletedTodos={onCompleteTodos}
+          onRemoveTodo={onRemoveTodo}
+          onTitleChange={onTitleChange}
+        />
       ))}
     </ul>
   );
