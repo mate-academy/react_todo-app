@@ -6,60 +6,50 @@ import { useLocalStorage } from './helpers/useLocasStorage';
 
 export const App = () => {
   const [todos, setTodos] = useState([]);
-  const [toggleAll, setToggleAll] = useState(true);
+  const [isToggleAll, setIsToggleAll] = useState(true);
   const [filter, setFilter] = useState('all');
-  const [filterTodos, setFilterTodos] = useLocalStorage('todos', todos);
+  const [filteredTodos, setFilteredTodos] = useLocalStorage('todos', todos);
 
-  const toggleHandler = () => {
-    setToggleAll(prev => !prev);
+  const handleToggle = () => {
+    setIsToggleAll(prev => !prev);
     let newTodos = [];
 
-    if (toggleAll) {
-      newTodos = todos.map(todo => (
-        {
-          ...todo,
-          completed: true,
-        }
-      ));
+    if (isToggleAll) {
+      newTodos = todos.map(todo => ({ ...todo, completed: true }));
     }
 
-    if (!toggleAll) {
-      newTodos = todos.map(todo => (
-        {
-          ...todo,
-          completed: false,
-        }
-      ));
+    if (!isToggleAll) {
+      newTodos = todos.map(todo => ({ ...todo, completed: false }));
     }
 
     setTodos(newTodos);
   };
 
-  const clearHandler = () => {
-    setTodos(prev => prev.filter(todo => !todo.completed));
-    setToggleAll(true);
+  const handleClear = () => {
+    setTodos(prevState => prevState.filter(todo => !todo.completed));
+    setIsToggleAll(true);
   };
 
-  const localStorageTodos = useCallback(
+  const putInLocalStorageTodos = useCallback(
     (type) => {
       switch (type) {
         case 'active':
-          setFilterTodos(todos.filter(todo => !todo.completed));
+          setFilteredTodos(todos.filter(todo => !todo.completed));
           break;
 
         case 'completed':
-          setFilterTodos(todos.filter(todo => todo.completed));
+          setFilteredTodos(todos.filter(todo => todo.completed));
           break;
 
         case 'all':
         default:
-          setFilterTodos(todos);
+          setFilteredTodos(todos);
       }
     }, [todos],
   );
 
   useEffect(() => {
-    localStorageTodos(filter);
+    putInLocalStorageTodos(filter);
   }, [todos, filter]);
 
   return (
@@ -79,14 +69,14 @@ export const App = () => {
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
-              onChange={toggleHandler}
+              onChange={handleToggle}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
             <TodoList
               todos={todos}
               setTodos={setTodos}
-              filterTodos={filterTodos}
-              setFilterTodos={setFilterTodos}
+              filterTodos={filteredTodos}
+              setFilterTodos={setFilteredTodos}
             />
           </section>
 
@@ -104,7 +94,7 @@ export const App = () => {
             <button
               type="button"
               className="clear-completed"
-              onClick={() => clearHandler()}
+              onClick={handleClear}
             >
               Clear completed
             </button>

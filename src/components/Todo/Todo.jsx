@@ -15,26 +15,25 @@ export const Todo = ({
   const completeHandler = useCallback(
     (id) => {
       const newTodos = todos.map(todo => (
-        todo.id === id ? ({
+        {
           ...todo,
-          completed: !todo.completed,
-        })
-          : todo
+          ...(todo.id === id ? { completed: !todo.completed } : {}),
+        }
       ));
 
       setTodos(newTodos);
     }, [todos],
   );
 
-  const editingHandler = () => {
-    setIsDoubleClicked(prev => !prev);
+  const handleEditing = () => {
+    setIsDoubleClicked(prevState => !prevState);
   };
 
-  const changeHandler = (event) => {
+  const handleChange = (event) => {
     setInputQuery(event.target.value);
   };
 
-  const submitHandler = useCallback(
+  const handleSubmit = useCallback(
     (event) => {
       if (event.key === 'Esc') {
         setIsDoubleClicked(false);
@@ -50,7 +49,7 @@ export const Todo = ({
     }, [title, inputQuery],
   );
 
-  const blurHandler = useCallback(
+  const handleBlur = useCallback(
     (event) => {
       const { target, currentTarget } = event;
 
@@ -76,7 +75,7 @@ export const Todo = ({
           onChange={() => completeHandler(todo.id)}
         />
         <label
-          onDoubleClick={() => editingHandler(todo.id)}
+          onDoubleClick={() => handleEditing(todo.id)}
         >
           {title}
         </label>
@@ -90,9 +89,9 @@ export const Todo = ({
         type="text"
         className="edit"
         value={inputQuery}
-        onChange={changeHandler}
-        onKeyPress={submitHandler}
-        onBlur={blurHandler}
+        onChange={handleChange}
+        onKeyPress={handleSubmit}
+        onBlur={handleBlur}
       />
     </li>
   );

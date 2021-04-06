@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 export const Form = ({ setTodos, todos }) => {
   const [titleValue, setTitleValue] = useState('');
 
-  const changeHandler = event => (
+  const handleChange = event => (
     setTitleValue(event.target.value)
   );
 
-  const submitHandler = useCallback(
+  const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
 
@@ -29,13 +29,13 @@ export const Form = ({ setTodos, todos }) => {
   );
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
         className="new-todo"
         placeholder="What needs to be done?"
         value={titleValue}
-        onChange={changeHandler}
+        onChange={handleChange}
       />
     </form>
   );
