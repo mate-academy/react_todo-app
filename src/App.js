@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
@@ -13,7 +13,6 @@ const App = () => {
   const [title, setTitle] = useState('');
   const [todos, setTodos] = useState([]);
   const [status, setStatus] = useState(FILTERS.all);
-  const [filteredTodos, setFilteredTodos] = useState([]);
   const [toggledAll, setToggledAll] = useState(false);
 
   useEffect(() => {
@@ -21,9 +20,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    filterTodos();
     setLocalTodos();
-  }, [todos, status]);
+  }, [todos]);
 
   const setLocalTodos = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -59,49 +57,37 @@ const App = () => {
     addTodo();
   };
 
-  const filterTodos = () => {
+  const filteredTodos = useMemo(() => {
     switch (status) {
       case FILTERS.active:
-        setFilteredTodos(todos.filter(todo => todo.completed === false));
-        break;
+        return todos.filter(todo => todo.completed === false);
 
       case FILTERS.completed:
-        setFilteredTodos(todos.filter(todo => todo.completed === true));
-        break;
+        return todos.filter(todo => todo.completed === true);
 
       default:
-        setFilteredTodos(todos);
+        return todos;
     }
-  };
+  }, [status, todos]);
 
   const completedTodos = todos.filter(todo => todo.completed);
   const activeTodos = todos.filter(todo => !todo.completed);
 
   const selectAll = () => {
-    setToggledAll(!toggledAll);
-
-    if (completedTodos.length === todos.length) {
-      setTodos(todos.map(todo => ({
-        ...todo,
-        completed: false,
-      })));
-
-      return;
-    }
-
-    if (activeTodos.length === todos.length) {
+    if (todos.some(todo => todo.status)
+      && todos.some(todo => !todo.status)) {
       setTodos(todos.map(todo => ({
         ...todo,
         completed: true,
       })));
-
-      return;
     }
 
     setTodos(todos.map(todo => ({
       ...todo,
       completed: !toggledAll,
     })));
+
+    setToggledAll(!toggledAll);
   };
 
   const clearCompleted = () => {

@@ -89,6 +89,7 @@ export const TodoItem = ({ item, setTodos }) => {
         <input
           value={editedTodos}
           type="text"
+          autoFocus
           className="edit"
           onChange={e => setEditedTodos(e.target.value)}
           onKeyDown={e => handleKeyboard(e)}
