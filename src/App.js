@@ -1,88 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Header } from './components/Header';
+import { Main } from './components/Main';
+import { Footer } from './components/Footer';
+// import { data } from './api';
+import { useLocalStorage } from './hooks/hooks';
 
-function App() {
+export function App() {
+  const [data, setDataHooks] = useLocalStorage('todos', []);
+  const [visibleData, setVisibleData] = useState([]);
+
+  useEffect(() => {
+    setVisibleData(data);
+  }, []);
+
+  useEffect(() => {
+    setVisibleData(data);
+  }, [data]);
+
+  const updateData = (newData) => {
+    setDataHooks([...data, newData]);
+  };
+
+  const updateTitle = (postId, newTitle) => {
+    const findPost = visibleData.find(post => post.id === postId);
+
+    findPost.title = newTitle;
+  };
+
+  const deletePost = (postId) => {
+    setDataHooks(data.filter(post => post.id !== postId));
+  };
+
+  const changeCheckox = (postId, newChecked) => {
+    const updatedPost = visibleData.find(post => post.id === postId);
+
+    updatedPost.completed = newChecked;
+  };
+
+  const filterData = (filterBy) => {
+    if (filterBy === undefined) {
+      setVisibleData(data);
+    } else {
+      setVisibleData(data
+        .filter(post => post.completed === filterBy));
+    }
+  };
+
+  const clearAllCompleted = () => {
+    setDataHooks(data.filter(post => post.completed !== true));
+  };
+
   return (
     <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <Header
+        onSubmit={updateData}
+        newId={data.length + 1}
+      />
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <Main
+        data={visibleData}
+        changeCheckob={changeCheckox}
+        onDelete={deletePost}
+        onUpdateTitle={updateTitle}
+      />
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {visibleData.length > 0 && (
+        <Footer
+          filterData={filterData}
+          itemsLength={visibleData.length}
+          clearAllCompleted={clearAllCompleted}
+        />
+      )}
     </section>
   );
 }
 
-export default App;
+// export default App;
