@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export const Main = React.memo(
@@ -6,8 +7,6 @@ export const Main = React.memo(
     const [isCompleted, setCompleted] = useState(false);
     const [chhosenForEditing, setEdit] = useState(0);
     const [editValue, setEditValue] = useState('');
-
-    console.log('edit:', editValue);
 
     return (
       <section className="main">
@@ -74,20 +73,13 @@ export const Main = React.memo(
   },
 );
 
-// <li className="editing">
-//   <div className="view">
-//     <input type="checkbox" className="toggle" />
-//     <label>zxcvbnm</label>
-//     <button type="button" className="destroy" />
-//   </div>
-//   <input type="text" className="edit" />
-// </li>
-
-// <li>
-//   <div className="view">
-//     <input type="checkbox" className="toggle" />
-//     <label>1234567890</label>
-//     <button type="button" className="destroy" />
-//   </div>
-//   <input type="text" className="edit" />
-// </li> */
+Main.propTypes = PropTypes.shape({
+  data: PropTypes.arrayOf({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }),
+  changeCheckob: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onUpdateTitle: PropTypes.func.isRequired,
+}).isRequired;

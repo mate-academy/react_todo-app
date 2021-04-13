@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
-// import { data } from './api';
 import { useLocalStorage } from './hooks/hooks';
 
 export function App() {
@@ -74,5 +73,3 @@ export function App() {
     </section>
   );
 }
-
-// export default App;

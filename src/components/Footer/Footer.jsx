@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
 export const Footer = React.memo(
   ({ itemsLength, filterData, clearAllCompleted }) => {
@@ -87,3 +88,9 @@ export const Footer = React.memo(
     );
   },
 );
+
+Footer.propTypes = PropTypes.shape({
+  filterData: PropTypes.func.isRequired,
+  itemsLength: PropTypes.number.isRequired,
+  clearAllCompleted: PropTypes.func.isRequired,
+}).isRequired;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
 export const Header = ({ onSubmit, newId }) => {
   const [newData, setNewData] = useState({});
@@ -55,3 +56,8 @@ export const Header = ({ onSubmit, newId }) => {
     </header>
   );
 };
+
+Header.propTypes = PropTypes.shape({
+  onSubmit: PropTypes.func.isRequired,
+  newId: PropTypes.number.isRequired,
+}).isRequired;
