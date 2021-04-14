@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { HeaderForm } from '../HeaderForm';
 
-export const Header = ({ onSubmit, newId }) => {
+export const Header = ({ onSubmit, newId, todosLength }) => {
   const [newTodo, setNewTodo] = useState({});
   const [inputTitle, setInputTitle] = useState('');
   const [appliedTitle, setAppliedTitle] = useState('');
@@ -18,18 +18,13 @@ export const Header = ({ onSubmit, newId }) => {
 
   const applyQuerry = useCallback(debounce(setAppliedTitle, 100), []);
 
-  useEffect(() => {
-    setNewTodo({
-      id: newId,
-      title: inputTitle,
-      completed: false,
-    });
-  }, [appliedTitle]);
-
   const submitForm = (event) => {
     event.preventDefault();
 
-    onSubmit(newTodo);
+    if (inputTitle.length > 0) {
+      onSubmit(newTodo);
+      setInputTitle('');
+    }
   };
 
   const enterNewTitle = (event) => {
@@ -39,7 +34,11 @@ export const Header = ({ onSubmit, newId }) => {
 
   const addNewTitle = (event) => {
     if (event.key === 'Enter') {
-      setInputTitle('');
+      setNewTodo({
+        id: newId,
+        title: appliedTitle,
+        completed: false,
+      });
     }
   };
 

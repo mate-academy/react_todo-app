@@ -11,7 +11,7 @@ export const Main = React.memo(
     setAllTodosCompleted,
   }) => {
     const [isCompleted, setCompleted] = useState(false);
-    const [isEdit, setEdit] = useState(0);
+    const [todoIdForEdit, setTodoIdForEdit] = useState(0);
     const [renameTitle, setRename] = useState('');
 
     return (
@@ -37,10 +37,10 @@ export const Main = React.memo(
             <li
               className={classnames('',
                 { completed: todo.completed },
-                { editing: isEdit === todo.id })}
+                { editing: todoIdForEdit === todo.id })}
               key={todo.id}
               onDoubleClick={() => {
-                setEdit(todo.id);
+                setTodoIdForEdit(todo.id);
                 setRename(todo.title);
               }}
             >
@@ -73,12 +73,12 @@ export const Main = React.memo(
                 }}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
-                    onUpdateTitle(isEdit, event.target.value);
-                    setEdit(null);
+                    onUpdateTitle(todoIdForEdit, event.target.value);
+                    setTodoIdForEdit(null);
                   }
 
                   if (event.key === 'Escape') {
-                    setEdit(null);
+                    setTodoIdForEdit(null);
                   }
                 }}
               />

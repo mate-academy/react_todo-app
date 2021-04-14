@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 export const Footer = React.memo(
-  ({ todosLength, filterTodos, clearAllCompleted }) => {
+  ({ gettodosActiveTodosLength, filterTodos, clearAllCompleted }) => {
     const reducer = (_, actions) => {
       switch (actions) {
         case 'all':
@@ -40,7 +40,7 @@ export const Footer = React.memo(
     return (
       <footer className="footer">
         <span className="todo-count">
-          {`${todosLength} items left`}
+          {`${gettodosActiveTodosLength()} items left`}
         </span>
 
         <ul className="filters">

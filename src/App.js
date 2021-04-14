@@ -32,7 +32,7 @@ export function App() {
 
     updatedPost.completed = newCheck;
 
-    setTodos(todos.map(todo => ({ ...todo, updatedPost })));
+    setTodos(todos.map(todo => todo));
   };
 
   const filterTodos = (todoComplete) => {
@@ -43,6 +43,9 @@ export function App() {
         .filter(post => post.completed === todoComplete));
     }
   };
+
+  const onlyActiveTodos = () => todos
+    .filter(todo => todo.completed === false).length;
 
   const clearAllCompleted = () => {
     setTodos(todos.filter(todo => todo.completed !== true));
@@ -56,6 +59,7 @@ export function App() {
     <section className="todoapp">
       <Header
         onSubmit={updateTodos}
+        todosLength={visbleTodos.length}
         newId={todos.length + 1}
       />
 
@@ -70,7 +74,7 @@ export function App() {
       {todos.length > 0 && (
         <Footer
           filterTodos={filterTodos}
-          todosLength={visbleTodos.length}
+          gettodosActiveTodosLength={onlyActiveTodos}
           clearAllCompleted={clearAllCompleted}
         />
       )}
