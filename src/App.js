@@ -67,7 +67,7 @@ export function App() {
         setAllTodosCompleted={setAllTodosCompleted}
       />
 
-      {visbleTodos.length > 0 && (
+      {todos.length > 0 && (
         <Footer
           filterTodos={filterTodos}
           todosLength={visbleTodos.length}
