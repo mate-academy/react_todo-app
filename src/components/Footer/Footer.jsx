@@ -91,6 +91,6 @@ export const Footer = React.memo(
 
 Footer.propTypes = PropTypes.shape({
   filterData: PropTypes.func.isRequired,
-  itemsLength: PropTypes.number.isRequired,
+  gettodosActiveTodosLength: PropTypes.func.isRequired,
   clearAllCompleted: PropTypes.func.isRequired,
 }).isRequired;
