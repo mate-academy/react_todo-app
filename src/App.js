@@ -17,10 +17,14 @@ export function App() {
     setTodos([...todos, newTodos]);
   };
 
-  const updateTitle = (todoId, newTitle) => {
+  const updateTitle = (todoId, newTitle, prevTodoTitle) => {
     const findPost = visbleTodos.find(todo => todo.id === todoId);
 
-    findPost.title = newTitle;
+    if (newTitle.length <= 0) {
+      findPost.title = prevTodoTitle;
+    } else {
+      findPost.title = newTitle;
+    }
   };
 
   const deleteTodo = (todoId) => {

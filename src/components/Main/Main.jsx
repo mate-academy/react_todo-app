@@ -10,10 +10,10 @@ export const Main = React.memo(
     onUpdateTitle,
     setAllTodosCompleted,
   }) => {
-    const [isCompleted, setCompleted] = useState(false);
     const [todoIdForEdit, setTodoIdForEdit] = useState(0);
     const [renameTitle, setRename] = useState('');
     const [isChecked, setChecked] = useState(true);
+    const [prevTodoTitle, setPrevTodo] = useState('');
 
     return (
       <section className="main">
@@ -46,6 +46,7 @@ export const Main = React.memo(
               onDoubleClick={() => {
                 setTodoIdForEdit(todo.id);
                 setRename(todo.title);
+                setPrevTodo(todo.title);
               }}
             >
               <div className="view">
@@ -76,7 +77,11 @@ export const Main = React.memo(
                 }}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
-                    onUpdateTitle(todoIdForEdit, event.target.value);
+                    onUpdateTitle(
+                      todoIdForEdit,
+                      event.target.value,
+                      prevTodoTitle,
+                    );
                     setTodoIdForEdit(null);
                   }
 
