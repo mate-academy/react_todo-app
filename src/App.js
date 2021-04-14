@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React, { useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
@@ -5,68 +6,71 @@ import { Footer } from './components/Footer';
 import { useLocalStorage } from './hooks/hooks';
 
 export function App() {
-  const [data, setDataHooks] = useLocalStorage('todos', []);
-  const [visibleData, setVisibleData] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [visbleTodos, setVsibleTodos] = useState([]);
 
   useEffect(() => {
-    setVisibleData(data);
-  }, []);
+    setVsibleTodos(todos);
+  }, [todos]);
 
-  useEffect(() => {
-    setVisibleData(data);
-  }, [data]);
-
-  const updateData = (newData) => {
-    setDataHooks([...data, newData]);
+  const updateTodos = (newTodos) => {
+    setTodos([...todos, newTodos]);
   };
 
-  const updateTitle = (postId, newTitle) => {
-    const findPost = visibleData.find(post => post.id === postId);
+  const updateTitle = (todoId, newTitle) => {
+    const findPost = visbleTodos.find(todo => todo.id === todoId);
 
     findPost.title = newTitle;
   };
 
-  const deletePost = (postId) => {
-    setDataHooks(data.filter(post => post.id !== postId));
+  const deleteTodo = (todoId) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
   };
 
-  const changeCheckox = (postId, newChecked) => {
-    const updatedPost = visibleData.find(post => post.id === postId);
+  const changeCheckox = (todoId, newCheck) => {
+    const updatedPost = todos.find(todo => todo.id === todoId);
 
-    updatedPost.completed = newChecked;
+    updatedPost.completed = newCheck;
+
+    setTodos(todos.map(todo => ({ ...todo, updatedPost })));
   };
 
-  const filterData = (filterBy) => {
-    if (filterBy === undefined) {
-      setVisibleData(data);
+  const filterTodos = (todoComplete) => {
+    if (todoComplete === undefined) {
+      setVsibleTodos(todos);
     } else {
-      setVisibleData(data
-        .filter(post => post.completed === filterBy));
+      setVsibleTodos(todos
+        .filter(post => post.completed === todoComplete));
     }
   };
 
   const clearAllCompleted = () => {
-    setDataHooks(data.filter(post => post.completed !== true));
+    setTodos(todos.filter(todo => todo.completed !== true));
+  };
+
+  const setAllTodosCompleted = () => {
+    setTodos(todos.map(todo => ({ ...todo, completed: !todo.completed })));
   };
 
   return (
     <section className="todoapp">
       <Header
-        onSubmit={updateData}
-        newId={data.length + 1}
+        onSubmit={updateTodos}
+        newId={todos.length + 1}
       />
 
       <Main
-        data={visibleData}
-        changeCheckob={changeCheckox}
-        onDelete={deletePost}
+        todos={visbleTodos}
+        changeCheckBox={changeCheckox}
+        onDelete={deleteTodo}
         onUpdateTitle={updateTitle}
+        setAllTodosCompleted={setAllTodosCompleted}
       />
 
-      {visibleData.length > 0 && (
+      {visbleTodos.length > 0 && (
         <Footer
-          filterData={filterData}
-          itemsLength={visibleData.length}
+          filterTodos={filterTodos}
+          todosLength={visbleTodos.length}
           clearAllCompleted={clearAllCompleted}
         />
       )}

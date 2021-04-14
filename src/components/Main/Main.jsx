@@ -3,46 +3,63 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export const Main = React.memo(
-  ({ data, changeCheckob, onDelete, onUpdateTitle }) => {
+  ({
+    todos,
+    changeCheckBox,
+    onDelete,
+    onUpdateTitle,
+    setAllTodosCompleted,
+  }) => {
     const [isCompleted, setCompleted] = useState(false);
-    const [chhosenForEditing, setEdit] = useState(0);
-    const [editValue, setEditValue] = useState('');
+    const [isEdit, setEdit] = useState(0);
+    const [renameTitle, setRename] = useState('');
 
     return (
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onClick={setAllTodosCompleted}
+        />
+        {todos.length > 0 && (
+          <label
+            htmlFor="toggle-all"
+          >
+            Mark all as complete
+          </label>
+        )}
 
         <ul className="todo-list">
 
-          {data.map(item => (
+          {todos.map(todo => (
 
             <li
               className={classnames('',
-                { completed: item.completed },
-                { editing: chhosenForEditing === item.id })}
-              key={item.id}
+                { completed: todo.completed },
+                { editing: isEdit === todo.id })}
+              key={todo.id}
               onDoubleClick={() => {
-                setEdit(item.id);
-                setEditValue(item.title);
+                setEdit(todo.id);
+                setRename(todo.title);
               }}
             >
               <div className="view">
                 <input
                   type="checkbox"
                   className="toggle"
-                  checked={item.completed}
+                  checked={todo.completed}
                   onClick={() => {
                     setCompleted(!isCompleted);
-                    changeCheckob(item.id, isCompleted);
+                    changeCheckBox(todo.id, isCompleted);
                   }}
                 />
-                <label>{item.title}</label>
+                <label>{todo.title}</label>
                 <button
                   type="button"
                   className="destroy"
                   onClick={() => {
-                    onDelete(item.id);
+                    onDelete(todo.id);
                   }}
                 />
               </div>
@@ -50,13 +67,13 @@ export const Main = React.memo(
               <input
                 type="text"
                 className="edit"
-                value={editValue}
+                value={renameTitle}
                 onChange={(event) => {
-                  setEditValue(event.target.value);
+                  setRename(event.target.value);
                 }}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
-                    onUpdateTitle(chhosenForEditing, event.target.value);
+                    onUpdateTitle(isEdit, event.target.value);
                     setEdit(null);
                   }
 

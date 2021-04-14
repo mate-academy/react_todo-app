@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { HeaderForm } from '../HeaderForm';
 
 export const Header = ({ onSubmit, newId }) => {
-  const [newData, setNewData] = useState({});
+  const [newTodo, setNewTodo] = useState({});
   const [inputTitle, setInputTitle] = useState('');
   const [appliedTitle, setAppliedTitle] = useState('');
 
@@ -18,41 +19,41 @@ export const Header = ({ onSubmit, newId }) => {
   const applyQuerry = useCallback(debounce(setAppliedTitle, 100), []);
 
   useEffect(() => {
-    setNewData({
+    setNewTodo({
       id: newId,
       title: inputTitle,
       completed: false,
     });
   }, [appliedTitle]);
 
+  const submitForm = (event) => {
+    event.preventDefault();
+
+    onSubmit(newTodo);
+  };
+
+  const enterNewTitle = (event) => {
+    setInputTitle(event.target.value);
+    applyQuerry(event.target.value);
+  };
+
+  const addNewTitle = (event) => {
+    if (event.key === 'Enter') {
+      setInputTitle('');
+    }
+  };
+
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
+      <HeaderForm
+        submitForm={submitForm}
+        enterNewTitle={enterNewTitle}
+        addNewTitle={addNewTitle}
+        inputTitle={inputTitle}
+      />
 
-          onSubmit(newData);
-        }}
-      >
-        <input
-          type="text"
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={inputTitle}
-          onChange={(event) => {
-            setInputTitle(event.target.value);
-            applyQuerry(event.target.value);
-          }}
-
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              setInputTitle('');
-            }
-          }}
-        />
-      </form>
     </header>
   );
 };

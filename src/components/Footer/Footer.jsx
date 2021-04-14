@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 export const Footer = React.memo(
-  ({ itemsLength, filterData, clearAllCompleted }) => {
-    const reducer = (isActive, actions) => {
+  ({ todosLength, filterTodos, clearAllCompleted }) => {
+    const reducer = (_, actions) => {
       switch (actions) {
         case 'all':
           return 'all';
@@ -24,23 +24,23 @@ export const Footer = React.memo(
 
     const selectAll = () => {
       dispatch('all');
-      filterData();
+      filterTodos();
     };
 
     const selectActive = () => {
       dispatch('active');
-      filterData(false);
+      filterTodos(false);
     };
 
     const selectComplited = () => {
       dispatch('completed');
-      filterData(true);
+      filterTodos(true);
     };
 
     return (
       <footer className="footer">
         <span className="todo-count">
-          {`${itemsLength} items left`}
+          {`${todosLength} items left`}
         </span>
 
         <ul className="filters">
