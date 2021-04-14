@@ -1,88 +1,91 @@
-import React from 'react';
+/* eslint-disable no-return-assign */
+import React, { useEffect, useState } from 'react';
+import { Header } from './components/Header';
+import { Main } from './components/Main';
+import { Footer } from './components/Footer';
+import { useLocalStorage } from './hooks/hooks';
 
-function App() {
+export function App() {
+  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [visbleTodos, setVsibleTodos] = useState([]);
+
+  useEffect(() => {
+    setVsibleTodos(todos);
+  }, [todos]);
+
+  const updateTodos = (newTodos) => {
+    setTodos([...todos, newTodos]);
+  };
+
+  const updateTitle = (todoId, newTitle, prevTodoTitle) => {
+    const findPost = visbleTodos.find(todo => todo.id === todoId);
+
+    if (newTitle.length <= 0) {
+      findPost.title = prevTodoTitle;
+    } else {
+      findPost.title = newTitle;
+    }
+  };
+
+  const deleteTodo = (todoId) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
+  const changeCheckox = (todoId, newCheck) => {
+    const updatedPost = todos.find(todo => todo.id === todoId);
+
+    updatedPost.completed = newCheck;
+
+    setTodos(todos.map(todo => todo));
+  };
+
+  const filterTodos = (todoComplete) => {
+    if (todoComplete === undefined) {
+      setVsibleTodos(todos);
+    } else {
+      setVsibleTodos(todos
+        .filter(post => post.completed === todoComplete));
+    }
+  };
+
+  const onlyActiveTodos = () => todos
+    .filter(todo => todo.completed === false).length;
+
+  const clearAllCompleted = () => {
+    setTodos(todos.filter(todo => todo.completed !== true));
+  };
+
+  const setAllTodosCompleted = (revise) => {
+    if (revise) {
+      setTodos(todos.map(todo => ({ ...todo, completed: true })));
+    } else {
+      setTodos(todos.map(todo => ({ ...todo, completed: false })));
+    }
+  };
+
   return (
     <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <Header
+        onSubmit={updateTodos}
+        todosLength={visbleTodos.length}
+        newId={todos.length + 1}
+      />
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <Main
+        todos={visbleTodos}
+        changeCheckBox={changeCheckox}
+        onDelete={deleteTodo}
+        onUpdateTitle={updateTitle}
+        setAllTodosCompleted={setAllTodosCompleted}
+      />
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {todos.length > 0 && (
+        <Footer
+          filterTodos={filterTodos}
+          gettodosActiveTodosLength={onlyActiveTodos}
+          clearAllCompleted={clearAllCompleted}
+        />
+      )}
     </section>
   );
 }
-
-export default App;
