@@ -13,6 +13,7 @@ export const Main = React.memo(
     const [isCompleted, setCompleted] = useState(false);
     const [todoIdForEdit, setTodoIdForEdit] = useState(0);
     const [renameTitle, setRename] = useState('');
+    const [isChecked, setChecked] = useState(true);
 
     return (
       <section className="main">
@@ -20,7 +21,10 @@ export const Main = React.memo(
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
-          onClick={setAllTodosCompleted}
+          onClick={() => {
+            setChecked(!isChecked);
+            setAllTodosCompleted(isChecked);
+          }}
         />
         {todos.length > 0 && (
           <label
@@ -50,8 +54,7 @@ export const Main = React.memo(
                   className="toggle"
                   checked={todo.completed}
                   onClick={() => {
-                    setCompleted(!isCompleted);
-                    changeCheckBox(todo.id, isCompleted);
+                    changeCheckBox(todo.id, !todo.completed);
                   }}
                 />
                 <label>{todo.title}</label>

@@ -51,8 +51,12 @@ export function App() {
     setTodos(todos.filter(todo => todo.completed !== true));
   };
 
-  const setAllTodosCompleted = () => {
-    setTodos(todos.map(todo => ({ ...todo, completed: !todo.completed })));
+  const setAllTodosCompleted = (revise) => {
+    if (revise) {
+      setTodos(todos.map(todo => ({ ...todo, completed: true })));
+    } else {
+      setTodos(todos.map(todo => ({ ...todo, completed: false })));
+    }
   };
 
   return (
