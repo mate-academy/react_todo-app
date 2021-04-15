@@ -14,7 +14,7 @@ function App() {
   return (
     <section className="todoapp">
       <header className="header">
-        <h1>todos</h1>
+        <h1>todos App</h1>
 
         <TodoForm
           updateTodos={updateTodos}
