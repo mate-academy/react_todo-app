@@ -1,24 +1,31 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
 
-export const TodoList = ({ todos }) => (
-  <section className="main">
-    <input type="checkbox" id="toggle-all" className="toggle-all" />
-    <label htmlFor="toggle-all">Mark all as complete</label>
-    <ul className="todo-list">
-      {todos.map(todo => (
-        <TodoItem todo={todo} />
-      ))}
-    </ul>
-  </section>
+export const TodoList = ({ todos, deleteTodo, toggleTodoComplete }) => (
+  <ul className="todo-list">
+    {todos.map(todo => (
+      <TodoItem
+        todo={todo}
+        deleteTodo={deleteTodo}
+        toggleTodoComplete={toggleTodoComplete}
+      />
+    ))}
+  </ul>
 );
 
-// <li className="completed">
-//   <div className="view">
-//     <input type="checkbox" className="toggle" />
-//     <label>qwertyuio</label>
-//     <button type="button" className="destroy" />
-//   </div>
-//   <input type="text" className="edit" />
-// </li>
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool.isRequired,
+    }).isRequired,
+  ),
+  deleteTodo: PropTypes.func.isRequired,
+  toggleTodoComplete: PropTypes.func.isRequired,
+};
 
+TodoList.defaultProps = {
+  todos: [],
+};

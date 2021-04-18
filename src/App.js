@@ -1,6 +1,5 @@
 import React from 'react';
 import { TodoApp } from './components/TodoApp/TodoApp';
-// import { TodoList } from './components/TodoList/TodoList';
 
 function App() {
   return (
