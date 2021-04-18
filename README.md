@@ -1,5 +1,5 @@
 # React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/)
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://Smikhotur.github.io/react_todo-app/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
@@ -69,3 +69,4 @@ Implement saving the todos in [the API](https://mate-academy.github.io/fe-studen
 - Use '✕' symbol to remove TODO item on hover
 - [checked](./public/icons/checked.svg)
 - [unchecked](./public/icons/unchecked.svg)
+https://github.com/mate-academy/react_todo-app
