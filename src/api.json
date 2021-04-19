@@ -1,0 +1,42 @@
+[
+  {
+    "timeStart": "10:00",
+    "timeEnd": "11:30",
+    "dayStart": "0",
+    "dayEnd": "3",
+    "title": "lesons"
+  },
+  {
+    "timeStart": "10:00",
+    "timeEnd": "11:30",
+    "dayStart": "4",
+    "dayEnd": "4",
+    "title": "master-class"
+  },
+  {
+    "timeStart": "11:30",
+    "timeEnd": "13:00",
+    "dayStart": "0",
+    "dayEnd": "4",
+    "title": "practis work"
+  }
+]
+
+// function decryptMessage(message) {
+//   const result = message.split('');
+//   let i = 0;
+
+//   for (; ;) {
+//     if (i < result.length / 2) {
+//       const num = result[i];
+
+//       result[i] = result[result.length - (i + 1)];
+//       result[result.length - (i + 1)] = num;
+//     } else {
+//       break;
+//     }
+//     i++;
+//   }
+
+//   return result.join('');
+// }
