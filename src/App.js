@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router';
-import { useLocalStorage } from './useLocalStorage';
+// import { useLocalStorage } from './useLocalStorage';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
 export const App = () => {
-  const [todos, setTodos] = useLocalStorage([]);
+  const [todos, setTodos] = useState([]);
 
   const setStatus = (todoId) => {
     setTodos(prevTodos => prevTodos.map((todo) => {
