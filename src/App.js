@@ -74,8 +74,8 @@ const App = () => {
   const activeTodos = todos.filter(todo => !todo.completed);
 
   const selectAll = () => {
-    if (todos.some(todo => todo.status)
-      && todos.some(todo => !todo.status)) {
+    if (todos.some(todo => todo.completed)
+      && todos.some(todo => !todo.completed)) {
       setTodos(todos.map(todo => ({
         ...todo,
         completed: true,
