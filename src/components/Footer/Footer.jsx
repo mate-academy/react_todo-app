@@ -17,6 +17,10 @@ export const Footer = ({
 );
 
 Footer.propTypes = {
-  activeTodos: PropTypes.func.isRequired,
+  activeTodos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  })).isRequired,
   clearAllCompleted: PropTypes.func.isRequired,
 };

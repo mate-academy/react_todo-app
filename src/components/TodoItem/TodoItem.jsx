@@ -55,7 +55,7 @@ export const TodoItem = ({
         <li
           key={todo.id}
           className={className({
-            completed: todo.completed,
+            completed: todo.id === todoId,
             editing: editTitle,
           })}
           onDoubleClick={event => handleDblClick(event, todo.title, todo.id)}
@@ -78,14 +78,16 @@ export const TodoItem = ({
               }}
             />
           </div>
-          <input
-            type="text"
-            className="edit"
-            value={newTitle}
-            onChange={handleEdit}
-            onKeyUp={handleKeyUp}
-            onBlur={handleBlur}
-          />
+          {todo.id !== todoId && (
+            <input
+              type="text"
+              className="edit"
+              value={newTitle}
+              onChange={handleEdit}
+              onKeyUp={handleKeyUp}
+              onBlur={handleBlur}
+            />
+          )}
         </li>
       ))}
     </>
