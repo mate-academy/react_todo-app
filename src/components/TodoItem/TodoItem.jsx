@@ -55,8 +55,8 @@ export const TodoItem = ({
         <li
           key={todo.id}
           className={className({
-            completed: todo.id === todoId,
-            editing: editTitle,
+            completed: todo.completed,
+            editing: todo.id === todoId && editTitle,
           })}
           onDoubleClick={event => handleDblClick(event, todo.title, todo.id)}
         >
@@ -78,7 +78,7 @@ export const TodoItem = ({
               }}
             />
           </div>
-          {todo.id !== todoId && (
+          {todo.id === todoId && editTitle && (
             <input
               type="text"
               className="edit"
