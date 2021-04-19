@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-// import { useLocalStorage } from './useLocalStorage';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
 export const App = () => {
   const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    if (!localStorage.todos) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    } else {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const setStatus = (todoId) => {
     setTodos(prevTodos => prevTodos.map((todo) => {
