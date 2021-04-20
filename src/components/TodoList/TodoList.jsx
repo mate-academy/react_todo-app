@@ -2,7 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
 
-export const TodoList = ({ todos, deleteTodo, toggleTodoComplete, editTodoTitle }) => (
+export const TodoList = ({
+  todos,
+  deleteTodo,
+  toggleTodoComplete,
+  editTodoTitle,
+}) => (
   <ul className="todo-list">
     {todos.map(todo => (
       <TodoItem
@@ -26,6 +31,7 @@ TodoList.propTypes = {
   ),
   deleteTodo: PropTypes.func.isRequired,
   toggleTodoComplete: PropTypes.func.isRequired,
+  editTodoTitle: PropTypes.func.isRequired,
 };
 
 TodoList.defaultProps = {

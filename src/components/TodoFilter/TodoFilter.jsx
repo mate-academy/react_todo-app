@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 export const TodoFilter = ({ filterChange }) => {
+  const [selected, setSelected] = useState(false);
   const handleClick = (filter) => {
     filterChange(filter);
+    setSelected(true);
   };
 
   return (
@@ -11,7 +13,7 @@ export const TodoFilter = ({ filterChange }) => {
       <li>
         <a
           href="#/"
-          className=""
+          className={`${selected} ? 'selected' : ''`}
           onClick={() => handleClick('All')}
         >
           All
@@ -21,7 +23,7 @@ export const TodoFilter = ({ filterChange }) => {
       <li>
         <a
           href="#/active"
-          className=""
+          className={`${selected} ? 'selected' : ''`}
           onClick={() => handleClick('Active')}
         >
           Active
@@ -31,7 +33,7 @@ export const TodoFilter = ({ filterChange }) => {
       <li>
         <a
           href="#/completed"
-          className="selected"
+          className={`${selected} ? 'selected' : ''`}
           onClick={() => handleClick('Completed')}
         >
           Completed

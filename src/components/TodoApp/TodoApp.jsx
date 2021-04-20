@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { TodoList } from '../TodoList/TodoList';
 import { TodoFilter } from '../TodoFilter/TodoFilter';
 
@@ -7,52 +7,33 @@ export const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [activeFilter, setActiveFilter] = useState('All');
 
-  const switchFilter = (filter) => {
+  const filterChange = (filter) => {
     setActiveFilter(filter);
+    switchFilter(filter);
+  };
+
+  const switchFilter = (filter) => {
+    let visibleTodos;
 
     switch (filter) {
       case 'Active':
-        return todos.filter(todo => !todo.completed);
+        visibleTodos = todos.filter(todo => !todo.completed);
+        break;
 
       case 'Completed':
-        return todos.filter(todo => todo.completed);
+        visibleTodos = todos.filter(todo => todo.completed);
+        break;
 
       case 'All':
-        return todos;
+        visibleTodos = todos;
+        break;
 
       default:
-        break;
+        visibleTodos = todos;
     }
+
+    return visibleTodos;
   };
-
-  const filteredTodos = useMemo(() => {
-    return switchFilter(activeFilter);
-  }, []);
-
-  const filterChange = () => {
-    return filteredTodos;
-  };
-
-  // const filterChange = (filter) => {
-
-  //   const filteredTodos = () => {
-  //     switch (filter) {
-  //       case 'Active':
-  //         return todos.filter(todo => !todo.completed);
-
-  //       case 'Completed':
-  //         return todos.filter(todo => todo.completed);
-
-  //       case 'All':
-  //         return todos;
-
-  //       default:
-  //         break;
-  //     }
-  //   };
-
-  //   return filteredTodos;
-  // };
 
   const toggleAllTodos = () => {
     let toggledTodos;
@@ -73,10 +54,6 @@ export const TodoApp = () => {
 
     setTodos(toggledTodos);
   };
-
-  // const saveTodos = (filteredTodos) => {
-  //   setTodos(filteredTodos);
-  // };
 
   const handleInputChange = (event) => {
     const { value } = event.target;
@@ -128,8 +105,6 @@ export const TodoApp = () => {
     ));
   };
 
-  console.log(todos);
-
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -153,7 +128,7 @@ export const TodoApp = () => {
       </section>
 
       <TodoList
-        todos={todos}
+        todos={switchFilter(activeFilter)}
         deleteTodo={deleteTodo}
         toggleTodoComplete={toggleTodoComplete}
         editTodoTitle={editTodoTitle}

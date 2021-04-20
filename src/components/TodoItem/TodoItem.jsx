@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export const TodoItem = ({ todo, deleteTodo, toggleTodoComplete, editTodoTitle}) => {
+export const TodoItem = ({
+  todo,
+  deleteTodo,
+  toggleTodoComplete,
+  editTodoTitle,
+}) => {
   const [isEditing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
-  // const [editedTodo, setEditedTodo] = useState(todo);
 
   const allowEditTodo = () => {
     setEditing(true);
@@ -73,4 +77,5 @@ TodoItem.propTypes = {
   }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
   toggleTodoComplete: PropTypes.func.isRequired,
+  editTodoTitle: PropTypes.func.isRequired,
 };
