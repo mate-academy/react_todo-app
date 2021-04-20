@@ -1,19 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export const TodoItem = ({ todo, deleteTodo, toggleTodoComplete }) => {
+export const TodoItem = ({ todo, deleteTodo, toggleTodoComplete, editTodoTitle}) => {
+  const [isEditing, setEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
+  // const [editedTodo, setEditedTodo] = useState(todo);
+
+  const allowEditTodo = () => {
+    setEditing(true);
+  };
+
+  const editTitle = (event) => {
+    const { value } = event.target;
+
+    setNewTitle(value);
+  };
+
+  const handleKeyAction = (event) => {
+    if (event.key === 'Enter') {
+      editTodoTitle(todo, newTitle);
+      setEditing(false);
+    }
+
+    if (event.key === 'Escape') {
+      setNewTitle(todo.title);
+      setEditing(false);
+    }
+  };
+
   const handleToggleComplete = () => {
     toggleTodoComplete(todo);
   };
 
   return (
-    <li key={todo.id} className={todo.completed ? 'completed' : ''}>
+    <li
+      key={todo.id}
+      className={`${todo.completed ? 'completed' : ''}
+      ${isEditing ? 'editing' : ''}`}
+      onDoubleClick={allowEditTodo}
+    >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           checked={todo.completed}
           onChange={handleToggleComplete}
+          editable={isEditing}
         />
         <label>{todo.title}</label>
         <button
@@ -22,6 +54,13 @@ export const TodoItem = ({ todo, deleteTodo, toggleTodoComplete }) => {
           onClick={() => deleteTodo(todo.id)}
         />
       </div>
+      <input
+        type="text"
+        className="edit"
+        value={newTitle}
+        onChange={editTitle}
+        onKeyDown={handleKeyAction}
+      />
     </li>
   );
 };

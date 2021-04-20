@@ -2,13 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
 
-export const TodoList = ({ todos, deleteTodo, toggleTodoComplete }) => (
+export const TodoList = ({ todos, deleteTodo, toggleTodoComplete, editTodoTitle }) => (
   <ul className="todo-list">
     {todos.map(todo => (
       <TodoItem
         todo={todo}
         deleteTodo={deleteTodo}
         toggleTodoComplete={toggleTodoComplete}
+        todos={todos}
+        editTodoTitle={editTodoTitle}
       />
     ))}
   </ul>
