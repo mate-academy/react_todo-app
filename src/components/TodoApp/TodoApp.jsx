@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { TodoList } from '../TodoList/TodoList';
 import { TodoFilter } from '../TodoFilter/TodoFilter';
 import { useLocalStorage } from '../../styles/localStorage';
@@ -8,7 +8,7 @@ export const TodoApp = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [todos, setTodos] = useLocalStorage('todos', []);
 
-  const switchFilter = (filter) => {
+  const switchFilter = useCallback((filter) => {
     let visibleTodos;
 
     switch (filter) {
@@ -29,7 +29,12 @@ export const TodoApp = () => {
     }
 
     return visibleTodos;
-  };
+  }, [todos]);
+
+  const filteredTodos = useMemo(
+    () => switchFilter(activeFilter),
+    [switchFilter, activeFilter],
+  );
 
   const filterChange = (filter) => {
     setActiveFilter(filter);
@@ -129,7 +134,7 @@ export const TodoApp = () => {
       </section>
 
       <TodoList
-        todos={switchFilter(activeFilter)}
+        todos={filteredTodos}
         deleteTodo={deleteTodo}
         toggleTodoComplete={toggleTodoComplete}
         editTodoTitle={editTodoTitle}
