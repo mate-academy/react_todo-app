@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 export const TodoFilter = ({ filterChange }) => {
   const [selected, setSelected] = useState(false);
+
   const handleClick = (filter) => {
     filterChange(filter);
     setSelected(true);

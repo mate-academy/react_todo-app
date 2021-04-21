@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { TodoList } from '../TodoList/TodoList';
 import { TodoFilter } from '../TodoFilter/TodoFilter';
+import { useLocalStorage } from '../../styles/localStorage';
 
 export const TodoApp = () => {
   const [title, setTitle] = useState('');
-  const [todos, setTodos] = useState([]);
   const [activeFilter, setActiveFilter] = useState('All');
-
-  const filterChange = (filter) => {
-    setActiveFilter(filter);
-    switchFilter(filter);
-  };
+  const [todos, setTodos] = useLocalStorage('todos', []);
 
   const switchFilter = (filter) => {
     let visibleTodos;
@@ -33,6 +29,11 @@ export const TodoApp = () => {
     }
 
     return visibleTodos;
+  };
+
+  const filterChange = (filter) => {
+    setActiveFilter(filter);
+    switchFilter(filter);
   };
 
   const toggleAllTodos = () => {

@@ -38,7 +38,6 @@ export const TodoItem = ({
 
   return (
     <li
-      key={todo.id}
       className={`${todo.completed ? 'completed' : ''}
       ${isEditing ? 'editing' : ''}`}
       onDoubleClick={allowEditTodo}
