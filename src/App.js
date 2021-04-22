@@ -6,53 +6,80 @@ function App() {
       <header className="header">
         <h1>todos App</h1>
 
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus=""
-        />
+        <form>
+          <input
+            type="text"
+            className="new-todo"
+            placeholder="What needs to be done?"
+          />
+        </form>
       </header>
 
-      <section className="main" style={{ display: 'block' }}>
-        <input id="toggle-all" className="toggle-all" type="checkbox" />
+      <section className="main">
+        <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
+
         <ul className="todo-list">
-          <li className="">
+          <li>
             <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sdfsdfsdf</label>
-              <button className="destroy"></button>
+              <input type="checkbox" className="toggle" />
+              <label>asdfghj</label>
+              <button type="button" className="destroy" />
             </div>
+            <input type="text" className="edit" />
           </li>
-          <li className="">
+
+          <li className="completed">
             <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>dsfgsdfgdsrg</label>
-              <button className="destroy"></button></div>
-          </li>
-          <li className="">
-            <div className="view">
-              <input className="toggle" type="checkbox" />
-              <label>sddfgdfgdf</label>
-              <button className="destroy"></button>
+              <input type="checkbox" className="toggle" />
+              <label>qwertyuio</label>
+              <button type="button" className="destroy" />
             </div>
+            <input type="text" className="edit" />
+          </li>
+
+          <li className="editing">
+            <div className="view">
+              <input type="checkbox" className="toggle" />
+              <label>zxcvbnm</label>
+              <button type="button" className="destroy" />
+            </div>
+            <input type="text" className="edit" />
+          </li>
+
+          <li>
+            <div className="view">
+              <input type="checkbox" className="toggle" />
+              <label>1234567890</label>
+              <button type="button" className="destroy" />
+            </div>
+            <input type="text" className="edit" />
           </li>
         </ul>
       </section>
-      <footer className="footer" style={{ display: 'block' }}>
-        <span className="todo-count"><strong>3</strong> items left</span>
+
+      <footer className="footer">
+        <span className="todo-count">
+          3 items left
+        </span>
+
         <ul className="filters">
           <li>
             <a href="#/" className="selected">All</a>
           </li>
+
           <li>
             <a href="#/active">Active</a>
           </li>
+
           <li>
             <a href="#/completed">Completed</a>
           </li>
         </ul>
-        <button className="clear-completed" style={{ display: 'block' }}></button>
+
+        <button type="button" className="clear-completed">
+          Clear completed
+        </button>
       </footer>
     </section>
   );
