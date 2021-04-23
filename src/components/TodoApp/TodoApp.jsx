@@ -11,7 +11,9 @@ export const TodoApp = ({ onAdd }) => {
 
   const handleSubmit = (changeEvent) => {
     changeEvent.preventDefault();
-    onAdd(title);
+    const date = Date.now();
+
+    onAdd([title, date]);
     setTitle('');
   };
 
@@ -22,6 +24,7 @@ export const TodoApp = ({ onAdd }) => {
 
       <form onSubmit={handleSubmit}>
         <input
+          value={title}
           onChange={handleChange}
           type="text"
           className="new-todo"

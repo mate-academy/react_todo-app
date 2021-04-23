@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { TodoApp } from './styles/components/TodoApp/TodoApp';
-import { TodoList } from './styles/components/TodoList/TodoList';
-import { TodosFilter } from './styles/components/TodosFilter/TodosFilter';
+import { TodoApp } from './components/TodoApp/TodoApp';
+import { TodoList } from './components/TodoList/TodoList';
+import { TodosFilter } from './components/TodosFilter/TodosFilter';
+// import { TodoItem } from './components/TodoItem/TodoItem';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [todo, setTodo] = useState('');
+  const [todo, setTodo] = useState();
 
   useEffect(() => {
-    setTodos([...todos, todo]);
-    /* console.log(todo, 'it`s todo');
-    console.log(todos, 'it`s todos'); */
+    if (todo) {
+      setTodos([...todos, todo]);
+    }
   }, [todo, setTodos]);
+
+  const handleDelete = (id) => {
+    // console.log(id);
+    const newTodos = todos.filter(item => item[1] !== id);
+
+    setTodos(newTodos);
+  };
 
   return (
     <section className="todoapp">
@@ -21,7 +29,7 @@ function App() {
         <input type="checkbox" id="toggle-all" className="toggle-all" />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList items={todos} />
+        <TodoList todos={todos} onDelete={handleDelete} />
       </section>
 
       <TodosFilter />
