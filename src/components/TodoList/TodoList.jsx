@@ -1,31 +1,82 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem/TodoItem';
+import { TodosFilter } from '../TodosFilter/TodosFilter';
 import './TodoList.scss';
 
-export const TodoList = ({ todos, onDelete }) => {
+export const TodoList = ({
+  todos,
+  handleClearing,
+  onDelete,
+  onChange,
+  handleEditChanges,
+}) => {
+  const [sortedTodo, setSortedTodo] = useState('All');
+  const [notes, setNotes] = useState(todos);
+
   useEffect(() => {
-    console.log(todos);
-  }, [todos]);
+    if (sortedTodo === 'All') {
+      setNotes(todos);
+    } else if (sortedTodo === 'Active') {
+      setNotes(todos.filter(it => it.completed === false));
+    } else {
+      setNotes(todos.filter(it => it.completed === true));
+    }
+  }, [sortedTodo, todos]);
+
+  const sortTodos = (event) => {
+    const item = event.target;
+
+    if (item.name === 'All') {
+      setSortedTodo('All');
+    }
+
+    if (item.name === 'Active') {
+      setSortedTodo('Active');
+    }
+
+    if (item.name === 'Completed') {
+      setSortedTodo('Completed');
+    }
+  };
 
   return (
-    <ul className="todo-list">
-      {todos
-        && todos.map(todo => (
-          <TodoItem
-            key={todo[1]}
-            onDelete={onDelete}
-            todo={todo}
-          />
-        ))}
-    </ul>
+    <>
+      <ul className="todo-list">
+        {notes
+          && notes.map(todo => (
+            <TodoItem
+              key={todo.id}
+              onDelete={onDelete}
+              onChange={onChange}
+              handleEditChanges={handleEditChanges}
+              todo={todo}
+            />
+          ))}
+      </ul>
+
+      {notes.length > 0
+        && (
+        <TodosFilter
+          length={todos.length}
+          sortTodos={sortTodos}
+          clearing={handleClearing}
+        />
+        )
+      }
+
+    </>
   );
 };
 
-/* TodoList.propTypes = {
-  todos: PropTypes.shape({
-    PropTypes.shape({
-
-    })
-  }).isRequired,
-}; */
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  })).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  handleClearing: PropTypes.func.isRequired,
+  handleEditChanges: PropTypes.func.isRequired,
+};

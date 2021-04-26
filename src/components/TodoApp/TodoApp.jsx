@@ -9,12 +9,26 @@ export const TodoApp = ({ onAdd }) => {
     setTitle(changeEvent.target.value);
   };
 
-  const handleSubmit = (changeEvent) => {
-    changeEvent.preventDefault();
+  const handleSubmit = (submitEvent) => {
+    submitEvent.preventDefault();
+    if (!title) {
+      return;
+    }
+
     const date = Date.now();
 
-    onAdd([title, date]);
+    onAdd({
+      title,
+      id: date,
+      completed: false,
+    });
     setTitle('');
+  };
+
+  const handleСancel = (keyEvent) => {
+    if (keyEvent.key === 'Escape' || keyEvent.key === 'Esc') {
+      setTitle('');
+    }
   };
 
   return (
@@ -25,6 +39,7 @@ export const TodoApp = ({ onAdd }) => {
       <form onSubmit={handleSubmit}>
         <input
           value={title}
+          onKeyDown={handleСancel}
           onChange={handleChange}
           type="text"
           className="new-todo"
