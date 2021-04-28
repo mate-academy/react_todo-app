@@ -6,29 +6,26 @@ function App() {
   const [todos, setTodos] = useState(
     JSON.parse(window.localStorage.getItem('todos')) || [],
   );
-  const [todo, setTodo] = useState();
   const [isAllChecked, setAllChecked] = useState(false);
 
-  useEffect(() => {
-    if (todo) {
-      setTodos(prevTodos => [...prevTodos, todo]);
-    }
-  }, [todo]);
+  const onAdd = (newTodo) => {
+    setTodos(prevTodos => [...prevTodos, newTodo]);
+  };
 
   useEffect(() => {
     window.localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const deleteCompletedTodos = useCallback((id) => {
-    setTodos(newTodos => newTodos.filter(item => item.id !== id));
-  }, []);
+    setTodos(prevTodos => prevTodos.filter(item => item.id !== id));
+  }, [setTodos]);
 
-  const handleCheckbox = (id) => {
+  const handleStatus = useCallback((id) => {
     const completedTodo = todos.find(item => item.id === id);
 
     completedTodo.completed = !completedTodo.completed;
     window.localStorage.setItem('todos', JSON.stringify(todos));
-  };
+  }, [todos]);
 
   const handleEditChanges = (id, title) => {
     const changedTodo = todos.find(item => item.id === id);
@@ -45,12 +42,13 @@ function App() {
 
   const setAllCompleted = () => {
     const newTodos = todos.map((item) => {
-      const note = item;
+      const { title, id } = item;
+      let note = {};
 
       if (!isAllChecked) {
-        note.completed = true;
+        note = { title, id, completed: true };
       } else {
-        note.completed = false;
+        note = { title, id, completed: false };
       }
 
       return note;
@@ -59,34 +57,31 @@ function App() {
     setAllChecked(!isAllChecked);
 
     setTodos(newTodos);
-    window.localStorage.setItem('todos', JSON.stringify(todos));
   };
 
   return (
     <section className="todoapp">
-      <TodoApp onAdd={setTodo} />
+      <TodoApp onAdd={onAdd} />
 
       <section className="main">
-        {todos.length > 0
-          && (
-            <>
-              <input
-                type="checkbox"
-                id="toggle-all"
-                className="toggle-all"
-                onClick={setAllCompleted}
-              />
-              <label htmlFor="toggle-all">Mark all as complete</label>
-            </>
-          )
-        }
+        {todos.length > 0 && (
+          <>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              onClick={setAllCompleted}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          </>
+        )}
 
         <TodoList
           handleEditChanges={handleEditChanges}
           todos={todos}
           handleClearing={handleClearing}
           onDelete={deleteCompletedTodos}
-          onChange={handleCheckbox}
+          onChange={handleStatus}
         />
       </section>
 

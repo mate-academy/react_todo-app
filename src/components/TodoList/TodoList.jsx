@@ -25,17 +25,17 @@ export const TodoList = ({
   }, [sortedTodo, todos]);
 
   const sortTodos = (event) => {
-    const item = event.target;
+    const buttom = event.target;
 
-    if (item.name === 'All') {
+    if (buttom.name === 'All') {
       setSortedTodo('All');
     }
 
-    if (item.name === 'Active') {
+    if (buttom.name === 'Active') {
       setSortedTodo('Active');
     }
 
-    if (item.name === 'Completed') {
+    if (buttom.name === 'Completed') {
       setSortedTodo('Completed');
     }
   };
@@ -43,27 +43,24 @@ export const TodoList = ({
   return (
     <>
       <ul className="todo-list">
-        {notes
-          && notes.map(todo => (
-            <TodoItem
-              key={todo.id}
-              onDelete={onDelete}
-              onChange={onChange}
-              handleEditChanges={handleEditChanges}
-              todo={todo}
-            />
-          ))}
+        {notes && notes.map(todo => (
+          <TodoItem
+            key={todo.id}
+            onDelete={onDelete}
+            onChange={onChange}
+            handleEditChanges={handleEditChanges}
+            todo={todo}
+          />
+        ))}
       </ul>
 
-      {notes.length > 0
-        && (
+      {notes.length > 0 && (
         <TodosFilter
           length={todos.length}
           sortTodos={sortTodos}
           clearing={handleClearing}
         />
-        )
-      }
+      )}
 
     </>
   );
