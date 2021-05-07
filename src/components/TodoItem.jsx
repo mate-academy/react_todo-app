@@ -5,8 +5,6 @@ export const TodoItem = ({ todo, handleDelete, handleChecked, updateTodoTitle })
   const [isEditTodos, setIsEditTodos] = useState(false);
   const [todoValue, setTodoValue] = useState(todo.title);
 
-  console.log(isEditTodos)
-
   return (
     <li
       className={classNames(

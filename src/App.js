@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import { useLocalStorage } from './components/LocalStorage';
 import { Footer } from './components/Footer';
 import { TodoForm } from './components/TodoFrom';
 import { TodoList } from './components/TodoList';
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [filter, setFilter] = useState('All');
 
   const completedTodos = todos.filter(todo => todo.completed);
@@ -25,7 +26,7 @@ function App() {
         return todos;
       }
     }
-  }, [filter, todos]);
+  }, [todos]);
 
   const filteredTodos = useMemo(
     () => filterTodos(filter), [filter, filterTodos],
