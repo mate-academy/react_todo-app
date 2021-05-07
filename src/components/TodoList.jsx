@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
+
+import { TodoItem } from './TodoItem';
 
 export const TodoList = ({ todos, setTodos }) => {
   const [hasToogleChecked, setHasToogleChecked] = useState(false);
@@ -11,6 +12,21 @@ export const TodoList = ({ todos, setTodos }) => {
     }));
 
     setTodos(newTodos);
+  };
+
+  const updateTodoTitle = (todoId, todoValue) => {
+    const updateTitle = todos.map(todo => {
+      if (todo.id === todoId) {
+        return ({
+          ...todo,
+          title: todoValue,
+        });
+      }
+
+      return todo;
+    });
+
+    setTodos(updateTitle);
   };
 
   const handleChecked = (event, todoId) => {
@@ -44,41 +60,28 @@ export const TodoList = ({ todos, setTodos }) => {
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        checked={hasToogleChecked}
-        className="toggle-all"
-        onClick={toggleTodos}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      {!!todos.length && (
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            checked={hasToogleChecked}
+            className="toggle-all"
+            onChange={toggleTodos}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        </>
+      )}
 
       <ul className="todo-list">
         {todos.map(todo => (
-          <li
+          <TodoItem
             key={todo.id}
-            className={classNames({ 'completed': todo.completed })}
-          >
-            <div className="view">
-              <input
-                type="checkbox"
-                className="toggle"
-                checked={todo.completed}
-                onChange={(event) => {
-                  handleChecked(event, todo.id);
-                }}
-              />
-              <label>{todo.title}</label>
-              <button
-                type="button"
-                className="destroy"
-                onClick={() => {
-                  handleDelete(todo.id);
-                }}
-              />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            todo={todo}
+            handleChecked={handleChecked}
+            handleDelete={handleDelete}
+            updateTodoTitle={updateTodoTitle}
+          />
         ))}
 
         {/* <li className="completed">
