@@ -8,37 +8,30 @@ export const TodoApp = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [todos, setTodos] = useLocalStorage('todos', []);
 
-  const switchFilter = useCallback((filter) => {
-    let visibleTodos;
-
+  const filterType = useCallback((filter) => {
     switch (filter) {
       case 'Active':
-        visibleTodos = todos.filter(todo => !todo.completed);
-        break;
+        return todos.filter(todo => !todo.completed);
 
       case 'Completed':
-        visibleTodos = todos.filter(todo => todo.completed);
-        break;
+        return todos.filter(todo => todo.completed);
 
       case 'All':
-        visibleTodos = todos;
-        break;
+        return todos;
 
       default:
-        visibleTodos = todos;
+        return todos;
     }
-
-    return visibleTodos;
   }, [todos]);
 
   const filteredTodos = useMemo(
-    () => switchFilter(activeFilter),
-    [switchFilter, activeFilter],
+    () => filterType(activeFilter),
+    [filterType, activeFilter],
   );
 
   const filterChange = (filter) => {
     setActiveFilter(filter);
-    switchFilter(filter);
+    filterType(filter);
   };
 
   const toggleAllTodos = () => {
