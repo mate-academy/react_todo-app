@@ -55,6 +55,7 @@ function App() {
           completedTodos={completedTodos}
           activeTodos={activeTodos}
           todos={filteredTodos}
+          filter={filter}
           setFilter={setFilter}
           deleteCompletedTodos={deleteCompletedTodos}
         />

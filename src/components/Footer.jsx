@@ -1,9 +1,11 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export const Footer = (
   { completedTodos,
     activeTodos,
     setFilter,
+    filter,
     deleteCompletedTodos },
 ) => (
   <footer className="footer">
@@ -19,7 +21,9 @@ export const Footer = (
       <li>
         <a
           href="#/"
-          className="selected"
+          className={classNames({
+            selected: filter === 'All',
+          })}
           onClick={(event) => {
             setFilter(event.target.textContent);
           }}
@@ -31,6 +35,9 @@ export const Footer = (
       <li>
         <a
           href="#/active"
+          className={classNames({
+            selected: filter === 'Active',
+          })}
           onClick={(event) => {
             setFilter(event.target.textContent);
           }}
@@ -42,6 +49,9 @@ export const Footer = (
       <li>
         <a
           href="#/completed"
+          className={classNames({
+            selected: filter === 'Completed',
+          })}
           onClick={(event) => {
             setFilter(event.target.textContent);
           }}

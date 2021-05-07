@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-export const TodoItem = ({ todo, handleDelete, handleChecked, updateTodoTitle }) => {
+export const TodoItem = ({
+  todo,
+  handleDelete,
+  handleChecked,
+  updateTodoTitle }) => {
   const [isEditTodos, setIsEditTodos] = useState(false);
   const [todoValue, setTodoValue] = useState(todo.title);
 
