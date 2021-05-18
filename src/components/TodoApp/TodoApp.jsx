@@ -35,23 +35,17 @@ export const TodoApp = () => {
   };
 
   const toggleAllTodos = () => {
-    let toggledTodos;
-
     if (todos.some(todo => todo.completed === false)) {
-      toggledTodos
-        = todos.map(todo => ({
-          ...todo,
-          completed: true,
-        }));
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: true,
+      })));
     } else {
-      toggledTodos
-        = todos.map(todo => ({
-          ...todo,
-          completed: false,
-        }));
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })));
     }
-
-    setTodos(toggledTodos);
   };
 
   const handleInputChange = (event) => {
@@ -85,11 +79,17 @@ export const TodoApp = () => {
     ));
   };
 
-  const toggleTodoComplete = (todo) => {
-    const selectedTodo = todos.find(selected => todo.id === selected.id);
+  const toggleTodoComplete = (todoId) => {
+    setTodos(prevTodos => prevTodos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
 
-    selectedTodo.completed = !selectedTodo.completed;
-    setTodos([...todos]);
+      return {
+        ...todo,
+        completed: !todo.completed,
+      };
+    }));
   };
 
   const editTodoTitle = (todo, newTitle) => {

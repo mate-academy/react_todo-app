@@ -33,7 +33,7 @@ export const TodoItem = ({
   };
 
   const handleToggleComplete = () => {
-    toggleTodoComplete(todo);
+    toggleTodoComplete(todo.id);
   };
 
   return (
