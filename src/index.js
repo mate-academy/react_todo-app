@@ -6,8 +6,11 @@ import './styles/todo-list.css';
 import './styles/filters.css';
 
 import App from './App';
+import { StateProvider } from './components/StateContext';
 
 ReactDOM.render(
-  <App />,
+  <StateProvider>
+    <App />
+  </StateProvider>,
   document.getElementById('root'),
 );
