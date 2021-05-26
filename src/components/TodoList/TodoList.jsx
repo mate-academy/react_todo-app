@@ -25,9 +25,7 @@ export const TodoList = () => {
         className="toggle-all"
         onChange={handleToggleAll}
       />
-      {todos && (
-        <label htmlFor="toggle-all">Mark all as complete</label>
-      )}
+      <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list">
         {todos && todos.map(({ id, title, completed }) => (

@@ -12,6 +12,21 @@ function TodoApp() {
     setTodos([...todos, newTodo]);
   }, [todos]);
 
+  // const filterTodos = (filterBy) => {
+  //   setSelectedInput(!selectedInput);
+
+  //   switch (filterBy) {
+  //     case 'all':
+  //       return todos;
+  //     case 'active':
+  //       return todosFilterBy(false);
+  //     case 'completed':
+  //       return todosFilterBy(true);
+  //     default:
+  //       return todos;
+  //   }
+  // };
+
   return (
     <section className="todoapp">
       <header className="header">

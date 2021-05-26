@@ -1,27 +1,53 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 
-export const TodoFilter = () => (
-  <>
-    <span className="todo-count">
-      3 items left
-    </span>
+import { TodosContext } from '../../TodosContext';
 
-    <ul className="filters">
-      <li>
-        <a href="#/" className="selected">All</a>
-      </li>
+export const TodoFilter = ({ filterTodos }) => {
+  const { todos } = useContext(TodosContext);
 
-      <li>
-        <a href="#/active">Active</a>
-      </li>
+  return (
+    <>
+      <span className="todo-count">
+        {`${todos.length} items left`}
+      </span>
 
-      <li>
-        <a href="#/completed">Completed</a>
-      </li>
-    </ul>
+      <ul className="filters">
+        <li>
+          <a
+            href="#/"
+            onClick={() => filterTodos('all')}
+          >
+            All
+          </a>
+        </li>
 
-    <button type="button" className="clear-completed">
-      Clear completed
-    </button>
-  </>
-);
+        <li>
+          <a
+            href="#/active"
+            onClick={() => filterTodos('active')}
+          >
+            Active
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="#/completed"
+            onClick={() => filterTodos('completed')}
+          >
+            Completed
+          </a>
+        </li>
+      </ul>
+
+      <button type="button" className="clear-completed">
+        Clear completed
+      </button>
+    </>
+  );
+};
+
+TodoFilter.TodoItem.propTypes = {
+  filterTodos: PropTypes.func.isRequired,
+};
