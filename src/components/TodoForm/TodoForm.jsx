@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export const TodoApp = ({ dispatch }) => {
+export const TodoForm = React.memo(({ onAddNewTodo }) => {
   const [newTodo, setNewTodo] = useState({
     id: +new Date(),
     title: '',
@@ -11,10 +11,7 @@ export const TodoApp = ({ dispatch }) => {
   const handleSubmit = (clickEvent) => {
     clickEvent.preventDefault();
 
-    dispatch({
-      type: 'addNewTodo',
-      payload: newTodo,
-    });
+    onAddNewTodo(newTodo);
 
     setNewTodo({
       id: +new Date(),
@@ -43,8 +40,8 @@ export const TodoApp = ({ dispatch }) => {
       />
     </form>
   );
-};
+});
 
-TodoApp.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+TodoForm.propTypes = {
+  onAddNewTodo: PropTypes.func.isRequired,
 };

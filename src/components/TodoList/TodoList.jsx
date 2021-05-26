@@ -1,34 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
+import React, { useContext } from 'react';
 import { TodoItem } from '../TodoItem';
+import { TodosContext } from '../../TodosContext';
 
-export const TodoList = ({ items }) => (
-  <section className="main">
-    <input type="checkbox" id="toggle-all" className="toggle-all" />
-    <label htmlFor="toggle-all">Mark all as complete</label>
+export const TodoList = () => {
+  const { todos, setTodos } = useContext(TodosContext);
 
-    <ul className="todo-list">
-      {items && items.map(({ id, title, completed }) => (
-        <TodoItem
-          key={id}
-          id={id}
-          title={title}
-          completed={completed}
-        />
-      ))}
-    </ul>
-  </section>
-);
+  const handleToggleAll = () => (
+    (todos.some(todo => !todo.completed))
+      ? setTodos(todos.map(todo => ({
+        ...todo,
+        completed: true,
+      })))
+      : setTodos(todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })))
+  );
 
-TodoList.defaultProps = {
-  items: [],
-};
+  return (
+    <>
+      <input
+        type="checkbox"
+        id="toggle-all"
+        className="toggle-all"
+        onChange={handleToggleAll}
+      />
+      {todos && (
+        <label htmlFor="toggle-all">Mark all as complete</label>
+      )}
 
-TodoList.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    title: PropTypes.string,
-    completed: PropTypes.bool,
-  })),
+      <ul className="todo-list">
+        {todos && todos.map(({ id, title, completed }) => (
+          <TodoItem
+            key={id}
+            id={id}
+            title={title}
+            completed={completed}
+          />
+        )).reverse()}
+      </ul>
+    </>
+  );
 };
