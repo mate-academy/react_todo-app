@@ -13,7 +13,7 @@ export const TodosProvider = ({ children }) => {
   const contextValue = useMemo(() => ({
     todos,
     setTodos,
-  }), [todos]);
+  }), [todos, setTodos]);
 
   return (
     <TodosContext.Provider value={contextValue}>

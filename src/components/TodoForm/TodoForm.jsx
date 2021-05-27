@@ -37,6 +37,7 @@ export const TodoForm = React.memo(({ onAddNewTodo }) => {
         placeholder="What needs to be done?"
         value={newTodo.title}
         onChange={handleChangeInput}
+        required
       />
     </form>
   );

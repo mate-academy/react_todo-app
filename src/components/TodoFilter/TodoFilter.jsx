@@ -1,53 +1,73 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import className from 'classnames';
 
-import { TodosContext } from '../../TodosContext';
+export const TodoFilter = ({
+  activeTodos,
+  completedTodos,
+  filter,
+  setFilter,
+  onDeleteCompletedTodos,
+}) => (
+  <>
+    <span className="todo-count">
+      {`${activeTodos.length} items left`}
+    </span>
 
-export const TodoFilter = ({ filterTodos }) => {
-  const { todos } = useContext(TodosContext);
+    <ul className="filters">
+      <li>
+        <a
+          href="#/"
+          className={className(
+            filter === 'All' ? 'selected' : '',
+          )}
+          onClick={clickEvent => setFilter(clickEvent.target.textContent)}
+        >
+          All
+        </a>
+      </li>
 
-  return (
-    <>
-      <span className="todo-count">
-        {`${todos.length} items left`}
-      </span>
+      <li>
+        <a
+          href="#/active"
+          className={className(
+            filter === 'Active' ? 'selected' : '',
+          )}
+          onClick={clickEvent => setFilter(clickEvent.target.textContent)}
+        >
+          Active
+        </a>
+      </li>
 
-      <ul className="filters">
-        <li>
-          <a
-            href="#/"
-            onClick={() => filterTodos('all')}
-          >
-            All
-          </a>
-        </li>
+      <li>
+        <a
+          href="#/completed"
+          className={className(
+            filter === 'Completed' ? 'selected' : '',
+          )}
+          onClick={clickEvent => setFilter(clickEvent.target.textContent)}
+        >
+          Completed
+        </a>
+      </li>
+    </ul>
 
-        <li>
-          <a
-            href="#/active"
-            onClick={() => filterTodos('active')}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            onClick={() => filterTodos('completed')}
-          >
-            Completed
-          </a>
-        </li>
-      </ul>
-
-      <button type="button" className="clear-completed">
+    {completedTodos.length > 0 && (
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={onDeleteCompletedTodos}
+      >
         Clear completed
       </button>
-    </>
-  );
-};
+    )}
+  </>
+);
 
-TodoFilter.TodoItem.propTypes = {
-  filterTodos: PropTypes.func.isRequired,
+TodoFilter.propTypes = {
+  activeTodos: PropTypes.instanceOf(Array).isRequired,
+  completedTodos: PropTypes.instanceOf(Array).isRequired,
+  filter: PropTypes.string.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  onDeleteCompletedTodos: PropTypes.func.isRequired,
 };
