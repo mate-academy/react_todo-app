@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useLocalStorage } from './hooks/LocalStorage';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 export const TodosContext = React.createContext({
   todos: [],
