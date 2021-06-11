@@ -1,13 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { NewTodo } from './components/NewTodo';
 
+const FILTERS = {
+  all: '/',
+  active: '/active',
+  completed: '/completed',
+};
+
 function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [allToggled, setAllToggled] = useState(false);
+  const { pathname } = useLocation();
+
+  const filteredTodos = useMemo(
+    () => (
+      todos.filter(({ completed }) => {
+        switch (pathname) {
+          case FILTERS.all:
+            return true;
+
+          case FILTERS.active:
+            return !completed;
+
+          case FILTERS.completed:
+            return completed;
+
+          default:
+            return true;
+        }
+      })
+    )
+    , [todos],
+  );
 
   useEffect(() => {
     setAllToggled(todos.every(({ completed }) => completed));
@@ -65,7 +94,7 @@ function TodoApp() {
       </header>
 
       <TodoList
-        todos={todos}
+        todos={filteredTodos}
         allToggled={allToggled}
         handleToggle={handleToggle}
         handleToggleAll={handleToggleAll}
@@ -74,7 +103,7 @@ function TodoApp() {
 
       {todos.length > 0 && (
         <TodoFooter
-          todos={todos}
+          todos={filteredTodos}
           handleClearCompleted={handleClearCompleted}
         />
       )}
