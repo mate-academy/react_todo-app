@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 
-export function TodoFooter({ todosLeft }) {
+export function TodoFooter({ todos, handleClearCompleted }) {
+  const activeTodos = useMemo(() => (
+    todos.reduce((total, current) => (
+      (current.completed) ? total : total + 1
+    ), 0)
+  ), [todos]);
+
+  const completedTodos = todos.length - activeTodos;
+
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${todosLeft} items left`}
+        {`${activeTodos} items left`}
       </span>
 
       <ul className="filters">
@@ -38,9 +46,15 @@ export function TodoFooter({ todosLeft }) {
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {completedTodos > 0 && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleClearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import uuid from 'react-uuid';
 
 import { TodoList } from './components/TodoList';
@@ -8,16 +8,6 @@ import { NewTodo } from './components/NewTodo';
 function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [allToggled, setAllToggled] = useState(false);
-
-  const todosLeft = useMemo(() => (
-    todos.reduce((total, current) => {
-      if (current.completed) {
-        return total;
-      }
-
-      return total + 1;
-    }, 0)
-  ), [todos]);
 
   useEffect(() => {
     setAllToggled(todos.every(({ completed }) => completed));
@@ -63,6 +53,10 @@ function TodoApp() {
     ]);
   };
 
+  const handleClearCompleted = () => {
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -79,7 +73,10 @@ function TodoApp() {
       />
 
       {todos.length > 0 && (
-        <TodoFooter todosLeft={todosLeft} />
+        <TodoFooter
+          todos={todos}
+          handleClearCompleted={handleClearCompleted}
+        />
       )}
     </section>
   );
