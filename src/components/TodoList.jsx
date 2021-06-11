@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 
+import { TodoItem } from './TodoItem';
+
 export function TodoList({
   todos, allToggled, handleToggle, handleToggleAll, handleDelete,
 }) {
-
   return (
     <section className="main">
       {todos.length > 0 && (
@@ -24,32 +25,14 @@ export function TodoList({
         </>
       )}
 
-      {/* Switch - Route - filter todos */}
       <ul className="todo-list">
         {todos.map(todo => (
-          <li
+          <TodoItem
             key={todo.id}
-            className={cn({
-              completed: todo.completed,
-              editing: false,
-            })}
-          >
-            <div className="view">
-              <input
-                type="checkbox"
-                className="toggle"
-                checked={todo.completed}
-                onChange={() => handleToggle(todo.id)}
-              />
-              <label>{todo.title}</label>
-              <button
-                type="button"
-                className="destroy"
-                onClick={() => handleDelete(todo.id)}
-              />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            {...todo}
+            handleDelete={handleDelete}
+            handleToggle={handleToggle}
+          />
         ))}
       </ul>
     </section>
@@ -60,8 +43,6 @@ TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      title: PropTypes.string,
-      completed: PropTypes.bool,
     }),
   ),
   handleToggle: PropTypes.func,

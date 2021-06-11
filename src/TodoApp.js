@@ -35,7 +35,7 @@ function TodoApp() {
         }
       })
     )
-    , [todos],
+    , [todos, pathname],
   );
 
   useEffect(() => {
