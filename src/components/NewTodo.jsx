@@ -8,8 +8,10 @@ export function NewTodo({ handleSubmit }) {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        handleSubmit(todo);
-        setTodo('');
+        if (todo.trim()) {
+          handleSubmit(todo.trim());
+          setTodo('');
+        }
       }}
     >
       <input

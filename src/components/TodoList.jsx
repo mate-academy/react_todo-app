@@ -3,15 +3,22 @@ import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 
-export function TodoList({ todos }) {
+export function TodoList({
+  todos, handleToggle, handleToggleAll, handleDelete,
+}) {
   const { pathname } = useLocation();
-
-  console.log(pathname);
 
   return (
     <section className="main">
-      <input type="checkbox" id="toggle-all" className="toggle-all" />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      <input
+        type="checkbox"
+        id="toggle-all"
+        className="toggle-all"
+        onChange={handleToggleAll}
+      />
+      <label htmlFor="toggle-all">
+        Mark all as complete
+      </label>
 
       {/* Switch - Route - filter todos */}
       <ul className="todo-list">
@@ -24,9 +31,18 @@ export function TodoList({ todos }) {
             })}
           >
             <div className="view">
-              <input type="checkbox" className="toggle" />
+              <input
+                type="checkbox"
+                className="toggle"
+                checked={todo.completed}
+                onChange={() => handleToggle(todo.id)}
+              />
               <label>{todo.title}</label>
-              <button type="button" className="destroy" />
+              <button
+                type="button"
+                className="destroy"
+                onClick={() => handleDelete(todo.id)}
+              />
             </div>
             <input type="text" className="edit" />
           </li>
@@ -44,8 +60,14 @@ TodoList.propTypes = {
       completed: PropTypes.bool,
     }),
   ),
+  handleToggle: PropTypes.func,
+  handleDelete: PropTypes.func,
+  handleToggleAll: PropTypes.func,
 };
 
 TodoList.defaultProps = {
   todos: [],
+  handleToggle: () => {},
+  handleDelete: () => {},
+  handleToggleAll: () => {},
 };

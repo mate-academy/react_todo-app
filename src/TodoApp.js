@@ -18,6 +18,30 @@ function TodoApp() {
     }, 0)
   ), [todos]);
 
+  const handleToggle = (id) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return {
+        id, title: todo.title, completed: !todo.completed,
+      };
+    }));
+  };
+
+  const handleToggleAll = () => {
+    setTodos(todos.map(({ id, title, completed }) => ({
+      id, title, completed: !completed,
+    })));
+  };
+
+  const handleDelete = (id) => {
+    setTodos(todos.filter(todo => (
+      todo.id !== id
+    )));
+  };
+
   const handleAddTodo = (title) => {
     setTodos(currentTodos => [
       ...currentTodos,
@@ -32,7 +56,12 @@ function TodoApp() {
         <NewTodo handleSubmit={handleAddTodo} />
       </header>
 
-      <TodoList todos={todos} />
+      <TodoList
+        todos={todos}
+        handleToggle={handleToggle}
+        handleToggleAll={handleToggleAll}
+        handleDelete={handleDelete}
+      />
 
       {todos.length > 0 && (
         <TodoFooter todosLeft={todosLeft} />
