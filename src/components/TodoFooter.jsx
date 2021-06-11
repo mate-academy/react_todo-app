@@ -1,7 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
+import { DispatchContext } from '../context/TodosContext';
+import { actions } from '../context/reducer';
 
-export function TodoFooter({ todos, handleClearCompleted }) {
+export function TodoFooter({ todos }) {
+  const dispatch = useContext(DispatchContext);
+
   const activeTodos = useMemo(() => (
     todos.reduce((total, current) => (
       (current.completed) ? total : total + 1
@@ -50,7 +54,7 @@ export function TodoFooter({ todos, handleClearCompleted }) {
         <button
           type="button"
           className="clear-completed"
-          onClick={handleClearCompleted}
+          onClick={() => dispatch(actions.deleteCompleted())}
         >
           Clear completed
         </button>

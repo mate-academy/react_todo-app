@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
-import cn from 'classnames';
 
+import { DispatchContext } from '../context/TodosContext';
+import { actions } from '../context/reducer';
 import { TodoItem } from './TodoItem';
 
-export function TodoList({
-  todos, allToggled, handleToggle, handleToggleAll, handleDelete,
-}) {
+export function TodoList({ todos, toggleAllChecked }) {
+  const dispatch = useContext(DispatchContext);
+
   return (
     <section className="main">
       {todos.length > 0 && (
@@ -16,8 +16,8 @@ export function TodoList({
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            checked={allToggled}
-            onChange={handleToggleAll}
+            checked={toggleAllChecked}
+            onChange={() => dispatch(actions.toggleAll())}
           />
           <label htmlFor="toggle-all">
             Mark all as complete
@@ -27,12 +27,7 @@ export function TodoList({
 
       <ul className="todo-list">
         {todos.map(todo => (
-          <TodoItem
-            key={todo.id}
-            {...todo}
-            handleDelete={handleDelete}
-            handleToggle={handleToggle}
-          />
+          <TodoItem key={todo.id} {...todo} />
         ))}
       </ul>
     </section>
@@ -45,14 +40,10 @@ TodoList.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   ),
-  handleToggle: PropTypes.func,
-  handleDelete: PropTypes.func,
-  handleToggleAll: PropTypes.func,
+  toggleAllChecked: PropTypes.bool,
 };
 
 TodoList.defaultProps = {
   todos: [],
-  handleToggle: () => {},
-  handleDelete: () => {},
-  handleToggleAll: () => {},
+  toggleAllChecked: false,
 };

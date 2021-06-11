@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useState } from 'react';
+import { DispatchContext } from '../context/TodosContext';
+import { actions } from '../context/reducer';
 
-export function NewTodo({ handleSubmit }) {
+export function NewTodo() {
   const [todo, setTodo] = useState('');
+  const dispatch = useContext(DispatchContext);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         if (todo.trim()) {
-          handleSubmit(todo.trim());
+          dispatch(actions.addTodo(todo.trim()));
           setTodo('');
         }
       }}
@@ -24,11 +26,3 @@ export function NewTodo({ handleSubmit }) {
     </form>
   );
 }
-
-NewTodo.propTypes = {
-  handleSubmit: PropTypes.func,
-};
-
-NewTodo.defaultProps = {
-  handleSubmit: () => {},
-};
