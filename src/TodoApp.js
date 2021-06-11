@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import uuid from 'react-uuid';
 
 import { TodoList } from './components/TodoList';
@@ -7,6 +7,7 @@ import { NewTodo } from './components/NewTodo';
 
 function TodoApp() {
   const [todos, setTodos] = useState([]);
+  const [allToggled, setAllToggled] = useState(false);
 
   const todosLeft = useMemo(() => (
     todos.reduce((total, current) => {
@@ -18,7 +19,13 @@ function TodoApp() {
     }, 0)
   ), [todos]);
 
+  useEffect(() => {
+    setAllToggled(todos.every(({ completed }) => completed));
+  }, [todos]);
+
   const handleToggle = (id) => {
+    setAllToggled(false);
+
     setTodos(todos.map((todo) => {
       if (todo.id !== id) {
         return todo;
@@ -31,9 +38,16 @@ function TodoApp() {
   };
 
   const handleToggleAll = () => {
-    setTodos(todos.map(({ id, title, completed }) => ({
-      id, title, completed: !completed,
-    })));
+    if (allToggled) {
+      setTodos(todos.map(({ id, title, completed }) => ({
+        id, title, completed: !completed,
+      })));
+    } else {
+      setAllToggled(true);
+      setTodos(todos.map(({ id, title }) => ({
+        id, title, completed: true,
+      })));
+    }
   };
 
   const handleDelete = (id) => {
@@ -58,6 +72,7 @@ function TodoApp() {
 
       <TodoList
         todos={todos}
+        allToggled={allToggled}
         handleToggle={handleToggle}
         handleToggleAll={handleToggleAll}
         handleDelete={handleDelete}

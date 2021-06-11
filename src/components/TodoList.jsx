@@ -4,21 +4,25 @@ import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 
 export function TodoList({
-  todos, handleToggle, handleToggleAll, handleDelete,
+  todos, allToggled, handleToggle, handleToggleAll, handleDelete,
 }) {
-  const { pathname } = useLocation();
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        onChange={handleToggleAll}
-      />
-      <label htmlFor="toggle-all">
-        Mark all as complete
-      </label>
+      {todos.length > 0 && (
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            checked={allToggled}
+            onChange={handleToggleAll}
+          />
+          <label htmlFor="toggle-all">
+            Mark all as complete
+          </label>
+        </>
+      )}
 
       {/* Switch - Route - filter todos */}
       <ul className="todo-list">
