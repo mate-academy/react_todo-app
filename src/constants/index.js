@@ -3,3 +3,5 @@ export const FILTERS = {
   active: '/active',
   completed: '/completed',
 };
+
+export const LOCAL_STORAGE_KEY = 'todos';

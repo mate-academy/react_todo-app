@@ -1,14 +1,20 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { todosReducer } from './reducer';
+import { LOCAL_STORAGE_KEY } from '../constants';
 
-const initialState = [];
-
-export const TodosContext = React.createContext(initialState);
+export const TodosContext = React.createContext([]);
 export const DispatchContext = React.createContext(() => {});
 
 export function TodosContextProvider({ children }) {
-  const [todos, dispatch] = useReducer(todosReducer, initialState);
+  const [todos, dispatch] = useReducer(
+    todosReducer,
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [],
+  );
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

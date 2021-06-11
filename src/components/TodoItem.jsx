@@ -10,8 +10,25 @@ export function TodoItem({ id, title, completed }) {
 
   const dispatch = useContext(DispatchContext);
 
-  const handleSaveNewTitle = () => {
+  const handleSave = () => {
     setEditing(false);
+    dispatch(actions.updateTodo(id, newTitle));
+  };
+
+  const handleKeyDown = (e) => {
+    switch (e.key) {
+      case 'Enter':
+        handleSave();
+        break;
+
+      case 'Escape':
+        setNewTitle(title);
+        setEditing(false);
+        break;
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -22,7 +39,6 @@ export function TodoItem({ id, title, completed }) {
     >
       <div
         className="view"
-        onDoubleClick={() => setEditing(current => !current)}
       >
         <input
           type="checkbox"
@@ -30,7 +46,11 @@ export function TodoItem({ id, title, completed }) {
           checked={completed}
           onChange={() => dispatch(actions.toggle(id))}
         />
-        <label>{title}</label>
+        <label
+          onDoubleClick={() => setEditing(true)}
+        >
+          {title}
+        </label>
         <button
           type="button"
           className="destroy"
@@ -42,7 +62,8 @@ export function TodoItem({ id, title, completed }) {
         className="edit"
         value={newTitle}
         onChange={e => setNewTitle(e.target.value)}
-        onBlur={() => setEditing(false)}
+        onBlur={handleSave}
+        onKeyDown={handleKeyDown}
       />
     </li>
   );
