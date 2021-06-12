@@ -45,13 +45,13 @@ export function TodoItem({ id, title, completed }) {
   const handleDelete = () => {
     deleteTodo(id)
       .then(() => dispatch(actions.delete(id)))
-      .catch();
+      .catch(error => alert(`Failed to delete item ${title}; ${error}`));
   };
 
   const handleToggle = () => {
     toggleTodo(id, !completed)
       .then(() => dispatch(actions.toggle(id)))
-      .catch();
+      .catch(error => alert(`Failed to toggle item ${title}; ${error}`));
   };
 
   return (

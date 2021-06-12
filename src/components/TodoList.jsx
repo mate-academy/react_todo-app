@@ -53,6 +53,8 @@ export function TodoList() {
     results.forEach((result) => {
       if (result.status === 'fulfilled') {
         dispatch(actions.toggle(result.value.id));
+      } else {
+        alert(`Failed to toggle item`);
       }
     });
   };

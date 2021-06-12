@@ -16,11 +16,12 @@ function TodoApp() {
 
   useEffect(() => {
     getUser(USER_ID)
-      .then(setUser);
+      .then(setUser)
+      .catch(error => alert(`Failed to fetch user data; ${error}`));
 
     getUserTodos(USER_ID)
       .then(userTodos => dispatch(actions.reset(userTodos)))
-      .catch(error => alert(error));
+      .catch(error => alert(`Failed to fetch todo list; ${error}`));
   }, []);
 
   const [activeCount, completedCount] = useMemo(() => {
@@ -38,7 +39,9 @@ function TodoApp() {
 
     results.forEach((result) => {
       if (result.status === 'fulfilled') {
-        dispatch(actions.deleteCompleted());
+        dispatch(actions.delete(result.value.id));
+      } else {
+        alert(`Failed to delete item`);
       }
     });
   };
