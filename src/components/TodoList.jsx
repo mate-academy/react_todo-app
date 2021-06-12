@@ -37,7 +37,7 @@ export function TodoList({ todos, toggleAllChecked }) {
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
     }),
   ),
   toggleAllChecked: PropTypes.bool,

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { DispatchContext } from '../context/TodosContext';
 import { actions } from '../context/reducer';
+import { deleteTodo, toggleTodo, renameTodo } from '../api';
 
 export function TodoItem({ id, title, completed }) {
   const [newTitle, setNewTitle] = useState(title);
@@ -12,13 +13,17 @@ export function TodoItem({ id, title, completed }) {
 
   const handleSave = () => {
     setEditing(false);
-    dispatch(actions.updateTodo(id, newTitle));
+
+    if (newTitle !== title) {
+      renameTodo(id, newTitle)
+        .then(() => dispatch(actions.updateTodo(id, newTitle)));
+    }
   };
 
   const handleKeyDown = (e) => {
     switch (e.key) {
       case 'Enter':
-        handleSave();
+        setEditing(false);
         break;
 
       case 'Escape':
@@ -29,6 +34,18 @@ export function TodoItem({ id, title, completed }) {
       default:
         break;
     }
+  };
+
+  const handleDelete = () => {
+    deleteTodo(id)
+      .then(() => dispatch(actions.delete(id)))
+      .catch();
+  };
+
+  const handleToggle = () => {
+    toggleTodo(id, !completed)
+      .then(() => dispatch(actions.toggle(id)))
+      .catch();
   };
 
   return (
@@ -44,7 +61,7 @@ export function TodoItem({ id, title, completed }) {
           type="checkbox"
           className="toggle"
           checked={completed}
-          onChange={() => dispatch(actions.toggle(id))}
+          onChange={handleToggle}
         />
         <label
           onDoubleClick={() => setEditing(true)}
@@ -54,7 +71,7 @@ export function TodoItem({ id, title, completed }) {
         <button
           type="button"
           className="destroy"
-          onClick={() => dispatch(actions.delete(id))}
+          onClick={handleDelete}
         />
       </div>
       <input
@@ -70,7 +87,7 @@ export function TodoItem({ id, title, completed }) {
 }
 
 TodoItem.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   title: PropTypes.string,
   completed: PropTypes.bool,
 };

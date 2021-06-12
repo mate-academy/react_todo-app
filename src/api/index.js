@@ -26,4 +26,22 @@ export const addTodo = (userId, title) => (
   })
 );
 
-export const deleteTodo = () => {};
+export const deleteTodo = id => (
+  request(`/todos/${id}`, {
+    method: 'DELETE',
+  })
+);
+
+export const toggleTodo = (id, completed) => (
+  request(`/todos/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ completed }),
+  })
+);
+
+export const renameTodo = (id, title) => (
+  request(`/todos/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ title }),
+  })
+);

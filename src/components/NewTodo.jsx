@@ -14,7 +14,9 @@ export function NewTodo() {
         e.preventDefault();
         if (todo.trim()) {
           addTodo(USER_ID, todo.trim())
-            .then(newTodo => dispatch(actions.addTodo(newTodo.id, newTodo.title)))
+            .then((newTodo) => {
+              dispatch(actions.addTodo(newTodo.id, newTodo.title));
+            })
             .catch(error => alert(error));
 
           setTodo('');
