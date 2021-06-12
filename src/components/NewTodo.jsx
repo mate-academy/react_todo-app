@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { DispatchContext } from '../context/TodosContext';
 import { actions } from '../context/reducer';
+import { USER_ID } from '../constants';
+import { addTodo } from '../api';
 
 export function NewTodo() {
   const [todo, setTodo] = useState('');
@@ -11,7 +13,10 @@ export function NewTodo() {
       onSubmit={(e) => {
         e.preventDefault();
         if (todo.trim()) {
-          dispatch(actions.addTodo(todo.trim()));
+          addTodo(USER_ID, todo.trim())
+            .then(newTodo => dispatch(actions.addTodo(newTodo.id, newTodo.title)))
+            .catch(error => alert(error));
+
           setTodo('');
         }
       }}

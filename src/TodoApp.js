@@ -1,14 +1,20 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { TodosContext } from './context/TodosContext';
+import { DispatchContext, TodosContext } from './context/TodosContext';
+import { actions } from './context/reducer';
 import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
-import { FILTERS } from './constants';
+import { UserInfo } from './components/UserInfo';
+import { FILTERS, USER_ID } from './constants';
+import { getUser, getUserTodos } from './api';
 
 function TodoApp() {
   const todos = useContext(TodosContext);
+  const dispatch = useContext(DispatchContext);
+  const [user, setUser] = useState({});
+
   const { pathname } = useLocation();
 
   const filteredTodos = useMemo(
@@ -34,22 +40,35 @@ function TodoApp() {
     todos.every(({ completed }) => completed)
   ), [todos]);
 
+  useEffect(() => {
+    getUser(USER_ID)
+      .then(setUser);
+
+    getUserTodos(USER_ID)
+      .then(userTodos => dispatch(actions.reset(userTodos)))
+      .catch(error => alert(error));
+  }, []);
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-        <NewTodo />
-      </header>
+    <>
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <NewTodo />
+        </header>
 
-      <TodoList
-        todos={filteredTodos}
-        toggleAllChecked={toggleAllChecked}
-      />
+        <TodoList
+          todos={filteredTodos}
+          toggleAllChecked={toggleAllChecked}
+        />
 
-      {todos.length > 0 && (
-        <TodoFooter todos={filteredTodos} />
-      )}
-    </section>
+        {todos.length > 0 && (
+          <TodoFooter todos={filteredTodos} />
+        )}
+      </section>
+
+      <UserInfo name={user.name} />
+    </>
   );
 }
 

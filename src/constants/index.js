@@ -5,3 +5,4 @@ export const FILTERS = {
 };
 
 export const LOCAL_STORAGE_KEY = 'todos';
+export const USER_ID = 1189;
