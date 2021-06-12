@@ -1,13 +1,40 @@
-import React, { useContext } from 'react';
+import React, { useMemo, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
-import { DispatchContext } from '../context/TodosContext';
+import { DispatchContext, TodosContext } from '../context/TodosContext';
 import { actions } from '../context/reducer';
 import { toggleTodo } from '../api';
 import { TodoItem } from './TodoItem';
+import { FILTERS } from '../constants';
 
-export function TodoList({ todos, toggleAllChecked }) {
+export function TodoList() {
+  const todos = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
+  const { pathname } = useLocation();
+
+  const filteredTodos = useMemo(
+    () => (
+      todos.filter(({ completed }) => {
+        switch (pathname) {
+          case FILTERS.active:
+            return !completed;
+
+          case FILTERS.completed:
+            return completed;
+
+          case FILTERS.all:
+          default:
+            return true;
+        }
+      })
+    )
+    , [todos, pathname],
+  );
+
+  const toggleAllChecked = useMemo(() => (
+    todos.every(({ completed }) => completed)
+  ), [todos]);
 
   const handleToggleAll = async() => {
     let results;
@@ -48,7 +75,7 @@ export function TodoList({ todos, toggleAllChecked }) {
       )}
 
       <ul className="todo-list">
-        {todos.map(todo => (
+        {filteredTodos.map(todo => (
           <TodoItem key={todo.id} {...todo} />
         ))}
       </ul>

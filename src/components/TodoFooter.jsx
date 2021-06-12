@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 export function TodoFooter({
@@ -52,3 +53,14 @@ export function TodoFooter({
     </footer>
   );
 }
+
+TodoFooter.propTypes = {
+  handleDeleteCompleted: PropTypes.func.isRequired,
+  activeCount: PropTypes.number,
+  completedCount: PropTypes.number,
+};
+
+TodoFooter.defaultProps = {
+  activeCount: 0,
+  completedCount: 0,
+};
