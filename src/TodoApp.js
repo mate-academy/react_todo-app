@@ -8,7 +8,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { UserInfo } from './components/UserInfo';
 import { FILTERS, USER_ID } from './constants';
-import { getUser, getUserTodos } from './api';
+import { getUser, getUserTodos, deleteTodo } from './api';
 
 function TodoApp() {
   const todos = useContext(TodosContext);
@@ -49,6 +49,26 @@ function TodoApp() {
       .catch(error => alert(error));
   }, []);
 
+  const [activeCount, completedCount] = useMemo(() => {
+    const completed = todos.filter(todo => todo.completed).length;
+    const active = todos.length - completed;
+
+    return [active, completed];
+  }, [todos]);
+
+  const handleDeleteCompleted = async() => {
+    const results = await Promise.allSettled(
+      todos.filter(todo => todo.completed)
+        .map(todo => deleteTodo(todo.id)),
+    );
+
+    results.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        dispatch(actions.deleteCompleted());
+      }
+    });
+  };
+
   return (
     <>
       <section className="todoapp">
@@ -63,7 +83,11 @@ function TodoApp() {
         />
 
         {todos.length > 0 && (
-          <TodoFooter todos={filteredTodos} />
+          <TodoFooter
+            activeCount={activeCount}
+            completedCount={completedCount}
+            handleDeleteCompleted={handleDeleteCompleted}
+          />
         )}
       </section>
 

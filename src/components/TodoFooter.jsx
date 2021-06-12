@@ -1,23 +1,13 @@
-import React, { useContext, useMemo } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { DispatchContext } from '../context/TodosContext';
-import { actions } from '../context/reducer';
 
-export function TodoFooter({ todos }) {
-  const dispatch = useContext(DispatchContext);
-
-  const activeTodos = useMemo(() => (
-    todos.reduce((total, current) => (
-      (current.completed) ? total : total + 1
-    ), 0)
-  ), [todos]);
-
-  const completedTodos = todos.length - activeTodos;
-
+export function TodoFooter({
+  handleDeleteCompleted, activeCount, completedCount,
+}) {
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${activeTodos} items left`}
+        {`${activeCount} items left`}
       </span>
 
       <ul className="filters">
@@ -50,11 +40,11 @@ export function TodoFooter({ todos }) {
         </li>
       </ul>
 
-      {completedTodos > 0 && (
+      {completedCount > 0 && (
         <button
           type="button"
           className="clear-completed"
-          onClick={() => dispatch(actions.deleteCompleted())}
+          onClick={handleDeleteCompleted}
         >
           Clear completed
         </button>

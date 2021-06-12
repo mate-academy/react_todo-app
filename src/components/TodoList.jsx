@@ -3,10 +3,32 @@ import PropTypes from 'prop-types';
 
 import { DispatchContext } from '../context/TodosContext';
 import { actions } from '../context/reducer';
+import { toggleTodo } from '../api';
 import { TodoItem } from './TodoItem';
 
 export function TodoList({ todos, toggleAllChecked }) {
   const dispatch = useContext(DispatchContext);
+
+  const handleToggleAll = async() => {
+    let results;
+
+    if (toggleAllChecked || todos.every(todo => !todo.completed)) {
+      results = await Promise.allSettled(
+        todos.map(todo => toggleTodo(todo.id, !todo.completed)),
+      );
+    } else {
+      results = await Promise.allSettled(
+        todos.filter(todo => !todo.completed)
+          .map(todo => toggleTodo(todo.id, true)),
+      );
+    }
+
+    results.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        dispatch(actions.toggle(result.value.id));
+      }
+    });
+  };
 
   return (
     <section className="main">
@@ -17,7 +39,7 @@ export function TodoList({ todos, toggleAllChecked }) {
             id="toggle-all"
             className="toggle-all"
             checked={toggleAllChecked}
-            onChange={() => dispatch(actions.toggleAll())}
+            onChange={handleToggleAll}
           />
           <label htmlFor="toggle-all">
             Mark all as complete
