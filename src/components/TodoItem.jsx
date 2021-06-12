@@ -12,18 +12,24 @@ export function TodoItem({ id, title, completed }) {
   const dispatch = useContext(DispatchContext);
 
   const handleSave = () => {
-    setEditing(false);
-
     if (newTitle !== title) {
+      const oldTitle = title;
+
+      dispatch(actions.updateTodo(id, newTitle));
+      setEditing(false);
+
       renameTodo(id, newTitle)
-        .then(() => dispatch(actions.updateTodo(id, newTitle)));
+        .catch(() => {
+          dispatch(actions.updateTodo(id, oldTitle));
+          setNewTitle(oldTitle);
+        });
     }
   };
 
   const handleKeyDown = (e) => {
     switch (e.key) {
       case 'Enter':
-        setEditing(false);
+        handleSave();
         break;
 
       case 'Escape':
