@@ -1,0 +1,9 @@
+POST https://mate-api.herokuapp.com/users HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Mariia Kornieva",
+    "username": "mariiakornieva",
+    "email": "mate@example.com",
+    "phone": "1234567890"
+}
