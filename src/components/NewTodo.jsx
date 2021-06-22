@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { DispatchContext } from '../context/TodosContext';
-import { actions } from '../context/reducer';
+import { TodosContext } from '../context/TodosContext';
+import { actions } from '../reducers/todosReducer';
 import { USER_ID } from '../constants';
 import { addTodo } from '../api';
 
 export function NewTodo() {
   const [todo, setTodo] = useState('');
-  const dispatch = useContext(DispatchContext);
+  const { dispatch } = useContext(TodosContext);
 
   return (
     <form

@@ -1,29 +1,40 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
-import { DispatchContext } from '../context/TodosContext';
-import { actions } from '../context/reducer';
+import { TodosContext } from '../context/TodosContext';
+import { actions } from '../reducers/todosReducer';
 import { deleteTodo, toggleTodo, renameTodo } from '../api';
+import { INVALID_TODO_ID } from '../constants';
 
-export function TodoItem({ id, title, completed }) {
+export function TodoItem({ id, title, completed, editing, onEdit }) {
   const [newTitle, setNewTitle] = useState(title);
-  const [editing, setEditing] = useState(false);
+  const { dispatch } = useContext(TodosContext);
+  const textInput = useRef(null);
 
-  const dispatch = useContext(DispatchContext);
+  useEffect(() => {
+    if (editing) {
+      textInput.current.focus();
+    }
+  }, [editing]);
 
   const handleSave = () => {
-    if (newTitle !== title) {
+    const newTitleTrimmed = newTitle.trim();
+
+    if (newTitleTrimmed && newTitleTrimmed !== title) {
       const oldTitle = title;
 
-      dispatch(actions.updateTodo(id, newTitle));
-      setEditing(false);
+      dispatch(actions.updateTodo(id, newTitleTrimmed));
+      setNewTitle(newTitleTrimmed);
 
-      renameTodo(id, newTitle)
+      renameTodo(id, newTitleTrimmed)
         .catch(() => {
           dispatch(actions.updateTodo(id, oldTitle));
           setNewTitle(oldTitle);
         });
+    } else if (!newTitleTrimmed) {
+      handleDelete();
     }
+
+    onEdit(INVALID_TODO_ID);
   };
 
   const handleKeyDown = (e) => {
@@ -34,7 +45,7 @@ export function TodoItem({ id, title, completed }) {
 
       case 'Escape':
         setNewTitle(title);
-        setEditing(false);
+        onEdit(INVALID_TODO_ID);
         break;
 
       default:
@@ -43,23 +54,19 @@ export function TodoItem({ id, title, completed }) {
   };
 
   const handleDelete = () => {
+    dispatch(actions.delete(id));
     deleteTodo(id)
-      .then(() => dispatch(actions.delete(id)))
       .catch(error => alert(`Failed to delete item ${title}; ${error}`));
   };
 
   const handleToggle = () => {
+    dispatch(actions.toggle(id));
     toggleTodo(id, !completed)
-      .then(() => dispatch(actions.toggle(id)))
       .catch(error => alert(`Failed to toggle item ${title}; ${error}`));
   };
 
   return (
-    <li
-      className={cn({
-        completed, editing,
-      })}
-    >
+    <>
       <div
         className="view"
       >
@@ -69,9 +76,7 @@ export function TodoItem({ id, title, completed }) {
           checked={completed}
           onChange={handleToggle}
         />
-        <label
-          onDoubleClick={() => setEditing(true)}
-        >
+        <label onDoubleClick={() => onEdit(id)}>
           {title}
         </label>
         <button
@@ -80,15 +85,17 @@ export function TodoItem({ id, title, completed }) {
           onClick={handleDelete}
         />
       </div>
+
       <input
         type="text"
         className="edit"
         value={newTitle}
+        ref={textInput}
         onChange={e => setNewTitle(e.target.value)}
         onBlur={handleSave}
         onKeyDown={handleKeyDown}
       />
-    </li>
+    </>
   );
 }
 
@@ -96,9 +103,12 @@ TodoItem.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string,
   completed: PropTypes.bool,
+  editing: PropTypes.bool,
+  onEdit: PropTypes.func.isRequired,
 };
 
 TodoItem.defaultProps = {
   title: '',
   completed: false,
+  editing: false,
 };

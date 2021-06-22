@@ -1,28 +1,13 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-
-import { DispatchContext, TodosContext } from './context/TodosContext';
-import { actions } from './context/reducer';
-import { NewTodo } from './components/NewTodo';
-import { TodoList } from './components/TodoList';
-import { TodoFooter } from './components/TodoFooter';
-import { UserInfo } from './components/UserInfo';
-import { USER_ID } from './constants';
-import { getUser, getUserTodos, deleteTodo } from './api';
+import React, { useMemo, useContext } from 'react';
+import { TodosContext } from './context/TodosContext';
+import { actions } from './reducers/todosReducer';
+import { NewTodo, TodoList, TodoFooter, UserInfo } from './components';
+import { deleteTodo, toggleTodo } from './api';
+import { useUser } from './hooks/useUser';
 
 function TodoApp() {
-  const todos = useContext(TodosContext);
-  const dispatch = useContext(DispatchContext);
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    getUser(USER_ID)
-      .then(setUser)
-      .catch(error => alert(`Failed to fetch user data; ${error}`));
-
-    getUserTodos(USER_ID)
-      .then(userTodos => dispatch(actions.reset(userTodos)))
-      .catch(error => alert(`Failed to fetch todo list; ${error}`));
-  }, []);
+  const { todos, dispatch } = useContext(TodosContext);
+  const user = useUser();
 
   const [activeCount, completedCount] = useMemo(() => {
     const completed = todos.filter(todo => todo.completed).length;
@@ -31,19 +16,32 @@ function TodoApp() {
     return [active, completed];
   }, [todos]);
 
+  const isToggleAllChecked = useMemo(() => (
+    todos.every(({ completed }) => completed)
+  ), [todos]);
+
+  const handleToggleAll = async() => {
+    dispatch(actions.toggleAll());
+
+    if (isToggleAllChecked || todos.every(todo => !todo.completed)) {
+      await Promise.allSettled(
+        todos.map(todo => toggleTodo(todo.id, !todo.completed)),
+      );
+    } else {
+      await Promise.allSettled(
+        todos.filter(todo => !todo.completed)
+          .map(todo => toggleTodo(todo.id, true)),
+      );
+    }
+  };
+
   const handleDeleteCompleted = async() => {
-    const results = await Promise.allSettled(
+    dispatch(actions.deleteCompleted());
+
+    await Promise.allSettled(
       todos.filter(todo => todo.completed)
         .map(todo => deleteTodo(todo.id)),
     );
-
-    results.forEach((result) => {
-      if (result.status === 'fulfilled') {
-        dispatch(actions.delete(result.value.id));
-      } else {
-        alert(`Failed to delete item`);
-      }
-    });
   };
 
   return (
@@ -54,7 +52,11 @@ function TodoApp() {
           <NewTodo />
         </header>
 
-        <TodoList />
+        <TodoList
+          todos={todos}
+          handleToggleAll={handleToggleAll}
+          isToggleAllChecked={isToggleAllChecked}
+        />
 
         {todos.length > 0 && (
           <TodoFooter

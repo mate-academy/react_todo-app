@@ -6,7 +6,7 @@ import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
 
-import { TodosContextProvider } from './context/TodosContext';
+import { TodosContextProvider } from './components';
 import TodoApp from './TodoApp';
 
 ReactDOM.render(

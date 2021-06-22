@@ -1,17 +1,14 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+import cn from 'classnames';
 
-import { DispatchContext, TodosContext } from '../context/TodosContext';
-import { actions } from '../context/reducer';
-import { toggleTodo } from '../api';
 import { TodoItem } from './TodoItem';
-import { FILTERS } from '../constants';
+import { FILTERS, INVALID_TODO_ID } from '../constants';
 
-export function TodoList() {
-  const todos = useContext(TodosContext);
-  const dispatch = useContext(DispatchContext);
+export function TodoList({ todos, isToggleAllChecked, handleToggleAll }) {
   const { pathname } = useLocation();
+  const [currentEditedItem, setCurrentEditedItem] = useState(INVALID_TODO_ID);
 
   const filteredTodos = useMemo(
     () => (
@@ -32,33 +29,6 @@ export function TodoList() {
     , [todos, pathname],
   );
 
-  const toggleAllChecked = useMemo(() => (
-    todos.every(({ completed }) => completed)
-  ), [todos]);
-
-  const handleToggleAll = async() => {
-    let results;
-
-    if (toggleAllChecked || todos.every(todo => !todo.completed)) {
-      results = await Promise.allSettled(
-        todos.map(todo => toggleTodo(todo.id, !todo.completed)),
-      );
-    } else {
-      results = await Promise.allSettled(
-        todos.filter(todo => !todo.completed)
-          .map(todo => toggleTodo(todo.id, true)),
-      );
-    }
-
-    results.forEach((result) => {
-      if (result.status === 'fulfilled') {
-        dispatch(actions.toggle(result.value.id));
-      } else {
-        alert(`Failed to toggle item`);
-      }
-    });
-  };
-
   return (
     <section className="main">
       {todos.length > 0 && (
@@ -67,7 +37,7 @@ export function TodoList() {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            checked={toggleAllChecked}
+            checked={isToggleAllChecked}
             onChange={handleToggleAll}
           />
           <label htmlFor="toggle-all">
@@ -78,7 +48,19 @@ export function TodoList() {
 
       <ul className="todo-list">
         {filteredTodos.map(todo => (
-          <TodoItem key={todo.id} {...todo} />
+          <li
+            key={todo.id}
+            className={cn({
+              completed: todo.completed,
+              editing: currentEditedItem === todo.id,
+            })}
+          >
+            <TodoItem
+              {...todo}
+              editing={currentEditedItem === todo.id}
+              onEdit={setCurrentEditedItem}
+            />
+          </li>
         ))}
       </ul>
     </section>
@@ -91,10 +73,11 @@ TodoList.propTypes = {
       id: PropTypes.number.isRequired,
     }),
   ),
-  toggleAllChecked: PropTypes.bool,
+  isToggleAllChecked: PropTypes.bool,
+  handleToggleAll: PropTypes.func.isRequired,
 };
 
 TodoList.defaultProps = {
   todos: [],
-  toggleAllChecked: false,
+  isToggleAllChecked: false,
 };
