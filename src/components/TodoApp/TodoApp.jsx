@@ -11,16 +11,19 @@ export const TodoApp = () => {
 
   const onAddTodo = useCallback((e) => {
     e.preventDefault();
-    setTodos(prev => ([
-      ...prev,
-      { ...todo },
-    ]));
-    setTodo({
-      title: '',
-      completed: false,
-      id: +new Date(),
-    });
-    localStorage.setItem('todos', JSON.stringify(todos));
+    if (todo.title.trim()) {
+      setTodos(prev => ([
+        ...prev,
+        { ...todo,
+          title: todo.title.trim() },
+      ]));
+      setTodo({
+        title: '',
+        completed: false,
+        id: +new Date(),
+      });
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
   }, [todo]);
 
   const handleChange = useCallback(({ target }) => setTodo(prev => ({
