@@ -7,25 +7,57 @@ import { TodosContext } from '../TodosContext';
 export const TodoItem = ({ id }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const [onEdit, setOnEdit] = useState(false);
-  const [editedTodo, setEditedTodo] = useState('');
   const todo = todos.find(searchTodo => searchTodo.id === id);
+  const [editedTodo, setEditedTodo] = useState(todo.title);
   const textInput = useRef(null);
+
+  const resetEditInput = useCallback(() => {
+    setEditedTodo(todo.title);
+    setOnEdit(false);
+  }, [todo]);
 
   const editTodo = useCallback(() => {
     setTodos((prev) => {
       const newTodoList = prev;
       const index = newTodoList.findIndex(item => item.id === todo.id);
 
-      newTodoList[index].title = (editedTodo !== '')
-        ? editedTodo
+      newTodoList[index].title = (editedTodo.trim())
+        ? editedTodo.trim()
         : newTodoList[index].title;
-      setEditedTodo('');
-      setOnEdit(false);
+      resetEditInput();
 
       return ([...newTodoList]);
     });
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [editedTodo]);
+
+  const onKeyDownHandle = useCallback((e) => {
+    if (e.key === 'Enter') {
+      editTodo();
+    } else if (e.key === 'Escape') {
+      resetEditInput();
+    }
+  }, [todo, editTodo]);
+
+  const onCheckTodo = useCallback(({ target }) => setTodos((prev) => {
+    const newTodoList = prev;
+    const index = newTodoList.findIndex(item => item.id === todo.id);
+
+    newTodoList[index].completed = target.checked;
+    localStorage.setItem('todos', JSON.stringify(todos));
+
+    return ([...newTodoList]);
+  }), []);
+
+  const onDeleteTodo = useCallback(() => setTodos((prev) => {
+    const newTodoList = prev;
+    const index = newTodoList.findIndex(item => item.id === todo.id);
+
+    newTodoList.splice(index, 1);
+    localStorage.setItem('todos', JSON.stringify(todos));
+
+    return ([...newTodoList]);
+  }), []);
 
   useEffect(() => {
     textInput.current.focus();
@@ -44,27 +76,11 @@ export const TodoItem = ({ id }) => {
           type="checkbox"
           className="toggle"
           checked={todo.completed}
-          onChange={({ target }) => setTodos((prev) => {
-            const newTodoList = prev;
-            const index = newTodoList.findIndex(item => item.id === todo.id);
-
-            newTodoList[index].completed = target.checked;
-            localStorage.setItem('todos', JSON.stringify(todos));
-
-            return ([...newTodoList]);
-          })}
+          onChange={onCheckTodo}
         />
         <label>{todo.title}</label>
         <button
-          onClick={() => setTodos((prev) => {
-            const newTodoList = prev;
-            const index = newTodoList.findIndex(item => item.id === todo.id);
-
-            newTodoList.splice(index, 1);
-            localStorage.setItem('todos', JSON.stringify(todos));
-
-            return ([...newTodoList]);
-          })}
+          onClick={onDeleteTodo}
           type="button"
           className="destroy"
         />
@@ -75,14 +91,7 @@ export const TodoItem = ({ id }) => {
         className="edit"
         value={editedTodo}
         onChange={({ target }) => setEditedTodo(target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            editTodo();
-          } else if (e.key === 'Escape') {
-            setEditedTodo(todo.title);
-            setOnEdit(false);
-          }
-        }}
+        onKeyDown={onKeyDownHandle}
         onBlur={() => editTodo()}
       />
     </li>

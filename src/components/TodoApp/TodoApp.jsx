@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { TodosContext } from '../TodosContext';
 
 export const TodoApp = () => {
@@ -9,28 +9,32 @@ export const TodoApp = () => {
     id: +new Date(),
   });
 
+  const onAddTodo = useCallback((e) => {
+    e.preventDefault();
+    setTodos(prev => ([
+      ...prev,
+      { ...todo },
+    ]));
+    setTodo({
+      title: '',
+      completed: false,
+      id: +new Date(),
+    });
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todo]);
+
+  const handleChange = useCallback(({ target }) => setTodo(prev => ({
+    ...prev,
+    title: target.value,
+  })), []);
+
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        setTodos(prev => ([
-          ...prev,
-          { ...todo },
-        ]));
-        setTodo({
-          title: '',
-          completed: false,
-          id: +new Date(),
-        });
-        localStorage.setItem('todos', JSON.stringify(todos));
-      }}
+      onSubmit={onAddTodo}
     >
       <input
         value={todo.title}
-        onChange={({ target }) => setTodo(prev => ({
-          ...prev,
-          title: target.value,
-        }))}
+        onChange={handleChange}
         type="text"
         className="new-todo"
         placeholder="What needs to be done?"

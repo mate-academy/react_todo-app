@@ -9,8 +9,9 @@ export const TodoList = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const filter = useLocation().pathname;
 
-  const allCompleted = useMemo(() => (todos.length
-    === filterTodos(todos, '/completed').length), [todos]);
+  const allCompleted = useMemo(() => (
+    todos.length === filterTodos(todos, '/completed').length
+  ), [todos]);
   const toggleAll = useCallback(() => {
     setTodos((prev) => {
       let newTodos = [...prev];
