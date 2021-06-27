@@ -17,13 +17,16 @@ function App({ todos }) {
       className="todoapp"
     >
       <header className="header">
-        <h1>todos App</h1>
+        <h1>todos</h1>
 
         <NewTodo />
       </header>
 
       <section className="main">
-        <ToggleAllButton />
+        {todos.length > 0
+          ? <ToggleAllButton />
+          : ''
+        }
 
         <TodoList />
       </section>
