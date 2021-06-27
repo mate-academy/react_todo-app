@@ -10,7 +10,11 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "redux": "^4.1.0",
+    "redux-devtools-extension": "^2.13.9"
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react": "*",
@@ -19,6 +23,7 @@
     "gh-pages": "^2.2.0",
     "husky": "^4.0.10",
     "lint-staged": "^9.5.0",
+    "remote-redux-devtools": "^0.5.16",
     "stylelint": "^13.0.0"
   },
   "scripts": {
