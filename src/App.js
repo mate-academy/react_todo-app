@@ -1,86 +1,62 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { NewTodo } from './components/NewTodo';
+import { TodoFilter } from './components/TodoFilter';
+import { TodoList } from './components/TodoList';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+
+  const todoInProgres = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
+
+  const addTodo = (title) => {
+    setTodos([
+      ...todos,
+      { id: uuidv4(), title, completed: false },
+    ]);
+  };
+
+  const clearAllCompleted = () => {
+    const filteredTodos = todos.filter(todo => !todo.completed);
+
+    setTodos(filteredTodos);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <NewTodo addTodo={addTodo} />
       </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      <TodoList
+        todos={todos}
+        setTodos={setTodos}
+      />
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
+      {todos.length > 0 && (
       <footer className="footer">
         <span className="todo-count">
-          3 items left
+          {todoInProgres}
+          {' '}
+          items left
         </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+        <TodoFilter />
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
+        {todos.length !== todoInProgres && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => clearAllCompleted()}
+        >
           Clear completed
         </button>
+        )}
       </footer>
+      )}
     </section>
   );
 }
