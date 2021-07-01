@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { NewTodo } from './components/NewTodo';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
@@ -13,7 +14,7 @@ function App() {
   const addTodo = (title) => {
     setTodos([
       ...todos,
-      { id: +new Date(), title, completed: false },
+      { id: uuidv4(), title, completed: false },
     ]);
   };
 

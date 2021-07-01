@@ -20,7 +20,7 @@ export const TodoList = ({ todos, setTodos }) => {
     if (inputElement.current) {
       inputElement.current.focus();
     }
-  });
+  }, [selectedId]);
 
   const toggleStatusAll = () => {
     const areCompleted = todos.every(todo => todo.completed);
@@ -33,7 +33,6 @@ export const TodoList = ({ todos, setTodos }) => {
 
   const toggleStatus = (todoId) => {
     const findetTodo = todos.find(todo => todo.id === todoId);
-
     findetTodo.completed = !findetTodo.completed;
 
     setTodos(prev => [...prev]);
@@ -47,22 +46,28 @@ export const TodoList = ({ todos, setTodos }) => {
 
   const handleBlur = (id) => {
     const todochangeTitle = todos.find(todo => todo.id === id);
+    const todosWithTitle = todos.filter(todo => todo.id !== id);
 
     todochangeTitle.title = newTitle.trim();
 
-    setTodos(prev => [...prev]);
+    const updateList = newTitle.length ? [...todos] : todosWithTitle
+
+    setTodos(updateList);
     setNewTitle('');
     setSelectedId(0);
   };
 
   const handleKeyDown = (e, title, todoId) => {
     const changeTitle = todos.find(todo => todo.id === todoId);
+    const todosWithTitle = todos.filter(todo => todo.id !== todoId);
+
+    const newList = newTitle.length ? [...todos] : todosWithTitle
 
     switch (e.key) {
       case 'Enter':
         changeTitle.title = newTitle.trim();
 
-        setTodos(prev => [...prev]);
+        setTodos(newList);
         setNewTitle(newTitle);
         setSelectedId(0);
 
