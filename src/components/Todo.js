@@ -1,38 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as actions from '../redux/actions';
+
+const classNames = require('classnames');
 
 const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
   const [newTitle, setNewTitle] = useState(todo.title);
   const [editing, setEditing] = useState(false);
 
+  const todoObject = useRef(null);
+
   useEffect(() => {
-    document.getElementById(`${todo.id}-edit`).focus();
+    todoObject.current.focus();
   }, [editing, todo]);
 
   return (
     <li
       key={`${todo.id}-key`}
-      className={
-        `${todo.completed
-          ? 'completed'
-          : ''
-        } ${editing
-          ? 'editing'
-          : ''
-        }`
-      }
+      className={classNames([
+        { completed: todo.completed },
+        { editing },
+      ])}
     >
       <div className="view">
         <input
           checked={todo.completed}
           type="checkbox"
-          className={`toggle ${todo.completed ? 'completed' : ''}`}
+          className={classNames([
+            'toggle',
+            { completed: todo.completed },
+          ])}
           value={todo.completed}
           onChange={
-            (event) => {
-              completeTodo(todo.id, !todo.completed);
+            () => {
+              completeTodo(todo.id);
             }
           }
         />
@@ -50,7 +52,7 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
         />
       </div>
       <input
-        id={`${todo.id}-edit`}
+        ref={todoObject}
         type="text"
         className="edit"
         value={newTitle}
@@ -59,7 +61,6 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
         }
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
-            changeTitle(changeTitle(todo.id, newTitle));
             setEditing(false);
           }
 
@@ -69,8 +70,13 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
           }
         }
         }
-        onBlur={(event) => {
-          changeTitle(todo.id, newTitle);
+        onBlur={() => {
+          if (newTitle.trim() !== '') {
+            changeTitle(todo.id, newTitle);
+          } else {
+            setNewTitle(todo.title);
+          }
+
           setEditing(false);
         }}
       />

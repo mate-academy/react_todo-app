@@ -21,10 +21,10 @@ export function deleteTodo(id) {
   });
 }
 
-export function completeTodo(id, value) {
+export function completeTodo(id) {
   return ({
     type: COMPLETE_TODO,
-    payload: { id, value },
+    payload: id,
   });
 }
 

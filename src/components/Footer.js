@@ -14,18 +14,15 @@ const Footer = ({ gotCompleted, todos, clearCompleted: claear }) => (
 
     <TodosFilter />
 
-    {gotCompleted
-      ? (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={claear}
-        >
-          Clear completed
-        </button>
-      )
-      : ''
-      }
+    {gotCompleted && (
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={claear}
+      >
+        Clear completed
+      </button>
+    )}
   </footer>
 );
 

@@ -27,10 +27,10 @@ export const todoReducer = (state = initialState, action) => {
     case COMPLETE_TODO:
       return { ...state,
         todos: state.todos.map((todo) => {
-          if (todo.id === action.payload.id) {
+          if (todo.id === action.payload) {
             return {
               ...todo,
-              completed: action.payload.value,
+              completed: !todo.completed,
             };
           }
 
