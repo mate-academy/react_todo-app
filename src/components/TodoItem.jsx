@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import classNames from 'classnames';
 import { removeTodo } from '../api/api';
 import { changeTodo } from '../api/api';
 
-export const TodoItem = ({ todo, updateTodos }) => {
+export const TodoItem = ({ todo, setTodos }) => {
   const [checkedTodo, setCheckedTodo] = useState(todo.completed);
   const [isEdit, setEdit] = useState('');
   const [newTitle, setNewTitle] = useState(todo.title);
@@ -14,16 +15,33 @@ export const TodoItem = ({ todo, updateTodos }) => {
   }, [todo]);
 
   const toggleCheck = async() => {
-    await changeTodo(todo.id, {completed: !todo.completed,});
-    updateTodos();
+    await changeTodo(todo.id, {completed: !todo.completed,})
+      .then((response) => {
+        if (response.data) {
+          setTodos(list => [...list].map((item) => {
+            if (item.id === todo.id) {
+              return {
+                ...item,
+                completed: !todo.completed,
+              };
+            }
+
+            return item;
+          }));
+        }
+      });
   };
 
   const funcRemoveTodo = async() => {
-    await removeTodo(todo.id);
-    updateTodos();
+    await removeTodo(todo.id)
+      .then((response) => {
+        if (response.data) {
+          setTodos(list => [...list.filter(item => item.id !== todo.id)]);
+        }
+      });
   };
 
-  let nameInput = useRef(null);
+  const nameInput = useRef(null);
 
   const editTodo = () => {
     setEdit('editing');
@@ -40,28 +58,50 @@ export const TodoItem = ({ todo, updateTodos }) => {
     }
 
     if (!target.value.trim()) {
-      await removeTodo(todo.id);
-      updateTodos();
+      await removeTodo(todo.id)
+        .then((response) => {
+          if (response.data) {
+            setTodos(list => list.filter(item => item.id !== todo.id));
+          }
+        });
 
       return;
     }
 
-    await changeTodo(todo.id, { title: target.value });
+    await changeTodo(todo.id, { title: target.value })
+      .then((response) => {
+        if (response.data) {
+          setTodos(list => list.map((item) => {
+            if (item.id === todo.id) {
+              return {...item, title: target.value,};
+            }
+
+            return item;
+          })
+          )
+        }
+      });
     setEdit('');
-    updateTodos();
   };
 
   const checkKey = (e) => {
-    if (e.keyCode === 13) {
+    const [enterKey, escKey] = [13, 27];
+
+    if (e.keyCode === enterKey) {
       saveTitle(e);
-    } else if (e.keyCode === 27) {
+    } else if (e.keyCode === escKey) {
       setEdit('');
     }
   };
 
+  const liClass = classNames({
+    completed: checkedTodo,
+    [isEdit]: isEdit,
+  });
+
   return (
     <li
-      className={`${checkedTodo ? 'completed' : ''} ${isEdit}`}
+      className={liClass}
     >
       <div className="view">
         <input
@@ -71,7 +111,11 @@ export const TodoItem = ({ todo, updateTodos }) => {
           onChange={toggleCheck}
         />
         <label onDoubleClick={editTodo}>{todo.title}</label>
-        <button type="button" className="destroy" onClick={funcRemoveTodo} />
+        <button
+          type="button"
+          className="destroy-btn"
+          onClick={funcRemoveTodo}
+        />
       </div>
       <input
         type="text"

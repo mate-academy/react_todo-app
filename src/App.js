@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <section className="todoapp">
-        <TodoApp todos={todos} updateTodos={updateTodos} />
+        <TodoApp todos={todos} setTodos={setTodos} />
         {!!todos.length
         && <TodosFilter todos={todos} updateTodos={updateTodos} />}
       </section>
