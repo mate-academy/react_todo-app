@@ -9,7 +9,7 @@ const NewTodo = ({ addTodo: addNewTodo }) => {
   return (
     <form
       onSubmit={() => {
-        if (title !== '') {
+        if (title.trim() !== '') {
           addNewTodo({
             title,
             id: +new Date(),
