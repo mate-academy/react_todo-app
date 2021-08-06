@@ -8,7 +8,9 @@ const NewTodo = ({ addTodo: addNewTodo }) => {
 
   return (
     <form
-      onSubmit={() => {
+      onSubmit={(event) => {
+        event.preventDefault();
+
         if (title.trim() !== '') {
           addNewTodo({
             title,
