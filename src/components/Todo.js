@@ -7,13 +7,19 @@ const classNames = require('classnames');
 
 const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
   const [newTitle, setNewTitle] = useState(todo.title);
+  const [title, setTitle] = useState(todo.title);
   const [editing, setEditing] = useState(false);
 
   const todoObject = useRef(null);
 
   useEffect(() => {
     todoObject.current.focus();
-  }, [editing, todo]);
+    setTitle(newTitle);
+  }, [editing, todo, newTitle]);
+
+  useEffect(() => {
+    setTitle(newTitle);
+  }, [newTitle]);
 
   return (
     <li
@@ -42,8 +48,9 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
           onDoubleClick={() => {
             setEditing(true);
           }}
+          className="label"
         >
-          {todo.title}
+          {title}
         </label>
         <button
           type="button"
