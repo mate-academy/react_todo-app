@@ -29,6 +29,7 @@ const TodoList = ({ todos }) => {
       {filteredTodos.map(
         todo => (
           <Todo
+            key={`${todo.id}-todo`}
             todo={todo}
           />
         ),

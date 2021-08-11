@@ -17,7 +17,7 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
 
   return (
     <li
-      key={`${todo.id}-key`}
+      key={todo.id}
       className={classNames([
         { completed: todo.completed },
         { editing },

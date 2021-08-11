@@ -14,7 +14,7 @@ const initialState = {
 export const todoReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_TODO:
-      return { ...state, todos: [...state.todos, action.payload] };
+      return { ...state, todos: [action.payload, ...state.todos] };
 
     case DELETE_TODO:
       return {
