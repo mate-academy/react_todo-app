@@ -75,13 +75,12 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
             setNewTitle(todo.title);
             setEditing(false);
           }
-        }
-        }
+        }}
         onBlur={() => {
           if (newTitle.trim() !== '') {
             changeTitle(todo.id, newTitle);
           } else {
-            setNewTitle(todo.title);
+            deleteTodo(todo.id);
           }
 
           setEditing(false);
