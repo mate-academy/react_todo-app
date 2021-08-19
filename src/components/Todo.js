@@ -14,12 +14,7 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
 
   useEffect(() => {
     todoObject.current.focus();
-    setTitle(newTitle);
   }, [editing, todo, newTitle]);
-
-  useEffect(() => {
-    setTitle(newTitle);
-  }, [newTitle]);
 
   return (
     <li
@@ -78,9 +73,11 @@ const Todo = ({ todo, deleteTodo, completeTodo, changeTitle }) => {
         }}
         onBlur={() => {
           if (newTitle.trim() !== '') {
+            setTitle(newTitle);
             changeTitle(todo.id, newTitle);
           } else {
-            deleteTodo(todo.id);
+            setTitle(todo.title);
+            setNewTitle(todo.title);
           }
 
           setEditing(false);
