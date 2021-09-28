@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/jsx-filename-extension */
 import classNames from 'classnames';
@@ -31,7 +32,6 @@ const App = () => {
   todos = toDo;
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <section
       className="todoapp"
       onClick={(anEvent) => {
