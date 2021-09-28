@@ -35,7 +35,7 @@ const App = () => {
     <section
       className="todoapp"
       onClick={(anEvent) => {
-        const isEdit = anEvent.currentTarget.classList.contains('edit');
+        const isEdit = anEvent.target.classList.contains('edit');
 
         if (isEdit || !edit) {
           return;
