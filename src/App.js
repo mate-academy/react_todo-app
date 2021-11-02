@@ -97,28 +97,34 @@ function App() {
         />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          {`${count} items left`}
-        </span>
+      {todos.length ? (
+        <footer className="footer">
+          <span className="todo-count">
+            {`${count} items left`}
+          </span>
 
-        <TodosFilter onVisibleTodos={onVisibleTodos} />
+          <TodosFilter
+            onVisibleTodos={onVisibleTodos}
+            visibleTodos={visibleTodos}
+          />
 
-        {todosVisible.some(todo => todo.completed)
-          ? (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={() => {
-                setTodos(todos.filter(todo => !todo.completed));
-                saveData(todos.filter(todo => !todo.completed));
-              }}
-            >
-              Clear completed
-            </button>
-          ) : null
-        }
-      </footer>
+          {todosVisible.some(todo => todo.completed)
+            ? (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={() => {
+                  setTodos(todos.filter(todo => !todo.completed));
+                  saveData(todos.filter(todo => !todo.completed));
+                }}
+              >
+                Clear completed
+              </button>
+            ) : null
+          }
+        </footer>
+      ) : null
+      }
     </section>
   );
 }

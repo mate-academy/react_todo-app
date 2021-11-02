@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
+import TodoEdit from './TodoEdit';
 
 const TodoList = ({
   todosVisible,
@@ -8,8 +9,6 @@ const TodoList = ({
   setTodos,
   saveData,
 }) => {
-  const [todosBeforeEdit, setTodosBeforeEdit] = useState([]);
-
   const onDelete = (todoId) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
     saveData(todos.filter(todo => todo.id !== todoId));
@@ -21,22 +20,6 @@ const TodoList = ({
         return {
           ...todo,
           completed: !todo.completed,
-        };
-      }
-
-      return todo;
-    });
-
-    setTodos(newTodos);
-    saveData(newTodos);
-  };
-
-  const onEdit = (event, todoId) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          title: event.target.value,
         };
       }
 
@@ -60,39 +43,6 @@ const TodoList = ({
     });
 
     setTodos(newTodos);
-    saveData(newTodos);
-  };
-
-  const handleUpdatedDone = (event, todoId) => {
-    if (event.key === 'Enter') {
-      const newTodos = todos.map((todo) => {
-        if (todo.id === todoId) {
-          return {
-            ...todo,
-            toggle: true,
-          };
-        }
-
-        return todo;
-      });
-
-      setTodos(newTodos);
-      saveData(newTodos);
-    } else if (event.key === 'Escape') {
-      const newTodos = todosBeforeEdit.map((todo) => {
-        if (todo.id === todoId) {
-          return {
-            ...todo,
-            toggle: true,
-          };
-        }
-
-        return todo;
-      });
-
-      setTodos(newTodos);
-      saveData(newTodos);
-    }
   };
 
   return (
@@ -113,17 +63,11 @@ const TodoList = ({
             </li>
           ) : (
             <li className="editing" key={todo.id}>
-              <input
-                type="text"
-                className="edit"
-                value={todo.title}
-                onChange={(event) => {
-                  setTodosBeforeEdit(todosVisible);
-                  onEdit(event, todo.id);
-                }}
-                onKeyDown={event => (
-                  handleUpdatedDone(event, todo.id)
-                )}
+              <TodoEdit
+                todos={todos}
+                todo={todo}
+                saveData={saveData}
+                setTodos={setTodos}
               />
             </li>
           )
