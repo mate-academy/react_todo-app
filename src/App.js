@@ -1,87 +1,117 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocalStorage } from './hooks';
+import { TodoContext } from './TodoContext';
+import { TodoList } from './TodoList';
+import { TodosFilter } from './TodosFilter';
 
 function App() {
+  const [title, setTitle] = useState('');
+  const [todos, setTodo] = useLocalStorage('todos', []);
+  const [visibleTodos, setVisibleTodos] = useState([]);
+  const [isAllCompleted, setIsAllCompleted] = useState(false);
+
+  useEffect(() => {
+    setVisibleTodos(todos);
+    setIsAllCompleted(todos.every(todo => todo.completed));
+  }, [todos]);
+
+  const createTodo = (event) => {
+    event.preventDefault();
+    const newTodo = {
+      id: +new Date(),
+      title,
+      completed: false,
+    };
+
+    if (title === '') {
+      return;
+    }
+
+    setTodo([...todos, newTodo]);
+    localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
+    setTitle('');
+  };
+
+  const contextValue = {
+    todos,
+    setTodo,
+    isAllCompleted,
+    setIsAllCompleted,
+  };
+
+  const handleToggleAllCheckbox = () => {
+    setTodo(todos.map(todo => ({
+      ...todo,
+      completed: !isAllCompleted,
+    })));
+    setIsAllCompleted(!isAllCompleted);
+  };
+
+  const handleClearButton = () => {
+    setTodo(todos.filter(todo => !todo.completed));
+  };
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <TodoContext.Provider value={contextValue}>
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <form onSubmit={createTodo}>
+            <input
+              type="text"
+              className="new-todo"
+              placeholder="What needs to be done?"
+              value={title}
+              onChange={(event) => {
+                setTitle(event.target.value);
+              }}
+            />
+          </form>
+        </header>
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+        {todos.length > 0
+          && (
+          <>
+            <section className="main">
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                checked={isAllCompleted}
+                onChange={handleToggleAllCheckbox}
+              />
+              <label htmlFor="toggle-all">
+                Mark all as complete
+              </label>
+              <TodoList visibleTodos={visibleTodos} />
+            </section>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+            <footer className="footer">
+              <span className="todo-count">
+                {`${todos.filter(todo => (
+                  !todo.completed
+                )).length} items left`}
+              </span>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+              <TodosFilter setVisibleTodos={setVisibleTodos} />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+              {todos.some(todo => todo.completed)
+                && (
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={handleClearButton}
+                >
+                  Clear completed
+                </button>
+                )
+              }
+            </footer>
+          </>
+          )
+        }
       </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
+    </TodoContext.Provider>
   );
 }
 
