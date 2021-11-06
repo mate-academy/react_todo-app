@@ -1,5 +1,5 @@
 # React ToDo App
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/)
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://sasha39612.github.io/react_todo-app/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## Description
@@ -69,3 +69,16 @@ Implement saving the todos in [the API](https://mate-academy.github.io/fe-studen
 - Use '✕' symbol to remove TODO item on hover
 - [checked](./public/icons/checked.svg)
 - [unchecked](./public/icons/unchecked.svg)
+
+
+**BEFORE you started:**
+
+4. Load all the todos from `/todos` and filter them by `userId` to show only your todos in the App
+5. Save new todos by sending POST request to `/todos` (don't forget to add `userId`)
+    - use `JSON.stringify` when sending a `body`
+    - Think what to do in case of a server error (at least notify the user)
+6. Delete the todo by sending DELETE to `/todos/:todoId`
+7. Toggle completed status or rename the todo by sending `PATCH` to the `/todos/:todoId`
+    - you can send only changed fields (`completed` of `title`)
+8. Implement `toggleAll` functionality (try to send as few requests as possible)
+9. Implement `clear completed` sending as few requests as possible
