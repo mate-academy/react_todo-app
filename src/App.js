@@ -1,86 +1,163 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { TodoList } from './TodoList';
+import { TodosFilter } from './TodosFilter';
+import { FILTERS } from './Const';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [todoTitle, setTodoTitle] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('All');
+
+  useEffect(() => {
+    if (!localStorage.todos) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    } else {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const addTodo = () => {
+    if (todoTitle.trim().length > 0) {
+      const newTodo = {
+        id: +new Date(),
+        title: todoTitle,
+        completed: false,
+      };
+
+      setTodos([...todos, newTodo]);
+    }
+
+    setTodoTitle('');
+  };
+
+  const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
+
+  const onStatusChange = (todoId) => {
+    setTodos(prevTodos => prevTodos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
+  const toggleAll = (event) => {
+    const eventChecked = event.target.checked;
+
+    setTodos(prevTodos => prevTodos.map(todo => (
+      { ...todo, completed: eventChecked }
+    )));
+  };
+
+  const filterTodos = (key) => {
+    switch (key) {
+      case FILTERS.Active:
+        return activeTodos;
+
+      case FILTERS.Completed:
+        return completedTodos;
+
+      default:
+        return todos;
+    }
+  };
+
+  const filteredTodos = filterTodos(FILTERS[selectedFilter]);
+
+  const deleteTodo = (todoID) => {
+    setTodos(todos.filter(todo => todo.id !== todoID));
+  };
+
+  const clearCompleted = () => {
+    setTodos(activeTodos);
+  };
+
+  const updateTitle = (id, title) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todos,
+          title,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          addTodo();
+        }}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={todoTitle}
+            onChange={(event) => {
+              setTodoTitle(event.target.value);
+            }}
           />
         </form>
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onChange={toggleAll}
+          checked={activeTodos.length === 0}
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList
+          todos={filteredTodos}
+          onStatusChange={onStatusChange}
+          deleteTodo={deleteTodo}
+          updateTitle={updateTitle}
+        />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count">
+            {activeTodos.length}
+            {' '}
+            items left
+          </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+          <TodosFilter
+            setSelectedFilter={setSelectedFilter}
+            selectedFilter={selectedFilter}
+          />
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+          {completedTodos.length > 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+        </footer>
+      )}
     </section>
   );
 }
