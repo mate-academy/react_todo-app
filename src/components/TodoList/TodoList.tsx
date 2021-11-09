@@ -1,4 +1,4 @@
-import { TodoItem } from '../TodoItem';
+import { TodoItem } from '../TodoItem/index';
 
 type Props = {
   getVisibleTodos: () => Todo[],

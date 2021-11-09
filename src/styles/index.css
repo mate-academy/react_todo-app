@@ -217,4 +217,13 @@ body {
   .footer {
     height: 50px;
   }
+
+  .todoapp {
+    margin: 140px 0 20px;
+  }
+
+  .todoapp h1 {
+    font-size: 50px;
+    top: -130px;
+  }
 }
