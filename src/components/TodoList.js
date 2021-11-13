@@ -8,10 +8,17 @@ const TodoList = ({
   todos,
   setTodos,
   saveData,
+  setToogleAll,
 }) => {
   const onDelete = (todoId) => {
-    setTodos(todos.filter(todo => todo.id !== todoId));
-    saveData(todos.filter(todo => todo.id !== todoId));
+    const newTodos = todos.filter(todo => todo.id !== todoId);
+
+    if (newTodos.every(todo => !todo.completed)) {
+      setToogleAll(false);
+    }
+
+    setTodos(newTodos);
+    saveData(newTodos);
   };
 
   const onComplete = (todoId) => {
@@ -89,6 +96,7 @@ TodoList.propTypes = {
   }).isRequired).isRequired,
   setTodos: PropTypes.func.isRequired,
   saveData: PropTypes.func.isRequired,
+  setToogleAll: PropTypes.func.isRequired,
 };
 
 export default TodoList;

@@ -44,6 +44,12 @@ function App() {
   };
 
   const onToogleAll = () => {
+    if (!todos.length) {
+      setToogleAll(false);
+
+      return;
+    }
+
     const newTodos = todos.map(todo => ({
       ...todo,
       completed: !toogleAll,
@@ -51,6 +57,17 @@ function App() {
 
     setTodos(newTodos);
     setToogleAll(!toogleAll);
+  };
+
+  const onClearCompleted = () => {
+    const newTodos = todos.filter(todo => !todo.completed);
+
+    if (!newTodos.length) {
+      setToogleAll(false);
+    }
+
+    setTodos(newTodos);
+    saveData(newTodos);
   };
 
   let todosVisible = [];
@@ -87,6 +104,7 @@ function App() {
           checked={toogleAll}
           onChange={() => onToogleAll()}
         />
+
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
@@ -94,6 +112,7 @@ function App() {
           setTodos={setTodos}
           todos={todos}
           saveData={saveData}
+          setToogleAll={setToogleAll}
         />
       </section>
 
@@ -113,10 +132,7 @@ function App() {
               <button
                 type="button"
                 className="clear-completed"
-                onClick={() => {
-                  setTodos(todos.filter(todo => !todo.completed));
-                  saveData(todos.filter(todo => !todo.completed));
-                }}
+                onClick={() => onClearCompleted()}
               >
                 Clear completed
               </button>

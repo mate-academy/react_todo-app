@@ -28,8 +28,8 @@ const TodoEdit = ({
         return elem;
       });
 
-      setTodos(newTodos);
-      saveData(newTodos);
+      setTodos(newTodos.filter(el => el.title !== ''));
+      saveData(newTodos.filter(el => el.title !== ''));
     } else if (event.key === 'Escape') {
       const newTodos = todos.map((elem) => {
         if (elem.id === todoId) {
