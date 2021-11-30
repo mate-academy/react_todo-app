@@ -32,19 +32,38 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const time = new Date().toDateString();
-    const newTodo = {
-      id: time,
-      title: event.target.value,
-      completed: false,
-    };
-
-    setTodoList((prevState) => {
-      return {
-        ...prevState,
-        newTodo,
+    if (inputValue) {
+      const time = +new Date();
+      const newTodo = {
+        id: time,
+        title: inputValue,
+        completed: false,
       };
+
+      setTodoList(prevState => [...prevState, newTodo]);
+      setInputValue('');
+    }
+  };
+
+  const handleCompletedChange = (todo) => {
+    setTodoList(prevState => {
+      return prevState.map(item => {
+        if (item.id === todo.id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return item;
+      });
     });
+  };
+
+  const handleRemove = (todo) => {
+    setTodoList(prevState => (
+      prevState.filter(item => item.id !== todo.id)
+    ));
   };
 
   return (
@@ -64,7 +83,9 @@ function App() {
       </header>
 
       <TodoList
-        todosFromServer={todoList}
+        todos={todoList}
+        handleRemove={handleRemove}
+        handleCompletedChange={handleCompletedChange}
       />
 
       <footer className="footer">

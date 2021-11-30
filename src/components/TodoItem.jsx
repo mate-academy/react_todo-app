@@ -1,4 +1,4 @@
-export const TodoItem = ({ todo, handleCompletedChange }) => {
+export const TodoItem = ({ todo, completedChange, handleRemove }) => {
   return (
     <li
       className={todo.completed ? 'completed' : 'list-item'}
@@ -7,12 +7,22 @@ export const TodoItem = ({ todo, handleCompletedChange }) => {
         <input
           type="checkbox"
           className="toggle"
-          onClick={handleCompletedChange(todo)}
+          onClick={() => {
+            completedChange(todo);
+          }}
         />
-        <label htmlFor="co">
+        <label htmlFor="title">
           {todo.title}
         </label>
-        <button type="button" className="destroy">d</button>
+        <button
+          type="button"
+          className="destroy"
+          onClick={() => {
+            handleRemove(todo);
+          }}
+        >
+          d
+        </button>
       </div>
       <input type="text" className="edit" />
     </li>
