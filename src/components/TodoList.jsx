@@ -1,10 +1,26 @@
 import { TodoItem } from './TodoItem';
 
-export const TodoList = ({ todos, handleCompletedChange, handleRemove }) => {
+export const TodoList = ({
+  todos,
+  toggleAll,
+  handleRemove,
+  handleTodoEdit,
+  handleCompletedChange,
+}) => {
   return (
     <section className="main">
-      <input type="checkbox" id="toggle-all" className="toggle-all" />
-      {/* <label htmlFor="toggle-all">Mark all as complete</label> */}
+      <label
+        htmlFor="toggle-all"
+        style={{ cursor: 'pointer' }}
+      >
+        Mark all as complete
+        <input
+          type="checkbox"
+          id="toggle-all"
+          onClick={toggleAll}
+          className="toggle-all"
+        />
+      </label>
 
       <ul className="todo-list">
         {todos.map(item => {
@@ -14,6 +30,7 @@ export const TodoList = ({ todos, handleCompletedChange, handleRemove }) => {
               todo={item}
               key={item.id}
               handleRemove={handleRemove}
+              handleTodoEdit={handleTodoEdit}
             />
           );
         })}

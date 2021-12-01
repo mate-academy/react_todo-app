@@ -1,16 +1,38 @@
-export const TodosFilter = () => {
+export const TodosFilter = ({ onFilterChange }) => {
   return (
     <ul className="filters">
       <li>
-        <a href="#/" className="selected">All</a>
+        <a
+          href="#/"
+          onClick={() => {
+            onFilterChange('all');
+          }}
+          className="selected"
+        >
+          All
+        </a>
       </li>
 
       <li>
-        <a href="#/active">Active</a>
+        <a
+          href="#/active"
+          onClick={() => {
+            onFilterChange('active');
+          }}
+        >
+          Active
+        </a>
       </li>
 
       <li>
-        <a href="#/completed">Completed</a>
+        <a
+          href="#/completed"
+          onClick={() => {
+            onFilterChange('completed');
+          }}
+        >
+          Completed
+        </a>
       </li>
     </ul>
   );

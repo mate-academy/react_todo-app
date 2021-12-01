@@ -1,29 +1,17 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
-
-const todos = [
-  {
-    id: 1,
-    title: 'Cross from lake to forest!',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'Cross from city to vilage!',
-    completed: false,
-  },
-  {
-    id: 3,
-    title: 'Cross from sea to hotel!',
-    completed: false,
-  },
-];
+import { getLocalStorageItem, setLocalStorageItem } from './localStorage';
 
 function App() {
-  const [todoList, setTodoList] = useState(todos);
+  const [todoList, setTodoList] = useState([]);
+  const [filter, onFilterChange] = useState('all');
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    setTodoList(getLocalStorageItem('todos') || []);
+  }, []);
 
   const handleInputChange = ({ target: { value } }) => {
     setInputValue(value);
@@ -32,7 +20,7 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (inputValue) {
+    if (inputValue.length > 1) {
       const time = +new Date();
       const newTodo = {
         id: time,
@@ -40,14 +28,18 @@ function App() {
         completed: false,
       };
 
-      setTodoList(prevState => [...prevState, newTodo]);
+      setTodoList(prevState => {
+        setLocalStorageItem('todos', [...prevState, newTodo]);
+
+        return [...prevState, newTodo];
+      });
       setInputValue('');
     }
   };
 
   const handleCompletedChange = (todo) => {
     setTodoList(prevState => {
-      return prevState.map(item => {
+      const nextState = prevState.map(item => {
         if (item.id === todo.id) {
           return {
             ...todo,
@@ -57,13 +49,77 @@ function App() {
 
         return item;
       });
+
+      setLocalStorageItem('todos', nextState);
+
+      return nextState;
     });
   };
 
   const handleRemove = (todo) => {
-    setTodoList(prevState => (
-      prevState.filter(item => item.id !== todo.id)
-    ));
+    setTodoList(prevState => {
+      const nextState = prevState.filter(item => item.id !== todo.id);
+
+      setLocalStorageItem('todos', nextState);
+
+      return nextState;
+    });
+  };
+
+  const handleTodoEdit = (todo, editTitle) => {
+    setTodoList(prevState => {
+      const nextState = prevState.map(item => {
+        if (item.id === todo.id) {
+          return {
+            ...todo,
+            title: editTitle,
+          };
+        }
+
+        return item;
+      });
+
+      setLocalStorageItem('todos', nextState);
+
+      return nextState;
+    });
+  };
+
+  const toggleAll = () => {
+    setTodoList(prevState => {
+      const nextState = prevState.map(item => {
+        return {
+          ...item,
+          completed: !item.completed,
+        };
+      });
+
+      setLocalStorageItem('todos', nextState);
+
+      return nextState;
+    });
+  };
+
+  const completedTodos = todoList.filter(item => !item.completed);
+
+  const filteredTodos = filter === 'all'
+    ? todoList
+    : todoList.filter(item => {
+      if (filter === 'active') {
+        return !item.completed;
+      }
+
+      return item.completed;
+    });
+
+  const completedRemove = () => {
+    setTodoList(prevState => {
+      const nextState = prevState.filter(item => !item.completed);
+
+      setLocalStorageItem('todos', nextState);
+
+      return nextState;
+    });
   };
 
   return (
@@ -83,19 +139,30 @@ function App() {
       </header>
 
       <TodoList
-        todos={todoList}
+        todos={filteredTodos}
+        toggleAll={toggleAll}
         handleRemove={handleRemove}
+        handleTodoEdit={handleTodoEdit}
         handleCompletedChange={handleCompletedChange}
       />
 
       <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
+        {completedTodos.length > 0 && (
+          <span className="todo-count">
+            {completedTodos.length}
+            items left
+          </span>
+        )}
 
-        <TodosFilter />
+        <TodosFilter
+          onFilterChange={onFilterChange}
+        />
 
-        <button type="button" className="clear-completed">
+        <button
+          type="button"
+          onClick={completedRemove}
+          className="clear-completed"
+        >
           Clear completed
         </button>
       </footer>
