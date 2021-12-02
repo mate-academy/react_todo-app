@@ -28,6 +28,18 @@
   display: none;
 }
 
+.editing {
+  display: block;
+  width: 469px;
+  height: auto;
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 300;
+  color: #4d4d4d;
+  padding: 12px 16px;
+  margin: 0 0 0 43px;
+}
+
 .todo-list li.editing .edit {
   display: block;
   width: 506px;
@@ -93,6 +105,7 @@
 }
 
 .todo-list li .destroy:hover {
+  cursor: pointer;
   color: #af5b5e;
 }
 
