@@ -102,7 +102,7 @@ function App() {
 
   const completedTodos = todoList.filter(item => !item.completed);
 
-  const filteredTodos = filter === 'all'
+  const visibleTodos = filter === 'all'
     ? todoList
     : todoList.filter(item => {
       if (filter === 'active') {
@@ -139,7 +139,7 @@ function App() {
       </header>
 
       <TodoList
-        todos={filteredTodos}
+        todos={visibleTodos}
         toggleAll={toggleAll}
         handleRemove={handleRemove}
         handleTodoEdit={handleTodoEdit}

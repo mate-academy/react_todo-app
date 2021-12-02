@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import classNames from 'classnames';
 
 export const TodoItem = ({
   todo,
@@ -41,7 +42,7 @@ export const TodoItem = ({
       ) : (
         <li
           onDoubleClick={changeMode}
-          className={todo.completed ? 'completed' : 'list-item'}
+          className={classNames(todo.completed ? 'completed' : 'list-item')}
         >
           <div className="view">
             <input
@@ -50,6 +51,7 @@ export const TodoItem = ({
               onClick={() => {
                 completedChange(todo);
               }}
+              checked={todo.completed}
             />
             <label htmlFor="title">
               {todo.title}
