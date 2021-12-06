@@ -1,86 +1,65 @@
-import React from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { useLocalStorage } from './components/LocalStorage';
+import { Footer } from './components/Footer';
+import { TodoForm } from './components/TodoForm';
+import { TodoList } from './components/TodoList';
 
 function App() {
+  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [filter, setFilter] = useState('All');
+
+  const completedTodos = todos.filter(todo => todo.completed);
+  const activeTodos = todos.filter(todo => !todo.completed);
+
+  const updateTodos = (newTodo) => {
+    setTodos([...todos, newTodo]);
+  };
+
+  const filterTodos = useCallback((filterBy) => {
+    switch (filterBy) {
+      case 'Active':
+        return todos.filter(todo => !todo.completed);
+      case 'Completed':
+        return todos.filter(todo => todo.completed);
+      case 'All':
+      default: {
+        return todos;
+      }
+    }
+  }, [todos]);
+
+  const filteredTodos = useMemo(
+    () => filterTodos(filter), [filter, filterTodos],
+  );
+
+  const deleteCompletedTodos = () => {
+    setTodos(activeTodos);
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <h1>todos App</h1>
+        <TodoForm
+          updateTodos={updateTodos}
+        />
       </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      <TodoList
+        todos={filteredTodos}
+        setTodos={setTodos}
+      />
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {!!todos.length && (
+        <Footer
+          completedTodos={completedTodos}
+          activeTodos={activeTodos}
+          todos={filteredTodos}
+          filter={filter}
+          setFilter={setFilter}
+          deleteCompletedTodos={deleteCompletedTodos}
+        />
+      )}
     </section>
   );
 }
