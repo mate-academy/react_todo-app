@@ -30,7 +30,7 @@ const TodoApp = () => {
   const todoStatus = searchParams.get('status') || Status.ALL;
 
   const visibleTodos: ITodo[] = getVisibleTodos(todos, todoStatus as Status);
-  const activeTodos = todos.filter((todo) => !todo.completed).length;
+  const activeTodosCount = todos.filter((todo) => !todo.completed).length;
 
   return (
     <div className="TodoApp">
@@ -61,7 +61,7 @@ const TodoApp = () => {
 
         <div className="TodoApp__lower-actions">
           <p className="TodoApp__todos-left">
-            <span className="TodoApp__todos-count">{activeTodos}</span>
+            <span className="TodoApp__todos-count">{activeTodosCount}</span>
             tasks left
           </p>
 
