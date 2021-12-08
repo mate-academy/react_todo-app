@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+ul,
+p {
+  margin: 0;
+}
+
+ul,
+button {
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  border: 0;
+
+  background-color: transparent;
+
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}

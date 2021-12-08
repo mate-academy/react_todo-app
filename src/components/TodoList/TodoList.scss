@@ -1,0 +1,14 @@
+@import '../../lib/variables.scss';
+@import '../../lib/extends.scss';
+
+
+.TodoList {
+  display: flex;
+  flex-direction: column;
+
+  &::after {
+    @extend %divider;
+
+    margin: 12px 0;
+  }
+}

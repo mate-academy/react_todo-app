@@ -1,0 +1,26 @@
+.TodoItem {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  &__delete-btn {
+    position: absolute;
+    right: 0;
+
+    width: 20px;
+  }
+
+  &__delete-icon {
+    width: 100%;
+  }
+}
