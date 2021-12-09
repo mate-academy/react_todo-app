@@ -2,6 +2,8 @@ import React from 'react';
 import { TodoList } from './components/TodoList';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { Todo } from './domain/Todo';
+import { TodoChecked } from './domain/TodoChecked';
 
 export class App extends React.Component {
   state = {
@@ -21,21 +23,21 @@ export class App extends React.Component {
         todos:
         [
           ...prevState.todos,
-          {
+          Todo.fromInput({
             id: prevState.todos.length + 1,
             todo: text,
             completed: false,
-          },
+          }),
         ],
       }));
     }
   }
 
-  toggleProperty = (arr, id) => arr.map(item => (item.id === id
-    ? {
+  toggleProperty = (todos, id) => todos.map(item => (item.id === id
+    ? TodoChecked.fromInput({
       ...item,
       completed: !item.completed,
-    }
+    })
     : item));
 
   onToggle = (id) => {
