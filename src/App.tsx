@@ -3,15 +3,17 @@ import classNames from 'classnames';
 import {
   addTodoToServer,
   deleteTodoFromServer,
-  editTodo,
+  editTodoStatus,
+  editTodoTitle,
   getTodos,
 } from './api/api';
 import { Todo } from './types/Todo';
+import { TodoList } from './Components/TodoList/TodoList';
 
-const App = () => {
+const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodo, setVisibleTodo] = useState<Todo[]>([]);
-  const [searchValue, setSearchValue] = useState<Todo['title']>('');
+  const [newTodo, setNewTodo] = useState<string>('');
   const [filterValue, setFilterValue] = useState<string>('all');
 
   const fetchTodos = async () => {
@@ -55,8 +57,14 @@ const App = () => {
     fetchTodos();
   };
 
-  const updateTodo = async (todoId: Todo['id'], completed: Todo['completed']) => {
-    await editTodo(todoId, completed);
+  const updateTodoStatus = async (todoId: Todo['id'], completed: Todo['completed']) => {
+    await editTodoStatus(todoId, completed);
+
+    fetchTodos();
+  };
+
+  const updateTodoTitle = async (todoId: Todo['id'], title: Todo['title']) => {
+    await editTodoTitle(todoId, title);
 
     fetchTodos();
   };
@@ -67,9 +75,9 @@ const App = () => {
 
   const chekAllTodos = () => {
     if (todos.filter(todo => !todo.completed).length === 0) {
-      todos.map(todo => updateTodo(todo.id, false));
+      todos.map(todo => updateTodoStatus(todo.id, false));
     } else {
-      todos.map(todo => updateTodo(todo.id, true));
+      todos.map(todo => updateTodoStatus(todo.id, true));
     }
   };
 
@@ -81,79 +89,50 @@ const App = () => {
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            if (searchValue.trim()) {
-              addTodo(searchValue);
+            if (newTodo.trim()) {
+              addTodo(newTodo);
             }
 
-            setSearchValue('');
+            setNewTodo('');
           }}
         >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
-            value={searchValue}
+            value={newTodo}
             onChange={(event) => {
-              setSearchValue(event.target.value);
+              setNewTodo(event.target.value);
             }}
           />
         </form>
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          checked={todos.filter(todo => !todo.completed).length === 0}
-          onChange={() => chekAllTodos()}
-        />
-        <label htmlFor="toggle-all">
-          Mark all as complete
-          <input hidden />
-        </label>
-
-        {todos && (
-          <ul className="todo-list">
-            {visibleTodo.map(todo => (
-              <li
-                key={todo.id}
-                className={classNames({ completed: todo.completed })}
-              >
-                <div className="view">
-                  <input
-                    type="checkbox"
-                    className="toggle"
-                    readOnly
-                    checked={todo.completed}
-                    onClick={() => {
-                      updateTodo(todo.id, !todo.completed);
-                      setFilterValue('all');
-                    }}
-                  />
-                  <label htmlFor="#">
-                    {todo.title}
-                    <input hidden />
-                  </label>
-                  <button
-                    type="button"
-                    className="destroy"
-                    onClick={() => {
-                      deleteTodo(todo.id);
-                      fetchTodos();
-                    }}
-                  >
-                    x
-                  </button>
-                </div>
-                <input type="text" className="edit" />
-              </li>
-            ))}
-          </ul>
+        {!!todos.length && (
+          <>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              checked={todos.filter(todo => !todo.completed).length === 0}
+              onChange={() => chekAllTodos()}
+            />
+            <label htmlFor="toggle-all">
+              Mark all as complete
+              <input hidden />
+            </label>
+            <TodoList
+              visibleTodo={visibleTodo}
+              updateTodoStatus={updateTodoStatus}
+              deleteTodo={deleteTodo}
+              updateTodoTitle={updateTodoTitle}
+            />
+          </>
         )}
       </section>
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <footer className="footer">
           <span className="todo-count">
             {`${todos.filter(todo => !todo.completed).length} items left`}

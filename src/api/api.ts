@@ -41,6 +41,10 @@ export const addTodoToServer = (title:string) => {
   });
 };
 
-export const editTodo = (todoId:number, completed:boolean) => {
+export const editTodoStatus = (todoId:number, completed:boolean) => {
   return patch(`/todos/${todoId}`, { completed });
+};
+
+export const editTodoTitle = (todoId:number, title:string) => {
+  return patch(`/todos/${todoId}`, { title });
 };
