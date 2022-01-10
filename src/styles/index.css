@@ -33,10 +33,6 @@ body {
   font-weight: 300;
 }
 
-.hidden {
-  display: none;
-}
-
 .todoapp {
   background: #fff;
   margin: 130px 0 40px;
@@ -82,11 +78,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.edit-input {
+  width: 75%;
+  padding: 10px 15px;
+  font-size: 22px;
+}
+
 .new-todo,
 .edit {
   position: relative;
   margin: 0;
-  width: 100%;
+  width: 90%;
   font-size: 24px;
   font-family: inherit;
   font-weight: inherit;
@@ -94,55 +96,48 @@ body {
   color: inherit;
   padding: 6px;
   border: 1px solid #999;
-  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow-button {
+  cursor: pointer;
+  height: 100%;
+  width: 10%;
+  transition: all 0.3s;
+}
+
+.arrow-button:hover {
+  transform: rotate(90deg);
+}
+
+.arrow-icon {
+  height: 40px;
+  width: 50px;
+  color: #999;
+}
+
+.arrow-icon:hover {
+  color: #777;
+}
+
 .new-todo {
-  padding: 16px 16px 16px 60px;
+  padding: 16px;
   border: none;
-  background: rgba(0, 0, 0, 0.01);
-  box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
 }
 
 .main {
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
-}
-
-.toggle-all {
-  width: 1px;
-  height: 1px;
-  border: none; /* Mobile Safari */
-  opacity: 0;
-  position: absolute;
-  right: 100%;
-  bottom: 100%;
-}
-
-.toggle-all + label {
-  width: 60px;
-  height: 34px;
-  font-size: 0;
-  position: absolute;
-  top: -52px;
-  left: -13px;
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-
-.toggle-all + label:before {
-  content: "❯";
-  font-size: 22px;
-  color: #e6e6e6;
-  padding: 10px 27px;
-}
-
-.toggle-all:checked + label:before {
-  color: #737373;
 }
 
 .footer {
