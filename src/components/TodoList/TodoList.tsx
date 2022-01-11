@@ -36,7 +36,10 @@ export const TodoList: React.FC<Props> = ({
     if (e.key === 'Enter') {
       changeTodoTitle(id, value);
 
-      setChangeTodo(0);
+      setTimeout(() => {
+        setValue('');
+        setChangeTodo(0);
+      }, 500);
     }
   };
 
@@ -70,7 +73,10 @@ export const TodoList: React.FC<Props> = ({
               className={!todo.completed ? 'toggle' : 'toggle chaked'}
               onClick={() => handleCheckbox(todo)}
             />
-            <label htmlFor="change-title" className={!todo.completed ? 'unchaked' : 'chaked'}>
+            <label
+              htmlFor="change-title"
+              className={!todo.completed ? 'unchaked' : 'chaked'}
+            >
               {changeTodo === todo.id ? (
                 <input
                   type="text"
