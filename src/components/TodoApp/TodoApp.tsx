@@ -23,7 +23,7 @@ export const TodoApp = () => {
   }, []);
 
   useEffect(() => {
-    const active = todos.filter(a => a.completed !== true);
+    const active = todos.filter(a => !a.completed);
 
     setActiveTodos(active.length);
   }, [todos]);

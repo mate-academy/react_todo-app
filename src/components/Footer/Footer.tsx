@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import { Todo } from '../../Types/Todo';
 import { deleteTodo } from '../../api/api';
 
@@ -17,7 +18,7 @@ export const Footer: React.FC<Props> = ({
 }) => {
   const clearCopleted = () => {
     return todos.forEach(todo => (
-      (todo.completed === true) && deleteTodo(todo.id)
+      (todo.completed) && deleteTodo(todo.id)
     ));
   };
 
@@ -31,7 +32,8 @@ export const Footer: React.FC<Props> = ({
         <li>
           <button
             type="button"
-            className={!sortQuery ? 'selected' : ''}
+            className={classnames('filter__button',
+              { 'filter__button selected': !sortQuery })}
             onClick={() => setSearchParams({})}
           >
             All
@@ -40,7 +42,8 @@ export const Footer: React.FC<Props> = ({
         <li>
           <button
             type="button"
-            className={sortQuery === 'active' ? 'selected' : ''}
+            className={classnames('filter__button',
+              { 'filter__button selected': sortQuery === 'active' })}
             onClick={() => setSearchParams({ filterBy: 'active' })}
           >
             Active
@@ -49,7 +52,8 @@ export const Footer: React.FC<Props> = ({
         <li>
           <button
             type="button"
-            className={sortQuery === 'completed' ? 'selected' : ''}
+            className={classnames('filter__button',
+              { 'filter__button selected': sortQuery === 'selected' })}
             onClick={() => setSearchParams({ filterBy: 'completed' })}
           >
             Completed
@@ -60,7 +64,7 @@ export const Footer: React.FC<Props> = ({
         <button
           type="button"
           className="clear-completed"
-          onClick={() => clearCopleted()}
+          onClick={clearCopleted}
         >
           Clear completed
         </button>

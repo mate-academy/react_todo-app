@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import classnames from 'classnames';
 import { Todo } from '../../Types/Todo';
 import { changeTodoTitle } from '../../api/api';
 
@@ -34,7 +35,9 @@ export const TodoList: React.FC<Props> = ({
 
   const changeTitle = (id: number, e: any) => {
     if (e.key === 'Enter') {
-      changeTodoTitle(id, value);
+      if (value.trim()) {
+        changeTodoTitle(id, value);
+      }
 
       setTimeout(() => {
         setValue('');
@@ -70,12 +73,12 @@ export const TodoList: React.FC<Props> = ({
           <div className="view">
             <input
               type="checkbox"
-              className={!todo.completed ? 'toggle' : 'toggle chaked'}
+              className={classnames('toggle', { 'toggle chaked': todo.completed })}
               onClick={() => handleCheckbox(todo)}
             />
             <label
               htmlFor="change-title"
-              className={!todo.completed ? 'unchaked' : 'chaked'}
+              className={classnames('title', { 'title chaked': todo.completed })}
             >
               {changeTodo === todo.id ? (
                 <input

@@ -46,12 +46,12 @@ export const Form: React.FC<Props> = ({ setTodos, todos }) => {
   return (
     <form
       className="form"
-      onSubmit={(e) => handleSubmit(e)}
+      onSubmit={handleSubmit}
     >
       <button
         type="button"
         className="arrow-button"
-        onClick={() => arrowButtonClick()}
+        onClick={arrowButtonClick}
       >
         <VscChevronRight className="arrow-icon" />
       </button>
