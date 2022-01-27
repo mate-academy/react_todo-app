@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -10,6 +9,8 @@ const TodoList = ({
   changeComplete,
   allComplete,
   clearCompleted,
+  changeEditing,
+  changeItem,
 }) => {
   const [newArr, setNewArr] = useState(items);
   const [filterAll, setFilterAll] = useState({
@@ -56,6 +57,8 @@ const TodoList = ({
               todo={todo}
               deleteTodo={deleteTodo}
               changeComplete={changeComplete}
+              changeEditing={changeEditing}
+              changeItem={changeItem}
             />
           ))}
         </ul>
@@ -78,7 +81,7 @@ const TodoList = ({
                 setFilterAll({
                   all: true,
                   active: false,
-                  completed: true,
+                  completed: false,
                 });
               }}
             >
@@ -141,6 +144,8 @@ TodoList.propTypes = {
   changeComplete: PropTypes.func.isRequired,
   allComplete: PropTypes.func.isRequired,
   clearCompleted: PropTypes.func.isRequired,
+  changeEditing: PropTypes.func.isRequired,
+  changeItem: PropTypes.func.isRequired,
 };
 
 export default TodoList;

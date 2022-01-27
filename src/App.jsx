@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TodoList from './components/TodoList';
 
 function App() {
   const [newTodo, setNewTodo] = useState();
-  const [listTodo, setListTodo] = useState([]);
+  const [listTodo, setListTodo] = useState(
+    JSON.parse(localStorage.getItem('items')) || [],
+  );
+
+  useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(listTodo));
+  }, [listTodo]);
 
   const handleEvent = (event) => {
     event.preventDefault();
@@ -12,6 +18,8 @@ function App() {
       id: (+new Date()),
       title: newTodo,
       completed: false,
+      editing: false,
+      prevText: '',
     };
 
     setListTodo([...listTodo, task]);
@@ -35,6 +43,38 @@ function App() {
           return {
             ...todo,
             completed: !handle,
+          };
+        }
+
+        return todo;
+      }),
+    );
+  };
+
+  const changeItem = (abc, todoId) => {
+    setListTodo(
+      listTodo.map((todo) => {
+        if (todo.id === todoId) {
+          const next = abc;
+
+          return {
+            ...todo,
+            title: next,
+          };
+        }
+
+        return todo;
+      }),
+    );
+  };
+
+  const changeEditing = (todoId) => {
+    setListTodo(
+      listTodo.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            prevText: todo.title,
           };
         }
 
@@ -99,6 +139,8 @@ function App() {
           changeComplete={changeComplete}
           allComplete={allComplete}
           clearCompleted={clearCompleted}
+          changeEditing={changeEditing}
+          changeItem={changeItem}
         />
       )}
     </section>
