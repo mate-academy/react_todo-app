@@ -1,0 +1,25 @@
+.TodoApp {
+  &__bnt {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    transition: all 0.5s;
+    &--delete-user {
+      box-shadow: 0 0 6px 0 red;
+      background-color: white;
+      &:hover {
+        background-color: rgb(190, 190, 190);
+      }
+      &:active {
+        background-color: rgb(221, 221, 221);
+      }
+    }
+  }
+
+  &__loader-spiner {
+    top: -40px;
+    position: absolute;
+    width: 100px;
+  }
+}
