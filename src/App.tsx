@@ -5,32 +5,55 @@ import { getTodos } from './api/todos/todosAPI';
 import { getUsers, deleteUser } from './api/users/usersAPI';
 
 export const App: React.FC = () => {
-  const [todoasd, setTodo] = useState<Todo[]>([]);
+  const [todos, setTodo] = useState<Todo[]>([]);
   const [users, setUsers] = useState<User[]>([]);
-  const [foundUser, setfoundUser] = useState<User>();
+  const [foundUser, setfoundUser] = useState<User | undefined>();
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [checkNewUser, setCheckNewUser] = useState(false);
 
-  const checkUser = localStorage.getItem('test');
+  const checkUser = localStorage.getItem('userId');
+
+  const dateFromServer = async () => {
+    try {
+      const todosFromServer = await getTodos();
+
+      setTodo(todosFromServer);
+      const usersFromServer = await getUsers();
+
+      setUsers(usersFromServer);
+    } catch {
+      throw new Error('todos');
+    }
+  };
+
+  const filterEmailUsers = users.map(user => user.email);
+
+  useEffect(() => {
+    dateFromServer();
+  }, []);
 
   const waitingNewUser = () => {
     setCheckNewUser(!checkNewUser);
   };
 
   const handlerLogin = (email: string, password: string) => {
-    const findUser = users.find(user => user.email === email && user.username === password);
+    (async () => {
+      await dateFromServer();
 
-    if (findUser) {
-      setfoundUser(findUser);
-    }
+      const findUser = users.find(user => user.email === email && user.username === password);
+
+      if (findUser) {
+        setfoundUser(findUser);
+      }
+    })();
   };
 
   useMemo(() => {
     if (foundUser) {
-      localStorage.setItem('test', foundUser ? foundUser.username : '');
+      localStorage.setItem('userId', foundUser ? foundUser.username : '');
     }
 
-    const foundTodos = todoasd.filter(todo => todo.userId === foundUser?.id);
+    const foundTodos = todos.filter(todo => todo.userId === foundUser?.id);
 
     setVisibleTodos(foundTodos);
   }, [foundUser]);
@@ -42,7 +65,7 @@ export const App: React.FC = () => {
       setfoundUser(findUser);
 
       if (findUser) {
-        const firstFilter = todoasd
+        const firstFilter = todos
           .filter(todo => todo.userId === findUser?.id);
 
         setVisibleTodos(firstFilter);
@@ -50,27 +73,22 @@ export const App: React.FC = () => {
     }
   }, [users]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const todosFromServer = await getTodos();
-
-        setTodo(todosFromServer);
-        const usersFromServer = await getUsers();
-
-        setUsers(usersFromServer);
-      } catch {
-        throw new Error('todos');
-      }
-    })();
-  }, []);
-
   const removeUser = () => {
     if (foundUser) {
       deleteUser(foundUser.id);
-      setCheckNewUser(!checkNewUser);
-      localStorage.clear();
+
+      localStorage.removeItem('userId');
+
+      const updateUsers = users.filter(user => user.id !== foundUser.id);
+
+      setUsers(updateUsers);
+      setfoundUser(undefined);
     }
+  };
+
+  const handlerSingOut = () => {
+    localStorage.removeItem('userId');
+    setfoundUser(undefined);
   };
 
   return (
@@ -80,9 +98,17 @@ export const App: React.FC = () => {
           todos={visibleTodos}
           user={foundUser}
           removeUser={removeUser}
+          handlerSingOut={handlerSingOut}
         />
       )}
-      {!checkUser && <Auth handlerLogin={handlerLogin} waitingNewUser={waitingNewUser} />}
+      {!checkUser && (
+        <Auth
+          foundUser={foundUser}
+          handlerLogin={handlerLogin}
+          waitingNewUser={waitingNewUser}
+          filterEmailUsers={filterEmailUsers}
+        />
+      )}
     </>
   );
 };

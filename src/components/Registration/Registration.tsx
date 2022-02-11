@@ -1,25 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { postUser } from '../../api/users/usersAPI';
+import { Notification } from '../Notification';
 
 import '../Auth/Auth.scss';
 
 type Props = {
   backToAuth: () => void,
+  handlerLogin: (email: string, password: string) => void,
+  filterEmailUsers: string[],
 };
 
-export const Registration: React.FC<Props> = ({ backToAuth }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filterEmailUsers }) => {
+  const [newEmail, setEmail] = useState('');
+  const [newPassword, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [openNotific, setOpenNotific] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useMemo(() => {
+    setOpenNotific(false);
+  }, [newEmail, newPassword, name]);
 
   const createUser = () => {
-    if (name.length > 2 && email.length > 5 && password.length > 7) {
-      postUser(name, password, email);
-      setName('');
-      setPassword('');
-      setEmail('');
-      localStorage.setItem('test', password);
-      backToAuth();
+    const checkNewEmail = filterEmailUsers.some(email => email === newEmail);
+
+    if (name.length > 2 && newEmail.length > 5 && newPassword.length > 7 && !checkNewEmail) {
+      (async () => {
+        await postUser(name, newPassword, newEmail);
+        handlerLogin(newEmail, newPassword);
+        backToAuth();
+      })();
+    } else {
+      setOpenNotific(true);
+    }
+
+    if (name.length < 3) {
+      setErrorMessage('Enter name min 3 letters');
+    } else if (newEmail.length < 5) {
+      setErrorMessage('Enter Email min 6 letters');
+    } else if (newPassword.length < 8) {
+      setErrorMessage('Enter Password min 6 letters');
+    } else if (checkNewEmail) {
+      setErrorMessage('This email is used');
     }
   };
 
@@ -48,7 +70,7 @@ export const Registration: React.FC<Props> = ({ backToAuth }) => {
           <input
             type="text"
             id="log-email"
-            value={email}
+            value={newEmail}
             className="Auth__input"
             placeholder="Minimum 6 letters"
             onChange={(event) => setEmail(event.target.value)}
@@ -62,7 +84,7 @@ export const Registration: React.FC<Props> = ({ backToAuth }) => {
           <input
             type="password"
             id="log-password"
-            value={password}
+            value={newPassword}
             className="Auth__input"
             placeholder="Minimum 8 letters"
             onChange={(event) => setPassword(event.target.value)}
@@ -82,6 +104,7 @@ export const Registration: React.FC<Props> = ({ backToAuth }) => {
         >
           SING IN
         </button>
+        {openNotific && <Notification message={errorMessage} />}
       </form>
     </div>
   );

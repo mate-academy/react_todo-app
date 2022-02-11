@@ -17,6 +17,11 @@
     }
   }
 
+  &__header-btns {
+    display: flex;
+    justify-content: space-between;
+  }
+
   &__loader-spiner {
     top: -40px;
     position: absolute;

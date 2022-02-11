@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   postTodo,
@@ -14,35 +14,42 @@ type Props = {
   todos: Todo[],
   user: User | undefined,
   removeUser: () => void,
+  handlerSingOut: () => void,
 };
 
 export const TodoApp: React.FC<Props> = ({
   todos,
   user,
   removeUser,
+  handlerSingOut,
 }) => {
-  const [visibleTodos, setTodos] = useState<Todo[]>(todos);
-  const [visibleTodo, setTodo] = useState<Todo[]>(visibleTodos);
+  const [visibleTodo, setTodo] = useState<Todo[]>(todos);
   const [newTitle, setNewTitle] = useState('');
+  const [updateTodos, setUpdateTodos] = useState(true);
 
   const handleSubmit = () => {
     if (newTitle && user) {
       (async () => {
         await postTodo(newTitle, user.id, false);
         setNewTitle('');
-        (async () => {
-          const qwe = await getTodo(user.id);
-
-          setTodo(qwe);
-        })();
+        setUpdateTodos(!updateTodos);
       })();
     }
   };
 
+  useMemo(() => {
+    (async () => {
+      if (user) {
+        const todo = await getTodo(user.id);
+
+        setTodo(todo);
+      }
+    })();
+  }, [updateTodos]);
+
   useEffect(() => {
-    setTodos(todos);
-    setTodo(visibleTodos);
-  }, [todos, visibleTodos]);
+    setTodo(todos);
+  }, [todos]);
 
   const handlerChecked = (todoId: number) => {
     const findTodo = visibleTodo.find(todo => todo.id === todoId);
@@ -110,7 +117,7 @@ export const TodoApp: React.FC<Props> = ({
   };
 
   const handlerEditTodo = (title: string, todoId: number) => {
-    const editTodo = visibleTodos.map(todo => {
+    const editTodo = visibleTodo.map(todo => {
       if (todo.id === todoId) {
         return {
           title,
@@ -123,18 +130,33 @@ export const TodoApp: React.FC<Props> = ({
       return todo;
     });
 
-    setTodos(editTodo);
+    visibleTodo.forEach(todo => {
+      if (todo.id === todoId) {
+        patchTodos(todoId, todo.completed, title);
+      }
+    });
+
+    setTodo(editTodo);
   };
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={() => removeUser()}
-        className="TodoApp__bnt TodoApp__bnt--delete-user"
-      >
-        Delete Account
-      </button>
+    <div className="TodoApp">
+      <div className="TodoApp__header-btns">
+        <button
+          type="button"
+          onClick={() => removeUser()}
+          className="TodoApp__bnt TodoApp__bnt--delete-user"
+        >
+          Delete Account
+        </button>
+        <button
+          type="button"
+          onClick={() => handlerSingOut()}
+          className="TodoApp__bnt TodoApp__bnt--delete-user"
+        >
+          Sign out
+        </button>
+      </div>
       <section className="todoapp">
         <header className="header">
           <h1>
@@ -211,6 +233,6 @@ export const TodoApp: React.FC<Props> = ({
           </footer>
         ) }
       </section>
-    </>
+    </div>
   );
 };
