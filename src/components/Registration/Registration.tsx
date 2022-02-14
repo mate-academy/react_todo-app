@@ -11,27 +11,30 @@ type Props = {
 };
 
 export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filterEmailUsers }) => {
-  const [newEmail, setEmail] = useState('');
+  const [newEmail, setNewEmail] = useState('');
   const [newPassword, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [openNotific, setOpenNotific] = useState(false);
+  const [opennerMessage, setOpennerMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useMemo(() => {
-    setOpenNotific(false);
+    setOpennerMessage(false);
   }, [newEmail, newPassword, name]);
 
   const createUser = () => {
     const checkNewEmail = filterEmailUsers.some(email => email === newEmail);
 
-    if (name.length > 2 && newEmail.length > 5 && newPassword.length > 7 && !checkNewEmail) {
+    const validated = name.length > 2
+      && newEmail.length > 5 && newPassword.length > 7 && !checkNewEmail;
+
+    if (validated) {
       (async () => {
         await postUser(name, newPassword, newEmail);
         handlerLogin(newEmail, newPassword);
         backToAuth();
       })();
     } else {
-      setOpenNotific(true);
+      setOpennerMessage(true);
     }
 
     if (name.length < 3) {
@@ -39,7 +42,7 @@ export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filter
     } else if (newEmail.length < 5) {
       setErrorMessage('Enter Email min 6 letters');
     } else if (newPassword.length < 8) {
-      setErrorMessage('Enter Password min 6 letters');
+      setErrorMessage('Enter Password min 8 letters');
     } else if (checkNewEmail) {
       setErrorMessage('This email is used');
     }
@@ -73,7 +76,7 @@ export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filter
             value={newEmail}
             className="Auth__input"
             placeholder="Minimum 6 letters"
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => setNewEmail(event.target.value)}
           />
         </label>
         <label
@@ -104,7 +107,7 @@ export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filter
         >
           SING IN
         </button>
-        {openNotific && <Notification message={errorMessage} />}
+        {opennerMessage && <Notification message={errorMessage} />}
       </form>
     </div>
   );

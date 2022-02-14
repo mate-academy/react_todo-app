@@ -19,26 +19,26 @@ export const Auth: React.FC<Props> = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [opennerRegistr, setOpennerRegistr] = useState(false);
-  const [openNotif, setOpenNotif] = useState(false);
+  const [opennerMessage, setOpennerMessage] = useState(false);
 
   useMemo(() => {
-    setOpenNotif(false);
+    setOpennerMessage(false);
   }, [email, password]);
 
   const backToAuth = () => {
     setOpennerRegistr(!opennerRegistr);
     setPassword('');
     setEmail('');
-    setOpenNotif(false);
+    setOpennerMessage(false);
     waitingNewUser();
   };
 
   const controlLogin = () => {
     if (email.length > 3 && password.length > 4) {
       handlerLogin(email, password);
-      setOpenNotif(true);
+      setOpennerMessage(true);
     } else {
-      setOpenNotif(true);
+      setOpennerMessage(true);
     }
   };
 
@@ -103,7 +103,11 @@ export const Auth: React.FC<Props> = ({
             >
               REGISTRATION
             </button>
-            {openNotif && (!foundUser && <Notification message="Incorrect login or password" />) }
+            {opennerMessage
+              && !foundUser
+              && (
+                <Notification message="Incorrect login or password" />
+              ) }
           </form>
         )}
     </div>

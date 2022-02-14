@@ -23,7 +23,7 @@ export const TodoApp: React.FC<Props> = ({
   removeUser,
   handlerSingOut,
 }) => {
-  const [visibleTodo, setTodo] = useState<Todo[]>(todos);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [newTitle, setNewTitle] = useState('');
   const [updateTodos, setUpdateTodos] = useState(true);
 
@@ -42,82 +42,82 @@ export const TodoApp: React.FC<Props> = ({
       if (user) {
         const todo = await getTodo(user.id);
 
-        setTodo(todo);
+        setVisibleTodos(todo);
       }
     })();
   }, [updateTodos]);
 
   useEffect(() => {
-    setTodo(todos);
+    setVisibleTodos(todos);
   }, [todos]);
 
   const handlerChecked = (todoId: number) => {
-    const findTodo = visibleTodo.find(todo => todo.id === todoId);
+    const findTodo = visibleTodos.find(todo => todo.id === todoId);
 
     if (findTodo) {
       patchTodos(todoId, !findTodo.completed, findTodo.title);
       findTodo.completed = !findTodo.completed;
     }
 
-    setTodo(pre => [...pre]);
+    setVisibleTodos(pre => [...pre]);
   };
 
   const handlerDeleteTodo = (todoId: number) => {
-    const findTodo = visibleTodo.findIndex(todo => todo.id === todoId);
+    const findTodo = visibleTodos.findIndex(todo => todo.id === todoId);
 
     if (findTodo >= 0) {
       deleteTodo(todoId);
-      visibleTodo.splice(findTodo, 1);
-      setTodo(pre => [...pre]);
+      visibleTodos.splice(findTodo, 1);
+      setVisibleTodos(pre => [...pre]);
     }
   };
 
   const handlerAllChecked = () => {
-    const areCompleted = visibleTodo.every(todo => todo.completed);
-    const findTodo = visibleTodo.map(todo => ({
+    const areCompleted = visibleTodos.every(todo => todo.completed);
+    const findTodo = visibleTodos.map(todo => ({
       ...todo,
       completed: areCompleted ? !todo.completed : true,
     }));
 
-    visibleTodo
+    visibleTodos
       .forEach(todo => patchTodos(todo.id, (areCompleted ? !todo.completed : true), todo.title));
 
-    setTodo(findTodo);
+    setVisibleTodos(findTodo);
   };
 
   const location = useLocation();
 
   const parthName = location.pathname;
 
-  let filterTodos = visibleTodo;
+  let filterTodos = visibleTodos;
 
   useMemo(() => {
     filterTodos = parthName !== '/'
-      ? visibleTodo.filter(todo => (
+      ? visibleTodos.filter(todo => (
         parthName === '/completed'
           ? todo.completed
           : !todo.completed
       ))
-      : visibleTodo;
-  }, [parthName, newTitle, visibleTodo]);
+      : visibleTodos;
+  }, [parthName, newTitle, visibleTodos]);
 
   const setActive = ({ isActive }: { isActive:boolean }) => (isActive ? 'selected' : '');
 
   const deleteAllTodos = () => {
-    const onlyActive = visibleTodo.filter(todo => todo.completed === false);
+    const onlyActive = visibleTodos.filter(todo => todo.completed === false);
 
-    visibleTodo
+    visibleTodos
       .forEach(todo => {
         if (todo.completed) {
           deleteTodo(todo.id);
         }
       });
 
-    setTodo(onlyActive);
+    setVisibleTodos(onlyActive);
   };
 
   const handlerEditTodo = (title: string, todoId: number) => {
-    const editTodo = visibleTodo.map(todo => {
+    const editTodo = visibleTodos.map(todo => {
       if (todo.id === todoId) {
         return {
           title,
@@ -130,13 +130,13 @@ export const TodoApp: React.FC<Props> = ({
       return todo;
     });
 
-    visibleTodo.forEach(todo => {
+    visibleTodos.forEach(todo => {
       if (todo.id === todoId) {
         patchTodos(todoId, todo.completed, title);
       }
     });
 
-    setTodo(editTodo);
+    setVisibleTodos(editTodo);
   };
 
   return (
@@ -144,14 +144,14 @@ export const TodoApp: React.FC<Props> = ({
       <div className="TodoApp__header-btns">
         <button
           type="button"
-          onClick={() => removeUser()}
+          onClick={removeUser}
           className="TodoApp__bnt TodoApp__bnt--delete-user"
         >
           Delete Account
         </button>
         <button
           type="button"
-          onClick={() => handlerSingOut()}
+          onClick={handlerSingOut}
           className="TodoApp__bnt TodoApp__bnt--delete-user"
         >
           Sign out
@@ -185,10 +185,10 @@ export const TodoApp: React.FC<Props> = ({
           handlerAllChecked={handlerAllChecked}
           handlerEditTodo={handlerEditTodo}
         />
-        {visibleTodo.length > 0 && (
+        {visibleTodos.length > 0 && (
           <footer className="footer">
             <span className="todo-count">
-              {visibleTodo.filter(todo => todo.completed === false).length}
+              {visibleTodos.filter(todo => todo.completed === false).length}
               {' '}
               items left
             </span>

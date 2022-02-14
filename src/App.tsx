@@ -5,7 +5,7 @@ import { getTodos } from './api/todos/todosAPI';
 import { getUsers, deleteUser } from './api/users/usersAPI';
 
 export const App: React.FC = () => {
-  const [todos, setTodo] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [foundUser, setfoundUser] = useState<User | undefined>();
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
@@ -17,7 +17,7 @@ export const App: React.FC = () => {
     try {
       const todosFromServer = await getTodos();
 
-      setTodo(todosFromServer);
+      setTodos(todosFromServer);
       const usersFromServer = await getUsers();
 
       setUsers(usersFromServer);
@@ -93,22 +93,23 @@ export const App: React.FC = () => {
 
   return (
     <>
-      {checkUser && (
-        <TodoApp
-          todos={visibleTodos}
-          user={foundUser}
-          removeUser={removeUser}
-          handlerSingOut={handlerSingOut}
-        />
-      )}
-      {!checkUser && (
-        <Auth
-          foundUser={foundUser}
-          handlerLogin={handlerLogin}
-          waitingNewUser={waitingNewUser}
-          filterEmailUsers={filterEmailUsers}
-        />
-      )}
+      {checkUser
+        ? (
+          <TodoApp
+            todos={visibleTodos}
+            user={foundUser}
+            removeUser={removeUser}
+            handlerSingOut={handlerSingOut}
+          />
+        )
+        : (
+          <Auth
+            foundUser={foundUser}
+            handlerLogin={handlerLogin}
+            waitingNewUser={waitingNewUser}
+            filterEmailUsers={filterEmailUsers}
+          />
+        )}
     </>
   );
 };
