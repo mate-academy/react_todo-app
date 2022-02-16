@@ -113,6 +113,10 @@ body {
   border-top: 1px solid #e6e6e6;
 }
 
+.main__hidden {
+  visibility: hidden;
+}
+
 .toggle-all {
   width: 1px;
   height: 1px;
