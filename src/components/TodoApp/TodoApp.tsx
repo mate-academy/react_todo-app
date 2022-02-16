@@ -27,17 +27,18 @@ export const TodoApp: React.FC<Props> = ({
   const [newTitle, setNewTitle] = useState('');
   const [updateTodos, setUpdateTodos] = useState(true);
 
-  const handleSubmit = () => {
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
     if (newTitle && user) {
-      (async () => {
-        await postTodo(newTitle, user.id, false);
-        setNewTitle('');
-        setUpdateTodos(!updateTodos);
-      })();
+      await postTodo(newTitle, user.id, false);
+
+      setNewTitle('');
+      setUpdateTodos(!updateTodos);
     }
   };
 
-  useMemo(() => {
+  useEffect(() => {
     (async () => {
       if (user) {
         const todo = await getTodo(user.id);

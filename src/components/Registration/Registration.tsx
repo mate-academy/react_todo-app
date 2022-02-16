@@ -24,8 +24,13 @@ export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filter
   const createUser = () => {
     const checkNewEmail = filterEmailUsers.some(email => email === newEmail);
 
-    const validated = name.length > 2
-      && newEmail.length > 5 && newPassword.length > 7 && !checkNewEmail;
+    const validatedName = name.length > 2;
+    const validatedEmailLength = newEmail.length > 5;
+    const validatedEmailType = newEmail.includes('@gmail.com')
+      || newEmail.includes('@mail.com') || newEmail.includes('@gmail.ru') || newEmail.includes('@mail.ru');
+
+    const validated = validatedName
+      && validatedEmailLength && newPassword.length > 7 && !checkNewEmail && validatedEmailType;
 
     if (validated) {
       (async () => {
@@ -45,6 +50,8 @@ export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filter
       setErrorMessage('Enter Password min 8 letters');
     } else if (checkNewEmail) {
       setErrorMessage('This email is used');
+    } else if (!validatedEmailType) {
+      setErrorMessage('Example mail xxxx@gmail.com');
     }
   };
 
@@ -71,7 +78,7 @@ export const Registration: React.FC<Props> = ({ backToAuth, handlerLogin, filter
         >
           <span>Email</span>
           <input
-            type="text"
+            type="email"
             id="log-email"
             value={newEmail}
             className="Auth__input"

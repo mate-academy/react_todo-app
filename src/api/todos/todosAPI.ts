@@ -10,8 +10,8 @@ export const getTodo = (userId: number) => {
     .then(res => res.json());
 };
 
-export const postTodo = (title: string, userId: number, completed: boolean) => {
-  return fetch(`${BASE_URL}`, {
+export const postTodo = async (title: string, userId: number, completed: boolean) => {
+  const response = await fetch(`${BASE_URL}`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -22,6 +22,8 @@ export const postTodo = (title: string, userId: number, completed: boolean) => {
       completed,
     }),
   });
+
+  return response.json();
 };
 
 export const patchTodos = (todoId: number, completed: boolean, title: string) => {

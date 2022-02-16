@@ -26,7 +26,7 @@ export const TodoList: React.FC<Props> = ({
         id="toggle-all"
         className="toggle-all"
         checked={checkeAll}
-        onClick={handlerAllChecked}
+        onChange={handlerAllChecked}
       />
       <label
         htmlFor="toggle-all"
