@@ -11,7 +11,7 @@ export const TodosProvider: React.FC = ({ children }) => {
   const [toggleAll, setToggleAll] = useState<string>('');
 
   useEffect(() => {
-    if (JSON.parse(localStorage.todos)) {
+    if (localStorage.todos) {
       setTodos(JSON.parse(localStorage.todos));
     }
   }, []);
