@@ -152,19 +152,21 @@ export const TodoApp: React.FC = () => {
         />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
-          {`${uncompleteNumber} ${uncompleteNumber === 1 ? 'item' : 'items'} left`}
-        </span>
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count">
+            {`${uncompleteNumber} ${uncompleteNumber === 1 ? 'item' : 'items'} left`}
+          </span>
 
-        <TodosFilter toggleFilter={toggleFilter} />
+          <TodosFilter toggleFilter={toggleFilter} />
 
-        {completeNumber > 0 && (
-          <button type="button" className="clear-completed" onClick={clearCompleted}>
-            Clear completed
-          </button>
-        )}
-      </footer>
+          {completeNumber > 0 && (
+            <button type="button" className="clear-completed" onClick={clearCompleted}>
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
     </>
   );
 };
