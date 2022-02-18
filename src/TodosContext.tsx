@@ -7,7 +7,7 @@ import { Todo } from './types/Todo';
 export const TodosContext = React.createContext<ContextValue | null>(null);
 
 export const TodosProvider: React.FC = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[] | null>(JSON.parse(localStorage.todos));
+  const [todos, setTodos] = useState<Todo[] | null>(JSON.parse(localStorage.todos) || null);
   const [toggleAll, setToggleAll] = useState<string>('');
 
   useEffect(() => {
