@@ -13,13 +13,16 @@ export const Footer: React.FC = () => {
       {clearCompleted && todos && todos?.length !== 0 && (
         <footer className="footer">
           <span className="todo-count">
-            {`${todos.length} items left`}
+            {`${todos.filter(todo => !todo.completed).length} items left`}
           </span>
 
           <div className="filters">
             {state.map(item => (
-              <li key={item}>
-                <NavLink to={`/${item === 'all' ? '' : item}`}>
+              <li key={item} className="selected">
+                <NavLink
+                  to={`/${item === 'all' ? '' : item}`}
+                  style={({ isActive }) => (isActive ? { borderColor: 'rgba(175, 47, 47, 0.2)' } : {})}
+                >
                   {item[0].toUpperCase() + item.substring(1)}
                 </NavLink>
               </li>
