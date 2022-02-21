@@ -98,6 +98,8 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  outline: 0;
+  outline-offset: 0;
 }
 
 .new-todo {
