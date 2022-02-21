@@ -100,8 +100,7 @@ export const TodoApp: React.FC = () => {
     );
   };
 
-  // eslint-disable-next-line consistent-return
-  const toggleFilter = (filter: string): void => {
+  const toggleFilter = (filter: string) => {
     switch (filter) {
       case 'all':
         return setToggledTodos(todos);
@@ -114,7 +113,7 @@ export const TodoApp: React.FC = () => {
           (todo: { completed: boolean; }) => todo.completed,
         ));
       default:
-        break;
+        return 1;
     }
   };
 
