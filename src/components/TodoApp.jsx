@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 // import { useLocalStorageState } from '../localStorage';
@@ -13,13 +13,29 @@ export const TodoApp = () => {
   const unCompletedTodos = todoList.filter(todo => !todo.completed);
 
   const toggleAll = () => {
-    const completedTodos = todoList.map(todo => ({
-      ...todo, completed: !allTodosCompleted,
-    }));
-
+    let completedTodos;
+    if (allTodosCompleted) {
+      completedTodos = todoList.map(todo => ({
+        ...todo, completed: false,
+      }));
+      setAllTodosCompleted(false);
+    } else {
+      completedTodos = todoList.map(todo => ({
+        ...todo, completed: true,
+      }));
+      setAllTodosCompleted(true);
+    }
     setTodoList(completedTodos);
-    setAllTodosCompleted(!allTodosCompleted);
   };
+
+  // const toggleAll = () => {
+  //   const completedTodos = todoList.map(todo => ({
+  //     ...todo, completed: !allTodosCompleted,
+  //   }));
+
+  //   setTodoList(completedTodos);
+  //   setAllTodosCompleted(!allTodosCompleted);
+  // };
 
   const addTodo = (e) => {
     e.preventDefault();
@@ -69,6 +85,12 @@ export const TodoApp = () => {
       };
     });
 
+    const uncomplitedTodos = todoList.find(todo => !todo.completed);
+
+    if (!uncomplitedTodos) {
+      setAllTodosCompleted(false)
+    };
+
     setTodoList(updatedTodoList);
   };
 
@@ -109,6 +131,10 @@ export const TodoApp = () => {
     setTodoList(onlyInCompletedTodos);
   };
 
+  const updateInput = useCallback((e) => {
+    setInputText(e.target.value);
+  })
+
   return (
     <>
       <header className="header">
@@ -122,9 +148,7 @@ export const TodoApp = () => {
             value={inputText}
             className="new-todo"
             placeholder="What needs to be done?"
-            onChange={(e) => {
-              setInputText(e.target.value);
-            }}
+            onChange={updateInput}
           />
         </form>
       </header>
@@ -137,9 +161,7 @@ export const TodoApp = () => {
               checked={unCompletedTodos.length === 0}
               id="toggle-all"
               className="toggle-all"
-              onClick={() => {
-                toggleAll();
-              }}
+              onClick={toggleAll}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -168,9 +190,7 @@ export const TodoApp = () => {
             <button
               type="button"
               className="clear-completed"
-              onClick={() => {
-                clearCompleted();
-              }}
+              onClick={clearCompleted}
             >
               Clear completed
             </button>
