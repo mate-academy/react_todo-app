@@ -7,7 +7,7 @@ import { Todo } from './types/Todo';
 export const TodosContext = React.createContext<ContextValue | null>(null);
 
 export const TodosProvider: React.FC = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [toggleAll, setToggleAll] = useState<string>('');
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export const TodosProvider: React.FC = ({ children }) => {
   }, [todos]);
 
   useEffect(() => {
-    setTodos((currentTodos: Todo[] | null) => {
+    setTodos((currentTodos: Todo[]) => {
       const result = currentTodos?.map((todo: Todo) => {
         switch (toggleAll) {
           case 'allCompleted':
@@ -33,7 +33,7 @@ export const TodosProvider: React.FC = ({ children }) => {
         }
       });
 
-      return result || null;
+      return result;
     });
   }, [toggleAll]);
 
@@ -72,50 +72,43 @@ export const TodosProvider: React.FC = ({ children }) => {
   }, []);
 
   const addTodo = useCallback((title: string) => {
-    const todo = {
-      id: `${new Date()}`,
-      title,
-      completed: false,
-    };
-
-    setTodos((currentTodos: Todo[] | null) => {
-      return currentTodos !== null ? [...currentTodos, todo] : [todo];
+    setTodos((currentTodos: Todo[]) => {
+      return [...currentTodos,
+        {
+          id: `${currentTodos.length - 1}`,
+          title,
+          completed: false,
+        }];
     });
   }, []);
 
   const deleteTodo = useCallback((id: string) => {
-    setTodos((currentTodos: Todo[] | null) => {
-      const result = currentTodos?.filter((todo: Todo) => todo.id !== id);
-
-      return result || null;
+    setTodos((currentTodos: Todo[]) => {
+      return currentTodos.filter((todo: Todo) => todo.id !== id);
     });
   }, []);
 
   const checkedTodo = useCallback((id: string) => {
-    setTodos((currentTodos: Todo[] | null) => {
-      const result = currentTodos?.map((todo: Todo) => {
+    setTodos((currentTodos: Todo[]) => {
+      return currentTodos.map((todo: Todo) => {
         return todo.id === id ? { ...todo, completed: !todo.completed } : todo;
       });
-
-      return result || null;
     });
   }, []);
 
   const clearCompleted = useCallback(() => {
-    setTodos((currentTodos: Todo[] | null) => {
-      const result = currentTodos?.filter((todo: Todo) => !todo.completed);
+    setTodos((currentTodos: Todo[]) => {
+      const result = currentTodos.filter((todo: Todo) => !todo.completed);
 
-      return result || null;
+      return result;
     });
   }, []);
 
   const onChangeTodo = useCallback((id: string, title: string) => {
-    setTodos((currentTodos: Todo[] | null) => {
-      const result = currentTodos?.map((todo: Todo) => {
+    setTodos((currentTodos: Todo[]) => {
+      return currentTodos.map((todo: Todo) => {
         return todo.id === id ? { ...todo, title } : todo;
       });
-
-      return result || null;
     });
   }, []);
 

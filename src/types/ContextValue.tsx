@@ -1,7 +1,7 @@
 import { Todo } from './Todo';
 
 export type ContextValue = {
-  todos: Todo[] | null,
+  todos: Todo[],
   toggleAll: string,
   setTodos: (todos: Todo[]) => void,
   handlerToggleAll: () => void,
