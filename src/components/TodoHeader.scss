@@ -1,0 +1,14 @@
+@import "../variables";
+
+.todo-header {
+  margin: 0;
+  margin-bottom: $marginBottom;
+
+  &__title {
+    text-align: center;
+    font-size: $titleSize;
+    font-weight: 700;
+    color: $whiteColor;
+    text-shadow: 8px 8px 8px rgba(34, 60, 80, 0.5);
+  }
+}

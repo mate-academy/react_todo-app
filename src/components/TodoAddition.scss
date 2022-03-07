@@ -1,0 +1,11 @@
+@import "../variables";
+
+.todo-addition {
+  display: flex;
+  justify-content: space-between;
+  background-color: $whiteColor;
+
+  &__count {
+    width: 96px;
+  }
+}
