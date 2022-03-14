@@ -1,88 +1,165 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
-function App() {
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+import { FILTER } from './constants';
+
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState({});
+  const [todosType, setTodosType] = useState('All');
+  const [currentTitle, setCurrentTitle] = useState('');
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('todos'))) {
+      setTodos(JSON.parse(localStorage.getItem('todos')));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const uncompletedTodos = useMemo(
+    () => todos.filter(todo => !todo.completed),
+    [todos],
+  );
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed),
+    [todos],
+  );
+
+  const changeStatus = (todoId) => {
+    const changedTodos = todos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
+
+      return { ...todo, completed: !todo.completed };
+    });
+
+    setTodos(changedTodos);
+  };
+
+  const changeStatusAllTodos = () => {
+    setTodos(
+      todos.map(todo => ({
+        ...todo,
+        completed: completedTodos.length !== todos.length,
+      })),
+    );
+  };
+
+  const selectTodosType = (type) => {
+    setTodosType(type);
+  };
+
+  const filteredTodos = useMemo(() => {
+    switch (todosType) {
+      case FILTER.active:
+        return uncompletedTodos;
+
+      case FILTER.completed:
+        return completedTodos;
+
+      default:
+        return todos;
+    }
+  }, [todos, todosType]);
+
+  const clearCompleted = () => {
+    setTodos(uncompletedTodos);
+  };
+
+  const removeTodo = (todoId) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
+  const changeTodo = (todoId, newValue) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
+
+      return { ...todo, title: newValue };
+    }));
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
-        <h1>todos</h1>
+        <h1>todos App</h1>
 
-        <form>
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          if (currentTitle) {
+            setTodos([...todos, newTodo]);
+          }
+
+          setCurrentTitle('');
+        }}
+        >
           <input
             type="text"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={currentTitle}
+            onChange={(event) => {
+              setCurrentTitle(event.target.value.trimLeft());
+              setNewTodo({
+                id: +new Date(),
+                title: event.target.value.trimLeft(),
+                completed: false,
+              });
+            }}
           />
         </form>
       </header>
 
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length > 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              checked={completedTodos.length === todos.length}
+              onChange={changeStatusAllTodos}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <TodoList
+              items={filteredTodos}
+              changeStatus={changeStatus}
+              removeTodo={removeTodo}
+              changeTodo={changeTodo}
+            />
+          </section>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <footer className="footer">
+            <span className="todo-count">
+              {`${uncompletedTodos.length} items left`}
+            </span>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <TodoFilter
+              todosType={todosType}
+              selectTodosType={selectTodosType}
+            />
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            {completedTodos.length > 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </section>
   );
 }
 
-export default App;
+export default TodoApp;
