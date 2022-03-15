@@ -12,9 +12,9 @@ export const TodosContext = createContext<GlobalContent | null>(null);
 
 export const TodosProvider: React.FC = ({ children }) => {
   const [todos, setTodos] = useState<ITodo[]>(() => {
-    const saved = localStorage.getItem("name");
+    const saved = localStorage.getItem('todos');
     const initialValue = saved && JSON.parse(saved);
-    return initialValue || "";
+    return initialValue || [];
   });
   const [filteredTodos, setFilteredTodos] = useState<ITodo[]>([]);
 
