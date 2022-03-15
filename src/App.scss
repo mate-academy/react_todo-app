@@ -1,0 +1,17 @@
+@import "variables";
+
+.app {
+  min-width: 480px;
+  max-width: 560px;
+  padding: 8px;
+  margin: 0 auto;
+  color: $fontColor;
+
+  &__todos {
+    background-color: $whiteColor;
+    margin-bottom: 24px;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 8px 8px 8px 0 rgba(34, 60, 80, 0.5);
+  }
+}

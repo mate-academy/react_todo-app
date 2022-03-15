@@ -1,0 +1,53 @@
+@import "../variables";
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  height: min-content;
+  width: 100%;
+  padding: 8px 16px;
+  border-bottom: 1px solid $lightGrayColor;
+
+  &:last-child {
+    border-bottom: transparent;
+  }
+
+  &__part {
+    display: flex;
+    align-items: center;
+  }
+
+  &__checkbox {
+    margin-right: 16px;
+    width: 16px;
+    height: 16px;
+    accent-color: $blueColor;
+    cursor: pointer;
+  }
+
+  &__input {
+    height: 32px;
+    color: $grayColor;
+    font-size: $fontSize;
+  }
+
+  &__title {
+    width: max-content;
+    max-width: 320px;
+    font-size: $fontSize;
+    word-wrap: break-word;
+    cursor: pointer;
+
+    &--completed {
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+  }
+
+  &__button {
+    width: 24px;
+    height: 24px;
+    margin-left: 8px;
+    padding: 0;
+  }
+}
