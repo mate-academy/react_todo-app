@@ -3,32 +3,24 @@ import { ITodo } from '../../types/ITodo';
 
 type GlobalContent = {
   todos: ITodo[];
-  setTodos: (todos: ITodo[]) => void;
+  setTodos: React.Dispatch<React.SetStateAction<ITodo[]>>,
   filteredTodos: ITodo[];
-  setFilteredTodos: (filteredTodos: ITodo[]) => void;
+  setFilteredTodos: React.Dispatch<React.SetStateAction<ITodo[]>>,
 };
 
 export const TodosContext = createContext<GlobalContent | null>(null);
 
 export const TodosProvider: React.FC = ({ children }) => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [todos, setTodos] = useState<ITodo[]>(() => {
+    const saved = localStorage.getItem("name");
+    const initialValue = saved && JSON.parse(saved);
+    return initialValue || "";
+  });
   const [filteredTodos, setFilteredTodos] = useState<ITodo[]>([]);
-
-  const saveLocalTodos = () => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  };
-
-  const getLocalTodos = () => {
-    setTodos(JSON.parse(localStorage.todos));
-  };
-
-  useEffect(() => {
-    getLocalTodos();
-  }, []);
 
   useEffect(() => {
     setFilteredTodos(todos);
-    saveLocalTodos();
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   return (
