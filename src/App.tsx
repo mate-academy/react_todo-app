@@ -27,11 +27,6 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
-  // const fetchTodos = async () => {
-  //  const todos = await getTodos();
-  //  setTodos(todos);
-  // };
-
   useEffect(() => {
     Promise.all([getUser(), getTodos()])
       .then(responce => {
@@ -42,19 +37,25 @@ const App: React.FC = () => {
       });
   }, []);
 
-  const completedTodos = useMemo(() => todos.filter(todo => todo.completed), [todos]);
-  const activeTodos = useMemo(() => todos.filter(todo => !todo.completed), [todos]);
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed),
+    [todos],
+  );
+
+  const activeTodos = useMemo(
+    () => todos.filter(todo => !todo.completed),
+    [todos],
+  );
 
   const onTodoAdd = useCallback(async (newTodo: Todo) => {
     const addedTodo = await postTodo(newTodo);
-    // await fetchTodos();
 
     setTodos([...todos, addedTodo]);
   }, [todos]);
 
   const onTodoUpdate = useCallback(async (todoId: number, propsToUpdate: TodoPropsToUpdate) => {
     await updateTodo(todoId, propsToUpdate);
-    // await fetchTodos();
+
     setTodos((oldTodos) => oldTodos.map(todo => {
       if (todo.id === todoId) {
         return { ...todo, ...propsToUpdate };
@@ -66,19 +67,20 @@ const App: React.FC = () => {
 
   const onTodoDelete = useCallback(async (todoId: number) => {
     await deleteTodo(todoId);
-    // await fetchTodos();
+
     setTodos((oldTodos) => oldTodos.filter(todo => todo.id !== todoId));
   }, [todos]);
 
   const onToggleAllChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    todos.forEach(todo => {
-      if (event.target.checked && !todo.completed) {
-        onTodoUpdate(todo.id, { completed: true });
-      } else if (!event.target.checked && todo.completed) {
-        onTodoUpdate(todo.id, { completed: false });
-      }
-    });
-    // await fetchTodos();
+    if (event.target.checked) {
+      todos.forEach(todo => {
+        updateTodo(todo.id, { completed: true });
+      });
+    } else {
+      todos.forEach(todo => {
+        updateTodo(todo.id, { completed: false });
+      });
+    }
   }, [todos]);
 
   const clearCompleted = useCallback(async () => {
@@ -87,7 +89,6 @@ const App: React.FC = () => {
         onTodoDelete(todo.id);
       }
     });
-    // await fetchTodos();
   }, [todos]);
 
   return (

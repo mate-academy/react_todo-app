@@ -11,6 +11,7 @@ const AddTodoForm: React.FC<Props> = ({ onTodoAdd }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     onTodoAdd({
       id: 0,
       title,
