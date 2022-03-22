@@ -3,7 +3,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 
 import TodoList from '../TodoList';
 
-import { Status } from '../../types/Status';
+import { FilterRoutes } from '../../types/FilterRoutes';
 
 type Props = {
   todos: Todo[],
@@ -13,9 +13,9 @@ type Props = {
 export const TodosFilter: React.FC<Props> = React.memo(({ todos, setTodos }) => (
   <Routes>
     <Route path="/" element={<TodoList todos={todos} setTodos={setTodos} />} />
-    <Route path={Status.All} element={<Navigate to="/" />} />
+    <Route path={FilterRoutes.All} element={<Navigate to="/" />} />
     <Route
-      path={Status.Active}
+      path={FilterRoutes.Active}
       element={(
         <TodoList
           todos={todos.filter(todo => !todo.completed)}
@@ -24,7 +24,7 @@ export const TodosFilter: React.FC<Props> = React.memo(({ todos, setTodos }) => 
       )}
     />
     <Route
-      path={Status.Completed}
+      path={FilterRoutes.Completed}
       element={(
         <TodoList
           todos={todos.filter(todo => todo.completed)}

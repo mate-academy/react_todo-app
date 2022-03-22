@@ -16,7 +16,7 @@ import {
   patchTodo,
 } from './api/todos';
 
-import { Status } from './types/Status';
+import { FilterRoutes } from './types/FilterRoutes';
 
 import TodosFilter from './components/TodosFilter';
 import Error from './components/Error';
@@ -166,7 +166,7 @@ const App: React.FC = () => {
 
               <li>
                 <NavLink
-                  to={`/${Status.Active}`}
+                  to={`/${FilterRoutes.Active}`}
                   className={({ isActive }) => classNames({ selected: isActive })}
                 >
                   Active
@@ -175,7 +175,7 @@ const App: React.FC = () => {
 
               <li>
                 <NavLink
-                  to={`/${Status.Completed}`}
+                  to={`/${FilterRoutes.Completed}`}
                   className={({ isActive }) => classNames({ selected: isActive })}
                 >
                   Completed
