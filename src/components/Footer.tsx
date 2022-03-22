@@ -45,7 +45,7 @@ const Footer: React.FC<Props> = ({ clearCompleted, activeTodosLength, completedT
         <button
           type="button"
           className="clear-completed"
-          onClick={() => clearCompleted()}
+          onClick={clearCompleted}
         >
           Clear completed
         </button>

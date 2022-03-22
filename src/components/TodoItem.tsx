@@ -85,7 +85,7 @@ const TodoItem: React.FC<Props> = ({ todo, onTodoDelete, onTodoUpdate }) => {
         ref={inputElement}
         value={inputTitle}
         onChange={event => setInputTitle(event.target.value)}
-        onBlur={() => onInputBlur()}
+        onBlur={onInputBlur}
         onKeyPress={handleEnterPress}
       />
     </li>
