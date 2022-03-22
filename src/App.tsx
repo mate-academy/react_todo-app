@@ -74,11 +74,11 @@ const App: React.FC = () => {
   const onToggleAllChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       todos.forEach(todo => {
-        updateTodo(todo.id, { completed: true });
+        onTodoUpdate(todo.id, { completed: true });
       });
     } else {
       todos.forEach(todo => {
-        updateTodo(todo.id, { completed: false });
+        onTodoUpdate(todo.id, { completed: false });
       });
     }
   }, [todos]);
