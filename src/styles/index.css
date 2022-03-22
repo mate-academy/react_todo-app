@@ -33,6 +33,10 @@ body {
   font-weight: 300;
 }
 
+input:focus {
+  outline: none;
+}
+
 .hidden {
   display: none;
 }
