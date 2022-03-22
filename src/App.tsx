@@ -114,10 +114,40 @@ const App: React.FC = () => {
         )}
 
         <Routes>
-          <Route path="/" element={<TodoList todos={todos} onTodoDelete={onTodoDelete} onTodoUpdate={onTodoUpdate} />} />
-          <Route path="/active" element={<TodoList todos={activeTodos} onTodoDelete={onTodoDelete} onTodoUpdate={onTodoUpdate} />} />
-          <Route path="/completed" element={<TodoList todos={completedTodos} onTodoDelete={onTodoDelete} onTodoUpdate={onTodoUpdate} />} />
-          <Route path="*" element={<Hello404 />} />
+          <Route
+            path="/"
+            element={(
+              <TodoList
+                todos={todos}
+                onTodoDelete={onTodoDelete}
+                onTodoUpdate={onTodoUpdate}
+              />
+            )}
+          />
+          <Route
+            path="/active"
+            element={(
+              <TodoList
+                todos={activeTodos}
+                onTodoDelete={onTodoDelete}
+                onTodoUpdate={onTodoUpdate}
+              />
+            )}
+          />
+          <Route
+            path="/completed"
+            element={(
+              <TodoList
+                todos={completedTodos}
+                onTodoDelete={onTodoDelete}
+                onTodoUpdate={onTodoUpdate}
+              />
+            )}
+          />
+          <Route
+            path="*"
+            element={<Hello404 />}
+          />
         </Routes>
       </section>
 
