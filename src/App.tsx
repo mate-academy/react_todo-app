@@ -19,9 +19,11 @@ import {
 import { Status } from './types/Status';
 
 import TodosFilter from './components/TodosFilter';
+import Error from './components/Error';
 
 const App: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState('');
@@ -31,11 +33,19 @@ const App: React.FC = () => {
   ), [todos]);
 
   const placeholder = useMemo(() => (
-    isLoading ? 'Loading...' : 'Couldn\'t connect to server'
+    isLoading ? 'Loading...' : 'Server error: couldn\'t load user'
   ), [isLoading]);
 
+  const errorHandler = useCallback(() => {
+    setError(true);
+    setTimeout(() => setError(false), 1500);
+  }, []);
+
   useEffect(() => {
-    getTodos(USER_ID).then(setTodos);
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(errorHandler);
+
     getUser(USER_ID)
       .then(userFromServer => {
         setUser(userFromServer);
@@ -56,22 +66,25 @@ const App: React.FC = () => {
       .then(() => {
         setInput('');
         getTodos(USER_ID).then(setTodos);
-      });
-  }, [USER_ID, input]);
+      })
+      .catch(errorHandler);
+  }, [input]);
 
   const toggleAll = useCallback(() => {
     const newTodos: Todo[] = [];
 
     if (activeTodos.length === 0 || activeTodos.length === todos.length) {
       todos.forEach(todo => {
-        patchTodo(todo.id, { completed: !todo.completed });
         newTodos.push({ ...todo, completed: !todo.completed });
+        patchTodo(todo.id, { completed: !todo.completed })
+          .catch(errorHandler);
       });
     } else {
       todos.forEach(todo => {
         if (!todo.completed) {
-          patchTodo(todo.id, { completed: true });
           newTodos.push({ ...todo, completed: true });
+          patchTodo(todo.id, { completed: true })
+            .catch(errorHandler);
         } else {
           newTodos.push(todo);
         }
@@ -86,7 +99,8 @@ const App: React.FC = () => {
 
     todos.forEach(todo => {
       if (todo.completed) {
-        deleteTodo(todo.id);
+        deleteTodo(todo.id)
+          .catch(errorHandler);
       } else {
         newTodos.push(todo);
       }
@@ -96,84 +110,94 @@ const App: React.FC = () => {
   }, [todos]);
 
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>
-          {user
-            ? `${user.name} todos`
-            : placeholder}
-        </h1>
+    <>
+      <section className="todoapp">
+        <header className="header">
+          <h1>
+            {user
+              ? `${user.name} todos`
+              : placeholder}
+          </h1>
 
-        <form onSubmit={addTodo}>
+          <form onSubmit={addTodo}>
+            <input
+              type="text"
+              className="new-todo"
+              placeholder="What needs to be done?"
+              value={input}
+              onChange={(event) => {
+                if (error) {
+                  setError(false);
+                }
+
+                setInput(event.target.value);
+              }}
+            />
+          </form>
+        </header>
+
+        <section className="main">
           <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            onChange={toggleAll}
           />
-        </form>
-      </header>
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          onChange={toggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+          {todos.length > 0 && <TodosFilter todos={todos} setTodos={setTodos} />}
+        </section>
 
-        {todos.length > 0 && <TodosFilter todos={todos} setTodos={setTodos} />}
+        {todos.length > 0 && (
+          <footer className="footer">
+            <span className="todo-count">
+              {`${activeTodos.length} items left`}
+            </span>
+
+            <ul className="filters">
+              <li>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) => classNames({ selected: isActive })}
+                >
+                  All
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to={`/${Status.Active}`}
+                  className={({ isActive }) => classNames({ selected: isActive })}
+                >
+                  Active
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to={`/${Status.Completed}`}
+                  className={({ isActive }) => classNames({ selected: isActive })}
+                >
+                  Completed
+                </NavLink>
+              </li>
+            </ul>
+
+            {activeTodos.length !== todos.length && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        )}
       </section>
 
-      {todos.length > 0 && (
-        <footer className="footer">
-          <span className="todo-count">
-            {`${activeTodos.length} items left`}
-          </span>
-
-          <ul className="filters">
-            <li>
-              <NavLink
-                to="/"
-                className={({ isActive }) => classNames({ selected: isActive })}
-              >
-                All
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to={`/${Status.Active}`}
-                className={({ isActive }) => classNames({ selected: isActive })}
-              >
-                Active
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to={`/${Status.Completed}`}
-                className={({ isActive }) => classNames({ selected: isActive })}
-              >
-                Completed
-              </NavLink>
-            </li>
-          </ul>
-
-          {activeTodos.length !== todos.length && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={clearCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
-      )}
-    </section>
+      {error && <Error message="Server error: try again later" />}
+    </>
   );
 };
 
