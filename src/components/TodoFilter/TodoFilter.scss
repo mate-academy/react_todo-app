@@ -1,0 +1,16 @@
+@import '../../lib/mixins.scss';
+
+.TodoFilter {
+  display: flex;
+  gap: 10px;
+
+  &__status {
+    @include text-3;
+
+    color: rgb(49, 143, 231);
+
+    &--active {
+      font-weight: 600;
+    }
+  }
+}

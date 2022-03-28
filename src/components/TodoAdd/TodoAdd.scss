@@ -1,0 +1,33 @@
+@import '../../lib/variables.scss';
+@import '../../lib/mixins.scss';
+
+.TodoAdd {
+  &__input {
+    @include main-text;
+
+    width: 100%;
+    padding: 16px 4px 16px 40px;
+    border: 0;
+    border-radius: 6px;
+
+    background: url(../../lib/assets/icons/todo-list-icon.svg) no-repeat 12px /
+      20px;
+    background-color: $c-gray-light;
+
+    &:focus {
+      outline: none;
+
+      background-color: $c-gray-dark;
+    }
+
+    &::placeholder {
+      color: $c-grayish-blue;
+    }
+  }
+
+  &__title-error {
+    @include text-3;
+
+    margin: 6px 0 12px;
+  }
+}

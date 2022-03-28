@@ -1,0 +1,20 @@
+.TodoCheckBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+  border: 2px solid black;
+  border-radius: 50%;
+
+  background-color: rgb(255, 255, 255);
+
+  &__inner-circle {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+
+    background-color: black;
+  }
+}

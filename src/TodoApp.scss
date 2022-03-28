@@ -1,0 +1,115 @@
+@import './lib/variables.scss';
+@import './lib/mixins.scss';
+@import './lib/extends.scss';
+
+.TodoApp {
+  @include main-text;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 100px;
+  margin: 20px;
+  border-radius: 10px;
+
+  background-color: $c-bg;
+
+  &__todo-app {
+    width: 400px;
+    padding: 12px;
+    border-radius: 6px;
+
+    background-color: $c-white;
+
+    @media (max-width: 480px) {
+      width: 300px;
+    }
+  }
+
+  &__todo-add {
+    margin-bottom: 8px;
+  }
+
+  &__upper-actions-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__upper-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &::after {
+      @extend %divider;
+
+      margin-bottom: 12px;
+    }
+  }
+
+  &__upper-action-complete {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__complete-all-icon {
+    width: 18px;
+  }
+
+  &__upper-action {
+    @include text-3;
+
+    color: $c-dark-blue;
+
+    &--complete {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      &::after {
+        content: url(./lib/assets/icons/done-icon--hover.svg);
+
+        width: 0;
+        height: 0;
+
+        overflow: hidden;
+      }
+
+      &::before {
+        content: '';
+
+        display: block;
+        width: 16px;
+        height: 16px;
+
+        background: url(./lib/assets/icons/done-icon.svg) no-repeat center /
+          contain;
+      }
+
+      &:hover::before {
+        background-image: url(./lib/assets/icons/done-icon--hover.svg);
+      }
+    }
+  }
+
+  &__lower-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__todos-left {
+    @include text-2;
+  }
+
+  &__todos-count {
+    margin-right: 4px;
+  }
+
+  &__lower-action {
+    @include text-3;
+  }
+}

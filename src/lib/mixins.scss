@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;600;700&display=swap');
+
+@mixin main-text {
+  font-family: 'Libre Franklin', sans-serif;
+  font-weight: 500;
+}
+
+@mixin text-2 {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 12px;
+  font-weight: 5000;
+}
+
+@mixin text-3 {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
