@@ -1,64 +1,69 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setCompletedTodosAction,
+  setEditingIdAction,
+  setInitialTitleAction,
+  setTodosAction,
+} from '../../store/actions';
+import { getEditingIdSelector, getInitialTitleSelector } from '../../store/selectors';
 
 type Props = {
   listTodo: Todo,
   todos: Todo[],
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   completedTodos: number[],
-  setCompletedTodos: React.Dispatch<React.SetStateAction<number[]>>,
 };
 
 export const TodoItem: React.FC<Props> = (props) => {
   const {
     listTodo,
     completedTodos,
-    setCompletedTodos,
     todos,
-    setTodos,
   } = props;
-  const [editingId, setEditingId] = useState<number>();
-  const [initialTitle, setInitialTitle] = useState<string[]>([]);
+  const dispatch = useDispatch();
+  const editingId = useSelector(getEditingIdSelector);
+  const initialTitle = useSelector(getInitialTitleSelector);
 
   const handleComplete = (event: React.ChangeEvent<HTMLInputElement>, todoId: number) => {
     if (event.target.checked) {
-      setCompletedTodos([...completedTodos, todoId]);
+      dispatch(setCompletedTodosAction([...completedTodos, todoId]));
     } else {
-      setCompletedTodos(completedTodos.filter(id => id !== todoId));
+      dispatch(setCompletedTodosAction(completedTodos.filter(id => id !== todoId)));
     }
   };
 
   const handleChangeInput = (todo: Todo, title: string) => {
     const newTodo = { ...todo, title };
 
-    setTodos([...todos.map((oldTodo) => {
+    dispatch(setTodosAction([...todos.map((oldTodo) => {
       if (oldTodo.id === newTodo.id) {
         return newTodo;
       }
 
       return oldTodo;
-    })]);
+    })]));
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, todo: Todo) => {
     if (initialTitle.length === 0) {
-      setInitialTitle([todo.title]);
+      dispatch(setInitialTitleAction([todo.title]));
     }
 
     handleChangeInput(todo, event.target.value);
   };
 
   const handleDelete = (todoId: number) => {
-    setTodos(todos.filter(todo => todo.id !== todoId));
-    setCompletedTodos(completedTodos.filter(id => id !== todoId));
+    dispatch(setTodosAction(todos.filter(todo => todo.id !== todoId)));
+    dispatch(setCompletedTodosAction(completedTodos.filter(id => id !== todoId)));
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
-    setEditingId(0);
-    setInitialTitle([]);
+    dispatch(setEditingIdAction(0));
+    dispatch(setInitialTitleAction([]));
 
     if (event.target.value.length === 0) {
-      setTodos(todos.filter(oldTodo => oldTodo.title !== event.target.value));
+      dispatch(setTodosAction(todos.filter(oldTodo => oldTodo.title !== event.target.value)));
     }
   };
 
@@ -69,7 +74,7 @@ export const TodoItem: React.FC<Props> = (props) => {
 
     if (event.key === 'Escape') {
       handleChangeInput(todo, initialTitle[0]);
-      setInitialTitle([]);
+      dispatch(setInitialTitleAction([]));
       event.target.blur();
     }
   };
@@ -91,7 +96,7 @@ export const TodoItem: React.FC<Props> = (props) => {
           id={`${listTodo.id}`}
           onChange={(event) => handleComplete(event, listTodo.id)}
         />
-        <span className="todo__text" onDoubleClick={() => setEditingId(listTodo.id)}>{listTodo.title}</span>
+        <span className="todo__text" onDoubleClick={() => dispatch(setEditingIdAction(listTodo.id))}>{listTodo.title}</span>
         <button type="button" className="destroy" onClick={() => handleDelete(listTodo.id)}>
           <div className="destroy-icon" />
         </button>

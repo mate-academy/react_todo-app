@@ -1,36 +1,53 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodosFilter } from './components/TodosFilter/TodosFilter';
+import {
+  setActiveFilterAction,
+  setCompletedTodosAction,
+  setNewTodoAction,
+  setTodosAction,
+  setVisibleTodosAction,
+} from './store/actions';
+import {
+  getActiveFilterSelector,
+  getCompletedTodosSelector,
+  getNewTodoSelector,
+  getTodosSelector,
+  getVisibleTodosSelector,
+} from './store/selectors';
 
 const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [completedTodos, setCompletedTodos] = useState<number[]>([]);
-  const [newTodoTitle, setNewTodoTitle] = useState<string>('');
-  const [activeFilter, setActiveFilter] = useState('all');
+  const dispatch = useDispatch();
+  const todos = useSelector(getTodosSelector);
+  const visibleTodos = useSelector(getVisibleTodosSelector);
+  const completedTodos = useSelector(getCompletedTodosSelector);
+  const newTodoTitle = useSelector(getNewTodoSelector);
+  const activeFilter = useSelector(getActiveFilterSelector);
+
   const filter = {
     all: () => {
-      setVisibleTodos(todos);
-      setActiveFilter('all');
+      dispatch(setVisibleTodosAction(todos));
+      dispatch(setActiveFilterAction('all'));
     },
     active: () => {
-      setVisibleTodos(todos.filter(todo => !completedTodos.includes(todo.id)));
-      setActiveFilter('active');
+      dispatch(setVisibleTodosAction(todos.filter(todo => !completedTodos.includes(todo.id))));
+      dispatch(setActiveFilterAction('active'));
     },
     completed: () => {
-      setVisibleTodos(todos.filter(todo => completedTodos.includes(todo.id)));
-      setActiveFilter('completed');
+      dispatch(setVisibleTodosAction(todos.filter(todo => completedTodos.includes(todo.id))));
+      dispatch(setActiveFilterAction('completed'));
     },
   };
 
   const handleToggleAll = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      setCompletedTodos(todos.map(todo => todo.id));
+      dispatch(setCompletedTodosAction(todos.map(todo => todo.id)));
     }
 
     if (!event.target.checked) {
-      setCompletedTodos([]);
+      dispatch(setCompletedTodosAction([]));
     }
   };
 
@@ -42,15 +59,16 @@ const App: React.FC = () => {
       completed: false,
     };
 
-    setTodos([...todos, newTodo]);
-    setNewTodoTitle('');
+    dispatch(setTodosAction([...todos, newTodo]));
+    dispatch(setNewTodoAction(''));
   };
 
   const handleClearAll = () => {
     const filteredTodos = todos.filter(todo => !completedTodos.includes(todo.id));
 
-    setTodos(filteredTodos);
-    setCompletedTodos(completedTodos.filter(id => filteredTodos.some(todo => todo.id === id)));
+    dispatch(setTodosAction(filteredTodos));
+    dispatch(setCompletedTodosAction(completedTodos
+      .filter(id => filteredTodos.some(todo => todo.id === id))));
   };
 
   useEffect(() => {
@@ -74,7 +92,7 @@ const App: React.FC = () => {
             className="todoapp__input new-todo"
             placeholder="What needs to be done?"
             value={newTodoTitle}
-            onChange={(event) => setNewTodoTitle(event.target.value)}
+            onChange={(event) => dispatch(setNewTodoAction(event.target.value))}
           />
         </form>
       </header>
@@ -97,9 +115,7 @@ const App: React.FC = () => {
         <TodoList
           todos={todos}
           visibleTodos={visibleTodos}
-          setTodos={setTodos}
           completedTodos={completedTodos}
-          setCompletedTodos={setCompletedTodos}
         />
       </section>
 
