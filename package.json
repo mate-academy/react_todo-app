@@ -61,7 +61,7 @@
   },
   "mateAcademy": {
     "_comment": "Replace 'reactTypescript' with 'react' if you want use React without Typescript",
-    "projectType": "reactTypescript",
+    "projectType": "react",
     "tests": {
       "_comment": "Add `cypressComponents: true` to enable component tests",
       "cypress": true
