@@ -22,8 +22,8 @@ function App() {
         <ul className="todo-list">
           <li>
             <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>asdfghj</label>
+              <input type="checkbox" className="toggle" id="toggle-view" />
+              <label labelFor="toggle-view">asdfghj</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
@@ -31,8 +31,8 @@ function App() {
 
           <li className="completed">
             <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>qwertyuio</label>
+              <input type="checkbox" className="toggle" id="toggle-completed" />
+              <label labelFor="toggle-completed">qwertyuio</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
@@ -40,8 +40,8 @@ function App() {
 
           <li className="editing">
             <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>zxcvbnm</label>
+              <input type="checkbox" className="toggle" id="toggle-editing" />
+              <label labelFor="toggle-editing">zxcvbnm</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
@@ -49,8 +49,8 @@ function App() {
 
           <li>
             <div className="view">
-              <input type="checkbox" className="toggle" />
-              <label>1234567890</label>
+              <input type="checkbox" className="toggle" id="toggle-view2" />
+              <label labelFor="toggle-view2">1234567890</label>
               <button type="button" className="destroy" />
             </div>
             <input type="text" className="edit" />
