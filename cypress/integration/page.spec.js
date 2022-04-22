@@ -152,7 +152,7 @@ describe('Page', () => {
       .should('not.exist');
   });
 
-  it(' Make inline editing for the TODO item', () => {
+  it('user can edit todos', () => {
     cy.get('@todos')
       .eq(0)
       .dblclick()
