@@ -5,9 +5,12 @@ import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
 
-import App from './App';
+import TodoApp from './TodoApp';
+import { TodosProvider } from './TodosContext';
 
 ReactDOM.render(
-  <App />,
+  <TodosProvider>
+    <TodoApp />
+  </TodosProvider>,
   document.getElementById('root'),
 );
