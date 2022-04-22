@@ -10,33 +10,33 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
 ![todoapp](./description/todoapp.gif)
 
 ## Tasks
-1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
+1. Implement `TodoApp` component with an input field (add `data-cy="createTodo"` to this element) to create new todos on submit (Enter). Each item should have:
     - `id` - unique identifier (`+new Date()` is good enough)
     - `title` - the text of a todo
     - `completed` - current status (`false` by default)
-1. Show the number of not completed todos in `TodoApp`
-1. Implement `TodoList` component to display a list of todos
+1. Show the number of not completed todos in `TodoApp`. You should add a `data-cy="todosCounter"` attribute to this element. 
+1. Implement `TodoList` component with a `data-cy="todoList"` attribute in it's `<ul>` or `<ol>` element to display a list of todos
     ```jsx harmony
     <TodoList items={todos} />
     ```
-1. Implement `TodoItem` component with ability to toggle the `completed` status.
+1. Implement `TodoItem` component with ability to toggle the `completed` status using a checkbox.
     - move the `li` tag inside the `TodoItem`
     - add class `completed` if todo is completed
-1. Add ability to toggle the completed status of all the todos.
+1. Add ability to toggle the completed status of all the todos and add a `data-cy="toggleAll"` attribute to it.
     - `toggleAll` checkbox is active only if all the todos are completed
-    - if you click the checkbox all the items should be marked as `comlpeted`/`not completed`  depending on `toggleAll` status
-1. Create `TodosFilter` component to switch between `all`/`active`/`completed` todos (add it to the `App`)
+    - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` status
+1. Create `TodosFilter` component with 3 buttons containing text `All`/`Active`/`Completed` to switch between these types of todos (add it to the `App`) and add a `data-cy="todosFilter"` attribute to it.
     - Use constants instead of just strings (for example `FILTERS.all`)
-1. Add ability to remove an item.
-1. Add ability to `clear completed` - remove all completed items from the list.
+1. Add ability to remove an item and add a `data-cy="deleteTodo"` attribute to this element.
+1. Add ability to clear completed todos - remove all completed items from the list. The element should contain text `Clear completed` in it.
     - It should be visible if there is at least 1 completed item in the list. 
 1. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
 1. Make inline editing for the TODO item
-    - double click on the TODO title makes it editable (just add a class `editing` to a `li`)
+    - double click on the TODO title makes it editable (just add a class `editing` to a `li` and add an `id="editTodo"` attribute to the editing input element for)
     - DON'T add `htmlFor` to the label!!!
     - `Enter` saves changes
     - `Ecs` cancels editing
-    - Todo title can't be empty!
+    - Todo title can't be empty! If user clicks `Enter` with empty todo editing input this todo should be removed .
     - (*) save changes `onBlur`
 1. Save state of the APP to the `localStorage` ([Required theory](https://javascript.info/localstorage))
     - use `JSON.stringify` before saving and `JSON.parse` on reading
