@@ -22,6 +22,14 @@ describe('Page', () => {
       .as('todos');
   });
 
+  it('todo element has "id", "title", "completed" values', () => {
+    const todos = window.localStorage.getItem('todos');
+    const obj = JSON.parse(todos);
+
+    expect(obj[0]).to.includes.keys('id', 'title', 'completed');
+    expect(obj[0].completed).to.eq(false);
+  });
+
   it('the number of not completed todos is shown', () => {
     cy.get('@todos')
       .eq(0)
