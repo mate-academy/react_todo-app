@@ -8,7 +8,7 @@ function App() {
   );
 
   useEffect(() => {
-    localStorage.setItem('items', JSON.stringify(listTodo));
+    localStorage.setItem('todos', JSON.stringify(listTodo));
   }, [listTodo]);
 
   const handleEvent = (event) => {
