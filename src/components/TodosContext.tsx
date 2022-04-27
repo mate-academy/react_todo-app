@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import * as todosApi from './api/todos';
-import { Filter } from './types/Filter';
+import * as todosApi from '../api/todos';
+import { Filter } from '../types/Filter';
 
-type TodosContentType = {
+type TodosContextType = {
   getAll: (type?: Filter) => Todo[],
   add: (title: string) => void,
   remove: (todoId: string) => void,
@@ -11,7 +11,7 @@ type TodosContentType = {
   clearCompleted: () => void,
 };
 
-export const TodosContext = React.createContext<TodosContentType>({
+export const TodosContext = React.createContext<TodosContextType>({
   getAll: () => [],
   add: () => {},
   remove: () => {},
@@ -32,6 +32,30 @@ export const TodosProvider: React.FC = ({ children }) => {
   }, []);
 
   const value = useMemo(() => ({
+    getAll: (type = Filter.all) => {
+      switch (type) {
+        case Filter.active:
+          return todos.filter(todo => !todo.completed);
+
+        case Filter.completed:
+          return todos.filter(todo => todo.completed);
+
+        default:
+          return todos;
+      }
+    },
+    add: async (title: string) => {
+      todosApi.add(title)
+        .then(loadTodos);
+    },
+    remove: (todoId: string) => {
+      todosApi.remove(todoId)
+        .then(loadTodos);
+    },
+    update: (todoData: Todo) => {
+      todosApi.update(todoData)
+        .then(loadTodos);
+    },
     toggleAll: (completed: boolean) => {
       todosApi.updatedAll(
         todos
@@ -47,31 +71,6 @@ export const TodosProvider: React.FC = ({ children }) => {
           .map(todo => todo.id),
       )
         .then(loadTodos);
-    },
-    add: async (title: string) => {
-      const newTodo: Todo = await todosApi.add(title);
-
-      setTodos([...todos, newTodo]);
-    },
-    remove: (todoId: string) => {
-      todosApi.remove(todoId)
-        .then(loadTodos);
-    },
-    update: (todoData: Todo) => {
-      todosApi.update(todoData)
-        .then(loadTodos);
-    },
-    getAll: (type = Filter.all) => {
-      switch (type) {
-        case Filter.active:
-          return todos.filter(todo => !todo.completed);
-
-        case Filter.completed:
-          return todos.filter(todo => todo.completed);
-
-        default:
-          return todos;
-      }
     },
   }), [todos]);
 
