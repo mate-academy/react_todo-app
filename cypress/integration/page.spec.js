@@ -1,18 +1,46 @@
 Cypress.Commands.add('createDefaultTodos', function () {
-  const toDoItemOne = 'buy some cheese';
-  const toDoItemTwo = 'feed the cat';
-  const toDoItemThree = 'book a doctor`s appointment';
+  const todos = {
+    toDoItemOne: 'buy some cheese',
+    toDoItemTwo: 'feed the cat',
+    toDoItemThree: 'book a doctor`s appointment'
+  };
 
   cy.getByDataCy('createTodo')
-    .type(`${toDoItemOne}{enter}`)
-    .type(`${toDoItemTwo}{enter}`)
-    .type(`${toDoItemThree}{enter}`)
+    .type(`${todos.toDoItemOne}{enter}`)
+    .type(`${todos.toDoItemTwo}{enter}`)
+    .type(`${todos.toDoItemThree}{enter}`);
 
   cy.get('[data-cy="todosList"]')
     .children()
     .then(() => {
     });
-})
+});
+
+const page = {
+  checkTodo() {
+    cy.get('@todos')
+      .eq(0)
+      .find('[type="checkbox"]')
+      .check();
+  },
+
+  clickButton(name) {
+    cy.get('button')
+      .contains(name)
+      .click();
+  },
+
+  assertTodo(key, value, index) {
+    cy.get('@todos')
+      .eq(index)
+      .should(key, value);
+  },
+
+  assertTodosList(key, value) {
+    cy.get('@todos')
+      .should(key, value);
+  }
+}
 
 describe('Page', () => {
   beforeEach(() => {
@@ -22,7 +50,7 @@ describe('Page', () => {
       .as('todos');
   });
 
-  it('todo element has "id", "title", "completed" values', () => {
+  it('should have todo element with "id", "title", "completed" values', () => {
     const todos = window.localStorage.getItem('todos');
     const obj = JSON.parse(todos);
 
@@ -30,36 +58,27 @@ describe('Page', () => {
     expect(obj[0].completed).to.eq(false);
   });
 
-  it('the number of not completed todos is shown', () => {
-    cy.get('@todos')
-      .eq(0)
-      .find('[type="checkbox"]')
-      .check();
+  it('should show the number of not completed todos', () => {
+    page.checkTodo();
 
     cy.getByDataCy('todosCounter')
       .should('contain', 2);
   });
 
-  it('a todo can be completed', () => {
-    cy.get('@todos')
-      .eq(0)
-      .find('[type="checkbox"]')
-      .check();
+  it('should have an option to complete a todo', () => {
+    page.checkTodo();
 
-    cy.get('@todos')
-      .eq(0)
-      .should('have.class', 'completed');
+    page.assertTodo('have.class', 'completed', 0);
   });
 
-  it('Add ability to toggle the completed status of all the todos', () => {
+  it('should have an option to toggle the completed status of all the todos', () => {
     cy.getByDataCy('toggleAll')
       .check();
 
     cy.get('@todos')
       .children()
       .each(() => {
-        cy.get('@todos')
-          .should('have.class', 'completed')
+        page.assertTodo('have.class', 'completed', 0);
       });
 
     cy.getByDataCy('toggleAll')
@@ -68,76 +87,54 @@ describe('Page', () => {
     cy.get('@todos')
       .children()
       .each(() => {
-        cy.get('@todos')
-          .should('not.have.class', 'completed')
+        page.assertTodo('not.have.class', 'completed', 0);
       });
   });
 
-  it('user can switch between `all`/`active`/`completed` todos', () => {
-    cy.get('@todos')
-      .eq(0)
-      .find('[type="checkbox"]')
-      .check();
+  it('should have an option to switch between `all`/`active`/`completed` todos', () => {
+    page.checkTodo();
 
-    cy.get('button')
-      .contains('Active')
-      .click();
+    page.clickButton('Active');
 
-    cy.get('@todos')
-      .should('have.length', 2);
+    page.assertTodosList('have.length', 2)
 
-    cy.get('button')
-      .contains('Completed')
-      .click();
+    page.clickButton('Completed');
 
-    cy.get('@todos')
-      .should('have.length', 1);
+    page.assertTodosList('have.length', 1);
 
-    cy.get('button')
-      .contains('All')
-      .click();
+    page.clickButton('All');
 
-    cy.get('@todos')
-      .should('have.length', 3);
+    page.assertTodosList('have.length', 3);
   });
 
-  it('user can delete todos', () => {
+  it('should have an option to delete todos', () => {
     cy.get('@todos')
       .eq(0)
       .find('[data-cy="deleteTodo"]')
       .click({ force: true });
 
-    cy.get('@todos')
-      .should('have.length', 2);
+    page.assertTodosList('have.length', 2);
   });
 
-  it('user can clear the completed todos', () => {
+  it('should have an option to clear the completed todos', () => {
     cy.contains('Clear completed')
       .should('not.exist');
 
-    cy.get('@todos')
-      .eq(0)
-      .find('[type="checkbox"]')
-      .check();
+    page.checkTodo();
 
-    cy.get('button')
-      .contains('Clear completed')
-      .click();
+    page.clickButton('Clear completed');
 
-    cy.get('@todos')
-      .should('have.length', 2);
+    page.assertTodosList('have.length', 2);
   });
 
-  it('only input should be visible on the page when there are no todos', () => {
+  it('should show only input on the page when there are no todos', () => {
     cy.getByDataCy('todosList').children().each(() => {
       cy.get('@todos')
         .find('[type="checkbox"]')
         .check({ multiple: true })
     });
 
-    cy.get('button')
-      .contains('Active')
-      .click();
+    page.clickButton('Active');
 
     cy.getByDataCy('todosList')
       .should('exist');
@@ -145,13 +142,9 @@ describe('Page', () => {
     cy.getByDataCy('todosFilter')
       .should('be.visible');
 
-    cy.get('button')
-      .contains('All')
-      .click();
+    page.clickButton('All');
 
-    cy.get('button')
-      .contains('Clear completed')
-      .click();
+    page.clickButton('Clear completed');
 
     cy.getByDataCy('todosList')
       .should('not.exist');
@@ -166,18 +159,14 @@ describe('Page', () => {
       .dblclick()
       .type('!{enter}');
 
-    cy.get('@todos')
-      .eq(0)
-      .should('contain', 'buy some cheese!');
+    page.assertTodo('contain', 'buy some cheese!', 0);
 
     cy.get('@todos')
       .eq(1)
       .dblclick()
       .type('!{esc}');
 
-    cy.get('@todos')
-      .eq(1)
-      .should('contain', 'feed the cat');
+    page.assertTodo('contain', 'feed the cat', 1);
 
     cy.get('@todos')
       .eq(2)
