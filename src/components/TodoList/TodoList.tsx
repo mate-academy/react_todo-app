@@ -8,7 +8,7 @@ export const TodoList: React.FC = () => {
   return (
     <ul className="todo-list">
       {visibleTodos.map(todo => (
-        <TodoItem todo={todo} />
+        <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>
   );

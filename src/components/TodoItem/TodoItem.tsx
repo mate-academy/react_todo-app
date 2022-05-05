@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState, useRef } from 'react';
+import React, {
+  useContext, useState, useRef, useEffect,
+} from 'react';
 import classNames from 'classnames';
 import { TodosContext } from '../TodosContext';
 
@@ -12,6 +14,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [focused, setFocused] = useState(false);
   const [editedTodoTitle, setEditedTodoTitle] = useState(todo.title);
   const inputEditEl = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputEditEl.current) {
+      inputEditEl.current.focus();
+    }
+  }, [focused]);
 
   const toggleChange = (todoId: number): void => {
     setTodos(
@@ -36,10 +44,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleFocus = () => {
     setFocused(true);
-
-    if (inputEditEl.current) {
-      inputEditEl.current.focus();
-    }
   };
 
   const handleEditTitleChange = (
@@ -87,7 +91,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li
-      key={todo.id}
       className={classNames(
         {
           completed: todo.completed,
