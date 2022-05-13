@@ -4,7 +4,6 @@ import AppView from './components/TodoApp';
 function App() {
   return (
     <AppView />
-
   );
 }
 

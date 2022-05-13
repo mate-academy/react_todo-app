@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 // import React from 'react';
 
-export const TodoItem = ({ todo }) => {
+export const TodoItem = ({ todo, deleteTODO }) => {
   const { id, title, completed } = todo;
   const [isCompleted, setCompleted] = useState(completed);
 
@@ -11,6 +11,10 @@ export const TodoItem = ({ todo }) => {
 
     console.log(a);
   }, [isCompleted]);
+
+  const handleDell = (todoOnDeleting) => {
+    deleteTODO(todoOnDeleting);
+  };
 
   const handleCompleted = ({ target: { checked, id: todoId } }) => {
     const arr = JSON.parse(localStorage.getItem('todo'));
@@ -35,13 +39,17 @@ export const TodoItem = ({ todo }) => {
       <div className="view">
         <input
           type="checkbox"
-          checked={completed}
+          checked={isCompleted}
           className="toggle"
           id={id}
           onChange={handleCompleted}
         />
         <label htmlFor={id}>{title}</label>
-        <button type="button" className="destroy" />
+        <button
+          type="button"
+          className="destroy"
+          onClick={() => handleDell(todo)}
+        />
       </div>
       <input type="text" className="edit" />
     </li>

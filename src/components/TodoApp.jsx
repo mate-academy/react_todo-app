@@ -4,16 +4,13 @@ import TodoList from './TodoList';
 // import Todo from './TodoItem';
 import AddTodo from './AddTodo';
 
-const AppView = () => {
-  const getTodos = JSON.parse(localStorage.getItem('todo')) || [];
+const AppView = () => (
+  <section className="todoapp">
+    <AddTodo />
 
-  return (
-    <section className="todoapp">
-      <AddTodo />
+    <TodoList />
 
-      <TodoList todos={getTodos} />
-
-      {/* <Todo />
+    {/* <Todo />
       <header className="header">
         <h1>todos</h1>
 
@@ -85,8 +82,7 @@ const AppView = () => {
           Clear completed
         </button>
       </footer> */}
-    </section>
-  );
-};
+  </section>
+);
 
 export default AppView;
