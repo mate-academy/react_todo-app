@@ -21,11 +21,11 @@
 }
 
 .filters li a:hover {
-  border-color: rgba(175, 47, 47, 0.1);
+  border-color: #bb702a33;
 }
 
 .filters li a.selected {
-  border-color: rgba(175, 47, 47, 0.2);
+  border-color: #bb702aef;
 }
 
 @media (max-width: 430px) {
