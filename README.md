@@ -25,7 +25,7 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
 1. Add ability to toggle the completed status of all the todos and add a `data-cy="toggleAll"` attribute to this cehckbox element.
     - `toggleAll` checkbox is active only if all the todos are completed
     - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` status
-1. Create `TodosFilter` component with 3 buttons containing text `All`/`Active`/`Completed` to switch between these types of todos (add it to the `App`) and add a `data-cy="todosFilter"` attribute to the container of this buttons.
+1. Create `TodosFilter` component to switch between `All`/`Active`/`Completed` todos (add it to the `App`)
     - Use constants instead of just strings (for example `FILTERS.all`)
 1. Add ability to remove an item and add a `data-cy="deleteTodo"` attribute to this button.
 1. Add ability to clear completed todos - remove all completed items from the list. The button should contain text `Clear completed` in it.

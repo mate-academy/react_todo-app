@@ -25,8 +25,7 @@ const page = {
   },
 
   clickButton(name) {
-    cy.get('button')
-      .contains(name)
+      cy.contains(name)
       .click();
   },
 
