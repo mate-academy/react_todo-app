@@ -22,21 +22,21 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
 1. Implement `TodoItem` component with ability to toggle the `completed` status using a checkbox.
     - move the `li` tag inside the `TodoItem`
     - add class `completed` if todo is completed
-1. Add ability to toggle the completed status of all the todos and add a `data-cy="toggleAll"` attribute to it.
+1. Add ability to toggle the completed status of all the todos and add a `data-cy="toggleAll"` attribute to this cehckbox element.
     - `toggleAll` checkbox is active only if all the todos are completed
     - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` status
-1. Create `TodosFilter` component with 3 buttons containing text `All`/`Active`/`Completed` to switch between these types of todos (add it to the `App`) and add a `data-cy="todosFilter"` attribute to it.
+1. Create `TodosFilter` component with 3 buttons containing text `All`/`Active`/`Completed` to switch between these types of todos (add it to the `App`) and add a `data-cy="todosFilter"` attribute to the container of this buttons.
     - Use constants instead of just strings (for example `FILTERS.all`)
-1. Add ability to remove an item and add a `data-cy="deleteTodo"` attribute to this element.
-1. Add ability to clear completed todos - remove all completed items from the list. The element should contain text `Clear completed` in it.
+1. Add ability to remove an item and add a `data-cy="deleteTodo"` attribute to this button.
+1. Add ability to clear completed todos - remove all completed items from the list. The button should contain text `Clear completed` in it.
     - It should be visible if there is at least 1 completed item in the list. 
 1. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
 1. Make inline editing for the TODO item
-    - double click on the TODO title makes it editable (just add a class `editing` to a `li` and add an `id="editTodo"` attribute to the editing input element for)
+    - double click on the TODO title makes it editable (just add a class `editing` to a `li` and add an `id="editTodo"` attribute to the editing input element)
     - DON'T add `htmlFor` to the label!!!
     - `Enter` saves changes
     - `Ecs` cancels editing
-    - Todo title can't be empty! If user clicks `Enter` with empty todo editing input this todo should be removed .
+    - Todo title can't be empty! If user clicks `Enter` with empty todo editing input, this todo should be removed.
     - (*) save changes `onBlur`
 1. Save state of the APP to the `localStorage` using the name `todos` for the key ([Required theory](https://javascript.info/localstorage))
     - use `JSON.stringify` before saving and `JSON.parse` on reading

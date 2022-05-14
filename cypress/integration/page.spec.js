@@ -50,7 +50,7 @@ describe('Page', () => {
       .as('todos');
   });
 
-  it('should have todo element with "id", "title", "completed" values', () => {
+  it('should store todos in "localStorage" with "id", "title", "completed" values', () => {
     const todos = window.localStorage.getItem('todos');
     const obj = JSON.parse(todos);
 
@@ -58,7 +58,7 @@ describe('Page', () => {
     expect(obj[0].completed).to.eq(false);
   });
 
-  it('should show the number of not completed todos', () => {
+  it('should show the number of not completed todos left', () => {
     page.checkTodo();
 
     cy.getByDataCy('todosCounter')
@@ -128,11 +128,8 @@ describe('Page', () => {
   });
 
   it('should show only input on the page when there are no todos', () => {
-    cy.getByDataCy('todosList').children().each(() => {
-      cy.get('@todos')
-        .find('[type="checkbox"]')
-        .check({ multiple: true })
-    });
+    cy.getByDataCy('toggleAll')
+      .check();
 
     page.clickButton('Active');
 
@@ -173,7 +170,10 @@ describe('Page', () => {
       .dblclick();
 
     cy.get('@todos')
-      .eq(2).find('#editTodo').clear().type('{enter}');
+      .eq(2)
+      .find('#editTodo')
+      .clear()
+      .type('{enter}');
 
     cy.get('@todos')
       .contains('book a doctor`s appointment')
