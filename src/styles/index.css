@@ -1,10 +1,7 @@
-html {
-  opacity: 0.8;
+html,
+body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(118.71deg, #fffaf6 9.66%, #fbcee2 87.86%);
-  background-repeat: no-repeat;
-  min-height: 100vh;
 }
 
 button {
@@ -26,6 +23,7 @@ button {
 body {
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.4em;
+  background: #f5f5f5;
   color: #4d4d4d;
   min-width: 230px;
   max-width: 550px;
@@ -33,7 +31,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
-  padding: 0 0 20px;
 }
 
 .hidden {
@@ -41,12 +38,11 @@ body {
 }
 
 .todoapp {
-  margin: 190px 0 40px;
+  background: #fff;
+  margin: 130px 0 40px;
   position: relative;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(3px);
-  border-radius: 12px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+    0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
 
 .todoapp input::-webkit-input-placeholder {
@@ -75,12 +71,12 @@ body {
 
 .todoapp h1 {
   position: absolute;
-  top: -180px;
+  top: -155px;
   width: 100%;
   font-size: 100px;
   font-weight: 100;
   text-align: center;
-  color: #252259;
+  color: rgba(175, 47, 47, 0.15);
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
@@ -102,7 +98,6 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  outline: none;
 }
 
 .new-todo {
@@ -151,15 +146,11 @@ body {
 }
 
 .footer {
-  color: rgba(255, 255, 255);
+  color: #777;
   padding: 10px 15px;
   height: 20px;
   text-align: center;
-  background: linear-gradient(90deg,
-  rgba(255, 158, 90, 0.9) 1.1%,
-  rgba(255, 105, 120, 0.9) 48.25%,
-  rgba(180, 59, 139, 0.9) 100%);
-  border-radius: 0 0 12px 12px;
+  border-top: 1px solid #e6e6e6;
 }
 
 .footer:before {
@@ -175,7 +166,6 @@ body {
     0 9px 1px -3px rgba(0, 0, 0, 0.2),
     0 16px 0 -6px #f6f6f6,
     0 17px 2px -6px rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
 }
 
 .todo-count {
@@ -216,14 +206,5 @@ body {
 @media (max-width: 430px) {
   .footer {
     height: 50px;
-  }
-
-  .todoapp {
-    margin: 140px 0 20px;
-  }
-
-  .todoapp h1 {
-    font-size: 50px;
-    top: -130px;
   }
 }
