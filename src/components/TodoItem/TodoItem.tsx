@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types';
 
@@ -16,62 +16,62 @@ export const TodoItem: React.FC<Props> = React.memo(({
   changeStatus,
   editTitle,
 }) => {
-  const [clicked, setClicked] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
-  const changeTodoInput = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (changeTodoInput.current !== null) {
-      changeTodoInput.current.focus();
-    }
-  }, [clicked]);
-
-  const handleFocus = () => {
-    if (changeTodoInput.current !== null) {
-      changeTodoInput.current.focus();
-    }
-  };
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <li
-      className={classNames({ completed: todo.completed }, { editing: clicked })}
+      className={
+        classNames({
+          completed: todo.completed,
+        }, {
+          editing: isEditing,
+        })
+      }
+      onDoubleClick={() => {
+        setIsEditing(true);
+        setTempTitle(todo.title);
+      }}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          defaultChecked={todo.completed}
+          checked={todo.completed}
           onClick={() => changeStatus(todo.id)}
         />
-        <label
-          onDoubleClick={() => {
-            handleFocus();
-            setClicked(true);
-          }}
-        >
+        <label htmlFor="toggle-view">
           {todo.title ? todo.title : `${removeTodo(todo.id)}`}
         </label>
         <button type="button" className="destroy" onClick={() => removeTodo(todo.id)} />
       </div>
-      <input
-        type="text"
-        ref={changeTodoInput}
-        className="edit"
-        value={tempTitle}
-        onChange={event => setTempTitle(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            editTitle(tempTitle, todo.id);
-            setClicked(false);
-          }
+      {isEditing && (
+        <input
+          type="text"
+          className="edit"
+          value={tempTitle}
+          onChange={event => setTempTitle(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              editTitle(tempTitle, todo.id);
+              setIsEditing(false);
+            }
 
-          if (event.key === 'Escape') {
-            setClicked(false);
-            setTempTitle(todo.title);
-          }
-        }}
-        onBlur={() => setClicked(false)}
-      />
+            if (event.key === 'Escape') {
+              setIsEditing(false);
+              setTempTitle(todo.title);
+            }
+          }}
+          onBlur={() => {
+            if (tempTitle) {
+              editTitle(tempTitle, todo.id);
+              setIsEditing(false);
+            } else {
+              setIsEditing(false);
+            }
+          }}
+        />
+      )}
     </li>
   );
 });

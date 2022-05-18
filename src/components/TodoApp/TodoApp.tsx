@@ -43,7 +43,7 @@ export const TodoApp: React.FC = React.memo(() => {
     setTodos(filteredTodos);
   };
 
-  const clearCompleted = (): void => {
+  const clearCompleted = () => {
     const filteredTodos = todos.filter((item: { completed: boolean; }) => !item.completed);
 
     setTodos(filteredTodos);
