@@ -1,6 +1,6 @@
 # React - People table
 - Replace `<your_account>` with your Github username in the
-  [DEMO LINK](https://mykhailoivchenko.github.io/react_people-table-advanced/)
+  [DEMO LINK](https://mykhailoivchenko.github.io/react_todo-app/)
 - Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
 
 ## If you don't use **Typescript**

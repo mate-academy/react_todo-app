@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import Filters from './enums/enums';
 import NewTodoForm from './components/NewTodoForm/NewTodoForm';
 import TodoList from './components/TodoList/TodoList';
 import TodosCounter from './components/TodosCounter/TodosCounter';
@@ -17,22 +18,19 @@ const TodoApp: React.FC = () => {
   const [userId] = useState(3542);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [toggleAllStatus, setToggleAllStatus] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState('all');
+  const [currentFilter, setCurrentFilter] = useState<Filters>(Filters.All);
   const [user, setUser] = useState('');
   const [isErrorOccured, setIsErrorOccured] = useState(false);
 
-  const mainClasses = classNames({
-    main: true,
+  const mainClasses = classNames('main', {
     hidden: todos.length === 0,
   });
 
-  const footerClasses = classNames({
-    footer: true,
+  const footerClasses = classNames('footer', {
     hidden: todos.length === 0,
   });
 
-  const errorClasses = classNames({
-    error: true,
+  const errorClasses = classNames('error', {
     hidden: !isErrorOccured,
   });
 
@@ -147,14 +145,14 @@ const TodoApp: React.FC = () => {
 
   const applyFilter = (chosenFilter: string) => {
     switch (chosenFilter) {
-      case 'active':
-        setCurrentFilter('active');
+      case Filters.Active:
+        setCurrentFilter(Filters.Active);
         break;
-      case 'completed':
-        setCurrentFilter('completed');
+      case Filters.Completed:
+        setCurrentFilter(Filters.Completed);
         break;
       default:
-        setCurrentFilter('all');
+        setCurrentFilter(Filters.All);
     }
   };
 

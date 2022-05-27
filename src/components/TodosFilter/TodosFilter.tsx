@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
+import Filters from '../../enums/enums';
 
 const TodosFilter: React.FC<TodosFilterProps> = ({ applyFilter }) => {
-  const filters = {
-    all: 'all',
-    active: 'active',
-    completed: 'completed',
-  };
+  const [selectedFilter, setSelectedFilter] = useState(Filters.All);
 
-  const [selectedFilter, setSelectedFilter] = useState(filters.all);
-
-  const handleFilterChange = (appliedFilter: string) => {
+  const handleFilterChange = (appliedFilter: Filters) => {
     setSelectedFilter(appliedFilter);
     applyFilter(appliedFilter);
   };
@@ -19,8 +14,8 @@ const TodosFilter: React.FC<TodosFilterProps> = ({ applyFilter }) => {
       <li>
         <a
           href="#/"
-          className={selectedFilter === filters.all ? 'selected' : ''}
-          onClick={() => handleFilterChange(filters.all)}
+          className={selectedFilter === Filters.All ? 'selected' : ''}
+          onClick={() => handleFilterChange(Filters.All)}
         >
           All
         </a>
@@ -29,8 +24,8 @@ const TodosFilter: React.FC<TodosFilterProps> = ({ applyFilter }) => {
       <li>
         <a
           href="#/active"
-          className={selectedFilter === filters.active ? 'selected' : ''}
-          onClick={() => handleFilterChange(filters.active)}
+          className={selectedFilter === Filters.Active ? 'selected' : ''}
+          onClick={() => handleFilterChange(Filters.Active)}
         >
           Active
         </a>
@@ -39,8 +34,8 @@ const TodosFilter: React.FC<TodosFilterProps> = ({ applyFilter }) => {
       <li>
         <a
           href="#/completed"
-          className={selectedFilter === filters.completed ? 'selected' : ''}
-          onClick={() => handleFilterChange(filters.completed)}
+          className={selectedFilter === Filters.Completed ? 'selected' : ''}
+          onClick={() => handleFilterChange(Filters.Completed)}
         >
           Completed
         </a>
