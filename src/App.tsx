@@ -12,9 +12,9 @@ export const App: React.FC = () => {
     <TodoProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<TodoList />} />
-          <Route path="active" element={<TodoList />} />
-          <Route path="completed" element={<TodoList />} />
+          <Route path="/" element={<TodoList />}>
+            <Route path=":status" element={<TodoList />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

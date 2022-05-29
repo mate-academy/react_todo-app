@@ -1,27 +1,26 @@
 import React, { useState, useContext } from 'react';
+import classNames from 'classnames';
 import { TodoContext } from '../hoc/TodoProvider';
+import { deleteTodo, editTodo } from '../api/api';
+import './TodoItem.scss';
 
 export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
   const [titleInList, setTitleInList] = useState(title);
   const [edit, setEdit] = useState(false);
   const [editValue, setEditValue] = useState(titleInList);
-  const content = useContext(TodoContext);
-  const todos = content?.todos;
-  const setTodos = content?.setTodos;
+  const { todos, setTodos } = useContext(TodoContext);
 
   const handleCheckbox = (todoId: number) => {
-    if (todos && setTodos) {
-      setTodos(todos.map(todo => {
-        if (todoId === todo.id) {
-          return {
-            ...todo,
-            completed: !todo.completed,
-          };
-        }
+    setTodos(todos.map(todo => {
+      if (todoId === todo.id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
 
-        return todo;
-      }));
-    }
+      return todo;
+    }));
   };
 
   const handleDoubleClick = () => {
@@ -36,19 +35,19 @@ export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
     setEditValue(event.target.value);
   };
 
-  const editTodo = (todoId: number) => {
-    if (todos && setTodos) {
-      setTodos(todos.map(todo => {
-        if (todoId === todo.id) {
-          return {
-            ...todo,
-            title: editValue,
-          };
-        }
+  const changeTodo = (todoId: number) => {
+    editTodo(todoId, { title: editValue });
 
-        return todo;
-      }));
-    }
+    setTodos(todos.map(todo => {
+      if (todoId === todo.id) {
+        return {
+          ...todo,
+          title: editValue,
+        };
+      }
+
+      return todo;
+    }));
   };
 
   const handleKeydown = (event: React.KeyboardEvent<HTMLInputElement>,
@@ -56,7 +55,7 @@ export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       setTitleInList(editValue);
-      editTodo(todoId);
+      changeTodo(todoId);
       setEdit(false);
     }
 
@@ -69,22 +68,21 @@ export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
 
   const handleBlur = (todoId: number) => {
     setTitleInList(editValue);
-    editTodo(todoId);
+    changeTodo(todoId);
     setEdit(false);
   };
 
   const removeTodo = (todoId: number) => {
-    if (todos && setTodos) {
-      setTodos(todos.filter(todo => todo.id !== todoId));
-    }
+    deleteTodo(todoId);
+
+    setTodos(todos.filter(todo => todo.id !== todoId));
   };
 
   return (
     <li>
       <div className="field is-grouped is-justify-content-space-between">
         <div
-          className="field"
-          style={{ width: '80%' }}
+          className="field field--width"
         >
           <label
             className="field"
@@ -104,7 +102,7 @@ export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
             <input
               type="checkbox"
               checked={completed}
-              style={{ visibility: 'hidden' }}
+              className="checked"
               onChange={() => handleCheckbox(id)}
             />
 
@@ -118,16 +116,10 @@ export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
               ? (
                 <>
                   <p
-                    style={{
-                      width: '80%',
-                      display: 'inline-block',
-                      textDecoration: completed === true
-                        ? 'line-through'
-                        : 'none',
-                      color: completed === true
-                        ? 'grey'
-                        : 'black',
-                    }}
+                    className={classNames(
+                      'todo',
+                      { 'todo--complete': completed === true },
+                    )}
                   >
                     {titleInList}
                   </p>
@@ -152,9 +144,8 @@ export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
         <div className="buttons">
           <button
             type="button"
-            className="button icon has-text-info"
+            className="button icon has-text-info btn"
             title="edit"
-            style={{ border: 'none' }}
             disabled={edit}
             onClick={handleClick}
           >
@@ -163,9 +154,8 @@ export const TodoItem: React.FC<Todo> = ({ id, title, completed }) => {
 
           <button
             type="button"
-            className="button icon has-text-danger"
+            className="button icon has-text-danger btn"
             title="delete"
-            style={{ border: 'none' }}
             disabled={edit}
             onClick={() => removeTodo(id)}
           >

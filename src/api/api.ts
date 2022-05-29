@@ -14,6 +14,10 @@ export const request = (url: string, method?: RequestInit | undefined) => {
     });
 };
 
+export const getUser = (username: string) => {
+  return request(`/users?username=${username}`);
+};
+
 export const newUser = (
   name: string,
   username: string,
@@ -35,18 +39,15 @@ export const newUser = (
 };
 
 export const createTodo = (
-  title: string,
-  id: number,
-  completed: boolean,
   userId: number,
+  title: string,
 ) => {
   return request('/todos', {
     method: 'POST',
     body: JSON.stringify({
-      id,
       title,
-      completed,
       userId,
+      completed: false,
     }),
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -54,7 +55,11 @@ export const createTodo = (
   });
 };
 
-export const deleteTodo = (todoId: number) => {
+export const getTodos = (userId: number) => {
+  return request(`/todos?userId=${userId}`);
+};
+
+export const deleteTodo = (todoId?: number) => {
   return request(`/todos/${todoId}`, {
     method: 'DELETE',
   });

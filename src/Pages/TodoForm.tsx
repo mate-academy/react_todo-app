@@ -5,19 +5,18 @@ import React, {
   useState,
 } from 'react';
 import { TodoContext } from '../hoc/TodoProvider';
+import { createTodo } from '../api/api';
+import './TodoForm.scss';
 
 export const TodoForm: React.FC = () => {
-  const content = useContext(TodoContext);
-  const todos = content?.todos;
-  const setTodos = content?.setTodos;
+  const { todos, setTodos, user } = useContext(TodoContext);
   const [allCompleted, setAllCompleted] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   const completedTodos = useMemo(() => {
-    const count = todos
-      && todos.filter(todo => todo.completed === true).length;
+    const count = todos.filter(todo => todo.completed === true).length;
 
-    if (count === todos?.length) {
+    if (count === todos.length) {
       setAllCompleted(true);
     } else {
       setAllCompleted(false);
@@ -31,7 +30,7 @@ export const TodoForm: React.FC = () => {
   };
 
   const allDoneButton = () => {
-    if (!allCompleted && setTodos && todos) {
+    if (!allCompleted && todos) {
       setTodos(todos.map(todo => {
         if (!todo.completed) {
           return { ...todo, completed: true };
@@ -43,7 +42,7 @@ export const TodoForm: React.FC = () => {
       }));
     }
 
-    if (allCompleted && setTodos && todos) {
+    if (allCompleted && todos) {
       setTodos(todos.map(todo => {
         if (todo.completed) {
           return { ...todo, completed: false };
@@ -56,45 +55,53 @@ export const TodoForm: React.FC = () => {
     }
   };
 
-  const addTodo = () => {
-    if (inputValue && todos && setTodos) {
-      setTodos([
-        ...todos,
-        {
-          id: Date.now(),
-          title: inputValue,
-          completed: false,
-        },
-      ]);
+  const addTodo = (userId: number, title: string) => {
+    if (user && title) {
+      createTodo(userId, title);
 
-      setInputValue('');
+      const newTodo = {
+        id: Date.now(),
+        title,
+        completed: false,
+        userId,
+      };
+
+      setTodos((prevState: Todo[]) => ([
+        ...prevState,
+        newTodo,
+      ]));
     }
+
+    setInputValue('');
   };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    addTodo();
+    if (user) {
+      addTodo(user?.id, inputValue);
+    }
   };
 
   const handleKeydown:
   React.KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      addTodo();
+      if (user) {
+        addTodo(user?.id, inputValue);
+      }
     }
   };
 
   return (
     <form
-      className="field"
-      style={{ width: '100%' }}
+      className="field field__form"
       onSubmit={handleSubmit}
     >
       <div className="control">
         <input
           type="text"
           value={inputValue}
-          className="input is-primary pl-6"
+          className="input is-primary pl-6 is-relative"
           placeholder="What needs to be done?"
           onChange={handleChange}
           onKeyDown={handleKeydown}
@@ -104,19 +111,13 @@ export const TodoForm: React.FC = () => {
           <button
             type="button"
             className={classNames(
-              'button icon ',
+              'button icon btnAll',
               {
                 'has-text-grey-light': todos?.length !== completedTodos,
                 'has-text-primary': todos?.length === completedTodos,
               },
             )}
             title="select all"
-            style={{
-              border: 'none',
-              position: 'absolute',
-              top: '8px',
-              left: '5px',
-            }}
             onClick={allDoneButton}
           >
             <i className="fas fa-check" />
@@ -126,14 +127,8 @@ export const TodoForm: React.FC = () => {
         {inputValue.length > 0 && (
           <button
             type="submit"
-            className="button icon has-text-primary"
+            className="button icon has-text-primary btnAdd"
             title="add todo"
-            style={{
-              border: 'none',
-              position: 'absolute',
-              top: '8px',
-              right: '5px',
-            }}
           >
             <i className="fas fa-add" />
           </button>
