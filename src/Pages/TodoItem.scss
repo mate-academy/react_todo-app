@@ -1,0 +1,23 @@
+.field {
+  &--width {
+    width: 80%;
+  }
+}
+
+.checked {
+  visibility: hidden;
+}
+
+.todo {
+  width: 80%;
+  display: inline-block;
+
+  &--complete {
+    text-decoration: line-through;
+    color: grey;
+  }
+}
+
+.buttons button.btn {
+  border: none;
+}

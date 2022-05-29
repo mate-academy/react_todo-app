@@ -1,0 +1,23 @@
+.field {
+  &__form {
+    width: 100%;
+  }
+}
+
+.control button.btnAll {
+  border: none;
+  position: absolute;
+  top: 8px;
+  left: 5px;
+}
+
+.control button.btnAdd {
+  border: none;
+  position: absolute;
+  top: 8px;
+  right: 5px;
+}
+
+.button:focus:not(:active) {
+  box-shadow: none !important;
+}
