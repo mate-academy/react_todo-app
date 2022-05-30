@@ -75,11 +75,9 @@ input:focus {
 
 .todoapp h1 {
   position: absolute;
-  margin: 30px 0 0;
   top: -155px;
   width: 100%;
-  line-height: 60px;
-  font-size: 60px;
+  font-size: 100px;
   font-weight: 100;
   text-align: center;
   color: rgba(175, 47, 47, 0.15);
@@ -197,22 +195,6 @@ input:focus {
 
 .clear-completed:active {
   text-decoration: none;
-}
-
-.error {
-  position: absolute;
-  box-sizing: border-box;
-  left: -400px;
-  padding: 10px;
-  background-color: yellow;
-  border: 1px, solid, red;
-  border-radius: 10px;
-  font-size: 36px;
-  line-height: 40px;
-  width: 300px;
-  height: 200px;
-  color: red;
-  text-align: center;
 }
 
 /*

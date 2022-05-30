@@ -1,14 +1,6 @@
 // eslint-disable-next-line
 /// <reference types="react-scripts" />
 
-interface Option {
-  method: string,
-  headers?: {
-    'Content-type': string,
-  }
-  body?: string,
-}
-
 interface Todo {
   id: number,
   title: string,

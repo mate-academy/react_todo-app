@@ -1,8 +1,6 @@
-/* eslint-disable no-case-declarations */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import Filters from './enums/enums';
 import NewTodoForm from './components/NewTodoForm/NewTodoForm';
 import TodoList from './components/TodoList/TodoList';
 import TodosCounter from './components/TodosCounter/TodosCounter';
@@ -10,89 +8,59 @@ import TodosFilter from './components/TodosFilter/TodosFilter';
 import ClearCompletedButton
   from './components/ClearCompletedButton/ClearCompletedButton';
 import ToggleAll from './components/ToggleAll/Toggle';
-import {
-  addNewTodo, changeTodo, deleteTodo, getUser, getUserTodos,
-} from './api';
+import Filters from './enums/enums';
+
+let todoForSavingInLS: Todo[] = [];
 
 const TodoApp: React.FC = () => {
-  const [userId] = useState(3542);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [toggleAllStatus, setToggleAllStatus] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState<Filters>(Filters.All);
-  const [user, setUser] = useState('');
-  const [isErrorOccured, setIsErrorOccured] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState(Filters.All);
 
-  const mainClasses = classNames('main', {
+  todoForSavingInLS = [...todos];
+
+  const mainClasses = classNames({
+    main: true,
     hidden: todos.length === 0,
   });
 
-  const footerClasses = classNames('footer', {
+  const footerClasses = classNames({
+    footer: true,
     hidden: todos.length === 0,
   });
 
-  const errorClasses = classNames('error', {
-    hidden: !isErrorOccured,
-  });
+  const editTodoTitle = (newTitle: string, todoId: number) => {
+    const changedArray = todos
+      .map(todo => {
+        if (todo.id === todoId) {
+          return {
+            id: todo.id,
+            title: newTitle,
+            completed: todo.completed,
+          };
+        }
 
-  const getUserName = async () => {
-    try {
-      const userFS = await getUser(userId);
+        return todo;
+      });
 
-      setUser(userFS.name);
-    } catch {
-      setUser('User loading failed');
-    }
+    setTodos(changedArray.filter(todo => todo.title !== ''));
   };
 
-  const getTodosFromServer = async () => {
-    const todosFS: Todo[] = await getUserTodos(userId);
+  const editCompletedStatus = (newStatus: boolean, todoId: number) => {
+    const changedArray = todos
+      .map(todo => {
+        if (todo.id === todoId) {
+          return {
+            id: todo.id,
+            title: todo.title,
+            completed: newStatus,
+          };
+        }
 
-    setTodos([...todosFS]);
+        return todo;
+      });
 
-    if (todosFS.length > 0) {
-      const numberOfActiveTodos = todosFS
-        .filter(todo => !todo.completed).length;
-
-      if (numberOfActiveTodos === 0) {
-        setToggleAllStatus(true);
-      }
-    } else {
-      setToggleAllStatus(false);
-    }
-  };
-
-  const handleChangeRequest = async (
-    todoId: number, changingField: string, newValue: string,
-  ) => {
-    const result = await changeTodo(todoId, changingField, newValue);
-
-    if (!result) {
-      setIsErrorOccured(true);
-
-      setTimeout(() => setIsErrorOccured(false), 3000);
-    }
-
-    return result;
-  };
-
-  const handleDeleteRequest = async (todoId: number) => {
-    const result = await deleteTodo(todoId);
-
-    if (!result) {
-      setIsErrorOccured(true);
-
-      setTimeout(() => setIsErrorOccured(false), 3000);
-    }
-
-    return result;
-  };
-
-  const editCompletedStatus = async (newStatus: boolean, todoId: number) => {
-    await handleChangeRequest(todoId, 'completed', newStatus.toString());
-
-    await getTodosFromServer();
-
-    const isAnyTodoActive = todos.find(todo => todo.completed === false);
+    const isAnyTodoActive = changedArray.find(todo => todo.completed === false);
 
     if (!isAnyTodoActive) {
       setToggleAllStatus(true);
@@ -101,46 +69,35 @@ const TodoApp: React.FC = () => {
     if (toggleAllStatus) {
       setToggleAllStatus(false);
     }
+
+    setTodos(changedArray);
   };
 
-  const handleToggleAllClick = async () => {
-    switch (toggleAllStatus) {
-      case false:
-        const activePromises = todos.map(todo => {
-          if (!todo.completed) {
-            return handleChangeRequest(todo.id, 'completed', 'true');
-          }
-
-          return '';
-        });
-
-        await Promise.all(activePromises.filter(promise => promise !== ''));
-        break;
-
-      default:
-        const completedPromises = todos.map(todo => handleChangeRequest(
-          todo.id, 'completed', 'false',
-        ));
-
-        await Promise.all(completedPromises);
-        break;
-    }
+  const handleToggleAllClick = () => {
+    setTodos(prevTodos => prevTodos.map(todo => {
+      return {
+        id: todo.id,
+        title: todo.title,
+        completed: !toggleAllStatus,
+      };
+    }));
 
     setToggleAllStatus(prev => !prev);
-
-    getTodosFromServer();
   };
 
   const handleFormSubmit
-    = async (event: React.FormEvent<HTMLFormElement>, newTodoTitle: string) => {
+    = (event: React.FormEvent<HTMLFormElement>, newTodoTitle: string) => {
       event.preventDefault();
       if (!newTodoTitle) {
         return;
       }
 
-      await addNewTodo(newTodoTitle, userId, false);
-
-      getTodosFromServer();
+      setTodos(prevTodos => [...prevTodos,
+        {
+          id: +new Date(),
+          title: newTodoTitle,
+          completed: false,
+        }]);
     };
 
   const applyFilter = (chosenFilter: string) => {
@@ -158,36 +115,25 @@ const TodoApp: React.FC = () => {
 
   const getVisibleTodos = () => {
     switch (currentFilter) {
-      case 'active':
+      case Filters.Active:
         return todos.filter(todo => todo.completed === false);
-      case 'completed':
+      case Filters.Completed:
         return todos.filter(todo => todo.completed === true);
       default:
         return todos;
     }
   };
 
-  const getActiveNumber = () => {
-    const activeTodos = todos.filter(todo => !todo.completed);
+  const getActive = () => {
+    const changedArray = todos.filter(todo => !todo.completed);
 
-    return activeTodos.length;
-  };
+    setTodos(changedArray);
 
-  const deleteCompletedTodos = async () => {
-    const completedTodos = todos.filter(todo => todo.completed);
-
-    const completedTodosPromises = completedTodos
-      .map(todo => handleDeleteRequest(todo.id));
-
-    await Promise.all(completedTodosPromises);
-
-    getTodosFromServer();
+    return changedArray.length;
   };
 
   const handleClearCompletedClick = () => {
-    deleteCompletedTodos();
-
-    const numberOfActiveTodos = getActiveNumber();
+    const numberOfActiveTodos = getActive();
 
     if (numberOfActiveTodos === 0) {
       setToggleAllStatus(prev => !prev);
@@ -198,32 +144,48 @@ const TodoApp: React.FC = () => {
     return todos.filter(todo => todo.completed).length;
   };
 
-  const editTodoTitle = async (newTitle: string, todoId: number) => {
-    if (!newTitle) {
-      await handleDeleteRequest(todoId);
-    } else {
-      await handleChangeRequest(todoId, 'title', newTitle);
-    }
+  const handleWindowClose = () => {
+    const todosStringForLS = JSON.stringify(todoForSavingInLS);
 
-    getTodosFromServer();
+    localStorage.setItem('todos', todosStringForLS);
   };
 
   useEffect(() => {
-    getUserName();
-    getTodosFromServer();
+    const todosStringFromLS = localStorage.getItem('todos') || '';
+    let todosFromLS: Todo[] = [];
+
+    if (todosStringFromLS) {
+      todosFromLS = JSON.parse(todosStringFromLS);
+    }
+
+    if (todosFromLS.length > 0) {
+      setTodos([...todosFromLS]);
+
+      const numberOfActiveTodos = todosFromLS
+        .filter(todo => !todo.completed).length;
+
+      if (numberOfActiveTodos === 0) {
+        setToggleAllStatus(true);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload',
+      handleWindowClose);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      window.removeEventListener('beforeunload',
+        handleWindowClose);
+    };
   }, []);
 
   return (
     <section className="todoapp">
-      <div
-        className={errorClasses}
-      >
-        Something went wrong with server connection
-      </div>
       <header className="header">
-        <h1>
-          {`${user} todos`}
-        </h1>
+        <h1>todos</h1>
 
         <NewTodoForm
           data-cy="createTodo"
