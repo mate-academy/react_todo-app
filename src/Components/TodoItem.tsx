@@ -19,9 +19,8 @@ export const TodoItem: React.FC<Props> = ({
   const [editedTodoIndex, setEditedTodoIndex] = useState(-1);
   const [editedValue, setEditedValue] = useState('');
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const editStartHandler = (index: React.SetStateAction<number>) => {
-    setEditedTodoIndex(index);
+  const editStartHandler = (indexEdit: React.SetStateAction<number>) => {
+    setEditedTodoIndex(indexEdit);
   };
 
   return (
@@ -30,8 +29,7 @@ export const TodoItem: React.FC<Props> = ({
         completed: todo.completed,
         editing: editedTodoIndex === index,
       })}
-      // eslint-disable-next-line react/no-array-index-key
-      key={index}
+      key={todo.id}
       data-cy="toggleAll"
     >
       <div className="view">
