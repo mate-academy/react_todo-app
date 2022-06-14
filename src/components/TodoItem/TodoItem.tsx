@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 import classNames from 'classnames';
@@ -47,6 +49,8 @@ export const TodoItem: React.FC<Props> = React.memo(({
       </div>
       {isEditing && (
         <input
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
           type="text"
           className="edit"
           value={tempTitle}
@@ -63,12 +67,8 @@ export const TodoItem: React.FC<Props> = React.memo(({
             }
           }}
           onBlur={() => {
-            if (tempTitle) {
-              editTitle(tempTitle, todo.id);
-              setIsEditing(false);
-            } else {
-              setIsEditing(false);
-            }
+            setIsEditing(false);
+            setTempTitle(todo.title);
           }}
         />
       )}

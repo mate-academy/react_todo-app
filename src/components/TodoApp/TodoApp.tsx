@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { TodoList } from '../TodoList/TodoList';
@@ -77,12 +79,10 @@ export const TodoApp: React.FC = React.memo(() => {
     }
 
     return setTodos(
-      todos.map((item: Todo) => {
-        return {
-          ...item,
-          completed: !item.completed,
-        };
-      }),
+      todos.map((item: Todo) => ({
+        ...item,
+        completed: !item.completed,
+      })),
     );
   };
 
@@ -160,7 +160,11 @@ export const TodoApp: React.FC = React.memo(() => {
           <TodosFilter toggleFilter={toggleFilter} />
 
           {completeNumber > 0 && (
-            <button type="button" className="clear-completed" onClick={clearCompleted}>
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
               Clear completed
             </button>
           )}

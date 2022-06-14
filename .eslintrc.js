@@ -1,6 +1,7 @@
 module.exports = {
-  extends: ['@mate-academy/eslint-config-react-typescript', 'plugin:cypress/recommended'],
+  extends: ['@mate-academy/eslint-config-react', 'plugin:cypress/recommended'],
   rules: {
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.tsx'] }],
     'import/no-extraneous-dependencies': ['error', {
       devDependencies: true,
       optionalDependencies: false,
