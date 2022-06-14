@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { Todo } from '../../types';
 import { TodoItem } from '../TodoItem/TodoItem';
@@ -14,18 +16,16 @@ export const TodoList: React.FC<Props> = React.memo(({
   removeTodo,
   changeStatus,
   editTitle,
-}) => {
-  return (
-    <ul className="todo-list">
-      {items.map(todo => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          removeTodo={removeTodo}
-          changeStatus={changeStatus}
-          editTitle={editTitle}
-        />
-      ))}
-    </ul>
-  );
-});
+}) => (
+  <ul className="todo-list">
+    {items.map(todo => (
+      <TodoItem
+        key={todo.id}
+        todo={todo}
+        removeTodo={removeTodo}
+        changeStatus={changeStatus}
+        editTitle={editTitle}
+      />
+    ))}
+  </ul>
+));
