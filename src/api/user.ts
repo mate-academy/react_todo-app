@@ -1,4 +1,4 @@
-import { BASE_URL } from "./api";
+import { BASE_URL } from './api';
 
 export const createUser = (
   userId: number,
@@ -16,5 +16,5 @@ export const createUser = (
       email,
     }),
   })
-  .then(response => response.json());
+    .then(response => response.json());
 };

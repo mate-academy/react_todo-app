@@ -27,7 +27,8 @@ export const TodosFilter: React.FC = () => {
           <footer className="footer">
             <span
               data-cy="todosCounter"
-              className="todo-count">
+              className="todo-count"
+            >
               {`${activeTodos.length} items left`}
             </span>
 
