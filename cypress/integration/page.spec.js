@@ -1,8 +1,8 @@
-Cypress.Commands.add('createDefaultTodos', function () {
+Cypress.Commands.add('createDefaultTodos', () => {
   const todos = {
     toDoItemOne: 'buy some cheese',
     toDoItemTwo: 'feed the cat',
-    toDoItemThree: 'book a doctor`s appointment'
+    toDoItemThree: 'book a doctor`s appointment',
   };
 
   cy.getByDataCy('createTodo')
@@ -25,7 +25,7 @@ const page = {
   },
 
   clickButton(name) {
-      cy.contains(name)
+    cy.contains(name)
       .click();
   },
 
@@ -38,8 +38,8 @@ const page = {
   assertTodosList(key, value) {
     cy.get('@todos')
       .should(key, value);
-  }
-}
+  },
+};
 
 describe('Page', () => {
   beforeEach(() => {
@@ -49,6 +49,7 @@ describe('Page', () => {
       .as('todos');
   });
 
+  // eslint-disable-next-line max-len
   it('should store todos in "localStorage" with "id", "title", "completed" values', () => {
     const todos = window.localStorage.getItem('todos');
     const obj = JSON.parse(todos);
@@ -70,6 +71,7 @@ describe('Page', () => {
     page.assertTodo('have.class', 'completed', 0);
   });
 
+  // eslint-disable-next-line max-len
   it('should have an option to toggle the completed status of all the todos', () => {
     cy.getByDataCy('toggleAll')
       .check();
@@ -90,12 +92,13 @@ describe('Page', () => {
       });
   });
 
+  // eslint-disable-next-line max-len
   it('should have an option to switch between `all`/`active`/`completed` todos', () => {
     page.checkTodo();
 
     page.clickButton('Active');
 
-    page.assertTodosList('have.length', 2)
+    page.assertTodosList('have.length', 2);
 
     page.clickButton('Completed');
 
