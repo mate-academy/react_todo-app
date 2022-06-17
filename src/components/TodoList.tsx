@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Todo } from '../types';
+import { Todo, filterValues } from '../types';
 import { TodoItem } from './TodoItem';
 import { TodosContext } from './TodosContext';
 
@@ -17,16 +17,18 @@ export const TodoList: React.FC = React.memo(() => {
 
   const filterTodos = (value: string) => {
     switch (value) {
-      case 'Active':
+      case filterValues.Active:
         return todos.filter(todo => !todo.completed);
 
-      case 'Completed':
+      case filterValues.Completed:
         return todos.filter(todo => todo.completed);
 
       default:
         return todos;
     }
   };
+
+  const isChecked = todos.filter(todo => !todo.completed).length === 0;
 
   return (
     <section className="main">
@@ -35,7 +37,7 @@ export const TodoList: React.FC = React.memo(() => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        checked={todos.filter(todo => !todo.completed).length === 0}
+        checked={isChecked}
         onChange={toggleAll}
       />
       <label

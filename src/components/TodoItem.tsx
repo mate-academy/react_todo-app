@@ -7,6 +7,10 @@ type Props = {
   todo: Todo,
 }
 
+enum edit {
+  Editing = 'editing',
+}
+
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const [editClass, setEditClass] = useState('');
   const [editTodoId, setEditTodoId] = useState('');
@@ -32,7 +36,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const editTodo = () => {
     setNewTitle(todo.title);
-    setEditClass('editing');
+    setEditClass(edit.Editing);
     setEditTodoId('editTodo');
   };
 
@@ -78,6 +82,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
         <label
           onDoubleClick={editTodo}
+          className="label"
         >
           {todo.title}
         </label>

@@ -6,7 +6,16 @@ export const TodosFilter: React.FC = React.memo(() => {
   const { todos, setTodos } = useContext(TodosContext);
   const { filterBy, setFilterBy } = useContext(TodosContext);
 
-  const counter = () => todos.filter(todo => !todo.completed).length;
+  const counter = () => {
+    const count = todos.filter(todo => !todo.completed).length;
+
+    if (count === 1) {
+      return `${count} item left`;
+    }
+
+    return `${count} items left`;
+  };
+
   const counterCompleted = () => todos.filter(todo => todo.completed).length;
 
   const clearCompleted = () => {
@@ -28,8 +37,7 @@ export const TodosFilter: React.FC = React.memo(() => {
             className="todo-count"
             data-cy="todosCounter"
           >
-            {`${counter()} `}
-            {counter() > 1 ? 'items left' : 'item left'}
+            {counter()}
           </span>
 
           <ul className="filters">

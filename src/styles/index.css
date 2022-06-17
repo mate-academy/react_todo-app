@@ -209,3 +209,15 @@ body {
     height: 50px;
   }
 }
+
+.editing :focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #bdbdbd;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(119, 119, 119, 0.25);
+}
+
+.label {
+  cursor: text;
+}

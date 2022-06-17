@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { Todo } from '../types';
+import { Todo, filterValues } from '../types';
 
 type ContextProps = {
   todos: Todo[],
@@ -16,7 +16,7 @@ export const TodosContext = React.createContext<ContextProps>({
   setTodos: () => {},
   visibleTodos: [],
   setVisibleTodos: () => {},
-  filterBy: 'All',
+  filterBy: filterValues.All,
   setFilterBy: () => {},
 });
 
