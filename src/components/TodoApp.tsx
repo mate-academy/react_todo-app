@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { TodoContext } from '../TodoContext';
+import './TodoApp.scss';
 
 export const TodoApp: React.FC = React.memo(() => {
   const { todo, setTodo } = useContext(TodoContext);
