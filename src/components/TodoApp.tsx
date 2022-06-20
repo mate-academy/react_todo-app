@@ -3,7 +3,7 @@ import { TodoContext } from '../TodoContext';
 import './TodoApp.scss';
 
 export const TodoApp: React.FC = React.memo(() => {
-  const { todo, setTodo } = useContext(TodoContext);
+  const { todos, setTodos } = useContext(TodoContext);
   const [title, setTitle] = useState('');
 
   const todoCreate = (event: React.FormEvent) => {
@@ -19,7 +19,7 @@ export const TodoApp: React.FC = React.memo(() => {
       return;
     }
 
-    setTodo([...todo, newTodo]);
+    setTodos([...todos, newTodo]);
     setTitle('');
   };
 

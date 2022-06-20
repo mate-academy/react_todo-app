@@ -2,50 +2,50 @@ import React, { useEffect, useState } from 'react';
 import { Todo } from './types';
 
 type ContextProps = {
-  todo: Todo[],
-  setTodo: (todo: Todo[]) => void,
+  todos: Todo[],
+  setTodos: (todo: Todo[]) => void,
   finishedTodos: Todo[],
   setFinishedTodos: (todo: Todo[]) => void,
   activeTodos: Todo[],
   setActiveTodos: (todo: Todo[]) => void,
-  todoses: Todo[],
+  visibleTodoses: Todo[],
   setVisibleTodoses: (todo: Todo[]) => void,
 };
 
 export const TodoContext = React.createContext<ContextProps>({
-  todo: [],
-  setTodo: () => { },
+  todos: [],
+  setTodos: () => { },
   finishedTodos: [],
   setFinishedTodos: () => { },
   activeTodos: [],
   setActiveTodos: () => { },
-  todoses: [],
+  visibleTodoses: [],
   setVisibleTodoses: () => { },
 });
 
 export const TodoProvider: React.FC = ({ children }) => {
-  const [todo, setTodo] = useState<Todo[]>(
+  const [todos, setTodos] = useState<Todo[]>(
     JSON.parse(localStorage.getItem('todo') || '[]'),
   );
-  const [todoses, setVisibleTodoses] = useState<Todo[]>([]);
+  const [visibleTodoses, setVisibleTodoses] = useState<Todo[]>([]);
   const [finishedTodos, setFinishedTodos] = useState<Todo[]>([]);
   const [activeTodos, setActiveTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    localStorage.setItem('todo', JSON.stringify(todo));
+    localStorage.setItem('todo', JSON.stringify(todos));
 
-    setFinishedTodos(todo.filter(elem => elem.completed));
-    setActiveTodos(todo.filter(elem => !elem.completed));
-  }, [todo]);
+    setFinishedTodos(todos.filter(elem => elem.completed));
+    setActiveTodos(todos.filter(elem => !elem.completed));
+  }, [todos]);
 
   const contextValue = {
-    todo,
-    setTodo,
+    todos,
+    setTodos,
     finishedTodos,
     setFinishedTodos,
     activeTodos,
     setActiveTodos,
-    todoses,
+    visibleTodoses,
     setVisibleTodoses,
   };
 

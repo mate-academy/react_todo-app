@@ -2,18 +2,19 @@ import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../TodoContext';
 import { Todo } from '../types';
+import './TodoItem.scss';
 
 type Props = {
   el: Todo,
 }
 
 export const TodoItem: React.FC<Props> = ({ el }) => {
-  const { todo, setTodo } = useContext(TodoContext);
+  const { todos, setTodos } = useContext(TodoContext);
   const [focused, setFocused] = useState(false);
   const [editTodo, setEditTodo] = useState(el.title);
 
   const updateTodo = () => {
-    setTodo(todo.map((elem) => {
+    setTodos(todos.map((elem) => {
       if (elem.id === el.id) {
         return {
           ...elem,
@@ -30,23 +31,25 @@ export const TodoItem: React.FC<Props> = ({ el }) => {
   };
 
   const handleClick = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      setFocused(false);
-      updateTodo();
-    }
-
-    if (event.key === 'Escape') {
-      setEditTodo(el.title);
-      setFocused(false);
+    switch (event.key) {
+      case 'Enter':
+        setFocused(false);
+        updateTodo();
+        break;
+      case 'Escape':
+        setEditTodo(el.title);
+        setFocused(false);
+        break;
+      default:
     }
   };
 
   const destroyItem = (id: number) => {
-    setTodo(todo.filter(elem => elem.id !== id));
+    setTodos(todos.filter(elem => elem.id !== id));
   };
 
   const handleInputTodo = (id: number) => {
-    setTodo(todo.map((elem) => {
+    setTodos(todos.map((elem) => {
       if (elem.id === id) {
         return {
           ...elem,

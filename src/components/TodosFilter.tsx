@@ -2,10 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../TodoContext';
 
-export const TodosFilter: React.FC = () => {
-  const { todo, setTodo, finishedTodos } = useContext(TodoContext);
+export const TodosFilter: React.FC = React.memo(() => {
+  const { todos, setTodos, finishedTodos } = useContext(TodoContext);
   const { activeTodos, setVisibleTodoses } = useContext(TodoContext);
   const [type, setType] = useState('all');
+
+  // eslint-disable-next-line
+  // console.log(finishedTodos);
 
   useEffect(() => {
     switch (type) {
@@ -16,13 +19,13 @@ export const TodosFilter: React.FC = () => {
         setVisibleTodoses(finishedTodos);
         break;
       default:
-        setVisibleTodoses(todo);
+        setVisibleTodoses(todos);
     }
-  }, [type, todo]);
+  }, [type, todos, finishedTodos]);
 
   return (
     <>
-      {todo.length > 0 && (
+      {todos.length > 0 && (
         <>
           <footer className="footer">
             <span
@@ -68,7 +71,7 @@ export const TodosFilter: React.FC = () => {
               <button
                 type="button"
                 className="clear-completed"
-                onClick={() => setTodo(activeTodos)}
+                onClick={() => setTodos(activeTodos)}
               >
                 Clear completed
               </button>
@@ -80,4 +83,4 @@ export const TodosFilter: React.FC = () => {
 
     </>
   );
-};
+});

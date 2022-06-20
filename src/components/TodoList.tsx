@@ -2,14 +2,14 @@ import React, { useContext } from 'react';
 import { TodoContext } from '../TodoContext';
 import { TodoItem } from './TodoItem';
 
-export const TodoList: React.FC = () => {
-  const { todo, setTodo } = useContext(TodoContext);
-  const { todoses } = useContext(TodoContext);
+export const TodoList: React.FC = React.memo(() => {
+  const { todos, setTodos } = useContext(TodoContext);
+  const { visibleTodoses } = useContext(TodoContext);
 
-  const actTodo = todo.filter(elem => !elem.completed);
+  const actTodo = todos.filter(elem => !elem.completed);
 
   const handleToggleAll = (e: boolean) => {
-    setTodo(todo.map((elem) => {
+    setTodos(todos.map((elem) => {
       return {
         ...elem,
         completed: e,
@@ -19,7 +19,7 @@ export const TodoList: React.FC = () => {
 
   return (
     <>
-      {todo.length !== 0 && (
+      {todos.length !== 0 && (
         <>
           <input
             type="checkbox"
@@ -37,7 +37,7 @@ export const TodoList: React.FC = () => {
         className="todo-list"
         data-cy="todoList"
       >
-        {todoses.map(el => (
+        {visibleTodoses.map(el => (
           <TodoItem
             el={el}
             key={el.id}
@@ -46,4 +46,4 @@ export const TodoList: React.FC = () => {
       </ul>
     </>
   );
-};
+});
