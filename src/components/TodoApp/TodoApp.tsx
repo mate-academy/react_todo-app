@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addNewTodo } from '../../api/api';
+import { addNewTodo, userId } from '../../api/api';
 import { TodosType } from '../../types/TodosType';
 
 type Props = {
@@ -12,7 +12,7 @@ export const TodoApp: React.FC<Props> = ({ setTodos }) => {
   const addTodo = (e: any) => {
     e.preventDefault();
 
-    addNewTodo('todos/?userId=3644', inputValue)
+    addNewTodo(`todos/?userId=${userId}`, inputValue)
       .then((resp) => {
         setTodos((todos: TodosType[]) => (
           [...todos,

@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList';
 import { TodosType } from './types/TodosType';
 import { TodosFilter } from './components/TodosFilter';
 import { useLocalStorage } from './hook/useLocalStorage';
-import { deleteTodo, userId, changeTodoStatus } from './api/api';
+import { deleteTodo, userId, changeTodoStatus, getTodos } from './api/api';
 import { SortBy } from './types/SortBy';
 
 export const TodoData = React.createContext<any>({});
@@ -16,8 +16,7 @@ export const App: React.FC = () => {
   const [sortBy, setSortBy] = useState(SortBy.All);
 
   useEffect(() => {
-    fetch(`https://mate.academy/students-api/todos/?userId=${userId}`)
-      .then(resp => resp.json())
+    getTodos(`todos/?userId=${userId}`)
       .then((data) => {
         setTodos(data);
       });
@@ -83,14 +82,18 @@ export const App: React.FC = () => {
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          checked={toggleStatus}
-          className="toggle-all"
-          onChange={() => (toggleAll())}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {todos.length > 0 && (
+          <>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              checked={toggleStatus}
+              className="toggle-all"
+              onChange={toggleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          </>
+        )}
 
         <TodoData.Provider value={contextValue}>
           <TodoList
@@ -101,25 +104,27 @@ export const App: React.FC = () => {
 
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${notCompletedCount()} items left`}
-        </span>
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {`${notCompletedCount()} items left`}
+          </span>
 
-        <TodosFilter sortBy={sortBy} setSortBy={setSortBy} />
+          <TodosFilter sortBy={sortBy} setSortBy={setSortBy} />
 
-        {completedCount() > 0
-          && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={() => clearCompleted()}
-            >
-              Clear completed
-            </button>
-          )
-        }
-      </footer>
+          {completedCount() > 0
+            && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={() => clearCompleted()}
+              >
+                Clear completed
+              </button>
+            )
+          }
+        </footer>
+      )}
     </section>
   );
 };

@@ -2,7 +2,7 @@ const BASE_URL = 'https://mate.academy/students-api/';
 
 export const userId = 3643;
 
-export const request = (url: string, options: any) => fetch(`${BASE_URL}${url}`, options)
+export const request = (url: string, options?: any) => fetch(`${BASE_URL}${url}`, options)
   .then((res) => {
     if (!res.ok) {
       throw new Error('Error with loading data...');
@@ -10,6 +10,9 @@ export const request = (url: string, options: any) => fetch(`${BASE_URL}${url}`,
 
     return res.json();
   });
+
+// Get todos
+export const getTodos = (url: string) => request(url);
 
 // Add new todo
 export const addNewTodo = (url: string, title: string) => request(
@@ -57,17 +60,3 @@ export const deleteTodo = (url: string) => request(
     headers: { 'Content-Type': 'application/json' },
   },
 );
-
-// export const createUser = (url: string) => request(
-//   url,
-//   {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       "name": "Alex",
-//       "username": "yavis",
-//       "email": "testt@example.com",
-//       "phone": "1234567890"
-//     }),
-//   },
-// )
