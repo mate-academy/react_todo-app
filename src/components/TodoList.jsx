@@ -4,7 +4,6 @@ import { TodoItem } from './TodoItem';
 
 export const TodoList = React.memo(({
   todos,
-  // onIdSet,
   setTodos,
   setInput,
 }) => {
