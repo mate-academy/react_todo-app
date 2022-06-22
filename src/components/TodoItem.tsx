@@ -11,14 +11,14 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ el }) => {
   const { todos, setTodos } = useContext(TodoContext);
   const [focused, setFocused] = useState(false);
-  const [editTodo, setEditTodo] = useState(el.title);
+  const [editTodo, setEditTodo] = useState(el.title.trim());
 
   const updateTodo = () => {
     setTodos(todos.map((elem) => {
       if (elem.id === el.id) {
         return {
           ...elem,
-          title: editTodo,
+          title: editTodo.trim(),
         };
       }
 
@@ -37,7 +37,7 @@ export const TodoItem: React.FC<Props> = ({ el }) => {
         updateTodo();
         break;
       case 'Escape':
-        setEditTodo(el.title);
+        setEditTodo(el.title.trim());
         setFocused(false);
         break;
       default:

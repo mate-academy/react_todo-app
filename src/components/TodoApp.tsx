@@ -29,7 +29,7 @@ export const TodoApp: React.FC = React.memo(() => {
         type="text"
         value={title}
         onChange={(e) => {
-          setTitle(e.target.value);
+          setTitle(e.target.value.trim());
         }}
         className="new-todo"
         data-cy="createTodo"
