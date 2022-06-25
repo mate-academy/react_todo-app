@@ -28,7 +28,7 @@ export const TodoItem = React.memo(({
   };
 
   const onEditHandler = (e) => {
-    if (e.key === 'Enter' && e.target.value.length > 0) {
+    if (e.key === 'Enter' && e.target.value.trim().length > 0) {
       setInput(e.target.value);
       setTodos(todos.map((item) => {
         if (item.id === todo.id) {
@@ -44,7 +44,7 @@ export const TodoItem = React.memo(({
       setInput('');
     }
 
-    if (e.key === 'Enter' && e.target.value.length === 0) {
+    if (e.key === 'Enter' && e.target.value.trim().length === 0) {
       setTodos(todos.filter(item => item.id !== todo.id));
     }
 

@@ -1,13 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 
 export const TodoApp = React.memo(() => {
   const [input, setInput] = useState('');
   const [todos, setTodos] = useState([]);
-  const [allTodos, setAllTodos] = useState(false);
+  const [allTodos, setAllTodos] = useState(true);
   const [filter, setFilter] = useState('All');
-  const [filteredTodos, setFilteredTodos] = useState([]);
+
+  const filteredTodos = useMemo(() => {
+    switch (filter) {
+      case 'Completed':
+        return todos.filter(todo => todo.completed);
+
+      case 'Active':
+        return todos.filter(todo => !todo.completed);
+
+      default:
+        return todos;
+    }
+  }, [filter, todos]);
 
   const onClickHandler = (e) => {
     setInput(e.target.value);
@@ -32,7 +44,8 @@ export const TodoApp = React.memo(() => {
   };
 
   const allCompletedHandler = () => {
-    setAllTodos(!allTodos);
+    // setAllTodos(!allTodos);
+    setAllTodos(prev => !prev);
     setTodos(todos.map((todo) => {
       if (allTodos) {
         return {
@@ -48,23 +61,9 @@ export const TodoApp = React.memo(() => {
     }));
   };
 
-  const filterHandler = () => {
-    switch (filter) {
-      case 'Completed':
-        setFilteredTodos(todos.filter(todo => todo.completed));
-        break;
+  const filterHandler = () => filteredTodos;
 
-      case 'Active':
-        setFilteredTodos(todos.filter(todo => !todo.completed));
-        break;
-
-      default:
-        setFilteredTodos(todos);
-        break;
-    }
-  };
-
-  const removeTodosHandler = () => {
+  const removeCompletedTodosHandler = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
@@ -145,7 +144,7 @@ export const TodoApp = React.memo(() => {
             <button
               type="button"
               className="clear-completed"
-              onClick={removeTodosHandler}
+              onClick={removeCompletedTodosHandler}
             >
               Clear completed
             </button>
