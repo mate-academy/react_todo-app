@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   Switch,
   Route,
 } from "react-router-dom";
 import { TodoList } from './TodoList';
-import { changeTodo } from '../api/api';
+import {changeTodo, multipleChange} from '../api/api';
 import { NewTodoForm } from './NewTodoForm';
 
-export const TodoApp = ({ todos, setTodos }) => {
+export const TodoApp = ({ todos, setTodos, setAuthToken }) => {
   const [allChecked, setAllChecked] = useState(todos && todos.every(
     todo => !!todo.completed
   ));
@@ -17,9 +17,18 @@ export const TodoApp = ({ todos, setTodos }) => {
   }, [todos]);
 
   const toggleAll = async() => {
-    await Promise.all(todos.map((todo) => {
-      return changeTodo(todo.id, { completed: !allChecked });
-    }));
+    const filteredTodos = todos.filter(todo => todo.completed === allChecked);
+
+    await multipleChange({
+      items: filteredTodos.map(todo => ({
+        ...todo,
+        completed: !todo.completed,
+      })),
+    }, 'update');
+
+    // await Promise.all(filteredTodos.map((todo) => {
+    //   return changeTodo(todo.id, { completed: !allChecked });
+    // }));
 
     setTodos(list => list.map(todo => ({
       ...todo,
@@ -65,6 +74,8 @@ export const TodoApp = ({ todos, setTodos }) => {
         </Switch>
         )}
       </section>
+
+
     </>
   );
 };

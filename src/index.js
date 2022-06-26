@@ -5,6 +5,7 @@ import { HashRouter } from 'react-router-dom';
 import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
+import './styles/auth.css';
 
 import App from './App';
 

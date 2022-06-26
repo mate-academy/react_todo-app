@@ -1,9 +1,7 @@
-import React, { useRef } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+
 import classNames from 'classnames';
-import { removeTodo } from '../api/api';
-import { changeTodo } from '../api/api';
+import { removeTodo, changeTodo } from '../api/api';
 
 export const TodoItem = ({ todo, setTodos }) => {
   const [checkedTodo, setCheckedTodo] = useState(todo.completed);
@@ -15,7 +13,7 @@ export const TodoItem = ({ todo, setTodos }) => {
   }, [todo]);
 
   const toggleCheck = async() => {
-    await changeTodo(todo.id, {completed: !todo.completed,})
+    await changeTodo(todo.id, { ...todo, completed: !todo.completed, })
       .then((response) => {
         if (response.data) {
           setTodos(list => [...list].map((item) => {
@@ -68,12 +66,12 @@ export const TodoItem = ({ todo, setTodos }) => {
       return;
     }
 
-    await changeTodo(todo.id, { title: target.value })
+    await changeTodo(todo.id, { ...todo, title: target.value })
       .then((response) => {
         if (response.data) {
           setTodos(list => list.map((item) => {
             if (item.id === todo.id) {
-              return {...item, title: target.value,};
+              return { ...item, title: target.value };
             }
 
             return item;

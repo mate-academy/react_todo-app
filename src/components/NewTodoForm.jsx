@@ -16,18 +16,18 @@ export const NewTodoForm = ({ setTodos }) => {
     }
 
     const newTodoObj = {
-      "userId": 1233,
-      "completed": false,
-      "title": newTodoTitle,
+      // userId: 1233,
+      completed: false,
+      title: newTodoTitle,
     };
 
     setNewTodoTitle('');
     await addNewTodo(newTodoObj)
       .then((response) => {
-        if (response.ok) {
+        if (response?.data) {
           setTodos(list => [...list, {
-            ...newTodoObj,
-            id: new Date(),
+            ...response?.data,
+            // id: new Date(),
           }]);
         }
       });

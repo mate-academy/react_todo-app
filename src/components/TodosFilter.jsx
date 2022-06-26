@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { removeTodo } from '../api/api';
+import {multipleChange, removeTodo} from '../api/api';
 
 export const TodosFilter = ({ todos, updateTodos }) => {
   const [itemsLeft, setItemsLeft] = useState('');
@@ -18,13 +18,17 @@ export const TodosFilter = ({ todos, updateTodos }) => {
   }, [todos]);
 
   const clearCompleted = async() => {
-    await Promise.all(todos.map((todo) => {
-      if (todo.completed) {
-        return removeTodo(todo.id);
-      }
+    const filteredTodos = todos.filter(todo => todo.completed)
+      .map(todo => todo.id);
 
-      return todo;
-    }));
+    await multipleChange({ ids: filteredTodos }, 'delete');
+    // await Promise.all(todos.map((todo) => {
+    //   if (todo.completed) {
+    //     return removeTodo(todo.id);
+    //   }
+    //
+    //   return todo;
+    // }));
 
     updateTodos();
   };
