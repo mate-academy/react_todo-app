@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TodoContext } from '../../TodoContext';
 
-const TodosFilter = ({ setFilterStatus, clearCompleted }) => {
+const TodosFilter = ({ setFilterStatus, clearCompleted, filterStatus }) => {
   const [leftItem, setLeftItem] = useState([]);
   const { todos } = useContext(TodoContext);
+
+  const toggleClass = status => ((filterStatus === status) ? 'selected' : '');
 
   useEffect(() => {
     setLeftItem(todos.filter(todo => !todo.complete));
@@ -25,7 +27,7 @@ const TodosFilter = ({ setFilterStatus, clearCompleted }) => {
         <li>
           <a
             href="#/"
-            className="selected"
+            className={toggleClass('all')}
             onClick={() => setFilterStatus('all')}
           >
             All
@@ -35,6 +37,7 @@ const TodosFilter = ({ setFilterStatus, clearCompleted }) => {
         <li>
           <a
             href="#/active"
+            className={toggleClass('active')}
             onClick={() => setFilterStatus('active')}
           >
             Active
@@ -44,6 +47,7 @@ const TodosFilter = ({ setFilterStatus, clearCompleted }) => {
         <li>
           <a
             href="#/completed"
+            className={toggleClass('completed')}
             onClick={() => setFilterStatus('completed')}
           >
             Completed

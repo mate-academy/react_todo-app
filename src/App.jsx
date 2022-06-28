@@ -71,6 +71,7 @@ function App() {
           <TodoFilter
             setFilterStatus={setFilterStatus}
             clearCompleted={clearCompleted}
+            filterStatus={filterStatus}
           />
         </footer>
       </section>
