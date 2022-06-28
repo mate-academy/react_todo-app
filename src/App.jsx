@@ -1,87 +1,81 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import TodoApp from './components/TodoApp/TodoApp';
+import TodoList from './components/TodoList/TodoList';
+import TodoFilter from './components/TodosFilter/TodosFilter';
+import { TodoContext } from './TodoContext';
 
 function App() {
+  const [inputText, setInputText] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [todos, setTodos] = useState([]);
+
+  const getLocalTodos = () => {
+    if (localStorage.getItem('todos') === null) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    }
+
+    setTodos(JSON.parse(localStorage.getItem('todos')));
+  };
+
+  useEffect(() => {
+    getLocalTodos();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const getChangeTitle = useCallback((id, newTitle) => {
+    setTodos(currentTodos => currentTodos
+      .map(todo => ((todo.id === id && newTitle.length > 0)
+        ? { ...todo, title: newTitle } : todo)));
+  }, []);
+
+  const filterTodos = useMemo(() => {
+    switch (filterStatus) {
+      case 'completed':
+        return todos.filter(todo => todo.complete);
+      case 'active':
+        return todos.filter(todo => !todo.complete);
+      default:
+        return todos;
+    }
+  }, [filterStatus, todos]);
+
+  const clearCompleted = useCallback(() => {
+    setTodos(currentTodos => currentTodos
+      .filter(todo => !todo.complete));
+  }, []);
+
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <TodoContext.Provider value={{
+      todos,
+      setTodos,
+      inputText,
+      setInputText,
+      filterTodos,
+      getChangeTitle,
+    }}
+    >
+      <section className="todoapp">
+        <header className="header">
+          <h1>Todos</h1>
+          <TodoApp />
+        </header>
 
-        <form>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
+        <section className="main">
+          <TodoList />
+        </section>
+
+        <footer className="footer">
+          <TodoFilter
+            setFilterStatus={setFilterStatus}
+            clearCompleted={clearCompleted}
           />
-        </form>
-      </header>
-
-      <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        </footer>
       </section>
+    </TodoContext.Provider>
 
-      <footer className="footer">
-        <span className="todo-count">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </section>
   );
 }
 
