@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
+import { TodoInput } from './TodoInput';
 
 export const TodoApp = React.memo(() => {
   const [input, setInput] = useState('');
@@ -8,22 +9,23 @@ export const TodoApp = React.memo(() => {
   const [allTodos, setAllTodos] = useState(true);
   const [filter, setFilter] = useState('All');
 
+  const filterType = {
+    Completed: 'Completed',
+    Active: 'Active',
+  };
+
   const filteredTodos = useMemo(() => {
     switch (filter) {
-      case 'Completed':
+      case filterType.Completed:
         return todos.filter(todo => todo.completed);
 
-      case 'Active':
+      case filterType.Active:
         return todos.filter(todo => !todo.completed);
 
       default:
         return todos;
     }
   }, [filter, todos]);
-
-  const onClickHandler = (e) => {
-    setInput(e.target.value);
-  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -67,29 +69,24 @@ export const TodoApp = React.memo(() => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
-  const setToLocalStrg = () => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  };
-
-  const getLocalTodos = () => {
+  useEffect(() => {
     if (localStorage.getItem('todos') === null) {
       localStorage.setItem('todos', JSON.stringify([]));
     } else {
       setTodos(JSON.parse(localStorage.getItem('todos')));
     }
-  };
-
-  useEffect(() => {
-    getLocalTodos();
   }, []);
 
   useEffect(() => {
     filterHandler();
-    setToLocalStrg();
+
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos, filter]);
 
   const activeTodos = [...filteredTodos]
     .filter(todo => !todo.completed).length;
+
+  const activeTodosLeft = `${activeTodos} items left`;
 
   const completedTodos = [...filteredTodos]
     .filter(todo => todo.completed).length;
@@ -99,14 +96,7 @@ export const TodoApp = React.memo(() => {
       <header className="header">
         <h1>React Todo</h1>
         <form onSubmit={submitHandler}>
-          <input
-            type="text"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            data-cy="createTodo"
-            value={input}
-            onChange={e => onClickHandler(e)}
-          />
+          <TodoInput input={input} setInput={setInput} />
         </form>
       </header>
 
@@ -130,9 +120,7 @@ export const TodoApp = React.memo(() => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {activeTodos}
-            {' '}
-            items left
+            {activeTodosLeft}
           </span>
 
           <TodosFilter

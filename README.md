@@ -15,7 +15,7 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
     - `title` - the text of a todo
     - `completed` - current status (`false` by default)
 2. Show the number of not completed todos in `TodoApp`. You should add a `data-cy="todosCounter"` attribute to this element. 
-3. Implement `TodoList` component with a `data-cy="todoList"` attribute in it's `<ul>` or `<ol>` element to display a list of todos
+3. Implement `TodoList` component with a `data-cy="todosList"` attribute in it's `<ul>` or `<ol>` element to display a list of todos
     ```jsx harmony
     <TodoList items={todos} />
     ```

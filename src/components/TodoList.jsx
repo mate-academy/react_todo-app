@@ -8,7 +8,7 @@ export const TodoList = React.memo(({
   setInput,
 }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {todos.map(todo => (
         <TodoItem
           todo={todo}

@@ -90,7 +90,6 @@ export const TodoItem = React.memo(({
           checked={todo.completed}
         />
         <label
-          htmlFor="toggle-view"
           onDoubleClick={() => setToggle(true)}
         >
           {todo.title}
