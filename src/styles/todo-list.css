@@ -1,4 +1,3 @@
-
 .todo-list {
   margin: 0;
   padding: 0;
@@ -6,6 +5,7 @@
 }
 
 .todo-list li {
+  background-color: #fff;
   position: relative;
   font-size: 24px;
   border-bottom: 1px solid #ededed;
@@ -112,5 +112,58 @@
   .todo-list li .toggle {
     height: 40px;
     background: none;
+  }
+}
+
+.item-enter-active {
+  animation: item-in 500ms forwards;
+}
+
+.item-exit-active {
+  opacity: 0;
+  animation: item-out 500ms forwards;
+}
+
+@keyframes item-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes item-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+.header-title-enter-active {
+  animation: header-move 10000ms forwards;
+  -webkit-animation: header-move 1000ms forwards;
+}
+
+@keyframes header-move {
+  0% {
+    color: rgba(175, 47, 47, 0.15);
+    opacity: 0;
+    transform: translateX(-150px);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(100px);
+    color: rgba(175, 47, 47, 0.3);
+  }
+  100% {
+    transform: translateX(0);
+    color: rgba(175, 47, 47, 0.6);
   }
 }
