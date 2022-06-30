@@ -41,7 +41,7 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
 1. Save state of the APP to the `localStorage` using the name `todos` for the key ([Required theory](https://javascript.info/localstorage))
     - use `JSON.stringify` before saving and `JSON.parse` on reading
 
-![todoedit](./description/edittodo.gif)
+![todoedit](https://media.giphy.com/media/TQWpaxsZjFZ6l8ri5d/giphy.gif)
 
 ## (*) Advanced tasks (Optional)
 Implement saving the todos in [the API](https://mate-academy.github.io/fe-students-api/).
