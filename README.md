@@ -1,5 +1,8 @@
 # React ToDo App
 
+## Description:
+A regular to-do list that can be edited. Counting the number of uncompleted tasks.
+
 ## Technologies
 * HTML/CSS
 * SCSS
