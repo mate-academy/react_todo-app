@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -6,9 +5,9 @@ export const TodoItem = React.memo(({
   todos,
   todo,
   setTodos,
-  setInput,
 }) => {
   const [toggle, setToggle] = useState(false);
+  const [input, setInput] = useState(todo.title);
 
   const deleteHandler = () => {
     setTodos(todos.filter(item => todo.id !== item.id));
@@ -76,10 +75,11 @@ export const TodoItem = React.memo(({
   };
 
   return (
-    <li className={classNames('', {
-      completed: todo.completed,
-      editing: toggle,
-    })}
+    <li
+      className={classNames({
+        completed: todo.completed,
+        editing: toggle,
+      })}
     >
       <div className="view">
         <input
@@ -92,7 +92,7 @@ export const TodoItem = React.memo(({
         <label
           onDoubleClick={() => setToggle(true)}
         >
-          {todo.title}
+          {input}
         </label>
         <button
           onClick={deleteHandler}

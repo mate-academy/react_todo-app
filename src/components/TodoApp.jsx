@@ -4,7 +4,6 @@ import { TodosFilter } from './TodosFilter';
 import { TodoInput } from './TodoInput';
 
 export const TodoApp = React.memo(() => {
-  const [input, setInput] = useState('');
   const [todos, setTodos] = useState([]);
   const [allTodos, setAllTodos] = useState(true);
   const [filter, setFilter] = useState('All');
@@ -27,26 +26,7 @@ export const TodoApp = React.memo(() => {
     }
   }, [filter, todos]);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    if (!input) {
-      return;
-    }
-
-    const id = +new Date();
-    const todo = {
-      id,
-      title: input,
-      completed: false,
-    };
-
-    setTodos(state => [...state, todo]);
-    setInput('');
-  };
-
   const allCompletedHandler = () => {
-    // setAllTodos(!allTodos);
     setAllTodos(prev => !prev);
     setTodos(todos.map((todo) => {
       if (allTodos) {
@@ -89,15 +69,13 @@ export const TodoApp = React.memo(() => {
   const activeTodosLeft = `${activeTodos} items left`;
 
   const completedTodos = [...filteredTodos]
-    .filter(todo => todo.completed).length;
+    .filter(todo => todo.completed);
 
   return (
     <section className="todoapp">
       <header className="header">
         <h1>React Todo</h1>
-        <form onSubmit={submitHandler}>
-          <TodoInput input={input} setInput={setInput} />
-        </form>
+        <TodoInput setTodos={setTodos} />
       </header>
 
       <section className="main">
@@ -107,13 +85,13 @@ export const TodoApp = React.memo(() => {
           className="toggle-all"
           data-cy="toggleAll"
           onChange={allCompletedHandler}
+          checked={completedTodos.length > 0}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
           todos={filteredTodos}
           setTodos={setTodos}
-          setInput={setInput}
         />
       </section>
 
@@ -128,7 +106,7 @@ export const TodoApp = React.memo(() => {
             setFilter={setFilter}
           />
 
-          {completedTodos > 0 && (
+          {completedTodos.length > 0 && (
             <button
               type="button"
               className="clear-completed"

@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -17,7 +16,7 @@ export const TodosFilter = ({ todos, setFilter }) => {
       <li>
         <a
           href="#/"
-          className={classNames('', {
+          className={classNames({
             selected: classValue === 'All',
           })}
           onClick={e => clickHandler(e)}
