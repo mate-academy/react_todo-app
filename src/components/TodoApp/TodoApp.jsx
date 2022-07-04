@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import '../../styles/index.css';
 import '../../styles/todo-list.css';
 
 import { TodoContext } from '../../TodoContext';
 
 const TodoApp = () => {
-  const { setTodos, todos, setInputText, inputText } = useContext(TodoContext);
+  const [inputText, setInputText] = useState('');
+  const { setTodos, todos } = useContext(TodoContext);
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };

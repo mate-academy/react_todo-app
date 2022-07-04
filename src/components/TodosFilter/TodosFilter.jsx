@@ -43,7 +43,6 @@ const TodosFilter = ({ setFilterStatus, clearCompleted, filterStatus }) => {
             Active
           </a>
         </li>
-
         <li>
           <a
             href="#/completed"

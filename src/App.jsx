@@ -5,7 +5,6 @@ import TodoFilter from './components/TodosFilter/TodosFilter';
 import { TodoContext } from './TodoContext';
 
 function App() {
-  const [inputText, setInputText] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [todos, setTodos] = useState([]);
 
@@ -51,8 +50,6 @@ function App() {
     <TodoContext.Provider value={{
       todos,
       setTodos,
-      inputText,
-      setInputText,
       filterTodos,
       getChangeTitle,
     }}
@@ -67,6 +64,7 @@ function App() {
           <TodoList />
         </section>
 
+        {(todos.length !== 0) && (
         <footer className="footer">
           <TodoFilter
             setFilterStatus={setFilterStatus}
@@ -74,6 +72,7 @@ function App() {
             filterStatus={filterStatus}
           />
         </footer>
+        )}
       </section>
     </TodoContext.Provider>
 
