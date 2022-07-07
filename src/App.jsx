@@ -27,7 +27,9 @@ function App() {
   const getChangeTitle = useCallback((id, newTitle) => {
     setTodos(currentTodos => currentTodos
       .map(todo => ((todo.id === id && newTitle.length > 0)
-        ? { ...todo, title: newTitle } : todo)));
+        ? { ...todo, title: newTitle }
+        : todo
+      )));
   }, []);
 
   const filterTodos = useMemo(() => {

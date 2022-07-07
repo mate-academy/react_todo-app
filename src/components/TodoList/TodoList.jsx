@@ -7,7 +7,6 @@ import '../../styles/todo-list.css';
 const TodoList = () => {
   const { filterTodos, todos, setTodos } = useContext(TodoContext);
   const [isChecked, setIsChecked] = useState(false);
-  const [editing, setEditing] = useState(false);
 
   const handleToggleAll = () => {
     setIsChecked(!isChecked);
@@ -38,18 +37,10 @@ const TodoList = () => {
       }
       <ul className="todo-list">
         {filterTodos.map(item => (
-          <li
+          <TodoItem
+            item={item}
             key={item.id}
-            className={`
-          ${editing ? 'editing' : ''}
-          ${item.complete ? 'completed' : ''}
-          `}
-          >
-            <TodoItem
-              item={item}
-              setEditing={setEditing}
-            />
-          </li>
+          />
         ))}
       </ul>
 

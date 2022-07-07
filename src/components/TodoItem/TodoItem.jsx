@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { TodoContext } from '../../TodoContext';
 
-const TodoItem = ({ item, isChecked, setEditing }) => {
+const TodoItem = ({ item, isChecked }) => {
   const { setTodos, todos, getChangeTitle } = useContext(TodoContext);
   const [title, setTitle] = useState('');
+  const [editing, setEditing] = useState(false);
 
   const updateTodo = (event) => {
     event.preventDefault();
@@ -44,7 +45,13 @@ const TodoItem = ({ item, isChecked, setEditing }) => {
   };
 
   return (
-    <>
+    <li
+      key={item.id}
+      className={`
+        ${editing ? 'editing' : ''}
+        ${item.complete ? 'completed' : ''}
+      `}
+    >
       <div
         className="view"
       >
@@ -85,7 +92,7 @@ const TodoItem = ({ item, isChecked, setEditing }) => {
           updateTodoKeyDown(event);
         }}
       />
-    </>
+    </li>
   );
 };
 
