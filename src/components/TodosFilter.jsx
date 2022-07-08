@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 
 export const TodosFilter = ({ todos, setFilter }) => {
-  const [classValue, setClassValue] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('');
 
   const clickHandler = (value) => {
     const filterValue = value.currentTarget.textContent;
 
-    setClassValue(filterValue);
+    setSelectedFilter(filterValue);
     setFilter(filterValue);
   };
 
@@ -17,7 +17,7 @@ export const TodosFilter = ({ todos, setFilter }) => {
         <a
           href="#/"
           className={classNames({
-            selected: classValue === 'All',
+            selected: selectedFilter === 'All',
           })}
           onClick={e => clickHandler(e)}
         >
@@ -29,8 +29,8 @@ export const TodosFilter = ({ todos, setFilter }) => {
         <a
           href="#/active"
           onClick={e => clickHandler(e)}
-          className={classNames('', {
-            selected: classValue === 'Active',
+          className={classNames({
+            selected: selectedFilter === 'Active',
           })}
         >
           Active
@@ -41,8 +41,8 @@ export const TodosFilter = ({ todos, setFilter }) => {
         <a
           href="#/completed"
           onClick={e => clickHandler(e)}
-          className={classNames('', {
-            selected: classValue === 'Completed',
+          className={classNames({
+            selected: selectedFilter === 'Completed',
           })}
         >
           Completed

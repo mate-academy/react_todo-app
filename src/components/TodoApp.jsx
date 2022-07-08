@@ -5,7 +5,7 @@ import { TodoInput } from './TodoInput';
 
 export const TodoApp = React.memo(() => {
   const [todos, setTodos] = useState([]);
-  const [allTodos, setAllTodos] = useState(true);
+  const [isAllTodosSelected, setIsAllTodosSelected] = useState(true);
   const [filter, setFilter] = useState('All');
 
   const filterType = {
@@ -27,23 +27,12 @@ export const TodoApp = React.memo(() => {
   }, [filter, todos]);
 
   const allCompletedHandler = () => {
-    setAllTodos(prev => !prev);
-    setTodos(todos.map((todo) => {
-      if (allTodos) {
-        return {
-          ...todo,
-          completed: true,
-        };
-      }
-
-      return {
-        ...todo,
-        completed: false,
-      };
-    }));
+    setIsAllTodosSelected(prev => !prev);
+    setTodos(todos.map(todo => ({
+      ...todo,
+      completed: isAllTodosSelected,
+    })));
   };
-
-  const filterHandler = () => filteredTodos;
 
   const removeCompletedTodosHandler = () => {
     setTodos(todos.filter(todo => !todo.completed));
@@ -58,8 +47,6 @@ export const TodoApp = React.memo(() => {
   }, []);
 
   useEffect(() => {
-    filterHandler();
-
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos, filter]);
 

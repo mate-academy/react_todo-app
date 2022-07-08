@@ -92,7 +92,7 @@ export const TodoItem = React.memo(({
         <label
           onDoubleClick={() => setToggle(true)}
         >
-          {input}
+          {todo.title || input}
         </label>
         <button
           onClick={deleteHandler}

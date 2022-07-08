@@ -32,6 +32,5 @@ export const TodoInput = ({ setTodos }) => {
         onChange={e => setInput(e.target.value)}
       />
     </form>
-
   );
 };
