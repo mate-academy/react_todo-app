@@ -86,13 +86,14 @@ export const TodoItem = React.memo(({
           type="checkbox"
           className="toggle"
           id="toggle-view"
+          value={input}
           onChange={completeHandler}
           checked={todo.completed}
         />
         <label
           onDoubleClick={() => setToggle(true)}
         >
-          {todo.title || input}
+          {todo.title}
         </label>
         <button
           onClick={deleteHandler}
