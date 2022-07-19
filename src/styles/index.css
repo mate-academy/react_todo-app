@@ -45,6 +45,11 @@ body {
     0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
 
+.user-title {
+  padding: 20px 20px 0;
+  text-align: center;
+}
+
 .todoapp input::-webkit-input-placeholder {
   font-style: italic;
   font-weight: 300;
