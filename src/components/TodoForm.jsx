@@ -85,80 +85,77 @@ export const TodoForm = () => {
     handleCountTodo();
   }, [visibleTodos]);
 
+  if (error) {
+    return <h1>{error}</h1>;
+  }
+
   return (
-    <>
-      {!error
-        ? (
-          <section className="todoapp">
-            <p className="user-title">{`Todo's of ${user.name}`}</p>
-            <header className="header">
-              <h1>todos</h1>
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  value={input}
-                  className="new-todo"
-                  placeholder="What needs to be done?"
-                  data-cy="createTodo"
-                  onChange={handleInput}
-                />
-              </form>
-            </header>
-            <section className="main">
-              <input
-                type="checkbox"
-                id="toggle-all"
-                className="toggle-all"
-                onClick={handleCompleteAll}
-              />
-              <label htmlFor="toggle-all">Mark all as complete</label>
-              <TodoList todos={visibleTodos} />
-            </section>
-            {selectedUsersTodos.length > 0 && (
-              <footer className="footer">
-                <span className="todo-count" data-cy="todosCounter">
-                  {`${countActiveTodos} items left`}
-                </span>
-                <ul className="filters">
-                  <li>
-                    <Link
-                      to="/"
-                      className={!status ? 'selected' : ''}
-                    >
-                      All
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/active"
-                      className={status === 'active' ? 'selected' : ''}
-                    >
-                      Active
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/completed"
-                      className={status === 'completed' ? 'selected' : ''}
-                    >
-                      Completed
-                    </Link>
-                  </li>
-                </ul>
-                <button
-                  type="button"
-                  className="clear-completed"
-                  hidden={!countCompletedTodos}
-                  onClick={handleClearAll}
-                >
-                  Clear completed
-                </button>
-              </footer>
-            )}
-          </section>
-        )
-        : (<h1>{error}</h1>)
-    }
-    </>
+    <section className="todoapp">
+      <p className="user-title">{`Todo's of ${user.name}`}</p>
+      <header className="header">
+        <h1>todos</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={input}
+            className="new-todo"
+            placeholder="What needs to be done?"
+            data-cy="createTodo"
+            onChange={handleInput}
+          />
+        </form>
+      </header>
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          onClick={handleCompleteAll}
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
+        <TodoList todos={visibleTodos} />
+      </section>
+      {selectedUsersTodos.length > 0 && (
+      <footer className="footer">
+        <span className="todo-count" data-cy="todosCounter">
+          {`${countActiveTodos} items left`}
+        </span>
+        <ul className="filters">
+          <li>
+            <Link
+              to="/"
+              className={!status ? 'selected' : ''}
+            >
+              All
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/active"
+              className={status === 'active' ? 'selected' : ''}
+            >
+              Active
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/completed"
+              className={status === 'completed' ? 'selected' : ''}
+            >
+              Completed
+            </Link>
+          </li>
+        </ul>
+        <button
+          type="button"
+          className="clear-completed"
+          hidden={!countCompletedTodos}
+          onClick={handleClearAll}
+        >
+          Clear completed
+        </button>
+      </footer>
+      )}
+    </section>
   );
 };
