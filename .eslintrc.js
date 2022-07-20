@@ -1,6 +1,10 @@
 module.exports = {
   extends: ['@mate-academy/eslint-config-react', 'plugin:cypress/recommended'],
   rules: {
+    'import/no-unresolved': [
+      2,
+      { caseSensitive: false }
+    ],
     'import/no-extraneous-dependencies': ['error', {
       devDependencies: true,
       optionalDependencies: false,
