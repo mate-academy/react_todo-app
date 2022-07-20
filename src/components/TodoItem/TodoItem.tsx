@@ -24,10 +24,8 @@ export const TodoItem: React.FC<Props> = ({ todoElement }) => {
     setEdit(todoElement.title);
   }, []);
 
-  const keyPressed = useCallback((key: string | number, id: number): void | string => {
+  const keyPressed = useCallback((key: string, id: number): void | string => {
     if (key === 'Escape') {
-      console.log('input');
-
       setEdit(todoElement.title);
 
       setIsInput(false);
