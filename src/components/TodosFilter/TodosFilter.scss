@@ -1,0 +1,33 @@
+.TodosFilter {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  left: 0;
+
+  @media (max-width: 430px) {
+    bottom: 10px;
+  }
+
+  &__items {
+    display: inline;
+  }
+
+  &__link {
+    color: inherit;
+    margin: 3px;
+    padding: 3px 7px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    &:hover {
+      border-color: rgba(175, 47, 47, 0.1);
+    }
+
+    &--selected {
+      border-color: rgba(175, 47, 47, 0.2);
+    }
+  }
+}
