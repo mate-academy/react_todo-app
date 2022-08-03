@@ -1,0 +1,42 @@
+import React, { FC } from 'react';
+import { Todo } from '../types/Todo';
+import TodoItem from './TodoItem';
+
+type Props = {
+  todos: Todo[]
+  onChangeComplete: (id: number, completed: boolean) => void,
+  onClickDelete: (id: number) => void;
+  onPressEnter: (id: number, title: string) => void,
+};
+
+const TodoList: FC<Props> = ({
+  todos,
+  onChangeComplete,
+  onClickDelete,
+  onPressEnter,
+}) => {
+  const doubleClickHandler = (
+    event: React.MouseEvent<HTMLLabelElement>,
+  ): boolean => {
+    return event.detail === 2;
+  };
+
+  return (
+    <ul className="todo-list" data-cy="todoList">
+      {todos.map(todo => {
+        return (
+          <TodoItem
+            todo={todo}
+            key={todo.id}
+            onChangeComplete={onChangeComplete}
+            onClickDelete={onClickDelete}
+            onDoubleClick={doubleClickHandler}
+            onPressEnter={onPressEnter}
+          />
+        );
+      })}
+    </ul>
+  );
+};
+
+export default TodoList;
