@@ -1,14 +1,16 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
-function App() {
+export const App: React.FC = () => {
   return (
-    <section className="todoapp">
+    <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
         <form>
           <input
             type="text"
+            data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
           />
@@ -16,15 +18,20 @@ function App() {
       </header>
 
       <section className="main">
-        <input type="checkbox" id="toggle-all" className="toggle-all" />
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list">
+        <ul className="todo-list" data-cy="todoList">
           <li>
             <div className="view">
               <input type="checkbox" className="toggle" id="toggle-view" />
               <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" />
+              <button type="button" className="destroy" data-cy="deleteTodo" />
             </div>
             <input type="text" className="edit" />
           </li>
@@ -33,7 +40,7 @@ function App() {
             <div className="view">
               <input type="checkbox" className="toggle" id="toggle-completed" />
               <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" />
+              <button type="button" className="destroy" data-cy="deleteTodo" />
             </div>
             <input type="text" className="edit" />
           </li>
@@ -42,7 +49,7 @@ function App() {
             <div className="view">
               <input type="checkbox" className="toggle" id="toggle-editing" />
               <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" />
+              <button type="button" className="destroy" data-cy="deleteTodo" />
             </div>
             <input type="text" className="edit" />
           </li>
@@ -51,7 +58,7 @@ function App() {
             <div className="view">
               <input type="checkbox" className="toggle" id="toggle-view2" />
               <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" />
+              <button type="button" className="destroy" data-cy="deleteTodo" />
             </div>
             <input type="text" className="edit" />
           </li>
@@ -59,7 +66,7 @@ function App() {
       </section>
 
       <footer className="footer">
-        <span className="todo-count">
+        <span className="todo-count" data-cy="todosCounter">
           3 items left
         </span>
 
@@ -81,8 +88,6 @@ function App() {
           Clear completed
         </button>
       </footer>
-    </section>
+    </div>
   );
-}
-
-export default App;
+};

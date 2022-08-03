@@ -170,7 +170,7 @@ describe('Page', () => {
 
     cy.get('@todos')
       .eq(2)
-      .find('#editTodo')
+      .find('input.edit')
       .clear()
       .type('{enter}');
 
