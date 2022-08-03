@@ -38,7 +38,7 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
     - `Ecs` cancels editing
     - Todo title can't be empty! If user clicks `Enter` with empty todo editing input, this todo should be removed.
     - (*) save changes `onBlur`
-1. Save state of the APP to the `localStorage` using the name `todos` for the key ([Required theory](https://javascript.info/localstorage))
+1. Save state of the APP to the `localStorage` using the name `todos` for the key (Here is [the lesson](https://mate.academy/learn/react/custom-hooks#/video/777))
     - use `JSON.stringify` before saving and `JSON.parse` on reading
 
 ![todoedit](./description/edittodo.gif)
