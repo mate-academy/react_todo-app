@@ -1,20 +1,77 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import { FC, useState, useEffect } from 'react';
+import { TodoList } from './components/TodoList';
+import { NewTodo } from './components/newTodo';
+import { Todo } from './types/Todo';
 
-export const App: React.FC = () => {
+// enum Status {
+//   All = 'All',
+//   Active = 'Active',
+//   Completed = 'Completed',
+// }
+
+export const App: FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [notCompletedTodos, setCompletedNumber] = useState(0);
+  // const [showTodos, setShowTodos] = useState(Status.All);
+
+  useEffect(() => {
+    const completed = todos.filter(todo => todo.completed === false);
+
+    setVisibleTodos([...todos]);
+    setCompletedNumber(completed.length);
+  }, [todos]);
+
+  const onAddTodo = (newTitle: string) => {
+    const newTodo: Todo = {
+      id: (+new Date()),
+      title: newTitle,
+      completed: false,
+    };
+
+    setTodos([newTodo, ...todos]);
+  };
+
+  const handleCompleteItem = (id: number) => {
+    const update = todos.map(t => {
+      if (t.id === id) {
+        return {
+          ...t,
+          completed: !t.completed,
+        };
+      }
+
+      return t;
+    });
+
+    setTodos(update);
+  };
+
+  const toggleAll = () => {
+    const update = todos.map(t => {
+      if (todos.some(to => to.completed === false)) {
+        return {
+          ...t,
+          completed: true,
+        };
+      }
+
+      return {
+        ...t,
+        completed: false,
+      };
+    });
+
+    setTodos(update);
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
-        <h1>todos</h1>
+        <h1>Todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <NewTodo onAdd={onAddTodo} />
       </header>
 
       <section className="main">
@@ -23,51 +80,27 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onChange={() => toggleAll()}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <label
+          htmlFor="toggle-all"
+        >
+          Mark all as complete
+        </label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        {todos.length > 0 && (
+          <TodoList
+            todos={visibleTodos}
+            handleChange={handleCompleteItem}
+          />
+        )}
       </section>
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          3 items left
+          {notCompletedTodos !== 1
+            ? `${notCompletedTodos} items left`
+            : `${notCompletedTodos} item left`}
         </span>
 
         <ul className="filters">

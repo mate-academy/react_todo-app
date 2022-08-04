@@ -23,8 +23,8 @@ button {
 body {
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.4em;
-  background: #f5f5f5;
-  color: #4d4d4d;
+  background: #F1DAD0;
+  color: #52D6C8;
   min-width: 230px;
   max-width: 550px;
   margin: 0 auto;
@@ -38,11 +38,11 @@ body {
 }
 
 .todoapp {
-  background: #fff;
+  background: #f5f5f5;;
   margin: 130px 0 40px;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-    0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px 0 rgba(32, 214, 200, 0.5),
+    0 25px 50px 0 rgba(32, 214, 200, 0.5);
 }
 
 .todoapp input::-webkit-input-placeholder {
@@ -76,7 +76,7 @@ body {
   font-size: 100px;
   font-weight: 100;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  color: #00b8d4;
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
@@ -93,8 +93,8 @@ body {
   line-height: 1.4em;
   color: inherit;
   padding: 6px;
-  border: 1px solid #999;
-  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid #52D6C8;
+  box-shadow: inset 0 -1px 5px 0 rgba(32, 214, 200, 0.7);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
