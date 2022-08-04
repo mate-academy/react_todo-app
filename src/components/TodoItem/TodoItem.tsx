@@ -37,7 +37,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const onEditBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
-    if (!event.target.value) {
+    if (!event.target.value.trim().length) {
       onDeleteTodo(todo);
     } else {
       setEdit(false);
