@@ -141,7 +141,7 @@ export const TodoApp: React.FC = () => {
         />
       </section>
 
-      <Footer todos={todos} setTodos={setTodos} />
+      {todos.length > 0 && <Footer todos={todos} setTodos={setTodos} />}
     </div>
   );
 };
