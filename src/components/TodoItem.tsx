@@ -5,10 +5,10 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todo: Todo,
-  onChangeComplete: (id: number | undefined, completed: boolean) => void,
+  onChangeComplete: (completed: boolean, id: number | undefined) => void,
   onClickDelete: (id: number | undefined) => void;
   onDoubleClick: (event: React.MouseEvent<HTMLLabelElement>) => boolean;
-  onPressEnter: (id: number | undefined, title: string) => void,
+  onPressEnter: (title: string, id: number | undefined) => void,
 };
 
 const TodoItem: FC<Props> = ({
@@ -30,7 +30,7 @@ const TodoItem: FC<Props> = ({
           onChange={() => {
             const checked = !todo.completed;
 
-            onChangeComplete(todo.id, checked);
+            onChangeComplete(checked, todo.id);
           }}
         />
         <label
@@ -62,7 +62,7 @@ const TodoItem: FC<Props> = ({
           switch (event.key) {
             case 'Enter':
               if (title.length > 0) {
-                onPressEnter(todo.id, title);
+                onPressEnter(title, todo.id);
                 setEditing(false);
               } else {
                 onClickDelete(todo.id);
@@ -79,7 +79,7 @@ const TodoItem: FC<Props> = ({
           }
         }}
         onBlur={() => {
-          onPressEnter(todo.id, title);
+          onPressEnter(title, todo.id);
           setEditing(false);
         }}
       />

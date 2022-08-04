@@ -28,8 +28,8 @@ export function postNewTodo(newTodo: Todo) {
 }
 
 export function patchTodo(
-  todoId: number | undefined,
   updatedValue : UpdatedType,
+  todoId: number | undefined,
 ) {
   return fetch(`${BASE_URL}/todos/${todoId}`,
     {

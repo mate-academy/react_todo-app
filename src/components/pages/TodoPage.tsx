@@ -30,8 +30,8 @@ const TodoPage: FC = () => {
   }, [todosFromServer]);
 
   const updateCompleteTodoHandler = async (
-    id: number | undefined,
     completed: boolean,
+    id: number | undefined,
   ) => {
     if (isSaveLocalStorage) {
       setTodos((prevState: Todo[]) => {
@@ -44,13 +44,13 @@ const TodoPage: FC = () => {
         });
       });
     } else {
-      await patchTodo(id, { completed });
+      await patchTodo({ completed }, id);
     }
   };
 
   const updateTitleTodoHandler = async (
-    id: number | undefined,
     title: string,
+    id: number | undefined,
   ) => {
     if (isSaveLocalStorage) {
       setTodos(prevState => {
@@ -63,7 +63,7 @@ const TodoPage: FC = () => {
         });
       });
     } else {
-      await patchTodo(id, { title });
+      await patchTodo({ title }, id);
     }
   };
 
@@ -126,7 +126,7 @@ const TodoPage: FC = () => {
         mainTodos.forEach(t => {
           const completed = t.completed ? false : !t.completed;
 
-          patchTodo(t.id, { completed });
+          patchTodo({ completed }, t.id);
         });
       }
     } else if (isSaveLocalStorage) {
@@ -141,7 +141,7 @@ const TodoPage: FC = () => {
       mainTodos.forEach(t => {
         const completed = t.completed ? true : !t.completed;
 
-        patchTodo(t.id, { completed });
+        patchTodo({ completed }, t.id);
       });
     }
   };
