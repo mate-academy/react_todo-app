@@ -5,10 +5,10 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todo: Todo,
-  onChangeComplete: (id: number, completed: boolean) => void,
-  onClickDelete: (id: number) => void;
+  onChangeComplete: (id: number | undefined, completed: boolean) => void,
+  onClickDelete: (id: number | undefined) => void;
   onDoubleClick: (event: React.MouseEvent<HTMLLabelElement>) => boolean;
-  onPressEnter: (id: number, title: string) => void,
+  onPressEnter: (id: number | undefined, title: string) => void,
 };
 
 const TodoItem: FC<Props> = ({

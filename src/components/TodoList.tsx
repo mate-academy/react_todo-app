@@ -4,9 +4,9 @@ import TodoItem from './TodoItem';
 
 type Props = {
   todos: Todo[]
-  onChangeComplete: (id: number, completed: boolean) => void,
-  onClickDelete: (id: number) => void;
-  onPressEnter: (id: number, title: string) => void,
+  onChangeComplete: (id: number | undefined, completed: boolean) => void,
+  onClickDelete: (id: number | undefined) => void;
+  onPressEnter: (id: number | undefined, title: string) => void,
 };
 
 const TodoList: FC<Props> = ({

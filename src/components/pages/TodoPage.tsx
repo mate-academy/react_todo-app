@@ -1,49 +1,99 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
 import TodoList from '../TodoList';
 import TodosFilter from '../TodosFilter';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import {
+  deleteTodo, getTodos, patchTodo, postNewTodo,
+} from '../../api/todos';
 
 const TodoPage = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(true);
   const [value, setValue] = useState('');
+  const [isSaveLocalStorage, setSaveLocalStorage] = useState(true);
+  const [isSaveServer, setSaveServer] = useState(false);
   const location = useLocation();
   const filterBy = location.pathname;
 
-  const updateCompleteTodoHandler = (id: number, completed: boolean) => {
-    setTodos((prevState: Todo[]) => {
-      return prevState.map(todo => {
-        if (todo.id === id) {
-          return { ...todo, completed };
-        }
+  useEffect(() => {
+    const retrieveTodos = async () => {
+      const result = await getTodos();
 
-        return todo;
+      setLoading(false);
+      setTodosFromServer(result.reverse());
+    };
+
+    retrieveTodos();
+  }, [todosFromServer]);
+
+  const updateCompleteTodoHandler = async (
+    id: number | undefined,
+    completed: boolean,
+  ) => {
+    if (isSaveLocalStorage) {
+      setTodos((prevState: Todo[]) => {
+        return prevState.map(todo => {
+          if (todo.id === id) {
+            return { ...todo, completed };
+          }
+
+          return todo;
+        });
       });
-    });
+    } else {
+      await patchTodo(id, { completed });
+    }
   };
 
-  const updateTitleTodoHandler = (id: number, title: string) => {
-    setTodos(prevState => {
-      return prevState.map(todo => {
-        if (todo.id === id) {
-          return { ...todo, title };
-        }
+  const updateTitleTodoHandler = async (
+    id: number | undefined,
+    title: string,
+  ) => {
+    if (isSaveLocalStorage) {
+      setTodos(prevState => {
+        return prevState.map(todo => {
+          if (todo.id === id) {
+            return { ...todo, title };
+          }
 
-        return todo;
+          return todo;
+        });
       });
-    });
+    } else {
+      await patchTodo(id, { title });
+    }
   };
 
-  const deleteTodoById = (id: number) => {
-    setTodos(prevState => {
-      return prevState.filter(todo => {
-        return todo.id !== id;
+  const deleteTodoById = async (id: number | undefined) => {
+    if (isSaveLocalStorage) {
+      setTodos(prevState => {
+        return prevState.filter(todo => {
+          return todo.id !== id;
+        });
       });
-    });
+    } else {
+      await deleteTodo(id);
+    }
   };
 
-  const visibleTodos = todos.filter(todo => {
+  const mainTodos = isSaveLocalStorage ? todos : todosFromServer;
+
+  const deleteAll = async () => {
+    if (isSaveLocalStorage) {
+      setTodos(prevState => {
+        return prevState.filter(item => !item.completed);
+      });
+    } else {
+      mainTodos.forEach(t => {
+        deleteTodo(t.id);
+      });
+    }
+  };
+
+  const visibleTodos = mainTodos.filter(todo => {
     switch (filterBy) {
       case '/active': {
         return !todo.completed;
@@ -73,10 +123,18 @@ const TodoPage = () => {
             id: +new Date(),
             title: value,
             completed: false,
+            userId: 4,
           };
 
-          if (value.length > 0) {
-            setTodos(prevState => [newTodo, ...prevState]);
+          if (isSaveLocalStorage) {
+            if (value.length > 0) {
+              setTodos(prevState => [newTodo, ...prevState]);
+              setValue('');
+            }
+          } else {
+            const { id, ...ToDo } = newTodo;
+
+            postNewTodo(ToDo);
             setValue('');
           }
         }}
@@ -90,25 +148,55 @@ const TodoPage = () => {
             onChange={(event) => setValue(event.target.value)}
           />
         </form>
+        <form>
+          <input
+            type="checkbox"
+            id="toggle-localStor"
+            checked={isSaveLocalStorage}
+            onChange={() => {
+              setSaveServer(false);
+              setSaveLocalStorage(true);
+            }}
+          />
+          <label htmlFor="toggle-localStor">Save todos in localstorage</label>
+          <input
+            type="checkbox"
+            id="toggle-server"
+            checked={isSaveServer}
+            onChange={() => {
+              setSaveServer(true);
+              setSaveLocalStorage(false);
+            }}
+          />
+          <label htmlFor="toggle-server">Save todos on the server</label>
+        </form>
       </header>
 
       <section className="main">
         <input
           type="checkbox"
-          checked={todos.every(t => t.completed)}
+          checked={mainTodos.every(t => t.completed)}
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
           onChange={() => {
-            if (todos.every(t => t.completed)) {
-              setTodos(prevState => {
-                return prevState.map(t => {
+            if (mainTodos.every(t => t.completed)) {
+              if (isSaveLocalStorage) {
+                setTodos(prevState => {
+                  return prevState.map(t => {
+                    const completed = t.completed ? false : !t.completed;
+
+                    return { ...t, completed };
+                  });
+                });
+              } else {
+                mainTodos.forEach(t => {
                   const completed = t.completed ? false : !t.completed;
 
-                  return { ...t, completed };
+                  patchTodo(t.id, { completed });
                 });
-              });
-            } else {
+              }
+            } else if (isSaveLocalStorage) {
               setTodos(prevState => {
                 return prevState.map(t => {
                   const completed = t.completed ? true : !t.completed;
@@ -116,37 +204,43 @@ const TodoPage = () => {
                   return { ...t, completed };
                 });
               });
+            } else {
+              mainTodos.forEach(t => {
+                const completed = t.completed ? true : !t.completed;
+
+                patchTodo(t.id, { completed });
+              });
             }
           }}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList
-          todos={visibleTodos}
-          onChangeComplete={updateCompleteTodoHandler}
-          onClickDelete={deleteTodoById}
-          onPressEnter={updateTitleTodoHandler}
-        />
+        {!loading && (
+          <TodoList
+            todos={visibleTodos}
+            onChangeComplete={updateCompleteTodoHandler}
+            onClickDelete={deleteTodoById}
+            onPressEnter={updateTitleTodoHandler}
+          />
+        )}
       </section>
 
-      {todos.length > 0 && (
+      {mainTodos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {todos.filter(t => !t.completed).length}
+            {mainTodos.filter(t => !t.completed).length}
             {' '}
             items left
           </span>
 
           <TodosFilter />
 
-          {todos.filter(t => t.completed).length >= 1 && (
+          {mainTodos.filter(t => t.completed).length >= 1 && (
             <button
               type="button"
               className="clear-completed"
               onClick={() => {
-                setTodos(prevState => {
-                  return prevState.filter(item => !item.completed);
-                });
+                deleteAll();
               }}
             >
               Clear completed
