@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
 import TodoList from '../TodoList';
@@ -8,7 +8,7 @@ import {
   deleteTodo, getTodos, patchTodo, postNewTodo,
 } from '../../api/todos';
 
-const TodoPage = () => {
+const TodoPage: FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -112,6 +112,40 @@ const TodoPage = () => {
     }
   });
 
+  const toggleAll = async () => {
+    if (mainTodos.every(t => t.completed)) {
+      if (isSaveLocalStorage) {
+        setTodos(prevState => {
+          return prevState.map(t => {
+            const completed = t.completed ? false : !t.completed;
+
+            return { ...t, completed };
+          });
+        });
+      } else {
+        mainTodos.forEach(t => {
+          const completed = t.completed ? false : !t.completed;
+
+          patchTodo(t.id, { completed });
+        });
+      }
+    } else if (isSaveLocalStorage) {
+      setTodos(prevState => {
+        return prevState.map(t => {
+          const completed = t.completed ? true : !t.completed;
+
+          return { ...t, completed };
+        });
+      });
+    } else {
+      mainTodos.forEach(t => {
+        const completed = t.completed ? true : !t.completed;
+
+        patchTodo(t.id, { completed });
+      });
+    }
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -180,37 +214,7 @@ const TodoPage = () => {
           className="toggle-all"
           data-cy="toggleAll"
           onChange={() => {
-            if (mainTodos.every(t => t.completed)) {
-              if (isSaveLocalStorage) {
-                setTodos(prevState => {
-                  return prevState.map(t => {
-                    const completed = t.completed ? false : !t.completed;
-
-                    return { ...t, completed };
-                  });
-                });
-              } else {
-                mainTodos.forEach(t => {
-                  const completed = t.completed ? false : !t.completed;
-
-                  patchTodo(t.id, { completed });
-                });
-              }
-            } else if (isSaveLocalStorage) {
-              setTodos(prevState => {
-                return prevState.map(t => {
-                  const completed = t.completed ? true : !t.completed;
-
-                  return { ...t, completed };
-                });
-              });
-            } else {
-              mainTodos.forEach(t => {
-                const completed = t.completed ? true : !t.completed;
-
-                patchTodo(t.id, { completed });
-              });
-            }
+            toggleAll();
           }}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
