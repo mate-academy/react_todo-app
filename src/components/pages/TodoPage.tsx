@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
 import TodoList from '../TodoList';
@@ -8,7 +8,7 @@ import {
   deleteTodo, getTodos, patchTodo, postNewTodo,
 } from '../../api/todos';
 
-const TodoPage: FC = () => {
+export const TodoPage: FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,17 +19,12 @@ const TodoPage: FC = () => {
   const filterBy = location.pathname;
 
   useEffect(() => {
-    const retrieveTodos = async () => {
-      const result = await getTodos();
+    getTodos().then(res => setTodosFromServer(res.reverse()));
 
-      setLoading(false);
-      setTodosFromServer(result.reverse());
-    };
-
-    retrieveTodos();
+    setLoading(false);
   }, [todosFromServer]);
 
-  const updateCompleteTodoHandler = async (
+  const updateCompleteTodoHandler = (
     completed: boolean,
     id: number | undefined,
   ) => {
@@ -44,13 +39,13 @@ const TodoPage: FC = () => {
         });
       });
     } else {
-      await patchTodo({ completed }, id);
+      patchTodo({ completed }, id);
     }
   };
 
-  const updateTitleTodoHandler = async (
+  const updateTitleTodoHandler = (
     title: string,
-    id: number | undefined,
+    id: (number | undefined),
   ) => {
     if (isSaveLocalStorage) {
       setTodos(prevState => {
@@ -63,11 +58,11 @@ const TodoPage: FC = () => {
         });
       });
     } else {
-      await patchTodo({ title }, id);
+      patchTodo({ title }, id);
     }
   };
 
-  const deleteTodoById = async (id: number | undefined) => {
+  const deleteTodoById = (id: (number | undefined)) => {
     if (isSaveLocalStorage) {
       setTodos(prevState => {
         return prevState.filter(todo => {
@@ -75,13 +70,13 @@ const TodoPage: FC = () => {
         });
       });
     } else {
-      await deleteTodo(id);
+      deleteTodo(id);
     }
   };
 
   const mainTodos = isSaveLocalStorage ? todos : todosFromServer;
 
-  const deleteAll = async () => {
+  const deleteAll = () => {
     if (isSaveLocalStorage) {
       setTodos(prevState => {
         return prevState.filter(item => !item.completed);
@@ -112,7 +107,29 @@ const TodoPage: FC = () => {
     }
   });
 
-  const toggleAll = async () => {
+  const postNewToDo = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newTodo = {
+      id: +new Date(),
+      title: value,
+      completed: false,
+      userId: 4,
+    };
+
+    if (isSaveLocalStorage) {
+      if (value.length > 0) {
+        setTodos(prevState => [newTodo, ...prevState]);
+        setValue('');
+      }
+    } else {
+      const { id, ...ToDo } = newTodo;
+
+      postNewTodo(ToDo);
+      setValue('');
+    }
+  };
+
+  const toggleAll = () => {
     if (mainTodos.every(t => t.completed)) {
       if (isSaveLocalStorage) {
         setTodos(prevState => {
@@ -152,25 +169,7 @@ const TodoPage: FC = () => {
         <h1>todos</h1>
 
         <form onSubmit={(e) => {
-          e.preventDefault();
-          const newTodo = {
-            id: +new Date(),
-            title: value,
-            completed: false,
-            userId: 4,
-          };
-
-          if (isSaveLocalStorage) {
-            if (value.length > 0) {
-              setTodos(prevState => [newTodo, ...prevState]);
-              setValue('');
-            }
-          } else {
-            const { id, ...ToDo } = newTodo;
-
-            postNewTodo(ToDo);
-            setValue('');
-          }
+          postNewToDo(e);
         }}
         >
           <input
@@ -255,5 +254,3 @@ const TodoPage: FC = () => {
     </div>
   );
 };
-
-export default TodoPage;
