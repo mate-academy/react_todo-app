@@ -1,0 +1,210 @@
+import { FC, useState, useEffect } from 'react';
+import {
+  Link, useLocation,
+} from 'react-router-dom';
+import { TodoList } from './TodoList';
+import { NewTodo } from './newTodo';
+import { Todo } from '../types/Todo';
+
+enum Status {
+  All = '/',
+  Active = '/active',
+  Completed = '/completed',
+
+}
+
+export const TodoPage: FC = () => {
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const todosFromLocal = localStorage.getItem('todos');
+
+    try {
+      return todosFromLocal ? JSON.parse(todosFromLocal) : [];
+    } catch (error) {
+      return [];
+    }
+  });
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [notCompletedTodos, setCompletedNumber] = useState(0);
+  const location = useLocation();
+  const filter = location.pathname;
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  useEffect(() => {
+    const completed = todos.filter(t => t.completed === false);
+
+    setVisibleTodos([...todos]);
+    setCompletedNumber(completed.length);
+
+    switch (filter) {
+      case Status.All:
+        setVisibleTodos([...todos]);
+        break;
+
+      case Status.Active:
+        setVisibleTodos([...todos].filter(t => t.completed === false));
+        break;
+
+      case Status.Completed:
+        setVisibleTodos([...todos].filter(t => t.completed === true));
+        break;
+
+      default:
+        break;
+    }
+  }, [todos, filter]);
+
+  const onAddTodo = (newTitle: string) => {
+    const newTodo: Todo = {
+      id: (+new Date()),
+      title: newTitle,
+      completed: false,
+    };
+
+    setTodos([newTodo, ...todos]);
+  };
+
+  const handleCompleteItem = (id: number) => {
+    const update = todos.map(t => {
+      if (t.id === id) {
+        return {
+          ...t,
+          completed: !t.completed,
+        };
+      }
+
+      return t;
+    });
+
+    setTodos(update);
+  };
+
+  const toggleAll = () => {
+    const update = todos.map(t => {
+      if (todos.some(to => to.completed === false)) {
+        return {
+          ...t,
+          completed: true,
+        };
+      }
+
+      return {
+        ...t,
+        completed: false,
+      };
+    });
+
+    setTodos(update);
+  };
+
+  const deleteTodo = (id: number) => {
+    setTodos([...todos].filter(t => t.id !== id));
+  };
+
+  const deleteCompleted = () => {
+    setTodos([...todos].filter(t => t.completed === false));
+  };
+
+  const editTodo = (id: number, newTitile: string) => {
+    if (newTitile.length === 0) {
+      deleteTodo(id);
+    } else {
+      const update = todos.map(t => {
+        if (t.id === id) {
+          return {
+            ...t,
+            title: newTitile,
+          };
+        }
+
+        return t;
+      });
+
+      setTodos(update);
+    }
+  };
+
+  return (
+    <div className="todoapp">
+      <header className="header">
+        <h1>Todos</h1>
+
+        <NewTodo onAdd={onAddTodo} />
+      </header>
+
+      {todos.length > 0 && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onChange={() => toggleAll()}
+          />
+          <label
+            htmlFor="toggle-all"
+          >
+            Mark all as complete
+          </label>
+
+          {todos.length > 0 && (
+            <TodoList
+              todos={visibleTodos}
+              handleChange={handleCompleteItem}
+              deleteTodo={deleteTodo}
+              editTodo={editTodo}
+            />
+          )}
+        </section>
+      )}
+
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {notCompletedTodos !== 1
+              ? `${notCompletedTodos} items left`
+              : `${notCompletedTodos} item left`}
+          </span>
+
+          <ul className="filters">
+            <li>
+              <Link to="/" className={filter === '/' ? 'selected' : ''}>
+                All
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/active"
+                className={filter === '/active' ? 'selected' : ''}
+              >
+                Active
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/completed"
+                className={filter === '/completed' ? 'selected' : ''}
+              >
+                Completed
+              </Link>
+            </li>
+          </ul>
+
+          {todos.some(t => t.completed) && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={deleteCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
+    </div>
+  );
+};
