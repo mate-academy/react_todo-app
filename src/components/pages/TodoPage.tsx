@@ -1,12 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 import { Todo } from '../../types/Todo';
 import TodoList from '../TodoList';
 import TodosFilter from '../TodosFilter';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import {
-  deleteTodo, getTodos, patchTodo, postNewTodo,
+  deleteTodo, patchTodo, postNewTodo,
 } from '../../api/todos';
+
+const BASE_URL = 'https://mate.academy/students-api/todos?userId=4';
 
 export const TodoPage: FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
@@ -18,11 +21,22 @@ export const TodoPage: FC = () => {
   const location = useLocation();
   const filterBy = location.pathname;
 
-  useEffect(() => {
-    getTodos().then(res => setTodosFromServer(res.reverse()));
+  const getResponse = async () => {
+    axios
+      .get<Todo[]>(BASE_URL)
+      .then(response => {
+        setTodosFromServer(response.data);
+        setLoading(false);
+      });
+  };
 
-    setLoading(false);
-  }, [todosFromServer]);
+  useEffect(() => {
+    // getTodos().then(res => setTodosFromServer(res.reverse()));
+
+    const timer = setInterval(getResponse, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const updateCompleteTodoHandler = (
     completed: boolean,
