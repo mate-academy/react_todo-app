@@ -8,6 +8,7 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ todos, setTodos }) => {
+  const filtredTodods = todos.filter(todo => !todo.completed);
   const onClearUnComplited = () => {
     const allUnCompleted = todos.filter(todo => !todo.completed);
 
@@ -17,7 +18,7 @@ export const Footer: React.FC<Props> = ({ todos, setTodos }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length} items left`}
+        {`${filtredTodods.length} items left`}
       </span>
 
       <TodosFilter />

@@ -1,13 +1,21 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
 import { Footer } from '../Footer';
 import { TodoList } from '../TodoList';
 
+const useLocalStorage = () => {
+  const todosFromLocal = localStorage.getItem('todos');
+
+  try {
+    return todosFromLocal ? JSON.parse(todosFromLocal) : [];
+  } catch (error) {
+    return [];
+  }
+};
+
 export const TodoApp: React.FC = () => {
-  const todosFromLocal = localStorage.getItem('todos')!;
-  const [todos, setTodos] = useState<Todo[]>(JSON.parse(todosFromLocal) || []);
+  const [todos, setTodos] = useState<Todo[]>(useLocalStorage);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const { pathname } = useLocation();
@@ -141,7 +149,7 @@ export const TodoApp: React.FC = () => {
         />
       </section>
 
-      {todos.length > 0 && <Footer todos={todos} setTodos={setTodos} />}
+      {todos.length > 0 && <Footer todos={visibleTodos} setTodos={setTodos} />}
     </div>
   );
 };
