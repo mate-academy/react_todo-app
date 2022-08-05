@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
@@ -28,7 +27,7 @@ export const App = () => {
   const [stateOfTodo, setStateOfTodo]
     = useState<Todo>({ id: 0, state: TodoState.COMPLETED });
   const [titleOfTodo, setTitleOfTodo]
-    = useState<Todo>({ id: 0, title: '' });
+    = useState<Todo>({ id: 0, title: '', state: TodoState.ACTIVE });
 
   const setTodoState = (todoState: Todo): void => {
     const { id, state } = todoState;
@@ -50,12 +49,12 @@ export const App = () => {
   };
 
   const setTodoTitle = (todoTitle: Todo): void => {
-    const { id, title } = todoTitle;
+    const { id, title, state } = todoTitle;
     const todoIndexToChange = todos.findIndex(todo => todo.id === id);
 
     const callback = (prev: Todo[], todo: Todo, index: number): Todo[] => {
       if (index === todoIndexToChange) {
-        prev.push({ ...todo, title });
+        prev.push({ ...todo, title, state });
       } else {
         prev.push(todo);
       }
