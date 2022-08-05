@@ -6,15 +6,15 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo,
   onDeleteTodo: (todoId: number) => void,
+  onChangeComplited: (todoId: number) => void,
 };
 
 export const TodoItem: React.FC<Props> = ({
-  todo, onDeleteTodo,
+  todo, onDeleteTodo, onChangeComplited,
 }) => {
   return (
     <>
       <li
-        key={todo.id}
         className={classNames(
           { completed: todo.completed },
           { view: !todo.completed },
@@ -25,7 +25,7 @@ export const TodoItem: React.FC<Props> = ({
             type="checkbox"
             className="toggle"
             id={`toggle-view${todo.id}`}
-            checked={todo.completed}
+            onChange={() => onChangeComplited(todo.id)}
           />
           <label htmlFor={`toggle-view${todo.id}`}>
             {todo.title}

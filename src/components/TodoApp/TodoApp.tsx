@@ -46,7 +46,15 @@ export const TodoApp: React.FC = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
-  const todosLength = todos.filter(todo => !todo.completed).length;
+  const onChangeComplited = (todoId: number) => {
+    const todoIndex = todos.findIndex(todo => todo.id === todoId);
+
+    const updatedTodos = [...todos];
+
+    updatedTodos[todoIndex].completed = !updatedTodos[todoIndex].completed;
+
+    setTodos(updatedTodos);
+  };
 
   return (
     <div>
@@ -57,16 +65,17 @@ export const TodoApp: React.FC = () => {
           className="new-todo"
           placeholder="What needs to be done?"
           value={query}
-          onChange={(event) => setQuery(event.currentTarget.value)}
+          onChange={(event) => setQuery(event.target.value)}
         />
       </form>
 
-      {todosLength > 0 && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <TodoList
               todos={todos}
               onDeleteTodo={onDeleteTodo}
+              onChangeComplited={onChangeComplited}
             />
           </section>
 
