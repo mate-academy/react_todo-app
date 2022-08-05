@@ -1,17 +1,23 @@
+import classNames from 'classnames';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Todo } from '../types/todo';
 
 type Props = {
-  todos: Todo[]
   onTodoDeleted: (value: boolean) => void
   completedTodos: Todo[],
+  todos:Todo[],
 };
 
 export const TodosFilter: React.FC<Props> = ({
-  todos,
   onTodoDeleted,
   completedTodos,
+  todos,
 }) => {
+  const activeClass = ({ isActive }: { isActive: boolean }) => {
+    return classNames({ selected: isActive });
+  };
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -23,15 +29,15 @@ export const TodosFilter: React.FC<Props> = ({
 
       <ul className="filters">
         <li>
-          <a href="#/" className="selected">All</a>
+          <NavLink to="/" className={activeClass}>All</NavLink>
         </li>
 
         <li>
-          <a href="#/active">Active</a>
+          <NavLink to="/active" className={activeClass}>Active</NavLink>
         </li>
 
         <li>
-          <a href="#/completed">Completed</a>
+          <NavLink to="/completed" className={activeClass}>Completed</NavLink>
         </li>
       </ul>
       {(completedTodos.length > 0)

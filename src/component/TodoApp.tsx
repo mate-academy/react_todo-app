@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Todo } from '../types/todo';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
@@ -7,8 +8,8 @@ import { TodosFilter } from './TodosFilter';
 export const TodoApp: React.FC = () => {
   const [todoQuery, setTodoQuery] = useState('');
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const visibleTodos = todos;
-  const completedTodos = todos.filter(todo => todo.completed === true);
+
+  const { pathname } = useLocation();
 
   const deleteTodos = (value: number | boolean) => {
     if (todos) {
@@ -36,6 +37,29 @@ export const TodoApp: React.FC = () => {
     }
   };
 
+  const competedAll = () => {
+    const everyCompletedTodos = todos.every(todo => todo.completed);
+    let allTodos;
+
+    if (everyCompletedTodos) {
+      allTodos = todos.map(todo => {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      });
+    } else {
+      allTodos = todos.map(todo => {
+        return {
+          ...todo,
+          completed: true,
+        };
+      });
+    }
+
+    setTodos(allTodos);
+  };
+
   const hadleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -56,6 +80,27 @@ export const TodoApp: React.FC = () => {
     });
     setTodoQuery('');
   };
+
+  const visibleTodos = todos.filter(todo => {
+    switch (pathname) {
+      case '/active': {
+        return !todo.completed;
+      }
+
+      case '/': {
+        return true;
+      }
+
+      case '/completed': {
+        return todo.completed;
+      }
+
+      default:
+        return true;
+    }
+  });
+
+  const completedTodos = todos.filter(todo => todo.completed === true);
 
   return (
     <>
@@ -80,17 +125,18 @@ export const TodoApp: React.FC = () => {
         <TodoList
           onTodoDeleted={deleteTodos}
           onTodoUpdate={updateTodos}
+          setComletedTodos={competedAll}
           todos={visibleTodos}
           completedTodos={completedTodos}
         />
       )}
 
-      {visibleTodos && visibleTodos?.length > 0
+      {todos && todos?.length > 0
       && (
         <TodosFilter
           completedTodos={completedTodos}
-          todos={visibleTodos}
           onTodoDeleted={deleteTodos}
+          todos={todos}
         />
       )}
     </>

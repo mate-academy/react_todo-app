@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
@@ -68,15 +67,19 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete, onUpdate }) => {
         />
       </div>
       <input
-        name="title"
         type="text"
         className="edit"
         value={todoTitle}
         onChange={(event) => setTodoTitle(event.target.value)}
         onKeyUp={event => {
           if (event.key === 'Enter') {
-            onUpdate(creatNewTodo(todoTitle));
-            setIsEdit(false);
+            if (todoTitle.length > 0) {
+              onUpdate(creatNewTodo(todoTitle));
+              setIsEdit(false);
+            } else {
+              onDelete(todo.id);
+              setIsEdit(false);
+            }
           }
 
           if (event.key === 'Escape') {
@@ -85,7 +88,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete, onUpdate }) => {
           }
         }}
         onBlur={() => {
-          setTodoTitle(todo.title);
+          onUpdate(creatNewTodo(todoTitle));
           setIsEdit(false);
         }}
       />

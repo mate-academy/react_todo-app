@@ -6,6 +6,7 @@ import { TodoItem } from './TodoItem';
 type Props = {
   todos: Todo[]
   completedTodos: Todo[]
+  setComletedTodos: () => void,
   onTodoDeleted: (value: number) => void,
   onTodoUpdate: (updatedTodo: Todo) => void,
 };
@@ -15,6 +16,7 @@ export const TodoList: React.FC<Props> = ({
   completedTodos,
   onTodoDeleted,
   onTodoUpdate,
+  setComletedTodos,
 }) => {
   return (
     <section className="main">
@@ -24,8 +26,13 @@ export const TodoList: React.FC<Props> = ({
         className="toggle-all"
         data-cy="toggleAll"
         checked={todos.length > 0 && completedTodos.length === todos.length}
+        onChange={setComletedTodos}
       />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      <label
+        htmlFor="toggle-all"
+      >
+        Mark all as complete
+      </label>
 
       <ul className="todo-list" data-cy="todoList">
         {todos.map(todo => (
