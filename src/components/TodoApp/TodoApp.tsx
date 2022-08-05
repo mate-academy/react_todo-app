@@ -48,7 +48,7 @@ export const TodoApp = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
-    if (!value) {
+    if (value) {
       setQuery(value);
     }
   };
