@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { Footer } from '../Footer';
 import { TodoList } from '../TodoList';
 
 export const TodoApp: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const todosLocal = localStorage.getItem('todos');
+
+    try {
+      return todosLocal ? JSON.parse(todosLocal) : [];
+    } catch (error) {
+      return [];
+    }
+  });
   const [query, setQuery] = useState('');
-  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!query) {
+      return;
+    }
+
+    const uniqId = +new Date();
+
     const createdTodo = {
-      id: todos[todos.length - 1].id + 1,
+      id: uniqId,
       title: query,
       completed: false,
     };
@@ -18,6 +37,16 @@ export const TodoApp: React.FC = () => {
     setTodos(prevTodos => [...prevTodos, createdTodo]);
     setQuery('');
   };
+
+  const onDeleteTodo = (todoId: number) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
+  const onClearCompleted = () => {
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
+  const todosLength = todos.filter(todo => !todo.completed).length;
 
   return (
     <div>
@@ -28,37 +57,25 @@ export const TodoApp: React.FC = () => {
           className="new-todo"
           placeholder="What needs to be done?"
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => setQuery(event.currentTarget.value)}
         />
       </form>
 
-      <section className="main">
-        <TodoList todos={todos} />
-      </section>
+      {todosLength > 0 && (
+        <>
+          <section className="main">
+            <TodoList
+              todos={todos}
+              onDeleteTodo={onDeleteTodo}
+            />
+          </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${todos.length} items left`}
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          <Footer
+            todos={todos}
+            onClearCompleted={onClearCompleted}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -4,9 +4,10 @@ import { TodoItem } from '../TodoItem';
 
 type Props = {
   todos: Todo[],
+  onDeleteTodo: (todoId: number) => void,
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({ todos, onDeleteTodo }) => {
   return (
     <div className="">
       <input
@@ -19,13 +20,11 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
 
       <ul className="todo-list" data-cy="todoList">
         {todos.map(todo => (
-          <li className="view" key={todo.id}>
-            <TodoItem todo={todo} />
-          </li>
+          <TodoItem
+            todo={todo}
+            onDeleteTodo={() => onDeleteTodo(todo.id)}
+          />
         ))}
-        <li className="view">
-          gfsfdgsg
-        </li>
       </ul>
     </div>
   );
