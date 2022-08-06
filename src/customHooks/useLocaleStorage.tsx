@@ -1,9 +1,15 @@
 import { useState } from 'react';
 
 export function useLocaleStorage <T>(key: string, initialValue: T) {
-  const [value, setValue] = useState<T>(
-    JSON.parse(localStorage.getItem(key) || '') || initialValue,
-  );
+  const [value, setValue] = useState<T>(() => {
+    const AcceptableKey = localStorage.getItem(key);
+
+    if (AcceptableKey) {
+      return JSON.parse(AcceptableKey);
+    }
+
+    return initialValue;
+  });
 
   const save = (newValue: T) => {
     setValue(newValue);
