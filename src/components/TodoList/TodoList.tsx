@@ -6,10 +6,11 @@ type Props = {
   todos: Todo[],
   onDeleteTodo: (todoId: number) => void,
   onChangeComplited: (todoId: number) => void,
+  toggleAll: () => void,
 };
 
 export const TodoList: React.FC<Props> = ({
-  todos, onDeleteTodo, onChangeComplited,
+  todos, onDeleteTodo, onChangeComplited, toggleAll,
 }) => {
   return (
     <div className="">
@@ -18,6 +19,7 @@ export const TodoList: React.FC<Props> = ({
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        onChange={() => toggleAll()}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 

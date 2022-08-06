@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -12,22 +12,41 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({
   todo, onDeleteTodo, onChangeComplited,
 }) => {
+  const [isEditing, setEditing] = useState(false);
+  const [title, setTitle] = useState(todo.title);
+
+  const onEditTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (!event.target.value) {
+        onDeleteTodo(todo.id);
+      }
+
+      setEditing(false);
+      setTitle(event.target.value);
+    }
+
+    if (event.key === 'Escape') {
+      setEditing(false);
+      setTitle(todo.title);
+    }
+  };
+
   return (
     <>
       <li
         className={classNames(
-          { completed: todo.completed },
-          { view: !todo.completed },
+          { comleted: todo.completed },
+          { editing: isEditing && !todo.completed },
         )}
       >
         <div className="view">
           <input
             type="checkbox"
+            checked={todo.completed}
             className="toggle"
-            id={`toggle-view${todo.id}`}
             onChange={() => onChangeComplited(todo.id)}
           />
-          <label htmlFor={`toggle-view${todo.id}`}>
+          <label onDoubleClick={() => setEditing(true)}>
             {todo.title}
           </label>
           <button
@@ -37,7 +56,13 @@ export const TodoItem: React.FC<Props> = ({
             onClick={() => onDeleteTodo(todo.id)}
           />
         </div>
-        <input type="text" className="edit" />
+        <input
+          type="text"
+          className="edit"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          onKeyDown={onEditTodo}
+        />
       </li>
     </>
   );

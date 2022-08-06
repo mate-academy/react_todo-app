@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { TodoApp } from './components/TodoApp';
 
 export const App: React.FC = () => {
@@ -14,10 +14,6 @@ export const App: React.FC = () => {
             <Route path="active" element={<TodoApp />} />
             <Route path="completed" element={<TodoApp />} />
           </Route>
-          <Route
-            path="home"
-            element={<Navigate to="/" />}
-          />
           <Route
             path="*"
             element={<p>Page not found</p>}

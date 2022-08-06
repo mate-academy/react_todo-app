@@ -6,7 +6,7 @@ type Status = {
 };
 
 export const TodoFilter: React.FC = () => {
-  const selectedLink = (isActive: Status): string => {
+  const selectedLink = ({ isActive }: Status) => {
     return isActive ? 'selected' : '';
   };
 
