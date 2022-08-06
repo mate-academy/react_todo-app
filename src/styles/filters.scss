@@ -17,7 +17,7 @@
   padding: 3px 7px;
   text-decoration: none;
   border: 1px solid transparent;
-  border-radius: 3px;
+  border-radius: 15px;
 }
 
 .filters li a:hover {
@@ -25,7 +25,7 @@
 }
 
 .filters li a.selected {
-  border-color: rgba(175, 47, 47, 0.2);
+  border-color: $blueColor;
 }
 
 @media (max-width: 430px) {
