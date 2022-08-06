@@ -1,22 +1,24 @@
-import { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[]
-  onSetTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  onSetTodos: (newValue: Todo[]) => void
 }
 
-export const TodoAdd: FC<Props> = ({ todos, onSetTodos }) => {
+export const TodoAdd = React.memo<Props>(({ todos, onSetTodos }) => {
   const [title, setTitle] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    onSetTodos([...todos, {
-      id: +new Date(),
-      title,
-      comleted: false,
-    }]);
+    if (title.trim()) {
+      onSetTodos([...todos, {
+        id: +new Date(),
+        title,
+        completed: false,
+      }]);
+    }
 
     setTitle('');
   };
@@ -33,4 +35,4 @@ export const TodoAdd: FC<Props> = ({ todos, onSetTodos }) => {
       />
     </form>
   );
-};
+});
