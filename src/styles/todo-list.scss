@@ -56,10 +56,15 @@
 
 .todo-list li label {
   word-break: break-all;
-  padding: 15px 15px 15px 60px;
+  padding: 0;
   display: block;
   line-height: 1.2;
   transition: color 0.4s;
+}
+
+.todoItem-title {
+  margin: 0;
+  padding: 15px 15px 15px 60px;
 }
 
 .todo-list li.completed label {

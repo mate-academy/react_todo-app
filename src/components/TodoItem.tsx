@@ -80,7 +80,7 @@ export const TodoItem: FC<Props> = ({
                 }}
               />
             )
-            : todo.title}
+            : <p className="todoItem-title">{todo.title}</p>}
         </label>
 
         {!isEditing && (

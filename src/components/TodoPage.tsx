@@ -141,6 +141,7 @@ export const TodoPage: FC = () => {
             id="toggle-all"
             className="toggle-all"
             data-cy="toggleAll"
+            checked={todos.length > 0 && notCompletedTodos === 0}
             onChange={() => toggleAll()}
           />
           <label
