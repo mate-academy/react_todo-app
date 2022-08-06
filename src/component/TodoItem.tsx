@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useState } from 'react';
