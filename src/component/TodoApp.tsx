@@ -1,13 +1,33 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../types/todo';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 
+enum Status {
+  Active = '/active',
+  Completed = '/completed',
+
+}
+
 export const TodoApp: React.FC = () => {
   const [todoQuery, setTodoQuery] = useState('');
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[] | []>(() => {
+    const todosLocalStorage = localStorage.getItem('todos');
+
+    try {
+      return todosLocalStorage
+        ? JSON.parse(todosLocalStorage)
+        : [];
+    } catch (error) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const { pathname } = useLocation();
 
@@ -83,15 +103,11 @@ export const TodoApp: React.FC = () => {
 
   const visibleTodos = todos.filter(todo => {
     switch (pathname) {
-      case '/active': {
+      case Status.Active: {
         return !todo.completed;
       }
 
-      case '/': {
-        return true;
-      }
-
-      case '/completed': {
+      case Status.Completed: {
         return todo.completed;
       }
 
