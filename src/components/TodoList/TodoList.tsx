@@ -2,24 +2,31 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { Dispatch, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { response } from '../../api/api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  onDelete: Dispatch<React.SetStateAction<boolean>>,
-  onEdit: Dispatch<React.SetStateAction<boolean>>,
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onDelete, onEdit }) => {
+export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   const [hasEdit, setHasEdit] = useState(0);
   const [editText, setEditText] = useState('');
   const [countClick, setCountClick] = useState(0);
 
+  const findIndex = (todoId: number) => {
+    return todos.findIndex(currTodo => currTodo.id === todoId);
+  };
+
   const handleClickDelete = (todoId: number) => {
+    setTodos([
+      ...todos.slice(0, findIndex(todoId)),
+      ...todos.slice(findIndex(todoId) + 1),
+    ]);
+
     response(`/todos/${todoId}`, { method: 'DELETE' });
-    onDelete(true);
   };
 
   const handleClickEdit = (todoId: number) => {
@@ -41,11 +48,28 @@ export const TodoList: React.FC<Props> = ({ todos, onDelete, onEdit }) => {
         completed: !todo.completed,
       }),
     });
-    onEdit(true);
+
+    setTodos([
+      ...todos.slice(0, findIndex(todo.id)),
+      {
+        ...todo,
+        completed: !todo.completed,
+      },
+      ...todos.slice(findIndex(todo.id) + 1),
+    ]);
   };
 
   const handleSubmit = (event: React.SyntheticEvent, todo: Todo) => {
     event.preventDefault();
+
+    setTodos([
+      ...todos.slice(0, findIndex(todo.id)),
+      {
+        ...todo,
+        title: editText,
+      },
+      ...todos.slice(findIndex(todo.id) + 1),
+    ]);
 
     response(`/todos/${todo.id}`, {
       method: 'PATCH',
@@ -58,7 +82,6 @@ export const TodoList: React.FC<Props> = ({ todos, onDelete, onEdit }) => {
     });
 
     setHasEdit(0);
-    onEdit(true);
   };
 
   useEffect(() => {
@@ -82,6 +105,7 @@ export const TodoList: React.FC<Props> = ({ todos, onDelete, onEdit }) => {
           key={todo.id}
           className={classNames(
             { editing: hasEdit === todo.id },
+            { completed: todo.completed },
           )}
         >
           <div className="view">

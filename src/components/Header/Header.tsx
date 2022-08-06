@@ -1,19 +1,21 @@
-import { Dispatch, useState } from 'react';
+import { useState } from 'react';
 import { response } from '../../api/api';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   userId: number,
-  onAdd: Dispatch<React.SetStateAction<boolean>>,
+  todos: Todo[],
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
 };
 
-export const Header: React.FC<Props> = ({ onAdd, userId }) => {
+export const Header: React.FC<Props> = ({ userId, todos, setTodos }) => {
   const [title, setTitle] = useState('');
 
-  const handlerSubmit = (event: React.SyntheticEvent) => {
+  const handlerSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     if (title && userId > 0) {
-      response('/todos', {
+      const { id } = await response('/todos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,7 +26,16 @@ export const Header: React.FC<Props> = ({ onAdd, userId }) => {
           completed: false,
         }),
       });
-      onAdd(true);
+
+      setTodos([
+        ...todos,
+        {
+          id,
+          title,
+          userId,
+          completed: false,
+        },
+      ]);
       setTitle('');
     }
   };

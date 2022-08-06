@@ -10,31 +10,20 @@ import { TodoList } from '../TodoList';
 
 type Props = {
   userId: number,
-  hasAdd: boolean,
-  setHasAdd: React.Dispatch<React.SetStateAction<boolean>>,
-  hasClear: boolean,
-  setHasClear: React.Dispatch<React.SetStateAction<boolean>>,
+  todos: Todo[],
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
 };
 
 export const Main: React.FC<Props> = ({
   userId,
-  hasAdd,
-  setHasAdd,
-  hasClear,
-  setHasClear,
+  todos,
+  setTodos,
 }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hasDelete, setHasDelete] = useState(false);
-  const [hasEdit, setHasEdit] = useState(false);
   const { condition } = useParams();
 
   useEffect(() => {
     setLoading(true);
-    setHasDelete(false);
-    setHasEdit(false);
-    setHasAdd(false);
-    setHasClear(false);
 
     (async () => {
       try {
@@ -56,7 +45,7 @@ export const Main: React.FC<Props> = ({
         setLoading(false);
       }
     })();
-  }, [userId, hasDelete, hasEdit, hasAdd, condition, hasClear]);
+  }, [userId, condition]);
 
   return (
     <section className="main">
@@ -75,8 +64,7 @@ export const Main: React.FC<Props> = ({
       {!loading && (
         <TodoList
           todos={todos}
-          onDelete={setHasDelete}
-          onEdit={setHasEdit}
+          setTodos={setTodos}
         />
       )}
     </section>

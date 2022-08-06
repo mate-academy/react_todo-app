@@ -4,62 +4,53 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Modal } from './components/Modal';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [userId, setUserId] = useState(0);
-  const [hasAdd, setHasAdd] = useState(false);
-  const [hasClear, setHasClear] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const setUser = (id: number) => {
     setUserId(id);
   };
 
-  return (
-    <>
+  return userId > 0 ? (
+    <div className="todoapp">
+      <Header userId={userId} todos={todos} setTodos={setTodos} />
 
-      <Modal setUser={setUser} />
-
-      {userId > 0 && (
-        <div className="todoapp">
-          <Header userId={userId} onAdd={setHasAdd} />
-
-          <Routes>
-            <Route
-              path="/"
-              element={(
-                <Outlet />
-              )}
-            >
-              <Route
-                index
-                element={(
-                  <Main
-                    userId={userId}
-                    hasAdd={hasAdd}
-                    setHasAdd={setHasAdd}
-                    hasClear={hasClear}
-                    setHasClear={setHasClear}
-                  />
-                )}
+      <Routes>
+        <Route
+          path="/"
+          element={(
+            <Outlet />
+          )}
+        >
+          <Route
+            index
+            element={(
+              <Main
+                userId={userId}
+                todos={todos}
+                setTodos={setTodos}
               />
-              <Route
-                path=":condition"
-                element={(
-                  <Main
-                    userId={userId}
-                    hasAdd={hasAdd}
-                    setHasAdd={setHasAdd}
-                    hasClear={hasClear}
-                    setHasClear={setHasClear}
-                  />
-                )}
+            )}
+          />
+          <Route
+            path=":condition"
+            element={(
+              <Main
+                userId={userId}
+                todos={todos}
+                setTodos={setTodos}
               />
-            </Route>
-          </Routes>
+            )}
+          />
+        </Route>
+      </Routes>
 
-          <Footer setHasClear={setHasClear} />
-        </div>
-      )}
-    </>
+      <Footer todos={todos} setTodos={setTodos} />
+    </div>
+  ) : (
+    <Modal setUser={setUser} />
   );
 };

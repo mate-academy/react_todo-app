@@ -3,16 +3,21 @@ import { response } from '../../api/api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  setHasClear: React.Dispatch<React.SetStateAction<boolean>>,
+  todos: Todo[],
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
 };
 
-export const Footer: React.FC<Props> = ({ setHasClear }) => {
-  const handlerClick = () => {
-    response('/todos?completed=false', { method: 'GET' })
-      .then((todos) => todos.map((todo: Todo) => todo.id))
-      .then(todo => {
-        setHasClear(true);
+export const Footer: React.FC<Props> = ({ setTodos, todos }) => {
+  const completedtodos = todos.filter(todo => !todo.completed).length;
 
+  const handlerClick = () => {
+    setTodos(
+      todos.filter(todo => todo.completed),
+    );
+
+    response('/todos?completed=false', { method: 'GET' })
+      .then((todosFromServer) => todosFromServer.map((todo: Todo) => todo.id))
+      .then(todo => {
         return todo
           .map((todoId: number) => response(
             `/todos/${todoId}`,
@@ -24,7 +29,7 @@ export const Footer: React.FC<Props> = ({ setHasClear }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${0} `}
+        {`${todos.filter(todo => !todo.completed).length} `}
         items left
       </span>
 
@@ -57,13 +62,15 @@ export const Footer: React.FC<Props> = ({ setHasClear }) => {
         </li>
       </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={handlerClick}
-      >
-        Clear completed
-      </button>
+      {completedtodos > 0 && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handlerClick}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
