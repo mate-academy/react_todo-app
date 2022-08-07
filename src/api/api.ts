@@ -1,18 +1,13 @@
-import { Todo, User } from '../type';
+import { Todo } from '../type';
 
 const BASE_URL = 'https://mate.academy/students-api/';
 
-export const request = async (url: string, method?: RequestInit) => {
-  try {
-    const response = await fetch(`${BASE_URL}${url}`, method);
-
-    return await response.json();
-  } catch {
-    return Response.error();
-  }
+export const request = (url: string, method?: RequestInit) => {
+  return fetch(`${BASE_URL}${url}`, method)
+    .then(response => response.json());
 };
 
-export const creatUser = async () => {
+export const creatUser = () => {
   return request(
     'users',
     {
@@ -31,12 +26,6 @@ export const creatUser = async () => {
   );
 };
 
-export const getUser = (): Promise<User> => {
-  const user = 'users/888';
-
-  return request(user);
-};
-
 export const getTodos = (): Promise<Todo[]> => {
   const todos = 'todos?userId=888';
 
@@ -47,7 +36,7 @@ export const deleteTodo = (TodoId: number) => {
   return request(`todos/${TodoId}`, { method: 'DELETE' });
 };
 
-export const addTodo = async (NewTodo: Todo) => {
+export const addTodo = (NewTodo: Todo) => {
   return request(
     'todos',
     {
@@ -58,7 +47,7 @@ export const addTodo = async (NewTodo: Todo) => {
   );
 };
 
-export const updateTodo = async (
+export const updateTodo = (
   TodoId: number,
   value: object,
 ) => {
