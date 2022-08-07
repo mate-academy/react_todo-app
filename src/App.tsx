@@ -1,32 +1,75 @@
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './store';
+import {
+  ADD_TODO,
+  GET_TODOS,
+  COUNT_OF_ACTIVE,
+  DELETE_ALL,
+} from './store/todosReducer';
+import { Todo } from './type';
+import { TodoList } from './TodoList';
+import { TodosFilter } from './TodosFilter';
 
 export const App: React.FC = () => {
+  const todos = useSelector((state: RootState) => state.todos.todos);
+  const dispatch = useDispatch();
+  const [todoText, setTodoText] = useState('');
+  const activeTodos = useSelector(
+    (state: RootState) => state.todos.countOfActiveTodos,
+  );
+
+  useEffect(() => {
+    dispatch({ type: GET_TODOS });
+  }, [todos]);
+
+  const addTodo = (obj: Todo) => {
+    dispatch({ type: ADD_TODO, payload: obj });
+    dispatch({ type: COUNT_OF_ACTIVE });
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            setTodoText('');
+            const todo = {
+              id: new Date().toString() + todoText + Math.random(),
+              title: todoText,
+              completed: false,
+            };
+
+            if (todo.title) {
+              addTodo(todo);
+            }
+          }}
+        >
           <input
             type="text"
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={todoText}
+            onChange={(event) => {
+              setTodoText(event.target.value);
+            }}
           />
         </form>
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <TodoList />
 
-        <ul className="todo-list" data-cy="todoList">
+        {/* <ul className="todo-list" data-cy="todoList">
           <li>
             <div className="view">
               <input type="checkbox" className="toggle" id="toggle-view" />
@@ -62,29 +105,21 @@ export const App: React.FC = () => {
             </div>
             <input type="text" className="edit" />
           </li>
-        </ul>
+        </ul> */}
       </section>
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          3 items left
+          {`${activeTodos} items left`}
         </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
+        <TodosFilter />
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => {
+            dispatch({ type: DELETE_ALL });
+          }}
+        >
           Clear completed
         </button>
       </footer>
