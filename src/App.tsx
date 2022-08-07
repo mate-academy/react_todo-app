@@ -1,93 +1,217 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFilter';
+import { Todo } from './types/Todo';
+
+const useLocalStorage = (key: string, initialValue: Todo[]) => {
+  const getKey = localStorage.getItem(key);
+  const [storValue, setStorValue] = useState(() => {
+    try {
+      if (getKey !== null) {
+        return JSON.parse(getKey) || '';
+      }
+
+      return initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  const save = (value: Todo[] | ((val: Todo[]) => Todo[])) => {
+    const selectedValue = value instanceof Function ? value(storValue) : value;
+
+    setStorValue(selectedValue);
+    if (key) {
+      localStorage.setItem(key, JSON.stringify(selectedValue));
+    }
+  };
+
+  return [storValue, save];
+};
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [title, setTitle] = useState('');
+  const [checked, setChecked] = useState(true);
+
+  const addTodo = (todo: Todo) => {
+    setTodos((prevTodos:Todo[]) => {
+      return [...prevTodos, todo];
+    });
+  };
+
+  const newTodo: Todo = {
+    title,
+    id: +new Date(),
+    completed: false,
+  };
+
+  const activeTodos = todos.filter((todo: { completed: boolean; }) => (
+    !todo.completed
+  ));
+
+  const completedTodos = todos.filter((todo: { completed: boolean; }) => (
+    todo.completed
+  ));
+
+  const handleSubmit = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    addTodo(newTodo);
+    setTitle('');
+  };
+
+  const handleChangeCheckbox = () => {
+    setChecked((prevState) => {
+      return !prevState;
+    });
+    setTodos((prevTodos: Todo[]) => {
+      return prevTodos.map(todo => {
+        if (checked !== todo.completed) {
+          return { ...todo, completed: checked };
+        }
+
+        return todo;
+      });
+    });
+  };
+
+  const handleChangeClearComplButton = () => {
+    setTodos((prevTodo: Todo[]) => {
+      return prevTodo.filter(todo => todo.completed !== true);
+    });
+  };
+
+  const changeTodoStatus = (completed: boolean, todoId: number) => {
+    setTodos((prevTodos: Todo[]) => {
+      return prevTodos.map(todo => {
+        if (todoId === todo.id) {
+          return { ...todo, completed };
+        }
+
+        return todo;
+      });
+    });
+  };
+
+  const editTitle = (todoTitle: string, todoId: number) => {
+    setTodos((prevTodos: Todo[]) => {
+      return prevTodos.map(todo => {
+        if (todoId === todo.id) {
+          return { ...todo, title: todoTitle };
+        }
+
+        return todo;
+      });
+    });
+  };
+
+  const deleteTodo = (todoId: number) => {
+    const filteredTodos = todos.filter((todo: Todo) => todo.id !== todoId);
+
+    setTodos(filteredTodos);
+  };
+
+  const findCompleted = todos.find((todo: Todo) => (
+    todo.completed === true
+  ));
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={title}
+            onChange={event => setTitle(event.target.value)}
+            required
           />
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length > 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              checked={checked}
+              onChange={handleChangeCheckbox}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Routes>
+              <Route
+                path="/"
+                element={(
+                  <TodoList
+                    todos={todos}
+                    changeTodoStatus={changeTodoStatus}
+                    deleteTodo={deleteTodo}
+                    editTitle={editTitle}
+                  />
+                )}
+              />
+            </Routes>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Routes>
+              <Route
+                path="active"
+                element={(
+                  <TodoList
+                    todos={activeTodos}
+                    changeTodoStatus={changeTodoStatus}
+                    deleteTodo={deleteTodo}
+                    editTitle={editTitle}
+                  />
+                )}
+              />
+            </Routes>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Routes>
+              <Route
+                path="completed"
+                element={(
+                  <TodoList
+                    todos={completedTodos}
+                    changeTodoStatus={changeTodoStatus}
+                    deleteTodo={deleteTodo}
+                    editTitle={editTitle}
+                  />
+                )}
+              />
+            </Routes>
+          </section>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {todos.filter((todo: Todo) => !todo.completed).length}
+              {' '}
+              items left
+            </span>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
+            <TodosFilter />
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            {findCompleted !== undefined && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleChangeClearComplButton}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </div>
   );
 };
