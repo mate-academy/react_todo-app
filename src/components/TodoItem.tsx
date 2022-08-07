@@ -57,7 +57,6 @@ export const TodoItem: React.FC<Props> = ({
             <input
               type="checkbox"
               className="toggle"
-              id="toggle-view"
               checked={todo.completed}
               onChange={completeHandler}
             />
