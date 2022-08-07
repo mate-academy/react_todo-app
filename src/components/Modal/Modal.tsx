@@ -128,7 +128,7 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
                 <p className="control has-icons-left">
                   <input
                     className="input"
-                    type="text"
+                    type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
@@ -144,23 +144,18 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
                 <p className="control has-icons-left">
                   <input
                     className="input"
-                    type="text"
+                    type="tel"
+                    pattern="+([0-9]{3})-[0-9]{3}-[0-9]{2}-[0-9]{2}"
                     placeholder="Mobile phone"
                     value={phone}
-                    onChange={(event) => {
-                      if (
-                        !Number.isNaN(+event.target.value)
-                        || event.target.value === '+'
-                      ) {
-                        setPhone(event.target.value);
-                      }
-                    }}
+                    onChange={(event) => setPhone(event.target.value)}
                     required
                   />
                   <span className="icon is-small is-left">
                     <i className="fas fa-phone" />
                   </span>
                 </p>
+                <div className="help">format: +(098)-545-52-23</div>
               </div>
               <button
                 type="submit"
