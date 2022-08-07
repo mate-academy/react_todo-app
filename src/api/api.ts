@@ -32,15 +32,15 @@ export const creatUser = async () => {
 };
 
 export const getUser = (): Promise<User> => {
-  const endpoint = 'users/888';
+  const user = 'users/888';
 
-  return request(endpoint);
+  return request(user);
 };
 
 export const getTodos = (): Promise<Todo[]> => {
-  const endpoint = 'todos?userId=888';
+  const todos = 'todos?userId=888';
 
-  return request(endpoint);
+  return request(todos);
 };
 
 export const deleteTodo = (TodoId: number) => {
