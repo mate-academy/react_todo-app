@@ -5,18 +5,15 @@ import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Modal } from './components/Modal';
 import { Todo } from './types/Todo';
+import { User } from './types/User';
 
 export const App: React.FC = () => {
-  const [userId, setUserId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
-  const setUser = (id: number) => {
-    setUserId(id);
-  };
-
-  return userId > 0 ? (
+  return user ? (
     <div className="todoapp">
-      <Header userId={userId} todos={todos} setTodos={setTodos} />
+      <Header userId={user.id} todos={todos} setTodos={setTodos} />
 
       <Routes>
         <Route
@@ -29,7 +26,7 @@ export const App: React.FC = () => {
             index
             element={(
               <Main
-                userId={userId}
+                userId={user.id}
                 todos={todos}
                 setTodos={setTodos}
               />
@@ -39,7 +36,7 @@ export const App: React.FC = () => {
             path=":condition"
             element={(
               <Main
-                userId={userId}
+                userId={user.id}
                 todos={todos}
                 setTodos={setTodos}
               />
@@ -48,7 +45,7 @@ export const App: React.FC = () => {
         </Route>
       </Routes>
 
-      <Footer todos={todos} setTodos={setTodos} />
+      <Footer todos={todos} setTodos={setTodos} user={user} setUser={setUser} />
     </div>
   ) : (
     <Modal setUser={setUser} />

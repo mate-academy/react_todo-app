@@ -5,7 +5,7 @@ import { response } from '../../api/api';
 import { User } from '../../types/User';
 
 type Props = {
-  setUser: (userId: number) => void,
+  setUser: React.Dispatch<React.SetStateAction<User | null>>,
 };
 
 export const Modal: React.FC<Props> = ({ setUser }) => {
@@ -19,7 +19,7 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
   const [oldUsername, setOldUsername] = useState('');
   const [notFoundUser, setNotFoundUser] = useState(false);
 
-  const submitHandlerCreate = (event: React.SyntheticEvent) => {
+  const submitHandlerCreate = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     if (name && username && email && phone) {
@@ -34,9 +34,16 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
           email,
           phone,
         }),
-      },
-      setUser);
-      setIsActive(false);
+      }).then((user: User) => {
+        setUser({
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+        });
+        setIsActive(false);
+      });
     }
   };
 
@@ -50,9 +57,16 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
       .then((users) => users.find(
         (user: User) => user.username === searchingUser,
       ))
-      .then((users) => {
+      .then((user) => {
+        setUser({
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+        });
+
         setNotFoundUser(false);
-        setUser(users.id);
         setIsActive(false);
       })
       .catch(() => setNotFoundUser(true));

@@ -15,7 +15,7 @@ export const Header: React.FC<Props> = ({ userId, todos, setTodos }) => {
     event.preventDefault();
 
     if (title && userId > 0) {
-      const { id } = await response('/todos', {
+      response('/todos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,17 +25,17 @@ export const Header: React.FC<Props> = ({ userId, todos, setTodos }) => {
           userId,
           completed: false,
         }),
-      });
-
-      setTodos([
-        ...todos,
-        {
-          id,
-          title,
-          userId,
-          completed: false,
-        },
-      ]);
+      })
+        .then(({ id }) => (
+          setTodos([
+            ...todos,
+            {
+              id,
+              title,
+              userId,
+              completed: false,
+            },
+          ])));
       setTitle('');
     }
   };

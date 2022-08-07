@@ -25,10 +25,8 @@ export const Main: React.FC<Props> = ({
   useEffect(() => {
     setLoading(true);
 
-    (async () => {
-      try {
-        const todosFromServer: Todo[] = await response(`/todos/?userId=${userId}`);
-
+    response(`/todos/?userId=${userId}`)
+      .then((todosFromServer: Todo[]) => {
         switch (condition) {
           case Condition.completed:
             setTodos(todosFromServer.filter(todo => todo.completed));
@@ -41,10 +39,8 @@ export const Main: React.FC<Props> = ({
         }
 
         setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    })();
+      })
+      .catch(() => setLoading(false));
   }, [userId, condition]);
 
   return (
