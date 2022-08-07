@@ -12,7 +12,7 @@ export const request = async (url: string) => {
 
 export const getTodos = () => (request('/todos'));
 
-export const createTodo = async (todo:{}) => {
+export const addTodoServer = async (todo:{}) => {
   const response = await fetch(`${BASE_URL}/todos`, {
     method: 'POST',
     headers: {
@@ -26,7 +26,7 @@ export const createTodo = async (todo:{}) => {
   return response.json();
 };
 
-export const modifyTodo = async (
+export const updateTodoServer = async (
   todoId: number,
   valuesToChange: {},
 ) => {
@@ -37,6 +37,14 @@ export const modifyTodo = async (
     },
     body: JSON.stringify(valuesToChange),
   });
+
+  return response.json();
+};
+
+export const deleteTodoServer = async (
+  todoId: number,
+) => {
+  const response = await fetch(`${BASE_URL}/todos/${todoId}`, { method: 'DELETE' });
 
   return response.json();
 };

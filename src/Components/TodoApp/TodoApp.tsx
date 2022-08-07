@@ -1,36 +1,43 @@
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../Types/Todo';
 import { useLocalStorage } from '../../Utilits/LocalStorage/LocalStorageAPI';
+import {
+  addTodoServer,
+  deleteTodoServer,
+  getTodos,
+  updateTodoServer,
+} from '../../Utilits/ServerStroage/ServerStorageAPI';
+import { StorageContext } from '../../Utilits/StorageContext';
+import { StorageSelector } from '../StorageSelector/StorageSelector';
 import { TodoAdd } from '../TodoAdd/TodoAdd';
 import { TodosFilters } from '../TodoFilters/TodosFilter';
 import { TodoList } from '../TodoList/TodoList';
 
 export const TodoApp: React.FC = () => {
+  const [storage, setStorage] = useState('local');
   const { pathname } = useLocation();
   const [localTodos, setLocalTodos] = useLocalStorage<Todo[]>('todos', []);
-  /*   const [todos, setTodos] = useState<Todo[]>(() => {
-    const todosFromLocal = localStorage.getItem('todos');
+  const [serverTodos, setServerTodos] = useState<Todo[]>([]);
 
-    try {
-      return todosFromLocal ? JSON.parse(todosFromLocal) : [];
-    } catch (error) {
-      return [];
-    }
-  });
+  const updateServer = async () => {
+    getTodos().then(setServerTodos);
+  };
 
-  const visibleTodos = [...todos].filter(todo => {
-    switch (pathname) {
-      case '/active':
-        return todo.completed === false;
-      case '/completed':
-        return todo.completed === true;
+  useEffect(() => {
+    const timer = setInterval(updateServer, 1000);
 
-      default:
-        return true;
-    }
-  }); */
+    return () => clearInterval(timer);
+  }, []);
 
-  const visibleTodos = [...localTodos].filter(todo => {
+  useEffect(() => {
+    updateServer();
+  },
+  []);
+
+  const usedTodos = storage === 'local' ? localTodos : serverTodos;
+
+  const visibleTodos = [...usedTodos].filter(todo => {
     switch (pathname) {
       case '/active':
         return todo.completed === false;
@@ -42,7 +49,7 @@ export const TodoApp: React.FC = () => {
     }
   });
 
-  const addTodo = (title: string) => {
+  const addTodoLocal = (title: string) => {
     const newTodo = {
       userId: 1,
       title,
@@ -55,15 +62,40 @@ export const TodoApp: React.FC = () => {
     setLocalTodos([newTodo, ...localTodos]);
   };
 
-  const clear = (value: number | boolean) => {
-    if (typeof value === 'boolean') {
+  const addTodo = (value: string) => {
+    if (storage === 'local') {
+      return addTodoLocal(value);
+    }
+
+    return addTodoServer(
+      {
+        userId: 1,
+        title: value,
+        completed: false,
+      },
+    );
+  };
+
+  const deleteTodoLocal = (value?: number) => {
+    if (!value) {
       setLocalTodos(localTodos.filter(todo => todo.completed !== true));
     } else {
       setLocalTodos(localTodos.filter(todo => todo.id !== value));
     }
   };
 
-  const updateTodo = (id: number, value: string | boolean) => {
+  const deleteTodo = (value? : number) => {
+    if (storage === 'local') {
+      deleteTodoLocal(value);
+    } else if (value) {
+      deleteTodoServer(value);
+    } else {
+      usedTodos.filter(todo => todo.completed === true)
+        .forEach(onDeleteTodo => deleteTodoServer(onDeleteTodo.id));
+    }
+  };
+
+  const updateTodoLocal = (id: number, value: string | boolean) => {
     const changetTodo = localTodos.find(todo => todo.id === id);
 
     if (!changetTodo) {
@@ -85,55 +117,81 @@ export const TodoApp: React.FC = () => {
     }));
   };
 
-  const markAll = () => {
-    if (localTodos.every(todo => todo.completed === true)) {
-      localTodos.forEach(todo => updateTodo(todo.id, false));
+  const updateTodo = (id: number, value: string | boolean) => {
+    if (storage === 'local') {
+      updateTodoLocal(id, value);
     } else {
-      localTodos.forEach(todo => updateTodo(todo.id, true));
+      const updatedValue = typeof value === 'string'
+        ? { title: value }
+        : { completed: value };
+
+      updateTodoServer(id, updatedValue);
+    }
+  };
+
+  const localeMarkAllTodo = () => {
+    if (localTodos.every(todo => todo.completed === true)) {
+      localTodos.forEach(todo => updateTodoLocal(todo.id, false));
+    } else {
+      localTodos.forEach(todo => updateTodoLocal(todo.id, true));
+    }
+  };
+
+  const MarkAll = () => {
+    if (storage === 'local') {
+      localeMarkAllTodo();
+    } else if (usedTodos.every(todo => todo.completed === true)) {
+      usedTodos
+        .forEach(todo => updateTodoServer(todo.id, { completed: false }));
+    } else {
+      usedTodos.forEach(todo => updateTodoServer(todo.id, { completed: true }));
     }
   };
 
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-        <TodoAdd addTodo={addTodo} />
-      </header>
+    <StorageContext.Provider value="">
+      <StorageSelector storage={storage} setStorage={setStorage} />
+      <div className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <TodoAdd addTodo={addTodo} />
+        </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={() => {
-            markAll();
-          }}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onChange={() => {
+              MarkAll();
+            }}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList
-          visibleTodos={visibleTodos}
-          updateTodo={updateTodo}
-          clear={clear}
-        />
-      </section>
+          <TodoList
+            visibleTodos={visibleTodos}
+            updateTodo={updateTodo}
+            clear={deleteTodo}
+          />
+        </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {localTodos.length}
-        </span>
-        <TodosFilters />
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={() => {
-            clear(true);
-          }}
-        >
-          Clear completed
-        </button>
-      </footer>
-    </div>
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {usedTodos.length}
+          </span>
+          <TodosFilters />
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={() => {
+              deleteTodo();
+            }}
+          >
+            Clear completed
+          </button>
+        </footer>
+      </div>
+    </StorageContext.Provider>
   );
 };

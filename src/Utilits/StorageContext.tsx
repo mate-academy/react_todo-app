@@ -1,3 +1,3 @@
 import React from 'react';
 
-export const ServerChose = React.createContext('local');
+export const StorageContext = React.createContext('local');
