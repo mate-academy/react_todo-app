@@ -1,4 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, useEffect, useState,
+} from 'react';
+import {
+  addTodo, deleteTodo, getTodos, updateTodo,
+} from '../../api/api';
 import { Todo } from '../../type';
 import { Footer } from '../Footer';
 import { TodoList } from '../TodoList';
@@ -14,38 +19,112 @@ const useLocalStorage = () => {
 };
 
 export const TodoApp: FC = () => {
-  const [todos] = useState(useLocalStorage);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [targetValue, setTargetValue] = useState('');
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [useServer, setUseServer] = useState(true);
+
+  async function load() {
+    const todoFromServer = await getTodos();
+
+    setVisibleTodos(todoFromServer);
+  }
+
+  useEffect(() => {
+    if (useServer) {
+      load();
+    } else {
+      setVisibleTodos(useLocalStorage);
+    }
+  }, [useServer]);
+
+  useEffect(() => {
+    if (useServer) {
+      load();
+    } else {
+      setVisibleTodos(useLocalStorage);
+    }
+  }, []);
 
   const addNewTodo = (event: React.FormEvent) => {
     event.preventDefault();
     const newTodo: Todo = {
-      id: +new Date(),
       title: targetValue,
       completed: false,
+      userId: 888,
     };
 
-    setVisibleTodos(prevTodo => [...prevTodo, newTodo]);
+    if (useServer) {
+      addTodo(newTodo);
+    }
+
+    setVisibleTodos(prevTodo => [...prevTodo,
+      { id: +new Date(), ...newTodo },
+    ]);
+
     setTargetValue('');
   };
 
-  const onDelete = (id: number) => {
+  const onDelete = (id: number | undefined) => {
     setVisibleTodos(state => {
-      return state.filter(todoForChange => todoForChange.id !== id);
+      return state.filter(todoForChange => {
+        if (useServer && id) {
+          deleteTodo(id);
+        }
+
+        return todoForChange.id !== id;
+      });
     });
   };
 
   const DeleteAll = () => {
     setVisibleTodos(prevTodo => {
-      return prevTodo.filter(todo => !todo.completed);
+      return prevTodo.filter(todo => {
+        if (useServer && todo.completed && todo.id) {
+          deleteTodo(todo.id);
+        }
+
+        return !todo.completed;
+      });
     });
   };
 
-  const onCompletedChange = (id: number) => {
+  const CompletedAll = () => {
+    setVisibleTodos(prevTodo => {
+      if (prevTodo.every(todo => todo.completed)) {
+        return prevTodo.map(todo => {
+          if (useServer && todo.id) {
+            updateTodo(todo.id, { completed: false });
+          }
+
+          return { ...todo, completed: false };
+        });
+      }
+
+      return prevTodo.map(todo => {
+        if (todo.completed) {
+          return todo;
+        }
+
+        if (useServer && todo.id) {
+          updateTodo(todo.id, { completed: true });
+        }
+
+        return { ...todo, completed: true };
+      });
+    });
+  };
+
+  const onCompletedChange = (id: number | undefined) => {
     setVisibleTodos(state => {
       return state.map(todoForChange => {
         if (todoForChange.id === id) {
+          if (useServer && todoForChange.id) {
+            updateTodo(
+              todoForChange.id,
+              { completed: !todoForChange.completed },
+            );
+          }
+
           return {
             ...todoForChange,
             completed: !todoForChange.completed,
@@ -58,11 +137,9 @@ export const TodoApp: FC = () => {
   };
 
   useEffect(() => {
-    setVisibleTodos(todos);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(visibleTodos));
+    if (!useServer) {
+      localStorage.setItem('todos', JSON.stringify(visibleTodos));
+    }
   }, [visibleTodos]);
 
   return (
@@ -85,7 +162,6 @@ export const TodoApp: FC = () => {
           />
         </form>
       </header>
-
       <section className="main">
         <input
           type="checkbox"
@@ -96,21 +172,7 @@ export const TodoApp: FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          onChange={() => {
-            setVisibleTodos(prevTodo => {
-              if (prevTodo.every(todo => todo.completed)) {
-                return prevTodo.map(todo => {
-                  return { ...todo, completed: false };
-                });
-              }
-
-              return prevTodo.map(todo => {
-                return todo.completed
-                  ? todo
-                  : { ...todo, completed: true };
-              });
-            });
-          }}
+          onChange={() => CompletedAll()}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
@@ -118,8 +180,19 @@ export const TodoApp: FC = () => {
           onDelete={onDelete}
           onCompletedChange={onCompletedChange}
           setVisibleTodos={setVisibleTodos}
+          useServer={useServer}
         />
       </section>
+      <form className="main">
+        <label>
+          <input
+            type="checkbox"
+            checked={useServer}
+            onChange={() => setUseServer(state => !state)}
+          />
+          Use Server
+        </label>
+      </form>
 
       {visibleTodos.length !== 0
         && (

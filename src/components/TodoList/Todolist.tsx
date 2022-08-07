@@ -1,13 +1,14 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../type';
 import { TodoItem } from '../TodoItem';
 
 interface Props {
   todoList: Todo[]
-  onDelete: (id: number) => void
-  onCompletedChange: (id: number) => void
+  onDelete: (id: number | undefined) => void
+  onCompletedChange: (id: number | undefined) => void
   setVisibleTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  useServer: boolean
 }
 
 export const TodoList: FC<Props> = ({
@@ -15,6 +16,7 @@ export const TodoList: FC<Props> = ({
   onDelete,
   onCompletedChange,
   setVisibleTodos,
+  useServer,
 }) => {
   let visibelTodos = [...todoList];
   const { pathname } = useLocation();
@@ -37,13 +39,16 @@ export const TodoList: FC<Props> = ({
 
     <ul className="todo-list" data-cy="todoList">
       {visibelTodos.map(todo => (
-        <TodoItem
-          todo={todo}
-          onDelete={onDelete}
-          onCompletedChange={onCompletedChange}
-          key={todo.id}
-          setVisibleTodos={setVisibleTodos}
-        />
+        <React.Fragment key={todo.id}>
+          <TodoItem
+            todo={todo}
+            onDelete={onDelete}
+            onCompletedChange={onCompletedChange}
+            setVisibleTodos={setVisibleTodos}
+            useServer={useServer}
+          />
+        </React.Fragment>
+
       ))}
 
     </ul>

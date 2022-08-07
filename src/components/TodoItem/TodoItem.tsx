@@ -1,12 +1,15 @@
 import classNames from 'classnames';
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
+import lodash from 'lodash';
+import { deleteTodo, updateTodo } from '../../api/api';
 import { Todo } from '../../type';
 
 interface Props {
   todo: Todo
-  onDelete: (id: number) => void
-  onCompletedChange: (id: number) => void
+  onDelete: (id: number | undefined) => void
+  onCompletedChange: (id: number | undefined) => void
   setVisibleTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  useServer: boolean
 }
 
 export const TodoItem: FC<Props> = ({
@@ -14,29 +17,47 @@ export const TodoItem: FC<Props> = ({
   onDelete,
   onCompletedChange,
   setVisibleTodos,
+  useServer,
 }) => {
   const [edit, setEdit] = useState(false);
   const [targetValue, setTargetValue] = useState(todo.title);
+  const [applyTarget, setAppliedTarget] = useState(todo.title);
 
-  const upDateVisibleState = (id:number):void => {
+  const upDateTitelTarget = useCallback(
+    lodash.debounce(setAppliedTarget, 1000),
+    [],
+  );
+
+  const upDateVisibleState = (id:number | undefined):void => {
     if (!targetValue) {
+      if (useServer && id) {
+        deleteTodo(id);
+      }
+
       onDelete(id);
 
       return;
     }
 
     setVisibleTodos(prevTodo => {
-      return prevTodo.map(t => {
-        if (t.id === id) {
-          return { ...t, title: targetValue };
+      return prevTodo.map(todoForUpdate => {
+        if (todoForUpdate.id === id) {
+          if (useServer && todoForUpdate.id) {
+            updateTodo(
+              todoForUpdate.id,
+              { title: applyTarget },
+            );
+          }
+
+          return { ...todoForUpdate, title: applyTarget };
         }
 
-        return t;
+        return todoForUpdate;
       });
     });
   };
 
-  const editTitel = (key:string, id:number): void => {
+  const editTitel = (key:string, id:number | undefined): void => {
     switch (key) {
       case 'Enter':
         upDateVisibleState(id);
@@ -45,6 +66,7 @@ export const TodoItem: FC<Props> = ({
 
       case 'Escape':
         setEdit(false);
+        upDateTitelTarget(todo.title);
         setTargetValue(todo.title);
         break;
 
@@ -53,14 +75,13 @@ export const TodoItem: FC<Props> = ({
     }
   };
 
-  const editOnBlur = (id:number) => {
+  const editOnBlur = (id:number | undefined) => {
     upDateVisibleState(id);
     setEdit(false);
   };
 
   return (
     <li
-      key={todo.id}
       className={classNames({
         completed: todo.completed,
         editing: edit,
@@ -94,7 +115,10 @@ export const TodoItem: FC<Props> = ({
         type="text"
         className="edit"
         value={targetValue}
-        onChange={(event) => setTargetValue(event.target.value)}
+        onChange={(event) => {
+          setTargetValue(event.target.value);
+          upDateTitelTarget(event.target.value);
+        }}
         onKeyDown={(event) => editTitel(event.key, todo.id)}
         onBlur={() => editOnBlur(todo.id)}
       />
