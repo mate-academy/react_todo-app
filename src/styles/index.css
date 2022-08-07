@@ -147,7 +147,7 @@ body {
 
 .footer {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   color: #777;
   padding: 10px 15px;
   height: 20px;

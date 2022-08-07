@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useState, useEffect } from 'react';
+import { HashRouter as Router } from 'react-router-dom';
 
 import { AddTodoForm } from './components/AddTodoForm';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
-
-export type Todo = {
-  id: number, title: string, completed: boolean,
-};
+import { Todo } from './types/types';
 
 export const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
@@ -40,8 +38,61 @@ export const App: React.FC = () => {
     }
   };
 
+  const countCompleted = () => {
+    let quantityCompleted = 0;
+
+    todos.forEach(todo => {
+      if (todo.completed) {
+        quantityCompleted += 1;
+      }
+    });
+
+    return todos.length - quantityCompleted;
+  };
+
+  const clearCompleted = () => {
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
+  const handlingUpdate = (todoId: number, newTitle: string) => {
+    setTodos(todos.map(todo => {
+      if (todoId !== todo.id) {
+        return todo;
+      }
+
+      return {
+        ...todo,
+        title: newTitle,
+      };
+    }));
+  };
+
+  const mainCount = todos.length - countCompleted();
+
+  const toggleAll = () => {
+    setTodos(todos.map(todo => {
+      if (mainCount < todos.length) {
+        if (!todo.completed) {
+          return {
+            ...todo,
+            completed: true,
+          };
+        }
+
+        return todo;
+      }
+
+      return {
+        ...todo,
+        completed: !todo.completed,
+      };
+    }));
+  };
+
   useEffect(() => {
+    setStatus(window.location.hash.slice(2));
     getLocalTodos();
+    filterHandler();
   }, []);
 
   useEffect(() => {
@@ -60,20 +111,26 @@ export const App: React.FC = () => {
           onInput={setInputText}
         />
       </header>
-
-      <section className="main">
-        <TodoList
-          todos={todos}
-          filteredTodos={filteredTodos}
-          onSettingTodo={setTodos}
-        />
-      </section>
-
-      <footer className="footer">
-        <TodosFilter
-          onSettingStatus={setStatus}
-        />
-      </footer>
+      {todos.length > 0 && (
+        <div>
+          <section className="main">
+            <TodoList
+              todos={todos}
+              filteredTodos={filteredTodos}
+              onSettingTodo={setTodos}
+              onUpdate={handlingUpdate}
+              onToggle={toggleAll}
+            />
+          </section>
+          <Router>
+            <TodosFilter
+              onClear={clearCompleted}
+              onSettingStatus={setStatus}
+              onCountCompleted={countCompleted}
+            />
+          </Router>
+        </div>
+      )}
     </div>
   );
 };

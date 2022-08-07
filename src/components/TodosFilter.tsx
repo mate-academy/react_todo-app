@@ -1,45 +1,65 @@
-type Props = {
-  onSettingStatus: (str: string) => void;
-};
-export const TodosFilter: React.FC<Props> = ({ onSettingStatus }) => {
-  const statusHandler: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
-    onSettingStatus(event.target.value);
-  };
+import { NavLink } from 'react-router-dom';
 
+type Props = {
+  onClear: () => void,
+  onSettingStatus: (str: string) => void,
+  onCountCompleted: () => number,
+};
+export const TodosFilter: React.FC<Props> = ({
+  onClear,
+  onSettingStatus,
+  onCountCompleted,
+}) => {
   return (
     <>
-      <div className="todo-count" data-cy="todosCounter">
-        3 items left
-      </div>
+      <footer className="footer">
+        <div className="todo-count" data-cy="todosCounter">
+          {onCountCompleted()}
+          {' '}
+          items left
+        </div>
 
-      <div className="footer-content">
-        <select
-          className="filters"
-          onChange={statusHandler}
+        <ul className="filters">
+          <li>
+            <NavLink
+              to="/"
+              className="navlink"
+              onClick={() => onSettingStatus('all')}
+            >
+              All
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/active"
+              className="navlink"
+              onClick={() => onSettingStatus('active')}
+            >
+              Active
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/completed"
+              className="navlink"
+              onClick={() => onSettingStatus('completed')}
+            >
+              Completed
+            </NavLink>
+          </li>
+        </ul>
+
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={onClear}
         >
-          <option
-            value="all"
-          >
-            All
-          </option>
-
-          <option
-            value="active"
-          >
-            Active
-          </option>
-
-          <option
-            value="completed"
-          >
-            Completed
-          </option>
-        </select>
-
-        <button type="button" className="clear-completed">
           Clear completed
         </button>
-      </div>
+      </footer>
+
     </>
   );
 };

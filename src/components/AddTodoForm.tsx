@@ -1,23 +1,30 @@
-import { Todo } from '../App';
+import { Todo } from '../types/types';
 
 type Props = {
   todos: Todo[],
   inputText: string,
-  onCreateTodo: (todos: any) => void;
+  onCreateTodo: (todos: Todo[]) => void;
   onInput: (text: string) => void,
 };
 export const AddTodoForm: React.FC<Props> = ({
   todos, inputText, onCreateTodo, onInput,
 }) => {
-  const inputTextHandler: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    console.log(event.target.value);
+  const inputTextHandler: React.ChangeEventHandler<HTMLInputElement> = (
+    event,
+  ) => {
     onInput(event.target.value);
   };
 
-  const submitTodoHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const submitTodoHandler: React.FormEventHandler<HTMLFormElement> = (
+    event,
+  ) => {
     event.preventDefault();
     onCreateTodo([
-      ...todos, { id: Math.random() * 1000, title: inputText, completed: false },
+      ...todos, {
+        id: Math.random() * 1000,
+        title: inputText,
+        completed: false,
+      },
     ]);
     onInput('');
   };

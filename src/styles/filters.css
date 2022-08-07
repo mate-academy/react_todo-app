@@ -1,14 +1,13 @@
 .filters {
   display: flex;
-  flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
   right: 0;
   left: 0;
 }
-/*
-.filters li a {
+
+.navlink {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
@@ -17,13 +16,13 @@
   border-radius: 3px;
 }
 
-.filters li a:hover {
+.navlink:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.navlink.selected {
   border-color: rgba(175, 47, 47, 0.2);
-} */
+}
 
 @media (max-width: 430px) {
   .filters {
