@@ -13,6 +13,5 @@ export const response = (
   option: Option = { method: 'GET' },
 ) => {
   return fetch(`${BASE_URL}${url}`, option)
-    .then(data => data.json())
-    .catch((error) => [error]);
+    .then(data => data.json());
 };

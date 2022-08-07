@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { response } from '../../api/api';
 import { Todo } from '../../types/Todo';
 
@@ -13,7 +13,6 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   const [hasEdit, setHasEdit] = useState(0);
-  const [editText, setEditText] = useState('');
   const [countClick, setCountClick] = useState(0);
 
   const findIndex = (todoId: number) => {
@@ -32,10 +31,23 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   const handleClickEdit = (todoId: number) => {
     setCountClick(countClick + 1);
     if (countClick === 1) {
-      setEditText('');
       setHasEdit(todoId);
       setCountClick(0);
     }
+  };
+
+  const handleChangeEdit = (
+    event: ChangeEvent<HTMLInputElement>,
+    todo: Todo,
+  ) => {
+    setTodos([
+      ...todos.slice(0, findIndex(todo.id)),
+      {
+        ...todo,
+        title: event.target.value,
+      },
+      ...todos.slice(findIndex(todo.id) + 1),
+    ]);
   };
 
   const handleClickCompleted = (todo: Todo) => {
@@ -62,22 +74,13 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   const handleSubmit = (event: React.SyntheticEvent, todo: Todo) => {
     event.preventDefault();
 
-    setTodos([
-      ...todos.slice(0, findIndex(todo.id)),
-      {
-        ...todo,
-        title: editText,
-      },
-      ...todos.slice(findIndex(todo.id) + 1),
-    ]);
-
     response(`/todos/${todo.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title: editText,
+        title: todo.title,
       }),
     });
 
@@ -132,10 +135,8 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
             <input
               type="text"
               className="edit"
-              value={editText}
-              onChange={(event) => {
-                setEditText(event.target.value);
-              }}
+              value={todo.title}
+              onChange={(event) => handleChangeEdit(event, todo)}
             />
           </form>
         </li>
