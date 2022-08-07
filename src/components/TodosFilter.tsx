@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 export const TodosFilter: React.FC = () => {
   return (
     <ul className="filters">
-
       <li>
         <NavLink
           to="/"
