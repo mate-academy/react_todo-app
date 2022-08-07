@@ -14,7 +14,7 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState<null | number>(null);
+  const [phone, setPhone] = useState('');
 
   const [oldUsername, setOldUsername] = useState('');
   const [notFoundUser, setNotFoundUser] = useState(false);
@@ -146,8 +146,15 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
                     className="input"
                     type="text"
                     placeholder="Mobile phone"
-                    value={phone || ''}
-                    onChange={(event) => setPhone(Number(event.target.value))}
+                    value={phone}
+                    onChange={(event) => {
+                      if (
+                        !Number.isNaN(+event.target.value)
+                        || event.target.value === '+'
+                      ) {
+                        setPhone(event.target.value);
+                      }
+                    }}
                     required
                   />
                   <span className="icon is-small is-left">
