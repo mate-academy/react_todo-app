@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { response } from '../../api/api';
 import { Condition } from '../../types/Condition';
@@ -43,6 +43,44 @@ export const Main: React.FC<Props> = ({
       .catch(() => setLoading(false));
   }, [userId, condition]);
 
+  const handleClick = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: true,
+      })));
+
+      todos.forEach(({ id }) => {
+        response(`/todos/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            completed: true,
+          }),
+        });
+      });
+    } else {
+      setTodos(todos.map(todo => ({
+        ...todo,
+        completed: false,
+      })));
+
+      todos.forEach(({ id }) => {
+        response(`/todos/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            completed: false,
+          }),
+        });
+      });
+    }
+  };
+
   return (
     <section className="main">
       <input
@@ -50,6 +88,7 @@ export const Main: React.FC<Props> = ({
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        onChange={(event) => handleClick(event)}
       />
       <label htmlFor="toggle-all">
         Mark all as complete

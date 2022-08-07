@@ -5,7 +5,7 @@ import { response } from '../../api/api';
 import { User } from '../../types/User';
 
 type Props = {
-  setUser: React.Dispatch<React.SetStateAction<User | null>>,
+  setUser: (value: User | null) => void,
 };
 
 export const Modal: React.FC<Props> = ({ setUser }) => {
@@ -19,7 +19,7 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
   const [oldUsername, setOldUsername] = useState('');
   const [notFoundUser, setNotFoundUser] = useState(false);
 
-  const submitHandlerCreate = async (event: React.SyntheticEvent) => {
+  const submitHandlerCreate = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     if (name && username && email && phone) {

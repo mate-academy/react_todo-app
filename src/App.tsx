@@ -9,7 +9,14 @@ import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(
+    JSON.parse(localStorage.getItem('user') || 'null'),
+  );
+
+  const saveUser = (value: User | null) => {
+    setUser(value);
+    localStorage.setItem('user', JSON.stringify(value));
+  };
 
   return user ? (
     <div className="todoapp">
@@ -45,9 +52,14 @@ export const App: React.FC = () => {
         </Route>
       </Routes>
 
-      <Footer todos={todos} setTodos={setTodos} user={user} setUser={setUser} />
+      <Footer
+        todos={todos}
+        setTodos={setTodos}
+        user={user}
+        setUser={saveUser}
+      />
     </div>
   ) : (
-    <Modal setUser={setUser} />
+    <Modal setUser={saveUser} />
   );
 };

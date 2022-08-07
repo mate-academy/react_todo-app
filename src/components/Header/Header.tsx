@@ -11,7 +11,7 @@ type Props = {
 export const Header: React.FC<Props> = ({ userId, todos, setTodos }) => {
   const [title, setTitle] = useState('');
 
-  const handlerSubmit = async (event: React.SyntheticEvent) => {
+  const handlerSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     if (title && userId > 0) {
@@ -26,7 +26,7 @@ export const Header: React.FC<Props> = ({ userId, todos, setTodos }) => {
           completed: false,
         }),
       })
-        .then(({ id }) => (
+        .then(({ id }) => {
           setTodos([
             ...todos,
             {
@@ -35,8 +35,10 @@ export const Header: React.FC<Props> = ({ userId, todos, setTodos }) => {
               userId,
               completed: false,
             },
-          ])));
-      setTitle('');
+          ]);
+
+          setTitle('');
+        });
     }
   };
 

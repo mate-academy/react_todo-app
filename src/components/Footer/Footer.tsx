@@ -7,7 +7,7 @@ type Props = {
   todos: Todo[],
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   user: User,
-  setUser: React.Dispatch<React.SetStateAction<User | null>>,
+  setUser: (value: User | null) => void,
 };
 
 export const Footer: React.FC<Props> = ({
