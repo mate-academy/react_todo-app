@@ -7,7 +7,7 @@ import { TodoList } from '../TodoList';
 enum Status {
   ALL,
   Active = '/active',
-  Completed = '/comleted',
+  Completed = '/completed',
 }
 
 export const TodoApp: React.FC = () => {
@@ -32,11 +32,11 @@ export const TodoApp: React.FC = () => {
 
   useEffect(() => {
     switch (filteredBy) {
-      case Status.Completed:
-        setVisibleTodos(todos.filter(todo => todo.completed));
-        break;
       case Status.Active:
         setVisibleTodos(todos.filter(todo => !todo.completed));
+        break;
+      case Status.Completed:
+        setVisibleTodos(todos.filter(todo => todo.completed));
         break;
 
       default:
@@ -96,10 +96,7 @@ export const TodoApp: React.FC = () => {
         };
       }
 
-      return {
-        ...updatedTodo,
-        completed: false,
-      };
+      return updatedTodo;
     });
 
     setTodos(updatedTodos);
