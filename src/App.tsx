@@ -66,6 +66,16 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const toggleAll = () => {
+    const hasUncompletedTodo = todos.some(todo => todo.completed === false);
+
+    if (hasUncompletedTodo) {
+      setTodos(todos.map(todo => ({ ...todo, completed: true })));
+    } else {
+      setTodos(todos.map(todo => ({ ...todo, completed: false })));
+    }
+  };
+
   const uncompletedTodos: Todo[] = todos
     .filter(todo => todo.completed === false);
 
@@ -133,6 +143,7 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onChange={() => toggleAll()}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -171,11 +182,14 @@ export const App: React.FC = () => {
             )}
           />
         </Routes>
-        <TodoFilter
-          quantity={uncompletedTodos.length}
-          hasCompleted={hasCompleted}
-          onClearCompleted={clearCompleted}
-        />
+
+        {todos.length > 0 && (
+          <TodoFilter
+            quantity={uncompletedTodos.length}
+            hasCompleted={hasCompleted}
+            onClearCompleted={clearCompleted}
+          />
+        )}
       </section>
     </div>
   );
