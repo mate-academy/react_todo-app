@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
-import { Footer } from '../Footer';
+import { TodoBottom } from '../TodoBottom';
 import { TodoList } from '../TodoList';
 
 enum Status {
@@ -129,7 +129,7 @@ export const TodoApp: React.FC = () => {
             />
           </section>
 
-          <Footer
+          <TodoBottom
             todos={todos}
             onClearCompleted={onClearCompleted}
           />
