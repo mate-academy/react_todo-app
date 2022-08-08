@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import Status from '../../enums/Status';
 
-export const TodosFilter: React.FC = () => {
+const TodosFilter: React.FC = () => {
   return (
     <ul className="filters">
       <li>
@@ -48,3 +48,5 @@ export const TodosFilter: React.FC = () => {
     </ul>
   );
 };
+
+export default TodosFilter;

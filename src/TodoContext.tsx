@@ -1,37 +1,38 @@
-import React, { useMemo } from 'react';
+import React, { useReducer } from 'react';
 
-import useLocalStorage, { SetNewValue } from './hooks/useLocalStorage';
+import {
+  Action, State, TodoReducer,
+} from './reducer';
 
-import Todo from './types/Todo';
-
-type Context = {
-  todos: Todo[],
-  setTodos: (() => void) | (SetNewValue<Todo[]>),
+type DispatchContextType = {
+  state: State,
+  dispatch: React.Dispatch<Action>
 };
 
-export const TodoContext = React.createContext<Context>({
-  todos: [],
-  setTodos: () => {
-  },
+export const initialState: State = {
+  todos: JSON.parse(localStorage.getItem('todos')
+    || '') || [],
+};
+
+export const TodoContext = React.createContext<DispatchContextType>({
+  state: initialState,
+  dispatch: () => null,
 });
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+const TodoProvider: React.FC<Props> = ({ children }) => {
+  const [state, dispatch] = useReducer(TodoReducer, initialState);
 
-  const contextValue = useMemo(() => (
-    {
-      todos,
-      setTodos,
-    }
-  ), [todos]);
+  localStorage.setItem('todos', JSON.stringify(state.todos));
 
   return (
-    <TodoContext.Provider value={contextValue}>
+    <TodoContext.Provider value={{ state, dispatch }}>
       {children}
     </TodoContext.Provider>
   );
 };
+
+export default TodoProvider;

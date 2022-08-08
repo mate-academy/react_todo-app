@@ -2,9 +2,9 @@
 import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 
-import { TodoContext } from '../../TodoContext';
-
 import Todo from '../../types/Todo';
+import { TodoContext } from '../../TodoContext';
+import { ActionType } from '../../reducer';
 
 // TODO: implement todo app using context first, then save it on GitHub and try to implement with just props passing
 // It is not such a large app to use context, but if someone will check your code - they want me to have as much complicated things
@@ -32,37 +32,35 @@ type Props = {
   item: Todo;
 };
 
-export const TodoItem: React.FC<Props> = ({ item }) => {
-  const { setTodos } = useContext(TodoContext);
+const TodoItem: React.FC<Props> = ({ item }) => {
+  const { dispatch } = useContext(TodoContext);
 
   const [isInEditMode, setIsInEditMode] = useState(false);
   const [todoNewTitle, setTodoNewTitle] = useState(item.title);
 
   const deleteTodo = () => {
-    setTodos(prevValue => (
-      prevValue.filter(todo => todo.id !== item.id)
-    ));
+    dispatch({
+      type: ActionType.Remove,
+      payload: {
+        id: item.id,
+      },
+    });
   };
 
-  const updateTodo = (title: string, completed = item.completed) => {
-    if (title === '') {
+  const updateTodo = (newTitle: string, newCompleted = item.completed) => {
+    if (newTitle === '') {
       deleteTodo();
 
       return;
     }
 
-    setTodos(prevValue => {
-      return prevValue.map(todo => {
-        if (todo.id !== item.id) {
-          return todo;
-        }
-
-        return {
-          ...todo,
-          title,
-          completed,
-        };
-      });
+    dispatch({
+      type: ActionType.Update,
+      payload: {
+        id: item.id,
+        title: newTitle,
+        completed: newCompleted,
+      },
     });
   };
 
@@ -99,8 +97,8 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         <input
           type="checkbox"
           className="toggle"
-          defaultChecked={item.completed}
-          onClick={() => updateTodo(item.title, !item.completed)}
+          checked={item.completed}
+          onChange={() => updateTodo(item.title, !item.completed)}
         />
 
         <label>
@@ -128,4 +126,4 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);

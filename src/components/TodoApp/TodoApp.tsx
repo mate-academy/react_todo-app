@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { TodoContext } from '../../TodoContext';
-
 import TodoList from '../TodoList';
-import { TodosFilter } from '../TodosFilter/TodosFilter';
+import TodosFilter from '../TodosFilter/TodosFilter';
+import { TodoContext } from '../../TodoContext';
 
 import Todo from '../../types/Todo';
 import Status from '../../enums/Status';
+import { ActionType } from '../../reducer';
 
 function convertToHumanReadableCount(amount: number, singularWord: string) {
   if (amount === 1) {
@@ -18,64 +18,57 @@ function convertToHumanReadableCount(amount: number, singularWord: string) {
 }
 
 const TodoApp: React.FC = () => {
+  const { state, dispatch } = useContext(TodoContext);
+  const { todos } = state;
+
   const { status } = useParams();
 
-  const { todos, setTodos } = useContext(TodoContext);
   const [newTodoTitle, setNewTodoTitle] = useState('');
 
-  const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
+  const completedTodosAmount = useMemo(() => {
+    return todos.reduce((sum, curr) => (
+      curr.completed ? sum + 1 : sum
+    ), 0);
+  }, [state]);
 
   const createTodo = () => {
+    if (newTodoTitle === '') {
+      return;
+    }
+
     const newTodo: Todo = {
       id: +new Date(),
       title: newTodoTitle,
       completed: false,
     };
 
-    setTodos(prevValue => [
-      ...prevValue,
-      newTodo,
-    ]);
+    dispatch({ type: ActionType.Add, payload: newTodo });
 
     setNewTodoTitle('');
   };
 
-  const selectTodos = () => {
-    setTodos(prevValue => (
-      prevValue.map(todo => (
-        { ...todo, completed: true }
-      ))
-    ));
-  };
-
-  const deselectTodos = () => {
-    setTodos(prevValue => (
-      prevValue.map(todo => (
-        { ...todo, completed: false }
-      ))
-    ));
-  };
-
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') {
-
+    if (event.key === 'Enter') {
+      createTodo();
     }
-
-    // setNewTodoTitle(''); // Create only one todo, using enter or blur
   };
 
   const handleCompletedTodosSelector = () => {
-    setIsSelectAllChecked(prevState => {
-      const newState = !prevState;
+    if (completedTodosAmount === todos.length) {
+      dispatch({
+        type: ActionType.UpdateAll,
+        payload: { completed: false },
+      });
+    } else {
+      dispatch({
+        type: ActionType.UpdateAll,
+        payload: { completed: true },
+      });
+    }
+  };
 
-      if (newState === true) {
-        selectTodos();
-      } else {
-        deselectTodos();
-      }
-
-      return newState;
-    });
+  const handleClearButton = () => {
+    dispatch({ type: ActionType.RemoveAll, payload: { completed: true } });
   };
 
   const prepareTodos = () => {
@@ -114,32 +107,45 @@ const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          checked={isSelectAllChecked}
-          className="toggle-all"
-          onClick={handleCompletedTodosSelector}
-          data-cy="toggleAll"
-        />
+      {todos.length > 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              checked={completedTodosAmount === todos.length}
+              className="toggle-all"
+              onChange={handleCompletedTodosSelector}
+              data-cy="toggleAll"
+            />
 
-        <label htmlFor="toggle-all">Mark all as complete</label>
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList todos={preparedTodos} />
-      </section>
+            <TodoList todos={preparedTodos} />
+          </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${convertToHumanReadableCount(todos.length, 'item')} left`}
-        </span>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${convertToHumanReadableCount(
+                todos.length - completedTodosAmount,
+                'item',
+              )} left`}
+            </span>
 
-        <TodosFilter />
+            <TodosFilter />
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            {completedTodosAmount > 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleClearButton}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </div>
   );
 };

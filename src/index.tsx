@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 
 import './styles/index.css';
@@ -8,7 +8,12 @@ import './styles/filters.css';
 import { App } from './App';
 
 const container = document.getElementById('root');
-const root = createRoot(container!);
+
+if (!container) {
+  throw new Error('Failed to find root element');
+}
+
+const root = ReactDOM.createRoot(container!);
 
 root.render(
   <HashRouter>
