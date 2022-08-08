@@ -134,7 +134,7 @@ export const TodoPage: React.FC = () => {
 
         {visibleTodos && (
           <TodoList
-            todos={todos}
+            todos={visibleTodos}
             onUpdate={updateTodo}
           />
         )}
