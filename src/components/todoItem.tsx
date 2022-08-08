@@ -1,5 +1,7 @@
 import classNames from 'classnames';
-import { FC, useContext, useState } from 'react';
+import {
+  FC, useContext, useEffect, useRef, useState,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { TodosContextType } from '../types/TodosContext';
 import { TodosContext } from './todoContext';
@@ -14,9 +16,19 @@ export const TodoItem: FC<Props> = ({ todo }) => {
     deleteTodo,
     editeTodoTitle,
   } = useContext(TodosContext) as TodosContextType;
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isEdit, setEdit] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEdit]);
+
+  const handleDoubleClick = () => {
+    setEdit(true);
+  };
 
   const handleBlur = () => {
     if (todoTitle !== todo.title) {
@@ -26,10 +38,13 @@ export const TodoItem: FC<Props> = ({ todo }) => {
     setEdit(false);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    event: (
+      React.KeyboardEvent<HTMLInputElement>
+      ),
+  ) => {
     if (event.key === 'Enter') {
-      editeTodoTitle(todoTitle, todo);
-      setEdit(false);
+      event.target.blur();
     }
 
     if (event.key === 'Escape') {
@@ -53,11 +68,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
           checked={todo.completed === true}
           onChange={() => changeStatusTodo(todo)}
         />
-        <label
-          onDoubleClick={
-            () => setEdit(true)
-          }
-        >
+        <label onDoubleClick={handleDoubleClick}>
           {todo.title}
         </label>
         <button
@@ -69,7 +80,9 @@ export const TodoItem: FC<Props> = ({ todo }) => {
         />
       </div>
       <input
+        ref={inputRef}
         type="text"
+        id={`${todo.id}`}
         className="edit"
         value={todoTitle}
         onChange={(event) => setTodoTitle(event.target.value)}

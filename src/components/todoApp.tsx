@@ -1,30 +1,19 @@
-import classNames from 'classnames';
 import {
   useContext, useEffect, useMemo, useState,
 } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { FilterBy } from '../types/FilterBy';
 import { TodosContextType } from '../types/TodosContext';
+import { Footer } from './Footer';
 import { FormCreateTodo } from './formCreateTodo';
 import { TodosContext } from './todoContext';
 import { TodoList } from './todoList';
-
-enum FilterBy {
-  Completed = 'completed',
-  Active = 'active',
-}
-
-type Status = { isActive: boolean };
-
-const getActiveClasses = (status: Status) => classNames(
-  { selected: status.isActive },
-);
 
 export const TodoApp = () => {
   const {
     todos,
     addTodo,
     toogleALL,
-    deleteAllCompleted,
   } = useContext(TodosContext) as TodosContextType;
   const { filterBy } = useParams();
   const [isAllCompleted, setIsAllCompleted] = useState(false);
@@ -57,6 +46,7 @@ export const TodoApp = () => {
 
         <FormCreateTodo onSubmit={addTodo} />
       </header>
+
       <section className="main">
         <input
           type="checkbox"
@@ -70,50 +60,7 @@ export const TodoApp = () => {
         <TodoList todos={visibleTodos} />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {todos.filter(todo => todo.completed === false).length}
-          {' '}
-          items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <NavLink
-              to="/"
-              className={getActiveClasses}
-            >
-              All
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to={`/${FilterBy.Active}`}
-              className={getActiveClasses}
-            >
-              Active
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to={`/${FilterBy.Completed}`}
-              className={getActiveClasses}
-            >
-              Completed
-            </NavLink>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={deleteAllCompleted}
-        >
-          Clear completed
-        </button>
-      </footer>
+      <Footer />
     </div>
   );
 };
