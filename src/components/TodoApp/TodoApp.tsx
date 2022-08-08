@@ -50,7 +50,7 @@ export const TodoApp: React.FC = () => {
 
     const newTodo: Todo = {
       id: todoId,
-      title: query,
+      title: query.trim(),
       completed: false,
     };
 
