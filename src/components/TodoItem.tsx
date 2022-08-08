@@ -40,10 +40,11 @@ export const TodoItem: React.FC<Props> = ({
   const updateHandler: React.FormEventHandler<HTMLFormElement> = (
     event,
   ) => {
+    event.preventDefault();
     if (newTitle === '') {
       deleteHandler();
+      return;
     }
-    event.preventDefault();
     onUpdate(todo.id, newTitle);
     updateTodo(false);
   };
@@ -112,6 +113,10 @@ export const TodoItem: React.FC<Props> = ({
               ref={callbackRef}
               onFocus={e => e.currentTarget.select()}
               onBlur={() => {
+                if (newTitle === '') {
+                  deleteHandler();
+                  return;
+                }
                 onUpdate(todo.id, newTitle);
                 updateTodo(false);
               }}

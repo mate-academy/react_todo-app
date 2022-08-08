@@ -22,6 +22,7 @@ export const AddTodoForm: React.FC<Props> = ({
     if (inputText === '') {
       return;
     }
+
     onCreateTodo([
       ...todos, {
         id: Math.random() * 1000,
