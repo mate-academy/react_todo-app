@@ -4,7 +4,7 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { TodosContextType } from '../types/TodosContext';
-import { TodosContext } from './todoContext';
+import { TodosContext } from './todosContext';
 
 type Props = {
   todo: Todo;
@@ -39,9 +39,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
   };
 
   const handleKeyDown = (
-    event: (
-      React.KeyboardEvent<HTMLInputElement>
-      ),
+    event: (React.KeyboardEvent<HTMLInputElement>),
   ) => {
     if (event.key === 'Enter') {
       event.target.blur();

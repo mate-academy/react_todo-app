@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 // import { createUser } from './api/user';
 import { TodoApp } from './components/todoApp';
-import { TodosProvider } from './components/todoContext';
+import { TodosProvider } from './components/todosContext';
 
 export const App: React.FC = () => {
   // const user = createUser({

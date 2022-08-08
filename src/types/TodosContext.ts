@@ -5,7 +5,7 @@ export type TodosContextType = {
   changeStatusTodo(todo: Todo): Promise<unknown>,
   deleteTodo(todo: Todo): Promise<unknown>,
   toogleALL(isAllCompleted: boolean): void,
-  deleteAllCompleted(): Promise<void>,
+  deleteAllCompleted(): void,
   editeTodoTitle(
     newTitle: string,
     todo: Todo

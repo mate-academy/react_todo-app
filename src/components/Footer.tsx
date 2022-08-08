@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { TodosContextType } from '../types/TodosContext';
 import { Filters } from './filters';
-import { TodosContext } from './todoContext';
+import { TodosContext } from './todosContext';
 
 export const Footer = () => {
   const {

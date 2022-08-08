@@ -6,7 +6,7 @@ import { FilterBy } from '../types/FilterBy';
 import { TodosContextType } from '../types/TodosContext';
 import { Footer } from './Footer';
 import { FormCreateTodo } from './formCreateTodo';
-import { TodosContext } from './todoContext';
+import { TodosContext } from './todosContext';
 import { TodoList } from './todoList';
 
 export const TodoApp = () => {
