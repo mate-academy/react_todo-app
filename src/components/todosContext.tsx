@@ -97,10 +97,10 @@ export const TodosProvider: FC<Props> = ({ children }) => {
     async (newTitle: string, todo: Todo) => {
       let todoId;
 
-      if (!newTitle) {
+      if (!newTitle || !newTitle.trim()) {
         todoId = deleteTodo(todo);
       } else {
-        todoId = await editTodo(todo.id, { title: newTitle });
+        todoId = await editTodo(todo.id, { title: newTitle.trim() });
       }
 
       if (todoId) {

@@ -14,12 +14,12 @@ export const FormCreateTodo: FC<Props> = ({ onSubmit }) => {
     event.preventDefault();
 
     const newTodo: CreateTodo = {
-      title,
+      title: title.trim(),
       userId: 3924,
       completed: false,
     };
 
-    if (title) {
+    if (title.trim()) {
       onSubmit(newTodo);
       setTitle('');
     }
