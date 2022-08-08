@@ -6,7 +6,7 @@ type Props = {
   onSetTodos: (value: Todo[]) => void
 };
 
-export const AddTodo: React.FC<Props> = ({ todos, onSetTodos }) => {
+export const CreateTodoForm: React.FC<Props> = ({ todos, onSetTodos }) => {
   const [query, setQuery] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +16,7 @@ export const AddTodo: React.FC<Props> = ({ todos, onSetTodos }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (query) {
+    if (query.trim()) {
       onSetTodos([...todos, {
         id: Number(new Date()),
         title: query,

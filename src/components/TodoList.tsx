@@ -6,14 +6,12 @@ type Props = {
   todos: Todo[],
   visibleTodos: Todo[],
   onSetTodos: (value: Todo[]) => void
-  onCheck: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   visibleTodos,
   onSetTodos,
-  onCheck,
 }) => {
   return (
     <ul className="todo-list" data-cy="todoList">
@@ -23,7 +21,6 @@ export const TodoList: React.FC<Props> = ({
           todos={todos}
           todo={todo}
           onSetTodos={onSetTodos}
-          onCheck={onCheck}
         />
       ))}
     </ul>
