@@ -11,7 +11,7 @@ type DispatchContextType = {
 
 export const initialState: State = {
   todos: JSON.parse(localStorage.getItem('todos')
-    || '') || [],
+    || '[]'),
 };
 
 export const TodoContext = React.createContext<DispatchContextType>({
@@ -29,7 +29,12 @@ const TodoProvider: React.FC<Props> = ({ children }) => {
   localStorage.setItem('todos', JSON.stringify(state.todos));
 
   return (
-    <TodoContext.Provider value={{ state, dispatch }}>
+    <TodoContext.Provider
+      value={{
+        state,
+        dispatch,
+      }}
+    >
       {children}
     </TodoContext.Provider>
   );
