@@ -124,12 +124,13 @@ body {
 }
 
 .toggle-all + label {
+  cursor: pointer;
   width: 60px;
   height: 34px;
   font-size: 0;
   position: absolute;
-  top: -52px;
-  left: -13px;
+  top: -62px;
+  left: -10px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
 }
