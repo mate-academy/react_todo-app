@@ -1,12 +1,10 @@
 import { FC, FormEvent, useState } from 'react';
-// import { Todo } from '../types/Todo';
 
 type Props = {
-  // setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   addTodo: (title: string) => void
 };
 
-export const NewTodoForm: FC<Props> = ({ addTodo }) => {
+export const TodoApp: FC<Props> = ({ addTodo }) => {
   const [title, setTitle] = useState('');
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -16,7 +14,6 @@ export const NewTodoForm: FC<Props> = ({ addTodo }) => {
     }
 
     addTodo(title);
-
     setTitle('');
   };
 
