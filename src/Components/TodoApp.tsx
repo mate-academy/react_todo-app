@@ -28,7 +28,7 @@ export const TodoApp: React.FC = () => {
     setQuery('');
   };
 
-  const onDeleteTodo = (id: number): void => {
+  const deleteTodo = (id: number): void => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
@@ -37,7 +37,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const toggleTodoStatus = (id: number): void => {
-    const toggledTodo = todos.map(todo => {
+    const updatedTodos = todos.map(todo => {
       if (todo.id === id) {
         return {
           ...todo,
@@ -48,7 +48,22 @@ export const TodoApp: React.FC = () => {
       return todo;
     });
 
-    setTodos(toggledTodo);
+    setTodos(updatedTodos);
+  };
+
+  const updateTitle = (id: number, title: string): void => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          title,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
   };
 
   const visibleTodos = todos.filter(todo => {
@@ -91,7 +106,8 @@ export const TodoApp: React.FC = () => {
         <TodoList
           items={visibleTodos}
           toggleTodoStatus={toggleTodoStatus}
-          onDeleteTodo={onDeleteTodo}
+          deleteTodo={deleteTodo}
+          updateTitle={updateTitle}
         />
       </section>
       {todos.length > 0
