@@ -40,6 +40,7 @@ export const TodoList: React.FC<Props> = ({
             todo={todo}
             onDelete={onTodoDeleted}
             onUpdate={onTodoUpdate}
+            key={todo.id}
           />
         ))}
       </ul>

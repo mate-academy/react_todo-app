@@ -106,7 +106,6 @@ export const TodoApp: React.FC = () => {
     <>
       <header className="header">
         <h1>todos</h1>
-
         <form onSubmit={hadleSubmit}>
           <input
             type="text"
