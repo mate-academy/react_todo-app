@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { Todo } from '../types/types';
 
 type Props = {
@@ -49,6 +49,15 @@ export const TodoItem: React.FC<Props> = ({
     setNewTitle(event.target.value);
   };
 
+  const inputElement: MutableRefObject<null> = useRef(null);
+  inputElement.current;
+
+  const callbackRef = useCallback((inputElement: HTMLInputElement | null) => {
+    if (inputElement) {
+      inputElement.focus();
+    }
+  }, []);
+
   return (
     <>
       {!isUpdating ? (
@@ -61,7 +70,9 @@ export const TodoItem: React.FC<Props> = ({
               onChange={completeHandler}
             />
             <label
-              onDoubleClick={() => updateTodo(true)}
+              onDoubleClick={() => {
+                updateTodo(true);
+              }}
             >
               {todo.title}
             </label>
@@ -70,6 +81,7 @@ export const TodoItem: React.FC<Props> = ({
               className="destroy"
               data-cy="deleteTodo"
               onClick={deleteHandler}
+              aria-label="remove todo"
             />
           </div>
           <input type="text" className="edit" />
@@ -82,7 +94,12 @@ export const TodoItem: React.FC<Props> = ({
               className="toggle"
               id="toggle-editing"
             />
-            <button type="button" className="destroy" data-cy="deleteTodo" />
+            <button
+              type="button"
+              className="destroy"
+              data-cy="deleteTodo"
+              aria-label="remove todo"
+            />
           </div>
           <form onSubmit={updateHandler}>
             <input
@@ -90,13 +107,20 @@ export const TodoItem: React.FC<Props> = ({
               data-cy="editTodo"
               className="edit"
               value={newTitle}
-              autoFocus
+              ref={callbackRef}
+              onFocus={e => e.currentTarget.select()}
               onBlur={() => {
                 onUpdate(todo.id, newTitle);
                 updateTodo(false);
               }}
               onChange={inputTextHandler}
               placeholder="What needs to be re-done?"
+              onKeyDown={event => {
+                if (event.key === 'Escape') {
+                  setNewTitle(todo.title);
+                  updateTodo(false);
+                }
+              }}
             />
           </form>
         </li>
