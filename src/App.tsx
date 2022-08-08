@@ -5,7 +5,15 @@ import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoList } from './components/TodoList/TodoList';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const savedTodos = localStorage.getItem('todos');
+
+    try {
+      return savedTodos ? JSON.parse(savedTodos) : [];
+    } catch (error) {
+      return [];
+    }
+  });
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const { pathname } = useLocation();
 
@@ -13,6 +21,7 @@ export const App: React.FC = () => {
   const completedTodos = todos.filter(todo => todo.completed);
 
   useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
     switch (pathname) {
       case '/':
         setVisibleTodos(todos);
