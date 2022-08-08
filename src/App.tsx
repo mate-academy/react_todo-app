@@ -1,93 +1,120 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useCallback, useEffect } from 'react';
+import { Todo } from './types';
+import { CreateTodo } from './components/CreateTodos/CreateTodo';
+import { TodoList } from './components/TodoList/TdoList';
 
-export const App: React.FC = () => {
+const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('todos');
+
+    localStorage.setItem('todos', JSON.stringify(todos));
+    if (saved === null || saved === undefined) {
+      return [];
+    }
+
+    return JSON.parse(saved);
+  }, [todos]);
+
+  const todosCallback = useCallback(
+    (newTodo: Todo[]) => setTodos(newTodo),
+    [todos],
+  );
+
+  let visibleTodos: Todo[] = [];
+
+  switch (filter) {
+    case 'all':
+      visibleTodos = todos.filter(todo => todo);
+      break;
+    case 'active':
+      visibleTodos = todos.filter(todo => todo.completed === false);
+      break;
+    case 'completed':
+      visibleTodos = todos.filter(todo => todo.completed === true);
+      break;
+    default:
+      break;
+  }
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <CreateTodo
+        todosCallback={(newTodo: any) => setTodos(value => [...value, newTodo])}
+      />
+      <TodoList
+        mainTodos={(todo: { id: any; }) => setTodos(prev => prev.map((item) => {
+          if (item.id === todo.id) {
+            item.completed
+        = !item.completed; /* eslint no-param-reassign: "error" */
+          }
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+          return item;
+        }))}
+        todos={visibleTodos}
+        todosCallback={todosCallback}
+      />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length !== 0 && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {todos.filter(todo => todo.completed === false).length}
+            {' '}
+            items left
+          </span>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <ul className="filters">
+            <li>
+              <a
+                href="#/"
+                className={filter === 'all' ? 'selected' : ''}
+                onClick={() => setFilter('all')}
+              >
+                All
+              </a>
+            </li>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <li>
+              <a
+                href="#/active"
+                className={filter === 'active' ? 'selected' : ''}
+                onClick={() => setFilter('active')}
+              >
+                Active
+              </a>
+            </li>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <li>
+              <a
+                href="#/completed"
+                className={filter === 'completed' ? 'selected' : ''}
+                onClick={() => setFilter('completed')}
+              >
+                Completed
+              </a>
+            </li>
+          </ul>
+          {todos.filter(todo => todo.completed === true).length !== 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={() => {
+                const filterTodo = todos
+                  .filter(todo => todo.completed === false);
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+                setTodos(filterTodo);
+              }}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
     </div>
   );
 };
+
+export default App;
