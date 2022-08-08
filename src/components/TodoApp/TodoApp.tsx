@@ -40,7 +40,7 @@ export const TodoApp: React.FC = () => {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (!query) {
+    if (!query.trim()) {
       return;
     }
 
