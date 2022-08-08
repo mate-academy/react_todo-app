@@ -48,7 +48,7 @@ export const TodoApp: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!query) {
+    if (!query.trim()) {
       return;
     }
 
@@ -56,7 +56,7 @@ export const TodoApp: React.FC = () => {
 
     const createdTodo = {
       id: uniqId,
-      title: query,
+      title: query.trim(),
       completed: false,
     };
 
@@ -96,7 +96,10 @@ export const TodoApp: React.FC = () => {
         };
       }
 
-      return updatedTodo;
+      return {
+        ...updatedTodo,
+        completed: false,
+      };
     });
 
     setTodos(updatedTodos);

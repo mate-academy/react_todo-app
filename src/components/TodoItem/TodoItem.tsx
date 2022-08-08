@@ -17,7 +17,7 @@ export const TodoItem: React.FC<Props> = ({
 
   const onEditTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      if (!event.target.value) {
+      if (!event.target.value.trim()) {
         onDeleteTodo(todo.id);
       }
 
@@ -34,16 +34,17 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <>
       <li
-        className={classNames(
-          { comleted: todo.completed },
-          { editing: isEditing && !todo.completed },
-        )}
+        className={classNames({
+          completed: todo.completed,
+          editing: isEditing && !todo.completed,
+        })}
       >
         <div className="view">
           <input
             type="checkbox"
-            checked={todo.completed}
             className="toggle"
+            id="toggle-view"
+            checked={todo.completed}
             onChange={() => onChangeComplited(todo.id)}
           />
           <label onDoubleClick={() => setEditing(true)}>
