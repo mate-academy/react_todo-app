@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Status } from '../../types/Status';
 import { Todo } from '../../types/Todo';
 import { Footer } from '../Footer';
 import { TodoList } from '../TodoList';
@@ -27,10 +28,10 @@ export const TodoApp: React.FC = () => {
 
   useEffect(() => {
     switch (pathname) {
-      case '/active':
+      case Status.Active:
         setVisibleTodos(todos.filter(todo => !todo.completed));
         break;
-      case '/completed':
+      case Status.Completed:
         setVisibleTodos(todos.filter(todo => todo.completed));
         break;
       default:
