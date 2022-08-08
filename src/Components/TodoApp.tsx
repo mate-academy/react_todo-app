@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useLocalStorage } from '../CustomHooks/useLocalStorage';
+import { SortLinks } from '../types/SortLinks';
 import { Todo } from '../types/Todo';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 
 export const TodoApp: React.FC = () => {
   const [query, setQuery] = useState<string>('');
-  const [todos, setTodos] = useState<Todo[]>([]);
-
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const { pathname } = useLocation();
 
   const addNewTodo = (event: React.FormEvent<HTMLFormElement>) => {
@@ -31,7 +32,7 @@ export const TodoApp: React.FC = () => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
-  const deleteCompleted = ():void => {
+  const deleteCompleted = (): void => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
@@ -52,9 +53,9 @@ export const TodoApp: React.FC = () => {
 
   const visibleTodos = todos.filter(todo => {
     switch (pathname) {
-      case '/active':
+      case SortLinks.Active:
         return !todo.completed;
-      case '/completed':
+      case SortLinks.Completed:
         return todo.completed;
       default:
         return '/';

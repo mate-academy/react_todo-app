@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
@@ -13,16 +14,16 @@ export const TodoItem: React.FC<Props> = ({
   onDeleteTodo,
 }) => {
   return (
-    <li className={classNames({ 'completed': todo.completed })}>
+    <li className={classNames({ completed: todo.completed })}>
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={`toggle-view-${todo.id}`}
           checked={todo.completed}
           onChange={() => toggleTodoStatus(todo.id)}
         />
-        <label htmlFor="toggle-view">{todo.title}</label>
+        <label htmlFor={`toggle-view-${todo.id}`}>{todo.title}</label>
 
         <button
           type="button"

@@ -19,7 +19,7 @@ export const TodosFilter: React.FC<Props> = ({
 
   const isLinkActive = (status: Status): string => {
     return classNames({
-      'selected': status.isActive,
+      selected: status.isActive,
     });
   };
 
