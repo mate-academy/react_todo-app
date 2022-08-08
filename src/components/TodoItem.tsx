@@ -1,5 +1,7 @@
 import classNames from 'classnames';
-import { MutableRefObject, useCallback, useRef, useState } from 'react';
+import {
+  useCallback, useState,
+} from 'react';
 import { Todo } from '../types/types';
 
 type Props = {
@@ -38,6 +40,9 @@ export const TodoItem: React.FC<Props> = ({
   const updateHandler: React.FormEventHandler<HTMLFormElement> = (
     event,
   ) => {
+    if (newTitle === '') {
+      deleteHandler();
+    }
     event.preventDefault();
     onUpdate(todo.id, newTitle);
     updateTodo(false);
@@ -48,9 +53,6 @@ export const TodoItem: React.FC<Props> = ({
   ) => {
     setNewTitle(event.target.value);
   };
-
-  const inputElement: MutableRefObject<null> = useRef(null);
-  inputElement.current;
 
   const callbackRef = useCallback((inputElement: HTMLInputElement | null) => {
     if (inputElement) {
