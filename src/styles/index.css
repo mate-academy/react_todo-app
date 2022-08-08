@@ -128,8 +128,8 @@ body {
   height: 34px;
   font-size: 0;
   position: absolute;
-  top: -52px;
-  left: -13px;
+  top: -94.5px;
+  left: -14px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
 }
@@ -139,6 +139,7 @@ body {
   font-size: 22px;
   color: #e6e6e6;
   padding: 10px 27px;
+  border-top: 1px solid #e6e6e6;
 }
 
 .toggle-all:checked + label:before {

@@ -1,25 +1,60 @@
-import { useState } from 'react';
-import { createTodo } from '../api/todos';
-import { Footer } from './Footer';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { createTodo, getTodos } from '../api/todos';
+import { Todo } from '../types/Todo';
+import { Menu } from './Menu';
 import { TodoList } from './TodoList';
 
 export const TodoApp: React.FC = () => {
   const [title, setTitle] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const { pathname } = useLocation();
 
-  const handleSubmit = (event: React.FormEvent) => {
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
+
+  const findMaxId = () => {
+    return Math.max(...todos.map(todo => todo.id));
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const newTodo = {
+    if (!title.length) {
+      return;
+    }
+
+    const newTodo: Todo = {
       title,
-      id: +new Date(),
-      userId: 4,
+      id: findMaxId() + 1,
+      userId: 30,
       completed: false,
     };
 
-    createTodo(newTodo);
+    await createTodo(newTodo);
+
+    getTodos().then(setTodos);
 
     setTitle('');
   };
+
+  const itemsLeft = todos.filter(todo => !todo.completed).length;
+
+  let displayedTodos = todos;
+
+  switch (pathname) {
+    case '/active':
+      displayedTodos = todos.filter(todo => !todo.completed);
+      break;
+
+    case '/completed':
+      displayedTodos = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      displayedTodos = todos;
+  }
 
   return (
     <div className="todoapp">
@@ -40,19 +75,17 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      <Menu
+        todos={displayedTodos}
+        itemsLeft={itemsLeft}
+        setTodos={setTodos}
+      />
 
-        <TodoList />
-      </section>
-
-      <Footer />
+      <TodoList
+        todos={displayedTodos}
+        setTodos={setTodos}
+        itemsLeft={itemsLeft}
+      />
     </div>
   );
 };
