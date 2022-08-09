@@ -1,16 +1,14 @@
 import { FC, useState, useEffect } from 'react';
-import {
-  Link, useLocation,
-} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { TodoList } from './TodoList';
 import { NewTodo } from './newTodo';
 import { Todo } from '../types/Todo';
+import { Footer } from './Footer';
 
 enum Status {
   All = '/',
   Active = '/active',
   Completed = '/completed',
-
 }
 
 export const TodoPage: FC = () => {
@@ -162,49 +160,12 @@ export const TodoPage: FC = () => {
       )}
 
       {todos.length > 0 && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {notCompletedTodos !== 1
-              ? `${notCompletedTodos} items left`
-              : `${notCompletedTodos} item left`}
-          </span>
-
-          <ul className="filters">
-            <li>
-              <Link to="/" className={filter === '/' ? 'selected' : ''}>
-                All
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to="/active"
-                className={filter === '/active' ? 'selected' : ''}
-              >
-                Active
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to="/completed"
-                className={filter === '/completed' ? 'selected' : ''}
-              >
-                Completed
-              </Link>
-            </li>
-          </ul>
-
-          {todos.some(t => t.completed) && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={deleteCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+        <Footer
+          notCompletedTodos={notCompletedTodos}
+          deleteCompleted={deleteCompleted}
+          todos={visibleTodos}
+          filter={filter}
+        />
       )}
     </div>
   );

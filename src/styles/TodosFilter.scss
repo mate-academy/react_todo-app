@@ -1,4 +1,4 @@
-.filters {
+.TodosFilter {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -7,11 +7,11 @@
   left: 0;
 }
 
-.filters li {
+.TodosFilter li {
   display: inline;
 }
 
-.filters li a {
+.TodosFilter li a {
   color: inherit;
   margin: 3px;
   padding: 3px 7px;
@@ -20,16 +20,16 @@
   border-radius: 15px;
 }
 
-.filters li a:hover {
+.TodosFilter li a:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li a.selected {
+.TodosFilter li a.selected {
   border-color: $blueColor;
 }
 
 @media (max-width: 430px) {
-  .filters {
+  .TodosFilter {
     bottom: 10px;
   }
 }

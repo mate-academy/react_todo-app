@@ -7,7 +7,7 @@ import { TodoPage } from './components/TodoPage';
 
 export const App: FC = () => {
   <Routes>
-    <Route path="/" element={(<TodoPage />)} />
+    <Route path="/" element={<TodoPage />} />
     <Route path="/home" element={<Navigate to="/" />} />
     <Route path="/todos" element={<Navigate to="/" />} />
     <Route path="*" element={<p>Page not found</p>} />

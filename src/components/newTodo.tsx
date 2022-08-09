@@ -8,7 +8,7 @@ export const NewTodo: FC<Props> = ({ onAdd }) => {
   const [todoTitle, setTodoTitle] = useState('');
   const [hasInputError, setInputError] = useState(false);
 
-  const submit = (event: React.FormEvent) => {
+  const handleFormSubmitting = (event: React.FormEvent) => {
     event.preventDefault();
 
     if (todoTitle.length > 0) {
@@ -20,7 +20,7 @@ export const NewTodo: FC<Props> = ({ onAdd }) => {
   };
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={handleFormSubmitting}>
       <input
         type="text"
         data-cy="createTodo"
