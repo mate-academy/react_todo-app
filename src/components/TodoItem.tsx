@@ -33,7 +33,7 @@ export const TodoItem: React.FC<Props> = ({ todo, setTodos }) => {
     getTodos().then(setTodos);
   };
 
-  const uploadTitle = async () => {
+  const uploadTitle = () => {
     if (!newTitle.length) {
       handleDelete();
     }
@@ -61,11 +61,9 @@ export const TodoItem: React.FC<Props> = ({ todo, setTodos }) => {
   const handleBlur = () => {
     setEdit(false);
 
-    if (todo.title === newTitle) {
-      return;
+    if (todo.title !== newTitle) {
+      uploadTitle();
     }
-
-    uploadTitle();
   };
 
   return (

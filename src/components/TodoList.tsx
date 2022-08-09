@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos, itemsLeft }) => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        checked={itemsLeft > 0}
+        checked={itemsLeft === 0}
         onChange={handleToggleAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>

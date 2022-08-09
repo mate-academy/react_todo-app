@@ -102,9 +102,9 @@ body {
 
 .new-todo {
   padding: 16px 16px 16px 60px;
-  border: none;
   background: rgba(0, 0, 0, 0.01);
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+  border: 1px solid #e6e6e6;
 }
 
 .main {
@@ -128,7 +128,7 @@ body {
   height: 34px;
   font-size: 0;
   position: absolute;
-  top: -94.5px;
+  top: -54.5px;
   left: -14px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);

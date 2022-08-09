@@ -41,7 +41,7 @@ export const TodoApp: React.FC = () => {
 
   const itemsLeft = todos.filter(todo => !todo.completed).length;
 
-  let displayedTodos = todos;
+  let displayedTodos;
 
   switch (pathname) {
     case '/active':
@@ -58,6 +58,14 @@ export const TodoApp: React.FC = () => {
 
   return (
     <div className="todoapp">
+      {todos.length > 0 && (
+        <Menu
+          todos={displayedTodos}
+          itemsLeft={itemsLeft}
+          setTodos={setTodos}
+        />
+      )}
+      
       <header className="header">
         <h1>To-Dos</h1>
 
@@ -74,12 +82,6 @@ export const TodoApp: React.FC = () => {
           />
         </form>
       </header>
-
-      <Menu
-        todos={displayedTodos}
-        itemsLeft={itemsLeft}
-        setTodos={setTodos}
-      />
 
       <TodoList
         todos={displayedTodos}
