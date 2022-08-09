@@ -12,8 +12,8 @@ export const Footer: React.FC<Props> = ({ todos, setTodos }) => {
     return (isActive ? 'selected' : '');
   };
 
-  const clearCompleted = (arr: Todo[]) => {
-    return arr.filter(todo => todo.completed === false);
+  const clearCompleted = (ourTodos: Todo[]) => {
+    return ourTodos.filter(todo => todo.completed === false);
   };
 
   const isCompleted = todos.some(todo => todo.completed === true);
@@ -21,7 +21,7 @@ export const Footer: React.FC<Props> = ({ todos, setTodos }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length} items left`}
+        {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
       <ul className="filters">

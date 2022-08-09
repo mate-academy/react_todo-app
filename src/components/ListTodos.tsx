@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const ListTodos: React.FC<Props> = ({ todos, setTodos }) => {
-  const deleteTodo = (id: any) => {
+  const deleteTodo = (id: number | undefined) => {
     return setTodos(todos.filter(item => item.id !== id));
   };
 

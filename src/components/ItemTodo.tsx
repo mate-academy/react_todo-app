@@ -6,7 +6,7 @@ import { Todo } from '../types/types';
 type Props = {
   todo: Todo,
   todos: Todo[],
-  deleteTodo: (id: any) => void,
+  deleteTodo: (id: number | undefined) => void,
   setTodos: (str: Todo[]) => void;
 };
 
@@ -16,7 +16,7 @@ export const ItemTodo: React.FC<Props> = ({
   const [todoName, setTodoName] = useState(todo.title);
   const [edition, setEdition] = useState(false);
 
-  const renameTodo = (title: any, todoo: Todo) => {
+  const renameTodo = (title: string | undefined, todoo: Todo) => {
     const renameTodos = todos.map(item => {
       if (item.id === todoo.id) {
         return { ...item, title };
@@ -28,9 +28,9 @@ export const ItemTodo: React.FC<Props> = ({
     setTodos(renameTodos);
   };
 
-  const checketTodo = (event: any, t: any) => {
+  const checketTodo = (event: boolean, task: Todo) => {
     const checketTodos = todos.map(item => {
-      if (item.id === t.id) {
+      if (item.id === task.id) {
         return { ...item, completed: event };
       }
 
@@ -55,7 +55,6 @@ export const ItemTodo: React.FC<Props> = ({
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
           checked={todo.completed}
           onChange={(event) => {
             checketTodo(event.target.checked, todo);

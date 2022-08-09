@@ -20,6 +20,17 @@ export const App: React.FC = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+  const checketAll = (state: boolean) => {
+    const checketTodos = todos.map(item => {
+      return {
+        ...item,
+        completed: !state,
+      };
+    });
+
+    setTodos(checketTodos);
+  };
+
   return (
     <div className="todoapp">
       <Header
@@ -33,6 +44,7 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onChange={(event) => checketAll(event.target.checked)}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -50,7 +62,7 @@ export const App: React.FC = () => {
             path="/active"
             element={(
               <ListTodos
-                todos={todos.filter(todo => todo.completed === false)}
+                todos={todos.filter(todo => !todo.completed)}
                 setTodos={setTodos}
               />
             )}
@@ -59,7 +71,7 @@ export const App: React.FC = () => {
             path="/completed"
             element={(
               <ListTodos
-                todos={todos.filter(todo => todo.completed === true)}
+                todos={todos.filter(todo => todo.completed)}
                 setTodos={setTodos}
               />
             )}
