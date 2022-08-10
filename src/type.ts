@@ -6,6 +6,6 @@ export type Todo = {
 
 export type State = {
   todos: Todo[];
-  visibleTodos: Todo[];
   countOfActiveTodos: number;
+  visibleTodos: Todo[];
 };

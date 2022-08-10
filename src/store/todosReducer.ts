@@ -14,19 +14,18 @@ export const DELETE_TODO = 'delete_todo';
 export const DELETE_ALL = 'delete_all';
 export const EDIT_TODO = 'edit_todo';
 
+const str = localStorage.getItem('todos');
+
+let todosFromStorage = [];
+
+if (str !== null) {
+  todosFromStorage = JSON.parse(str);
+}
+
 const defaultState = {
-  todos: [{
-    id: 'asdfghj',
-    title: 'asdfghj',
-    completed: false,
-  },
-  {
-    id: 'qwertyuio',
-    title: 'qwertyuio',
-    completed: true,
-  }],
-  visibleTodos: [],
+  todos: todosFromStorage || [],
   countOfActiveTodos: 1,
+  visibleTodos: [],
 };
 
 export const todosReducer = (

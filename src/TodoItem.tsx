@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';

@@ -1,5 +1,6 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
 
 import './styles/index.css';
 import './styles/todo-list.css';
@@ -8,9 +9,14 @@ import store from './store';
 
 import { App } from './App';
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement,
+);
+
+root.render(
   <Provider store={store}>
-    <App />
+    <HashRouter>
+      <App />
+    </HashRouter>
   </Provider>,
-  document.getElementById('root'),
 );

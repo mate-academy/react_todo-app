@@ -4,10 +4,11 @@ import { Todo } from './type';
 import { TodoItem } from './TodoItem';
 import { COUNT_OF_ACTIVE, TOGGLE_ALL } from './store/todosReducer';
 
-export const TodoList = () => {
-  const visibleTodos = useSelector(
-    (state: RootState) => state.todos.visibleTodos,
-  );
+type Props = {
+  visibleTodos: Todo[];
+};
+
+export const TodoList: React.FC <Props> = ({ visibleTodos }) => {
   const dispatch = useDispatch();
   const countOfActiveTodos = useSelector(
     (state: RootState) => state.todos.countOfActiveTodos,
@@ -29,7 +30,10 @@ export const TodoList = () => {
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list" data-cy="todoList">
         {visibleTodos.map((todo: Todo) => (
-          <TodoItem todo={todo} />
+          <TodoItem
+            todo={todo}
+            key={todo.id}
+          />
         ))}
       </ul>
     </>
