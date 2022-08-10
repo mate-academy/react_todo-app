@@ -16,6 +16,12 @@ enum ActionType {
   FILTER_BY = 'FILTER_BY',
   DELETE_TODO = 'DELETE_TODO',
   DELETE_COMLETED = 'DELETE_COMPLETED',
+  CHANGE_TODO = 'CHANGE_TODO',
+}
+
+interface ChangeTodoPayload {
+  id: number,
+  todoTitle: string,
 }
 
 const initialState: State = {
@@ -31,6 +37,8 @@ export const setAllUnfinished = createAction(ActionType.ALL_TODOS_UNFINISHED);
 export const setFilterBy = createAction<FilterBy>(ActionType.FILTER_BY);
 export const deleteTodo = createAction<number>(ActionType.DELETE_TODO);
 export const deleteCompleted = createAction(ActionType.DELETE_COMLETED);
+export const changeTodo
+  = createAction<ChangeTodoPayload>(ActionType.CHANGE_TODO);
 
 const reducer = createReducer(initialState, (builder) => {
   builder.addCase(addTodoAction, (state, action) => {
@@ -73,6 +81,16 @@ const reducer = createReducer(initialState, (builder) => {
 
   builder.addCase(deleteCompleted, (state) => {
     state.todos = state.todos.filter(todo => !todo.completed);
+  });
+
+  builder.addCase(changeTodo, (state, { payload }) => {
+    state.todos = state.todos.map(todo => {
+      if (todo.id === payload.id) {
+        todo.title = payload.todoTitle;
+      }
+
+      return todo;
+    });
   });
 });
 
