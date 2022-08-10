@@ -42,7 +42,7 @@ export const TodoElement: React.FC<Props> = ({
     };
 
     if (event.key === 'Enter') {
-      const newTitle = event.target.value;
+      const newTitle = event.target.value.trim();
 
       if (newTitle !== '') {
         setTitleOfTodo({

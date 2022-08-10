@@ -21,14 +21,15 @@ export const Header: React.FC<Props> = ({ todos, setTodos }) => {
 
     const newTodo = {
       id: todoId,
-      title: query,
+      title: query.trim(),
       state: TodoState.ACTIVE,
     };
 
     if (newTodo.title !== '') {
       setTodos([...todos, newTodo]);
-      setQuery('');
     }
+
+    setQuery('');
   };
 
   return (
