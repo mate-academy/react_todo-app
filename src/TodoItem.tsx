@@ -40,7 +40,7 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <li className={classNames(
       {
-        completed: item.completed === true,
+        completed: item.completed,
         editing: editingStatus,
       },
     )}

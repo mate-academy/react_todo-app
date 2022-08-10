@@ -32,7 +32,7 @@ export const TodoFilter: React.FC<Props> = ({
 
         <li>
           <Link
-            to="active"
+            to="/active"
             className={classNames({
               selected: location.pathname === '/active',
             })}
@@ -43,7 +43,7 @@ export const TodoFilter: React.FC<Props> = ({
 
         <li>
           <Link
-            to="completed"
+            to="/completed"
             className={classNames({
               selected: location.pathname === '/completed',
             })}
