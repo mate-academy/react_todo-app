@@ -65,7 +65,7 @@ export const TodoApp: React.FC = () => {
           setTodos={setTodos}
         />
       )}
-      
+
       <header className="header">
         <h1>To-Dos</h1>
 

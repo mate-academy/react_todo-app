@@ -9,9 +9,7 @@ type Props = {
   setTodos: (value: Todo[]) => void;
 };
 
-type Status = { isActive: boolean };
-
-const getActiveClasses = (status: Status) => classNames(
+const getActiveClasses = (status: { isActive: boolean }) => classNames(
   { selected: status.isActive },
 );
 
