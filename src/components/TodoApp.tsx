@@ -13,8 +13,13 @@ const todosFromServer = [
 
 export const TodoApp: React.FC = () => {
   const location = useLocation().pathname.split('/')[1];
+  let localTodosJSON = '';
 
-  const localTodos = JSON.parse(localStorage.getItem('todos'));
+  if (localStorage.getItem('todos')) {
+    localTodosJSON = localStorage.getItem('todos') || '';
+  }
+
+  const localTodos = JSON.parse(localTodosJSON);
 
   const [todos, setTodos] = useState(localTodos);
   const [shownTodos, setShownTodos] = useState(todosFromServer);

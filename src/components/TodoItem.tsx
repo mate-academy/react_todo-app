@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo, TodoActionType } from '../types/Todo';
 
 type Props = {
@@ -11,10 +11,10 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo, changeTodo }) => {
   const [onEdit, setEdit] = useState(false);
   const [newTitle, setTitle] = useState(todo.title);
-  const editField = useRef();
+  const editField = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (onEdit) {
+    if (onEdit && editField.current !== null) {
       editField.current.focus();
     }
   });
