@@ -15,7 +15,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   useEffect(() => {
     setTodoTitle(todo.title);
-  }, []);
+  }, [todo]);
 
   const editHandler = (key: string, id: number) => {
     if (key === 'Escape') {
