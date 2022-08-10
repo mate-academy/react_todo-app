@@ -5,24 +5,12 @@ import { TodoList } from './TodoList';
 import { Todo, TodoActionType } from '../types/Todo';
 import { TodoFilter } from './TodoFilter';
 
-const todosFromServer = [
-  { id: 1, title: 'a', completed: false },
-  { id: 2, title: 'b', completed: true },
-  { id: 3, title: 'c', completed: false },
-];
-
 export const TodoApp: React.FC = () => {
   const location = useLocation().pathname.split('/')[1];
-  let localTodosJSON = '';
-
-  if (localStorage.getItem('todos')) {
-    localTodosJSON = localStorage.getItem('todos') || '';
-  }
-
-  const localTodos = JSON.parse(localTodosJSON);
+  const localTodos = JSON.parse(localStorage.getItem('todos') || '[]');
 
   const [todos, setTodos] = useState(localTodos);
-  const [shownTodos, setShownTodos] = useState(todosFromServer);
+  const [shownTodos, setShownTodos] = useState(localTodos);
   const [newTodo, setNewTodo] = useState('');
 
   useEffect(() => {
