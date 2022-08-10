@@ -30,7 +30,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         dispatch(deleteTodo(id));
       }
 
-      setTodoTitle('');
       setEditableTodoId(0);
     }
   };
