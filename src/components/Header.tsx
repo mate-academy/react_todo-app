@@ -10,13 +10,17 @@ export const Header: React.FC<Props> = ({ setTodos, todos }) => {
   const [query, setQuery] = useState('');
 
   const creatTodo = (str: string) => {
-    const newTodo: Todo = {
-      id: +new Date(),
-      title: str,
-      completed: false,
-    };
+    if (str.trim().length === 0) {
+      setTodos([...todos]);
+    } else {
+      const newTodo: Todo = {
+        id: +new Date(),
+        title: str,
+        completed: false,
+      };
 
-    setTodos([...todos, newTodo]);
+      setTodos([...todos, newTodo]);
+    }
   };
 
   return (
