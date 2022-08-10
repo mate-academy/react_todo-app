@@ -107,14 +107,19 @@ export const App = () => {
       <Header todos={todos} setTodos={setTodos} />
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={toggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {todos.length > 0 && (
+          <>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onChange={toggleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+
+          </>
+        )}
 
         <Routes>
           <Route
