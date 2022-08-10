@@ -153,58 +153,62 @@ export const App = () => {
         </Routes>
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {todos.length > 0 && (
-            countOfActiveTodos === 1
-              ? '1 item left'
-              : `${countOfActiveTodos} items left`
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {todos.length > 0 && (
+              countOfActiveTodos === 1
+                ? '1 item left'
+                : `${countOfActiveTodos} items left`
+            )}
+          </span>
+
+          <ul className="filters">
+            <li>
+              <NavLink
+                to="/"
+                className={
+                  ({ isActive }) => classNames({ selected: isActive })
+                }
+              >
+                All
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/active"
+                className={
+                  ({ isActive }) => classNames({ selected: isActive })
+                }
+              >
+                Active
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/completed"
+                className={
+                  ({ isActive }) => classNames({ selected: isActive })
+                }
+              >
+                Completed
+              </NavLink>
+            </li>
+          </ul>
+
+          {todos.find(todo => todo.state === TodoState.COMPLETED) && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
+              Clear completed
+            </button>
           )}
-        </span>
-
-        <ul className="filters">
-          <li>
-            <NavLink
-              to="/"
-              className={
-                ({ isActive }) => classNames({ selected: isActive })
-              }
-            >
-              All
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/active"
-              className={
-                ({ isActive }) => classNames({ selected: isActive })
-              }
-            >
-              Active
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/completed"
-              className={
-                ({ isActive }) => classNames({ selected: isActive })
-              }
-            >
-              Completed
-            </NavLink>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={clearCompleted}
-        >
-          Clear completed
-        </button>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 };
