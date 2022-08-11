@@ -4,16 +4,7 @@ import { TodoType } from '../../types/todoType';
 import { Filter } from '../Filter/Filter';
 import { TodoForm } from '../TodoForm/TodoForm';
 import { TodoList } from '../TodoList/TodoList';
-
-const useLocalStorage = () => {
-  const todosFromLocaleStorage = localStorage.getItem('todos');
-
-  try {
-    return todosFromLocaleStorage ? JSON.parse(todosFromLocaleStorage) : [];
-  } catch {
-    return [];
-  }
-};
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>(useLocalStorage());
