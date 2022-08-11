@@ -208,3 +208,15 @@ body {
     height: 50px;
   }
 }
+
+#error {
+  font-size: 70px;
+  margin-top: 75px;
+  color: rgba(255, 0, 0, 0.4);
+}
+
+#userCredentials {
+  font-weight: 600;
+  font-size: 70px;
+  margin-top: 75px;
+}
