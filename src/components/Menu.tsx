@@ -24,7 +24,7 @@ export const Menu:React.FC<Props> = ({ itemsLeft, todos, setTodos }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${itemsLeft} items left`}
+        {`${itemsLeft} ${itemsLeft === 1 ? 'item' : 'items'} left`}
       </span>
 
       <ul className="filters">
