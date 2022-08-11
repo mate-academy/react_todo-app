@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
@@ -19,6 +18,30 @@ export const TodoItem: React.FC<Props> = ({
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
 
+  const handleChangeKeyboard = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'Enter':
+
+        if (title.length === 0) {
+          setEditing(false);
+          deleteTodo(todo.id);
+          break;
+        }
+
+        editTitle(title, todo.id);
+        setEditing(false);
+        break;
+
+      case 'Escape':
+        setEditing(false);
+        setTitle(todo.title);
+        break;
+
+      default:
+        setTitle(todo.title);
+    }
+  };
+
   return (
     <li
       className={classNames({ completed: todo.completed }, { editing })}
@@ -36,7 +59,6 @@ export const TodoItem: React.FC<Props> = ({
         />
         <label
           role="presentation"
-          onKeyDown={() => {}}
           onDoubleClick={() => {
             setEditing(true);
           }}
@@ -60,29 +82,7 @@ export const TodoItem: React.FC<Props> = ({
         onChange={(event) => {
           setTitle(event.target.value);
         }}
-        onKeyDown={(event) => {
-          switch (event.key) {
-            case 'Enter':
-
-              if (title.length === 0) {
-                setEditing(false);
-                deleteTodo(todo.id);
-                break;
-              }
-
-              editTitle(title, todo.id);
-              setEditing(false);
-              break;
-
-            case 'Escape':
-              setEditing(false);
-              setTitle(todo.title);
-              break;
-
-            default:
-              setTitle(event.target.value);
-          }
-        }}
+        onKeyDown={handleChangeKeyboard}
       />
     </li>
   );
