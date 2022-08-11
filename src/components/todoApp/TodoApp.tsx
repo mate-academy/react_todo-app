@@ -86,11 +86,13 @@ export const TodoApp: React.FC = () => {
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setTodos(prev => [...prev, {
-      id: +new Date(),
-      title: newTodoTitle,
-      completed: false,
-    }]);
+    if (newTodoTitle.trim().length > 0) {
+      setTodos(prev => [...prev, {
+        id: +new Date(),
+        title: newTodoTitle.trim(),
+        completed: false,
+      }]);
+    }
 
     setNewTodoTitle('');
   };

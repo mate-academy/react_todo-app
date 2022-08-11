@@ -24,13 +24,22 @@ export const TodoItem: React.FC<Props> = (
   const [isEdited, setIsEdited] = useState(false);
   const [editedValue, setEditedValue] = useState('');
 
-  const handleDoubleClick = (event: React.MouseEvent) => {
-    if (event.detail === 2) {
-      setIsEdited(true);
-      setEditedValue(todo.title);
+  const handleDoubleClick = () => {
+    setIsEdited(true);
+    setEditedValue(todo.title);
+  };
+
+  const handleSubmitEditing = () => {
+    if (editedValue.trim().length > 0) {
+      const copyTodo = { ...todo };
+
+      copyTodo.title = editedValue;
+      onEditTodo(copyTodo);
     } else {
-      onMarkCompleteOneTodo(todo.id);
+      onTodoDelete(todo.id);
     }
+
+    setIsEdited(false);
   };
 
   return (
@@ -39,6 +48,7 @@ export const TodoItem: React.FC<Props> = (
         completed: todo.completed,
         editing: isEdited,
       })}
+      onDoubleClick={handleDoubleClick}
     >
       <div className="view">
         <input
@@ -46,21 +56,18 @@ export const TodoItem: React.FC<Props> = (
           className="toggle"
           checked={todo.completed}
           id="toggle-view"
-          onClick={() => {
+          onChange={() => {
             onMarkCompleteOneTodo(todo.id);
           }}
         />
-        <label
-          htmlFor="toggle-view"
-          onDoubleClick={handleDoubleClick}
-        >
-          {todo.title}
-        </label>
+        <label>{todo.title}</label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => onTodoDelete(todo.id)}
+          onClick={() => {
+            onTodoDelete(todo.id);
+          }}
         />
       </div>
       <input
@@ -71,18 +78,17 @@ export const TodoItem: React.FC<Props> = (
           setEditedValue(event.target.value);
         }}
         onBlur={() => {
-          setIsEdited(false);
-          const copyTodo = { ...todo };
-
-          copyTodo.title = editedValue;
-          onEditTodo(copyTodo);
+          handleSubmitEditing();
         }}
         onKeyPress={(event) => {
           if (event.key === 'Enter') {
-            const copyTodo = { ...todo };
-
-            copyTodo.title = editedValue;
-            onEditTodo(copyTodo);
+            handleSubmitEditing();
+          }
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            setIsEdited(false);
+            setEditedValue(todo.title);
           }
         }}
       />
