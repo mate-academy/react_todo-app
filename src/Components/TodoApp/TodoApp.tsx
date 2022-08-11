@@ -25,7 +25,7 @@ export const TodoApp: React.FC = () => {
   };
 
   useEffect(() => {
-    const timer = setInterval(updateServer, 1000);
+    const timer = setInterval(updateServer, 500);
 
     return () => clearInterval(timer);
   }, []);
@@ -175,22 +175,25 @@ export const TodoApp: React.FC = () => {
             clear={deleteTodo}
           />
         </section>
+        {usedTodos.length !== 0
+        && (
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {usedTodos.length}
+            </span>
+            <TodosFilters />
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={() => {
+                deleteTodo();
+              }}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
 
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {usedTodos.length}
-          </span>
-          <TodosFilters />
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={() => {
-              deleteTodo();
-            }}
-          >
-            Clear completed
-          </button>
-        </footer>
       </div>
     </StorageContext.Provider>
   );

@@ -9,7 +9,7 @@ export const TodoAdd: React.FC<Props> = ({ addTodo }) => {
 
   const onAdd = (event: React.FormEvent) => {
     event.preventDefault();
-    if (title.length > 0) {
+    if (title.trim().length > 0) {
       addTodo(title);
       setTitle('');
     }
