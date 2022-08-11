@@ -5,10 +5,24 @@ import { Filter } from '../Filter/Filter';
 import { TodoForm } from '../TodoForm/TodoForm';
 import { TodoList } from '../TodoList/TodoList';
 
+const useLocalStorage = () => {
+  const todosFromLocaleStorage = localStorage.getItem('todos');
+
+  try {
+    return todosFromLocaleStorage ? JSON.parse(todosFromLocaleStorage) : [];
+  } catch {
+    return [];
+  }
+};
+
 export const TodoApp: React.FC = () => {
-  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [todos, setTodos] = useState<TodoType[]>(useLocalStorage());
   const [visibleTodos, setVisibleTodos] = useState<TodoType[]>([]);
   const location = useLocation();
+
+  useEffect(() => (
+    localStorage.setItem('todos', JSON.stringify(todos))
+  ), [todos]);
 
   useEffect(() => {
     switch (location.pathname) {

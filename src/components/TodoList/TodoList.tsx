@@ -19,14 +19,13 @@ export const TodoList: React.FC<Props> = ({
   return (
     <ul className="todo-list" data-cy="todoList">
       {items.map(item => (
-        <li key={item.id}>
-          <Todo
-            todo={item}
-            toggleTask={toggleTask}
-            removeTask={removeTask}
-            onEditTitle={onEditTitle}
-          />
-        </li>
+        <Todo
+          todo={item}
+          key={item.id}
+          toggleTask={toggleTask}
+          removeTask={removeTask}
+          onEditTitle={onEditTitle}
+        />
       ))}
     </ul>
   );
