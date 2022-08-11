@@ -1,5 +1,4 @@
 import { createBrowserHistory } from 'history';
-/* import { useLocation } from 'react-router-dom'; */
 
 type Props = {
   storage: string
@@ -7,10 +6,6 @@ type Props = {
 };
 
 export const StorageSelector: React.FC<Props> = ({ storage, setStorage }) => {
-  const curentUrl = new URL(document.URL).pathname.includes('server')
-    ? 'server'
-    : undefined;
-
   const history = createBrowserHistory();
   const changeStorage = (e: React.ChangeEvent<HTMLSelectElement>) => {
     history.push(`${e.target.value}`);
@@ -20,18 +15,16 @@ export const StorageSelector: React.FC<Props> = ({ storage, setStorage }) => {
   return (
     <div className="select">
       <select
-        value={storage}
+        defaultValue={storage}
         onChange={changeStorage}
       >
         <option
           value="local"
-          selected={!curentUrl}
         >
           Local
         </option>
         <option
           value="server"
-          selected={curentUrl === 'server'}
         >
           Server
         </option>
