@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { TodosFilter } from '../TodosFilter/TodosFilter';
+import { TodosFilter } from '../TodosFilter';
 import { TodoList } from '../TodoList';
 
 import '../../styles/todo-list.css';
