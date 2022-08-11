@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { TodoList } from './TodoList';
 import { Todo, TodoActionType } from '../types/Todo';
 import { TodoFilter } from './TodoFilter';
 
 export const TodoApp: React.FC = () => {
-  const location = useLocation().pathname.split('/')[1];
+  const { filterType } = useParams();
   const localTodos = JSON.parse(localStorage.getItem('todos') || '[]');
 
   const [todos, setTodos] = useState(localTodos);
@@ -16,7 +16,7 @@ export const TodoApp: React.FC = () => {
   useEffect(() => {
     let filteredTodos;
 
-    switch (location) {
+    switch (filterType) {
       case ('active'):
         filteredTodos = todos.filter((todo: Todo) => !todo.completed);
         break;
@@ -29,7 +29,7 @@ export const TodoApp: React.FC = () => {
     }
 
     setShownTodos(filteredTodos);
-  }, [location, todos]);
+  }, [filterType, todos]);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -75,7 +75,9 @@ export const TodoApp: React.FC = () => {
     setTodos(newTodos);
   };
 
-  const addTodo = () => {
+  const addTodo = (event: FormEvent): void => {
+    event.preventDefault();
+
     if (newTodo.trim() !== '') {
       setTodos([
         ...todos,
@@ -97,7 +99,7 @@ export const TodoApp: React.FC = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={() => addTodo()}>
+        <form onSubmit={(event) => addTodo(event)}>
           <input
             type="text"
             data-cy="createTodo"
@@ -145,13 +147,15 @@ export const TodoApp: React.FC = () => {
 
           <TodoFilter />
 
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={() => clearCompleted()}
-          >
-            Clear completed
-          </button>
+          {todos.some((todo: Todo) => todo.completed) && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={() => clearCompleted()}
+            >
+              Clear completed
+            </button>
+          )}
         </footer>
       )}
 

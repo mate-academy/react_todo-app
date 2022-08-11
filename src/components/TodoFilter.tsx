@@ -1,14 +1,16 @@
 import { NavLink } from 'react-router-dom';
 
 export const TodoFilter: React.FC = () => {
+  const styleActiveLink = (isActive: boolean) => (
+    isActive ? 'selected' : ''
+  );
+
   return (
     <ul className="filters">
       <li>
         <NavLink
           to="/"
-          className={({ isActive }) => (
-            isActive ? 'selected' : ''
-          )}
+          className={({ isActive }) => styleActiveLink(isActive)}
         >
           All
         </NavLink>
@@ -17,9 +19,7 @@ export const TodoFilter: React.FC = () => {
       <li>
         <NavLink
           to="/active"
-          className={({ isActive }) => (
-            isActive ? 'selected' : ''
-          )}
+          className={({ isActive }) => styleActiveLink(isActive)}
         >
           Active
         </NavLink>
@@ -28,9 +28,7 @@ export const TodoFilter: React.FC = () => {
       <li>
         <NavLink
           to="/completed"
-          className={({ isActive }) => (
-            isActive ? 'selected' : ''
-          )}
+          className={({ isActive }) => styleActiveLink(isActive)}
         >
           Completed
         </NavLink>
