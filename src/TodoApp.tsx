@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
-import { addTodoAction } from './store';
+import { addTodoAction, setTodosAction } from './store';
 import { getTodosSelector } from './store/selectors';
 
 const App: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const todos = useSelector(getTodosSelector);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const cachedData = localStorage.getItem('todos');
+
+    if (cachedData) {
+      dispatch(setTodosAction(JSON.parse(cachedData)));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

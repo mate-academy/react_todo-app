@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import { Todo } from '../../react-app-env';
-import { changeTodo, deleteTodo, toggleTodoAction } from '../../store';
+import { editTodo, deleteTodo, toggleTodoAction } from '../../store';
 
 interface Props {
   todo: Todo,
+  editableTodoId: number,
+  setEditableTodoId: React.Dispatch<React.SetStateAction<number>>,
 }
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [editableTodoId, setEditableTodoId] = useState(0);
+export const TodoItem: React.FC<Props> = ({
+  todo,
+  editableTodoId,
+  setEditableTodoId,
+}) => {
   const [todoTitle, setTodoTitle] = useState('');
   const dispatch = useDispatch();
 
@@ -25,7 +30,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (key === 'Enter') {
       if (todoTitle.length) {
-        dispatch(changeTodo({ id, todoTitle }));
+        dispatch(editTodo({ id, todoTitle }));
       } else {
         dispatch(deleteTodo(id));
       }

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterBy, setAllFinished, setAllUnfinished } from '../../store';
 import { getFilterBy, getTodosSelector } from '../../store/selectors';
 import { TodoItem } from '../TodoItem';
 
 export const TodoList: React.FC = () => {
+  const [editableTodoId, setEditableTodoId] = useState(0);
   const todos = useSelector(getTodosSelector);
   const filterBy = useSelector(getFilterBy);
   const dispatch = useDispatch();
@@ -49,7 +50,12 @@ export const TodoList: React.FC = () => {
 
       <ul className="todo-list" data-cy="todoList">
         {visibleTodos.map(todo => (
-          <TodoItem key={todo.id} todo={todo} />
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            editableTodoId={editableTodoId}
+            setEditableTodoId={setEditableTodoId}
+          />
         ))}
 
         {/* <li className="completed">

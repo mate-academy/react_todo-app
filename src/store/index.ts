@@ -9,6 +9,7 @@ export enum FilterBy {
 }
 
 enum ActionType {
+  SET_TODOS = 'SET_TODOS',
   ADD_TODO = 'ADD_TODO',
   TOGGLE_TODO = 'TOGGLE_TODO',
   ALL_TODOS_FINISHED = 'ALL_TODOS_FINISHED',
@@ -19,7 +20,7 @@ enum ActionType {
   CHANGE_TODO = 'CHANGE_TODO',
 }
 
-interface ChangeTodoPayload {
+interface EditTodoPayload {
   id: number,
   todoTitle: string,
 }
@@ -29,6 +30,7 @@ const initialState: State = {
   filterBy: FilterBy.ALL_TODOS,
 };
 
+export const setTodosAction = createAction<Todo[]>(ActionType.SET_TODOS);
 export const addTodoAction = createAction<Todo>(ActionType.ADD_TODO);
 export const toggleTodoAction
   = createAction<number>(ActionType.TOGGLE_TODO);
@@ -37,10 +39,14 @@ export const setAllUnfinished = createAction(ActionType.ALL_TODOS_UNFINISHED);
 export const setFilterBy = createAction<FilterBy>(ActionType.FILTER_BY);
 export const deleteTodo = createAction<number>(ActionType.DELETE_TODO);
 export const deleteCompleted = createAction(ActionType.DELETE_COMLETED);
-export const changeTodo
-  = createAction<ChangeTodoPayload>(ActionType.CHANGE_TODO);
+export const editTodo
+  = createAction<EditTodoPayload>(ActionType.CHANGE_TODO);
 
 const reducer = createReducer(initialState, (builder) => {
+  builder.addCase(setTodosAction, (state, action) => {
+    state.todos = action.payload;
+  });
+
   builder.addCase(addTodoAction, (state, action) => {
     state.todos.push(action.payload);
   });
@@ -83,7 +89,7 @@ const reducer = createReducer(initialState, (builder) => {
     state.todos = state.todos.filter(todo => !todo.completed);
   });
 
-  builder.addCase(changeTodo, (state, { payload }) => {
+  builder.addCase(editTodo, (state, { payload }) => {
     state.todos = state.todos.map(todo => {
       if (todo.id === payload.id) {
         todo.title = payload.todoTitle;
