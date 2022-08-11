@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Todo } from '../../Types/Todo';
 import { useLocalStorage } from '../../Utilits/LocalStorage/LocalStorageAPI';
 import {
@@ -15,11 +15,12 @@ import { TodosFilters } from '../TodoFilters/TodosFilter';
 import { TodoList } from '../TodoList/TodoList';
 
 export const TodoApp: React.FC = () => {
-  const [storage, setStorage] = useState('local');
-  const { pathname } = useLocation();
+  const curentUrl = new URL(document.URL).pathname.slice(1);
+  const [storage, setStorage] = useState(curentUrl);
   const [localTodos, setLocalTodos] = useLocalStorage<Todo[]>('todos', []);
   const [serverTodos, setServerTodos] = useState<Todo[]>([]);
-
+  const [searchParams] = useSearchParams();
+  const completed = searchParams.get('completed');
   const updateServer = async () => {
     getTodos().then(setServerTodos);
   };
@@ -36,12 +37,11 @@ export const TodoApp: React.FC = () => {
   []);
 
   const usedTodos = storage === 'local' ? localTodos : serverTodos;
-
   const visibleTodos = [...usedTodos].filter(todo => {
-    switch (pathname) {
-      case '/active':
+    switch (completed) {
+      case 'active':
         return todo.completed === false;
-      case '/completed':
+      case 'completed':
         return todo.completed === true;
 
       default:

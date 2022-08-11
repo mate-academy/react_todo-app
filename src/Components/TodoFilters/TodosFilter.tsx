@@ -1,37 +1,39 @@
+import classNames from 'classnames';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { SearchLink } from '../../Utilits/SearchLink';
 
-type ActiveLink = (isActive: { isActive: boolean }) => string;
 export const TodosFilters: React.FC = () => {
-  const activeLink: ActiveLink = ({ isActive }) => (isActive ? 'selected' : '');
+  const [searchParams] = useSearchParams();
+  const completed = searchParams.get('completed');
 
   return (
     <ul className="filters">
       <li>
-        <NavLink
-          to="/"
-          className={activeLink}
+        <SearchLink
+          params={{ completed: null }}
+          className={classNames({ selected: !completed })}
         >
           All
-        </NavLink>
+        </SearchLink>
       </li>
 
       <li>
-        <NavLink
-          to="/active"
-          className={activeLink}
+        <SearchLink
+          params={{ completed: 'active' }}
+          className={classNames({ selected: completed === 'active' })}
         >
           Active
-        </NavLink>
+        </SearchLink>
       </li>
 
       <li>
-        <NavLink
-          to="/completed"
-          className={activeLink}
+        <SearchLink
+          params={{ completed: 'completed' }}
+          className={classNames({ selected: completed === 'completed' })}
         >
           Completed
-        </NavLink>
+        </SearchLink>
       </li>
     </ul>
   );
