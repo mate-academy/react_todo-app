@@ -28,6 +28,8 @@ export const TodoItem: React.FC<Props> = (
     if (event.detail === 2) {
       setIsEdited(true);
       setEditedValue(todo.title);
+    } else {
+      onMarkCompleteOneTodo(todo.id);
     }
   };
 
@@ -50,7 +52,7 @@ export const TodoItem: React.FC<Props> = (
         />
         <label
           htmlFor="toggle-view"
-          onClick={handleDoubleClick}
+          onDoubleClick={handleDoubleClick}
         >
           {todo.title}
         </label>
