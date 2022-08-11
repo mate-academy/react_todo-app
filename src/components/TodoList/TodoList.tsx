@@ -8,10 +8,16 @@ interface Props {
   visibleTodos: Todo[],
   onSetTodos: (newValue: Todo[]) => void
   onCheckTodos: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
+// console.log('list')
+
 export const TodoList: FC<Props> = ({
-  todos, visibleTodos, onSetTodos, onCheckTodos,
+  todos,
+  visibleTodos,
+  onSetTodos,
+  onCheckTodos,
 }) => {
   return (
     <ul className="todo-list" data-cy="todoList">

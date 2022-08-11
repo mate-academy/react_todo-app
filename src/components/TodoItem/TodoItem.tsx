@@ -4,18 +4,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  crntTodo: Todo,
+  currentTodo: Todo,
   todos: Todo[],
   onSetTodos: (newValue: Todo[]) => void
   onCheckTodos: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const TodoItem = React.memo<Props>(({
-  crntTodo, todos, onSetTodos, onCheckTodos,
+  currentTodo,
+  todos,
+  onSetTodos,
+  onCheckTodos,
 }) => {
-  const [isCompleted, setCompleted] = useState(crntTodo.completed);
+  const [completed, setCompleted] = useState(currentTodo.completed);
   const [isEditing, setEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState('');
+  const [title, setTitle] = useState('');
 
   const textInput = useRef<HTMLInputElement>(null);
 
@@ -27,27 +30,28 @@ export const TodoItem = React.memo<Props>(({
 
   useEffect(() => {
     onSetTodos(todos.map(todo => {
-      if (crntTodo.id === todo.id) {
-        return { ...todo, completed: isCompleted };
+      if (currentTodo.id === todo.id) {
+        return { ...todo, completed };
       }
 
       return todo;
     }));
 
-    if (!isCompleted) {
+    if (!completed) {
       onCheckTodos(false);
     }
-  }, [isCompleted]);
+  }, [completed]);
 
   useEffect(() => {
-    setCompleted(crntTodo.completed);
-  }, [crntTodo.completed]);
+    setCompleted(currentTodo.completed);
+  }, [currentTodo.completed]);
 
   const approveEdit = () => {
     setEditing(false);
+
     onSetTodos(todos.map(todo => {
-      if (todo.id === crntTodo.id) {
-        return { ...todo, title: newTitle };
+      if (todo.id === currentTodo.id) {
+        return { ...todo, title };
       }
 
       return todo;
@@ -62,15 +66,14 @@ export const TodoItem = React.memo<Props>(({
 
     if (key === 'Escape') {
       setEditing(false);
-      setNewTitle('');
     }
   };
 
   return (
     <li
-      key={crntTodo.id}
+      key={currentTodo.id}
       className={classNames({
-        completed: isCompleted,
+        completed,
         editing: isEditing,
       })}
     >
@@ -78,32 +81,31 @@ export const TodoItem = React.memo<Props>(({
         <input
           type="checkbox"
           className="toggle"
-          checked={isCompleted}
+          checked={completed}
           onChange={event => setCompleted(event.target.checked)}
         />
         <label
           onDoubleClick={() => {
             setEditing(true);
-            setNewTitle(crntTodo.title);
+            setTitle(currentTodo.title);
           }}
         >
-          {crntTodo.title}
+          {currentTodo.title}
 
         </label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => (
-            onSetTodos(todos.filter(todo => todo.id !== crntTodo.id))
-          )}
+          onClick={() => onSetTodos(todos
+            .filter(todo => todo.id !== currentTodo.id))}
         />
       </div>
       <input
         type="text"
         className="edit"
-        value={newTitle}
-        onChange={({ target }) => setNewTitle(target.value)}
+        value={title}
+        onChange={({ target }) => setTitle(target.value)}
         onKeyDown={handleEdit}
         onBlur={approveEdit}
         ref={textInput}

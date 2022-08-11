@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLocaleStorage } from '../../customHooks/useLocaleStorage';
 import { Todo } from '../../types/Todo';
@@ -7,46 +7,56 @@ import { TodoFilter } from '../TodoFilter/TodoFIlter';
 import { TodoList } from '../TodoList/TodoList';
 
 export const TodoApp = () => {
-  const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
-  const [areTodosChecked, setTodosChecked] = useState(
-    todos.every(todo => todo.completed),
-  );
+  const [
+    todosFromStorage,
+    setTodosFromStorage,
+  ] = useLocaleStorage<Todo[]>('todos', []);
+  const [areTodosChecked, setTodosChecked] = useState(false);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [completedCount, setCompletedCount] = useState(0);
 
   const location = useLocation();
   const pathName = location.pathname;
 
-  const visibleTodos = todos.filter(todo => {
-    switch (pathName) {
-      case '/completed':
-        return todo.completed;
+  useEffect(() => {
+    setVisibleTodos(todosFromStorage.filter(todo => {
+      switch (pathName) {
+        case '/completed':
+          return todo.completed;
 
-      case '/active':
-        return !todo.completed;
+        case '/active':
+          return !todo.completed;
 
-      case '/':
-      default:
-        return todo;
-    }
-  });
+        case '/':
+        default:
+          return todo;
+      }
+    }));
 
-  const completedCount = todos.reduce((prev, cur) => prev + +cur.completed, 0);
+    setTodosChecked(todosFromStorage.every(todo => todo.completed));
+    setCompletedCount(todosFromStorage
+      .reduce((prev, cur) => prev + Number(!cur.completed), 0));
+  }, [todosFromStorage, pathName]);
 
   const handleAllCheck = () => {
-    let allTodos;
+    const allTodos = todosFromStorage.map(todo => (
+      {
+        ...todo,
+        completed: !areTodosChecked,
+      }));
 
     if (areTodosChecked) {
       setTodosChecked(false);
-      allTodos = todos.map(todo => {
-        return { ...todo, completed: false };
-      });
     } else {
       setTodosChecked(true);
-      allTodos = todos.map(todo => {
-        return { ...todo, completed: true };
-      });
     }
 
-    setTodos(allTodos);
+    setTodosFromStorage(allTodos);
+  };
+
+  const removeCompleted = () => {
+    setTodosFromStorage(todosFromStorage
+      .filter(todo => !todo.completed));
   };
 
   return (
@@ -54,7 +64,10 @@ export const TodoApp = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <TodoAdd todos={todos} onSetTodos={setTodos} />
+        <TodoAdd
+          todos={todosFromStorage}
+          onSetTodos={setTodosFromStorage}
+        />
       </header>
 
       <section className="main">
@@ -70,15 +83,15 @@ export const TodoApp = () => {
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
-          todos={todos}
+          todos={todosFromStorage}
           visibleTodos={visibleTodos}
-          onSetTodos={setTodos}
+          onSetTodos={setTodosFromStorage}
           onCheckTodos={setTodosChecked}
         />
 
       </section>
 
-      {todos.length > 0 && (
+      {todosFromStorage.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${completedCount} items left`}
@@ -86,13 +99,11 @@ export const TodoApp = () => {
 
           <TodoFilter pathName={pathName} />
 
-          {completedCount > 0 && (
+          {completedCount < todosFromStorage.length && (
             <button
               type="button"
               className="clear-completed"
-              onClick={() => (
-                setTodos(todos.filter(todo => !todo.completed))
-              )}
+              onClick={removeCompleted}
             >
               Clear completed
             </button>

@@ -6,39 +6,43 @@ interface Props {
   pathName: string,
 }
 
-export const TodoFilter = memo<Props>(({ pathName }) => (
-  <ul className="filters">
-    <li>
-      <Link
-        to="/"
-        className={classNames({
-          selected: pathName === '/',
-        })}
-      >
-        All
-      </Link>
-    </li>
+export const TodoFilter = memo<Props>(({ pathName }) => {
+  // console.log('filter')
 
-    <li>
-      <Link
-        to="/active"
-        className={classNames({
-          selected: pathName === '/active',
-        })}
-      >
-        Active
-      </Link>
-    </li>
+  return (
+    <ul className="filters">
+      <li>
+        <Link
+          to="/"
+          className={classNames({
+            selected: pathName === '/',
+          })}
+        >
+          All
+        </Link>
+      </li>
 
-    <li>
-      <Link
-        to="/completed"
-        className={classNames({
-          selected: pathName === '/completed',
-        })}
-      >
-        Completed
-      </Link>
-    </li>
-  </ul>
-));
+      <li>
+        <Link
+          to="/active"
+          className={classNames({
+            selected: pathName === '/active',
+          })}
+        >
+          Active
+        </Link>
+      </li>
+
+      <li>
+        <Link
+          to="/completed"
+          className={classNames({
+            selected: pathName === '/completed',
+          })}
+        >
+          Completed
+        </Link>
+      </li>
+    </ul>
+  );
+});
