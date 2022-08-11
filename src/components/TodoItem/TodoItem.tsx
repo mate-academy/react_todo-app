@@ -21,6 +21,12 @@ export const TodoItem: React.FC<Props> = ({
   const [editing, setEditing] = useState(false);
   const [editingTitle, setEditingTitle] = useState('');
 
+  const onCounterClickChange = (
+    event: React.MouseEvent<HTMLLabelElement>,
+  ): boolean => {
+    return event.detail === 2;
+  };
+
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
@@ -75,8 +81,8 @@ export const TodoItem: React.FC<Props> = ({
         <label
           role="presentation"
           onKeyDown={() => {}}
-          onClick={() => {
-            setEditing(() => true);
+          onClick={(event) => {
+            setEditing(onCounterClickChange(event));
           }}
         >
           {item.title}

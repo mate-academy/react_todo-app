@@ -20,7 +20,7 @@ export const TodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>(useLocalStorage);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [isClearBtn, SetClearBtn] = useState(false);
+  const [isClearBtn, setClearBtn] = useState(false);
 
   /* GET PATHNAME */
   const location = useLocation();
@@ -47,6 +47,10 @@ export const TodoApp = () => {
   /* FUNCTIONS */
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+
+    if (value === ' ') {
+      return;
+    }
 
     if (value) {
       setQuery(value);
@@ -91,7 +95,7 @@ export const TodoApp = () => {
       return todo;
     });
 
-    SetClearBtn(true);
+    setClearBtn(true);
     setTodos(updatedTodo);
   };
 
@@ -111,6 +115,7 @@ export const TodoApp = () => {
     });
 
     setTodos(updatedTodos);
+    setClearBtn(true);
   };
 
   const deleteTodo = (id: number) => {
@@ -144,7 +149,7 @@ export const TodoApp = () => {
     const filteredTodos = currentTodos.filter(todo => !todo.completed);
 
     setTodos(filteredTodos);
-    SetClearBtn(false);
+    setClearBtn(false);
   };
 
   return (
