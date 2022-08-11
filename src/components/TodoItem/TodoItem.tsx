@@ -81,6 +81,9 @@ export const TodoItem: React.FC<Props> = ({
         onKeyDown={({ key }) => {
           editHandler(key, todo.id);
         }}
+        onBlur={() => {
+          editHandler('Enter', todo.id);
+        }}
       />
     </li>
   );
