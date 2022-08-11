@@ -9,7 +9,9 @@ export const TodoApp: FC<Props> = ({ addTodo }) => {
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    if (!title) {
+    if (title.trim().length === 0) {
+      setTitle('');
+
       return;
     }
 

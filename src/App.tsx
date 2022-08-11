@@ -38,7 +38,7 @@ export const App: React.FC = () => {
   };
 
   const deleteTodo = (todoId: number) => {
-    setTodos(todos.filter((todo: { id: number; }) => todo.id !== todoId));
+    setTodos(todos.filter((todo: Todo) => todo.id !== todoId));
   };
 
   const editTodo = (todoId: number, todoTitle: string) => {

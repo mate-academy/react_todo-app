@@ -36,7 +36,7 @@ export const TodoItem: FC<Props> = ({
           />
 
           <label
-            onDoubleClick={() => setChanges(true)}
+            onDoubleClick={() => !todo.completed && setChanges(true)}
           >
             {todo.title}
           </label>
@@ -51,8 +51,10 @@ export const TodoItem: FC<Props> = ({
       ) : (
         <form onSubmit={(event) => {
           event.preventDefault();
-          if (todo.title.trim().length === 0) {
+          if (todoTitle.trim().length === 0) {
             onDelete(todo.id);
+
+            return;
           }
 
           onEdit(todo.id, todoTitle);
