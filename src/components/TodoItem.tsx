@@ -42,24 +42,13 @@ export const TodoItem: React.FC<Props> = ({
         onDoubleClick={() => setEditing(!editing)}
       >
         <div className="view">
-          {todo.completed
-            ? (
-              <input
-                type="checkbox"
-                className="toggle"
-                id="toggle-view"
-                onClick={() => completeHandler(todo.id)}
-                checked
-              />
-            )
-            : (
-              <input
-                type="checkbox"
-                className="toggle"
-                id="toggle-view"
-                onClick={() => completeHandler(todo.id)}
-              />
-            )}
+          <input
+            type="checkbox"
+            className="toggle"
+            id="toggle-view"
+            onClick={() => completeHandler(todo.id)}
+            checked={todo.completed}
+          />
           <label>{todo.title}</label>
           <button
             type="button"
