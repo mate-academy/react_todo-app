@@ -153,7 +153,7 @@ export const TodoApp: React.FC = () => {
       <StorageSelector storage={storage} setStorage={setStorage} />
       <div className="todoapp">
         <header className="header">
-          <h1>todos</h1>
+          <h1>{`${storage} todos`}</h1>
           <TodoAdd addTodo={addTodo} />
         </header>
 

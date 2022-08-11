@@ -18,8 +18,12 @@ export const TodoItem: React.FC<Props> = ({
   const [onEdit, setOnEdit] = useState(false);
 
   const applyTitle = () => {
-    setprevQuery(query);
-    updateTodo(todo.id, query);
+    if (query.trim().length === 0) {
+      clear(todo.id);
+    } else {
+      setprevQuery(query);
+      updateTodo(todo.id, query);
+    }
   };
 
   const editTitle = (key: string) => {
