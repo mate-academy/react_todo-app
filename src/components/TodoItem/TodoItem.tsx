@@ -46,25 +46,28 @@ export const TodoItem = React.memo<Props>(({
     setCompleted(currentTodo.completed);
   }, [currentTodo.completed]);
 
-  const approveEdit = () => {
-    setEditing(false);
+  const [lastKey, setLastKey] = useState('');
 
+  const approveEdit = () => {
     onSetTodos(todos.map(todo => {
-      if (todo.id === currentTodo.id) {
+      if (todo.id === currentTodo.id && lastKey !== 'Escape') {
         return { ...todo, title };
       }
 
       return todo;
     })
       .filter(todo => todo.title !== ''));
+    setEditing(false);
   };
 
   const handleEdit = ({ key }: React.KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
+      setLastKey(key);
       approveEdit();
     }
 
     if (key === 'Escape') {
+      setLastKey(key);
       setEditing(false);
     }
   };
