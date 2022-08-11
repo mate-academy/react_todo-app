@@ -25,7 +25,7 @@ export const TodoList: FC<Props> = ({
         <TodoItem
           key={todo.id}
           todos={todos}
-          crntTodo={todo}
+          currentTodo={todo}
           onSetTodos={onSetTodos}
           onCheckTodos={onCheckTodos}
         />
