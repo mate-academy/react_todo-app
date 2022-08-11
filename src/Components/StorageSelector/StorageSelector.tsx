@@ -7,7 +7,10 @@ type Props = {
 };
 
 export const StorageSelector: React.FC<Props> = ({ storage, setStorage }) => {
-  const curentUrl = new URL(document.URL).pathname.slice(1);
+  const curentUrl = new URL(document.URL).pathname.includes('server')
+    ? 'server'
+    : undefined;
+
   const history = createBrowserHistory();
   const changeStorage = (e: React.ChangeEvent<HTMLSelectElement>) => {
     history.push(`${e.target.value}`);
@@ -22,7 +25,7 @@ export const StorageSelector: React.FC<Props> = ({ storage, setStorage }) => {
       >
         <option
           value="local"
-          selected={curentUrl === 'local'}
+          selected={!curentUrl}
         >
           Local
         </option>
