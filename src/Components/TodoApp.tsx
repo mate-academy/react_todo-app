@@ -77,6 +77,29 @@ export const TodoApp: React.FC = () => {
     }
   });
 
+  const toggleAllTodos = () => {
+    const isTodosMatched = todos.every(todo => todo.completed);
+    let allTodos;
+
+    if (isTodosMatched) {
+      allTodos = todos.map(todo => {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      });
+    } else {
+      allTodos = todos.map(todo => {
+        return {
+          ...todo,
+          completed: true,
+        };
+      });
+    }
+
+    setTodos(allTodos);
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -101,6 +124,7 @@ export const TodoApp: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onChange={toggleAllTodos}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
