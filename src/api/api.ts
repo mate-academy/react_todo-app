@@ -2,6 +2,8 @@ import { Todo } from '../type';
 
 const BASE_URL = 'https://mate.academy/students-api/';
 
+export const userId = 888;
+
 export const request = (url: string, method?: RequestInit) => {
   return fetch(`${BASE_URL}${url}`, method)
     .then(response => response.json());
@@ -16,7 +18,7 @@ export const creatUser = () => {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: JSON.stringify({
-        id: 888,
+        id: userId,
         name: 'Alex',
         username: 'Destroyer3000',
         email: 'email@email.com',

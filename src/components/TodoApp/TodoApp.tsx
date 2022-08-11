@@ -2,26 +2,16 @@ import {
   FC, useEffect, useState,
 } from 'react';
 import {
-  addTodo, deleteTodo, getTodos, updateTodo,
+  addTodo,
+  deleteTodo, getTodos, updateTodo, userId,
 } from '../../api/api';
 import { Todo } from '../../type';
-import { Footer } from '../Footer';
+import { TodoFilter } from '../TodoFilter';
+import { TodoForm } from '../TodoForm';
 import { TodoList } from '../TodoList';
 
-const useLocalStorage = () => {
-  const todosFromLocal = localStorage.getItem('todos');
-
-  try {
-    return todosFromLocal ? JSON.parse(todosFromLocal) : [];
-  } catch (error) {
-    return [];
-  }
-};
-
 export const TodoApp: FC = () => {
-  const [targetValue, setTargetValue] = useState('');
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [useServer, setUseServer] = useState(true);
 
   async function load() {
     const todoFromServer = await getTodos();
@@ -30,44 +20,13 @@ export const TodoApp: FC = () => {
   }
 
   useEffect(() => {
-    if (useServer) {
-      load();
-    } else {
-      setVisibleTodos(useLocalStorage);
-    }
-  }, [useServer]);
-
-  useEffect(() => {
-    if (useServer) {
-      load();
-    } else {
-      setVisibleTodos(useLocalStorage);
-    }
+    load();
   }, []);
-
-  const addNewTodo = (event: React.FormEvent) => {
-    event.preventDefault();
-    const newTodo: Todo = {
-      title: targetValue,
-      completed: false,
-      userId: 888,
-    };
-
-    if (useServer) {
-      addTodo(newTodo);
-    }
-
-    setVisibleTodos(prevTodo => [...prevTodo,
-      { id: +new Date(), ...newTodo },
-    ]);
-
-    setTargetValue('');
-  };
 
   const onDelete = (id: number | undefined) => {
     setVisibleTodos(state => {
       return state.filter(todoForChange => {
-        if (useServer && id) {
+        if (id) {
           deleteTodo(id);
         }
 
@@ -76,10 +35,10 @@ export const TodoApp: FC = () => {
     });
   };
 
-  const DeleteAll = () => {
+  const deleteAll = () => {
     setVisibleTodos(prevTodo => {
       return prevTodo.filter(todo => {
-        if (useServer && todo.completed && todo.id) {
+        if (todo.completed && todo.id) {
           deleteTodo(todo.id);
         }
 
@@ -88,11 +47,13 @@ export const TodoApp: FC = () => {
     });
   };
 
-  const CompletedAll = () => {
+  const completedAllTodos = () => {
+    const allTodoDone = visibleTodos.every(todo => todo.completed);
+
     setVisibleTodos(prevTodo => {
-      if (prevTodo.every(todo => todo.completed)) {
+      if (allTodoDone) {
         return prevTodo.map(todo => {
-          if (useServer && todo.id) {
+          if (todo.id) {
             updateTodo(todo.id, { completed: false });
           }
 
@@ -101,15 +62,13 @@ export const TodoApp: FC = () => {
       }
 
       return prevTodo.map(todo => {
-        if (todo.completed) {
-          return todo;
-        }
-
-        if (useServer && todo.id) {
+        if (!todo.completed && todo.id) {
           updateTodo(todo.id, { completed: true });
+
+          return { ...todo, completed: true };
         }
 
-        return { ...todo, completed: true };
+        return todo;
       });
     });
   };
@@ -118,7 +77,7 @@ export const TodoApp: FC = () => {
     setVisibleTodos(state => {
       return state.map(todoForChange => {
         if (todoForChange.id === id) {
-          if (useServer && todoForChange.id) {
+          if (todoForChange.id) {
             updateTodo(
               todoForChange.id,
               { completed: !todoForChange.completed },
@@ -136,69 +95,40 @@ export const TodoApp: FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (!useServer) {
-      localStorage.setItem('todos', JSON.stringify(visibleTodos));
-    }
-  }, [visibleTodos]);
+  const addNewTodo = (event: React.FormEvent, targetValue: string) => {
+    event.preventDefault();
+    const newTodo: Todo = {
+      title: targetValue,
+      completed: false,
+      userId,
+    };
+
+    addTodo(newTodo);
+
+    setVisibleTodos(prevTodo => [...prevTodo,
+      { id: +new Date(), ...newTodo },
+    ]);
+  };
 
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form
-          onSubmit={(event) => addNewTodo(event)}
-        >
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={targetValue}
-            onChange={(event) => {
-              setTargetValue(event.target.value);
-            }}
-          />
-        </form>
-      </header>
-      <section className="main">
-        <input
-          type="checkbox"
-          checked={
-            visibleTodos.every(todo => todo.completed)
-            && visibleTodos.length !== 0
-          }
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={() => CompletedAll()}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList
-          todoList={visibleTodos}
-          onDelete={onDelete}
-          onCompletedChange={onCompletedChange}
-          setVisibleTodos={setVisibleTodos}
-          useServer={useServer}
-        />
-      </section>
-      <form className="main">
-        <label>
-          <input
-            type="checkbox"
-            checked={useServer}
-            onChange={() => setUseServer(state => !state)}
-          />
-          Use Server
-        </label>
-      </form>
+      <TodoForm
+        addNewTodo={addNewTodo}
+        completedAllTodos={completedAllTodos}
+        visibleTodos={visibleTodos}
+      />
+      <TodoList
+        todoList={visibleTodos}
+        onDelete={onDelete}
+        onCompletedChange={onCompletedChange}
+        setVisibleTodos={setVisibleTodos}
+      />
 
       {visibleTodos.length !== 0
         && (
-          <Footer
+          <TodoFilter
             todos={visibleTodos}
-            DeleteAll={DeleteAll}
+            DeleteAll={deleteAll}
           />
         )}
     </div>

@@ -8,7 +8,6 @@ interface Props {
   onDelete: (id: number | undefined) => void
   onCompletedChange: (id: number | undefined) => void
   setVisibleTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-  useServer: boolean
 }
 
 export const TodoList: FC<Props> = ({
@@ -16,7 +15,6 @@ export const TodoList: FC<Props> = ({
   onDelete,
   onCompletedChange,
   setVisibleTodos,
-  useServer,
 }) => {
   let visibelTodos = [...todoList];
   const { pathname } = useLocation();
@@ -45,7 +43,6 @@ export const TodoList: FC<Props> = ({
             onDelete={onDelete}
             onCompletedChange={onCompletedChange}
             setVisibleTodos={setVisibleTodos}
-            useServer={useServer}
           />
         </React.Fragment>
 

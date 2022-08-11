@@ -1,7 +1,6 @@
 import classNames from 'classnames';
-import { FC, useCallback, useState } from 'react';
-import lodash from 'lodash';
-import { deleteTodo, updateTodo } from '../../api/api';
+import { FC, useState } from 'react';
+import { updateTodo } from '../../api/api';
 import { Todo } from '../../type';
 
 interface Props {
@@ -9,7 +8,6 @@ interface Props {
   onDelete: (id: number | undefined) => void
   onCompletedChange: (id: number | undefined) => void
   setVisibleTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-  useServer: boolean
 }
 
 export const TodoItem: FC<Props> = ({
@@ -17,23 +15,12 @@ export const TodoItem: FC<Props> = ({
   onDelete,
   onCompletedChange,
   setVisibleTodos,
-  useServer,
 }) => {
   const [edit, setEdit] = useState(false);
   const [targetValue, setTargetValue] = useState(todo.title);
-  const [applyTarget, setAppliedTarget] = useState(todo.title);
-
-  const upDateTitelTarget = useCallback(
-    lodash.debounce(setAppliedTarget, 1000),
-    [],
-  );
 
   const upDateVisibleState = (id:number | undefined):void => {
     if (!targetValue) {
-      if (useServer && id) {
-        deleteTodo(id);
-      }
-
       onDelete(id);
 
       return;
@@ -41,15 +28,13 @@ export const TodoItem: FC<Props> = ({
 
     setVisibleTodos(prevTodo => {
       return prevTodo.map(todoForUpdate => {
-        if (todoForUpdate.id === id) {
-          if (useServer && todoForUpdate.id) {
-            updateTodo(
-              todoForUpdate.id,
-              { title: applyTarget },
-            );
-          }
+        if (todoForUpdate.id && todoForUpdate.id === id) {
+          updateTodo(
+            todoForUpdate.id,
+            { title: targetValue },
+          );
 
-          return { ...todoForUpdate, title: applyTarget };
+          return { ...todoForUpdate, title: targetValue };
         }
 
         return todoForUpdate;
@@ -66,7 +51,6 @@ export const TodoItem: FC<Props> = ({
 
       case 'Escape':
         setEdit(false);
-        upDateTitelTarget(todo.title);
         setTargetValue(todo.title);
         break;
 
@@ -117,7 +101,6 @@ export const TodoItem: FC<Props> = ({
         value={targetValue}
         onChange={(event) => {
           setTargetValue(event.target.value);
-          upDateTitelTarget(event.target.value);
         }}
         onKeyDown={(event) => editTitel(event.key, todo.id)}
         onBlur={() => editOnBlur(todo.id)}
