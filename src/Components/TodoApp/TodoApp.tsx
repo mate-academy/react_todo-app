@@ -16,7 +16,7 @@ import { TodoList } from '../TodoList/TodoList';
 
 export const TodoApp: React.FC = () => {
   const curentUrl = new URL(document.URL).pathname.slice(1);
-  const [storage, setStorage] = useState(curentUrl);
+  const [storage, setStorage] = useState(curentUrl || 'local');
   const [localTodos, setLocalTodos] = useLocalStorage<Todo[]>('todos', []);
   const [serverTodos, setServerTodos] = useState<Todo[]>([]);
   const [searchParams] = useSearchParams();
