@@ -80,6 +80,7 @@ body {
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
+  white-space: nowrap;
 }
 
 .new-todo,
