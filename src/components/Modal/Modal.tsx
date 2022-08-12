@@ -19,30 +19,45 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
   const [oldUsername, setOldUsername] = useState('');
   const [notFoundUser, setNotFoundUser] = useState(false);
 
+  const [isUnique, setIsUnique] = useState(false);
+
   const submitHandlerCreate = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     if (name && username && email && phone) {
-      response('/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          username,
-          email,
-          phone,
-        }),
-      }).then((user: User) => {
-        setUser({
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-        });
-        setIsActive(false);
+      let hasDublicate = false;
+
+      response('/users').then(usersFromServer => {
+        hasDublicate = usersFromServer.map((users: User) => users.username)
+          .includes(username);
+        setIsUnique(true);
+
+        if (!hasDublicate) {
+          setIsUnique(false);
+          response('/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name,
+              username,
+              email,
+              phone,
+            }),
+          }).then((user: User) => {
+            setUser({
+              id: user.id,
+              name: user.name,
+              username: user.username,
+              email: user.email,
+              phone: user.phone,
+            });
+            setIsActive(false);
+          });
+        } else {
+          setIsUnique(true);
+        }
       });
     }
   };
@@ -144,8 +159,7 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
                 <p className="control has-icons-left">
                   <input
                     className="input"
-                    type="tel"
-                    pattern="+([0-9]{3})-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+                    type="text"
                     placeholder="Mobile phone"
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
@@ -155,7 +169,6 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
                     <i className="fas fa-phone" />
                   </span>
                 </p>
-                <div className="help">format: +(098)-545-52-23</div>
               </div>
               <button
                 type="submit"
@@ -163,6 +176,12 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
               >
                 Create and Continue
               </button>
+
+              {isUnique && (
+                <p className="help is-danger">
+                  Sorry, this user is already exist
+                </p>
+              )}
             </form>
 
             <p className="subtitle">

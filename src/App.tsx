@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { Outlet, Routes, Route } from 'react-router-dom';
+import {
+  Outlet,
+  Routes,
+  Route,
+} from 'react-router-dom';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
@@ -20,7 +24,11 @@ export const App: React.FC = () => {
 
   return user ? (
     <div className="todoapp">
-      <Header userId={user.id} todos={todos} setTodos={setTodos} />
+      <Header
+        userId={user.id}
+        todos={todos}
+        setTodos={setTodos}
+      />
 
       <Routes>
         <Route

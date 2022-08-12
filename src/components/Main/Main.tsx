@@ -1,7 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { response } from '../../api/api';
-import { Condition } from '../../types/Condition';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 import { TodoList } from '../TodoList';
@@ -20,28 +18,17 @@ export const Main: React.FC<Props> = ({
   setTodos,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { condition } = useParams();
 
   useEffect(() => {
     setLoading(true);
 
     response(`/todos/?userId=${userId}`)
       .then((todosFromServer: Todo[]) => {
-        switch (condition) {
-          case Condition.completed:
-            setTodos(todosFromServer.filter(todo => todo.completed));
-            break;
-          case Condition.active:
-            setTodos(todosFromServer.filter(todo => !todo.completed));
-            break;
-          default:
-            setTodos([...todosFromServer]);
-        }
-
+        setTodos(todosFromServer);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [userId, condition]);
+  }, [userId]);
 
   const handleClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {

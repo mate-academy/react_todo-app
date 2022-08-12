@@ -2,8 +2,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { response } from '../../api/api';
+import { Condition } from '../../types/Condition';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -12,14 +14,27 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
-  const [hasEdit, setHasEdit] = useState(0);
-  const [countClick, setCountClick] = useState(0);
+  const { condition } = useParams();
+  const [itemEditId, setItemEdit] = useState(0);
+  const [title, setTitle]
+  = useState('');
+
+  const filterTodos = (condit = '') => {
+    switch (condit) {
+      case Condition.completed:
+        return todos.filter(todo => todo.completed);
+      case Condition.active:
+        return todos.filter(todo => !todo.completed);
+      default:
+        return [...todos];
+    }
+  };
 
   const findIndex = (todoId: number) => {
     return todos.findIndex(currTodo => currTodo.id === todoId);
   };
 
-  const handleClickDelete = (todoId: number) => {
+  const handlerClickDelete = (todoId: number) => {
     setTodos([
       ...todos.slice(0, findIndex(todoId)),
       ...todos.slice(findIndex(todoId) + 1),
@@ -28,29 +43,7 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
     response(`/todos/${todoId}`, { method: 'DELETE' });
   };
 
-  const handleClickEdit = (todoId: number) => {
-    setCountClick(countClick + 1);
-    if (countClick === 1) {
-      setHasEdit(todoId);
-      setCountClick(0);
-    }
-  };
-
-  const handleChangeEdit = (
-    event: ChangeEvent<HTMLInputElement>,
-    todo: Todo,
-  ) => {
-    setTodos([
-      ...todos.slice(0, findIndex(todo.id)),
-      {
-        ...todo,
-        title: event.target.value,
-      },
-      ...todos.slice(findIndex(todo.id) + 1),
-    ]);
-  };
-
-  const handleClickCompleted = (todo: Todo) => {
+  const handlerClickCompleted = (todo: Todo) => {
     response(`/todos/${todo.id}`, {
       method: 'PATCH',
       headers: {
@@ -71,26 +64,35 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
     ]);
   };
 
-  const handleSubmit = (event: React.SyntheticEvent, todo: Todo) => {
+  const handlerSubmit = (event: React.SyntheticEvent, todo: Todo) => {
     event.preventDefault();
 
+    setTodos([
+      ...todos.slice(0, findIndex(todo.id)),
+      {
+        ...todo,
+        title,
+      },
+      ...todos.slice(findIndex(todo.id) + 1),
+    ]);
+
     response(`/todos/${todo.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title: todo.title,
+        title,
       }),
     });
 
-    setHasEdit(0);
+    setItemEdit(0);
   };
 
   useEffect(() => {
     const keyDownHandler = (event: any) => {
       if (event.key === 'Escape') {
-        setHasEdit(0);
+        setItemEdit(0);
       }
     };
 
@@ -103,11 +105,11 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
 
   return (
     <ul className="todo-list" data-cy="todoList">
-      {todos.map((todo) => (
+      {filterTodos(condition).map((todo) => (
         <li
           key={todo.id}
           className={classNames(
-            { editing: hasEdit === todo.id },
+            { editing: itemEditId === todo.id },
             { completed: todo.completed },
           )}
         >
@@ -116,10 +118,10 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
               type="checkbox"
               className="toggle"
               checked={todo.completed}
-              onChange={() => handleClickCompleted(todo)}
+              onChange={() => handlerClickCompleted(todo)}
             />
             <label
-              onClick={() => handleClickEdit(todo.id)}
+              onClick={() => setItemEdit(todo.id)}
             >
               {todo.title}
             </label>
@@ -128,15 +130,17 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
               type="button"
               className="destroy"
               data-cy="deleteTodo"
-              onClick={() => handleClickDelete(todo.id)}
+              onClick={() => handlerClickDelete(todo.id)}
             />
           </div>
-          <form onSubmit={(event) => handleSubmit(event, todo)}>
+          <form onSubmit={(event) => handlerSubmit(event, todo)}>
             <input
               type="text"
               className="edit"
-              value={todo.title}
-              onChange={(event) => handleChangeEdit(event, todo)}
+              value={title}
+              onChange={(event) => {
+                setTitle(event.target.value);
+              }}
             />
           </form>
         </li>

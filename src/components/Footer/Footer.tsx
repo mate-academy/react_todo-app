@@ -16,7 +16,7 @@ export const Footer: React.FC<Props> = ({
   todos,
   user,
 }) => {
-  const completedtodos = todos.filter(todo => !todo.completed).length;
+  const completedtodos = todos.filter(todo => todo.completed).length;
 
   const handlerClick = () => {
     setTodos(
@@ -36,51 +36,53 @@ export const Footer: React.FC<Props> = ({
 
   return (
     <footer>
-      <div className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${todos.filter(todo => !todo.completed).length} `}
-          items left
-        </span>
+      {todos.length > 0 && (
+        <div className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {`${todos.filter(todo => !todo.completed).length} `}
+            items left
+          </span>
 
-        <ul className="filters">
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) => (isActive ? 'selected' : '')}
+          <ul className="filters">
+            <li>
+              <NavLink
+                to="/"
+                className={({ isActive }) => (isActive ? 'selected' : '')}
+              >
+                All
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="active"
+                className={({ isActive }) => (isActive ? 'selected' : '')}
+              >
+                Active
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="completed"
+                className={({ isActive }) => (isActive ? 'selected' : '')}
+              >
+                Completed
+              </NavLink>
+            </li>
+          </ul>
+
+          {completedtodos > 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handlerClick}
             >
-              All
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="active"
-              className={({ isActive }) => (isActive ? 'selected' : '')}
-            >
-              Active
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="completed"
-              className={({ isActive }) => (isActive ? 'selected' : '')}
-            >
-              Completed
-            </NavLink>
-          </li>
-        </ul>
-
-        {completedtodos > 0 && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={handlerClick}
-          >
-            Clear completed
-          </button>
-        )}
-      </div>
+              Clear completed
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="card">
         <div className="card-content">
