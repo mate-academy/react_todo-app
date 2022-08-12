@@ -139,7 +139,7 @@ export const TodoApp: React.FC = () => {
         <TodoList todos={shownTodos} changeTodo={changeTodo} />
       </section>
 
-      {todos.length === 0 || (
+      {!todos.length || (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${todos.filter((todo: Todo) => !todo.completed).length} items left`}
