@@ -28,8 +28,8 @@ export const TodoApp = () => {
   const filteredBy = location.pathname;
 
   /* VARIABLES */
-  const countNoCompletedTodos = visibleTodos
-    .filter(visibleTodo => visibleTodo.completed === false)
+  const countNoCompletedTodos = todos
+    .filter(todo => todo.completed === false)
     .length;
 
   const isCompleted = todos.filter(todo => todo.completed === true);
