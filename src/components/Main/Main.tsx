@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { response } from '../../api/api';
+import { patchTodo, response } from '../../api/api';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 import { TodoList } from '../TodoList';
@@ -38,15 +38,7 @@ export const Main: React.FC<Props> = ({
       })));
 
       todos.forEach(({ id }) => {
-        response(`/todos/${id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            completed: true,
-          }),
-        });
+        patchTodo(id, 'completed', true);
       });
     } else {
       setTodos(todos.map(todo => ({
@@ -55,15 +47,7 @@ export const Main: React.FC<Props> = ({
       })));
 
       todos.forEach(({ id }) => {
-        response(`/todos/${id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            completed: false,
-          }),
-        });
+        patchTodo(id, 'completed', true);
       });
     }
   };

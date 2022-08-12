@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { response } from '../../api/api';
+import { postTodo } from '../../api/api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -15,17 +15,7 @@ export const Header: React.FC<Props> = ({ userId, todos, setTodos }) => {
     event.preventDefault();
 
     if (title && userId > 0) {
-      response('/todos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          userId,
-          completed: false,
-        }),
-      })
+      postTodo(title, userId)
         .then(({ id }) => {
           setTodos([
             ...todos,

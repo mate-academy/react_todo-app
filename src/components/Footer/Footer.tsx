@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { response } from '../../api/api';
 import { Todo } from '../../types/Todo';
@@ -36,7 +37,7 @@ export const Footer: React.FC<Props> = ({
 
   return (
     <footer>
-      {todos.length > 0 && (
+      {!!todos.length && (
         <div className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${todos.filter(todo => !todo.completed).length} `}
@@ -47,7 +48,9 @@ export const Footer: React.FC<Props> = ({
             <li>
               <NavLink
                 to="/"
-                className={({ isActive }) => (isActive ? 'selected' : '')}
+                className={({ isActive }) => classNames(
+                  { selected: isActive },
+                )}
               >
                 All
               </NavLink>
@@ -56,7 +59,9 @@ export const Footer: React.FC<Props> = ({
             <li>
               <NavLink
                 to="active"
-                className={({ isActive }) => (isActive ? 'selected' : '')}
+                className={({ isActive }) => classNames(
+                  { selected: isActive },
+                )}
               >
                 Active
               </NavLink>
@@ -65,7 +70,9 @@ export const Footer: React.FC<Props> = ({
             <li>
               <NavLink
                 to="completed"
-                className={({ isActive }) => (isActive ? 'selected' : '')}
+                className={({ isActive }) => classNames(
+                  { selected: isActive },
+                )}
               >
                 Completed
               </NavLink>

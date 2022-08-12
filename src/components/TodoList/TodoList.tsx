@@ -4,7 +4,7 @@
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { response } from '../../api/api';
+import { deleteTodo, patchTodo } from '../../api/api';
 import { Condition } from '../../types/Condition';
 import { Todo } from '../../types/Todo';
 
@@ -40,19 +40,11 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
       ...todos.slice(findIndex(todoId) + 1),
     ]);
 
-    response(`/todos/${todoId}`, { method: 'DELETE' });
+    deleteTodo(todoId);
   };
 
   const handlerClickCompleted = (todo: Todo) => {
-    response(`/todos/${todo.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        completed: !todo.completed,
-      }),
-    });
+    patchTodo(todo.id, 'completed', !todo.completed);
 
     setTodos([
       ...todos.slice(0, findIndex(todo.id)),
@@ -67,30 +59,28 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   const handlerSubmit = (event: React.SyntheticEvent, todo: Todo) => {
     event.preventDefault();
 
-    setTodos([
-      ...todos.slice(0, findIndex(todo.id)),
-      {
-        ...todo,
-        title,
-      },
-      ...todos.slice(findIndex(todo.id) + 1),
-    ]);
+    if (title) {
+      setTodos([
+        ...todos.slice(0, findIndex(todo.id)),
+        {
+          ...todo,
+          title,
+        },
+        ...todos.slice(findIndex(todo.id) + 1),
+      ]);
 
-    response(`/todos/${todo.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title,
-      }),
-    });
+      patchTodo(todo.id, 'title', title);
 
-    setItemEdit(0);
+      setItemEdit(0);
+    } else {
+      setItemEdit(0);
+    }
   };
 
   useEffect(() => {
-    const keyDownHandler = (event: any) => {
+    const keyDownHandler = (
+      event: globalThis.KeyboardEvent,
+    ) => {
       if (event.key === 'Escape') {
         setItemEdit(0);
       }
@@ -102,6 +92,10 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
       document.removeEventListener('keydown', keyDownHandler);
     };
   }, []);
+
+  useEffect(() => {
+    setTitle('');
+  }, [itemEditId]);
 
   return (
     <ul className="todo-list" data-cy="todoList">

@@ -24,7 +24,9 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
   const submitHandlerCreate = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    if (name && username && email && phone) {
+    const validCreate = name && username && email && phone;
+
+    if (validCreate) {
       let hasDublicate = false;
 
       response('/users').then(usersFromServer => {
@@ -98,7 +100,7 @@ export const Modal: React.FC<Props> = ({ setUser }) => {
         <article className="message">
           <div className="message-header">
             <p className="title has-text-light">
-              Please, choose a user or create your own
+              Please, choose an user or create your own
             </p>
           </div>
           <div className="message-body">
