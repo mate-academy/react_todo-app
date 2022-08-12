@@ -111,6 +111,8 @@ export const App: React.FC = () => {
   const setNewTitleTodo = (newTitle: string, todoId: number) => {
     if (newTitle.trim() === '') {
       onDeleteTodo(todoId);
+
+      return;
     }
 
     setTodos(todos
