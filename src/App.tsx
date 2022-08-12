@@ -99,6 +99,7 @@ export const App: React.FC = () => {
                 todos={todos}
                 deleteTodo={deleteTodo}
                 toggleTodoStatus={toggleTodoStatus}
+                setTodos={setTodos}
               />
             )}
           />
@@ -109,6 +110,7 @@ export const App: React.FC = () => {
                 todos={todos.filter(todo => todo.completed === false)}
                 deleteTodo={deleteTodo}
                 toggleTodoStatus={toggleTodoStatus}
+                setTodos={setTodos}
               />
             )}
           />
@@ -119,6 +121,7 @@ export const App: React.FC = () => {
                 todos={todos.filter(todo => todo.completed === true)}
                 deleteTodo={deleteTodo}
                 toggleTodoStatus={toggleTodoStatus}
+                setTodos={setTodos}
               />
             )}
           />

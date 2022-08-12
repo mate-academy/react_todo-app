@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import classNames from 'classnames';
@@ -7,6 +8,7 @@ import { Todo } from '../types/todo';
 type Props = {
   todo: Todo
   todos: Todo[]
+  setTodos: (todo: Todo[]) => void
   deleteTodo: (id: string) => void
   toggleTodoStatus: (id: string) => void
 };
@@ -16,19 +18,23 @@ export const TodoItem: React.FC<Props> = ({
   todo,
   deleteTodo,
   toggleTodoStatus,
+  setTodos,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedTitle, setUpdatedTitle] = useState(todo.title);
 
-  const updateTitel = (e: React.KeyboardEvent | string) => {
+  const changeTitle = (newTitle: string) => {
+    console.log(newTitle);
+    const updatedTodos = todos.map(prevTodo => (prevTodo.id === todo.id
+      ? { ...todo, title: newTitle }
+      : prevTodo));
+
+    setTodos(updatedTodos);
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+  };
+
+  const makeNotEditing = (e: React.KeyboardEvent | string) => {
     if (e === 'Enter') {
       setIsEditing(false);
-
-      const updatedTodos = todos.map(prevTodo => (prevTodo.id === todo.id
-        ? { ...todo, title: updatedTitle }
-        : prevTodo));
-
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
     }
   };
 
@@ -51,13 +57,13 @@ export const TodoItem: React.FC<Props> = ({
             ? (
               <input
                 className="todo"
-                value={updatedTitle}
-                onChange={(e) => (setUpdatedTitle(e.target.value))}
-                onKeyDown={(e) => updateTitel(e.key)}
-                onBlur={() => updateTitel('Enter')}
+                value={todo.title}
+                onChange={(e) => (changeTitle(e.target.value))}
+                onKeyDown={(e) => makeNotEditing(e.key)}
+                onBlur={() => makeNotEditing('Blur')}
               />
             )
-            : <div className="todo">{updatedTitle}</div>}
+            : <div className="todo">{todo.title}</div>}
         </label>
         <button
           type="button"
@@ -67,6 +73,7 @@ export const TodoItem: React.FC<Props> = ({
           onClick={() => deleteTodo(todo.id)}
         />
       </div>
+
       <input type="text" className="edit" />
     </li>
   );
