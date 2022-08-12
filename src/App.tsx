@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Header } from './components/Header/Header';
 import { Main } from './components/Main/Main';
 import { Footer } from './components/Footer/Footer';
@@ -8,7 +9,8 @@ import { fetchUser, fetchTodos } from './api/fetchGet';
 
 export const App: React.FC = () => {
   const [user, setUser] = useState<User | null >(null);
-  const [listOfTodos, setListOfTodos] = useState<Todo[] | null>(null);
+  const [listOfTodos, setListOfTodos] = useState<Todo[]>([]);
+  const { filterCriteria } = useParams();
 
   useEffect(() => {
     fetchUser()
@@ -16,9 +18,6 @@ export const App: React.FC = () => {
         if (res?.name !== undefined) {
           setUser(res);
         }
-
-        // eslint-disable-next-line no-console
-        console.log(res);
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
@@ -39,17 +38,25 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log(listOfTodos);
-
   return (
     <div className="todoapp">
 
-      <Header user={user} />
+      <Header
+        user={user}
+        setListOfTodos={setListOfTodos}
+      />
 
-      <Main listOfTodos={listOfTodos} />
+      <Main
+        filterCriteria={filterCriteria}
+        listOfTodos={listOfTodos}
+        setListOfTodos={setListOfTodos}
+      />
 
-      <Footer />
+      <Footer
+        filterCriteria={filterCriteria}
+        setListOfTodos={setListOfTodos}
+        listOfTodos={listOfTodos}
+      />
     </div>
   );
 };

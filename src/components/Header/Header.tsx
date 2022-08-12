@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { User } from '../../types/User';
-import { fetchPost } from '../../api/fetchPost';
+import { fetchSend } from '../../api/fetchSend';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   user: User | null;
+  setListOfTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-export const Header: React.FC<Props> = ({ user }) => {
+export const Header: React.FC<Props> = ({ user, setListOfTodos }) => {
   const [inputField, setInputField] = useState('');
 
   const postNewTodo = () => {
@@ -14,10 +16,15 @@ export const Header: React.FC<Props> = ({ user }) => {
       return;
     }
 
-    fetchPost(inputField)
+    fetchSend('Post', inputField)
       .then(res => {
-        // eslint-disable-next-line no-console
-        console.log(res);
+        setListOfTodos(prev => {
+          if (prev) {
+            return [...prev, res];
+          }
+
+          return [res];
+        });
       })
       .catch((error) => {
         // eslint-disable-next-line no-console

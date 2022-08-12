@@ -3,13 +3,19 @@ import classNames from 'classnames';
 import { useEffect, useState, useRef } from 'react';
 import { Todo } from '../../types/Todo';
 import { useClickHook } from '../../UseClickHook/UseClickHook';
-import { fetchPatch } from '../../api/fetchPatch';
+import { fetchSend, fetchDelete } from '../../api/fetchSend';
 
 type Props = {
   todo: Todo;
+  setListOfTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  listOfTodos: Todo[];
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = (
+  {
+    todo, setListOfTodos, listOfTodos,
+  },
+) => {
   const [click, setClick] = useState('');
   const clickHook = useClickHook(click);
 
@@ -19,8 +25,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const editInputRef = useRef<HTMLInputElement | null>(null);
 
+  useEffect(() => {
+    setCompleted(todo.completed);
+  }, [listOfTodos]);
+
   const patchHandler = () => {
-    fetchPatch(contentString, completed, todo.id)
+    fetchSend('PATCH', contentString, completed, todo.id)
       .then(res => {
         if (res?.title === undefined) {
           setCompleted(prev => !prev);
@@ -33,11 +43,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('clickHook', clickHook);
-
     if (clickHook === 'change') {
       patchHandler();
+      setListOfTodos(prev => [...prev].map(el => {
+        if (el.id === todo.id) {
+          // eslint-disable-next-line no-param-reassign
+          el.completed = !el.completed;
+        }
+
+        return el;
+      }));
     }
 
     if (clickHook === 'dblclick') {
@@ -52,6 +67,27 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       editInputRef.current.focus();
     }
   }, [edit]);
+
+  const deleteHandler = () => {
+    fetchDelete(todo.id)
+      .then(res => {
+        if (res.ok) {
+          setListOfTodos(prev => [...prev].filter(el => el.id !== todo.id));
+        }
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.warn(`${err.message}`);
+      });
+  };
+
+  const emptyStringHandler = () => {
+    if (contentString === '') {
+      deleteHandler();
+    } else {
+      patchHandler();
+    }
+  };
 
   return (
     <>
@@ -79,6 +115,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="destroy"
             data-cy="deleteTodo"
+            onClick={() => {
+              deleteHandler();
+            }}
           />
         </div>
         <input
@@ -90,13 +129,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           }}
           value={contentString}
           onBlur={() => {
+            emptyStringHandler();
             setEdit(false);
-            patchHandler();
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
+              emptyStringHandler();
+
               setEdit(false);
-              patchHandler();
             }
           }}
         />

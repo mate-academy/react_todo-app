@@ -1,11 +1,36 @@
+import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
+import { fetchSend } from '../../api/fetchSend';
 
 type Props = {
-  listOfTodos: Todo[] | null;
+  listOfTodos: Todo[];
+  setListOfTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  filterCriteria: string | undefined;
 };
 
-export const Main: React.FC<Props> = ({ listOfTodos }) => {
+export const Main: React.FC<Props> = (
+  {
+    listOfTodos, setListOfTodos, filterCriteria,
+  },
+) => {
+  const [fistTimeClickonCheckAll, setFistTimeClickonCheckAll] = useState(true);
+  const checkAllHandler = () => {
+    setListOfTodos(prev => [...prev].map(el => {
+      const newObject = { ...el };
+
+      newObject.completed = fistTimeClickonCheckAll;
+
+      fetchSend('PATCH', newObject.title, newObject.completed, newObject.id)
+        // eslint-disable-next-line no-console
+        .catch(err => console.warn(err));
+
+      return newObject;
+    }));
+
+    setFistTimeClickonCheckAll(prev => !prev);
+  };
+
   return (
     <section className="main">
       <input
@@ -13,52 +38,38 @@ export const Main: React.FC<Props> = ({ listOfTodos }) => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        onClick={() => {
+          checkAllHandler();
+        }}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
         {
-          listOfTodos && (
-            listOfTodos.map(todo => (
-              <TodoItem todo={todo} key={todo.id} />
-            ))
+          listOfTodos.length > 0 && (
+            listOfTodos
+              .filter(el => {
+                switch (filterCriteria) {
+                  case 'completed':
+                    return el.completed;
+                  case 'active':
+                    return !el.completed;
+                  default:
+                    return true;
+                }
+              })
+              .map(todo => {
+                return (
+                  <TodoItem
+                    todo={todo}
+                    key={todo.id}
+                    listOfTodos={listOfTodos}
+                    setListOfTodos={setListOfTodos}
+                  />
+                );
+              })
           )
         }
-        {/* <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-view" />
-            <label htmlFor="toggle-view">asdfghj</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="completed">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-completed" />
-            <label htmlFor="toggle-completed">qwertyuio</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="editing">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-editing" />
-            <label htmlFor="toggle-editing">zxcvbnm</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-view2" />
-            <label htmlFor="toggle-view2">1234567890</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li> */}
       </ul>
     </section>
   );
