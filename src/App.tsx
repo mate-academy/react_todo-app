@@ -7,8 +7,7 @@ export const App: React.FC = () => {
     <Routes>
       <Route path="/">
         <Route index element={<TodoApp />} />
-        <Route path="local" element={<TodoApp />} />
-        <Route path="server" element={<TodoApp />} />
+        <Route path=":storage" element={<TodoApp />} />
       </Route>
       <Route path="home" element={<Navigate to="/" />} />
       <Route path="*" element={<p>Page not found</p>} />
