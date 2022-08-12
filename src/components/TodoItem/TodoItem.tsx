@@ -19,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({
   updateTodo,
 }) => {
   const [editing, setEditing] = useState(false);
-  const [editingTitle, setEditingTitle] = useState('');
+  const [editingTitle, setEditingTitle] = useState(item.title);
 
   const onCounterClickChange = (
     event: React.MouseEvent<HTMLLabelElement>,
@@ -54,7 +54,6 @@ export const TodoItem: React.FC<Props> = ({
 
   const onBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
     if (!event.target.value.trim().length) {
-      deleteTodo(item.id);
       setEditing(false);
     } else {
       setEditing(false);
@@ -81,9 +80,7 @@ export const TodoItem: React.FC<Props> = ({
         <label
           role="presentation"
           onKeyDown={() => {}}
-          onClick={(event) => {
-            setEditing(onCounterClickChange(event));
-          }}
+          onClick={(event) => setEditing(onCounterClickChange(event))}
         >
           {item.title}
         </label>
@@ -95,6 +92,7 @@ export const TodoItem: React.FC<Props> = ({
         />
       </div>
       <input
+        ref={input => input?.focus()}
         type="text"
         className="edit"
         aria-label="Field name"

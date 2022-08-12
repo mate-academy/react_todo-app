@@ -2,6 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
+
+/* COMPONENTS */
+import { TodoForm } from '../TodoForm/TodoForm';
 import { TodoList } from '../TodoList/TodoList';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
@@ -19,16 +22,17 @@ export const TodoApp = () => {
   /* STATE */
   const [todos, setTodos] = useState<Todo[]>(useLocalStorage);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('');
-  const [isClearBtn, setClearBtn] = useState(false);
 
   /* GET PATHNAME */
   const location = useLocation();
   const filteredBy = location.pathname;
 
+  /* VARIABLES */
   const countNoCompletedTodos = visibleTodos
     .filter(visibleTodo => visibleTodo.completed === false)
     .length;
+
+  const isCompleted = todos.filter(todo => todo.completed === true);
 
   /* HOOKS */
   useEffect(() => (
@@ -49,42 +53,6 @@ export const TodoApp = () => {
   }, [filteredBy, todos]);
 
   /* FUNCTIONS */
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
-    if (value === ' ') {
-      return;
-    }
-
-    if (value) {
-      setQuery(value);
-    }
-  };
-
-  const handleSubmitForm = (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (query === '') {
-      return;
-    }
-
-    const newTodo = {
-      id: +new Date(),
-      title: query,
-      completed: false,
-    };
-
-    const sameTodo = visibleTodos
-      .find(visibleTodo => visibleTodo.title === newTodo.title);
-
-    if (sameTodo) {
-      return;
-    }
-
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
-    setQuery('');
-  };
-
   const changeCompletedOneTodo = (id: number) => {
     const currentTodos = [
       ...todos,
@@ -99,7 +67,6 @@ export const TodoApp = () => {
       return todo;
     });
 
-    setClearBtn(true);
     setTodos(updatedTodo);
   };
 
@@ -119,7 +86,18 @@ export const TodoApp = () => {
     });
 
     setTodos(updatedTodos);
-    setClearBtn(true);
+  };
+
+  const addTodo = (title: string) => {
+    if (title.trim()) {
+      const newTodo: Todo = {
+        id: +new Date(),
+        title,
+        completed: false,
+      };
+
+      setTodos((prevTodo) => ([...prevTodo, newTodo]));
+    }
   };
 
   const deleteTodo = (id: number) => {
@@ -153,7 +131,6 @@ export const TodoApp = () => {
     const filteredTodos = currentTodos.filter(todo => !todo.completed);
 
     setTodos(filteredTodos);
-    setClearBtn(false);
   };
 
   return (
@@ -161,16 +138,7 @@ export const TodoApp = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={handleSubmitForm}>
-          <input
-            onChange={handleInputChange}
-            value={query}
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <TodoForm addTodo={addTodo} />
       </header>
 
       <section className="main">
@@ -194,7 +162,7 @@ export const TodoApp = () => {
       <TodosFilter
         countNoCompletedTodos={countNoCompletedTodos}
         clearCompletedTodos={clearCompletedTodos}
-        isClearBtn={isClearBtn}
+        isCompleted={isCompleted}
       />
     </div>
   );

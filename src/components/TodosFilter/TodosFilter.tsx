@@ -1,15 +1,16 @@
 import { NavLink } from 'react-router-dom';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   countNoCompletedTodos: number
   clearCompletedTodos: () => void,
-  isClearBtn:boolean,
+  isCompleted: Todo[],
 };
 
 export const TodosFilter: React.FC<Props> = ({
   countNoCompletedTodos,
   clearCompletedTodos,
-  isClearBtn,
+  isCompleted,
 }) => {
   type Link = {
     isActive: boolean,
@@ -51,7 +52,7 @@ export const TodosFilter: React.FC<Props> = ({
           </NavLink>
         </li>
       </ul>
-      {isClearBtn && (
+      {isCompleted.length > 0 && (
         <button
           onClick={clearCompletedTodos}
           type="button"
