@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { Todo } from '../../Types/Todo';
 import { useLocalStorage } from '../../Utilits/LocalStorage/LocalStorageAPI';
 import {
@@ -15,10 +15,8 @@ import { TodosFilters } from '../TodoFilters/TodosFilter';
 import { TodoList } from '../TodoList/TodoList';
 
 export const TodoApp: React.FC = () => {
-  const curentUrl = new URL(document.URL).pathname.includes('server')
-    ? 'server'
-    : 'local';
-  const [storage, setStorage] = useState(curentUrl);
+  const { pathname } = useLocation();
+  const [storage, setStorage] = useState(pathname.slice(1) || 'local');
   const [localTodos, setLocalTodos] = useLocalStorage<Todo[]>('todos', []);
   const [serverTodos, setServerTodos] = useState<Todo[]>([]);
   const [searchParams] = useSearchParams();
@@ -28,7 +26,7 @@ export const TodoApp: React.FC = () => {
   };
 
   useEffect(() => {
-    const timer = setInterval(updateServer, 500);
+    const timer = setInterval(updateServer, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -38,7 +36,11 @@ export const TodoApp: React.FC = () => {
   },
   []);
 
-  const usedTodos = storage === 'local' ? localTodos : serverTodos;
+  useEffect(() => {
+    setStorage(pathname);
+  }, [pathname]);
+
+  const usedTodos = storage === '/server' ? serverTodos : localTodos;
   const visibleTodos = [...usedTodos].filter(todo => {
     switch (completed) {
       case 'active':
@@ -65,7 +67,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const addTodo = (value: string) => {
-    if (storage === 'local') {
+    if (storage === '/local') {
       return addTodoLocal(value);
     }
 
@@ -87,7 +89,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const deleteTodo = (value? : number) => {
-    if (storage === 'local') {
+    if (storage === '/local') {
       deleteTodoLocal(value);
     } else if (value) {
       deleteTodoServer(value);
@@ -120,7 +122,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const updateTodo = (id: number, value: string | boolean) => {
-    if (storage === 'local') {
+    if (storage === '/local') {
       updateTodoLocal(id, value);
     } else {
       const updatedValue = typeof value === 'string'
@@ -140,7 +142,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const MarkAll = () => {
-    if (storage === 'local') {
+    if (storage === '/local') {
       localeMarkAllTodo();
     } else if (usedTodos.every(todo => todo.completed === true)) {
       usedTodos
@@ -152,10 +154,10 @@ export const TodoApp: React.FC = () => {
 
   return (
     <StorageContext.Provider value="">
-      <StorageSelector storage={storage} setStorage={setStorage} />
+      <StorageSelector storage={storage} />
       <div className="todoapp">
         <header className="header">
-          <h1>{`${storage} todos`}</h1>
+          <h1>{`${storage.slice(1)} todos`}</h1>
           <TodoAdd addTodo={addTodo} />
         </header>
 

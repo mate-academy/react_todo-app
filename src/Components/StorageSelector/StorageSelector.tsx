@@ -1,34 +1,30 @@
-import { createBrowserHistory } from 'history';
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
+import './StorageSelector.scss';
 
 type Props = {
   storage: string
-  setStorage: (value: string) => void
 };
 
-export const StorageSelector: React.FC<Props> = ({ storage, setStorage }) => {
-  const history = createBrowserHistory();
-  const changeStorage = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    history.push(`${e.target.value}`);
-    setStorage(e.target.value);
-  };
-
+export const StorageSelector: React.FC<Props> = ({ storage }) => {
   return (
-    <div className="select">
-      <select
-        defaultValue={storage}
-        onChange={changeStorage}
+    <div className="storage">
+      <Link
+        className={classNames('storage__link', {
+          selected: storage === '/local',
+        })}
+        to="local"
       >
-        <option
-          value="local"
-        >
-          Local
-        </option>
-        <option
-          value="server"
-        >
-          Server
-        </option>
-      </select>
+        Local
+      </Link>
+      <Link
+        className={classNames('storage__link', {
+          selected: storage === '/server',
+        })}
+        to="server"
+      >
+        Server
+      </Link>
     </div>
   );
 };

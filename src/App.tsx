@@ -5,7 +5,7 @@ import { TodoApp } from './Components/TodoApp/TodoApp';
 export const App: React.FC = () => {
   return (
     <Routes>
-      <Route path="/">
+      <Route path="/" element={<TodoApp />}>
         <Route index element={<TodoApp />} />
         <Route path=":storage" element={<TodoApp />} />
       </Route>

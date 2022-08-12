@@ -1,0 +1,35 @@
+.storage {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  right: 0;
+  left: 0;
+
+
+  &__link {
+    display: inline;
+    color: rgba(77, 77, 77, 0.5);
+    background-color: white;
+    margin: 3px;
+    padding: 3px 7px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  &__link:hover {
+    border-color: rgba(175, 47, 47, 0.1);
+  }
+
+  &__link.selected {
+    color: inherit;
+    border-color: rgba(175, 47, 47, 0.2);
+  }
+
+
+}
+
+
