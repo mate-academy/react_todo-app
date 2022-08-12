@@ -31,7 +31,7 @@ export const TodoApp: React.FC = () => {
   }, [location, todos]);
 
   const addTask = (userInput: string) => {
-    if (userInput) {
+    if (userInput.trim()) {
       const newItem = {
         id: +new Date(),
         title: userInput,
@@ -121,13 +121,15 @@ export const TodoApp: React.FC = () => {
 
         <Filter />
 
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={clearCompleted}
-        >
-          Clear completed
-        </button>
+        {notCompleted.length > 0 && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={clearCompleted}
+          >
+            Clear completed
+          </button>
+        )}
       </footer>
     </div>
   );
