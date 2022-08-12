@@ -4,6 +4,11 @@ import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList/TodoList';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
+enum Status {
+  ACTIVE = '/active',
+  COMPLETED = '/completed',
+}
+
 const useLocaleStorage = () => {
   const todosFromStorage = localStorage.getItem('todos');
 
@@ -29,11 +34,11 @@ export const TodoApp: React.FC = () => {
 
   useEffect(() => {
     switch (pathname) {
-      case '/active':
+      case Status.ACTIVE:
         setVisibleTodos(todos.filter(todo => !todo.completed));
         break;
 
-      case '/completed':
+      case Status.COMPLETED:
         setVisibleTodos(todos.filter(todo => todo.completed));
         break;
 
