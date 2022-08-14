@@ -19,7 +19,7 @@ export const AddTodoForm: React.FC<Props> = ({
     event,
   ) => {
     event.preventDefault();
-    if (inputText === '') {
+    if (inputText.trim() === '') {
       return;
     }
 

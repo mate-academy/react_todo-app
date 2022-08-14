@@ -43,8 +43,10 @@ export const TodoItem: React.FC<Props> = ({
     event.preventDefault();
     if (newTitle === '') {
       deleteHandler();
+
       return;
     }
+
     onUpdate(todo.id, newTitle);
     updateTodo(false);
   };
