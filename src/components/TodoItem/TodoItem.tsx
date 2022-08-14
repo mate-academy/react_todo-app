@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 import './TodoItem.scss';
@@ -9,22 +9,22 @@ type Props = {
   todo: Todo,
   onChange: (value: boolean, todoId: number) => void,
   onDelete: (todoId: number) => void,
+  onEdit: (value: string, todoId: number) => void,
 };
 
-export const TodoItem: React.FC<Props> = ({
+export const TodoItem: React.FC<Props> = React.memo(({
   todo,
   onChange,
   onDelete,
+  onEdit,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
-  // const ref = useRef<HTMLInputElement>(null);
 
-  // const handleClick = () => {
-  //   ref.current?.focus();
-  // };
+  // eslint-disable-next-line max-len
+  const handleChange = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+    const regex = /^\s*$/i;
 
-  const handleChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
       case 'Escape':
         setTodoTitle(todo.title);
@@ -32,17 +32,20 @@ export const TodoItem: React.FC<Props> = ({
         break;
 
       case 'Enter':
-        if (todoTitle !== '') {
-          setTodoTitle(todoTitle);
-          setIsEditing(false);
+        if (regex.test(todoTitle)) {
+          return;
         }
+
+        setIsEditing(false);
+        setTodoTitle(todoTitle);
+        onEdit(todoTitle, todo.id);
 
         break;
 
       default:
         break;
     }
-  };
+  }, [todoTitle]);
 
   return (
     <li
@@ -56,6 +59,7 @@ export const TodoItem: React.FC<Props> = ({
       onBlur={() => {
         setIsEditing(false);
         setTodoTitle(todoTitle);
+        onEdit(todoTitle, todo.id);
       }}
     >
       <div className="view">
@@ -89,4 +93,4 @@ export const TodoItem: React.FC<Props> = ({
       />
     </li>
   );
-};
+});

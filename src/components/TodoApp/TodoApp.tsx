@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '../../customHooks/useLocalStorage';
 import { Todo } from '../../types/Todo';
@@ -13,7 +13,7 @@ export const TodoApp: React.FC = () => {
   const [completed, setCompleted] = useState(false);
   const { status } = useParams();
 
-  const setSingleTodoState = (value: boolean, todoId: number) => {
+  const setSingleTodoState = useCallback((value: boolean, todoId: number) => {
     const newTodos = todos.map((todo: Todo) => {
       if (todo.id === todoId) {
         return {
@@ -26,9 +26,9 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos(newTodos);
-  };
+  }, [todos]);
 
-  const setAllTodoState = (value: boolean) => {
+  const setAllTodoState = useCallback((value: boolean) => {
     const newTodos = todos.map((todo: Todo) => {
       return {
         ...todo,
@@ -38,9 +38,10 @@ export const TodoApp: React.FC = () => {
 
     setTodos(newTodos);
     setCompleted(value);
-  };
+  }, [todos]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  // eslint-disable-next-line max-len
+  const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const regex = /^\s*$/i;
@@ -62,25 +63,40 @@ export const TodoApp: React.FC = () => {
 
     setTodos(newTodos);
     setTodoTitle('');
-  };
+  }, [todoTitle]);
 
-  const deleteTodo = (todoId: number) => {
+  const deleteTodo = useCallback((todoId: number) => {
     const newTodos = todos.filter(todo => todo.id !== todoId);
 
     setTodos(newTodos);
-  };
+  }, [todos]);
 
-  const clearCompletedTodo = () => {
+  const clearCompletedTodo = useCallback(() => {
     const newTodos = todos.filter(todo => todo.completed === false);
 
     setTodos(newTodos);
-  };
+  }, [todos]);
 
-  const activeTodosCount = () => {
+  const editTodo = useCallback((value: string, todoId: number) => {
+    const newTodos = todos.map((todo: Todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          title: value,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos(newTodos);
+  }, [todos]);
+
+  const activeTodosCount = useMemo(() => {
     return todos.filter(todo => todo.completed === false).length;
-  };
+  }, [todos]);
 
-  function sortTodos() {
+  const visibleTodos = useMemo(() => {
     switch (status) {
       case 'active':
         return todos.filter(todo => todo.completed === false);
@@ -91,9 +107,7 @@ export const TodoApp: React.FC = () => {
       default:
         return todos;
     }
-  }
-
-  const visibleTodos = sortTodos();
+  }, [status, todos]);
 
   return (
     <>
@@ -133,6 +147,7 @@ export const TodoApp: React.FC = () => {
           todos={visibleTodos}
           onChange={setSingleTodoState}
           onDelete={deleteTodo}
+          onEdit={editTodo}
         />
       </section>
 

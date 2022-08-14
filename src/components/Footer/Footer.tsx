@@ -3,14 +3,14 @@ import { TodoFilter } from '../TodoFilter';
 
 type Props = {
   onClear: () => void,
-  onCount: () => void,
+  onCount: number,
 };
 
 export const Footer: React.FC<Props> = ({ onClear, onCount }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${onCount()} items left`}
+        {`${onCount} items left`}
       </span>
 
       <TodoFilter />
