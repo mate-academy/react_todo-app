@@ -1,4 +1,3 @@
-
 .todo-list {
   margin: 0;
   padding: 0;
@@ -112,5 +111,17 @@
   .todo-list li .toggle {
     height: 40px;
     background: none;
+  }
+}
+
+.dark-theme {
+  .todo-list {
+    background-color: #242526;
+    color: #d9dbdf;
+  }
+
+  .todo-list li.completed label {
+    color: #454951;
+    text-decoration: line-through;
   }
 }

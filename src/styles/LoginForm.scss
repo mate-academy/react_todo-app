@@ -1,0 +1,103 @@
+.form {
+  background: #d7d7d7;
+
+  &__title {
+    font: inherit;
+    font-size: 20px;
+    font-weight: bold;
+
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin: auto;
+  }
+
+  &__input {
+    font: inherit;
+    font-size: 16px;
+    font-weight: bold;
+    
+    border: none;
+
+    outline: none;
+
+    margin-bottom: 30px;
+    width: 100%;
+    height: 30px;
+    padding-left: 10px;
+    border-radius: 10px;
+  }
+
+  &__button {
+    font: inherit;
+    font-size: 20px;
+    font-weight: bold;
+
+    background-color: #eee;
+    line-height: 20px;
+    padding: 10px;
+    border-radius: 10px;
+
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    border: 3px solid transparent;
+
+    &:hover {
+      background-color: #00ced1;
+    }
+
+    &:active {
+      border-color: #00ced1;
+      background-color: #eee;
+    }
+  }
+
+  &__register {
+    font: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  &__change {
+    color: blue;
+    cursor: pointer;
+
+    &:active {
+      color: red;
+    }
+  }
+
+  &__error {
+    text-align: center;
+    position: relative;
+    top: -15px;
+    color: red;
+  }
+}
+
+.dark-theme {
+  .form {
+    background-color: #222;
+
+    &__title {
+      color: #eee;
+    }
+
+    &__register {
+      color: #eee;
+    }
+  }
+}
+
+.link-register {
+  text-decoration: none;
+}
