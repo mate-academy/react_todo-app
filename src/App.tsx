@@ -1,93 +1,116 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { TodoList } from './components/TodoList';
+import { Context } from './components/Context';
+import { Filters } from './components/Filters';
+import { Todo } from './types/Todo';
+
+enum TodoFilters {
+  completed = '/completed',
+  active = '/active',
+  default = '',
+}
+
+const useFilters = (filter: TodoFilters | string, todos: Todo[]) => {
+  switch (filter) {
+    case TodoFilters.completed: {
+      return todos.filter(todo => todo.completed === true);
+    }
+
+    case TodoFilters.active: {
+      return todos.filter(todo => todo.completed !== true);
+    }
+
+    default:
+      return todos;
+  }
+};
 
 export const App: React.FC = () => {
+  const [newTask, setNewTask] = useState('');
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const todosFromLocalStorage = localStorage.todo;
+
+    try {
+      return JSON.parse(todosFromLocalStorage) || [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.todo = JSON.stringify(todos);
+  }, [todos]);
+
+  const { pathname } = useLocation();
+  const currentFilter = useMemo(() => {
+    return Object.values(TodoFilters)
+      .find(todofilter => todofilter === pathname) || TodoFilters.default;
+  }, [pathname]);
+
+  const preparedTodos = useFilters(
+    currentFilter,
+    todos,
+  );
+
+  const handleSubmit = () => {
+    if (todos && newTask !== '') {
+      setTodos(currentTodos => {
+        return ([
+          ...currentTodos, {
+            title: newTask,
+            completed: false,
+            id: new Date().toISOString(),
+          },
+        ]);
+      });
+    } else if (!todos && newTask.length) {
+      setTodos([
+        {
+          title: newTask,
+          completed: false,
+          id: new Date().toISOString(),
+        },
+      ]);
+    }
+
+    setNewTask('');
+  };
+
+  const contextValues = {
+    todos: preparedTodos,
+    setTodos,
+    newTask,
+    setNewTask,
+    handleSubmit,
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          handleSubmit();
+        }}
+        >
           <input
             type="text"
             data-cy="createTodo"
             className="new-todo"
+            value={newTask}
+            onChange={(event) => setNewTask(event.target.value)}
             placeholder="What needs to be done?"
           />
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <Context.Provider value={contextValues}>
+        <TodoList />
+        <Filters />
+      </Context.Provider>
     </div>
   );
 };
