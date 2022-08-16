@@ -3,9 +3,3 @@ interface Todo {
   title: string,
   completed: boolean,
 }
-
-// enum Status {
-//   All = 'All',
-//   Active = 'Active',
-//   Completed = 'Completed',
-// }

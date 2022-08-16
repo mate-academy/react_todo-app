@@ -8,17 +8,13 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const savedTodos = localStorage.getItem('todos');
 
-    try {
-      return savedTodos ? JSON.parse(savedTodos) : [];
-    } catch (error) {
-      return [];
-    }
+    return savedTodos ? JSON.parse(savedTodos) : [];
   });
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const { pathname } = useLocation();
 
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
+  const handleActiveTodos = todos.filter(todo => !todo.completed);
+  const handleCompletedTodos = todos.filter(todo => todo.completed);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -52,15 +48,9 @@ export const App: React.FC = () => {
   };
 
   const toggleAllTodosStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setTodos((currentTodos) => currentTodos.map((todo) => (
-        { ...todo, completed: true }
-      )));
-    } else {
-      setTodos((currentTodos) => currentTodos.map((todo) => (
-        { ...todo, completed: false }
-      )));
-    }
+    setTodos((currentTodos) => currentTodos.map((todo) => (
+      { ...todo, completed: event.target.checked }
+    )));
   };
 
   const deleteTodo = (todoId: number) => {
@@ -70,7 +60,7 @@ export const App: React.FC = () => {
   };
 
   const deleteCompleted = () => {
-    setTodos(() => ([...activeTodos]));
+    setTodos(() => ([...handleActiveTodos]));
   };
 
   const editTodo = (editedTitle: string, todoId: number) => {
@@ -95,8 +85,8 @@ export const App: React.FC = () => {
       />
       <TodoFilter
         deleteCompleted={deleteCompleted}
-        activeTodos={activeTodos}
-        completedTodos={completedTodos}
+        activeTodos={handleActiveTodos}
+        onClear={handleCompletedTodos}
       />
     </div>
   );

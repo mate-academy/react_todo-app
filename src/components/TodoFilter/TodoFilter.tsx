@@ -4,13 +4,13 @@ import { NavLink } from 'react-router-dom';
 type Props = {
   deleteCompleted: () => void,
   activeTodos: Todo[],
-  completedTodos: Todo[],
+  onClear: Todo[],
 };
 
 export const TodoFilter: React.FC<Props> = ({
   deleteCompleted,
   activeTodos,
-  completedTodos,
+  onClear: completedTodos,
 }) => {
   return (
     <footer className="footer">
@@ -59,17 +59,15 @@ export const TodoFilter: React.FC<Props> = ({
         </li>
       </ul>
 
-      {(completedTodos.length)
-        ? (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={() => deleteCompleted()}
-          >
-            Clear completed
-          </button>
-        )
-        : null}
+      {completedTodos.length && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => deleteCompleted()}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

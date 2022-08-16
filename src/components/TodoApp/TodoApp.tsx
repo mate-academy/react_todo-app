@@ -11,7 +11,7 @@ export const TodoApp: React.FC<Props> = ({ addNewTodo }) => {
     event.preventDefault();
 
     const newTodo: Todo = {
-      id: (+new Date()),
+      id: Number(new Date()),
       title: TodoTitle,
       completed: false,
     };

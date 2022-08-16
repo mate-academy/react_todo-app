@@ -90,30 +90,3 @@ export const TodoItem: React.FC<Props> = ({
     </>
   );
 };
-
-/* <li className="completed">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-completed" />
-          <label htmlFor="toggle-completed">test2</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-editing" />
-          <label htmlFor="toggle-editing">test3</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view2" />
-          <label htmlFor="toggle-view2">test4</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li> */
