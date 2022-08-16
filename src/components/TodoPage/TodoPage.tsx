@@ -14,7 +14,7 @@ export const TodoPage: React.FC = () => {
   const addTodo = (userInput: string) => {
     if (userInput) {
       const newTodo: Todo = {
-        id: +new Date(),
+        id: Number(new Date()),
         title: userInput.trim(),
         completed: false,
       };
@@ -145,7 +145,7 @@ export const TodoPage: React.FC = () => {
         <footer className="footer">
           <TodoFilter
             todos={todos}
-            clearCompleted={clearCompleted}
+            onClearCompleted={clearCompleted}
           />
         </footer>
       )}

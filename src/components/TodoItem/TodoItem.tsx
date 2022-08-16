@@ -33,15 +33,18 @@ export const TodoItem: React.FC<Props> = ({ todo, onUpdate }) => {
         }
 
         break;
+
       case 'completed':
         if (typeof value === 'boolean') {
           newTodo.completed = value;
         }
 
         break;
+
       case 'deleted':
         newTodo = null;
         break;
+
       default:
     }
 
@@ -49,7 +52,11 @@ export const TodoItem: React.FC<Props> = ({ todo, onUpdate }) => {
   };
 
   return (
-    <li className={classNames({ editing, completed: todo.completed })}>
+    <li className={classNames({
+      editing,
+      completed: todo.completed,
+    })}
+    >
       <div className="view">
         <input
           type="checkbox"
@@ -83,8 +90,6 @@ export const TodoItem: React.FC<Props> = ({ todo, onUpdate }) => {
             handleOnEdit('title', title);
             setEditing(false);
           }
-
-          window.console.log(event.key);
 
           if (event.key === 'Escape') {
             setTitle(todo.title);

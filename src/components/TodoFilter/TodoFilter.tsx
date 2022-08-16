@@ -5,12 +5,17 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  clearCompleted: () => void,
+  onClearCompleted: () => void,
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, clearCompleted }) => {
+export const TodoFilter: React.FC<Props> = ({
+  todos,
+  onClearCompleted,
+}) => {
   const completedTodos = todos.filter(todo => todo.completed === true);
-  const activeClass = (isActive: boolean) => classNames({ selected: isActive });
+  const activeClass = (isActive: boolean) => classNames({
+    selected: isActive,
+  });
 
   return (
     <>
@@ -53,7 +58,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, clearCompleted }) => {
         <button
           type="button"
           className="clear-completed"
-          onClick={clearCompleted}
+          onClick={onClearCompleted}
         >
           Clear completed
         </button>
