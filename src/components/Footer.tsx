@@ -58,7 +58,7 @@ export const Footer: React.FC<Props> = ({ todos, setTodos }) => {
             Clear completed
           </button>
         )
-        : ''}
+        : null}
     </footer>
   );
 };

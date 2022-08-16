@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Todo } from '../types/todo';
@@ -23,7 +20,6 @@ export const TodoItem: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
 
   const changeTitle = (newTitle: string) => {
-    console.log(newTitle);
     const updatedTodos = todos.map(prevTodo => (prevTodo.id === todo.id
       ? { ...todo, title: newTitle }
       : prevTodo));
@@ -52,12 +48,13 @@ export const TodoItem: React.FC<Props> = ({
           className="toggle"
           onChange={() => toggleTodoStatus(todo.id)}
         />
-        <label onClick={() => setIsEditing(true)}>
+        <label>
           {isEditing
             ? (
               <input
                 className="todo"
                 value={todo.title}
+                onClick={() => setIsEditing(true)}
                 onChange={(e) => (changeTitle(e.target.value))}
                 onKeyDown={(e) => makeNotEditing(e.key)}
                 onBlur={() => makeNotEditing('Blur')}

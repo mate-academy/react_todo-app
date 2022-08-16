@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/semi */
-
 import React from 'react';
 import { Todo } from '../types/todo';
 import { TodoItem } from './TodoItem';
@@ -31,5 +28,5 @@ export const TodoList: React.FC<Props> = ({
         />
       ))}
     </ul>
-  )
-}
+  );
+};

@@ -1,20 +1,12 @@
-/* eslinewTodoTitlent-disable @typescript-eslint/indent */
-/* eslint-disable no-console */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-
-import { TodoList } from './components/TodoList';
+import { MainSection } from './components/MainSection';
 import { Footer } from './components/Footer';
 import { Todo } from './types/todo';
+import { Header } from './components/Header';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(JSON.parse(`${localStorage.getItem('todos')}`) || []);
   const [newTodoTitle, setNewTodoTitle] = useState<string>('');
-
-  const makeTodoTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTodoTitle(event.target.value);
-  };
 
   const makeTodo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,72 +57,20 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form onSubmit={(e) => makeTodo(e)}>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onChange={(event) => makeTodoTitle(event)}
-            value={newTodoTitle}
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        {todos[0] && (
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-            onChange={() => toggleTodoStatus('toggleAll')}
-          />
-        )}
-        <label htmlFor="toggle-all"> </label>
-        <Routes>
-          <Route
-            path="/"
-            element={(
-              <TodoList
-                todos={todos}
-                deleteTodo={deleteTodo}
-                toggleTodoStatus={toggleTodoStatus}
-                setTodos={setTodos}
-              />
-            )}
-          />
-          <Route
-            path="active"
-            element={(
-              <TodoList
-                todos={todos.filter(todo => todo.completed === false)}
-                deleteTodo={deleteTodo}
-                toggleTodoStatus={toggleTodoStatus}
-                setTodos={setTodos}
-              />
-            )}
-          />
-          <Route
-            path="completed"
-            element={(
-              <TodoList
-                todos={todos.filter(todo => todo.completed === true)}
-                deleteTodo={deleteTodo}
-                toggleTodoStatus={toggleTodoStatus}
-                setTodos={setTodos}
-              />
-            )}
-          />
-
-        </Routes>
-      </section>
-      {todos.length
-        ? (<Footer todos={todos} setTodos={setTodos} />)
-        : ''}
+      <Header
+        makeTodo={makeTodo}
+        newTodoTitle={newTodoTitle}
+        setNewTodoTitle={setNewTodoTitle}
+      />
+      <MainSection
+        todos={todos}
+        deleteTodo={deleteTodo}
+        toggleTodoStatus={toggleTodoStatus}
+        setTodos={setTodos}
+      />
+      {todos[0] && (
+        <Footer todos={todos} setTodos={setTodos} />
+      )}
     </div>
   );
 };
