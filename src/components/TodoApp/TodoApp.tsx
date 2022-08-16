@@ -29,18 +29,13 @@ export const TodoApp = () => {
     }
   });
 
-  const completedCount = todos.reduce((prev, cur) => prev + +cur.completed, 0);
+  const completedCount = todos
+    .reduce((prev, cur) => prev + Number(cur.completed), 0);
 
   const handleAllCheck = () => {
-    let allTodos;
-
-    if (areTodosChecked) {
-      setTodosChecked(false);
-      allTodos = todos.map(todo => ({ ...todo, completed: false }));
-    } else {
-      setTodosChecked(true);
-      allTodos = todos.map(todo => ({ ...todo, completed: true }));
-    }
+    setTodosChecked(!areTodosChecked);
+    // eslint-disable-next-line max-len
+    const allTodos = todos.map(todo => ({ ...todo, completed: !areTodosChecked }));
 
     setTodos(allTodos);
   };
@@ -80,7 +75,7 @@ export const TodoApp = () => {
             {`${todos.length - completedCount} items left`}
           </span>
 
-          <TodoFilter pathName={pathName} />
+          <TodoFilter />
 
           {completedCount > 0 && (
             <button

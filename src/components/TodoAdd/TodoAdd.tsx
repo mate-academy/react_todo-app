@@ -14,7 +14,7 @@ export const TodoAdd = React.memo<Props>(({ todos, onSetTodos }) => {
 
     if (title.trim()) {
       onSetTodos([...todos, {
-        id: +new Date(),
+        id: Number(new Date()),
         title,
         completed: false,
       }]);

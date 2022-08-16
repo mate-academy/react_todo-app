@@ -1,44 +1,41 @@
-import classNames from 'classnames';
 import { memo } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-interface Props {
-  pathName: string,
-}
+export const TodoFilter = memo(() => {
+  return (
+    <ul className="filters">
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) => (
+            isActive ? 'selected' : undefined
+          )}
+        >
+          All
+        </NavLink>
+      </li>
 
-export const TodoFilter = memo<Props>(({ pathName }) => (
-  <ul className="filters">
-    <li>
-      <Link
-        to="/"
-        className={classNames({
-          selected: pathName === '/',
-        })}
-      >
-        All
-      </Link>
-    </li>
+      <li>
+        <NavLink
+          to="/active"
+          className={({ isActive }) => (
+            isActive ? 'selected' : undefined
+          )}
+        >
+          Active
+        </NavLink>
+      </li>
 
-    <li>
-      <Link
-        to="/active"
-        className={classNames({
-          selected: pathName === '/active',
-        })}
-      >
-        Active
-      </Link>
-    </li>
-
-    <li>
-      <Link
-        to="/completed"
-        className={classNames({
-          selected: pathName === '/completed',
-        })}
-      >
-        Completed
-      </Link>
-    </li>
-  </ul>
-));
+      <li>
+        <NavLink
+          to="/completed"
+          className={({ isActive }) => (
+            isActive ? 'selected' : undefined
+          )}
+        >
+          Completed
+        </NavLink>
+      </li>
+    </ul>
+  );
+});
