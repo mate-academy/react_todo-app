@@ -4,13 +4,13 @@ import { TodoItem } from './TodoItem';
 type Props = {
   items: Todo[],
   onClick: (id: number) => void,
-  editTodo: (value: string, id: number) => void;
+  onEditTodo: (value: string, id: number) => void;
 };
 
 export const TodoList = ({
   items,
   onClick,
-  editTodo,
+  onEditTodo,
 }: Props) => {
   return (
     <ul className="todo-list" data-cy="todoList">
@@ -20,7 +20,7 @@ export const TodoList = ({
             onClick={onClick}
             todo={todo}
             key={todo.id}
-            editTodo={editTodo}
+            onEditTodo={onEditTodo}
           />
         );
       })}

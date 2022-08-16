@@ -52,7 +52,7 @@ export const TodoApp = () => {
   }, []);
 
   const newTodo: Todo = {
-    id: +new Date(),
+    id: Number(new Date()),
     title,
     completed: false,
   };
@@ -65,7 +65,7 @@ export const TodoApp = () => {
     }
   };
 
-  const editTodo = (value: string, todoId: number) => {
+  const onEditTodo = (value: string, todoId: number) => {
     let todoList;
 
     if (value) {
@@ -153,7 +153,7 @@ export const TodoApp = () => {
             <TodoList
               items={filteredTodo}
               onClick={onClick}
-              editTodo={editTodo}
+              onEditTodo={onEditTodo}
             />
           </section>
 

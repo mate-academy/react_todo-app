@@ -5,19 +5,19 @@ import { Todo } from '../type/Todo';
 type Props = {
   todo: Todo,
   onClick: (id: number) => void,
-  editTodo: (value: string, id: number) => void;
+  onEditTodo: (value: string, id: number) => void;
 };
 
 export const TodoItem = ({
   todo,
   onClick,
-  editTodo,
+  onEditTodo,
 } : Props) => {
   const ref = useRef<null | HTMLInputElement>(null);
   const [value, setValue] = useState(todo.title);
   const [edit, setEdit] = useState(false);
-  const classW = todo.completed ? 'completed' : 'view';
-  const classB = edit ? 'editing' : classW;
+  const classCompletedOrView = todo.completed ? 'completed' : 'view';
+  const selectedClass = edit ? 'editing' : classCompletedOrView;
 
   useEffect(() => {
     if (edit && ref.current) {
@@ -28,7 +28,7 @@ export const TodoItem = ({
   const cancelEditing = () => setEdit(false);
 
   const saveValue = () => {
-    editTodo(value, todo.id);
+    onEditTodo(value, todo.id);
     cancelEditing();
   };
 
@@ -48,17 +48,16 @@ export const TodoItem = ({
   };
 
   return (
-    <li className={classB} key={todo.id}>
+    <li className={selectedClass} key={todo.id}>
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id={`toggle-${classB}`}
+          id={`toggle-${selectedClass}`}
           checked={todo.completed}
           onClick={() => onClick(todo.id)}
         />
         <label
-          // htmlFor={`toggle-${classB}`}
           onDoubleClick={onDoubleClick}
         >
           {todo.title}
@@ -68,7 +67,7 @@ export const TodoItem = ({
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => editTodo('', todo.id)}
+          onClick={() => onEditTodo('', todo.id)}
         />
       </div>
       {edit && (
