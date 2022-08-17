@@ -55,7 +55,7 @@
     font-size: 20px;
     font-weight: bold;
 
-    background-color: #eee;
+    background: #eee;
     line-height: 20px;
     padding: 10px;
     border-radius: 10px;
@@ -65,12 +65,12 @@
     border: 3px solid transparent;
 
     &:hover {
-      background-color: #00ced1;
+      background: #00ced1;
     }
 
     &:active {
       border-color: #00ced1;
-      background-color: #eee;
+      background: #eee;
     }
   }
 
@@ -85,6 +85,7 @@
   &__change {
     color: blue;
     cursor: pointer;
+    outline: none;
 
     &:active {
       color: red;
@@ -116,7 +117,7 @@
 
 .dark-theme {
   .form {
-    background-color: #222;
+    background: #222;
 
     &__title {
       color: #eee;
