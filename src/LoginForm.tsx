@@ -120,7 +120,7 @@ export const LoginForm = React.memo(() => {
                     .catch(() => {
                       createUser(name, username, email, phone).then(user => {
                         setUserId(user.id);
-                        navigate(`/${user.username}`);
+                        navigate(`/${user.username}/`);
                         setIsLoad(true);
                         setTodos([]);
                       });

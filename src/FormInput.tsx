@@ -35,7 +35,7 @@ export const FormInput: React.FC<Props> = ({
           break;
         case 'phone':
           if (!inputValue.includes('+')
-            || inputValue.length !== 13) {
+            || inputValue.length < 10) {
             setIsError(true);
           }
 
