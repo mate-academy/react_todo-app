@@ -4,7 +4,13 @@ body {
 
 .container {
   position: absolute;
-  left: 110%;
+  left: 102%;
+
+  @media (max-width: 820px) {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 120%;
+  }
 }
 
 .toggle {

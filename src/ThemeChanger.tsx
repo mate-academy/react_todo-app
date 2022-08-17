@@ -1,20 +1,20 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 
 import './styles/ThemeChanger.scss';
 
+if (!localStorage.getItem('theme')) {
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.body.classList.add('dark-theme');
+    localStorage.setItem('theme', 'dark');
+  }
+} else if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark-theme');
+}
+
 export const ThemeChanger = React.memo(() => {
-  const useDark = useMemo(() => {
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (isDark) {
-      document.body.classList.toggle('dark-theme');
-    }
-
-    return isDark;
-  }, []);
-
-  const [theme, setTheme] = useState(useDark ? 'dark' : 'light');
+  const [theme, setTheme] = useState(localStorage.getItem('theme')
+    || 'dark');
 
   return (
     <div className="container">
@@ -22,12 +22,18 @@ export const ThemeChanger = React.memo(() => {
         checked={theme === 'light'}
         className="input"
         onChange={() => {
-          setTheme(prevTheme => {
+          setTheme(() => {
+            const prevTheme = localStorage.getItem('theme');
+
             document.body.classList.toggle('dark-theme');
 
             if (prevTheme === 'dark') {
+              localStorage.setItem('theme', 'light');
+
               return 'light';
             }
+
+            localStorage.setItem('theme', 'dark');
 
             return 'dark';
           });

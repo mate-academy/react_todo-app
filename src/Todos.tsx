@@ -7,18 +7,19 @@ import { TodosContext } from './TodosProvider';
 
 export const Todos = React.memo(() => {
   const [isLoad, setIsLoad] = useState(false);
-  const {
-    userId, todos, setTodos, setUserId,
-  } = useContext(TodosContext);
+  const { userId, todos, setTodos } = useContext(TodosContext);
   const [erorLoad, setErorLoad] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
     getTodos(userId)
       .then(userTodos => {
         setTodos(userTodos);
         setIsLoad(true);
+        setIsUpdate(true);
       })
       .catch(() => {
+        setIsUpdate(false);
         setIsLoad(false);
         setErorLoad(true);
       });
@@ -27,9 +28,14 @@ export const Todos = React.memo(() => {
   useEffect(() => {
     return () => {
       setTodos([]);
-      setUserId(0);
+      setIsUpdate(false);
+      setIsLoad(false);
     };
   }, []);
+
+  useEffect(() => {
+    setIsUpdate(true);
+  });
 
   return (
     <>
@@ -40,8 +46,7 @@ export const Todos = React.memo(() => {
         </>
       )}
 
-      {((!isLoad && todos.length === 0)
-        && !(isLoad && todos.length !== 0)) && (<Loader />)}
+      {(!isLoad && isUpdate) && (<Loader />)}
       {erorLoad && (
         <div className="error-todos">
           Error loading todos

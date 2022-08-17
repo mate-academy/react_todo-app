@@ -114,7 +114,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           }
 
           if (event.key === 'Enter') {
-            editTodoName();
+            if (todo.title !== todoName) {
+              editTodoName();
+            } else {
+              setIsEdit(false);
+            }
           }
 
           return false;
