@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import { NavLink } from 'react-router-dom';
 
 type Props = {
   getActiveTodosCount: () => void;
@@ -17,21 +18,36 @@ export const Footer: React.FC<Props> = ({
 
       <ul className="filters">
         <li>
-          <Link to="/" className="selected">
+          <NavLink
+            to="/"
+            className={({ isActive }) => classNames(
+              isActive ? 'selected' : '',
+            )}
+          >
             All
-          </Link>
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/active">
+          <NavLink
+            to="/active"
+            className={({ isActive }) => classNames(
+              isActive ? 'selected' : '',
+            )}
+          >
             Active
-          </Link>
+          </NavLink>
         </li>
 
         <li>
-          <Link to="/completed">
+          <NavLink
+            to="/completed"
+            className={({ isActive }) => classNames(
+              isActive ? 'selected' : '',
+            )}
+          >
             Completed
-          </Link>
+          </NavLink>
         </li>
       </ul>
 

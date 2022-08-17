@@ -14,7 +14,7 @@ root.render(
     <Routes>
       <Route path="/">
         <Route index element={<App />} />
-        <Route path=":status" element={<App />} />
+        <Route path=":pathName" element={<App />} />
       </Route>
     </Routes>
   </Router>,

@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
         type="text"
         data-cy="createTodo"
         className="new-todo"
-        placeholder="What needs to be don111e?"
+        placeholder="What needs to be done?"
         value={title}
         onChange={(event) => {
           setTitle(event.target.value);

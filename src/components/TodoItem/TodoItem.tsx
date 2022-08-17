@@ -16,11 +16,17 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 }) => {
   const [isEditingTodo, setIsEditingTodo] = useState(false);
 
+  const handleNewTitle = (event:
+  React.FocusEvent<HTMLInputElement, Element>
+  | React.KeyboardEvent<HTMLInputElement>) => {
+    setNewTitle(event.target.value, todo.id);
+    setIsEditingTodo(false);
+  };
+
   return (
     <li
       key={todo.id}
       className={classNames(
-        'view',
         { completed: todo.completed },
         { editing: isEditingTodo },
       )}
@@ -53,19 +59,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         type="text"
         className="edit"
         defaultValue={todo.title}
-        onBlur={(event) => {
-          setNewTitle(event.target.value, todo.id);
-          setIsEditingTodo(false);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            setNewTitle(event.target.value, todo.id);
-            setIsEditingTodo(false);
-          }
-
-          if (event.key === 'Escape') {
-            setNewTitle(event.target.value, todo.id);
-            setIsEditingTodo(false);
+        onBlur={handleNewTitle}
+        onKeyUp={(event) => {
+          if (event.key === 'Enter' || event.key === 'Escape') {
+            handleNewTitle(event);
           }
         }}
       />

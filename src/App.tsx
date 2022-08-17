@@ -1,26 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Header, TodoList, Footer } from './components';
-
-function useLocaleStorage<T>(
-  key: string,
-  initialValue: T,
-): [T, (value: T) => void] {
-  const [value, setValue] = useState<T>(() => {
-    try {
-      return JSON.parse(localStorage.getItem(key) || '') || initialValue;
-    } catch (error) {
-      return initialValue;
-    }
-  });
-
-  const save = (saveValue: T) => {
-    setValue(saveValue);
-    localStorage.setItem(key, JSON.stringify(saveValue));
-  };
-
-  return [value, save];
-}
+import useLocaleStorage from './UseLocaleStorage';
 
 export const App: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -28,12 +9,12 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
-  const { status } = useParams();
+  const { pathName } = useParams();
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
     setVisibleTodos(todos.filter(todo => {
-      switch (status) {
+      switch (pathName) {
         case 'completed':
           return todo.completed;
 
@@ -44,7 +25,7 @@ export const App: React.FC = () => {
           return todo;
       }
     }));
-  }, [todos, status]);
+  }, [todos, pathName]);
 
   const onDeleteTodo = (todoId: number) => {
     setTodos(todos.filter((todo: Todo) => todoId !== todo.id));
@@ -95,7 +76,7 @@ export const App: React.FC = () => {
     }
 
     const newTodo: Todo = {
-      id: +new Date(),
+      id: Number(new Date()),
       title,
       completed: false,
     };
@@ -149,7 +130,7 @@ export const App: React.FC = () => {
         onCheckTodo={onCheckTodo}
         setNewTitle={setNewTitleTodo}
       />
-      {(todos.length !== 0) && (
+      {todos.length && (
         <Footer
           getActiveTodosCount={getActiveTodosCount}
           clearCompletedTodos={clearCompletedTodos}
