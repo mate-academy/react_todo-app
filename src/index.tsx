@@ -2,16 +2,14 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 
 import './styles/index.scss';
-import './styles/todo-list.scss';
-import './styles/filters.scss';
-import './styles/button.scss';
 
 import { TodoApp } from './TodoApp';
 import { TodosProvider } from './TodosProvider';
-import { TodoList } from './TodoList';
 import { LoginForm } from './LoginForm';
+import { Todos } from './Todos';
 
 const container = document.getElementById('root');
+// eslint-disable-next-line
 const root = createRoot(container!);
 
 root.render(
@@ -20,9 +18,9 @@ root.render(
       <Routes>
         <Route path="/" element={<TodoApp />}>
           <Route index element={<LoginForm />} />
-          <Route path=":username" element={<TodoList />}>
-            <Route index element={<TodoList />} />
-            <Route path=":filter" element={<TodoList />} />
+          <Route path=":username">
+            <Route index element={<Todos />} />
+            <Route path=":filter" element={<Todos />} />
           </Route>
         </Route>
       </Routes>

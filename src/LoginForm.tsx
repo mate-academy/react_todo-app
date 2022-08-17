@@ -1,22 +1,32 @@
-import { useContext, useState } from 'react';
+import React, {
+  useContext, useEffect, useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUser, getTodos, getUser } from './api';
+import { createUser, getUser } from './api';
+import { FormInput } from './FormInput';
 import { Loader } from './Loader';
 import './styles/LoginForm.scss';
 import { TodosContext } from './TodosProvider';
 
-export const LoginForm = () => {
+export const LoginForm = React.memo(() => {
   const [isMember, setIsMember] = useState(true);
   const [username, setUsername] = useState('');
+  const [errorUsername, setErrorUsername] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [isEmptyInput, setIsEmptyInput] = useState(false);
-  const [errorUsername, setErrorUsername] = useState(false);
-  const {
-    isLoad, setIsLoad, setTodos, setUserId,
-  } = useContext(TodosContext);
+  const [isLoad, setIsLoad] = useState(false);
+
+  const [isError, setIsError] = useState(false);
+
+  const { setTodos, setUserId } = useContext(TodosContext);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setTodos([]);
+    localStorage.clear();
+  }, []);
 
   return (
     <>
@@ -25,109 +35,99 @@ export const LoginForm = () => {
           <h2 className="form__title">
             {isMember ? ('Account login') : ('Register account')}
           </h2>
-          <form className="form__field" method="post">
-            {!isMember && (
-              <label>
-                <input
-                  value={name}
-                  onChange={event => {
-                    setName(event.target.value);
-                  }}
-                  className="form__input"
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                />
-              </label>
-            )}
-            <label>
-              <input
-                value={username}
-                onChange={event => {
-                  setUsername(event.target.value);
-                }}
-                className="form__input"
+          <form
+            className="form__field"
+            onSubmit={event => {
+              event.preventDefault();
+            }}
+          >
+            {isMember ? (
+              <FormInput
                 type="text"
                 name="username"
                 placeholder="Username"
+                onSubmit={setUsername}
+                onError={setIsError}
               />
-            </label>
-            {!isMember && (
+            ) : (
               <>
-                <label>
-                  <input
-                    value={email}
-                    onChange={event => {
-                      setEmail(event.target.value);
-                    }}
-                    className="form__input"
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                  />
-                </label>
-                <label>
-                  <input
-                    value={phone}
-                    onChange={event => {
-                      setPhone(event.target.value);
-                    }}
-                    className="form__input"
-                    type="phone"
-                    name="phone"
-                    placeholder="Phone"
-                  />
-                </label>
+                <FormInput
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  onSubmit={setName}
+                  onError={setIsError}
+                />
+                <FormInput
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  onSubmit={setUsername}
+                  onError={setIsError}
+                />
+                <FormInput
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  onSubmit={setEmail}
+                  onError={setIsError}
+                />
+                <FormInput
+                  type="phone"
+                  name="phone"
+                  placeholder="Phone"
+                  onSubmit={setPhone}
+                  onError={setIsError}
+                />
               </>
             )}
             <button
               onClick={() => {
                 if (isMember) {
                   if (!username) {
-                    setIsEmptyInput(true);
+                    setIsError(true);
 
                     return false;
                   }
 
-                  setIsEmptyInput(false);
+                  setIsError(false);
                   setIsLoad(true);
 
-                  getUser(username).then(user => {
-                    setErrorUsername(false);
-                    navigate(`/${user[0].username}`);
-                    setUserId(user[0].id);
-                    getTodos(user[0].id).then(todos => {
-                      setTodos(todos);
+                  getUser(username)
+                    .then(user => {
+                      setErrorUsername(false);
+                      setUserId(user[0].id);
+                      navigate(`/${user[0].username}/`);
+                    })
+                    .catch(() => {
+                      setErrorUsername(true);
                       setIsLoad(false);
                     });
-                  }).catch(() => {
-                    setErrorUsername(true);
-                    setIsLoad(false);
-                  });
                 } else if (!username || !name || !phone || !email) {
-                  setIsEmptyInput(true);
+                  setIsError(true);
 
                   return false;
                 } else {
+                  setIsLoad(true);
                   getUser(username).then(users => {
                     if (users.length < 1) {
                       throw new Error('No user');
                     }
 
                     setErrorUsername(true);
+                    setIsLoad(false);
                   })
                     .catch(() => {
                       createUser(name, username, email, phone).then(user => {
-                        navigate(`/${user.username}`);
                         setUserId(user.id);
-                        setIsLoad(false);
+                        navigate(`/${user.username}`);
+                        setIsLoad(true);
                         setTodos([]);
                       });
                     });
                 }
 
-                setIsEmptyInput(false);
+                setIsError(false);
 
                 return true;
               }}
@@ -137,7 +137,7 @@ export const LoginForm = () => {
               {isMember ? ('Login') : ('Register')}
             </button>
             <div className="form__error">
-              {isEmptyInput ? ('Please fill in all the fields') : (
+              {isError && !isMember ? ('Please fill in all the fields') : (
                 <>
                   {errorUsername && isMember && ('There is no such user')}
                   {errorUsername && !isMember && (
@@ -153,7 +153,7 @@ export const LoginForm = () => {
                 className="form__change"
                 type="button"
                 onClick={() => {
-                  setIsEmptyInput(false);
+                  setIsError(false);
                   setIsMember(prevState => !prevState);
                   setErrorUsername(false);
                   setUsername('');
@@ -169,4 +169,4 @@ export const LoginForm = () => {
       )}
     </>
   );
-};
+});

@@ -114,6 +114,16 @@
   }
 }
 
+.error-todos {
+  background-color: #f5f5f5;
+  color: red;
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 24px;
+}
+
 .dark-theme {
   .todo-list {
     background-color: #242526;
@@ -123,5 +133,9 @@
   .todo-list li.completed label {
     color: #454951;
     text-decoration: line-through;
+  }
+
+  .error-todos {
+    background-color: #242526;
   }
 }

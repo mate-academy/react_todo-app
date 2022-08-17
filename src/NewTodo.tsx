@@ -1,9 +1,9 @@
-import { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { createTodo } from './api';
 import { TodosContext } from './TodosProvider';
 import { Todo } from './types/Todo';
 
-export const NewTodo = () => {
+export const NewTodo = React.memo(() => {
   const [todoName, setTodoName] = useState('');
   const { todos, setTodos, userId } = useContext(TodosContext);
   const resetChange = useCallback(() => {
@@ -40,4 +40,4 @@ export const NewTodo = () => {
       />
     </form>
   );
-};
+});

@@ -119,7 +119,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
           return false;
         }}
-        onBlur={() => editTodoName()}
       />
     </li>
   );

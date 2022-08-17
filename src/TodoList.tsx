@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { Status } from './apis';
+import { Status } from './types/Status';
 import { TodoItem } from './TodoItem';
 import { TodosContext } from './TodosProvider';
+
+import './styles/todo-list.scss';
 
 export const TodoList = () => {
   const { todos } = useContext(TodosContext);
