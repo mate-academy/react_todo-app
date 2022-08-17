@@ -1,93 +1,141 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Header, TodoList, Footer } from './components';
+import useLocaleStorage from './UseLocaleStorage';
 
 export const App: React.FC = () => {
+  const [title, setTitle] = useState('');
+
+  const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+
+  const { pathName } = useParams();
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+    setVisibleTodos(todos.filter(todo => {
+      switch (pathName) {
+        case 'completed':
+          return todo.completed;
+
+        case 'active':
+          return !todo.completed;
+
+        default:
+          return todo;
+      }
+    }));
+  }, [todos, pathName]);
+
+  const onDeleteTodo = (todoId: number) => {
+    setTodos(todos.filter((todo: Todo) => todoId !== todo.id));
+  };
+
+  const togglerAllCheck = () => {
+    const someTodoActive = todos.some(todo => !todo.completed);
+
+    if (someTodoActive) {
+      setTodos(todos.map(todo => {
+        return {
+          ...todo,
+          completed: true,
+        };
+      }));
+    }
+
+    if (!someTodoActive) {
+      setTodos(todos.map(todo => {
+        return {
+          ...todo,
+          completed: false,
+        };
+      }));
+    }
+  };
+
+  const onCheckTodo = (todoId: number) => {
+    setTodos(
+      todos.map((todo: Todo) => {
+        if (todoId === todo.id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
+        }
+
+        return todo;
+      }),
+    );
+  };
+
+  const onAddTodo = () => {
+    if (title.trim() === '') {
+      setTitle('');
+
+      return;
+    }
+
+    const newTodo: Todo = {
+      id: Number(new Date()),
+      title,
+      completed: false,
+    };
+
+    setTodos([
+      ...todos,
+      newTodo,
+    ]);
+
+    setTitle('');
+  };
+
+  const setNewTitleTodo = (newTitle: string, todoId: number) => {
+    if (newTitle.trim() === '') {
+      onDeleteTodo(todoId);
+
+      return;
+    }
+
+    setTodos(todos
+      .map((todo: Todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            title: newTitle,
+          };
+        }
+
+        return todo;
+      }));
+  };
+
+  const getActiveTodosCount = () => {
+    return (todos.filter(
+      t => !t.completed,
+    )).length;
+  };
+
+  const clearCompletedTodos = () => {
+    setTodos(todos.filter((todo: Todo) => !todo.completed));
+    setVisibleTodos(todos);
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <Header title={title} setTitle={setTitle} onAddTodo={onAddTodo} />
+      <TodoList
+        visibleTodos={visibleTodos}
+        togglerAllCheck={togglerAllCheck}
+        onDeleteTodo={onDeleteTodo}
+        onCheckTodo={onCheckTodo}
+        setNewTitle={setNewTitleTodo}
+      />
+      {todos.length && (
+        <Footer
+          getActiveTodosCount={getActiveTodosCount}
+          clearCompletedTodos={clearCompletedTodos}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      )}
     </div>
   );
 };
