@@ -61,7 +61,9 @@ export const deleteTodoFromServer = (todoId: number) => {
   });
 };
 
-export const editTodoStatus = (todoId: number, completed: boolean) => {
+export const editTodo = (
+  todoId: number, completed: boolean, title: string,
+) => {
   return request(`todos/${todoId}`, {
     method: 'PATCH',
     headers: {
@@ -69,14 +71,7 @@ export const editTodoStatus = (todoId: number, completed: boolean) => {
     },
     body: JSON.stringify({
       completed,
+      title,
     }),
-  });
-};
-
-export const editTodo = (
-  todoId: number, title: string, userId: number,
-) => {
-  return deleteTodoFromServer(todoId).then(() => {
-    createTodo(title, userId);
   });
 };

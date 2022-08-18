@@ -3,7 +3,7 @@ import {
   createRef, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import {
-  deleteTodoFromServer, editTodo, editTodoStatus,
+  deleteTodoFromServer, editTodo,
 } from './api';
 import { TodosContext } from './TodosProvider';
 import { Todo } from './types/Todo';
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { todos, setTodos, userId } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
   const [isEdit, setIsEdit] = useState(false);
   const [todoName, setTodoName] = useState(todo.title);
 
@@ -50,7 +50,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     } else {
       const editedTodo = { ...todo, title: todoName };
 
-      editTodo(todo.id, todoName, userId)
+      editTodo(todo.id, todo.completed, todoName)
         .catch(resetChange);
 
       editTodos(editedTodo);
@@ -82,7 +82,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={event => {
             const editedTodo = { ...todo, completed: event.target.checked };
 
-            editTodoStatus(todo.id, event.target.checked)
+            editTodo(todo.id, event.target.checked, todoName)
               .catch(resetChange);
 
             editTodos(editedTodo);
