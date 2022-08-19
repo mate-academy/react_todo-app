@@ -10,10 +10,8 @@ export const getMyTodos = () => {
     .then(res => res.json());
 };
 
-export const postNewTodo = (title: string) => {
-  const URL = `${API_URL}`;
-
-  return fetch(URL, {
+export const postNewTodo = async (title: string) => {
+  const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,10 +20,10 @@ export const postNewTodo = (title: string) => {
       title,
       userId: myUserId,
       completed: false,
-      id: +new Date(),
     }),
-  })
-    .then(res => res.json());
+  });
+
+  return response.json();
 };
 
 export const removeTodo = (todoId: number) => {

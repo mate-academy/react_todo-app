@@ -37,7 +37,6 @@ export const TodoApp: React.FC = () => {
   const addNewTodo = () => {
     postNewTodo(title);
     setTitle('');
-    loadTodos();
   };
 
   const deleteTodo = (todoId: number) => {
@@ -154,6 +153,7 @@ export const TodoApp: React.FC = () => {
       (todo: Todo) => todo.completed,
     );
 
+    loadTodos();
     setActiveTodos(activeTodosFilter);
     setCompletedTodos(completedTodosFilter);
     setVisiableTodos(myTodos);
