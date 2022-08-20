@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import TodoApp from './components/TodoApp';
-import TodoProvider from './TodoContext';
+import { TodoPage } from './features/TodoPage';
+import { fetchTodos } from './features/TodoPage/todoPageSlice';
+import { useAppDispatch } from './app/hooks';
 
 export const App: React.FC = () => {
-  return (
-    <TodoProvider>
-      <Routes>
-        <Route path="/">
-          <Route
-            index
-            element={<TodoApp />}
-          />
+  const dispatch = useAppDispatch();
 
-          <Route
-            path=":status"
-            element={<TodoApp />}
-          />
-        </Route>
-      </Routes>
-    </TodoProvider>
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, []);
+
+  return (
+    <Routes>
+      <Route path="/">
+        <Route
+          index
+          element={<TodoPage />}
+        />
+
+        <Route
+          path=":status"
+          element={<TodoPage />}
+        />
+      </Route>
+    </Routes>
   );
 };

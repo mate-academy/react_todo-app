@@ -1,107 +1,120 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import Todo from '../../types/Todo';
-import { TodoContext } from '../../TodoContext';
-import { ActionType } from '../../reducer';
+import { useAppDispatch } from '../../app/hooks';
+import { removeTodo, updateTodo } from '../../features/TodoPage/todoPageSlice';
 
 type Props = {
   item: Todo;
 };
 
-const TodoItem: React.FC<Props> = ({ item }) => {
-  const { dispatch } = useContext(TodoContext);
+export const TodoItem: React.FC<Props> = React.memo(
+  ({ item }) => {
+    const dispatch = useAppDispatch();
 
-  const [isInEditMode, setIsInEditMode] = useState(false);
-  const [todoNewTitle, setTodoNewTitle] = useState(item.title);
+    const [localItem, setLocalItem] = useState<Todo>(item);
+    const [newTitle, setNewTitle] = useState(localItem.title);
+    const [isInEditMode, setIsInEditMode] = useState(false);
 
-  const deleteTodo = () => {
-    dispatch({
-      type: ActionType.Remove,
-      payload: {
-        id: item.id,
-      },
-    });
-  };
+    const deleteTodo = () => {
+      dispatch(removeTodo(item.id));
+    };
 
-  const updateTodo = (newTitle: string, newCompleted = item.completed) => {
-    if (newTitle === '') {
-      deleteTodo();
+    useEffect(() => {
+      if (_.isEqual(item, localItem)) {
+        return;
+      }
 
-      return;
-    }
+      if (localItem.title === '') {
+        deleteTodo();
 
-    dispatch({
-      type: ActionType.Update,
-      payload: {
-        id: item.id,
-        title: newTitle,
-        completed: newCompleted,
-      },
-    });
-  };
+        return;
+      }
 
-  const applyChanges = () => {
-    updateTodo(todoNewTitle);
-    setIsInEditMode(false);
-    setTodoNewTitle(todoNewTitle);
-  };
+      dispatch(updateTodo(localItem));
+    }, [localItem]);
 
-  const discardChanges = () => {
-    setIsInEditMode(false);
-    setTodoNewTitle(item.title);
-  };
+    const applyChanges = (isCompleted = item.completed) => {
+      setLocalItem(prevState => (
+        {
+          ...prevState,
+          title: newTitle,
+          completed: isCompleted,
+        }
+      ));
 
-  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      applyChanges();
-    }
+      setIsInEditMode(false);
+    };
 
-    if (event.key === 'Escape') {
-      discardChanges();
-    }
-  };
+    const handleCompletedCheckboxChange = () => {
+      setLocalItem(prevState => (
+        {
+          ...prevState,
+          completed: !item.completed,
+        }
+      ));
+    };
 
-  return (
-    <li
-      className={classNames({
-        completed: item.completed,
-        editing: isInEditMode,
-      })}
-      onDoubleClick={() => setIsInEditMode(true)}
-    >
-      <div className="view">
+    const handleNewTitleInputChange = (
+      event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+      setNewTitle(event.target.value);
+    };
+
+    const handleInputKeyDown = (
+      event: React.KeyboardEvent<HTMLInputElement>,
+    ) => {
+      if (event.key === 'Enter') {
+        setIsInEditMode(false);
+      }
+
+      if (event.key === 'Escape') {
+        setNewTitle(localItem.title);
+        setIsInEditMode(false);
+      }
+    };
+
+    return (
+      <li
+        className={classNames({
+          completed: item.completed,
+          editing: isInEditMode,
+        })}
+        onDoubleClick={() => setIsInEditMode(true)}
+      >
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            checked={item.completed}
+            onChange={handleCompletedCheckboxChange}
+          />
+
+          <label>
+            {localItem.title}
+          </label>
+
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={deleteTodo}
+          />
+        </div>
+
         <input
-          type="checkbox"
-          className="toggle"
-          checked={item.completed}
-          onChange={() => updateTodo(item.title, !item.completed)}
+          type="text"
+          className="edit"
+          ref={inputRef => inputRef?.focus()}
+          value={newTitle}
+          onChange={handleNewTitleInputChange}
+          onBlur={() => applyChanges()}
+          onKeyDown={handleInputKeyDown}
         />
-
-        <label>
-          {item.title}
-        </label>
-
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={deleteTodo}
-        />
-      </div>
-
-      <input
-        type="text"
-        className="edit"
-        ref={inputRef => inputRef?.focus()}
-        value={todoNewTitle}
-        onChange={({ target }) => setTodoNewTitle(target.value)}
-        onBlur={applyChanges}
-        onKeyDown={handleInputKeyDown}
-      />
-    </li>
-  );
-};
-
-export default React.memo(TodoItem);
+      </li>
+    );
+  },
+);

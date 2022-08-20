@@ -1,5 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
 import './styles/index.css';
 import './styles/todo-list.css';
@@ -13,10 +15,12 @@ if (!container) {
   throw new Error('Failed to find root element');
 }
 
-const root = ReactDOM.createRoot(container!);
+const root = ReactDOM.createRoot(container);
 
 root.render(
-  <HashRouter>
-    <App />
-  </HashRouter>,
+  <Provider store={store}>
+    <HashRouter>
+      <App />
+    </HashRouter>
+  </Provider>,
 );

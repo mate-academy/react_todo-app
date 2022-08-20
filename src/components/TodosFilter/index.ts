@@ -1,3 +1,1 @@
-import TodosFilter from './TodosFilter';
-
-export default TodosFilter;
+export * from './TodosFilter';

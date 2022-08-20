@@ -1,0 +1,54 @@
+.Toast {
+  box-sizing: border-box;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  margin: 24px;
+
+  font-size: 1.2rem;
+  color: white;
+
+  border-radius: 16px;
+  background-color: rgb(175, 47, 47);
+
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+  0 25px 50px 0 rgba(0, 0, 0, 0.1);
+
+  transition: opacity 500ms;
+
+  &--hide-transition {
+    opacity: 0;
+  }
+
+  &__close-button {
+    line-height: 0;
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+
+    padding: 12px;
+  }
+
+  &__info {
+    line-height: 3rem;
+  }
+
+  &__icon-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  &__icon-svg {
+    stroke: #fff;
+
+    transition: stroke 200ms;
+
+    &:hover {
+      stroke: #b3b6b7;
+    }
+  }
+}
