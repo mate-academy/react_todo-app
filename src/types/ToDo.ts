@@ -1,7 +1,5 @@
-import { TodoState } from './TodoState';
-
-export interface Todo {
+export interface Todo{
   id: number,
-  title?: string,
-  state?: TodoState,
+  title: string,
+  completed: boolean,
 }
