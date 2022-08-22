@@ -17,6 +17,18 @@ export const ListFooter = React.memo(() => {
     setTodos([...todos]);
   }, [todos]);
 
+  const handlerClearCompleted = useCallback(() => {
+    const editedTodos = todos.filter(todo => !todo.completed);
+    const clearTodos = todos.filter(todo => todo.completed);
+
+    clearTodos.forEach((clearTodo) => {
+      deleteTodoFromServer(clearTodo.id)
+        .catch(resetChange);
+    });
+
+    setTodos(editedTodos);
+  }, [todos]);
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -44,17 +56,7 @@ export const ListFooter = React.memo(() => {
         <button
           type="button"
           className="clear-completed"
-          onClick={() => {
-            const editedTodos = todos.filter(todo => !todo.completed);
-            const clearTodos = todos.filter(todo => todo.completed);
-
-            clearTodos.forEach((clearTodo) => {
-              deleteTodoFromServer(clearTodo.id)
-                .catch(resetChange);
-            });
-
-            setTodos(editedTodos);
-          }}
+          onClick={handlerClearCompleted}
         >
           Clear completed
         </button>

@@ -1,18 +1,20 @@
 import React, { useCallback, useState } from 'react';
 import classNames from 'classnames';
+import { User } from './types/User';
 
 type Props = {
   name: string,
   placeholder: string,
   type: string,
-  onSubmit: React.Dispatch<React.SetStateAction<string>>,
+  startValue: string | undefined,
+  onSubmit: React.Dispatch<React.SetStateAction<User>>,
   onError: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const FormInput: React.FC<Props> = ({
-  name, placeholder, type, onError, onSubmit,
+  name, placeholder, type, onError, onSubmit, startValue,
 }) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(startValue || '');
   const [isError, setIsError] = useState(false);
 
   const handlerInput = useCallback(
@@ -45,7 +47,10 @@ export const FormInput: React.FC<Props> = ({
       }
 
       if (!isError) {
-        onSubmit(inputValue);
+        onSubmit(user => ({
+          ...user,
+          [name]: inputValue,
+        }));
       } else {
         onError(true);
       }
