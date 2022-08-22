@@ -1,19 +1,19 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 
 import { AddTodoForm } from './components/AddTodoForm';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
+import { getLocalTodos } from './lib/utils';
 import { Todo } from './types/types';
 
 export const App: React.FC = () => {
-  const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(window.location.hash.slice(2));
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
-  const filterHandler = () => {
+  const filterHandler = useCallback(() => {
     switch (status) {
       case 'completed':
         setFilteredTodos(todos.filter(todo => todo.completed));
@@ -24,37 +24,22 @@ export const App: React.FC = () => {
       default:
         setFilteredTodos(todos);
     }
-  };
+  }, [status, todos]);
 
   const saveLocalTodos = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   };
 
-  const getLocalTodos = () => {
-    if (localStorage.getItem('todos') === null) {
-      localStorage.setItem('todos', JSON.stringify([]));
-    } else {
-      setTodos(JSON.parse(localStorage.getItem('todos') || ''));
-    }
-  };
-
   const countCompleted = () => {
-    let quantityCompleted = 0;
 
-    todos.forEach(todo => {
-      if (todo.completed) {
-        quantityCompleted += 1;
-      }
-    });
-
-    return todos.length - quantityCompleted;
+    return todos.filter(todo=>!todo.completed).length;
   };
 
   const clearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
-  const handlingUpdate = (todoId: number, newTitle: string) => {
+  const handleUpdate = (todoId: number, newTitle: string) => {
     setTodos(todos.map(todo => {
       if (todoId !== todo.id) {
         return todo;
@@ -90,8 +75,7 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setStatus(window.location.hash.slice(2));
-    getLocalTodos();
+    getLocalTodos(setTodos);
     filterHandler();
   }, []);
 
@@ -106,9 +90,7 @@ export const App: React.FC = () => {
         <h1>todos</h1>
         <AddTodoForm
           todos={todos}
-          inputText={inputText}
           onCreateTodo={setTodos}
-          onInput={setInputText}
         />
       </header>
       {todos.length > 0 && (
@@ -118,7 +100,7 @@ export const App: React.FC = () => {
               todos={todos}
               filteredTodos={filteredTodos}
               onSettingTodo={setTodos}
-              onUpdate={handlingUpdate}
+              onUpdate={handleUpdate}
               onToggle={toggleAll}
             />
           </section>

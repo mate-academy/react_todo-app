@@ -1,18 +1,20 @@
+import { useState } from 'react';
+import nextId from 'react-id-generator';
 import { Todo } from '../types/types';
 
 type Props = {
   todos: Todo[],
-  inputText: string,
   onCreateTodo: (todos: Todo[]) => void;
-  onInput: (text: string) => void,
 };
 export const AddTodoForm: React.FC<Props> = ({
-  todos, inputText, onCreateTodo, onInput,
+  todos, onCreateTodo,
 }) => {
+  const [inputText, setInputText] = useState('');
+
   const inputTextHandler: React.ChangeEventHandler<HTMLInputElement> = (
     event,
   ) => {
-    onInput(event.target.value);
+    setInputText(event.target.value);
   };
 
   const submitTodoHandler: React.FormEventHandler<HTMLFormElement> = (
@@ -25,12 +27,12 @@ export const AddTodoForm: React.FC<Props> = ({
 
     onCreateTodo([
       ...todos, {
-        id: Math.random() * 1000,
+        id: Number(nextId().slice(2)),
         title: inputText,
         completed: false,
       },
     ]);
-    onInput('');
+    setInputText('');
   };
 
   return (

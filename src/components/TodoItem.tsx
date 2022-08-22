@@ -20,11 +20,11 @@ export const TodoItem: React.FC<Props> = ({
   const [isUpdating, updateTodo] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
-  const deleteHandler = () => {
+  const handleDeleted = () => {
     onSettingTodo(todos.filter(elem => elem.id !== todo.id));
   };
 
-  const completeHandler = () => {
+  const handleCompleted = useCallback(() => {
     onSettingTodo(todos.map(elem => {
       if (elem.id === todo.id) {
         return {
@@ -35,23 +35,23 @@ export const TodoItem: React.FC<Props> = ({
 
       return elem;
     }));
-  };
+  }, [todos]);
 
-  const updateHandler: React.FormEventHandler<HTMLFormElement> = (
-    event,
+  const handleUpdate: React.FormEventHandler<HTMLFormElement> = useCallback((
+    event
   ) => {
     event.preventDefault();
     if (newTitle === '') {
-      deleteHandler();
+      handleDeleted();
 
       return;
     }
 
     onUpdate(todo.id, newTitle);
     updateTodo(false);
-  };
+  }, [newTitle]);
 
-  const inputTextHandler: React.ChangeEventHandler<HTMLInputElement> = (
+  const handleInputText: React.ChangeEventHandler<HTMLInputElement> = (
     event,
   ) => {
     setNewTitle(event.target.value);
@@ -63,6 +63,17 @@ export const TodoItem: React.FC<Props> = ({
     }
   }, []);
 
+  const handleBlur = () => {
+    if (newTitle === '') {
+      handleDeleted();
+
+      return;
+    }
+
+    onUpdate(todo.id, newTitle);
+    updateTodo(false);
+  }
+
   return (
     <>
       {!isUpdating ? (
@@ -72,7 +83,7 @@ export const TodoItem: React.FC<Props> = ({
               type="checkbox"
               className="toggle"
               checked={todo.completed}
-              onChange={completeHandler}
+              onChange={handleCompleted}
             />
             <label
               onDoubleClick={() => {
@@ -85,7 +96,7 @@ export const TodoItem: React.FC<Props> = ({
               type="button"
               className="destroy"
               data-cy="deleteTodo"
-              onClick={deleteHandler}
+              onClick={handleDeleted}
               aria-label="remove todo"
             />
           </div>
@@ -106,7 +117,7 @@ export const TodoItem: React.FC<Props> = ({
               aria-label="remove todo"
             />
           </div>
-          <form onSubmit={updateHandler}>
+          <form onSubmit={handleUpdate}>
             <input
               type="edit"
               data-cy="editTodo"
@@ -114,15 +125,8 @@ export const TodoItem: React.FC<Props> = ({
               value={newTitle}
               ref={callbackRef}
               onFocus={e => e.currentTarget.select()}
-              onBlur={() => {
-                if (newTitle === '') {
-                  deleteHandler();
-                  return;
-                }
-                onUpdate(todo.id, newTitle);
-                updateTodo(false);
-              }}
-              onChange={inputTextHandler}
+              onBlur={handleBlur}
+              onChange={handleInputText}
               placeholder="What needs to be re-done?"
               onKeyDown={event => {
                 if (event.key === 'Escape') {
