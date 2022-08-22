@@ -33,7 +33,7 @@ export const App = () => {
     const { id, state } = todoState;
     const todoIndexToChange = todos.findIndex(todo => todo.id === id);
 
-    const callback = (prev: Todo[], todo: Todo, index: number): Todo[] => {
+    const changeTodos = (prev: Todo[], todo: Todo, index: number): Todo[] => {
       if (index === todoIndexToChange) {
         prev.push({ ...todo, state });
       } else {
@@ -43,7 +43,7 @@ export const App = () => {
       return prev;
     };
 
-    const changedTodos = todos.reduce(callback, []);
+    const changedTodos = todos.reduce(changeTodos, []);
 
     setTodos(changedTodos);
   };
@@ -52,7 +52,7 @@ export const App = () => {
     const { id, title, state } = todoTitle;
     const todoIndexToChange = todos.findIndex(todo => todo.id === id);
 
-    const callback = (prev: Todo[], todo: Todo, index: number): Todo[] => {
+    const changeTodos = (prev: Todo[], todo: Todo, index: number): Todo[] => {
       if (index === todoIndexToChange) {
         prev.push({ ...todo, title, state });
       } else {
@@ -62,7 +62,7 @@ export const App = () => {
       return prev;
     };
 
-    const changedTodos = todos.reduce(callback, []);
+    const changedTodos = todos.reduce(changeTodos, []);
 
     setTodos(changedTodos);
   };
@@ -161,11 +161,11 @@ export const App = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {todos.length > 0 && (
+            {
               countOfActiveTodos === 1
                 ? '1 item left'
                 : `${countOfActiveTodos} items left`
-            )}
+            }
           </span>
 
           <ul className="filters">

@@ -25,7 +25,7 @@ export const Header: React.FC<Props> = ({ todos, setTodos }) => {
       state: TodoState.ACTIVE,
     };
 
-    if (newTodo.title !== '') {
+    if (newTodo.title) {
       setTodos([...todos, newTodo]);
     }
 
