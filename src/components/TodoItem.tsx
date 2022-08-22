@@ -38,7 +38,7 @@ export const TodoItem: React.FC<Props> = ({
   }, [todos]);
 
   const handleUpdate: React.FormEventHandler<HTMLFormElement> = useCallback((
-    event
+    event,
   ) => {
     event.preventDefault();
     if (newTitle === '') {
@@ -72,7 +72,7 @@ export const TodoItem: React.FC<Props> = ({
 
     onUpdate(todo.id, newTitle);
     updateTodo(false);
-  }
+  };
 
   return (
     <>

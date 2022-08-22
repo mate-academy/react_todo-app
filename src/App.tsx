@@ -31,8 +31,7 @@ export const App: React.FC = () => {
   };
 
   const countCompleted = () => {
-
-    return todos.filter(todo=>!todo.completed).length;
+    return todos.filter(todo => !todo.completed).length;
   };
 
   const clearCompleted = () => {
