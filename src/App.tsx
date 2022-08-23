@@ -92,7 +92,7 @@ export const App: React.FC = () => {
           onCreateTodo={setTodos}
         />
       </header>
-      {todos.length > 0 && (
+      {todos.length && (
         <div>
           <section className="main">
             <TodoList
