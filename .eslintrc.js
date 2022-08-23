@@ -3,6 +3,9 @@ module.exports = {
     '@mate-academy/eslint-config-react-typescript',
     'plugin:cypress/recommended',
   ],
+  parserOptions: {
+    project: ['./tsconfig.json'],
+  },
   rules: {
     'max-len': [
       'error', {
@@ -16,8 +19,9 @@ module.exports = {
       },
     ],
     'no-param-reassign': [
-      'error',
-      { props: true, ignorePropertyModificationsFor: ['state'] },
+      'error', {
+        props: true, ignorePropertyModificationsFor: ['state'],
+      },
     ],
   },
 };
