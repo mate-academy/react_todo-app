@@ -18,31 +18,31 @@
 
   transition: opacity 500ms;
 
-  &--hide-transition {
+  &-HideTransition {
     opacity: 0;
   }
 
-  &__close-button {
+  &-CloseButton {
     line-height: 0;
   }
 
-  &__container {
+  &-Container {
     display: flex;
     align-items: center;
 
     padding: 12px;
   }
 
-  &__info {
+  &-Info {
     line-height: 3rem;
   }
 
-  &__icon-container {
+  &-IconContainer {
     width: 40px;
     height: 40px;
   }
 
-  &__icon-svg {
+  &-IconSvg {
     stroke: #fff;
 
     transition: stroke 200ms;

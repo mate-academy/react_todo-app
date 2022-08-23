@@ -3,9 +3,7 @@ import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+import './index.css';
 
 import { App } from './App';
 

@@ -2,22 +2,25 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
+import './TodoFilter.scss';
+
 import TodoStatus from '../../enums/TodoStatus';
 
-export const TodosFilter: React.FC = () => {
+export const TodoFilter: React.FC = () => {
   return (
-    <ul className="filters">
-      {Object.entries(TodoStatus).map(([name, link]) => (
-        <li key={name}>
+    <ul className="TodoFilter">
+      {Object.entries(TodoStatus).map(([status, link]) => (
+        <li key={status} className="TodoFilter-Item">
           <NavLink
             to={`/${link}`}
             className={({ isActive }) => (
               classNames({
-                selected: isActive,
+                'TodoFilter-Link': true,
+                'TodoFilter-Link_selected': isActive,
               })
             )}
           >
-            {name}
+            {status}
           </NavLink>
         </li>
       ))}

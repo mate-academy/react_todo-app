@@ -22,7 +22,7 @@ const initialState: TodosState = {
 };
 
 export const fetchTodos = createAsyncThunk(
-  'todos/fetchTodos',
+  'todoPage/fetchTodos',
   async () => {
     const response = await todosApi.getTodos();
 
@@ -31,7 +31,7 @@ export const fetchTodos = createAsyncThunk(
 );
 
 export const addTodo = createAsyncThunk(
-  'todos/addTodo',
+  'todoPage/addTodo',
   async (todo: Omit<Todo, 'id'>) => {
     const response = await todosApi.createTodo(todo);
 
@@ -40,7 +40,7 @@ export const addTodo = createAsyncThunk(
 );
 
 export const updateTodo = createAsyncThunk(
-  'todos/updateTodo',
+  'todoPage/updateTodo',
   async (todo: TodoPatch) => {
     const response = await todosApi.patchTodo(todo);
 
@@ -49,7 +49,7 @@ export const updateTodo = createAsyncThunk(
 );
 
 export const removeTodo = createAsyncThunk(
-  'todos/removeTodo',
+  'todoPage/removeTodo',
   async (todoId: number) => {
     await todosApi.deleteTodo(todoId);
 
@@ -58,7 +58,7 @@ export const removeTodo = createAsyncThunk(
 );
 
 export const todosSlice = createSlice({
-  name: 'todos',
+  name: 'todoPage',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -100,7 +100,7 @@ export const todosSlice = createSlice({
   },
 });
 
-export const todosSelector = (state: RootState) => (
+export const todoPageSelector = (state: RootState) => (
   state.todos
 );
 

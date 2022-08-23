@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
 
+import './TodoItem.scss';
+
 import Todo from '../../types/Todo';
 import { useAppDispatch } from '../../app/hooks';
 import { removeTodo, updateTodo } from '../../features/TodoPage/todoPageSlice';
@@ -80,26 +82,36 @@ export const TodoItem: React.FC<Props> = React.memo(
     return (
       <li
         className={classNames({
-          completed: item.completed,
-          editing: isInEditMode,
+          TodoItem: true,
+          TodoItem_editing: isInEditMode,
         })}
         onDoubleClick={() => setIsInEditMode(true)}
       >
-        <div className="view">
+        <div
+          className={classNames({
+            'TodoItem-View': true,
+            'TodoItem-View_editing': isInEditMode,
+          })}
+        >
           <input
             type="checkbox"
-            className="toggle"
+            className="TodoItem-Toggle"
             checked={item.completed}
             onChange={handleCompletedCheckboxChange}
           />
 
-          <label>
+          <label
+            className={classNames({
+              'TodoItem-Label': true,
+              'TodoItem-Label_completed': item.completed,
+            })}
+          >
             {localItem.title}
           </label>
 
           <button
             type="button"
-            className="destroy"
+            className="TodoItem-Destroy"
             data-cy="deleteTodo"
             onClick={deleteTodo}
           />
@@ -107,7 +119,10 @@ export const TodoItem: React.FC<Props> = React.memo(
 
         <input
           type="text"
-          className="edit"
+          className={classNames({
+            'TodoItem-Edit': true,
+            'TodoItem-Edit_editing': isInEditMode,
+          })}
           ref={inputRef => inputRef?.focus()}
           value={newTitle}
           onChange={handleNewTitleInputChange}

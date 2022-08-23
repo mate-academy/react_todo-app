@@ -1,31 +1,35 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import type { RootState } from '../../app/store';
 
 export interface ToastState {
-  shown: boolean;
+  visible: boolean;
+  message: string;
 }
 
 const initialState: ToastState = {
-  shown: false,
+  visible: false,
+  message: '',
 };
 
 export const toastSlice = createSlice({
   name: 'toast',
   initialState,
   reducers: {
-    showToast: (state) => {
-      state.shown = true;
+    showToast: (state, action: PayloadAction<string>) => {
+      state.visible = true;
+      state.message = action.payload;
     },
     hideToast: (state) => {
-      state.shown = false;
+      state.visible = false;
     },
   },
 });
 
 export const { showToast, hideToast } = toastSlice.actions;
 
-export const isToastShown = (state: RootState) => (
-  state.toast.shown
+export const toastSelector = (state: RootState) => (
+  state.toast
 );
 
 export default toastSlice.reducer;

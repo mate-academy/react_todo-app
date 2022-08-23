@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import todosReducer from '../features/TodoPage/todoPageSlice';
+import todoPageReducer from '../features/TodoPage/todoPageSlice';
 import toastReducer from '../features/Toast/toastSlice';
 
 export const store = configureStore({
   reducer: {
-    todos: todosReducer,
+    todos: todoPageReducer,
     toast: toastReducer,
   },
 });

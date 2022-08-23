@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import './Loader.scss';
 
@@ -6,15 +7,19 @@ type Props = {
   visible: boolean;
 };
 
-export const Loader: React.FC<Props> = React.memo(
+const Loader: React.FC<Props> = React.memo(
   ({ visible }) => {
     return (
       <div
-        className="Loader"
-        style={{ visibility: visible ? 'visible' : 'hidden' }}
+        className={classNames({
+          Loader: true,
+          Loader_hidden: !visible,
+        })}
       >
-        <div className="Loader__content" />
+        <div className="Loader-Content" />
       </div>
     );
   },
 );
+
+export default Loader;
