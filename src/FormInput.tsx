@@ -6,15 +6,15 @@ type Props = {
   name: string,
   placeholder: string,
   type: string,
-  startValue: string | undefined,
+  startValue?: string,
   onSubmit: React.Dispatch<React.SetStateAction<User>>,
   onError: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const FormInput: React.FC<Props> = ({
-  name, placeholder, type, onError, onSubmit, startValue,
+  name, placeholder, type, onError, onSubmit, startValue = '',
 }) => {
-  const [value, setValue] = useState(startValue || '');
+  const [value, setValue] = useState(startValue);
   const [isError, setIsError] = useState(false);
 
   const handlerInput = useCallback(

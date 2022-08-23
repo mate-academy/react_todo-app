@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUser, getUser } from './api';
 import { FormInput } from './FormInput';
@@ -13,14 +13,17 @@ type Props = {
 
 export const RegisterForm: React.FC<Props> = React.memo(({ onSetTypeForm }) => {
   const [errorUsername, setErrorUsername] = useState(false);
-  const [{
-    username, name, email, phone,
-  }, setUser] = useState<User>({
+  const initialUser = useMemo(() => ({
     username: '',
     name: '',
     email: '',
     phone: '',
-  });
+  }), []);
+  const [user, setUser] = useState<User>(initialUser);
+
+  const {
+    username, name, email, phone,
+  } = useMemo(() => user, [user]);
 
   const [isLoad, setIsLoad] = useState(false);
 
@@ -59,92 +62,74 @@ export const RegisterForm: React.FC<Props> = React.memo(({ onSetTypeForm }) => {
       });
   };
 
+  if (isLoad) {
+    return <Loader />;
+  }
+
   return (
-    <>
-      {!isLoad ? (
-        <div className="form">
-          <h2 className="form__title">
-            Account login
-          </h2>
-          <form
-            className="form__field"
-            onSubmit={event => {
-              event.preventDefault();
+    <div className="form">
+      <h2 className="form__title">
+        Account login
+      </h2>
+      <form
+        className="form__field"
+        onSubmit={event => {
+          event.preventDefault();
+        }}
+      >
+        {Object.entries(user).map(([inputName, inputValue]) => {
+          const placeholder = inputName[0].toUpperCase()
+            + inputName.slice(1);
+
+          return (
+            <FormInput
+              key={inputName}
+              type="text"
+              name={inputName}
+              placeholder={placeholder}
+              startValue={inputValue}
+              onSubmit={setUser}
+              onError={setIsError}
+            />
+          );
+        })}
+        <button
+          onClick={() => {
+            if (!username || !name || !phone || !email) {
+              setIsError(true);
+
+              return false;
+            }
+
+            handlerRegister();
+            setIsError(false);
+
+            return true;
+          }}
+          className="form__button"
+          type="button"
+        >
+          Register
+        </button>
+        <div className="form__error">
+          {isError && ('Please fill in all the fields')}
+          {errorUsername && !isError
+            && ('This username has already been used')}
+        </div>
+        <div className="form__register">
+          Is a member ?
+          {' '}
+          <button
+            className="form__change"
+            type="button"
+            onClick={() => {
+              onSetTypeForm(true);
             }}
           >
-            <FormInput
-              type="text"
-              name="name"
-              placeholder="Name"
-              startValue={name}
-              onSubmit={setUser}
-              onError={setIsError}
-            />
-            <FormInput
-              type="text"
-              name="username"
-              placeholder="Username"
-              startValue={username}
-              onSubmit={setUser}
-              onError={setIsError}
-            />
-            <FormInput
-              type="email"
-              name="email"
-              placeholder="Email"
-              startValue={email}
-              onSubmit={setUser}
-              onError={setIsError}
-            />
-            <FormInput
-              type="phone"
-              name="phone"
-              placeholder="Phone"
-              startValue={phone}
-              onSubmit={setUser}
-              onError={setIsError}
-            />
-            <button
-              onClick={() => {
-                if (!username || !name || !phone || !email) {
-                  setIsError(true);
-
-                  return false;
-                }
-
-                handlerRegister();
-                setIsError(false);
-
-                return true;
-              }}
-              className="form__button"
-              type="button"
-            >
-              Register
-            </button>
-            <div className="form__error">
-              {isError && ('Please fill in all the fields')}
-              {errorUsername && !isError
-                && ('This username has already been used')}
-            </div>
-            <div className="form__register">
-              Is a member ?
-              {' '}
-              <button
-                className="form__change"
-                type="button"
-                onClick={() => {
-                  onSetTypeForm(true);
-                }}
-              >
-                Log in
-              </button>
-            </div>
-          </form>
+            Log in
+          </button>
         </div>
-      ) : (
-        <Loader />
-      )}
-    </>
+      </form>
+    </div>
   );
 });

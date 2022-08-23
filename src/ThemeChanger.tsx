@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import classNames from 'classnames';
 
 import './styles/ThemeChanger.scss';
@@ -16,28 +16,33 @@ export const ThemeChanger = React.memo(() => {
   const [theme, setTheme] = useState(localStorage.getItem('theme')
     || 'dark');
 
+  const handlerChangeTheme = useCallback(
+    () => {
+      setTheme(() => {
+        const prevTheme = localStorage.getItem('theme');
+
+        document.body.classList.toggle('dark-theme');
+
+        if (prevTheme === 'dark') {
+          localStorage.setItem('theme', 'light');
+
+          return 'light';
+        }
+
+        localStorage.setItem('theme', 'dark');
+
+        return 'dark';
+      });
+    },
+    [],
+  );
+
   return (
     <div className="container">
       <input
         checked={theme === 'light'}
         className="input"
-        onChange={() => {
-          setTheme(() => {
-            const prevTheme = localStorage.getItem('theme');
-
-            document.body.classList.toggle('dark-theme');
-
-            if (prevTheme === 'dark') {
-              localStorage.setItem('theme', 'light');
-
-              return 'light';
-            }
-
-            localStorage.setItem('theme', 'dark');
-
-            return 'dark';
-          });
-        }}
+        onChange={handlerChangeTheme}
         type="checkbox"
         id="toggle"
       />

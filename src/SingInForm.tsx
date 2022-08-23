@@ -39,66 +39,64 @@ export const SingInForm: React.FC<Props> = React.memo(({ onSetTypeForm }) => {
       });
   };
 
+  if (isLoad) {
+    return <Loader />;
+  }
+
   return (
-    <>
-      {!isLoad ? (
-        <div className="form">
-          <h2 className="form__title">
-            Account login
-          </h2>
-          <form
-            className="form__field"
-            onSubmit={event => {
-              event.preventDefault();
+    <div className="form">
+      <h2 className="form__title">
+        Account login
+      </h2>
+      <form
+        className="form__field"
+        onSubmit={event => {
+          event.preventDefault();
+        }}
+      >
+        <FormInput
+          type="text"
+          name="username"
+          placeholder="Username"
+          startValue={username}
+          onSubmit={setUser}
+          onError={setIsError}
+        />
+        <button
+          onClick={() => {
+            if (!username) {
+              setIsError(true);
+
+              return false;
+            }
+
+            handlerLogin();
+
+            return true;
+          }}
+          className="form__button"
+          type="button"
+        >
+          Login
+        </button>
+        <div className="form__error">
+          {isError && ('Please fill in the field')}
+          {errorUsername && !isError && ('There is no such user')}
+        </div>
+        <div className="form__register">
+          Not a member ?
+          {' '}
+          <button
+            className="form__change"
+            type="button"
+            onClick={() => {
+              onSetTypeForm(false);
             }}
           >
-            <FormInput
-              type="text"
-              name="username"
-              placeholder="Username"
-              startValue={username}
-              onSubmit={setUser}
-              onError={setIsError}
-            />
-            <button
-              onClick={() => {
-                if (!username) {
-                  setIsError(true);
-
-                  return false;
-                }
-
-                handlerLogin();
-
-                return true;
-              }}
-              className="form__button"
-              type="button"
-            >
-              Login
-            </button>
-            <div className="form__error">
-              {isError && ('Please fill in the field')}
-              {errorUsername && !isError && ('There is no such user')}
-            </div>
-            <div className="form__register">
-              Not a member ?
-              {' '}
-              <button
-                className="form__change"
-                type="button"
-                onClick={() => {
-                  onSetTypeForm(false);
-                }}
-              >
-                Join
-              </button>
-            </div>
-          </form>
+            Join
+          </button>
         </div>
-      ) : (
-        <Loader />
-      )}
-    </>
+      </form>
+    </div>
   );
 });
