@@ -1,12 +1,24 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
+import { HashRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+import './index.css';
 
 import { App } from './App';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root'),
+const container = document.getElementById('root');
+
+if (!container) {
+  throw new Error('Failed to find root element');
+}
+
+const root = ReactDOM.createRoot(container);
+
+root.render(
+  <Provider store={store}>
+    <HashRouter>
+      <App />
+    </HashRouter>
+  </Provider>,
 );

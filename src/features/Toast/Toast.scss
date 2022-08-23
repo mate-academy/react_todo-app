@@ -1,0 +1,54 @@
+.Toast {
+  box-sizing: border-box;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  margin: 24px;
+
+  font-size: 1.2rem;
+  color: white;
+
+  border-radius: 16px;
+  background-color: rgb(175, 47, 47);
+
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+  0 25px 50px 0 rgba(0, 0, 0, 0.1);
+
+  transition: opacity 500ms;
+
+  &-HideTransition {
+    opacity: 0;
+  }
+
+  &-CloseButton {
+    line-height: 0;
+  }
+
+  &-Container {
+    display: flex;
+    align-items: center;
+
+    padding: 12px;
+  }
+
+  &-Info {
+    line-height: 3rem;
+  }
+
+  &-IconContainer {
+    width: 40px;
+    height: 40px;
+  }
+
+  &-IconSvg {
+    stroke: #fff;
+
+    transition: stroke 200ms;
+
+    &:hover {
+      stroke: #b3b6b7;
+    }
+  }
+}
