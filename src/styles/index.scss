@@ -41,32 +41,14 @@ body {
   background: #fff;
   margin: 130px 0 40px;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-    0 25px 50px 0 rgba(0, 0, 0, 0.1);
-}
-
-.todoapp input::-webkit-input-placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
-}
-
-.todoapp input::-moz-placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
-}
-
-.todoapp input::-ms-input-placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
-}
-
-.todoapp input::placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4),
+    0 25px 50px 0 rgba(0, 0, 0, 0.2);
+  
+  .input::placeholder {
+    font-style: italic;
+    font-weight: 300;
+    color: #eee;
+  }
 }
 
 .todoapp h1 {
@@ -76,7 +58,7 @@ body {
   font-size: 100px;
   font-weight: 100;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  color: rgba(175, 47, 47, 0.3);
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
@@ -93,7 +75,7 @@ body {
   line-height: 1.4em;
   color: inherit;
   padding: 6px;
-  border: 1px solid #999;
+  // border: 1px solid #999;
   box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -101,6 +83,7 @@ body {
 }
 
 .new-todo {
+  outline: none;
   padding: 16px 16px 16px 60px;
   border: none;
   background: rgba(0, 0, 0, 0.01);
@@ -110,7 +93,6 @@ body {
 .main {
   position: relative;
   z-index: 2;
-  border-top: 1px solid #e6e6e6;
 }
 
 .toggle-all {
@@ -206,5 +188,51 @@ body {
 @media (max-width: 430px) {
   .footer {
     height: 50px;
+  }
+}
+
+.dark-theme {
+  background: #0d1117;
+
+  .todoapp {
+    box-shadow: 0 2px 4px 0 rgba(100, 100, 100, 0.6),
+      0 25px 50px 0 rgba(100, 100, 100, 0.6);
+  }
+
+  .todoapp h1 {
+    color: #e4e6eb;
+  }
+
+  .new-todo {
+    background: #3a3b3c;
+    color: #d9dbdf;
+    box-shadow: inset 0 -2px 1px rgba(1,1,0,0.1);
+
+    &::placeholder {
+      color: #d9dbdf;
+    }
+  }
+
+  .edit {
+    background: #3a3b3c;
+    color: #d9dbdf;
+  }
+
+  .footer {
+    background: #242526;
+    color: #d9dbdf;
+
+    &::before {
+      box-shadow: 0 1px 1px rgba(100, 100, 100, 0.6),
+        0 8px 0 -3px #242526,
+        0 9px 1px -3px rgba(100, 100, 100, 0.6),
+        0 16px 0 -6px #242526,
+        0 17px 2px -6px rgba(100, 100, 100, 0.6);
+    }
+  }
+
+  .todo-count {
+    background: #242526;
+    color: #d9dbdf;
   }
 }

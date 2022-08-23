@@ -33,3 +33,9 @@
     bottom: 10px;
   }
 }
+
+.dark-theme {
+  .filters li a.selected {
+    border-color: rgba(175, 47, 47, 0.5);
+  }
+}
