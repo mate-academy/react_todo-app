@@ -30,36 +30,49 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   return (
-    <li
+    <div
       className={classNames(
         `TodoItem + ${todo.completed
           ? 'TodoItem--completed'
           : ''
         }`,
       )}
-      onDoubleClick={
-        () => setEditTodo(true)
-      }
     >
-      <input
-        type="checkbox"
-        className="TodoItem__toggle"
-        id="toggle-view"
-        onChange={() => {
+      <button
+        className={
+          classNames(
+            'TodoItem__label',
+            { 'TodoItem__label--completed': todo.completed },
+          )
+        }
+        type="button"
+        onClick={() => {
           changeStatus(todo.id);
         }}
-      />
-      <label
-        htmlFor="toggle-view"
-        className={classNames(
-          `TodoItem__label + ${todo.completed
-            ? 'TodoItem__label--completed'
-            : ''
-          }`,
-        )}
+        onKeyDown={() => {
+          changeStatus(todo.id);
+        }}
+      >
+        <input
+          type="checkbox"
+          className="TodoItem__toggle"
+          id="toggle-view"
+        />
+      </button>
+
+      <span
+        className={
+          classNames(
+            'TodoItem__text',
+            { 'TodoItem__text--completed': todo.completed },
+          )
+        }
+        onDoubleClick={
+          () => setEditTodo(true)
+        }
       >
         {todo.title}
-      </label>
+      </span>
       <button
         type="button"
         className="TodoItem__destroy"
@@ -91,6 +104,6 @@ export const TodoItem: React.FC<Props> = ({
           }
         }}
       />
-    </li>
+    </div>
   );
 };

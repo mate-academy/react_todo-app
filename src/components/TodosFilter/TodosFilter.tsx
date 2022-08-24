@@ -15,10 +15,10 @@ export const TodosFilter: React.FC<Props> = ({ showTodos }) => {
       <li className="TodosFilter__items">
         <NavLink
           className={
-            classNames(`TodosFilter__link + ${selectFilter === 'all'
-              ? 'TodosFilter__link--selected'
-              : ''
-            }`)
+            classNames(
+              'TodosFilter__link',
+              { 'TodosFilter__link--selected': selectFilter === 'all' },
+            )
           }
           to="/all"
           onClick={() => {
@@ -33,10 +33,10 @@ export const TodosFilter: React.FC<Props> = ({ showTodos }) => {
       <li className="TodosFilter__items">
         <NavLink
           className={
-            classNames(`TodosFilter__link + ${selectFilter === 'active'
-              ? 'TodosFilter__link--selected'
-              : ''
-            }`)
+            classNames(
+              'TodosFilter__link',
+              { 'TodosFilter__link--selected': selectFilter === 'active' },
+            )
           }
           to="/active"
           onClick={() => {
@@ -51,10 +51,10 @@ export const TodosFilter: React.FC<Props> = ({ showTodos }) => {
       <li className="TodosFilter__items">
         <NavLink
           className={
-            classNames(`TodosFilter__link + ${selectFilter === 'completed'
-              ? 'TodosFilter__link--selected'
-              : ''
-            }`)
+            classNames(
+              'TodosFilter__link',
+              { 'TodosFilter__link--selected': selectFilter === 'completed' },
+            )
           }
           to="/completed"
           onClick={() => {

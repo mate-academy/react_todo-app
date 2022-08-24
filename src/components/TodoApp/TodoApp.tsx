@@ -1,30 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
-import { getUser } from '../api/user';
 import {
   getMyTodos, postNewTodo, removeTodo, editTodo,
 } from '../api/todos';
 import { Todo } from '../types/Todo';
-import { User } from '../types/User';
 import './TodoApp.scss';
 
 export const TodoApp: React.FC = () => {
-  // #region loadUser, loadTodos
-  const [userName, setUserName] = useState('');
+  // #region loadTodos
   const [myTodos, setMyTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const loadUser = async () => {
-    const userFromServer: User = await getUser();
-
-    if (!userFromServer.error) {
-      setUserName(userFromServer.name);
-    } else {
-      setErrorMessage('Failed to fecth User Info');
-    }
-  };
 
   const loadTodos = async () => {
     getMyTodos().then(setMyTodos);
@@ -35,7 +21,7 @@ export const TodoApp: React.FC = () => {
   const [title, setTitle] = useState('');
 
   const addNewTodo = () => {
-    postNewTodo(title);
+    postNewTodo(title).then(loadTodos);
     setTitle('');
   };
 
@@ -47,27 +33,27 @@ export const TodoApp: React.FC = () => {
   };
   // #endregion
 
-  const [activeTodos, setActiveTodos] = useState<Todo[]>([]);
-  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
+  const todosLeft = useMemo(() => {
+    return (
+      myTodos.reduce((acc, todo) => (!todo.completed ? acc + 1 : acc), 0)
+    );
+  }, [myTodos]);
+
+  const todosCompleted = useMemo(() => {
+    return (
+      myTodos.reduce((acc, todo) => (todo.completed ? acc + 1 : acc), 0)
+    );
+  }, [myTodos]);
 
   // #region changeTodo
   const changeStatus = (todoId: number) => {
-    setMyTodos(myTodos.map((todo: Todo) => {
+    myTodos.forEach((todo: Todo) => {
       if (todo.id === todoId) {
         const data = { completed: !todo.completed };
 
-        editTodo(`/todos/${todoId}`, data);
-
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
+        editTodo(`/todos/${todoId}`, data).then(loadTodos);
       }
-
-      return {
-        ...todo,
-      };
-    }));
+    });
   };
 
   const changeTitle = (todoId: number, newTitle: string) => {
@@ -77,8 +63,7 @@ export const TodoApp: React.FC = () => {
       removeTodo(todoId);
     }
 
-    editTodo(`/todos/${todoId}`, data);
-    loadTodos();
+    editTodo(`/todos/${todoId}`, data).then(loadTodos);
   };
   // #endregion
 
@@ -116,10 +101,10 @@ export const TodoApp: React.FC = () => {
         setVisiableTodos(myTodos);
         break;
       case 'active':
-        setVisiableTodos(activeTodos);
+        setVisiableTodos(myTodos.filter(todo => !todo.completed));
         break;
       case 'completed':
-        setVisiableTodos(completedTodos);
+        setVisiableTodos(myTodos.filter(todo => todo.completed));
         break;
       default:
         break;
@@ -140,22 +125,10 @@ export const TodoApp: React.FC = () => {
   };
 
   useEffect(() => {
-    loadUser();
     loadTodos();
   }, []);
 
   useEffect(() => {
-    const activeTodosFilter = myTodos.filter(
-      (todo: Todo) => !todo.completed,
-    );
-
-    const completedTodosFilter = myTodos.filter(
-      (todo: Todo) => todo.completed,
-    );
-
-    loadTodos();
-    setActiveTodos(activeTodosFilter);
-    setCompletedTodos(completedTodosFilter);
     setVisiableTodos(myTodos);
   }, [myTodos]);
 
@@ -163,9 +136,7 @@ export const TodoApp: React.FC = () => {
     <section className="TodoApp">
       <header className="TodoApp__header">
         <h1 className="TodoApp__title">
-          todos of
-          {' '}
-          {userName}
+          todos
         </h1>
         <form
           onSubmit={(event) => {
@@ -187,9 +158,6 @@ export const TodoApp: React.FC = () => {
       </header>
 
       <section className="TodoApp__main">
-        {errorMessage && (
-          <p className="TodoApp__error">{errorMessage}</p>
-        )}
         <input
           type="checkbox"
           id="toggle-all"
@@ -202,10 +170,10 @@ export const TodoApp: React.FC = () => {
         <label
           htmlFor="toggle-all"
           className={
-            classNames(`TodoApp__toggleAll-label + ${toggleAllActive
-              ? 'TodoApp__toggleAll-label--completed'
-              : ''
-            }`)
+            classNames(
+              'TodoApp__toggleAll-label',
+              { 'TodoApp__toggleAll-label--completed': toggleAllActive },
+            )
           }
         >
           Mark all as complete
@@ -222,16 +190,16 @@ export const TodoApp: React.FC = () => {
       {myTodos.length > 0 && (
         <footer className="TodoApp__footer">
           <span className="TodoApp__todo-count" data-cy="todosCounter">
-            {activeTodos.length === 1
+            {todosLeft === 1
               ? '1 item left'
-              : `${activeTodos.length} items left`}
+              : `${todosLeft} items left`}
           </span>
 
           <TodosFilter
             showTodos={showTodos}
           />
 
-          {completedTodos.length > 0 && (
+          {todosCompleted > 0 && (
             <button
               type="button"
               className="TodoApp__clear-completed"

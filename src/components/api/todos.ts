@@ -1,11 +1,11 @@
-import { request, BASE_URL } from './api';
-import { myUserId } from './user';
+import { request } from './api';
+
+export const myUserId = 4063;
 
 const API_URL = 'https://mate.academy/students-api/todos';
+const URL = `${API_URL}?userId=${myUserId}`;
 
 export const getMyTodos = () => {
-  const URL = `${BASE_URL}/todos?userId=${myUserId}`;
-
   return fetch(URL)
     .then(res => res.json());
 };
@@ -18,8 +18,8 @@ export const postNewTodo = async (title: string) => {
     },
     body: JSON.stringify({
       title,
-      userId: myUserId,
       completed: false,
+      userId: myUserId,
     }),
   });
 
