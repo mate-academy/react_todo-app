@@ -2,6 +2,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  font-family: "Mouse Memoirs", sans-serif;
 }
 
 button {
@@ -21,10 +22,10 @@ button {
 }
 
 body {
-  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 14px "Mouse Memoirs", sans-serif;
   line-height: 1.4em;
-  background: #f5f5f5;
-  color: #4d4d4d;
+  background: $lightPinkColor;
+  color: $tiffanyColor;
   min-width: 230px;
   max-width: 550px;
   margin: 0 auto;
@@ -38,45 +39,46 @@ body {
 }
 
 .todoapp {
-  background: #fff;
+  background: $bezhColor;
   margin: 130px 0 40px;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-    0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px 0 rgba(32, 214, 200, 0.5),
+    0 25px 50px 0 rgba(32, 214, 200, 0.5);
 }
 
 .todoapp input::-webkit-input-placeholder {
-  font-style: italic;
+  font-family: "Mouse Memoirs", sans-serif;
   font-weight: 300;
-  color: #e6e6e6;
+  color: $bezhColor;
 }
 
 .todoapp input::-moz-placeholder {
-  font-style: italic;
+  font-family: "Mouse Memoirs", sans-serif;
   font-weight: 300;
-  color: #e6e6e6;
+  color: $bezhColor;
 }
 
 .todoapp input::-ms-input-placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
+  font-family: "Mouse Memoirs", sans-serif;
+  font-weight: 400;
+  color: $lightPinkColor;
 }
 
 .todoapp input::placeholder {
-  font-style: italic;
-  font-weight: 300;
-  color: #e6e6e6;
+  font-family: "Mouse Memoirs", sans-serif;
+  font-weight: 500;
+  color: $lightPinkColor;
 }
 
 .todoapp h1 {
+  font-family: "Mouse Memoirs", sans-serif;
   position: absolute;
   top: -155px;
   width: 100%;
   font-size: 100px;
   font-weight: 100;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  color: $blueColor;
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
@@ -88,13 +90,13 @@ body {
   margin: 0;
   width: 100%;
   font-size: 24px;
-  font-family: inherit;
-  font-weight: inherit;
+  font-family: "Mouse Memoirs", sans-serif;
+  font-weight: 1.2em;
   line-height: 1.4em;
   color: inherit;
   padding: 6px;
-  border: 1px solid #999;
-  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid #52d6c8;
+  box-shadow: inset 0 -1px 5px 0 rgba(32, 214, 200, 0.7);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -103,14 +105,22 @@ body {
 .new-todo {
   padding: 16px 16px 16px 60px;
   border: none;
+  outline: none;
   background: rgba(0, 0, 0, 0.01);
-  box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+  box-shadow: inset 0 -2px 1px rgba(32, 214, 200, 0.3);
+
+  &-edit {
+    padding: 15px 15px 15px 60px;
+    height: 100%;
+    font-size: 24px;
+    line-height: 1em;
+  }
 }
 
 .main {
   position: relative;
   z-index: 2;
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid $bezhColor;
 }
 
 .toggle-all {
@@ -137,16 +147,16 @@ body {
 .toggle-all + label:before {
   content: "❯";
   font-size: 22px;
-  color: #e6e6e6;
+  color: rgba(32, 214, 200, 0.2);
   padding: 10px 27px;
 }
 
 .toggle-all:checked + label:before {
-  color: #737373;
+  color: $blueColor;
 }
 
 .footer {
-  color: #777;
+  color: $tiffanyColor;
   padding: 10px 15px;
   height: 20px;
   text-align: center;
@@ -193,10 +203,6 @@ body {
   text-decoration: none;
 }
 
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox
-*/
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   .toggle-all {
     background: none;

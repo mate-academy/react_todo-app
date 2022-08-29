@@ -23,7 +23,7 @@
 1. `NewTodo` form should trim redundant spaces.
 1. Do not rely on the unknown string, make constants for this.
     ```
-    const FILTERS = {
+    const TodosFilter = {
       all: ‘all’,
       completed: ‘completed’,
       active: ‘active’,
