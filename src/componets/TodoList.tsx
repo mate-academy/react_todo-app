@@ -28,14 +28,14 @@ export const TodoList: React.FC<Props> = React.memo((
     switch (filter) {
       case 'active':
         visibleTodos = todos
-          .filter(todo => todo.completed === false)
-          .sort((a, b) => a.id - b.id);
+          .filter(todo => !todo.completed);
+        // .sort((a, b) => a.id - b.id);
         break;
 
       case 'completed':
         visibleTodos = todos
-          .filter(todo => todo.completed === true)
-          .sort((a, b) => a.id - b.id);
+          .filter(todo => todo.completed);
+        // .sort((a, b) => a.id - b.id);
         break;
 
       default:
@@ -75,9 +75,8 @@ export const TodoList: React.FC<Props> = React.memo((
     }
 
     const newTodo = {
-      id: todo.id,
+      ...todo,
       title: editValue,
-      completed: todo.completed,
     };
 
     const newTodos = todos.filter(t => t.id !== todo.id);
