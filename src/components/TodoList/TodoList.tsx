@@ -1,4 +1,5 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
 
 type Props = {
@@ -15,7 +16,7 @@ export const TodoList: React.FC<Props> = ({
   changeTodoTitle,
 }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <section className="todoapp__main">
       {todos.map(item => (
         <TodoItem
           item={item}
@@ -24,6 +25,6 @@ export const TodoList: React.FC<Props> = ({
           changeTodoTitle={changeTodoTitle}
         />
       ))}
-    </ul>
+    </section>
   );
 };

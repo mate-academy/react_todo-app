@@ -1,16 +1,24 @@
-import React, { useEffect, useMemo, useState } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import classNames from 'classnames';
 import {
   changeTodo, createTodo, deleteTodo, getTodos,
-} from '../../api/api';
+} from '../../api/todos';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
 type Props = {
-  userId: number,
+  user: User,
 };
 
 export const TodoApp: React.FC<Props> = React.memo(
-  ({ userId }) => {
+  ({ user }) => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [todoTitle, setTodoTitle] = useState('');
     const [isPressSubmit, setIsPressSubmit] = useState(false);
@@ -18,11 +26,9 @@ export const TodoApp: React.FC<Props> = React.memo(
     const [filterParam, setFilterParam] = useState('all');
 
     useEffect(() => {
-      if (userId) {
-        getTodos(userId)
-          .then(setTodos);
-      }
-    }, [userId, isPressSubmit]);
+      getTodos(user.id)
+        .then(setTodos);
+    }, [isPressSubmit]);
 
     const changeIsPressSubmit = () => {
       setIsPressSubmit(curr => !curr);
@@ -142,45 +148,43 @@ export const TodoApp: React.FC<Props> = React.memo(
     };
 
     return (
-      <>
-        <header className="header">
-          <h1>todos</h1>
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
 
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (todoTitle) {
-                setTodoTitle('');
-                createTodo(todoTitle, userId)
-                  .then(changeIsPressSubmit);
-              }
-            }}
-          >
-            <input
-              type="text"
-              data-cy="createTodo"
-              className="new-todo"
-              placeholder="What needs to be done?"
-              value={todoTitle}
-              onChange={({ target }) => {
-                setTodoTitle(target.value);
+        <div className="todoapp__content">
+          <header className="todoapp__header">
+            {todos.length > 0 && (
+              <button
+                type="button"
+                className={classNames(
+                  'todoapp__toggle-all',
+                  { 'is-active': toggleAll },
+                )}
+                onClick={toggleAllTodos}
+              />
+            )}
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                if (todoTitle) {
+                  createTodo(todoTitle, user.id)
+                    .then(changeIsPressSubmit);
+                  setTodoTitle('');
+                }
               }}
-            />
-          </form>
-        </header>
-
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            disabled={todos.length === 0}
-            checked={toggleAll}
-            onChange={toggleAllTodos}
-          />
-          <label htmlFor="toggle-all">
-            Mark all as complete
-          </label>
+            >
+              <input
+                type="text"
+                data-cy="createTodo"
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+                value={todoTitle}
+                onChange={({ target }) => {
+                  setTodoTitle(target.value);
+                }}
+              />
+            </form>
+          </header>
 
           <TodoList
             todos={filteredTodos}
@@ -188,29 +192,29 @@ export const TodoApp: React.FC<Props> = React.memo(
             removeTodo={removeTodo}
             changeTodoTitle={changeTodoTitle}
           />
-        </section>
 
-        {todos.length > 0 && (
-          <footer className="footer">
-            <span className="todo-count">
-              {todosLeft > 0 && `${todosLeft} ${todosLeft > 1 ? 'items' : 'item'} left`}
-            </span>
+          {todos.length > 0 && (
+            <footer className="todoapp__footer">
+              <span className="todo-count">
+                {todosLeft > 0 && `${todosLeft} ${todosLeft > 1 ? 'items' : 'item'} left`}
+              </span>
 
-            <TodosFilter
-              sortParam={filterParam}
-              setSortParam={setFilterParam}
-            />
+              <TodosFilter
+                sortParam={filterParam}
+                setSortParam={setFilterParam}
+              />
 
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={deleteCompleted}
-            >
-              {createTodos !== 0 && 'Clear completed'}
-            </button>
-          </footer>
-        )}
-      </>
+              <button
+                type="button"
+                className="todoapp__clear-completed"
+                onClick={deleteCompleted}
+              >
+                {createTodos !== 0 && 'Clear completed'}
+              </button>
+            </footer>
+          )}
+        </div>
+      </div>
     );
   },
 );

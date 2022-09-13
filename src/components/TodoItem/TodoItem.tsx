@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   item: Todo;
@@ -22,59 +23,65 @@ export const TodoItem: React.FC<Props> = React.memo(
     return (
       <li
         key={item.id}
-        className={classNames({
+        className={classNames('todo', {
           completed: item.completed,
           editing: isEditing,
         })}
         onDoubleClick={() => setIsEditing(true)}
       >
-        <div className="view">
+        <label className="todo__status-label">
           <input
             type="checkbox"
-            className="toggle"
-            id="toggle-view"
+            className="todo__status"
             checked={item.completed}
             onChange={() => setTodoStatus(item.id)}
           />
-          <label htmlFor="toggle-view">{item.title}</label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            onClick={() => removeTodo(item.id)}
-          />
-        </div>
+        </label>
+        {!isEditing
+          ? (
+            <>
+              <span className="todo__title">{item.title}</span>
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="deleteTodo"
+                onClick={() => removeTodo(item.id)}
+              >
+                x
+              </button>
+            </>
+          )
+          : (
+            <input
+              type="text"
+              className="todo__title-field"
+              value={newTitle}
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+              onChange={event => setNewTitle(event.target.value)}
+              onBlur={() => {
+                if (newTitle) {
+                  changeTodoTitle(item.id, newTitle);
+                }
 
-        {isEditing && (
-          <input
-            type="text"
-            className="edit"
-            value={newTitle}
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
-            onChange={event => setNewTitle(event.target.value)}
-            onBlur={() => {
-              if (newTitle) {
-                changeTodoTitle(item.id, newTitle);
-              }
-
-              setNewTitle('');
-              setIsEditing(false);
-            }}
-            onKeyDown={(event) => {
-              if (event.code === 'Enter' && newTitle) {
-                changeTodoTitle(item.id, newTitle);
                 setNewTitle('');
                 setIsEditing(false);
-              }
+              }}
+              onKeyDown={(event) => {
+                if (event.code === 'Enter' && newTitle) {
+                  changeTodoTitle(item.id, newTitle);
+                  setNewTitle('');
+                  setIsEditing(false);
+                }
 
-              if (event.code === 'Escape') {
-                setNewTitle('');
-                setIsEditing(false);
-              }
-            }}
-          />
-        )}
+                if (event.code === 'Escape') {
+                  setNewTitle('');
+                  setIsEditing(false);
+                }
+              }}
+            />
+          )}
+
       </li>
     );
   },
