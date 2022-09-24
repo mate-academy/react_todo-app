@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
-// import './styles/todo-items.css';
 
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { App } from './App';
