@@ -6,5 +6,5 @@
   * HTML
   * SASS
   * Bulma
-  * React
+  * React (with Typescript)
   * React Router
