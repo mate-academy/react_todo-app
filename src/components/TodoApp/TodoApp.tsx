@@ -6,26 +6,7 @@ import { TodoList } from '../TodoList';
 import { Header } from '../Header';
 import { SortType } from '../../types/sort';
 import { Footer } from '../Footer';
-
-function useLocaleStorage<T>(
-  key: string,
-  initialValue: T,
-): [T, (value: T) => void] {
-  const [value, setValue] = useState<T>(() => {
-    try {
-      return JSON.parse(localStorage.getItem(key) || '') || initialValue;
-    } catch (error) {
-      return initialValue;
-    }
-  });
-
-  const save = (saveValue: T) => {
-    setValue(saveValue);
-    localStorage.setItem(key, JSON.stringify(saveValue));
-  };
-
-  return [value, save];
-}
+import { useLocaleStorage } from '../helpers/useLocalStorage';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
@@ -147,7 +128,7 @@ export const TodoApp: React.FC = () => {
   return (
     <div className="todoapp">
       <Header
-        title={title}
+        todoInputValue={title}
         onAddTodo={onAddTodo}
         handleTitle={handleTitle}
       />

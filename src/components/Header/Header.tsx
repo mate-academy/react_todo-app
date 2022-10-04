@@ -1,10 +1,12 @@
 type Props = {
-  title: string,
+  todoInputValue : string,
   handleTitle:(event: React.ChangeEvent<HTMLInputElement>) => void,
   onAddTodo: (event: React.FormEvent) => void
 };
 
-export const Header: React.FC<Props> = ({ title, handleTitle, onAddTodo }) => {
+export const Header: React.FC<Props> = ({
+  todoInputValue: title, handleTitle, onAddTodo,
+}) => {
   return (
     <header className="header">
       <h1>todos</h1>
