@@ -1,93 +1,123 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
+import { useParams } from 'react-router-dom';
+
+import {
+  AuthContext,
+  TodoList,
+  TodoFooter,
+  Todo,
+  getTodos,
+  Filter,
+  Notification,
+  TodoHeader,
+} from './imports';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<Filter>(Filter.all);
+  const [notification, setNotification] = useState('');
+  const [isToggleClicked, setIsToggleClicked] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isClearButtonClicked, setIsClearButtonClicked] = useState(false);
+
+  const { filterParam = '' } = useParams();
+
+  useMemo(() => {
+    switch (filterParam) {
+      case '':
+      default:
+        setFilter(Filter.all);
+        break;
+      case 'active':
+        setFilter(Filter.active);
+        break;
+      case 'completed':
+        setFilter(Filter.completed);
+        break;
+    }
+  }, [filterParam]);
+
+  const filterList = (todosList: Todo[]) => {
+    switch (filter) {
+      case Filter.all:
+        return todosList;
+      case Filter.active:
+        return todosList.filter(todo => todo.completed === false);
+      case Filter.completed:
+        return todosList.filter(todo => todo.completed === true);
+      default:
+        return todosList;
+    }
+  };
+
+  const user = useContext(AuthContext);
+  const newTodoField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // focus the element with `ref={newTodoField}`
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+
+    if (user) {
+      getTodos(user.id)
+        .then(setTodos)
+        .catch(() => {
+          setNotification('Unable to get todos');
+        });
+    }
+  }, []);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <TodoHeader
+          newTodoField={newTodoField}
+          todos={todos}
+          setTodos={setTodos}
+          setIsToggleClicked={setIsToggleClicked}
+          isAdding={isAdding}
+          setIsAdding={setIsAdding}
+          user={user}
+          setNotification={setNotification}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <>
+            <TodoList
+              todos={filterList(todos)}
+              setTodos={setTodos}
+              isToggleClicked={isToggleClicked}
+              isAdding={isAdding}
+              isClearButtonClicked={isClearButtonClicked}
+              setNotification={setNotification}
+            />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <TodoFooter
+              todos={todos}
+              setIsClearButtonClicked={setIsClearButtonClicked}
+              setTodos={setTodos}
+            />
+          </>
+        )}
+      </div>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+      {notification && (
+        <Notification
+          notification={notification}
+          setNotification={setNotification}
+        />
+      )}
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
     </div>
   );
 };
