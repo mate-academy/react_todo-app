@@ -7,6 +7,7 @@ import { Header } from '../Header';
 import { SortType } from '../../types/sort';
 import { Footer } from '../Footer';
 import { useLocaleStorage } from '../helpers/useLocalStorage';
+import { getActiveTodosCount } from '../helpers/getActiveTodosCount';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
@@ -29,12 +30,6 @@ export const TodoApp: React.FC = () => {
       }
     }));
   }, [todos, status]);
-
-  const getActiveTodosCount = () => {
-    return todos.filter(todo => {
-      return !todo.completed;
-    }).length;
-  };
 
   const markAsCompleted = (todoId: number) => {
     return setTodos(todos.map(todo => {
@@ -157,7 +152,7 @@ export const TodoApp: React.FC = () => {
 
       {todos.length > 0 && (
         <Footer
-          getActiveTodosCount={getActiveTodosCount}
+          activeTodosCount={getActiveTodosCount(todos)}
           findCompleted={findCompleted}
           clearCompleted={clearCompleted}
         />

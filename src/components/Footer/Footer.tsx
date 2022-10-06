@@ -2,20 +2,20 @@ import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
 type Props = {
-  getActiveTodosCount: () => number,
+  activeTodosCount: number,
   findCompleted : () => boolean,
   clearCompleted: () => void,
 };
 
 export const Footer: React.FC<Props> = ({
-  getActiveTodosCount,
+  activeTodosCount,
   findCompleted,
   clearCompleted,
 }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {getActiveTodosCount()}
+        {activeTodosCount}
         {' '}
         items left
       </span>
