@@ -83,20 +83,20 @@ export const TodoHeader: React.FC<Props> = ({
         />
       )}
 
-      <form onSubmit={e => {
-        e.preventDefault();
+      <form onSubmit={event => {
+        event.preventDefault();
         handleSubmit();
       }}
       >
         <input
-          data-cy="NewTodoField"
+          data-cy="createTodo"
           type="text"
           ref={newTodoField}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           disabled={isAdding}
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(event) => setTitle(event.target.value)}
         />
       </form>
     </header>

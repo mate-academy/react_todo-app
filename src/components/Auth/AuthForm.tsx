@@ -4,7 +4,7 @@ import { createUser, getUserByEmail } from '../../api/users';
 import { User } from '../../types/User';
 
 export type Props = {
-  onLogin: (user: User) => void,
+  onLogin(user: User): void,
 };
 
 export const AuthForm: React.FC<Props> = ({ onLogin }) => {

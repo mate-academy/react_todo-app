@@ -2,36 +2,31 @@ import classNames from 'classnames';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+type Props = {
+  to: string;
+  text: string;
+};
+
+export const PageNavLink: React.FC<Props> = ({ to, text }) => (
+  <NavLink
+    data-cy="FilterLinkAll"
+    end
+    to={to}
+    className={({ isActive }) => classNames('filter__link', {
+      selected: isActive,
+    })}
+  >
+    {text}
+  </NavLink>
+);
+
 export const TodoFilter: React.FC = () => (
-
   <nav className="filter" data-cy="Filter">
-    <NavLink
-      data-cy="FilterLinkAll"
-      to="/"
-      className={({ isActive }) => classNames('filter__link', {
-        selected: isActive,
-      })}
-    >
-      All
-    </NavLink>
 
-    <NavLink
-      data-cy="FilterLinkActive"
-      to="/active"
-      className={({ isActive }) => classNames('filter__link', {
-        selected: isActive,
-      })}
-    >
-      Active
-    </NavLink>
-    <NavLink
-      data-cy="FilterLinkCompleted"
-      to="/completed"
-      className={({ isActive }) => classNames('filter__link', {
-        selected: isActive,
-      })}
-    >
-      Completed
-    </NavLink>
+    <PageNavLink to="/" text="All" />
+
+    <PageNavLink to="/active" text="Active" />
+
+    <PageNavLink to="/completed" text="Completed" />
   </nav>
 );
