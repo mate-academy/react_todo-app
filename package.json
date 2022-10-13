@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@mate-academy/eslint-config-react-typescript": "*",
-    "@mate-academy/scripts": "^1.2.3",
+    "@mate-academy/scripts": "^1.2.8",
     "@mate-academy/students-ts-config": "*",
     "@mate-academy/stylelint-config": "*",
     "cypress": "^5.6.0",

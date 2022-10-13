@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import * as todosApi from '../api/todos';
 import { Filter } from '../types/Filter';
 
 type TodosContextType = {
@@ -21,17 +20,51 @@ export const TodosContext = React.createContext<TodosContextType>({
 });
 
 export const TodosProvider: React.FC = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const data = window.localStorage.getItem('todos');
 
-  const loadTodos = () => {
-    todosApi.getAll().then(setTodos);
-  };
+    return data ? JSON.parse(data) : [];
+  });
 
   useEffect(() => {
-    loadTodos();
-  }, []);
+    window.localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const value = useMemo(() => ({
+    add: (title: string) => {
+      const newTodo: Todo = {
+        id: `${Date.now()}`,
+        title,
+        completed: false,
+      };
+
+      setTodos([...todos, newTodo]);
+    },
+
+    remove: (todoId: string) => {
+      setTodos(todos.filter(todo => todo.id !== todoId));
+    },
+
+    update: (todoData: Todo) => {
+      setTodos(todos.map((todo) => {
+        return (todo.id === todoData.id)
+          ? todoData
+          : todo;
+      }));
+    },
+
+    toggleAll: (completed: boolean) => {
+      setTodos(todos.map((todo) => {
+        return (todo.completed === completed)
+          ? todo
+          : { ...todo, completed };
+      }));
+    },
+
+    clearCompleted: () => {
+      setTodos(todos.filter(todo => !todo.completed));
+    },
+
     getAll: (type = Filter.all) => {
       switch (type) {
         case Filter.active:
@@ -43,34 +76,6 @@ export const TodosProvider: React.FC = ({ children }) => {
         default:
           return todos;
       }
-    },
-    add: async (title: string) => {
-      todosApi.add(title)
-        .then(loadTodos);
-    },
-    remove: (todoId: string) => {
-      todosApi.remove(todoId)
-        .then(loadTodos);
-    },
-    update: (todoData: Todo) => {
-      todosApi.update(todoData)
-        .then(loadTodos);
-    },
-    toggleAll: (completed: boolean) => {
-      todosApi.updatedAll(
-        todos
-          .filter(todo => todo.completed !== completed)
-          .map(todo => ({ ...todo, completed })),
-      )
-        .then(loadTodos);
-    },
-    clearCompleted: () => {
-      todosApi.removeAll(
-        todos
-          .filter(todo => todo.completed)
-          .map(todo => todo.id),
-      )
-        .then(loadTodos);
     },
   }), [todos]);
 

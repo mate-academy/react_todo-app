@@ -1,3 +1,8 @@
+iframe,
+.hidden {
+  display: none;
+}
+
 html,
 body {
   margin: 0;
@@ -31,10 +36,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
-}
-
-.hidden {
-  display: none;
 }
 
 .todoapp {

@@ -1,29 +1,15 @@
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import { TodosPage } from './components/TodosPage';
 
 export const App = () => {
   return (
-    <>
-      <header>
-        <nav
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: 'white',
-          }}
-        >
-          <Link to="/">Home</Link>
-          <Link to="/login">Login</Link>
-        </nav>
-      </header>
-      <main>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route index element={<App />} />
-            <Route path=":type" element={<App />} />
-          </Route>
-        </Routes>
-      </main>
-    </>
+    <main>
+      <Routes>
+        <Route path="/">
+          <Route index element={<TodosPage />} />
+          <Route path=":type" element={<TodosPage />} />
+        </Route>
+      </Routes>
+    </main>
   );
 };
