@@ -2,9 +2,15 @@ import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
+enum FilterType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 type Props = {
-  setFilter: React.Dispatch<React.SetStateAction<string>>
-  filter: string
+  setFilter: (value: FilterType) => void
+  filter: FilterType
   todos: Todo[]
   removeTodo: (todoId: number) => void
 };
@@ -38,10 +44,10 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkAll"
           href="#/"
           className={classNames('filter__link', {
-            'filter__link selected': filter === 'all',
+            'filter__link selected': filter === FilterType.ALL,
           })}
-          onClick={(event) => {
-            setFilter(event.currentTarget.innerHTML.toLocaleLowerCase());
+          onClick={() => {
+            setFilter(FilterType.ALL);
           }}
         >
           All
@@ -51,10 +57,10 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkActive"
           href="#/active"
           className={classNames('filter__link', {
-            'filter__link selected': filter === 'active',
+            'filter__link selected': filter === FilterType.ACTIVE,
           })}
-          onClick={(event) => {
-            setFilter(event.currentTarget.innerHTML.toLocaleLowerCase());
+          onClick={() => {
+            setFilter(FilterType.ACTIVE);
           }}
         >
           Active
@@ -63,10 +69,10 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={classNames('filter__link', {
-            'filter__link selected': filter === 'completed',
+            'filter__link selected': filter === FilterType.COMPLETED,
           })}
-          onClick={(event) => {
-            setFilter(event.currentTarget.innerHTML.toLocaleLowerCase());
+          onClick={() => {
+            setFilter(FilterType.COMPLETED);
           }}
         >
           Completed

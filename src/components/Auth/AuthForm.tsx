@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createUser, getUserByEmail } from '../../api/users';
 import { User } from '../../types/User';
 
@@ -31,7 +31,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
 
       onLogin(user);
     } catch (error) {
-      // Need to login
+      setErrorMessage('Need to LogIn');
     }
   }, []);
 
@@ -50,7 +50,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
       .then(saveUser);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = useCallback(async (event: React.FormEvent) => {
     event.preventDefault();
 
     setErrorMessage('');
@@ -67,7 +67,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [name, email]);
 
   return (
     <form onSubmit={handleSubmit} className="box mt-5">

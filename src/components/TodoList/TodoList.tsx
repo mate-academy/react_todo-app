@@ -9,6 +9,7 @@ type Props = {
   isLoading: boolean
   setIsLoading: (value: boolean) => void
   todo: Todo
+  selectedId: number[]
   removeTodo: (todoId: number) => void
   changeTodo: (todoId: number, object: TodoCompleted | TodoTitle) => void
 };
@@ -19,12 +20,12 @@ export const TodoList: React.FC<Props> = ({
   changeTodo,
   isLoading,
   setIsLoading,
+  selectedId,
 }) => {
   const [toggle, setToggle] = useState(false);
   const [query, setQuery] = useState(todo.title);
-  // const [isLoading, setIsLoading] = useState(false);
 
-  const actionOnEnter = (
+  const actionOnEdit = (
     todoTitle: string, value: Todo,
   ) => {
     if (query !== '' && query !== todoTitle) {
@@ -47,22 +48,6 @@ export const TodoList: React.FC<Props> = ({
       setToggle(false);
       setQuery(todo.title);
     }
-  };
-
-  const actionOnBlur = (todoTitle: string, value: Todo) => {
-    if (query !== '' && query !== todoTitle) {
-      setIsLoading(true);
-      changeTodo(value.id, { title: query });
-      setToggle(false);
-    }
-
-    if (query === '') {
-      removeTodo(value.id);
-    }
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
   };
 
   return (
@@ -88,7 +73,7 @@ export const TodoList: React.FC<Props> = ({
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            actionOnEnter(todo.title, todo);
+            actionOnEdit(todo.title, todo);
           }}
         >
           <input
@@ -100,7 +85,7 @@ export const TodoList: React.FC<Props> = ({
             }}
             onKeyDown={actionOnEscape}
             onBlur={() => {
-              actionOnBlur(todo.title, todo);
+              actionOnEdit(todo.title, todo);
             }}
           />
         </form>
@@ -127,12 +112,9 @@ export const TodoList: React.FC<Props> = ({
             >
               ×
             </button>
-
           </>
-
         )}
-
-      {isLoading && (
+      {isLoading && (selectedId.includes(todo.id)) && (
         <div data-cy="TodoLoader" className="modal overlay is-active">
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
