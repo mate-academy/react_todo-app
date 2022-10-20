@@ -4,6 +4,12 @@ body {
   padding: 0;
 }
 
+#cloudTodos-title {
+  width: 600px;
+  margin-left: -27px;
+  color: rgba(28, 31, 204, 0.15);
+}
+
 button {
   margin: 0;
   padding: 0;
@@ -98,6 +104,7 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  outline: none;
 }
 
 .new-todo {
