@@ -20,6 +20,8 @@ export const App: React.FC = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/styles" element={<StylesExample />} />
               <Route path="/local" element={<LocalTodos />} />
+              <Route path="/local/active" element={<LocalTodos />} />
+              <Route path="/local/completed" element={<LocalTodos />} />
               <Route path="/cloud" element={<CloudTodos />} />
               <Route path="/home" element={<Navigate to="/" replace />} />
               <Route path="*" element={<NotFoundPage />} />

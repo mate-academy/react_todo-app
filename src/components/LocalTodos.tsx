@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 type Todo = {
   id: string;
@@ -13,9 +14,12 @@ export const LocalTodos: React.FC = () => {
   const [newTodoInput, setNewTodoInput] = useState('');
   const [editableId, setEditableId] = useState('');
   const [editableTitle, setEditableTitle] = useState('');
+  const location = useLocation();
+
+  const localTodos = JSON.parse(localStorage.getItem('todos') || '{}');
 
   useEffect(() => {
-    const localTodos = JSON.parse(localStorage.getItem('todos') || '{}');
+    console.log('pathname', location.pathname);
 
     if (localTodos.length > 0) {
       setTodos(JSON.parse(localStorage.getItem('todos') || '{}'));
@@ -29,6 +33,24 @@ export const LocalTodos: React.FC = () => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    // const localTodos = JSON.parse(localStorage.getItem('todos') || '{}');
+
+    if (location.pathname === '/local/active') {
+      const filteredTodos = localTodos
+        .filter((todo:Todo) => todo.completed === false);
+
+      setTodos(filteredTodos);
+    } else if (location.pathname === '/local/completed') {
+      const filteredTodos = localTodos
+        .filter((todo:Todo) => todo.completed === true);
+
+      setTodos(filteredTodos);
+    } else {
+      setTodos(localTodos);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (editableId.length) {
@@ -70,21 +92,6 @@ export const LocalTodos: React.FC = () => {
       localStorage.setItem('todos', JSON.stringify(todos));
     }
 
-    // const updatedTodos = [...todos].splice(+editableId, 1, updatedTodo);
-
-    // setTodos(updatedTodos);
-
-    /*    const originalTodoIndex = todos.findIndex(todo => todo.id === editableId);
-
-    if (todos[originalTodoIndex].title !== editableTitle) {
-      const updatedTodo = { ...todos[originalTodoIndex], title: editableTitle };
-
-      const updatedTodos = [...todos].splice(originalTodoIndex, 1, updatedTodo);
-
-      setTodos(updatedTodos);
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-    }
-*/
     setEditableTitle('');
     setEditableId('');
 
@@ -94,6 +101,29 @@ export const LocalTodos: React.FC = () => {
       editInput.blur();
     }
   };
+
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      console.log(`${event.key} pressed`);
+
+      if (event.key === 'Escape') {
+        console.log('escape pressed');
+        setEditableTitle('');
+        setEditableId('');
+      }
+
+      if (event.key === 'Enter') {
+        console.log('Enter pressed');
+        handleBlur();
+      }
+    };
+
+    window.addEventListener('keydown', handleEsc);
+
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
 
   const handleCompleted = (todoId:string) => {
     const selectedTodoIndex = todos.findIndex(todo => todo.id === todoId);
@@ -224,20 +254,20 @@ export const LocalTodos: React.FC = () => {
 
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${todos.filter(todo => !todo.completed).length} items left`}
+            {`${localTodos.filter((todo:Todo) => !todo.completed).length} items left`}
           </span>
 
           <ul className="filters">
             <li>
-              <a href="#/" className="selected">All</a>
+              <Link to="/local" className="selected">All</Link>
             </li>
 
             <li>
-              <a href="#/active">Active</a>
+              <Link to="/local/active">Active</Link>
             </li>
 
             <li>
-              <a href="#/completed">Completed</a>
+              <Link to="/local/completed">Completed</Link>
             </li>
           </ul>
 
