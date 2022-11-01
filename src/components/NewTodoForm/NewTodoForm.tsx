@@ -3,7 +3,7 @@ import React from 'react';
 export const NewTodoForm: React.FC = () => {
   return (
     <>
-      <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
       <form>
         <input

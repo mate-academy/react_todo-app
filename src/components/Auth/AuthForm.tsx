@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import classnames from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { getUserByEmail, createUser } from '../../api/users';
 import { User } from '../../types/User';
 
 type Props = {
@@ -16,10 +17,71 @@ export const AuthForm: React.FC<Props> = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   // eslint-disable-next-line no-console
-  console.log(onLogin, setLoading, setNeedToRegister, setErrorMessage);
+  // console.log(onLogin, setLoading, setNeedToRegister, setErrorMessage);
+  // functions I need to create:
+  // 1. Save user = accept the user, save to LS and to state in context
+  // 2. In useEffect I need to check if we have a user in LS, if not - do nothing,
+  // if yes - parse it and save to state in context, do this on 1st render of the component;
+  // 3. loadUser - try to get the user by email, if success - saveUser, if no - set needToRegister to true
+  // 4. registerUser - creates a new user in the /users and saves it to the state in context
+  // 5. handleSubmit - clear error message, set loading state to true, then if user needs to register,
+  // call register user function (async), if no - call loadUser function. On error set error message to
+  // 'Something went wrong', and in the end set loading state to false;
+
+  const saveUser = (user: User) => {
+    localStorage.setItem('user', JSON.stringify(user));
+
+    onLogin(user);
+  };
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+
+    if (!userData) {
+      return;
+    }
+
+    try {
+      const user = JSON.parse(userData);
+
+      onLogin(user);
+    } catch {
+      // need to login
+    }
+  }, []);
+
+  const loadUser = async () => {
+    const user: User = await getUserByEmail(email);
+
+    if (user) {
+      saveUser(user);
+    } else {
+      setNeedToRegister(true);
+    }
+  };
+
+  const registerUser = () => {
+    return createUser({ name, email })
+      .then(saveUser);
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    setErrorMessage('');
+    setLoading(true);
+
+    try {
+      if (needToRegister) {
+        await registerUser();
+      } else {
+        await loadUser();
+      }
+    } catch {
+      setErrorMessage('Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -1,10 +1,23 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { TodoItem } from '../TodoItem';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => {
+type Props = {
+  todos: Todo[],
+};
+
+export const TodoList: React.FC<Props> = ({
+  todos,
+}) => {
   return (
     <ul className="todo-list" data-cy="todoList">
-      <li>
+      {todos.map(todo => (
+        <li key={todo.id}>
+          <TodoItem key={todo.id} todo={todo} />
+        </li>
+      ))}
+      {/* <li>
         <div className="view">
           <input type="checkbox" className="toggle" id="toggle-view" />
           <label htmlFor="toggle-view">asdfghj</label>
@@ -30,15 +43,15 @@ export const TodoList: React.FC = () => {
         </div>
         <input type="text" className="edit" />
       </li>
-
-      <li>
+*/}
+      {/* <li>
         <div className="view">
           <input type="checkbox" className="toggle" id="toggle-view2" />
           <label htmlFor="toggle-view2">1234567890</label>
           <button type="button" className="destroy" data-cy="deleteTodo" />
         </div>
         <input type="text" className="edit" />
-      </li>
+      </li> */}
     </ul>
   );
 };
