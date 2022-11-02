@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { getTodos } from './api/todos';
+import { createTodo, deleteTodo, getTodos, toggleTodo } from './api/todos';
 import { AuthContext } from './components/Auth';
 import { Footer } from './components/Footer';
 import { NewTodoForm } from './components/NewTodoForm';
@@ -42,12 +42,47 @@ export const App: React.FC = () => {
     }
   });
 
+  const handleDeleteTodo = async (todoId: number) => {
+    await deleteTodo(todoId);
+
+    setTodos(prevTodos => prevTodos.filter(
+      todo => todo.id !== todoId,
+    ));
+  };
+
+  const handleAddTodo = async (title: string) => {
+    const response = await createTodo({
+      userId,
+      title,
+      completed: false,
+    });
+
+    setTodos(prevTodos => [...prevTodos, response]);
+  };
+
+  const handleToggleTodo = async (todo: Todo) => {
+    await toggleTodo(todo.id, !todo.completed);
+
+    setTodos(prevTodos => prevTodos.map(prevTodo => {
+      if (todo.id === prevTodo.id) {
+        return {
+          ...prevTodo,
+          completed: !prevTodo.completed,
+        };
+      }
+
+      return prevTodo;
+    }));
+  };
+
   // console.log(todos, setFilter, filteredTodos);
 
   return (
     <div className="todoapp">
       <header className="header">
-        <NewTodoForm />
+        <NewTodoForm
+          onAdd={handleAddTodo}
+        />
       </header>
 
       <section className="main">
@@ -61,6 +96,8 @@ export const App: React.FC = () => {
 
         <TodoList
           todos={filteredTodos}
+          onToggle={handleToggleTodo}
+          onDelete={handleDeleteTodo}
         />
       </section>
 
