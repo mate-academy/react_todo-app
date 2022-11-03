@@ -2,6 +2,7 @@
 import React from 'react';
 import { TodoItem } from '../TodoItem';
 import { Todo } from '../../types/Todo';
+import classnames from 'classnames';
 
 type Props = {
   todos: Todo[],
@@ -16,15 +17,22 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   return (
     <ul className="todo-list" data-cy="todoList">
-      {todos.map(todo => (
-        <li key={todo.id}>
+      {todos.map((todo) => (
+        <li
+          key={todo.id}
+          className={
+            classnames(
+              { completed: todo.completed },
+            )
+          }
+        >
           <TodoItem todo={todo} onToggle={onToggle} onDelete={onDelete} />
         </li>
       ))}
       {/* <li>
         <div className="view">
           <input type="checkbox" className="toggle" id="toggle-view" />
-          <label htmlFor="toggle-view">asdfghj</label>
+          <label htmlFor="toggle-view">view</label>
           <button type="button" className="destroy" data-cy="deleteTodo" />
         </div>
         <input type="text" className="edit" />
@@ -33,7 +41,7 @@ export const TodoList: React.FC<Props> = ({
       <li className="completed">
         <div className="view">
           <input type="checkbox" className="toggle" id="toggle-completed" />
-          <label htmlFor="toggle-completed">qwertyuio</label>
+          <label htmlFor="toggle-completed">completed</label>
           <button type="button" className="destroy" data-cy="deleteTodo" />
         </div>
         <input type="text" className="edit" />
@@ -45,10 +53,9 @@ export const TodoList: React.FC<Props> = ({
           <label htmlFor="toggle-editing">zxcvbnm</label>
           <button type="button" className="destroy" data-cy="deleteTodo" />
         </div>
-        <input type="text" className="edit" />
+        <input type="text" className="edit" value="editing" />
       </li>
-*/}
-      {/* <li>
+      <li>
         <div className="view">
           <input type="checkbox" className="toggle" id="toggle-view2" />
           <label htmlFor="toggle-view2">1234567890</label>

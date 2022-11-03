@@ -7,13 +7,20 @@ type Props = {
   todos: Todo[],
   filter: string,
   onFilterSelect: (filterType: string) => void,
+  onDelete: (todoid: number) => void,
 };
 
 export const Footer: React.FC<Props> = ({
   todos,
   filter,
   onFilterSelect,
+  onDelete,
 }) => {
+  const handleClearCompleted = () => {
+    todos.filter(todo => todo.completed)
+      .forEach(todo => onDelete(todo.id));
+  };
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -64,7 +71,11 @@ export const Footer: React.FC<Props> = ({
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={handleClearCompleted}
+      >
         {todos.some(todo => todo.completed) && 'Clear completed'}
       </button>
     </footer>

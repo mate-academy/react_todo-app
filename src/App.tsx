@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { createTodo, deleteTodo, getTodos, toggleTodo } from './api/todos';
+import {
+  createTodo, deleteTodo, getTodos, toggleTodo,
+} from './api/todos';
 import { AuthContext } from './components/Auth';
 import { Footer } from './components/Footer';
 import { NewTodoForm } from './components/NewTodoForm';
@@ -75,7 +77,18 @@ export const App: React.FC = () => {
     }));
   };
 
-  // console.log(todos, setFilter, filteredTodos);
+  const handleToggleAll = async () => {
+    await todos.forEach(todo => {
+      toggleTodo(todo.id, !todos.every(item => item.completed));
+    });
+
+    setTodos(prevTodos => prevTodos.map(prevTodo => {
+      return {
+        ...prevTodo,
+        completed: !todos.every(item => item.completed),
+      };
+    }));
+  };
 
   return (
     <div className="todoapp">
@@ -91,21 +104,29 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          checked={todos.every(todo => todo.completed)}
+          onChange={handleToggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList
-          todos={filteredTodos}
-          onToggle={handleToggleTodo}
-          onDelete={handleDeleteTodo}
-        />
-      </section>
+        {todos.length > 0 && (
+          <>
+            <TodoList
+              todos={filteredTodos}
+              onToggle={handleToggleTodo}
+              onDelete={handleDeleteTodo}
+            />
 
-      <Footer
-        todos={todos}
-        filter={filter}
-        onFilterSelect={setFilter}
-      />
+            <Footer
+              todos={todos}
+              filter={filter}
+              onFilterSelect={setFilter}
+              onDelete={handleDeleteTodo}
+            />
+          </>
+        )}
+
+      </section>
     </div>
   );
 };
