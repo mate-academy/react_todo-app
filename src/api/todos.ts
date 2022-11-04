@@ -15,6 +15,10 @@ export const toggleTodo = async (todoId: number, completed: boolean) => {
   return client.patch<Todo>(`/todos/${todoId}`, { completed });
 };
 
+export const updateTodoTitle = async (todoId: number, title: string) => {
+  return client.patch<Todo>(`/todos/${todoId}`, { title });
+};
+
 export const deleteTodo = async (todoId: number) => {
   return client.delete(`/todos/${todoId}`);
 };

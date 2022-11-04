@@ -2,32 +2,30 @@
 import React from 'react';
 import { TodoItem } from '../TodoItem';
 import { Todo } from '../../types/Todo';
-import classnames from 'classnames';
 
 type Props = {
   todos: Todo[],
   onToggle: (todo: Todo) => void,
+  onUpdate: (todoId: number, title: string) => void,
   onDelete: (todoId: number) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onToggle,
+  onUpdate,
   onDelete,
 }) => {
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map((todo) => (
-        <li
+        <TodoItem
           key={todo.id}
-          className={
-            classnames(
-              { completed: todo.completed },
-            )
-          }
-        >
-          <TodoItem todo={todo} onToggle={onToggle} onDelete={onDelete} />
-        </li>
+          todo={todo}
+          onToggle={onToggle}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+        />
       ))}
       {/* <li>
         <div className="view">

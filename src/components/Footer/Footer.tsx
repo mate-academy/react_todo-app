@@ -1,12 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
-import { FilterType } from '../../types/FilterType';
+import { Status } from '../../types/Status';
 
 type Props = {
   todos: Todo[],
   filter: string,
-  onFilterSelect: (filterType: string) => void,
+  onFilterSelect: (Status: string) => void,
   onDelete: (todoid: number) => void,
 };
 
@@ -29,45 +30,45 @@ export const Footer: React.FC<Props> = ({
 
       <ul className="filters">
         <li>
-          <a
-            href="#/"
+          <Link
+            to="/"
             className={
               classnames(
-                { selected: filter === FilterType.All },
+                { selected: filter === Status.All },
               )
             }
-            onClick={() => onFilterSelect(FilterType.All)}
+            onClick={() => onFilterSelect(Status.All)}
           >
             All
-          </a>
+          </Link>
         </li>
 
         <li>
-          <a
-            href="#/active"
+          <Link
+            to="/active"
             className={
               classnames(
-                { selected: filter === FilterType.Active },
+                { selected: filter === Status.Active },
               )
             }
-            onClick={() => onFilterSelect(FilterType.Active)}
+            onClick={() => onFilterSelect(Status.Active)}
           >
             Active
-          </a>
+          </Link>
         </li>
 
         <li>
-          <a
-            href="#/completed"
+          <Link
+            to="/completed"
             className={
               classnames(
-                { selected: filter === FilterType.Completed },
+                { selected: filter === Status.Completed },
               )
             }
-            onClick={() => onFilterSelect(FilterType.Completed)}
+            onClick={() => onFilterSelect(Status.Completed)}
           >
             Completed
-          </a>
+          </Link>
         </li>
       </ul>
 

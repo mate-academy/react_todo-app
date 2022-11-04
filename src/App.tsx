@@ -1,19 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  createTodo, deleteTodo, getTodos, toggleTodo,
+  createTodo, deleteTodo, getTodos, toggleTodo, updateTodoTitle,
 } from './api/todos';
 import { AuthContext } from './components/Auth';
 import { Footer } from './components/Footer';
 import { NewTodoForm } from './components/NewTodoForm';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
-import { FilterType } from './types/FilterType';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<string>('all');
-  // const [processingTodoIds, setProcessingTodoIds] = useState<number[]>([]);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const user = useContext(AuthContext);
   const userId = user ? user?.id : 0;
@@ -30,13 +28,13 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
-      case FilterType.All:
+      case Status.All:
         return todo;
 
-      case FilterType.Active:
+      case Status.Active:
         return !todo.completed;
 
-      case FilterType.Completed:
+      case Status.Completed:
         return todo.completed;
 
       default:
@@ -77,15 +75,29 @@ export const App: React.FC = () => {
     }));
   };
 
-  const handleToggleAll = async () => {
+  const handleUpdateTodo = async (todoId: number, title: string) => {
+    const response = await updateTodoTitle(todoId, title);
+
+    setTodos(prevTodos => prevTodos.map(prevTodo => {
+      if (prevTodo.id === todoId) {
+        return response;
+      }
+
+      return prevTodo;
+    }));
+  };
+
+  const handleToggleAll = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     await todos.forEach(todo => {
-      toggleTodo(todo.id, !todos.every(item => item.completed));
+      toggleTodo(todo.id, event.target.checked);
     });
 
     setTodos(prevTodos => prevTodos.map(prevTodo => {
       return {
         ...prevTodo,
-        completed: !todos.every(item => item.completed),
+        completed: !event.target.checked,
       };
     }));
   };
@@ -114,6 +126,7 @@ export const App: React.FC = () => {
             <TodoList
               todos={filteredTodos}
               onToggle={handleToggleTodo}
+              onUpdate={handleUpdateTodo}
               onDelete={handleDeleteTodo}
             />
 
