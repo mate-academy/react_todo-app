@@ -3,7 +3,7 @@ import React from 'react';
 
 export const CloudTodos: React.FC = () => (
   <>
-    <h1 className="title">these are your</h1>
+    <h1 className="title">These are your</h1>
     <div className="todoapp">
       <header className="header">
         <h1 id="cloudTodos-title">Cloud Todos</h1>

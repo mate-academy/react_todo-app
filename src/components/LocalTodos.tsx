@@ -19,8 +19,6 @@ export const LocalTodos: React.FC = () => {
   const localTodos = JSON.parse(localStorage.getItem('todos') || '{}');
 
   useEffect(() => {
-    console.log('pathname', location.pathname);
-
     if (localTodos.length > 0) {
       setTodos(JSON.parse(localStorage.getItem('todos') || '{}'));
     }
@@ -33,24 +31,6 @@ export const LocalTodos: React.FC = () => {
       }
     }
   }, []);
-
-  useEffect(() => {
-    // const localTodos = JSON.parse(localStorage.getItem('todos') || '{}');
-
-    if (location.pathname === '/local/active') {
-      const filteredTodos = localTodos
-        .filter((todo:Todo) => todo.completed === false);
-
-      setTodos(filteredTodos);
-    } else if (location.pathname === '/local/completed') {
-      const filteredTodos = localTodos
-        .filter((todo:Todo) => todo.completed === true);
-
-      setTodos(filteredTodos);
-    } else {
-      setTodos(localTodos);
-    }
-  }, [location]);
 
   useEffect(() => {
     if (editableId.length) {
@@ -79,12 +59,6 @@ export const LocalTodos: React.FC = () => {
   };
 
   const handleBlur = () => {
-    console.log('blur detected');
-
-    console.log(editableId, todos.find(todo => todo.id === editableId));
-
-    console.log(editableTitle);
-
     const editableTodo = todos.find(todo => todo.id === editableId);
 
     if (editableTodo) {
@@ -104,16 +78,12 @@ export const LocalTodos: React.FC = () => {
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
-      console.log(`${event.key} pressed`);
-
       if (event.key === 'Escape') {
-        console.log('escape pressed');
         setEditableTitle('');
         setEditableId('');
       }
 
       if (event.key === 'Enter') {
-        console.log('Enter pressed');
         handleBlur();
       }
     };
@@ -189,11 +159,9 @@ export const LocalTodos: React.FC = () => {
 
   const newTodoInputHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodoInput(event.target.value);
-    console.log(newTodoInput);
   };
 
   const handleNewTodo = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('event submitted');
     event.preventDefault();
 
     if (newTodoInput.length > 0) {
@@ -211,10 +179,38 @@ export const LocalTodos: React.FC = () => {
   };
 
   const clearCompleted = () => {
-    const newTodos = [...todos.filter(todo => !todo.completed)];
+    const newTodos = localTodos
+      .filter((todo:Todo) => todo.completed === false);
 
     setTodos(newTodos);
     localStorage.setItem('todos', JSON.stringify(newTodos));
+  };
+
+  let visualTodos = localTodos;
+
+  if (location.pathname === '/local/active') {
+    visualTodos = localTodos.filter((todo:Todo) => todo.completed === false);
+  }
+
+  if (location.pathname === '/local/completed') {
+    visualTodos = localTodos
+      .filter((todo:Todo) => todo.completed === true);
+  }
+
+  const ToggleAll = () => {
+    if (!todos.find(todo => !todo.completed)) {
+      const updatedTodos = todos
+        .map((todo:Todo) => ({ ...todo, completed: false }));
+
+      setTodos(updatedTodos);
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    } else {
+      const updatedTodos = todos
+        .map((todo:Todo) => ({ ...todo, completed: true }));
+
+      setTodos(updatedTodos);
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    }
   };
 
   return (
@@ -238,43 +234,77 @@ export const LocalTodos: React.FC = () => {
           </form>
         </header>
 
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+        {todos.length !== 0 && (
+          <>
+            <section className="main">
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                data-cy="toggleAll"
+                checked={!todos
+                  .find(todo => !todo.completed)}
+                onChange={ToggleAll}
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <ul className="todo-list" data-cy="todoList">
-            {todos.map(todo => todoMarkup(todo))}
-          </ul>
-        </section>
+              <ul className="todo-list" data-cy="todoList">
+                {visualTodos.map((todo:Todo) => todoMarkup(todo))}
+              </ul>
+            </section>
 
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${localTodos.filter((todo:Todo) => !todo.completed).length} items left`}
-          </span>
+            <footer className="footer">
+              <span className="todo-count" data-cy="todosCounter">
+                {`${localTodos.filter((todo:Todo) => !todo.completed).length} items left`}
+              </span>
 
-          <ul className="filters">
-            <li>
-              <Link to="/local" className="selected">All</Link>
-            </li>
+              <ul className="filters">
+                <li>
+                  <Link
+                    to="/local"
+                    className={classNames({
+                      selected: location.pathname === '/local',
+                    })}
+                  >
+                    All
+                  </Link>
+                </li>
 
-            <li>
-              <Link to="/local/active">Active</Link>
-            </li>
+                <li>
+                  <Link
+                    to="/local/active"
+                    className={classNames({
+                      selected: location.pathname === '/local/active',
+                    })}
+                  >
+                    Active
+                  </Link>
+                </li>
 
-            <li>
-              <Link to="/local/completed">Completed</Link>
-            </li>
-          </ul>
+                <li>
+                  <Link
+                    to="/local/completed"
+                    className={classNames({
+                      selected: location.pathname === '/local/completed',
+                    })}
+                  >
+                    Completed
+                  </Link>
+                </li>
+              </ul>
 
-          <button type="button" className="clear-completed" onClick={clearCompleted}>
-            Clear completed
-          </button>
-        </footer>
+              {todos.find(todo => todo.completed) && (
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={clearCompleted}
+                >
+                  Clear completed
+                </button>
+              )}
+            </footer>
+          </>
+        )}
       </div>
     </>
   );
