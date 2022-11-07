@@ -193,6 +193,51 @@ body {
   text-decoration: none;
 }
 
+.notification {
+  position: relative;
+  background-color: rgb(253, 217, 223);
+  color: #f00;
+  padding: 25px 20px;
+  border-radius: 8px;
+
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.delete {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+
+  height: 20px;
+  width: 20px;
+  background-color: rgb(213, 176, 182);
+  border-radius: 50%;
+  color: #fff;
+}
+
+.delete::before {
+  position: absolute;
+  content: "";
+  height: 2px;
+  width: 10px;
+  transform: rotate(45deg);
+  background-color: #fff;
+}
+
+.delete::after {
+  position: absolute;
+  content: "";
+  height: 2px;
+  width: 10px;
+  transform: rotate(-45deg);
+  background-color: #fff;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox

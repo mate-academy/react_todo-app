@@ -16,18 +16,6 @@ export const AuthForm: React.FC<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // eslint-disable-next-line no-console
-  // console.log(onLogin, setLoading, setNeedToRegister, setErrorMessage);
-  // functions I need to create:
-  // 1. Save user = accept the user, save to LS and to state in context
-  // 2. In useEffect I need to check if we have a user in LS, if not - do nothing,
-  // if yes - parse it and save to state in context, do this on 1st render of the component;
-  // 3. loadUser - try to get the user by email, if success - saveUser, if no - set needToRegister to true
-  // 4. registerUser - creates a new user in the /users and saves it to the state in context
-  // 5. handleSubmit - clear error message, set loading state to true, then if user needs to register,
-  // call register user function (async), if no - call loadUser function. On error set error message to
-  // 'Something went wrong', and in the end set loading state to false;
-
   const saveUser = (user: User) => {
     localStorage.setItem('user', JSON.stringify(user));
 

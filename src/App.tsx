@@ -1,30 +1,69 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
+import { useParams } from 'react-router-dom';
+
 import {
-  createTodo, deleteTodo, getTodos, toggleTodo, updateTodoTitle,
-} from './api/todos';
-import { AuthContext } from './components/Auth';
-import { Footer } from './components/Footer';
-import { NewTodoForm } from './components/NewTodoForm';
-import { TodoList } from './components/TodoList';
-import { Todo } from './types/Todo';
-import { Status } from './types/Status';
+  createTodo,
+  deleteTodo,
+  getTodos,
+  toggleTodo,
+  updateTodoTitle,
+  AuthContext,
+  NewTodoForm,
+  TodoList,
+  Footer,
+  ErrorNotification,
+  Todo,
+  Status,
+} from './imports';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState<string>('');
+  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+
+  const { filterParam = '' } = useParams();
 
   const user = useContext(AuthContext);
   const userId = user ? user?.id : 0;
 
-  const loadTodos = async () => {
-    const response = await getTodos(userId);
+  if (error) {
+    setTimeout(() => setError(''), 3000);
+  }
 
-    setTodos(response);
+  const loadTodos = async () => {
+    setError('');
+
+    try {
+      const response = await getTodos(userId);
+
+      setTodos(response);
+    } catch {
+      setError('Something went wrong');
+    }
   };
 
   useEffect(() => {
     loadTodos();
   }, []);
+
+  useMemo(() => {
+    switch (filterParam) {
+      case '':
+        return setFilter(Status.All);
+
+      case 'active':
+        return setFilter(Status.Active);
+
+      case 'completed':
+        return setFilter(Status.Completed);
+
+      default:
+        return null;
+    }
+  }, [filterParam]);
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
@@ -43,103 +82,147 @@ export const App: React.FC = () => {
   });
 
   const handleDeleteTodo = async (todoId: number) => {
-    await deleteTodo(todoId);
+    setError('');
 
-    setTodos(prevTodos => prevTodos.filter(
-      todo => todo.id !== todoId,
-    ));
+    try {
+      await deleteTodo(todoId);
+
+      setTodos(prevTodos => prevTodos.filter(
+        todo => todo.id !== todoId,
+      ));
+    } catch {
+      setError('Couldn\'t remove todo');
+    }
   };
 
   const handleAddTodo = async (title: string) => {
-    const response = await createTodo({
-      userId,
-      title,
-      completed: false,
-    });
+    setError('');
+    setIsAdding(true);
 
-    setTodos(prevTodos => [...prevTodos, response]);
+    if (title.trim() === '') {
+      setError('Title cannot be empty');
+
+      return setIsAdding(false);
+    }
+
+    try {
+      const response = await createTodo({
+        userId,
+        title,
+        completed: false,
+      });
+
+      return setTodos(prevTodos => [...prevTodos, response]);
+    } catch {
+      return setError('Cannot add a new todo');
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const handleToggleTodo = async (todo: Todo) => {
-    await toggleTodo(todo.id, !todo.completed);
+    setError('');
 
-    setTodos(prevTodos => prevTodos.map(prevTodo => {
-      if (todo.id === prevTodo.id) {
-        return {
-          ...prevTodo,
-          completed: !prevTodo.completed,
-        };
-      }
+    try {
+      await toggleTodo(todo.id, !todo.completed);
 
-      return prevTodo;
-    }));
+      setTodos(prevTodos => prevTodos.map(prevTodo => {
+        if (todo.id === prevTodo.id) {
+          return {
+            ...prevTodo,
+            completed: !prevTodo.completed,
+          };
+        }
+
+        return prevTodo;
+      }));
+    } catch {
+      setError('Cannot toggle todo status');
+    }
   };
 
   const handleUpdateTodo = async (todoId: number, title: string) => {
-    const response = await updateTodoTitle(todoId, title);
+    setError('');
 
-    setTodos(prevTodos => prevTodos.map(prevTodo => {
-      if (prevTodo.id === todoId) {
-        return response;
-      }
+    try {
+      const response = await updateTodoTitle(todoId, title);
 
-      return prevTodo;
-    }));
+      setTodos(prevTodos => prevTodos.map(prevTodo => {
+        if (prevTodo.id === todoId) {
+          return response;
+        }
+
+        return prevTodo;
+      }));
+    } catch {
+      setError('Couldn\'t update todo');
+    }
   };
 
   const handleToggleAll = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    await todos.forEach(todo => {
-      toggleTodo(todo.id, event.target.checked);
-    });
+    setError('');
 
-    setTodos(prevTodos => prevTodos.map(prevTodo => {
-      return {
-        ...prevTodo,
-        completed: !event.target.checked,
-      };
-    }));
+    try {
+      await todos.forEach(todo => {
+        toggleTodo(todo.id, event.target.checked);
+      });
+
+      setTodos(prevTodos => prevTodos.map(prevTodo => {
+        return {
+          ...prevTodo,
+          completed: !event.target.checked,
+        };
+      }));
+    } catch {
+      setError('Cannot toggle todos');
+    }
   };
 
   return (
-    <div className="todoapp">
-      <header className="header">
-        <NewTodoForm
-          onAdd={handleAddTodo}
-        />
-      </header>
+    <>
+      <div className="todoapp">
+        <header className="header">
+          <NewTodoForm
+            onAdd={handleAddTodo}
+            isAdding={isAdding}
+          />
+        </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          checked={todos.every(todo => todo.completed)}
-          onChange={handleToggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            checked={todos.every(todo => todo.completed)}
+            onChange={handleToggleAll}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-        {todos.length > 0 && (
-          <>
-            <TodoList
-              todos={filteredTodos}
-              onToggle={handleToggleTodo}
-              onUpdate={handleUpdateTodo}
-              onDelete={handleDeleteTodo}
-            />
+          {todos.length > 0 && (
+            <>
+              <TodoList
+                todos={filteredTodos}
+                onToggle={handleToggleTodo}
+                onUpdate={handleUpdateTodo}
+                onDelete={handleDeleteTodo}
+              />
 
-            <Footer
-              todos={todos}
-              filter={filter}
-              onFilterSelect={setFilter}
-              onDelete={handleDeleteTodo}
-            />
-          </>
-        )}
+              <Footer
+                todos={todos}
+                onDelete={handleDeleteTodo}
+              />
+            </>
+          )}
+        </section>
 
-      </section>
-    </div>
+      </div>
+      <ErrorNotification
+        error={error}
+        closeError={setError}
+      />
+    </>
   );
 };

@@ -1,20 +1,14 @@
 import React from 'react';
-import classnames from 'classnames';
-import { Link } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
-import { Status } from '../../types/Status';
+import { PageNavLink } from '../PageNavLink/PageNavLink';
 
 type Props = {
   todos: Todo[],
-  filter: string,
-  onFilterSelect: (Status: string) => void,
   onDelete: (todoid: number) => void,
 };
 
 export const Footer: React.FC<Props> = ({
   todos,
-  filter,
-  onFilterSelect,
   onDelete,
 }) => {
   const handleClearCompleted = () => {
@@ -30,45 +24,24 @@ export const Footer: React.FC<Props> = ({
 
       <ul className="filters">
         <li>
-          <Link
+          <PageNavLink
             to="/"
-            className={
-              classnames(
-                { selected: filter === Status.All },
-              )
-            }
-            onClick={() => onFilterSelect(Status.All)}
-          >
-            All
-          </Link>
+            text="All"
+          />
         </li>
 
         <li>
-          <Link
+          <PageNavLink
             to="/active"
-            className={
-              classnames(
-                { selected: filter === Status.Active },
-              )
-            }
-            onClick={() => onFilterSelect(Status.Active)}
-          >
-            Active
-          </Link>
+            text="Active"
+          />
         </li>
 
         <li>
-          <Link
+          <PageNavLink
             to="/completed"
-            className={
-              classnames(
-                { selected: filter === Status.Completed },
-              )
-            }
-            onClick={() => onFilterSelect(Status.Completed)}
-          >
-            Completed
-          </Link>
+            text="Completed"
+          />
         </li>
       </ul>
 

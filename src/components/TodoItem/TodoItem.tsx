@@ -16,7 +16,7 @@ export const TodoItem: React.FC<Props> = ({
   onDelete,
 }) => {
   const [editing, setEditing] = useState<boolean>(false);
-  const [titleEdit, setTitleEdit] = useState<string>(todo.title);
+  const [titleEdit, setTitleEdit] = useState<string>(todo.title.trim());
   const currentInputField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -32,12 +32,14 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (event.key === 'Enter') {
-      if (!titleEdit.trim()) {
+      if (titleEdit.trim() === '') {
         onDelete(todo.id);
+        setTitleEdit(prev => prev.trim());
       }
 
-      if (titleEdit !== todo.title) {
-        onUpdate(todo.id, titleEdit);
+      if (titleEdit.trim() !== '' && (titleEdit.trim() !== todo.title.trim())) {
+        onUpdate(todo.id, titleEdit.trim());
+        setTitleEdit(prev => prev.trim());
       }
 
       setEditing(false);
@@ -50,7 +52,8 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (titleEdit !== todo.title) {
-      onUpdate(todo.id, titleEdit);
+      onUpdate(todo.id, titleEdit.trim());
+      setTitleEdit(prev => prev.trim());
     }
 
     setEditing(false);
