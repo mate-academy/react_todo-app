@@ -9,7 +9,7 @@ type Props = {
   onDelete: (todoId: number) => void,
 };
 
-export const TodoItem: React.FC<Props> = ({
+export const TodoItem: React.FC<Props> = React.memo(({
   todo,
   onToggle,
   onUpdate,
@@ -101,4 +101,4 @@ export const TodoItem: React.FC<Props> = ({
       />
     </li>
   );
-};
+});

@@ -5,7 +5,7 @@ type Props = {
   onAdd: (title: string) => void,
 };
 
-export const NewTodoForm: React.FC<Props> = ({
+export const NewTodoForm: React.FC<Props> = React.memo(({
   isAdding,
   onAdd,
 }) => {
@@ -44,4 +44,4 @@ export const NewTodoForm: React.FC<Props> = ({
       </header>
     </>
   );
-};
+});

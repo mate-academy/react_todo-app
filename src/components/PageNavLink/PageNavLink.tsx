@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 type Props = {
@@ -6,7 +7,7 @@ type Props = {
   text: string,
 };
 
-export const PageNavLink: React.FC<Props> = ({ to, text }) => (
+export const PageNavLink: React.FC<Props> = React.memo(({ to, text }) => (
   <NavLink
     to={to}
     end
@@ -16,4 +17,4 @@ export const PageNavLink: React.FC<Props> = ({ to, text }) => (
   >
     {text}
   </NavLink>
-);
+));

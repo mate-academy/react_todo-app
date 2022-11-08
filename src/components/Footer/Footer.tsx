@@ -7,7 +7,7 @@ type Props = {
   onDelete: (todoid: number) => void,
 };
 
-export const Footer: React.FC<Props> = ({
+export const Footer: React.FC<Props> = React.memo(({
   todos,
   onDelete,
 }) => {
@@ -54,4 +54,4 @@ export const Footer: React.FC<Props> = ({
       </button>
     </footer>
   );
-};
+});

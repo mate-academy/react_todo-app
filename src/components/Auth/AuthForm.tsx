@@ -7,7 +7,7 @@ type Props = {
   onLogin: (user: User) => void,
 };
 
-export const AuthForm: React.FC<Props> = ({
+export const AuthForm: React.FC<Props> = React.memo(({
   onLogin,
 }) => {
   const [name, setName] = useState<string>('');
@@ -159,4 +159,4 @@ export const AuthForm: React.FC<Props> = ({
       </div>
     </form>
   );
-};
+});
