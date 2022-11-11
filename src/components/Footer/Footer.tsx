@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { PageNavLink } from '../PageNavLink/PageNavLink';
+import { PageNavLink } from '../PageNavLink';
 
 type Props = {
   todos: Todo[]
