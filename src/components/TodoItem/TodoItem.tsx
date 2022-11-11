@@ -16,7 +16,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
   onDelete,
 }) => {
   const [editing, setEditing] = useState<boolean>(false);
-  const [titleEdit, setTitleEdit] = useState<string>(todo.title.trim());
+  const [titleEdit, setTitleEdit] = useState<string>(todo.title);
   const currentInputField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

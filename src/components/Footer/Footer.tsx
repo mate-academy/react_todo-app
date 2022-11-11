@@ -12,14 +12,19 @@ export const Footer: React.FC<Props> = React.memo(({
   onDelete,
 }) => {
   const handleClearCompleted = () => {
-    todos.filter(todo => todo.completed)
-      .forEach(todo => onDelete(todo.id));
+    todos.forEach(todo => {
+      if (todo.completed) {
+        onDelete(todo.id);
+      }
+    });
   };
+
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${activeTodosCount} items left`}
       </span>
 
       <ul className="filters">
