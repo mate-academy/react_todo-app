@@ -1,0 +1,25 @@
+iframe {
+  display: none;
+}
+
+body {
+  margin: 0 auto;
+  min-width: 230px;
+  max-width: 550px;
+}
+
+.notification {
+  transition-property: opacity, min-height;
+  transition-duration: 1s;
+  min-height: 36px;
+}
+
+.notification.hidden {
+  opacity: 0;
+  min-height: 0;
+  pointer-events: none;
+}
+
+@import "./todoapp";
+@import "./todo";
+@import "./filter";
