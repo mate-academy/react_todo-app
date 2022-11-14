@@ -38,7 +38,7 @@ export const Footer: React.FC<Props> = (
                 'is-invisible': todos.every(todo => !todo.completed),
               },
             )}
-            onClick={() => deleteCompleted()}
+            onClick={deleteCompleted}
           >
             Clear completed
           </button>

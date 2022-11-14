@@ -21,7 +21,7 @@ export const Error: React.FC<Props> = ({ errorText, closeNotification }) => {
         type="button"
         className="delete"
         aria-label="HideErrorButton"
-        onClick={() => closeNotification()}
+        onClick={closeNotification}
       />
 
       {errorText === 'empty'

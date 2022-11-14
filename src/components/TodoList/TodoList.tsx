@@ -36,6 +36,15 @@ export const TodoList: React.FC<Props> = (
     return null;
   }
 
+  const defaultTodo = {
+    id: 0,
+    title: newTodoName,
+    completed: false,
+    userId: user.id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <TransitionGroup>
@@ -63,14 +72,7 @@ export const TodoList: React.FC<Props> = (
             classNames="item"
           >
             <TodoItem
-              todo={{
-                id: 0,
-                title: newTodoName,
-                completed: false,
-                userId: user.id,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-              }}
+              todo={defaultTodo}
               todoAction={[0]}
               removeOneTodo={removeOneTodo}
               changeOneTodoStatus={changeOneTodoStatus}
