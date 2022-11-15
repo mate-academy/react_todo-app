@@ -1,0 +1,62 @@
+.login {
+  border: none;
+  background: var(--todo);
+
+  &__label {
+    display: block;
+    padding: 20px 15px;
+    font-size: 28px;
+    font-weight: 500;
+    
+  }
+
+  &__text {
+    color: var(--title);
+    margin-bottom: 20px;
+  }
+
+  &__input {
+    padding-left: 20px;
+    outline: none;
+    &--error {
+      border: 1px solid red;
+      color: red;
+    }
+
+    &--disabled {
+      opacity: 0.5;
+    }
+  }
+
+  &__error {
+    margin-left: 20px;
+    font-size: 14px;
+    color: red;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 130px;
+  }
+
+  &__button {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 65px;
+    color: var(--title);
+    font-size: 24px;
+    background: var(--todo-overlay);
+    transition: 0.1s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:focus {
+      background: var(--todo-border);
+    }
+    
+  }
+}

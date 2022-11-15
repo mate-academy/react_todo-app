@@ -1,0 +1,56 @@
+.theme-switcher {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+
+  border-radius: 20px;
+  width: 80px;
+  height: 40px;
+  background: rgba(175, 47, 47, 0.15);
+  transition: 0.5s;
+
+  &--ligth {
+    background: hsl(48,90%,85%);
+  }
+
+  &--nigth {
+    background: hsl(198,90%,85%);
+  }
+
+  &__item {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 5px;
+    transition: 0.5s;
+
+    &--ligth {
+      background: hsl(48,90%,55%);
+    }
+
+    &--nigth {
+      background: hsl(198,90%,55%);
+      transform: translateX(40px);
+    }
+
+    &--ligth::before {
+      content: "";
+      display: block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: url("../svg/sun-svgrepo-com.svg");
+    }
+
+    &--nigth::before {
+      content: "";
+      display: block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: url("../svg/full-moon-svgrepo-com.svg");
+    }
+  }
+}
