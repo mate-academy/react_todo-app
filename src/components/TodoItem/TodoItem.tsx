@@ -77,6 +77,7 @@ export const TodoItem: React.FC<Props> = ({
         onKeyDown={(e) => handleOnEscapeOrEnter(e)}
         onChange={(event) => setEditedTitle(event.target.value)}
         onBlur={() => handleOnBlurOrEnter()}
+        ref={input => input && input.focus()}
       />
     </li>
   );
