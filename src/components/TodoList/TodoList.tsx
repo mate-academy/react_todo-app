@@ -16,6 +16,10 @@ export const TodoList: React.FC = () => {
     error,
   } = useContext(Context);
   const [loaderToggleAll, setLoaderToggleAll] = useState(false);
+  const [renedrTodos, setrenedrTodos] = useState(todos);
+
+  const [searchParams] = useSearchParams();
+  const sort = searchParams.get('sort');
 
   useEffect(() => {
     if (user) {
@@ -29,8 +33,19 @@ export const TodoList: React.FC = () => {
     }
   }, [user]);
 
-  const [searchParams] = useSearchParams();
-  const sort = searchParams.get('sort');
+  useEffect(() => {
+    setrenedrTodos(todos.filter(todo => {
+      if (sort === 'active') {
+        return !todo.completed;
+      }
+
+      if (sort === 'completed') {
+        return todo.completed;
+      }
+
+      return true;
+    }));
+  }, [sort]);
 
   function toggleAll(setCompleted: boolean, todo: Todo) {
     setLoaderTodos((todoIdinLoader) => [...todoIdinLoader, todo.id]);
@@ -83,17 +98,7 @@ export const TodoList: React.FC = () => {
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
-        {todos.filter(todo => {
-          if (sort === 'active') {
-            return !todo.completed;
-          }
-
-          if (sort === 'completed') {
-            return todo.completed;
-          }
-
-          return true;
-        }).map(todo => {
+        {renedrTodos.map(todo => {
           return (
             <li key={todo.id}>
               <TodoItem todo={todo} />

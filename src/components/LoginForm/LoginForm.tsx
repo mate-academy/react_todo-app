@@ -3,6 +3,7 @@ import React, {
   useContext,
   MouseEvent,
   KeyboardEvent,
+  useCallback,
 } from 'react';
 import classNames from 'classnames';
 
@@ -20,47 +21,52 @@ export const LoginForm: React.FC = () => {
   const [emailError, setEmailError] = useState(false);
   const [emailLoader, setEmailLoader] = useState(false);
 
-  // eslint-disable-next-line max-len
-  const regexp = /^((([0-9A-Za-z]{1}[-0-9A-z\\.]{0,30}[0-9A-Za-z]?)|([0-9А-Яа-я]{1}[-0-9А-я\\.]{0,30}[0-9А-Яа-я]?))@([-A-Za-z]{1,}\.){1,}[-A-Za-z]{2,})$/g;
+  // const regexp = /^((([0-9A-Za-z]{1}[-0-9A-z\\.]{0,30}[0-9A-Za-z]?)|([0-9А-Яа-я]{1}[-0-9А-я\\.]{0,30}[0-9А-Яа-я]?))@([-A-Za-z]{1,}\.){1,}[-A-Za-z]{2,})$/g;
+  const regexp = new RegExp('^((([0-9A-Za-z]{1}[-0-9A-z\\\\.]{0,30}[0-9A-Za-z]'
+  + '?)|([0-9А-Яа-я]{1}[-0-9А-я\\\\.]{0,30}[0-9А-Яа-я]?))@'
+  + '([-A-Za-z]{1,}\\.){1,}[-A-Za-z]{2,})$', 'g');
 
-  // eslint-disable-next-line max-len
-  const loginEvent = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  const loginEvent = useCallback(
+    (e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLInputElement>) => {
+      e.preventDefault();
 
-    if (!email.match(regexp)) {
-      setEmailError(true);
+      if (!email.match(regexp)) {
+        setEmailError(true);
 
-      return;
-    }
+        return;
+      }
 
-    setEmailLoader(true);
+      setEmailLoader(true);
 
-    getUsers(email)
-      .then((user) => {
-        if (user.length !== 0) {
-          setUser(user[0]);
+      getUsers(email)
+        .then((user) => {
+          if (user.length !== 0) {
+            setUser(user[0]);
+            setEmailLoader(false);
+            localStorage.setItem('user', JSON.stringify(user[0]));
+            window.location.hash = '/todos';
+          } else {
+            addUsers(email)
+              .then(() => {
+                setUser(user[0]);
+                setEmailLoader(false);
+                localStorage
+                  .setItem('user', JSON.stringify(user[0]));
+              })
+              .catch(() => {
+                error('Server error');
+                setEmailLoader(false);
+              });
+          }
+
+          setChangeUserButton(true);
+        })
+        .catch(() => {
+          error('Server error');
           setEmailLoader(false);
-          localStorage.setItem('user', JSON.stringify(user[0]));
-          window.location.hash = '/todos';
-        } else {
-          addUsers(email)
-            .then(() => {
-              setUser(user[0]);
-              setEmailLoader(false);
-              localStorage
-                .setItem('user', JSON.stringify(user[0]));
-            }).catch(() => {
-              error('Server error');
-              setEmailLoader(false);
-            });
-        }
-
-        setChangeUserButton(true);
-      }).catch(() => {
-        error('Server error');
-        setEmailLoader(false);
-      });
-  };
+        });
+    }, [email],
+  );
 
   return (
     <div

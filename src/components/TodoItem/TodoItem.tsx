@@ -6,7 +6,6 @@ import { editTodos, deleteTodos } from '../../api';
 
 import { Context } from '../context';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   todo: Todo;
 };
@@ -95,6 +94,7 @@ export const TodoItem: React.FC<Props> = ({
           className="destroy"
           data-cy="deleteTodo"
           onClick={removeTodo}
+          aria-label="Delete todo"
         />
 
         <div

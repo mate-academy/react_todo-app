@@ -1,5 +1,4 @@
 import React, { useState, ReactNode } from 'react';
-// import { useSearchParams } from 'react-router-dom';
 import { Todo } from '../types/Todo';
 import { User } from '../types/User';
 

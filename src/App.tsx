@@ -1,15 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { Context } from './components/context';
 
-// import { AddForm } from './components/AddForm';
-// import { LoginForm } from './components/LoginForm';
-
 import { useTheme } from './hooks/use-theme';
-
-// import { TodoList } from './components/TodoList';
 
 export const App: React.FC = () => {
   const {
@@ -32,6 +27,17 @@ export const App: React.FC = () => {
     setTheme('nigth');
   }, []);
 
+  const changeTheme = useCallback(
+    () => {
+      if (theme === 'ligth') {
+        setTheme('nigth');
+      } else {
+        setTheme('ligth');
+      }
+    },
+    [theme],
+  );
+
   return (
     <>
       <Outlet />
@@ -40,22 +46,20 @@ export const App: React.FC = () => {
         type="button"
         className={classNames(
           'theme-switcher',
-          theme === 'ligth' ? 'theme-switcher--ligth' : 'theme-switcher--nigth',
+          {
+            'theme-switcher--ligth': theme === 'ligth',
+            'theme-switcher--nigth': theme === 'nigth',
+          },
         )}
-        onClick={(e) => {
-          e.preventDefault();
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          theme === 'ligth'
-            ? setTheme('nigth')
-            : setTheme('ligth');
-        }}
+        onClick={changeTheme}
       >
         <div
           className={classNames(
             'theme-switcher__item',
-            theme === 'ligth'
-              ? 'theme-switcher__item--ligth'
-              : 'theme-switcher__item--nigth',
+            {
+              'theme-switcher__item--ligth': theme === 'ligth',
+              'theme-switcher__item--nigth': theme === 'nigth',
+            },
           )}
         >
           <></>
