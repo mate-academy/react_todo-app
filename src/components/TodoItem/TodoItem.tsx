@@ -1,4 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -10,7 +15,7 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoItem: React.FC<Props> = ({
+export const TodoItem: React.FC<Props> = React.memo(({
   todo,
 }) => {
   const {
@@ -36,7 +41,7 @@ export const TodoItem: React.FC<Props> = ({
     }
   }, [loaderTodos]);
 
-  const removeTodo = () => {
+  const removeTodo = useCallback(() => {
     setTodoLoader(true);
 
     deleteTodos(id)
@@ -50,9 +55,9 @@ export const TodoItem: React.FC<Props> = ({
         setTodoLoader(false);
         error('Error, server not responding');
       });
-  };
+  }, []);
 
-  const toggleTodo = () => {
+  const toggleTodo = useCallback(() => {
     setTodoLoader(true);
     editTodos(id, {
       completed: !completed,
@@ -70,7 +75,7 @@ export const TodoItem: React.FC<Props> = ({
         setComplitedTodo(complitedTodo);
         error('Error, server not responding');
       });
-  };
+  }, [complitedTodo]);
 
   return (
     <>
@@ -107,4 +112,4 @@ export const TodoItem: React.FC<Props> = ({
       <input type="text" className="edit" />
     </>
   );
-};
+});

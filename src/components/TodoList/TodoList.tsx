@@ -1,4 +1,6 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, {
+  useEffect, useContext, useState, useMemo, useCallback,
+} from 'react';
 import { useSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { Context } from '../context';
@@ -33,7 +35,7 @@ export const TodoList: React.FC = () => {
     }
   }, [user]);
 
-  useEffect(() => {
+  useMemo(() => {
     setrenedrTodos(todos.filter(todo => {
       if (sort === 'active') {
         return !todo.completed;
@@ -45,9 +47,9 @@ export const TodoList: React.FC = () => {
 
       return true;
     }));
-  }, [sort]);
+  }, [sort, todos]);
 
-  function toggleAll(setCompleted: boolean, todo: Todo) {
+  const toggleAll = useCallback((setCompleted: boolean, todo: Todo) => {
     setLoaderTodos((todoIdinLoader) => [...todoIdinLoader, todo.id]);
     setLoaderToggleAll(true);
     editTodos(todo.id, {
@@ -68,7 +70,7 @@ export const TodoList: React.FC = () => {
         setLoaderToggleAll(false);
         error('Server error');
       });
-  }
+  }, [todos]);
 
   return (
     <section className="main">
