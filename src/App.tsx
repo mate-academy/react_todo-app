@@ -45,18 +45,17 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage]
     = useState<ErrorMessage>(ErrorMessage.None);
   const [temporaryTodo, setTemporaryTodo] = useState(defaultTodo);
-  // const [areTodosToggling, setAreTodosToggling] = useState(false);
 
   const numberOfTodos = useMemo(() => todos.length, [todos]);
 
-  const numberOfComletedTodos = useMemo(() => {
+  const numberOfCompletedTodos = useMemo(() => {
     return [...todos].filter(todo => todo.completed).length;
   }, [todos]);
 
   const areAllCompleted = useMemo(() => {
     return (todos.filter((todo) => todo.completed).length === todos.length
       && todos.length > 0);
-  }, [numberOfComletedTodos, numberOfTodos]);
+  }, [numberOfCompletedTodos, numberOfTodos]);
 
   const visibleTodos = useMemo(() => {
     return [...todos].filter(todo => {
@@ -179,7 +178,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <Footer
             filter={filter}
-            numberOfCompletedTodos={numberOfComletedTodos}
+            numberOfCompletedTodos={numberOfCompletedTodos}
             numberOfTodos={numberOfTodos}
             deleteCompleted={deleteCompletedTodos}
           />
