@@ -1,0 +1,42 @@
+.error {
+  display: flex;
+  padding: 10px 50px 10px 30px;
+  border-radius: 20px;
+  background: red;
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+
+  opacity: 0;
+  transition: 0.5s;
+
+  &--show {
+    opacity: 1;
+  }
+
+  &__text {
+    font-size: 28px;
+    color: #000;
+  }
+
+  &__close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: #f3f3f3;
+    border-radius: 50%;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 10px;
+      height: 10px;
+      background: url("../svg/close.svg");
+    }
+  }
+}

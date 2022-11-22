@@ -1,93 +1,101 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
+import { Outlet, Link } from 'react-router-dom';
+import classNames from 'classnames';
+import { Context } from './components/context';
+
+import { useTheme } from './hooks/use-theme';
 
 export const App: React.FC = () => {
+  const {
+    setUser,
+    userErrorHide,
+    setUserErrorHide,
+    userError,
+    changeUserButton,
+    setChangeUserButton,
+  } = useContext(Context);
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    const userOnLocaleStorage = localStorage.getItem('user');
+
+    if (userOnLocaleStorage) {
+      setUser(JSON.parse(userOnLocaleStorage));
+    }
+
+    setTheme('nigth');
+  }, []);
+
+  const changeTheme = useCallback(
+    () => {
+      if (theme === 'ligth') {
+        setTheme('nigth');
+      } else {
+        setTheme('ligth');
+      }
+    },
+    [theme],
+  );
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <>
+      <Outlet />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <button
+        type="button"
+        className={classNames(
+          'theme-switcher',
+          {
+            'theme-switcher--ligth': theme === 'ligth',
+            'theme-switcher--nigth': theme === 'nigth',
+          },
+        )}
+        onClick={changeTheme}
+      >
+        <div
+          className={classNames(
+            'theme-switcher__item',
+            {
+              'theme-switcher__item--ligth': theme === 'ligth',
+              'theme-switcher__item--nigth': theme === 'nigth',
+            },
+          )}
+        >
+          <></>
+        </div>
+      </button>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className={
+        classNames(
+          'error',
+          { 'error--show': userErrorHide },
+        )
+      }
+      >
+        <button
+          className="error__close"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setUserErrorHide(false);
+          }}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <h2 className="error__text">{userError}</h2>
+      </div>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+      {(changeUserButton) && (
+        <Link
+          to="login"
+          className="another-user"
+          onClick={() => {
+            localStorage.removeItem('user');
+            setChangeUserButton(false);
+          }}
+        >
+          Сhange user
+        </Link>
+      )}
+    </>
   );
 };
