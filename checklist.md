@@ -14,7 +14,7 @@
 ## Task checklist.
 1. `App.js` code should be split into several components.
 1. Callbacks that work with the main state should take prepared data instead of the whole child's state.
-1. Code should be split into small, reusable components if it possible (`Filter`, `TodoList`, `Todo`, `NewTodo`)
+1. Code should be split into small, reusable components if it possible (`Status`, `TodoList`, `Todo`, `NewTodo`)
 1. ID for new todos should be unique, you can use an internal ID counter for this, and increment it.
 1. “Toggle all” should be active only in case when all todos are completed.
 1. If you manually toggle all todos to completed state, “Toggle all” should stay active.
