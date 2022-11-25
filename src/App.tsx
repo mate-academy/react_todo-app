@@ -1,93 +1,43 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import {
+  Navigate, Route, Routes,
+} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { AuthForm } from './components/Auth/AuthForm';
+import { TodosPage } from './components/Pages/todosPage';
+import { User } from './types/User';
 
-export const App: React.FC = () => {
+export const App = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+
+    if (userData) {
+      const userFromLocalStorage = JSON.parse(userData) as User;
+
+      setUser(userFromLocalStorage);
+    }
+  }, []);
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <Routes>
+      <Route
+        path="/"
+        element={<AuthForm onLogin={setUser} />}
+      />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <Route path="home" element={<Navigate to="/" replace />} />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      <Route path={`${user?.id}/todos`} element={<TodosPage user={user} />} />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+      <Route
+        path="*"
+        element={(
+          <h1 className="title">
+            You must to register
+          </h1>
+        )}
+      />
+    </Routes>
   );
 };
