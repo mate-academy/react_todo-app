@@ -22,7 +22,7 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` checked;
 1. Create `TodosFilter` component to switch between `All`/`Active`/`Completed` todos (add it to the `App`)
     - add the `Status` enum with the required values;
-1. Filter links should update the URL (`/`, `/active` or `/completed`)
+1. Status links should update the URL (`/`, `/active` or `/completed`)
     - correct filter should be applied after page reload;
     - use `HashRouter`;
 1. Add ability to remove a todo using the `destroy` button (`X`).
