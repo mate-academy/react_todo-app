@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../types/Todo';
 import { TodoList } from './TodoList';
@@ -6,28 +6,11 @@ import { TodosFilter } from './TodosFilter';
 import { Status } from '../types/Status';
 import { useLocaleStorage } from '../hooks/useLocaleStorage';
 import { TodoItem } from './TodoItem';
-import { createUser } from '../api/createUser';
 
 export const TodoApp: FC = () => {
   const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
-  const [userId, setUserId] = useLocaleStorage<number | null>('userId', null);
   const [todoTitle, setTodoTitle] = useState('');
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    const findOrCreateUser = async () => {
-      if (!userId) {
-        const newUser = await createUser({
-          email: `${+new Date()}@mail.com`,
-          name: `User${+new Date()}`,
-        });
-
-        setUserId(newUser.id);
-      }
-    };
-
-    findOrCreateUser();
-  }, []);
 
   const notCompletedTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.length - notCompletedTodos.length;
