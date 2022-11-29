@@ -38,20 +38,22 @@ export const TodosPage: FC<Props> = ({ user }) => {
   async function loadTodos() {
     closeErrorMessage();
 
-    if (user) {
-      const loadedTodos = await getTodos(user.id);
+    if (!user) {
+      return;
+    }
 
-      try {
-        if ('Error' in loadedTodos) {
-          throw new Error();
-        }
+    const loadedTodos = await getTodos(user.id);
 
-        if (loadedTodos.length) {
-          setTodosFromServer(loadedTodos);
-        }
-      } catch {
-        showErrorMessage(ErrorTodo.Download);
+    try {
+      if ('Error' in loadedTodos) {
+        throw new Error();
       }
+
+      if (loadedTodos.length) {
+        setTodosFromServer(loadedTodos);
+      }
+    } catch {
+      showErrorMessage(ErrorTodo.Download);
     }
   }
 

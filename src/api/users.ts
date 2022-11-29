@@ -4,7 +4,7 @@ import { client } from '../utils/fetchClient';
 export const getUserByEmail = async (email: string) => {
   const users = await client.get<User[]>(`/users?email=${email}`);
 
-  return users[0] || null;
+  return users;
 };
 
 type UserData = Pick<User, 'name' | 'email'>;

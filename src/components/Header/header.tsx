@@ -59,13 +59,11 @@ export const Header: React.FC<Props> = ({
           throw new Error();
         }
 
-        if (todosFromServer) {
-          setTodosFromServer([...todosFromServer, addedTodo]);
-        }
-
-        if (!todosFromServer) {
-          setTodosFromServer([addedTodo]);
-        }
+        setTodosFromServer(
+          todosFromServer
+            ? [...todosFromServer, addedTodo]
+            : [addedTodo],
+        );
       } catch {
         showErrorMessage(ErrorTodo.Add);
       } finally {
@@ -75,9 +73,39 @@ export const Header: React.FC<Props> = ({
     }
   }
 
-  const handleUpdateStatus = () => {
-    let newTodos = todosFromServer;
+  const getUpdatedTodos = (
+    newTodos: Todo[] | undefined, result: PromiseFulfilledResult<Todo>,
+  ) => (
+    newTodos?.map(todoFromServer => {
+      if (todoFromServer.id === result.value.id) {
+        return result.value;
+      }
 
+      return todoFromServer;
+    })
+  );
+
+  const sendPromise = (todos: Todo[]) => {
+    let newTodos = todosFromServer && [...todosFromServer];
+
+    Promise.allSettled(todos.map(updatedTodo => updateTodo({
+      ...updatedTodo,
+      completed: !updatedTodo.completed,
+    })))
+      .then(results => results.forEach(result => {
+        if (result.status === 'fulfilled' && 'Error' in result.value) {
+          showErrorMessage(ErrorTodo.Update);
+        } else if (result.status === 'fulfilled') {
+          newTodos = getUpdatedTodos(newTodos, result);
+
+          setTodosFromServer(newTodos);
+        }
+
+        seiIdOfTodosForUpdate([]);
+      }));
+  };
+
+  const handleUpdateStatus = () => {
     closeErrorMessage();
 
     if (todosFromServer?.find(
@@ -87,52 +115,10 @@ export const Header: React.FC<Props> = ({
         .filter(todoFromServer => !todoFromServer.completed);
 
       seiIdOfTodosForUpdate(todosForUpdating.map(todo => todo.id));
-
-      Promise.allSettled(todosForUpdating.map(updatedTodo => updateTodo({
-        ...updatedTodo,
-        completed: !updatedTodo.completed,
-      })))
-        .then(results => results.forEach(result => {
-          if (result.status === 'fulfilled' && 'Error' in result.value) {
-            showErrorMessage(ErrorTodo.Update);
-          } else if (result.status === 'fulfilled') {
-            newTodos = newTodos?.map(todoFromServer => {
-              if (todoFromServer.id === result.value.id) {
-                return result.value;
-              }
-
-              return todoFromServer;
-            });
-
-            setTodosFromServer(newTodos);
-          }
-
-          seiIdOfTodosForUpdate([]);
-        }));
+      sendPromise(todosForUpdating);
     } else if (todosFromServer) {
       seiIdOfTodosForUpdate(todosFromServer.map(todo => todo.id));
-
-      Promise.allSettled(todosFromServer?.map(updatedTodo => updateTodo({
-        ...updatedTodo,
-        completed: !updatedTodo.completed,
-      })))
-        .then(results => results.forEach(result => {
-          if (result.status === 'fulfilled' && 'Error' in result.value) {
-            showErrorMessage(ErrorTodo.Update);
-          } else if (result.status === 'fulfilled') {
-            newTodos = newTodos?.map(todoFromServer => {
-              if (todoFromServer.id === result.value.id) {
-                return result.value;
-              }
-
-              return todoFromServer;
-            });
-
-            setTodosFromServer(newTodos);
-          }
-
-          seiIdOfTodosForUpdate([]);
-        }));
+      sendPromise(todosFromServer);
     }
   };
 

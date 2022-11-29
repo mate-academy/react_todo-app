@@ -14,6 +14,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
   const [needToRegister, setNeedToRegister] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isContinue, setIsContinue] = useState(false);
   const navigate = useNavigate();
 
   const saveUser = (user: User) => {
@@ -29,28 +30,51 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
       return;
     }
 
-    try {
-      const user = JSON.parse(userData) as User;
-
-      onLogin(user);
-    } catch (error) {
-      setErrorMessage('Need to register');
-    }
+    setIsContinue(true);
   }, []);
+
+  const handleContinue = () => {
+    const userData = localStorage.getItem('user');
+
+    if (userData) {
+      const user = JSON.parse(userData);
+
+      saveUser(user);
+    }
+  };
 
   const loadUser = async () => {
     const user = await getUserByEmail(email);
 
-    if (user) {
-      saveUser(user);
-    } else {
+    if (user.length === 0) {
       setNeedToRegister(true);
+
+      return;
+    }
+
+    try {
+      if ('Error' in user) {
+        throw new Error();
+      }
+
+      saveUser(user[0]);
+    } catch {
+      setErrorMessage('Something went wrong');
     }
   };
 
   const registerUser = () => {
     return createUser({ name, email })
-      .then(saveUser);
+      .then(user => {
+        if ('Error' in user) {
+          throw new Error();
+        }
+
+        saveUser(user);
+      })
+      .catch(() => {
+        setErrorMessage('Something went wrong');
+      });
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -65,7 +89,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
       } else {
         await loadUser();
       }
-    } catch (error) {
+    } catch {
       setErrorMessage('Something went wrong');
     } finally {
       setLoading(false);
@@ -150,12 +174,34 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
       <div className="field">
         <button
           type="submit"
-          className={classNames('button is-primary', {
-            'is-loading': loading,
-          })}
+          className={classNames(
+            'button',
+            'is-primary',
+            'mr-3',
+            {
+              'is-loading': loading,
+            },
+          )}
         >
           {needToRegister ? 'Register' : 'Login'}
         </button>
+
+        {isContinue
+          && (
+            <button
+              type="submit"
+              onClick={handleContinue}
+              className={classNames(
+                'button',
+                'is-primary',
+                {
+                  'is-loading': loading,
+                },
+              )}
+            >
+              Continue the last session
+            </button>
+          )}
       </div>
     </form>
   );
