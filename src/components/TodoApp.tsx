@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
@@ -11,25 +11,27 @@ export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const location = useLocation();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    if (!title.trim()) {
-      return;
-    }
+      if (!title.trim()) {
+        return;
+      }
 
-    const newTodo: Todo = {
-      id: +new Date(),
-      title,
-      completed: false,
-    };
+      const newTodo: Todo = {
+        id: +new Date(),
+        title,
+        completed: false,
+      };
 
-    // setTodos((prevTodos)=> {
-    //   [...prevTodos, newTodo]
-    // });
-    setTodos([...todos, newTodo]);
-    setTitle('');
-  };
+      // setTodos((prevTodos)=> {
+      //   [...prevTodos, newTodo]
+      // });
+      setTodos([...todos, newTodo]);
+      setTitle('');
+    }, [todos, title],
+  );
 
   const toggleAllHandler = (): void => {
     const completedTodos = todos.every(todo => todo.completed);
@@ -97,7 +99,7 @@ export const TodoApp: React.FC = () => {
     setTodos([...clereadTodos]);
   };
 
-  const filteredTodos = todos.filter(todo => {
+  const filteredTodos = useMemo(() => todos.filter(todo => {
     switch (location.pathname) {
       case Status.Active:
         return !todo.completed;
@@ -108,7 +110,7 @@ export const TodoApp: React.FC = () => {
       default:
         return Status.All;
     }
-  });
+  }), [todos, location]);
 
   return (
     <div className="todoapp">
