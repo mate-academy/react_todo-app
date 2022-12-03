@@ -75,9 +75,9 @@ export const TodoInfo: React.FC<Props> = ({
         >
           {title}
         </label>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           type="button"
+          aria-label="destroy"
           className="destroy"
           data-cy="deleteTodo"
           onClick={() => deleteTodo(id)}

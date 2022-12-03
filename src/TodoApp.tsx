@@ -57,29 +57,21 @@ export const TodoApp: React.FC = () => {
       completed: false,
     };
 
-    setTodos(currentTodos => [...currentTodos, todoToAdd]);
+    setTodos(previousTodos => [...previousTodos, todoToAdd]);
     setTitle('');
   };
 
-  const activeTodos = todos.filter((todo) => (
-    !todo.completed
-  ));
+  const activeTodos = todos.filter(todo => !todo.completed);
 
-  const completedTodos = todos.filter((todo) => (
-    todo.completed
-  ));
+  const completedTodos = todos.filter(todo => todo.completed);
 
   const chandeTodoStatus = (id: number, status: boolean) => {
     setTodos(
       todos.map((todo: Todo) => {
-        if (id === todo.id) {
-          return {
-            ...todo,
-            completed: status,
-          };
-        }
-
-        return todo;
+        return {
+          ...todo,
+          ...(id === todo.id && { completed: status }),
+        };
       }),
     );
   };
@@ -94,23 +86,10 @@ export const TodoApp: React.FC = () => {
   const toggleAllTodos = () => {
     const someTodoActive = todos.some(todo => !todo.completed);
 
-    if (someTodoActive) {
-      setTodos(todos.map(todo => {
-        return {
-          ...todo,
-          completed: true,
-        };
-      }));
-    }
-
-    if (!someTodoActive) {
-      setTodos(todos.map(todo => {
-        return {
-          ...todo,
-          completed: false,
-        };
-      }));
-    }
+    setTodos(todos.map(todo => ({
+      ...todo,
+      completed: Boolean(someTodoActive),
+    })));
   };
 
   const deleteTodo = async (id: number) => {
@@ -135,49 +114,47 @@ export const TodoApp: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-        </header>
+    <div className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+      </header>
 
-        <form onSubmit={addNewTodo}>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={title}
-            onChange={event => setTitle(event.target.value)}
-          />
-        </form>
+      <form onSubmit={addNewTodo}>
+        <input
+          type="text"
+          data-cy="createTodo"
+          className="new-todo"
+          placeholder="What needs to be done?"
+          value={title}
+          onChange={event => setTitle(event.target.value)}
+        />
+      </form>
 
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-            onChange={toggleAllTodos}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+          onChange={toggleAllTodos}
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <TodoList
-            todos={filteredTodos}
-            deleteTodo={deleteTodo}
-            togleStatus={togleStatus}
-            changeInputText={changeInputText}
-          />
-        </section>
+        <TodoList
+          todos={filteredTodos}
+          deleteTodo={deleteTodo}
+          togleStatus={togleStatus}
+          changeInputText={changeInputText}
+        />
+      </section>
 
-        {todos.length > 0 && (
-          <Footer
-            todosLeft={activeTodos}
-            completedTodos={completedTodos}
-            removeCompletedTodos={removeCompletedTodos}
-          />
-        )}
-      </div>
-    </>
+      {todos.length > 0 && (
+        <Footer
+          todosLeft={activeTodos}
+          completedTodos={completedTodos}
+          removeCompletedTodos={removeCompletedTodos}
+        />
+      )}
+    </div>
   );
 };
