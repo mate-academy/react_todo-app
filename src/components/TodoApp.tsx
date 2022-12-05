@@ -25,9 +25,6 @@ export const TodoApp: React.FC = () => {
         completed: false,
       };
 
-      // setTodos((prevTodos)=> {
-      //   [...prevTodos, newTodo]
-      // });
       setTodos([...todos, newTodo]);
       setTitle('');
     }, [todos, title],
