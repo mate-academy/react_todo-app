@@ -74,24 +74,20 @@ export const TodoApp: React.FC<Props> = memo(({ todos, setTodos }) => {
         </form>
       </header>
 
-      {todos.length > 0 && (
-        <>
-          <section className="main">
-            <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              data-cy="toggleAll"
-              onClick={handleMarkAll}
-            />
-            <label htmlFor="toggle-all">Mark all as complete</label>
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+          onClick={handleMarkAll}
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
 
-            <TodoList todos={todos} setTodos={setTodos} />
-          </section>
+        <TodoList todos={todos} setTodos={setTodos} />
+      </section>
 
-          <TodoFilter todos={todos} setTodos={setTodos} />
-        </>
-      )}
+      {todos.length > 0 && (<TodoFilter todos={todos} setTodos={setTodos} />)}
     </div>
   );
 });
