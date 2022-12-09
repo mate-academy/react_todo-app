@@ -1,93 +1,193 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useContext, useEffect, useRef, useState, useMemo,
+} from 'react';
+import { useLocation } from 'react-router-dom';
+import { Todo } from './types/Todo';
+import { Status } from './types/Status';
+import { User } from './types/User';
+import * as todoAPI from './api/todos';
+import { useLocalStorage } from './utils/useLocalStorage';
+
+import { AuthContext } from './components/Auth/AuthContext';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/Footer';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
+  const user = useContext(AuthContext) as User;
+  const newTodoField = useRef<HTMLInputElement>(null);
+  const location = useLocation();
+  const [localStorageTodos, setLocalStorageTodos]
+    = useLocalStorage<Todo[]>('todos', []);
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
+  const [addingTitle, setAddingTitle] = useState('');
+  const [processingTodos, setProcessingTodos] = useState<number[]>([]);
+
+  useEffect(() => {
+    setErrorMessage('');
+
+    todoAPI.getTodos(user.id)
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setLocalStorageTodos(todosFromServer.map(todo => (
+          {
+            id: todo.id,
+            title: todo.title,
+            completed: todo.completed,
+          }
+        )));
+      })
+      .catch(() => setErrorMessage('Unable to load todos for such user'));
+  }, [user.id]);
+
+  const activeTodos = useMemo(() => {
+    return todos.filter(todo => !todo.completed);
+  }, [todos]);
+
+  const completedTodos = useMemo(() => {
+    return todos.filter(todo => todo.completed);
+  }, [todos]);
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (location.pathname.slice(1)) {
+        case Status.Completed:
+          return todo.completed;
+
+        case Status.Active:
+          return !todo.completed;
+
+        case Status.All:
+        default:
+          return true;
+      }
+    });
+  }, [todos, location]);
+
+  const addProcessingTodo = (todoIdToAdd: number) => {
+    setProcessingTodos(current => [...current, todoIdToAdd]);
+  };
+
+  const removeProcessingTodo = (todoIdToRemove: number) => {
+    setProcessingTodos(current => current.filter(id => id !== todoIdToRemove));
+  };
+
+  const addTodo = (title: string) => {
+    setIsAdding(true);
+    setAddingTitle(title);
+    setErrorMessage('');
+
+    const newTodo = {
+      id: +new Date(),
+      title,
+      userId: user.id,
+      completed: false,
+    };
+
+    todoAPI.addTodo(newTodo)
+      .then(createdTodo => {
+        setTodos(current => [...current, createdTodo]);
+        setLocalStorageTodos([...localStorageTodos, {
+          id: createdTodo.id,
+          title: createdTodo.title,
+          completed: createdTodo.completed,
+        }]);
+      })
+      .catch(() => setErrorMessage('Unable to add a todo'))
+      .finally(() => {
+        setIsAdding(false);
+        setAddingTitle('');
+      });
+  };
+
+  const deleteTodo = async (todoId: number) => {
+    addProcessingTodo(todoId);
+    setErrorMessage('');
+
+    todoAPI.deleteTodo(todoId)
+      .then(() => {
+        setTodos(current => current.filter(todo => todo.id !== todoId));
+        setLocalStorageTodos(localStorageTodos
+          .filter(todo => todo.id !== todoId));
+      })
+      .catch(() => setErrorMessage('Unable to delete a todo'))
+      .finally(() => removeProcessingTodo(todoId));
+  };
+
+  const updateTodo = async (updatedTodo: Todo) => {
+    addProcessingTodo(updatedTodo.id);
+    setErrorMessage('');
+
+    todoAPI.updateTodo(updatedTodo)
+      .then(() => {
+        setTodos(current => current.map(
+          todo => (todo.id === updatedTodo.id
+            ? updatedTodo
+            : todo
+          ),
+        ));
+        setLocalStorageTodos(localStorageTodos.map(
+          todo => (todo.id === updatedTodo.id
+            ? {
+              id: updatedTodo.id,
+              title: updatedTodo.title,
+              completed: updatedTodo.completed,
+            }
+            : todo
+          ),
+        ));
+      })
+      .catch(() => {
+        setErrorMessage('Unable to update a todo');
+      })
+      .finally(() => removeProcessingTodo(updatedTodo.id));
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
+      <p className="todoapp__user">
+        {`Welcome back: ${user.name}`}
+      </p>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <Header
+          newTodoField={newTodoField}
+          todos={todos}
+          activeTodos={activeTodos}
+          completedTodos={completedTodos}
+          isAdding={isAdding}
+          onErrorMessage={setErrorMessage}
+          handleAddTodo={addTodo}
+          handleUpdateTodo={updateTodo}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <TodoList
+          todos={visibleTodos}
+          isAdding={isAdding}
+          processingTodos={processingTodos}
+          addingTitle={addingTitle}
+          handleDeleteTodo={deleteTodo}
+          handleUpdateTodo={updateTodo}
+        />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {(todos.length > 0 || isAdding) && (
+          <Footer
+            activeTodos={activeTodos}
+            completedTodos={completedTodos}
+            handleDeleteTodo={deleteTodo}
+          />
+        )}
+      </div>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
