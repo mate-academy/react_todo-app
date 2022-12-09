@@ -40,7 +40,7 @@ export const TodoInfo: React.FC<Props> = ({
     }
   };
 
-  const handleBlure = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
     setIsEditing(false);
 
     if (!query) {
@@ -69,9 +69,7 @@ export const TodoInfo: React.FC<Props> = ({
           checked={completed}
         />
         <label
-          onDoubleClick={() => {
-            setIsEditing(!isEditing);
-          }}
+          onDoubleClick={() => setIsEditing(!isEditing)}
         >
           {title}
         </label>
@@ -88,8 +86,8 @@ export const TodoInfo: React.FC<Props> = ({
         className="edit"
         defaultValue={title}
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        onBlur={handleBlure}
+        onChange={(e) => setQuery(e.target.value)}
+        onBlur={handleBlur}
         onKeyDown={handleInputChange}
         placeholder="Empty todo will be deleted"
       />

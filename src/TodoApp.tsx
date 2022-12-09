@@ -8,19 +8,17 @@ import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { Footer } from './components/Footer';
 import { FilterTypes } from './types/FilterTypes';
+import { Notification } from './components/Notification';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const localTodos = localStorage.getItem('todos');
 
-    try {
-      return localTodos ? JSON.parse(localTodos) : [];
-    } catch {
-      return [];
-    }
+    return localTodos ? JSON.parse(localTodos) : [];
   });
 
   const [title, setTitle] = useState('');
+  const [notification, setNotification] = useState<string>('');
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -42,9 +40,12 @@ export const TodoApp: React.FC = () => {
 
   const addNewTodo = (event: FormEvent) => {
     event.preventDefault();
+    setNotification('');
     const newTitle = title.trim();
 
-    if (!newTitle) {
+    if (!newTitle || !/\S/.test(newTitle)) {
+      setNotification('Title can\'t be empty');
+
       return;
     }
 
@@ -90,6 +91,10 @@ export const TodoApp: React.FC = () => {
     })));
   };
 
+  const newTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
   const deleteTodo = async (id: number) => {
     setTodos(todos.filter((todo: Todo) => id !== todo.id));
   };
@@ -100,59 +105,62 @@ export const TodoApp: React.FC = () => {
 
   const changeInputText = (id: number, query: string) => {
     setTodos(todos.map(todo => {
-      if (id === todo.id) {
-        return {
-          ...todo,
-          title: query,
-        };
-      }
-
-      return todo;
+      return {
+        ...todo,
+        ...(id === todo.id && { title: query }),
+      };
     }));
   };
 
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-      </header>
+    <>
+      <div className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+        </header>
 
-      <form onSubmit={addNewTodo}>
-        <input
-          type="text"
-          data-cy="createTodo"
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={title}
-          onChange={event => setTitle(event.target.value)}
-        />
-      </form>
+        <form onSubmit={addNewTodo}>
+          <input
+            type="text"
+            data-cy="createTodo"
+            className="new-todo"
+            placeholder="What needs to be done?"
+            value={title}
+            onChange={newTodo}
+          />
+        </form>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={toggleAllTodos}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onChange={toggleAllTodos}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList
-          todos={filteredTodos}
-          deleteTodo={deleteTodo}
-          togleStatus={toggleStatus}
-          changeInputText={changeInputText}
-        />
-      </section>
+          <TodoList
+            todos={filteredTodos}
+            deleteTodo={deleteTodo}
+            togleStatus={toggleStatus}
+            changeInputText={changeInputText}
+          />
+        </section>
 
-      {todos.length > 0 && (
-        <Footer
-          todosLeft={activeTodos}
-          completedTodos={completedTodos}
-          removeCompletedTodos={removeCompletedTodos}
-        />
-      )}
-    </div>
+        {todos.length > 0 && (
+          <Footer
+            todosLeft={activeTodos}
+            completedTodos={completedTodos}
+            removeCompletedTodos={removeCompletedTodos}
+          />
+        )}
+      </div>
+
+      <Notification
+        notification={notification}
+        onSetNotification={setNotification}
+      />
+    </>
   );
 };
