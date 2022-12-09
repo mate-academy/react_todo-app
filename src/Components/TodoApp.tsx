@@ -87,7 +87,7 @@ export const TodoApp: React.FC<Props> = memo(({ todos, setTodos }) => {
         <TodoList todos={todos} setTodos={setTodos} />
       </section>
 
-      {todos.length > 0 && (<TodoFilter todos={todos} setTodos={setTodos} />)}
+      <TodoFilter todos={todos} setTodos={setTodos} />
     </div>
   );
 });

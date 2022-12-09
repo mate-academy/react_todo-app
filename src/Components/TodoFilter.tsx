@@ -25,7 +25,7 @@ export const TodoFilter: React.FC<Props> = memo(({
 
   return (
     <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
+      <span className="todo-count" data-cy="todosCount">
         {`${remainingTodos} items left`}
       </span>
 
