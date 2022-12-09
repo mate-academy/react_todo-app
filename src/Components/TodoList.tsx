@@ -9,7 +9,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = memo(({ todos, setTodos }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {todos.map(item => (
         <TodoItem
           key={item.id}
