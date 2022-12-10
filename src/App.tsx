@@ -6,7 +6,6 @@ import { Todo } from './types/Todo';
 import { Status } from './types/Status';
 import { User } from './types/User';
 import * as todoAPI from './api/todos';
-import { useLocalStorage } from './utils/useLocalStorage';
 
 import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Header';
@@ -18,8 +17,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext) as User;
   const newTodoField = useRef<HTMLInputElement>(null);
   const location = useLocation();
-  const [localStorageTodos, setLocalStorageTodos]
-    = useLocalStorage<Todo[]>('todos', []);
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,16 +28,7 @@ export const App: React.FC = () => {
     setErrorMessage('');
 
     todoAPI.getTodos(user.id)
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-        setLocalStorageTodos(todosFromServer.map(todo => (
-          {
-            id: todo.id,
-            title: todo.title,
-            completed: todo.completed,
-          }
-        )));
-      })
+      .then(setTodos)
       .catch(() => setErrorMessage('Unable to load todos for such user'));
   }, [user.id]);
 
@@ -91,11 +79,6 @@ export const App: React.FC = () => {
     todoAPI.addTodo(newTodo)
       .then(createdTodo => {
         setTodos(current => [...current, createdTodo]);
-        setLocalStorageTodos([...localStorageTodos, {
-          id: createdTodo.id,
-          title: createdTodo.title,
-          completed: createdTodo.completed,
-        }]);
       })
       .catch(() => setErrorMessage('Unable to add a todo'))
       .finally(() => {
@@ -111,8 +94,6 @@ export const App: React.FC = () => {
     todoAPI.deleteTodo(todoId)
       .then(() => {
         setTodos(current => current.filter(todo => todo.id !== todoId));
-        setLocalStorageTodos(localStorageTodos
-          .filter(todo => todo.id !== todoId));
       })
       .catch(() => setErrorMessage('Unable to delete a todo'))
       .finally(() => removeProcessingTodo(todoId));
@@ -127,16 +108,6 @@ export const App: React.FC = () => {
         setTodos(current => current.map(
           todo => (todo.id === updatedTodo.id
             ? updatedTodo
-            : todo
-          ),
-        ));
-        setLocalStorageTodos(localStorageTodos.map(
-          todo => (todo.id === updatedTodo.id
-            ? {
-              id: updatedTodo.id,
-              title: updatedTodo.title,
-              completed: updatedTodo.completed,
-            }
             : todo
           ),
         ));
