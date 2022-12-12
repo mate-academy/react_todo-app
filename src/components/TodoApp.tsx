@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Status } from '../types/Status';
+import { TaskUrlStatus } from '../types/TaskUrlStatus';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../useLocalStorage';
 import { TodoFilter } from './TodoFilter';
@@ -25,15 +25,12 @@ export const TodoApp: React.FC = () => {
         completed: false,
       };
 
-      // setTodos((prevTodos)=> {
-      //   [...prevTodos, newTodo]
-      // });
       setTodos([...todos, newTodo]);
       setTitle('');
     }, [todos, title],
   );
 
-  const toggleAllHandler = (): void => {
+  const toggleAllHandler = useCallback((): void => {
     const completedTodos = todos.every(todo => todo.completed);
 
     const allTodos = todos.map(todo => {
@@ -55,15 +52,15 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...allTodos]);
-  };
+  }, [todos]);
 
-  const deleteHandler = (todoId: number) => {
+  const deleteHandler = useCallback((todoId: number) => {
     const unDeletedTodos = todos.filter(todo => todo.id !== todoId);
 
     setTodos([...unDeletedTodos]);
-  };
+  }, []);
 
-  const completeHandler = (todoId: number) => {
+  const completeHandler = useCallback((todoId: number) => {
     const completeTodo = todos.map(todo => {
       if (todoId === todo.id) {
         return {
@@ -76,9 +73,9 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...completeTodo]);
-  };
+  }, [todos]);
 
-  const editHandler = (todoId: number, newTitle: string) => {
+  const editHandler = useCallback((todoId: number, newTitle: string) => {
     const editedTodos = todos.map(todo => {
       if (todoId === todo.id) {
         return {
@@ -91,24 +88,26 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...editedTodos]);
-  };
+  }, []);
 
-  const clearCompletedHandler = (): void => {
-    const clereadTodos = todos.filter(todo => !todo.completed);
+  const clearCompletedHandler = useCallback(
+    (): void => {
+      const clereadTodos = todos.filter(todo => !todo.completed);
 
-    setTodos([...clereadTodos]);
-  };
+      setTodos([...clereadTodos]);
+    }, [],
+  );
 
   const filteredTodos = useMemo(() => todos.filter(todo => {
     switch (location.pathname) {
-      case Status.Active:
+      case TaskUrlStatus.Active:
         return !todo.completed;
 
-      case Status.Completed:
+      case TaskUrlStatus.Completed:
         return todo.completed;
 
       default:
-        return Status.All;
+        return TaskUrlStatus.All;
     }
   }), [todos, location]);
 

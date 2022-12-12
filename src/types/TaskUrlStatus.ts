@@ -1,4 +1,4 @@
-export enum Status {
+export enum TaskUrlStatus {
   All = '/',
   Active = '/active',
   Completed = '/completed',
