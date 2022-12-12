@@ -121,13 +121,22 @@ export const App: React.FC = () => {
     }
   };
 
+  const getTodosFromServer = async () => {
+    try {
+      if (user) {
+        const todosFromServer = await getTodos(user.id);
+
+        setTodos(todosFromServer);
+      }
+    } catch (error) {
+      setErrorType('Unable to load todos');
+      errorTimeOut();
+    }
+  };
+
   useEffect(() => {
-    getTodos(user?.id)
-      .then(res => setTodos(res))
-      .catch(() => {
-        setErrorType('Unable to load todos');
-        errorTimeOut();
-      });
+    getTodosFromServer();
+
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
