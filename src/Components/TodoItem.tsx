@@ -62,7 +62,7 @@ export const TodoItem: React.FC<Props> = memo(({ todo, todos, setTodos }) => {
   }, [todos, editMode, newTitle]);
 
   return (
-    <li
+    <div
       className={classNames({
         completed: todo.completed,
         editing: editMode,
@@ -76,10 +76,7 @@ export const TodoItem: React.FC<Props> = memo(({ todo, todos, setTodos }) => {
           onChange={handleMarkAsCompleted}
           checked={todo.completed}
         />
-        <label
-          htmlFor="toggle-completed"
-          onDoubleClick={handleDoubleClick}
-        >
+        <label onDoubleClick={handleDoubleClick}>
           {todo.title}
         </label>
         <button
@@ -96,6 +93,6 @@ export const TodoItem: React.FC<Props> = memo(({ todo, todos, setTodos }) => {
         onChange={e => handleEdit(e)}
         onKeyDown={e => createNewTitle(e)}
       />
-    </li>
+    </div>
   );
 });

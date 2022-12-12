@@ -11,12 +11,13 @@ export const TodoList: React.FC<Props> = memo(({ todos, setTodos }) => {
   return (
     <ul className="todo-list" data-cy="todosList">
       {todos.map(item => (
-        <TodoItem
-          key={item.id}
-          todo={item}
-          todos={todos}
-          setTodos={setTodos}
-        />
+        <li key={item.id}>
+          <TodoItem
+            todo={item}
+            todos={todos}
+            setTodos={setTodos}
+          />
+        </li>
       ))}
     </ul>
   );

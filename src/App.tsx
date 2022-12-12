@@ -8,7 +8,7 @@ import {
 import { TodoApp } from './Components/TodoApp';
 import { useLocalStorage } from './Hooks/LocalStorage';
 import { Todo } from './Types/Todo';
-import { Status } from './Types/Status';
+import { FilterStatus } from './Types/FilterStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
@@ -16,14 +16,14 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => todos.filter(todo => {
     switch (pathname) {
-      case Status.Active:
+      case FilterStatus.Active:
         return !todo.completed;
 
-      case Status.Completed:
+      case FilterStatus.Completed:
         return todo.completed;
 
       default:
-        return Status.All;
+        return FilterStatus.All;
     }
   }), [todos, pathname]);
 
@@ -31,15 +31,33 @@ export const App: React.FC = () => {
     <Routes>
       <Route
         path="/"
-        element={<TodoApp todos={visibleTodos} setTodos={setTodos} />}
+        element={(
+          <TodoApp
+            bottomBarVisibility={todos}
+            todos={visibleTodos}
+            setTodos={setTodos}
+          />
+        )}
       >
         <Route
           path="/active"
-          element={<TodoApp todos={visibleTodos} setTodos={setTodos} />}
+          element={(
+            <TodoApp
+              bottomBarVisibility={todos}
+              todos={visibleTodos}
+              setTodos={setTodos}
+            />
+          )}
         />
         <Route
           path="/completed"
-          element={<TodoApp todos={visibleTodos} setTodos={setTodos} />}
+          element={(
+            <TodoApp
+              bottomBarVisibility={todos}
+              todos={visibleTodos}
+              setTodos={setTodos}
+            />
+          )}
         />
       </Route>
       <Route

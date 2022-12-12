@@ -5,11 +5,16 @@ import { Todo } from '../Types/Todo';
 import { TodoFilter } from './TodoFilter';
 
 type Props = {
+  bottomBarVisibility: Todo[];
   todos: Todo[];
   setTodos: (todos: Todo[]) => void;
 };
 
-export const TodoApp: React.FC<Props> = memo(({ todos, setTodos }) => {
+export const TodoApp: React.FC<Props> = memo(({
+  bottomBarVisibility,
+  todos,
+  setTodos,
+}) => {
   const [title, setTitle] = useState('');
 
   const handleTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +92,9 @@ export const TodoApp: React.FC<Props> = memo(({ todos, setTodos }) => {
         <TodoList todos={todos} setTodos={setTodos} />
       </section>
 
-      <TodoFilter todos={todos} setTodos={setTodos} />
+      {bottomBarVisibility.length > 0 && (
+        <TodoFilter todos={todos} setTodos={setTodos} />
+      )}
     </div>
   );
 });

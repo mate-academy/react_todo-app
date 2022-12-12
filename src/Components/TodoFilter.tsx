@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Todo } from '../Types/Todo';
 
@@ -12,8 +12,13 @@ export const TodoFilter: React.FC<Props> = memo(({
   todos,
   setTodos,
 }) => {
-  const remainingTodos = todos.filter(todo => !todo.completed).length;
-  const completedTodos = todos.filter(todo => todo.completed);
+  const remainingTodos = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
+
+  const completedTodos = useMemo(() => {
+    return todos.filter(todo => todo.completed);
+  }, [todos]);
 
   const handleClear = useCallback(() => {
     setTodos(todos.filter(todo => !todo.completed));
