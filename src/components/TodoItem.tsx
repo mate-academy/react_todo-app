@@ -1,5 +1,5 @@
 import React, {
-  FC, useEffect, useRef, useState,
+  FC, useCallback, useEffect, useRef, useState,
 } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
@@ -27,7 +27,7 @@ export const TodoItem: FC<Props> = (
     }
   }, [isEditing]);
 
-  const onChangeTitle = (event: React.FormEvent) => {
+  const onChangeTitle = useCallback((event: React.FormEvent) => {
     event.preventDefault();
     if (newTodoTitle !== title) {
       changeTodoTitle(newTodoTitle, id);
@@ -35,38 +35,42 @@ export const TodoItem: FC<Props> = (
     }
 
     setIsEditing(false);
-  };
+  }, [newTodoTitle]);
 
-  const onCancelEditing = (event: React.KeyboardEvent) => {
+  const onCancelEditing = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       setIsEditing(false);
       setNewTodoTitle(title);
     }
-  };
+  }, [newTodoTitle]);
 
   return (
-    <li className={classNames(
-      { completed },
-      { editing: isEditing },
-    )}
+    <li
+      className={classNames(
+        { completed },
+        { editing: isEditing },
+      )}
     >
       <div className="view">
-        <input
-          id="toggle-view"
-          type="checkbox"
-          className="toggle"
-          onChange={() => changeToggleStatus(id)}
-          checked={completed}
-        />
+
         <label
           onDoubleClick={() => setIsEditing(true)}
         >
           {title}
+          <input
+            id="toggle-view"
+            type="checkbox"
+            className="toggle"
+            onChange={() => changeToggleStatus(id)}
+            checked={completed}
+          />
         </label>
+
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          aria-label="destroy button"
           onClick={() => removeTodo(id)}
         />
       </div>

@@ -1,9 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../types/Todo';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
-import { Status } from '../types/Status';
+import { FilterStatus } from '../types/Status';
 import { useLocaleStorage } from '../hooks/useLocaleStorage';
 import { TodoItem } from './TodoItem';
 
@@ -15,7 +15,7 @@ export const TodoApp: FC = () => {
   const notCompletedTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.length - notCompletedTodos.length;
 
-  const changeToggleStatus = (todoId: number) => {
+  const toggleTodoStatus = useCallback((todoId: number) => {
     setTodos(
       todos.map(todo => {
         if (todo.id === todoId) {
@@ -28,7 +28,7 @@ export const TodoApp: FC = () => {
         return todo;
       }),
     );
-  };
+  }, [todos]);
 
   const removeTodo = (todoId: number) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
@@ -88,10 +88,10 @@ export const TodoApp: FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (pathname) {
-      case Status.Active:
+      case FilterStatus.Active:
         return !todo.completed;
 
-      case Status.Completed:
+      case FilterStatus.Completed:
         return todo.completed;
 
       default:
@@ -131,7 +131,7 @@ export const TodoApp: FC = () => {
             <TodoItem
               key={todo.id}
               todo={todo}
-              changeToggleStatus={changeToggleStatus}
+              changeToggleStatus={toggleTodoStatus}
               removeTodo={removeTodo}
               changeTodoTitle={changeTodoTitle}
             />
