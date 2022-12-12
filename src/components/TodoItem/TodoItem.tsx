@@ -55,43 +55,43 @@ export const TodoItem: React.FC<Props> = ({
 
   return (
     <>
-      {!editModeOn && (
-        <div className="view">
+      {editModeOn
+        ? (
           <input
-            type="checkbox"
-            className="toggle"
-            id={`toggle-view${item.id}`}
-            checked={item.completed}
-            onChange={() => onToggleComplete(item)}
+            type="text"
+            className="edit"
+            ref={input => input && input.focus()}
+            value={updatedTitle}
+            onChange={(event) => setUpdatedTitle(event.target.value.trim())}
+            onBlur={handleSave}
+            onKeyDown={handleUpdate}
           />
+        )
+        : (
+          <div className="view">
+            <input
+              type="checkbox"
+              className="toggle"
+              id={`toggle-view${item.id}`}
+              checked={item.completed}
+              onChange={() => onToggleComplete(item)}
+            />
 
-          <label
-            onDoubleClick={handleEdit}
-          >
-            {item.title}
-          </label>
+            <label
+              onDoubleClick={handleEdit}
+            >
+              {item.title}
+            </label>
 
-          <button
-            type="button"
-            aria-label="Delete Todo"
-            className="destroy"
-            data-cy="deleteTodo"
-            onClick={() => onDelete(item)}
-          />
-        </div>
-      )}
-
-      {editModeOn && (
-        <input
-          type="text"
-          className="edit"
-          ref={input => input && input.focus()}
-          value={updatedTitle}
-          onChange={(event) => setUpdatedTitle(event.target.value.trim())}
-          onBlur={handleSave}
-          onKeyDown={handleUpdate}
-        />
-      )}
+            <button
+              type="button"
+              aria-label="Delete Todo"
+              className="destroy"
+              data-cy="deleteTodo"
+              onClick={() => onDelete(item)}
+            />
+          </div>
+        )}
     </>
   );
 };

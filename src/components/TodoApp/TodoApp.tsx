@@ -4,12 +4,12 @@ import React,
 } from 'react';
 import { TodoList } from '../TodoList';
 import { Todo } from '../../types/Todo';
-import { Status } from '../../types/Status';
+import { FilterStatus } from '../../types/FilterStatus';
 import { TodosFilter } from '../TodosFilter';
 import { useLocalStorage } from '../../useLocalStorage';
 
 interface Props {
-  selectedFilter: Status
+  selectedFilter: FilterStatus
 }
 
 export const TodoApp: React.FC<Props> = ({ selectedFilter }) => {
@@ -26,12 +26,12 @@ export const TodoApp: React.FC<Props> = ({ selectedFilter }) => {
 
   const handleFilterChange = useCallback(() => {
     switch (selectedFilter) {
-      case Status.ACTIVE:
+      case FilterStatus.ACTIVE:
         setFilteredTodos(
           todos.filter(currentTodo => !currentTodo.completed),
         );
         break;
-      case Status.COMPLETED:
+      case FilterStatus.COMPLETED:
         setFilteredTodos(
           todos.filter(currentTodo => currentTodo.completed),
         );
@@ -66,32 +66,32 @@ export const TodoApp: React.FC<Props> = ({ selectedFilter }) => {
   );
 
   const handleToggleComplete = useCallback((todo: Todo) => {
-    const toggledTodo = todo;
+    const toggledTodo = { ...todo };
 
     toggledTodo.completed = !toggledTodo.completed;
     setTodos(prevTodos => {
-      const toggledTodoIndex = prevTodos.map(t => t.id)
-        .indexOf(todo.id);
-      const updatedTodos = [...prevTodos];
+      return prevTodos.map((currentTodo) => {
+        if (currentTodo.id === todo.id) {
+          return toggledTodo;
+        }
 
-      updatedTodos.splice(toggledTodoIndex, 1, toggledTodo);
-
-      return updatedTodos;
+        return currentTodo;
+      });
     });
   }, []);
 
   const handleUpdateTitle = useCallback((todo: Todo, updatedTitle: string) => {
-    const editedTodo = todo;
+    const editedTodo = { ...todo };
 
     editedTodo.title = updatedTitle;
     setTodos(prevTodos => {
-      const editedTodoIndex = prevTodos.map(t => t.id)
-        .indexOf(todo.id);
-      const updatedTodos = [...prevTodos];
+      return prevTodos.map((currentTodo) => {
+        if (currentTodo.id === todo.id) {
+          return editedTodo;
+        }
 
-      updatedTodos.splice(editedTodoIndex, 1, editedTodo);
-
-      return updatedTodos;
+        return currentTodo;
+      });
     });
   }, []);
 
@@ -102,7 +102,7 @@ export const TodoApp: React.FC<Props> = ({ selectedFilter }) => {
   }, []);
 
   const handleToggleAll = useCallback(() => {
-    const updatedToggleAll = !(activeTodoCount === 0);
+    const updatedToggleAll = (activeTodoCount !== 0);
 
     setTodos(prevTodos => (
       prevTodos.map(currentTodo => ({
@@ -167,9 +167,9 @@ export const TodoApp: React.FC<Props> = ({ selectedFilter }) => {
 
           <TodosFilter
             filters={[
-              Status.ALL,
-              Status.ACTIVE,
-              Status.COMPLETED,
+              FilterStatus.ALL,
+              FilterStatus.ACTIVE,
+              FilterStatus.COMPLETED,
             ]}
           />
 

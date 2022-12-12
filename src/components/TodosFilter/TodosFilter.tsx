@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import { Status } from '../../types/Status';
+import { FilterStatus } from '../../types/FilterStatus';
 
 interface Props {
-  filters: Status[];
+  filters: FilterStatus[];
 }
 
 export const TodosFilter: React.FC<Props> = ({
@@ -23,7 +23,7 @@ export const TodosFilter: React.FC<Props> = ({
               )
             )}
           >
-            {(filter === Status.ALL)
+            {(filter === FilterStatus.ALL)
               ? 'All'
               : (filter[1].toUpperCase() + filter.slice(2))}
           </NavLink>

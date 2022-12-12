@@ -18,7 +18,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd react_todo-app
 ```
 
 Install dependencies
@@ -30,7 +30,7 @@ Install dependencies
 Start the server
 
 ```bash
-  npm run start
+  npm start
 ```
 
 ## Deployment
@@ -38,7 +38,7 @@ Start the server
 To deploy this project run
 
 ```bash
-
+  npm run deploy
 ```
 
 ## Features
@@ -54,14 +54,4 @@ To deploy this project run
 - double click on the TODO title makes it editable.
 
 ## 🛠 Skills
-Javascript, HTML, CSS and React.
-
-
-## Installation
-
-Install my-project with npm
-
-```bash
-  npm install my-project
-  cd my-project
-```
+Javascript, TypeScript, HTML, CSS, React, React Router and hooks.
