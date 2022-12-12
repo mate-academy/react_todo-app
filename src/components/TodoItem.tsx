@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -19,17 +19,19 @@ export const TodoItem: React.FC<Props> = ({
   const [editing, setEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
 
-  const setNewTodoTitle = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      editHandler(todo.id, editedTitle);
-      setEditing(false);
-    }
+  const setNewTodoTitle = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        editHandler(todo.id, editedTitle);
+        setEditing(false);
+      }
 
-    if (event.key === 'Escape') {
-      setEditedTitle(todo.title);
-      setEditing(false);
-    }
-  };
+      if (event.key === 'Escape') {
+        setEditedTitle(todo.title);
+        setEditing(false);
+      }
+    }, [editedTitle, editing],
+  );
 
   return (
     <>
@@ -47,6 +49,7 @@ export const TodoItem: React.FC<Props> = ({
             className="toggle"
             id="toggle-view"
             onClick={() => completeHandler(todo.id)}
+            onChange={() => {}}
             checked={todo.completed}
           />
           <label>{todo.title}</label>

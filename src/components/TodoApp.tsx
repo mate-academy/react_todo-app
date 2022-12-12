@@ -58,7 +58,7 @@ export const TodoApp: React.FC = () => {
     const unDeletedTodos = todos.filter(todo => todo.id !== todoId);
 
     setTodos([...unDeletedTodos]);
-  }, []);
+  }, [todos]);
 
   const completeHandler = useCallback((todoId: number) => {
     const completeTodo = todos.map(todo => {
@@ -88,14 +88,14 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...editedTodos]);
-  }, []);
+  }, [todos]);
 
   const clearCompletedHandler = useCallback(
     (): void => {
       const clereadTodos = todos.filter(todo => !todo.completed);
 
       setTodos([...clereadTodos]);
-    }, [],
+    }, [todos],
   );
 
   const filteredTodos = useMemo(() => todos.filter(todo => {
@@ -138,6 +138,7 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
+              onChange={() => {}}
               onClick={() => toggleAllHandler()}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>

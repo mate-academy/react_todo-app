@@ -1,3 +1,4 @@
+// import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
@@ -18,13 +19,16 @@ export const TodoList: React.FC<Props> = ({
   return (
     <ul className="todo-list" data-cy="todosList">
       {todos.map(todo => (
-        <TodoItem
-          todo={todo}
+        <li
           key={todo.id}
-          deleteHandler={deleteHandler}
-          completeHandler={completeHandler}
-          editHandler={editHandler}
-        />
+        >
+          <TodoItem
+            todo={todo}
+            deleteHandler={deleteHandler}
+            completeHandler={completeHandler}
+            editHandler={editHandler}
+          />
+        </li>
       ))}
     </ul>
   );
