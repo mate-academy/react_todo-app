@@ -12,7 +12,7 @@ export const Notification: React.FC<Props> = React.memo(({
 }) => {
   const notificationDelay = setTimeout(() => onSetNotification(''), 3000);
 
-  const clickHandler = () => {
+  const handleClick = () => {
     onSetNotification('');
     clearTimeout(notificationDelay);
   };
@@ -30,7 +30,7 @@ export const Notification: React.FC<Props> = React.memo(({
         type="button"
         className="delete"
         aria-label="hide-notification"
-        onClick={clickHandler}
+        onClick={handleClick}
       />
       {notification}
     </div>

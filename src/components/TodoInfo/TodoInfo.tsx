@@ -11,32 +11,46 @@ type Props = {
   changeInputText: (id: number, query: string) => void;
 };
 
+enum ButtonKey {
+  enter = 'Enter',
+  escape = 'Escape',
+}
+
 export const TodoInfo: React.FC<Props> = ({
   todo,
   togleStatus,
   deleteTodo,
   changeInputText,
 }) => {
-  const { title, completed, id } = todo;
+  const {
+    title,
+    completed,
+    id,
+  } = todo;
   const [isEditing, setIsEditing] = useState(false);
   const [query, setQuery] = useState(title);
 
   const handleInputChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      setIsEditing(false);
-      setQuery(event.target.value);
-      if (!query) {
-        deleteTodo(id);
+    switch (event.key) {
+      case ButtonKey.enter:
+        setIsEditing(false);
+        setQuery(event.target.value);
+        if (!query) {
+          deleteTodo(id);
 
-        return;
-      }
+          return;
+        }
 
-      changeInputText(id, query);
-    }
+        changeInputText(id, query);
+        break;
 
-    if (event.key === 'Escape') {
-      setIsEditing(false);
-      setQuery(title);
+      case ButtonKey.escape:
+        setIsEditing(false);
+        setQuery(title);
+        break;
+
+      default:
+        break;
     }
   };
 

@@ -66,12 +66,10 @@ export const TodoApp: React.FC = () => {
 
   const switchTodoStatus = (id: number, status: boolean) => {
     setTodos(
-      todos.map((todo: Todo) => {
-        return {
-          ...todo,
-          ...(id === todo.id && { completed: status }),
-        };
-      }),
+      todos.map((todo: Todo) => ({
+        ...todo,
+        ...(id === todo.id && { completed: status }),
+      })),
     );
   };
 
@@ -104,12 +102,10 @@ export const TodoApp: React.FC = () => {
   };
 
   const changeInputText = (id: number, query: string) => {
-    setTodos(todos.map(todo => {
-      return {
-        ...todo,
-        ...(id === todo.id && { title: query }),
-      };
-    }));
+    setTodos(todos.map(todo => ({
+      ...todo,
+      ...(id === todo.id && { title: query }),
+    })));
   };
 
   return (
