@@ -73,22 +73,6 @@ export const TodoApp: React.FC<Props> = ({ todos, setTodos }) => {
     setTodos(todos.filter((todo) => !todo.completed));
   }, [todos]);
 
-  // const handleCheckAll = useCallback(() => {
-  //   console.log('Before', todos, activeTodos);
-  //   setTodos(
-  //     todos.map(todo => (
-  //       {
-  //         ...todo,
-  //         completed: activeTodos !== todos.length,
-  //       }
-  //     )),
-  //   );
-
-  //   setActiveTodos((activeTodos !== todos.length ? 0 : todos.length));
-  // }, [todos, activeTodos]);
-
-  // console.log('After', todos, activeTodos);
-
   return (
     <div className="todoapp">
       <header className="header">
