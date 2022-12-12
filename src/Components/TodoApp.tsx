@@ -89,7 +89,9 @@ export const TodoApp: React.FC<Props> = memo(({
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList todos={todos} setTodos={setTodos} />
+        {bottomBarVisibility.length > 0 && (
+          <TodoList todos={todos} setTodos={setTodos} />
+        )}
       </section>
 
       {bottomBarVisibility.length > 0 && (
