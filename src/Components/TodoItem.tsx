@@ -67,7 +67,6 @@ export const TodoItem: React.FC<Props> = memo(({ todo, todos, setTodos }) => {
         completed: todo.completed,
         editing: editMode,
       })}
-      onDoubleClick={handleDoubleClick}
     >
       <div className="view">
         <input
@@ -77,7 +76,7 @@ export const TodoItem: React.FC<Props> = memo(({ todo, todos, setTodos }) => {
           onChange={handleMarkAsCompleted}
           checked={todo.completed}
         />
-        <label>
+        <label onDoubleClick={handleDoubleClick}>
           {todo.title}
         </label>
         <button
