@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
   deleteHandler: (todoId: number) => void,
   completeHandler: (todoId: number) => void,
   editHandler: (todoId: number, newTitle: string) => void,
+  onEditing: (itemId: number) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -15,21 +16,25 @@ export const TodoItem: React.FC<Props> = ({
   deleteHandler,
   completeHandler,
   editHandler,
+  onEditing,
 }) => {
   const [editing, setEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
 
-  const setNewTodoTitle = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      editHandler(todo.id, editedTitle);
-      setEditing(false);
-    }
+  const setNewTodoTitle = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        editHandler(todo.id, editedTitle);
+        onEditing(-1);
+        setEditing(false);
+      }
 
-    if (event.key === 'Escape') {
-      setEditedTitle(todo.title);
-      setEditing(false);
-    }
-  };
+      if (event.key === 'Escape') {
+        setEditedTitle(todo.title);
+        setEditing(false);
+      }
+    }, [editedTitle, editing],
+  );
 
   return (
     <>
@@ -47,6 +52,7 @@ export const TodoItem: React.FC<Props> = ({
             className="toggle"
             id="toggle-view"
             onClick={() => completeHandler(todo.id)}
+            onChange={() => {}}
             checked={todo.completed}
           />
           <label>{todo.title}</label>

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Status } from '../types/Status';
+import { FilterStatus } from '../types/FilterStatus';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../useLocaleStorage';
 import { TodoFilter } from './TodoFilter';
@@ -30,7 +30,7 @@ export const TodoApp: React.FC = () => {
     }, [todos, title],
   );
 
-  const toggleAllHandler = (): void => {
+  const toggleAllHandler = useCallback((): void => {
     const completedTodos = todos.every(todo => todo.completed);
 
     const allTodos = todos.map(todo => {
@@ -52,15 +52,15 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...allTodos]);
-  };
+  }, [todos]);
 
-  const deleteHandler = (todoId: number) => {
+  const deleteHandler = useCallback((todoId: number) => {
     const unDeletedTodos = todos.filter(todo => todo.id !== todoId);
 
     setTodos([...unDeletedTodos]);
-  };
+  }, [todos]);
 
-  const completeHandler = (todoId: number) => {
+  const completeHandler = useCallback((todoId: number) => {
     const completeTodo = todos.map(todo => {
       if (todoId === todo.id) {
         return {
@@ -73,9 +73,9 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...completeTodo]);
-  };
+  }, [todos]);
 
-  const editHandler = (todoId: number, newTitle: string) => {
+  const editHandler = useCallback((todoId: number, newTitle: string) => {
     const editedTodos = todos.map(todo => {
       if (todoId === todo.id) {
         return {
@@ -88,24 +88,26 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...editedTodos]);
-  };
+  }, [todos]);
 
-  const clearCompletedHandler = (): void => {
-    const clereadTodos = todos.filter(todo => !todo.completed);
+  const clearCompletedHandler = useCallback(
+    (): void => {
+      const clereadTodos = todos.filter(todo => !todo.completed);
 
-    setTodos([...clereadTodos]);
-  };
+      setTodos([...clereadTodos]);
+    }, [todos],
+  );
 
   const filteredTodos = useMemo(() => todos.filter(todo => {
     switch (location.pathname) {
-      case Status.Active:
+      case FilterStatus.Active:
         return !todo.completed;
 
-      case Status.Completed:
+      case FilterStatus.Completed:
         return todo.completed;
 
       default:
-        return Status.All;
+        return FilterStatus.All;
     }
   }), [todos, location]);
 
@@ -136,6 +138,7 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
+              onChange={() => {}}
               onClick={() => toggleAllHandler()}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>

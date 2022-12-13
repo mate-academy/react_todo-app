@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Todo } from '../types/Todo';
 
@@ -13,7 +13,9 @@ export const TodoFilter: React.FC<Props> = ({
   clearCompletedHandler,
 }) => {
   const leftTodos = todos.filter(todo => !todo.completed).length;
-  const completedTodos = todos.filter(todo => todo.completed);
+  const completedTodos = useMemo(() => (
+    todos.filter(todo => todo.completed)
+  ), [todos]);
 
   const isActiveLink = ({ isActive }: { isActive: boolean }) => {
     return classNames({ selected: isActive });
