@@ -5,7 +5,7 @@ Simple TODO app working as described in (Features) below.
 ![todoapp](./description/todoapp.gif)
 
 ## Github flow
-1.Fork the repo.  
+1.Clone the repo.  
 2.Run npm install (or just npm i)  
 3.Run npm start  
 ## Technologies
@@ -15,6 +15,8 @@ Project is created with:
 * JavaScript
 * TypeScript
 * React
+* React Router
+* Hooks
 
 ## Features
 * Create new todos, and press Enter to save it in Todo list.
