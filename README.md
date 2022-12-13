@@ -12,7 +12,7 @@ This is a todo app that allows a user to add, remove and edit todos, as well as 
 
 
 > Here is a demo link to the app:
-  - [DEMO LINK](https://MeshackDev.github.io/react_todo-app/) and add it to the PR description.
+  - [DEMO LINK](https://MeshackDev.github.io/react_todo-app/)
 
 
 > The `gif` below shows how each future works:
