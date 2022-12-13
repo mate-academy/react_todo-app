@@ -1,5 +1,6 @@
 // import classNames from 'classnames';
-import React from 'react';
+import classNames from 'classnames';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
@@ -16,17 +17,25 @@ export const TodoList: React.FC<Props> = ({
   completeHandler,
   editHandler,
 }) => {
+  const [editing, setEditing] = useState(false);
+
   return (
     <ul className="todo-list" data-cy="todosList">
       {todos.map(todo => (
         <li
           key={todo.id}
+          className={classNames({
+            completed: todo.completed,
+            editing,
+          })}
+          onDoubleClick={() => setEditing(!editing)}
         >
           <TodoItem
             todo={todo}
             deleteHandler={deleteHandler}
             completeHandler={completeHandler}
             editHandler={editHandler}
+            onEditing={setEditing}
           />
         </li>
       ))}
