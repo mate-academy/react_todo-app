@@ -5,7 +5,7 @@
 Project is created with:
 
 * HTML
-* Sass
+* CSS
 * Typescript
 * React
 * React Router
