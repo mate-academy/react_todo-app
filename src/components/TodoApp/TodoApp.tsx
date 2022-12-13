@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Status } from '../../types/Status';
+import { useCallback, useMemo, useState } from 'react';
+import { FilterStatus } from '../../types/FilterStatus';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
@@ -11,11 +11,7 @@ type Props = {
 
 export const TodoApp: React.FC<Props> = ({ todos, setTodos }) => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
-  const [activeTodos, setActiveTodos] = useState(
-    todos.reduce((acc, curr) => acc + (curr.completed ? 0 : 1), 0),
-  );
-  const [filterStatus, setFilterStatus] = useState(Status.All);
-  const [filteredTodos, setFilteredTodos] = useState([...todos]);
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
 
   const handleNewTodoTitle = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,18 +20,19 @@ export const TodoApp: React.FC<Props> = ({ todos, setTodos }) => {
     [newTodoTitle],
   );
 
-  useEffect(() => {
-    setFilterStatus(filterStatus);
+  const activeTodos = useMemo(() => (
+    todos.reduce((acc, curr) => acc + (curr.completed ? 0 : 1), 0)
+  ), [todos]);
+
+  const filteredTodos = useMemo(() => {
     switch (filterStatus) {
-      case Status.Completed:
-        setFilteredTodos(todos.filter((todo) => todo.completed === true));
-        break;
-      case Status.Active:
-        setFilteredTodos(todos.filter((todo) => todo.completed === false));
-        break;
-      case Status.All:
+      case FilterStatus.Completed:
+        return (todos.filter((todo) => todo.completed === true));
+      case FilterStatus.Active:
+        return (todos.filter((todo) => todo.completed === false));
+      case FilterStatus.All:
       default:
-        setFilteredTodos([...todos]);
+        return ([...todos]);
     }
   }, [todos, filterStatus]);
 
@@ -51,7 +48,6 @@ export const TodoApp: React.FC<Props> = ({ todos, setTodos }) => {
         };
 
         setTodos([...todos, newTodo]);
-        setActiveTodos((prevActiveTodos) => prevActiveTodos + 1);
         setNewTodoTitle('');
       }
     },
@@ -65,8 +61,6 @@ export const TodoApp: React.FC<Props> = ({ todos, setTodos }) => {
         completed: activeTodos !== 0,
       })),
     );
-
-    setActiveTodos(activeTodos > 0 ? 0 : todos.length);
   }, [todos, activeTodos]);
 
   const deleteCompleted = useCallback(() => {
@@ -105,7 +99,6 @@ export const TodoApp: React.FC<Props> = ({ todos, setTodos }) => {
           <TodoList
             todos={filteredTodos}
             setTodos={setTodos}
-            setActiveTodos={setActiveTodos}
           />
         </section>
       )}

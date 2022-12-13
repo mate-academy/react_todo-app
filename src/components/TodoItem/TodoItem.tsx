@@ -7,14 +7,12 @@ type Props = {
   todo: Todo;
   todos: Todo[],
   setTodos: (todos: Todo[]) => void,
-  setActiveTodos: (active: number | ((prev: number) => number)) => void,
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   todos,
   setTodos,
-  setActiveTodos,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
@@ -28,16 +26,9 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     setTodos(newTodos);
-    setActiveTodos(newTodos.reduce(
-      (acc, curr) => (acc + (curr.completed ? 0 : 1)), 0,
-    ));
   }, [todos]);
 
   const handleDeleteTodo = useCallback(() => {
-    if (!todo.completed) {
-      setActiveTodos((prev) => prev - 1);
-    }
-
     setTodos(todos.filter(item => item.id !== todo.id));
   }, [todos]);
 

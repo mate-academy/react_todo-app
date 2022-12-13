@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
-import { Status } from '../../types/Status';
+import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
-  filterStatus: Status;
-  setFilterStatus: (newStatus: Status) => void;
+  filterStatus: FilterStatus;
+  setFilterStatus: (newStatus: FilterStatus) => void;
 };
 
 export const TodosFilter: React.FC<Props> = (
@@ -13,7 +13,7 @@ export const TodosFilter: React.FC<Props> = (
   },
 ) => {
   const handleFilterStatus = useCallback(
-    (event: React.MouseEvent, newStatus: Status) => {
+    (event: React.MouseEvent, newStatus: FilterStatus) => {
       event.preventDefault();
 
       setFilterStatus(newStatus);
@@ -25,10 +25,10 @@ export const TodosFilter: React.FC<Props> = (
       <li>
         <a
           href="#/"
-          className={filterStatus === Status.All
+          className={filterStatus === FilterStatus.All
             ? 'selected'
             : ''}
-          onClick={(event) => handleFilterStatus(event, Status.All)}
+          onClick={(event) => handleFilterStatus(event, FilterStatus.All)}
         >
           All
         </a>
@@ -37,10 +37,10 @@ export const TodosFilter: React.FC<Props> = (
       <li>
         <a
           href="#/active"
-          className={filterStatus === Status.Active
+          className={filterStatus === FilterStatus.Active
             ? 'selected'
             : ''}
-          onClick={(event) => handleFilterStatus(event, Status.Active)}
+          onClick={(event) => handleFilterStatus(event, FilterStatus.Active)}
         >
           Active
         </a>
@@ -49,10 +49,10 @@ export const TodosFilter: React.FC<Props> = (
       <li>
         <a
           href="#/completed"
-          className={filterStatus === Status.Completed
+          className={filterStatus === FilterStatus.Completed
             ? 'selected'
             : ''}
-          onClick={(event) => handleFilterStatus(event, Status.Completed)}
+          onClick={(event) => handleFilterStatus(event, FilterStatus.Completed)}
         >
           Completed
         </a>
