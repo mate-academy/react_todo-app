@@ -28,7 +28,8 @@ export const TodoApp: FC = () => {
         return todo;
       }),
     );
-  }, [todos]);
+  },
+  [todos]);
 
   const removeTodo = (todoId: number) => {
     setTodos(todos.filter(todo => todo.id !== todoId));

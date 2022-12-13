@@ -35,14 +35,16 @@ export const TodoItem: FC<Props> = (
     }
 
     setIsEditing(false);
-  }, [newTodoTitle]);
+  },
+  [newTodoTitle]);
 
   const onCancelEditing = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       setIsEditing(false);
       setNewTodoTitle(title);
     }
-  }, [newTodoTitle]);
+  },
+  [newTodoTitle]);
 
   return (
     <li
