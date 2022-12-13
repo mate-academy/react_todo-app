@@ -30,6 +30,14 @@ export const TodoInfo: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [query, setQuery] = useState(title);
 
+  const handleDoubleClick = () => setIsEditing(prevState => !prevState);
+  const handleButtonClick = () => deleteTodo(id);
+  const handleStatusChange = () => togleStatus(id, completed);
+
+  const handleTodoEdit = (event: React.KeyboardEvent<HTMLInputElement>) => (
+    setQuery(event.target.value)
+  );
+
   const handleInputChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
       case ButtonKey.enter:
@@ -79,11 +87,11 @@ export const TodoInfo: React.FC<Props> = ({
         <input
           type="checkbox"
           className="toggle"
-          onChange={() => togleStatus(id, completed)}
+          onChange={handleStatusChange}
           checked={completed}
         />
         <label
-          onDoubleClick={() => setIsEditing(!isEditing)}
+          onDoubleClick={handleDoubleClick}
         >
           {title}
         </label>
@@ -92,7 +100,7 @@ export const TodoInfo: React.FC<Props> = ({
           aria-label="destroy"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => deleteTodo(id)}
+          onClick={handleButtonClick}
         />
       </div>
       <input
@@ -100,7 +108,7 @@ export const TodoInfo: React.FC<Props> = ({
         className="edit"
         defaultValue={title}
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleTodoEdit}
         onBlur={handleBlur}
         onKeyDown={handleInputChange}
         placeholder="Empty todo will be deleted"
