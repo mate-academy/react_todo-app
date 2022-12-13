@@ -4,6 +4,16 @@
 
 # Run the project
 
+1) Clone the repository:
+
+```
+git clone https://github.com/GizemEce/react_todo-app.git
+```
+
+2) Install it locally using npm:
+
+```
+
 $ Run npm install / npm i
 $ Run npm start
 
@@ -14,14 +24,16 @@ $ Run npm start
 * CSS
 * JavaScript
 * React
+* React hooks
+* TypeScript
 
 # Functionalities
 
-* The app created new todos
-* It saves new todos in TodoList and shows the number of todos.
-* It is able to toggle the completed status of all the todos with the `toggleAll` checkbox.
-* It  switches between `All`/`Active`/`Completed` todos.
-* It is able to clear completed todos - removes all completed items from the list.
+* User can create new todos
+* User can save new todos in TodoList and can see the number of todos.
+* Ability to toggle the completed status of all the todos with the `toggleAll` checkbox.
+* Switches between `All`/`Active`/`Completed` todos.
+* Ability to clear completed todos - removes all completed items from the list.
 
 
 

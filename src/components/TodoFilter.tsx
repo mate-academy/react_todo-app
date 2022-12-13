@@ -12,7 +12,10 @@ export const TodoFilter: React.FC<Props> = ({
   todos,
   clearCompletedHandler,
 }) => {
-  const leftTodos = todos.filter(todo => !todo.completed).length;
+  const leftTodos = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
+
   const completedTodos = useMemo(() => (
     todos.filter(todo => todo.completed)
   ), [todos]);
