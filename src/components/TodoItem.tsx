@@ -1,92 +1,79 @@
-import React, {
-  FC, useCallback, useEffect, useRef, useState,
-} from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
+import React, { useCallback, useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  todo: Todo
-  changeToggleStatus: (todoId: number) => void;
-  removeTodo: (todoId: number) => void
-  changeTodoTitle: (newTodoTitle: string, todoId: number) => void;
+  todo: Todo;
+  toggleCompleteStatus: (todoId: number) => void,
+  deleteHandler: (todoId: number) => void,
+  editTitle: (todoId: number, newTitle: string) => void,
+  onEditing: (itemId: number) => void;
 };
 
-export const TodoItem: FC<Props> = (
-  {
-    todo, changeToggleStatus, removeTodo, changeTodoTitle,
-  },
-) => {
-  const { id, title, completed } = todo;
-  const [newTodoTitle, setNewTodoTitle] = useState(title);
-  const [isEditing, setIsEditing] = useState(false);
-  const isEditingField = useRef<HTMLInputElement>(null);
+export const TodoItem: React.FC<Props> = ({
+  todo,
+  toggleCompleteStatus,
+  deleteHandler,
+  editTitle,
+  onEditing,
+}) => {
+  const [editing, setEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
 
-  useEffect(() => {
-    if (isEditingField.current) {
-      isEditingField.current.focus();
-    }
-  }, [isEditing]);
+  const setNewTodoTitle = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        editTitle(todo.id, newTitle);
+        setEditing(false);
+        onEditing(-1);
+      }
 
-  const onChangeTitle = useCallback((event: React.FormEvent) => {
-    event.preventDefault();
-    if (newTodoTitle !== title) {
-      changeTodoTitle(newTodoTitle, id);
-      setIsEditing(false);
-    }
-
-    setIsEditing(false);
-  },
-  [newTodoTitle]);
-
-  const onCancelEditing = useCallback((event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      setIsEditing(false);
-      setNewTodoTitle(title);
-    }
-  },
-  [newTodoTitle]);
+      if (event.key === 'Escape') {
+        setNewTitle(todo.title);
+        setEditing(false);
+      }
+    }, [newTitle, editing],
+  );
 
   return (
-    <li
-      className={classNames(
-        { completed },
-        { editing: isEditing },
-      )}
-    >
-      <div className="view">
-
-        <label
-          onDoubleClick={() => setIsEditing(true)}
-        >
-          {title}
-          <input
-            id="toggle-view"
-            type="checkbox"
-            className="toggle"
-            onChange={() => changeToggleStatus(id)}
-            checked={completed}
+    <>
+      <li
+        className={classNames({
+          completed: todo.completed,
+          editing,
+        })}
+        onDoubleClick={() => setEditing(!editing)}
+      >
+        <div className="view">
+          <label>
+            {todo.title}
+            <input
+              type="checkbox"
+              className="toggle"
+              id="toggle-view"
+              onClick={() => toggleCompleteStatus(todo.id)}
+              onChange={() => {}}
+              checked={todo.completed}
+            />
+          </label>
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={() => deleteHandler(todo.id)}
           />
-        </label>
-
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          aria-label="destroy button"
-          onClick={() => removeTodo(id)}
-        />
-      </div>
-      <form onSubmit={onChangeTitle}>
+        </div>
         <input
           type="text"
           className="edit"
-          ref={isEditingField}
-          value={newTodoTitle}
-          onChange={event => setNewTodoTitle(event.target.value)}
-          onBlur={onChangeTitle}
-          onKeyUp={onCancelEditing}
+          value={newTitle}
+          onChange={event => {
+            setNewTitle(event.target.value);
+          }}
+          onKeyDown={setNewTodoTitle}
         />
-      </form>
-    </li>
+      </li>
+    </>
   );
 };

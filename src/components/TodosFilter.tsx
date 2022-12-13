@@ -1,35 +1,36 @@
-import { FC } from 'react';
-import { NavLink } from 'react-router-dom';
-import classNames from 'classnames';
+import React from 'react';
+import { Todo } from '../types/Todo';
+import { Navigation } from './Navigation';
 
-export const TodosFilter: FC = () => {
-  const filters = [
-    {
-      title: 'All',
-      link: '/',
-    },
-    {
-      title: 'Active',
-      link: '/active',
-    },
-    {
-      title: 'Completed',
-      link: '/completed',
-    },
-  ];
+type Props = {
+  todos: Todo[];
+  clearCompleted: () => void;
+};
+
+export const TodosFilter: React.FC<Props> = ({
+  todos,
+  clearCompleted,
+}) => {
+  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const completedTodos = todos.filter(todo => todo.completed);
 
   return (
-    <ul className="filters">
-      {filters.map(filter => (
-        <li key={filter.title}>
-          <NavLink
-            to={filter.link}
-            className={({ isActive }) => classNames({ selected: isActive })}
-          >
-            {filter.title}
-          </NavLink>
-        </li>
-      ))}
-    </ul>
+    <footer className="footer">
+      <span className="todo-count" data-cy="todosCounter">
+        {`${activeTodos} items left`}
+      </span>
+
+      <Navigation />
+
+      {completedTodos.length > 0 && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={clearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
+    </footer>
   );
 };

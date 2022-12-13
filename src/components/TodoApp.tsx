@@ -1,51 +1,77 @@
-import React, { FC, useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../types/Todo';
-import { TodoList } from './TodoList';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { FilterStatus } from '../types/FilterStatus';
 import { TodosFilter } from './TodosFilter';
-import { FilterStatus } from '../types/Status';
-import { useLocaleStorage } from '../hooks/useLocaleStorage';
-import { TodoItem } from './TodoItem';
+import { TodoList } from './TodoList';
 
-export const TodoApp: FC = () => {
-  const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
-  const [todoTitle, setTodoTitle] = useState('');
-  const { pathname } = useLocation();
+export const TodoApp: React.FC = () => {
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [title, setTitle] = useState('');
+  const location = useLocation();
 
-  const notCompletedTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.length - notCompletedTodos.length;
+  const addTodo = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-  const toggleTodoStatus = useCallback((todoId: number) => {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === todoId) {
-          return {
-            ...todo,
-            completed: !todo.completed,
-          };
-        }
+      if (title) {
+        const newTodo: Todo = {
+          id: +new Date(),
+          title,
+          completed: false,
+        };
 
-        return todo;
-      }),
-    );
-  },
-  [todos]);
+        setTodos([...todos, newTodo]);
+        setTitle('');
+      }
+    }, [todos, title],
+  );
 
-  const removeTodo = (todoId: number) => {
+  const deleteHandler = useCallback((todoId: number) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
-  };
+  }, [todos]);
 
-  const changeTodoTitle = (newTitle: string, todoId: number) => {
-    if (!newTitle.length) {
-      setTodos(
-        todos.filter(todo => todo.id !== todoId),
-      );
+  const toggleAllHandler = useCallback(() => {
+    const areAllTodosCompleted = todos.every(todo => todo.completed);
 
-      return;
-    }
+    const allTodos = todos.map(todo => {
+      if (areAllTodosCompleted) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
 
+      if (!areAllTodosCompleted) {
+        return {
+          ...todo,
+          completed: true,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos([...allTodos]);
+  }, [todos]);
+
+  const toggleCompleteStatus = useCallback((todoId: number) => {
     setTodos(todos.map(todo => {
-      if (todo.id === todoId) {
+      if (todoId === todo.id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+
+      return todo;
+    }));
+  }, [todos]);
+
+  const editTitle = useCallback((todoId: number, newTitle: string) => {
+    const editedTodos = todos.map(todo => {
+      if (todoId === todo.id) {
         return {
           ...todo,
           title: newTitle,
@@ -53,42 +79,17 @@ export const TodoApp: FC = () => {
       }
 
       return todo;
-    }));
-  };
+    });
 
-  const toggleAll = () => {
-    const setAllCallback = (currentTodos: Todo[], value: boolean) => {
-      return currentTodos.map(todo => ({ ...todo, completed: value }));
-    };
+    setTodos([...editedTodos]);
+  }, [todos]);
 
-    if (!notCompletedTodos.length) {
-      setTodos(setAllCallback(todos, false));
-    } else {
-      setTodos(setAllCallback(todos, true));
-    }
-  };
-
-  const removeAllCompleted = () => {
+  const clearCompleted = useCallback(() => {
     setTodos(todos.filter(todo => !todo.completed));
-  };
+  }, [todos]);
 
-  const handlerSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (todoTitle) {
-      const newTodo = {
-        id: +new Date(),
-        title: todoTitle,
-        completed: false,
-      };
-
-      setTodos([...todos, newTodo]);
-      setTodoTitle('');
-    }
-  };
-
-  const filteredTodos = todos.filter(todo => {
-    switch (pathname) {
+  const filteredTodos = useMemo(() => todos.filter(todo => {
+    switch (location.pathname) {
       case FilterStatus.Active:
         return !todo.completed;
 
@@ -96,66 +97,54 @@ export const TodoApp: FC = () => {
         return todo.completed;
 
       default:
-        return true;
+        return FilterStatus.All;
     }
-  });
+  }), [todos, location]);
 
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={handlerSubmit}>
+        <form onSubmit={addTodo}>
           <input
             type="text"
             data-cy="createTodo"
             className="new-todo"
-            value={todoTitle}
             placeholder="What needs to be done?"
-            onChange={(event) => setTodoTitle(event.target.value)}
+            value={title}
+            onChange={event => {
+              setTitle(event.target.value);
+            }}
           />
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onClick={toggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <TodoList>
-          {filteredTodos.map(todo => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              changeToggleStatus={toggleTodoStatus}
-              removeTodo={removeTodo}
-              changeTodoTitle={changeTodoTitle}
+      {todos.length > 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={() => toggleAllHandler()}
             />
-          ))}
-        </TodoList>
-      </section>
-      {todos.length !== 0 && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${notCompletedTodos.length} items left`}
-          </span>
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <TodosFilter />
-          {completedTodos > 0 && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={removeAllCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            <TodoList
+              todos={filteredTodos}
+              deleteHandler={deleteHandler}
+              toggleCompleteStatus={toggleCompleteStatus}
+              editTitle={editTitle}
+            />
+          </section>
+
+          <TodosFilter
+            todos={todos}
+            clearCompleted={clearCompleted}
+          />
+        </>
       )}
     </div>
   );
