@@ -193,6 +193,13 @@ body {
   text-decoration: none;
 }
 
+.username {
+  /* position: absolute; */
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox
