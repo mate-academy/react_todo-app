@@ -3,7 +3,7 @@
 [DEMO LINK](https://bzozyurt.github.io/react_todo-app/)
 ![todoapp](./description/todoapp.gif)
 
- 
+
 ## Table of Contents
 * [Technologies Used](#technologies-used)
 * [Features](#features)
@@ -18,6 +18,8 @@ Project is created with:
 * CSS
 * JavaScript
 * React
+* React Router
+* React hooks
 * TypeScript
 
 ## Features
@@ -31,7 +33,16 @@ Project is created with:
 
 
 ## Setup
-To run this project, install it locally using npm:
+To run this project,
+
+1) Clone the repository:
+
+```
+git clone https://github.com/bzozyurt/react_todo-app.git
+
+```
+
+2) Install it locally using npm:
 
 ```
 $ npm install

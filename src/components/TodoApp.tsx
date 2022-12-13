@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../useLocalStorage';
-import { FilterMethods } from '../types/FilterMethods';
+import { FilterStatues } from '../types/FilterMethods';
 import { TodosFilter } from './TodosFilter';
 import { TodoList } from './TodoList';
 
@@ -11,9 +11,7 @@ export const TodoApp: React.FC = () => {
   const [title, setTitle] = useState('');
   const location = useLocation();
 
-  const completedTodos = todos.every(todo => todo.completed);
-
-  const submitHandler = useCallback(
+  const addTodo = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
@@ -30,20 +28,22 @@ export const TodoApp: React.FC = () => {
     }, [todos, title],
   );
 
-  const deleteHandler = (todoId: number) => {
+  const deleteHandler = useCallback((todoId: number) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
-  };
+  }, [todos]);
 
-  const toggleAllHandler = () => {
+  const toggleAllHandler = useCallback(() => {
+    const areAllTodosCompleted = todos.every(todo => todo.completed);
+
     const allTodos = todos.map(todo => {
-      if (completedTodos) {
+      if (areAllTodosCompleted) {
         return {
           ...todo,
           completed: !todo.completed,
         };
       }
 
-      if (!completedTodos) {
+      if (!areAllTodosCompleted) {
         return {
           ...todo,
           completed: true,
@@ -54,9 +54,9 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...allTodos]);
-  };
+  }, [todos]);
 
-  const toggleCompleteStatus = (todoId: number) => {
+  const toggleCompleteStatus = useCallback((todoId: number) => {
     setTodos(todos.map(todo => {
       if (todoId === todo.id) {
         return {
@@ -67,9 +67,9 @@ export const TodoApp: React.FC = () => {
 
       return todo;
     }));
-  };
+  }, [todos]);
 
-  const editTitle = (todoId: number, newTitle: string) => {
+  const editTitle = useCallback((todoId: number, newTitle: string) => {
     const editedTodos = todos.map(todo => {
       if (todoId === todo.id) {
         return {
@@ -82,22 +82,22 @@ export const TodoApp: React.FC = () => {
     });
 
     setTodos([...editedTodos]);
-  };
+  }, [todos]);
 
-  const clearCompleted = () => {
+  const clearCompleted = useCallback(() => {
     setTodos(todos.filter(todo => !todo.completed));
-  };
+  }, [todos]);
 
   const filteredTodos = useMemo(() => todos.filter(todo => {
     switch (location.pathname) {
-      case FilterMethods.Active:
+      case FilterStatues.Active:
         return !todo.completed;
 
-      case FilterMethods.Completed:
+      case FilterStatues.Completed:
         return todo.completed;
 
       default:
-        return FilterMethods.All;
+        return FilterStatues.All;
     }
   }), [todos, location]);
 
@@ -106,7 +106,7 @@ export const TodoApp: React.FC = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={submitHandler}>
+        <form onSubmit={addTodo}>
           <input
             type="text"
             data-cy="createTodo"

@@ -1,4 +1,4 @@
-export enum FilterMethods {
+export enum FilterStatues {
   All = '/',
   Active = '/active',
   Completed = '/completed',
