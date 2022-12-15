@@ -1,93 +1,210 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { useLocation } from 'react-router-dom';
+import { AuthUserContext } from './components/Auth/AuthUserContext';
+import { Header } from './components/Header/Header';
+import { Footer } from './components/Footer/Footer';
+import { TodoList } from './components/Todo/TodoList';
+// eslint-disable-next-line max-len
+import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { Errors } from './types/Errors';
+import { Filter } from './types/Filter';
+import { Todo } from './types/Todo';
+import {
+  getTodos,
+  addTodo,
+  removeTodo,
+  updateTodo,
+} from './api/todos';
+import { UserNavbar } from './components/Navbar/UserNavbar';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 export const App: React.FC = () => {
+  const user = useContext(AuthUserContext);
+  const newTodoField = useRef<HTMLInputElement>(null);
+  const location = useLocation();
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.NONE);
+  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [todosFiltered, setTodosFiltered] = useState<Todo[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [activeTodoID, setActiveTodoID] = useState<number[]>([]);
+
+  const showError = (message: Errors) => {
+    setIsError(true);
+    setErrorMessage(message);
+    setTimeout(() => setIsError(false), 3000);
+  };
+
+  const loadTodos = useCallback(async () => {
+    try {
+      if (user) {
+        const todosFromServer = await getTodos(user.id);
+
+        setTodos(todosFromServer);
+      }
+    } catch (e) {
+      showError(Errors.UNEXPECTED);
+    }
+  }, []);
+
+  const addNewTodo = async (title: string) => {
+    try {
+      if (user) {
+        const newTodo: Todo = {
+          id: 0,
+          userId: user.id,
+          completed: false,
+          title,
+        };
+
+        setActiveTodoID(currentTodoIds => [...currentTodoIds, newTodo.id]);
+        await addTodo(newTodo);
+        await loadTodos();
+        await setIsAdding(true);
+        setActiveTodoID([]);
+      }
+    } catch (e) {
+      showError(Errors.ADD);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const deleteTodo = async (todoId: number) => {
+    try {
+      setActiveTodoID(currentTodoIds => [...currentTodoIds, todoId]);
+      await removeTodo(todoId);
+      await loadTodos();
+      setActiveTodoID([]);
+    } catch (e) {
+      showError(Errors.DELETE);
+    }
+  };
+
+  const clearTodo = async () => {
+    try {
+      const completedTodos: Todo[] = await todos.filter(todo => todo.completed);
+
+      await completedTodos.map(async (todo: Todo) => {
+        setActiveTodoID(currentTodoIds => [...currentTodoIds, todo.id]);
+        await deleteTodo(todo.id);
+        await loadTodos();
+        setActiveTodoID([]);
+      });
+    } catch (e) {
+      showError(Errors.DELETE);
+    }
+  };
+
+  const changeTodo = async (
+    todo: Todo,
+    title: string,
+    completed: boolean,
+    toggleAll = false,
+  ) => {
+    try {
+      if (toggleAll) {
+        todos.filter((item) => !item.completed)
+          .map(item => {
+            return setActiveTodoID(currentTodoIds => {
+              return [...currentTodoIds, item.id];
+            });
+          });
+      } else {
+        setActiveTodoID(currentTodoIds => [...currentTodoIds, todo.id]);
+      }
+
+      await updateTodo({
+        ...todo,
+        title,
+        completed,
+      });
+      await loadTodos();
+      setActiveTodoID([]);
+    } catch (e) {
+      showError(Errors.UPDATE);
+    }
+  };
+
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+
+    loadTodos();
+  }, []);
+
+  useEffect(() => {
+    const todosVisable = todos.filter(todo => {
+      switch (location.pathname) {
+        case Filter.ACTIVE:
+          return !todo.completed;
+
+        case Filter.COMPLETED:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+
+    setTodosFiltered(todosVisable);
+  }, [todos, location]);
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <>
+      <UserNavbar
+        userName={user?.name}
+        userEmail={user?.email}
+      />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
+
+        <div className="todoapp__content">
+          <Header
+            newTodoField={newTodoField}
+            isAdding={isAdding}
+            addNewTodo={addNewTodo}
+            showError={showError}
+            todos={todos}
+            changeTodo={changeTodo}
           />
-        </form>
-      </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+          {todos.length > 0 && (
+            <>
+              <TodoList
+                todos={todosFiltered}
+                isAdding={isAdding}
+                onDelete={deleteTodo}
+                activeTodoID={activeTodoID}
+                changeTodo={changeTodo}
+                showError={showError}
+              />
+              <Footer
+                todos={todos}
+                onDelete={clearTodo}
+              />
+            </>
+          )}
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          {isError && (
+            <ErrorNotification
+              isError={isError}
+              error={errorMessage}
+              setIsError={setIsError}
+            />
+          )}
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        </div>
+      </div>
+    </>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
   );
 };
