@@ -2,6 +2,8 @@
 
 Simple TODO app working as described in (Features) below.
 
+https://mayuces.github.io/react_todo-app/
+
 ![todoapp](./description/todoapp.gif)
 
 ## Github flow
