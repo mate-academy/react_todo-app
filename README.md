@@ -20,7 +20,7 @@ It is a simple TODO app working as described below: (DEMO: [TODO app](https://Bi
 
 ## Technologies used for the project:
 
-- HTML
+- HTML 
 - CSS
 - JavaScript
 - Typescript
