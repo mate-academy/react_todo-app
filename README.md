@@ -14,7 +14,7 @@ It is a simple TODO app working as described below: (DEMO: [TODO app](https://Bi
 
 ## Instructions to run the project locally
 
-  1. `Clone` the project (git@github.com:Bibicutu/react_todo-app.git)
+  1. `Clone` the project (git@github.com/Bibicutu/react_todo-app.git)
   1. Run `npm install` to install the dependencies
   1. Run `npm start` to run a development server at http://localhost:3000 (If you need to stop the server press `ctrl + c` in the terminal window)
 
