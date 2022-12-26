@@ -22,13 +22,13 @@ export const TodoList: React.FC<Props> = ({
   loaderDeleating,
   loaderAllTodos,
 }) => {
-  const [isToggle, setIsToggle] = useState(false);
+  const [isToggleActive, setIsToggleActive] = useState(false);
   const [query, setQuery] = useState(todo.title);
 
   const onEdit = (todoTitle: string, value: Todo) => {
     if (query !== '' && query !== todoTitle) {
       changeTodo(value.id, { title: query });
-      setIsToggle(false);
+      setIsToggleActive(false);
     }
 
     if (query === '') {
@@ -38,10 +38,15 @@ export const TodoList: React.FC<Props> = ({
 
   const onEscape = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
-      setIsToggle(false);
+      setIsToggleActive(false);
       setQuery(todo.title);
     }
   };
+
+  const loaderVisibility: boolean = loaderDeleating.includes(todo.id)
+  || loaderAllTodos.includes(todo.id)
+  || loader === todo.id
+  || todo.id === 0;
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -63,7 +68,7 @@ export const TodoList: React.FC<Props> = ({
           />
         </label>
 
-        {isToggle ? (
+        {isToggleActive ? (
           <form
             onSubmit={(event) => {
               event.preventDefault();
@@ -89,7 +94,7 @@ export const TodoList: React.FC<Props> = ({
               data-cy="TodoTitle"
               className="todo__title"
               onDoubleClick={() => {
-                setIsToggle(true);
+                setIsToggleActive(true);
               }}
             >
               {query}
@@ -110,10 +115,7 @@ export const TodoList: React.FC<Props> = ({
         <div
           data-cy="TodoLoader"
           className={classNames('modal', 'overlay', {
-            'is-active': loaderDeleating.includes(todo.id)
-            || loaderAllTodos.includes(todo.id)
-            || loader === todo.id
-            || todo.id === 0,
+            'is-active': loaderVisibility,
           })}
         >
           <div className="modal-background has-background-white-ter" />
