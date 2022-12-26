@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Todo } from '../../types/Todo';
 import { TodoTitle } from '../../types/TodoTitle';
@@ -25,6 +25,8 @@ export const TodoList: React.FC<Props> = ({
   const [toggle, setToggle] = useState(false);
   const [query, setQuery] = useState(todo.title);
 
+  const { id, completed, title } = todo;
+
   const onEdit = (
     todoTitle: string, value: Todo,
   ) => {
@@ -41,47 +43,53 @@ export const TodoList: React.FC<Props> = ({
   const actionOnEscape = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       setToggle(false);
-      setQuery(todo.title);
+      setQuery(title);
     }
   };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onEdit(title, todo);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleOption = useCallback(() => {
+    changeTodo(id, { completed: !completed });
+  }, [todo]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <div
         data-cy="Todo"
         className={classNames('todo', {
-          'todo completed': todo.completed,
+          'todo completed': completed,
         })}
-        key={todo.id}
+        key={id}
       >
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
             type="checkbox"
             className="todo__status"
-            onChange={() => {
-              changeTodo(todo.id, { completed: !todo.completed });
-            }}
+            onChange={handleOption}
           />
         </label>
 
         {toggle ? (
           <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              onEdit(todo.title, todo);
-            }}
+            onSubmit={handleSubmit}
           >
             <input
               type="text"
               value={query}
               className="todo__title-field"
-              onChange={(event) => {
-                setQuery(event.target.value);
-              }}
+              onChange={handleChange}
               onKeyDown={actionOnEscape}
               onBlur={() => {
-                onEdit(todo.title, todo);
+                onEdit(title, todo);
               }}
             />
           </form>
@@ -103,7 +111,7 @@ export const TodoList: React.FC<Props> = ({
                 className="todo__remove"
                 data-cy="TodoDeleteButton"
                 onClick={() => {
-                  removeTodo(todo.id);
+                  removeTodo(id);
                 }}
               >
                 ×
@@ -115,10 +123,10 @@ export const TodoList: React.FC<Props> = ({
           className={classNames(
             'modal overlay',
             {
-              'is-active': isDeleting.includes(todo.id)
-                || isChangeAllTodos.includes(todo.id)
-                || loaderVisibility === todo.id
-                || todo.id === 0,
+              'is-active': isDeleting.includes(id)
+                || isChangeAllTodos.includes(id)
+                || loaderVisibility === id
+                || id === 0,
             },
           )}
         >

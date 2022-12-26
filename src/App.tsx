@@ -44,7 +44,7 @@ export const App: React.FC = () => {
   };
 
   const handleNewTodos = async () => {
-    if (!query.trim().length) {
+    if (!query.trim()) {
       handleError('Title can\'t be empty');
 
       return;
