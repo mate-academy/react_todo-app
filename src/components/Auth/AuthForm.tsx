@@ -11,7 +11,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [needToRegister, setNeedToRegister] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const saveUser = (user: User) => {
@@ -54,7 +54,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     event.preventDefault();
 
     setErrorMessage('');
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       if (needToRegister) {
@@ -65,14 +65,16 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     } catch (error) {
       setErrorMessage('Something went wrtong');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="box mt-5">
       <h1 className="title is-3">
-        {needToRegister ? 'You need to register' : 'Log in to open todos'}
+        {needToRegister
+          ? 'You need to register'
+          : 'Log in to open todos'}
       </h1>
 
       <div className="field">
@@ -82,7 +84,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
 
         <div
           className={classNames('control has-icons-left', {
-            'is-loading': loading,
+            'is-loading': isLoading,
           })}
         >
           <input
@@ -92,7 +94,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
               'is-danger': !needToRegister && errorMessage,
             })}
             placeholder="Enter your email"
-            disabled={loading || needToRegister}
+            disabled={isLoading || needToRegister}
             value={email}
             required
             onChange={e => setEmail(e.target.value)}
@@ -116,7 +118,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
 
           <div
             className={classNames('control has-icons-left', {
-              'is-loading': loading,
+              'is-loading': isLoading,
             })}
           >
             <input
@@ -128,7 +130,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
               placeholder="Enter your name"
               required
               minLength={4}
-              disabled={loading}
+              disabled={isLoading}
               value={name}
               onChange={e => setName(e.target.value)}
             />
@@ -148,10 +150,12 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
         <button
           type="submit"
           className={classNames('button is-primary', {
-            'is-loading': loading,
+            'is-loading': isLoading,
           })}
         >
-          {needToRegister ? 'Register' : 'Login'}
+          {needToRegister
+            ? 'Register'
+            : 'Login'}
         </button>
       </div>
     </form>

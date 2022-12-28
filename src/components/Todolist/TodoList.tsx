@@ -78,24 +78,23 @@ export const TodoList: React.FC<Props> = ({
           />
         </label>
 
-        {toggle ? (
-          <form
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="text"
-              value={query}
-              className="todo__title-field"
-              onChange={handleChange}
-              onKeyDown={actionOnEscape}
-              onBlur={() => {
-                onEdit(title, todo);
-              }}
-            />
-          </form>
-
-        )
-          : (
+        {toggle
+          ? (
+            <form
+              onSubmit={handleSubmit}
+            >
+              <input
+                type="text"
+                value={query}
+                className="todo__title-field"
+                onChange={handleChange}
+                onKeyDown={actionOnEscape}
+                onBlur={() => {
+                  onEdit(title, todo);
+                }}
+              />
+            </form>
+          ) : (
             <>
               <span
                 data-cy="TodoTitle"
