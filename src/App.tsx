@@ -1,93 +1,39 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import { FC, useContext } from 'react';
+import {
+  Navigate, Route, Routes, useMatch,
+} from 'react-router-dom';
+import { AuthForm } from './components/AuthForm/AuthForm';
+import { AuthContext } from './contexts/AuthContext';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { ToDosPage } from './pages/ToDosPage';
 
-export const App: React.FC = () => {
+export const App: FC = () => {
+  const { user, createSlug } = useContext(AuthContext);
+  const match = useMatch('/:userName');
+
+  const checkParam = () => {
+    const slug = createSlug(user?.name);
+
+    return !match || slug === match?.params.userName
+      ? <ToDosPage />
+      : <NotFoundPage />;
+  };
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <Routes>
+      <Route path="/">
+        <Route index element={<Navigate to="/login" replace />} />
+        <Route path="login" element={<AuthForm />} />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+        <Route path=":userName">
+          <Route index element={checkParam()} />
+          <Route path="all" element={<Navigate to="../" replace />} />
+          <Route path="active" element={<ToDosPage />} />
+          <Route path="completed" element={<ToDosPage />} />
+        </Route>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 };
