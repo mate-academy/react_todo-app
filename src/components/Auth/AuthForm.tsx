@@ -153,9 +153,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
             'is-loading': isLoading,
           })}
         >
-          {needToRegister
-            ? 'Register'
-            : 'Login'}
+          {needToRegister ? 'Register' : 'Login'}
         </button>
       </div>
     </form>

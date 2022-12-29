@@ -89,9 +89,10 @@ export const App: React.FC = () => {
 
       setIsLoaderVisibility(updatedTodo.id);
 
-      setTodos(prevState => (prevState.map((prev) => (prev.id === todoId
-        ? updatedTodo
-        : prev))
+      setTodos(prevState => (
+        prevState.map((prev) => (prev.id === todoId
+          ? updatedTodo
+          : prev))
       ));
     } catch (error) {
       handleError('Unable to update a todo');
