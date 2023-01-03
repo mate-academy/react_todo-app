@@ -1,93 +1,109 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { Main } from './components/main';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    const items = localStorage.getItem('todos');
+
+    if (!items) {
+      return;
+    }
+
+    setTodos(JSON.parse(items));
+  }, []);
+
+  const activeTodos = useMemo(() => {
+    return todos.filter(todo => !todo.completed);
+  }, [todos]);
+
+  const completedTodos = useMemo(() => {
+    return todos.filter(todo => todo.completed === true);
+  }, [todos]);
+
+  const removeTodo = useCallback((id: number) => {
+    const filteredTodos = todos.filter(todo => todo.id !== id);
+
+    localStorage.setItem('todos', JSON.stringify(filteredTodos));
+    setTodos(filteredTodos);
+  }, [todos]);
+
+  const toggleTodo = useCallback((id: number) => {
+    const toggledTodos = todos.map(todo => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return ({
+        ...todo,
+        completed: !todo.completed,
+      });
+    });
+
+    localStorage.setItem('todos', JSON.stringify(toggledTodos));
+    setTodos(toggledTodos);
+  }, [todos]);
+
+  const toggleAll = useCallback(() => {
+    let toggledTodos = todos;
+
+    if (completedTodos.length !== todos.length) {
+      toggledTodos = todos.map(todo => {
+        return { ...todo, completed: true };
+      });
+    } else {
+      toggledTodos = todos.map(todo => {
+        return { ...todo, completed: false };
+      });
+    }
+
+    localStorage.setItem('todos', JSON.stringify(toggledTodos));
+    setTodos(toggledTodos);
+  }, [todos]);
+
+  const updateTodo = useCallback((newTitle: string, id: number) => {
+    const updatedTodo = todos.map(todo => {
+      if (todo.id !== id) {
+        return todo;
+      }
+
+      return { ...todo, title: newTitle };
+    });
+
+    localStorage.setItem('todos', JSON.stringify(updatedTodo));
+    setTodos(updatedTodo);
+  }, [todos]);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <Header todos={todos} setTodos={setTodos} />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      {!!todos.length
+        && (
+          <>
+            <Main
+              todos={todos}
+              removeTodo={removeTodo}
+              activeTodos={activeTodos}
+              completedTodos={completedTodos}
+              toggleTodo={toggleTodo}
+              toggleAll={toggleAll}
+              updateTodo={updateTodo}
+            />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            <Footer
+              activeTodos={activeTodos}
+              completedTodos={completedTodos}
+              setTodos={setTodos}
+            />
+          </>
+        )}
     </div>
   );
 };
