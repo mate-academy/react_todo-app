@@ -65,7 +65,6 @@ export const App: React.FC = () => {
 
         setActiveTodoID(currentTodoIds => [...currentTodoIds, newTodo.id]);
         await addTodo(newTodo);
-        await loadTodos();
         await setIsAdding(true);
         setActiveTodoID([]);
       }
@@ -80,7 +79,6 @@ export const App: React.FC = () => {
     try {
       setActiveTodoID(currentTodoIds => [...currentTodoIds, todoId]);
       await removeTodo(todoId);
-      await loadTodos();
       setActiveTodoID([]);
     } catch (e) {
       showError(Errors.DELETE);
@@ -94,7 +92,6 @@ export const App: React.FC = () => {
       await completedTodos.map(async (todo: Todo) => {
         setActiveTodoID(currentTodoIds => [...currentTodoIds, todo.id]);
         await deleteTodo(todo.id);
-        await loadTodos();
         setActiveTodoID([]);
       });
     } catch (e) {
@@ -125,7 +122,6 @@ export const App: React.FC = () => {
         title,
         completed,
       });
-      await loadTodos();
       setActiveTodoID([]);
     } catch (e) {
       showError(Errors.UPDATE);
@@ -136,8 +132,6 @@ export const App: React.FC = () => {
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
-
-    loadTodos();
   }, []);
 
   useEffect(() => {
@@ -155,6 +149,8 @@ export const App: React.FC = () => {
     });
 
     setTodosFiltered(todosVisable);
+
+    loadTodos();
   }, [todos, location]);
 
   return (
