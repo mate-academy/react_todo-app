@@ -1,0 +1,14 @@
+@import "../../styles/utils/mixins";
+
+.auth-form-section {
+  height: 100vh;
+}
+
+.auth-form {
+  box-sizing: border-box;
+  margin: 0 auto;
+
+  @include onTablet {
+    width: 40%;
+  }
+}

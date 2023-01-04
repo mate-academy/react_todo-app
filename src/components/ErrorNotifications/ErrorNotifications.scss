@@ -1,0 +1,14 @@
+.error {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  max-width: 550px;
+  min-width: 230px;
+  margin: 0 auto;
+
+  background-color: white;
+  border-radius: 6px;
+  color: #f14668;
+  padding: 1.25rem;
+}

@@ -1,0 +1,52 @@
+.header {
+  position: relative;
+
+  &__toggle-all {
+    all: initial;
+
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    color: #e6e6e6;
+    cursor: pointer;
+    display: flex;
+    font-size: 24px;
+    height: 100%;
+    justify-content: center;
+    position: absolute;
+    width: 45px;
+
+    &.active {
+      color: #737373;
+    }
+
+    &:before {
+      content: "❯";
+      transform: translateY(2px) rotate(90deg);
+      line-height: 0;
+    }
+  }
+
+  &__input-new-todo {
+    width: 100%;
+    padding: 16px 16px 16px 60px !important;
+
+    font-size: 24px;
+    line-height: 1.4em;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    border: none;
+    background: rgba(0, 0, 0, 0.01);
+    box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+
+    &::placeholder {
+      font-style: italic;
+      font-weight: 300;
+      color: #e6e6e6;
+    }
+  }
+}

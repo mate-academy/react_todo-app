@@ -1,93 +1,112 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { ThreeDots } from 'react-loader-spinner';
+import { Route, Routes } from 'react-router-dom';
+import { getTodos } from './api/todos';
+import { AuthContext } from './components/Auth/AuthContext';
+import { ContextTextError } from './components/Context/ContextTextError';
+import { ContextTodos } from './components/Context/ContextTodos';
+import { ErrorNotifications } from './components/ErrorNotifications';
+import { HeaderForm } from './components/HeaderForm';
+import { TodoFilter } from './components/TodosFilter';
+import { ErrorType } from './types/ErrorType';
 
 export const App: React.FC = () => {
+  const { user } = useContext(AuthContext);
+  const { textError, setTextError } = useContext(ContextTextError);
+  const { todos, setTodos, isAddingTodo } = useContext(ContextTodos);
+  const { setUser } = useContext(AuthContext);
+
+  const userId = user?.id || 0;
+  const unCompletedTodos = useMemo(() => {
+    return [...todos].filter(todo => !todo.completed);
+  }, [todos]);
+  const completedTodos = useMemo(() => {
+    return [...todos].filter(todo => todo.completed);
+  }, [todos]);
+
+  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
+
+  useEffect(() => {
+    setIsLoadingTodos(true);
+    getTodos(userId)
+      .then((result) => setTodos(result))
+      .catch(() => setTextError(ErrorType.GET))
+      .finally(() => setIsLoadingTodos(false));
+  }, []);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
+      <div className="todoapp__log-out">
+        <span className="icon-text">
+          <span className="icon">
+            <i className="fas fa-user is-small" />
+          </span>
+          <span>{`Hello, ${user?.name}`}</span>
         </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
+        <button
+          type="button"
+          className="button is-outlined is-rounded"
+          onClick={() => {
+            localStorage.clear();
+            setUser(null);
+          }}
+        >
+          Log out
         </button>
-      </footer>
+      </div>
+      <h1 className="todoapp__title">todos</h1>
+
+      <div className="todoapp__content">
+        <HeaderForm unCompletedTodos={unCompletedTodos} />
+
+        {isLoadingTodos && (
+          <div className="todoapp__loader">
+            <ThreeDots
+              height="80"
+              width="80"
+              radius="9"
+              color="#af2f2f75"
+              ariaLabel="three-dots-loading"
+              visible
+            />
+          </div>
+        )}
+
+        {((todos?.length as number) > 0 || isAddingTodo) && (
+          <Routes>
+            <Route
+              path="/"
+              element={(
+                <TodoFilter
+                  unCompletedTodos={unCompletedTodos}
+                  completedTodos={completedTodos}
+                />
+              )}
+            />
+
+            <Route
+              path="/:filter"
+              element={(
+                <TodoFilter
+                  unCompletedTodos={unCompletedTodos}
+                  completedTodos={completedTodos}
+                />
+              )}
+            />
+          </Routes>
+
+        )}
+      </div>
+
+      {textError && (
+        <ErrorNotifications />
+      )}
     </div>
   );
 };
