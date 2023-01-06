@@ -95,6 +95,8 @@ export const App: React.FC = () => {
     todosUpdater(updatedTodos);
   };
 
+  const checkCompletedTodo = todos.filter(todo => todo.completed);
+
   return (
     <div className="todoapp">
       <Header>
@@ -136,9 +138,17 @@ export const App: React.FC = () => {
             <>
               <TodoCounter todos={todos} />
 
-              <Filters filterChange={filterChange} filter={filter} />
+              <Filters
+                filterChange={filterChange}
+                filter={filter}
+              />
 
-              <ClearCompleted todosUpdater={todosUpdater} todos={todos} />
+              {checkCompletedTodo.length > 0 && (
+                <ClearCompleted
+                  todosUpdater={todosUpdater}
+                  todos={todos}
+                />
+              )}
             </>
           </Footer>
         </>

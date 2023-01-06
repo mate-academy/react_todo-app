@@ -17,7 +17,10 @@ export const Filters: React.FC<Props> = ({ filterChange, filter }) => {
   };
 
   return (
-    <nav className="filters">
+    <nav
+      className="filters"
+      data-cy="todosFilter"
+    >
       <a
         id={Filter.All}
         href="#/"

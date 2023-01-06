@@ -105,7 +105,7 @@ export const TodoCard: React.FC<Props> = ({
         <form onBlur={handleBlur}>
           <input
             type="text"
-            className="todo__edit"
+            className="todo edit"
             placeholder="Empty todo will be deleted"
             value={titleQuery}
             onChange={(event) => {

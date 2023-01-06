@@ -18,17 +18,22 @@ export const ToggleAllTodos: React.FC<Props> = ({ todos, todoUpdater }) => {
   };
 
   return (
-    <button
-      type="button"
+    <label
       className={classNames(
-        'todoapp__toggle-all',
+        'todoapp__toggle-all-label',
         {
           active: uncompleted.length === 0,
-          'todoapp__toggle-all--hidden': !todos.length,
+          'todoapp__toggle-all-label--hidden': !todos.length,
         },
       )}
-      aria-label="Toggle All"
-      onClick={handleAllCompleted}
-    />
+    >
+      <input
+        type="checkbox"
+        data-cy="toggleAll"
+        className="todoapp__toggle-all"
+        aria-label="Toggle All"
+        onClick={handleAllCompleted}
+      />
+    </label>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import { Todo } from '../types/todo';
 
 type Props = {
@@ -11,8 +11,6 @@ export const ClearCompleted: React.FC<Props> = ({
   todos,
   todosUpdater,
 }) => {
-  const someCompletedTodo = todos.filter(todo => todo.completed);
-
   const handleCompletedDel = () => {
     return todosUpdater(todos.filter(todo => !todo.completed));
   };
@@ -20,10 +18,8 @@ export const ClearCompleted: React.FC<Props> = ({
   return (
     <button
       type="button"
-      className={classNames(
-        'todoapp__clear-completed',
-        { 'todoapp__clear-completed--hidden': !someCompletedTodo.length },
-      )}
+      data-cy="clearCompleted"
+      className="todoapp__clear-completed"
       onClick={handleCompletedDel}
     >
       Clear completed
