@@ -1,93 +1,142 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { ClearCompleted } from './ClearCompleted';
+import { Filters } from './Filters';
+import { Footer } from './Footer';
+import { Header } from './Header';
+import { HeaderInput } from './HeaderInput';
+import { HeaderTitle } from './HeaderTitle';
+import { Main } from './Main';
+import { TodoCard } from './TodoCard';
+import { TodoCounter } from './TodoCounter';
+import { TodoList } from './TodoList';
+import { ToggleAllTodos } from './ToggleAllTodos';
+import { Filter } from './types/Filter';
+import { Todo } from './types/todo';
+import {
+  getTodosFromLS,
+  uploadTodosToLS,
+} from './utils/LocalStorageManipulation';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef) {
+      inputRef.current?.focus();
+    }
+
+    // console.log('todos setted');
+    setTodos(getTodosFromLS());
+  }, []);
+
+  useEffect(() => {
+    // console.log('filtered');
+    let todosToFilter = [...todos];
+
+    if (filter !== 'All') {
+      todosToFilter = todosToFilter.filter(todo => {
+        switch (filter) {
+          case Filter.Active:
+            return !todo.completed;
+
+          case Filter.Completed:
+            return todo.completed;
+
+          default:
+            return true;
+        }
+      });
+    }
+
+    setVisibleTodos(todosToFilter);
+
+    return () => setVisibleTodos(todos);
+  }, [todos, filter]);
+
+  const todosUpdater = (todosToChange: Todo[]) => {
+    // console.log('some todo has updated');
+    uploadTodosToLS(todosToChange);
+    setTodos(todosToChange);
+  };
+
+  const filterChange = useCallback(
+    (todosFilter: Filter) => setFilter(todosFilter), [todos],
+  );
+
+  const createNewTodo = (title: string) => {
+    if (!title.trim()) {
+      return;
+    }
+
+    const newTodo = {
+      id: +new Date(),
+      completed: false,
+      title,
+    };
+
+    const updatedTodos = [...todos, newTodo];
+
+    todosUpdater(updatedTodos);
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      <Header>
+        <>
+          <HeaderTitle />
+          <ToggleAllTodos
+            todoUpdater={todosUpdater}
+            todos={todos}
           />
-        </form>
-      </header>
+          <HeaderInput
+            createNewTodo={createNewTodo}
+            inputRef={inputRef}
+          />
+        </>
+      </Header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length > 0 && (
+        <>
+          <Main>
+            <TodoList>
+              <>
+                {visibleTodos.map(todo => {
+                  const { id, title, completed } = todo;
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+                  return (
+                    <TodoCard
+                      key={id}
+                      id={id}
+                      title={title}
+                      completed={completed}
+                      todosUpdater={todosUpdater}
+                      todos={todos}
+                    />
+                  );
+                })}
+              </>
+            </TodoList>
+          </Main>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <Footer>
+            <>
+              <TodoCounter todos={todos} />
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+              <Filters filterChange={filterChange} filter={filter} />
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+              <ClearCompleted todosUpdater={todosUpdater} todos={todos} />
+            </>
+          </Footer>
+        </>
+      )}
     </div>
   );
 };
