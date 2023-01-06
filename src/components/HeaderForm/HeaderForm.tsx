@@ -11,10 +11,12 @@ import './HeaderForm.scss';
 
 type Props = {
   unCompletedTodos: Todo[],
+  loaderTodos: () => Promise<void>,
 };
 
 export const HeaderForm: React.FC<Props> = React.memo(({
   unCompletedTodos,
+  loaderTodos,
 }) => {
   const { user } = useContext(AuthContext);
   const userId = user?.id || 0;
@@ -59,16 +61,9 @@ export const HeaderForm: React.FC<Props> = React.memo(({
   };
 
   const createTodoOnServer = async () => {
-    const newTodo = {
-      id: +(new Date()),
-      title: newTodoTitle,
-      completed: false,
-      userId,
-    };
-
     try {
       await createNewTodo(newTodoTitle, userId);
-      setTodos((curentTodos) => [...curentTodos, newTodo]);
+      loaderTodos();
     } catch {
       setTextError(ErrorType.POST);
     } finally {

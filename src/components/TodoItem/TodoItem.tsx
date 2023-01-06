@@ -57,16 +57,17 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const changedTodoOnServer = async (
     updateTitle: string | null,
     updateCompleted: boolean | null,
+    todoId: number,
   ) => {
     try {
-      await changedTodo(id, updateTitle, updateCompleted);
+      await changedTodo(todoId, updateTitle, updateCompleted);
       setTodos(curentTodos => [...curentTodos].map(el => {
-        if (el.id === id) {
+        if (el.id === todoId) {
           if (updateCompleted !== null) {
             return { ...el, completed: !el.completed };
           }
 
-          if (updateTitle !== null) {
+          if (updateTitle) {
             return { ...el, title: updateTitle };
           }
         }
@@ -87,7 +88,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const handlerToggleClick = () => {
     setIsLoading(true);
     setSelectedTodoId(id);
-    changedTodoOnServer(null, !completed)
+    changedTodoOnServer(null, !completed, id)
       .finally(() => {
         setSelectedTodoId(null);
         setIsLoading(false);
@@ -111,7 +112,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     setIsEditing(false);
     setIsLoading(true);
     setSelectedTodoId(id);
-    changedTodoOnServer(newTitle, null)
+    changedTodoOnServer(newTitle, null, id)
       .finally(() => {
         setSelectedTodoId(null);
         setIsLoading(false);

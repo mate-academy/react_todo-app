@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -32,7 +33,7 @@ export const App: React.FC = () => {
 
   const [isLoadingTodos, setIsLoadingTodos] = useState(false);
 
-  const loaderTodos = async () => {
+  const loaderTodos = useCallback(async () => {
     try {
       const todosFromServer = await getTodos(userId);
 
@@ -42,7 +43,7 @@ export const App: React.FC = () => {
     } finally {
       setIsLoadingTodos(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     setIsLoadingTodos(true);
@@ -72,7 +73,10 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <HeaderForm unCompletedTodos={unCompletedTodos} />
+        <HeaderForm
+          unCompletedTodos={unCompletedTodos}
+          loaderTodos={loaderTodos}
+        />
 
         {isLoadingTodos && (
           <div className="todoapp__loader">
