@@ -1,11 +1,10 @@
 import classNames from 'classnames';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { deleteTodo, getTodos } from '../../api/todos';
+import { deleteTodo } from '../../api/todos';
 import { ErrorType } from '../../types/ErrorType';
 import { FilterType } from '../../types/FilterType';
 import { Todo } from '../../types/Todo';
-import { AuthContext } from '../Auth/AuthContext';
 import { ContextTextError } from '../Context/ContextTextError';
 import { ContextTodos } from '../Context/ContextTodos';
 import { ContextToggleAll } from '../Context/ContextToggleAll';
@@ -23,8 +22,6 @@ export const Footer: React.FC<Props> = React.memo(
   ({
     unCompletedTodos, completedTodos, setTypeOfFilter, typeOfFilter,
   }) => {
-    const { user } = useContext(AuthContext);
-    const userId = user?.id || 0;
     const { setTextError } = useContext(ContextTextError);
     const { setTodos } = useContext(ContextTodos);
     const { setIsToggleAllCompleted } = useContext(ContextToggleAll);
@@ -35,16 +32,20 @@ export const Footer: React.FC<Props> = React.memo(
       { title: 'Completed', value: FilterType.COMPLETED, to: '/completed' },
     ];
 
+    const deleteTodoOnServer = async (todoId: number) => {
+      try {
+        await deleteTodo(todoId);
+        setTodos((todos) => todos?.filter((todo) => todo.id !== todoId));
+      } catch {
+        setTextError(ErrorType.DELETE);
+      } finally {
+        setIsToggleAllCompleted(false);
+      }
+    };
+
     const handlerClearAllClick = () => {
       setIsToggleAllCompleted(true);
-      completedTodos?.map((todo) => deleteTodo(todo.id)
-        .then(() => {
-          getTodos(userId as number)
-            .then((todoFromServer) => setTodos(todoFromServer))
-            .catch(() => setTextError(ErrorType.GET));
-        })
-        .catch(() => setTextError(ErrorType.DELETE))
-        .finally(() => setIsToggleAllCompleted(false)));
+      completedTodos?.map((todo) => deleteTodoOnServer(todo.id));
     };
 
     return (
@@ -72,7 +73,7 @@ export const Footer: React.FC<Props> = React.memo(
         <button
           type="button"
           className={classNames('footer__clear-completed', {
-            hidden: completedTodos?.length === 0,
+            hidden: !completedTodos?.length,
           })}
           onClick={handlerClearAllClick}
         >

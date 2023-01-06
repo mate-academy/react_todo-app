@@ -32,12 +32,21 @@ export const App: React.FC = () => {
 
   const [isLoadingTodos, setIsLoadingTodos] = useState(false);
 
+  const loaderTodos = async () => {
+    try {
+      const todosFromServer = await getTodos(userId);
+
+      setTodos(todosFromServer);
+    } catch {
+      setTextError(ErrorType.GET);
+    } finally {
+      setIsLoadingTodos(false);
+    }
+  };
+
   useEffect(() => {
     setIsLoadingTodos(true);
-    getTodos(userId)
-      .then((result) => setTodos(result))
-      .catch(() => setTextError(ErrorType.GET))
-      .finally(() => setIsLoadingTodos(false));
+    loaderTodos();
   }, []);
 
   return (
@@ -78,7 +87,7 @@ export const App: React.FC = () => {
           </div>
         )}
 
-        {((todos?.length as number) > 0 || isAddingTodo) && (
+        {(todos?.length || isAddingTodo) && (
           <Routes>
             <Route
               path="/"

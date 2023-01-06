@@ -2,10 +2,9 @@ import classNames from 'classnames';
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { changedTodo, deleteTodo, getTodos } from '../../api/todos';
+import { changedTodo, deleteTodo } from '../../api/todos';
 import { ErrorType } from '../../types/ErrorType';
 import { Todo } from '../../types/Todo';
-import { AuthContext } from '../Auth/AuthContext';
 import { ContextTextError } from '../Context/ContextTextError';
 import { ContextTodos } from '../Context/ContextTodos';
 import { ContextToggleAll } from '../Context/ContextToggleAll';
@@ -19,9 +18,6 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const { title, completed, id } = todo;
-
-  const { user } = useContext(AuthContext);
-  const userId = user?.id || 0;
 
   const { setTextError } = useContext(ContextTextError);
   const { todos, setTodos, isAddingTodo } = useContext(ContextTodos);
@@ -46,30 +42,50 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   || (isToggleAllCompleted && completedTodosId.includes(id))
   || (isAddingTodo && id === 0);
 
+  const deleteTodoOnServer = async () => {
+    try {
+      await deleteTodo(id);
+      setTodos(curentTodos => [...curentTodos].filter(el => el.id !== id));
+    } catch {
+      setTextError(ErrorType.DELETE);
+    } finally {
+      setSelectedTodoId(null);
+      setIsLoading(false);
+    }
+  };
+
+  const changedTodoOnServer = async (
+    upDateTitle: string | null,
+    isCompleted: boolean | null,
+  ) => {
+    try {
+      await changedTodo(id, upDateTitle, isCompleted);
+      setTodos(curentTodos => [...curentTodos].map(el => {
+        if (upDateTitle && el.id === id) {
+          return { ...el, title: upDateTitle };
+        }
+
+        if (isCompleted && el.id === id) {
+          return { ...el, completed: !el.completed };
+        }
+
+        return el;
+      }));
+    } catch {
+      setTextError(ErrorType.PATCH);
+    }
+  };
+
   const handlerDeleteTodo = () => {
     setIsLoading(true);
     setSelectedTodoId(id);
-    deleteTodo(id)
-      .then(() => {
-        getTodos(userId as number)
-          .then(todoFromServer => setTodos(todoFromServer))
-          .catch(() => setTextError(ErrorType.GET));
-      })
-      .catch(() => setTextError(ErrorType.DELETE))
-      .finally(() => {
-        setSelectedTodoId(null);
-        setIsLoading(false);
-      });
+    deleteTodoOnServer();
   };
 
   const handlerToggleClick = () => {
     setIsLoading(true);
     setSelectedTodoId(id);
-    changedTodo(id, null, !completed)
-      .then(() => getTodos(userId as number)
-        .then(result => setTodos(result))
-        .catch(() => setTextError(ErrorType.GET)))
-      .catch(() => setTextError(ErrorType.PATCH))
+    changedTodoOnServer(null, true)
       .finally(() => {
         setSelectedTodoId(null);
         setIsLoading(false);
@@ -93,15 +109,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     setIsEditing(false);
     setIsLoading(true);
     setSelectedTodoId(id);
-
-    changedTodo(id, newTitle, null)
-      .then(() => {
-        getTodos(userId)
-          .then((data) => {
-            setTodos(data);
-          });
-      })
-      .catch(() => setTextError(ErrorType.PATCH))
+    changedTodoOnServer(newTitle, null)
       .finally(() => {
         setSelectedTodoId(null);
         setIsLoading(false);
@@ -157,11 +165,11 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
             placeholder="Empty todo will be deleted"
             value={newTitle}
             onBlur={() => handlerSubmitNewTitle()}
-            onChange={(event) => {
-              setNewTitle(event.target.value);
+            onChange={({ target }) => {
+              setNewTitle(target.value);
             }}
-            onKeyDown={(event) => {
-              switch (event.key) {
+            onKeyDown={({ key }) => {
+              switch (key) {
                 case 'Enter':
                   handlerSubmitNewTitle();
                   break;

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useContext, useState } from 'react';
-import { changedTodo, createNewTodo, getTodos } from '../../api/todos';
+import { changedTodo, createNewTodo } from '../../api/todos';
 import { ErrorType } from '../../types/ErrorType';
 import { Todo } from '../../types/Todo';
 import { AuthContext } from '../Auth/AuthContext';
@@ -37,6 +37,46 @@ export const HeaderForm: React.FC<Props> = React.memo(({
 
   const isAllCompleted = [...todos].every((todo) => todo.completed);
 
+  const changedTodoOnServer = async (isCompleted: boolean, todoId: number) => {
+    try {
+      await changedTodo(todoId, null, isCompleted);
+      setTodos(currentTodos => [...currentTodos].map((todo) => {
+        if (todo.id === todoId) {
+          return { ...todo, completed: !todo.completed };
+        }
+
+        return todo;
+      }));
+    } catch {
+      setTextError(ErrorType.PATCH);
+    } finally {
+      if (isCompleted) {
+        setIsToggleAllUnCompleted(false);
+      } else {
+        setIsToggleAllCompleted(false);
+      }
+    }
+  };
+
+  const createTodoOnServer = async () => {
+    const newTodo = {
+      id: +(new Date()),
+      title: newTodoTitle,
+      completed: false,
+      userId,
+    };
+
+    try {
+      await createNewTodo(newTodoTitle, userId);
+      setTodos((curentTodos) => [...curentTodos, newTodo]);
+    } catch {
+      setTextError(ErrorType.POST);
+    } finally {
+      setIsAddingTodo(false);
+      setNewTodoTitle('');
+    }
+  };
+
   const handlerFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsAddingTodo(true);
@@ -48,38 +88,18 @@ export const HeaderForm: React.FC<Props> = React.memo(({
     }
 
     setTitle(newTodoTitle);
-    createNewTodo(newTodoTitle, userId)
-      .then(() => {
-        getTodos(userId)
-          .then((result) => setTodos(result))
-          .catch(() => setTextError(ErrorType.GET));
-      })
-      .catch(() => setTextError(ErrorType.POST))
-      .finally(() => setIsAddingTodo(false));
-    setNewTodoTitle('');
+    createTodoOnServer();
   };
 
   const handlerToggleAllClick = () => {
     if (unCompletedTodos.length === 0) {
       setIsToggleAllCompleted(true);
-      [...todos].forEach((todo) => (
-        changedTodo(todo.id, null, false)
-          .then(() => getTodos(userId)
-            .then((result) => setTodos(result))
-            .catch(() => setTextError(ErrorType.GET)))
-          .catch(() => setTextError(ErrorType.PATCH))
-          .finally(() => setIsToggleAllCompleted(false))
-      ));
+      [...todos].forEach((todo) => changedTodoOnServer(false, todo.id));
     }
 
     unCompletedTodos.forEach(todo => {
       setIsToggleAllUnCompleted(true);
-      changedTodo(todo.id, null, true)
-        .then(() => getTodos(userId)
-          .then((result) => setTodos(result))
-          .catch(() => setTextError(ErrorType.GET)))
-        .catch(() => setTextError(ErrorType.PATCH))
-        .finally(() => setIsToggleAllUnCompleted(false));
+      changedTodoOnServer(true, todo.id);
     });
   };
 

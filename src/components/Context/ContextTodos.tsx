@@ -2,8 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type TodosContext = {
-  todos: Todo[] | [],
-  setTodos: (todos: Todo[] | []) => void,
+  todos: Todo[],
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   isAddingTodo: boolean,
   setIsAddingTodo: (isLoading: boolean) => void,
   title: string,
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const ContextTodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isAddingTodo, setIsAddingTodo] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
 
