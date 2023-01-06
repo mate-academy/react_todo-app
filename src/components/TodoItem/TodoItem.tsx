@@ -55,23 +55,25 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   };
 
   const changedTodoOnServer = async (
-    upDateTitle: string | null,
-    isCompleted: boolean | null,
+    updateTitle: string | null,
+    updateCompleted: boolean | null,
   ) => {
     try {
-      await changedTodo(id, upDateTitle, isCompleted);
+      await changedTodo(id, updateTitle, updateCompleted);
       setTodos(curentTodos => [...curentTodos].map(el => {
-        if (upDateTitle && el.id === id) {
-          return { ...el, title: upDateTitle };
-        }
+        if (el.id === id) {
+          if (updateCompleted !== null) {
+            return { ...el, completed: !el.completed };
+          }
 
-        if (isCompleted && el.id === id) {
-          return { ...el, completed: !el.completed };
+          if (updateTitle !== null) {
+            return { ...el, title: updateTitle };
+          }
         }
 
         return el;
       }));
-    } catch {
+    } catch (error) {
       setTextError(ErrorType.PATCH);
     }
   };
@@ -85,7 +87,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const handlerToggleClick = () => {
     setIsLoading(true);
     setSelectedTodoId(id);
-    changedTodoOnServer(null, true)
+    changedTodoOnServer(null, !completed)
       .finally(() => {
         setSelectedTodoId(null);
         setIsLoading(false);
