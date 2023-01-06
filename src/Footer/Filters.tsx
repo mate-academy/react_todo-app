@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Filter } from './types/Filter';
+import { Filter } from '../types/FilterEnum';
 
 type Props = {
   filterChange: (todoFilter: Filter) => void;

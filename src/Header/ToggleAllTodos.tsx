@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Todo } from './types/todo';
-import { statusChanger } from './utils/functions';
+import { Todo } from '../types/todo';
+import { statusChanger } from '../utils/functions';
 
 type Props = {
   todos: Todo[];
@@ -22,7 +22,10 @@ export const ToggleAllTodos: React.FC<Props> = ({ todos, todoUpdater }) => {
       type="button"
       className={classNames(
         'todoapp__toggle-all',
-        { active: uncompleted.length === 0 },
+        {
+          active: uncompleted.length === 0,
+          'todoapp__toggle-all--hidden': !todos.length,
+        },
       )}
       aria-label="Toggle All"
       onClick={handleAllCompleted}

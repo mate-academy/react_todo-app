@@ -4,27 +4,37 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { ClearCompleted } from './ClearCompleted';
-import { Filters } from './Filters';
-import { Footer } from './Footer';
-import { Header } from './Header';
-import { HeaderInput } from './HeaderInput';
-import { HeaderTitle } from './HeaderTitle';
-import { Main } from './Main';
-import { TodoCard } from './TodoCard';
-import { TodoCounter } from './TodoCounter';
-import { TodoList } from './TodoList';
-import { ToggleAllTodos } from './ToggleAllTodos';
-import { Filter } from './types/Filter';
+
+import {
+  Header,
+  HeaderInput,
+  HeaderTitle,
+  ToggleAllTodos,
+} from './Header';
+
+import {
+  TodoList,
+  TodoCard,
+} from './Main';
+
+import {
+  Footer,
+  Filters,
+  ClearCompleted,
+  TodoCounter,
+} from './Footer';
+
+import { Filter } from './types/FilterEnum';
 import { Todo } from './types/todo';
+
 import {
   getTodosFromLS,
   uploadTodosToLS,
-} from './utils/LocalStorageManipulation';
+} from './api/LocalStorageManipulation';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,12 +43,11 @@ export const App: React.FC = () => {
       inputRef.current?.focus();
     }
 
-    // console.log('todos setted');
     setTodos(getTodosFromLS());
+    setVisibleTodos(todos);
   }, []);
 
   useEffect(() => {
-    // console.log('filtered');
     let todosToFilter = [...todos];
 
     if (filter !== 'All') {
@@ -62,9 +71,8 @@ export const App: React.FC = () => {
   }, [todos, filter]);
 
   const todosUpdater = (todosToChange: Todo[]) => {
-    // console.log('some todo has updated');
-    uploadTodosToLS(todosToChange);
     setTodos(todosToChange);
+    uploadTodosToLS(todosToChange);
   };
 
   const filterChange = useCallback(
@@ -105,26 +113,24 @@ export const App: React.FC = () => {
 
       {todos.length > 0 && (
         <>
-          <Main>
-            <TodoList>
-              <>
-                {visibleTodos.map(todo => {
-                  const { id, title, completed } = todo;
+          <TodoList>
+            <>
+              {visibleTodos.map(todo => {
+                const { id, title, completed } = todo;
 
-                  return (
-                    <TodoCard
-                      key={id}
-                      id={id}
-                      title={title}
-                      completed={completed}
-                      todosUpdater={todosUpdater}
-                      todos={todos}
-                    />
-                  );
-                })}
-              </>
-            </TodoList>
-          </Main>
+                return (
+                  <TodoCard
+                    key={id}
+                    id={id}
+                    title={title}
+                    completed={completed}
+                    todosUpdater={todosUpdater}
+                    todos={todos}
+                  />
+                );
+              })}
+            </>
+          </TodoList>
 
           <Footer>
             <>

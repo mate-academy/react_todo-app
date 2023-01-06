@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import classNames from 'classnames';
-import { Todo } from './types/todo';
-import { titleChanger } from './utils/functions';
+import { Todo } from '../types/todo';
+import { titleChanger } from '../utils/functions';
 
 type Props = {
   id: number;
@@ -20,7 +20,6 @@ export const TodoCard: React.FC<Props> = ({
 }) => {
   const [todoOnEdit, setTodoOnEdit] = useState<Todo | null>(null);
   const [titleQuery, setTitleQuery] = useState<string>('');
-  // const todoEditRef = createRef(null);
 
   const callbackRef = useCallback((inputElement: HTMLInputElement) => {
     if (inputElement) {
@@ -29,11 +28,9 @@ export const TodoCard: React.FC<Props> = ({
   }, []);
 
   const handleCompletedChange = () => {
-    const todosCopy = [...todos];
-    const changedTodoIndex = todosCopy.findIndex(todo => todo.id === id);
-    const completedState = todosCopy[changedTodoIndex].completed;
-
-    todosCopy[changedTodoIndex].completed = !completedState;
+    const todosCopy = [...todos].map(todo => (
+      (todo.id === id) ? { ...todo, completed: !completed } : todo
+    ));
 
     return todosUpdater(todosCopy);
   };
@@ -61,7 +58,7 @@ export const TodoCard: React.FC<Props> = ({
         return;
       }
 
-      todosUpdater(titleChanger(todos, todoOnEdit.title, titleQuery));
+      todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
     }
 
     setTodoOnEdit(null);
@@ -84,7 +81,7 @@ export const TodoCard: React.FC<Props> = ({
       return;
     }
 
-    todosUpdater(titleChanger(todos, todoOnEdit.title, titleQuery));
+    todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
     setTodoOnEdit(null);
   };
 

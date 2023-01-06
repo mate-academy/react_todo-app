@@ -42,6 +42,7 @@
 
     &.active {
       color: #737373;
+      transition: color 0.4s;
     }
 
     &:before {
@@ -49,6 +50,10 @@
       transform: rotate(90deg);
       line-height: 0;
       cursor: pointer;
+    }
+
+    &--hidden {
+      visibility: hidden;
     }
   }
 

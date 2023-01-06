@@ -2,15 +2,16 @@ import { Todo } from '../types/todo';
 
 export const titleChanger = (
   todosToForm: Todo[],
-  oldTitle: string,
+  oldTodo: Todo,
   newTitle: string,
 ) => {
   if (!newTitle.trim()) {
-    return todosToForm.filter(todo => todo.title !== oldTitle);
+    return todosToForm
+      .filter(todo => todo.id !== oldTodo.id);
   }
 
   return todosToForm.map(todo => (
-    (todo.title === oldTitle) ? { ...todo, title: newTitle } : todo
+    (todo.id === oldTodo.id) ? { ...todo, title: newTitle } : todo
   ));
 };
 
