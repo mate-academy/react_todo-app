@@ -9,13 +9,11 @@ type Props = {
 
 export const FilterLink = React.memo<Props>(({ text, to }) => {
   return (
-    <li>
-      <NavLink
-        to={to}
-        className={({ isActive }) => classNames({ selected: isActive })}
-      >
-        {text}
-      </NavLink>
-    </li>
+    <NavLink
+      to={to}
+      className={({ isActive }) => classNames({ selected: isActive })}
+    >
+      {text}
+    </NavLink>
   );
 });

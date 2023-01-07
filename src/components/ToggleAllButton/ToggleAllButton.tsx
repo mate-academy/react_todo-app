@@ -11,20 +11,18 @@ export const ToggleAllButton = React.memo<Props>(({
   todos,
   completedTodos,
   toggleAll,
-}) => {
-  return (
-    <>
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        data-cy="toggleAll"
-        checked={completedTodos.length === todos.length}
-        onChange={toggleAll}
-      />
-      <label hidden={!todos.length} htmlFor="toggle-all">
-        Mark all as complete
-      </label>
-    </>
-  );
-});
+}) => (
+  <>
+    <input
+      type="checkbox"
+      id="toggle-all"
+      className="toggle-all"
+      data-cy="toggleAll"
+      checked={completedTodos.length === todos.length}
+      onChange={toggleAll}
+    />
+    <label hidden={!todos.length} htmlFor="toggle-all">
+      Mark all as complete
+    </label>
+  </>
+));

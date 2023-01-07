@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -7,6 +6,8 @@ type Props = {
   removeTodo: (id: number) => void;
   toggleTodo: (id: number) => void;
   updateTodo: (newTitle: string, id: number) => void;
+  updatedTodoId: number | null;
+  setUpdatedTodoId: (id: number | null) => void;
 };
 
 export const TodoItem = React.memo<Props>(({
@@ -14,9 +15,10 @@ export const TodoItem = React.memo<Props>(({
   removeTodo,
   toggleTodo,
   updateTodo,
+  updatedTodoId,
+  setUpdatedTodoId,
 }) => {
   const { title, completed, id } = todo;
-  const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(title);
   const todoToUpdate = useRef<HTMLInputElement>(null);
 
@@ -24,7 +26,7 @@ export const TodoItem = React.memo<Props>(({
     if (todoToUpdate.current) {
       todoToUpdate.current.focus();
     }
-  }, [isUpdated]);
+  }, [updatedTodoId]);
 
   const handleClick = () => {
     removeTodo(id);
@@ -35,7 +37,7 @@ export const TodoItem = React.memo<Props>(({
   };
 
   const handleDoubleClick = () => {
-    setIsUpdated(true);
+    setUpdatedTodoId(id);
   };
 
   const handleChangeTitle = (value: string) => {
@@ -44,23 +46,25 @@ export const TodoItem = React.memo<Props>(({
 
   const handleBlur = () => {
     if (newTitle === title) {
-      setIsUpdated(false);
+      setUpdatedTodoId(null);
 
       return;
     }
 
     if (!newTitle) {
       removeTodo(id);
-    } else {
-      updateTodo(newTitle, id);
+      setUpdatedTodoId(null);
+
+      return;
     }
 
-    setIsUpdated(false);
+    updateTodo(newTitle, id);
+    setUpdatedTodoId(null);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Escape') {
-      setIsUpdated(false);
+      setUpdatedTodoId(null);
 
       return;
     }
@@ -70,12 +74,9 @@ export const TodoItem = React.memo<Props>(({
     }
   };
 
+
   return (
-    <li className={classNames(
-      { editing: isUpdated },
-      { completed },
-    )}
-    >
+    <>
       <div className="view">
         <input
           type="checkbox"
@@ -98,7 +99,7 @@ export const TodoItem = React.memo<Props>(({
         />
       </div>
 
-      {isUpdated && (
+      {updatedTodoId === id && (
         <input
           type="text"
           className="edit"
@@ -110,6 +111,6 @@ export const TodoItem = React.memo<Props>(({
           style={{ outline: 'none' }}
         />
       )}
-    </li>
+    </>
   );
 });

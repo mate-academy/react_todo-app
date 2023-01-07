@@ -1,4 +1,5 @@
 import React from 'react';
+import { FilterType } from '../../types/FilterType';
 import { Todo } from '../../types/Todo';
 import { FilterLink } from '../FilterLink';
 
@@ -25,9 +26,17 @@ export const Footer = React.memo<Props>(({
       </span>
 
       <ul className="filters" data-cy="todosFilter">
-        <FilterLink text="All" to="/" />
-        <FilterLink text="Active" to="/active" />
-        <FilterLink text="Completed" to="/completed" />
+        <li>
+          <FilterLink text="All" to="/" />
+        </li>
+
+        <li>
+          <FilterLink text="Active" to={`/${FilterType.ACTIVE}`} />
+        </li>
+
+        <li>
+          <FilterLink text="Completed" to={`/${FilterType.COMPLETED}`} />
+        </li>
       </ul>
 
       {!!completedTodos.length
