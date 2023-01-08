@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "../utils/variables";
+
 .filters {
   display: flex;
 
@@ -13,17 +16,16 @@
     border-radius: 3px;
 
     &:hover {
-      border-color: rgba(175, 47, 47, 0.1);
+      border-color: map.get($colors, "filters-hover");
     }
 
     &.selected {
-      border-color: rgba(175, 47, 47, 0.2);
+      border-color: map.get($colors, "filters-selected");
     }
   }
-}
 
-@media (max-width: 430px) {
-  .filters {
+  @media (max-width: 430px) {
     bottom: 10px;
   }
 }
+

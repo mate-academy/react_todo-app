@@ -31,23 +31,15 @@ import {
   getTodosFromLS,
   uploadTodosToLS,
 } from './api/LocalStorageManipulation';
+import { Main } from './Main/Main';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(getTodosFromLS());
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (inputRef) {
-      inputRef.current?.focus();
-    }
-
-    setTodos(getTodosFromLS());
-    setVisibleTodos(todos);
-  }, []);
-
-  useEffect(() => {
+  const filteringMethod = useCallback(() => {
     let todosToFilter = [...todos];
 
     if (filter !== 'All') {
@@ -66,9 +58,17 @@ export const App: React.FC = () => {
     }
 
     setVisibleTodos(todosToFilter);
-
-    return () => setVisibleTodos(todos);
   }, [todos, filter]);
+
+  useEffect(() => {
+    if (inputRef) {
+      inputRef.current?.focus();
+    }
+
+    setTodos(getTodosFromLS());
+  }, []);
+
+  useEffect(() => filteringMethod(), [filteringMethod]);
 
   const todosUpdater = (todosToChange: Todo[]) => {
     setTodos(todosToChange);
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
   };
 
   const filterChange = useCallback(
-    (todosFilter: Filter) => setFilter(todosFilter), [todos],
+    (todosFilter: Filter) => setFilter(todosFilter), [filter],
   );
 
   const createNewTodo = (title: string) => {
@@ -115,24 +115,26 @@ export const App: React.FC = () => {
 
       {todos.length > 0 && (
         <>
-          <TodoList>
-            <>
-              {visibleTodos.map(todo => {
-                const { id, title, completed } = todo;
+          <Main>
+            <TodoList>
+              <>
+                {visibleTodos.map(todo => {
+                  const { id, title, completed } = todo;
 
-                return (
-                  <TodoCard
-                    key={id}
-                    id={id}
-                    title={title}
-                    completed={completed}
-                    todosUpdater={todosUpdater}
-                    todos={todos}
-                  />
-                );
-              })}
-            </>
-          </TodoList>
+                  return (
+                    <TodoCard
+                      key={id}
+                      id={id}
+                      title={title}
+                      completed={completed}
+                      todosUpdater={todosUpdater}
+                      todos={todos}
+                    />
+                  );
+                })}
+              </>
+            </TodoList>
+          </Main>
 
           <Footer>
             <>
@@ -143,7 +145,7 @@ export const App: React.FC = () => {
                 filter={filter}
               />
 
-              {checkCompletedTodo.length > 0 && (
+              {Boolean(checkCompletedTodo.length) && (
                 <ClearCompleted
                   todosUpdater={todosUpdater}
                   todos={todos}

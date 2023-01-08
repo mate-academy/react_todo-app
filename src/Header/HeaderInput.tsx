@@ -10,7 +10,6 @@ export const HeaderInput: React.FC<Props> = ({
   inputRef,
 }) => {
   const [query, setQuery] = useState('');
-  // двічі рендериться хедер інпут, треба з мемоізацією розібратися
 
   const handleTodoCreate = async (event: React.FormEvent) => {
     event.preventDefault();

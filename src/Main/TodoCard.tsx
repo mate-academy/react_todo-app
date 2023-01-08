@@ -85,9 +85,18 @@ export const TodoCard: React.FC<Props> = ({
     setTodoOnEdit(null);
   };
 
+  const isTodoInEdit = todoOnEdit && todoOnEdit.id === id;
+
   return (
-    <div
-      key={id}
+    // <div
+    //   key={id}
+    //   className={classNames(
+    //     'todo',
+    //     { completed },
+    //   )}
+    // >
+    <li
+      // key={id}
       className={classNames(
         'todo',
         { completed },
@@ -101,7 +110,7 @@ export const TodoCard: React.FC<Props> = ({
         />
       </label>
 
-      {todoOnEdit && todoOnEdit.id === id && (
+      {isTodoInEdit && (
         <form onBlur={handleBlur}>
           <input
             type="text"
@@ -136,6 +145,7 @@ export const TodoCard: React.FC<Props> = ({
           />
         </>
       )}
-    </div>
+    </li>
+    // </div>
   );
 };

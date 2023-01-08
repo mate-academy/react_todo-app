@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "../utils/variables";
+
 .todo {
   position: relative;
 
@@ -5,9 +8,9 @@
   grid-template-columns: 45px 1fr;
   justify-items: stretch;
 
-  font-size: 24px;
+  font-size: $typing-font-size;
   line-height: 1.4em;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid map.get($colors, "todo-border");
 
   &:last-child {
     border-bottom: none;
@@ -27,6 +30,11 @@
   &__toggle {
     opacity: 0;
     cursor: pointer;
+
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+      height: 40px;
+      background: none;
+    }
   }
 
   &__title {
@@ -37,7 +45,7 @@
   }
 
   &.completed &__title {
-    color: #d9d9d9;
+    color: map.get($colors, "completed-todo");
     text-decoration: line-through;
   }
 
@@ -51,7 +59,7 @@
     line-height: 1;
     font-family: inherit;
     font-weight: inherit;
-    color: #cc9a9a;
+    color: map.get($colors, "destroy-light");
 
     float: right;
     border: 0;
@@ -63,7 +71,7 @@
     transition: color 0.2s ease-out;
 
     &:hover {
-      color: #af5b5e;
+      color: map.get($colors, "destroy-hovered");
     }
 
     &:after {
@@ -87,8 +95,8 @@
     font-weight: inherit;
     color: inherit;
 
-    border: 1px solid #999;
-    box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid map.get($colors, "editForm-border");
+    box-shadow: inset 0 -1px 5px 0 map.get($shadows, "app-close");
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -96,28 +104,7 @@
     &::placeholder {
       font-style: italic;
       font-weight: 300;
-      color: #e6e6e6;
+      color: map.get($colors, "main-light");
     }
-  }
-
-  // .overlay {
-  //   position: absolute;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 0;
-  //   top: 0;
-
-  //   opacity: 0.5;
-  // }
-}
-
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox
-*/
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  .todo__toggle {
-    height: 40px;
-    background: none;
   }
 }

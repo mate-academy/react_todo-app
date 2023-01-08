@@ -1,0 +1,24 @@
+$typing-font-size: 24px;
+$shadows: (
+  "app-close": rgba(0, 0, 0, 0.2),
+  "app-long": rgba(0, 0, 0, 0.1),
+  "app-light": #f6f6f6,
+  "editForm-box": rgba(0, 0, 0, 0.03),
+);
+$colors: (
+  "title": rgba(175, 47, 47, 0.15),
+  "main-light": #e6e6e6,
+  "toggleAll-active": #737373,
+  "app-bg": #fff,
+  "footer": #777,
+  "editForm-bg": rgba(0, 0, 0, 0.01),
+  "todo-border": #ededed,
+  "completed-todo": #d9d9d9,
+  "destroy-light": #cc9a9a,
+  "destroy-hovered": #af5b5e,
+  "editForm-border": #999,
+  "filters-hover": rgba(175, 47, 47, 0.1),
+  "filters-selected": rgba(175, 47, 47, 0.2),
+  "body-bg": #f5f5f5,
+  "body-color": #4d4d4d,
+);

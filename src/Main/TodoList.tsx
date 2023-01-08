@@ -5,10 +5,10 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ children }) => (
-  <section
-    className="todoapp__main"
+  <ul
+    className="todoapp__list"
     data-cy="todosList"
   >
     {children}
-  </section>
+  </ul>
 );
