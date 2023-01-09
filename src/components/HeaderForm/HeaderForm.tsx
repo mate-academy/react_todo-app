@@ -11,12 +11,10 @@ import './HeaderForm.scss';
 
 type Props = {
   unCompletedTodos: Todo[],
-  loaderTodos: () => Promise<void>,
 };
 
 export const HeaderForm: React.FC<Props> = React.memo(({
   unCompletedTodos,
-  loaderTodos,
 }) => {
   const { user } = useContext(AuthContext);
   const userId = user?.id || 0;
@@ -62,8 +60,13 @@ export const HeaderForm: React.FC<Props> = React.memo(({
 
   const createTodoOnServer = async () => {
     try {
-      await createNewTodo(newTodoTitle, userId);
-      loaderTodos();
+      const todoOnServer: any | Todo = await createNewTodo(
+        newTodoTitle, userId,
+      );
+
+      const newTodo = { ...todoOnServer };
+
+      setTodos(curentTodos => [...curentTodos, newTodo]);
     } catch {
       setTextError(ErrorType.POST);
     } finally {
@@ -101,18 +104,20 @@ export const HeaderForm: React.FC<Props> = React.memo(({
   return (
     <header className="header">
       <form onSubmit={handlerFormSubmit}>
-        <label htmlFor="header__toggle-all">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className={classNames(
-              'header__toggle-all',
-              { active: isAllCompleted },
-            )}
-            data-cy="toggleAll"
-            onClick={handlerToggleAllClick}
-          />
-        </label>
+        {todos.length > 0 && (
+          <label htmlFor="header__toggle-all">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className={classNames(
+                'header__toggle-all',
+                { active: isAllCompleted },
+              )}
+              data-cy="toggleAll"
+              onClick={handlerToggleAllClick}
+            />
+          </label>
+        )}
 
         <input
           type="text"

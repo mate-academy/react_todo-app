@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
   useContext,
@@ -75,7 +74,6 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <HeaderForm
           unCompletedTodos={unCompletedTodos}
-          loaderTodos={loaderTodos}
         />
 
         {isLoadingTodos && (
