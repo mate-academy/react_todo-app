@@ -12,9 +12,7 @@ export const ToggleAllTodos: React.FC<Props> = ({ todos, todoUpdater }) => {
   const uncompleted = todos.filter(todo => !todo.completed);
 
   const handleAllCompleted = () => {
-    return uncompleted.length
-      ? todoUpdater(statusChanger(todos, false))
-      : todoUpdater(statusChanger(todos, true));
+    return todoUpdater(statusChanger(todos, !uncompleted.length));
   };
 
   return (

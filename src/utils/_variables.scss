@@ -1,24 +1,20 @@
 $typing-font-size: 24px;
-$shadows: (
-  "app-close": rgba(0, 0, 0, 0.2),
-  "app-long": rgba(0, 0, 0, 0.1),
-  "app-light": #f6f6f6,
-  "editForm-box": rgba(0, 0, 0, 0.03),
-);
-$colors: (
-  "title": rgba(175, 47, 47, 0.15),
-  "main-light": #e6e6e6,
-  "toggleAll-active": #737373,
-  "app-bg": #fff,
-  "footer": #777,
-  "editForm-bg": rgba(0, 0, 0, 0.01),
-  "todo-border": #ededed,
-  "completed-todo": #d9d9d9,
-  "destroy-light": #cc9a9a,
-  "destroy-hovered": #af5b5e,
-  "editForm-border": #999,
-  "filters-hover": rgba(175, 47, 47, 0.1),
-  "filters-selected": rgba(175, 47, 47, 0.2),
-  "body-bg": #f5f5f5,
-  "body-color": #4d4d4d,
-);
+$shadow-app-close: rgba(0, 0, 0, 0.2);
+$shadow-app-long: rgba(0, 0, 0, 0.1);
+$shadow-app-light: #f6f6f6;
+$shadow-editForm-box: rgba(0, 0, 0, 0.03);
+$color-title: rgba(175, 47, 47, 0.15);
+$color-main-light: #e6e6e6;
+$color-toggleAll-active: #737373;
+$color-app-bg: #fff;
+$color-footer: #777;
+$color-editForm-bg: rgba(0, 0, 0, 0.01);
+$color-todo-border: #ededed;
+$color-completed-todo: #d9d9d9;
+$color-destroy-light: #cc9a9a;
+$color-destroy-hovered: #af5b5e;
+$color-editForm-border: #999;
+$color-filters-hover: rgba(175, 47, 47, 0.1);
+$color-filters-selected: rgba(175, 47, 47, 0.2);
+$color-body-bg: #f5f5f5;
+$color-body: #4d4d4d;

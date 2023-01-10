@@ -1,12 +1,11 @@
-@use "sass:map";
 @import "../utils/variables";
 
 .todoapp {
-  background: (map.get($colors, "app-bg"));
+  background: $color-app-bg;
   margin: 130px 0 40px;
   position: relative;
-  box-shadow: 0 2px 4px 0 (map.get($shadows, "app-close")),
-    0 25px 50px 0 (map.get($shadows, "app-long"));
+  box-shadow: 0 2px 4px 0 $shadow-app-close,
+    0 25px 50px 0 $shadow-app-long;
 
   &__header {
     position: relative;
@@ -19,7 +18,7 @@
     font-size: 100px;
     font-weight: 100;
     text-align: center;
-    color: (map.get($colors, "title"));
+    color: $color-title;
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -37,14 +36,14 @@
     align-items: center;
 
     font-size: $typing-font-size;
-    color: (map.get($colors, "main-light"));
+    color: $color-main-light;
 
     border: 0;
     background-color: transparent;
     cursor: pointer;
 
     &.active {
-      color: (map.get($colors, "toggleAll-active"));
+      color: $color-toggleAll-active;
       transition: color 0.4s;
     }
 
@@ -82,8 +81,8 @@
     color: inherit;
     padding: 16px 16px 16px 60px;
     border: none;
-    background: (map.get($colors, "editForm-bg"));
-    box-shadow: inset 0 -2px 1px (map.get($shadows, "editForm-box"));
+    background: $color-editForm-bg;
+    box-shadow: inset 0 -2px 1px $shadow-editForm-box;
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -91,7 +90,7 @@
     &::placeholder {
       font-style: italic;
       font-weight: 300;
-      color: (map.get($colors, "main-light"));
+      color: $color-main-light;
     }
 
     &::-ms-input-placeholder,
@@ -99,14 +98,14 @@
     &::-webkit-input-placeholder {
       font-style: italic;
       font-weight: 300;
-      color: (map.get($colors, "main-light"));
+      color: $color-main-light;
     }
   }
 
   &__main {
     position: relative;
     z-index: 2;
-    border-top: 1px solid (map.get($colors, "main-light"));
+    border-top: 1px solid $color-main-light;
   }
 
   &__list {
@@ -119,11 +118,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: map.get($colors, "footer");
+    color: $color-footer;
     padding: 10px 15px;
     height: 20px;
     text-align: center;
-    border-top: 1px solid (map.get($colors, "main-light"));
+    border-top: 1px solid $color-main-light;
 
     &::before {
       content: "";
@@ -134,11 +133,11 @@
       z-index: -1;
       height: 50px;
       overflow: hidden;
-      box-shadow: 0 1px 1px (map.get($shadows, "app-close")),
-        0 8px 0 -3px (map.get($shadows, "app-light")),
-        0 9px 1px -3px (map.get($shadows, "app-close")),
-        0 16px 0 -6px (map.get($shadows, "app-light")),
-        0 17px 2px -6px (map.get($shadows, "app-close"));
+      box-shadow: 0 1px 1px $shadow-app-close,
+        0 8px 0 -3px $shadow-app-light,
+        0 9px 1px -3px $shadow-app-close,
+        0 16px 0 -6px $shadow-app-light,
+        0 17px 2px -6px $shadow-app-close;
     }
 
     @media (max-width: 430px) {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Props = {
-  children: JSX.Element;
+  children: JSX.Element[];
 };
 
 export const TodoList: React.FC<Props> = ({ children }) => (

@@ -13,6 +13,7 @@ import {
 } from './Header';
 
 import {
+  Main,
   TodoList,
   TodoCard,
 } from './Main';
@@ -31,7 +32,6 @@ import {
   getTodosFromLS,
   uploadTodosToLS,
 } from './api/LocalStorageManipulation';
-import { Main } from './Main/Main';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(getTodosFromLS());
@@ -42,7 +42,7 @@ export const App: React.FC = () => {
   const filteringMethod = useCallback(() => {
     let todosToFilter = [...todos];
 
-    if (filter !== 'All') {
+    if (filter !== Filter.All) {
       todosToFilter = todosToFilter.filter(todo => {
         switch (filter) {
           case Filter.Active:
@@ -113,26 +113,19 @@ export const App: React.FC = () => {
         </>
       </Header>
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <Main>
             <TodoList>
-              <>
-                {visibleTodos.map(todo => {
-                  const { id, title, completed } = todo;
-
-                  return (
-                    <TodoCard
-                      key={id}
-                      id={id}
-                      title={title}
-                      completed={completed}
-                      todosUpdater={todosUpdater}
-                      todos={todos}
-                    />
-                  );
-                })}
-              </>
+              {visibleTodos.map(todo => (
+                <React.Fragment key={todo.id}>
+                  <TodoCard
+                    todo={todo}
+                    todosUpdater={todosUpdater}
+                    todos={todos}
+                  />
+                </React.Fragment>
+              ))}
             </TodoList>
           </Main>
 
@@ -145,7 +138,7 @@ export const App: React.FC = () => {
                 filter={filter}
               />
 
-              {Boolean(checkCompletedTodo.length) && (
+              {!!checkCompletedTodo.length && (
                 <ClearCompleted
                   todosUpdater={todosUpdater}
                   todos={todos}

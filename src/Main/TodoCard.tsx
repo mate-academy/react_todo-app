@@ -4,22 +4,20 @@ import { Todo } from '../types/todo';
 import { titleChanger } from '../utils/functions';
 
 type Props = {
-  id: number;
-  completed: boolean;
-  title: string;
+  todo: Todo;
   todosUpdater: (prevState: Todo[]) => void;
   todos: Todo[];
 };
 
 export const TodoCard: React.FC<Props> = ({
-  id,
-  title,
-  completed,
+  todo,
   todosUpdater,
   todos,
 }) => {
   const [todoOnEdit, setTodoOnEdit] = useState<Todo | null>(null);
   const [titleQuery, setTitleQuery] = useState<string>('');
+
+  const { id, title, completed } = todo;
 
   const callbackRef = useCallback((inputElement: HTMLInputElement) => {
     if (inputElement) {
@@ -28,21 +26,21 @@ export const TodoCard: React.FC<Props> = ({
   }, []);
 
   const handleCompletedChange = () => {
-    const todosCopy = [...todos].map(todo => (
-      (todo.id === id) ? { ...todo, completed: !completed } : todo
+    const todosCopy = [...todos].map(oneTodo => (
+      (oneTodo.id === id) ? { ...oneTodo, completed: !completed } : oneTodo
     ));
 
     return todosUpdater(todosCopy);
   };
 
   const handleTodoDelete = () => {
-    const todoDelete = todos.filter(todo => todo.id !== id);
+    const todoDelete = todos.filter(oneTodo => oneTodo.id !== id);
 
     return todosUpdater(todoDelete);
   };
 
   const handleDBClick = () => {
-    const todoToEdit = todos.find(todo => todo.id === id);
+    const todoToEdit = todos.find(oneTodo => oneTodo.id === id);
 
     if (todoToEdit) {
       setTodoOnEdit(todoToEdit);
@@ -50,21 +48,17 @@ export const TodoCard: React.FC<Props> = ({
     }
   };
 
+  const handleEscapePress = () => setTodoOnEdit(null);
+
   const handleEnterPress = () => {
     if (todoOnEdit) {
-      if (todoOnEdit.title === titleQuery) {
-        setTodoOnEdit(null);
-
-        return;
+      if (todoOnEdit.title !== titleQuery) {
+        todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
       }
 
-      todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
+      handleEscapePress();
     }
-
-    setTodoOnEdit(null);
   };
-
-  const handleEscapePress = () => setTodoOnEdit(null);
 
   const handleTitleSubmit = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -82,21 +76,13 @@ export const TodoCard: React.FC<Props> = ({
     }
 
     todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
-    setTodoOnEdit(null);
+    handleEscapePress();
   };
 
-  const isTodoInEdit = todoOnEdit && todoOnEdit.id === id;
+  const isTodoOnEdit = todoOnEdit && todoOnEdit.id === id;
 
   return (
-    // <div
-    //   key={id}
-    //   className={classNames(
-    //     'todo',
-    //     { completed },
-    //   )}
-    // >
     <li
-      // key={id}
       className={classNames(
         'todo',
         { completed },
@@ -110,7 +96,7 @@ export const TodoCard: React.FC<Props> = ({
         />
       </label>
 
-      {isTodoInEdit && (
+      {isTodoOnEdit ? (
         <form onBlur={handleBlur}>
           <input
             type="text"
@@ -124,9 +110,7 @@ export const TodoCard: React.FC<Props> = ({
             onKeyDown={handleTitleSubmit}
           />
         </form>
-      )}
-
-      {!todoOnEdit && (
+      ) : (
         <>
           <span
             data-cy="TodoTitle"
@@ -146,6 +130,5 @@ export const TodoCard: React.FC<Props> = ({
         </>
       )}
     </li>
-    // </div>
   );
 };
