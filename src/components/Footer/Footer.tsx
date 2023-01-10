@@ -20,7 +20,10 @@ type Props = {
 
 export const Footer: React.FC<Props> = React.memo(
   ({
-    unCompletedTodos, completedTodos, setTypeOfFilter, typeOfFilter,
+    unCompletedTodos,
+    completedTodos,
+    setTypeOfFilter,
+    typeOfFilter,
   }) => {
     const { setTextError } = useContext(ContextTextError);
     const { setTodos } = useContext(ContextTodos);

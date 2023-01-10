@@ -2,6 +2,11 @@
   margin: 0;
   padding: 0;
   list-style: none;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 1px;
+  }
 }
 
 .item-enter {

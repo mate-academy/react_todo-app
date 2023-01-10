@@ -1,3 +1,5 @@
+@import '../../styles/utils/variables';
+
 .header {
   position: relative;
 
@@ -7,7 +9,7 @@
     align-items: center;
     background-color: transparent;
     border: 0;
-    color: #e6e6e6;
+    color: $placeholder-color;
     cursor: pointer;
     display: flex;
     font-size: 24px;
@@ -17,7 +19,7 @@
     width: 45px;
 
     &.active {
-      color: #737373;
+      color: $toggle-all-active-color;
     }
 
     &:before {
@@ -46,7 +48,7 @@
     &::placeholder {
       font-style: italic;
       font-weight: 300;
-      color: #e6e6e6;
+      color: $placeholder-color;
     }
   }
 }

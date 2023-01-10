@@ -1,3 +1,6 @@
+@import './utils/mixins';
+@import './utils/variables';
+
 * {
   margin: 0;
   padding: 0;
@@ -7,8 +10,8 @@
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
   position: relative;
   line-height: 1.4em;
-  background: #f5f5f5;
-  color: #4d4d4d;
+  background: $page-bg;
+  color: $primary-color;
   height: 100vh;
   margin: 0 auto;
   -webkit-font-smoothing: antialiased;
@@ -20,7 +23,7 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 24px;
   font-weight: 300;
-  color: #4d4d4d;
+  color: $primary-color;
   margin: 15px auto;
 
   &__log-out {
@@ -35,7 +38,7 @@
     max-width: 550px;
     min-width: 200px;
     margin: 0 auto 20px;
-    background: #fff;
+    background: $white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
       0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
@@ -45,7 +48,7 @@
     font-size: 100px;
     font-weight: 100;
     text-align: center;
-    color: rgba(175, 47, 47, 0.15);
+    color: $title-color;
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -62,7 +65,7 @@
 }
 
 .main {
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid $footer-border-top-color;
 }
 
 .hidden {
@@ -73,5 +76,5 @@
 .icon-text {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  color: #777;
+  color: $main-color;
 }

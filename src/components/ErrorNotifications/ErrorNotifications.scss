@@ -1,3 +1,5 @@
+@import '../../styles/utils/variables';
+
 .error {
   display: flex;
   justify-content: space-between;
@@ -7,8 +9,8 @@
   min-width: 200px;
   margin: 0 auto;
 
-  background-color: white;
+  background-color: $white;
   border-radius: 6px;
-  color: #f14668;
+  color: $error-color;
   padding: 1.25rem;
 }

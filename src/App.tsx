@@ -44,6 +44,11 @@ export const App: React.FC = () => {
     }
   }, [userId]);
 
+  const handlerClearLocalStorage = useCallback(() => {
+    localStorage.clear();
+    setUser(null);
+  }, []);
+
   useEffect(() => {
     setIsLoadingTodos(true);
     loaderTodos();
@@ -61,10 +66,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           className="button is-outlined is-rounded"
-          onClick={() => {
-            localStorage.clear();
-            setUser(null);
-          }}
+          onClick={handlerClearLocalStorage}
         >
           Log out
         </button>

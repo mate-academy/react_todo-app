@@ -1,15 +1,12 @@
+@import '../../styles/utils/variables';
+
 .todo-item {
   position: relative;
   font-size: 24px;
   border-bottom: 1px solid #ededed;
 
-  &:last-child {
-    border-bottom: none;
-    margin-bottom: 1px;
-  }
-
   &--completed {
-    color: #d9d9d9;
+    color: $todo-item-completed-color;
     text-decoration: line-through;
   }
 
@@ -59,7 +56,7 @@
     display: none;
     border: 0;
     bottom: 0;
-    color: #cc9a9a;
+    color: $desrtroy-color;
     cursor: pointer;
     float: right;
     font-family: inherit;
@@ -74,7 +71,7 @@
     transition: color 0.2s ease-out;
 
     &:hover {
-      color: #af5b5e;
+      color: $desrtroy-hover-color;
     }
 
     &::after {
@@ -98,15 +95,15 @@
     line-height: inherit;
     font-family: inherit;
     font-weight: inherit;
-    color: #777;
+    color: $main-color;
 
-    border: 1px solid #999;
+    border: 1px solid $edit-border-color;
     box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
 
     &::placeholder {
       font-style: italic;
       font-weight: 300;
-      color: #e6e6e6;
+      color: $placeholder-color;
     }
   }
 }

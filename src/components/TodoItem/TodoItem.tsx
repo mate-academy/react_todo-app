@@ -76,6 +76,9 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       }));
     } catch (error) {
       setTextError(ErrorType.PATCH);
+    } finally {
+      setSelectedTodoId(null);
+      setIsLoading(false);
     }
   };
 
@@ -88,11 +91,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const handlerToggleClick = () => {
     setIsLoading(true);
     setSelectedTodoId(id);
-    changedTodoOnServer(null, !completed, id)
-      .finally(() => {
-        setSelectedTodoId(null);
-        setIsLoading(false);
-      });
+    changedTodoOnServer(null, !completed, id);
   };
 
   const handlerSubmitNewTitle = () => {
@@ -112,12 +111,30 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     setIsEditing(false);
     setIsLoading(true);
     setSelectedTodoId(id);
-    changedTodoOnServer(newTitle, null, id)
-      .finally(() => {
-        setSelectedTodoId(null);
-        setIsLoading(false);
-        setSelectedTodoId(null);
-      });
+    changedTodoOnServer(newTitle, null, id);
+  };
+
+  const handlerFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handlerSubmitNewTitle();
+  };
+
+  const handlerKayDown = (key: string) => {
+    switch (key) {
+      case 'Enter':
+        handlerSubmitNewTitle();
+        break;
+      case 'Escape':
+        setIsEditing(false);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleronChange = (target: EventTarget & HTMLInputElement) => {
+    setNewTitle(target.value);
   };
 
   useEffect(() => {
@@ -156,34 +173,16 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
         />
       </div>
       {isEditing && (
-        <form onSubmit={(event) => {
-          event.preventDefault();
-          handlerSubmitNewTitle();
-        }}
-        >
+        <form onSubmit={handlerFormSubmit}>
           <input
             ref={newTitleField}
             type="text"
             className="todo-item__edit"
             placeholder="Empty todo will be deleted"
             value={newTitle}
-            onBlur={() => handlerSubmitNewTitle()}
-            onChange={({ target }) => {
-              setNewTitle(target.value);
-            }}
-            onKeyDown={({ key }) => {
-              switch (key) {
-                case 'Enter':
-                  handlerSubmitNewTitle();
-                  break;
-                case 'Escape':
-                  setIsEditing(false);
-                  break;
-
-                default:
-                  break;
-              }
-            }}
+            onBlur={handlerSubmitNewTitle}
+            onChange={({ target }) => handleronChange(target)}
+            onKeyDown={({ key }) => handlerKayDown(key)}
           />
         </form>
       )}

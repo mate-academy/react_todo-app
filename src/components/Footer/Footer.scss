@@ -1,3 +1,5 @@
+@import '../../styles/utils/variables';
+
 .footer {
   display: flex;
   justify-content: space-between;
@@ -9,14 +11,14 @@
 
   font-size: 14px;
 
-  color: #777;
+  color: $main-color;
   text-align: center;
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid $footer-border-top-color;
 
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
-    0 8px 0 -3px #f6f6f6,
+    0 8px 0 -3px $footer-box-shadow-color,
     0 9px 1px -3px rgba(0, 0, 0, 0.2),
-    0 16px 0 -6px #f6f6f6,
+    0 16px 0 -6px $footer-box-shadow-color,
     0 17px 2px -6px rgba(0, 0, 0, 0.2);
 
   @media (max-width: 430px) {
@@ -31,9 +33,9 @@
     height: 50px;
     overflow: hidden;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
-      0 8px 0 -3px #f6f6f6,
+      0 8px 0 -3px $footer-box-shadow-color,
       0 9px 1px -3px rgba(0, 0, 0, 0.2),
-      0 16px 0 -6px #f6f6f6,
+      0 16px 0 -6px $footer-box-shadow-color,
       0 17px 2px -6px rgba(0, 0, 0, 0.2);
   }
 
@@ -86,11 +88,11 @@
     border-radius: 3px;
 
     &:hover {
-      border-color: rgba(175, 47, 47, 0.1);
+      border-color: $filters-hover-border-color;
     }
 
     &.selected {
-      border-color: rgba(175, 47, 47, 0.2);
+      border-color: $filters-hover-border-color;
     }
   }
 }
