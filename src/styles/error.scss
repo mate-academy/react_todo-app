@@ -1,0 +1,45 @@
+.notification {
+  background-color: #feecf0;
+  color: #cc0f35;
+  border-radius: 4px;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+  position: relative;
+
+  &__delete {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    background-color: #0a0a0a33;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    min-height: 20px;
+    min-width: 20px;
+
+    &::before {
+      height: 2px;
+      width: 50%;
+      background-color: #fff;
+      content: "";
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    }
+    
+    &::after {
+      height: 50%;
+      width: 2px;
+      background-color: #fff;
+      content: "";
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    }
+    
+    &:hover {
+      background-color: #0a0a0a4d;
+    }
+  }
+}
