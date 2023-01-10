@@ -1,0 +1,109 @@
+@import "../../styles/utils/variables";
+
+.todo-item {
+  position: relative;
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
+
+  &--completed {
+    color: $todo-item-completed-color;
+    text-decoration: line-through;
+  }
+
+  &--editing {
+    border-bottom: none;
+    padding: 0;
+  }
+
+  &__toggle {
+    box-sizing: border-box;
+    text-align: center;
+    width: 40px;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    border: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    background-image: url("../../image/unchecked.svg");
+    background-repeat: no-repeat;
+    background-position: center left;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--completed {
+      background-image: url("../../image/checked.svg");
+    }
+  }
+
+  &__text {
+    word-break: break-all;
+    padding: 15px 15px 15px 60px;
+    display: block;
+    line-height: 1.2;
+    transition: color 0.4s;
+  }
+
+  &__destroy {
+    all: initial;
+
+    background: none;
+    display: none;
+    border: 0;
+    bottom: 0;
+    color: $desrtroy-color;
+    cursor: pointer;
+    float: right;
+    font-family: inherit;
+    font-size: 120%;
+    font-weight: inherit;
+    line-height: 1;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+    transition: color 0.2s ease-out;
+
+    &:hover {
+      color: $desrtroy-hover-color;
+    }
+
+    &::after {
+      content: "×";
+    }
+  }
+
+  &:hover &__destroy {
+    display: block;
+  }
+
+  &__edit {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 91%;
+    padding: 11px 14px;
+
+    font-size: inherit;
+    line-height: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    color: $main-color;
+
+    border: 1px solid $edit-border-color;
+    box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+
+    &::placeholder {
+      font-style: italic;
+      font-weight: 300;
+      color: $placeholder-color;
+    }
+  }
+}

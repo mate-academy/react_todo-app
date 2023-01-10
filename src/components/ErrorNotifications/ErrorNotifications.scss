@@ -1,0 +1,16 @@
+@import "../../styles/utils/variables";
+
+.error {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  max-width: 550px;
+  min-width: 200px;
+  margin: 0 auto;
+
+  background-color: $white;
+  border-radius: 6px;
+  color: $error-color;
+  padding: 1.25rem;
+}
