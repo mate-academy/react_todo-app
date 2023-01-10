@@ -24,7 +24,7 @@ export const App: React.FC = () => {
           className="toggle-all"
           data-cy="toggleAll"
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <label htmlFor="toggle-all">Mark all as complete and hello</label>
 
         <ul className="todo-list" data-cy="todoList">
           <li>
