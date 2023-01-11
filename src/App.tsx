@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   }, [todos]);
 
   const completedTodos: Todo[] = useMemo(() => {
-    return todos.filter((todo: Todo) => !!todo.completed);
+    return todos.filter((todo: Todo) => todo.completed);
   }, [todos]);
 
   const removeTodo = useCallback((id: number) => {
@@ -71,7 +71,7 @@ export const App: React.FC = () => {
 
         return completedTodos;
       default:
-        
+
         return todos;
     }
   }, [todos, filter]);

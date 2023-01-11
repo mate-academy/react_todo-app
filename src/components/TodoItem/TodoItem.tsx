@@ -74,7 +74,6 @@ export const TodoItem = React.memo<Props>(({
     }
   };
 
-
   return (
     <>
       <div className="view">
@@ -82,8 +81,8 @@ export const TodoItem = React.memo<Props>(({
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          onChange={handleChangeCompleted}
           checked={completed}
+          onChange={handleChangeCompleted}
         />
 
         <label onDoubleClick={handleDoubleClick}>
@@ -104,11 +103,11 @@ export const TodoItem = React.memo<Props>(({
           type="text"
           className="edit"
           value={newTitle}
+          ref={todoToUpdate}
+          style={{ outline: 'none' }}
           onChange={event => handleChangeTitle(event.target.value)}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          ref={todoToUpdate}
-          style={{ outline: 'none' }}
         />
       )}
     </>
