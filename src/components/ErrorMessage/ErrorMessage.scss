@@ -1,9 +1,18 @@
 .notification {
-  background-color: #feecf0;
-  color: #cc0f35;
-  border-radius: 4px;
-  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
   position: relative;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+  min-height: 36px;
+  color: #cc0f35;
+  background-color: #feecf0;
+  border-radius: 4px;
+  transition-property: opacity, min-height;
+  transition-duration: 1s;
+
+  &.hidden {
+    min-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
 
   &__delete {
     position: absolute;

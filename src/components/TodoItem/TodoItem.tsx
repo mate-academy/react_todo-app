@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Loading } from '../../types/Loading';
 import { Renaming } from '../../types/Renaming';
 import { Todo } from '../../types/Todo';
+import { Modal } from '../Modal';
 
 type Props = {
   todos: Todo[],
@@ -112,14 +113,10 @@ export const TodoItem: React.FC<Props> = (
               </>
             )}
 
-          <div
-            className={classNames(
-              'modal overlay',
-              { 'is-active': isLoading[todo.id] },
-            )}
-          >
-            <div className="loader" />
-          </div>
+          <Modal
+            isLoading={isLoading}
+            todoId={todo.id}
+          />
         </div>
       ))}
     </>
