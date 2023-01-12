@@ -2,12 +2,16 @@
 import React from 'react';
 
 export const App: React.FC = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             data-cy="createTodo"
