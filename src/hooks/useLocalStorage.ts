@@ -1,0 +1,39 @@
+import { useState } from 'react';
+
+type InitValue = string;
+
+export function useLocalStorage(
+  key: string,
+  initialValue: InitValue,
+) {
+  const [storedValue, setStoredValue] = useState(() => {
+    if (typeof window === 'undefined') {
+      return JSON.parse(initialValue);
+    }
+
+    try {
+      const item = window.localStorage.getItem(key);
+
+      return item ? JSON.parse(item) : JSON.parse(initialValue);
+    } catch (error) {
+      return JSON.parse(initialValue);
+    }
+  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const setValue = (value: any) => {
+    try {
+      const valueToStore
+        = value instanceof Function ? value(storedValue) : value;
+
+      setStoredValue(valueToStore);
+
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      }
+    } catch (error) {
+      // A more advanced implementation would handle the error case
+    }
+  };
+
+  return [storedValue, setValue];
+}
