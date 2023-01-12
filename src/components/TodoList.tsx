@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Todo } from '../types/Todo';
+import { generateKey } from '../utils/generateKey';
 import { TodoComponent } from './Todo/Todo';
 
 type Props = {
@@ -24,13 +25,9 @@ export const TodoList: FC<Props> = ({
       {visibleTodos.map((todo: Todo, index: number) => {
         const isCurrentClicked = index === clickedIndex;
 
-        const generateKey = (pre: number) => {
-          return `${pre + index}_${new Date().getTime()}`;
-        };
-
         return (
           <TodoComponent
-            key={generateKey(todo.id)}
+            key={generateKey(todo.id, index)}
             isCurrentClicked={isCurrentClicked}
             visibleTodos={visibleTodos}
             setVisibleTodos={setVisibleTodos}
