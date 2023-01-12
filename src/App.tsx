@@ -22,7 +22,10 @@ export const App: React.FC = () => {
         setData={setData}
       />
 
-      <Footer />
+      <Footer
+        data={data}
+        setData={setData}
+      />
     </div>
   );
 };

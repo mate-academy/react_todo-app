@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import classNames from 'classnames';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -8,12 +9,24 @@ type Props = {
 };
 
 export const Main: React.FC <Props> = ({ data, setData }) => {
-  const handleRemove = (id:number) => {
-    console.log(id);
+  const [checked, setChecked] = useState(false);
 
+  const handleRemove = (id:number) => {
     const newList = data.filter((item) => item.id !== id);
 
     setData(newList);
+  };
+
+  // const handleCheck = (id:number) => {
+  //   const newList = data.filter((todo) => todo.id === id);
+  //     console.log(newList)
+
+  //   setChecked(!checked);
+  // };
+
+  const handleCheck = () => {
+    setChecked(!checked);
+    console.log('clicked')
   };
 
   return (
@@ -30,7 +43,20 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
         {data.map(todo => (
           <li>
             <div className="view" key={todo.id}>
-              <input type="checkbox" className="toggle" id="toggle-view" />
+              <input
+                type="checkbox"
+                // name='checkbox {todo.id}'
+                // value={checked.{todo.id}}
+                // className={`${!checked ? 'toggle' : 'toggle completed'}`}
+                // className={`${!checked ? 'toggle' : 'toggle completed'}`}
+                className={classNames('toggle',
+                  { completed: checked })}
+                // onClick={() => {setChecked(!isChecked)}}
+                id="toggle-view"
+                // onChange={() => handleCheck(todo.id)}
+                onChange={handleCheck}
+                // checked={checked}
+              />
               <label htmlFor="toggle-view">{todo.title}</label>
               <button
                 type="button"
