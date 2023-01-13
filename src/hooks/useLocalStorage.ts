@@ -22,17 +22,13 @@ export function useLocalStorage(
   });
 
   const setValue = (value: Todo[]) => {
-    try {
-      const valueToStore
-        = value instanceof Function ? value(storedValue) : value;
+    const valueToStore
+      = value instanceof Function ? value(storedValue) : value;
 
-      setStoredValue(valueToStore);
+    setStoredValue(valueToStore);
 
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      }
-    } catch (error) {
-      // A more advanced implementation would handle the error case
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
     }
   };
 

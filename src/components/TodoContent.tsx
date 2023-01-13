@@ -30,7 +30,7 @@ export const TodoContent = () => {
   function onSubmitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setClickedIndex(visibleTodos.length);
-    const inputValue = newTodoField?.current?.value;
+    const inputValue = newTodoField?.current?.value.trim();
 
     if (!inputValue?.length) {
       setIsEmptyTitleErrorShown(true);

@@ -21,7 +21,7 @@ export const TodoList: FC<Props> = ({
   setTodos,
 }) => {
   return (
-    <section className="todoapp__main" data-cy="TodoList">
+    <ul className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map((todo: Todo, index: number) => (
         <TodoComponent
           key={generateKey(todo.id, index)}
@@ -36,6 +36,6 @@ export const TodoList: FC<Props> = ({
           setTodos={setTodos}
         />
       ))}
-    </section>
+    </ul>
   );
 };

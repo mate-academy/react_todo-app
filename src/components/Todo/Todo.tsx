@@ -31,6 +31,11 @@ export const TodoComponent: FC<Props> = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isTodoEditing, setIsTodoEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const {
+    title,
+    completed,
+    id,
+  } = todo;
 
   function updateCompletedStatus(
     prev: Todo[],
@@ -121,19 +126,19 @@ export const TodoComponent: FC<Props> = ({
 
   const onToggleTodo = () => {
     setClickedIndex(index);
-    handleToggleTodo(todo.id);
+    handleToggleTodo(id);
   };
 
   const onDeleteTodo = () => {
     setClickedIndex(index);
-    deleteTodoHandler(todo.id);
+    deleteTodoHandler(id);
   };
 
   let focusTimeout: ReturnType<typeof setTimeout> = setTimeout(() => {});
 
   const handleDoubleClick = () => {
     onDoubleClick(index);
-    setInputValue(todo.title);
+    setInputValue(title);
     setIsTodoEditing(true);
 
     focusTimeout = setTimeout(() => {
@@ -148,11 +153,11 @@ export const TodoComponent: FC<Props> = ({
   }, []);
 
   return (
-    <div
+    <li
       data-cy="Todo"
       className={classNames(
         'todo',
-        { completed: todo.completed },
+        { completed },
       )}
       onDoubleClick={handleDoubleClick}
     >
@@ -182,7 +187,7 @@ export const TodoComponent: FC<Props> = ({
         />
       ) : (
         <span data-cy="TodoTitle" className="todo__title">
-          {todo.title}
+          {title}
         </span>
       )}
 
@@ -197,6 +202,6 @@ export const TodoComponent: FC<Props> = ({
       >
         ×
       </button>
-    </div>
+    </li>
   );
 };
