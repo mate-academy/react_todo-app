@@ -32,25 +32,28 @@ export const ErrorNotification = () => {
   ]);
 
   return (
-    <div
-      data-cy="ErrorNotification"
-      className={classNames(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        { hidden: !isErrorShown },
+    <>
+      {isErrorShown && (
+        <div
+          data-cy="ErrorNotification"
+          className={classNames(
+            'notification',
+            'is-danger',
+            'is-light',
+            'has-text-weight-normal',
+          )}
+        >
+          <button
+            aria-label="delete"
+            type="button"
+            data-cy="HideErrorButton"
+            className="delete"
+            onClick={hideErrorHandler}
+          />
+          Title can`t be empty
+          <br />
+        </div>
       )}
-    >
-      <button
-        aria-label="delete"
-        type="button"
-        data-cy="HideErrorButton"
-        className="delete"
-        onClick={hideErrorHandler}
-      />
-      {!isClosePressed && isEmptyTitleErrorShown && 'Title can`t be empty'}
-      <br />
-    </div>
+    </>
   );
 };
