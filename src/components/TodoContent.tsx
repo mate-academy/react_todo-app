@@ -1,5 +1,6 @@
+import { useSearchParams } from 'react-router-dom';
 import {
-  FormEvent, useContext, useEffect, useRef, useState,
+  FormEvent, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { TodoList } from './TodoList';
 import { Footer } from './Footer';
@@ -7,19 +8,20 @@ import { Todo } from '../types/Todo';
 import { ToggleAllButton } from './ToggleAllButton';
 import { ErrorContext } from '../context/ErrorContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { FilterType } from '../types/filterType';
 
 export const TodoContent = () => {
+  const [searchParams] = useSearchParams();
   const [todos, setTodos] = useLocalStorage('todos', '[]');
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-
-  const {
-    setIsEmptyTitleErrorShown,
-  } = useContext(ErrorContext);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const { setIsEmptyTitleErrorShown } = useContext(ErrorContext);
 
   const newTodoField = useRef<HTMLInputElement>(null);
   const [clickedIndex, setClickedIndex] = useState(-1);
 
   useEffect(() => {
+    setVisibleTodos(todos);
+
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -30,7 +32,7 @@ export const TodoContent = () => {
     setClickedIndex(visibleTodos.length);
     const inputValue = newTodoField?.current?.value;
 
-    if (inputValue?.length === 0) {
+    if (!inputValue?.length) {
       setIsEmptyTitleErrorShown(true);
 
       return;
@@ -50,6 +52,30 @@ export const TodoContent = () => {
       newTodoField.current.value = '';
     }
   }
+
+  const filterType = useMemo(() => {
+    return searchParams.get('filter') || FilterType.All;
+  }, [searchParams]);
+
+  useEffect(() => {
+    switch (filterType) {
+      case FilterType.All:
+        setVisibleTodos(todos);
+
+        break;
+
+      case FilterType.Completed:
+        setVisibleTodos(todos.filter((todo: Todo) => todo.completed));
+        break;
+
+      case FilterType.Active:
+        setVisibleTodos(todos.filter((todo: Todo) => !todo.completed));
+        break;
+
+      default:
+        throw new Error('Wrong Type');
+    }
+  }, [filterType, todos]);
 
   return (
     <div className="todoapp__content">
@@ -83,12 +109,13 @@ export const TodoContent = () => {
         todos={todos}
       />
 
-      <Footer
-        setVisibleTodos={setVisibleTodos}
-        visibleTodos={visibleTodos}
-        todos={todos}
-        setTodos={setTodos}
-      />
+      {!!todos.length && (
+        <Footer
+          visibleTodos={visibleTodos}
+          todos={todos}
+          setTodos={setTodos}
+        />
+      )}
     </div>
   );
 };

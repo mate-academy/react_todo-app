@@ -22,24 +22,20 @@ export const TodoList: FC<Props> = ({
 }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {visibleTodos.map((todo: Todo, index: number) => {
-        const isCurrentClicked = index === clickedIndex;
-
-        return (
-          <TodoComponent
-            key={generateKey(todo.id, index)}
-            isCurrentClicked={isCurrentClicked}
-            visibleTodos={visibleTodos}
-            setVisibleTodos={setVisibleTodos}
-            clickedIndex={clickedIndex}
-            setClickedIndex={setClickedIndex}
-            todos={todos}
-            todo={todo}
-            index={index}
-            setTodos={setTodos}
-          />
-        );
-      })}
+      {visibleTodos.map((todo: Todo, index: number) => (
+        <TodoComponent
+          key={generateKey(todo.id, index)}
+          isCurrentClicked={index === clickedIndex}
+          visibleTodos={visibleTodos}
+          setVisibleTodos={setVisibleTodos}
+          clickedIndex={clickedIndex}
+          setClickedIndex={setClickedIndex}
+          todos={todos}
+          todo={todo}
+          index={index}
+          setTodos={setTodos}
+        />
+      ))}
     </section>
   );
 };

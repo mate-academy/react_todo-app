@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, {
-  FC, FormEvent, useRef, useState,
+  FC, FormEvent, useEffect, useRef, useState,
 } from 'react';
 import { Todo } from '../../types/Todo';
 import { EditForm } from './EditForm';
@@ -119,6 +119,34 @@ export const TodoComponent: FC<Props> = ({
     }
   };
 
+  const onToggleTodo = () => {
+    setClickedIndex(index);
+    handleToggleTodo(todo.id);
+  };
+
+  const onDeleteTodo = () => {
+    setClickedIndex(index);
+    deleteTodoHandler(todo.id);
+  };
+
+  let focusTimeout: ReturnType<typeof setTimeout> = setTimeout(() => {});
+
+  const handleDoubleClick = () => {
+    onDoubleClick(index);
+    setInputValue(todo.title);
+    setIsTodoEditing(true);
+
+    focusTimeout = setTimeout(() => {
+      if (inputRef) {
+        inputRef.current?.focus();
+      }
+    }, 0);
+  };
+
+  useEffect(() => {
+    return () => clearTimeout(focusTimeout);
+  }, []);
+
   return (
     <div
       data-cy="Todo"
@@ -126,16 +154,7 @@ export const TodoComponent: FC<Props> = ({
         'todo',
         { completed: todo.completed },
       )}
-      onDoubleClick={() => {
-        onDoubleClick(index);
-        setInputValue(todo.title);
-        setIsTodoEditing(true);
-        setTimeout(() => {
-          if (inputRef) {
-            inputRef.current?.focus();
-          }
-        }, 0);
-      }}
+      onDoubleClick={handleDoubleClick}
     >
       <label className={classNames(
         'todo__status-label',
@@ -147,10 +166,7 @@ export const TodoComponent: FC<Props> = ({
           type="checkbox"
           className="todo__status"
           defaultChecked
-          onClick={() => {
-            setClickedIndex(index);
-            handleToggleTodo(todo.id);
-          }}
+          onClick={onToggleTodo}
         />
       </label>
 
@@ -177,10 +193,7 @@ export const TodoComponent: FC<Props> = ({
           { hidden: isTodoEditing && index === clickedIndex },
         )}
         data-cy="TodoDeleteButton"
-        onClick={() => {
-          setClickedIndex(index);
-          deleteTodoHandler(todo.id);
-        }}
+        onClick={onDeleteTodo}
       >
         ×
       </button>

@@ -2,10 +2,6 @@ import classNames from 'classnames';
 import { useContext, useEffect, useState } from 'react';
 import { ErrorContext } from '../context/ErrorContext';
 
-enum ErrorMessage {
-  EmptyTitle = 'Title can`t be empty',
-}
-
 export const ErrorNotification = () => {
   const {
     isEmptyTitleErrorShown,
@@ -53,7 +49,7 @@ export const ErrorNotification = () => {
         className="delete"
         onClick={hideErrorHandler}
       />
-      {!isClosePressed && isEmptyTitleErrorShown && ErrorMessage.EmptyTitle}
+      {!isClosePressed && isEmptyTitleErrorShown && 'Title can`t be empty'}
       <br />
     </div>
   );

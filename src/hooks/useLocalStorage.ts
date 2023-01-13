@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Todo } from '../types/Todo';
 
 type InitValue = string;
 
@@ -19,8 +20,8 @@ export function useLocalStorage(
       return JSON.parse(initialValue);
     }
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const setValue = (value: any) => {
+
+  const setValue = (value: Todo[]) => {
     try {
       const valueToStore
         = value instanceof Function ? value(storedValue) : value;
