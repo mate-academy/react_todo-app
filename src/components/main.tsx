@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -9,24 +9,23 @@ type Props = {
 };
 
 export const Main: React.FC <Props> = ({ data, setData }) => {
-  const [checked, setChecked] = useState(false);
-
   const handleRemove = (id:number) => {
     const newList = data.filter((item) => item.id !== id);
 
     setData(newList);
   };
 
-  // const handleCheck = (id:number) => {
-  //   const newList = data.filter((todo) => todo.id === id);
-  //     console.log(newList)
+  const handleCheck = (id:number): void => {
+    setData(data.map(todo => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
 
-  //   setChecked(!checked);
-  // };
-
-  const handleCheck = () => {
-    setChecked(!checked);
-    console.log('clicked')
+      return todo;
+    }));
   };
 
   return (
@@ -41,23 +40,20 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
 
       <ul className="todo-list" data-cy="todoList">
         {data.map(todo => (
-          <li>
+          <li
+            className={classNames({ completed: todo.completed })}
+            data-id={todo.id}
+          >
             <div className="view" key={todo.id}>
               <input
                 type="checkbox"
-                // name='checkbox {todo.id}'
-                // value={checked.{todo.id}}
-                // className={`${!checked ? 'toggle' : 'toggle completed'}`}
-                // className={`${!checked ? 'toggle' : 'toggle completed'}`}
-                className={classNames('toggle',
-                  { completed: checked })}
-                // onClick={() => {setChecked(!isChecked)}}
+                className="toggle"
                 id="toggle-view"
-                // onChange={() => handleCheck(todo.id)}
-                onChange={handleCheck}
-                // checked={checked}
+                onChange={() => handleCheck(todo.id)}
               />
-              <label htmlFor="toggle-view">{todo.title}</label>
+              <label htmlFor="toggle-view">
+                {todo.title}
+              </label>
               <button
                 type="button"
                 className="destroy"

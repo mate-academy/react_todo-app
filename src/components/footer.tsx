@@ -3,12 +3,16 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   data:Todo[];
-  setData:any;
-
+  setData:(data: Todo[]) => void;
+  // setFilterTodos: (data: Todo[]) => void;
 };
 
-export const Footer: React.FC<Props> = ({ data, setData}) => {
-  const todosLeft = data.filter(todo => todo.completed === false);
+export const Footer: React.FC<Props>
+= ({
+  data, setData,
+}) => {
+  const hasNotCompletedTodos = data.filter(todo => todo.completed === false);
+  const hasCompleted = data.filter(todo => todo.completed === true);
 
   const handleClearCompleted = () => {
     const updatedTodoList = data.filter(todo => todo.completed === false);
@@ -16,33 +20,50 @@ export const Footer: React.FC<Props> = ({ data, setData}) => {
     setData(updatedTodoList);
   };
 
+  const handleClickAll = () => {
+    setData(data);
+  };
+
+  // const handleClickActive = () => {
+  //   setFilterTodos(hasNotCompletedTodos);
+  // };
+
+  // const handleClickCompleted = () => {
+  //   setFilterTodos(hasCompleted);
+  // };
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {todosLeft.length === 1 ? '1 item left' : `${todosLeft.length} items left`}
+        {hasNotCompletedTodos.length === 1 ? '1 item left' : `${hasNotCompletedTodos.length} items left`}
       </span>
 
       <ul className="filters">
         <li>
-          <a href="#/" className="selected">All</a>
+          <a href="#/" className="selected" onClick={handleClickAll}>All</a>
         </li>
 
         <li>
+          {/* <a href="#/active" onClick={handleClickActive}>Active</a> */}
           <a href="#/active">Active</a>
         </li>
 
         <li>
+          {/* <a href="#/completed" onClick={handleClickCompleted}>Completed</a> */}
           <a href="#/completed">Completed</a>
         </li>
       </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={handleClearCompleted}
-      >
-        Clear completed
-      </button>
+      {hasCompleted.length > 0 && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleClearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
+
     </footer>
   );
 };
