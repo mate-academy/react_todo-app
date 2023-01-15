@@ -26,21 +26,6 @@ export const Footer: React.FC<Props>
     setData(updatedTodoList);
   };
 
-  // function filterTodo(status: any) {
-  //   if (status === 'All') {
-  //     setFilterTodos(data);
-  //   }
-  // } else {
-  //   const newArrTodo = [...data].filter(item => item.status === status);
-
-  //   setFilterTodos(newArrTodo);
-  // }
-  // }
-
-  // useEffect(() => {
-  //   setFilterTodos(data);
-  // }, [data]);
-
   const handleClickAll = () => {
     setFilterTodos(data);
     setIsActiveActive(false);
@@ -72,10 +57,8 @@ export const Footer: React.FC<Props>
         <li>
           <a
             href="#/"
-            // className="selected"
             className={classNames({ selected: isActiveAll })}
             onClick={handleClickAll}
-            // onClick={() => filterTodo('All')}
           >
             All
           </a>
@@ -89,8 +72,6 @@ export const Footer: React.FC<Props>
           >
             Active
           </a>
-          {/* <a href="#/active" onClick={() => filterTodo(false)}>Active</a> */}
-          {/* <a href="#/active">Active</a> */}
         </li>
 
         <li>
@@ -101,7 +82,6 @@ export const Footer: React.FC<Props>
           >
             Completed
           </a>
-          {/* <a href="#/completed">Completed</a> */}
         </li>
       </ul>
 

@@ -21,11 +21,16 @@
 }
 
 .filters li a:hover {
-  border-color: rgba(175, 47, 47, 0.1);
+  /* border-color: rgba(175, 47, 47, 0.1); */
+  border-color: #7680ef58;
 }
 
 .filters li a.selected {
-  border-color: rgba(175, 47, 47, 0.2);
+  /* border-color: rgba(175, 47, 47, 0.2); */
+  /* border-color: #5bc3aeb6; */
+  /* border-color: #7680ef; */
+  background-color: #7680ef3a;
+  /* color: white; */
 }
 
 @media (max-width: 430px) {

@@ -43,7 +43,7 @@ export const Header: React.FC<Props>
 
   return (
     <header className="header">
-      <h1>todos</h1>
+      <h1>just do it.</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

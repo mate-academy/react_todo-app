@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
+import { FaRegEdit } from 'react-icons/fa';
 import React from 'react';
 import { Todo } from '../types/Todo';
 
@@ -28,43 +29,6 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     }));
   };
 
-  // const [edit, setEdit] = React.useState(true);
-
-  // function handleDoubleClick(id:number) {
-  //   setData(
-  //     data.map(todo => {
-  //       if (todo.id === id) {
-  //         setEdit(false);
-  //       }
-
-  //       return todo;
-  //     }),
-  //   ),
-  // }
-
-  // function handleDoubleClick(id:number) {
-  //   setData(
-  //     data.map(todo => {
-  //       if (todo.id === id) {
-  //         return setEdit(false);
-  //       }
-
-  //       return todo;
-  //     }),
-  //   ),
-  // }
-
-  // const handleBlur = () => {
-
-  // }
-
-  // const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-  //   if (e.key === 'Enter') {
-  //     e.preventDefault();
-  //     // handleSubmit();
-  //   }
-  // };
-
   return (
     <section className="main">
       <input
@@ -83,8 +47,9 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
             //   { completed: todo.completed }, { editing: edit === false },
             // )}
             data-id={todo.id}
+            key={todo.id}
           >
-            <div className="view" key={todo.id}>
+            <div className="view">
               <input
                 type="checkbox"
                 className="toggle"
@@ -94,6 +59,7 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
                 // autoFocus
                 // onClick={handleDoubleClick}
                 // onBlur={handleBlur}
+                checked={todo.completed}
               />
               <label
                 htmlFor="toggle-view"
@@ -107,6 +73,15 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
                 data-cy="deleteTodo"
                 onClick={() => handleRemove(todo.id)}
               />
+              <button
+                type="button"
+                className="change"
+                data-cy="deleteTodo"
+                // disabled={}
+                // onClick={() => handleRemove(todo.id)}
+              >
+                <FaRegEdit />
+              </button>
             </div>
             <input type="text" className="edit" />
           </li>

@@ -30,7 +30,7 @@ export const App: React.FC = () => {
         />
       )}
 
-      {filterTodos && (
+      {data.length > 0 && (
         <Footer
           data={data}
           setData={setData}
