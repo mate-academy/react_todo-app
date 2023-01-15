@@ -2,15 +2,15 @@ import classNames from 'classnames';
 import { Loading } from '../../types/Loading';
 
 type Props = {
-  isLoading: Loading;
+  loading: Loading;
   todoId: number;
 };
 
-export const Modal: React.FC<Props> = ({ isLoading, todoId }) => (
+export const Modal: React.FC<Props> = ({ loading, todoId }) => (
   <div
     className={classNames(
       'modal overlay',
-      { 'is-active': isLoading[todoId] },
+      { 'is-active': loading[todoId] },
     )}
   >
     <div className="modal__loader" />

@@ -7,11 +7,11 @@ import { Modal } from '../Modal';
 
 type Props = {
   todos: Todo[],
-  isLoading: Loading,
-  isRenaming: Renaming,
+  loading: Loading,
+  renaming: Renaming,
   handleMarkChange: (id: number, isCompleted: boolean) => void,
   handleDeleteTodoClick: (id: number) => void,
-  setIsRenaming: (obj: Renaming) => void,
+  setRenaming: (obj: Renaming) => void,
   handleRenamingSubmit: (
     e: React.FormEvent,
     id: number,
@@ -23,11 +23,11 @@ type Props = {
 export const TodoItem: React.FC<Props> = (
   {
     todos,
-    isLoading,
-    isRenaming,
+    loading,
+    renaming,
     handleMarkChange,
     handleDeleteTodoClick,
-    setIsRenaming,
+    setRenaming,
     handleRenamingSubmit,
   },
 ) => {
@@ -39,14 +39,14 @@ export const TodoItem: React.FC<Props> = (
     if (renamingField.current) {
       renamingField.current.focus();
     }
-  }, [isRenaming]);
+  }, [renaming]);
 
   const handleKeyUp = (keyCode: string) => {
     if (keyCode !== 'Escape') {
       return;
     }
 
-    setIsRenaming({});
+    setRenaming({});
   };
 
   return (
@@ -70,7 +70,7 @@ export const TodoItem: React.FC<Props> = (
             />
           </label>
 
-          {isRenaming[todo.id]
+          {renaming[todo.id]
             ? (
               <form
                 onSubmit={(e) => {
@@ -90,7 +90,7 @@ export const TodoItem: React.FC<Props> = (
                   placeholder="Empty todo will be deleted"
                   onChange={(e) => setTitleRenaming(e.target.value)}
                   onFocus={() => setTitleRenaming(todo.title)}
-                  onBlur={() => setIsRenaming({})}
+                  onBlur={() => setRenaming({})}
                   onKeyUp={(e) => handleKeyUp(e.code)}
                 />
               </form>
@@ -99,7 +99,7 @@ export const TodoItem: React.FC<Props> = (
               <>
                 <span
                   className="todo__title"
-                  onDoubleClick={() => setIsRenaming({ [todo.id]: true })}
+                  onDoubleClick={() => setRenaming({ [todo.id]: true })}
                 >
                   {todo.title}
                 </span>
@@ -114,7 +114,7 @@ export const TodoItem: React.FC<Props> = (
             )}
 
           <Modal
-            isLoading={isLoading}
+            loading={loading}
             todoId={todo.id}
           />
         </div>

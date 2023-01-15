@@ -1,6 +1,6 @@
 import React from 'react';
 import { Filter } from '../../types/Filters';
-import { FilterLink } from '../FilterLink';
+import { LinkItem } from '../LinkItem';
 
 type Props = {
   itemsLeft: number,
@@ -19,16 +19,16 @@ export const Footer: React.FC<Props> = ({
         {`${itemsLeft} items left`}
       </span>
 
-      <nav className="filter">
-        <FilterLink
+      <nav className="nav">
+        <LinkItem
           to={Filter.All}
           title="All"
         />
-        <FilterLink
+        <LinkItem
           to={Filter.Active}
           title="Active"
         />
-        <FilterLink
+        <LinkItem
           to={Filter.Completed}
           title="Completed"
         />

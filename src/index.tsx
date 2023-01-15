@@ -3,7 +3,7 @@ import { HashRouter as Router } from 'react-router-dom';
 
 import './styles/index.scss';
 
-import { App } from './App';
+import { App } from './components/App/App';
 import { AuthProvider } from './components/Auth/AuthContext';
 
 const Root = () => (

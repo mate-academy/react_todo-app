@@ -6,14 +6,14 @@ type Props = {
   title: string;
 };
 
-export const FilterLink: React.FC<Props> = ({ to, title }) => {
+export const LinkItem: React.FC<Props> = ({ to, title }) => {
   const location = useLocation().pathname;
 
   return (
     <Link
       to={to}
       className={classNames(
-        'filter__link',
+        'nav__link',
         { selected: location === to },
       )}
     >

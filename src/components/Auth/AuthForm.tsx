@@ -1,7 +1,8 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createUser, getUserByEmail } from '../../api/users';
 import { User } from '../../types/User';
+import { Storage } from '../../utils/storageService';
 
 export type Props = {
   onLogin: (user: User) => void,
@@ -15,12 +16,12 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const saveUser = (user: User) => {
-    localStorage.setItem('user', JSON.stringify(user));
+    Storage.set('user', user);
     onLogin(user);
   };
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
+    const userData = Storage.get('user');
 
     if (!userData) {
       return;

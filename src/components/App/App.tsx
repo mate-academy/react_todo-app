@@ -1,21 +1,16 @@
-import React, {
-  useCallback,
-  useContext, useEffect, useMemo, useState, useRef,
+import {
+  useCallback, useContext, useEffect, useMemo, useState, useRef,
 } from 'react';
 import { useLocation } from 'react-router-dom';
-import { AuthContext } from './components/Auth/AuthContext';
+
 import {
   getTodos, createTodo, updateTodo, deleteTodo,
-} from './api/todos';
-import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
-import { ErrorMessage } from './components/ErrorMessage';
-import { Footer } from './components/Footer';
-import { Todo } from './types/Todo';
-import { ErrorType } from './types/ErrorType';
-import { Loading } from './types/Loading';
-import { Renaming } from './types/Renaming';
-import { Filter } from './types/Filters';
+} from '../../api/todos';
+
+import {
+  AuthContext, Header, TodoList, ErrorMessage,
+  Footer, Todo, ErrorType, Loading, Renaming, Filter,
+} from './index';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -24,8 +19,8 @@ export const App: React.FC = () => {
   const [error, setError] = useState<ErrorType>(ErrorType.Clear);
   const [isAdding, setIsAdding] = useState(false);
   const [toggleAll, setToggleAll] = useState(false);
-  const [isLoading, setIsLoading] = useState<Loading>({});
-  const [isRenaming, setIsRenaming] = useState<Renaming>({});
+  const [loading, setLoading] = useState<Loading>({});
+  const [renaming, setRenaming] = useState<Renaming>({});
   const timerId = useRef(0);
   const location = useLocation().pathname;
 
@@ -68,13 +63,13 @@ export const App: React.FC = () => {
     ), [todos],
   );
 
-  const getIsLoading = (arrTodos: Todo[], loading: boolean) => {
-    const isLoadingObj: Loading = arrTodos.reduce((obj, { id }) => ({
+  const getIsLoading = (arrTodos: Todo[], isLoading: boolean) => {
+    const loadingObj: Loading = arrTodos.reduce((obj, { id }) => ({
       ...obj,
-      [id]: loading,
+      [id]: isLoading,
     }), {});
 
-    setIsLoading(isLoadingObj);
+    setLoading(loadingObj);
   };
 
   const itemsLeft = filteredByCompleted(false).length;
@@ -122,12 +117,12 @@ export const App: React.FC = () => {
     e.preventDefault();
 
     if (prevTitle === title) {
-      setIsRenaming({} as Renaming);
+      setRenaming({} as Renaming);
 
       return;
     }
 
-    setIsLoading({ [id]: true });
+    setLoading({ [id]: true });
 
     try {
       if (title === '') {
@@ -148,13 +143,13 @@ export const App: React.FC = () => {
         showError(ErrorType.Update);
       }
     } finally {
-      setIsRenaming({} as Renaming);
-      setIsLoading({} as Loading);
+      setRenaming({} as Renaming);
+      setLoading({} as Loading);
     }
   };
 
   const handleMarkChange = async (id: number, completed: boolean) => {
-    setIsLoading({ [id]: true });
+    setLoading({ [id]: true });
 
     try {
       await updateTodo(id, { completed: !completed });
@@ -165,12 +160,12 @@ export const App: React.FC = () => {
     } catch (err: unknown) {
       showError(ErrorType.Update);
     } finally {
-      setIsLoading({} as Loading);
+      setLoading({} as Loading);
     }
   };
 
   const handleDeleteTodoClick = async (id: number) => {
-    setIsLoading({ [id]: true });
+    setLoading({ [id]: true });
 
     try {
       await deleteTodo(id);
@@ -179,7 +174,7 @@ export const App: React.FC = () => {
     } catch (err: unknown) {
       showError(ErrorType.Delete);
     } finally {
-      setIsLoading({ [id]: false });
+      setLoading({ [id]: false });
     }
   };
 
@@ -260,11 +255,11 @@ export const App: React.FC = () => {
               todos={visibleTodos}
               tempTodo={tempTodo}
               todoTitle={todoTitle}
-              isLoading={isLoading}
-              isRenaming={isRenaming}
+              loading={loading}
+              renaming={renaming}
               handleMarkChange={handleMarkChange}
               handleDeleteTodoClick={handleDeleteTodoClick}
-              setIsRenaming={setIsRenaming}
+              setRenaming={setRenaming}
               handleRenamingSubmit={handleRenamingSubmit}
             />
 

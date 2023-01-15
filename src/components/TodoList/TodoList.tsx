@@ -9,11 +9,11 @@ type Props = {
   todos: Todo[],
   tempTodo: boolean,
   todoTitle: string,
-  isLoading: Loading,
-  isRenaming: Renaming,
+  loading: Loading,
+  renaming: Renaming,
   handleMarkChange: (id: number, isCompleted: boolean) => void,
   handleDeleteTodoClick: (id: number) => void,
-  setIsRenaming: (obj: Renaming) => void,
+  setRenaming: (obj: Renaming) => void,
   handleRenamingSubmit: (
     e: React.FormEvent,
     id: number,
@@ -28,21 +28,21 @@ export const TodoList: React.FC<Props> = React.memo(
     todos,
     tempTodo,
     todoTitle,
-    isLoading,
-    isRenaming,
+    loading,
+    renaming,
     handleMarkChange,
     handleDeleteTodoClick,
-    setIsRenaming,
+    setRenaming,
     handleRenamingSubmit,
   }) => (
     <section className="todoapp__main">
       <TodoItem
         todos={todos}
-        isLoading={isLoading}
-        isRenaming={isRenaming}
+        loading={loading}
+        renaming={renaming}
         handleMarkChange={handleMarkChange}
         handleDeleteTodoClick={handleDeleteTodoClick}
-        setIsRenaming={setIsRenaming}
+        setRenaming={setRenaming}
         handleRenamingSubmit={handleRenamingSubmit}
       />
 
