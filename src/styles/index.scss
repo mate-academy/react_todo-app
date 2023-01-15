@@ -1,0 +1,20 @@
+@import "../components/LinkItem/LinkItem";
+@import "../components/Modal/Modal";
+@import "../components/TodoItem/TodoItem";
+@import "../components/ErrorMessage/ErrorMessage";
+@import "../components/Auth/AuthForm";
+@import "./todo-app";
+
+* {
+  box-sizing: border-box;
+}
+
+iframe {
+  display: none;
+}
+
+body {
+  min-width: 230px;
+  max-width: 550px;
+  margin: 0 auto;
+}

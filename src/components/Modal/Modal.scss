@@ -1,0 +1,36 @@
+.modal {
+  align-items: center;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  position: fixed;
+  z-index: 40;
+  background-color: #f5f5f5;
+
+  &.is-active {
+    display: flex;
+  }
+
+  &__loader {
+    position: relative;
+    content: "";
+    display: block;
+    height: 1em;
+    width: 1em;
+    border-color: transparent transparent #dbdbdb #dbdbdb;
+    border-radius: 9999px;
+    border-style: solid;
+    border-width: 2px;
+    animation: spinAround 0.5s linear infinite;
+  }
+}
+
+@keyframes spinAround {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

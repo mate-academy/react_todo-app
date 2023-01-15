@@ -1,12 +1,18 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+import { HashRouter as Router } from 'react-router-dom';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+import './styles/index.scss';
 
-import { App } from './App';
+import { App } from './components/App/App';
+import { AuthProvider } from './components/Auth/AuthContext';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root'),
+const Root = () => (
+  <Router>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </Router>
 );
+
+createRoot(document.getElementById('root') as HTMLDivElement)
+  .render(<Root />);
