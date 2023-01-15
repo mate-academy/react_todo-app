@@ -31,6 +31,16 @@ export const Header: React.FC<Props>
     }
   };
 
+  // const toggleAll = () => {
+  //   if (todos && setTodos) {
+  //     setTodos(
+  //       todos.map(todo => {
+  //         return { ...todo, completed: !areAllCompleted };
+  //       }),
+  //     );
+  //   }
+  // };
+
   return (
     <header className="header">
       <h1>todos</h1>

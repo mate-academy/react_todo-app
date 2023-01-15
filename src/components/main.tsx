@@ -28,6 +28,43 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     }));
   };
 
+  // const [edit, setEdit] = React.useState(true);
+
+  // function handleDoubleClick(id:number) {
+  //   setData(
+  //     data.map(todo => {
+  //       if (todo.id === id) {
+  //         setEdit(false);
+  //       }
+
+  //       return todo;
+  //     }),
+  //   ),
+  // }
+
+  // function handleDoubleClick(id:number) {
+  //   setData(
+  //     data.map(todo => {
+  //       if (todo.id === id) {
+  //         return setEdit(false);
+  //       }
+
+  //       return todo;
+  //     }),
+  //   ),
+  // }
+
+  // const handleBlur = () => {
+
+  // }
+
+  // const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+  //   if (e.key === 'Enter') {
+  //     e.preventDefault();
+  //     // handleSubmit();
+  //   }
+  // };
+
   return (
     <section className="main">
       <input
@@ -42,6 +79,9 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
         {data.map(todo => (
           <li
             className={classNames({ completed: todo.completed })}
+            // className={classNames(
+            //   { completed: todo.completed }, { editing: edit === false },
+            // )}
             data-id={todo.id}
           >
             <div className="view" key={todo.id}>
@@ -50,8 +90,15 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
                 className="toggle"
                 id="toggle-view"
                 onChange={() => handleCheck(todo.id)}
+                // onKeyDown={handleKeyDown}
+                // autoFocus
+                // onClick={handleDoubleClick}
+                // onBlur={handleBlur}
               />
-              <label htmlFor="toggle-view">
+              <label
+                htmlFor="toggle-view"
+                // onDoubleClick={() => handleDoubleClick(todo.id)}
+              >
                 {todo.title}
               </label>
               <button
