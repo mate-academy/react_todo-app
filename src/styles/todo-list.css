@@ -92,6 +92,7 @@
   /* margin-bottom: 11px; */
   transition: all 0.2s ease-out;
   margin-top: 16px;
+  /* padding: 5px; */
 }
 
 .todo-list li .change:after {
@@ -133,6 +134,14 @@
 .todo-list li:hover .destroy {
   display: block;
 }
+
+/* .btn {
+  background-color: #af5b5e;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  align-items: center;
+} */
 
 /*
 	Hack to remove background from Mobile Safari.

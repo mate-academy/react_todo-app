@@ -1,15 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { FaRegEdit } from 'react-icons/fa';
-import React from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
   data:Todo[];
   setData:any;
+  // input: string;
+  // setInput: any
 };
 
 export const Main: React.FC <Props> = ({ data, setData }) => {
+  const [editTodo, setEditTodo] = useState(0);
+  const [editValue, setEditValue] = useState('');
+
   const handleRemove = (id:number) => {
     const newList = data.filter((item) => item.id !== id);
 
@@ -29,6 +34,63 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     }));
   };
 
+  // const handleToggleAll = () => {
+  //   setData(data.map(todo => {
+  //     return {
+  //       ...todo,
+  //       completed: !todo.completed,
+  //     };
+  //   }));
+  // };
+
+  const [isToggleAll, setIsToggleAll] = useState(false);
+
+  const handleToggleAll = () => {
+    setIsToggleAll(!isToggleAll);
+
+    if (isToggleAll) {
+      setData(data.map(todo => {
+        return {
+          ...todo,
+          completed: false,
+        };
+      }));
+    }
+
+    if (!isToggleAll) {
+      setData(data.map(todo => {
+        return {
+          ...todo,
+          completed: true,
+        };
+      }));
+    }
+
+    if (data.length === 0) {
+      setIsToggleAll(false);
+    }
+  };
+
+  const handleEdit = (id:number, title: string) => {
+    setEditTodo(id);
+    setEditValue(title);
+  };
+
+  const handleSubmitValue = (e: any, id:number) => {
+    const newValue = [...data].map(todo => {
+      if (todo.id === id) {
+        todo.title = editValue;
+      }
+
+      return todo;
+    });
+
+    if (e.key === 'Enter') {
+      setData(newValue);
+      setEditTodo(0);
+    }
+  };
+
   return (
     <section className="main">
       <input
@@ -36,18 +98,21 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        onChange={handleToggleAll}
+        checked={isToggleAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
         {data.map(todo => (
           <li
-            className={classNames({ completed: todo.completed })}
-            // className={classNames(
-            //   { completed: todo.completed }, { editing: edit === false },
-            // )}
+            // className={classNames({ completed: todo.completed })}
+            className={classNames(
+              { completed: todo.completed }, { editing: editTodo === todo.id },
+            )}
             data-id={todo.id}
             key={todo.id}
+
           >
             <div className="view">
               <input
@@ -55,35 +120,38 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
                 className="toggle"
                 id="toggle-view"
                 onChange={() => handleCheck(todo.id)}
-                // onKeyDown={handleKeyDown}
-                // autoFocus
-                // onClick={handleDoubleClick}
-                // onBlur={handleBlur}
                 checked={todo.completed}
+                value={editValue}
               />
               <label
                 htmlFor="toggle-view"
-                // onDoubleClick={() => handleDoubleClick(todo.id)}
+
               >
                 {todo.title}
               </label>
               <button
                 type="button"
-                className="destroy"
+                className="destroy btn"
                 data-cy="deleteTodo"
                 onClick={() => handleRemove(todo.id)}
               />
               <button
                 type="button"
-                className="change"
+                className="change btn"
                 data-cy="deleteTodo"
                 // disabled={}
-                // onClick={() => handleRemove(todo.id)}
+                onClick={() => handleEdit(todo.id, todo.title)}
               >
                 <FaRegEdit />
               </button>
             </div>
-            <input type="text" className="edit" />
+            <input
+              type="text"
+              className="edit"
+              value={editValue}
+              onChange={(event) => setEditValue(event.target.value)}
+              onKeyDown={(e) => handleSubmitValue(e, todo.id)}
+            />
           </li>
 
         ))}

@@ -27,6 +27,8 @@ export const App: React.FC = () => {
         <Main
           data={filterTodos}
           setData={setData}
+          // input={input}
+          // setInput={setInput}
         />
       )}
 
