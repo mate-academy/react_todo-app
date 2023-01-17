@@ -3,9 +3,9 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   input: string;
-  setInput: any
+  setInput:(input: string) => void ;
   data:Todo[];
-  setData:any;
+  setData:(data: Todo[]) => void;
 
 };
 
@@ -31,19 +31,9 @@ export const Header: React.FC<Props>
     }
   };
 
-  // const toggleAll = () => {
-  //   if (todos && setTodos) {
-  //     setTodos(
-  //       todos.map(todo => {
-  //         return { ...todo, completed: !areAllCompleted };
-  //       }),
-  //     );
-  //   }
-  // };
-
   return (
     <header className="header">
-      <h1>just do it.</h1>
+      <h1>Todos</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

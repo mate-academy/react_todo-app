@@ -6,14 +6,13 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   data:Todo[];
-  setData:any;
-  // input: string;
-  // setInput: any
+  setData:(data: Todo[]) => void;
 };
 
 export const Main: React.FC <Props> = ({ data, setData }) => {
   const [editTodo, setEditTodo] = useState(0);
   const [editValue, setEditValue] = useState('');
+  const [isToggleAll, setIsToggleAll] = useState(false);
 
   const handleRemove = (id:number) => {
     const newList = data.filter((item) => item.id !== id);
@@ -34,17 +33,6 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     }));
   };
 
-  // const handleToggleAll = () => {
-  //   setData(data.map(todo => {
-  //     return {
-  //       ...todo,
-  //       completed: !todo.completed,
-  //     };
-  //   }));
-  // };
-
-  const [isToggleAll, setIsToggleAll] = useState(false);
-
   const handleToggleAll = () => {
     setIsToggleAll(!isToggleAll);
 
@@ -64,10 +52,6 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
           completed: true,
         };
       }));
-    }
-
-    if (data.length === 0) {
-      setIsToggleAll(false);
     }
   };
 
@@ -106,7 +90,6 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
       <ul className="todo-list" data-cy="todoList">
         {data.map(todo => (
           <li
-            // className={classNames({ completed: todo.completed })}
             className={classNames(
               { completed: todo.completed }, { editing: editTodo === todo.id },
             )}
@@ -131,15 +114,15 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
               </label>
               <button
                 type="button"
-                className="destroy btn"
+                className="destroy"
                 data-cy="deleteTodo"
                 onClick={() => handleRemove(todo.id)}
               />
               <button
                 type="button"
-                className="change btn"
+                className="change"
                 data-cy="deleteTodo"
-                // disabled={}
+                // disabled={todo.completed === true}
                 onClick={() => handleEdit(todo.id, todo.title)}
               >
                 <FaRegEdit />
