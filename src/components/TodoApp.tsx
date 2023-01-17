@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { useLocalStorage } from '../api/LocalStorage';
+import { useLocalStorage } from '../hooks/LocalStorage';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 import { TodoFilter } from './TodoFilter';
