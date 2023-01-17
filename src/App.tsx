@@ -11,9 +11,12 @@ export const App: React.FC = () => {
   // const [data, setData] = useState<Todo[]>([]);
 
   const useLocalStorage = (key:string, initialValue: any) => {
-    const [data, setData] = useState(
-      JSON.parse(localStorage.getItem(key)) || initialValue,
-    );
+    const firstValue = localStorage.getItem(key);
+    const jsonValue = firstValue !== null
+      ? JSON.parse(firstValue)
+      : initialValue;
+    const [data, setData] = useState(jsonValue);
+    // JSON.parse(firstValue) || initialValue,
 
     const save = (value: any) => {
       setData(value);
@@ -23,7 +26,7 @@ export const App: React.FC = () => {
     return [data, save];
   };
 
-  const [data, setData] = useLocalStorage('data', 60);
+  const [data, setData] = useLocalStorage('data', []);
 
   const [filterTodos, setFilterTodos] = useState<Todo[]>(data);
 

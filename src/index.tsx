@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import createRoot from 'react-dom';
 
 import './styles/index.css';
 import './styles/todo-list.css';
@@ -6,7 +7,12 @@ import './styles/filters.css';
 
 import { App } from './App';
 
-ReactDOM.render(
+// ReactDOM.render(
+//   <App />,
+//   document.getElementById('root'),
+// );
+
+createRoot.render(
   <App />,
   document.getElementById('root'),
 );

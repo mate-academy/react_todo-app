@@ -21,8 +21,11 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   };
 
   const handleCheck = (id:number): void => {
+    console.log(id);
     setData(data.map(todo => {
       if (todo.id === id) {
+        console.log(todo.id);
+
         return {
           ...todo,
           completed: !todo.completed,
