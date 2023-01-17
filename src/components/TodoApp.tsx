@@ -102,7 +102,7 @@ export const TodoApp = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={(event) => handleNewTodoKeyDown(event)}>
+        <form onSubmit={handleNewTodoKeyDown}>
           <input
             type="text"
             data-cy="createTodo"
