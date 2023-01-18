@@ -68,12 +68,14 @@ background-image: radial-gradient(18% 28% at 24% 50%, #CEFAFFFF 7%, #073AFF00 10
 }
 
 .todoapp {
-  /* border-radius: 5px; */
+  /* border-top-left-radius: 10px;
+  border-top-right-radius: 10px; */
   background: #fff;
   margin: 130px 0 40px;
   position: relative;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
     0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  /* border-radius: 20px; */
 }
 
 .todoapp input::-webkit-input-placeholder {
@@ -183,8 +185,12 @@ background-image: radial-gradient(18% 28% at 24% 50%, #CEFAFFFF 7%, #073AFF00 10
   padding: 10px 27px;
 }
 
-.toggle-all-hide {
-  color: #e6e6e6;
+/* .toggle-all + label:before.hide {
+  color: rgba(0, 0, 0, 0.01);
+} */
+
+.hide {
+  color: rgba(0, 0, 0, 0.01);
 }
 
 .toggle-all:checked + label:before {
@@ -197,6 +203,8 @@ background-image: radial-gradient(18% 28% at 24% 50%, #CEFAFFFF 7%, #073AFF00 10
   height: 20px;
   text-align: center;
   border-top: 1px solid #e6e6e6;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .footer:before {
@@ -212,6 +220,9 @@ background-image: radial-gradient(18% 28% at 24% 50%, #CEFAFFFF 7%, #073AFF00 10
     0 9px 1px -3px rgba(0, 0, 0, 0.2),
     0 16px 0 -6px #f6f6f6,
     0 17px 2px -6px rgba(0, 0, 0, 0.2); */
+    /* border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px; */
+    /* border-radius: 40px; */
 }
 
 .todo-count {

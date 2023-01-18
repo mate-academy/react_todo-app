@@ -13,6 +13,13 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   const [editTodo, setEditTodo] = useState(0);
   const [editValue, setEditValue] = useState('');
   const [isToggleAll, setIsToggleAll] = useState(false);
+  // const [hideToggleAll, setHideToggleAll] = useState(false);
+  // .toggle-all-hide
+
+
+  // if (!data.length) {
+  //   setHideToggleAll(true);
+  // }
 
   const handleRemove = (id:number) => {
     const newList = data.filter((item) => item.id !== id);
@@ -21,11 +28,8 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   };
 
   const handleCheck = (id:number): void => {
-    console.log(id);
     setData(data.map(todo => {
       if (todo.id === id) {
-        console.log(todo.id);
-
         return {
           ...todo,
           completed: !todo.completed,
@@ -63,18 +67,59 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     setEditValue(title);
   };
 
-  const handleSubmitValue = (e: any, id:number) => {
-    const newValue = [...data].map(todo => {
+  // save changes onBlur
+  const handleSubmitValue = (id:number) => {
+    const newValue = data.map(todo => {
       if (todo.id === id) {
-        todo.title = editValue;
+        // todo.title = editValue;
+
+        return {
+          ...todo,
+          title: editValue,
+        };
       }
 
       return todo;
     });
 
-    if (e.key === 'Enter') {
+    setData(newValue);
+    setEditTodo(0);
+
+    data.map(todo => {
+      if (!todo.title) {
+        handleRemove(id);
+      }
+
+      return todo;
+    });
+  };
+
+  // save changes with Enter press
+  const handleEnter = (e:any, id:number) => {
+    if (e.code === 'Enter') {
+      const newValue = data.map(todo => {
+        if (todo.id === id) {
+          // todo.title = editValue;
+
+          return {
+            ...todo,
+            title: editValue,
+          };
+        }
+
+        return todo;
+      });
+
       setData(newValue);
       setEditTodo(0);
+
+      data.map(todo => {
+        if (!todo.title) {
+          handleRemove(id);
+        }
+
+        return todo;
+      });
     }
   };
 
@@ -83,6 +128,10 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
       <input
         type="checkbox"
         id="toggle-all"
+        // className="toggle-all"
+        // className={classNames({ 'toggle-all': !hideToggleAll },
+        //   { hide: hideToggleAll })}
+        // className={classNames('toggle-all', { hide: hideToggleAll })}
         className="toggle-all"
         data-cy="toggleAll"
         onChange={handleToggleAll}
@@ -109,10 +158,7 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
                 checked={todo.completed}
                 value={editValue}
               />
-              <label
-                htmlFor="toggle-view"
-
-              >
+              <label>
                 {todo.title}
               </label>
               <button
@@ -125,7 +171,6 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
                 type="button"
                 className="change"
                 data-cy="deleteTodo"
-                // disabled={todo.completed === true}
                 onClick={() => handleEdit(todo.id, todo.title)}
               >
                 <FaRegEdit />
@@ -136,7 +181,8 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
               className="edit"
               value={editValue}
               onChange={(event) => setEditValue(event.target.value)}
-              onKeyDown={(e) => handleSubmitValue(e, todo.id)}
+              onKeyDown={(e) => handleEnter(e, todo.id)}
+              onBlur={() => handleSubmitValue(todo.id)}
             />
           </li>
 
