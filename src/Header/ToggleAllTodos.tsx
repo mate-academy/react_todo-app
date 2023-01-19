@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Todo } from '../types/todo';
+import { Todo } from '../types/Todo';
 import { statusChanger } from '../utils/functions';
 
 type Props = {

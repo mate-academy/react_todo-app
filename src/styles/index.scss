@@ -20,6 +20,8 @@ body {
   font-weight: 300;
 }
 
+@import "./auth";
 @import "./todoapp";
+@import "./notification";
 @import "./todo";
 @import "./filters";

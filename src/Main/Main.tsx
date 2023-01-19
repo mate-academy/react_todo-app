@@ -5,9 +5,7 @@ type Props = {
 };
 
 export const Main: React.FC<Props> = ({ children }) => (
-  <section
-    className="todoapp__main"
-  >
+  <section className="todoapp__main">
     {children}
   </section>
 );

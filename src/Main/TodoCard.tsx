@@ -1,18 +1,22 @@
 import React, { useCallback, useState } from 'react';
 import classNames from 'classnames';
-import { Todo } from '../types/todo';
+import { Todo } from '../types/Todo';
 import { titleChanger } from '../utils/functions';
+import { Error } from '../types/ErrorEnum';
+import { patchTodo } from '../api/todos';
 
 type Props = {
   todo: Todo;
   todosUpdater: (prevState: Todo[]) => void;
   todos: Todo[];
+  errorNotification: (err: Error) => void
 };
 
 export const TodoCard: React.FC<Props> = ({
   todo,
   todosUpdater,
   todos,
+  errorNotification,
 }) => {
   const [todoOnEdit, setTodoOnEdit] = useState<Todo | null>(null);
   const [titleQuery, setTitleQuery] = useState<string>('');
@@ -44,18 +48,21 @@ export const TodoCard: React.FC<Props> = ({
 
     if (todoToEdit) {
       setTodoOnEdit(todoToEdit);
-      setTitleQuery(todoToEdit.title);
+      setTitleQuery(title);
     }
   };
 
   const handleEscapePress = () => setTodoOnEdit(null);
 
-  const handleEnterPress = () => {
-    if (todoOnEdit) {
-      if (todoOnEdit.title !== titleQuery) {
+  const handleEnterPress = async () => {
+    try {
+      if (todoOnEdit && title !== titleQuery) {
+        await patchTodo(id, { title });
         todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
       }
-
+    } catch (error) {
+      errorNotification(Error.UPDATE);
+    } finally {
       handleEscapePress();
     }
   };

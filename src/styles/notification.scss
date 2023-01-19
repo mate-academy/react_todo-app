@@ -1,0 +1,42 @@
+.notification {
+  position: absolute;
+  box-sizing: border-box;
+  margin-top: 20px;
+  padding: 10px 20px;
+  width: 100%;
+  font-size: 25px;
+  font-weight: bold;
+  border-radius: 20px;
+  color: $color-app-bg;
+  background-color: $color-error;
+  box-shadow: 0 4px 8px 0 $shadow-app-close, 0 6px 20px 0 $shadow-app-long;
+  transition-property: opacity;
+  transition-duration: 1s;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    right: 10px;
+    font-weight: bold;
+    color: $color-app-bg;
+    border-radius: 50%;
+    background-color: $color-error;
+    box-shadow: 0 4px 8px 0 $shadow-app-close, 0 6px 20px 0 $shadow-app-long;
+    cursor: pointer;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+
+    &:hover {
+      background-color: $color-error-press;
+    }
+  }
+}

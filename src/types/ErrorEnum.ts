@@ -1,8 +1,8 @@
-// errors aren't implemented yet
-
 export enum Error {
-  Add = 'Unable to add a todo',
-  Delete = 'Unable to delete a todo',
-  Update = 'Unable to update a todo',
-  None = '',
+  NONE = '',
+  ADD = 'Unable to add a todo',
+  DELETE = 'Unable to delete a todo',
+  UPDATE = 'Unable to update a todo',
+  LOAD = 'Unable to load a todos',
+  TITLE = "Title can't be empty",
 }

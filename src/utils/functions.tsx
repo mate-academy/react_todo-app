@@ -1,4 +1,4 @@
-import { Todo } from '../types/todo';
+import { Todo } from '../types/Todo';
 
 export const titleChanger = (
   todosToForm: Todo[],
