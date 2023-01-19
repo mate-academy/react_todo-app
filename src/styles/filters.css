@@ -21,22 +21,13 @@
 }
 
 .filters li a:hover {
-  /* border-color: rgba(175, 47, 47, 0.1); */
-  /* border-color: #7680ef58; */
   border-color: #96c1f0;
 }
 
 .filters li a.selected {
-  /* border-color: rgba(175, 47, 47, 0.2); */
-  /* border-color: #5bc3aeb6; */
-  /* border-color: #7680ef; */
-  /* background-color: #7680ef3a; */
-  /* background-color: #969AF0; */
   background-color: #96c1f0;
   color: white;
   font-weight: 200;
-
-  /* color: white; */
 }
 
 @media (max-width: 430px) {
@@ -45,6 +36,3 @@
   }
 }
 
-
-  /* color: #96c1f0; */
-  /* #4494ea */

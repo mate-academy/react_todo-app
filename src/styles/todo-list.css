@@ -72,13 +72,6 @@
   outline:none;
 }
 
-/* .todo-list li .edit:focus {
-  outline: #af5b5e;
-} */
-/* .new-todo, .edit:focus {
-  border: 1px solid green
-
-} */
 
 input .edit:focus {
   outline: none;
@@ -175,18 +168,16 @@ input .edit:focus {
 
 @media (max-width:560px) {
   .todo-list li.editing .edit {
+  width: 95%;
+  padding: 12px 16px;
+  margin: 0 0 0 43px;
 
-   width: 95%;
-    /* min-width: none; */
-    padding: 12px 16px;
-    margin: 0 0 0 43px;
-    /* height: auto; */
   }
 }
 
 @media (max-width:560px) {
   .todo-list li.editing .edit {
-   width: 90%;
+  width: 90%;
   padding: 12px 16px;
   }
 }

@@ -13,13 +13,6 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   const [editTodo, setEditTodo] = useState(0);
   const [editValue, setEditValue] = useState('');
   const [isToggleAll, setIsToggleAll] = useState(false);
-  // const [hideToggleAll, setHideToggleAll] = useState(false);
-  // .toggle-all-hide
-
-
-  // if (!data.length) {
-  //   setHideToggleAll(true);
-  // }
 
   const handleRemove = (id:number) => {
     const newList = data.filter((item) => item.id !== id);
@@ -71,12 +64,7 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   const handleSubmitValue = (id:number) => {
     const newValue = data.map(todo => {
       if (todo.id === id) {
-        // todo.title = editValue;
-
-        return {
-          ...todo,
-          title: editValue,
-        };
+        todo.title = editValue;
       }
 
       return todo;
@@ -99,12 +87,7 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     if (e.code === 'Enter') {
       const newValue = data.map(todo => {
         if (todo.id === id) {
-          // todo.title = editValue;
-
-          return {
-            ...todo,
-            title: editValue,
-          };
+          todo.title = editValue;
         }
 
         return todo;
@@ -128,16 +111,16 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
       <input
         type="checkbox"
         id="toggle-all"
-        // className="toggle-all"
-        // className={classNames({ 'toggle-all': !hideToggleAll },
-        //   { hide: hideToggleAll })}
-        // className={classNames('toggle-all', { hide: hideToggleAll })}
         className="toggle-all"
         data-cy="toggleAll"
         onChange={handleToggleAll}
         checked={isToggleAll}
       />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      <label
+        htmlFor="toggle-all"
+      >
+        Mark all as complete
+      </label>
 
       <ul className="todo-list" data-cy="todoList">
         {data.map(todo => (
@@ -191,31 +174,3 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     </section>
   );
 };
-
-/*
-<li className="completed">
-  <div className="view">
-    <input type="checkbox" className="toggle" id="toggle-completed" />
-    <label htmlFor="toggle-completed">qwertyuio</label>
-    <button type="button" className="destroy" data-cy="deleteTodo" />
-  </div>
-  <input type="text" className="edit" />
-</li>
-
-<li className="editing">
-  <div className="view">
-    <input type="checkbox" className="toggle" id="toggle-editing" />
-    <label htmlFor="toggle-editing">zxcvbnm</label>
-    <button type="button" className="destroy" data-cy="deleteTodo" />
-  </div>
-  <input type="text" className="edit" />
-</li>
-
-<li>
-  <div className="view">
-    <input type="checkbox" className="toggle" id="toggle-view2" />
-    <label htmlFor="toggle-view2">1234567890</label>
-    <button type="button" className="destroy" data-cy="deleteTodo" />
-  </div>
-  <input type="text" className="edit" />
-</li> */
