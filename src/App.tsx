@@ -101,7 +101,6 @@ export const App: React.FC = () => {
       inputRef.current.focus();
     }
 
-    // setTodos(getTodosFromLS());
     fetchTodos();
   }, []);
 
@@ -117,21 +116,27 @@ export const App: React.FC = () => {
   );
 
   const createNewTodo = async (title: string) => {
+    setIsError({
+      message: Error.NONE,
+      status: false,
+    });
+
     try {
-      if (!title.trim()) {
-        return;
+      if (user) {
+        const newTodo = {
+          id: 0,
+          userId: user.id,
+          completed: false,
+          title,
+        };
+
+        await postTodo(newTodo);
+
+        newTodo.id = +(String(new Date()).replace(/\D+/g, ''));
+        const updatedTodos = [...todos, newTodo];
+
+        todosUpdater(updatedTodos);
       }
-
-      const newTodo = {
-        id: +new Date(),
-        completed: false,
-        title,
-      };
-
-      const updatedTodos = [...todos, newTodo];
-
-      await postTodo(newTodo);
-      todosUpdater(updatedTodos);
     } catch (error) {
       errorNotification(Error.ADD);
     }
@@ -146,58 +151,58 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <div className="todoapp__content">
-        <Header>
-          <>
-            <HeaderTitle />
-            <ToggleAllTodos
-              todoUpdater={todosUpdater}
-              todos={todos}
-            />
-            <HeaderInput
-              createNewTodo={createNewTodo}
-              inputRef={inputRef}
-            />
-          </>
-        </Header>
+      <Header>
+        <>
+          <HeaderTitle />
+          <ToggleAllTodos
+            todoUpdater={todosUpdater}
+            todos={todos}
+            errorNotification={errorNotification}
+          />
+          <HeaderInput
+            createNewTodo={createNewTodo}
+            inputRef={inputRef}
+            errorNotification={errorNotification}
+          />
+        </>
+      </Header>
 
-        {!!todos.length && (
-          <>
-            <Main>
-              <TodoList>
-                {visibleTodos.map(todo => (
-                  <React.Fragment key={todo.id}>
-                    <TodoCard
-                      todo={todo}
-                      todosUpdater={todosUpdater}
-                      todos={todos}
-                      errorNotification={errorNotification}
-                    />
-                  </React.Fragment>
-                ))}
-              </TodoList>
-            </Main>
-
-            <Footer>
-              <>
-                <TodoCounter todos={todos} />
-
-                <Filters
-                  filterChange={filterChange}
-                  filter={filter}
-                />
-
-                {!!checkCompletedTodo.length && (
-                  <ClearCompleted
+      {!!todos.length && (
+        <>
+          <Main>
+            <TodoList>
+              {visibleTodos.map(todo => (
+                <React.Fragment key={todo.id}>
+                  <TodoCard
+                    todo={todo}
                     todosUpdater={todosUpdater}
                     todos={todos}
+                    errorNotification={errorNotification}
                   />
-                )}
-              </>
-            </Footer>
-          </>
-        )}
-      </div>
+                </React.Fragment>
+              ))}
+            </TodoList>
+          </Main>
+
+          <Footer>
+            <>
+              <TodoCounter todos={todos} />
+
+              <Filters
+                filterChange={filterChange}
+                filter={filter}
+              />
+
+              {!!checkCompletedTodo.length && (
+                <ClearCompleted
+                  todosUpdater={todosUpdater}
+                  todos={todos}
+                />
+              )}
+            </>
+          </Footer>
+        </>
+      )}
 
       <ErrorNotifications
         isError={isError}

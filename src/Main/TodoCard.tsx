@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { titleChanger } from '../utils/functions';
 import { Error } from '../types/ErrorEnum';
-import { patchTodo } from '../api/todos';
+import { deleteTodo, patchTodo } from '../api/todos';
 
 type Props = {
   todo: Todo;
@@ -29,7 +29,19 @@ export const TodoCard: React.FC<Props> = ({
     }
   }, []);
 
-  const handleCompletedChange = () => {
+  const handleCompletedChange = async () => {
+    try {
+      const todosCopy = [...todos].map(oneTodo => (
+        (oneTodo.id === id) ? { ...oneTodo, completed: !completed } : oneTodo
+      ));
+
+      todosUpdater(todosCopy);
+
+      await patchTodo(id, { completed: !completed });
+    } catch (error) {
+      errorNotification(Error.UPDATE);
+    }
+
     const todosCopy = [...todos].map(oneTodo => (
       (oneTodo.id === id) ? { ...oneTodo, completed: !completed } : oneTodo
     ));
@@ -37,19 +49,20 @@ export const TodoCard: React.FC<Props> = ({
     return todosUpdater(todosCopy);
   };
 
-  const handleTodoDelete = () => {
-    const todoDelete = todos.filter(oneTodo => oneTodo.id !== id);
+  const handleTodoDelete = async () => {
+    try {
+      const todoDelete = todos.filter(oneTodo => oneTodo.id !== id);
 
-    return todosUpdater(todoDelete);
+      await deleteTodo(id);
+      todosUpdater(todoDelete);
+    } catch (error) {
+      errorNotification(Error.DELETE);
+    }
   };
 
   const handleDBClick = () => {
-    const todoToEdit = todos.find(oneTodo => oneTodo.id === id);
-
-    if (todoToEdit) {
-      setTodoOnEdit(todoToEdit);
-      setTitleQuery(title);
-    }
+    setTodoOnEdit(todo);
+    setTitleQuery(title);
   };
 
   const handleEscapePress = () => setTodoOnEdit(null);
@@ -57,8 +70,8 @@ export const TodoCard: React.FC<Props> = ({
   const handleEnterPress = async () => {
     try {
       if (todoOnEdit && title !== titleQuery) {
-        await patchTodo(id, { title });
         todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
+        await patchTodo(id, { title: titleQuery });
       }
     } catch (error) {
       errorNotification(Error.UPDATE);
