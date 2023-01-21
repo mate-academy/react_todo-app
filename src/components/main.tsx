@@ -83,26 +83,9 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   };
 
   // save changes with Enter press
-  const handleEnter = (e:any, id:number) => {
+  const handleEnter = (e:React.KeyboardEvent<HTMLInputElement>, id:number) => {
     if (e.code === 'Enter') {
-      const newValue = data.map(todo => {
-        if (todo.id === id) {
-          todo.title = editValue;
-        }
-
-        return todo;
-      });
-
-      setData(newValue);
-      setEditTodo(0);
-
-      data.map(todo => {
-        if (!todo.title) {
-          handleRemove(id);
-        }
-
-        return todo;
-      });
+      handleSubmitValue(id);
     }
   };
 
