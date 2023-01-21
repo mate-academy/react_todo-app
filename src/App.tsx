@@ -1,93 +1,238 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useCallback, useContext, useEffect, useMemo, useRef, useState,
+} from 'react';
+import { debounce } from 'lodash';
 
-export const App: React.FC = () => {
-  return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+import classNames from 'classnames';
+import { AuthContext } from './components/Auth/AuthContext';
+import { DefaultContext } from './components/DefaultContext';
+import { ErrorContext }
+  from './components/ErrorNotification/ErrorContext';
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+import { TodoList } from './components/TodoList';
+import { Filter } from './components/Filter';
+import { ErrorNotification } from './components/ErrorNotification';
+
+import {
+  getTodos, postTodo, deleteTodo, patchTodo,
+} from './api/todos';
+
+import { Todo } from './types/Todo';
+import { Status } from './types/Status';
+import { Errors } from './types/Errors';
+
+export const App: React.FC = React.memo(
+  () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const user = useContext(AuthContext);
+    const newTodoField = useRef<HTMLInputElement>(null);
+
+    const {
+      todosFromServer,
+      setTodosFromServer,
+      setTodoIdsForLoader,
+    } = useContext(DefaultContext);
+
+    const { setError } = useContext(ErrorContext);
+
+    const [status, setStatus] = useState(Status.ALL);
+    const [newTodoTitle, setNewTodoTitle] = useState('');
+    const [appliedNewTodoTitle, setAppliedNewTodoTitle] = useState('');
+    const [isAdding, setIsAdding] = useState(false);
+
+    const loadTodos = async () => {
+      if (user) {
+        try {
+          setError(Errors.NONE);
+          const todos = await getTodos(user.id);
+
+          setTodosFromServer(todos);
+        } catch {
+          setError(Errors.LOAD);
+        }
+      }
+    };
+
+    const createTodo = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      if (user && newTodoTitle.trim().length) {
+        try {
+          setIsAdding(true);
+          const todo = await postTodo(user.id, newTodoTitle) as Todo;
+
+          setTodosFromServer([...todosFromServer, todo]);
+        } catch {
+          setError(Errors.ADD);
+        } finally {
+          setIsAdding(false);
+          setNewTodoTitle('');
+        }
+      } else {
+        setError(Errors.ADD);
+      }
+    };
+
+    const toggleAllTodos = async () => {
+      try {
+        const activeTodosIds = todosFromServer
+          .filter(todo => !todo.completed)
+          .map(todo => todo.id);
+
+        if (activeTodosIds.length) {
+          setTodoIdsForLoader(activeTodosIds);
+
+          await Promise.all(activeTodosIds
+            .map(id => patchTodo(id, { completed: true })));
+
+          setTodosFromServer(todosFromServer
+            .map(todo => ({ ...todo, completed: true })));
+        } else {
+          const todosIds = todosFromServer.map(todo => todo.id);
+
+          setTodoIdsForLoader(todosIds);
+
+          await Promise.all(todosFromServer
+            .map(todo => patchTodo(todo.id, { completed: false })));
+
+          setTodosFromServer(todosFromServer
+            .map(todo => ({ ...todo, completed: false })));
+        }
+      } catch {
+        setError(Errors.UPDATE);
+      } finally {
+        setTodoIdsForLoader([]);
+      }
+    };
+
+    const clearCompletedTodos = async () => {
+      try {
+        const completedTodosIds = todosFromServer
+          .filter(todo => todo.completed)
+          .map(todo => todo.id);
+
+        setTodoIdsForLoader(completedTodosIds);
+
+        await Promise.all(completedTodosIds.map(id => deleteTodo(id)));
+
+        setTodosFromServer(todosFromServer.filter(todo => !todo.completed));
+      } catch {
+        setError(Errors.DELETE_COMPLETED);
+      } finally {
+        setTodoIdsForLoader([]);
+      }
+    };
+
+    useEffect(() => {
+      loadTodos();
+    }, [user]);
+
+    useEffect(() => {
+      if (newTodoField.current) {
+        newTodoField.current.focus();
+      }
+    }, [todosFromServer]);
+
+    const todos = useMemo(() => (
+      todosFromServer.filter(todo => {
+        switch (status) {
+          case Status.COMPLETED:
+            return todo.completed;
+
+          case Status.ACTIVE:
+            return !todo.completed;
+          default:
+            return todo;
+        }
+      })
+    ), [todosFromServer, status]);
+
+    const activeTodosCount = todosFromServer.reduce(
+      (acc, todo) => (!todo.completed ? 1 : 0) + acc, 0,
+    );
+
+    const completedTodosCount = todosFromServer.reduce(
+      (acc, todo) => (todo.completed ? 1 : 0) + acc, 0,
+    );
+
+    const applyNewTodoTitle = useCallback(
+      debounce(setAppliedNewTodoTitle, 1000),
+      [],
+    );
+
+    return (
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
+
+        <div className="todoapp__content">
+          <header className="todoapp__header">
+            <button
+              data-cy="ToggleAllButton"
+              type="button"
+              className={classNames(
+                'todoapp__toggle-all',
+                { active: activeTodosCount === 0 },
+                { hidden: todosFromServer.length === 0 },
+              )}
+              onClick={() => toggleAllTodos()}
+            />
+
+            <form onSubmit={createTodo}>
+              <input
+                data-cy="NewTodoField"
+                type="text"
+                ref={newTodoField}
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+                value={newTodoTitle}
+                disabled={isAdding}
+                onChange={e => {
+                  setNewTodoTitle(e.target.value);
+                  applyNewTodoTitle(e.target.value);
+                }}
+              />
+            </form>
+          </header>
+
+          <TodoList
+            todos={todos}
+            isAdding={isAdding}
+            newTodoTitle={appliedNewTodoTitle}
           />
-        </form>
-      </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+          <footer
+            className={classNames(
+              'todoapp__footer',
+              { hidden: todosFromServer.length === 0 },
+            )}
+            data-cy="Footer"
+          >
+            <span className="todo-count" data-cy="todosCounter">
+              {`${activeTodosCount} items left`}
+            </span>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Filter
+              status={status}
+              setStatus={setStatus}
+            />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <button
+              data-cy="ClearCompletedButton"
+              type="button"
+              className={classNames(
+                'todoapp__clear-completed',
+                { hidden: completedTodosCount === 0 },
+              )}
+              onClick={clearCompletedTodos}
+            >
+              Clear completed
+            </button>
+          </footer>
+        </div>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
-  );
-};
+        <ErrorNotification />
+      </div>
+    );
+  },
+);
