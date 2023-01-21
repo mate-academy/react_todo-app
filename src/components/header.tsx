@@ -1,6 +1,5 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
-// import { Login } from './login';
 
 type Props = {
   input: string;
@@ -35,7 +34,6 @@ export const Header: React.FC<Props>
   return (
     <header className="header">
       <h1>Todos</h1>
-      {/* <Login /> */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"

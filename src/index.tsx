@@ -4,6 +4,7 @@ import createRoot from 'react-dom';
 import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
+// import { AuthProvider } from './context/AuthProvider';
 
 import { App } from './App';
 
@@ -13,6 +14,8 @@ import { App } from './App';
 // );
 
 createRoot.render(
+  // <AuthProvider>
   <App />,
+  // </AuthProvider>,
   document.getElementById('root'),
 );
