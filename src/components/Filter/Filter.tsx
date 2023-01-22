@@ -1,51 +1,32 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Status } from '../../types/Status';
+import { NavLink } from 'react-router-dom';
 
 type Props = {
-  status: Status,
-  setStatus: (status: Status) => void,
+  to: string;
+  text: string;
 };
 
-export const Filter = React.memo(
-  ({ status, setStatus }: Props) => {
-    return (
-      <nav className="filter" data-cy="Filter">
-        <a
-          data-cy="FilterLinkAll"
-          href="#/"
-          className={
-            classNames('filter__link',
-              { selected: status === Status.ALL })
-          }
-          onClick={() => setStatus(Status.ALL)}
-        >
-          All
-        </a>
+export const PageNavLink: React.FC<Props> = ({ to, text }) => (
+  <NavLink
+    data-cy="FilterLinkAll"
+    end
+    to={to}
+    className={({ isActive }) => classNames('filter__link', {
+      selected: isActive,
+    })}
+  >
+    {text}
+  </NavLink>
+);
 
-        <a
-          data-cy="FilterLinkActive"
-          href="#/active"
-          className={
-            classNames('filter__link',
-              { selected: status === Status.ACTIVE })
-          }
-          onClick={() => setStatus(Status.ACTIVE)}
-        >
-          Active
-        </a>
-        <a
-          data-cy="FilterLinkCompleted"
-          href="#/completed"
-          className={
-            classNames('filter__link',
-              { selected: status === Status.COMPLETED })
-          }
-          onClick={() => setStatus(Status.COMPLETED)}
-        >
-          Completed
-        </a>
-      </nav>
-    );
-  },
+export const Filter: React.FC = () => (
+  <nav className="filter" data-cy="Filter">
+
+    <PageNavLink to="/" text="All" />
+
+    <PageNavLink to="/active" text="Active" />
+
+    <PageNavLink to="/completed" text="Completed" />
+  </nav>
 );
