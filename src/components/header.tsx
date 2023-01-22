@@ -26,7 +26,6 @@ export const Header: React.FC<Props>
       };
 
       setData([...data, newInput]);
-
       setInput('');
     }
   };

@@ -8,7 +8,6 @@ import { useLocalStorage } from './components/localstorage';
 
 export const App: React.FC = () => {
   const [input, setInput] = useState('');
-  // const [data, setData] = useState<Todo[]>([]);
   const [data, setData] = useLocalStorage('data', []);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(data);
 
