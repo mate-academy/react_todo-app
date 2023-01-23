@@ -41,12 +41,6 @@ export const TodoCard: React.FC<Props> = ({
     } catch (error) {
       errorNotification(Error.UPDATE);
     }
-
-    const todosCopy = [...todos].map(oneTodo => (
-      (oneTodo.id === id) ? { ...oneTodo, completed: !completed } : oneTodo
-    ));
-
-    return todosUpdater(todosCopy);
   };
 
   const handleTodoDelete = async () => {
@@ -69,6 +63,12 @@ export const TodoCard: React.FC<Props> = ({
 
   const handleEnterPress = async () => {
     try {
+      if (!titleQuery) {
+        handleTodoDelete();
+
+        return;
+      }
+
       if (todoOnEdit && title !== titleQuery) {
         todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
         await patchTodo(id, { title: titleQuery });
@@ -91,12 +91,7 @@ export const TodoCard: React.FC<Props> = ({
   };
 
   const handleBlur = () => {
-    if (!todoOnEdit) {
-      return;
-    }
-
-    todosUpdater(titleChanger(todos, todoOnEdit, titleQuery));
-    handleEscapePress();
+    handleEnterPress();
   };
 
   const isTodoOnEdit = todoOnEdit && todoOnEdit.id === id;

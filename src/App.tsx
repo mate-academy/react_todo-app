@@ -13,6 +13,7 @@ import {
   HeaderInput,
   HeaderTitle,
   ToggleAllTodos,
+  UserStatus,
 } from './Header';
 
 import {
@@ -30,7 +31,7 @@ import {
 
 import { Filter } from './types/FilterEnum';
 import { Error } from './types/ErrorEnum';
-import { ErrorType } from './types/Error';
+import { ErrorType } from './types/ErrorType';
 import { Todo } from './types/Todo';
 
 import {
@@ -132,7 +133,9 @@ export const App: React.FC = () => {
 
         await postTodo(newTodo);
 
-        newTodo.id = +(String(new Date()).replace(/\D+/g, ''));
+        const lastTodoId = await getTodos(user.id);
+
+        newTodo.id = lastTodoId[lastTodoId.length - 1].id;
         const updatedTodos = [...todos, newTodo];
 
         todosUpdater(updatedTodos);
@@ -153,6 +156,7 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <Header>
         <>
+          <UserStatus user={user} />
           <HeaderTitle />
           <ToggleAllTodos
             todoUpdater={todosUpdater}
@@ -197,6 +201,7 @@ export const App: React.FC = () => {
                 <ClearCompleted
                   todosUpdater={todosUpdater}
                   todos={todos}
+                  errorNotification={errorNotification}
                 />
               )}
             </>

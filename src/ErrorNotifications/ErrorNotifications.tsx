@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ErrorType } from '../types/Error';
+import { ErrorType } from '../types/ErrorType';
 import '../styles/index.scss';
 
 type Props = {

@@ -1,5 +1,3 @@
-@import "../utils/variables";
-
 .todoapp {
   background: $color-app-bg;
   margin: 130px 0 40px;
@@ -7,8 +5,15 @@
   box-shadow: 0 2px 4px 0 $shadow-app-close,
     0 25px 50px 0 $shadow-app-long;
 
+  &__user {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+  }
+
   &__header {
     position: relative;
+    z-index: 2;
   }
 
   &__title {
@@ -27,9 +32,12 @@
   &__toggle-all-label {
     position: absolute;
 
-    height: 100%;
+    height: inherit;
     width: 45px;
     z-index: 2;
+
+    top: 50%;
+    transform: translateY(-50%);
 
     display: flex;
     justify-content: center;
@@ -49,11 +57,9 @@
 
     &:before {
       content: "❯";
-      position: relative;
-      left: calc($typing-font-size / 2);
+      position: absolute;
       transform: rotate(90deg);
       line-height: 0;
-      cursor: pointer;
     }
 
     &--hidden {
@@ -104,7 +110,6 @@
 
   &__main {
     position: relative;
-    z-index: 2;
     border-top: 1px solid $color-main-light;
   }
 

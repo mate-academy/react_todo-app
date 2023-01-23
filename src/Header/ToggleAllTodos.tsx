@@ -1,5 +1,6 @@
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
+import { patchTodo } from '../api/todos';
 import { Error } from '../types/ErrorEnum';
 import { Todo } from '../types/Todo';
 import { statusChanger } from '../utils/functions';
@@ -17,14 +18,24 @@ export const ToggleAllTodos: React.FC<Props> = ({
 }) => {
   const uncompleted = todos.filter(todo => !todo.completed);
 
+  const toggleAllPatcher = (choosenTodos: Todo[]) => {
+    choosenTodos.map(async ({ id }) => {
+      await patchTodo(id, { completed: !!uncompleted.length });
+    });
+  };
+
   const handleAllCompleted = async () => {
     try {
-      // there I did stuck, await patchTodo for all todos
+      if (!uncompleted.length) {
+        toggleAllPatcher(todos);
+      } else {
+        toggleAllPatcher(uncompleted);
+      }
+
       todoUpdater(statusChanger(todos, !uncompleted.length));
     } catch (error) {
       errorNotification(Error.UPDATE);
     }
-    // return todoUpdater(statusChanger(todos, !uncompleted.length));
   };
 
   return (

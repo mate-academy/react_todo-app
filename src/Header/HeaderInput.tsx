@@ -32,12 +32,10 @@ export const HeaderInput: React.FC<Props> = ({
   };
 
   return (
-    <form
-      onSubmit={handleTodoCreate}
-    >
+    <form onSubmit={handleTodoCreate}>
       <input
-        type="text"
         data-cy="createTodo"
+        type="text"
         className="todoapp__new-todo"
         placeholder="What needs to be done?"
         ref={inputRef}
