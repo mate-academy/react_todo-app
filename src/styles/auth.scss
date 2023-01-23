@@ -1,0 +1,78 @@
+.auth {
+  margin-top: 50px;
+  padding: 20px;
+  border: 1px solid $color-todo-border;
+  background-color: $color-app-bg;
+  box-shadow: 0 4px 8px 0 $shadow-app-close, 0 6px 20px 0 $shadow-app-long;
+
+  &__title {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
+
+  &__field {
+    margin-top: 15px;
+  }
+
+  &__label {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+    padding-left: 25px;
+    margin-top: 10px;
+    border-color: $color-todo-border;
+    background-image: url("../assets/icons/mail.svg");
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    background-size: 15px;
+    transition: border 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $color-body;
+    }
+
+    &::placeholder {
+      font-style: italic;
+    }
+
+    &--name {
+      background: none;
+      padding-left: 5px;
+    }
+  }
+
+  &__is-danger {
+    background-color: $color-destroy-hovered;
+    transition: color 0.2s;
+  }
+
+  &__help {
+    box-sizing: border-box;
+    width: 100%;
+    border-color: $color-title;
+    padding: 5px;
+    margin-top: 5px;
+    color: $color-app-bg;
+  }
+
+  &__button {
+    border: 1px solid $color-app-bg;
+    padding: 5px 30px;
+    color: $color-app-bg;
+    font-weight: bold;
+    background-color: $color-button;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: $color-button-press;
+    }
+  }
+}

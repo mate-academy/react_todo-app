@@ -1,93 +1,218 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import { AuthContext } from './Auth/AuthContext';
+
+import {
+  Header,
+  HeaderInput,
+  HeaderTitle,
+  ToggleAllTodos,
+  UserStatus,
+} from './Header';
+
+import {
+  Main,
+  TodoList,
+  TodoCard,
+} from './Main';
+
+import {
+  Footer,
+  Filters,
+  ClearCompleted,
+  TodoCounter,
+} from './Footer';
+
+import { Filter } from './types/FilterEnum';
+import { Error } from './types/ErrorEnum';
+import { ErrorType } from './types/ErrorType';
+import { Todo } from './types/Todo';
+
+import {
+  getTodosFromLS,
+  uploadTodosToLS,
+} from './api/LocalStorageManipulation';
+import { getTodos, postTodo } from './api/todos';
+import { ErrorNotifications } from './ErrorNotifications';
 
 export const App: React.FC = () => {
+  const user = useContext(AuthContext);
+  const [todos, setTodos] = useState<Todo[]>(getTodosFromLS());
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [isError, setIsError] = useState<ErrorType>({
+    message: Error.NONE,
+    status: false,
+  });
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const errorNotification = useCallback((text: Error) => {
+    setIsError({ message: text, status: true });
+
+    setTimeout(() => {
+      setIsError({
+        message: text,
+        status: false,
+      });
+    }, 3000);
+  }, []);
+
+  const fetchTodos = useCallback(async () => {
+    try {
+      if (user) {
+        const todosFromServer = await getTodos(user.id);
+
+        setTodos(todosFromServer);
+      }
+    } catch (error) {
+      errorNotification(Error.LOAD);
+    }
+  }, [user]);
+
+  const filteringMethod = useCallback(() => {
+    let todosToFilter = [...todos];
+
+    if (filter !== Filter.All) {
+      todosToFilter = todosToFilter.filter(todo => {
+        switch (filter) {
+          case Filter.Active:
+            return !todo.completed;
+
+          case Filter.Completed:
+            return todo.completed;
+
+          default:
+            return true;
+        }
+      });
+    }
+
+    setVisibleTodos(todosToFilter);
+  }, [todos, filter]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    fetchTodos();
+  }, []);
+
+  useEffect(() => filteringMethod(), [filteringMethod]);
+
+  const todosUpdater = (todosToChange: Todo[]) => {
+    setTodos(todosToChange);
+    uploadTodosToLS(todosToChange);
+  };
+
+  const filterChange = useCallback(
+    (todosFilter: Filter) => setFilter(todosFilter), [filter],
+  );
+
+  const createNewTodo = async (title: string) => {
+    setIsError({
+      message: Error.NONE,
+      status: false,
+    });
+
+    try {
+      if (user) {
+        const newTodo = {
+          id: 0,
+          userId: user.id,
+          completed: false,
+          title,
+        };
+
+        await postTodo(newTodo);
+
+        const lastTodoId = await getTodos(user.id);
+
+        newTodo.id = lastTodoId[lastTodoId.length - 1].id;
+        const updatedTodos = [...todos, newTodo];
+
+        todosUpdater(updatedTodos);
+      }
+    } catch (error) {
+      errorNotification(Error.ADD);
+    }
+  };
+
+  const handleErrorClose = useCallback(() => setIsError({
+    message: isError.message,
+    status: false,
+  }), []);
+
+  const checkCompletedTodo = todos.filter(todo => todo.completed);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      <Header>
+        <>
+          <UserStatus user={user} />
+          <HeaderTitle />
+          <ToggleAllTodos
+            todoUpdater={todosUpdater}
+            todos={todos}
+            errorNotification={errorNotification}
           />
-        </form>
-      </header>
+          <HeaderInput
+            createNewTodo={createNewTodo}
+            inputRef={inputRef}
+            errorNotification={errorNotification}
+          />
+        </>
+      </Header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {!!todos.length && (
+        <>
+          <Main>
+            <TodoList>
+              {visibleTodos.map(todo => (
+                <React.Fragment key={todo.id}>
+                  <TodoCard
+                    todo={todo}
+                    todosUpdater={todosUpdater}
+                    todos={todos}
+                    errorNotification={errorNotification}
+                  />
+                </React.Fragment>
+              ))}
+            </TodoList>
+          </Main>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <Footer>
+            <>
+              <TodoCounter todos={todos} />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+              <Filters
+                filterChange={filterChange}
+                filter={filter}
+              />
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+              {!!checkCompletedTodo.length && (
+                <ClearCompleted
+                  todosUpdater={todosUpdater}
+                  todos={todos}
+                  errorNotification={errorNotification}
+                />
+              )}
+            </>
+          </Footer>
+        </>
+      )}
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <ErrorNotifications
+        isError={isError}
+        handleErrorClose={handleErrorClose}
+      />
     </div>
   );
 };

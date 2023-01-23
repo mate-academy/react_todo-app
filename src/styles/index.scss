@@ -1,0 +1,26 @@
+@import "../utils/variables";
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.4em;
+  background: $color-body-bg;
+  color: $color-body;
+  min-width: 230px;
+  max-width: 550px;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 300;
+}
+
+@import "./auth";
+@import "./todoapp";
+@import "./notification";
+@import "./todo";
+@import "./filters";
