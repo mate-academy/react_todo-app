@@ -64,6 +64,7 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   const handleSubmitValue = (id:number) => {
     const newValue = data.map(todo => {
       if (todo.id === id) {
+        // eslint-disable-next-line no-param-reassign
         todo.title = editValue;
       }
 
