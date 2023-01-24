@@ -1,0 +1,37 @@
+.item-enter {
+  max-height: 0;
+}
+
+.item-enter-active {
+  overflow: hidden;
+  max-height: 58px;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.item-exit {
+  max-height: 58px;
+}
+
+.item-exit-active {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.error-enter {
+  opacity: 0;
+}
+
+.error-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.error-exit {
+  opacity: 1;
+}
+
+.error-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+}
