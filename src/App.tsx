@@ -27,7 +27,7 @@ export const App: FC = () => {
 
         <Route path=":userName">
           <Route index element={checkParam()} />
-          <Route path="all" element={<Navigate to="../" replace />} />
+          <Route path="all" element={<ToDosPage />} />
           <Route path="active" element={<ToDosPage />} />
           <Route path="completed" element={<ToDosPage />} />
         </Route>
