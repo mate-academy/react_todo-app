@@ -4,20 +4,20 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo
-  isTemp?: boolean;
-  onRemove?: (todoId: number) => void
-  isEditing?: boolean
-  onStatusChange?: (todoId: number, data: boolean) => void;
-  onTitleChange?: (todoId: number, title: string) => void;
+  isTemp: boolean;
+  onRemove: (todoId: number) => void
+  isEditing: boolean
+  onStatusChange: (todoId: number, data: boolean) => void;
+  onTitleChange: (todoId: number, title: string) => void;
 };
 
 export const ToDo: React.FC<Props> = ({
   todo,
-  isTemp = false,
-  onRemove = () => { },
+  isTemp,
+  onRemove,
   isEditing,
-  onStatusChange = () => { },
-  onTitleChange = () => { },
+  onStatusChange,
+  onTitleChange,
 }) => {
   const { title, completed, id = 0 } = todo;
   const [editorMode, setEditorMode] = useState(false);
@@ -93,9 +93,7 @@ export const ToDo: React.FC<Props> = ({
               ×
             </button>
           </>
-
-        )
-        : (
+        ) : (
           <form onSubmit={handleTitleUpdate}>
             <input
               type="text"

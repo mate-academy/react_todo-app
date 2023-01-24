@@ -275,7 +275,7 @@ export const ToDosPage: FC = () => {
           todos={visibleToDos}
           isTemp={isTemp}
           onRemove={handleRemoveTodo}
-          deletingToDoId={editingTodoIds}
+          editingToDoId={editingTodoIds}
           onStatusChange={handleUpdateTodoStatus}
           onTitleChange={handleTitleChange}
         />
@@ -304,7 +304,6 @@ export const ToDosPage: FC = () => {
         in={!!errorType}
         timeout={500}
         unmountOnExit
-
       >
         <ErrorMessage />
       </CSSTransition>

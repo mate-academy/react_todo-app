@@ -11,7 +11,7 @@ type Props = {
   todos: Todo[];
   isTemp: boolean;
   onRemove: (todoId: number) => void
-  deletingToDoId: number[];
+  editingToDoId: number[];
   onStatusChange: (todoId: number, data: boolean) => void;
   onTitleChange: (todoId: number, title: string) => void;
 };
@@ -20,33 +20,33 @@ export const ToDoList: FC<Props> = ({
   todos,
   onRemove,
   isTemp,
-  deletingToDoId,
+  editingToDoId,
   onStatusChange,
   onTitleChange,
 }) => {
   const isTodoEditing = (id: number) => {
-    return deletingToDoId.includes(id);
+    return editingToDoId.includes(id);
   };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <TransitionGroup>
-
+      <TransitionGroup component="ul">
         {todos.map((todo, i) => (
           <CSSTransition
             key={todo.id}
             timeout={300}
             classNames="item"
           >
-            <ToDo
-              key={todo.id}
-              todo={todo}
-              onRemove={onRemove}
-              isEditing={isTodoEditing(todo.id || 0)}
-              onStatusChange={onStatusChange}
-              onTitleChange={onTitleChange}
-              isTemp={i === todos.length - 1 && isTemp}
-            />
+            <li key={todo.id}>
+              <ToDo
+                todo={todo}
+                onRemove={onRemove}
+                isEditing={isTodoEditing(todo.id || 0)}
+                onStatusChange={onStatusChange}
+                onTitleChange={onTitleChange}
+                isTemp={i === todos.length - 1 && isTemp}
+              />
+            </li>
           </CSSTransition>
         ))}
       </TransitionGroup>
