@@ -7,7 +7,6 @@ import { Todo } from '../types/Todo';
 type Props = {
   data:Todo[];
   setData:(data: Todo[]) => void;
-  // input:string;
 };
 
 export const Main: React.FC <Props> = ({ data, setData }) => {
@@ -59,29 +58,13 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  // console.log(inputRef)
-
-  // function inputAutoFocus() {
-  //   if (inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // }
-
   useEffect(() => {
-    // inputAutoFocus();
     if (inputRef.current) {
       inputRef.current.focus();
     }
   }, [focus]);
 
-  // useEffect(() => {
-  //   if (inputRef.current) {
-  //     inputRef.current.focus();
-  //   }
-  // }, []);
-
   const handleEdit = (id:number, title: string) => {
-    // inputRef.current.focus();
     setFocus(true);
 
     setEditTodo(id);
@@ -187,8 +170,3 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     </section>
   );
 };
-
-// const inputRef:React.MutableRefObject<any> | undefined = useRef();
-// const inputRef = React.useRef<HTMLInputElement>(null);
-// const inputRef: React.MutableRefObject<null> = useRef(null);
-// const inputRef = useRef<HTMLInputElement>('');
