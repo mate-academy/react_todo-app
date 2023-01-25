@@ -12,7 +12,7 @@
 }
 
 .filters li a {
-  color: inherit;
+  color: black;
   margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
@@ -21,11 +21,13 @@
 }
 
 .filters li a:hover {
-  border-color: rgba(175, 47, 47, 0.1);
+  border-color: #96c1f0;
 }
 
 .filters li a.selected {
-  border-color: rgba(175, 47, 47, 0.2);
+  background-color: #96c1f0;
+  color: #fff;
+  font-weight: 200;
 }
 
 @media (max-width: 430px) {
@@ -33,3 +35,4 @@
     bottom: 10px;
   }
 }
+
