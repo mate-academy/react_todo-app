@@ -58,27 +58,31 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   };
 
   const inputRef = React.useRef<HTMLInputElement>(null);
-  
-  console.log(inputRef)
 
-  function inputAutoFocus() {
+  // console.log(inputRef)
+
+  // function inputAutoFocus() {
+  //   if (inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // }
+
+  useEffect(() => {
+    // inputAutoFocus();
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }
-
-  useEffect(() => {
-    // inputRef.current.focus();
-    inputAutoFocus();
   }, [focus]);
+
+  // useEffect(() => {
+  //   if (inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // }, []);
 
   const handleEdit = (id:number, title: string) => {
     // inputRef.current.focus();
     setFocus(true);
-
-    // if (inputRef.current) {
-    //   inputRef.current.focus();
-    // }
 
     setEditTodo(id);
     setEditValue(title);
@@ -88,9 +92,6 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   const handleSubmitValue = (id:number) => {
     const newValue = data.map(todo => {
       if (todo.id === id) {
-        // eslint-disable-next-line no-param-reassign
-        // todo.title = editValue;
-
         return {
           ...todo,
           title: editValue,
@@ -106,6 +107,8 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     if (!editValue) {
       handleRemove(id);
     }
+
+    setFocus(false);
   };
 
   // save changes with Enter press
