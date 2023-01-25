@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { FaRegEdit } from 'react-icons/fa';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -14,6 +14,7 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
   const [editTodo, setEditTodo] = useState(0);
   const [editValue, setEditValue] = useState('');
   const [isToggleAll, setIsToggleAll] = useState(false);
+  const [focus, setFocus] = useState(false);
 
   const handleRemove = (id:number) => {
     const newList = data.filter((item) => item.id !== id);
@@ -56,13 +57,28 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     }
   };
 
-  // const inputRef:React.MutableRefObject<any> | undefined = useRef();
-  // const inputRef = React.useRef<HTMLInputElement>(null);
-  // const inputRef: React.MutableRefObject<null> = useRef(null);
-  // const inputRef = useRef<HTMLInputElement>('');
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  
+  console.log(inputRef)
+
+  function inputAutoFocus() {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }
+
+  useEffect(() => {
+    // inputRef.current.focus();
+    inputAutoFocus();
+  }, [focus]);
 
   const handleEdit = (id:number, title: string) => {
     // inputRef.current.focus();
+    setFocus(true);
+
+    // if (inputRef.current) {
+    //   inputRef.current.focus();
+    // }
 
     setEditTodo(id);
     setEditValue(title);
@@ -73,7 +89,12 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     const newValue = data.map(todo => {
       if (todo.id === id) {
         // eslint-disable-next-line no-param-reassign
-        todo.title = editValue;
+        // todo.title = editValue;
+
+        return {
+          ...todo,
+          title: editValue,
+        };
       }
 
       return todo;
@@ -82,13 +103,9 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     setData(newValue);
     setEditTodo(0);
 
-    data.map(todo => {
-      if (!todo.title) {
-        handleRemove(id);
-      }
-
-      return todo;
-    });
+    if (!editValue) {
+      handleRemove(id);
+    }
   };
 
   // save changes with Enter press
@@ -158,7 +175,7 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
               onChange={(event) => setEditValue(event.target.value)}
               onKeyDown={(e) => handleEnter(e, todo.id)}
               onBlur={() => handleSubmitValue(todo.id)}
-              // ref={inputRef}
+              ref={inputRef}
             />
           </li>
 
@@ -167,3 +184,8 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
     </section>
   );
 };
+
+// const inputRef:React.MutableRefObject<any> | undefined = useRef();
+// const inputRef = React.useRef<HTMLInputElement>(null);
+// const inputRef: React.MutableRefObject<null> = useRef(null);
+// const inputRef = useRef<HTMLInputElement>('');
