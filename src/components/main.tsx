@@ -161,10 +161,9 @@ export const Main: React.FC <Props> = ({ data, setData }) => {
               onChange={(event) => setEditValue(event.target.value)}
               onKeyDown={(e) => handleEnter(e, todo.id)}
               onBlur={() => handleSubmitValue(todo.id)}
-              ref={inputRef}
+              ref={input => input?.focus()}
             />
           </li>
-
         ))}
       </ul>
     </section>
