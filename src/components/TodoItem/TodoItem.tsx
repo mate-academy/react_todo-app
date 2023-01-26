@@ -21,15 +21,17 @@ export const TodoItem: React.FC<Props> = ({ item, setItems }) => {
     }
   });
 
-  const setId = () => `toggle-${completed ? 'completed' : 'view'}-${id}`;
   const removeItem = (itemId: number) => setItems(currentItems => currentItems
     .filter(itemTodo => itemTodo.id !== itemId));
 
-  const upDateItem = (text: string) => setItems(currentItem => {
-    item.title = text;
+  const upDateItem = (itemId: number) => setItems(currentItems => currentItems
+    .map(todoItem => {
+      if (itemId === todoItem.id) {
+        todoItem.title = value;
+      }
 
-    return [...currentItem];
-  });
+      return todoItem;
+    }));
 
   const handleChangeCheckBox = (
     itemTodo: Todo,
@@ -79,7 +81,7 @@ export const TodoItem: React.FC<Props> = ({ item, setItems }) => {
           return;
         }
 
-        upDateItem(e.target.value);
+        upDateItem(id);
         setIsEditing(false);
         break;
       default:
@@ -99,7 +101,7 @@ export const TodoItem: React.FC<Props> = ({ item, setItems }) => {
     if (!value) {
       removeItem(id);
     } else {
-      upDateItem(e.currentTarget.value);
+      upDateItem(id);
     }
 
     setIsEditing(false);
@@ -115,13 +117,13 @@ export const TodoItem: React.FC<Props> = ({ item, setItems }) => {
         <input
           type="checkbox"
           className="toggle"
-          id={setId()}
+          id={`${id}`}
           checked={completed}
           onChange={() => handleChangeCheckBox(item)}
         />
         <label
           role="presentation"
-          htmlFor={setId()}
+          htmlFor={`${id}`}
           onClick={handleClickLabel}
           onDoubleClick={handleClickEdit}
         >

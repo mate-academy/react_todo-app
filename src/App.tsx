@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Footer from './components/Footer';
 import NewTodoField from './components/NewTodoField';
 import TodoList from './components/TodoList';
-import { ToggleAllButton } from './components/ToggleAllButton/ToggleAllButton';
+import ToggleAllButton from './components/ToggleAllButton';
 import { FilterBy } from './types/FilterBy';
 import { Todo } from './types/Todo';
 

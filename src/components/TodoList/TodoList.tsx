@@ -30,7 +30,7 @@ export const TodoList: React.FC<Props> = ({ items, setItems }) => {
   const visibleItems = filter ? getVisibleItems(items, filter) : [...items];
 
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todo-list">
       {visibleItems.map(item => (
         <TodoItem item={item} key={item.id} setItems={setItems} />
       ))}

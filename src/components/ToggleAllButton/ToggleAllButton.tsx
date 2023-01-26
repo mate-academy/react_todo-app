@@ -10,19 +10,14 @@ type Props = {
 export const ToggleAllButton: React.FC<Props> = ({ setItems, items }) => {
   const isChecked = !items.find(todo => todo.completed === false);
 
-  const setStatus = (status: boolean) => {
-    setItems(currentTodo => {
-      currentTodo.forEach(todo => {
-        if (todo.completed === status) {
-          return;
-        }
+  const setStatus = (status: boolean) => setItems((currentItems => currentItems
+    .map(itemTodo => {
+      if (itemTodo.completed !== status) {
+        itemTodo.completed = status;
+      }
 
-        todo.completed = status;
-      });
-
-      return [...currentTodo];
-    });
-  };
+      return itemTodo;
+    })));
 
   const handleClickToggleAllButton = () => {
     setStatus(!isChecked);
