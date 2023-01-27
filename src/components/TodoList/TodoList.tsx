@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
   return (
     <ul className="todo-list" data-cy="todosList">
       <TransitionGroup>
-        {todos?.map(todo => (
+        {todos.map(todo => (
           <CSSTransition
             key={todo.id}
             timeout={300}

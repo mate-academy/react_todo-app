@@ -209,21 +209,19 @@ export const TodoApp = () => {
               onChange={handleToggleAll}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
-
-            <TodoList
-              todos={todos}
-              handleToggle={handleToggle}
-              handleDelet={handleDelet}
-              changedTitleTodoId={changedTitleTodoId}
-              handleEdit={handleEdit}
-              newEditedTitle={newEditedTitle}
-              handleInputChange={handleInputChange}
-              handleBlur={handleBlur}
-              handleKeyDown={handleKeyDown}
-            />
           </>
         )}
-
+        <TodoList
+          todos={todos}
+          handleToggle={handleToggle}
+          handleDelet={handleDelet}
+          changedTitleTodoId={changedTitleTodoId}
+          handleEdit={handleEdit}
+          newEditedTitle={newEditedTitle}
+          handleInputChange={handleInputChange}
+          handleBlur={handleBlur}
+          handleKeyDown={handleKeyDown}
+        />
       </section>
 
       {((copyTodos.length > 0 && todos.length > 0)
