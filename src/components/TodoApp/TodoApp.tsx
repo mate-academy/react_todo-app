@@ -33,9 +33,8 @@ export const TodoApp = () => {
     setActiveToggleAll(activeTodosLength === 0);
   }, [activeTodosLength]);
 
-  const completedTodos
-    = useMemo(() => (copyTodos.filter(todo => todo.completed)),
-      [copyTodos]);
+  const completedTodos = useMemo(() => (
+    copyTodos.filter(todo => todo.completed)), [copyTodos]);
 
   const createNewTodo = (title: string): Todo => ({
     id: +new Date(),
@@ -122,7 +121,7 @@ export const TodoApp = () => {
     setCopyTodos(newTodos);
   };
 
-  const handleDelet = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { name } = event.currentTarget;
 
     deleteTodo(+name);
@@ -163,6 +162,8 @@ export const TodoApp = () => {
 
     if (updatedTodo) {
       updatedTodo.title = newEditedTitle;
+      setTodos([...todos]);
+      setCopyTodos([...todos]);
     }
 
     setChangedTitleTodoId(null);
@@ -214,7 +215,7 @@ export const TodoApp = () => {
         <TodoList
           todos={todos}
           handleToggle={handleToggle}
-          handleDelet={handleDelet}
+          handleDelete={handleDelete}
           changedTitleTodoId={changedTitleTodoId}
           handleEdit={handleEdit}
           newEditedTitle={newEditedTitle}

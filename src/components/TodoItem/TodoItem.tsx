@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todo: Todo,
   handleToggle: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  handleDelet: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  handleDelete: (event: React.MouseEvent<HTMLButtonElement>) => void,
   changedTitleTodoId: number | null,
   handleEdit: (event: React.MouseEvent<HTMLLabelElement>) => void,
   newEditedTitle: string,
@@ -18,7 +18,7 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({
   todo,
   handleToggle,
-  handleDelet,
+  handleDelete,
   changedTitleTodoId,
   handleEdit,
   newEditedTitle,
@@ -64,7 +64,7 @@ export const TodoItem: React.FC<Props> = ({
           className="destroy"
           data-cy="deleteTodo"
           aria-label="Mute volume"
-          onClick={handleDelet}
+          onClick={handleDelete}
         />
       </div>
       <input

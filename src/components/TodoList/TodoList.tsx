@@ -5,7 +5,7 @@ import { TodoItem } from '../TodoItem';
 interface Props {
   todos: Todo[];
   handleToggle: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  handleDelet: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  handleDelete: (event: React.MouseEvent<HTMLButtonElement>) => void,
   changedTitleTodoId: number | null,
   handleEdit: (event: React.MouseEvent<HTMLLabelElement>) => void,
   newEditedTitle: string,
@@ -18,7 +18,7 @@ interface Props {
 export const TodoList: React.FC<Props> = ({
   todos,
   handleToggle,
-  handleDelet,
+  handleDelete,
   changedTitleTodoId,
   handleEdit,
   newEditedTitle,
@@ -38,7 +38,7 @@ export const TodoList: React.FC<Props> = ({
             <TodoItem
               todo={todo}
               handleToggle={handleToggle}
-              handleDelet={handleDelet}
+              handleDelete={handleDelete}
               changedTitleTodoId={changedTitleTodoId}
               handleEdit={handleEdit}
               newEditedTitle={newEditedTitle}
