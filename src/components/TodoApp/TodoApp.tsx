@@ -38,8 +38,45 @@ export const TodoApp = () => {
     Active = '/active',
     Completed = '/completed',
   }
+  const [userName, setUserName] = useState('');
+
+  async function getUser() {
+    const result = await fetch('https://mate.academy/students-api/users/6057', {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const response = await result.json();
+
+    return setUserName(response.name);
+  }
+
+  async function getTodos() {
+    const result = await fetch(
+      'https://mate.academy/students-api/todos?userId=6057', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    const response = await result.json();
+
+    return response;
+  }
 
   useEffect(() => {
+    getUser();
+    getTodos();
+  }, []);
+
+  useEffect(() => {
+    // createUser();
     switch (pathname) {
       case FilterTypes.Active:
         return setVisibleTodos(activeTodos);
@@ -77,6 +114,7 @@ export const TodoApp = () => {
   return (
     <div className="todoapp">
       <header className="header">
+        <h1>{userName}</h1>
         <h1>todos</h1>
         <TodoForm
           todos={todos}
