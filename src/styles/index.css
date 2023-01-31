@@ -185,6 +185,10 @@ body {
   cursor: pointer;
 }
 
+.clear-completed--hidden {
+  visibility: hidden;
+}
+
 .clear-completed:hover {
   text-decoration: underline;
 }
