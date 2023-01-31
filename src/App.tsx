@@ -43,7 +43,7 @@ export const App: React.FC = () => {
         setErrorType(TypeError.LOAD);
       }
     }
-  }, []);
+  }, [user]);
 
   const newTodoTitleHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
       setIsAdding(true);
 
       try {
-        if (newTodoTitle.trim().length === 0) {
+        if (!newTodoTitle.trim().length) {
           setHasError(true);
           setErrorType(TypeError.TITLE);
           setIsAdding(false);
@@ -188,7 +188,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadTodosFromServer();
-  }, [todos]);
+  }, [todos, loadTodosFromServer]);
 
   useEffect(() => {
     const filteredTodos = todos.filter(todo => {
@@ -250,13 +250,12 @@ export const App: React.FC = () => {
         <FilterTodoList
           setFilterType={setFilterType}
           filterType={filterType}
-          visibleTodos={visibleTodos}
+          todos={todos}
           clearAllHandler={clearAllHandler}
         />
       </div>
 
-      {hasError
-      && (
+      {hasError && (
         <Erorr
           errorType={errorType}
           onRemoveErrorHandler={removeErorrHandler}
