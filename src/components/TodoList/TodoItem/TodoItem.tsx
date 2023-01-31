@@ -1,10 +1,7 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Todo } from '../../../types/types';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   todo: Todo,
   setTodos: (value: Todo[]) => void,
@@ -64,43 +61,38 @@ export const TodoItem: React.FC<Props> = ({
     setIsEditing(true);
   };
 
-  const setNewTodoTitle = (event: any) => {
-    if (event.key === 'Enter') {
-      if (!newTitleValue.trim().length) {
-        return deleteTodo();
-      }
-
-      setTodos(
-        todos.map((one: Todo) => {
-          if (one.id === todo.id) {
-            return {
-              ...one,
-              title: newTitleValue,
-            };
-          }
-
-          return one;
-        }),
-      );
-
-      setVisibleTodos(
-        todos.map((one: Todo) => {
-          if (one.id === todo.id) {
-            return {
-              ...one,
-              title: newTitleValue,
-            };
-          }
-
-          return one;
-        }),
-      );
-      setIsEditing(false);
+  const setNewTodoTitle = () => {
+    if (!newTitleValue.trim().length && !todo.title.trim().length) {
+      return deleteTodo();
     }
 
-    if (event.key === 'Escape') {
-      setIsEditing(false);
-    }
+    setTodos(
+      todos.map((one: Todo) => {
+        if (one.id === todo.id) {
+          return {
+            ...one,
+            title: newTitleValue || todo.title,
+          };
+        }
+
+        return one;
+      }),
+    );
+
+    setVisibleTodos(
+      todos.map((one: Todo) => {
+        if (one.id === todo.id) {
+          return {
+            ...one,
+            title: newTitleValue || todo.title,
+          };
+        }
+
+        return one;
+      }),
+    );
+
+    return setIsEditing(false);
   };
 
   const handleChange = () => {
@@ -108,7 +100,6 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <li
       key={todo.id}
       className={
@@ -139,45 +130,23 @@ export const TodoItem: React.FC<Props> = ({
           className="destroy"
           data-cy="deleteTodo"
           onClick={deleteTodo}
+          aria-label="destroy"
         />
       </div>
       <input
         type="text"
         className="edit"
         value={newTitleValue || todo.title}
-        onKeyDown={setNewTodoTitle}
-        onBlur={() => {
-          if (!newTitleValue.trim().length) {
-            return deleteTodo();
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            setNewTodoTitle();
           }
 
-          setTodos(
-            todos.map((one: any) => {
-              if (one.id === todo.id) {
-                return {
-                  ...one,
-                  title: newTitleValue,
-                };
-              }
-
-              return one;
-            }),
-          );
-
-          setVisibleTodos(
-            todos.map((one: Todo) => {
-              if (one.id === todo.id) {
-                return {
-                  ...one,
-                  title: newTitleValue,
-                };
-              }
-
-              return one;
-            }),
-          );
-          setIsEditing(false);
+          if (event.key === 'Escape') {
+            setIsEditing(false);
+          }
         }}
+        onBlur={setNewTodoTitle}
         ref={input => input && input.focus()}
         onChange={(event) => {
           setNewTitleValue(event.target.value);

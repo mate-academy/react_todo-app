@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -8,15 +8,15 @@ import { TodoFilter } from '../TodoFilter/TodoFilter';
 import { TodoForm } from '../TodoForm/TodoForm';
 import { TodoList } from '../TodoList/TodoList';
 
-const useLocalStorage = (key: string, initialValue: any) => {
+const useLocalStorage = (key: string, initialValue: []) => {
   const [value, setValue] = useState(
     localStorage.getItem(key) || initialValue,
   );
 
-  const save = (value: any) => {
-    setValue(value);
+  const save = (saveValue: []) => {
+    setValue(saveValue);
 
-    localStorage.setItem('todos', JSON.stringify(value));
+    localStorage.setItem('todos', JSON.stringify(saveValue));
   };
 
   if (typeof value === 'object') {
@@ -54,29 +54,11 @@ export const TodoApp = () => {
     return setUserName(response.name);
   }
 
-  async function getTodos() {
-    const result = await fetch(
-      'https://mate.academy/students-api/todos?userId=6057', {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-
-    const response = await result.json();
-
-    return response;
-  }
-
   useEffect(() => {
     getUser();
-    getTodos();
   }, []);
 
   useEffect(() => {
-    // createUser();
     switch (pathname) {
       case FilterTypes.Active:
         return setVisibleTodos(activeTodos);
@@ -133,11 +115,8 @@ export const TodoApp = () => {
               className="toggle-all"
               data-cy="toggleAll"
             />
-            <label
-              onClick={completeAll}
-            >
+            <label onClick={completeAll}>
               Mark all as complete
-
             </label>
 
             <TodoList

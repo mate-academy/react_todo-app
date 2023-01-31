@@ -1,7 +1,6 @@
 import { Todo } from '../../types/types';
 import { TodoItem } from './TodoItem/TodoItem';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   visibleTodos: Todo[],
   setTodos: (value: Todo[]) => void,
@@ -19,8 +18,6 @@ export const TodoList:React.FC<Props> = ({
   setIsToggled,
   isToggled,
 }) => {
-  // console.log(setVisibleTodos, todos, visibleTodos);
-
   return (
     <ul className="todo-list" data-cy="todoList">
       {

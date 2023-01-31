@@ -13,7 +13,6 @@ export const TodoForm:React.FC<Props> = ({
   todos, setTodos, setVisibleTodos, setIsToggled, isToggled,
 }) => {
   const [formValue, setFormValue] = useState('');
-  // console.log(setTodos)
   const createTodo = () => {
     if (formValue.trim()) {
       const todo = {
