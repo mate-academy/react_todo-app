@@ -10,11 +10,21 @@ type Props = {
   todos: Todo[],
   isAdding: boolean,
   newTodoTitle: string,
+  removeTodo: (id: number) => void,
+  toggleTodo: (todo: Todo) => void,
+  updateTodoTitle: (todoTitle: string, todo: Todo) => void,
+  todoIdsForLoader: number[],
 };
 
 export const TodoList = React.memo(
   ({
-    todos, isAdding, newTodoTitle,
+    todos,
+    isAdding,
+    newTodoTitle,
+    removeTodo,
+    toggleTodo,
+    updateTodoTitle,
+    todoIdsForLoader,
   }: Props) => {
     return (
       <section className="todoapp__main" data-cy="TodoList">
@@ -28,6 +38,10 @@ export const TodoList = React.memo(
               <TodoItem
                 todo={todo}
                 isAdding={false}
+                removeTodo={removeTodo}
+                toggleTodo={toggleTodo}
+                updateTodoTitle={updateTodoTitle}
+                todoIdsForLoader={todoIdsForLoader}
               />
             </CSSTransition>
           ))}
@@ -45,6 +59,10 @@ export const TodoList = React.memo(
                   completed: false,
                 }}
                 isAdding={isAdding}
+                removeTodo={removeTodo}
+                toggleTodo={toggleTodo}
+                updateTodoTitle={updateTodoTitle}
+                todoIdsForLoader={todoIdsForLoader}
               />
             </CSSTransition>
           )}

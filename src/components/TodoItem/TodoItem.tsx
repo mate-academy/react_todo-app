@@ -1,29 +1,27 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useEffect, useRef, useState,
 } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { DefaultContext } from '../DefaultContext';
-import { patchTodo, deleteTodo } from '../../api/todos';
-import { ErrorContext } from '../ErrorNotification/ErrorContext';
-import { Errors } from '../../types/Errors';
 
 type Props = {
   todo: Todo,
   isAdding: boolean,
+  removeTodo: (id: number) => void,
+  toggleTodo: (todo: Todo) => void,
+  updateTodoTitle: (todoTitle: string, todo: Todo) => void,
+  todoIdsForLoader: number[],
 };
 
 export const TodoItem = React.memo(
   ({
-    todo, isAdding,
+    todo,
+    isAdding,
+    removeTodo,
+    toggleTodo,
+    updateTodoTitle,
+    todoIdsForLoader,
   }: Props) => {
-    const {
-      todosFromServer,
-      setTodosFromServer,
-      todoIdsForLoader,
-      setTodoIdsForLoader,
-    } = useContext(DefaultContext);
-    const { setError } = useContext(ErrorContext);
     const [todoTitle, setTodoTitle] = useState(todo.title);
     const [isEditing, setIsEditing] = useState(false);
     const newTodoTitleField = useRef<HTMLInputElement>(null);
@@ -34,39 +32,8 @@ export const TodoItem = React.memo(
       }
     });
 
-    const removeTodo = async (todoId: number) => {
-      try {
-        setTodoIdsForLoader([todoId]);
-        await deleteTodo(todoId);
-
-        setTodosFromServer([
-          ...todosFromServer.filter(toDo => toDo.id !== todoId),
-        ]);
-      } catch {
-        setError(Errors.DELETE);
-      } finally {
-        setTodoIdsForLoader([]);
-      }
-    };
-
-    const toggleTodo = async () => {
-      try {
-        setTodoIdsForLoader([todo.id]);
-        const updatedTodo = await patchTodo(todo.id,
-          { completed: !todo.completed }) as Todo;
-
-        setTodosFromServer(todosFromServer
-          .map(todoOnServer => (todoOnServer.id === updatedTodo.id
-            ? updatedTodo
-            : todoOnServer)));
-      } catch (error) {
-        setError(Errors.UPDATE);
-      } finally {
-        setTodoIdsForLoader([]);
-      }
-    };
-
-    const updateTodoTitle = async () => {
+    const handleSubmitUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
       switch (todoTitle) {
         case '':
           removeTodo(todo.id);
@@ -80,27 +47,19 @@ export const TodoItem = React.memo(
           break;
       }
 
-      try {
-        setTodoIdsForLoader([todo.id]);
-
-        const updatedTodo = await patchTodo(todo.id,
-          { title: todoTitle }) as Todo;
-
-        setTodosFromServer(todosFromServer
-          .map(todoOnServer => (todoOnServer.id === updatedTodo.id
-            ? updatedTodo
-            : todoOnServer)));
-
-        setIsEditing(false);
-      } catch {
-        setError(Errors.UPDATE);
-      } finally {
-        setTodoIdsForLoader([]);
-      }
+      updateTodoTitle(todoTitle, todo);
+      setIsEditing(false);
     };
 
-    const handleKeyDownEscape = (e: string) => {
-      if (e === 'Escape') {
+    const handleChangeTodoStatus = () => toggleTodo(todo);
+    const handleDblClickTodo = () => setIsEditing(true);
+    const handleClickRemoveTodo = () => removeTodo(todo.id);
+    const handleChangeTodoTitle = (e: React.ChangeEvent<HTMLInputElement>) => (
+      setTodoTitle(e.target.value)
+    );
+    const handleBlurTodoTitle = () => updateTodoTitle(todoTitle, todo);
+    const handleKeyDownEscape = (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') {
         setIsEditing(false);
         setTodoTitle(todo.title);
       }
@@ -117,7 +76,7 @@ export const TodoItem = React.memo(
             data-cy="TodoStatus"
             type="checkbox"
             className="todo__status"
-            onChange={toggleTodo}
+            onChange={handleChangeTodoStatus}
           />
         </label>
 
@@ -127,7 +86,7 @@ export const TodoItem = React.memo(
             'todo__title',
             { hidden: isEditing },
           )}
-          onDoubleClick={() => setIsEditing(true)}
+          onDoubleClick={handleDblClickTodo}
         >
           {todoTitle}
         </span>
@@ -139,16 +98,13 @@ export const TodoItem = React.memo(
             { hidden: isEditing },
           )}
           data-cy="TodoDeleteButton"
-          onClick={() => removeTodo(todo.id)}
+          onClick={handleClickRemoveTodo}
         >
           ×
         </button>
 
         <form
-          onSubmit={e => {
-            e.preventDefault();
-            updateTodoTitle();
-          }}
+          onSubmit={handleSubmitUpdate}
         >
           <input
             data-cy="TodoTitleField"
@@ -160,9 +116,9 @@ export const TodoItem = React.memo(
             placeholder="Empty todo will be deleted"
             value={todoTitle}
             ref={newTodoTitleField}
-            onChange={e => setTodoTitle(e.target.value)}
-            onBlur={updateTodoTitle}
-            onKeyDown={e => handleKeyDownEscape(e.key)}
+            onChange={handleChangeTodoTitle}
+            onBlur={handleBlurTodoTitle}
+            onKeyDown={handleKeyDownEscape}
           />
         </form>
 

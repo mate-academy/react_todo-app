@@ -1,11 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Errors } from '../../types/Errors';
-import { ErrorContext } from './ErrorContext';
 
-export const ErrorNotification = React.memo(
-  () => {
-    const { error, setError } = useContext(ErrorContext);
+type Props = {
+  error: Errors,
+  setError: (error: Errors) => void,
+};
+
+export const ErrorNotification: React.FC<Props> = React.memo(
+  ({ error, setError }) => {
+    const handleDeleteError = () => setError(Errors.NONE);
 
     setTimeout(() => setError(Errors.NONE), 3000);
 
@@ -27,7 +31,7 @@ export const ErrorNotification = React.memo(
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setError(Errors.NONE)}
+          onClick={handleDeleteError}
         />
 
         {error}

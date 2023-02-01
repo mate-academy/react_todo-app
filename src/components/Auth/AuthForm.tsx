@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { createUser, getUserByEmail } from '../../api/users';
 import { User } from '../../types/User';
+import { RegisterField } from './RegisterField';
 
 export type Props = {
   onLogin: (user: User) => void,
@@ -31,7 +32,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
 
       onLogin(user);
     } catch (error) {
-      // Need to login
+      setErrorMessage('Need to login!');
     }
   }, []);
 
@@ -75,74 +76,15 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
         {needToRegister ? 'You need to register' : 'Log in to open todos'}
       </h1>
 
-      <div className="field">
-        <label className="label" htmlFor="user-email">
-          Email
-        </label>
-
-        <div
-          className={classNames('control has-icons-left', {
-            'is-loading': loading,
-          })}
-        >
-          <input
-            type="email"
-            id="user-email"
-            className={classNames('input', {
-              'is-danger': !needToRegister && errorMessage,
-            })}
-            placeholder="Enter your email"
-            disabled={loading || needToRegister}
-            value={email}
-            required
-            onChange={e => setEmail(e.target.value)}
-          />
-
-          <span className="icon is-small is-left">
-            <i className="fas fa-envelope" />
-          </span>
-        </div>
-
-        {!needToRegister && errorMessage && (
-          <p className="help is-danger">{errorMessage}</p>
-        )}
-      </div>
-
-      {needToRegister && (
-        <div className="field">
-          <label className="label" htmlFor="user-name">
-            Your Name
-          </label>
-
-          <div
-            className={classNames('control has-icons-left', {
-              'is-loading': loading,
-            })}
-          >
-            <input
-              type="text"
-              id="user-name"
-              className={classNames('input', {
-                'is-danger': needToRegister && errorMessage,
-              })}
-              placeholder="Enter your name"
-              required
-              minLength={4}
-              disabled={loading}
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-
-            <span className="icon is-small is-left">
-              <i className="fas fa-user" />
-            </span>
-          </div>
-
-          {needToRegister && errorMessage && (
-            <p className="help is-danger">{errorMessage}</p>
-          )}
-        </div>
-      )}
+      <RegisterField
+        loading={loading}
+        needToRegister={needToRegister}
+        errorMessage={errorMessage}
+        email={email}
+        name={name}
+        setEmail={setEmail}
+        setName={setName}
+      />
 
       <div className="field">
         <button
