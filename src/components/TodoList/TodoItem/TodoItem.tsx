@@ -99,6 +99,16 @@ export const TodoItem: React.FC<Props> = ({
     setIsToggled(!isToggled);
   };
 
+  const checkKey = (event: { key: string; }) => {
+    if (event.key === 'Enter') {
+      setNewTodoTitle();
+    }
+
+    if (event.key === 'Escape') {
+      setIsEditing(false);
+    }
+  };
+
   return (
     <li
       key={todo.id}
@@ -137,15 +147,7 @@ export const TodoItem: React.FC<Props> = ({
         type="text"
         className="edit"
         value={newTitleValue || todo.title}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            setNewTodoTitle();
-          }
-
-          if (event.key === 'Escape') {
-            setIsEditing(false);
-          }
-        }}
+        onKeyDown={checkKey}
         onBlur={setNewTodoTitle}
         ref={input => input && input.focus()}
         onChange={(event) => {

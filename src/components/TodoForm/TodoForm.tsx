@@ -3,8 +3,8 @@ import { Todo } from '../../types/types';
 
 type Props = {
   todos: Todo[],
-  setTodos: (value: any) => void,
-  setVisibleTodos: (value: any) => void,
+  setTodos: (value: Todo[]) => void,
+  setVisibleTodos: (value: Todo[]) => void,
   setIsToggled: (value: boolean) => void,
   isToggled: boolean,
 };
@@ -36,6 +36,13 @@ export const TodoForm:React.FC<Props> = ({
     setFormValue('');
   };
 
+  const checkKey = (event: { key: string; preventDefault: () => void; }) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      createTodo();
+    }
+  };
+
   return (
     <form>
       <input
@@ -47,12 +54,7 @@ export const TodoForm:React.FC<Props> = ({
         onChange={(event) => {
           setFormValue(event.target.value);
         }}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            createTodo();
-          }
-        }}
+        onKeyDown={checkKey}
       />
     </form>
   );

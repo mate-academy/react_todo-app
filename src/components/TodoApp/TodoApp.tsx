@@ -41,17 +41,27 @@ export const TodoApp = () => {
   const [userName, setUserName] = useState('');
 
   async function getUser() {
-    const result = await fetch('https://mate.academy/students-api/users/6057', {
-      method: 'GET',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const result = await fetch(
+        'https://mate.academy/students-api/users/6057', {
+          method: 'GET',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
 
-    const response = await result.json();
+      if (result.status !== 200) {
+        return console.error(result.status);
+      }
 
-    return setUserName(response.name);
+      const response = await result.json();
+
+      return setUserName(response.name);
+    } catch (err) {
+      return console.error(err);
+    }
   }
 
   useEffect(() => {
@@ -96,8 +106,9 @@ export const TodoApp = () => {
   return (
     <div className="todoapp">
       <header className="header">
-        <h1>{userName}</h1>
-        <h1>todos</h1>
+        <h1>
+          {`${userName} todos`}
+        </h1>
         <TodoForm
           todos={todos}
           setTodos={setTodos}
