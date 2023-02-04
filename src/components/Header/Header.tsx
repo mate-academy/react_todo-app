@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useRef } from 'react';
@@ -48,6 +47,7 @@ export const Header: React.FC<Props> = ({
       <button
         data-cy="ToggleAllButton"
         type="button"
+        aria-label="Toggle all button"
         className={classNames(
           'todoapp__toggle-all',
           { active: activeTodosCount === 0 },
