@@ -84,41 +84,47 @@ export const TodoApp: React.FC<Props> = ({ todos, setTodos }) => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          checked={activeTodos === 0}
-          onChange={handleCheckAll}
-        />
+      {todos.length > 0
+        && (
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              checked={activeTodos === 0}
+              onChange={handleCheckAll}
+            />
 
-        <label htmlFor="toggle-all"> </label>
+            <label htmlFor="toggle-all"> </label>
 
-        <TodoList todos={filteredTodos} setTodos={setTodos} />
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${activeTodos} item${activeTodos !== 1 ? 's' : ''} left`}
-        </span>
-
-        <TodosFilter
-          filterType={filterType}
-          setFilterType={setFilterType}
-        />
-
-        {activeTodos < todos.length && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={deleteCompleted}
-          >
-            Clear completed
-          </button>
+            <TodoList todos={filteredTodos} setTodos={setTodos} />
+          </section>
         )}
-      </footer>
+
+      {todos.length > 0
+        && (
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${activeTodos} item${activeTodos !== 1 ? 's' : ''} left`}
+            </span>
+
+            <TodosFilter
+              filterType={filterType}
+              setFilterType={setFilterType}
+            />
+
+            {activeTodos < todos.length && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={deleteCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        )}
     </div>
   );
 };
