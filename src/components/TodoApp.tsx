@@ -6,18 +6,6 @@ import { TodoList } from './TodoList';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../utils/useLocalStorage';
 
-// const todosList = [
-//   {
-//     id: 1, userId: 4, title: 'HTML', completed: true,
-//   },
-//   {
-//     id: 2, userId: 4, title: 'JS', completed: false,
-//   },
-//   {
-//     id: 3, userId: 4, title: 'CSS', completed: false,
-//   },
-// ];
-
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
 
