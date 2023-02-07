@@ -1,18 +1,16 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
-import { FilterType } from '../../types/FilterType';
+import { FilterType } from '../types/FilterType';
 
 type Props = {
   filterType: FilterType;
   setFilterType: (newType: FilterType) => void;
 };
 
-export const TodosFilter: React.FC<Props> = (
-  {
-    filterType,
-    setFilterType,
-  },
-) => {
+export const TodosFilter: React.FC<Props> = ({
+  filterType,
+  setFilterType,
+}) => {
   const handleFilterType = useCallback(
     (event: React.MouseEvent, newStatus: FilterType) => {
       event.preventDefault();
