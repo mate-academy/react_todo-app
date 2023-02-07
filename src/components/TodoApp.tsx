@@ -116,45 +116,48 @@ export const TodoApp: React.FC = () => {
       </header>
 
       {todos.length > 0 && (
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-            checked={activeTodos === 0}
-            onChange={handleCheckAll}
-          />
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              checked={activeTodos === 0}
+              onChange={handleCheckAll}
+            />
 
-          <label htmlFor="toggle-all"> </label>
+            <label htmlFor="toggle-all"> </label>
 
-          <TodoList
-            todos={filteredTodos}
-            onDeleteTodo={onDeleteTodo}
-            onCompleted={onCompleted}
-            onRenameTodo={onRenameTodo}
-          />
-        </section>
-      )}
+            <TodoList
+              todos={filteredTodos}
+              onDeleteTodo={onDeleteTodo}
+              onCompleted={onCompleted}
+              onRenameTodo={onRenameTodo}
+            />
+          </section>
 
-      {todos.length > 0 && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${activeTodos} item${activeTodos !== 1 ? 's' : ''} left`}
-          </span>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${activeTodos} item${activeTodos !== 1 ? 's' : ''} left`}
+            </span>
 
-          <TodosFilter filterType={filterType} setFilterType={setFilterType} />
+            <TodosFilter
+              filterType={filterType}
+              setFilterType={setFilterType}
+            />
 
-          {activeTodos < todos.length && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={deleteCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            {activeTodos < todos.length && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={deleteCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
       )}
     </div>
   );
