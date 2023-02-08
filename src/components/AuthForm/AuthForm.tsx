@@ -1,6 +1,5 @@
 import {
   FC,
-  useCallback,
   useContext,
   useEffect,
   useState,
@@ -16,10 +15,9 @@ import { ErrorNotification } from '../ErrorNotification';
 export const AuthForm: FC = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [needToRegister, setNeedToRegister] = useState(false);
+  const [isUnregistered, setIsUnregistered] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const { setUser } = useContext(AuthContext);
@@ -29,11 +27,6 @@ export const AuthForm: FC = () => {
     localStorage.setItem('user', JSON.stringify(user));
     setUser(user);
   };
-
-  const generateError = useCallback((message: string) => {
-    setErrorMessage(message);
-    setHasError(true);
-  }, []);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -47,7 +40,7 @@ export const AuthForm: FC = () => {
 
       setUser(user);
     } catch (error: unknown) {
-      generateError(`Something went wrong with ${error}`);
+      setErrorMessage(`Something went wrong with ${error}`);
     }
   }, []);
 
@@ -58,7 +51,7 @@ export const AuthForm: FC = () => {
       saveUser(user);
       navigate('/todos');
     } else {
-      setNeedToRegister(true);
+      setIsUnregistered(true);
     }
   };
 
@@ -72,13 +65,13 @@ export const AuthForm: FC = () => {
     const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
 
     if (!email) {
-      generateError('Email can\'t be empty!');
+      setErrorMessage('Email can\'t be empty!');
 
       return false;
     }
 
     if (!emailPattern.test(email)) {
-      generateError('Invalid email!');
+      setErrorMessage('Invalid email!');
 
       return false;
     }
@@ -87,14 +80,14 @@ export const AuthForm: FC = () => {
   };
 
   const isNameValid = () => {
-    if (!name && needToRegister) {
-      generateError('Name can\'t be empty!');
+    if (!name && isUnregistered) {
+      setErrorMessage('Name can\'t be empty!');
 
       return false;
     }
 
-    if (name.length < 3 && needToRegister) {
-      generateError('The name must be at least 3 letters!');
+    if (name.length < 3 && isUnregistered) {
+      setErrorMessage('The name must be at least 3 letters!');
 
       return false;
     }
@@ -113,13 +106,13 @@ export const AuthForm: FC = () => {
     setIsLoading(true);
 
     try {
-      if (needToRegister) {
+      if (isUnregistered) {
         await registerUser();
       } else {
         await loadUser();
       }
     } catch (error: unknown) {
-      generateError(`Something went wrong with ${error}`);
+      setErrorMessage(`Something went wrong with ${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -129,7 +122,7 @@ export const AuthForm: FC = () => {
     value: string,
     type: 'email' | 'name',
   ) => {
-    setHasError(false);
+    setErrorMessage('');
 
     if (type === 'email') {
       setEmail(value);
@@ -138,19 +131,15 @@ export const AuthForm: FC = () => {
     }
   };
 
-  const closeNotification = useCallback(() => (
-    setHasError(false)
-  ), []);
-
   useEffect(() => {
-    setTimeout(() => setHasError(false), 2000);
-  }, [hasError]);
+    setTimeout(() => setErrorMessage(''), 2000);
+  }, [errorMessage]);
 
   return (
     <>
       <form onSubmit={handleSubmit} className="box mt-5">
         <h1 className="title is-3">
-          {needToRegister ? 'You need to register' : 'Log in to open todos'}
+          {isUnregistered ? 'You need to register' : 'Log in to open todos'}
         </h1>
 
         <div className="field">
@@ -169,10 +158,10 @@ export const AuthForm: FC = () => {
               type="text"
               id="user-email"
               className={classNames('input', {
-                'is-danger': !needToRegister && errorMessage,
+                'is-danger': !isUnregistered && errorMessage,
               })}
               placeholder="Enter your email"
-              disabled={isLoading || needToRegister}
+              disabled={isLoading || isUnregistered}
               value={email}
               onChange={e => handleInputChange(e.target.value, 'email')}
             />
@@ -183,7 +172,7 @@ export const AuthForm: FC = () => {
           </div>
         </div>
 
-        {needToRegister && (
+        {isUnregistered && (
           <div className="field">
             <label className="label" htmlFor="user-name">
               Your Name
@@ -200,7 +189,7 @@ export const AuthForm: FC = () => {
                 type="text"
                 id="user-name"
                 className={classNames('input', {
-                  'is-danger': needToRegister && errorMessage,
+                  'is-danger': isUnregistered && errorMessage,
                 })}
                 placeholder="Enter your name"
                 disabled={isLoading}
@@ -224,15 +213,14 @@ export const AuthForm: FC = () => {
               { 'is-loading': isLoading },
             )}
           >
-            {needToRegister ? 'Register' : 'Login'}
+            {isUnregistered ? 'Register' : 'Login'}
           </button>
         </div>
       </form>
 
       <ErrorNotification
-        hasError={hasError}
         errorMessage={errorMessage}
-        closeNotification={closeNotification}
+        setErrorMessage={setErrorMessage}
       />
     </>
   );

@@ -54,7 +54,7 @@ export const TodoItem: FC<Props> = memo(({
       return;
     }
 
-    if (trimmedNewTitle === '') {
+    if (!trimmedNewTitle) {
       handleRemove();
 
       return;
@@ -64,7 +64,7 @@ export const TodoItem: FC<Props> = memo(({
     changeTodoTitleOnServer(id, trimmedNewTitle);
   }, [title, newTitle]);
 
-  const handleSubmit = useCallback((
+  const handleFormSubmit = useCallback((
     e: React.FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
@@ -116,7 +116,7 @@ export const TodoItem: FC<Props> = memo(({
 
       {isFormVisible
         ? (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleFormSubmit}>
             <input
               data-cy="TodoTitleField"
               type="text"

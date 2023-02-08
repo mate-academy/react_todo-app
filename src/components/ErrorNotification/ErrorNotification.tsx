@@ -3,18 +3,16 @@ import classNames from 'classnames';
 import { CSSTransition } from 'react-transition-group';
 
 interface Props {
-  hasError: boolean;
   errorMessage: string;
-  closeNotification: () => void;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ErrorNotification: FC<Props> = memo(({
-  hasError,
   errorMessage,
-  closeNotification,
+  setErrorMessage,
 }) => (
   <CSSTransition
-    in={hasError}
+    in={!!errorMessage}
     timeout={1000}
     classNames="error"
     unmountOnExit
@@ -26,7 +24,7 @@ export const ErrorNotification: FC<Props> = memo(({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: !hasError },
+        { hidden: !errorMessage },
       )}
     >
       <button
@@ -34,7 +32,7 @@ export const ErrorNotification: FC<Props> = memo(({
         type="button"
         className="delete"
         aria-label="HideErrorButton"
-        onClick={closeNotification}
+        onClick={() => setErrorMessage('')}
       />
 
       {errorMessage}

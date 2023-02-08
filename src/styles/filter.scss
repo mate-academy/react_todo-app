@@ -1,6 +1,10 @@
 .filter {
   display: flex;
 
+  &__link-wrapper {
+    display: inline-block;
+  }
+
   &__link {
     margin: 3px;
     padding: 3px 7px;
@@ -12,11 +16,11 @@
     border-radius: 3px;
 
     &:hover {
-      border-color: rgba(175, 47, 47, 0.1);
+      border-color: $pot-pourri-color;
     }
 
     &.selected {
-      border-color: rgba(175, 47, 47, 0.2);
+      border-color: $oyster-pink-color;
     }
   }
 }

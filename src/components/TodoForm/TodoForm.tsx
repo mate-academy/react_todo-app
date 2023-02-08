@@ -10,14 +10,14 @@ import {
 interface Props {
   addTodoToServer: (todoTitle: string) => void;
   isAdding: boolean;
-  generateError: (message: string) => void;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   toggleAllTodosStatusOnServer: () => Promise<void>;
 }
 
 export const TodoForm: FC<Props> = memo(({
   addTodoToServer,
   isAdding,
-  generateError,
+  setErrorMessage,
   toggleAllTodosStatusOnServer,
 }) => {
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -31,8 +31,8 @@ export const TodoForm: FC<Props> = memo(({
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (todoText.trim() === '') {
-      generateError('Title can\'t be empty');
+    if (!todoText.trim()) {
+      setErrorMessage('Title can\'t be empty');
 
       return;
     }

@@ -5,7 +5,7 @@
 .item-enter-active {
   overflow: hidden;
   max-height: 58px;
-  transition: max-height 0.3s ease-in-out;
+  transition: max-height $transition-time ease-in-out;
 }
 
 .item-exit {
@@ -15,7 +15,7 @@
 .item-exit-active {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.3s ease-in-out;
+  transition: max-height $transition-time ease-in-out;
 }
 
 .temp-item-enter {
@@ -25,7 +25,7 @@
 .temp-item-enter-active {
   overflow: hidden;
   max-height: 58px;
-  transition: max-height 0.3s ease-in-out;
+  transition: max-height $transition-time ease-in-out;
 }
 
 .temp-item-exit {
@@ -36,7 +36,7 @@
   transform: translateY(-58px);
   max-height: 0;
   opacity: 0;
-  transition: 0.3s ease-in-out;
+  transition: $transition-time ease-in-out;
   transition-property: opacity, max-height, transform;
 }
 
@@ -51,7 +51,7 @@
 
 .error-enter-active {
   opacity: 1;
-  transition: opacity 300ms;
+  transition: opacity $transition-time;
 }
 
 .error-exit {
@@ -60,5 +60,5 @@
 
 .error-exit-active {
   opacity: 0;
-  transition: opacity 300ms;
+  transition: opacity $transition-time;
 }

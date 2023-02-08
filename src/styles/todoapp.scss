@@ -2,21 +2,21 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 24px;
   font-weight: 300;
-  color: #4d4d4d;
+  color: $tundora-color;
   margin: 40px 20px;
 
   &__content {
     margin-bottom: 20px;
-    background: #fff;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-      0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    background: $white-color;
+    box-shadow: 0 2px 4px 0 $silver-color,
+      0 25px 50px 0 $mercury-color;
   }
 
   &__title {
     font-size: 100px;
     font-weight: 100;
     text-align: center;
-    color: rgba(175, 47, 47, 0.15);
+    color: $pot-pourri-color;
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -37,14 +37,14 @@
     align-items: center;
 
     font-size: 24px;
-    color: #e6e6e6;
+    color: $mercury-color;
 
     border: 0;
     background-color: transparent;
     cursor: pointer;
 
     &.active {
-      color: #737373;
+      color: $dove-gray-color;
     }
 
     &:before {
@@ -67,19 +67,19 @@
     -moz-osx-font-smoothing: grayscale;
 
     border: none;
-    background: rgba(0, 0, 0, 0.01);
-    box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+    background: $alabaster-color;
+    box-shadow: inset 0 -2px 1px $alabaster-color;
     outline: none;
 
     &::placeholder {
       font-style: italic;
       font-weight: 300;
-      color: #e6e6e6;
+      color: $mercury-color;
     }
   }
 
   &__main {
-    border-top: 1px solid #e6e6e6;
+    border-top: 1px solid $mercury-color;
   }
 
   &__footer {
@@ -93,15 +93,15 @@
 
     font-size: 14px;
 
-    color: #777;
+    color: $boulder-color;
     text-align: center;
-    border-top: 1px solid #e6e6e6;
+    border-top: 1px solid $mercury-color;
 
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
-      0 8px 0 -3px #f6f6f6,
-      0 9px 1px -3px rgba(0, 0, 0, 0.2),
-      0 16px 0 -6px #f6f6f6,
-      0 17px 2px -6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 1px $silver-color,
+      0 8px 0 -3px $wild-sand-color,
+      0 9px 1px -3px $silver-color,
+      0 16px 0 -6px $wild-sand-color,
+      0 17px 2px -6px $silver-color;
   }
 
   &__clear-completed {
@@ -118,7 +118,8 @@
     background: none;
     visibility: visible;
     opacity: 1;
-    transition: visibility 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transition: visibility $transition-time ease-in-out,
+      opacity $transition-time ease-in-out;
 
     -webkit-appearance: none;
     appearance: none;

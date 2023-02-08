@@ -27,20 +27,26 @@ export const TodosFilter: FC<Props> = memo(({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {Object.entries(FilterStatus).map(([key, value]) => (
-          <SearchLink
-            key={value}
-            params={({ selectedStatus: value || null })}
-            data-cy={`FilterLink${key}`}
-            className={classNames(
-              'filter__link',
-              { selected: selectedStatus === value },
-            )}
-            onClick={() => setSearchParams(value)}
-          >
-            {key}
-          </SearchLink>
-        ))}
+        <ul>
+          {Object.entries(FilterStatus).map(([key, value]) => (
+            <li
+              key={value}
+              className="filter__link-wrapper"
+            >
+              <SearchLink
+                params={({ selectedStatus: value || null })}
+                data-cy={`FilterLink${key}`}
+                className={classNames(
+                  'filter__link',
+                  { selected: selectedStatus === value },
+                )}
+                onClick={() => setSearchParams(value)}
+              >
+                {key}
+              </SearchLink>
+            </li>
+          ))}
+        </ul>
       </nav>
 
       <button
@@ -48,7 +54,7 @@ export const TodosFilter: FC<Props> = memo(({
         type="button"
         className={classNames(
           'todoapp__clear-completed',
-          { 'todoapp__clear-completed--hidden': completedTodosLength === 0 },
+          { 'todoapp__clear-completed--hidden': !completedTodosLength },
         )}
         onClick={removeAllCompletedTodos}
       >

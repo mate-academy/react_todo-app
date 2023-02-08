@@ -29,13 +29,12 @@ import { Logout } from '../components/Logout';
 export const TodosPage: FC = () => {
   const { user } = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
-
-  const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const [isAdding, setIsAdding] = useState(false);
   const [todoIdsLoading, setTodoIdsLoading] = useState<number[]>([]);
   const [tempTodoTitle, setTempTodoTitle] = useState('');
+
   const [searchParams] = useSearchParams();
 
   const selectedStatus = searchParams.get('selectedStatus') || null;
@@ -66,15 +65,6 @@ export const TodosPage: FC = () => {
     todos.filter((todo) => todo.completed)
   ), [todos]);
 
-  const closeNotification = useCallback(() => (
-    setHasError(false)
-  ), []);
-
-  const generateError = useCallback((message: string) => {
-    setErrorMessage(message);
-    setHasError(true);
-  }, []);
-
   const getTodosFromServer = useCallback(async () => {
     try {
       if (user) {
@@ -83,7 +73,7 @@ export const TodosPage: FC = () => {
         setTodos(todosFromServer);
       }
     } catch (error) {
-      generateError('Unable to show todos!');
+      setErrorMessage('Unable to show todos!');
     }
   }, [user]);
 
@@ -101,7 +91,7 @@ export const TodosPage: FC = () => {
 
         await getTodosFromServer();
       } catch (error) {
-        generateError('Unable to add a todo!');
+        setErrorMessage('Unable to add a todo!');
       } finally {
         setIsAdding(false);
       }
@@ -119,7 +109,7 @@ export const TodosPage: FC = () => {
         currentIds.filter((id) => id !== todoId)
       ));
     } catch (error) {
-      generateError(`Unable to remove todo with id #${todoId}!`);
+      setErrorMessage(`Unable to remove todo with id #${todoId}!`);
     }
   }, [todos]);
 
@@ -129,7 +119,7 @@ export const TodosPage: FC = () => {
         removeTodoFromServer(id)
       )));
     } catch (error) {
-      generateError('Unable to remove all completed todos!');
+      setErrorMessage('Unable to remove all completed todos!');
     }
   }, [completedTodos]);
 
@@ -147,7 +137,7 @@ export const TodosPage: FC = () => {
         currentIds.filter((id) => id !== todoId)
       ));
     } catch (error) {
-      generateError(`Unable to update the status of todo with id #${todoId}!`);
+      setErrorMessage(`Unable to update the status of todo with id #${todoId}!`);
     }
   }, [todos]);
 
@@ -161,7 +151,7 @@ export const TodosPage: FC = () => {
         toggleTodoStatusOnServer(id, !completed)
       )));
     } catch (error) {
-      generateError('Unable to toggle all todos status!');
+      setErrorMessage('Unable to toggle all todos status!');
     }
   }, [todos]);
 
@@ -179,7 +169,7 @@ export const TodosPage: FC = () => {
         currentIds.filter((id) => id !== todoId)
       ));
     } catch (error) {
-      generateError(`Unable to change the title of todo with id #${todoId}!`);
+      setErrorMessage(`Unable to change the title of todo with id #${todoId}!`);
     }
   }, [todos]);
 
@@ -188,8 +178,8 @@ export const TodosPage: FC = () => {
   ), [todos, isAdding]);
 
   useEffect(() => {
-    setTimeout(() => setHasError(false), 2000);
-  }, [hasError]);
+    setTimeout(() => setErrorMessage(''), 2000);
+  }, [errorMessage]);
 
   useEffect(() => {
     getTodosFromServer();
@@ -204,7 +194,7 @@ export const TodosPage: FC = () => {
       <div className="todoapp__content">
         <TodoForm
           isAdding={isAdding}
-          generateError={generateError}
+          setErrorMessage={setErrorMessage}
           addTodoToServer={addTodoToServer}
           toggleAllTodosStatusOnServer={toggleAllTodosStatusOnServer}
         />
@@ -229,9 +219,8 @@ export const TodosPage: FC = () => {
       </div>
 
       <ErrorNotification
-        hasError={hasError}
         errorMessage={errorMessage}
-        closeNotification={closeNotification}
+        setErrorMessage={setErrorMessage}
       />
 
       <Logout />
