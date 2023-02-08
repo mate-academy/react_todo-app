@@ -1,4 +1,9 @@
-import React, { FormEvent, useMemo, useState } from 'react';
+import React, {
+  FormEvent,
+  ChangeEvent,
+  useMemo,
+  useState,
+} from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -37,8 +42,8 @@ export const Header = React.memo<Props>(({ todos, setTodos }) => {
     handleBlur();
   };
 
-  const handleChange = (newTitle: string) => {
-    setTitle(newTitle);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
   };
 
   return (
@@ -52,7 +57,7 @@ export const Header = React.memo<Props>(({ todos, setTodos }) => {
           className="new-todo"
           placeholder="What needs to be done?"
           value={title}
-          onChange={(event) => handleChange(event.target.value)}
+          onChange={handleChange}
           onBlur={handleBlur}
         />
       </form>

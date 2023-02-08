@@ -80,8 +80,8 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <Header todos={todos} setTodos={setTodos} />
 
-      {!todos.length
-        || (
+      {!!todos.length
+        && (
           <>
             <TodoList
               todos={filteredTodos}
