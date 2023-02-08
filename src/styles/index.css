@@ -208,3 +208,14 @@ body {
     height: 50px;
   }
 }
+
+.notification {
+  font-size: 24px;
+  padding: 20px;
+  background-color: #feecf0;
+  color: #cc0f35;
+}
+
+.notification-hidden {
+  display: none;
+}
