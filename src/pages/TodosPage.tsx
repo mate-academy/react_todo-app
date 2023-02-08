@@ -75,7 +75,7 @@ export const TodosPage: FC = () => {
     setHasError(true);
   }, []);
 
-  const getTodosFromServer = async () => {
+  const getTodosFromServer = useCallback(async () => {
     try {
       if (user) {
         const todosFromServer = await getTodos(user.id);
@@ -85,9 +85,9 @@ export const TodosPage: FC = () => {
     } catch (error) {
       generateError('Unable to show todos!');
     }
-  };
+  }, [user]);
 
-  const addTodoToServer = async (todoTitle: string) => {
+  const addTodoToServer = useCallback(async (todoTitle: string) => {
     if (user) {
       try {
         setIsAdding(true);
@@ -106,7 +106,7 @@ export const TodosPage: FC = () => {
         setIsAdding(false);
       }
     }
-  };
+  }, [user]);
 
   const removeTodoFromServer = useCallback(async (todoId: number) => {
     try {
@@ -121,7 +121,7 @@ export const TodosPage: FC = () => {
     } catch (error) {
       generateError(`Unable to remove todo with id #${todoId}!`);
     }
-  }, []);
+  }, [todos]);
 
   const removeAllCompletedTodos = useCallback(async () => {
     try {
@@ -181,7 +181,7 @@ export const TodosPage: FC = () => {
     } catch (error) {
       generateError(`Unable to change the title of todo with id #${todoId}!`);
     }
-  }, []);
+  }, [todos]);
 
   const isFilterVisible = useMemo(() => (
     todos.length > 0 || isAdding
