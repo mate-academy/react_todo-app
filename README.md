@@ -1,6 +1,9 @@
 # ToDo App
 
+[Demo](https://vlasiuk-anatolii.github.io/todo-app/)
+
 ## Description
+
 Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as described below.
 
 ![todoapp](./description/todoapp.gif)
