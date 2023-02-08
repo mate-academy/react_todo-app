@@ -14,13 +14,13 @@ export const Header: FC<Props> = ({ addTodo }) => {
   const [inputValue, setInputValue] = useState('');
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     setInputValue(value);
   };
 
-  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (inputValue.length === 0) {
@@ -47,14 +47,14 @@ export const Header: FC<Props> = ({ addTodo }) => {
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={onFormSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <input
           type="text"
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
           value={inputValue}
-          onChange={handleOnChange}
+          onChange={handleChange}
           ref={newTodoField}
         />
       </form>

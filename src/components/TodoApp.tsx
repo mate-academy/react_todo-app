@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React from 'react';
 import { Footer } from './Footer';
 import { Header } from './Header';
@@ -38,11 +37,9 @@ export const TodoApp: React.FC = () => {
   const toggleAllCompletedStatus = () => {
     const todoIds = handleAllCompleted(todos)
       ? todos.map((todo: Todo) => todo.id)
-      : todos.filter(
-        (todo: Todo) => !todo.completed,
-      ).map(
-        (todo: Todo) => todo.id,
-      );
+      : todos
+        .filter((todo: Todo) => !todo.completed)
+        .map((todo: Todo) => todo.id);
 
     toggleCompletedStatus(todoIds, { completed: !handleAllCompleted(todos) });
   };
@@ -85,13 +82,9 @@ export const TodoApp: React.FC = () => {
           className="toggle-all"
           data-cy="toggleAll"
           onChange={toggleAllCompletedStatus}
+          checked={handleAllCompleted(todos)}
         />
-        <label
-          htmlFor="toggle-all"
-          className={classNames(
-            { 'toggle-all-label': handleAllCompleted(todos) },
-          )}
-        >
+        <label htmlFor="toggle-all">
           Mark all as complete
         </label>
 

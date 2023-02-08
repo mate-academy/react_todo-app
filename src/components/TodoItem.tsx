@@ -111,7 +111,6 @@ export const TodoItem: FC<Props> = ({
         ref={selectedTodoField}
         onBlur={handleChangingTitle}
       />
-
     </li>
   );
 };
