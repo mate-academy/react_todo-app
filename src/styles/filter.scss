@@ -1,0 +1,26 @@
+.filter {
+  display: flex;
+
+  &__link-wrapper {
+    display: inline-block;
+  }
+
+  &__link {
+    margin: 3px;
+    padding: 3px 7px;
+
+    color: inherit;
+    text-decoration: none;
+
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    &:hover {
+      border-color: $pot-pourri-color;
+    }
+
+    &.selected {
+      border-color: $oyster-pink-color;
+    }
+  }
+}

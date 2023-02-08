@@ -1,0 +1,13 @@
+.not-found-page {
+  padding-top: 50px;
+
+  &__title {
+    font-size: 100px;
+    font-weight: 100;
+    text-align: center;
+    color: $pot-pourri-color;
+    -webkit-text-rendering: optimizeLegibility;
+    -moz-text-rendering: optimizeLegibility;
+    text-rendering: optimizeLegibility;
+  }
+}

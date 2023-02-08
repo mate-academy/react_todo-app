@@ -1,0 +1,103 @@
+.todo {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  justify-items: stretch;
+
+  font-size: 24px;
+  line-height: 1.4em;
+  border-bottom: 1px solid $gallery-color;
+  
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &__status-label {
+    cursor: pointer;
+    background-image: url(../images/unchecked.svg);
+    background-repeat: no-repeat;
+    background-position: center left;
+  }
+
+  &.completed &__status-label {
+    background-image: url(../images/checked.svg);
+  }
+
+  &__status {
+    opacity: 0;
+  }
+
+  &__title {
+    padding: 12px 15px;
+  
+    word-break: break-all;
+    transition: color 0.4s;
+  }
+
+  &.completed &__title {
+    color: $alto-color;
+    text-decoration: line-through;
+  }
+
+  &__remove {
+    position: absolute;
+    right: 12px;
+    top: 0;
+    bottom: 0;
+
+    font-size: 120%;
+    line-height: 1;
+    font-family: inherit;
+    font-weight: inherit;
+    color: $eunry-color;
+
+    float: right;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  
+    transform: translateY(-2px);
+    opacity: 0;
+    transition: color 0.2s ease-out;
+
+    &:hover {
+      color: $matrix-color;
+    }
+  }
+  
+  &:hover &__remove {
+    opacity: 1;
+  }
+
+  &__title-field {
+    width: 100%;
+    padding: 11px 14px;
+  
+    font-size: inherit;
+    line-height: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+  
+    border: 1px solid $dusty-gray-color;
+    box-shadow: inset 0 -1px 5px 0 $silver-color;
+    outline: none;
+
+    &::placeholder {
+      font-style: italic;
+      font-weight: 300;
+      color: $mercury-color;
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+
+    opacity: 0.5;
+  }
+}
