@@ -193,7 +193,7 @@ export const TodosPage: FC = () => {
 
   useEffect(() => {
     getTodosFromServer();
-  });
+  }, [user]);
 
   return (
     <div className="todoapp">

@@ -18,7 +18,7 @@ export const AuthForm: FC = () => {
   const [name, setName] = useState('');
   const [needToRegister, setNeedToRegister] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -46,8 +46,8 @@ export const AuthForm: FC = () => {
       const user = JSON.parse(userData) as User;
 
       setUser(user);
-    } catch (error) {
-      generateError('Something went wrong!');
+    } catch (error: unknown) {
+      generateError(`Something went wrong with ${error}`);
     }
   }, []);
 
@@ -110,7 +110,7 @@ export const AuthForm: FC = () => {
     }
 
     setErrorMessage('');
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       if (needToRegister) {
@@ -118,23 +118,23 @@ export const AuthForm: FC = () => {
       } else {
         await loadUser();
       }
-    } catch (error) {
-      generateError('Something went wrtong');
+    } catch (error: unknown) {
+      generateError(`Something went wrong with ${error}`);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    value: string,
     type: 'email' | 'name',
   ) => {
     setHasError(false);
 
     if (type === 'email') {
-      setEmail(event.target.value);
+      setEmail(value);
     } else {
-      setName(event.target.value);
+      setName(value);
     }
   };
 
@@ -162,7 +162,7 @@ export const AuthForm: FC = () => {
             className={classNames(
               'control',
               'has-icons-left',
-              { 'is-loading': loading },
+              { 'is-loading': isLoading },
             )}
           >
             <input
@@ -172,9 +172,9 @@ export const AuthForm: FC = () => {
                 'is-danger': !needToRegister && errorMessage,
               })}
               placeholder="Enter your email"
-              disabled={loading || needToRegister}
+              disabled={isLoading || needToRegister}
               value={email}
-              onChange={e => handleInputChange(e, 'email')}
+              onChange={e => handleInputChange(e.target.value, 'email')}
             />
 
             <span className="icon is-small is-left">
@@ -193,7 +193,7 @@ export const AuthForm: FC = () => {
               className={classNames(
                 'control',
                 'has-icons-left',
-                { 'is-loading': loading },
+                { 'is-loading': isLoading },
               )}
             >
               <input
@@ -203,9 +203,9 @@ export const AuthForm: FC = () => {
                   'is-danger': needToRegister && errorMessage,
                 })}
                 placeholder="Enter your name"
-                disabled={loading}
+                disabled={isLoading}
                 value={name}
-                onChange={e => handleInputChange(e, 'name')}
+                onChange={e => handleInputChange(e.target.value, 'name')}
               />
 
               <span className="icon is-small is-left">
@@ -221,7 +221,7 @@ export const AuthForm: FC = () => {
             className={classNames(
               'button',
               'is-primary',
-              { 'is-loading': loading },
+              { 'is-loading': isLoading },
             )}
           >
             {needToRegister ? 'Register' : 'Login'}
