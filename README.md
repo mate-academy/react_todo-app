@@ -7,7 +7,7 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/) working as d
 
 ## Tasks
 1. Implemented `TodoApp` component with an input field to create new todos on submit (Enter). Each item has:
-    - `id` - unique identifier (`+new Date()` is good enough)
+    - `id` - unique identifier
     - `title` - the text of a todo
     - `completed` - current status (`false` by default)
 1. Implemented `TodoList` component to display a list of todos
