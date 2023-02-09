@@ -7,13 +7,13 @@ import { AuthContext } from './Auth/AuthContext';
 
 type Props = {
   addTodo: (todo: Todo) => void,
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>,
+  addErrorMessage: (text: string) => void,
   setErrorText: React.Dispatch<React.SetStateAction<string>>,
 };
 
 export const Header: React.FC<Props> = ({
   addTodo,
-  setIsError,
+  addErrorMessage,
   setErrorText,
 }) => {
   const user = useContext(AuthContext);
@@ -31,9 +31,7 @@ export const Header: React.FC<Props> = ({
     event.preventDefault();
 
     if (!query.trim()) {
-      setIsError(true);
-      setErrorText("Title can't be empty");
-      setTimeout(() => setErrorText(''), 3000);
+      addErrorMessage("Title can't be empty");
 
       return;
     }
@@ -48,9 +46,7 @@ export const Header: React.FC<Props> = ({
           });
         })
         .catch(() => {
-          setIsError(true);
-          setErrorText('Unable to add a todo');
-          setTimeout(() => setErrorText(''), 3000);
+          addErrorMessage('Unable to add a todo');
         })
         .finally(() => {
           setQuery('');

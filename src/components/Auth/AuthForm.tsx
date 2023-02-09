@@ -29,34 +29,33 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     onLogin(user);
   }, []);
 
-  const loadUser = async () => {
-    const user = await getUserByEmail(email);
-
-    if (user) {
-      saveUser(user);
-    } else {
-      setNeedToRegister(true);
-    }
+  const loadUser = () => {
+    getUserByEmail(email)
+      .then(user => {
+        if (user) {
+          saveUser(user);
+        } else {
+          setNeedToRegister(true);
+        }
+      })
+      .catch(() => setErrorMessage('Something went wrong'));
   };
 
   const registerUser = () => {
     return createUser({ name, email })
-      .then(saveUser);
+      .then(saveUser)
+      .catch(() => setErrorMessage('Something went wrong'));
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     setErrorMessage('');
 
-    try {
-      if (needToRegister) {
-        await registerUser();
-      } else {
-        await loadUser();
-      }
-    } catch (error) {
-      setErrorMessage('Something went wrong');
+    if (needToRegister) {
+      registerUser();
+    } else {
+      loadUser();
     }
   };
 

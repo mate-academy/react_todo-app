@@ -23,6 +23,12 @@ export const App: React.FC = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
+  const addErrorMessage = (text: string) => {
+    setIsError(true);
+    setErrorText(text);
+    setTimeout(() => setErrorText(''), 3000);
+  };
+
   useEffect(() => {
     if (user) {
       getTodos(user.id)
@@ -48,9 +54,7 @@ export const App: React.FC = () => {
         });
       })
       .catch(() => {
-        setIsError(true);
-        setErrorText('Unable to delete a todo');
-        setTimeout(() => setErrorText(''), 3000);
+        addErrorMessage('Unable to delete a todo');
       });
   };
 
@@ -69,9 +73,7 @@ export const App: React.FC = () => {
         }));
       })
       .catch(() => {
-        setIsError(true);
-        setErrorText('Unable to update a todo');
-        setTimeout(() => setErrorText(''), 3000);
+        addErrorMessage('Unable to update a todo');
       });
   };
 
@@ -104,9 +106,7 @@ export const App: React.FC = () => {
             }));
           })
           .catch(() => {
-            setIsError(true);
-            setErrorText('Unable to update a todo');
-            setTimeout(() => setErrorText(''), 3000);
+            addErrorMessage('Unable to update a todo');
           });
       }));
   };
@@ -116,7 +116,7 @@ export const App: React.FC = () => {
       <div className="todoapp">
         <Header
           addTodo={addTodo}
-          setIsError={setIsError}
+          addErrorMessage={addErrorMessage}
           setErrorText={setErrorText}
         />
 
