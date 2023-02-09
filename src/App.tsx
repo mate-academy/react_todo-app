@@ -20,11 +20,9 @@ export const App: React.FC = () => {
     : [];
 
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
-  const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
   const addErrorMessage = (text: string) => {
-    setIsError(true);
     setErrorText(text);
     setTimeout(() => setErrorText(''), 3000);
   };
@@ -32,10 +30,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (user) {
       getTodos(user.id)
-        .then(setTodos)
-        .catch(() => {
-          setIsError(true);
-        });
+        .then(setTodos);
     }
   }, []);
 
@@ -167,7 +162,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {isError && (
+      {errorText.length > 0 && (
         <ErrorNotification
           errorText={errorText}
         />

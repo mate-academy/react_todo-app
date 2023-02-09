@@ -110,12 +110,14 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
         </div>
       )}
 
-      <button
-        type="submit"
-        className="form-button"
-      >
-        {needToRegister ? 'Register' : 'Login'}
-      </button>
+      <div className="button-wrapper">
+        <button
+          type="submit"
+          className="form-button"
+        >
+          {needToRegister ? 'Register' : 'Login'}
+        </button>
+      </div>
     </form>
   );
 };
