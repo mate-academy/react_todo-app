@@ -67,9 +67,9 @@ export const TodoItem: FC<Props> = ({
     }
   };
 
-  const tickTodo = (todoId: number) => {
+  const tickTodo = () => {
     setTodos(todos.map(currentTodo => {
-      if (currentTodo.id === todoId) {
+      if (currentTodo.id === id) {
         return {
           ...currentTodo,
           completed: !currentTodo.completed,
@@ -91,7 +91,7 @@ export const TodoItem: FC<Props> = ({
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          onClick={() => tickTodo(id)}
+          onClick={tickTodo}
           checked={completed}
         />
         <label

@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
@@ -9,38 +7,14 @@ import { TodosFilter } from './TodosFilter';
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [newTodoTitle, setNewTodoTitle] = useState('');
-  const { pathname } = useLocation();
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (newTodoTitle) {
-      const newTodo = {
-        id: +new Date(),
-        title: newTodoTitle,
-        completed: false,
-      };
-
-      setTodos([...todos, newTodo]);
-      setNewTodoTitle('');
-    }
-  };
-
-  const filteredTodos = todos.filter(todo => {
-    switch (pathname) {
-      case Filter.Active:
-        return !todo.completed;
-      case Filter.Completed:
-        return todo.completed;
-      default:
-        return Filter.All;
-    }
-  });
+  const allCompletedTodos = todos.every(
+    (todo) => todo.completed,
+  );
 
   const tickAllTodos = () => {
-    const completedTodos = todos.every(todo => todo.completed);
-
     const checkAndTick = todos.map(todo => {
-      if (completedTodos) {
+      if (allCompletedTodos) {
         return {
           ...todo,
           completed: false,
@@ -55,6 +29,30 @@ export const TodoApp: React.FC = () => {
 
     setTodos([...checkAndTick]);
   };
+
+  const addTodo = (todo: Todo) => {
+    setTodos([...todos, todo]);
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (newTodoTitle) {
+      const newTodo = {
+        id: +new Date(),
+        title: newTodoTitle,
+        completed: false,
+      };
+
+      addTodo(newTodo);
+      setNewTodoTitle('');
+    }
+  };
+
+  const todosNotCompleted = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.length - todosNotCompleted.length;
+  const removeCompletedTodos = () => (
+    setTodos(todosNotCompleted)
+  );
 
   return (
     <div className="todoapp">
@@ -80,19 +78,32 @@ export const TodoApp: React.FC = () => {
           className="toggle-all"
           data-cy="toggleAll"
           onClick={tickAllTodos}
+          checked={allCompletedTodos && todos.length > 0}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <TodoList
           setTodos={setTodos}
-          todos={filteredTodos}
+          todos={todos}
         />
       </section>
       {todos.length > 0 && (
-        <TodosFilter
-          todos={todos}
-          setTodos={setTodos}
-        />
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {`${todosNotCompleted.length} items left`}
+          </span>
+
+          <TodosFilter />
+          {completedTodos > 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={removeCompletedTodos}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
       )}
     </div>
   );

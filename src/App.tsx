@@ -1,8 +1,8 @@
 import React from 'react';
-import { TodoApp } from './components/TodoApp';
+import { Outlet } from 'react-router-dom';
 
 export const App: React.FC = () => {
   return (
-    <TodoApp />
+    <Outlet />
   );
 };
