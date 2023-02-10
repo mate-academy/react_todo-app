@@ -47,14 +47,10 @@ export const TodoApp: React.FC = () => {
         };
       }
 
-      if (!completedTodos) {
-        return {
-          ...todo,
-          completed: true,
-        };
-      }
-
-      return todo;
+      return {
+        ...todo,
+        completed: true,
+      };
     });
 
     setTodos([...checkAndTick]);
