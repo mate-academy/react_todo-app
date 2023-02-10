@@ -36,6 +36,30 @@ export const TodoApp: React.FC = () => {
     }
   });
 
+  const tickAllTodos = () => {
+    const completedTodos = todos.every(todo => todo.completed);
+
+    const checkAndTick = todos.map(todo => {
+      if (completedTodos) {
+        return {
+          ...todo,
+          completed: false,
+        };
+      }
+
+      if (!completedTodos) {
+        return {
+          ...todo,
+          completed: true,
+        };
+      }
+
+      return todo;
+    });
+
+    setTodos([...checkAndTick]);
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -59,6 +83,7 @@ export const TodoApp: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onClick={tickAllTodos}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -69,7 +94,7 @@ export const TodoApp: React.FC = () => {
       </section>
       {todos.length > 0 && (
         <TodosFilter
-          todos={filteredTodos}
+          todos={todos}
           setTodos={setTodos}
         />
       )}

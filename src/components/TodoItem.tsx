@@ -92,6 +92,7 @@ export const TodoItem: FC<Props> = ({
           className="toggle"
           id="toggle-view"
           onClick={() => tickTodo(id)}
+          checked={completed}
         />
         <label
           onDoubleClick={() => setIsEditing(true)}
