@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { Route, Routes } from 'react-router-dom';
 import classNames from 'classnames';
 
 import React, {
@@ -14,7 +15,7 @@ import {
   patchTodos,
 } from './api/todos';
 
-import { Filter, Filters } from './components/React/Filter';
+import { Filter } from './components/React/Filter';
 import { AuthContext } from './components/Auth/AuthContext';
 import { NewTodo } from './components/React/NewTodo';
 import { TodoList } from './components/React/TodoList';
@@ -32,7 +33,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filters>(Filters.All);
   const [error, setError] = useState('');
   const [input, setInput] = useState('');
   const [isAdding, setIsAdding] = useState(false);
@@ -178,7 +178,16 @@ export const App: React.FC = () => {
     patch(id, { title });
   };
 
-  const handleTodosFilter = (filterType: Filters) => setFilter(filterType);
+  const propPack = {
+    todoIdsOnLoad,
+    todoOnLoad: todoOnload,
+    onTodoDelete: handleTodoDeleteButton,
+    onTodoComplete: handleCompletedCheckBox,
+    saveInputChange: handleExtraInputChange,
+  };
+
+  const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
 
   useEffect(() => fetch(), []);
 
@@ -220,20 +229,26 @@ export const App: React.FC = () => {
 
         {!!todos.length && (
           <>
-            <TodoList
-              todos={todos}
-              filter={filter}
-              todoOnLoad={todoOnload}
-              todoIdsOnLoad={todoIdsOnLoad}
-              onTodoDelete={handleTodoDeleteButton}
-              onTodoComplete={handleCompletedCheckBox}
-              saveInputChange={handleExtraInputChange}
-            />
+            <Routes>
+              <Route
+                path="/"
+                element={<TodoList todos={todos} {...propPack} />}
+              />
+
+              <Route
+                path="/active"
+                element={<TodoList todos={activeTodos} {...propPack} />}
+              />
+
+              <Route
+                path="/completed"
+                element={<TodoList todos={completedTodos} {...propPack} />}
+              />
+            </Routes>
 
             <Filter
-              filter={filter}
+              // filter={filter}
               todos={todos}
-              onFilterChange={handleTodosFilter}
               onCompletedClear={handleClearButton}
             />
           </>

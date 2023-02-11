@@ -5,7 +5,6 @@ import { TodoInfo } from './TodoInfo';
 
 type Props = {
   todos: Todo[],
-  filter: string,
   todoOnLoad: Todo | null,
   todoIdsOnLoad: number[],
   onTodoDelete: (id: number) => void,
@@ -15,46 +14,37 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  filter,
   todoOnLoad,
   todoIdsOnLoad,
   onTodoDelete,
   onTodoComplete,
   saveInputChange,
 }) => {
+  const todoListPropPack = {
+    todoIdsOnLoad,
+    onTodoDelete,
+    onTodoComplete,
+    saveInputChange,
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <TransitionGroup>
-        {todos
-          .filter(todo => {
-            switch (filter) {
-              case 'active':
-                return !todo.completed;
-
-              case 'completed':
-                return todo.completed;
-
-              default: return todo;
-            }
-          })
-          .map(todo => {
-            return (
-              <CSSTransition
+        {todos.map(todo => {
+          return (
+            <CSSTransition
+              key={todo.id}
+              timeout={300}
+              classNames="item"
+            >
+              <TodoInfo
                 key={todo.id}
-                timeout={300}
-                classNames="item"
-              >
-                <TodoInfo
-                  todo={todo}
-                  key={todo.id}
-                  todoIdsOnLoad={todoIdsOnLoad}
-                  onTodoDelete={onTodoDelete}
-                  onTodoComplete={onTodoComplete}
-                  saveInputChange={saveInputChange}
-                />
-              </CSSTransition>
-            );
-          })}
+                todo={todo}
+                {...todoListPropPack}
+              />
+            </CSSTransition>
+          );
+        })}
 
         {todoOnLoad && (
           <CSSTransition
@@ -64,10 +54,7 @@ export const TodoList: React.FC<Props> = ({
           >
             <TodoInfo
               todo={todoOnLoad}
-              todoIdsOnLoad={todoIdsOnLoad}
-              onTodoDelete={onTodoDelete}
-              onTodoComplete={onTodoComplete}
-              saveInputChange={saveInputChange}
+              {...todoListPropPack}
             />
           </CSSTransition>
         )}

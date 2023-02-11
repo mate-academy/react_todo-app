@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -57,10 +57,19 @@ export const TodoInfo: React.FC<Props> = ({
     updateInputInfo();
   };
 
+  useEffect(() => {
+    const activeInput = document.getElementById('#input');
+
+    if (inputMode && activeInput) {
+      activeInput.focus();
+    }
+  }, [inputMode]);
+
   return (
     <div
       data-cy="Todo"
       className={classNames('todo', { completed })}
+
     >
       <label className="todo__status-label">
         <input
@@ -92,10 +101,9 @@ export const TodoInfo: React.FC<Props> = ({
         </>
       ) : (
         <input
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
           type="text"
           className="todo__title-field"
+          id="#input"
           value={titleRecord}
           onChange={handleInputModification}
           onBlur={handleButtonBlur}

@@ -1,34 +1,16 @@
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { FilterBar } from './FilterBar';
+import { Status } from '../../enums/Status';
 
 type Props = {
-  filter: string,
   todos: Todo[],
   onCompletedClear: () => void,
-  onFilterChange: (filterType: Filters) => void,
 };
 
-export enum Filters {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
 export const Filter: React.FC<Props> = ({
-  filter,
   todos,
   onCompletedClear,
-  onFilterChange,
 }) => {
-  const compareFilter = (filterName: string) => {
-    return classNames(
-      'filter__link',
-      {
-        selected: filter === filterName,
-      },
-    );
-  };
-
   const activeTodos = todos.filter(todo => !todo.completed).length;
   const isCompletedTodo = todos.some(todo => todo.completed);
 
@@ -39,31 +21,15 @@ export const Filter: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          data-cy="FilterLinkAll"
-          href="#/"
-          className={compareFilter(Filters.All)}
-          onClick={() => onFilterChange(Filters.All)}
-        >
-          All
-        </a>
+        <FilterBar to="/">{Status.All}</FilterBar>
 
-        <a
-          data-cy="FilterLinkActive"
-          href="#/active"
-          className={compareFilter(Filters.Active)}
-          onClick={() => onFilterChange(Filters.Active)}
-        >
-          Active
-        </a>
-        <a
-          data-cy="FilterLinkCompleted"
-          href="#/completed"
-          className={compareFilter(Filters.Completed)}
-          onClick={() => onFilterChange(Filters.Completed)}
-        >
-          Completed
-        </a>
+        <FilterBar data-cy="FilterLinkActive" to="/active">
+          {Status.Active}
+        </FilterBar>
+
+        <FilterBar data-cy="FilterLinkCompleted" to="/completed">
+          {Status.Completed}
+        </FilterBar>
       </nav>
 
       <button
