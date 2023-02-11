@@ -19,7 +19,10 @@ export const TodosFilter: FC = () => {
   ];
 
   return (
-    <ul className="filters">
+    <ul
+      className="filters"
+      data-cy="todosFilter"
+    >
       {conditions.map(condition => (
         <li key={condition.name}>
           <NavLink

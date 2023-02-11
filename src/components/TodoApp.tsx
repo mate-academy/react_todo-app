@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Todo } from '../types/Todo';
 import { TodoList } from './TodoList';
@@ -8,22 +8,15 @@ export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [newTodoTitle, setNewTodoTitle] = useState('');
 
-  const allCompletedTodos = todos.every(
-    (todo) => todo.completed,
-  );
+  const allCompletedTodos = useMemo(() => {
+    return todos.every(todo => todo.completed);
+  }, [todos]);
 
   const tickAllTodos = () => {
     const checkAndTick = todos.map(todo => {
-      if (allCompletedTodos) {
-        return {
-          ...todo,
-          completed: false,
-        };
-      }
-
       return {
         ...todo,
-        completed: true,
+        completed: !allCompletedTodos,
       };
     });
 
@@ -48,7 +41,9 @@ export const TodoApp: React.FC = () => {
     }
   };
 
-  const todosNotCompleted = todos.filter(todo => !todo.completed);
+  const todosNotCompleted = useMemo(() => {
+    return todos.filter(todo => !todo.completed);
+  }, [todos]);
   const completedTodos = todos.length - todosNotCompleted.length;
   const removeCompletedTodos = () => (
     setTodos(todosNotCompleted)
@@ -81,11 +76,12 @@ export const TodoApp: React.FC = () => {
           checked={allCompletedTodos && todos.length > 0}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <TodoList
-          setTodos={setTodos}
-          todos={todos}
-        />
+        {todos.length > 0 && (
+          <TodoList
+            setTodos={setTodos}
+            todos={todos}
+          />
+        )}
       </section>
       {todos.length > 0 && (
         <footer className="footer">

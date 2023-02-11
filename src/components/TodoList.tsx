@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
@@ -15,7 +15,7 @@ export const TodoList: FC<Props> = ({
 }) => {
   const { pathname } = useLocation();
 
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos = useMemo(() => todos.filter((todo) => {
     switch (pathname) {
       case Filter.Active:
         return !todo.completed;
@@ -24,14 +24,17 @@ export const TodoList: FC<Props> = ({
       default:
         return Filter.All;
     }
-  });
+  }), [todos, pathname]);
 
   return (
-    <ul className="todo-list" data-cy="todoList">
-      {filteredTodos.map(todo => (
+    <ul
+      className="todo-list"
+      data-cy="todosList"
+    >
+      {filteredTodos.map(item => (
         <TodoItem
-          key={todo.id}
-          todo={todo}
+          key={item.id}
+          todo={item}
           todos={todos}
           setTodos={setTodos}
         />

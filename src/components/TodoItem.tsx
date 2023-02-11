@@ -81,10 +81,11 @@ export const TodoItem: FC<Props> = ({
   };
 
   return (
-    <li className={classNames(
-      { completed },
-      { editing: isEditing },
-    )}
+    <li
+      className={classNames({
+        completed: todo.completed,
+        editing: isEditing,
+      })}
     >
       <div className="view">
         <input
@@ -109,7 +110,6 @@ export const TodoItem: FC<Props> = ({
       </div>
       <form
         onSubmit={submitChangedTitle}
-        onBlur={submitChangedTitle}
       >
         <input
           type="text"
@@ -118,6 +118,7 @@ export const TodoItem: FC<Props> = ({
           value={changedTitle}
           onChange={(event) => setChangedTitle(event.target.value)}
           onKeyDown={cancelUpdate}
+          onBlur={submitChangedTitle}
         />
       </form>
     </li>
