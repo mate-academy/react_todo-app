@@ -117,7 +117,6 @@ export const TodoItem: FC<Props> = ({
         onSubmit={submitChangedTitle}
       >
         <input
-          onSubmit={submitChangedTitle}
           type="text"
           className="edit"
           ref={editingTodo}
