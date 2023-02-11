@@ -60,7 +60,12 @@ export const TodoItem: FC<Props> = ({
     setIsEditing(false);
   };
 
-  const cancelUpdate = (event: React.KeyboardEvent) => {
+  const responseToKeys = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      updateTodoTitle(changedTitle, id);
+      setIsEditing(false);
+    }
+
     if (event.key === 'Escape') {
       setIsEditing(false);
       setChangedTitle(title);
@@ -82,10 +87,10 @@ export const TodoItem: FC<Props> = ({
 
   return (
     <li
-      className={classNames({
-        completed: todo.completed,
-        editing: isEditing,
-      })}
+      className={classNames(
+        { editing: isEditing },
+        { completed },
+      )}
     >
       <div className="view">
         <input
@@ -112,12 +117,13 @@ export const TodoItem: FC<Props> = ({
         onSubmit={submitChangedTitle}
       >
         <input
+          onSubmit={submitChangedTitle}
           type="text"
           className="edit"
           ref={editingTodo}
           value={changedTitle}
           onChange={(event) => setChangedTitle(event.target.value)}
-          onKeyDown={cancelUpdate}
+          onKeyDown={responseToKeys}
           onBlur={submitChangedTitle}
         />
       </form>
