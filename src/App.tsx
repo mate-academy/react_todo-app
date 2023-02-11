@@ -247,7 +247,6 @@ export const App: React.FC = () => {
             </Routes>
 
             <Filter
-              // filter={filter}
               todos={todos}
               onCompletedClear={handleClearButton}
             />
