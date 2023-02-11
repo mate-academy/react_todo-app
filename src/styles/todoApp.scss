@@ -1,4 +1,4 @@
-@import './variables.scss';
+@import "./variables.scss";
 
 .todoapp {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -98,8 +98,7 @@
     text-align: center;
     border-top: 1px solid $placeholder-color;
 
-    box-shadow:
-      0 1px 1px $box-shadow-dark,
+    box-shadow: 0 1px 1px $box-shadow-dark,
       0 8px 0 -3px $box-shadow-white,
       0 9px 1px -3px $box-shadow-dark,
       0 16px 0 -6px $box-shadow-white,
