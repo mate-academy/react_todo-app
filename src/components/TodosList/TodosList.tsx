@@ -10,7 +10,7 @@ type Props = {
   isToggled: boolean,
 };
 
-export const TodoList:React.FC<Props> = ({
+export const TodosList:React.FC<Props> = ({
   visibleTodos,
   setTodos,
   setVisibleTodos,
@@ -19,7 +19,7 @@ export const TodoList:React.FC<Props> = ({
   isToggled,
 }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {
         visibleTodos.map((todo: Todo) => {
           return (

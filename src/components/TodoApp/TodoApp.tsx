@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/types';
-import { TodoFilter } from '../TodoFilter/TodoFilter';
+import { TodosFilter } from '../TodosFilter/TodosFilter';
 import { TodoForm } from '../TodoForm/TodoForm';
-import { TodoList } from '../TodoList/TodoList';
+import { TodosList } from '../TodosList/TodosList';
 
 const useLocalStorage = (key: string, initialValue: []) => {
   const [value, setValue] = useState(
@@ -30,6 +30,7 @@ export const TodoApp = () => {
   const { pathname } = useLocation();
   const activeTodos = todos.filter((todo: Todo) => !todo.completed);
   const completedTodos = todos.filter((todo: Todo) => todo.completed);
+  const [count, setCount] = useState(0);
 
   enum FilterTypes {
     Active = '/active',
@@ -82,22 +83,46 @@ export const TodoApp = () => {
   };
 
   const completeAll = () => {
-    setTodos(
-      todos.map((todo: Todo) => {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }),
-    );
-    setVisibleTodos(
-      todos.map((todo: Todo) => {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }),
-    );
+    setCount(prev => prev + 1);
+    if (count % 2 === 0) {
+      setTodos(
+        todos.map((todo: Todo) => {
+          return {
+            ...todo,
+            completed: true,
+          };
+        }),
+      );
+      setVisibleTodos(
+        todos.map((todo: Todo) => {
+          return {
+            ...todo,
+            completed: true,
+          };
+        }),
+      );
+    } else {
+      setTodos(
+        todos.map((todo: Todo) => {
+          return {
+            ...todo,
+            completed: false,
+          };
+        }),
+      );
+      setVisibleTodos(
+        todos.map((todo: Todo) => {
+          return {
+            ...todo,
+            completed: false,
+          };
+        }),
+      );
+    }
+
+    if (count === 1) {
+      setCount(0);
+    }
   };
 
   return (
@@ -126,8 +151,7 @@ export const TodoApp = () => {
             <label htmlFor="completed" onClick={completeAll} aria-hidden>
               Mark all as complete
             </label>
-
-            <TodoList
+            <TodosList
               visibleTodos={visibleTodos}
               setTodos={setTodos}
               todos={todos}
@@ -140,17 +164,16 @@ export const TodoApp = () => {
             <span className="todo-count" data-cy="todosCounter">
               {`${activeTodos.length} ${activeTodos.length !== 1 ? 'items' : 'item'} left`}
             </span>
-
             <ul className="filters">
-              <TodoFilter
+              <TodosFilter
                 link="/"
                 title="All"
               />
-              <TodoFilter
+              <TodosFilter
                 link="/completed"
                 title="Completed"
               />
-              <TodoFilter
+              <TodosFilter
                 link="/active"
                 title="Active"
               />
@@ -165,7 +188,6 @@ export const TodoApp = () => {
               </button>
             )}
           </footer>
-
         </>
       )}
     </div>

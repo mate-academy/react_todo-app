@@ -6,17 +6,16 @@ type Props = {
   title: string,
 };
 
-export const TodoFilter:React.FC<Props> = ({
+export const TodosFilter:React.FC<Props> = ({
   link,
   title,
 }) => {
   const { pathname } = useLocation();
 
   return (
-    <li>
+    <li className={pathname === link ? 'completed' : ''}>
       <Link
         to={link}
-        className={pathname === link ? 'selected' : ''}
       >
         {title}
       </Link>
