@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/types';
@@ -43,7 +40,7 @@ export const TodoApp = () => {
   async function getUser() {
     try {
       const result = await fetch(
-        'https://mate.academy/students-api/users/6057', {
+        'https://mate.academy/students-api/users/1', {
           method: 'GET',
           credentials: 'same-origin',
           headers: {
@@ -53,14 +50,14 @@ export const TodoApp = () => {
       );
 
       if (result.status !== 200) {
-        return console.error(result.status);
+        throw new Error(`Error ${result.status}`);
       }
 
       const response = await result.json();
 
       return setUserName(response.name);
     } catch (err) {
-      return console.error(err);
+      throw new Error('An error occured');
     }
   }
 
@@ -107,7 +104,7 @@ export const TodoApp = () => {
     <div className="todoapp">
       <header className="header">
         <h1>
-          {`${userName} todos`}
+          {userName || 'todos'}
         </h1>
         <TodoForm
           todos={todos}
@@ -126,7 +123,7 @@ export const TodoApp = () => {
               className="toggle-all"
               data-cy="toggleAll"
             />
-            <label onClick={completeAll}>
+            <label htmlFor="completed" onClick={completeAll} aria-hidden>
               Mark all as complete
             </label>
 

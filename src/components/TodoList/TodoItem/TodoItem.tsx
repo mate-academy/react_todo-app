@@ -133,7 +133,6 @@ export const TodoItem: React.FC<Props> = ({
           onDoubleClick={changeTodoTitle}
         >
           {todo.title}
-
         </label>
         <button
           type="button"
