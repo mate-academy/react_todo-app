@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Action } from '../enums/Action';
+import { ActionType } from '../types/ActionType';
 
 type Props = {
   error: string;
-  dispatch: React.Dispatch<{ type: Action, payload?: unknown }>,
+  dispatch: React.Dispatch<ActionType>,
 };
 
 export const ErrorNotification: React.FC<Props> = ({

@@ -4,8 +4,10 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './styles/index.scss';
 
+import {
+  HashRouter, Navigate, Route, Routes,
+} from 'react-router-dom';
 import { App } from './App';
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 const Root = () => (
   <HashRouter>

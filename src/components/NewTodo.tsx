@@ -1,11 +1,14 @@
 import classNames from 'classnames';
 import {
-  useEffect, useRef, useState,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import { Action } from '../enums/Action';
+import { ActionType } from '../types/ActionType';
 
 type Props = {
-  dispatch: React.Dispatch<{ type: Action, payload?: unknown }>,
+  dispatch: React.Dispatch<ActionType>,
   isAllFinished: boolean,
 };
 
@@ -18,7 +21,8 @@ export const NewTodo: React.FC<Props> = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!todoTitle) {
+    if (!todoTitle.trim()) {
+      setTodoTitle('');
       dispatch({ type: Action.ERROR, payload: 'Title can\'t be empty' });
 
       return;

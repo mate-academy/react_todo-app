@@ -1,12 +1,12 @@
 import React from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { Action } from '../enums/Action';
+import { ActionType } from '../types/ActionType';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[],
-  dispatch: React.Dispatch<{ type: Action, payload?: unknown }>,
+  dispatch: React.Dispatch<ActionType>,
 };
 
 export const TodoList: React.FC<Props> = React.memo(

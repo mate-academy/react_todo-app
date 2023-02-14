@@ -5,11 +5,12 @@ import {
   useRef,
 } from 'react';
 import { Action } from '../enums/Action';
+import { ActionType } from '../types/ActionType';
 
 type Props = {
   todoId: number,
   prevTitle: string,
-  dispatch: React.Dispatch<any>,
+  dispatch: React.Dispatch<ActionType>,
   setIsEditing: Dispatch<SetStateAction<boolean>>,
 };
 

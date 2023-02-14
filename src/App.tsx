@@ -6,7 +6,6 @@ import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
 import { Filter } from './enums/Filter';
 import { reducer } from './utils/reducer';
-import { Todo } from './types/Todo';
 import { useLocalStorage } from './utils/useLocalStorage';
 import { ErrorNotification } from './components/ErrorNotification';
 
@@ -16,7 +15,7 @@ const INITIAL_STATE = {
 };
 
 export const App: React.FC = () => {
-  const [storageTodos, setStorageTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [storageTodos, setStorageTodos] = useLocalStorage('todos', []);
   const [{ todos, error }, dispatch] = useReducer(
     reducer,
     { ...INITIAL_STATE, todos: storageTodos },
@@ -27,7 +26,7 @@ export const App: React.FC = () => {
     setStorageTodos(todos);
   }, [todos]);
 
-  const unfinishedTodosLeft = useMemo(
+  const unfinishedTodos = useMemo(
     () => todos.filter(todo => !todo.completed).length, [todos],
   );
 
@@ -43,8 +42,10 @@ export const App: React.FC = () => {
     switch (filter) {
       case Filter.ACTIVE:
         return todos.filter((todo) => !todo.completed);
+
       case Filter.COMPLETED:
         return todos.filter((todo) => todo.completed);
+
       default:
         return todos;
     }
@@ -68,7 +69,7 @@ export const App: React.FC = () => {
 
             <Footer
               dispatch={dispatch}
-              unfinishedTodosLeft={unfinishedTodosLeft}
+              unfinishedTodosLeft={unfinishedTodos}
               isSomeFinished={isSomeFinished}
             />
           </>

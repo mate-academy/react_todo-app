@@ -7,7 +7,7 @@
 
   font-size: 24px;
   line-height: 1.4em;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid $todo-border-color;
   
   &:last-child {
     border-bottom: 0;
@@ -36,7 +36,7 @@
   }
 
   &.completed &__title {
-    color: #d9d9d9;
+    color: $todo-completed-color;
     text-decoration: line-through;
   }
 
@@ -50,7 +50,7 @@
     line-height: 1;
     font-family: inherit;
     font-weight: inherit;
-    color: #cc9a9a;
+    color: $remove-btn-main;
 
     float: right;
     border: 0;
@@ -62,7 +62,7 @@
     transition: color 0.2s ease-out;
 
     &:hover {
-      color: #af5b5e;
+      color: $remove-btn-hover;
     }
   }
   
@@ -86,17 +86,7 @@
     &::placeholder {
       font-style: italic;
       font-weight: 300;
-      color: #e6e6e6;
+      color: $borderColor;
     }
-  }
-
-  .overlay {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-
-    opacity: 0.5;
   }
 }

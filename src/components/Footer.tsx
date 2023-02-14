@@ -2,9 +2,10 @@ import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { Action } from '../enums/Action';
 import { Filter } from '../enums/Filter';
+import { ActionType } from '../types/ActionType';
 
 type Props = {
-  dispatch: React.Dispatch<{ type: Action, payload?: unknown }>,
+  dispatch: React.Dispatch<ActionType>,
   unfinishedTodosLeft: number,
   isSomeFinished: boolean,
 };

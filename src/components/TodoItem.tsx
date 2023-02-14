@@ -1,18 +1,25 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Action } from '../enums/Action';
+import { ActionType } from '../types/ActionType';
 import { Todo } from '../types/Todo';
 import { TodoEdit } from './TodoEdit';
 
 type Props = {
   todo: Todo,
-  dispatch: React.Dispatch<{ type: Action, payload?: unknown }>,
+  dispatch: React.Dispatch<ActionType>,
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo: { id, title, completed }, dispatch,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const handleStatusUpdate = () => {
+    dispatch({
+      type: Action.UPDATE,
+      payload: [id, { completed: !completed }],
+    });
+  };
 
   return (
     <li
@@ -28,10 +35,7 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           defaultChecked
-          onClick={() => dispatch({
-            type: Action.UPDATE,
-            payload: [id, { completed: !completed }],
-          })}
+          onClick={handleStatusUpdate}
         />
       </label>
 
