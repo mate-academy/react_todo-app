@@ -1,93 +1,87 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
+import { useParams } from 'react-router-dom';
+import { Footer } from './components/Footer';
+import { NewTodo } from './components/NewTodo';
+import { TodoList } from './components/TodoList';
+import { Filter } from './enums/Filter';
+import { reducer } from './utils/reducer';
+import { useLocalStorage } from './utils/useLocalStorage';
+import { ErrorNotification } from './components/ErrorNotification';
+
+const INITIAL_STATE = {
+  todos: [],
+  error: '',
+};
 
 export const App: React.FC = () => {
+  const [storageTodos, setStorageTodos] = useLocalStorage('todos', []);
+  const [{ todos, error }, dispatch] = useReducer(
+    reducer,
+    { ...INITIAL_STATE, todos: storageTodos },
+  );
+  const { filter } = useParams();
+
+  useEffect(() => {
+    setStorageTodos(todos);
+  }, [todos]);
+
+  const unfinishedTodos = useMemo(
+    () => todos.filter(todo => !todo.completed).length, [todos],
+  );
+
+  const isSomeFinished = useMemo(() => {
+    return todos.some(todo => todo.completed);
+  }, [todos]);
+
+  const isAllFinished = useMemo(() => {
+    return todos.every(todo => todo.completed);
+  }, [todos]);
+
+  const visibleTodos = useMemo(() => {
+    switch (filter) {
+      case Filter.ACTIVE:
+        return todos.filter((todo) => !todo.completed);
+
+      case Filter.COMPLETED:
+        return todos.filter((todo) => todo.completed);
+
+      default:
+        return todos;
+    }
+  }, [filter, todos]);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <h1 className="todoapp__title">todos</h1>
+      <div className="todoapp__content">
+        <NewTodo
+          dispatch={dispatch}
+          isAllFinished={isAllFinished}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {!!todos.length && (
+          <>
+            <TodoList
+              todos={visibleTodos}
+              dispatch={dispatch}
+            />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Footer
+              dispatch={dispatch}
+              unfinishedTodosLeft={unfinishedTodos}
+              isSomeFinished={isSomeFinished}
+            />
+          </>
+        )}
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+        {!!error && (
+          <ErrorNotification
+            error={error}
+            dispatch={dispatch}
+          />
+        )}
+      </div>
     </div>
   );
 };
