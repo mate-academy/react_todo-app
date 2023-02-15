@@ -18,7 +18,7 @@ export const TodoItem: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [newTitleValue, setNewTitleValue] = useState('');
   const changeCompleted = () => {
-    setTodos(
+    setVisibleTodos(
       todos.map((one: Todo) => {
         if (one.id === todo.id) {
           return {
@@ -30,7 +30,7 @@ export const TodoItem: React.FC<Props> = ({
         return one;
       }),
     );
-    setVisibleTodos(
+    setTodos(
       todos.map((one: Todo) => {
         if (one.id === todo.id) {
           return {
@@ -127,7 +127,6 @@ export const TodoItem: React.FC<Props> = ({
           onClick={changeCompleted}
           checked={todo.completed}
           onChange={handleChange}
-
         />
         <label
           onDoubleClick={changeTodoTitle}
