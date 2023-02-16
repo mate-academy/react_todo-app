@@ -43,7 +43,6 @@ export const Header: React.FC<Props> = ({
           onClick={toggleAllTodosStatus}
         />
       )}
-      ;
 
       <form
         onSubmit={onSumbit}
