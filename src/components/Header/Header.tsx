@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -33,7 +31,8 @@ export const Header: React.FC<Props> = ({
 
   return (
     <header className="todoapp__header">
-      {!!todos.length && (
+      {(!!todos.length) && (
+        /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
         <button
           data-cy="ToggleAllButton"
           type="button"
@@ -44,6 +43,7 @@ export const Header: React.FC<Props> = ({
           onClick={toggleAllTodosStatus}
         />
       )}
+      ;
 
       <form
         onSubmit={onSumbit}
