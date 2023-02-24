@@ -1,3 +1,4 @@
+@import url("./vars.css");
 
 .todo-list {
   margin: 0;
@@ -8,7 +9,7 @@
 .todo-list li {
   position: relative;
   font-size: 24px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--todos-border-color);
 }
 
 .todo-list li:last-child {
@@ -63,7 +64,7 @@
 }
 
 .todo-list li.completed label {
-  color: #d9d9d9;
+  color: var(--todos-color);
   text-decoration: line-through;
 }
 

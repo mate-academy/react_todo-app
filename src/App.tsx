@@ -1,93 +1,172 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useEffect, useState, useContext, useMemo,
+} from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { getTodos, removeTodo, updateTodo } from './api/todos';
+import { AuthContext } from './components/Auth/AuthContext';
+import { ErrorNotification } from './components/ErrorNotification';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const user = useContext(AuthContext);
+
+  const todosFromLocalStorage = localStorage.getItem('todos');
+  const initialTodos = todosFromLocalStorage
+    ? JSON.parse(todosFromLocalStorage)
+    : [];
+
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
+  const [errorText, setErrorText] = useState('');
+
+  const addErrorMessage = (text: string) => {
+    setErrorText(text);
+    setTimeout(() => setErrorText(''), 3000);
+  };
+
+  useEffect(() => {
+    if (user) {
+      getTodos(user.id)
+        .then(setTodos);
+    }
+  }, []);
+
+  const addTodo = (todo: Todo) => {
+    setTodos((currentTodos: Todo[]) => [
+      ...currentTodos,
+      todo,
+    ]);
+  };
+
+  const deleteTodo = (todoId: number) => {
+    removeTodo(todoId)
+      .then(() => {
+        setTodos((currentTodos) => {
+          return currentTodos.filter(todo => todo.id !== todoId);
+        });
+      })
+      .catch(() => {
+        addErrorMessage('Unable to delete a todo');
+      });
+  };
+
+  const updateTodoData = (todoId: number, data: object) => {
+    updateTodo(todoId, data)
+      .then(() => {
+        setTodos(todos.map(todo => {
+          if (todo.id !== todoId) {
+            return todo;
+          }
+
+          return {
+            ...todo,
+            ...data,
+          };
+        }));
+      })
+      .catch(() => {
+        addErrorMessage('Unable to update a todo');
+      });
+  };
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const numberOfCompletedTodos = todos
+    .filter((todo: Todo) => todo.completed).length;
+
+  const numberOfActiveTodos = todos
+    .filter((todo: Todo) => !todo.completed).length;
+
+  const isAllCompleted = useMemo(
+    () => numberOfCompletedTodos === todos.length,
+    [numberOfCompletedTodos],
+  );
+
+  const toggleAllTodos = () => {
+    Promise.all(todos
+      .filter(todo => todo.completed === isAllCompleted)
+      .map(todo => {
+        return updateTodo(todo.id, { completed: !isAllCompleted })
+          .then(() => {
+            setTodos(todos.map(todoItem => {
+              return {
+                ...todoItem,
+                completed: !isAllCompleted,
+              };
+            }));
+          })
+          .catch(() => {
+            addErrorMessage('Unable to update a todo');
+          });
+      }));
+  };
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+    <>
+      <div className="todoapp">
+        <Header
+          addTodo={addTodo}
+          addErrorMessage={addErrorMessage}
+          setErrorText={setErrorText}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            checked={isAllCompleted}
+            onChange={toggleAllTodos}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <Routes>
+            <Route path="/">
+              <Route
+                index
+                element={(
+                  <TodoList
+                    todos={todos}
+                    deleteTodo={deleteTodo}
+                    updateTodoData={updateTodoData}
+                  />
+                )}
+              />
+              <Route
+                path=":filterOption"
+                element={(
+                  <TodoList
+                    todos={todos}
+                    deleteTodo={deleteTodo}
+                    updateTodoData={updateTodoData}
+                  />
+                )}
+              />
+            </Route>
+          </Routes>
+        </section>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <Footer
+            numberOfActiveTodos={numberOfActiveTodos}
+            numberOfCompletedTodos={numberOfCompletedTodos}
+            todos={todos}
+            deleteTodo={deleteTodo}
+          />
+        )}
+      </div>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+      {errorText.length > 0 && (
+        <ErrorNotification
+          errorText={errorText}
+        />
+      )}
+    </>
   );
 };
