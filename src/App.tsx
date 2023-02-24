@@ -56,18 +56,19 @@ export const App: React.FC = () => {
   const updateTodoData = (todoId: number, data: object) => {
     const currentTodos = [...todos];
 
-    setTodos(todos.map(todo => {
-      if (todo.id !== todoId) {
-        return todo;
-      }
-
-      return {
-        ...todo,
-        ...data,
-      };
-    }));
-
     updateTodo(todoId, data)
+      .then(() => {
+        setTodos(todos.map(todo => {
+          if (todo.id !== todoId) {
+            return todo;
+          }
+
+          return {
+            ...todo,
+            ...data,
+          };
+        }));
+      })
       .catch(() => {
         addErrorMessage('Unable to update a todo');
         setTodos(currentTodos);
