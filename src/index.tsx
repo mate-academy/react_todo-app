@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import './styles/index.css';
 import './styles/todo-list.css';
@@ -6,7 +7,6 @@ import './styles/filters.css';
 
 import { App } from './App';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root'),
-);
+const Root = () => <App />;
+
+createRoot(document.getElementById('root') as HTMLDivElement).render(<Root />);
