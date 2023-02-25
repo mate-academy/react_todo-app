@@ -87,9 +87,15 @@ export const TodoApp: React.FC = () => {
         <input
           type="checkbox"
           id="toggle-all"
-          className={classNames('toggle-all', { view: !todos.length })}
+          className={
+            classNames(
+              'toggle-all',
+              { view: !todos.length },
+            )
+          }
           data-cy="toggleAll"
           onClick={toggleTodoAllHandler}
+          checked={allCompleted}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
