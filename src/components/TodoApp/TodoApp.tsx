@@ -73,9 +73,8 @@ export const TodoApp: React.FC = () => {
     }
 
     setTodos(
-      todos.map(
-        (todo: Todo) => (todo.id === id ? { ...todo, title } : { ...todo }),
-      ),
+      todos.map((todo: Todo) => (
+        todo.id === id ? { ...todo, title } : { ...todo })),
     );
   };
 
