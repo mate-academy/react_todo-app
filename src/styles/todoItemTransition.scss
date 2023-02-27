@@ -1,0 +1,52 @@
+.item-enter {
+  max-height: 0;
+}
+
+.item-enter-active {
+  max-height: 58px;
+
+  overflow: hidden;
+  transition: max-height $transition-duration ease-in-out;
+}
+
+.item-exit {
+  max-height: 58px;
+}
+
+.item-exit-active {
+  max-height: 0;
+
+  overflow: hidden;
+  transition: max-height $transition-duration ease-in-out;
+}
+
+.temp-item-enter {
+  max-height: 0;
+}
+
+.temp-item-enter-active {
+  max-height: 58px;
+
+  overflow: hidden;
+  transition: max-height $transition-duration ease-in-out;
+}
+
+.temp-item-exit {
+  max-height: 58px;
+}
+
+.temp-item-exit-active {
+  max-height: 0;
+
+  opacity: 0;
+
+  transform: translateY(-58px);
+
+  transition: $transition-duration ease-in-out;
+  transition-property: opacity, max-height, transform;
+}
+
+.has-error .temp-item-exit-active {
+  overflow: hidden;
+  transform: translateY(0);
+}
