@@ -1,0 +1,5 @@
+@mixin hide-smoothly {
+  pointer-events: none;
+
+  opacity: 0;
+}
