@@ -16,7 +16,7 @@ export const TodoList: FC<Props> = ({
   editingTodo,
 }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {todos.map((todo) => {
         return (
           <TodoItem

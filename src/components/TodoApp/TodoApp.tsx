@@ -11,6 +11,7 @@ import { filterTotos } from '../../helpers/filterTotos';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
+
   const completedTodosCount = useMemo(
     () => todos.filter((todo: Todo) => todo.completed).length,
     [todos],
@@ -83,28 +84,30 @@ export const TodoApp: React.FC = () => {
   return (
     <div className="todoapp">
       <Header addTodo={handleAddTodo} ref={newTodoField} />
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className={
-            classNames(
-              'toggle-all',
-              { view: !todos.length },
-            )
-          }
-          data-cy="toggleAll"
-          onClick={toggleTodoAllHandler}
-          checked={allCompleted}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList
-          todos={visibleTodos}
-          deleteTodo={deleteTodoHandler}
-          toggleTodo={toggleTodoHandler}
-          editingTodo={editingTodoHandler}
-        />
-      </section>
+      {!!todos.length && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className={
+              classNames(
+                'toggle-all',
+                { view: !todos.length },
+              )
+            }
+            data-cy="toggleAll"
+            onChange={toggleTodoAllHandler}
+            checked={allCompleted}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+          <TodoList
+            todos={visibleTodos}
+            deleteTodo={deleteTodoHandler}
+            toggleTodo={toggleTodoHandler}
+            editingTodo={editingTodoHandler}
+          />
+        </section>
+      )}
 
       {!!todos.length && (
         <TodosFilter

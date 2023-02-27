@@ -31,22 +31,21 @@ export const TodosFilter: FC<Props> = ({
         {`${activeTodosCount} ${activeTodosCount > 1 ? 'items' : 'item'} left`}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         <FilterLink to="/" title={Status.All} />
         <FilterLink to="/active" title={Status.Active} />
         <FilterLink to="/completed" title={Status.Completed} />
       </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={deleteTodos}
-        style={
-          !completedTodosCount ? { visibility: 'hidden' } : { display: 'block' }
-        }
-      >
-        Clear completed
-      </button>
+      {!!completedTodosCount && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={deleteTodos}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
