@@ -7,7 +7,7 @@ type Props = {
   todo: Todo;
   deleteTodo: (id: number) => void;
   toggleTodo: (id: number) => void;
-  editingTodo: (id: number, title: string) => void
+  editingTodo: (id: number, title: string) => void;
 };
 
 export const TodoItem: FC<Props> = ({
@@ -16,8 +16,8 @@ export const TodoItem: FC<Props> = ({
   toggleTodo,
   editingTodo,
 }) => {
-  const [text, setText] = useState(title);
-  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState<string>(title);
+  const [editing, setEditing] = useState<boolean>(false);
   const editingTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

@@ -1,24 +1,12 @@
 import { FC } from 'react';
-import classNames from 'classnames';
-import { NavLink } from 'react-router-dom';
 import { Status } from '../../types/Status';
+import { FilterLink } from '../FilterLink';
 
 type Props = {
   completedTodosCount: number;
   activeTodosCount: number;
   deleteTodos: () => void;
 };
-
-const FilterLink: FC<{ to: string; title: string }> = ({ to, title }) => (
-  <li>
-    <NavLink
-      to={to}
-      className={({ isActive }) => classNames({ selected: isActive })}
-    >
-      {title}
-    </NavLink>
-  </li>
-);
 
 export const TodosFilter: FC<Props> = ({
   completedTodosCount,
@@ -38,11 +26,7 @@ export const TodosFilter: FC<Props> = ({
       </ul>
 
       {!!completedTodosCount && (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={deleteTodos}
-        >
+        <button type="button" className="clear-completed" onClick={deleteTodos}>
           Clear completed
         </button>
       )}

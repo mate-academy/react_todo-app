@@ -7,7 +7,7 @@ type Props = {
 type Ref = HTMLInputElement;
 
 export const Header = forwardRef<Ref, Props>(({ addTodo }, ref) => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState<string>('');
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

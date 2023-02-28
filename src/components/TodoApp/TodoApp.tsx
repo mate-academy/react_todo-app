@@ -21,7 +21,7 @@ export const TodoApp: React.FC = () => {
     [todos],
   );
   const newTodoField = useRef<HTMLInputElement>(null);
-  const allCompleted = completedTodosCount === todos.length;
+  const isAllCompleted = completedTodosCount === todos.length;
   const { pathname: location } = useLocation();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const TodoApp: React.FC = () => {
   const toggleTodoAllHandler = () => {
     setTodos(
       todos.map((todo: Todo) => (
-        allCompleted
+        isAllCompleted
           ? { ...todo, completed: false }
           : { ...todo, completed: true })),
     );
@@ -97,7 +97,7 @@ export const TodoApp: React.FC = () => {
             }
             data-cy="toggleAll"
             onChange={toggleTodoAllHandler}
-            checked={allCompleted}
+            checked={isAllCompleted}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
           <TodoList
