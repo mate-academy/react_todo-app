@@ -59,6 +59,7 @@ export const TodoItem: FC<Props> = ({
           onChange={() => toggleTodo(id)}
         />
         <label htmlFor="toggle-view">{title}</label>
+
         <button
           type="button"
           className="destroy"
@@ -66,6 +67,7 @@ export const TodoItem: FC<Props> = ({
           aria-label="deleteTodo"
           onClick={() => deleteTodo(id)}
         />
+
       </div>
       <input
         type="text"

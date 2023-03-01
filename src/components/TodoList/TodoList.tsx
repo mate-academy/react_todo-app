@@ -14,20 +14,18 @@ export const TodoList: FC<Props> = ({
   deleteTodo,
   toggleTodo,
   editingTodo,
-}) => {
-  return (
-    <ul className="todo-list" data-cy="todosList">
-      {todos.map((todo) => {
-        return (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            deleteTodo={deleteTodo}
-            toggleTodo={toggleTodo}
-            editingTodo={editingTodo}
-          />
-        );
-      })}
-    </ul>
-  );
-};
+}) => (
+  <ul className="todo-list" data-cy="todosList">
+    {todos.map((todo) => {
+      return (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          deleteTodo={deleteTodo}
+          toggleTodo={toggleTodo}
+          editingTodo={editingTodo}
+        />
+      );
+    })}
+  </ul>
+);

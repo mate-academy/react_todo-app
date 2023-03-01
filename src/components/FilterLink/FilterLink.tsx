@@ -2,10 +2,9 @@ import { FC } from 'react';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 
-export const FilterLink: FC<{ to: string; title: string }> = ({
-  to,
-  title,
-}) => (
+type Props = { to: string; title: string };
+
+export const FilterLink: FC<Props> = ({ to, title }) => (
   <li>
     <NavLink
       to={to}

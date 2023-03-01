@@ -1,6 +1,10 @@
-// eslint-disable-next-line object-curly-newline
 import classNames from 'classnames';
-import { useEffect, useMemo, useRef } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Todo } from '../../types/Todo';
@@ -12,14 +16,14 @@ import { filterTotos } from '../../helpers/filterTotos';
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
 
-  const completedTodosCount = useMemo(
-    () => todos.filter((todo: Todo) => todo.completed).length,
-    [todos],
-  );
-  const activeTodosCount = useMemo(
-    () => todos.filter((todo: Todo) => !todo.completed).length,
-    [todos],
-  );
+  const completedTodosCount = useMemo(() => (
+    todos.filter((todo: Todo) => todo.completed).length
+  ), [todos]);
+
+  const activeTodosCount = useMemo(() => (
+    todos.filter((todo: Todo) => !todo.completed).length
+  ), [todos]);
+
   const newTodoField = useRef<HTMLInputElement>(null);
   const isAllCompleted = completedTodosCount === todos.length;
   const { pathname: location } = useLocation();
@@ -40,44 +44,46 @@ export const TodoApp: React.FC = () => {
     setTodos([...todos, newTodo]);
   };
 
-  const toggleTodoAllHandler = () => {
-    setTodos(
-      todos.map((todo: Todo) => (
-        isAllCompleted
-          ? { ...todo, completed: false }
-          : { ...todo, completed: true })),
-    );
-  };
+  const toggleTodoAllHandler = useCallback(() => {
+    const newTodos = todos.map((todo: Todo) => (
+      isAllCompleted
+        ? { ...todo, completed: false }
+        : { ...todo, completed: true }));
 
-  const deleteTodoHandler = (id: number) => {
+    setTodos(newTodos);
+  }, [todos]);
+
+  const deleteTodoHandler = useCallback((id: number) => {
     setTodos(todos.filter((todo: Todo) => todo.id !== id));
-  };
+  }, [todos]);
 
-  const toggleTodoHandler = (id: number) => {
-    setTodos(
-      todos.map((todo: Todo) => (
-        todo.id === id
-          ? { ...todo, completed: !todo.completed }
-          : { ...todo })),
-    );
-  };
+  const toggleTodoHandler = useCallback((id: number) => {
+    const newTodos = todos.map((todo: Todo) => (
+      todo.id === id
+        ? { ...todo, completed: !todo.completed }
+        : { ...todo }));
 
-  const deleteCompletedTodosHandler = () => {
-    setTodos(todos.filter((todo: Todo) => !todo.completed));
-  };
+    setTodos(newTodos);
+  }, [todos]);
 
-  const editingTodoHandler = (id: number, title: string) => {
+  const deleteCompletedTodosHandler = useCallback(() => {
+    const newTodos = todos.filter((todo: Todo) => !todo.completed);
+
+    setTodos(newTodos);
+  }, [todos]);
+
+  const editingTodoHandler = useCallback((id: number, title: string) => {
     if (!title.trim()) {
       deleteTodoHandler(id);
 
       return;
     }
 
-    setTodos(
-      todos.map((todo: Todo) => (
-        todo.id === id ? { ...todo, title } : { ...todo })),
-    );
-  };
+    const newTodos = todos.map((todo: Todo) => (
+      todo.id === id ? { ...todo, title } : { ...todo }));
+
+    setTodos(newTodos);
+  }, [todos]);
 
   const visibleTodos = filterTotos(todos, location);
 
@@ -89,12 +95,8 @@ export const TodoApp: React.FC = () => {
           <input
             type="checkbox"
             id="toggle-all"
-            className={
-              classNames(
-                'toggle-all',
-                { view: !todos.length },
-              )
-            }
+            className={classNames('toggle-all',
+              { view: !todos.length })}
             data-cy="toggleAll"
             onChange={toggleTodoAllHandler}
             checked={isAllCompleted}
