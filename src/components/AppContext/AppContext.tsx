@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getTodos } from '../../api/todos';
 import { Error } from '../../types/Error';
 import { Status } from '../../types/Status';
@@ -27,14 +28,30 @@ export const AppProvider: React.FC <Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState<Error | null>(null);
   const [filter, setFilter] = useState<Status>(Status.All);
-
+  const locate = useLocation();
   const user = useContext(AuthContext);
+
+  const setFiltersParam = () => {
+    const location = locate.pathname;
+
+    switch (true) {
+      case location.includes(Status.Completed.toLowerCase()):
+        setFilter(Status.Completed);
+        break;
+      case location.includes(Status.Active.toLowerCase()):
+        setFilter(Status.Active);
+        break;
+      default:
+        setFilter(Status.All);
+    }
+  };
 
   const getFilteredTodos = () => {
     if (!todos || todos.length === 0) {
       return null;
     }
 
+    setFiltersParam();
     const todosList = [...todos];
 
     return todosList.filter((todo) => {

@@ -10,13 +10,13 @@ import { AuthProvider } from './components/Auth/AuthContext';
 import { AppProvider } from './components/AppContext/AppContext';
 
 const Root = () => (
-  <AuthProvider>
-    <AppProvider>
-      <HashRouter>
+  <HashRouter>
+    <AuthProvider>
+      <AppProvider>
         <App />
-      </HashRouter>
-    </AppProvider>
-  </AuthProvider>
+      </AppProvider>
+    </AuthProvider>
+  </HashRouter>
 );
 
 createRoot(document.getElementById('root') as HTMLDivElement)

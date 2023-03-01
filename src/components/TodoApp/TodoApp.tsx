@@ -8,7 +8,6 @@ export const TodoApp = () => {
   const [isActiveToggleAll, setIsActiveToggleAll] = useState(false);
   const todoData = useContext(AppContext);
   const todos = todoData?.todos || [];
-
   const isAllTodosCompleted = () => {
     for (let i = 0; i < todos.length; i += 1) {
       if (!todos[i].completed) {
