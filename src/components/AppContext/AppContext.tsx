@@ -54,11 +54,14 @@ export const AppProvider: React.FC <Props> = ({ children }) => {
     setFiltersParam();
     const todosList = [...todos];
 
+    if (filter === Status.All) {
+      return todosList;
+    }
+
     return todosList.filter((todo) => {
       switch (filter) {
         case Status.Active: return !todo.completed;
         case Status.Completed: return todo.completed;
-        case Status.All:
         default:
           return true;
       }

@@ -171,8 +171,8 @@ export const TodoItem: React.FC<Props> = ({
             onFocus={() => setQuery(todo.title)}
             onChange={(event) => setQuery(event.target.value)}
             value={query}
-            onKeyUp={(event) => keyUpHandler(event)}
-            onBlur={() => leaveInput()}
+            onKeyUp={keyUpHandler}
+            onBlur={leaveInput}
           />
         )}
     </li>

@@ -6,6 +6,9 @@ import { AppContext } from '../AppContext/AppContext';
 
 export const Filters = () => {
   const todoData = useContext(AppContext);
+  const onFilterChange = (status: Status) => () => {
+    todoData?.setFilter(status);
+  };
 
   return (
     <ul className="filters">
@@ -15,7 +18,7 @@ export const Filters = () => {
           className={classNames(
             { selected: todoData?.filter === Status.All },
           )}
-          onClick={() => todoData?.setFilter(Status.All)}
+          onClick={onFilterChange(Status.All)}
         >
           All
         </Link>
@@ -27,7 +30,7 @@ export const Filters = () => {
           className={classNames(
             { selected: todoData?.filter === Status.Active },
           )}
-          onClick={() => todoData?.setFilter(Status.Active)}
+          onClick={onFilterChange(Status.Active)}
         >
           Active
         </Link>
@@ -39,7 +42,7 @@ export const Filters = () => {
           className={classNames(
             { selected: todoData?.filter === Status.Completed },
           )}
-          onClick={() => todoData?.setFilter(Status.Completed)}
+          onClick={onFilterChange(Status.Completed)}
         >
           Completed
         </Link>

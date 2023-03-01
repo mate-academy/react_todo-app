@@ -58,7 +58,7 @@ export const Footer = () => {
         type="button"
         className={classNames('clear-completed',
           { 'clear-completed-hidden': !checkCompletedTodos() })}
-        onClick={() => removeAllCompletedTodos()}
+        onClick={removeAllCompletedTodos}
       >
         Clear completed
       </button>

@@ -27,6 +27,10 @@ export const ErrorNotification = () => {
     }
   }, [todosData?.isError]);
 
+  const onErrorClose = () => {
+    todosData?.setIsError(null);
+  };
+
   return (
     <div
       data-cy="errorNotification"
@@ -41,7 +45,7 @@ export const ErrorNotification = () => {
         data-cy="deleteTodo"
         type="button"
         className="destroyButton"
-        onClick={() => todosData?.setIsError(null)}
+        onClick={onErrorClose}
       />
     </div>
   );

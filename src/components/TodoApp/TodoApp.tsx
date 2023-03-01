@@ -68,7 +68,7 @@ export const TodoApp = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        onClick={() => toggleAllTodos()}
+        onClick={toggleAllTodos}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
       <TodoList />
