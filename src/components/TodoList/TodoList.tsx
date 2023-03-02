@@ -1,24 +1,40 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
+import { Error } from '../../types/Error';
 import { Todo } from '../../types/Todo';
-import { AppContext } from '../AppContext/AppContext';
 import { TodoItem } from '../TodoItem';
 
-export const TodoList = () => {
+type Props = {
+  todos: Todo[],
+  setTodos: (arg: Todo[]) => void,
+  setTodosList: () => void | undefined,
+  filteredTodos: Todo[] | null,
+  setIsError: (arg: Error | null) => void,
+};
+
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setTodos,
+  setTodosList,
+  filteredTodos,
+  setIsError,
+}) => {
   const [isActiveField, setIsActiveField] = useState<number>(0);
-  const todosData = useContext(AppContext);
 
   return (
-    <>
-      <ul className="todo-list" data-cy="todoList">
-        {todosData?.filteredTodos?.map((todo: Todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            isActiveField={isActiveField}
-            setIsActiveField={setIsActiveField}
-          />
-        ))}
-      </ul>
-    </>
+    <ul className="todo-list" data-cy="todoList">
+      {filteredTodos && filteredTodos.map((todo: Todo) => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          isActiveField={isActiveField}
+          setIsActiveField={setIsActiveField}
+          setIsError={setIsError}
+          todos={todos}
+          setTodos={setTodos}
+          filteredTodos={filteredTodos}
+          setTodosList={setTodosList}
+        />
+      ))}
+    </ul>
   );
 };

@@ -32,7 +32,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
 
       onLogin(user);
     } catch (error) {
-      // Need to login
+      throw new Error('Need to login');
     }
   }, []);
 

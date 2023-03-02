@@ -1,13 +1,52 @@
-import { useContext, useEffect, useState } from 'react';
-import { patchTodo } from '../../api/todos';
-import { Error } from '../../types/Error';
-import { AppContext } from '../AppContext/AppContext';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useLocation } from 'react-router-dom';
+import { getTodos, patchTodo } from '../../api/todos';
+import { AuthContext } from '../Auth/AuthContext';
 import { TodoList } from '../TodoList';
 
-export const TodoApp = () => {
+import { Error } from '../../types/Error';
+import { Status } from '../../types/Status';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[],
+  setTodos: (arg: Todo[]) => void,
+  setIsError: (arg: Error | null) => void,
+  filter: Status,
+  setFilter: (arg: Status) => void,
+};
+
+export const TodoApp: React.FC<Props> = ({
+  todos,
+  setTodos,
+  setIsError,
+  filter,
+  setFilter,
+}) => {
   const [isActiveToggleAll, setIsActiveToggleAll] = useState(false);
-  const todoData = useContext(AppContext);
-  const todos = todoData?.todos || [];
+
+  const user = useContext(AuthContext);
+  const locate = useLocation();
+
+  const setTodosList = () => {
+    if (!user) {
+      return;
+    }
+
+    getTodos(user.id)
+      .then(data => setTodos(data))
+      .catch(() => {
+        setIsError(Error.Update);
+        setTodos([]);
+      });
+  };
+
   const isAllTodosCompleted = () => {
     for (let i = 0; i < todos.length; i += 1) {
       if (!todos[i].completed) {
@@ -18,7 +57,7 @@ export const TodoApp = () => {
     return true;
   };
 
-  const toggleAllTodos = () => {
+  const toggleAllTodos = useCallback(() => {
     const todosList = [...todos];
     let countCompleted = 0;
 
@@ -30,7 +69,7 @@ export const TodoApp = () => {
           return todosList[index];
         })
         .catch(() => {
-          todoData?.setIsError(Error.Update);
+          setIsError(Error.Update);
         });
     };
 
@@ -52,13 +91,58 @@ export const TodoApp = () => {
 
     Promise.all(promises)
       .then(() => {
-        todoData?.setTodos(todosList);
+        setTodos(todosList);
       });
+  }, [todos]);
+
+  const setFiltersParam = () => {
+    const location = locate.pathname;
+
+    switch (true) {
+      case location.includes(Status.Completed.toLowerCase()):
+        setFilter(Status.Completed);
+        break;
+      case location.includes(Status.Active.toLowerCase()):
+        setFilter(Status.Active);
+        break;
+      default:
+        setFilter(Status.All);
+    }
   };
 
+  const getFilteredTodos = () => {
+    if (!todos || todos.length === 0) {
+      return null;
+    }
+
+    const todosList = [...todos];
+
+    if (filter === Status.All) {
+      return todosList;
+    }
+
+    return todosList.filter((todo) => {
+      switch (filter) {
+        case Status.Active: return !todo.completed;
+        case Status.Completed: return todo.completed;
+        default:
+          return true;
+      }
+    });
+  };
+
+  const filteredTodos = useMemo(() => getFilteredTodos(), [todos, filter]);
+
   useEffect(() => {
-    setIsActiveToggleAll(isAllTodosCompleted());
+    Promise.all(
+      [isAllTodosCompleted()],
+    ).then(([value]) => setIsActiveToggleAll(value));
   }, [todos]);
+
+  useEffect(() => {
+    setTodosList();
+    setFiltersParam();
+  }, [locate]);
 
   return (
     <section className="main">
@@ -71,7 +155,13 @@ export const TodoApp = () => {
         onClick={toggleAllTodos}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
-      <TodoList />
+      <TodoList
+        filteredTodos={filteredTodos}
+        setIsError={setIsError}
+        todos={todos}
+        setTodos={setTodos}
+        setTodosList={setTodosList}
+      />
     </section>
   );
 };

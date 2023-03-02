@@ -7,14 +7,11 @@ import './styles/authForm.css';
 import { HashRouter } from 'react-router-dom';
 import { App } from './App';
 import { AuthProvider } from './components/Auth/AuthContext';
-import { AppProvider } from './components/AppContext/AppContext';
 
 const Root = () => (
   <HashRouter>
     <AuthProvider>
-      <AppProvider>
-        <App />
-      </AppProvider>
+      <App />
     </AuthProvider>
   </HashRouter>
 );

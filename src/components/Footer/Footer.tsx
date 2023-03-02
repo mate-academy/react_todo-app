@@ -1,45 +1,50 @@
 import classNames from 'classnames';
-import { useContext } from 'react';
+import { useCallback } from 'react';
 import { deleteTodo } from '../../api/todos';
 import { Error } from '../../types/Error';
-import { AppContext } from '../AppContext/AppContext';
+import { Status } from '../../types/Status';
+import { Todo } from '../../types/Todo';
 import { Filters } from '../Filters';
 
-export const Footer = () => {
-  const todoData = useContext(AppContext);
+type Props = {
+  todos: Todo[],
+  setTodos: (arg: Todo[]) => void,
+  filter: Status,
+  setFilter: (arg: Status) => void,
+  setIsError: (arg: Error | null) => void,
+};
 
+export const Footer: React.FC<Props> = ({
+  todos,
+  setTodos,
+  filter,
+  setFilter,
+  setIsError,
+}) => {
   const checkCompletedTodos = () => {
-    if (todoData?.todos) {
-      const { todos } = todoData;
-
-      for (let i = 0; i < todos.length; i += 1) {
-        if (todos[i].completed) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    return todos.some(todo => todo.completed);
   };
 
-  const removeAllCompletedTodos = () => {
-    if (todoData?.todos) {
-      const { todos, setIsError, setTodos } = todoData;
+  const removeAllCompletedTodos = useCallback(() => {
+    if (!todos) {
+      return;
+    }
 
-      for (let i = 0; i < todos.length; i += 1) {
-        if (todos[i].completed) {
-          deleteTodo(todos[i].id)
+    Promise.all(
+      todos.map(async (todo) => {
+        if (todo.completed) {
+          await deleteTodo(todo.id)
             .then(() => setTodos(todos.filter(item => !item.completed)))
             .catch(() => setIsError(Error.Delete));
         }
-      }
-    }
-  };
+      }),
+    );
+  }, [todos]);
 
   const getNumberOfLeftItems = () => {
     let number = 0;
 
-    todoData?.todos.forEach((todo) => {
+    todos.forEach((todo) => {
       if (!todo.completed) {
         number += 1;
       }
@@ -53,11 +58,18 @@ export const Footer = () => {
       <span className="todo-count" data-cy="todosCounter">
         {`${getNumberOfLeftItems()} items left`}
       </span>
-      <Filters />
+
+      <Filters
+        setFilter={setFilter}
+        filter={filter}
+      />
+
       <button
         type="button"
-        className={classNames('clear-completed',
-          { 'clear-completed-hidden': !checkCompletedTodos() })}
+        className={classNames(
+          'clear-completed',
+          { 'clear-completed-hidden': !checkCompletedTodos() },
+        )}
         onClick={removeAllCompletedTodos}
       >
         Clear completed

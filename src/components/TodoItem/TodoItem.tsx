@@ -3,52 +3,59 @@ import { useContext, useState } from 'react';
 import { deleteTodo, patchTodo } from '../../api/todos';
 import { Error } from '../../types/Error';
 import { Todo } from '../../types/Todo';
-import { AppContext } from '../AppContext/AppContext';
 import { AuthContext } from '../Auth/AuthContext';
 
 type Props = {
   todo: Todo,
+  todos: Todo[],
+  setTodos: (arg: Todo[]) => void,
   isActiveField: number,
   setIsActiveField: (arg: number) => void,
+  setIsError: (arg: Error | null) => void,
+  filteredTodos: Todo[] | null,
+  setTodosList: () => void | undefined,
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
+  todos,
+  setTodos,
   isActiveField,
   setIsActiveField,
+  setIsError,
+  filteredTodos,
+  setTodosList,
 }) => {
   const [query, setQuery] = useState('');
-
-  const todosData = useContext(AppContext);
   const user = useContext(AuthContext);
 
   const deleteTodosItem = async (todoId: number) => {
     if (user) {
-      todosData?.setIsError(null);
+      setIsError(null);
       await deleteTodo(todoId)
         .then(() => {
-          if (todosData?.filteredTodos) {
-            todosData?.setTodos(
-              todosData?.filteredTodos
+          if (filteredTodos) {
+            setTodos(
+              filteredTodos
                 .filter((item: Todo) => item.id !== todoId),
             );
           }
         })
-        .catch(() => todosData?.setIsError(Error.Delete));
+        .catch(() => setIsError(Error.Delete));
     }
   };
 
   const toggleTodo = (completed = false) => {
-    if (user && todosData?.filteredTodos) {
+    if (user && filteredTodos) {
       const data = {
         completed,
       };
 
       const getChangedTodos = (completedTodo: boolean) => {
-        if (todosData?.filteredTodos) {
-          const todosList = [...todosData?.filteredTodos];
+        if (filteredTodos) {
+          const todosList = [...filteredTodos];
 
-          todosList[todosData?.filteredTodos
+          todosList[filteredTodos
             .indexOf(todo)].completed = completedTodo;
 
           return todosList;
@@ -59,18 +66,18 @@ export const TodoItem: React.FC<Props> = ({
 
       patchTodo(todo.id, data)
         .then(() => {
-          todosData?.setTodos(getChangedTodos(completed));
+          setTodos(getChangedTodos(completed));
         })
         .catch(() => {
-          todosData?.setTodos(getChangedTodos(!completed));
-          todosData?.setIsError(Error.Update);
+          setTodos(getChangedTodos(!completed));
+          setIsError(Error.Update);
         });
     }
   };
 
   const onChangeTodosTitle = () => {
-    if (user && todosData?.filteredTodos) {
-      const todosList = [...todosData?.todos];
+    if (user && filteredTodos) {
+      const todosList = [...todos];
 
       if (todo.title === query) {
         return;
@@ -83,14 +90,14 @@ export const TodoItem: React.FC<Props> = ({
       }
 
       const patchChangedTitle = (index: number, todosTitle: string) => {
-        todosData?.setIsError(null);
+        setIsError(null);
         const data = {
           completed: todo.completed,
           title: todosTitle,
         };
 
         todosList[index].title = query;
-        todosData?.setTodos(todosList);
+        setTodos(todosList);
 
         return patchTodo(todo.id, data)
           .then(() => {
@@ -99,12 +106,12 @@ export const TodoItem: React.FC<Props> = ({
             return todosList;
           })
           .catch(() => {
-            todosData.setTodosList();
-            todosData?.setIsError(Error.Update);
+            setTodosList();
+            setIsError(Error.Update);
           });
       };
 
-      todosData?.filteredTodos.map((item, index) => {
+      filteredTodos.map((item, index) => {
         if (todo.id === item.id) {
           return patchChangedTitle(index, query);
         }
@@ -112,7 +119,7 @@ export const TodoItem: React.FC<Props> = ({
         return [];
       });
 
-      todosData?.setTodos(todosList);
+      setTodos(todosList);
     }
   };
 

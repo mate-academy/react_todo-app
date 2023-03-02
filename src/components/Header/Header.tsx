@@ -1,14 +1,23 @@
 import { useContext, useState } from 'react';
-import { postTodo } from '../../api/todos';
-import { Error } from '../../types/Error';
-import { AppContext } from '../AppContext/AppContext';
 import { AuthContext } from '../Auth/AuthContext';
+import { postTodo } from '../../api/todos';
 
-export const Header = () => {
+import { Error } from '../../types/Error';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[],
+  setTodos: (arg: Todo[]) => void,
+  setIsError: (arg: Error | null) => void,
+};
+
+export const Header: React.FC<Props> = ({
+  todos,
+  setTodos,
+  setIsError,
+}) => {
   const [query, setQuery] = useState('');
-
   const user = useContext(AuthContext);
-  const todoData = useContext(AppContext);
 
   const postTodosData = async () => {
     if (user && query) {
@@ -20,14 +29,14 @@ export const Header = () => {
 
       await postTodo(data)
         .then(todo => {
-          if (todoData?.todos) {
-            todoData?.setTodos([...todoData?.todos, todo]);
+          if (todos) {
+            setTodos([...todos, todo]);
           } else {
-            todoData?.setTodos([todo]);
+            setTodos([todo]);
           }
         })
         .catch(() => {
-          todoData?.setIsError(Error.Add);
+          setIsError(Error.Add);
         })
         .finally(() => {
           setQuery('');

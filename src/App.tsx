@@ -1,35 +1,52 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { AppContext } from './components/AppContext/AppContext';
+import React, { useState } from 'react';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoApp } from './components/TodoApp';
 
-export const App: React.FC = () => {
-  const todosData = useContext(AppContext);
-  const locate = useLocation();
+import { Error } from './types/Error';
+import { Status } from './types/Status';
+import { Todo } from './types/Todo';
 
-  useEffect(() => {
-    todosData?.setTodosList();
-  }, [locate]);
+export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isError, setIsError] = useState<Error | null>(null);
+  const [filter, setFilter] = useState<Status>(Status.All);
 
   return (
     <>
       <div className="todoapp">
-        <Header />
-        {todosData?.filteredTodos && (
-          <TodoApp />
+        <Header
+          todos={todos}
+          setTodos={setTodos}
+          setIsError={setIsError}
+        />
+        {todos && (
+          <TodoApp
+            todos={todos}
+            setTodos={setTodos}
+            setIsError={setIsError}
+            filter={filter}
+            setFilter={setFilter}
+          />
         )}
-        {todosData?.filteredTodos && (
-          <Footer />
+        {todos.length > 0 && (
+          <Footer
+            todos={todos}
+            setTodos={setTodos}
+            setIsError={setIsError}
+            filter={filter}
+            setFilter={setFilter}
+          />
         )}
       </div>
-      {todosData?.isError && (
-        <ErrorNotification />
+
+      {isError && (
+        <ErrorNotification
+          isError={isError}
+          setIsError={setIsError}
+        />
       )}
     </>
-
   );
 };

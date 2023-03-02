@@ -1,19 +1,28 @@
-import { useContext, useEffect, useMemo } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 import classNames from 'classnames';
 import { Error } from '../../types/Error';
-import { AppContext } from '../AppContext/AppContext';
 
-export const ErrorNotification = () => {
-  const todosData = useContext(AppContext);
+type Props = {
+  isError: Error | null,
+  setIsError: (arg: Error | null) => void,
+};
 
+export const ErrorNotification: React.FC<Props> = ({
+  isError,
+  setIsError,
+}) => {
   useEffect(() => {
     setTimeout(() => {
-      todosData?.setIsError(null);
+      setIsError(null);
     }, 3000);
   }, []);
 
   const getErrorNotification = useMemo(() => {
-    switch (todosData?.isError) {
+    switch (isError) {
       case Error.Add:
         return 'Unable to add a todo';
       case Error.Delete:
@@ -25,18 +34,18 @@ export const ErrorNotification = () => {
       default:
         return null;
     }
-  }, [todosData?.isError]);
+  }, [isError]);
 
-  const onErrorClose = () => {
-    todosData?.setIsError(null);
-  };
+  const onErrorClose = useCallback(() => {
+    setIsError(null);
+  }, []);
 
   return (
     <div
       data-cy="errorNotification"
       className={classNames(
         ('errorNotification'),
-        { hidden: !todosData?.isError },
+        { hidden: isError },
       )}
     >
       {getErrorNotification}

@@ -1,14 +1,20 @@
 import classNames from 'classnames';
-import { useContext } from 'react';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Status } from '../../types/Status';
-import { AppContext } from '../AppContext/AppContext';
 
-export const Filters = () => {
-  const todoData = useContext(AppContext);
-  const onFilterChange = (status: Status) => () => {
-    todoData?.setFilter(status);
-  };
+type Props = {
+  filter: Status,
+  setFilter: (arg: Status) => void,
+};
+
+export const Filters: React.FC<Props> = ({
+  filter,
+  setFilter,
+}) => {
+  const onFilterChange = useCallback((status: Status) => () => {
+    setFilter(status);
+  }, []);
 
   return (
     <ul className="filters">
@@ -16,7 +22,7 @@ export const Filters = () => {
         <Link
           to="/"
           className={classNames(
-            { selected: todoData?.filter === Status.All },
+            { selected: filter === Status.All },
           )}
           onClick={onFilterChange(Status.All)}
         >
@@ -28,7 +34,7 @@ export const Filters = () => {
         <Link
           to="/active"
           className={classNames(
-            { selected: todoData?.filter === Status.Active },
+            { selected: filter === Status.Active },
           )}
           onClick={onFilterChange(Status.Active)}
         >
@@ -40,7 +46,7 @@ export const Filters = () => {
         <Link
           to="/completed"
           className={classNames(
-            { selected: todoData?.filter === Status.Completed },
+            { selected: filter === Status.Completed },
           )}
           onClick={onFilterChange(Status.Completed)}
         >
