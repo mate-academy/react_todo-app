@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../utils/useLocalStorage';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { TodoList } from './TodoList';
+import { ErrorNotification } from './ErrorNotification';
+import { Errors } from '../types/Error';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
-
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const addTodo = (todo: Todo) => {
+    if (!(todo.title).trim()) {
+      setErrorMessage(Errors.EMPTY);
+    }
+
     setTodos([...todos, todo]);
   };
 
@@ -73,35 +79,43 @@ export const TodoApp: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <Header addTodo={addTodo} />
+      <div>
+        <Header addTodo={addTodo} />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={toggleAllCompletedStatus}
-          checked={handleAllCompleted(todos)}
-        />
-        <label htmlFor="toggle-all">
-          Mark all as complete
-        </label>
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onChange={toggleAllCompletedStatus}
+            checked={handleAllCompleted(todos)}
+          />
+          <label htmlFor="toggle-all">
+            Mark all as complete
+          </label>
+
+          {!!todos.length && (
+            <TodoList
+              todos={todos}
+              toggleCompletedStatus={toggleCompletedStatus}
+              onTodoDelete={onTodoDelete}
+              handleTitleChange={handleTitleChange}
+            />
+          )}
+        </section>
 
         {!!todos.length && (
-          <TodoList
+          <Footer
             todos={todos}
-            toggleCompletedStatus={toggleCompletedStatus}
             onTodoDelete={onTodoDelete}
-            handleTitleChange={handleTitleChange}
           />
         )}
-      </section>
-
-      {!!todos.length && (
-        <Footer
-          todos={todos}
-          onTodoDelete={onTodoDelete}
+      </div>
+      {errorMessage && (
+        <ErrorNotification
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
         />
       )}
     </div>
