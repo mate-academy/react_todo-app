@@ -44,7 +44,7 @@ export const TodoApp: React.FC = () => {
     setTodos([...todos, newTodo]);
   };
 
-  const toggleTodoAllHandler = useCallback(() => {
+  const handleToggleTodoAll = useCallback(() => {
     const newTodos = todos.map((todo: Todo) => (
       isAllCompleted
         ? { ...todo, completed: false }
@@ -53,11 +53,11 @@ export const TodoApp: React.FC = () => {
     setTodos(newTodos);
   }, [todos]);
 
-  const deleteTodoHandler = useCallback((id: number) => {
+  const handleDeleteTodo = useCallback((id: number) => {
     setTodos(todos.filter((todo: Todo) => todo.id !== id));
   }, [todos]);
 
-  const toggleTodoHandler = useCallback((id: number) => {
+  const handleToggleTodo = useCallback((id: number) => {
     const newTodos = todos.map((todo: Todo) => (
       todo.id === id
         ? { ...todo, completed: !todo.completed }
@@ -66,15 +66,15 @@ export const TodoApp: React.FC = () => {
     setTodos(newTodos);
   }, [todos]);
 
-  const deleteCompletedTodosHandler = useCallback(() => {
+  const handleDeleteCompletedTodos = useCallback(() => {
     const newTodos = todos.filter((todo: Todo) => !todo.completed);
 
     setTodos(newTodos);
   }, [todos]);
 
-  const editingTodoHandler = useCallback((id: number, title: string) => {
+  const handleEditingTodo = useCallback((id: number, title: string) => {
     if (!title.trim()) {
-      deleteTodoHandler(id);
+      handleDeleteTodo(id);
 
       return;
     }
@@ -91,32 +91,32 @@ export const TodoApp: React.FC = () => {
     <div className="todoapp">
       <Header addTodo={handleAddTodo} ref={newTodoField} />
       {!!todos.length && (
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className={classNames('toggle-all',
-              { view: !todos.length })}
-            data-cy="toggleAll"
-            onChange={toggleTodoAllHandler}
-            checked={isAllCompleted}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
-          <TodoList
-            todos={visibleTodos}
-            deleteTodo={deleteTodoHandler}
-            toggleTodo={toggleTodoHandler}
-            editingTodo={editingTodoHandler}
-          />
-        </section>
-      )}
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className={classNames('toggle-all',
+                { view: !todos.length })}
+              data-cy="toggleAll"
+              onChange={handleToggleTodoAll}
+              checked={isAllCompleted}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+            <TodoList
+              todos={visibleTodos}
+              deleteTodo={handleDeleteTodo}
+              toggleTodo={handleToggleTodo}
+              editingTodo={handleEditingTodo}
+            />
+          </section>
 
-      {!!todos.length && (
-        <TodosFilter
-          completedTodosCount={completedTodosCount}
-          activeTodosCount={activeTodosCount}
-          deleteTodos={deleteCompletedTodosHandler}
-        />
+          <TodosFilter
+            completedTodosCount={completedTodosCount}
+            activeTodosCount={activeTodosCount}
+            deleteTodos={handleDeleteCompletedTodos}
+          />
+        </>
       )}
     </div>
   );

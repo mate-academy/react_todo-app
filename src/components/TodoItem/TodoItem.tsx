@@ -26,23 +26,22 @@ export const TodoItem: FC<Props> = ({
     }
   }, [editing]);
 
-  const completedEditingTodoHandler = (
+  const handleCompleted = () => {
+    editingTodo(id, text);
+    setEditing(false);
+  };
+
+  const handleCompletedEditingTodo = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.key === 'Enter') {
-      editingTodo(id, text);
-      setEditing(false);
+      handleCompleted();
     }
 
     if (event.key === 'Escape') {
       setText(title);
       setEditing(false);
     }
-  };
-
-  const onBlurHandler = () => {
-    editingTodo(id, text);
-    setEditing(false);
   };
 
   return (
@@ -67,7 +66,6 @@ export const TodoItem: FC<Props> = ({
           aria-label="deleteTodo"
           onClick={() => deleteTodo(id)}
         />
-
       </div>
       <input
         type="text"
@@ -75,8 +73,8 @@ export const TodoItem: FC<Props> = ({
         value={text}
         ref={editingTodoField}
         onChange={(e) => setText(e.target.value)}
-        onKeyUp={(e) => completedEditingTodoHandler(e)}
-        onBlur={() => onBlurHandler()}
+        onKeyUp={(e) => handleCompletedEditingTodo(e)}
+        onBlur={() => handleCompleted()}
       />
     </li>
   );

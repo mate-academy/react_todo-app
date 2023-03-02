@@ -9,7 +9,7 @@ type Ref = HTMLInputElement;
 export const Header = forwardRef<Ref, Props>(({ addTodo }, ref) => {
   const [text, setText] = useState<string>('');
 
-  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!text.trim()) {
@@ -24,7 +24,7 @@ export const Header = forwardRef<Ref, Props>(({ addTodo }, ref) => {
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={onSubmitHandler}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           data-cy="createTodo"
