@@ -1,3 +1,3 @@
-export enum Errors {
-    EMPTY = 'Title can\'t be empty',
+export enum Error {
+  EMPTY = 'Title can\'t be empty',
 }

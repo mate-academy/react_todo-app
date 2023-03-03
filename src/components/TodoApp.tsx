@@ -1,22 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../utils/useLocalStorage';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { TodoList } from './TodoList';
-import { ErrorNotification } from './ErrorNotification';
-import { Errors } from '../types/Error';
+// import { ErrorNotification } from './ErrorNotification';
+import { Error } from '../types/Error';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  // const [errorMessage, setErrorMessage] = useState<string>('');
+  const [hidden, setHidden] = useState(true);
+  const [error, setError] = useState('');
+  const closeErrorMessage = () => {
+    setHidden(false);
+  };
+
   const addTodo = (todo: Todo) => {
-    if (!(todo.title).trim()) {
-      setErrorMessage(Errors.EMPTY);
+    if ((todo.title).trim() && todo) {
+      setTodos([...todos, todo]);
+    } else {
+      setHidden(false);
+      setError(Error.EMPTY);
     }
 
-    setTodos([...todos, todo]);
+    return todo;
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setError('');
+      closeErrorMessage();
+    }, 3000);
+  }, [error]);
 
   const toggleCompletedStatus = (
     todoIds: number[],
@@ -112,12 +129,23 @@ export const TodoApp: React.FC = () => {
           />
         )}
       </div>
-      {errorMessage && (
-        <ErrorNotification
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
+
+      <div
+        data-cy="ErrorNotification"
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden },
+        )}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          aria-label="error"
+          className="delete"
+          onClick={closeErrorMessage}
         />
-      )}
+        {error}
+      </div>
     </div>
   );
 };
