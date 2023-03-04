@@ -1,13 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import { FilterType } from '../types/Filter';
+import { Status } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[],
-  filter: FilterType,
-  setFilter: (filter: FilterType) => void,
+  filter: Status,
+  setFilter: (filter: Status) => void,
   onTodoDelete:(todoId: number) => void,
   completedTodos: Todo[],
 };
@@ -40,10 +40,10 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkAll"
           to="/"
           className={classNames('filter__link', {
-            selected: filter === FilterType.All,
+            selected: filter === Status.All,
           })}
           onClick={() => {
-            setFilter(FilterType.All);
+            setFilter(Status.All);
           }}
         >
           All
@@ -53,10 +53,10 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkActive"
           to="/active"
           className={classNames('filter__link', {
-            selected: filter === FilterType.Active,
+            selected: filter === Status.Active,
           })}
           onClick={() => {
-            setFilter(FilterType.Active);
+            setFilter(Status.Active);
           }}
         >
           Active
@@ -65,10 +65,10 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkCompleted"
           to="/completed"
           className={classNames('filter__link', {
-            selected: filter === FilterType.Completed,
+            selected: filter === Status.Completed,
           })}
           onClick={() => {
-            setFilter(FilterType.Completed);
+            setFilter(Status.Completed);
           }}
         >
           Completed
