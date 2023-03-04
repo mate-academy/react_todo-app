@@ -1,61 +1,60 @@
-import {
-  FC,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useState } from 'react';
+import cn from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  addTodo: (todo: Todo) => void;
+  todos: Todo[];
+  newTodoField: React.RefObject<HTMLInputElement>;
+  addNewTodo: (title: string) => void;
+  toggleAllTodosStatus: () => void;
+  isAllTodosCompleted: boolean;
 };
 
-export const Header: FC<Props> = ({ addTodo }) => {
-  const [inputValue, setInputValue] = useState('');
-  const newTodoField = useRef<HTMLInputElement>(null);
+export const Header: React.FC<Props> = ({
+  todos,
+  newTodoField,
+  addNewTodo,
+  toggleAllTodosStatus,
+  isAllTodosCompleted,
+}) => {
+  const [title, setTitle] = useState('');
+
+  const onSumbit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    addNewTodo(title);
+    setTitle('');
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
-    setInputValue(value);
+    setTitle(event.target.value);
   };
-
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (inputValue.length === 0) {
-      return;
-    }
-
-    const newTodo = {
-      id: Number(new Date()),
-      title: inputValue,
-      completed: false,
-    };
-
-    addTodo(newTodo);
-    setInputValue('');
-  };
-
-  useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
 
   return (
-    <header className="header">
-      <h1>todos</h1>
+    <header className="todoapp__header">
+      {(!!todos.length) && (
+        /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
+        <button
+          data-cy="ToggleAllButton"
+          type="button"
+          className={cn(
+            'todoapp__toggle-all',
+            { active: isAllTodosCompleted },
+          )}
+          onClick={toggleAllTodosStatus}
+        />
+      )}
 
-      <form onSubmit={handleFormSubmit}>
+      <form
+        onSubmit={onSumbit}
+      >
         <input
+          data-cy="NewTodoField"
           type="text"
-          data-cy="createTodo"
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={inputValue}
-          onChange={handleChange}
           ref={newTodoField}
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+          value={title}
+          onChange={handleChange}
         />
       </form>
     </header>

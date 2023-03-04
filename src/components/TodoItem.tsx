@@ -1,116 +1,115 @@
+import { FC, useState } from 'react';
 import classNames from 'classnames';
-import {
-  FC,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
 import { Todo } from '../types/Todo';
+import { TodoLoader } from './TodoLoader';
 
 type Props = {
-  todo: Todo,
-  toggleCompletedStatus: (
-    todoIds: number[],
-    data: Pick<Todo, 'completed'>,
-  ) => void;
-  onTodoDelete: (todoIds: number[]) => void;
-  handleTitleChange: (todoId: number, title: string) => void;
+  todo: Todo;
+  onDelete: (todoId: number) => Promise<void>;
+  updateStatusTodo?: (todo: Todo) => void;
+  idsToChange?: number[];
+  editTitleTodo: (todo: Todo, title: string) => void;
 };
 
-export const TodoItem: FC<Props> = ({
+export const TodoItem:FC<Props> = ({
   todo,
-  toggleCompletedStatus,
-  onTodoDelete,
-  handleTitleChange,
+  onDelete,
+  updateStatusTodo,
+  idsToChange = [],
+  editTitleTodo,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [updatedTodoValue, setUpdatingTodoValue] = useState(todo.title);
-  const selectedTodoField = useRef<HTMLInputElement>(null);
+  const {
+    title,
+    completed,
+    id,
+  } = todo;
+  const [newTitle, setNewTitle] = useState(title);
+  const [editing, setEditing] = useState(false);
 
-  const handleCheckBox = () => {
-    toggleCompletedStatus([todo.id], { completed: !todo.completed });
-  };
-
-  const handleOnDoubleClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleTodoEdition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdatingTodoValue(event.target.value);
-  };
-
-  const handleChangingTitle = () => {
-    if (updatedTodoValue.length === 0) {
-      onTodoDelete([todo.id]);
-      setIsEditing(false);
-
-      return;
-    }
-
-    handleTitleChange(todo.id, updatedTodoValue);
-    setIsEditing(false);
-  };
-
-  const handleSavingTitle = (event: React.KeyboardEvent) => {
-    const { key } = event;
-
-    if (key === 'Enter') {
-      handleChangingTitle();
-
-      return;
-    }
-
-    if (key === 'Escape') {
-      setUpdatingTodoValue(todo.title);
-      setIsEditing(false);
+  const handleUpdate = () => {
+    if (updateStatusTodo) {
+      updateStatusTodo(todo);
     }
   };
 
-  useEffect(() => {
-    if (selectedTodoField.current) {
-      selectedTodoField.current.focus();
+  const handleEdit = () => {
+    if (editTitleTodo) {
+      editTitleTodo(todo, newTitle);
     }
-  });
+
+    if (!newTitle.length) {
+      onDelete(id);
+    }
+
+    setEditing(false);
+  };
 
   return (
     <li
-      className={classNames(
-        { completed: todo.completed },
-        { editing: isEditing },
-      )}
-      onDoubleClick={handleOnDoubleClick}
+      data-cy="Todo"
+      className={classNames('todo',
+        { completed })}
     >
-      <div className="view">
+      <label className="todo__status-label">
         <input
+          data-cy="TodoStatus"
           type="checkbox"
-          className="toggle"
-          onChange={handleCheckBox}
-          data-inputid={todo.id}
-          checked={todo.completed}
+          className="todo__status"
+          checked={completed}
+          onChange={handleUpdate}
         />
-        <label
-          data-inputid={todo.id}
-        >
-          {updatedTodoValue}
-        </label>
+      </label>
 
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          aria-label="deleteTodo"
-          onClick={() => onTodoDelete([todo.id])}
-        />
-      </div>
-      <input
-        type="text"
-        className="edit"
-        value={updatedTodoValue}
-        onChange={handleTodoEdition}
-        onKeyDown={handleSavingTitle}
-        ref={selectedTodoField}
-        onBlur={handleChangingTitle}
+      {editing
+        ? (
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleEdit();
+            }}
+          >
+            <input
+              data-cy="TodoTitleField"
+              type="text"
+              className="todo__title-field"
+              placeholder="Empty todo will be deleted"
+              value={newTitle}
+              onBlur={handleEdit}
+              onChange={event => setNewTitle(event.target.value)}
+              onKeyDown={event => {
+                if (event.key === 'Escape') {
+                  setEditing(false);
+                }
+              }}
+            />
+          </form>
+        )
+        : (
+          <>
+            <span
+              data-cy="TodoTitle"
+              className="todo__title"
+              onDoubleClick={() => setEditing(true)}
+            >
+              {title}
+            </span>
+
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDeleteButton"
+              onClick={() => onDelete(id)}
+            >
+              ×
+            </button>
+          </>
+        )}
+
+      <TodoLoader
+        isAdding={todo.id === 0}
+        isDeleting={idsToChange.includes(todo.id)}
       />
+
     </li>
   );
 };

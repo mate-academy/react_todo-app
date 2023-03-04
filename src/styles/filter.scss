@@ -13,11 +13,10 @@
 
     &:hover {
       border-color: rgba(175, 47, 47, 0.1);
-      background-color: rgb(199, 199, 199);
     }
 
     &.selected {
-      border-color: rgba(20, 206, 39, 0.2);
+      border-color: rgba(175, 47, 47, 0.2);
     }
   }
 }
