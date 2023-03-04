@@ -11,14 +11,16 @@ type Props = {
   setIsError: (arg: Error | null) => void,
 };
 
-export const ErrorNotification: React.FC<Props> = ({
-  isError,
-  setIsError,
-}) => {
+export const ErrorNotification: React.FC<Props> = ({ isError, setIsError }) => {
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setIsError(null);
     }, 3000);
+
+    return () => {
+      clearTimeout(timeout);
+      setIsError(null);
+    };
   }, []);
 
   const getErrorNotification = useMemo(() => {
@@ -45,7 +47,7 @@ export const ErrorNotification: React.FC<Props> = ({
       data-cy="errorNotification"
       className={classNames(
         ('errorNotification'),
-        { hidden: isError },
+        { hidden: !isError },
       )}
     >
       {getErrorNotification}

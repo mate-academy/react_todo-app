@@ -8,10 +8,7 @@ type Props = {
   setFilter: (arg: Status) => void,
 };
 
-export const Filters: React.FC<Props> = ({
-  filter,
-  setFilter,
-}) => {
+export const Filters: React.FC<Props> = ({ filter, setFilter }) => {
   const onFilterChange = useCallback((status: Status) => () => {
     setFilter(status);
   }, []);

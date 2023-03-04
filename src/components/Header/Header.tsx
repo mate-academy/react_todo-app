@@ -7,12 +7,11 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setTodos: (arg: Todo[]) => void,
+  setTodos: (arg: ((prev: Todo[]) => Todo[]) | Todo[]) => void,
   setIsError: (arg: Error | null) => void,
 };
 
 export const Header: React.FC<Props> = ({
-  todos,
   setTodos,
   setIsError,
 }) => {
@@ -29,11 +28,7 @@ export const Header: React.FC<Props> = ({
 
       await postTodo(data)
         .then(todo => {
-          if (todos) {
-            setTodos([...todos, todo]);
-          } else {
-            setTodos([todo]);
-          }
+          setTodos((prev) => [...prev, todo]);
         })
         .catch(() => {
           setIsError(Error.Add);

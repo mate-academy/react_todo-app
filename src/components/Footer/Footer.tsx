@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { deleteTodo } from '../../api/todos';
 import { Error } from '../../types/Error';
 import { Status } from '../../types/Status';
@@ -41,7 +41,7 @@ export const Footer: React.FC<Props> = ({
     );
   }, [todos]);
 
-  const getNumberOfLeftItems = () => {
+  const getNumberOfLeftItems = useMemo(() => {
     let number = 0;
 
     todos.forEach((todo) => {
@@ -51,12 +51,12 @@ export const Footer: React.FC<Props> = ({
     });
 
     return number;
-  };
+  }, [todos]);
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${getNumberOfLeftItems()} items left`}
+        {`${getNumberOfLeftItems} items left`}
       </span>
 
       <Filters

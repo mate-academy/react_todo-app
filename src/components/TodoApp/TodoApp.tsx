@@ -47,15 +47,7 @@ export const TodoApp: React.FC<Props> = ({
       });
   };
 
-  const isAllTodosCompleted = () => {
-    for (let i = 0; i < todos.length; i += 1) {
-      if (!todos[i].completed) {
-        return false;
-      }
-    }
-
-    return true;
-  };
+  const isAllTodosCompleted = () => todos.every((todo) => todo.completed);
 
   const toggleAllTodos = useCallback(() => {
     const todosList = [...todos];
