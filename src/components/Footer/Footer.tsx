@@ -41,7 +41,7 @@ export const Footer: React.FC<Props> = ({
     );
   }, [todos]);
 
-  const getNumberOfLeftItems = useMemo(() => {
+  const numberOfLeftItems = useMemo(() => {
     let number = 0;
 
     todos.forEach((todo) => {
@@ -56,7 +56,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${getNumberOfLeftItems} items left`}
+        {`${numberOfLeftItems} items left`}
       </span>
 
       <Filters

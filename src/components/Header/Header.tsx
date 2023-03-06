@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '../Auth/AuthContext';
 import { postTodo } from '../../api/todos';
 
@@ -39,15 +39,18 @@ export const Header: React.FC<Props> = ({
     }
   };
 
+  const onSubmitHandler = (event: FormEvent) => {
+    event.preventDefault();
+    postTodosData();
+  };
+
   return (
     <header className="header">
-      <h1>{`${user?.name}: todos`}</h1>
+      <h1 className="header__title">
+        {`${user?.name}: todos`}
+      </h1>
 
-      <form onSubmit={(event) => {
-        event.preventDefault();
-        postTodosData();
-      }}
-      >
+      <form onSubmit={onSubmitHandler}>
         <input
           type="text"
           data-cy="createTodo"
