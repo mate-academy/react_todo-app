@@ -1,93 +1,139 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
+import { useParams } from 'react-router-dom';
+import { ErrorType } from './types/ErrorType';
+import { Filter } from './types/Filter';
+
+import { TodoList } from './components/TodosList/TodosList';
+import { Header } from './components/Header/Header';
+import { Footer } from './components/Footer/Footer';
+import { Error } from './components/Error/Error';
+
+import { Todo } from './types/Todo';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 export const App: React.FC = () => {
+  const newTodoField = useRef<HTMLInputElement>(null);
+  const [typeOfError, setTypeOfError] = useState(ErrorType.success);
+  const [title, setTitle] = useState('');
+  const [todos, setTodos] = useLocalStorage([]);
+  const { filter = Filter.all } = useParams();
+
+  useEffect(() => {
+    const timeoutID = setTimeout(() => setTypeOfError(ErrorType.success), 3000);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  });
+
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    setTitle(value);
+  };
+
+  const listModified = (type: Filter | string) => {
+    switch (type) {
+      case Filter.active:
+        return todos.filter(item => !item.completed);
+      case Filter.completed:
+        return todos.filter(item => item.completed);
+      default:
+        return todos;
+    }
+  };
+
+  const uploadTodos = (newTodo: Todo) => {
+    setTodos([
+      ...todos,
+      newTodo,
+    ]);
+  };
+
+  const handleSubmit
+  = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!title.length) {
+      setTypeOfError(ErrorType.emptyTitle);
+
+      return;
+    }
+
+    const data: Todo = {
+      id: +new Date(),
+      title,
+      completed: false,
+    };
+
+    uploadTodos(data);
+    setTitle('');
+  };
+
+  const handleDelete = (id: number) => {
+    setTodos(todos.filter(item => item.id !== id));
+  };
+
+  const errorDisable = () => {
+    setTypeOfError(ErrorType.success);
+  };
+
+  const deleteCompletedTodos = () => {
+    setTodos(listModified(Filter.active));
+  };
+
+  const handleChangeTodo = (data: object, id: number) => {
+    setTodos(todos.map(todo => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          ...data,
+        };
+      }
+
+      return todo;
+    }));
+  };
+
+  const completedTodos = listModified(Filter.completed).length;
+  const todosFiltered = listModified(filter);
+  const activeTodos = listModified(Filter.active).length;
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <Header
+          onHandleSubmit={handleSubmit}
+          onHandleInput={handleInput}
+          setTodos={setTodos}
+          newTodoField={newTodoField}
+          inputValue={title}
+          todos={todos}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <TodoList
+          onDelete={handleDelete}
+          onHandleChangeTodo={handleChangeTodo}
+          todos={todosFiltered}
+        />
+        {!!todos.length && (
+          <Footer
+            onDeleteCompletedTodos={deleteCompletedTodos}
+            completedTodos={completedTodos}
+            activeTodos={activeTodos}
+          />
+        )}
+      </div>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <Error
+        onErrorDisable={errorDisable}
+        errorType={typeOfError}
+      />
     </div>
   );
 };
