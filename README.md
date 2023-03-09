@@ -18,7 +18,7 @@ A single-page app, for the ability to plan and control your tasks. If you are in
 - Delete a todo
 - Edit a todo
 - Set todo as completed \ uncompleted
-- Set all todos as completed \ uncompleted
+- Set all toDos as completed \ uncompleted
 - Can delete all completed ToDos
 - Can filter ToDos by all, active and completed. Filter is saved in URL
 - Can see the quantity of active ToDos
