@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import { RegForm } from './components/RegForm/RegForm';
 import { AuthPage } from './Pages/AuthPage';
+import { NotFoundPage } from './Pages/NotFoundPage';
 import { TodoPage } from './Pages/TodoPage';
 
 export const App: React.FC = () => (
@@ -22,6 +23,6 @@ export const App: React.FC = () => (
       <Route path=":filter" element={<TodoPage />} />
     </Route>
 
-    <Route path="*" element={<h1> Hello </h1>} />
+    <Route path="*" element={<NotFoundPage />} />
   </Routes>
 );
