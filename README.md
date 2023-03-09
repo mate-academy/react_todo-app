@@ -34,3 +34,5 @@ Finally, I paid a lot of attention to TypeScript and used interfaces for todos a
 
 ## Summary
 In summary, the React todo app that I built showcases my proficiency in a wide range of tools and methods, including React Router, classnames, API integration, promises, hooks, async functions, array methods, form events, logical operators, components, and TypeScript. I believe that the app demonstrates my ability to build complex, fully functional applications that are stable, reliable, and easy to use.
+
+Why do you think the React developers quit their jobs? Because they didn't get setState of the company's goals. And I hope that in this project I did a great job with setState.
