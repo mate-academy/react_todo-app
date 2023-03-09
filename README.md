@@ -1,5 +1,7 @@
 # Todo APP
-A single-page app, for the ability to plan and control your tasks. If you are interested to see the application, you can do it on a random user basis, an option has been added if you do not want to waste time registering. There is also an option to register, if you want.
+A single-page app, for the ability to plan and control your tasks. 
+If you are interested to see the application, you can do it on a random user basis, an option has been added if you don't want to waste time registering. 
+There is also an option to register, if you want.
 
 # STACK TECHNOLOGIES
 - Frontend UI: TypeScript, HTML, SCSS
