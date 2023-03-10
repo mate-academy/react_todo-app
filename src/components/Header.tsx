@@ -39,7 +39,8 @@ export const Header: React.FC<Props> = ({
       <button
         type="button"
         className={classNames(
-          'todoapp__toggle-all', { active: !activeTodos.length },
+          'todoapp__toggle-all',
+          { active: !activeTodos.length },
         )}
         aria-label="toggle-all"
         style={{ opacity: +Boolean(allTodos.length) }}

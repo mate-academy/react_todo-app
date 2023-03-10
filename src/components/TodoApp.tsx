@@ -107,10 +107,10 @@ export const TodoApp: React.FC = () => {
   }, []);
 
   const activeTodos = useMemo(
-    () => filterHandler(allTodos, pathname), [allTodos],
+    () => allTodos.filter(todo => !todo.completed), [allTodos],
   );
   const completedTodos = useMemo(
-    () => filterHandler(allTodos, pathname), [allTodos],
+    () => allTodos.filter(todo => todo.completed), [allTodos],
   );
   const visibleTodos = useMemo(
     () => filterHandler(allTodos, pathname), [allTodos, pathname],
