@@ -33,7 +33,7 @@ export const EditingForm: React.FC<Props> = (props) => {
     }
   };
 
-  const editingTitle = useRef<HTMLInputElement>(null);
+  const editingTitle = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (editingTitle.current) {

@@ -46,18 +46,14 @@ export const TodoApp: React.FC = () => {
   }, []);
 
   const filterHandler = (array: Todo[], filterType: string) => {
+    localStorage.setItem('filter', pathname);
+
     switch (filterType) {
       case '/active':
-        localStorage.setItem('filter', pathname);
-
         return array.filter(item => !item.completed);
       case '/completed':
-        localStorage.setItem('filter', pathname);
-
         return array.filter(item => item.completed);
       default:
-        localStorage.setItem('filter', pathname);
-
         return array;
     }
   };
