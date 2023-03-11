@@ -40,14 +40,14 @@ export const Header: React.FC<Props> = ({
   };
 
   return (
-    <header className="todoapp__header">
+    <header className="todoTodoPage__header">
       <button
         aria-label="toggle_button"
         id="toggle_button"
         data-cy="ToggleAllButton"
         type="button"
         className={classNames(
-          'todoapp__toggle-all',
+          'todoTodoPage__toggle-all',
           { active: isToggled },
         )}
         onClick={handleToggleButton}
@@ -59,7 +59,7 @@ export const Header: React.FC<Props> = ({
           type="text"
           ref={newTodoField}
           value={inputValue}
-          className="todoapp__new-todo"
+          className="todoTodoPage__new-todo"
           placeholder="What needs to be done?"
           onChange={onHandleInput}
         />
