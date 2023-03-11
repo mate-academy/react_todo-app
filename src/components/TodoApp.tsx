@@ -36,6 +36,10 @@ export const TodoApp: FC = () => {
   const [idsToChange, setIdsToChange] = useState<number[]>([]);
   const handleErrorClose = () => setErrorMessage('');
 
+  const localTodo = (todo: Todo) => {
+    setLocalTodos([...localTodos, todo]);
+  };
+
   useEffect(() => {
     if (newTodoField.current) {
       newTodoField.current.focus();
@@ -52,8 +56,6 @@ export const TodoApp: FC = () => {
         });
     }
   }, []);
-
-  const userTodo = () => setLocalTodos(localTodos);
 
   const addNewTodo = async (title: string) => {
     if (!title.trim()) {
@@ -155,7 +157,7 @@ export const TodoApp: FC = () => {
     updateStatusTodo,
     idsToChange,
     editTitleTodo,
-    userTodo,
+    localTodo,
   };
 
   const activeTodos = todos.filter(todo => !todo.completed);
