@@ -136,9 +136,8 @@
   text-decoration: none;
   cursor: pointer;
   background: none;
-  -webkit-TodoPageearance: none;
-  -moz-TodoPageearance: none;
-  TodoPageearance: none;
+  -webkit-todopageearance: none;
+  -moz-todopageearance: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
