@@ -20,7 +20,7 @@ export const Footer: FC<Props> = ({
 
     <TodosFilter />
 
-    {allCompleted.length && (
+    {!!allCompleted.length && (
       <button
         type="button"
         className="clear-completed"
