@@ -13,9 +13,11 @@
     "font-awesome-animation": "^1.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.5",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
-    "react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5",
+    "sweetalert2": "^11.7.3"
   },
   "devDependencies": {
     "@cypress/react": "^5.12.4",

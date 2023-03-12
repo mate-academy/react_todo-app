@@ -7,7 +7,7 @@ import React,
   useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { getUser, getUsers } from '../../api/user';
 import { Context } from '../../context';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -36,7 +36,17 @@ export const Auth: React.FC = React.memo(() => {
   }, [arrayOfUsers]);
 
   useEffect(() => {
-    getUsers().then(setArrayOfUsers);
+    const getUserFromServer = async () => {
+      try {
+        const res = await getUsers();
+
+        setArrayOfUsers(res);
+      } catch {
+        setCurrentError(Error.USER);
+      }
+    };
+
+    getUserFromServer();
   }, []);
 
   useEffect(() => {
@@ -48,24 +58,26 @@ export const Auth: React.FC = React.memo(() => {
   }, [currentError]);
 
   const toLogIn = async () => {
-    await getUser(+value)
-      .then(setUser)
-      .then(() => {
-        navigate(`/todos/${value}`);
-      })
-      .catch(() => {
-        navigate('/auth');
-        setValue('');
-        setIsLoadig(false);
-        setCurrentError(Error.USER);
-      })
-      .finally(() => {
-        setIsLoadig(false);
-      });
+    try {
+      const res = await getUser(+value);
+
+      await setUser(res);
+
+      navigate(`/todos/${value}`);
+    } catch {
+      navigate('/auth');
+      setValue('');
+      setIsLoadig(false);
+      setCurrentError(Error.USER);
+    }
+
+    setIsLoadig(false);
   };
 
   const inputHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setValue(+e.target.value.replace(/[^0-9]/g, ''));
+    const newValue = +e.target.value.replace(/[^0-9]/g, '');
+
+    setValue(newValue);
 
     setIsLoadig(false);
     setCurrentError(Error.RESET);
@@ -101,7 +113,7 @@ export const Auth: React.FC = React.memo(() => {
             />
 
             <span className="icon is-medium is-left">
-              <i className={classNames(
+              <i className={cn(
                 'fa-regular fa-id-badge',
                 { 'fa-fade': !isLoading },
               )}
@@ -109,11 +121,12 @@ export const Auth: React.FC = React.memo(() => {
             </span>
           </div>
         </div>
+
         <div className="field is-flex is-justify-content-space-between">
           <button
             type="submit"
             disabled={!!currentError}
-            className={classNames(
+            className={cn(
               'button',
               'is-rounded',
               { 'is-loading': isLoading },
@@ -124,7 +137,7 @@ export const Auth: React.FC = React.memo(() => {
 
           <button
             type="button"
-            className={classNames(
+            className={cn(
               'button',
               'is-primary',
               'is-rounded',
@@ -135,15 +148,15 @@ export const Auth: React.FC = React.memo(() => {
           </button>
         </div>
       </form>
+
       <Notification />
 
-      {!!currentError
-          && (
-            <ErrorMessage
-              currentError={currentError}
-              setCurrentError={setCurrentError}
-            />
-          )}
+      {!!currentError && (
+        <ErrorMessage
+          currentError={currentError}
+          setCurrentError={setCurrentError}
+        />
+      )}
     </>
   );
 });
