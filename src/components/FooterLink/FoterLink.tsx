@@ -11,7 +11,7 @@ export const FooterLink: React.FC<Props> = ({
 }) => (
   <NavLink
     to={type === Filter.all ? '/' : `/${type}`}
-    className={(isActive) => classNames(
+    className={({ isActive }) => classNames(
       'filter__link',
       { selected: isActive },
     )}
