@@ -55,7 +55,7 @@ export const Header: React.FC<Props> = ({
 
       <form onSubmit={onHandleSubmit}>
         <input
-          data-cy="editTodoField"
+          data-cy="createTodo"
           type="text"
           ref={newTodoField}
           value={inputValue}

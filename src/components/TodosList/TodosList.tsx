@@ -15,8 +15,8 @@ export const TodoList: React.FC<Props> = ({
   todos,
 }) => {
   return (
-    <section className="todoTodoPage__main" data-cy="TodoList">
-      <ul>
+    <section className="todoTodoPage__main">
+      <ul className="todo-list" data-cy="todoList">
         <TransitionGroup>
           {todos.map(todo => (
             <CSSTransition
