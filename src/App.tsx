@@ -101,8 +101,9 @@ export const App: React.FC = () => {
     setTodos(updatedTodos);
 
     try {
-      setUpdatedTodoID(prevIds => [...prevIds, id]);
-      await updateTodo(id, { title: newTitle });
+        setUpdatedTodoID(prevIds => [...prevIds, id]);
+        await updateTodo(id, { title: newTitle });
+
     } catch {
       setError(ErrorType.UpdatedError);
     }
@@ -111,7 +112,7 @@ export const App: React.FC = () => {
   };
 
   const clearCompleted = async () => {
-    const doneTasks = todos.filter(todo => todo.completed === true);
+    const doneTasks = todos.filter(todo => todo.completed);
     const doneIds = doneTasks.map((todo) => {
       return todo.id;
     });
@@ -121,7 +122,7 @@ export const App: React.FC = () => {
     await Promise.all(doneTasks.map((todo) => deleteTodo(todo.id)));
 
     const visibleTodos = filtredTodos.filter(todo => {
-      return todo.completed === false;
+      return !todo.completed;
     });
 
     setTodos(visibleTodos);
@@ -155,14 +156,15 @@ export const App: React.FC = () => {
 
   const toggleAll = async () => {
     const totalTodos = todos.length;
-    const are = todos.filter(todo => todo.completed).length === totalTodos;
+    const areTodosComplited
+    = todos.filter(todo => todo.completed).length === totalTodos;
 
-    setTodos(todos.map(todo => ({ ...todo, completed: !are })));
+    setTodos(todos.map(todo => ({ ...todo, completed: !areTodosComplited })));
 
     try {
-      const notCompletedTodos = todos.filter(todo => todo.completed === false);
+      const notCompletedTodos = todos.filter(todo => !todo.completed);
 
-      if (notCompletedTodos.length > 0) {
+      if (notCompletedTodos.length) {
         notCompletedTodos.forEach(async todo => {
           updateTodo(todo.id, { completed: !todo.completed });
         });

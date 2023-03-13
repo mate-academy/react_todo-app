@@ -37,11 +37,11 @@ export const TodoInfo: React.FC<Props> = React.memo(({
 
   const handleSubmitEdit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (newTitle.trim()) {
+    if (newTitle.trim() !== title) {
       await editTodo(id, newTitle);
     }
 
-    if (newTitle.length === 0) {
+    if (!newTitle.length) {
       onDelete(id);
     }
 
