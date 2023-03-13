@@ -4,7 +4,7 @@ import { NavLink, useSearchParams } from 'react-router-dom';
 import { getSearchWith } from '../../utils/searchHelper';
 import { Props } from './Props';
 
-export const FilterLink: React.FC<Props> = React.memo(({
+export const FilterLink: React.FC<Props> = ({
   params,
   text,
   ...props
@@ -24,4 +24,4 @@ export const FilterLink: React.FC<Props> = React.memo(({
       {text}
     </NavLink>
   );
-});
+};

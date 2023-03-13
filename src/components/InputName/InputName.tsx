@@ -3,7 +3,7 @@ import React from 'react';
 import { InputProps } from '../../types/InputProps';
 import { RegExp } from '../../constants/RegExp';
 
-export const InputName: React.FC<InputProps> = React.memo(({
+export const InputName: React.FC<InputProps> = ({
   register,
   error,
   message,
@@ -36,4 +36,4 @@ export const InputName: React.FC<InputProps> = React.memo(({
       )}
     </div>
   </label>
-));
+);

@@ -40,7 +40,7 @@ export function useTodos() {
     } catch {
       setCurrentError(Error.UPLOAD);
     }
-  }, []);
+  }, [todos, processingIds]);
 
   const onAdd = useCallback((todo: Todo) => {
     setIsCreated(true);
@@ -85,15 +85,15 @@ export function useTodos() {
     const toUpdateTodo = async () => {
       try {
         await updateTodo(todoID, data);
-        getTodosFromServer();
+        await getTodosFromServer();
       } catch {
         setCurrentError(Error.UPDATE);
+      } finally {
+        setProcessingIds(prev => prev.filter(id => id !== todoID));
       }
     };
 
     toUpdateTodo();
-
-    setProcessingIds(processingIds.filter(id => id !== todoID));
   }, [todos]);
 
   const dispatchTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {

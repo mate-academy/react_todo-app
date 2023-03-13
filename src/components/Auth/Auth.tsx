@@ -16,7 +16,7 @@ import { ErrorMessage } from '../ErrorMessage';
 import { User } from '../../types/User';
 import { Notification } from '../Notification/Notification';
 
-export const Auth: React.FC = React.memo(() => {
+export const Auth: React.FC = () => {
   const {
     setUser,
     currentError,
@@ -159,4 +159,4 @@ export const Auth: React.FC = React.memo(() => {
       )}
     </>
   );
-});
+};

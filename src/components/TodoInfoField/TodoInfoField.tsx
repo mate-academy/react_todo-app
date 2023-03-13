@@ -1,7 +1,7 @@
 import React from 'react';
 import { Props } from './Props';
 
-export const TodoInfoField: React.FC<Props> = React.memo(({
+export const TodoInfoField: React.FC<Props> = ({
   setIsEditing,
   onDelete,
   todo,
@@ -25,4 +25,4 @@ export const TodoInfoField: React.FC<Props> = React.memo(({
       ×
     </button>
   </>
-));
+);

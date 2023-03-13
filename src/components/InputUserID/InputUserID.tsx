@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { InputProps } from '../../types/InputProps';
 
-export const InputUserID: React.FC<InputProps> = React.memo(({
+export const InputUserID: React.FC<InputProps> = ({
   error,
   register,
   message,
@@ -37,4 +37,4 @@ export const InputUserID: React.FC<InputProps> = React.memo(({
       )}
     </div>
   </label>
-));
+);

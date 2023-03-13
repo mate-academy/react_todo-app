@@ -9,7 +9,7 @@ import { Inputs } from '../../types/Inputs';
 import { InputName } from '../InputName/InputName';
 import { InputEmail } from '../InputEmail/InputEmail';
 
-export const RegForm: React.FC = React.memo(() => {
+export const RegForm: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -98,4 +98,4 @@ export const RegForm: React.FC = React.memo(() => {
       </div>
     </form>
   );
-});
+};

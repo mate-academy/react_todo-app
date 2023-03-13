@@ -6,7 +6,7 @@ import React,
 } from 'react';
 import { Props } from './Props';
 
-export const TodoInfoForm: React.FC<Props> = React.memo(({
+export const TodoInfoForm: React.FC<Props> = ({
   setIsEditing,
   onDelete,
   onUpdate,
@@ -57,4 +57,4 @@ export const TodoInfoForm: React.FC<Props> = React.memo(({
       />
     </form>
   );
-});
+};
