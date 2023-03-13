@@ -20,9 +20,12 @@ export const Footer: React.FC<Props> = ({
 
     <nav className="filter" data-cy="Filter">
       {Object.values(Filter).map(filterBy => (
-        <FooterLink
-          type={filterBy}
-        />
+        <div key={filterBy}>
+          <FooterLink
+            type={filterBy}
+          />
+        </div>
+
       ))}
     </nav>
 

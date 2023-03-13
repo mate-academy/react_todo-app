@@ -1,15 +1,14 @@
-import React from 'react';
-import {
-  Route,
-  Routes,
-} from 'react-router-dom';
-import { TodoPage } from './components/TodoPage';
+import { useRoutes } from 'react-router-dom';
 
-export const App: React.FC = () => (
-  <Routes>
-    <Route path="/" element={<TodoPage />} />
-    <Route path="/*" element={<p>Page not found</p>} />
-    <Route index element={<TodoPage />} />
-    <Route path=":filter" element={<TodoPage />} />
-  </Routes>
-);
+import { TodoPage } from './components/TodoPage/TodoPage';
+import { NotFoundPage } from './components/NotFoundPage/NotFoundPage';
+
+export function App() {
+  const element = useRoutes([
+    { path: '/', element: <TodoPage /> },
+    { path: ':filter', element: <TodoPage /> },
+    { path: '*', element: <NotFoundPage /> },
+  ]);
+
+  return element;
+}

@@ -4,16 +4,17 @@ import React, {
   useEffect,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import { ErrorType } from '../types/ErrorType';
-import { Filter } from '../types/Filter';
+import { ErrorType } from '../../types/ErrorType';
+import { Filter } from '../../types/Filter';
 
-import { TodoList } from './TodosList/TodosList';
-import { Header } from './Header/Header';
-import { Footer } from './Footer/Footer';
-import { Error } from './Error/Error';
+import { TodoList } from '../TodosList/TodosList';
+import { Header } from '../Header/Header';
+import { Footer } from '../Footer/Footer';
+import { Error } from '../Error/Error';
 
-import { Todo } from '../types/Todo';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { Todo } from '../../types/Todo';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { NotFoundPage } from '../NotFoundPage/NotFoundPage';
 
 export const TodoPage: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -102,38 +103,43 @@ export const TodoPage: React.FC = () => {
   const completedTodos = listModified(Filter.completed).length;
   const todosFiltered = listModified(filter);
   const activeTodos = listModified(Filter.active).length;
+  const filterParamsCheck
+  = Object.values(Filter).some(par => par === filter);
+  const correctPath = filterParamsCheck || filter === '/';
 
-  return (
-    <div className="todoTodoPage">
-      <h1 className="todoTodoPage__title">todos</h1>
+  return correctPath
+    ? (
+      <div className="todoTodoPage">
+        <h1 className="todoTodoPage__title">todos</h1>
 
-      <div className="todoTodoPage__content">
-        <Header
-          onHandleSubmit={handleSubmit}
-          onHandleInput={handleInput}
-          setTodos={setTodos}
-          newTodoField={newTodoField}
-          inputValue={title}
-          todos={todos}
-        />
-        <TodoList
-          onDelete={handleDelete}
-          onHandleChangeTodo={handleChangeTodo}
-          todos={todosFiltered}
-        />
-        {!!todos.length && (
-          <Footer
-            onDeleteCompletedTodos={deleteCompletedTodos}
-            completedTodos={completedTodos}
-            activeTodos={activeTodos}
+        <div className="todoTodoPage__content">
+          <Header
+            onHandleSubmit={handleSubmit}
+            onHandleInput={handleInput}
+            setTodos={setTodos}
+            newTodoField={newTodoField}
+            inputValue={title}
+            todos={todos}
           />
-        )}
-      </div>
+          <TodoList
+            onDelete={handleDelete}
+            onHandleChangeTodo={handleChangeTodo}
+            todos={todosFiltered}
+          />
+          {!!todos.length && (
+            <Footer
+              onDeleteCompletedTodos={deleteCompletedTodos}
+              completedTodos={completedTodos}
+              activeTodos={activeTodos}
+            />
+          )}
+        </div>
 
-      <Error
-        onErrorDisable={errorDisable}
-        errorType={typeOfError}
-      />
-    </div>
-  );
+        <Error
+          onErrorDisable={errorDisable}
+          errorType={typeOfError}
+        />
+      </div>
+    )
+    : (<NotFoundPage />);
 };
