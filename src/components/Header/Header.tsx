@@ -16,7 +16,13 @@ type Props = {
 export const Header: FC<Props> = ({ onAddTodo, setError }) => {
   const [title, setTitle] = useState('');
   /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const user = JSON.parse(localStorage.getItem('user')!);
+  const user = JSON.parse(localStorage.getItem('user')!) || {
+    id: 0,
+    name: '',
+    username: '',
+    email: '',
+    phone: '',
+  };
 
   const handleChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;

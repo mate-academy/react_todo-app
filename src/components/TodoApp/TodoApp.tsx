@@ -22,6 +22,7 @@ export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(JSON.parse(
     localStorage.getItem('todos')!,
   ) || []);
+  const [error, setError] = useState(false);
   const [user, setUser] = useLocalStorage<User>('user', {
     id: 0,
     name: '',
@@ -30,7 +31,6 @@ export const TodoApp: React.FC = () => {
     phone: '',
   });
   const { id } = user;
-  const [error, setError] = useState(false);
 
   const activeTodos = todos.filter(({ completed }) => !completed);
   const allCompleted = todos.filter(({ completed }) => completed);

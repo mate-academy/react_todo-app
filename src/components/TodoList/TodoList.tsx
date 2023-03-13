@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
@@ -17,16 +17,18 @@ export const TodoList: React.FC<Props> = React.memo(({
 }) => {
   const { pathname } = useLocation();
 
-  const visibleTodos = todos.filter((todo) => {
+  const visibleTodos = useMemo(() => {
     switch (pathname) {
       case FilterCompleted.ACTIVE:
-        return !todo.completed;
+        return todos.filter(({ completed }) => !completed);
       case FilterCompleted.COMPLETED:
-        return todo.completed;
-      default:
+        return todos.filter(({ completed }) => completed);
+      case FilterCompleted.ALL:
         return todos;
+      default:
+        return [];
     }
-  });
+  }, [todos, pathname]);
 
   return (
     <ul className="todo-list" data-cy="todoList">
