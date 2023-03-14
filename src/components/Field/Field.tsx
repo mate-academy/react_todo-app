@@ -5,8 +5,8 @@ type Props = {
   name: string;
   type: string;
   value: string;
-  required?: boolean,
-  onChange?: (newValue: React.ChangeEvent<HTMLInputElement>) => void,
+  required: boolean,
+  onChange: (newValue: React.ChangeEvent<HTMLInputElement>) => void,
 };
 
 export const Field: FC<Props> = ({

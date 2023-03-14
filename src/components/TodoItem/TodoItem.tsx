@@ -4,22 +4,25 @@ import React, {
   useRef,
   useEffect,
   useCallback,
-  Dispatch,
-  SetStateAction,
 } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { toogleTodo, deleteTodo, updateTodo } from '../../api/todos';
 import { warningTimer } from '../../utils/warningTimer';
+import { User } from '../../types/User';
 
 type Props = {
+  user: User,
   todo: Todo;
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
+  todos: Todo[];
+  setTodos: (todos: Todo[]) => void;
   setError: (error: boolean) => void;
 };
 
 export const TodoItem: React.FC<Props> = React.memo(({
+  user,
   todo,
+  todos,
   setTodos,
   setError,
 }) => {
@@ -27,13 +30,11 @@ export const TodoItem: React.FC<Props> = React.memo(({
   const [isEditing, setIsEditing] = useState(false);
   const [changedTitle, setChangedTitle] = useState(title);
   const editingTodo = useRef<HTMLInputElement>(null);
-  /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const user = JSON.parse(localStorage.getItem('user')!);
 
   const removeTodo = useCallback(async () => {
     try {
       await deleteTodo(user.id, id);
-      setTodos(currentTodos => currentTodos.filter(currentTodo => {
+      setTodos(todos.filter(currentTodo => {
         return currentTodo.id !== id;
       }));
     } catch {
@@ -48,7 +49,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
   ) => {
     await updateTodo(user.id, id, newTitle);
 
-    setTodos(currentTodos => currentTodos.map(currentTodo => {
+    setTodos(todos.map(currentTodo => {
       if (currentTodo.id === todoId) {
         return {
           ...currentTodo,
@@ -91,7 +92,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
     try {
       await toogleTodo(user.id, id, !completed);
 
-      setTodos(currentTodos => currentTodos.map(currentTodo => {
+      setTodos(todos.map(currentTodo => {
         if (currentTodo.id === id) {
           return {
             ...currentTodo,

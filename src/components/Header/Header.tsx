@@ -2,27 +2,25 @@ import {
   FC,
   useState,
   useCallback,
-  Dispatch,
-  SetStateAction,
 } from 'react';
 import { createTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
 type Props = {
-  onAddTodo: Dispatch<SetStateAction<Todo[]>>;
+  user: User;
+  todos: Todo[];
+  onAddTodo: (todos: Todo[]) => void;
   setError: (error: boolean) => void;
 };
 
-export const Header: FC<Props> = ({ onAddTodo, setError }) => {
+export const Header: FC<Props> = ({
+  user,
+  todos,
+  onAddTodo,
+  setError,
+}) => {
   const [title, setTitle] = useState('');
-  /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const user = JSON.parse(localStorage.getItem('user')!) || {
-    id: 0,
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-  };
 
   const handleChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -35,7 +33,7 @@ export const Header: FC<Props> = ({ onAddTodo, setError }) => {
       try {
         e.preventDefault();
 
-        if (!title.trim().length) {
+        if (!title.trim()) {
           setTitle('');
 
           return;
@@ -50,7 +48,7 @@ export const Header: FC<Props> = ({ onAddTodo, setError }) => {
 
         const addedTodo = await createTodo(user.id, newTodo);
 
-        onAddTodo(currentTodos => [...currentTodos, addedTodo]);
+        onAddTodo([...todos, addedTodo]);
       } catch (error) {
         setError(true);
       } finally {

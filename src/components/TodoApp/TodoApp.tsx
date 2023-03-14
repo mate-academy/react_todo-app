@@ -2,6 +2,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from 'react';
 import classNames from 'classnames';
 
@@ -18,11 +19,8 @@ import { User } from '../../types/User';
 import { warningTimer } from '../../utils/warningTimer';
 
 export const TodoApp: React.FC = () => {
-  /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const [todos, setTodos] = useState<Todo[]>(JSON.parse(
-    localStorage.getItem('todos')!,
-  ) || []);
   const [error, setError] = useState(false);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [user, setUser] = useLocalStorage<User>('user', {
     id: 0,
     name: '',
@@ -32,9 +30,17 @@ export const TodoApp: React.FC = () => {
   });
   const { id } = user;
 
-  const activeTodos = todos.filter(({ completed }) => !completed);
-  const allCompleted = todos.filter(({ completed }) => completed);
-  const isAllCompleted = allCompleted.length === todos.length;
+  const activeTodos = useMemo(() => {
+    return todos.filter(({ completed }) => !completed);
+  }, [todos]);
+
+  const allCompleted = useMemo(() => {
+    return todos.filter(({ completed }) => completed);
+  }, [todos]);
+
+  const isAllCompleted = useMemo(() => {
+    return allCompleted.length === todos.length;
+  }, [todos]);
 
   const clearCompleted = useCallback(() => {
     try {
@@ -42,9 +48,7 @@ export const TodoApp: React.FC = () => {
         return deleteTodo(id, todo.id);
       }));
 
-      setTodos(currentTodos => {
-        return currentTodos.filter(({ completed }) => !completed);
-      });
+      setTodos(todos.filter(({ completed }) => !completed));
     } catch {
       setError(true);
       warningTimer(setError, false, 3000);
@@ -57,7 +61,7 @@ export const TodoApp: React.FC = () => {
         return toogleTodo(id, todo.id, !isAllCompleted);
       }));
 
-      setTodos(currentTodos => currentTodos.map((todo) => ({
+      setTodos(todos.map((todo) => ({
         ...todo,
         completed: !isAllCompleted,
       })));
@@ -100,7 +104,12 @@ export const TodoApp: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <Header onAddTodo={setTodos} setError={setError} />
+      <Header
+        user={user}
+        todos={todos}
+        onAddTodo={setTodos}
+        setError={setError}
+      />
 
       <section className="main">
         <input
@@ -122,6 +131,7 @@ export const TodoApp: React.FC = () => {
         </label>
 
         <TodoList
+          user={user}
           todos={todos}
           setTodos={setTodos}
           setError={setError}
