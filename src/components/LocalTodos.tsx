@@ -15,7 +15,6 @@ export const LocalTodos: React.FC = () => {
   const [editableId, setEditableId] = useState('');
   const [editableTitle, setEditableTitle] = useState('');
   const location = useLocation();
-
   const localTodos = JSON.parse(localStorage.getItem('todos') || '{}');
 
   useEffect(() => {
@@ -62,8 +61,12 @@ export const LocalTodos: React.FC = () => {
     const editableTodo = todos.find(todo => todo.id === editableId);
 
     if (editableTodo) {
-      editableTodo.title = editableTitle;
-      localStorage.setItem('todos', JSON.stringify(todos));
+      if (editableTitle.length === 0) {
+        removeHandler(editableId);
+      } else {
+        editableTodo.title = editableTitle;
+        localStorage.setItem('todos', JSON.stringify(todos));
+      }
     }
 
     setEditableTitle('');
