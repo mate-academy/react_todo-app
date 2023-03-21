@@ -101,9 +101,8 @@ export const App: React.FC = () => {
     setTodos(updatedTodos);
 
     try {
-        setUpdatedTodoID(prevIds => [...prevIds, id]);
-        await updateTodo(id, { title: newTitle });
-
+      setUpdatedTodoID(prevIds => [...prevIds, id]);
+      await updateTodo(id, { title: newTitle });
     } catch {
       setError(ErrorType.UpdatedError);
     }
@@ -186,7 +185,6 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
-
         <NewTodoField
           onAdd={uploadTodosOnServer}
           toggleAll={toggleAll}
@@ -194,6 +192,7 @@ export const App: React.FC = () => {
           setError={setError}
           isTodoLoading={isTodoLoading}
         />
+
         <TodoList
           filtredTodos={filtredTodos}
           isTodoLoading={isTodoLoading}
@@ -205,6 +204,7 @@ export const App: React.FC = () => {
           editTodo={editTodo}
           updatedTodoID={updatedTodoID}
         />
+
         <TodoFilters
           todos={todos}
           setFiltredTodos={setFiltredTodos}
