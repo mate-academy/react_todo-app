@@ -63,7 +63,7 @@ export const TodoItem = React.memo<Props>(({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === 'Esc') {
+    if (event.code === 'Escape') {
       setUpdatedTodoId(null);
 
       return;
