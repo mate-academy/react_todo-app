@@ -1,93 +1,104 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList/TodoList';
+import { ToggleAll } from './components/ToggleAll/ToggleAll';
+import { useLocalStorage } from './customHooks/useLocalStorage';
+import { Todo } from './types/Todo';
+import { filterByStatus } from './utils/helper';
+
+const todosFromServer: Todo[] = [
+  { id: 1, title: 'HTML', completed: true },
+  { id: 2, title: 'JS', completed: false },
+  { id: 3, title: 'CSS', completed: true },
+];
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [query, setQuery] = useState('');
+  const { filter = '' } = useParams();
+
+  useEffect(() => {
+    setTodos(todosFromServer);
+  }, []);
+
+  const handleToggleAll = (isTodosCompleted: boolean) => {
+    setTodos(todos.map(todo => {
+      return {
+        ...todo,
+        completed: !isTodosCompleted,
+      };
+    }));
+  };
+
+  const handleTodoUpdate = (todo: Todo, newValue: object) => {
+    const copyOfTodos = [...todos];
+    const updatedTodoIndex = todos.findIndex(({ id }) => id === todo.id);
+
+    copyOfTodos.splice(updatedTodoIndex, 1, {
+      ...todo,
+      ...newValue,
+    });
+
+    setTodos(copyOfTodos);
+  };
+
+  const handleQueryChange = (newQuery: string) => {
+    setQuery(newQuery);
+  };
+
+  const handleTodoAdd = (todo: Todo) => {
+    setTodos([...todos, todo]);
+    setQuery('');
+  };
+
+  const handleTodoDelete = (todoId: number) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
+  const handleClearCompleted = () => {
+    setTodos(todos.filter(({ completed }) => !completed));
+  };
+
+  const completedTodos = todos
+    .filter(({ completed }) => completed).length;
+  const isTodosEmpty = !todos.length;
+  const isTodosCompleted = completedTodos === todos.length;
+  const notCompletedTodos = todos.length - completedTodos;
+  const visibleArray = filterByStatus(filter, todos);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <Header
+        inputValue={query}
+        onInputChange={handleQueryChange}
+        onFormSubmit={handleTodoAdd}
+      />
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+        {!isTodosEmpty && (
+          <ToggleAll
+            isActive={isTodosCompleted}
+            onToggle={handleToggleAll}
+          />
+        )}
+
+        <TodoList
+          todos={visibleArray}
+          onTodoDelete={handleTodoDelete}
+          onTodoUpdate={handleTodoUpdate}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {!isTodosEmpty && (
+        <Footer
+          notCompletedTodos={notCompletedTodos}
+          completedTodos={completedTodos}
+          onClearCompleted={handleClearCompleted}
+        />
+      )}
     </div>
   );
 };
