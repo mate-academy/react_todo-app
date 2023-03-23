@@ -14,7 +14,7 @@ export const Footer = React.memo<Props>(({
   completedTodos,
   setTodos,
 }) => {
-  const clearCompleated = () => {
+  const clearCompleted = () => {
     localStorage.setItem('todos', JSON.stringify(activeTodos));
     setTodos(activeTodos);
   };
@@ -59,7 +59,7 @@ export const Footer = React.memo<Props>(({
           <button
             type="button"
             className="clear-completed"
-            onClick={clearCompleated}
+            onClick={clearCompleted}
           >
             Clear completed
           </button>
