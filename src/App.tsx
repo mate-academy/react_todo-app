@@ -43,10 +43,12 @@ export const App: React.FC = () => {
   const toggleAll = useCallback(() => {
     const completed = completedTodos.length !== todos.length;
 
-    const toggledTodos = todos.map((todo: Todo) => ({ ...todo, completed }));
+    const toggledTodos = todos.map((todo: Todo) => {
+      return { ...todo, completed };
+    });
 
     setTodos(toggledTodos);
-  }, [todos]);
+  }, [todos, completedTodos, setTodos]);
 
   const updateTodo = useCallback((newTitle: string, id: number) => {
     const updatedTodo = todos.map((todo: Todo) => {
