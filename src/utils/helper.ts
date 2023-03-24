@@ -1,7 +1,7 @@
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-export const createTodo = (title: string) => {
+export const createTodo = (title: string): Todo => {
   return {
     id: +new Date(),
     title,

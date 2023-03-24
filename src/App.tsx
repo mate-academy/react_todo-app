@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
@@ -9,20 +9,10 @@ import { useLocalStorage } from './customHooks/useLocalStorage';
 import { Todo } from './types/Todo';
 import { filterByStatus } from './utils/helper';
 
-const todosFromServer: Todo[] = [
-  { id: 1, title: 'HTML', completed: true },
-  { id: 2, title: 'JS', completed: false },
-  { id: 3, title: 'CSS', completed: true },
-];
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [query, setQuery] = useState('');
   const { filter = '' } = useParams();
-
-  useEffect(() => {
-    setTodos(todosFromServer);
-  }, []);
 
   const handleToggleAll = (isTodosCompleted: boolean) => {
     setTodos(todos.map(todo => {

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState, KeyboardEvent } from 'react';
 import classnames from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -32,7 +32,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     setIsEditing(false);
   };
 
-  const handleTodoEdit = (e: KeyboardEvent) => {
+  const handleTodoEdit = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleUpdateTodoTitle();
     }
@@ -42,14 +42,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       setIsEditing(false);
     }
   };
-
-  useEffect(() => {
-    if (isEditing) {
-      document.addEventListener('keyup', handleTodoEdit);
-    } else {
-      document.removeEventListener('keyup', handleTodoEdit);
-    }
-  }, [isEditing]);
 
   const handleTodoToggle = () => {
     onTodoUpdate(todo, { completed: !completed });
@@ -74,6 +66,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       })}
     >
       <div
+        id="div"
         className="view"
         onDoubleClick={handleEditingFormOpen}
       >
@@ -98,6 +91,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         type="text"
         className="edit"
         value={editedTitle}
+        onKeyUp={handleTodoEdit}
         onBlur={handleUpdateTodoTitle}
         onChange={handleEditingTitleChange}
       />
