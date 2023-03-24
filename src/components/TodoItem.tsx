@@ -19,11 +19,11 @@ export const TodoItem: React.FC<Props> = ({
   const [newTitle, setNewTitle] = useState(todo.title);
 
   const updateHandler = () => {
-    if (newTitle.length === 0) {
+    if (!newTitle.length) {
       deleteHandler(todo.id);
     }
 
-    if (newTitle !== todo.title && newTitle.length > 0) {
+    if (newTitle !== todo.title && newTitle.length) {
       onUpdate(todo.id, newTitle);
     }
 
