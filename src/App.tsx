@@ -27,10 +27,7 @@ export const App: React.FC = () => {
     const copyOfTodos = [...todos];
     const updatedTodoIndex = todos.findIndex(({ id }) => id === todo.id);
 
-    copyOfTodos.splice(updatedTodoIndex, 1, {
-      ...todo,
-      ...newValue,
-    });
+    copyOfTodos[updatedTodoIndex] = { ...todo, ...newValue };
 
     setTodos(copyOfTodos);
   };
@@ -44,7 +41,7 @@ export const App: React.FC = () => {
     setQuery('');
   };
 
-  const handleTodoDelete = (todoId: number) => {
+  const handleTodoDelete = (todoId: string) => {
     setTodos(todos.filter(todo => todo.id !== todoId));
   };
 

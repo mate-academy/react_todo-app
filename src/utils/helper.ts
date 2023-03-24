@@ -3,26 +3,10 @@ import { Todo } from '../types/Todo';
 
 export const createTodo = (title: string): Todo => {
   return {
-    id: +new Date(),
+    id: crypto.randomUUID(),
     title,
     completed: false,
   };
-};
-
-export const getLinkText = (link: string) => {
-  switch (link) {
-    case Status.All:
-      return 'All';
-
-    case Status.Active:
-      return 'Active';
-
-    case Status.Completed:
-      return 'Completed';
-
-    default:
-      return 'All';
-  }
 };
 
 export const filterByStatus = (filter: string, todos: Todo[]) => {

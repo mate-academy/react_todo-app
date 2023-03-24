@@ -3,7 +3,7 @@ import { TodoItem } from '../TodoItem';
 
 type TodoListProps = {
   todos: Todo[];
-  onTodoDelete: (todoId: number) => void;
+  onTodoDelete: (todoId: string) => void;
   onTodoUpdate: (todo: Todo, value: object) => void;
 };
 

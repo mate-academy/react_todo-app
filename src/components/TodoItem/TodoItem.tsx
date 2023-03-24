@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 
 type TodoItemProps = {
   todo: Todo;
-  onButtonClick: (todoId: number) => void;
+  onButtonClick: (todoId: string) => void;
   onTodoUpdate: (todo: Todo, value: object) => void;
 };
 
