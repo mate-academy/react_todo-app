@@ -31,7 +31,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
 
       onLogin(user);
     } catch (error) {
-      // Need to login
+     alert('Need to login')
     }
   }, []);
 
