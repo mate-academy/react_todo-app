@@ -1,93 +1,199 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/Footer';
+import { TodoNotification } from './components/TodoNotification';
+import { getTodos, postTodo, deleteTodo, patchTodo } from './api/todos';
+import { filterTodos } from './utils';
+import { Error, Filter, Todo, ErrorType, Property } from './types';
+
+const initialError: Error = {
+  state: false,
+  type: ErrorType.None,
+};
+
+const USER_ID = 6657;
+const localTodos = JSON.parse(localStorage.getItem('todos') || '[]');
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>(localTodos);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [filterType, setFilterType] = useState(Filter.All);
+  const [error, setError] = useState(initialError);
+  const [removedTodoId, setRemovedTodoId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const initialStatus = todos.every(todo => todo.completed);
+  const [completedStatus, setCompletedStatus] = useState(initialStatus);
+  const filteredTodos = useMemo(() => {
+    return filterTodos(todos, filterType);
+  }, [todos, filterType]);
+
+  useEffect(() => {
+    if (!localTodos.length) {
+      try {
+        const serverTodos = async () => {
+          const response = await getTodos(USER_ID);
+
+          return response;
+        };
+
+        serverTodos()
+          .then(response => setTodos(response));
+      } catch {
+        setError({
+          state: true,
+          type: ErrorType.Update,
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const addTodo = (title: string) => {
+    if (!title) {
+      setError({
+        state: true,
+        type: ErrorType.EmptyTitle,
+      });
+
+      return;
+    }
+
+    setTempTodo({
+      id: 0,
+      userId: USER_ID,
+      title,
+      completed: false,
+    });
+
+    postTodo(USER_ID, {
+      userId: USER_ID,
+      title,
+      completed: false,
+    }).then(response => {
+      setTodos(prev => (
+        [
+          ...prev,
+          response,
+        ]
+      ));
+    })
+      .finally(() => {
+        setTempTodo(null);
+      });
+  };
+
+  const removeTodo = (id: number) => {
+    setRemovedTodoId(id);
+    deleteTodo(id)
+      .then(() => {
+        setTodos(todos.filter(currentTodo => currentTodo.id !== id));
+      })
+      .catch(() => {
+        setError({
+          state: true,
+          type: ErrorType.Delete,
+        });
+      })
+      .finally(() => {
+        setRemovedTodoId(null);
+      });
+  };
+
+  const updateTodo = (id: number, data: Property) => {
+    setRemovedTodoId(id);
+    patchTodo(id, data)
+      .then((response) => {
+        const updatedTodos = [...todos];
+        const changedTodoId = [...todos].findIndex(todo => todo.id === id);
+
+        updatedTodos[changedTodoId] = response;
+        setTodos(updatedTodos);
+      })
+      .catch(() => {
+        setError({
+          state: true,
+          type: ErrorType.Update,
+        });
+      })
+      .finally(() => {
+        setRemovedTodoId(null);
+      });
+  };
+
+  const toggleCompletedStatus = () => {
+    setIsLoading(true);
+    setCompletedStatus(prev => !prev);
+
+    const updatedPromises = todos.map(todo => {
+      return patchTodo(todo.id, { completed: completedStatus });
+    });
+
+    Promise.all(updatedPromises)
+      .then(setTodos)
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const removeCompletedTodos = () => {
+    const completed = todos.filter(todo => todo.completed);
+    const uncompleted = todos.filter(todo => !todo.completed);
+    const removePromises = completed.map(todo => deleteTodo(todo.id));
+
+    Promise.all(removePromises)
+      .then(() => setTodos(uncompleted))
+      .catch(() => {
+        setError({
+          state: true,
+          type: ErrorType.Delete,
+        });
+      });
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <Header
+          todos={todos}
+          addTodo={addTodo}
+          tempTodo={tempTodo}
+          toggleCompletedStatus={toggleCompletedStatus}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <>
+            <TodoList
+              todos={filteredTodos}
+              tempTodo={tempTodo}
+              removeTodo={removeTodo}
+              removedTodoId={removedTodoId}
+              updateTodo={updateTodo}
+              isLoadingAll={isLoading}
+            />
+            <Footer
+              todos={todos}
+              setFilter={setFilterType}
+              filter={filterType}
+              removeCompletedTodos={removeCompletedTodos}
+            />
+          </>
+        )}
+      </div>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {error.state && (
+        <TodoNotification
+          setError={setError}
+          errorText={error.type}
+        />
+      )}
     </div>
   );
 };

@@ -1,12 +1,17 @@
 import ReactDOM from 'react-dom';
+import { HashRouter } from 'react-router-dom';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+import 'bulma/css/bulma.css';
+import './styles/index.scss';
+import './styles/todoapp.scss';
+import './styles/filter.scss';
 
 import { App } from './App';
+// import { Route, Routes } from 'react-router';
 
 ReactDOM.render(
-  <App />,
+  <HashRouter>
+    <App />
+  </HashRouter>,
   document.getElementById('root'),
 );
