@@ -120,7 +120,7 @@ export const App: React.FC = () => {
 
     await Promise.all(doneTasks.map((todo) => deleteTodo(todo.id)));
 
-    const visibleTodos = filtredTodos.filter(todo => {
+    const visibleTodos = todos.filter(todo => {
       return !todo.completed;
     });
 
