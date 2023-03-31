@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useMemo } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoFilter } from './TodoFilter';
