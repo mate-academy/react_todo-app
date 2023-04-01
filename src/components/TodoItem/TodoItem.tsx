@@ -34,6 +34,7 @@ export const TodoItem: React.FC<Props> = ({
       updateIdHandler(null);
     } else if (event.key === 'Escape') {
       updateIdHandler(null);
+      setTitleText(title);
     }
   };
 
