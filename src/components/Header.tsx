@@ -14,7 +14,7 @@ export const Header: React.FC<Props> = ({ onAddTodo }) => {
   const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (inputValue.trim() === '') {
+    if (!inputValue.trim()) {
       return;
     }
 

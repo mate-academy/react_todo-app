@@ -10,7 +10,10 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({
-  todo, toggleCompleted, onRemoveTodo, onRename,
+  todo,
+  toggleCompleted,
+  onRemoveTodo,
+  onRename,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
@@ -30,7 +33,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const handleTitleChange = () => {
-    if (newTitle.length === 0 || newTitle.trim() === '') {
+    if (!newTitle.length || !newTitle.trim()) {
       onRemoveTodo(todo.id);
       setIsEditing(false);
 

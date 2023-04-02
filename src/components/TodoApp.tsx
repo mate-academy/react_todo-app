@@ -58,6 +58,10 @@ export const TodoApp: React.FC = () => {
     setTodos(toggledTodos);
   };
 
+  const isToggledAll = useMemo(() => {
+    return todos.every((todo: Todo) => todo.completed);
+  }, [todos]);
+
   const handleRemoveTodo = useCallback((todoId: number) => {
     const updatedTodos = todos.filter((todo: Todo) => todo.id !== todoId);
 
@@ -94,7 +98,7 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
-              checked={todos.every((todo: Todo) => todo.completed)}
+              checked={isToggledAll}
               onChange={handleToggleAllTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
