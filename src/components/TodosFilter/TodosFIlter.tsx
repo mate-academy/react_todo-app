@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import classNames from 'classnames';
 import React from 'react';
 import { Link as NavLink } from 'react-router-dom';
@@ -15,8 +16,7 @@ export const TodosFilter: React.FC<Props> = React.memo(
         <li>
           <NavLink
             to="/"
-            // eslint-disable-next-line quote-props
-            className={classNames('', { 'selected': status === Status.all })}
+            className={classNames({ 'selected': status === Status.all })}
             onClick={() => onFilterClick(Status.all)}
           >
             All
@@ -26,8 +26,7 @@ export const TodosFilter: React.FC<Props> = React.memo(
         <li>
           <NavLink
             to="/active"
-            // eslint-disable-next-line quote-props
-            className={classNames('', { 'selected': status === Status.active })}
+            className={classNames({ 'selected': status === Status.active })}
             onClick={(event) => {
               onFilterClick(Status.active);
               event.preventDefault();
@@ -40,9 +39,9 @@ export const TodosFilter: React.FC<Props> = React.memo(
         <li>
           <NavLink
             to="/completed"
-            className={classNames('',
-              // eslint-disable-next-line quote-props
-              { 'selected': status === Status.completed })}
+            className={classNames(
+              { 'selected': status === Status.completed },
+            )}
             onClick={() => onFilterClick(Status.completed)}
           >
             Completed

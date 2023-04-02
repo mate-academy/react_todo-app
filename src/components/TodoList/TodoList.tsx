@@ -21,13 +21,10 @@ export const TodoList: React.FC<Props> = ({
     switch (status) {
       case Status.all:
         return item;
-
       case Status.completed:
         return item.completed;
-
       case Status.active:
         return !item.completed;
-
       default:
         return 0;
     }
