@@ -17,5 +17,5 @@ export const useLocaleStorage = <T>(initialValue: T, key: string) => {
     localStorage.setItem(key, JSON.stringify(value));
   }, [value, setValue]);
 
-  return [value];
+  return [value, setValue];
 };
