@@ -78,9 +78,9 @@ export const App: React.FC = () => {
         <NewTodo createNewTodo={createNewTodo} />
       </header>
 
-      <section className="main">
-        {!!todos.length && (
-          <>
+      {!!todos.length && (
+        <>
+          <section className="main">
             <input
               type="checkbox"
               id="toggle-all"
@@ -90,19 +90,18 @@ export const App: React.FC = () => {
               onChange={changeAllTodo}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
-          </>
-        )}
-        <Context.Provider value={{ updateTodo, removeTodo }}>
-          <TodoList todos={visibleTodos} />
-        </Context.Provider>
-      </section>
 
-      {!!todos.length && (
-        <Footer
-          activeTodos={activeTodos.length}
-          completedTodos={completedTodos.length}
-          removeAllCompleted={removeAllCompleted}
-        />
+            <Context.Provider value={{ updateTodo, removeTodo }}>
+              <TodoList todos={visibleTodos} />
+            </Context.Provider>
+          </section>
+
+          <Footer
+            activeTodos={activeTodos.length}
+            completedTodos={completedTodos.length}
+            removeAllCompleted={removeAllCompleted}
+          />
+        </>
       )}
     </div>
   );

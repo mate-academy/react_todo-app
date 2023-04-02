@@ -13,7 +13,7 @@ const Footer: React.FC<Props> = ({
 }) => (
   <footer className="footer">
     <span className="todo-count" data-cy="todosCounter">
-      {`${activeTodos} items left`}
+      {`${activeTodos} ${activeTodos === 1 ? 'item' : 'items'} left`}
     </span>
 
     <Filters />
