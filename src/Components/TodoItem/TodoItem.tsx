@@ -66,7 +66,6 @@ const TodoItem: React.FC<Props> = ({
           {value}
         </label>
         <button
-          style={{ cursor: 'pointer' }}
           type="button"
           className="destroy"
           data-cy="deleteTodo"

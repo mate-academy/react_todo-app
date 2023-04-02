@@ -10,7 +10,7 @@ type Props = {
 };
 
 const TodoList: React.FC<Props> = ({ todos }) => (
-  <ul className="todo-list" data-cy="todoList">
+  <ul className="todo-list" data-cy="todosList">
     <TransitionGroup>
       {todos.map(todo => (
         <CSSTransition
