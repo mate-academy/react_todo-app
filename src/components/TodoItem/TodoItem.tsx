@@ -91,7 +91,7 @@ export const TodoItem: React.FC<Props> = ({
           className="edit"
           value={tittleText}
           onChange={(event) => setTitleText(event.target.value)}
-          onKeyUp={(event) => changeTitleHandler(event)}
+          onKeyUp={changeTitleHandler}
           onBlur={(event) => {
             updateIdHandler(null);
             changeTitle(id, event.target.value);

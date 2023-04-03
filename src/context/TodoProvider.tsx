@@ -11,7 +11,6 @@ interface ITodoContext {
   checkCompleted: (element: Todo) => void,
   deleteTodo: (element: Todo) => void,
   changeTitle: (todoId: number, titleText: string) => void,
-
   statusTodo: string,
   setStatus: (value: string) => void,
   statusTodosHandler: (value: string) => void,
@@ -30,7 +29,6 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
   const [todosOriginal, setTodosOriginal]
     = useLocalStorage('todosOriginal');
   const [todos, setTodos] = useLocalStorage('todos');
-
   const [statusTodo, setStatus] = useState('All');
   const [all, setAll] = useState(true);
   const [active, setActive] = useState(false);
@@ -126,7 +124,6 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
     checkCompleted,
     deleteTodo,
     changeTitle,
-
     statusTodo,
     setStatus,
     statusTodosHandler,

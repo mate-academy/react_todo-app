@@ -33,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({
         <a
           href="#/"
           className={classNames({ selected: all })}
-          onClick={(event) => changeStatus(event)}
+          onClick={changeStatus}
         >
           All
         </a>
@@ -43,7 +43,7 @@ export const TodoFilter: React.FC<Props> = ({
         <a
           href="#/active"
           className={classNames({ selected: active })}
-          onClick={(event) => changeStatus(event)}
+          onClick={changeStatus}
         >
           Active
         </a>
@@ -53,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
         <a
           href="#/completed"
           className={classNames({ selected: completedTodo })}
-          onClick={(event) => changeStatus(event)}
+          onClick={changeStatus}
         >
           Completed
         </a>

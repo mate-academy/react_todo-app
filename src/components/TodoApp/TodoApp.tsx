@@ -15,7 +15,6 @@ export const TodoApp: React.FC = () => {
     setTodosOriginal,
     todos,
     setTodos,
-
     all,
     active,
     completedTodo,
@@ -84,11 +83,7 @@ export const TodoApp: React.FC = () => {
     todosOriginal?.forEach(el => {
       const { id, title } = el;
 
-      if (!allCompletedTodo) {
-        newTodos.push({ id, title, completed: true });
-      } else {
-        newTodos.push({ id, title, completed: false });
-      }
+      newTodos.push({ id, title, completed: !allCompletedTodo });
     });
 
     setAllCompletedTodo(!allCompletedTodo);
@@ -123,7 +118,7 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
-              onChange={() => toggleAllHandler()}
+              onChange={toggleAllHandler}
               checked={allCompletedTodo}
             />
             <label htmlFor="toggle-all">
