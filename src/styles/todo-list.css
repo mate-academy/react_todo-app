@@ -52,6 +52,7 @@
   -webkit-appearance: none;
   appearance: none;
   opacity: 0;
+  cursor: pointer;
 }
 
 .todo-list li label {
@@ -79,6 +80,7 @@
 
 .todo-list li .destroy {
   display: none;
+  cursor: pointer;
   position: absolute;
   top: 0;
   right: 10px;

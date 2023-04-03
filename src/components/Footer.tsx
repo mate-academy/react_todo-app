@@ -40,7 +40,7 @@ export const Footer: FC<Props> = ({
         {`${todos.length - amountCompletedTodos} items left`}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         {filterLinks.map(({ title, to }) => (
           <li>
             <NavLink

@@ -46,7 +46,7 @@ export const TodoList: FC<Props> = ({
         Mark all as complete
       </label>
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {todos.map(todo => (
           <li
             key={todo.id}

@@ -12,7 +12,7 @@ export const App: React.FC = () => {
   const amountCompletedTodos = useMemo(() => {
     return todos.reduce((acc, curr) => {
       return curr.completed ? acc + 1 : acc;
-    }, 0)
+    }, 0);
   }, [todos]);
   const { pathname: location } = useLocation();
   const isCompletedTodo = useMemo(() => {
