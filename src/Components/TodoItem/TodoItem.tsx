@@ -3,6 +3,8 @@ import {
   useState,
   KeyboardEvent,
   useContext,
+  useRef,
+  useEffect,
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -20,9 +22,16 @@ const TodoItem: React.FC<Props> = ({
   },
   todo,
 }) => {
+  const editRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState(title);
   const [isEdit, setIsEdit] = useState(false);
   const { updateTodo, removeTodo } = useContext(Context);
+
+  useEffect(() => {
+    if (isEdit) {
+      editRef.current?.focus();
+    }
+  }, [isEdit]);
 
   const changeTitle = (cancel?: boolean) => {
     if (!value.length || cancel) {
@@ -69,12 +78,13 @@ const TodoItem: React.FC<Props> = ({
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          aria-label="delete"
+          aria-label="destroy"
           onClick={() => removeTodo(id)}
         />
       </div>
       {isEdit && (
         <input
+          ref={editRef}
           type="text"
           className="edit"
           value={value}
