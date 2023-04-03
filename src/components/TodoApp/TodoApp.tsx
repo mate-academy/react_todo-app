@@ -25,11 +25,7 @@ export const TodoApp: React.FC = () => {
       const countActiveTodo
         = todosOriginal.filter(todo => !todo.completed).length;
 
-      if (activeCount === 0) {
-        setAllCompletedTodo(true);
-      } else {
-        setAllCompletedTodo(false);
-      }
+      setAllCompletedTodo(!activeCount);
 
       setActiveCount(countActiveTodo);
     } else {
@@ -111,7 +107,7 @@ export const TodoApp: React.FC = () => {
       </header>
 
       <section className="main">
-        {(todosOriginal && todosOriginal.length > 0) && (
+        {(todosOriginal && !!todosOriginal.length) && (
           <>
             <input
               type="checkbox"
@@ -132,7 +128,7 @@ export const TodoApp: React.FC = () => {
         )}
       </section>
 
-      {(todosOriginal && todosOriginal.length > 0) && (
+      {(todosOriginal && !!todosOriginal.length) && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${activeCount} item${activeCount > 0 ? 's' : ''} left`}
