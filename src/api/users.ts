@@ -3,17 +3,26 @@
 
 const API_URL = 'https://mate.academy/students-api';
 
-export function postUser(email: string) {
+type NewUserParams = {
+  name?: string,
+  username?: string,
+  email: string,
+  phone?: string,
+};
+
+export function createUser(params: NewUserParams) {
+  console.log(JSON.stringify(params));
+
   return fetch(`${API_URL}/users`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
     body: JSON.stringify({
-      name: 'a',
-      username: 'a',
-      email,
-      phone: 'a',
+      name: params.name,
+      username: params.username,
+      email: params.email,
+      phone: params.phone,
     }),
   })
     .then(res => {
@@ -21,13 +30,11 @@ export function postUser(email: string) {
         throw new Error(`${res.status} - ${res.statusText}`);
       }
 
+      console.log('new user request returned fine');
+
       return res.json();
     });
 }
-
-/* const timeoutCheck = (s:number) => {
-  return new Promise(resolve => setTimeout(resolve, s));
-}; */
 
 export function getAllUsers(): Promise<Response> {
   return fetch(`${API_URL}/users`, {
@@ -64,14 +71,7 @@ export function createTodo(title: string, userId: number) {
       userId,
       completed: false,
     }),
-  })
-    .then(() => {
-      console.log(JSON.stringify({
-        title,
-        userId,
-        completed: false,
-      }));
-    });
+  });
 }
 
 type PatchParams = {
@@ -98,3 +98,21 @@ export function updateTodo(
       console.log(JSON.stringify(params));
     });
 }
+
+export function deleteUser(UserId: number | undefined) {
+  console.log(`user ${UserId} has been deleted`);
+}
+
+/* export function deleteUser(UserId: number | undefined)
+  : Promise<Response | void> {
+  return fetch(`${API_URL}/users/${UserId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+    .then(() => {
+      console.log(`user #${UserId} deleted from MATE SERVER`);
+    });
+}
+ */

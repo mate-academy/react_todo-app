@@ -23,6 +23,8 @@ export const App: React.FC = () => {
               <Route path="/local/active" element={<LocalTodos />} />
               <Route path="/local/completed" element={<LocalTodos />} />
               <Route path="/cloud" element={<CloudTodos />} />
+              <Route path="/cloud/active" element={<CloudTodos />} />
+              <Route path="/cloud/completed" element={<CloudTodos />} />
               <Route path="/home" element={<Navigate to="/" replace />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
