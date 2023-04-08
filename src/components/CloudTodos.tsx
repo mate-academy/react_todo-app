@@ -27,7 +27,11 @@ export const CloudTodos: React.FC = () => {
     nickname: '',
   });
   const [adminAccess, setAdminAccess] = useState(false);
-  const [adminKeyInvalid, /*setAdminKeyInvalid*/] = useState(false);
+  const [adminKeyInvalid, setAdminKeyInvalid] = useState(false);
+  const [regFormErrors, setRegFormErrors] = useState({
+    userName: false,
+    email: true,
+  });
   /* stage 0 - loginCheck - checking if valid login stored in session memory
      stage 1 - login valid - todos from server showed up
      stage 2 - valid login absent - enter your email screen show up
@@ -140,6 +144,7 @@ export const CloudTodos: React.FC = () => {
   const emailIdInputHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailIdInput(event.target.value);
     setUnknownUserError(false);
+    setRegFormErrors(prevState => ({ ...prevState, email: false }));
   };
 
   const submitNewEmailId = (event: React.FormEvent<HTMLFormElement>) => {
@@ -322,6 +327,10 @@ export const CloudTodos: React.FC = () => {
     console.log("%s\n%s", event.target.value + ' <- target.value',
       event.target.name + ' <- target.name');
 
+    if (event.target.name === 'name') {
+      setRegFormErrors(prevState => ({ ...prevState, userName: false }));
+    }
+
     setNewUserObj({ ...newUserObj, [event.target.name]: event.target.value });
   };
 
@@ -386,6 +395,8 @@ export const CloudTodos: React.FC = () => {
         }));
     }
   };
+  // eslint-disable-next-line
+  const _0xf8fc=["\x61\x64\x6D\x69\x6E"];
 
   let visualTodos = loadedTodos;
 
@@ -416,7 +427,32 @@ export const CloudTodos: React.FC = () => {
     }
   };
 
-  const tryRegNewUser = () => { // BUTTON IN THE NEW USER FORM
+  const validateEmail = (email:string) => {
+    return String(email)
+      .toLowerCase()
+      .match( // eslint-disable-next-line
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const tryRegNewUser = () => { // BUTTON handler at the bottom of NEW USER REG FORM
+    let condition = validateEmail(emailIdInput);
+
+    if (newUserObj.name.length < 4) {
+      setRegFormErrors(prevState => ({ ...prevState, userName: true }));
+    }
+
+    if (!condition) {
+      console.log(condition, emailIdInput + ' this email was denied')
+      setRegFormErrors(prevState => ({ ...prevState, email: true }));
+    }
+    /// setdata(prevState=>({...prevState,username:{[0]:t}}))}
+
+    if (newUserObj.name.length < 4
+      || !condition) {
+      return;
+    }
+
     createUser({ ...newUserObj, email: emailIdInput })
       .then((res) => {
         console.log(res);
@@ -485,10 +521,14 @@ export const CloudTodos: React.FC = () => {
       if (adminKeySidebar && adminPassInput) { // TS
         if (adminKeySidebar.classList.contains('visible')) {
           console.log(adminPassInput.value, ' -adminInputKey value');
-          if (adminPassInput.value.toLowerCase() === 'admin') {
+
+          if (adminPassInput.value.toLowerCase() === _0xf8fc[0]) {
             setAdminAccess(true);
             adminKeySidebar.classList.remove('visible');
             adminPassInput.value = '';
+          } else if (adminPassInput.value.toLowerCase() !== _0xf8fc[0]
+            && adminPassInput.value.length > 0) {
+            setAdminKeyInvalid(true);
           }
         }
       }
@@ -527,13 +567,6 @@ export const CloudTodos: React.FC = () => {
   const handleUserDelete = (userId: number | undefined) => {
     deleteUser(userId);
   };
-
-  /*
-    Needs to be done:
-    - updating Todos list from server should be moved to separated function,
-    as it will be called multiple times from different methods;
-    - new user registration form with automatic user login;
-  */
 
   const switchUserHandle = (userEmail:string | undefined) => {
     if (userEmail) {
@@ -707,6 +740,11 @@ export const CloudTodos: React.FC = () => {
               value={newUserObj.name}
               onChange={newUserInputHandle}
             />
+            {regFormErrors.userName && (
+              <div className="new-user-form__errorMsg">
+                try valid name
+              </div>
+            )}
             <input
               name="email"
               type="text"
@@ -715,6 +753,11 @@ export const CloudTodos: React.FC = () => {
               value={emailIdInput}
               onChange={emailIdInputHandle}
             />
+            {regFormErrors.email && (
+              <div className="new-user-form__errorMsg">
+                try valid email
+              </div>
+            )}
             <input
               name="phone"
               type="text"
@@ -733,7 +776,7 @@ export const CloudTodos: React.FC = () => {
             />
             <button
               type="button"
-              className="new-user--submit-button"
+              className="new-user-form__submit-button"
               onClick={tryRegNewUser}
             >
               Apply for registration
@@ -804,7 +847,7 @@ export const CloudTodos: React.FC = () => {
           <br />
           <ul>
             {loadedTodos.map(todo => (
-              <li>
+              <li key={todo.id}>
                 {todo.title}
               </li>
             ))}
@@ -861,9 +904,12 @@ export const CloudTodos: React.FC = () => {
           Enter admin password
         </div>
         <input
-          type="text"
+          type="password"
           name="adminPasswordInput"
           className="adminKey__input"
+          onChange={() => {
+            setAdminKeyInvalid(false);
+          }}
         />
         <div
           className="adminKey__legend"
