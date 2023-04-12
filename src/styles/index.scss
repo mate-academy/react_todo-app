@@ -43,6 +43,8 @@ body {
   transition-property: opacity, min-height;
   transition-duration: 1s;
   min-height: 36px;
+  max-width: 500px;
+  margin: 10px auto 0;
 }
 
 .notification.hidden {
