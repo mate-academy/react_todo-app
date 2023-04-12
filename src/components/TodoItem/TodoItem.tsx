@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 type TodoItemProps = {
   todo: Todo;
   onButtonClick: (todoId: string) => void;
-  onTodoUpdate: (todo: Todo, value: object) => void;
+  onTodoUpdate: (todo: Todo, value: Partial<Todo>) => void;
 };
 
 export const TodoItem: React.FC<TodoItemProps> = ({

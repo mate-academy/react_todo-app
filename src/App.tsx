@@ -23,7 +23,7 @@ export const App: React.FC = () => {
     }));
   };
 
-  const handleTodoUpdate = (todo: Todo, newValue: object) => {
+  const handleTodoUpdate = (todo: Todo, newValue: Partial<Todo>) => {
     const copyOfTodos = [...todos];
     const updatedTodoIndex = todos.findIndex(({ id }) => id === todo.id);
 
@@ -49,11 +49,11 @@ export const App: React.FC = () => {
     setTodos(todos.filter(({ completed }) => !completed));
   };
 
-  const completedTodos = todos
+  const completedTodosLength = todos
     .filter(({ completed }) => completed).length;
   const isTodosEmpty = !todos.length;
-  const isTodosCompleted = completedTodos === todos.length;
-  const notCompletedTodos = todos.length - completedTodos;
+  const isTodosCompleted = completedTodosLength === todos.length;
+  const notCompletedTodosLength = todos.length - completedTodosLength;
   const visibleArray = filterByStatus(filter, todos);
 
   return (
@@ -81,8 +81,8 @@ export const App: React.FC = () => {
 
       {!isTodosEmpty && (
         <Footer
-          notCompletedTodos={notCompletedTodos}
-          completedTodos={completedTodos}
+          notCompletedTodos={notCompletedTodosLength}
+          completedTodos={completedTodosLength}
           onClearCompleted={handleClearCompleted}
         />
       )}

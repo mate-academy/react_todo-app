@@ -4,7 +4,7 @@ import { TodoItem } from '../TodoItem';
 type TodoListProps = {
   todos: Todo[];
   onTodoDelete: (todoId: string) => void;
-  onTodoUpdate: (todo: Todo, value: object) => void;
+  onTodoUpdate: (todo: Todo, value: Partial<Todo>) => void;
 };
 
 export const TodoList: React.FC<TodoListProps> = ({
