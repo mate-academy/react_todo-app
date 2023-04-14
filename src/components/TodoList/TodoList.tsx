@@ -8,12 +8,16 @@ type Props = {
   todos: Todo[];
   onDelete: (id: number) => void;
   onUpdateTodo: (id: number, data: Partial<Todo>) => void;
+  tempTodo: Todo | null,
+  isTodoLoading: (id: number) => boolean,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onDelete,
   onUpdateTodo,
+  tempTodo,
+  isTodoLoading,
 }) => {
   const getTodos = useCallback((filterType: string): Todo[] => {
     switch (filterType) {
@@ -49,9 +53,19 @@ export const TodoList: React.FC<Props> = ({
             todo={todo}
             onDelete={onDelete}
             onUpdateTodo={onUpdateTodo}
+            isLoading={isTodoLoading(id)}
           />
         );
       })}
+
+      {tempTodo && (
+        <TodoElement
+          todo={tempTodo}
+          onDelete={() => {}}
+          onUpdateTodo={() => {}}
+          isLoading
+        />
+      )}
     </Box>
   );
 };

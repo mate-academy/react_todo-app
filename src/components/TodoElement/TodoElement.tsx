@@ -7,17 +7,20 @@ import {
 } from '@mui/material';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { Todo } from '../../types/Todo';
+import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo;
   onDelete: (id: number) => void;
   onUpdateTodo: (id: number, data: Partial<Todo>) => void;
+  isLoading: boolean,
 };
 
 export const TodoElement: React.FC<Props> = ({
   todo,
   onDelete,
   onUpdateTodo,
+  isLoading,
 }) => {
   const { title, completed, id } = todo;
   const [isEditing, setIsEditing] = useState(false);
@@ -63,6 +66,7 @@ export const TodoElement: React.FC<Props> = ({
     <Box
       className="todo-item"
       sx={{
+        position: 'relative',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -124,6 +128,10 @@ export const TodoElement: React.FC<Props> = ({
             </Button>
           </>
         )}
+
+      {isLoading && (
+        <Loader />
+      )}
     </Box>
   );
 };

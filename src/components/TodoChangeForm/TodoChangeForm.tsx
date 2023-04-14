@@ -5,12 +5,14 @@ type Props = {
   onSubmit: (event: React.FormEvent) => void;
   query: string;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  disabledInput: boolean,
 };
 
 export const TodoChangeForm: React.FC<Props> = ({
   onSubmit,
   query,
   onInputChange,
+  disabledInput,
 }) => {
   return (
     <form onSubmit={onSubmit}>
@@ -23,6 +25,7 @@ export const TodoChangeForm: React.FC<Props> = ({
         sx={{
           width: '380px',
         }}
+        disabled={disabledInput}
       />
     </form>
   );

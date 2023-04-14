@@ -10,6 +10,7 @@ type Props = {
   query: string;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   remainingTodos: number,
+  disabledInput: boolean,
 };
 
 export const Header: React.FC<Props> = ({
@@ -18,6 +19,7 @@ export const Header: React.FC<Props> = ({
   query,
   onInputChange,
   remainingTodos,
+  disabledInput,
 }) => (
   <>
     <span className="header__count">
@@ -45,6 +47,7 @@ export const Header: React.FC<Props> = ({
         onInputChange={onInputChange}
         onSubmit={onSubmit}
         query={query}
+        disabledInput={disabledInput}
       />
     </Box>
   </>
