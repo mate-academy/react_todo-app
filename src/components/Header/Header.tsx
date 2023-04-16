@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TodoChanges } from '../../types/TodoChanges';
+import { Todo } from '../../types/Todo';
 
 type Props = {
-  setTodos: TodoChanges,
+  addTodo: (newTodo: Todo)=> void,
 };
 
-export const Header: React.FC<Props> = ({
-  setTodos,
-}) => {
+export const Header: React.FC<Props> = ({ addTodo }) => {
   const [value, setValue] = useState('');
   const input = useRef<HTMLInputElement | null>(null);
 
@@ -23,11 +21,13 @@ export const Header: React.FC<Props> = ({
     event.preventDefault();
 
     if (value.trim()) {
-      setTodos.add({
+      const newTodo = {
         id: Date.now(),
         completed: false,
         title: value,
-      });
+      };
+
+      addTodo(newTodo);
     }
 
     setValue('');
