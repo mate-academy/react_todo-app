@@ -89,7 +89,7 @@ export const TodoItem: React.FC<Props> = ({
             {todo.title}
           </label>
           <button
-            aria-label="Mute volume"
+            aria-label="Delete todo"
             type="button"
             className="destroy"
             data-cy="deleteTodo"

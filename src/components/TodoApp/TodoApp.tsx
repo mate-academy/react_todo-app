@@ -19,11 +19,11 @@ export const TodoApp: React.FC = () => {
   );
 
   const updatedTodos = (newTodo: Todo) => {
-    setTodos([...todos, newTodo]);
+    setTodos(() => [...todos, newTodo]);
   };
 
   const clearCompletedTodos = () => {
-    setTodos(todos.filter(todo => !todo.completed));
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
   const filteredTodos = todos.filter((todo) => {
@@ -55,10 +55,12 @@ export const TodoApp: React.FC = () => {
     }
   };
 
-  const handleToggleAll = (event: boolean) => {
-    const checked = event;
+  const handleToggleAll = (checked: boolean) => {
+    const isChecked = checked;
 
-    setTodos(todos.map(todo => ({ ...todo, completed: checked })));
+    setTodos(prevTodos => prevTodos.map(
+      todo => ({ ...todo, completed: isChecked }),
+    ));
   };
 
   return (

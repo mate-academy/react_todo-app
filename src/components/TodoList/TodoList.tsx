@@ -5,45 +5,47 @@ import { TodoItem } from '../TodoItem';
 
 type Props = {
   filteredTodos: Todo[];
-  setTodos: (arrOfTodos: Todo[]) => void;
+  setTodos: (arrOfTodos: (prevTodos: Todo[]) => Todo[]) => void;
 };
 
 export const TodoList: React.FC<Props> = ({ filteredTodos, setTodos }) => {
   const deleteTodo = (id: number) => {
-    setTodos(filteredTodos.filter(todo => todo.id !== id));
+    setTodos((prevState: Todo[]) => {
+      return prevState.filter(todo => todo.id !== id);
+    });
   };
 
   const handleToggle = (event: React.ChangeEvent<HTMLInputElement>,
     id: number) => {
-    const { checked } = event.target;
+    setTodos((prevState: Todo[]) => {
+      return prevState.map(todo => {
+        const { checked } = event.target;
 
-    const newTodos = filteredTodos.map(todo => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          completed: checked,
-        };
-      }
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: checked,
+          };
+        }
 
-      return todo;
+        return todo;
+      });
     });
-
-    setTodos(newTodos);
   };
 
   const editingTitle = (id: number, title: string) => {
-    const newTodos = filteredTodos.map(todo => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          title,
-        };
-      }
+    setTodos((prevState: Todo[]) => {
+      return prevState.map(todo => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title,
+          };
+        }
 
-      return todo;
+        return todo;
+      });
     });
-
-    setTodos(newTodos);
   };
 
   return (
