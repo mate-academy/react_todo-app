@@ -83,7 +83,7 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {todos.length && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <input
