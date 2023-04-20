@@ -14,13 +14,17 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
+  const handleAllClick = () => setFilter(StatusOfFilter.All);
+  const handleActiveClick = () => setFilter(StatusOfFilter.Active);
+  const handleCompletedClick = () => setFilter(StatusOfFilter.Completed);
+
   return (
     <ul className="filters">
       <li>
         <Link
           to="#/"
           className={classNames({ selected: filter === StatusOfFilter.All })}
-          onClick={() => setFilter(StatusOfFilter.All)}
+          onClick={handleAllClick}
         >
           All
         </Link>
@@ -30,7 +34,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
         <Link
           to="#/active"
           className={classNames({ selected: filter === StatusOfFilter.Active })}
-          onClick={() => setFilter(StatusOfFilter.Active)}
+          onClick={handleActiveClick}
         >
           Active
         </Link>
@@ -42,7 +46,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
           className={classNames({
             selected: filter === StatusOfFilter.Completed,
           })}
-          onClick={() => setFilter(StatusOfFilter.Completed)}
+          onClick={handleCompletedClick}
         >
           Completed
         </Link>

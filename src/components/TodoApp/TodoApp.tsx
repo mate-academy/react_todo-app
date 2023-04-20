@@ -19,7 +19,7 @@ export const TodoApp: React.FC = () => {
   );
 
   const updatedTodos = (newTodo: Todo) => {
-    setTodos(() => [...todos, newTodo]);
+    setTodos(prevTodos => [...prevTodos, newTodo]);
   };
 
   const clearCompletedTodos = () => {
@@ -28,14 +28,12 @@ export const TodoApp: React.FC = () => {
 
   const filteredTodos = todos.filter((todo) => {
     switch (filter) {
-      case StatusOfFilter.All:
-        return true;
       case StatusOfFilter.Active:
         return !todo.completed;
       case StatusOfFilter.Completed:
         return todo.completed;
       default:
-        throw new Error('Unexpected value');
+        return todo;
     }
   });
 
@@ -113,7 +111,7 @@ export const TodoApp: React.FC = () => {
               <button
                 type="button"
                 className="clear-completed"
-                onClick={() => clearCompletedTodos()}
+                onClick={clearCompletedTodos}
               >
                 Clear completed
               </button>
