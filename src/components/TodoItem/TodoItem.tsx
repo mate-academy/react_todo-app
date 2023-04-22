@@ -27,6 +27,29 @@ export const TodoItem: React.FC<Props> = ({
     }
   }, [isEditing]);
 
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (editingValue.trim() === '') {
+        deleteTodo(todo.id);
+      } else {
+        editingTitle(todo.id, editingValue);
+        setIsEditing(false);
+      }
+    } else if (event.key === 'Escape') {
+      setIsEditing(false);
+      setEditingValue(todo.title);
+    }
+  };
+
+  const onBlur = () => {
+    if (editingValue.trim() === '') {
+      deleteTodo(todo.id);
+    } else {
+      editingTitle(todo.id, editingValue);
+      setIsEditing(false);
+    }
+  };
+
   return (
     <li
       className={classNames({
@@ -49,27 +72,8 @@ export const TodoItem: React.FC<Props> = ({
           onChange={(event) => {
             setEditingValue(event.target.value);
           }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              if (editingValue.trim() === '') {
-                deleteTodo(todo.id);
-              } else {
-                editingTitle(todo.id, editingValue);
-                setIsEditing(false);
-              }
-            } else if (event.key === 'Escape') {
-              setIsEditing(false);
-              setEditingValue(todo.title);
-            }
-          }}
-          onBlur={() => {
-            if (editingValue.trim() === '') {
-              deleteTodo(todo.id);
-            } else {
-              editingTitle(todo.id, editingValue);
-              setIsEditing(false);
-            }
-          }}
+          onKeyDown={(event) => onKeyDown(event)}
+          onBlur={onBlur}
         />
       ) : (
         <div
