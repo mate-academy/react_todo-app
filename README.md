@@ -27,13 +27,13 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     - use `HashRouter`;
 1. Add ability to remove a todo using the `destroy` button (`X`).
 1. Add ability to clear completed todos - remove all completed items from the list. The button should contain text `Clear completed` in it.
-    - It should be visible if there is at least 1 completed item in the list. 
+    - It should be visible if there is at least 1 completed item in the list.
 1. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
 1. Make inline editing for the TODO item
     - double click on the TODO title makes it editable (just add a class `editing` to a `li`)
     - DON'T add `htmlFor` to the label!!!
     - `Enter` saves changes
-    - `Ecs` cancels editing
+    - `Esc` cancels editing
     - Todo title can't be empty! If a user presses `Enter` when the title is empty, this todo should be removed.
     - (*) save changes `onBlur`
 1. Save state of the APP to the `localStorage` using the name `todos` for the key (Here is [the lesson](https://mate.academy/learn/react/custom-hooks#/video/777))
@@ -46,7 +46,7 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://ivxvi.github.io/react_todo-app/) and add it to the PR description.
 
 ## (*) Advanced tasks (Optional)
 Implement saving the todos in [the API](https://mate-academy.github.io/fe-students-api/).
