@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Todo } from '../../types/Todo';
 import { TodoElement } from '../TodoElement';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   todos: Todo[];
+  filterType: FilterType;
   onDelete: (id: number) => void;
   onUpdateTodo: (id: number, data: Partial<Todo>) => void;
   tempTodo: Todo | null,
@@ -14,27 +15,26 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  filterType,
   onDelete,
   onUpdateTodo,
   tempTodo,
   isTodoLoading,
 }) => {
-  const getTodos = useCallback((filterType: string): Todo[] => {
+  const getTodos = useCallback((): Todo[] => {
     switch (filterType) {
-      case 'active':
+      case FilterType.Active:
         return todos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case FilterType.Completed:
         return todos.filter(todo => todo.completed);
 
       default:
         return todos;
     }
-  }, [todos]);
+  }, [todos, filterType]);
 
-  const { pathname } = useLocation();
-
-  const visibleTodos = getTodos(pathname.slice(1));
+  const visibleTodos = getTodos();
 
   return (
     <Box

@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React,
+{
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import {
   Box,
   Button,
@@ -26,16 +32,18 @@ export const TodoElement: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [todoTitle, settodoTitle] = useState(title);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = useCallback((event: React.FormEvent) => {
     event.preventDefault();
 
     if (!todoTitle) {
       onDelete(id);
-    } else {
-      onUpdateTodo(id, { title: todoTitle });
-      setIsEditing(false);
+
+      return;
     }
-  };
+
+    onUpdateTodo(id, { title: todoTitle });
+    setIsEditing(false);
+  }, [todoTitle, todo]);
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -72,8 +80,9 @@ export const TodoElement: React.FC<Props> = ({
         justifyContent: 'center',
         minHeight: '60px',
         gap: '10px',
-        // eslint-disable-next-line max-len
-        backgroundColor: 'linear-gradient(180deg, #ECFFFD 0%, rgba(215, 255, 250, 0) 100%)',
+        backgroundColor: `
+          linear-gradient(180deg, #ECFFFD 0%, rgba(215, 255, 250, 0) 100%)
+        `,
         border: '1px solid #C4C4C4',
         borderRadius: '8px',
         padding: '0 10px',
@@ -117,6 +126,7 @@ export const TodoElement: React.FC<Props> = ({
             >
               {title}
             </p>
+
             <Button
               type="button"
               className="delete-button"

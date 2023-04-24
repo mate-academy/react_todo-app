@@ -13,20 +13,18 @@ export const TodoChangeForm: React.FC<Props> = ({
   query,
   onInputChange,
   disabledInput,
-}) => {
-  return (
-    <form onSubmit={onSubmit}>
-      <TextField
-        variant="outlined"
-        label="Add new task"
-        value={query}
-        onChange={onInputChange}
-        autoComplete="off"
-        sx={{
-          width: '380px',
-        }}
-        disabled={disabledInput}
-      />
-    </form>
-  );
-};
+}) => (
+  <form onSubmit={onSubmit}>
+    <TextField
+      variant="outlined"
+      label="Add new task"
+      value={query}
+      onChange={onInputChange}
+      autoComplete="off"
+      sx={{
+        width: '380px',
+      }}
+      disabled={disabledInput}
+    />
+  </form>
+);

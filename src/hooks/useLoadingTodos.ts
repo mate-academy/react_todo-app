@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 export const useLoadingTodos = () => {
   const [loadingIds, setLoadingIds] = useState<Set<number>>(new Set());
 
-  const add = useCallback((id: number) => {
+  const addLoadingTodo = useCallback((id: number) => {
     setLoadingIds(state => {
       state.add(id);
 
@@ -11,7 +11,7 @@ export const useLoadingTodos = () => {
     });
   }, []);
 
-  const remove = useCallback((id: number) => {
+  const removeLoadingTodo = useCallback((id: number) => {
     setLoadingIds(state => {
       state.delete(id);
 
@@ -19,18 +19,18 @@ export const useLoadingTodos = () => {
     });
   }, []);
 
-  const isLoading = useCallback(
+  const isTodoLoading = useCallback(
     (id: number) => loadingIds.has(id),
     [loadingIds],
   );
 
   return useMemo(() => ({
-    add,
-    remove,
-    isLoading,
+    addLoadingTodo,
+    removeLoadingTodo,
+    isTodoLoading,
   }), [
-    add,
-    remove,
-    isLoading,
+    addLoadingTodo,
+    removeLoadingTodo,
+    isTodoLoading,
   ]);
 };

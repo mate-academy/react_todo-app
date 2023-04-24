@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useCallback, useEffect } from 'react';
 import {
   Box,
 } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import { Todo } from './types/Todo';
 import { Error } from './types/Error';
 import { Notification } from './components/Notification';
@@ -17,8 +17,21 @@ import {
 } from './api/todos';
 import { Loader } from './components/Loader';
 import { useLoadingTodos } from './hooks/useLoadingTodos';
+import { USER_ID } from './utils/constants';
+import { FilterType } from './types/FilterType';
 
-const USER_ID = 6616;
+const getFilterType = (pathname: string): FilterType => {
+  switch (pathname) {
+    case '/active':
+      return FilterType.Active;
+
+    case '/completed':
+      return FilterType.Completed;
+
+    default:
+      return FilterType.All;
+  }
+};
 
 export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<Error>(Error.None);
@@ -28,14 +41,17 @@ export const App: React.FC = () => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const {
-    add: addLoadingTodo,
-    remove: removeLoadingTodo,
-    isLoading: isTodoLoading,
+    addLoadingTodo,
+    removeLoadingTodo,
+    isTodoLoading,
   } = useLoadingTodos();
 
-  const removeError = () => {
+  const { pathname } = useLocation();
+  const filterType = getFilterType(pathname);
+
+  const removeError = useCallback(() => {
     setErrorMessage(Error.None);
-  };
+  }, []);
 
   const showError = useCallback((errorType: Error) => {
     setErrorMessage(errorType);
@@ -45,17 +61,17 @@ export const App: React.FC = () => {
   }, []);
 
   const addTodo = useCallback(async (title: string) => {
-    setDisabledInput(true);
-
-    const newTodo = {
-      title,
-      userId: USER_ID,
-      completed: false,
-    };
-
-    setTempTodo({ ...newTodo, id: 0 });
-
     try {
+      setDisabledInput(true);
+
+      const newTodo = {
+        title,
+        userId: USER_ID,
+        completed: false,
+      };
+
+      setTempTodo({ ...newTodo, id: 0 });
+
       const addedTodo = await postTodo(newTodo);
 
       setTodos(state => [...state, addedTodo]);
@@ -68,9 +84,8 @@ export const App: React.FC = () => {
   }, []);
 
   const removeTodo = useCallback(async (id: number) => {
-    addLoadingTodo(id);
-
     try {
+      addLoadingTodo(id);
       await deleteTodo(id);
 
       setTodos(state => state.filter(todo => todo.id !== id));
@@ -81,7 +96,7 @@ export const App: React.FC = () => {
     }
   }, [addLoadingTodo, removeLoadingTodo]);
 
-  const removeCompleted = () => {
+  const removeCompleted = useCallback(() => {
     const completedIds = todos
       .filter(todo => todo.completed)
       .map(todo => todo.id);
@@ -95,13 +110,15 @@ export const App: React.FC = () => {
           showError(Error.Delete);
         });
     });
-  };
+  }, [todos]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+    }, [],
+  );
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = useCallback((event: React.FormEvent) => {
     event.preventDefault();
 
     if (!query.trim()) {
@@ -112,7 +129,7 @@ export const App: React.FC = () => {
 
     addTodo(query.trim());
     setQuery('');
-  };
+  }, [query]);
 
   const handleUpdate = useCallback(async (id: number, data: Partial<Todo>) => {
     addLoadingTodo(id);
@@ -168,7 +185,7 @@ export const App: React.FC = () => {
 
   const remainingTodos = todos.filter(todo => !todo.completed).length;
 
-  const completedTodos = todos.filter(todo => todo.completed).length;
+  const completedTodos = todos.length - remainingTodos;
 
   return (
     <div className="todoapp">
@@ -202,10 +219,12 @@ export const App: React.FC = () => {
             <TodoFilter
               onRemoveCompleted={removeCompleted}
               completedTodos={completedTodos}
+              filterType={filterType}
             />
 
             <TodoList
               todos={todos}
+              filterType={filterType}
               tempTodo={tempTodo}
               isTodoLoading={isTodoLoading}
               onDelete={removeTodo}

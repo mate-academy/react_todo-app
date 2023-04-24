@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
@@ -39,7 +38,11 @@ export const Header: React.FC<Props> = ({
         onClick={onToggleAll}
       >
         <ExpandMoreOutlinedIcon
-          sx={{ width: '32px', height: '32px', color: 'black' }}
+          sx={{
+            width: '32px',
+            height: '32px',
+            color: 'black',
+          }}
         />
       </Button>
 
