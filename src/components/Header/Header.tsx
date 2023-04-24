@@ -25,7 +25,6 @@ export const Header: React.FC<Props> = ({
 
   return (
     <header className="todoapp__header">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         data-cy="toggleAll"
@@ -34,6 +33,7 @@ export const Header: React.FC<Props> = ({
           { active: !!activeTodos.length },
         )}
         onClick={toggleTodos}
+        aria-label="Close"
       />
       <form
         onSubmit={handleSubmit}

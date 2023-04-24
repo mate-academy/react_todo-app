@@ -51,14 +51,6 @@ export const App: React.FC = () => {
   }, [todos]);
 
   const updateTodo = useCallback((id: number, data: string | boolean) => {
-    const todoToUpdate = todos.find((todo: Todo) => todo.id === id);
-
-    if (typeof data === 'boolean') {
-      todoToUpdate.completed = data;
-    } else {
-      todoToUpdate.title = data;
-    }
-
     setTodos(todos.map((todo: Todo) => {
       if (todo.id === id) {
         if (typeof data === 'boolean') {
@@ -73,25 +65,22 @@ export const App: React.FC = () => {
   }, [todos]);
 
   const toggleTodos = () => {
-    const activeIds = activeTodos.map((activeTodo: Todo) => activeTodo.id);
-    const completedIds = completedTodos.map(
+    const activeTodoIds = activeTodos.map((activeTodo: Todo) => activeTodo.id);
+    const completedTodoIds = completedTodos.map(
       (completedTodo: Todo) => completedTodo.id,
     );
 
-    let updatedTodos;
+    setTodos((prevTodos: Todo[]) => prevTodos.map((prevTodo: Todo) => {
+      if (activeTodos.length !== 0 && activeTodoIds.includes(prevTodo.id)) {
+        return { ...prevTodo, completed: true };
+      }
 
-    if (activeTodos.length !== 0) {
-      updatedTodos = todos.map((todo: Todo) => (
-        activeIds.includes(todo.id) ? { ...todo, completed: true } : todo
-      ));
-    } else {
-      updatedTodos = todos.map((todo: Todo) => (
-        completedIds.includes(todo.id)
-          ? { ...todo, completed: false } : todo
-      ));
-    }
+      if (activeTodos.length !== 0 && completedTodoIds.includes(prevTodo.id)) {
+        return { ...prevTodo, completed: false };
+      }
 
-    setTodos(updatedTodos);
+      return prevTodo;
+    }));
   };
 
   const removeCompletedTodos = () => {

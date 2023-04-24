@@ -18,11 +18,11 @@ export const ErrorNotification: React.FC<Props> = (
           { hidden: !errorText },
         )}
       >
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           type="button"
           className="delete"
           onClick={handleCloseButton}
+          aria-label="Close"
         />
         <span>{errorText}</span>
       </div>

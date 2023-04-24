@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -18,27 +18,20 @@ export const TodoItem: React.FC<Props> = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef(null);
 
-  const handleFocus = useCallback(() => {
+  const handleFocus = () => {
     setIsUpdating(true);
     setPrevTitle(title);
-  }, [title]);
+  };
 
-  const handleComplete = useCallback(
-    () => updateTodo(id, !completed),
-    [id, completed, updateTodo],
-  );
+  const handleComplete = () => updateTodo(id, !completed);
 
-  const handleRemoval = useCallback(
-    () => removeTodo(id), [removeTodo, id],
-  );
+  const handleRemoval = () => removeTodo(id);
 
-  const handleEdit = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setTodoTitle(event.target.value);
-    }, [],
-  );
+  const handleEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoTitle(event.target.value);
+  };
 
-  const handleBlur = useCallback(() => {
+  const handleBlur = () => {
     if (todoTitle.length === 0) {
       removeTodo(id);
     } else {
@@ -46,26 +39,24 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     setIsUpdating(false);
-  }, [id, todoTitle, removeTodo, updateTodo]);
+  };
 
-  const handleInput = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Escape') {
-        setTodoTitle(prevTitle);
-        setIsUpdating(false);
+  const handleInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setTodoTitle(prevTitle);
+      setIsUpdating(false);
+    }
+
+    if (event.key === 'Enter') {
+      if (todoTitle.length === 0) {
+        removeTodo(id);
+      } else {
+        updateTodo(id, todoTitle);
       }
 
-      if (event.key === 'Enter') {
-        if (todoTitle.length === 0) {
-          removeTodo(id);
-        } else {
-          updateTodo(id, todoTitle);
-        }
-
-        setIsUpdating(false);
-      }
-    }, [id, todoTitle, prevTitle, removeTodo, updateTodo],
-  );
+      setIsUpdating(false);
+    }
+  };
 
   return (
     <li

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import { FilterLink } from '../../types/FilterLink';
 import { Todo } from '../../types/Todo';
+import { filterLinks } from '../../utils/filterLinks';
 
 type Props = {
   completedTodos: Todo[];
@@ -12,21 +12,6 @@ type Props = {
 export const Footer: React.FC<Props> = ({
   activeTodos, completedTodos, removeCompletedTodos,
 }) => {
-  const filterLinks = [
-    {
-      to: FilterLink.All,
-      name: 'All',
-    },
-    {
-      to: FilterLink.Active,
-      name: 'Active',
-    },
-    {
-      to: FilterLink.Completed,
-      name: 'Completed',
-    },
-  ];
-
   return (
     <footer className="todoapp__footer">
       <span className="todo-count" data-cy="todosCounter">
