@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { Navigate, Route, Routes } from 'react-router-dom';
 import React from 'react';
-import { StylesExample } from './components/StylesExample';
 import { HomePage } from './components/HomePage';
 import { Navbar } from './components/Navbar';
 import { NotFoundPage } from './components/NotFound';
@@ -18,7 +17,6 @@ export const App: React.FC = () => {
           <div className="block">
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/styles" element={<StylesExample />} />
               <Route path="/local" element={<LocalTodos />} />
               <Route path="/local/active" element={<LocalTodos />} />
               <Route path="/local/completed" element={<LocalTodos />} />

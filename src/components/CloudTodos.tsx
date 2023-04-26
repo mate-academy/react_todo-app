@@ -33,21 +33,18 @@ export const CloudTodos: React.FC = () => {
     email: true,
   });
   /* stage 0 - loginCheck - checking if valid login stored in session memory
-     stage 1 - login valid - todos from server showed up
-     stage 2 - valid login absent - enter your email screen show up
-     stage 3 - User does not exist on the server - would U like to register screen
+     stage 1 - if login valid - todos from server showed up
+     stage 2 - if login absent - input form waits for an email input
+     stage 3 - if input is valid - jumps to stage 1, if not - reg new user appears
   */
-  // const [todos, setTodos] = useState<CloudTodo[]>([]);
 
-  let vaultForEmail = ''; // sync pass instead of async states
+  let vaultForEmail = ''; // sync email storage between dif forms instead of async states
 
   function getTodosOfUser() {
-    console.log('get Todos of User button pressed');
     if (mainUserId) {
       LoadUserTodos(mainUserId)
         .then(res => res.json())
         .then(userTodos => {
-          console.log('loaded some user Todos');
           setLoadedTodos(userTodos);
         })
         .catch((error) => ({
@@ -67,11 +64,9 @@ export const CloudTodos: React.FC = () => {
   };
 
   function getUsersFromServer() {
-    console.log('getusers button pressed');
     getAllUsers()
       .then(res => res.json())
       .then(users => {
-        console.log(users);
         if (users.length > 0) {
           setLoadedUsers(users);
 
@@ -96,7 +91,6 @@ export const CloudTodos: React.FC = () => {
       LoadUserTodos(Number(mainUserId))
         .then(res => res.json())
         .then(userTodos => {
-          console.log('loaded some user Todos on mainUserID CHANGE in state');
           setLoadedTodos(userTodos);
         })
         .then(() => {
@@ -117,16 +111,13 @@ export const CloudTodos: React.FC = () => {
       getUsersFromServer();
     }
 
-    if (savedEmail !== null) { // EMAIL IS VALID
-      console.log('user is ', savedEmail);
-
+    if (savedEmail !== null) { // case when EMAIL IS VALID
       setLoading(true);
       setMainEmail(savedEmail);
       setMainUserId(Number(savedID));
       LoadUserTodos(Number(savedID))
         .then(res => res.json())
         .then(userTodos => {
-          console.log('loaded some user Todos on PAGELOAD');
           setLoadedTodos(userTodos);
         })
         .then(() => {
@@ -136,8 +127,6 @@ export const CloudTodos: React.FC = () => {
           Response: 'False',
           Error: error,
         }));
-    } else {
-      console.log('saved user is not found');
     }
   }, []);
 
@@ -185,7 +174,6 @@ export const CloudTodos: React.FC = () => {
         LoadUserTodos(Number(savedID))
           .then(res => res.json())
           .then(userTodos => {
-            console.log('loaded some user Todos');
             setLoadedTodos(userTodos);
           })
           .then(() => {
@@ -227,7 +215,7 @@ export const CloudTodos: React.FC = () => {
             setEditableId(0);
             getTodosOfUser();
           });
-        // updates todo with new title and reset editableId
+        // updates todo with new title and resets "editableId"
       }
     }
 
@@ -324,9 +312,6 @@ export const CloudTodos: React.FC = () => {
   };
 
   const newUserInputHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("%s\n%s", event.target.value + ' <- target.value',
-      event.target.name + ' <- target.name');
-
     if (event.target.name === 'name') {
       setRegFormErrors(prevState => ({ ...prevState, userName: false }));
     }
@@ -345,7 +330,6 @@ export const CloudTodos: React.FC = () => {
         LoadUserTodos(Number(savedID))
           .then(res => res.json())
           .then(userTodos => {
-            console.log('loaded some user Todos');
             setLoadedTodos(userTodos);
           });
       })
@@ -367,7 +351,6 @@ export const CloudTodos: React.FC = () => {
           LoadUserTodos(Number(savedID))
             .then(res => res.json())
             .then(userTodos => {
-              console.log('loaded some user Todos');
               setLoadedTodos(userTodos);
             });
         })
@@ -386,7 +369,6 @@ export const CloudTodos: React.FC = () => {
           LoadUserTodos(Number(savedID))
             .then(res => res.json())
             .then(userTodos => {
-              console.log('loaded some user Todos');
               setLoadedTodos(userTodos);
             });
         })
@@ -432,21 +414,19 @@ export const CloudTodos: React.FC = () => {
       .toLowerCase()
       .match( // eslint-disable-next-line
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
+      ); // that`s an email mask validation ⬆
   };
 
   const tryRegNewUser = () => { // BUTTON handler at the bottom of NEW USER REG FORM
-    let condition = validateEmail(emailIdInput);
+    const condition = validateEmail(emailIdInput);
 
     if (newUserObj.name.length < 4) {
       setRegFormErrors(prevState => ({ ...prevState, userName: true }));
     }
 
     if (!condition) {
-      console.log(condition, emailIdInput + ' this email was denied')
       setRegFormErrors(prevState => ({ ...prevState, email: true }));
     }
-    /// setdata(prevState=>({...prevState,username:{[0]:t}}))}
 
     if (newUserObj.name.length < 4
       || !condition) {
@@ -455,24 +435,16 @@ export const CloudTodos: React.FC = () => {
 
     createUser({ ...newUserObj, email: emailIdInput })
       .then((res) => {
-        console.log(res);
-        console.log(res.id + ' <- this is promise result ID');
-        console.log(res.email + ' <- this is promise result email');
         setMainEmail(res.email);
         vaultForEmail = res.email;
         setUnknownUserError(false);
-        // setMainUserId(res.id);
       })
       .then(() => {
         getAllUsers()
           .then(res => res.json())
           .then(users => {
-            console.log(users);
             if (users.length > 0) {
               setLoadedUsers(users);
-
-              console.log(mainEmail + ' <- main email');
-              console.log(vaultForEmail + ' <- vaultForEmail email');
               const searchRes = users
                 .find((user:CloudUser) => user.email === vaultForEmail
                   && user.email.length > 0);
@@ -512,16 +484,12 @@ export const CloudTodos: React.FC = () => {
     }
 
     if (event.key === 'Enter') {
-      console.log('Enter hit on line 479');
-
       const adminKeySidebar = document.querySelector('.adminKey');
       const adminPassInput = document
         .querySelector('.adminKey__input') as HTMLInputElement;
 
       if (adminKeySidebar && adminPassInput) { // TS
         if (adminKeySidebar.classList.contains('visible')) {
-          console.log(adminPassInput.value, ' -adminInputKey value');
-
           if (adminPassInput.value.toLowerCase() === _0xf8fc[0]) {
             setAdminAccess(true);
             adminKeySidebar.classList.remove('visible');
@@ -536,17 +504,15 @@ export const CloudTodos: React.FC = () => {
       const newUserForm = document.querySelector('.new-user-form__wrapper');
 
       if (newUserForm) { // TS walkaround
-        console.log(`${newUserForm.classList
-          .contains('visible')} - newUserForm contains visible class`);
         if (!newUserForm.classList.contains('visible')) {
           handleBlur();
         } else {
-          console.log('from here tryRegNewUser() will send empty form reg if invoked');
-        //tryRegNewUser(); // if reg form visible -> send it
+        // tryRegNewUser() call does not work from here;
+        // should`ve dispatch the form if it`s visible
+        // maybe I`ll fix it later if find out the issue
         }
       }
     }
-    // handleBlur();
   };
 
   useEffect(() => {
@@ -557,15 +523,9 @@ export const CloudTodos: React.FC = () => {
     };
   }, []);
 
-/*   const tryRegNewUserForm = (event: React.FormEvent<HTMLFormElement>) => {
-    //event.preventDefault();
-
-    console.log('new user form submitted');
-    //tryRegNewUser();
-  }; */
-
   const handleUserDelete = (userId: number | undefined) => {
-    deleteUser(userId);
+    deleteUser(userId)
+      .then(() => getUsersFromServer());
   };
 
   const switchUserHandle = (userEmail:string | undefined) => {
@@ -594,6 +554,8 @@ export const CloudTodos: React.FC = () => {
         setMainUserId(undefined);
         setLoadedTodos(([]));
       }
+
+      window.scrollTo(0, 0);
     }
   };
 
@@ -818,7 +780,7 @@ export const CloudTodos: React.FC = () => {
           <button
             type="button"
             onClick={getUsersFromServer}
-            className="new-user--submit-button"
+            className="new-user-form__submit-button inline-btn"
           >
             Force Load Users From Server
           </button>
@@ -826,7 +788,7 @@ export const CloudTodos: React.FC = () => {
           <button
             type="button"
             onClick={getTodosOfUser}
-            className="new-user--submit-button"
+            className="new-user-form__submit-button inline-btn"
           >
             Force Load Todos of Selected User
           </button>

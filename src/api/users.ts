@@ -1,6 +1,3 @@
-// import { CloudUser } from '../types/CloudUser';
-// import { CloudTodo } from '../types/CloudTodo';
-
 const API_URL = 'https://mate.academy/students-api';
 
 type NewUserParams = {
@@ -11,8 +8,6 @@ type NewUserParams = {
 };
 
 export function createUser(params: NewUserParams) {
-  console.log(JSON.stringify(params));
-
   return fetch(`${API_URL}/users`, {
     method: 'POST',
     headers: {
@@ -29,8 +24,6 @@ export function createUser(params: NewUserParams) {
       if (!res.ok) {
         throw new Error(`${res.status} - ${res.statusText}`);
       }
-
-      console.log('new user request returned fine');
 
       return res.json();
     });
@@ -93,26 +86,24 @@ export function updateTodo(
       'Content-type': 'application/json; charset=UTF-8',
     },
     body: JSON.stringify(params),
-  })
-    .then(() => {
-      console.log(JSON.stringify(params));
-    });
+  });
 }
 
-export function deleteUser(UserId: number | undefined) {
+/* this is a placeholder deleting function, to use in development
+
+  export function deleteUser(UserId: number | undefined) {
   console.log(`user ${UserId} has been deleted`);
-}
+} */
 
-/* export function deleteUser(UserId: number | undefined)
+export function deleteUser(UserId: number | undefined)
   : Promise<Response | void> {
   return fetch(`${API_URL}/users/${UserId}`, {
     method: 'DELETE',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-  })
-    .then(() => {
+  });
+/* .then(() => {
       console.log(`user #${UserId} deleted from MATE SERVER`);
-    });
+    }); */
 }
- */

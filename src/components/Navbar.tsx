@@ -9,48 +9,37 @@ export const Navbar = () => {
       role="navigation"
       aria-label="main navigation"
     >
-      <div className="container">
-        <div className="navbar-brand">
-          <NavLink
-            to="/"
-            className={({ isActive }) => classNames(
-              'navbar-item',
-              { 'has-background-grey-lighter': isActive },
-            )}
-          >
-            Home
-          </NavLink>
+      <div className="navbar__container">
+        <NavLink
+          to="/"
+          className="navbar__item"
+        >
+          <img
+            className="navIcon"
+            src="https://svgsilh.com/svg_v2/2088906.svg"
+            alt="home"
+          />
+        </NavLink>
 
-          <NavLink
-            to="/styles"
-            className={({ isActive }) => classNames(
-              'navbar-item',
-              { 'has-background-grey-lighter': isActive },
-            )}
-          >
-            StylesExample
-          </NavLink>
+        <NavLink
+          to="/local"
+          className={({ isActive }) => classNames(
+            'navbar__item',
+            { 'has-background-grey-lighter': isActive },
+          )}
+        >
+          Local Todos
+        </NavLink>
 
-          <NavLink
-            to="/local"
-            className={({ isActive }) => classNames(
-              'navbar-item',
-              { 'has-background-grey-lighter': isActive },
-            )}
-          >
-            Local Todos
-          </NavLink>
-
-          <NavLink
-            to="/cloud"
-            className={({ isActive }) => classNames(
-              'navbar-item',
-              { 'has-background-grey-lighter': isActive },
-            )}
-          >
-            Cloud Todos
-          </NavLink>
-        </div>
+        <NavLink
+          to="/cloud"
+          className={({ isActive }) => classNames(
+            'navbar__item',
+            { 'has-background-grey-lighter': isActive },
+          )}
+        >
+          Cloud Todos
+        </NavLink>
       </div>
     </nav>
   );
