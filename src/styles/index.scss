@@ -338,7 +338,7 @@ body {
   position: fixed;
   left: 0;
   top: 30vh;
-  padding: 0.5rem 1.5rem 2rem 0.5rem;
+  padding: 1rem 1.5rem 2rem 0.5rem;
   transform: translateX(-87%);
   transition: transform 0.5s;
   border: 1px solid grey;
@@ -364,19 +364,20 @@ body {
 
   &__legend {
     position: absolute;
-    top: -5px;
-    display: inline;
-    transform: scale(-1, -1);
+    left: 132px;
+    transform: rotate(270deg);
     writing-mode: vertical-lr;
     padding: 0.2rem;
     cursor: pointer;
-    height: 80px;
+    width: 90px;
   }
 
   &__errorMsg {
+    position: absolute;
     text-align: center;
     color: red;
     padding: 3px;
+    z-index: 2;
   }
 }
 

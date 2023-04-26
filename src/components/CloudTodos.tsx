@@ -873,12 +873,13 @@ export const CloudTodos: React.FC = () => {
             setAdminKeyInvalid(false);
           }}
         />
-        <div
+        <button
+          type="button"
           className="adminKey__legend"
           onClick={toggleAdminKeyForm}
         >
           admin panel
-        </div>
+        </button>
         {adminKeyInvalid && (
           <div className="adminKey__errorMsg">
             admin password invalid
