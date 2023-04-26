@@ -1,0 +1,33 @@
+.Loader {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  &__content { // default loader
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    margin: 1em auto;
+    border: 0.3em solid #ddd;
+    border-left-color: #000;
+    animation: load8 1.2s infinite linear;
+  }
+
+  &__git { // git kitty loader
+    background-image: url(https://github.githubassets.com/images/mona-loading-dark.gif);
+    width: 10vw;
+    height: 10vh;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}
+
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
