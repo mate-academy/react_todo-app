@@ -18,7 +18,7 @@ export const TodoItem: React.FC<Props> = ({
   const { id, title, completed } = todo;
 
   const [isEditing, setIsEditing] = useState(false);
-  const [changedTitle, setChangedTitle] = useState('');
+  const [changedTitle, setChangedTitle] = useState(title);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,7 +48,7 @@ export const TodoItem: React.FC<Props> = ({
     if (changedTitle === title) {
       setIsEditing(false);
     } else if (!changedTitle.trim()) {
-      onTodoRemoving(id);
+      setIsEditing(false);
     } else {
       onTodoEditing(id, changedTitle);
       setIsEditing(false);
@@ -61,7 +61,9 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const handleKeyboardEvent = (e: React.KeyboardEvent) => {
-    if (e.code === 'Enter') {
+    if (e.code === 'Enter' && !changedTitle.trim()) {
+      onTodoRemoving(id);
+    } else if (e.code === 'Enter' && changedTitle.trim()) {
       handleTitleSubmitting();
     } else if (e.code === 'Escape') {
       handleTitleCancelation();
