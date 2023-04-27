@@ -50,7 +50,6 @@ export const TodoItem: React.FC<Props> = ({
       setIsEditing(false);
     } else if (!changedTitle.trim()) {
       onTodoRemoving(id);
-      // setIsEditing(false);
     } else {
       onTodoEditing(id, changedTitle);
       setIsEditing(false);
