@@ -18,7 +18,6 @@ export const UserWarning: React.FC<Props> = ({
   const [userName, setUserName] = useState('');
   const [userFindError, setUserFindError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitForm, setIsSubmitForm] = useState(false);
 
   const fetchUser = async () => {
     setIsLoading(true);
@@ -27,7 +26,6 @@ export const UserWarning: React.FC<Props> = ({
 
       if (!getData.length) {
         setUserFindError(true);
-        setIsSubmitForm(true);
 
         throw new Error();
       }
@@ -62,9 +60,10 @@ export const UserWarning: React.FC<Props> = ({
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     setMail(tempMail);
+
     addUser();
     fetchUser();
-    setIsSubmitForm(false);
+    setUserFindError(false);
   };
 
   const onCloseError = () => setHasError(ErrorMessage.NONE);
@@ -73,7 +72,7 @@ export const UserWarning: React.FC<Props> = ({
     <section className="section">
       <form className="box mt-5" onSubmit={handleSubmit}>
         <h1 className="title is-3">
-          {(isSubmitForm || userFindError)
+          {(userFindError)
             ? 'You need to register'
             : 'Log in to open todos'}
         </h1>
@@ -94,7 +93,7 @@ export const UserWarning: React.FC<Props> = ({
           </span>
 
         </div>
-        {(isSubmitForm || userFindError) && (
+        {(userFindError) && (
           <div className="field">
             <label className="label" htmlFor="user-name">Your Name</label>
             <div className="control has-icons-left">
@@ -129,7 +128,7 @@ export const UserWarning: React.FC<Props> = ({
               setMail(tempMail);
             }}
           >
-            {(isSubmitForm || userFindError) ? 'Sign up' : 'Login'}
+            {(userFindError) ? 'Sign up' : 'Login'}
           </button>
         </div>
       </form>

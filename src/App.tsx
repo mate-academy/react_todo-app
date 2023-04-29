@@ -172,7 +172,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [userID]);
 
   if (!userID) {
     return <UserWarning setUserId={setId} />;
