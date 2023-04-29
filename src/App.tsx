@@ -34,12 +34,10 @@ export const App: React.FC = () => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadTodoId, setLoadTodoId] = useState([0]);
 
-  const [userId, setUserId] = useState(0);
+  const [userID, setUserID] = useState(null);
   // 7167
 
   const { pathname: location } = useLocation();
-
-  const USER_ID = userId;
 
   const completedTodosCount = useMemo(() => (
     todos.filter(todo => todo.completed).length
@@ -59,7 +57,7 @@ export const App: React.FC = () => {
     const newTodo = {
       title,
       completed: false,
-      userId: USER_ID,
+      userId: userID,
     };
 
     try {
@@ -135,6 +133,11 @@ export const App: React.FC = () => {
     });
   };
 
+  const setId = (id: number) => {
+    setUserID(id);
+    // console.log(userID);
+  };
+
   const activeTodos = getVisibleTodos(todos, '/active');
   const completedTodos = getVisibleTodos(todos, '/completed');
 
@@ -160,7 +163,7 @@ export const App: React.FC = () => {
 
   const fetchTodos = async () => {
     try {
-      const getData = await getTodos(USER_ID);
+      const getData = await getTodos(userID);
 
       setTodos(getData);
     } catch {
@@ -172,9 +175,11 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  if (!USER_ID) {
-    return <UserWarning setUserId={setUserId} />;
+  if (!userID) {
+    return <UserWarning setUserId={setId} />;
   }
+
+  // console.log(userID);
 
   return (
     <div className="todoapp">
