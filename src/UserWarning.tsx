@@ -24,7 +24,6 @@ export const UserWarning: React.FC<Props> = ({
     setIsLoading(true);
     try {
       const getData = await getUser(mail);
-      // console.log(getData);
 
       if (!getData.length) {
         setUserFindError(true);
@@ -36,11 +35,9 @@ export const UserWarning: React.FC<Props> = ({
       const user = getData.find(data => {
         return data.email === mail;
       });
-      // console.log(user);
 
       if (user) {
         setUserId(user?.id);
-        // console.log(user?.id);
       }
     } catch (e) {
       setHasError(ErrorMessage.LOAD);

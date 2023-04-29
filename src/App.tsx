@@ -34,7 +34,7 @@ export const App: React.FC = () => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadTodoId, setLoadTodoId] = useState([0]);
 
-  const [userID, setUserID] = useState(null);
+  const [userID, setUserID] = useState(0);
   // 7167
 
   const { pathname: location } = useLocation();
@@ -134,8 +134,7 @@ export const App: React.FC = () => {
   };
 
   const setId = (id: number) => {
-    setUserID(id);
-    // console.log(userID);
+    return setUserID(id);
   };
 
   const activeTodos = getVisibleTodos(todos, '/active');
@@ -178,8 +177,6 @@ export const App: React.FC = () => {
   if (!userID) {
     return <UserWarning setUserId={setId} />;
   }
-
-  // console.log(userID);
 
   return (
     <div className="todoapp">
