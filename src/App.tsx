@@ -35,7 +35,6 @@ export const App: React.FC = () => {
   const [loadTodoId, setLoadTodoId] = useState([0]);
 
   const [userID, setUserID] = useState(0);
-  // 7167
 
   const { pathname: location } = useLocation();
 
