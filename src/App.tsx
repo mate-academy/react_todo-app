@@ -169,6 +169,20 @@ export const App: React.FC = () => {
     }
   };
 
+  const takeUserID = () => {
+    let id;
+
+    if ('userID' in localStorage
+      && localStorage.getItem('userID') !== null) {
+      id = Number(localStorage.getItem('userID'));
+      setUserID(id);
+    }
+  };
+
+  useEffect(() => {
+    takeUserID();
+  }, []);
+
   useEffect(() => {
     fetchTodos();
   }, [userID]);
@@ -214,6 +228,20 @@ export const App: React.FC = () => {
           errorMessage={hasError}
           onCloseError={onCloseError}
         />
+      )}
+
+      {('userID' in localStorage) && (
+        <button
+          type="button"
+          className="button is-primary is-medium"
+          onClick={() => {
+            localStorage.removeItem('userID');
+            setUserID(0);
+          }}
+        >
+          Log Out
+          <i className="fa-solid fa-door-open fa-lg ml-2" />
+        </button>
       )}
     </div>
   );

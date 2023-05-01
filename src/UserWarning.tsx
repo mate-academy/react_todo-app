@@ -31,10 +31,11 @@ export const UserWarning: React.FC<Props> = ({
       }
 
       const user = getData.find(data => {
-        return data.email === mail;
+        return data.email === mail && data.username;
       });
 
       if (user) {
+        localStorage.setItem('userID', user?.id.toString());
         setUserId(user?.id);
       }
     } catch (e) {
@@ -45,6 +46,10 @@ export const UserWarning: React.FC<Props> = ({
   };
 
   const addUser = async () => {
+    if (!userFindError) {
+      return;
+    }
+
     const newUser = {
       username: userName,
       email: mail,
@@ -61,9 +66,12 @@ export const UserWarning: React.FC<Props> = ({
     event.preventDefault();
     setMail(tempMail);
 
-    addUser();
-    fetchUser();
-    setUserFindError(false);
+    if (!userFindError) {
+      fetchUser();
+    } else if (userFindError) {
+      addUser().then(() => fetchUser());
+      setUserFindError(false);
+    }
   };
 
   const onCloseError = () => setHasError(ErrorMessage.NONE);
