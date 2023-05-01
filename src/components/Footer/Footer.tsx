@@ -12,15 +12,15 @@ type Props = {
 const filteredLinks = [
   {
     title: 'All',
-    to: LinksPath.ALL,
+    to: LinksPath.All,
   },
   {
     title: 'Active',
-    to: LinksPath.ACTIVE,
+    to: LinksPath.Active,
   },
   {
     title: 'Completed',
-    to: LinksPath.COMPLETED,
+    to: LinksPath.Completed,
   },
 ];
 

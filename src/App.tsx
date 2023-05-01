@@ -17,11 +17,11 @@ import { ErrorNotification } from './components/ErrorNotification';
 
 const getVisibleTodos = (todos: Todo[], filterBy: string) => {
   switch (filterBy) {
-    case LinksPath.ACTIVE:
+    case LinksPath.Active:
       return todos.filter(item => !item.completed);
-    case LinksPath.COMPLETED:
+    case LinksPath.Completed:
       return todos.filter(item => item.completed);
-    case LinksPath.ALL:
+    case LinksPath.All:
     default:
       return todos;
   }

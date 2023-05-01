@@ -1,5 +1,5 @@
 export enum LinksPath {
-  ALL = '/',
-  ACTIVE = '/active',
-  COMPLETED = '/completed',
+  All = '/',
+  Active = '/active',
+  Completed = '/completed',
 }
