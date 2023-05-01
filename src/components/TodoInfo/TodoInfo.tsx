@@ -9,21 +9,21 @@ type Props = {
   todo: Todo;
   onDelete: (todoId: number) => void,
   onUpdate: (id: number, data: Partial<Todo>) => void;
-  loadTodoId: number[],
+  loadedTodoIds: number[],
 };
 
 export const TodoInfo: React.FC<Props> = ({
   todo,
   onDelete,
   onUpdate,
-  loadTodoId,
+  loadedTodoIds,
 }) => {
   const { id, title, completed } = todo;
 
   const [changedTitle, setChangedTitle] = useState(title);
   const [isEdit, setIsEdit] = useState(false);
 
-  const isActiveTodo = loadTodoId.includes(id);
+  const isActiveTodo = loadedTodoIds.includes(id);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -59,7 +59,6 @@ export const TodoInfo: React.FC<Props> = ({
       onDelete(id);
     } else if (title !== changedTitle) {
       onUpdate(id, { title: changedTitle });
-      setIsEdit(false);
     }
 
     setIsEdit(false);

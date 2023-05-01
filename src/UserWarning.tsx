@@ -27,11 +27,11 @@ export const UserWarning: React.FC<Props> = ({
       if (!getData.length) {
         setUserFindError(true);
 
-        throw new Error();
+        throw new Error(ErrorMessage.LOAD);
       }
 
       const user = getData.find(data => {
-        return data.email === mail && data.username;
+        return data.email === mail && data.username !== '';
       });
 
       if (user) {
@@ -68,7 +68,7 @@ export const UserWarning: React.FC<Props> = ({
 
     if (!userFindError) {
       fetchUser();
-    } else if (userFindError) {
+    } else {
       addUser().then(() => fetchUser());
       setUserFindError(false);
     }

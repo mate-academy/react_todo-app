@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   const [hasError, setHasError] = useState<ErrorMessage>(ErrorMessage.NONE);
   const [isDisabled, setIsDisabled] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  const [loadTodoId, setLoadTodoId] = useState([0]);
+  const [loadedTodoIds, setLoadedTodoIds] = useState([0]);
 
   const [userID, setUserID] = useState(0);
 
@@ -78,11 +78,11 @@ export const App: React.FC = () => {
     todoId: number,
     updatedDate: Partial<Todo>,
   ) => {
-    if (loadTodoId.includes(todoId)) {
+    if (loadedTodoIds.includes(todoId)) {
       return;
     }
 
-    setLoadTodoId(prevState => [...prevState, todoId]);
+    setLoadedTodoIds(prevState => [...prevState, todoId]);
     setIsDisabled(true);
 
     try {
@@ -96,12 +96,12 @@ export const App: React.FC = () => {
       setHasError(ErrorMessage.UPDATE);
     } finally {
       setIsDisabled(false);
-      setLoadTodoId([0]);
+      setLoadedTodoIds([0]);
     }
-  }, [loadTodoId]);
+  }, [loadedTodoIds]);
 
   const deleteTodo = useCallback(async (taskId: number) => {
-    setLoadTodoId(prevState => [...prevState, taskId]);
+    setLoadedTodoIds(prevState => [...prevState, taskId]);
 
     try {
       await removeTodo(taskId);
@@ -112,7 +112,7 @@ export const App: React.FC = () => {
     } catch {
       setHasError(ErrorMessage.DELETE);
     } finally {
-      setLoadTodoId([0]);
+      setLoadedTodoIds([0]);
     }
   }, []);
 
@@ -121,14 +121,14 @@ export const App: React.FC = () => {
     const completedTodos = todos.filter(todo => todo.completed);
 
     const promises = completedTodos.map(todo => {
-      setLoadTodoId(prevState => [...prevState, todo.id]);
+      setLoadedTodoIds(prevState => [...prevState, todo.id]);
 
       return removeTodo(todo.id);
     });
 
     Promise.all(promises).then(() => {
       setTodos(filteredTodos);
-      setLoadTodoId([]);
+      setLoadedTodoIds([]);
     });
   };
 
@@ -140,7 +140,7 @@ export const App: React.FC = () => {
   const completedTodos = getVisibleTodos(todos, '/completed');
 
   const changeStatusForAll = useCallback(async () => {
-    if (!loadTodoId.length) {
+    if (!loadedTodoIds.length) {
       return;
     }
 
@@ -209,7 +209,7 @@ export const App: React.FC = () => {
           onDelete={deleteTodo}
           onUpdate={updateTodo}
           tempTodo={tempTodo}
-          loadTodoId={loadTodoId}
+          loadedTodoIds={loadedTodoIds}
         />
 
         {todos.length > 0 && (
