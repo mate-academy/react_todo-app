@@ -88,18 +88,18 @@ export const TodoItem: React.FC<Props> = ({ todo, todos, setTodos }) => {
 
   return (
     <li
-      className={classNames(
-        { editing: isEditing },
-        { completed: todo.completed },
-      )}
+      className={classNames({
+        editing: isEditing,
+        completed: todo.completed,
+      })}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          defaultChecked={todo.completed}
-          onClick={() => changeTodoStatus(todo.id)}
+          checked={todo.completed}
+          onChange={() => changeTodoStatus(todo.id)}
         />
         <label onDoubleClick={() => setIsEditing(true)}>
           {todo.title}
