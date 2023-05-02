@@ -8,7 +8,7 @@
 .todo-list li {
   position: relative;
   font-size: 24px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid rgb(237, 237, 237);
 }
 
 .todo-list li:last-child {
@@ -87,13 +87,13 @@
   height: 40px;
   margin: auto 0;
   font-size: 30px;
-  color: #cc9a9a;
+  color: rgb(204, 154, 154);
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
 }
 
 .todo-list li .destroy:hover {
-  color: #af5b5e;
+  color: rgb(175, 91, 94);
 }
 
 .todo-list li .destroy:after {
