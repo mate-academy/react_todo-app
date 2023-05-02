@@ -12,7 +12,7 @@ type Props = {
 export const UserWarning: React.FC<Props> = ({
   setUserId,
 }) => {
-  const [mail, setMail] = useState('');
+  const [email, setEmail] = useState('');
   const [tempMail, setTempMail] = useState('');
   const [hasError, setHasError] = useState<ErrorMessage>(ErrorMessage.NONE);
   const [userName, setUserName] = useState('');
@@ -22,7 +22,7 @@ export const UserWarning: React.FC<Props> = ({
   const fetchUser = async () => {
     setIsLoading(true);
     try {
-      const getData = await getUser(mail);
+      const getData = await getUser(email);
 
       if (!getData.length) {
         setUserFindError(true);
@@ -31,7 +31,7 @@ export const UserWarning: React.FC<Props> = ({
       }
 
       const user = getData.find(data => {
-        return data.email === mail && data.username !== '';
+        return data.email === email && data.username !== '';
       });
 
       if (user) {
@@ -52,7 +52,7 @@ export const UserWarning: React.FC<Props> = ({
 
     const newUser = {
       username: userName,
-      email: mail,
+      email: email,
     };
 
     try {
@@ -64,7 +64,7 @@ export const UserWarning: React.FC<Props> = ({
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    setMail(tempMail);
+    setEmail(tempMail);
 
     if (!userFindError) {
       fetchUser();
@@ -133,7 +133,7 @@ export const UserWarning: React.FC<Props> = ({
             )}
             disabled={!tempMail.trim() || isLoading}
             onClick={() => {
-              setMail(tempMail);
+              setEmail(tempMail);
             }}
           >
             {(userFindError) ? 'Sign up' : 'Login'}

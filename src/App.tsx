@@ -136,8 +136,8 @@ export const App: React.FC = () => {
     return setUserID(id);
   };
 
-  const activeTodos = getVisibleTodos(todos, '/active');
-  const completedTodos = getVisibleTodos(todos, '/completed');
+  const activeTodos = getVisibleTodos(todos, LinksPath.Active);
+  const completedTodos = getVisibleTodos(todos, LinksPath.Completed);
 
   const changeStatusForAll = useCallback(async () => {
     if (!loadedTodoIds.length) {

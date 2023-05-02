@@ -7,7 +7,7 @@ import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo';
 
 type Props = {
-  todos: (Todo[]),
+  todos: Todo[],
   onDelete: (todoId: number) => void,
   onUpdate: (id: number, data: Partial<Todo>) => void;
   tempTodo: Todo | null,

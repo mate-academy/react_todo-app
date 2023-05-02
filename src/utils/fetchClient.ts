@@ -13,7 +13,7 @@ type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 function request<T>(
   url: string,
   method: RequestMethod = 'GET',
-  data: any = null,
+  data: unknown = null,
 ): Promise<T> {
   const options: RequestInit = { method };
 

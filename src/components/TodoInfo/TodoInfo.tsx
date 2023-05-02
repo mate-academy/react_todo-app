@@ -27,12 +27,6 @@ export const TodoInfo: React.FC<Props> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (inputRef.current !== null) {
-      inputRef.current.focus();
-    }
-  }, [isEdit]);
-
   const handleIsCompletedChange = () => {
     onUpdate(id, { completed: !completed });
   };
@@ -64,6 +58,12 @@ export const TodoInfo: React.FC<Props> = ({
     setIsEdit(false);
   };
 
+  useEffect(() => {
+    if (inputRef.current !== null) {
+      inputRef.current.focus();
+    }
+  }, [isEdit]);
+
   return (
     <div className={classNames('todo', { completed })}>
       <label className="todo__status-label">
@@ -81,7 +81,7 @@ export const TodoInfo: React.FC<Props> = ({
             onSubmit={handleSubmit}
             className="todo__title-field"
             type="text"
-            placeholder="Empty todo  will deleted"
+            placeholder="Empty todo will deleted"
             value={changedTitle}
             onBlur={handleSubmit}
             onChange={handleTitleChange}
