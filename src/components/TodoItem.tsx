@@ -34,7 +34,7 @@ export const TodoItem: React.FC<Props> = ({ todo, todos, setTodos }) => {
         };
       }
 
-      return todo;
+      return currentTodo;
     });
 
     setTodos(updatedTodos);
