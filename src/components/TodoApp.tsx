@@ -21,7 +21,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { getFilteredTodos } from '../utils/todosFilter';
 import { Notifications } from './Notifications';
-import { useLocalStorage } from '../utils/useLoacalStorage';
+import { useLocalStorage } from '../utils/useLocalStorage';
 
 export const TodoApp: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
