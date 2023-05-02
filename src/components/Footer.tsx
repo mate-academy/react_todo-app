@@ -16,8 +16,8 @@ export const Footer: React.FC<Props> = ({
 }) => {
   const allCompletedTodos = completedTodos.map(completeTodo => completeTodo.id);
 
-  const deleteAllCompletedTodos = (allCompletedTodo: number[]) => {
-    allCompletedTodo.forEach(todoId => onDelete(todoId));
+  const deleteAllCompletedTodos = () => {
+    allCompletedTodos.forEach(todoId => onDelete(todoId));
   };
 
   return (
@@ -65,7 +65,7 @@ export const Footer: React.FC<Props> = ({
           'todoapp__clear-completed',
           { 'todoapp__clear-completed--hidden': !completedTodos.length },
         )}
-        onClick={() => deleteAllCompletedTodos(allCompletedTodos)}
+        onClick={deleteAllCompletedTodos}
       >
         Clear completed
       </button>
