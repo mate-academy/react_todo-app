@@ -1,0 +1,14 @@
+.authorization {
+  margin-top: 50%;
+
+  &__content {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    padding: 20px;
+  }
+}
