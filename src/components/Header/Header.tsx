@@ -23,7 +23,7 @@ export const Header: React.FC<Props> = ({ addTodo }) => {
   };
 
   return (
-    <header className="header">
+    <header className="todo-header">
       <h1>todos</h1>
 
       <form onSubmit={handleSubmit}>

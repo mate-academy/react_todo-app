@@ -1,3 +1,4 @@
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import { PageNavLink } from '../PageNavLink';
 
@@ -11,7 +12,13 @@ export const Footer: React.FC<Props> = ({
   clearCompleted,
 }) => {
   const todosLeft = todos.filter(todoLeft => !todoLeft.completed).length;
-  const isVisibleButton = todos.filter(todo => todo.completed).length;
+  const completedTodosCount = todos.filter(todo => todo.completed).length;
+
+  const filtersArr = [
+    { path: '/', text: 'All' },
+    { path: '/active', text: 'Active' },
+    { path: '/completed', text: 'Completed' },
+  ];
 
   return (
     <footer className="footer">
@@ -20,20 +27,14 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <ul className="filters" data-cy="todosFilter">
-        <li>
-          <PageNavLink to="/" text="All" />
-        </li>
-
-        <li>
-          <PageNavLink to="/active" text="Active" />
-        </li>
-
-        <li>
-          <PageNavLink to="/completed" text="Completed" />
-        </li>
+        {filtersArr.map((filter) => (
+          <li key={filter.text}>
+            <PageNavLink to={filter.path} text={filter.text} />
+          </li>
+        ))}
       </ul>
 
-      {isVisibleButton > 0 && (
+      {completedTodosCount > 0 && (
         <button
           type="button"
           className="clear-completed"

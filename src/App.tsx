@@ -9,17 +9,15 @@ import { Todo } from './types/Todo';
 import { useLocalStorage } from './UseLocalStorage';
 
 const filteredTodos = (todos: Todo[], filter: string) => {
-  const returnArr = [...todos];
-
   switch (filter) {
     case Filter.ACTIVE:
-      return returnArr.filter(todo => !todo.completed);
+      return todos.filter(todo => !todo.completed);
 
     case Filter.COMPLETED:
-      return returnArr.filter(todo => todo.completed);
+      return todos.filter(todo => todo.completed);
 
     default:
-      return returnArr;
+      return todos;
   }
 };
 
@@ -72,7 +70,7 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <Header addTodo={addTodo} />
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <section className="main">
             <input

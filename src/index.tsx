@@ -10,10 +10,8 @@ import { App } from './App';
 ReactDOM.render(
   <Router>
     <Routes>
-      <Route>
-        <Route index element={<App />} />
-        <Route path=":filter" element={<App />} />
-      </Route>
+      <Route index element={<App />} />
+      <Route path=":filter" element={<App />} />
     </Routes>
   </Router>,
   document.getElementById('root'),

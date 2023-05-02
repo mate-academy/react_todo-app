@@ -48,11 +48,13 @@ export const TodoInfo: React.FC<Props> = ({
       return;
     }
 
-    if (inputValue) {
-      updateTodo({ ...todo, title: inputValue });
-    } else {
+    if (!inputValue) {
       deleteTodo(id);
+
+      return;
     }
+
+    updateTodo({ ...todo, title: inputValue });
   };
 
   const handleTodoEdit = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -87,6 +89,7 @@ export const TodoInfo: React.FC<Props> = ({
           id="toggle-view"
           checked={completed}
           onChange={handleCompletedTodo}
+          aria-label="toggle todo"
         />
         <label>
           {title}
@@ -108,6 +111,7 @@ export const TodoInfo: React.FC<Props> = ({
         onBlur={changeTitleBlur}
         onKeyUp={handleTodoEdit}
         value={inputValue}
+        aria-label="edit todo"
       />
     </li>
   );
