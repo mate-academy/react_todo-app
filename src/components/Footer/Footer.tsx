@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { Filter } from '../../types/Filter';
 
@@ -16,54 +17,56 @@ export const Footer: FC<Props> = ({
   containsCompleted,
   onClearCompleted,
   itemsLeft,
-}) => (
-  <footer className="todoapp__footer">
-    <span className="todo-count">
-      {`${itemsLeft} items left`}
-    </span>
+}) => {
+  return (
+    <footer className="todoapp__footer">
+      <span className="todo-count">
+        {`${itemsLeft} items left`}
+      </span>
 
-    <nav className="filter">
-      <a
-        href="#/"
-        className={classNames(
-          'filter__link',
-          { selected: filterType === Filter.All },
-        )}
-        onClick={() => onFilter(Filter.All)}
+      <nav className="filter">
+        <Link
+          to="/"
+          className={classNames(
+            'filter__link',
+            { selected: filterType === Filter.All },
+          )}
+          onClick={() => onFilter(Filter.All)}
+        >
+          All
+        </Link>
+
+        <Link
+          to="active"
+          className={classNames(
+            'filter__link',
+            { selected: filterType === Filter.Active },
+          )}
+          onClick={() => onFilter(Filter.Active)}
+        >
+          Active
+        </Link>
+
+        <Link
+          to="completed"
+          className={classNames(
+            'filter__link',
+            { selected: filterType === Filter.Completed },
+          )}
+          onClick={() => onFilter(Filter.Completed)}
+        >
+          Completed
+        </Link>
+      </nav>
+
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        style={{ visibility: containsCompleted ? 'visible' : 'hidden' }}
+        onClick={onClearCompleted}
       >
-        All
-      </a>
-
-      <a
-        href="#/active"
-        className={classNames(
-          'filter__link',
-          { selected: filterType === Filter.Active },
-        )}
-        onClick={() => onFilter(Filter.Active)}
-      >
-        Active
-      </a>
-
-      <a
-        href="#/completed"
-        className={classNames(
-          'filter__link',
-          { selected: filterType === Filter.Completed },
-        )}
-        onClick={() => onFilter(Filter.Completed)}
-      >
-        Completed
-      </a>
-    </nav>
-
-    <button
-      type="button"
-      className="todoapp__clear-completed"
-      style={{ visibility: containsCompleted ? 'visible' : 'hidden' }}
-      onClick={onClearCompleted}
-    >
-      Clear completed
-    </button>
-  </footer>
-);
+        Clear completed
+      </button>
+    </footer>
+  );
+};

@@ -19,11 +19,16 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
   const [isUserNotFound, setIsUserNotFound] = useState<boolean>(false);
   const [errAuthorization, setErrAuthorization] = useState<boolean>(false);
   const [isDisabledInput, setIsDisabledInput] = useState(false);
+  const minInputLength = 3;
 
   const onAuthorizationSubmit = (
     e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>,
   ) => {
     e.preventDefault();
+
+    if (email.length < minInputLength) {
+      return;
+    }
 
     const handleReceivedUser = (receivedUser: User) => {
       const user = {
@@ -81,7 +86,7 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
               'authorization__input',
             )}
             disabled={isDisabledInput}
-            minLength={3}
+            minLength={minInputLength}
           />
 
           {isUserNotFound && (
@@ -91,7 +96,7 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
               placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              minLength={3}
+              minLength={minInputLength}
               className={cn(
                 'input is-primary',
                 'authorization__input',

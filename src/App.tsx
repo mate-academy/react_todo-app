@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { HashRouter } from 'react-router-dom';
 import { AuthorizationPage } from './pages/AuthorizationPage';
 import { TodosPage } from './pages/TodosPage';
 import { User } from './types/User';
@@ -19,7 +20,11 @@ export const App: FC = () => {
   return (
     <>
       {user
-        ? <TodosPage user={user} />
+        ? (
+          <HashRouter>
+            <TodosPage user={user} />
+          </HashRouter>
+        )
         : <AuthorizationPage setUser={setUser} />}
     </>
   );
