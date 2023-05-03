@@ -81,6 +81,7 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
               'authorization__input',
             )}
             disabled={isDisabledInput}
+            minLength={3}
           />
 
           {isUserNotFound && (

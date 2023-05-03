@@ -8,7 +8,7 @@ type Props = {
   onDeleteTodo: (todoId: number) => void,
   procesingTodosId: number[],
   todoCondition: TodoCondition,
-  toggleTodo: (curentTodo: Todo, status?: boolean | undefined) => void,
+  toggleTodo: (curentTodo: Todo[], status?: boolean | undefined) => void,
   handleSubmitEditing: (id: number, thisTitle: string) => void,
 };
 

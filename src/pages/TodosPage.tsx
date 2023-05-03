@@ -10,6 +10,7 @@ import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
 import { Error } from '../types/Error';
 import { TodoCondition } from '../types/TodoCondition';
+import { User } from '../types/User';
 
 import { filterTodos } from '../utils/filterTodos';
 import {
@@ -23,7 +24,6 @@ import { TodoList } from '../components/TodoList';
 import { TodoItem } from '../components/TodoItem';
 import { Footer } from '../components/Footer/Footer';
 import { ErrorMessage } from '../components/ErrorMessage';
-import { User } from '../types/User';
 
 type Props = {
   user: User,
@@ -87,33 +87,35 @@ export const TodosPage: FC<Props> = ({ user }) => {
     });
   };
 
-  const toggleTodo = (curentTodo: Todo, status: boolean | undefined) => {
+  const toggleTodos = (curentTodos: Todo[], status?: boolean | undefined) => {
     setTodoCondition(TodoCondition.saving);
-    setProcesingTodosId([curentTodo.id]);
 
-    const copyTodos = [...todos];
-    const indexCurTodo = copyTodos.findIndex(({ id }) => id === curentTodo.id);
-    const newStatus: boolean = status || !curentTodo.completed;
+    curentTodos.forEach(curentTodo => {
+      if (curentTodo.completed !== status) {
+        setProcesingTodosId((state) => [...state, curentTodo.id]);
+      }
 
-    copyTodos[indexCurTodo].completed = newStatus;
+      const copyTodos = [...todos];
+      const indexCurTodo = copyTodos
+        .findIndex(({ id }) => id === curentTodo.id);
+      const newStatus: boolean = status || !curentTodo.completed;
 
-    changeTodo(curentTodo.id, { completed: newStatus })
-      .then(() => {
-        setTodos(copyTodos);
-      })
-      .catch(() => handleError(Error.Update))
-      .finally(() => {
-        setProcesingTodosId([]);
-        setTodoCondition(TodoCondition.neutral);
-      });
+      copyTodos[indexCurTodo].completed = newStatus;
+
+      changeTodo(curentTodo.id, { completed: newStatus })
+        .then(() => {
+          setTodos(copyTodos);
+        })
+        .catch(() => handleError(Error.Update))
+        .finally(() => {
+          setProcesingTodosId([]);
+          setTodoCondition(TodoCondition.neutral);
+        });
+    });
   };
 
   const toggleAllTodos = () => {
-    todos.forEach(todo => {
-      if (todosStatus.isActive !== todo.completed) {
-        toggleTodo(todo, todosStatus.isActive);
-      }
-    });
+    toggleTodos(todos, todosStatus.isActive);
   };
 
   const handleSubmitEditing = (todoId: number, newTitle: string) => {
@@ -138,6 +140,10 @@ export const TodosPage: FC<Props> = ({ user }) => {
       });
   };
 
+  const onLogout = () => {
+    localStorage.removeItem('user');
+  };
+
   const filteredTodos = todos ? filterTodos(todos, filterType) : [];
 
   return (
@@ -145,7 +151,15 @@ export const TodosPage: FC<Props> = ({ user }) => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__user">
-        {`Hello ${user.name.toUpperCase()} here is yours todos:`}
+        {`Hello ${user.name.toUpperCase()} ☺`}
+
+        <button
+          type="button"
+          onClick={onLogout}
+          className="button is-outlined is-danger is-small"
+        >
+          Logout
+        </button>
       </div>
 
       <div className="todoapp__content">
@@ -168,7 +182,7 @@ export const TodosPage: FC<Props> = ({ user }) => {
                 onDeleteTodo={handleDeleteTodo}
                 todoCondition={todoCondition}
                 procesingTodosId={procesingTodosId}
-                toggleTodo={toggleTodo}
+                toggleTodo={toggleTodos}
                 handleSubmitEditing={handleSubmitEditing}
               />
 
