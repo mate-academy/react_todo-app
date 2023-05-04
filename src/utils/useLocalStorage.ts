@@ -4,15 +4,15 @@ export const useLocalStorage = <T>(
   key: string,
   initialValue: T,
 ) : [T, (value: T) => void] => {
-  const [datas, setDatas] = useState<T>(
+  const [data, setData] = useState<T>(
     JSON.parse(localStorage.getItem(key)!) || initialValue,
   );
 
-  const saveDatas = (storageDatas: T) => {
-    setDatas(storageDatas);
+  const saveData = (storageData: T) => {
+    setData(storageData);
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
-    localStorage.setItem(key, JSON.stringify(storageDatas));
+    localStorage.setItem(key, JSON.stringify(storageData));
   };
 
-  return [datas, saveDatas];
+  return [data, saveData];
 };

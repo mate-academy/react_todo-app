@@ -21,19 +21,19 @@ export const Header: FC<Props> = ({
   return (
     <header className="todoapp__header">
       {hasTodos
-    && (
-      <button
-        type="button"
-        className={classNames(
-          'todoapp__toggle-all',
-          {
-            active: countActiveTodo === 0,
-          },
+        && (
+          <button
+            type="button"
+            className={classNames(
+              'todoapp__toggle-all',
+              {
+                active: countActiveTodo === 0,
+              },
+            )}
+            onClick={toggleCompletedAllTodo}
+            aria-labelledby="completedAllTodos"
+          />
         )}
-        onClick={toggleCompletedAllTodo}
-        aria-labelledby="completedAllTodos"
-      />
-    )}
 
       <form onSubmit={handleFormSubmit}>
         <input

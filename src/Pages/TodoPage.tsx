@@ -43,7 +43,6 @@ export const TodoPage:FC = () => {
       const todosFromServer = await getTodos(USER_ID);
 
       setTodos(todosFromServer);
-      setStorageTodos(todosFromServer);
     } catch (error) {
       setHasError(true);
       setErrorType(ErrorType.Load);
@@ -162,6 +161,12 @@ export const TodoPage:FC = () => {
   useEffect(() => {
     setStorageTodos(todos);
   }, [todos]);
+
+  if (!USER_ID) {
+    return (
+      <h1>User Not Found</h1>
+    )
+  }
 
   return (
     <Loader.Provider value={loadingTodo}>
