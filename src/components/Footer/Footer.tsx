@@ -1,19 +1,14 @@
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
-import { Filter } from '../../types/Filter';
 
 type Props = {
-  onFilter: (arg: Filter) => void,
-  filterType: Filter,
   containsCompleted: boolean,
   onClearCompleted: () => void,
   itemsLeft: number,
 };
 
 export const Footer: FC<Props> = ({
-  onFilter,
-  filterType,
   containsCompleted,
   onClearCompleted,
   itemsLeft,
@@ -25,38 +20,35 @@ export const Footer: FC<Props> = ({
       </span>
 
       <nav className="filter">
-        <Link
+        <NavLink
           to="/"
-          className={classNames(
+          className={({ isActive }) => classNames(
             'filter__link',
-            { selected: filterType === Filter.All },
+            { selected: isActive },
           )}
-          onClick={() => onFilter(Filter.All)}
         >
           All
-        </Link>
+        </NavLink>
 
-        <Link
+        <NavLink
           to="active"
-          className={classNames(
+          className={({ isActive }) => classNames(
             'filter__link',
-            { selected: filterType === Filter.Active },
+            { selected: isActive },
           )}
-          onClick={() => onFilter(Filter.Active)}
         >
           Active
-        </Link>
+        </NavLink>
 
-        <Link
+        <NavLink
           to="completed"
-          className={classNames(
+          className={({ isActive }) => classNames(
             'filter__link',
-            { selected: filterType === Filter.Completed },
+            { selected: isActive },
           )}
-          onClick={() => onFilter(Filter.Completed)}
         >
           Completed
-        </Link>
+        </NavLink>
       </nav>
 
       <button

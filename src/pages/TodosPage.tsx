@@ -5,9 +5,9 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Todo } from '../types/Todo';
-import { Filter } from '../types/Filter';
 import { Error } from '../types/Error';
 import { TodoCondition } from '../types/TodoCondition';
 import { User } from '../types/User';
@@ -31,12 +31,13 @@ type Props = {
 
 export const TodosPage: FC<Props> = ({ user }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState<Filter>(Filter.All);
   const [errorType, setErrorType] = useState(Error.None);
   const [todoCondition, setTodoCondition]
     = useState<TodoCondition>(TodoCondition.neutral);
   const [procesingTodosId, setProcesingTodosId] = useState<number[]>([]);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const USER_ID = user.id;
 
   const handleError = (err: Error) => {
@@ -142,16 +143,17 @@ export const TodosPage: FC<Props> = ({ user }) => {
 
   const onLogout = () => {
     localStorage.removeItem('user');
+    navigate(0);
   };
 
-  const filteredTodos = todos ? filterTodos(todos, filterType) : [];
+  const filteredTodos = todos ? filterTodos(todos, pathname) : [];
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__user">
-        {`Hello ${user.name.toUpperCase()} ☺`}
+        {`Hello ${user.name.toUpperCase()} 😊`}
 
         <button
           type="button"
@@ -198,8 +200,6 @@ export const TodosPage: FC<Props> = ({ user }) => {
 
         {!!todos.length && (
           <Footer
-            onFilter={setFilterType}
-            filterType={filterType}
             containsCompleted={todosStatus.isCompleted}
             onClearCompleted={clearCompleted}
             itemsLeft={todos

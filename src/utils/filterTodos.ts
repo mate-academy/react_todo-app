@@ -1,11 +1,10 @@
 import { Todo } from '../types/Todo';
-import { Filter } from '../types/Filter';
 
-export const filterTodos = (todos: Todo[], type: Filter) => {
-  switch (type) {
-    case Filter.Completed:
+export const filterTodos = (todos: Todo[], pathname: string) => {
+  switch (pathname) {
+    case '/completed':
       return todos.filter(todo => todo.completed === true);
-    case Filter.Active:
+    case '/active':
       return todos.filter(todo => todo.completed === false);
     default:
       return todos;
