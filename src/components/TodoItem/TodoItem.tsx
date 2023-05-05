@@ -8,7 +8,7 @@ type Props = {
   todo: Todo,
   todoCondition: TodoCondition,
   onDeleteTodo?: (todoId: number) => void,
-  toggleTodo?: (curentTodo: Todo[], status?: boolean | undefined) => void,
+  toggleTodo?: (curentTodos: Todo[], isCompleted?: boolean) => void,
   handleSubmitEditing?: (id: number, editTitle: string) => void,
 };
 
@@ -104,7 +104,7 @@ export const TodoItem: React.FC<Props> = ({
       <div className={classNames(
         'modal',
         'overlay',
-        { 'is-active': todoCondition !== TodoCondition.neutral },
+        { 'is-active': todoCondition !== TodoCondition.Neutral },
       )}
       >
         <div className="modal-background has-background-white-ter" />

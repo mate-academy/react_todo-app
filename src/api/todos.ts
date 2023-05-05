@@ -13,6 +13,6 @@ export const addTodo = (todo: Todo): Promise<Todo> => {
   return client.post('/todos/', todo);
 };
 
-export const changeTodo = (todoId: number, data: any) => {
+export const changeTodo = (todoId: number, data: {}) => {
   return client.patch(`/todos/${todoId}`, data);
 };

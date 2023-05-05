@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import classNames from 'classnames';
-import { Error } from '../../types/Error';
+import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
-  errorType: Error,
-  handleError: (err: Error) => void,
+  errorType: ErrorType,
+  handleError: (err: ErrorType) => void,
 };
 
 export const ErrorMessage: FC<Props> = ({ errorType, handleError }) => (
@@ -13,16 +13,16 @@ export const ErrorMessage: FC<Props> = ({ errorType, handleError }) => (
     'is-danger',
     'is-light',
     'has-text-weight-normal',
-    { hidden: errorType === Error.None },
+    { hidden: errorType === ErrorType.None },
   )}
   >
     <button
       type="button"
       className="delete"
-      onClick={() => handleError(Error.None)}
+      onClick={() => handleError(ErrorType.None)}
       aria-label="close error"
     />
-    {errorType === Error.EmptyInput
+    {errorType === ErrorType.EmptyInput
       ? "Title can't be empty"
       : `Unable to ${errorType} a todo`}
   </div>

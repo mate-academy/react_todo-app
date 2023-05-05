@@ -6,14 +6,14 @@ import {
   SetStateAction,
 } from 'react';
 import classNames from 'classnames';
-import { Error } from '../../types/Error';
+import { ErrorType } from '../../types/ErrorType';
 import { Todo } from '../../types/Todo';
 import { addTodo } from '../../api/todos';
 import { TodoCondition } from '../../types/TodoCondition';
 
 type Props = {
   containsActive: boolean,
-  handleError: (err: Error) => void,
+  handleError: (err: ErrorType) => void,
   setTodoCondition: (arg: TodoCondition) => void,
   onTrickTempTodo: (newTodo: Todo | null) => void,
   setTodos: Dispatch<SetStateAction<Todo[]>>,
@@ -37,11 +37,11 @@ export const Header: FC<Props> = ({
     event.preventDefault();
 
     if (!title) {
-      return handleError(Error.EmptyInput);
+      return handleError(ErrorType.EmptyInput);
     }
 
     setIsInputDisabled(true);
-    setTodoCondition(TodoCondition.saving);
+    setTodoCondition(TodoCondition.Saving);
 
     const newTodo = {
       id: 0,
@@ -58,9 +58,9 @@ export const Header: FC<Props> = ({
         onTrickTempTodo(null);
         setTodos((prev: Todo[]) => [...prev, result]);
       })
-      .catch(() => handleError(Error.Add))
+      .catch(() => handleError(ErrorType.Add))
       .finally(() => {
-        setTodoCondition(TodoCondition.neutral);
+        setTodoCondition(TodoCondition.Neutral);
         setIsInputDisabled(false);
       });
   };

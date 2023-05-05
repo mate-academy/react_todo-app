@@ -8,8 +8,8 @@ type Props = {
   onDeleteTodo: (todoId: number) => void,
   procesingTodosId: number[],
   todoCondition: TodoCondition,
-  toggleTodo: (curentTodo: Todo[], status?: boolean | undefined) => void,
-  handleSubmitEditing: (id: number, thisTitle: string) => void,
+  toggleTodo: (curentTodo: Todo[], isCompleted?: boolean) => void,
+  handleSubmitEditing: (id: number, updatedTitle: string) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -23,7 +23,7 @@ export const TodoList: React.FC<Props> = ({
   return (
     <>
       {todos.map((todo: Todo) => {
-        let thisTodoCondition = TodoCondition.neutral;
+        let thisTodoCondition = TodoCondition.Neutral;
 
         if (procesingTodosId.includes(todo.id)) {
           thisTodoCondition = todoCondition;

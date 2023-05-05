@@ -8,7 +8,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Todo } from '../types/Todo';
-import { Error } from '../types/Error';
+import { ErrorType } from '../types/ErrorType';
 import { TodoCondition } from '../types/TodoCondition';
 import { User } from '../types/User';
 
@@ -31,18 +31,18 @@ type Props = {
 
 export const TodosPage: FC<Props> = ({ user }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorType, setErrorType] = useState(Error.None);
+  const [errorType, setErrorType] = useState(ErrorType.None);
   const [todoCondition, setTodoCondition]
-    = useState<TodoCondition>(TodoCondition.neutral);
+    = useState<TodoCondition>(TodoCondition.Neutral);
   const [procesingTodosId, setProcesingTodosId] = useState<number[]>([]);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const USER_ID = user.id;
 
-  const handleError = (err: Error) => {
-    if (err !== Error.None) {
-      setTimeout(() => setErrorType(Error.None), 3000);
+  const handleError = (err: ErrorType) => {
+    if (err !== ErrorType.None) {
+      setTimeout(() => setErrorType(ErrorType.None), 3000);
     }
 
     setErrorType(err);
@@ -54,7 +54,7 @@ export const TodosPage: FC<Props> = ({ user }) => {
         .then(result => {
           setTodos(result);
         })
-        .catch(() => handleError(Error.Load));
+        .catch(() => handleError(ErrorType.Load));
     }
   }, [USER_ID]);
 
@@ -66,40 +66,40 @@ export const TodosPage: FC<Props> = ({ user }) => {
   }, [todos]);
 
   const handleDeleteTodo = (todoId: number) => {
-    setTodoCondition(TodoCondition.deleting);
+    setTodoCondition(TodoCondition.Deleting);
     setProcesingTodosId([todoId]);
     deleteTodo(todoId)
       .then(() => setTodos(prev => prev.filter(({ id }) => id !== todoId)))
-      .catch(() => handleError(Error.Delete))
-      .finally(() => setTodoCondition(TodoCondition.neutral));
+      .catch(() => handleError(ErrorType.Delete))
+      .finally(() => setTodoCondition(TodoCondition.Neutral));
   };
 
   const clearCompleted = () => {
-    setTodoCondition(TodoCondition.deleting);
+    setTodoCondition(TodoCondition.Deleting);
 
     todos?.forEach(todo => {
       if (todo.completed) {
         setProcesingTodosId((state) => [...state, todo.id]);
         deleteTodo(todo.id)
           .then(() => setTodos(prev => prev.filter(({ id }) => id !== todo.id)))
-          .catch(() => handleError(Error.Delete))
-          .finally(() => setTodoCondition(TodoCondition.neutral));
+          .catch(() => handleError(ErrorType.Delete))
+          .finally(() => setTodoCondition(TodoCondition.Neutral));
       }
     });
   };
 
-  const toggleTodos = (curentTodos: Todo[], status?: boolean | undefined) => {
-    setTodoCondition(TodoCondition.saving);
+  const toggleTodos = (curentTodos: Todo[], isCompleted?: boolean) => {
+    setTodoCondition(TodoCondition.Saving);
 
     curentTodos.forEach(curentTodo => {
-      if (curentTodo.completed !== status) {
+      if (curentTodo.completed !== isCompleted) {
         setProcesingTodosId((state) => [...state, curentTodo.id]);
       }
 
       const copyTodos = [...todos];
       const indexCurTodo = copyTodos
         .findIndex(({ id }) => id === curentTodo.id);
-      const newStatus: boolean = status || !curentTodo.completed;
+      const newStatus: boolean = isCompleted || !curentTodo.completed;
 
       copyTodos[indexCurTodo].completed = newStatus;
 
@@ -107,10 +107,10 @@ export const TodosPage: FC<Props> = ({ user }) => {
         .then(() => {
           setTodos(copyTodos);
         })
-        .catch(() => handleError(Error.Update))
+        .catch(() => handleError(ErrorType.Update))
         .finally(() => {
           setProcesingTodosId([]);
-          setTodoCondition(TodoCondition.neutral);
+          setTodoCondition(TodoCondition.Neutral);
         });
     });
   };
@@ -121,7 +121,7 @@ export const TodosPage: FC<Props> = ({ user }) => {
 
   const handleSubmitEditing = (todoId: number, newTitle: string) => {
     setProcesingTodosId([todoId]);
-    setTodoCondition(TodoCondition.saving);
+    setTodoCondition(TodoCondition.Saving);
 
     changeTodo(todoId, { title: newTitle })
       .then(() => setTodos(prevTodos => prevTodos.map(todo => {
@@ -134,10 +134,10 @@ export const TodosPage: FC<Props> = ({ user }) => {
 
         return todo;
       })))
-      .catch(() => Error.Update)
+      .catch(() => ErrorType.Update)
       .finally(() => {
         setProcesingTodosId([]);
-        setTodoCondition(TodoCondition.neutral);
+        setTodoCondition(TodoCondition.Neutral);
       });
   };
 
@@ -209,7 +209,7 @@ export const TodosPage: FC<Props> = ({ user }) => {
       </div>
 
       {
-        errorType !== Error.None && (
+        errorType !== ErrorType.None && (
           <ErrorMessage errorType={errorType} handleError={setErrorType} />
         )
       }

@@ -106,7 +106,6 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
 
           <button
             type="submit"
-            onSubmit={onAuthorizationSubmit}
             className="button is-primary"
           >
             confirm

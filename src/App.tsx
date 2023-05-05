@@ -4,8 +4,8 @@ import { AuthorizationPage } from './pages/AuthorizationPage';
 import { TodosPage } from './pages/TodosPage';
 import { User } from './types/User';
 
-const getLocalUser = () => {
-  const stringUser = localStorage.getItem('user');
+const getLocalUser = (): User | null => {
+  const stringUser: string | null = localStorage.getItem('user');
 
   if (stringUser) {
     return JSON.parse(stringUser);
