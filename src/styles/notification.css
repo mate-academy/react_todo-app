@@ -1,0 +1,17 @@
+.notification {
+  position: fixed;
+  top: 10%;
+  right: 5%;
+  max-width: 150px;
+  font: 24px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.4em;
+  background: #f70000;
+  color: #fff;
+  margin: 0 auto;
+  padding: 24px 12px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 500;
+  border-radius: 16px;
+  text-align: center;
+}
