@@ -20,9 +20,9 @@ export const Footer: React.FC<Props> = ({
         {`${amountActiveTodos} item${amountActiveTodos === 1 ? '' : 's'} left`}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         {FiltersLink.map(({ to, title }) => (
-          <li>
+          <li key={title}>
             <NavLink
               to={to}
               className={({ isActive }) => classNames(

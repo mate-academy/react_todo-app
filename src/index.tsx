@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 
 import './styles/index.css';
@@ -8,9 +8,9 @@ import './styles/notification.css';
 
 import { App } from './App';
 
-ReactDOM.render(
-  <HashRouter>
-    <App />
-  </HashRouter>,
-  document.getElementById('root'),
-);
+createRoot(document.getElementById('root') as HTMLDivElement)
+  .render(
+    <HashRouter>
+      <App />
+    </HashRouter>,
+  );

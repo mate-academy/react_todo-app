@@ -113,20 +113,22 @@ export const App: React.FC = () => {
           onAddTodo={handleAddTodo}
         />
 
-        <TodoList
-          todos={filteredTodos}
-          onRemoveTodo={handleRemoveTodo}
-          onUpdateTodo={handleUpdateTodo}
-          onChangeStatusTodo={handleChangeTodoStatus}
-          onToggleAll={handleToggleAll}
-        />
-
         {!!todos.length && (
-          <Footer
-            amountActiveTodos={activeTodos.length}
-            amountCompletedTodos={completedTodos.length}
-            onClearCompleted={handleClearCompleted}
-          />
+          <>
+            <TodoList
+              todos={filteredTodos}
+              onRemoveTodo={handleRemoveTodo}
+              onUpdateTodo={handleUpdateTodo}
+              onChangeStatusTodo={handleChangeTodoStatus}
+              onToggleAll={handleToggleAll}
+            />
+
+            <Footer
+              amountActiveTodos={activeTodos.length}
+              amountCompletedTodos={completedTodos.length}
+              onClearCompleted={handleClearCompleted}
+            />
+          </>
         )}
 
       </div>

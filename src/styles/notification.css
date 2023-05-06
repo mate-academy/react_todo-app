@@ -1,17 +1,17 @@
 .notification {
-  position: fixed;
-  top: 10%;
-  right: 5%;
-  max-width: 150px;
-  font: 24px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  line-height: 1.4em;
-  background: #f70000;
-  color: #fff;
-  margin: 0 auto;
-  padding: 24px 12px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 500;
-  border-radius: 16px;
-  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  background-color: #feecf0;
+  color: #cc0f35;
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  transition-property: opacity, min-height;
+  transition-duration: 1s;
+}
+
+.notification.hidden {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
 }

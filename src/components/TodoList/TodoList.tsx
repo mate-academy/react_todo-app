@@ -30,14 +30,14 @@ export const TodoList: React.FC<Props> = ({
             id="toggle-all"
             className="toggle-all"
             data-cy="toggleAll"
-            checked={isAllCompleted}
+            defaultChecked={isAllCompleted}
             onChange={onToggleAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
         </>
       )}
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {todos.map(todo => (
           <TodoItem
             key={todo.id}
