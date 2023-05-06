@@ -69,7 +69,7 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          defaultChecked={todo.completed}
+          checked={todo.completed}
           onClick={() => onChangeStatusTodo(todo.id)}
 
         />
