@@ -62,7 +62,6 @@ export const TodoItem: React.FC<Props> = ({
         'todo',
         { completed },
       )}
-      onDoubleClick={() => setIsEditing(true)}
     >
       <label className="todo__status-label">
         <input
@@ -89,7 +88,12 @@ export const TodoItem: React.FC<Props> = ({
         )
         : (
           <>
-            <span className="todo__title">{title}</span>
+            <span
+              className="todo__title"
+              onDoubleClick={() => setIsEditing(true)}
+            >
+              {title}
+            </span>
 
             <button
               type="button"
