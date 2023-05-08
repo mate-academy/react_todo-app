@@ -117,7 +117,7 @@ export const TodoItem: React.FC<Props> = ({
         placeholder="Empty todo will be deleted"
         value={inputValue}
         onChange={(event) => handleChange(event)}
-        onBlur={() => changeTodoTitle()}
+        onBlur={changeTodoTitle}
         ref={ref => ref && ref.focus()}
         onFocus={(e) => moveCursorToEndOfInput(e)}
         onKeyDown={onKeyPressAction}
