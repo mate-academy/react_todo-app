@@ -58,7 +58,7 @@ export const TodoApp: React.FC = () => {
 
     if (!newTodo.trim().length) {
       setNewTodo('');
-      setPlaceholderTitle('the field cannot be empty');
+      setPlaceholderTitle('The field CanNOT be EMPTY');
     }
 
     if (newTodo.trim().length) {
@@ -116,23 +116,25 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          checked={isActive}
-          onChange={() => onSwitch(isActive)}
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {!!todos.length && (
+        <section className="main">
+          <input
+            type="checkbox"
+            checked={isActive}
+            onChange={() => onSwitch(isActive)}
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList
-          items={filteredTodos}
-          setTodos={setTodos}
-          todos={todos}
-        />
-      </section>
+          <TodoList
+            items={filteredTodos}
+            setTodos={setTodos}
+            todos={todos}
+          />
+        </section>
+      )}
 
       {!!todos.length && (
         <footer className="footer">
