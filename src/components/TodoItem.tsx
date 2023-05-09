@@ -4,16 +4,16 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todo: Todo;
-  toggleCompleted: (id: number) => void,
-  removeTodo: (id:number) => void,
-  renameTodo: (id: number, title: string) => void,
+  onToggleCompleted: (id: number) => void,
+  onRemoveTodo: (id:number) => void,
+  onRenameTodo: (id: number, title: string) => void,
 };
 
 export const TodoItem:React.FC<Props> = ({
   todo,
-  toggleCompleted,
-  removeTodo,
-  renameTodo,
+  onToggleCompleted,
+  onRemoveTodo,
+  onRenameTodo,
 }) => {
   const { id, title, completed } = todo;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -21,7 +21,7 @@ export const TodoItem:React.FC<Props> = ({
   const [newTitle, setNewTitle] = useState(title);
 
   const handleToggleCompleted = () => {
-    toggleCompleted(id);
+    onToggleCompleted(id);
   };
 
   const handleDoubleClick = () => {
@@ -34,13 +34,13 @@ export const TodoItem:React.FC<Props> = ({
 
   const handleTitleChangeOnBlur = () => {
     if (!newTitle.length || !newTitle.trim()) {
-      removeTodo(id);
+      onRemoveTodo(id);
       setIsEditing(false);
 
       return;
     }
 
-    renameTodo(id, newTitle);
+    onRenameTodo(id, newTitle);
     setIsEditing(false);
   };
 
@@ -88,7 +88,7 @@ export const TodoItem:React.FC<Props> = ({
           className="destroy"
           data-cy="deleteTodo"
           aria-label="button"
-          onClick={() => removeTodo(todo.id)}
+          onClick={() => onRemoveTodo(todo.id)}
         />
       </div>
       {!!isEditing && (

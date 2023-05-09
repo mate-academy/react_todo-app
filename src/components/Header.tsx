@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 type Props = {
-  addTodo: (title: string) => void,
+  onAddTodo: (title: string) => void,
 };
 
-export const Header: React.FC<Props> = ({ addTodo }) => {
+export const Header: React.FC<Props> = ({ onAddTodo }) => {
   const [inputValue, setInputvalue] = useState('');
 
   const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +15,7 @@ export const Header: React.FC<Props> = ({ addTodo }) => {
     e.preventDefault();
 
     if (inputValue.trim()) {
-      addTodo(inputValue);
+      onAddTodo(inputValue);
       setInputvalue('');
     }
   };

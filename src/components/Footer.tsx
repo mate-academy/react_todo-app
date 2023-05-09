@@ -4,12 +4,12 @@ import { TodosFilter } from './TodosFilter';
 
 type Props = {
   todos: Todo[];
-  clearCompleted: () => void,
+  onClearCompleted: () => void,
 };
 
 export const Footer:React.FC<Props> = ({
   todos,
-  clearCompleted,
+  onClearCompleted,
 }) => {
   const uncompletedTodos = useMemo(() => {
     return todos.filter(todo => !todo.completed).length;
@@ -31,7 +31,7 @@ export const Footer:React.FC<Props> = ({
         <button
           type="button"
           className="clear-completed"
-          onClick={clearCompleted}
+          onClick={onClearCompleted}
         >
           Clear completed
         </button>

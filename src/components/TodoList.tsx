@@ -3,17 +3,17 @@ import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
 type Props = {
-  toggleCompleted: (id: number) => void,
+  onToggleCompleted: (id: number) => void,
   todos: Todo[],
-  removeTodo: (id: number) => void,
-  renameTodo: (id: number, title: string) => void,
+  onRemoveTodo: (id: number) => void,
+  onRenameTodo: (id: number, title: string) => void,
 };
 
 export const TodoList:React.FC<Props> = memo(({
   todos,
-  toggleCompleted,
-  removeTodo,
-  renameTodo,
+  onToggleCompleted,
+  onRemoveTodo,
+  onRenameTodo,
 }) => {
   return (
     <ul className="todo-list" data-cy="todosList">
@@ -21,9 +21,9 @@ export const TodoList:React.FC<Props> = memo(({
         <TodoItem
           key={todo.id}
           todo={todo}
-          toggleCompleted={toggleCompleted}
-          removeTodo={removeTodo}
-          renameTodo={renameTodo}
+          onToggleCompleted={onToggleCompleted}
+          onRemoveTodo={onRemoveTodo}
+          onRenameTodo={onRenameTodo}
         />
       ))}
     </ul>

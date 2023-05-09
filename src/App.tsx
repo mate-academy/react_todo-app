@@ -13,7 +13,7 @@ export const App: React.FC = () => {
 
   const location = useLocation();
 
-  const addTodo = (title: string) => {
+  const handleAddTodo = (title: string) => {
     const newTodo = {
       id: +new Date(),
       title,
@@ -23,7 +23,7 @@ export const App: React.FC = () => {
     setTodos([...todos, newTodo]);
   };
 
-  const toggleCompleted = (todoId: number) => {
+  const handleToggleCompleted = (todoId: number) => {
     const updateTodoList = todos.map((todo:Todo) => (
       todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
     ));
@@ -31,7 +31,7 @@ export const App: React.FC = () => {
     setTodos(updateTodoList);
   };
 
-  const toggleAll = () => {
+  const handleToggleAll = () => {
     const notCompletedAll = todos.every((todo:Todo) => todo.completed);
     const changeAll = todos.map((todo:Todo) => (
       { ...todo, completed: !notCompletedAll }));
@@ -39,19 +39,19 @@ export const App: React.FC = () => {
     setTodos(changeAll);
   };
 
-  const removeTodo = useCallback((todoId: number) => {
+  const handleRemoveTodo = useCallback((todoId: number) => {
     const newsTodos = todos.filter((todo:Todo) => todo.id !== todoId);
 
     setTodos(newsTodos);
   }, [todos]);
 
-  const clearCompleted = () => {
+  const handleClearCompleted = () => {
     const deleteAllCompleted = todos.filter((todo:Todo) => !todo.completed);
 
     setTodos(deleteAllCompleted);
   };
 
-  const renameTodo = (todoId: number, title: string) => {
+  const handleRenameTodo = (todoId: number, title: string) => {
     setTodos(todos.map((todo:Todo) => {
       if (todo.id !== todoId) {
         return todo;
@@ -79,7 +79,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <Header addTodo={addTodo} />
+      <Header onAddTodo={handleAddTodo} />
 
       {!!todos.length && (
         <>
@@ -90,21 +90,21 @@ export const App: React.FC = () => {
               className="toggle-all"
               data-cy="toggleAll"
               checked={todos.every((todo:Todo) => todo.completed)}
-              onChange={toggleAll}
+              onChange={handleToggleAll}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
 
             <TodoList
               todos={filteredTodos}
-              toggleCompleted={toggleCompleted}
-              removeTodo={removeTodo}
-              renameTodo={renameTodo}
+              onToggleCompleted={handleToggleCompleted}
+              onRemoveTodo={handleRemoveTodo}
+              onRenameTodo={handleRenameTodo}
             />
           </section>
 
           <Footer
             todos={todos}
-            clearCompleted={clearCompleted}
+            onClearCompleted={handleClearCompleted}
           />
         </>
       )}
