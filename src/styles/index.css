@@ -98,6 +98,7 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  outline: none;
 }
 
 .new-todo {
@@ -193,10 +194,6 @@ body {
   text-decoration: none;
 }
 
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox
-*/
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   .toggle-all {
     background: none;
