@@ -2,7 +2,6 @@
 
 import classNames from 'classnames';
 import {
-  KeyboardEvent,
   useEffect,
   useRef,
   useState,
@@ -13,7 +12,7 @@ type Props = {
   todo: Todo;
   handleTodoDelete: (id: number) => void;
   handleStatusToggle: (id: number) => void;
-  handleEditing: (
+  handleTodoEditing: (
     updatedTitle: string,
     id: number,
     callback: (arg: boolean) => void,
@@ -24,22 +23,22 @@ export const TodoItem: React.FC<Props> = ({
   todo,
   handleTodoDelete,
   handleStatusToggle,
-  handleEditing,
+  handleTodoEditing,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
-  const titleInputField = useRef<HTMLInputElement>(null);
+  const inputField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (titleInputField.current) {
-      titleInputField.current.focus();
+    if (inputField.current) {
+      inputField.current.focus();
     }
   });
 
-  const handleKeypress = (event: KeyboardEvent) => {
+  const handleKeypress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      handleEditing(newTitle, todo.id, setIsEditing);
+      handleTodoEditing(newTitle, todo.id, setIsEditing);
     }
 
     if (event.key === 'Escape') {
@@ -80,10 +79,10 @@ export const TodoItem: React.FC<Props> = ({
         type="text"
         className="edit"
         value={newTitle}
-        ref={titleInputField}
+        ref={inputField}
         onChange={(event) => setNewTitle(event.target.value)}
         onKeyDown={handleKeypress}
-        onBlur={() => handleEditing(newTitle, todo.id, setIsEditing)}
+        onBlur={() => handleTodoEditing(newTitle, todo.id, setIsEditing)}
       />
     </li>
   );

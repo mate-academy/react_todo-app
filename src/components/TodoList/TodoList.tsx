@@ -6,7 +6,7 @@ type Props = {
   todos: Todo[];
   handleTodoDelete: (id: number) => void;
   handleStatusToggle: (id: number) => void;
-  handleEditing: (
+  handleTodoEditing: (
     updatedTitle: string,
     id: number,
     callback: (arg: boolean) => void,
@@ -17,7 +17,7 @@ export const TodoList: React.FC<Props> = ({
   todos,
   handleTodoDelete,
   handleStatusToggle,
-  handleEditing,
+  handleTodoEditing,
 }) => {
   const { pathname } = useLocation();
 
@@ -42,7 +42,7 @@ export const TodoList: React.FC<Props> = ({
           todo={todo}
           handleTodoDelete={handleTodoDelete}
           handleStatusToggle={handleStatusToggle}
-          handleEditing={handleEditing}
+          handleTodoEditing={handleTodoEditing}
         />
       ))}
     </ul>

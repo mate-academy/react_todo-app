@@ -82,7 +82,7 @@ export const TodoApp: React.FC = () => {
     saveTodos(result);
   };
 
-  const handleEditing = (
+  const handleTodoEditing = (
     updatedTitle: string,
     id: number,
     callback: (arg: boolean) => void,
@@ -140,7 +140,7 @@ export const TodoApp: React.FC = () => {
           todos={todos}
           handleTodoDelete={handleTodoDelete}
           handleStatusToggle={handleStatusToggle}
-          handleEditing={handleEditing}
+          handleTodoEditing={handleTodoEditing}
         />
       </section>
 
