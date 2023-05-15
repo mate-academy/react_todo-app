@@ -18,7 +18,6 @@ import { ErrorNotice } from '../types/ErrorNotice';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [userID, setUserID] = useState<string>('');
   const [hasForm, setHasForm] = useState(false);
@@ -32,12 +31,14 @@ export const TodoApp: React.FC = () => {
   };
 
   const loadingTodos = useCallback(async () => {
-    try {
-      if (user) {
-        const todosServer = await getTodos(+user.id);
+    if (!user) {
+      return;
+    }
 
-        setTodosFromServer(todosServer);
-      }
+    try {
+      const todosServer = await getTodos(+user.id);
+
+      setTodos(todosServer);
     } catch (error) {
       showError(ErrorNotice.LOADING);
     }
@@ -63,6 +64,7 @@ export const TodoApp: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setProcessingIDs([0]);
 
     if (!title.trim()) {
       showError(ErrorNotice.TITLE);
@@ -70,20 +72,19 @@ export const TodoApp: React.FC = () => {
       return;
     }
 
-    const createTodo: Todo = {
+    const createdTodo: Todo = {
       id: +new Date(),
       title,
       completed: false,
     };
 
     if (user) {
-      createTodo.id = 0;
-      createTodo.userId = user.id;
+      addTodo(createdTodo);
+      createdTodo.id = 0;
+      createdTodo.userId = user.id;
 
       try {
-        await addTodoOnServer(createTodo);
-
-        setTodosFromServer(state => [...state, createTodo]);
+        await addTodoOnServer(createdTodo);
       } catch (error) {
         showError(ErrorNotice.ADD);
       } finally {
@@ -95,7 +96,7 @@ export const TodoApp: React.FC = () => {
       return;
     }
 
-    addTodo(createTodo);
+    addTodo(createdTodo);
     setTitle('');
   };
 
@@ -144,11 +145,11 @@ export const TodoApp: React.FC = () => {
   );
 
   const handleCompleteAll = useCallback(async () => {
-    if (user) {
-      const status = todosFromServer.some((todo: Todo) => !todo.completed);
+    const status = todos.some((todo: Todo) => !todo.completed);
 
+    if (user) {
       try {
-        const toggleAll = todosFromServer.map(todo => {
+        const toggleAll = todos.map((todo: Todo) => {
           if (todo.completed !== status) {
             setProcessingIDs(state => [...state, todo.id]);
 
@@ -167,8 +168,6 @@ export const TodoApp: React.FC = () => {
 
       return;
     }
-
-    const status = todos.some((todo: Todo) => !todo.completed);
 
     setTodos((todos.map((todo: Todo) => {
       if (todo.completed !== status) {
@@ -272,26 +271,17 @@ export const TodoApp: React.FC = () => {
     setHasForm(!hasForm);
   };
 
-  let visibleTodos = useMemo(() => (
+  const visibleTodos = useMemo(() => (
     getVisibleTodos(todos, pathname)),
   [todos, pathname]);
 
-  let activeTodos = useMemo(() => (
+  const activeTodos = useMemo(() => (
     todos.filter((todo: Todo) => !todo.completed)),
   [todos]);
 
-  let completedTodos: Todo[] = useMemo(() => (
+  const completedTodos: Todo[] = useMemo(() => (
     todos.filter((todo: Todo) => todo.completed)),
   [todos]);
-
-  let allTodos = todos;
-
-  if (user) {
-    visibleTodos = getVisibleTodos(todosFromServer, pathname);
-    activeTodos = todosFromServer.filter((todo: Todo) => !todo.completed);
-    completedTodos = todosFromServer.filter((todo: Todo) => todo.completed);
-    allTodos = todosFromServer;
-  }
 
   return (
     <div className="container">
@@ -312,7 +302,7 @@ export const TodoApp: React.FC = () => {
           </form>
         </header>
 
-        {allTodos.length > 0 && (
+        {todos.length > 0 && (
           <>
             <TodoList
               items={visibleTodos}
