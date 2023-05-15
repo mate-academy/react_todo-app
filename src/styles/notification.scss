@@ -1,0 +1,28 @@
+.notification {
+  position: relative;
+  font-size: 24px;
+  text-align: center;
+  color: red;
+  background-color: #feecf0;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+  min-height: 36px;
+
+  &__delete {
+    &:after {
+      content: "×";
+      position: absolute;
+      top: 0;
+      right: 10px;
+    }
+  }
+}
+
+.notification.hidden {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.container {
+  transition: linear opacity 0.5s;
+}

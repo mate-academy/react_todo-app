@@ -1,0 +1,52 @@
+.sign-in {
+  position: absolute;
+  font-family: inherit;
+  left: 0;
+  right: 55px;
+  top: -25px;
+  margin: 0 auto;
+  max-width: 15%;
+  transition: linear all 0.5s;
+  opacity: 1;
+
+  &__input {
+    border-radius: 5px;
+    width: 120px;
+    border: 1px solid rgba(175, 47, 47, 0.35);
+  }
+}
+
+.show-form {
+  opacity: 0;
+  translate: -150%;
+  transition: linear all 0.5s;
+}
+
+.item {
+  cursor: pointer;
+  text-decoration: none;
+  padding: 1px;
+  position: absolute;
+  border-radius: 5px;
+  max-width: 18%;
+  font-weight: 700;
+  transition: linear all 0.5s;
+  border: 1px solid rgba(175, 47, 47, 0.15);
+  color: rgba(175, 47, 47, 0.15);
+
+  &__sign-in {
+    padding: 2.5px;
+    top: -25px;
+    left: 0;
+  }
+
+  &__sign-up {
+    top: -25px;
+    right: 0;
+  }
+
+  &:hover {
+    border: 1px solid rgba(175, 47, 47, 0);
+    color: gray;
+  }
+}
