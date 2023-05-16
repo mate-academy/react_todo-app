@@ -1,93 +1,299 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useState, useEffect, useMemo, useCallback, FormEvent, FocusEvent,
+} from 'react';
+
+import { useSearchParams } from 'react-router-dom';
+
+import classNames from 'classnames';
+import { TodoHeader } from './components/TodoHeader';
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+import { Notification } from './components/Notification';
+
+import { Todo } from './types/Todo';
+import { User } from './types/User';
+import { TodoStatus } from './types/TodoStatus';
+import { TodoErrors } from './types/TodoErrors';
+import { UserErrors } from './types/UserError';
+import {
+  getTodos, USER_ID, createTodo, deleteTodo, toggleTodo, changeTitle,
+} from './api/todos';
+import { getUser } from './api/user';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [error, setError] = useState<TodoErrors | null | UserErrors>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  const [title, setTitle] = useState<string>('');
+  const [newTitle, setNewTitle] = useState<string>('');
+
+  const [isProcessed, setIsProcessed] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedId, setSeletedId] = useState<number | null>(null);
+  const [editedTodoId, setEditedTodoId] = useState<number | null>(null);
+
+  const [searchParams] = useSearchParams();
+  const status = searchParams.get('status') || '';
+
+  const resetTodoData = (): void => {
+    setIsProcessed(false);
+    setNewTitle('');
+    setEditedTodoId(null);
+    setSeletedId(null);
+    setTitle('');
+  };
+
+  const deleteTodoHandler = useCallback(async (
+    todoId: number,
+  ) => {
+    setSeletedId(todoId);
+
+    try {
+      await deleteTodo(todoId);
+      setTodos(filtredTodos => filtredTodos
+        .filter(todo => todo.id !== todoId));
+    } catch (innerError) {
+      setError(TodoErrors.Delete);
+    } finally {
+      setSeletedId(null);
+    }
+  }, []);
+
+  const createTodoHandler = useCallback(async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    if (user?.id) {
+      if (!title.trim()) {
+        setError(TodoErrors.Empty);
+      } else {
+        setTempTodo({
+          id: 0,
+          title,
+          completed: false,
+          userId: user?.id,
+        });
+
+        try {
+          const todo = await createTodo(user?.id, title);
+
+          setIsProcessed(true);
+
+          if (todo) {
+            setTempTodo(null);
+            setTodos([...todos, todo]);
+          }
+        } catch (innerError) {
+          setError(TodoErrors.Add);
+        } finally {
+          resetTodoData();
+        }
+      }
+    }
+  }, [title]);
+
+  const toggleTodoHandler = async (todoId: number, check: boolean) => {
+    setSeletedId(todoId);
+
+    try {
+      await toggleTodo(todoId, !check);
+      setTodos(todos.map(todo => (todo.id === todoId
+        ? { ...todo, completed: !todo.completed }
+        : todo
+      )));
+    } catch (innerError) {
+      setError(TodoErrors.Update);
+    } finally {
+      setSeletedId(null);
+    }
+  };
+
+  const toggleAllTodoHandler = async () => {
+    const allCompleted = todos.every(todo => todo.completed);
+    const completed = !allCompleted;
+
+    setIsProcessed(true);
+
+    try {
+      await Promise.all(
+        todos.filter(todo => todo.completed !== completed)
+          .map(async todo => toggleTodo(todo.id, completed)),
+      );
+      setTodos(todos.map(todo => ({ ...todo, completed })));
+    } catch (innerError) {
+      setError(TodoErrors.Update);
+    } finally {
+      setIsProcessed(false);
+    }
+  };
+
+  const clearCompletedTodos = async () => {
+    const completeTodos = todos.filter(todo => todo.completed);
+
+    try {
+      await Promise.all(completeTodos.map(async todo => {
+        await deleteTodo(todo.id);
+      }));
+      setTodos(filtredTodos => filtredTodos
+        .filter(filtrTodo => !filtrTodo.completed));
+    } catch (innerError) {
+      setError(TodoErrors.Delete);
+    }
+  };
+
+  const changeTodoTitleHandler = async (
+    event: FormEvent<HTMLFormElement> | FocusEvent<HTMLInputElement>,
+  ) => {
+    if (!editedTodoId) {
+      return;
+    }
+
+    event.preventDefault();
+    setSeletedId(editedTodoId);
+
+    try {
+      if (!newTitle.trim()) {
+        await deleteTodo(editedTodoId);
+        setTodos(filtredTodos => filtredTodos
+          .filter(todo => todo.id !== editedTodoId));
+      } else {
+        await changeTitle(editedTodoId, newTitle);
+        setTodos(innerTodos => innerTodos.map(todo => (todo.id === editedTodoId
+          ? { ...todo, title: newTitle }
+          : todo)));
+      }
+
+      resetTodoData();
+    } catch (innerError) {
+      setError(TodoErrors.Update);
+    } finally {
+      setSeletedId(null);
+    }
+  };
+
+  const itemsLeft = todos.filter(todo => !todo.completed).length;
+  const itemsCompleted = todos.filter(todo => todo.completed).length;
+
+  useEffect(() => {
+    let timeout: number;
+
+    if (error) {
+      timeout = window.setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [error]);
+
+  const filtredTodos = useMemo(() => {
+    switch (status) {
+      case TodoStatus.All:
+        return todos;
+      case TodoStatus.Active:
+        return todos.filter((todo) => !todo.completed);
+      case TodoStatus.Completed:
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, status]);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      if (user?.id) {
+        try {
+          const fetchedTodos = await getTodos(user?.id);
+
+          setTodos(fetchedTodos);
+        } catch (innerError) {
+          setError(TodoErrors.Get);
+        }
+      }
+    };
+
+    fetchTodos();
+  }, [user]);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const fetchUser = async () => {
+      try {
+        const innerUser = await getUser(USER_ID);
+
+        setUser(innerUser);
+      } catch (innerError) {
+        setError(UserErrors.Get);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      {isLoading
+        ? <Loader />
+        : (user
+          && (
+            <>
+              <h1 className="todoapp__title">{`${user?.name}'s todos`}</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+              <div className={
+                classNames('todoapp__content', { 'is-show': user })
+              }
+              >
+                <TodoHeader
+                  isAnyTodo={todos.length > 0}
+                  activeTodos={itemsLeft}
+                  title={title}
+                  isProcessed={isProcessed}
+                  onAddTodo={createTodoHandler}
+                  onToggleAll={toggleAllTodoHandler}
+                  onAddTitle={setTitle}
+                />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+                <TodoList
+                  todos={filtredTodos}
+                  creating={tempTodo}
+                  selectedId={selectedId}
+                  editedTodoId={editedTodoId}
+                  newTitle={newTitle}
+                  onDelete={deleteTodoHandler}
+                  onToggle={toggleTodoHandler}
+                  onEditedTodoId={setEditedTodoId}
+                  onAddNewTitle={setNewTitle}
+                  onChangeTodoTitle={changeTodoTitleHandler}
+                />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+                {todos.length !== 0
+                && (
+                  <TodoFilter
+                    status={status}
+                    itemsLeft={itemsLeft}
+                    itemsCompleted={itemsCompleted}
+                    clearCompletedTodos={clearCompletedTodos}
+                  />
+                )}
+              </div>
+            </>
+          )
+        )}
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <Notification
+        error={error}
+        onClose={setError}
+      />
     </div>
   );
 };
