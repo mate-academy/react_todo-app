@@ -1,0 +1,51 @@
+.login {
+  font-size: 24px;
+  &__text {
+    font-size: 48px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  &__form {
+    margin: 0 auto;
+    width: 300px;
+  }
+
+  &__label {
+    display: block;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  &__input {
+    display: block;
+    width: inherit;
+    height: 40px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    &::placeholder {
+      font-size: 16px;
+      opacity: 0.7;
+    }
+  }
+
+  &__submit {
+    display: block;
+    margin: 30px auto;
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: rgba(175, 47, 47, 0.8);
+    color: #fff;
+    border-radius: 5px;
+    text-transform: uppercase;
+
+    &:disabled {
+      background-color: rgba(175, 47, 47, 0.4);
+      cursor: not-allowed;
+    }
+  }
+}
