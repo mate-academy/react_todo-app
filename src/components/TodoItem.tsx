@@ -87,9 +87,11 @@ export const TodoItem: React.FC<Props> = ({
           </>
         )}
 
-      <div className={`modal overlay ${id === 0 || selectedId === id
-        ? 'is-active'
-        : ''}`}
+      <div className={`modal overlay ${
+        id === 0 || selectedId === id
+          ? 'is-active'
+          : ''
+      }`}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

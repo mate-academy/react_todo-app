@@ -6,7 +6,6 @@ import React, {
 import { useSearchParams } from 'react-router-dom';
 
 import classNames from 'classnames';
-import { UserWarning } from './UserWarning';
 import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -69,29 +68,31 @@ export const App: React.FC = () => {
   ) => {
     event.preventDefault();
 
-    if (!title.trim()) {
-      setError(TodoErrors.Empty);
-    } else {
-      setTempTodo({
-        id: 0,
-        title,
-        completed: false,
-        userId: USER_ID,
-      });
+    if (user?.id) {
+      if (!title.trim()) {
+        setError(TodoErrors.Empty);
+      } else {
+        setTempTodo({
+          id: 0,
+          title,
+          completed: false,
+          userId: user?.id,
+        });
 
-      try {
-        const todo = await createTodo(USER_ID, title);
+        try {
+          const todo = await createTodo(user?.id, title);
 
-        setIsProcessed(true);
+          setIsProcessed(true);
 
-        if (todo) {
-          setTempTodo(null);
-          setTodos([...todos, todo]);
+          if (todo) {
+            setTempTodo(null);
+            setTodos([...todos, todo]);
+          }
+        } catch (innerError) {
+          setError(TodoErrors.Add);
+        } finally {
+          resetTodoData();
         }
-      } catch (innerError) {
-        setError(TodoErrors.Add);
-      } finally {
-        resetTodoData();
       }
     }
   }, [title]);
@@ -207,17 +208,19 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      try {
-        const fetchedTodos = await getTodos(USER_ID);
+      if (user?.id) {
+        try {
+          const fetchedTodos = await getTodos(user?.id);
 
-        setTodos(fetchedTodos);
-      } catch (innerError) {
-        setError(TodoErrors.Get);
+          setTodos(fetchedTodos);
+        } catch (innerError) {
+          setError(TodoErrors.Get);
+        }
       }
     };
 
     fetchTodos();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -237,47 +240,43 @@ export const App: React.FC = () => {
     fetchUser();
   }, []);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   return (
     <div className="todoapp">
       {isLoading
         ? <Loader />
-        : (
-          <>
-            <h1 className="todoapp__title">{`${user?.name}'s todos`}</h1>
+        : (user
+          && (
+            <>
+              <h1 className="todoapp__title">{`${user?.name}'s todos`}</h1>
 
-            <div className={
-              classNames('todoapp__content', { 'is-show': !isLoading })
-            }
-            >
-              <TodoHeader
-                isAnyTodo={todos.length > 0}
-                activeTodos={itemsLeft}
-                title={title}
-                isProcessed={isProcessed}
-                onAddTodo={createTodoHandler}
-                onToggleAll={toggleAllTodoHandler}
-                onAddTitle={setTitle}
-              />
+              <div className={
+                classNames('todoapp__content', { 'is-show': user })
+              }
+              >
+                <TodoHeader
+                  isAnyTodo={todos.length > 0}
+                  activeTodos={itemsLeft}
+                  title={title}
+                  isProcessed={isProcessed}
+                  onAddTodo={createTodoHandler}
+                  onToggleAll={toggleAllTodoHandler}
+                  onAddTitle={setTitle}
+                />
 
-              <TodoList
-                todos={filtredTodos}
-                creating={tempTodo}
-                selectedId={selectedId}
-                editedTodoId={editedTodoId}
-                newTitle={newTitle}
-                onDelete={deleteTodoHandler}
-                onToggle={toggleTodoHandler}
-                onEditedTodoId={setEditedTodoId}
-                onAddNewTitle={setNewTitle}
-                onChangeTodoTitle={changeTodoTitleHandler}
+                <TodoList
+                  todos={filtredTodos}
+                  creating={tempTodo}
+                  selectedId={selectedId}
+                  editedTodoId={editedTodoId}
+                  newTitle={newTitle}
+                  onDelete={deleteTodoHandler}
+                  onToggle={toggleTodoHandler}
+                  onEditedTodoId={setEditedTodoId}
+                  onAddNewTitle={setNewTitle}
+                  onChangeTodoTitle={changeTodoTitleHandler}
+                />
 
-              />
-
-              {todos.length !== 0
+                {todos.length !== 0
                 && (
                   <TodoFilter
                     status={status}
@@ -286,8 +285,9 @@ export const App: React.FC = () => {
                     clearCompletedTodos={clearCompletedTodos}
                   />
                 )}
-            </div>
-          </>
+              </div>
+            </>
+          )
         )}
 
       <Notification

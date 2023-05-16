@@ -32,7 +32,7 @@ export const TodoHeader: React.FC<Props> = ({
             )}
             disabled={isProcessed}
             onClick={onToggleAll}
-            aria-label="button-toggle-all"
+            aria-label="Toggle all tasks"
           />
         )}
 

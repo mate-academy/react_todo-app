@@ -38,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({
         </SearchLink>
 
         <SearchLink
-          params={{ status: 'active' }}
+          params={{ status: TodoStatus.Active }}
           className={
             classnames(
               'filter__link',
@@ -50,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
         </SearchLink>
 
         <SearchLink
-          params={{ status: 'completed' }}
+          params={{ status: TodoStatus.Completed }}
           className={
             classnames(
               'filter__link',

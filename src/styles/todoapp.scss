@@ -13,7 +13,7 @@
       0 25px 50px 0 rgba(0, 0, 0, 0.1);
     opacity: 0;
     transform: translateY(-100%);
-    transition: transform 0.5s ease, opacity 0.3s ease;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
   }
 
   &__title {

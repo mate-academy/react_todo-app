@@ -17,7 +17,7 @@ export const SearchLink: React.FC<Props> = ({
       to={{
         search: getSearchWith(searchParams, params),
       }}
-      {...props} // copy all the other props
+      {...props}
     >
       {children}
     </Link>
