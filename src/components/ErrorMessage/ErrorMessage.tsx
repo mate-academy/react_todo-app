@@ -15,11 +15,12 @@ export const ErrorMessage: FC<Props> = React.memo(({ error, setError }) => {
   useEffect(
     () => {
       if (error === ErrorType.NONE || error === ErrorType.USER) {
-        return undefined;
+        return;
       }
 
       const timerId = setTimeout(() => setError(ErrorType.NONE), 3000);
 
+      // eslint-disable-next-line consistent-return
       return () => {
         clearTimeout(timerId);
       };
