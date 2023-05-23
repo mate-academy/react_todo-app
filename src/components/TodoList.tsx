@@ -19,7 +19,7 @@ export const TodoList: FC<Props> = ({
 
   const hendlerTogglerAll = () => {
     let allCompletedTodos = todos
-      .filter(todo => todo.completed === false);
+      .filter(todo => !todo.completed);
 
     if (!allCompletedTodos.length) {
       allCompletedTodos = [...todos];

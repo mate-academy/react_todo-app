@@ -29,7 +29,7 @@ export const Footer: FC<Props> = ({
 }) => {
   const hendlerRemoveAll = () => {
     const completedTodos = todos
-      .filter(todo => todo.completed === true);
+      .filter(todo => todo.completed);
 
     setTodos.remove(completedTodos.map(({ id }) => id));
   };
@@ -56,7 +56,7 @@ export const Footer: FC<Props> = ({
         ))}
       </ul>
 
-      {todos.some(todo => todo.completed === true) && (
+      {todos.some(todo => todo.completed) && (
         <button
           type="button"
           className="clear-completed"
