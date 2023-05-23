@@ -6,13 +6,11 @@ interface Props {
   query: string;
 }
 
-export const Header: FC<Props> = (
-  {
-    handleSubmit,
-    query,
-    handleQueryChange,
-  },
-) => (
+export const Header: FC<Props> = ({
+  handleSubmit,
+  query,
+  handleQueryChange,
+}) => (
   <header className="header">
     <h1>todos</h1>
 

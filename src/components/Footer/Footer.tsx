@@ -10,19 +10,17 @@ interface Props {
   handleClear: () => void;
 }
 
-export const Footer: FC<Props> = (
-  {
-    filterBy,
-    setFilterBy,
-    isSomeTodoCompleted,
-    handleClear,
-    count,
-  },
-) => {
+export const Footer: FC<Props> = ({
+  filterBy,
+  setFilterBy,
+  isSomeTodoCompleted,
+  handleClear,
+  count,
+}) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${count} items left`}
+        {`${count} item${count !== 1 ? 's' : ''} left`}
       </span>
 
       <ul className="filters">

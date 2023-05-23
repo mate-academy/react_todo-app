@@ -14,19 +14,17 @@ interface Props {
   setCurrTodoTitle: (currTodoTitle: string) => void;
 }
 
-export const TodoElement: FC<Props> = (
-  {
-    todo,
-    handleDelete,
-    handleToggle,
-    handleRename,
-    handleBlur,
-    currTodoId,
-    currTodoTitle,
-    setCurrTodoTitle,
-    handleCancelEditing,
-  },
-) => {
+export const TodoElement: FC<Props> = ({
+  todo,
+  handleDelete,
+  handleToggle,
+  handleRename,
+  handleBlur,
+  currTodoId,
+  currTodoTitle,
+  setCurrTodoTitle,
+  handleCancelEditing,
+}) => {
   const { title, id, completed } = todo;
   const inputRef = useRef<HTMLInputElement>(null);
 

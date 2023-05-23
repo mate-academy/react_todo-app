@@ -14,19 +14,17 @@ interface Props {
   currTodoTitle: string;
 }
 
-export const TodosList: FC<Props> = (
-  {
-    todos,
-    handleDelete,
-    handleToggle,
-    handleRename,
-    handleBlur,
-    currTodoId,
-    currTodoTitle,
-    setCurrTodoTitle,
-    handleCancelEditing,
-  },
-) => (
+export const TodosList: FC<Props> = ({
+  todos,
+  handleDelete,
+  handleToggle,
+  handleRename,
+  handleBlur,
+  currTodoId,
+  currTodoTitle,
+  setCurrTodoTitle,
+  handleCancelEditing,
+}) => (
   <ul className="todo-list" data-cy="todoList">
     {todos.map((todo) => (
       <TodoElement
