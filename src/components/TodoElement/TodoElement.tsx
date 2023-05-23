@@ -47,9 +47,7 @@ export const TodoElement: FC<Props> = (
         {currTodoId !== id ? (
           <>
             <label
-              className="label"
               onDoubleClick={() => handleRename(id, title)}
-              onBlur={handleBlur}
             >
               {title}
             </label>
