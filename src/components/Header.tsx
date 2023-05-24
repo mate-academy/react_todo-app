@@ -1,26 +1,28 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { USER_ID } from '../utils/userId';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  onAddTodo: (todo: Pick<Todo, 'userId' | 'title' | 'completed'>) => void,
-  inputDisable: boolean,
+  onAddTodo: (todo: Todo) => void,
   isToggleAllActive: boolean,
   handleToggleClick: () => void,
 };
 
 export const Header: React.FC<Props> = ({
-  onAddTodo, inputDisable, isToggleAllActive, handleToggleClick,
+  onAddTodo, isToggleAllActive, handleToggleClick,
 }) => {
   const [newTodoValue, setNewTodoValue] = useState('');
 
   const createNewTodo = () => {
+    if (newTodoValue.trim() === '') {
+      return;
+    }
+
     const newTodo = {
-      userId: USER_ID,
-      title: newTodoValue,
+      title: newTodoValue.trim(),
       completed: false,
+      id: +Date.now(),
     };
 
     onAddTodo(newTodo);
@@ -49,7 +51,6 @@ export const Header: React.FC<Props> = ({
           placeholder="What needs to be done?"
           value={newTodoValue}
           onChange={(e) => setNewTodoValue(e.target.value)}
-          disabled={!inputDisable}
         />
       </form>
     </header>

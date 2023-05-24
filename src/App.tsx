@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useState, useMemo,
+  useState, useMemo, useCallback,
 } from 'react';
 import { Footer } from './components/Footer';
 import { Main } from './components/Main';
@@ -27,6 +27,7 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = useMemo(() => {
+    setCompletedTodosId(getCompletedTodosId(todos));
     if (Array.isArray(todos)) {
       return filterTodosBySelectOptions(todos, selectedOption);
     }
@@ -59,7 +60,7 @@ export const App: React.FC = () => {
       const newStatus = !currentTodo.completed;
 
       currentTodo.completed = newStatus;
-      setTodos(todos.map(todo => (
+      setTodos(todos.map((todo:Todo) => (
         todo.id === todoId
           ? currentTodo
           : todo
@@ -75,7 +76,9 @@ export const App: React.FC = () => {
     const todoToDelete = todos.find(todo => todo.id === todoId);
 
     if (todoToDelete) {
-      setTodos(todos.filter((todo:Todo) => todo.id !== todoId));
+      const updatedTodos = todos.filter((todo: Todo) => todo.id !== todoId);
+
+      setTodos(updatedTodos);
     }
   };
 
@@ -103,7 +106,7 @@ export const App: React.FC = () => {
 
     if (currentTodo) {
       currentTodo.title = newTitle;
-      setTodos(todos.map(todo => (
+      setTodos(todos.map((todo:Todo) => (
         todo.id === todoId
           ? currentTodo
           : todo

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoInfo } from './TodoInfo';
-import { TempTodo } from './TempTodo';
 
 type Props = {
   todos: Todo[],
@@ -9,8 +8,6 @@ type Props = {
   onTodoDelete: (id: number) => void,
   onTodoChangingStatus: (todoId: number) => void,
   onTodoChangingTitle: (todoId: number, title:string) => void,
-  todoLoadingId: number[],
-  tempTodo: Todo | null,
 };
 
 export const Main: React.FC<Props> = ({
@@ -19,8 +16,6 @@ export const Main: React.FC<Props> = ({
   onTodoDelete,
   onTodoChangingStatus,
   onTodoChangingTitle,
-  todoLoadingId,
-  tempTodo,
 }) => {
   return (
     <section className="todoapp__main">
@@ -33,13 +28,9 @@ export const Main: React.FC<Props> = ({
             onTodoDelete={onTodoDelete}
             onTodoChangingStatus={onTodoChangingStatus}
             onTodoChangingTitle={onTodoChangingTitle}
-            todoLoadingId={todoLoadingId}
           />
         );
       })}
-      {tempTodo !== null && (
-        <TempTodo title={tempTodo.title} />
-      )}
     </section>
   );
 };

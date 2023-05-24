@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Todo } from '../types/Todo';
 
-export const useLocalStorage = (key: string, initialValue: []) => {
+export const useLocalStorage = (key: string, initialValue: Todo[]) => {
   const [value, setValue] = useState < Todo[] | [] >(() => {
     try {
       const storedItem = localStorage.getItem(key);
@@ -21,5 +21,5 @@ export const useLocalStorage = (key: string, initialValue: []) => {
     localStorage.setItem(key, JSON.stringify(valueToSet));
   };
 
-  return [value, saveItem];
+  return [value, saveItem] as const;
 };

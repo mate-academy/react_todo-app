@@ -6,10 +6,10 @@ export const getTodos = (userId: number) => {
 };
 
 // Add more methods here
-export const postTodos = (data: Pick<
-Todo, 'userId' | 'title' | 'completed'>) => {
-  return client.post<Todo>('/todos', data);
-};
+// export const postTodos = (data: Pick<
+// Todo, 'userId' | 'title' | 'completed'>) => {
+//   return client.post<Todo>('/todos', data);
+// };
 
 export const deleteTodos = (todoId:number) => {
   return client.delete(`/todos/${todoId}`);
