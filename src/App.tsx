@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList/TodoList';
@@ -18,7 +18,7 @@ import { FilterType } from './types/FilterType';
 
 const USER_ID = 10209;
 
-const todosFromServer = (todos: Todo[], filterType: string) => {
+const getFilteredTodos = (todos: Todo[], filterType: string) => {
   switch (filterType) {
     case FilterType.ALL:
       return todos;
@@ -40,8 +40,12 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
   const [title, setTitle] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  const [, setIsLoading] = useState(false);
   const [isOnLoad, setIsOnLoad] = useState(false);
+
+  const isLoading = useRef(false);
+  const setIsLoading = (value: boolean) => {
+    isLoading.current = value;
+  };
 
   useEffect(() => {
     setIsOnLoad(true);
@@ -57,13 +61,11 @@ export const App: React.FC = () => {
   }, []);
 
   if (!USER_ID) {
-    // eslint-disable-next-line no-alert
-    alert('Please, check your User Id');
     setError(Errors.NOUSER);
   }
 
-  const visibleTodos = todosFromServer(todos, filterType);
-  const completedTodos = todosFromServer(todos, FilterType.COMPLETED);
+  const visibleTodos = getFilteredTodos(todos, filterType);
+  const completedTodos = getFilteredTodos(todos, FilterType.COMPLETED);
   const isToggleOnActive = todos.length === completedTodos.length;
 
   const handleError = (e: Errors) => {
