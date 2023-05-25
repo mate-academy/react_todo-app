@@ -64,6 +64,8 @@ export const App: React.FC = () => {
       });
   }, [todos, filter]);
 
+  const activeTodosLength = useMemo(() => activeTodos.length, [activeTodos]);
+
   const handleSuccess = useCallback<TodoFormProps['onSuccess']>((todo) => {
     setTodos((prevTodos) => [...prevTodos, todo]);
     setTempTodo(null);
@@ -82,74 +84,85 @@ export const App: React.FC = () => {
     setTempTodo(todo);
   }, []);
 
-  const handleDeleteTodo = async (todoId: number) => {
-    try {
-      setEditedTodosIds((prevState) => [...prevState, todoId]);
-      const response = await deleteTodo(todoId);
+  const handleDeleteTodo = useCallback(
+    async (todoId: number) => {
+      try {
+        setEditedTodosIds((prevState) => [...prevState, todoId]);
+        const response = await deleteTodo(todoId);
 
-      if (response === 0) {
-        throw new Error(ErrorTypes.DELETE);
+        if (response === 0) {
+          throw new Error(ErrorTypes.DELETE);
+        }
+
+        setTodos((prevState) => {
+          return prevState.filter((todo) => todo.id !== todoId);
+        });
+      } catch {
+        setErrors(ErrorTypes.DELETE);
+      } finally {
+        setEditedTodosIds((prevState) => (
+          prevState.filter((deletedTodoId) => deletedTodoId !== todoId))
+        );
       }
-
-      const newTodos = todos.filter((todo) => todo.id !== todoId);
-
-      setTodos([...newTodos]);
-    } catch {
-      setErrors(ErrorTypes.DELETE);
-    } finally {
-      setEditedTodosIds(
-        editedTodosIds.filter((deletedTodoId) => deletedTodoId !== todoId),
-      );
-    }
-  };
+    },
+    [deleteTodo, todos],
+  );
 
   const resetErrorHandler = useCallback(() => {
     setErrors('');
   }, []);
 
   const handleClearCompleted = async () => {
-    const tasks: Promise<void>[] = [];
-
-    todos
-      .filter((todo) => todo.completed)
-      .forEach((todo) => {
-        handleDeleteTodo(todo.id);
-        tasks.push(deleteTodo(todo.id) as Promise<void>);
-      });
-
-    await Promise.all(tasks);
-
-    const result = todos.filter((todo) => !todo.completed);
-
-    setTodos([...result]);
-  };
-
-  const handleUpdateTodoStatus = async (todo: Todo) => {
     try {
-      setEditedTodosIds((prevState) => [...prevState, todo.id]);
+      const tasks: Promise<void>[] = [];
 
-      await updateTodoStatus(todo.id, !todo.completed);
+      todos
+        .filter((todo) => todo.completed)
+        .forEach((todo) => {
+          setEditedTodosIds((prevState) => [...prevState, todo.id]);
 
-      const newTodos = todos.map((mappedTodo) => {
-        const { id, completed } = mappedTodo;
+          tasks.push(deleteTodo(todo.id) as Promise<void>);
+        });
 
-        if (id === todo.id) {
-          return {
-            ...mappedTodo,
-            completed: !completed,
-          };
-        }
+      await Promise.all(tasks);
+      const result = todos.filter((todo) => !todo.completed);
 
-        return mappedTodo;
-      });
-
-      setTodos([...newTodos]);
+      setTodos([...result]);
     } catch {
-      setErrors(ErrorTypes.UPDATE);
+      setErrors(ErrorTypes.DELETE);
     } finally {
-      setEditedTodosIds(editedTodosIds.filter((todoId) => todoId !== todo.id));
+      setEditedTodosIds([]);
     }
   };
+
+  const handleUpdateTodoStatus = useCallback(
+    async (todo: Todo) => {
+      try {
+        setEditedTodosIds((prevState) => [...prevState, todo.id]);
+
+        const updatedStatus = !todo.completed;
+
+        await updateTodoStatus(todo.id, updatedStatus);
+
+        const updatedTodo = {
+          ...todo,
+          completed: updatedStatus,
+        };
+
+        setTodos((prevState) => {
+          return prevState.map((mappedTodo) => (
+            mappedTodo.id === todo.id ? updatedTodo : mappedTodo));
+          });
+      } catch {
+        setErrors(ErrorTypes.UPDATE);
+      } finally {
+        setEditedTodosIds((prevState) => (
+          prevState.filter((todoId) => todoId !== todo.id)
+        ));
+      }
+    },
+    [todos, updateTodoStatus, editedTodosIds],
+  );
 
   const handleChangeAll = async () => {
     const tasks: Promise<Todo>[] = [];
@@ -191,9 +204,9 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleEditTitleError = () => {
+  const handleEditTitleError = useCallback(() => {
     setErrors(ErrorTypes.UPDATE);
-  };
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -236,7 +249,9 @@ export const App: React.FC = () => {
 
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {`${activeTodos.length} items left`}
+                {activeTodosLength === 1
+                  ? '1 item left'
+                  : `${activeTodosLength} items left`}
               </span>
 
               <TodoFilter filter={filter} onFilterChange={setFilter} />
