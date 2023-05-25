@@ -101,8 +101,7 @@ export const App: React.FC = () => {
         setErrors(ErrorTypes.DELETE);
       } finally {
         setEditedTodosIds((prevState) => (
-          prevState.filter((deletedTodoId) => deletedTodoId !== todoId))
-        );
+          prevState.filter((deletedTodoId) => deletedTodoId !== todoId)));
       }
     },
     [deleteTodo, todos],
@@ -152,7 +151,7 @@ export const App: React.FC = () => {
         setTodos((prevState) => {
           return prevState.map((mappedTodo) => (
             mappedTodo.id === todo.id ? updatedTodo : mappedTodo));
-          });
+        });
       } catch {
         setErrors(ErrorTypes.UPDATE);
       } finally {
