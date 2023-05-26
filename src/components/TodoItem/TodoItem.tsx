@@ -69,6 +69,7 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (event.key === 'Escape') {
+      setNewTitle(title);
       setIsFormActive(false);
     }
   };
