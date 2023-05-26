@@ -62,7 +62,7 @@ export const TodoPage:FC = () => {
     setHasError(false);
   }, []);
 
-  const removeTodo = async (todoId: number) => {
+  const handleRemoveTodo = async (todoId: number) => {
     try {
       setLoadingTodo(prevTodo => [...prevTodo, todoId]);
 
@@ -186,7 +186,7 @@ export const TodoPage:FC = () => {
           <>
             <TodoList
               todos={filterTodos(storageTodos, pathname)}
-              removeTodo={removeTodo}
+              removeTodo={handleRemoveTodo}
               tempTodo={tempTodo}
               isToggleAll={isToggleAll}
               handleUpdateTodoFormSubmit={updateTodo}
@@ -194,7 +194,7 @@ export const TodoPage:FC = () => {
             />
             <Footer
               todos={todos}
-              removeTodo={removeTodo}
+              removeTodo={handleRemoveTodo}
             />
           </>
         )}

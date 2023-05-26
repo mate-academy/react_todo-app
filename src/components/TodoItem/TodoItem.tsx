@@ -57,11 +57,11 @@ export const TodoItem: FC<Props> = React.memo(({
     setUpdateTodoTitle(true);
   };
 
-  const saveNewUpdateTodoTitle = (cansel?: boolean) => {
-    if (newTodoTitle.length === 0) {
+  const saveNewUpdateTodoTitle = (cancel?: boolean) => {
+    if (!newTodoTitle.length) {
       removeTodo(id);
       setIsLoading(false);
-    } else if (newTodoTitle !== title && !cansel) {
+    } else if (newTodoTitle !== title && !cancel) {
       setUpdateTodoTitle(false);
       setIsLoading(true);
 

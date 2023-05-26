@@ -27,7 +27,7 @@ export const Header: FC<Props> = ({
             className={classNames(
               'todoapp__toggle-all',
               {
-                active: countActiveTodo === 0,
+                active: !countActiveTodo,
               },
             )}
             onClick={toggleCompletedAllTodo}
