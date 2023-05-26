@@ -27,7 +27,7 @@ export const Footer: FC<Props> = ({
   setTodos,
   amountCompletedTodos,
 }) => {
-  const hendlerRemoveAll = () => {
+  const hendleRemoveAll = () => {
     const completedTodos = todos
       .filter(todo => todo.completed);
 
@@ -42,7 +42,7 @@ export const Footer: FC<Props> = ({
 
       <ul className="filters" data-cy="todosFilter">
         {filterLinks.map(({ title, to }) => (
-          <li>
+          <li key={title}>
             <NavLink
               to={to}
               className={({ isActive }) => classNames(
@@ -60,7 +60,7 @@ export const Footer: FC<Props> = ({
         <button
           type="button"
           className="clear-completed"
-          onClick={hendlerRemoveAll}
+          onClick={hendleRemoveAll}
         >
           Clear completed
         </button>

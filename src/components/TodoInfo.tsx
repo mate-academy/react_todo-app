@@ -15,24 +15,24 @@ export const TodoInfo: FC<Props> = ({
 }) => {
   const [newTitle, setNewTitle] = useState(todo.title);
   const inputNewTitle = useRef<HTMLInputElement | null>(null);
-  const hendlerRemove = (id: number) => {
+  const hendleRemove = (id: number) => {
     setTodos.remove([id]);
   };
 
-  const hendlerToggler = (currentTodo: Todo) => {
+  const hendleToggler = (currentTodo: Todo) => {
     setTodos.toggle([{ ...currentTodo, completed: !todo.completed }]);
   };
 
-  const hendlerDoubleClick = (id: number) => {
+  const hendleDoubleClick = (id: number) => {
     setChangeTitle(id);
     inputNewTitle.current?.focus();
   };
 
-  const hendlerNewTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const hendleNewTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTitle(e.target.value);
   };
 
-  const hendlerKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const hendleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (!newTitle.trim()) {
         setTodos.remove([todo.id]);
@@ -53,30 +53,33 @@ export const TodoInfo: FC<Props> = ({
     }
   };
 
+  const hendleClick = (e: { stopPropagation: () => void; }) => {
+    e.stopPropagation();
+    hendleToggler(todo);
+  };
+
   return (
     <>
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={`toggle-view-${todo.id}`}
           checked={todo.completed}
-          onClick={(e) => {
-            e.stopPropagation();
-            hendlerToggler(todo);
-          }}
+          onChange={hendleClick}
         />
         <label
-          onDoubleClick={() => hendlerDoubleClick(todo.id)}
+          htmlFor={`toggle-view-${todo.id}`}
+          onDoubleClick={() => hendleDoubleClick(todo.id)}
         >
           {todo.title}
         </label>
-        {/* eslint-disable jsx-a11y/control-has-associated-label */}
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => hendlerRemove(todo.id)}
+          onClick={() => hendleRemove(todo.id)}
+          aria-label="Delete"
         />
       </div>
       <input
@@ -84,8 +87,8 @@ export const TodoInfo: FC<Props> = ({
         type="text"
         className="edit"
         value={newTitle}
-        onChange={hendlerNewTitle}
-        onKeyUp={hendlerKeyUp}
+        onChange={hendleNewTitle}
+        onKeyUp={hendleKeyUp}
       />
     </>
   );

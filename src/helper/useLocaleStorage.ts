@@ -27,11 +27,7 @@ export const useLocaleStorage = (key: string): [Todo[], MakeChange] => {
       const filterTodos = value.map(todo => {
         const item = items.find(({ id }) => id === todo.id);
 
-        if (item) {
-          return item;
-        }
-
-        return todo;
+        return item || todo;
       });
 
       setData(filterTodos);

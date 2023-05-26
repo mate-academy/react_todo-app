@@ -15,7 +15,7 @@ export const filterTodos = (items: Todo[], filterBy: string) => {
         return completed;
 
       default:
-        return false;
+        return items;
     }
   });
 };

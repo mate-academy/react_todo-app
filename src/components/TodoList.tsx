@@ -17,7 +17,7 @@ export const TodoList: FC<Props> = ({
 }) => {
   const [changeTitle, setChangeTitle] = useState<number | null>(null);
 
-  const hendlerTogglerAll = () => {
+  const hendleTogglerAll = () => {
     let allCompletedTodos = todos
       .filter(todo => !todo.completed);
 
@@ -38,7 +38,7 @@ export const TodoList: FC<Props> = ({
         className="toggle-all"
         data-cy="toggleAll"
         checked={isCompletedTodo}
-        onClick={hendlerTogglerAll}
+        onChange={hendleTogglerAll}
       />
       <label
         htmlFor="toggle-all"
