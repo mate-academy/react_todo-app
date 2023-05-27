@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList/TodoList';
-import { LoadingSpinner } from './components/Loader';
 import { PatchedTodo, Todo } from './types/Todo';
 import {
   deleteTodo,
@@ -15,6 +14,10 @@ import {
 } from './api/todos';
 import { Errors } from './types/Errors';
 import { FilterType } from './types/FilterType';
+import {
+  LoadingContext,
+  LoadingProvider,
+} from './components/LoadingContext/LoadingContext';
 
 const USER_ID = 10209;
 
@@ -40,23 +43,19 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
   const [title, setTitle] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  const [isOnLoad, setIsOnLoad] = useState(false);
 
-  const isLoading = useRef(false);
-  const setIsLoading = (value: boolean) => {
-    isLoading.current = value;
-  };
+  const { setIsLoading } = useContext(LoadingContext);
 
   useEffect(() => {
-    setIsOnLoad(true);
+    setIsLoading(true);
     getTodos(USER_ID)
       .then((response) => {
         setTodos(response);
-        setIsOnLoad(false);
+        setIsLoading(false);
       })
       .catch(() => {
         setError(Errors.UPLOAD);
-        setIsOnLoad(false);
+        setIsLoading(false);
       });
   }, []);
 
@@ -117,20 +116,19 @@ export const App: React.FC = () => {
   };
 
   const handleClearCompleted = async () => {
-    setIsOnLoad(true);
+    setIsLoading(true);
     const completedTodoIds = todos
       .filter(todo => todo.completed)
       .map(todo => todo.id);
 
-    // Promise.all(completedTodoIds.map(id => deleteTodo(USER_ID, id)));
     try {
       await Promise.all(completedTodoIds.map(id => deleteTodo(USER_ID, id)));
       setTodos(todos.filter(todo => !todo.completed));
     } catch {
       setError(Errors.DELETE);
-      setIsOnLoad(false);
+      setIsLoading(false);
     } finally {
-      setIsOnLoad(false);
+      setIsLoading(false);
     }
   };
 
@@ -158,7 +156,7 @@ export const App: React.FC = () => {
 
   const handleToggleAll = async () => {
     try {
-      setIsOnLoad(true);
+      setIsLoading(true);
       const idsToToggle = todos
         .filter(todo => (todo.completed === isToggleOnActive))
         .map(todo => todo.id);
@@ -170,28 +168,27 @@ export const App: React.FC = () => {
       setTodos(changeTodos(todos, toggledTodos));
     } catch {
       setError(Errors.UPDATE);
-      setIsOnLoad(false);
+      setIsLoading(false);
     } finally {
-      setIsOnLoad(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
+    <LoadingProvider todos={visibleTodos}>
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
 
-      <div className="todoapp__content">
-        <Header
-          todos={visibleTodos}
-          hasSomeTodos={!!todos.length}
-          onChangeIsError={handleError}
-          onSubmitAddTodo={handleAddTodo}
-          titleTodo={title}
-          onChangeTitle={setTitle}
-          onToggleAll={handleToggleAll}
-        />
-        {isOnLoad ? (<LoadingSpinner />
-        ) : (
+        <div className="todoapp__content">
+          <Header
+            todos={visibleTodos}
+            hasSomeTodos={!!todos.length}
+            onChangeIsError={handleError}
+            onSubmitAddTodo={handleAddTodo}
+            titleTodo={title}
+            onChangeTitle={setTitle}
+            onToggleAll={handleToggleAll}
+          />
           <TodoList
             tempTodo={tempTodo}
             todos={visibleTodos}
@@ -199,36 +196,36 @@ export const App: React.FC = () => {
             onDelete={handleDeleteTodo}
             onChangeTodo={handleToggle}
           />
-        )}
 
-        {!!todos.length && (
-          <Footer
-            todos={visibleTodos}
-            filterType={filterType}
-            setFilterType={setFilterType}
-            handleClearCompleted={handleClearCompleted}
-          />
-        )}
-      </div>
-
-      {error
-        && (
-          <div
-            className={
-              classNames(
-                'notification is-danger is-light has-text-weight-normal',
-                { hidden: !error },
-              )
-            }
-          >
-            <button
-              type="button"
-              className="delete"
-              onClick={() => setError(Errors.NONE)}
+          {!!todos.length && (
+            <Footer
+              todos={visibleTodos}
+              filterType={filterType}
+              setFilterType={setFilterType}
+              handleClearCompleted={handleClearCompleted}
             />
-            {error}
-          </div>
-        )}
-    </div>
+          )}
+        </div>
+
+        {error
+          && (
+            <div
+              className={
+                classNames(
+                  'notification is-danger is-light has-text-weight-normal',
+                  { hidden: !error },
+                )
+              }
+            >
+              <button
+                type="button"
+                className="delete"
+                onClick={() => setError(Errors.NONE)}
+              />
+              {error}
+            </div>
+          )}
+      </div>
+    </LoadingProvider>
   );
 };

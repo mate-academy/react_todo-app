@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { PatchedTodo, Todo } from '../../types/Todo';
 import { Errors } from '../../types/Errors';
 import { updateTodoTitle } from '../../api/todos';
+import { LoadingContext } from '../LoadingContext/LoadingContext';
 
   type Props = {
     todo: Todo
@@ -19,11 +20,10 @@ export const TodoItem: React.FC<Props> = ({
   onChangeTodo,
 }) => {
   let { title } = todo;
-  const { id } = todo;
 
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
-  const [isLoading, setIsLoading] = useState(id === 0);
+  const { isLoading, setIsLoading } = useContext(LoadingContext);
 
   const handleDeleteTodo = async () => {
     try {

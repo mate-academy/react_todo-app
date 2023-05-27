@@ -24,7 +24,7 @@ export const Header: React.FC<Props> = ({
   const handleFormSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      onSubmitAddTodo(titleTodo);
+      onSubmitAddTodo(titleTodo.trimStart());
     } catch {
       onChangeIsError(Errors.ADD);
     }
@@ -48,7 +48,7 @@ export const Header: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={titleTodo}
-          onChange={(e) => (onChangeTitle(e.target.value.trimStart()))}
+          onChange={(e) => (onChangeTitle(e.target.value))}
         />
       </form>
     </header>
