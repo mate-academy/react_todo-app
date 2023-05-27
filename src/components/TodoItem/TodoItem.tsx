@@ -20,10 +20,12 @@ export const TodoItem: React.FC<Props> = ({
   onChangeTodo,
 }) => {
   let { title } = todo;
+  const { id } = todo;
 
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
-  const { isLoading, setIsLoading } = useContext(LoadingContext);
+  const [isLoading, setIsLoading] = useState(id === 0);
+  const { isLoadingAll } = useContext(LoadingContext);
 
   const handleDeleteTodo = async () => {
     try {
@@ -151,7 +153,7 @@ export const TodoItem: React.FC<Props> = ({
           </button>
 
           <div className={classNames('modal overlay', {
-            'is-active': isLoading,
+            'is-active': isLoading || isLoadingAll,
           })}
           >
             <div className="modal-background has-background-white-ter" />

@@ -1,27 +1,24 @@
 import { ReactNode, createContext, useState } from 'react';
-import { Todo } from '../../types/Todo';
 
 type LoadingProviderProps = {
   children?: ReactNode;
-  todos: Todo[];
 };
 
 export const LoadingContext = createContext<{
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoadingAll: boolean;
+  setIsLoadingAll: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
-  isLoading: false,
-  setIsLoading: () => {},
+  isLoadingAll: false,
+  setIsLoadingAll: () => {},
 });
 
 // eslint-disable-next-line max-len
-export const LoadingProvider: React.FC<LoadingProviderProps> = ({ children, todos }) => {
-  // eslint-disable-next-line max-len
-  const [isLoading, setIsLoading] = useState(() => todos.some(todo => todo.id === 0));
+export const LoadingProvider: React.FC<LoadingProviderProps> = ({ children }) => {
+  const [isLoadingAll, setIsLoadingAll] = useState(false);
 
   const loadingValue = {
-    isLoading,
-    setIsLoading,
+    isLoadingAll,
+    setIsLoadingAll,
   };
 
   return (

@@ -1,6 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useContext, useEffect, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from 'react';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList/TodoList';
@@ -44,18 +49,23 @@ export const App: React.FC = () => {
   const [title, setTitle] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
-  const { setIsLoading } = useContext(LoadingContext);
+  const { setIsLoadingAll } = useContext(LoadingContext);
+
+  const isLoading = useRef(false);
+  const setIsLoading = (value: boolean) => {
+    isLoading.current = value;
+  };
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoadingAll(true);
     getTodos(USER_ID)
       .then((response) => {
         setTodos(response);
-        setIsLoading(false);
+        setIsLoadingAll(false);
       })
       .catch(() => {
         setError(Errors.UPLOAD);
-        setIsLoading(false);
+        setIsLoadingAll(false);
       });
   }, []);
 
@@ -116,19 +126,19 @@ export const App: React.FC = () => {
   };
 
   const handleClearCompleted = async () => {
-    setIsLoading(true);
     const completedTodoIds = todos
       .filter(todo => todo.completed)
       .map(todo => todo.id);
 
     try {
+      setIsLoadingAll(true);
       await Promise.all(completedTodoIds.map(id => deleteTodo(USER_ID, id)));
       setTodos(todos.filter(todo => !todo.completed));
     } catch {
       setError(Errors.DELETE);
-      setIsLoading(false);
+      setIsLoadingAll(false);
     } finally {
-      setIsLoading(false);
+      setIsLoadingAll(false);
     }
   };
 
@@ -156,7 +166,7 @@ export const App: React.FC = () => {
 
   const handleToggleAll = async () => {
     try {
-      setIsLoading(true);
+      setIsLoadingAll(true);
       const idsToToggle = todos
         .filter(todo => (todo.completed === isToggleOnActive))
         .map(todo => todo.id);
@@ -168,14 +178,14 @@ export const App: React.FC = () => {
       setTodos(changeTodos(todos, toggledTodos));
     } catch {
       setError(Errors.UPDATE);
-      setIsLoading(false);
+      setIsLoadingAll(false);
     } finally {
-      setIsLoading(false);
+      setIsLoadingAll(false);
     }
   };
 
   return (
-    <LoadingProvider todos={visibleTodos}>
+    <LoadingProvider>
       <div className="todoapp">
         <h1 className="todoapp__title">todos</h1>
 
