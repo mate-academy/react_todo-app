@@ -21,8 +21,8 @@ import { Errors } from './types/Errors';
 import { FilterType } from './types/FilterType';
 import {
   LoadingContext,
-  LoadingProvider,
 } from './components/LoadingContext/LoadingContext';
+import { LoadingSpinner } from './components/Loader';
 
 const USER_ID = 10209;
 
@@ -48,6 +48,7 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
   const [title, setTitle] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [uploadingTodos, setUploadingTodos] = useState(false);
 
   const { setIsLoadingAll } = useContext(LoadingContext);
 
@@ -57,15 +58,15 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setIsLoadingAll(true);
+    setUploadingTodos(true);
     getTodos(USER_ID)
       .then((response) => {
         setTodos(response);
-        setIsLoadingAll(false);
+        setUploadingTodos(false);
       })
       .catch(() => {
         setError(Errors.UPLOAD);
-        setIsLoadingAll(false);
+        setUploadingTodos(false);
       });
   }, []);
 
@@ -185,20 +186,21 @@ export const App: React.FC = () => {
   };
 
   return (
-    <LoadingProvider>
-      <div className="todoapp">
-        <h1 className="todoapp__title">todos</h1>
+    <div className="todoapp">
+      <h1 className="todoapp__title">todos</h1>
 
-        <div className="todoapp__content">
-          <Header
-            todos={visibleTodos}
-            hasSomeTodos={!!todos.length}
-            onChangeIsError={handleError}
-            onSubmitAddTodo={handleAddTodo}
-            titleTodo={title}
-            onChangeTitle={setTitle}
-            onToggleAll={handleToggleAll}
-          />
+      <div className="todoapp__content">
+        <Header
+          todos={visibleTodos}
+          hasSomeTodos={!!todos.length}
+          onChangeIsError={handleError}
+          onSubmitAddTodo={handleAddTodo}
+          titleTodo={title}
+          onChangeTitle={setTitle}
+          onToggleAll={handleToggleAll}
+        />
+        {uploadingTodos ? (<LoadingSpinner />
+        ) : (
           <TodoList
             tempTodo={tempTodo}
             todos={visibleTodos}
@@ -206,36 +208,36 @@ export const App: React.FC = () => {
             onDelete={handleDeleteTodo}
             onChangeTodo={handleToggle}
           />
+        )}
 
-          {!!todos.length && (
-            <Footer
-              todos={visibleTodos}
-              filterType={filterType}
-              setFilterType={setFilterType}
-              handleClearCompleted={handleClearCompleted}
-            />
-          )}
-        </div>
-
-        {error
-          && (
-            <div
-              className={
-                classNames(
-                  'notification is-danger is-light has-text-weight-normal',
-                  { hidden: !error },
-                )
-              }
-            >
-              <button
-                type="button"
-                className="delete"
-                onClick={() => setError(Errors.NONE)}
-              />
-              {error}
-            </div>
-          )}
+        {!!todos.length && (
+          <Footer
+            todos={visibleTodos}
+            filterType={filterType}
+            setFilterType={setFilterType}
+            handleClearCompleted={handleClearCompleted}
+          />
+        )}
       </div>
-    </LoadingProvider>
+
+      {error
+        && (
+          <div
+            className={
+              classNames(
+                'notification is-danger is-light has-text-weight-normal',
+                { hidden: !error },
+              )
+            }
+          >
+            <button
+              type="button"
+              className="delete"
+              onClick={() => setError(Errors.NONE)}
+            />
+            {error}
+          </div>
+        )}
+    </div>
   );
 };
