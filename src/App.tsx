@@ -246,7 +246,7 @@ export const App: React.FC = () => {
                 todos={visibleTodos}
                 tempTodo={tempTodo}
                 deleteTodo={handleDeleteTodo}
-                deletedTodos={editedTodosIds}
+                editedTodos={editedTodosIds}
                 handleUpdateTodoStatus={handleUpdateTodoStatus}
                 handleEditTitleError={handleEditTitleError}
               />
