@@ -1,11 +1,11 @@
 interface Props {
   todoId: number;
-  onclick: (todoId: number) => void;
+  onClick: (todoId: number) => void;
 }
 
-export const DeleteTodo: React.FC<Props> = ({ todoId, onclick }) => {
+export const DeleteTodo: React.FC<Props> = ({ todoId, onClick }) => {
   const handleDeleteTodo = () => {
-    onclick(todoId);
+    onClick(todoId);
   };
 
   return (

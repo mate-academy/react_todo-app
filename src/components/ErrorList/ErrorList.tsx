@@ -1,8 +1,7 @@
-import classNames from 'classnames';
 import React, { useEffect } from 'react';
 
 interface Props {
-  errors: string;
+  errors: string[];
   onClear: () => void;
 }
 
@@ -14,21 +13,25 @@ export const ErrorList: React.FC<Props> = ({ errors, onClear }) => {
   }, [errors, onClear]);
 
   return (
-    <div
-      className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: errors.length === 0 },
-      )}
-    >
-      <button
-        type="button"
-        className="delete"
-        aria-label="close"
-        hidden={false}
-        onClick={onClear}
-      />
-
-      {errors}
-    </div>
+    <>
+      {!!errors.length
+        && errors.map((error) => {
+          return (
+            <div
+              className="notification is-danger is-light has-text-weight-normal"
+              key={error}
+            >
+              <button
+                type="button"
+                className="delete"
+                aria-label="close"
+                hidden={false}
+                onClick={onClear}
+              />
+              {error}
+            </div>
+          );
+        })}
+    </>
   );
 };

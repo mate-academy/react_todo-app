@@ -21,8 +21,7 @@ export const TodoModal: React.FC<Props> = ({
   handleUpdateTodoStatus,
   handleEditTitleError,
 }) => {
-  const { completed } = todo;
-  const { title } = todo;
+  const { completed, title } = todo;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -76,10 +75,11 @@ export const TodoModal: React.FC<Props> = ({
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+      event.preventDefault();
 
-    updateTitle();
-  }, [updateTitle]);
+      updateTitle();
+    }, [updateTitle],
+  );
 
   const handleBlur = useCallback(async () => {
     setIsEditing(false);
@@ -104,7 +104,7 @@ export const TodoModal: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onClick={() => {
+          onChange={() => {
             handleUpdateTodoStatus(todo);
           }}
         />
@@ -129,7 +129,7 @@ export const TodoModal: React.FC<Props> = ({
         </span>
       )}
 
-      <DeleteTodo todoId={todo.id} onclick={deleteTodo} />
+      <DeleteTodo todoId={todo.id} onClick={deleteTodo} />
 
       <div className={classNames('modal overlay', { 'is-active': isLoading })}>
         <div className="modal-background has-background-white-ter" />

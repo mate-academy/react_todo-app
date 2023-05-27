@@ -22,7 +22,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const [filter, setFilter] = useState<FilterTodoStatus>(FilterTodoStatus.ALL);
-  const [errors, setErrors] = useState<string>('');
+  const [errors, setErrors] = useState<string[]>([]);
   const [editedTodosIds, setEditedTodosIds] = useState<number[]>([]);
 
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then((result) => setTodos(result))
-      .catch(() => setErrors(ErrorTypes.LOAD));
+      .catch(() => setErrors(prevState => [...prevState, ErrorTypes.LOAD]));
   }, []);
 
   const activeTodos = useMemo(
@@ -75,7 +75,7 @@ export const App: React.FC = () => {
     (errorMessage: string) => {
       setTempTodo(null);
 
-      setErrors(errorMessage);
+      setErrors(prevState => [...prevState, errorMessage]);
     },
     [],
   );
@@ -98,7 +98,7 @@ export const App: React.FC = () => {
           return prevState.filter((todo) => todo.id !== todoId);
         });
       } catch {
-        setErrors(ErrorTypes.DELETE);
+        setErrors(prevState => [...prevState, ErrorTypes.DELETE]);
       } finally {
         setEditedTodosIds((prevState) => (
           prevState.filter((deletedTodoId) => deletedTodoId !== todoId)));
@@ -108,8 +108,14 @@ export const App: React.FC = () => {
   );
 
   const resetErrorHandler = useCallback(() => {
-    setErrors('');
-  }, []);
+    setErrors(prevState => {
+      const newState = [...prevState];
+
+      newState.pop();
+
+      return newState;
+    });
+  }, [errors]);
 
   const handleClearCompleted = async () => {
     try {
@@ -128,7 +134,7 @@ export const App: React.FC = () => {
 
       setTodos([...result]);
     } catch {
-      setErrors(ErrorTypes.DELETE);
+      setErrors(prevState => [...prevState, ErrorTypes.DELETE]);
     } finally {
       setEditedTodosIds([]);
     }
@@ -153,7 +159,7 @@ export const App: React.FC = () => {
             mappedTodo.id === todo.id ? updatedTodo : mappedTodo));
         });
       } catch {
-        setErrors(ErrorTypes.UPDATE);
+        setErrors(prevState => [...prevState, ErrorTypes.UPDATE]);
       } finally {
         setEditedTodosIds((prevState) => (
           prevState.filter((todoId) => todoId !== todo.id)
@@ -197,14 +203,14 @@ export const App: React.FC = () => {
 
       setTodos([...result]);
     } catch {
-      setErrors(ErrorTypes.UPDATE);
+      setErrors(prevState => [...prevState, ErrorTypes.UPDATE]);
     } finally {
       setEditedTodosIds([]);
     }
   };
 
   const handleEditTitleError = useCallback(() => {
-    setErrors(ErrorTypes.UPDATE);
+    setErrors(prevState => [...prevState, ErrorTypes.UPDATE]);
   }, []);
 
   if (!USER_ID) {
