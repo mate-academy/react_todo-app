@@ -3,7 +3,7 @@ import { Users } from './types/Users';
 import { addUser, getUser } from './api/users';
 
 interface Props {
-  setUser: React.Dispatch<any>;
+  setUser: React.Dispatch<React.SetStateAction<Users | null>>;
 }
 
 export const UserWarning: React.FC<Props> = ({ setUser }) => {
@@ -81,7 +81,11 @@ export const UserWarning: React.FC<Props> = ({ setUser }) => {
             </div>
           )}
 
-          {error && <span>{error}</span>}
+          {error && (
+            <span>
+              {error}
+            </span>
+          )}
 
           <button type="submit">
             {register ? 'Register' : 'Login'}
