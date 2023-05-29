@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from './react-app-env';
 import { TodoItem } from './TodoItem';
@@ -12,23 +12,25 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   const [editTodoId, setEditTodoId] = useState(0);
   const { pathname } = useLocation();
-  let todosFilter = todos;
-
   const filter = () => {
     if (pathname === '/active') {
-      todosFilter = todos.filter(todo => !todo.completed);
+      return todos.filter(todo => !todo.completed);
     }
 
     if (pathname === '/completed') {
-      todosFilter = todos.filter(todo => todo.completed);
+      return todos.filter(todo => todo.completed);
     }
 
     if (pathname === '/') {
-      todosFilter = todos;
+      return todos;
     }
+
+    return todos;
   };
 
-  filter();
+  const todosFilter = useMemo(() => {
+    return filter();
+  }, [todos, pathname]);
 
   return (
     <ul className="todo-list" data-cy="todoList">
