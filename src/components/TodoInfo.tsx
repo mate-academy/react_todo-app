@@ -53,7 +53,7 @@ export const TodoInfo: FC<Props> = ({
     }
   };
 
-  const hendleClick = (e: { stopPropagation: () => void; }) => {
+  const hendleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     hendleToggler(todo);
   };
@@ -68,12 +68,14 @@ export const TodoInfo: FC<Props> = ({
           checked={todo.completed}
           onChange={hendleClick}
         />
+
         <label
           htmlFor={`toggle-view-${todo.id}`}
           onDoubleClick={() => hendleDoubleClick(todo.id)}
         >
           {todo.title}
         </label>
+
         <button
           type="button"
           className="destroy"
@@ -82,6 +84,7 @@ export const TodoInfo: FC<Props> = ({
           aria-label="Delete"
         />
       </div>
+
       <input
         ref={inputNewTitle}
         type="text"

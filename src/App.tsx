@@ -33,7 +33,7 @@ export const App: React.FC = () => {
           <TodoList
             isCompletedTodo={isCompletedTodo}
             todos={visibleTodos}
-            setTodos={setTodos}
+            onChange={setTodos}
           />
           <Footer
             todos={todos}

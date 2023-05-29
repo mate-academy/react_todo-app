@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MakeChange } from '../types/MakeChange';
 import { Todo } from '../types/Todo';
 
@@ -7,30 +7,27 @@ export const useLocaleStorage = (key: string): [Todo[], MakeChange] => {
     return JSON.parse(window.localStorage.getItem(key) || '[]');
   });
 
-  const setData = (data: Todo[]) => {
-    setValue(data);
-    window.localStorage.setItem(key, JSON.stringify(data));
-  };
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
 
   const makeChange = {
-    add(data: Todo) {
-      setData([...value, data]);
+    add: (data: Todo) => {
+      setValue(prevValue => [...prevValue, data]);
     },
 
-    remove(idTodos: number[]) {
-      const filterTodos = value.filter(({ id }) => !idTodos.includes(id));
-
-      setData(filterTodos);
+    remove: (idTodos: number[]) => {
+      setValue(prevValue => prevValue.filter(
+        ({ id }) => !idTodos.includes(id),
+      ));
     },
 
-    toggle(items: Todo[]) {
-      const filterTodos = value.map(todo => {
+    toggle: (items: Todo[]) => {
+      setValue(prevValue => prevValue.map(todo => {
         const item = items.find(({ id }) => id === todo.id);
 
         return item || todo;
-      });
-
-      setData(filterTodos);
+      }));
     },
   };
 

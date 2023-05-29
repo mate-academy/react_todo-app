@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { MakeChange } from '../types/MakeChange';
 import { Todo } from '../types/Todo';
 import { LinksPath } from '../types/LinksPath';
+import { ItemCount } from './ItemCount';
 
 type Props = {
   todos: Todo[],
@@ -22,7 +23,7 @@ const filterLinks = [{
   to: LinksPath.Completed,
 }];
 
-export const Footer: FC<Props> = ({
+export const Footer: FC<Props> = React.memo(({
   todos,
   setTodos,
   amountCompletedTodos,
@@ -34,10 +35,15 @@ export const Footer: FC<Props> = ({
     setTodos.remove(completedTodos.map(({ id }) => id));
   };
 
+  const hasCompletedTodos = todos.some(todo => todo.completed);
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length - amountCompletedTodos} items left`}
+        <ItemCount
+          todosLength={todos.length}
+          amountCompletedTodos={amountCompletedTodos}
+        />
       </span>
 
       <ul className="filters" data-cy="todosFilter">
@@ -56,7 +62,7 @@ export const Footer: FC<Props> = ({
         ))}
       </ul>
 
-      {todos.some(todo => todo.completed) && (
+      {hasCompletedTodos && (
         <button
           type="button"
           className="clear-completed"
@@ -67,4 +73,4 @@ export const Footer: FC<Props> = ({
       )}
     </footer>
   );
-};
+});

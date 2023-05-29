@@ -6,13 +6,13 @@ import { TodoInfo } from './TodoInfo';
 
 type Props = {
   todos: Todo[],
-  setTodos: MakeChange,
+  onChange: MakeChange,
   isCompletedTodo: boolean,
 };
 
 export const TodoList: FC<Props> = ({
   todos,
-  setTodos,
+  onChange,
   isCompletedTodo,
 }) => {
   const [changeTitle, setChangeTitle] = useState<number | null>(null);
@@ -25,9 +25,10 @@ export const TodoList: FC<Props> = ({
       allCompletedTodos = [...todos];
     }
 
-    setTodos.toggle(allCompletedTodos.map(todo => (
-      { ...todo, completed: !todo.completed }
-    )));
+    onChange.toggle(allCompletedTodos.map(todo => ({
+      ...todo,
+      completed: !todo.completed,
+    })));
   };
 
   return (
@@ -50,14 +51,14 @@ export const TodoList: FC<Props> = ({
         {todos.map(todo => (
           <li
             key={todo.id}
-            className={classNames(
-              { completed: todo.completed },
-              { editing: changeTitle === todo.id },
-            )}
+            className={classNames({
+              completed: todo.completed,
+              editing: changeTitle === todo.id,
+            })}
           >
             <TodoInfo
               todo={todo}
-              setTodos={setTodos}
+              setTodos={onChange}
               setChangeTitle={setChangeTitle}
             />
           </li>
