@@ -55,7 +55,7 @@ export const TodoApp: React.FC = () => {
   }, [filter, todos]);
 
   useEffect(() => {
-    if (todos.length === 0) {
+    if (!todos.length) {
       setIsEmpty(true);
     } else {
       setIsEmpty(false);
