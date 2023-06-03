@@ -15,11 +15,11 @@ export const Header: React.FC<Props> = ({
     input.current?.focus();
   }, []);
 
-  const hendlerInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
-  const hendlerForm = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (value.trim()) {
@@ -37,7 +37,7 @@ export const Header: React.FC<Props> = ({
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={hendlerForm}>
+      <form onSubmit={handleAddTodo}>
         <input
           ref={input}
           type="text"
@@ -45,7 +45,7 @@ export const Header: React.FC<Props> = ({
           className="new-todo"
           placeholder="What needs to be done?"
           value={value}
-          onChange={hendlerInput}
+          onChange={handleChangeValue}
         />
       </form>
     </header>

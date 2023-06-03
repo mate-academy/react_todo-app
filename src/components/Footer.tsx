@@ -29,7 +29,7 @@ export const Footer: FC<Props> = ({
 }) => {
   const hendlerRemoveAll = () => {
     const completedTodos = todos
-      .filter(todo => todo.completed === true);
+      .filter(todo => todo.completed);
 
     setTodos.remove(completedTodos.map(({ id }) => id));
   };

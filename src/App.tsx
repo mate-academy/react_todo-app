@@ -15,9 +15,9 @@ export const App: React.FC = () => {
     }, 0);
   }, [todos]);
   const { pathname: location } = useLocation();
-  const isCompletedTodo = useMemo(() => {
-    return !todos.some(todo => todo.completed === false);
-  }, [todos]);
+  const isCompletedTodo = useMemo(
+    () => todos.some(todo => todo.completed), [todos]
+  );
 
   const visibleTodos = filterTodos(todos, location);
 
