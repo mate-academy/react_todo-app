@@ -15,19 +15,16 @@ export const TodoList: FC<Props> = ({
   setTodos,
   isCompletedTodo,
 }) => {
-  const [changeTitle, setChangeTitle] = useState<number | null>(null);
+  const [titleChange, setTitleChange] = useState<number | null>(null);
 
   const hendlerToggleAll = () => {
-    let allCompletedTodos = todos
-      .filter(todo => todo.completed === false);
+    const allCompletedTodos = todos.some(todo => !todo.completed);
 
-    if (!allCompletedTodos.length) {
-      allCompletedTodos = [...todos];
-    }
+    const newTodos = todos.map(todo => (
+      { ...todo, completed: allCompletedTodos }
+    ));
 
-    setTodos.toggle(allCompletedTodos.map(todo => (
-      { ...todo, completed: !todo.completed }
-    )));
+    setTodos.toggle(newTodos);
   };
 
   return (
@@ -52,13 +49,13 @@ export const TodoList: FC<Props> = ({
             key={todo.id}
             className={classNames(
               { completed: todo.completed },
-              { editing: changeTitle === todo.id },
+              { editing: titleChange === todo.id },
             )}
           >
             <TodoInfo
               todo={todo}
               setTodos={setTodos}
-              setChangeTitle={setChangeTitle}
+              setChangeTitle={setTitleChange}
             />
           </li>
         ))}

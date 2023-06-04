@@ -11,16 +11,11 @@ type Props = {
   amountCompletedTodos: number,
 };
 
-const filterLinks = [{
-  title: 'All',
-  to: LinkPath.ALL,
-}, {
-  title: 'Active',
-  to: LinkPath.ACTIVE,
-}, {
-  title: 'Completed',
-  to: LinkPath.COMPLETED,
-}];
+const filterLinks = [
+  { title: 'All', to: LinkPath.ALL },
+  { title: 'Active', to: LinkPath.ACTIVE },
+  { title: 'Completed', to: LinkPath.COMPLETED },
+];
 
 export const Footer: FC<Props> = ({
   todos,
@@ -40,7 +35,11 @@ export const Footer: FC<Props> = ({
         {`${todos.length - amountCompletedTodos} items left`}
       </span>
 
-      <ul className="filters" data-cy="todosFilter">
+      <ul
+        className="filters"
+        data-cy="todosFilter"
+        key={amountCompletedTodos}
+      >
         {filterLinks.map(({ title, to }) => (
           <li>
             <NavLink
@@ -56,7 +55,7 @@ export const Footer: FC<Props> = ({
         ))}
       </ul>
 
-      {todos.some(todo => todo.completed === true) && (
+      {todos.some(todo => todo.completed) && (
         <button
           type="button"
           className="clear-completed"

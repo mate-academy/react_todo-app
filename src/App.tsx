@@ -16,16 +16,14 @@ export const App: React.FC = () => {
   }, [todos]);
   const { pathname: location } = useLocation();
   const isCompletedTodo = useMemo(
-    () => todos.some(todo => todo.completed), [todos]
+    () => todos.some(todo => todo.completed), [todos],
   );
 
   const visibleTodos = filterTodos(todos, location);
 
   return (
     <div className="todoapp">
-      <Header
-        setTodos={setTodos}
-      />
+      <Header setTodos={setTodos} />
 
       {!todos.length || (
         <>
