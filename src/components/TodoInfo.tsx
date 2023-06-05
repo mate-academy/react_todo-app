@@ -5,8 +5,7 @@ import { Todo } from '../types/Todo';
 type Props = {
   todo: Todo,
   setTodos: MakeChanges,
-  setChangeTitle:
-  React.Dispatch<React.SetStateAction<number | null>>,
+  setChangeTitle: React.Dispatch<React.SetStateAction<number | null>>,
 };
 
 export const TodoInfo: FC<Props> = ({
