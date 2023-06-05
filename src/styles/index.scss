@@ -24,6 +24,7 @@ body {
   pointer-events: none;
 }
 
+@import "./utils/_variables";
 @import "./todoapp";
 @import "./todo";
 @import "./filter";
