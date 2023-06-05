@@ -1,4 +1,4 @@
-import {
+import React, {
   FC,
   useState,
   FormEvent,
@@ -7,6 +7,7 @@ import {
   memo,
   useRef,
   useEffect,
+  useContext,
 } from 'react';
 import classnames from 'classnames';
 import { Todo } from '../types/Todo';
@@ -24,6 +25,7 @@ export const TodoItem: FC<Props> = memo((props) => {
     onChangeStatus,
   } = props;
 
+  const loadingTodos = useContext(React.createContext([0]));
   const [isEditing, setIsEditing] = useState(false);
   const [changedTitle, setChangedTitle] = useState(todo.title);
   const input = useRef<HTMLInputElement | null>(null);
@@ -108,6 +110,14 @@ export const TodoItem: FC<Props> = memo((props) => {
           </button>
         </>
       )}
+
+      <div className={classnames('modal overlay', {
+        'is-active': loadingTodos.includes(todo.id),
+      })}
+      >
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
+      </div>
     </div>
   );
 });

@@ -17,7 +17,7 @@ const USER_ID = 10552;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
   const [querySearch, setQuerySearch] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
 
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
       });
 
       await getTodosServer();
-    } catch {
+    } catch (error) {
       setErrorMessage(ErrorMessage.NotAdd);
     } finally {
       setTempTodo(null);
@@ -114,7 +114,7 @@ export const App: React.FC = () => {
           id,
         });
       }
-    } catch {
+    } catch (error) {
       setErrorMessage(ErrorMessage.Issue);
     }
   };
@@ -134,7 +134,7 @@ export const App: React.FC = () => {
       try {
         await updateTodo(id, property);
         getTodosServer();
-      } catch {
+      } catch (error) {
         setErrorMessage(ErrorMessage.NotUpdate);
       }
     }, [],
@@ -156,7 +156,7 @@ export const App: React.FC = () => {
       setTodos(todos.map(todo => (
         { ...todo, completed: !isAllTodosCompleted }
       )));
-    } catch {
+    } catch (error) {
       setErrorMessage(ErrorMessage.NotUpdate);
     }
   }, [todos]);
