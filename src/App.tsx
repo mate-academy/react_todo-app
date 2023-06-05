@@ -1,93 +1,88 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { TodoHeader } from './components/TodoHeader/TodoHeader';
+import { TodoSection } from './components/TodoSection/TodoSection';
+import { TodoFooter } from './components/TodoFooter/TodoFooter';
+import { Notification } from './components/Notification/Notification';
+import { ErrorType } from './types/ErrorType';
+import { useLocalStorage } from './utils/useLocalStorage';
+import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
+
+const getVisibleTodos = (path: string, allTodos: Todo[]) => {
+  switch (path) {
+    case FilterType.Active:
+      return allTodos.filter(todo => todo.completed === false);
+
+    case FilterType.Completed:
+      return allTodos.filter(todo => todo.completed === true);
+
+    default:
+      return allTodos;
+  }
+};
 
 export const App: React.FC = () => {
+  const [hasError, setHasError] = useState(ErrorType.None);
+
+  const { pathname } = useLocation();
+
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <TodoHeader
+          todos={todos}
+          setHasError={setHasError}
+          setTodos={setTodos}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <TodoSection
+                todos={getVisibleTodos(pathname, todos)}
+                setTodos={setTodos}
+              />
+            )}
+          />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <Route
+            path="/active"
+            element={(
+              <TodoSection
+                todos={getVisibleTodos(pathname, todos)}
+                setTodos={setTodos}
+              />
+            )}
+          />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <Route
+            path="/completed"
+            element={(
+              <TodoSection
+                todos={getVisibleTodos(pathname, todos)}
+                setTodos={setTodos}
+              />
+            )}
+          />
+        </Routes>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <TodoFooter
+            todos={todos}
+            setTodos={setTodos}
+          />
+        )}
+      </div>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <Notification
+        hasError={hasError}
+        setHasError={setHasError}
+      />
     </div>
   );
 };
