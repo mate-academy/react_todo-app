@@ -11,6 +11,10 @@ export const TodoInput: React.FC<Props> = ({ setNewTodo }) => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
+    if (title === '') {
+      return;
+    }
+
     setNewTodo({
       id: +new Date(),
       title,

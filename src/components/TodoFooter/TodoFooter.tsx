@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import { Filter } from '../../Types/FilterEnum';
+import { FilterTypes } from '../../Types/FilterEnum';
 
 interface Props {
-  filter: Filter,
-  setFilter: (value: Filter) => void,
-  handleDeleteEveryCompleted: () => void,
+  filter: FilterTypes,
+  setFilter: (value: FilterTypes) => void,
+  handleDeleteAllCompleted: () => void,
   countNotCompleted: number,
   countCompleted: number,
 }
@@ -12,14 +12,10 @@ interface Props {
 export const TodoFooter: React.FC<Props> = ({
   filter,
   setFilter,
-  handleDeleteEveryCompleted,
+  handleDeleteAllCompleted,
   countNotCompleted,
   countCompleted,
 }) => {
-  const handleFilter = (value: Filter) => {
-    setFilter(value);
-  };
-
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -31,9 +27,9 @@ export const TodoFooter: React.FC<Props> = ({
           <a
             href="#/"
             className={classNames(
-              { selected: filter === Filter.All },
+              { selected: filter === FilterTypes.All },
             )}
-            onClick={() => handleFilter(Filter.All)}
+            onClick={() => setFilter(FilterTypes.All)}
           >
             All
           </a>
@@ -43,9 +39,9 @@ export const TodoFooter: React.FC<Props> = ({
           <a
             href="#/active"
             className={classNames(
-              { selected: filter === Filter.Active },
+              { selected: filter === FilterTypes.Active },
             )}
-            onClick={() => handleFilter(Filter.Active)}
+            onClick={() => setFilter(FilterTypes.Active)}
           >
             Active
           </a>
@@ -55,9 +51,9 @@ export const TodoFooter: React.FC<Props> = ({
           <a
             href="#/completed"
             className={classNames(
-              { selected: filter === Filter.Completed },
+              { selected: filter === FilterTypes.Completed },
             )}
-            onClick={() => handleFilter(Filter.Completed)}
+            onClick={() => setFilter(FilterTypes.Completed)}
           >
             Completed
           </a>
@@ -67,7 +63,7 @@ export const TodoFooter: React.FC<Props> = ({
         <button
           type="button"
           className="clear-completed"
-          onClick={handleDeleteEveryCompleted}
+          onClick={handleDeleteAllCompleted}
         >
           Clear completed
         </button>

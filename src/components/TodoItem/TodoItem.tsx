@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Todo } from '../Types/Todo';
+import { Todo } from '../../Types/Todo';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 interface Props {
@@ -25,14 +25,6 @@ export const TodoItem: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editingValue, setEditingValue] = useState(title);
   const editingInputRef = useRef<HTMLInputElement>(null);
-
-  const handleCompleteChange = (selectedTodoId: number) => {
-    handleComplete(selectedTodoId);
-  };
-
-  const handleDeleteClick = (selectedTodoId: number) => {
-    handleDelete(selectedTodoId);
-  };
 
   const handleEditSumbit = (event: FormEvent, selectedTodoId: number) => {
     event.preventDefault();
@@ -82,7 +74,7 @@ export const TodoItem: React.FC<Props> = ({
             className="toggle"
             id="toggle-view"
             checked={completed}
-            onChange={() => handleCompleteChange(id)}
+            onChange={() => handleComplete(id)}
           />
           <label
             onDoubleClick={handleDoubleClick}
@@ -93,7 +85,7 @@ export const TodoItem: React.FC<Props> = ({
             type="button"
             className="destroy"
             data-cy="deleteTodo"
-            onClick={() => handleDeleteClick(id)}
+            onClick={() => handleDelete(id)}
           />
         </div>
         <input

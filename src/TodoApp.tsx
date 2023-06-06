@@ -1,27 +1,26 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Todo } from './Types/Todo';
 import { TodoInput } from './components/TodoInput/TodoInput';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoList } from './components/TodoList/TodoList';
-import { Filter } from './Types/FilterEnum';
+import { FilterTypes } from './Types/FilterEnum';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState<Todo | undefined>();
-  const [filter, setFilter] = useState(Filter.All);
+  const [filter, setFilter] = useState(FilterTypes.All);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
-  const [isEmpty, setIsEmpty] = useState(false);
   const { filtered } = useParams();
 
   useEffect(() => {
     const filterValue = filtered === 'active'
-      ? Filter.Active
+      ? FilterTypes.Active
       : filtered === 'completed'
-        ? Filter.Completed
-        : Filter.All;
+        ? FilterTypes.Completed
+        : FilterTypes.All;
 
     setFilter(filterValue);
   }, [filtered]);
@@ -37,12 +36,12 @@ export const TodoApp: React.FC = () => {
 
   useEffect(() => {
     switch (filter) {
-      case Filter.Active: {
+      case FilterTypes.Active: {
         setFilteredTodos(todos.filter(todo => !todo.completed));
         break;
       }
 
-      case Filter.Completed: {
+      case FilterTypes.Completed: {
         setFilteredTodos(todos.filter(todo => todo.completed));
         break;
       }
@@ -53,14 +52,6 @@ export const TodoApp: React.FC = () => {
       }
     }
   }, [filter, todos]);
-
-  useEffect(() => {
-    if (!todos.length) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [todos]);
 
   useEffect(() => {
     const todosFromStorage = localStorage.getItem('todos');
@@ -108,7 +99,7 @@ export const TodoApp: React.FC = () => {
     setTodos(updatedTodos);
   };
 
-  const handleDeleteEveryCompleted = () => {
+  const handleDeleteAllCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
@@ -136,8 +127,13 @@ export const TodoApp: React.FC = () => {
     }
   };
 
-  const countNotCompleted = todos.filter(todo => !todo.completed).length;
-  const countCompleted = todos.filter(todo => todo.completed).length;
+  const countNotCompleted = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
+
+  const countCompleted = useMemo(() => (
+    todos.filter(todo => todo.completed).length
+  ), [todos]);
 
   return (
     <div className="todoapp">
@@ -147,7 +143,7 @@ export const TodoApp: React.FC = () => {
         <TodoInput setNewTodo={setNewTodo} />
       </header>
 
-      {!isEmpty && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <input
@@ -170,7 +166,7 @@ export const TodoApp: React.FC = () => {
           <TodoFooter
             filter={filter}
             setFilter={setFilter}
-            handleDeleteEveryCompleted={handleDeleteEveryCompleted}
+            handleDeleteAllCompleted={handleDeleteAllCompleted}
             countNotCompleted={countNotCompleted}
             countCompleted={countCompleted}
           />
