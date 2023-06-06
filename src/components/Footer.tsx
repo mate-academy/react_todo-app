@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { Todo } from '../types/Todo';
 import { TodosFilter } from './TodosFilter';
 
@@ -8,33 +8,15 @@ type Props = {
 };
 
 export const Footer: FC<Props> = ({ todos, onTodoDelete }) => {
-  const [activeTodosCount, setActiveTodosCount] = useState(0);
-  const [completedTodosCount, setCompletedTodosCount] = useState(0);
-  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
-
-  const handleCompletedTodos = () => {
-    const finishedTodos = todos.filter(todo => todo.completed);
-
-    setCompletedTodosCount(finishedTodos.length);
-    setCompletedTodos(finishedTodos);
-  };
+  const completedTodos = todos.filter(todo => todo.completed);
+  const completedTodosCount = completedTodos.length;
+  const activeTodosCount = todos.length - completedTodosCount;
 
   const handleClearCompleted = () => {
     const idsToDelete = completedTodos.map(todo => todo.id);
 
     onTodoDelete(idsToDelete);
   };
-
-  const handleActiveTodosCount = () => {
-    const countActive = todos.filter(todo => !todo.completed).length;
-
-    setActiveTodosCount(countActive);
-  };
-
-  useEffect(() => {
-    handleActiveTodosCount();
-    handleCompletedTodos();
-  }, [todos]);
 
   return (
     <footer className="footer">
