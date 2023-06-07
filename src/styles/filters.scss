@@ -5,19 +5,19 @@
   position: absolute;
   right: 0;
   left: 0;
-}
 
-.filters li {
-  display: inline;
-}
-
-.filters li a {
-  color: inherit;
-  margin: 3px;
-  padding: 3px 7px;
-  text-decoration: none;
-  border: 1px solid transparent;
-  border-radius: 3px;
+  &__list {
+    display: inline;
+  }
+  
+  &__link {
+    color: inherit;
+    margin: 3px;
+    padding: 3px 7px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+  }
 }
 
 .filters li a:hover {
