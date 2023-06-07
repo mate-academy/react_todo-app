@@ -31,15 +31,16 @@ export const Footer: FC<Props> = ({
       </span>
 
       <TodosFilter />
+      {(completedTodosCount > 0) && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleClearCompleted}
+        >
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={handleClearCompleted}
-      >
-
-        Clear completed
-      </button>
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
