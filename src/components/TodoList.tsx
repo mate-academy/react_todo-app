@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
+import { Status } from '../enums/Status';
 
 type Props = {
   todos: Todo[],
@@ -12,12 +13,6 @@ type Props = {
   onTodoDelete: (todoIds: number[]) => void;
   handleTitleChange: (todoId: number, title: string) => void;
 };
-
-enum Status {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
 
 export const TodoList: FC<Props> = ({
   todos,

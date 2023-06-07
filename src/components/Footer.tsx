@@ -7,11 +7,13 @@ type Props = {
   onTodoDelete: (todoIds: number[]) => void;
 };
 
-export const Footer: FC<Props> = ({ todos, onTodoDelete }) => {
+export const Footer: FC<Props> = ({
+  todos,
+  onTodoDelete,
+}) => {
   const completedTodos = todos.filter(todo => todo.completed);
   const completedTodosCount = completedTodos.length;
   const activeTodosCount = todos.length - completedTodosCount;
-
   const handleClearCompleted = () => {
     const idsToDelete = completedTodos.map(todo => todo.id);
 
@@ -30,15 +32,14 @@ export const Footer: FC<Props> = ({ todos, onTodoDelete }) => {
 
       <TodosFilter />
 
-      {(completedTodosCount > 0) && (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={handleClearCompleted}
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={handleClearCompleted}
+      >
+
+        Clear completed
+      </button>
     </footer>
   );
 };

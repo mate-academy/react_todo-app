@@ -30,18 +30,18 @@ export const TodoApp: React.FC = () => {
     setTodos(updatedTodos);
   };
 
-  const handleAllCompleted = (array: Todo[]) => {
+  const areAllTodosCompleted = (array: Todo[]) => {
     return !(array.some(todo => !todo.completed) || array.length === 0);
   };
 
   const toggleAllCompletedStatus = () => {
-    const todoIds = handleAllCompleted(todos)
+    const todoIds = areAllTodosCompleted(todos)
       ? todos.map((todo: Todo) => todo.id)
       : todos
         .filter((todo: Todo) => !todo.completed)
         .map((todo: Todo) => todo.id);
 
-    toggleCompletedStatus(todoIds, { completed: !handleAllCompleted(todos) });
+    toggleCompletedStatus(todoIds, { completed: !areAllTodosCompleted(todos) });
   };
 
   const removeTodo = (todoIds: number[]) => {
@@ -82,7 +82,7 @@ export const TodoApp: React.FC = () => {
           className="toggle-all"
           data-cy="toggleAll"
           onChange={toggleAllCompletedStatus}
-          checked={handleAllCompleted(todos)}
+          checked={areAllTodosCompleted(todos)}
         />
         <label htmlFor="toggle-all">
           Mark all as complete

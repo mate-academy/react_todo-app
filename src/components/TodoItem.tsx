@@ -70,7 +70,7 @@ export const TodoItem: FC<Props> = ({
     if (selectedTodoField.current) {
       selectedTodoField.current.focus();
     }
-  });
+  }, [isEditing]);
 
   return (
     <li
