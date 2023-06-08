@@ -17,8 +17,7 @@ export const App: React.FC = () => {
   const [isEnterPressed, setIsEnterPressed] = useState(false);
   const [selectFilter, setSelectFilter] = useState('all');
   const [allTodosCompleted, setAllTodosCompleted] = useState<boolean>(true);
-
-  const count = todos.length;
+  const count = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     getTodos(USER_ID).then(todosFromServer => {
@@ -89,28 +88,34 @@ export const App: React.FC = () => {
     setAllTodosCompleted(prevCompleted => !prevCompleted);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      createTodo(7075, todoTitle);
+    }
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setIsEnterPressed(true);
+      setTodoTitle('');
+    }
+  };
+
+  const handleSetInputText = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoTitle(event.target.value);
+    setIsEnterPressed(false);
+  };
+
   const isCompleted = todos.some(todo => todo.completed === true);
 
   return (
     <div className="todoapp">
       <Header
         inputText={todoTitle}
-        setInputText={(ev) => {
-          setTodoTitle(ev.target.value);
-          setIsEnterPressed(false);
-        }}
-        handleKeyPress={(event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            createTodo(7075, todoTitle);
-          }
-        }}
-        handleKeyUp={(event) => {
-          if (event.key === 'Enter') {
-            setIsEnterPressed(true);
-            setTodoTitle('');
-          }
-        }}
+        setInputText={handleSetInputText}
+        handleKeyPress={handleKeyPress}
+        handleKeyUp={handleKeyUp}
       />
       {' '}
 

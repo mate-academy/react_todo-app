@@ -23,9 +23,30 @@ export const Footer: React.FC<Props> = (
     isCompleted,
   },
 ) => {
-  const [isSelectedAll, setSelected] = useState(false);
+  const [isSelectedAll, setSelected] = useState(true);
   const [isSelectedActive, setSelectedActive] = useState(false);
   const [isSelectedCompleted, setSelectedCompleted] = useState(false);
+
+  const handleAllClick = () => {
+    setFilter('all');
+    setSelected(!isSelectedAll);
+    setSelectedActive(false);
+    setSelectedCompleted(false);
+  };
+
+  const handleActiveClick = () => {
+    setFilter('active');
+    setSelectedActive(!isSelectedActive);
+    setSelected(false);
+    setSelectedCompleted(false);
+  };
+
+  const handleCompletedClick = () => {
+    setFilter('completed');
+    setSelectedCompleted(!isCompleted);
+    setSelected(false);
+    setSelectedActive(false);
+  };
 
   return (
     <footer className="footer">
@@ -39,12 +60,7 @@ export const Footer: React.FC<Props> = (
               { status: null }
             }
             className={classNames('filters__link', { selected: isSelectedAll })}
-            onClick={() => {
-              setFilter('all');
-              setSelected(!isSelectedAll);
-              setSelectedActive(false);
-              setSelectedCompleted(false);
-            }}
+            onClick={handleAllClick}
           >
             All
           </SearchLink>
@@ -56,12 +72,7 @@ export const Footer: React.FC<Props> = (
             }
             className={classNames('filters__link',
               { selected: isSelectedActive })}
-            onClick={() => {
-              setFilter('active');
-              setSelectedActive(!isSelectedActive);
-              setSelected(false);
-              setSelectedCompleted(false);
-            }}
+            onClick={handleActiveClick}
           >
             Active
           </SearchLink>
@@ -74,12 +85,7 @@ export const Footer: React.FC<Props> = (
             className={classNames('filters__link', {
               selected: isSelectedCompleted,
             })}
-            onClick={() => {
-              setFilter('completed');
-              setSelectedCompleted(!isCompleted);
-              setSelected(false);
-              setSelectedActive(false);
-            }}
+            onClick={handleCompletedClick}
           >
             Completed
           </SearchLink>

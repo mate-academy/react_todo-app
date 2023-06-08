@@ -57,7 +57,10 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          onClick={() => changeTodo(todo.id, { completed: !todo.completed })}
+          onClick={() => {
+            changeTodo(todo.id, { completed: !todo.completed });
+          }}
+          checked={todo.completed}
         />
         <label
           onDoubleClick={handleDoubleClick}
