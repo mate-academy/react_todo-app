@@ -17,7 +17,7 @@
     "@cypress/webpack-dev-server": "^1.8.4",
     "@mate-academy/cypress-tools": "^1.0.4",
     "@mate-academy/eslint-config-react-typescript": "^1.0.11",
-    "@mate-academy/scripts": "^1.2.3",
+    "@mate-academy/scripts": "^1.2.8",
     "@mate-academy/students-ts-config": "*",
     "@mate-academy/stylelint-config": "*",
     "@types/node": "^17.0.45",
