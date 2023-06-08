@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { FilterType } from '../types/FilterType';
 import { Todo } from '../types/Todo';
 import { NewTodo } from './NewTodo';
@@ -21,19 +23,19 @@ export const TodoApp = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const handleAddToto = (todo: Todo) => {
+  const handleAddToto = useCallback((todo: Todo) => {
     setTodos(prevTodos => [...prevTodos, todo]);
-  };
+  }, []);
 
-  const handleRemoveTodo = (id: number) => {
+  const handleRemoveTodo = useCallback((id: number) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
-  };
+  }, []);
 
-  const handleRemoveCompleted = () => {
+  const handleRemoveCompleted = useCallback(() => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
-  };
+  }, []);
 
-  const handleToggleCompleted = (id: number) => {
+  const handleToggleCompleted = useCallback((id: number) => {
     const todoToToggle = todos.find(todo => todo.id === id);
 
     if (todoToToggle) {
@@ -45,7 +47,7 @@ export const TodoApp = () => {
       setTodos(prevTodos => prevTodos
         .map(todo => (todo.id === id ? updatedTodo : todo)));
     }
-  };
+  }, [todos]);
 
   const handleToggleAllTodos = () => {
     const activeTodos = todos.filter(todo => !todo.completed);
@@ -60,7 +62,7 @@ export const TodoApp = () => {
     }
   };
 
-  const handleEditTodo = (id: number, newTitle: string) => {
+  const handleEditTodo = useCallback((id: number, newTitle: string) => {
     const todoToEdit = todos.find(todo => todo.id === id);
 
     if (todoToEdit) {
@@ -69,7 +71,7 @@ export const TodoApp = () => {
       setTodos(prevTodos => prevTodos
         .map(todo => (todo.id === id ? editedTodo : todo)));
     }
-  };
+  }, [todos]);
 
   const visibleTodos = useMemo(() => {
     let filteredTodos = todos;

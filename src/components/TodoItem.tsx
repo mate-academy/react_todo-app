@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/Todo';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   onRemoveTodo: (id: number) => void;
   onEditTodo: (id: number, newTitle: string) => void;
 }
-export const TodoItem: React.FC<Props> = ({
+export const TodoItem: React.FC<Props> = React.memo(({
   todo,
   onToggleCompleted,
   onRemoveTodo,
@@ -90,4 +90,4 @@ export const TodoItem: React.FC<Props> = ({
       </form>
     </li>
   );
-};
+});

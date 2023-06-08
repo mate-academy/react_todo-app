@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 
 interface Props {
   onAddTodo: (todo: Todo) => void;
 }
 
-export const NewTodo: React.FC<Props> = ({
+export const NewTodo: React.FC<Props> = React.memo(({
   onAddTodo,
 }) => {
   const [title, setTitle] = useState('');
@@ -39,4 +39,4 @@ export const NewTodo: React.FC<Props> = ({
       />
     </form>
   );
-};
+});

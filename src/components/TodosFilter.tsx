@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import React from 'react';
 import { FilterType } from '../types/FilterType';
 import { Todo } from '../types/Todo';
 
@@ -9,7 +10,7 @@ interface Props {
   todos: Todo[];
 }
 
-export const TodosFilter: React.FC<Props> = ({
+export const TodosFilter: React.FC<Props> = React.memo(({
   filter,
   setFilter,
   onRemoveCompleted,
@@ -76,4 +77,4 @@ export const TodosFilter: React.FC<Props> = ({
       ) }
     </footer>
   );
-};
+});

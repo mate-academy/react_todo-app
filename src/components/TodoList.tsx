@@ -1,3 +1,4 @@
+import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
@@ -8,7 +9,7 @@ interface Props {
   onEditTodo: (id: number, newTitle: string) => void;
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   onToggleCompleted,
   onRemoveTodo,
@@ -27,4 +28,4 @@ export const TodoList: React.FC<Props> = ({
       ))}
     </ul>
   );
-};
+});
