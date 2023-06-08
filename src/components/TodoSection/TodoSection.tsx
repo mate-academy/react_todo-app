@@ -1,10 +1,9 @@
-import React from 'react';
-import {
-  CSSTransition,
-  TransitionGroup,
-} from 'react-transition-group';
+import React, { useMemo } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { TodoItem } from '../TodoItem/TodoItem';
+import { TodoList } from '../TodoList/TodoList';
+import { getVisibleTodos } from '../../utils/getVisibleTodos';
 
 type Props = {
   todos: Todo[],
@@ -15,24 +14,81 @@ export const TodoSection: React.FC<Props> = React.memo(({
   todos,
   setTodos,
 }) => {
+  const isAllTodosActive = useMemo(() => (
+    todos.every(todo => todo.completed)
+  ), [todos]);
+
+  const { pathname } = useLocation();
+
+  const handleToggleAll = () => {
+    if (isAllTodosActive) {
+      return setTodos(todos.map(todo => (
+        {
+          ...todo,
+          completed: false,
+        }
+      )));
+    }
+
+    return setTodos(todos.map(todo => (
+      todo.completed
+        ? todo
+        : {
+          ...todo,
+          completed: true,
+        }
+    )));
+  };
+
   return (
-    <section className="todoapp__main" data-cy="todosList">
-      <TransitionGroup>
-        {todos.map(todo => (
-          <CSSTransition
-            key={todo.id}
-            timeout={300}
-            classNames="item"
-          >
-            <TodoItem
-              todo={todo}
-              todos={todos}
-              setTodos={setTodos}
-              key={todo.id}
+    <section className="main">
+      {!!todos.length && (
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className={classNames('toggle-all', {
+              active: isAllTodosActive,
+            })}
+            data-cy="toggleAll"
+            onChange={handleToggleAll}
+          />
+
+          <label htmlFor="toggle-all">Mark all as complete</label>
+
+          <Routes>
+            <Route
+              path="/"
+              element={(
+                <TodoList
+                  todos={getVisibleTodos(pathname, todos)}
+                  setTodos={setTodos}
+                />
+              )}
             />
-          </CSSTransition>
-        ))}
-      </TransitionGroup>
+
+            <Route
+              path="/active"
+              element={(
+                <TodoList
+                  todos={getVisibleTodos(pathname, todos)}
+                  setTodos={setTodos}
+                />
+              )}
+            />
+
+            <Route
+              path="/completed"
+              element={(
+                <TodoList
+                  todos={getVisibleTodos(pathname, todos)}
+                  setTodos={setTodos}
+                />
+              )}
+            />
+          </Routes>
+        </>
+      )}
     </section>
   );
 });

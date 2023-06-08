@@ -22,21 +22,22 @@ export const TodoFooter: React.FC<Props> = React.memo(({
   };
 
   return (
-    <footer className="todoapp__footer">
+    <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
         {`${todosLeft} items left`}
       </span>
 
       <Filter />
 
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        disabled={todos.length === todosLeft}
-        onClick={handleClearCompleted}
-      >
-        Clear completed
-      </button>
+      {todos.length !== todosLeft && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleClearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 });

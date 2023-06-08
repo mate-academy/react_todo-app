@@ -27,13 +27,6 @@ export const TodoItem: React.FC<Props> = React.memo(({
 
   const handleDoubleClick = () => setIsEditing(true);
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === 'Escape') {
-      setIsEditing(false);
-      setTitle(todo.title);
-    }
-  };
-
   const updateTitle = () => {
     setIsEditing(false);
 
@@ -63,12 +56,19 @@ export const TodoItem: React.FC<Props> = React.memo(({
     return setTodos(updatedTodos);
   };
 
-  const handleBlur = () => updateTitle();
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === 'Escape') {
+      setIsEditing(false);
+      setTitle(todo.title);
+    }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    updateTitle();
+    if (event.code === 'Enter') {
+      setIsEditing(false);
+      updateTitle();
+    }
   };
+
+  const handleBlur = () => updateTitle();
 
   const handleRemove = () => {
     const updatedTodos = todos.filter(currnetTodo => (
@@ -94,52 +94,44 @@ export const TodoItem: React.FC<Props> = React.memo(({
   };
 
   return (
-    <div
+    <li
       className={classNames('todo', {
         completed: todo.completed,
+        editing: isEditing,
       })}
+      onDoubleClick={handleDoubleClick}
     >
-      <label className="todo__status-label">
+      <div className="view">
         <input
           type="checkbox"
-          className="todo__status"
-          defaultChecked={todo.completed}
+          className="toggle"
+          checked={todo.completed}
           onChange={handleCheckboxChange}
         />
-      </label>
 
-      {isEditing ? (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            ref={inputRef}
-            value={title}
-            onChange={handleTitleChange}
-            onKeyUp={handleKeyUp}
-            onBlur={handleBlur}
-          />
-        </form>
-      ) : (
-        <>
-          <span
-            className="todo__title"
-            onDoubleClick={handleDoubleClick}
-          >
-            {todo.title}
-          </span>
+        <label>{todo.title}</label>
 
-          <button
-            type="button"
-            className="todo__remove"
-            data-cy="deleteTodo"
-            onClick={handleRemove}
-          >
-            ×
-          </button>
-        </>
+        <button
+          type="button"
+          aria-label="destroy"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={handleRemove}
+        />
+      </div>
+
+      {isEditing && (
+        <input
+          type="text"
+          className="edit"
+          placeholder="Empty todo will be deleted"
+          ref={inputRef}
+          value={title}
+          onChange={handleTitleChange}
+          onKeyUp={handleKeyUp}
+          onBlur={handleBlur}
+        />
       )}
-    </div>
+    </li>
   );
 });
