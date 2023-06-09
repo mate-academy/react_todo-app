@@ -8,6 +8,7 @@ import {
 } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
+import { Filter } from './utils/vars';
 
 const USER_ID = 7075;
 
@@ -15,26 +16,27 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoTitle, setTodoTitle] = useState('');
   const [isEnterPressed, setIsEnterPressed] = useState(false);
-  const [selectFilter, setSelectFilter] = useState('all');
-  const [allTodosCompleted, setAllTodosCompleted] = useState<boolean>(true);
+  const [selectFilter, setSelectFilter] = useState(Filter.ALL);
+  const [isAddingTodo, setIsAddingTodo] = useState(false);
+
   const count = todos.filter(todo => !todo.completed).length;
+  const isChecked = todos.every((todo: Todo) => todo.completed);
 
   useEffect(() => {
     getTodos(USER_ID).then(todosFromServer => {
       setTodos(todosFromServer);
     });
-  }, [isEnterPressed,
-  ]);
+  }, [isEnterPressed]);
 
   const visibleTodos = useMemo(() => {
     return todos.filter((todo: Todo) => {
       switch (selectFilter) {
-        case 'active':
+        case Filter.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case Filter.COMPLETED:
           return todo.completed;
         default:
-          return todos;
+          return true;
       }
     });
   }, [
@@ -66,32 +68,38 @@ export const App: React.FC = () => {
     }));
   };
 
-  const clearCompleted = () => {
-    todos
+  const clearCompleted = async () => {
+    const completedTodoIds = todos
       .filter(todo => todo.completed)
-      .forEach(async todo => {
-        await deleteTodo(todo.id);
-        setTodos(prevTodos => prevTodos
-          .filter(prevTodo => prevTodo.id !== todo.id));
-      });
+      .map(todo => todo.id);
+
+    await Promise.all(completedTodoIds.map(deleteTodo));
+
+    setTodos(prevTodos => prevTodos
+      .filter(prevTodo => !completedTodoIds.includes(prevTodo.id)));
   };
 
   const handleToggleAll = () => {
-    const updatedTodos = todos.map(todo => (
-      {
-        ...todo,
-        completed: allTodosCompleted,
-      }
-    ));
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !todos.every((someTodo: Todo) => someTodo.completed),
+    }));
 
     setTodos(updatedTodos);
-    setAllTodosCompleted(prevCompleted => !prevCompleted);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !isAddingTodo) {
       event.preventDefault();
-      createTodo(7075, todoTitle);
+      setIsAddingTodo(true);
+      createTodo(7075, todoTitle)
+        .then(() => {
+          setIsAddingTodo(false);
+          setTodoTitle('');
+        })
+        .catch(() => {
+          setIsAddingTodo(false);
+        });
     }
   };
 
@@ -117,15 +125,14 @@ export const App: React.FC = () => {
         handleKeyPress={handleKeyPress}
         handleKeyUp={handleKeyUp}
       />
-      {' '}
 
       <input
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        checked={todos.every((todo: Todo) => todo.completed)}
         onChange={handleToggleAll}
+        checked={isChecked}
       />
       {todos.length > 0 && (
         <TodoList

@@ -24,7 +24,8 @@ export const TodoItem: React.FC<Props> = ({
     setIsInputVisible(!isInputVisible);
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChangeTitle = (event:
+  React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
@@ -45,6 +46,10 @@ export const TodoItem: React.FC<Props> = ({
     }
   };
 
+  const handleInputChangeCompleted = () => {
+    changeTodo(todo.id, { completed: !todo.completed });
+  };
+
   return (
 
     <li className={classNames({
@@ -57,9 +62,7 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          onClick={() => {
-            changeTodo(todo.id, { completed: !todo.completed });
-          }}
+          onClick={handleInputChangeCompleted}
           checked={todo.completed}
         />
         <label
@@ -80,7 +83,7 @@ export const TodoItem: React.FC<Props> = ({
           type="text"
           className="edit"
           value={title}
-          onChange={handleInputChange}
+          onChange={handleInputChangeTitle}
           onKeyDown={handleKeyDown}
           onBlur={() => setIsInputVisible(false)}
         />

@@ -1,19 +1,14 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { SearchLink } from './SearchLink';
+import { Filter } from '../utils/vars';
 
 type Props = {
   count: number,
-  setFilter: (option: string) => void;
+  setFilter: (option: Filter) => void;
   clearCompleted: () => void;
   isCompleted: boolean,
 };
-
-enum Status {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
 
 export const Footer: React.FC<Props> = (
   {
@@ -28,22 +23,22 @@ export const Footer: React.FC<Props> = (
   const [isSelectedCompleted, setSelectedCompleted] = useState(false);
 
   const handleAllClick = () => {
-    setFilter('all');
+    setFilter(Filter.ALL);
     setSelected(!isSelectedAll);
     setSelectedActive(false);
     setSelectedCompleted(false);
   };
 
   const handleActiveClick = () => {
-    setFilter('active');
+    setFilter(Filter.ACTIVE);
     setSelectedActive(!isSelectedActive);
     setSelected(false);
     setSelectedCompleted(false);
   };
 
   const handleCompletedClick = () => {
-    setFilter('completed');
-    setSelectedCompleted(!isCompleted);
+    setFilter(Filter.COMPLETED);
+    setSelectedCompleted(!isSelectedCompleted);
     setSelected(false);
     setSelectedActive(false);
   };
@@ -68,7 +63,7 @@ export const Footer: React.FC<Props> = (
         <li className="filters__list">
           <SearchLink
             params={
-              { status: Status.ACTIVE }
+              { status: Filter.ACTIVE }
             }
             className={classNames('filters__link',
               { selected: isSelectedActive })}
@@ -80,7 +75,7 @@ export const Footer: React.FC<Props> = (
         <li className="filters__list">
           <SearchLink
             params={
-              { status: Status.COMPLETED }
+              { status: Filter.COMPLETED }
             }
             className={classNames('filters__link', {
               selected: isSelectedCompleted,
