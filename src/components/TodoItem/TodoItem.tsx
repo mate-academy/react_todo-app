@@ -19,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({
   onDeleteTodo,
   onChangeTodo,
 }) => {
-  let { title } = todo;
+  const { title } = todo;
   const { id } = todo;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -64,14 +64,12 @@ export const TodoItem: React.FC<Props> = ({
     try {
       setIsLoading(true);
       await updateTodoTitle(todo.id, newTitle);
-      title = newTitle;
       setIsEditing(false);
     } catch {
       setIsEditing(true);
       onChangeIsError(Errors.UPDATE);
       setIsLoading(false);
     } finally {
-      title = newTitle;
       setIsLoading(false);
     }
   };

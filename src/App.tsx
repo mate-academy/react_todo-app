@@ -2,7 +2,6 @@
 import classNames from 'classnames';
 import {
   useEffect,
-  useRef,
   useState,
   useContext,
 } from 'react';
@@ -52,10 +51,7 @@ export const App: React.FC = () => {
 
   const { setIsLoadingAll } = useContext(LoadingContext);
 
-  const isLoading = useRef(false);
-  const setIsLoading = (value: boolean) => {
-    isLoading.current = value;
-  };
+  const { setIsLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     setUploadingTodos(true);
@@ -106,7 +102,7 @@ export const App: React.FC = () => {
 
     const postedTodo = await postTodo(USER_ID, newTodo);
 
-    setTodos((prev: Todo[]) => {
+    setTodos((prev) => {
       return [...prev, postedTodo];
     });
     setTempTodo(null);

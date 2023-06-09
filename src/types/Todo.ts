@@ -5,7 +5,4 @@ export interface Todo {
   completed: boolean;
 }
 
-export interface PatchedTodo {
-  completed?: boolean;
-  title?: string;
-}
+export type PatchedTodo = Partial<Pick<Todo, 'title' | 'completed'>>;

@@ -3,7 +3,7 @@ import {
   LoadingProvider,
 } from './components/LoadingContext/LoadingContext';
 
-import 'bulma/css/bulma.css';
+import 'bulma/css/bulma.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './styles/index.scss';
 
