@@ -39,6 +39,10 @@
   display: none;
 }
 
+.toggle {
+  cursor: pointer;
+}
+
 .todo-list li .toggle {
   text-align: center;
   width: 40px;
