@@ -1,0 +1,192 @@
+@import "../../variables";
+
+.todoItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  border-radius: 30px;
+  background-color: $c-greyLight-1;
+  box-shadow: $shadow-box;
+  padding: 0 20px;
+  position: relative;
+
+  &:hover {
+    cursor: grab;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+
+    .checkbox {
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      z-index: 1;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    form {
+      width: 100%;
+      margin: 0 10px;
+
+      input {
+        font-family: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        color: inherit;
+        background: none;
+        outline: none;
+        border: none;
+        width: 100%;
+        height: 28px;
+      }
+    }
+
+    .text {
+      display: block;
+      width: max-content;
+      max-width: 465px;
+      margin-left: 10px;
+      height: 28px;
+      padding-right: 2px;
+      position: relative;
+      transition: color 0.6s;
+
+      &::after {
+        content: "";
+        display: block;
+        width: 500px;
+        height: 28px;
+        background-color: #e4ebf5;
+        position: absolute;
+        top: 0;
+        left: 100%;
+      }
+    }
+
+    .checkboxSvg {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 12px;
+      width: 100%;
+      height: auto;
+      margin: auto;
+
+      fill: none;
+      stroke: $c-primary-dark;
+      stroke-width: 2;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+
+      .box,
+      .check {
+        transition: stroke-dashoffset 0.6s cubic-bezier(0.9, 0, 0.5, 1);
+      }
+
+      @keyframes explode {
+        30% {
+          stroke-width: 3;
+          stroke-opacity: 1;
+          transform: scale(0.8) rotate(40deg);
+        }
+        100% {
+          stroke-width: 0;
+          stroke-opacity: 0;
+          transform: scale(1.1) rotate(60deg);
+        }
+      }
+
+      .box {
+        stroke-dasharray: 56.11, 56.11;
+        stroke-dashoffset: 0;
+      }
+
+      .check {
+        stroke: $c-green;
+        stroke-dasharray: 9.9, 9.9;
+        stroke-dashoffset: 9.9;
+        transition-duration: 0.3s;
+      }
+
+      .line {
+        transition: stroke-dashoffset 0.4s cubic-bezier(0.9, 0, 0.5, 1);
+        stroke-dasharray: 400, 1684;
+        stroke-dashoffset: 400;
+      }
+
+      .circle {
+        stroke: $c-green;
+        stroke-dasharray: 1 6;
+        stroke-width: 0;
+
+        transform-origin: 13.5px 12.5px;
+        transform: scale(0.4) rotate(0deg);
+        animation: none 0.6s linear;
+
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+      }
+    }
+
+    .checkbox:checked ~ .text {
+      color: $c-greyDark;
+    }
+
+    .checkbox:checked ~ .checkboxSvg .box {
+      stroke-dashoffset: 56.11;
+    }
+
+    .checkbox:checked ~ .checkboxSvg .line {
+      stroke-dashoffset: -8;
+    }
+
+    .checkbox:checked ~ .checkboxSvg .check {
+      stroke-dashoffset: 0;
+      transition-delay: 0.3s;
+    }
+
+    .checkbox:checked ~ .checkboxSvg .circle {
+      animation-name: explode;
+    }
+  }
+
+  .buttonBox {
+    display: flex;
+    justify-content: flex-end;
+    min-width: 60px;
+    position: relative;
+    box-shadow: -5px 0 5px 0 rgb(228, 235, 245);
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background: none;
+      width: 30px;
+      height: 30px;
+
+      & svg {
+        fill: $c-greyDark;
+        transition: fill 0.5s;
+      }
+
+      &:hover svg {
+        fill: #e3242b;
+      }
+
+      &:first-child:hover svg {
+        fill: $c-green;
+      }
+    }
+  }
+}

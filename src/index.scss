@@ -1,0 +1,17 @@
+@import "reset-css";
+@import "./variables";
+@import url("https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Handlee&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Handlee", cursive;
+  font-weight: bold;
+  font-size: 26px;
+  color: $c-primary;
+  background-image: url(./images/bg.jpg);
+  user-select: none;
+}
