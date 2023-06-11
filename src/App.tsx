@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const handleAddTodo = (text: string) => {
+  const onAddTodo = (text: string) => {
     setFilter(Filter.All);
 
     const newTodo = {
@@ -116,7 +116,7 @@ export const App: React.FC = () => {
           <h1>Todos</h1>
 
           <TodoForm
-            handleAddTodo={handleAddTodo}
+            onAddTodo={onAddTodo}
           />
 
           <AnimatePresence initial={false}>

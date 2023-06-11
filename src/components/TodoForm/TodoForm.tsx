@@ -1,12 +1,13 @@
 import { useState, useRef } from 'react';
 import { Button } from '../UI/Button';
 import styles from './TodoForm.module.scss';
+import { IconAdd } from '../UI/IconAdd';
 
 type Props = {
-  handleAddTodo: (text: string) => void;
+  onAddTodo: (text: string) => void;
 };
 
-export const TodoForm: React.FC<Props> = ({ handleAddTodo }) => {
+export const TodoForm: React.FC<Props> = ({ onAddTodo }) => {
   const [text, setText] = useState('');
   const formInputRef = useRef<HTMLInputElement>(null);
 
@@ -14,7 +15,7 @@ export const TodoForm: React.FC<Props> = ({ handleAddTodo }) => {
     event.preventDefault();
 
     if (text.trim()) {
-      handleAddTodo(text);
+      onAddTodo(text);
       setText('');
     }
 
@@ -37,17 +38,7 @@ export const TodoForm: React.FC<Props> = ({ handleAddTodo }) => {
       />
 
       <Button bigSize>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="30"
-          height="30"
-          viewBox="0 0 24 24"
-          fill="#9baacf"
-        >
-          <g id="add">
-            <path id="plus" d="M13 6h-2v5H6v2h5v5h2v-5h5v-2h-5z" />
-          </g>
-        </svg>
+        <IconAdd />
       </Button>
     </form>
   );
