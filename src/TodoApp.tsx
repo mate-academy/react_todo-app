@@ -128,7 +128,7 @@ export const TodoApp = () => {
     if (loadTodos) {
       setTodos(JSON.parse(loadTodos));
     }
-  }, [todos]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
