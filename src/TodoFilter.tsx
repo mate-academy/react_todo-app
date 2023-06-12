@@ -1,47 +1,47 @@
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import classNames from 'classnames';
 import { Filters } from './Filters';
 
 interface PropsTodoFilter {
   setFiltered: (filtered: Filters) => void;
-  filtered: Filters;
 }
 
-export const TodoFilter: FC<PropsTodoFilter> = ({ setFiltered, filtered }) => {
+export const TodoFilter: FC<PropsTodoFilter> = ({ setFiltered }) => {
   return (
 
     <ul className="filters">
       <li>
-        <Link
+        <NavLink
           to="/"
-          className={filtered === Filters.Active ? 'selected' : ''}
+          className={({ isActive }) => classNames({ selected: isActive })}
           onClick={() => setFiltered(Filters.All)}
         >
           All
 
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link
+        <NavLink
           to="active"
-          className={filtered === Filters.Active ? 'selected' : ''}
+          className={({ isActive }) => classNames({ selected: isActive })}
           onClick={() => setFiltered(Filters.Active)}
         >
           Active
 
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link
+        <NavLink
           to="completed"
           onClick={() => setFiltered(Filters.Completed)}
-          className={filtered === Filters.Completed ? 'selected' : ''}
+          className={({ isActive }) => classNames({ selected: isActive })}
         >
           Completed
 
-        </Link>
+        </NavLink>
       </li>
     </ul>
 

@@ -180,7 +180,7 @@ export const TodoApp = () => {
             {`${notCompleted} items left`}
           </span>
 
-          <TodoFilter setFiltered={setFiltered} filtered={filtered} />
+          <TodoFilter setFiltered={setFiltered} />
           <button
             type="button"
             className="clear-completed"
