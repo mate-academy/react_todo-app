@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import { Todo } from './Todo';
 import { TodoList } from './TodoList';
@@ -45,7 +47,7 @@ export const TodoApp = () => {
     return newTodos;
   }, [filtered, todos, filter]);
 
-  const handleCreateTodo = (event: React.FormEvent) => {
+  const handleCreateTodo = useCallback((event: React.FormEvent) => {
     event.preventDefault();
 
     const newTodo = {
@@ -56,9 +58,9 @@ export const TodoApp = () => {
 
     setTodos(prevState => [...prevState, newTodo]);
     setTitle('');
-  };
+  }, [title]);
 
-  const handleToggle = (id: number) => {
+  const handleToggle = useCallback((id: number) => {
     const toggleId = todos.filter(todo => todo.id === id)[0];
     const changeTodo = {
       id,
@@ -68,9 +70,9 @@ export const TodoApp = () => {
 
     setTodos(prevState => [...prevState
       .filter(todo => todo.id !== id), changeTodo].sort((a, b) => a.id - b.id));
-  };
+  }, [todos, filteredTodos]);
 
-  const handleAllToggle = () => {
+  const handleAllToggle = useCallback(() => {
     const newTodos = todos.find(todo => !todo.completed)
       ? todos.map(todo => {
         const toggleTodo = {
@@ -92,21 +94,21 @@ export const TodoApp = () => {
       });
 
     setTodos(newTodos);
-  };
+  }, [todos, filteredTodos]);
 
-  const handleDeleteTodo = (deleteId: number) => {
+  const handleDeleteTodo = useCallback((deleteId: number) => {
     const newTodos = todos.filter(todo => todo.id !== deleteId);
 
     setTodos(newTodos);
-  };
+  }, [todos, filteredTodos]);
 
-  const handleClearCompleted = () => {
+  const handleClearCompleted = useCallback(() => {
     const newTodos = todos.filter(todo => !todo.completed);
 
     setTodos(newTodos);
-  };
+  }, [todos, filteredTodos]);
 
-  const editTitle = (editById: number, tempTitle: string) => {
+  const editTitle = useCallback((editById: number, tempTitle: string) => {
     const editTodo = todos.find(todo => todo.id === editById);
 
     if (editTodo) {
@@ -120,7 +122,7 @@ export const TodoApp = () => {
         .filter(todo => todo.id !== editById), creatingEdtion]
         .sort((a, b) => a.id - b.id));
     }
-  };
+  }, [title, todos, filteredTodos]);
 
   useEffect(() => {
     const loadTodos = localStorage.getItem('todos');

@@ -15,11 +15,13 @@ export const TodoList: FC<PropsTodoList> = ({
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map(todo => {
+        const { id } = todo;
+
         return (
           <TodoItem
             todo={todo}
             handleToggle={handleToggle}
-            key={todo.id}
+            key={id}
             handleDeleteTodo={handleDeleteTodo}
             editTitle={editTitle}
           />

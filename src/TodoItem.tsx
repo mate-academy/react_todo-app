@@ -53,10 +53,12 @@ export const TodoItem: FC<PropsTodoItem> = ({
 
   const isEdit = editById === todo.id;
 
+  const { id, title, completed } = todo;
+
   return (
     <li
-      className={classNames({ completed: todo.completed }, { editing: isEdit })}
-      key={todo.id}
+      className={classNames({ completed }, { editing: isEdit })}
+      key={id}
 
     >
       <div className="view">
@@ -64,21 +66,21 @@ export const TodoItem: FC<PropsTodoItem> = ({
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          onClick={() => handleToggle(todo.id)}
-          checked={todo.completed}
+          onClick={() => handleToggle(id)}
+          checked={completed}
 
         />
         <label
           onDoubleClick={() => handleDoubleClickEdit(todo)}
         >
-          {todo.title}
+          {title}
 
         </label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => handleDeleteTodo(todo.id)}
+          onClick={() => handleDeleteTodo(id)}
         />
       </div>
       <form onSubmit={handleEditTitle}>

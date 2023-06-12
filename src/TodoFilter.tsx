@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { Filters } from './Filters';
 
 interface PropsTodoFilter {
@@ -11,36 +12,36 @@ export const TodoFilter: FC<PropsTodoFilter> = ({ setFiltered, filtered }) => {
 
     <ul className="filters">
       <li>
-        <a
-          href="#/"
-          className={filtered === Filters.All ? 'selected' : ''}
+        <Link
+          to="/"
+          className={filtered === Filters.Active ? 'selected' : ''}
           onClick={() => setFiltered(Filters.All)}
         >
           All
 
-        </a>
+        </Link>
       </li>
 
       <li>
-        <a
-          href="#/active"
+        <Link
+          to="active"
           className={filtered === Filters.Active ? 'selected' : ''}
           onClick={() => setFiltered(Filters.Active)}
         >
           Active
 
-        </a>
+        </Link>
       </li>
 
       <li>
-        <a
-          href="#/completed"
+        <Link
+          to="completed"
           onClick={() => setFiltered(Filters.Completed)}
           className={filtered === Filters.Completed ? 'selected' : ''}
         >
           Completed
 
-        </a>
+        </Link>
       </li>
     </ul>
 
