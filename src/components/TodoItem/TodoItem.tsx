@@ -53,10 +53,10 @@ export const TodoItem: React.FC<Props> = ({
 
     setFilter(Filter.All);
 
-    setTodos(todos.map(t => {
-      return t.id === id
-        ? { ...t, text: newText }
-        : { ...t };
+    setTodos(todos.map(task => {
+      return task.id === id
+        ? { ...task, text: newText }
+        : { ...task };
     }));
   };
 

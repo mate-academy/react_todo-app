@@ -97,8 +97,8 @@ export const App: React.FC = () => {
     sortedTodos();
     const filteredTodos = getFilteredTodos();
 
-    const allCompleted = todos.every(todo => todo.completed === true);
-    const allActive = todos.every(todo => todo.completed === false);
+    const allCompleted = todos.every(todo => todo.completed);
+    const allActive = todos.every(todo => !todo.completed);
 
     const delay = allActive || allCompleted ? 0 : 400;
 
