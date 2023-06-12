@@ -1,0 +1,33 @@
+@import "./variables";
+
+.todoapp {
+  display: flex;
+  justify-content: center;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+  }
+
+  .header {
+    margin: 40px 0 20px;
+    padding: 10px 20px 0;
+    width: 100%;
+    border-radius: 30px;
+    background-color: $c-greyLight-1;
+    box-shadow: $shadow-box;
+  }
+
+  h1 {
+    font-family: "Cabin Sketch", cursive;
+    font-size: 90px;
+    text-align: center;
+  }
+
+  .actionContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

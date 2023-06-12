@@ -1,0 +1,16 @@
+$c-primary: #3a88c5;
+$c-primary-dark: #2570aa;
+
+$c-white: #fff;
+$c-green: #5bb450;
+$c-greyLight-1: #e4ebf5;
+$c-greyLight-2: #c8d0e7;
+$c-greyDark: #9baacf;
+
+$shadow: 5px 5px 10px $c-greyLight-2,
+  -3px -3px 8px $c-white;
+
+$inner-shadow: inset 3px 3px 8px $c-greyLight-2,
+  inset -3px -3px 8px $c-white;
+
+$shadow-box: 0 10px 20px 0 rgba(0, 0, 0, 0.3);

@@ -1,0 +1,47 @@
+@import "../../../variables";
+
+.button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  background: none;
+  box-shadow: $shadow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s ease;
+
+  &__big {
+    width: 60px;
+    height: 60px;
+  }
+
+  & svg path,
+  svg {
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    color: $c-primary;
+
+    & svg path {
+      fill: $c-primary;
+    }
+  }
+
+  &:active {
+    color: $c-primary-dark;
+    box-shadow: $inner-shadow;
+
+    & svg {
+      transform: scale(0.95);
+    }
+
+    & svg path {
+      fill: $c-primary-dark;
+    }
+  }
+}

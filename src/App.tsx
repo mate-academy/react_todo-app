@@ -1,93 +1,162 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { TodoForm } from './components/TodoForm';
+import { ProgressBar } from './components/ProgressBar';
+import { TodoActions } from './components/TodoActions';
+import { TodoList } from './components/TodoList';
+import { Modal } from './components/Modal';
+import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
+import { useLocalStorageTodos } from './hooks/useLocalStorageTodos';
+import styles from './App.module.scss';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useLocalStorageTodos();
+  const [visibleTodos, setVisibleTodos] = useState<Todo[] | []>([]);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const onAddTodo = (text: string) => {
+    setFilter(Filter.All);
+
+    const newTodo = {
+      text,
+      id: crypto.randomUUID(),
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+  };
+
+  const handleToggleTodo = (id: string) => {
+    setFilter(Filter.All);
+
+    setTodos(todos.map(todo => (
+      todo.id === id
+        ? { ...todo, completed: !todo.completed }
+        : { ...todo }
+    )));
+  };
+
+  const handleDeleteTodo = (id: string) => {
+    setFilter(Filter.All);
+
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const handleClearCompletedTodo = () => {
+    setFilter(Filter.All);
+
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
+  const handleToggleAllTodos = () => {
+    const hasIncompleteTodo = todos.some(todo => !todo.completed);
+
+    setTodos(todos.map(todo => {
+      return todo.completed === hasIncompleteTodo
+        ? todo
+        : { ...todo, completed: hasIncompleteTodo };
+    }));
+  };
+
+  const getFilteredTodos = () => {
+    switch (filter) {
+      case Filter.Completed:
+        return todos.filter(todo => todo.completed);
+
+      case Filter.Active:
+        return todos.filter(todo => !todo.completed);
+
+      default:
+        return todos;
+    }
+  };
+
+  const sortedTodos = () => {
+    const copyTodos = [...todos];
+
+    switch (filter) {
+      case Filter.Completed:
+        copyTodos.sort((a, b) => +b.completed - +a.completed);
+        break;
+
+      case Filter.Active:
+        copyTodos.sort((a, b) => +a.completed - +b.completed);
+        break;
+
+      default:
+        break;
+    }
+
+    setVisibleTodos(copyTodos);
+  };
+
+  useEffect(() => {
+    sortedTodos();
+    const filteredTodos = getFilteredTodos();
+
+    const allCompleted = todos.every(todo => todo.completed);
+    const allActive = todos.every(todo => !todo.completed);
+
+    const delay = allActive || allCompleted ? 0 : 400;
+
+    const timeout = setTimeout(() => {
+      setVisibleTodos(filteredTodos);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [filter, todos]);
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <div className={styles.todoapp}>
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <h1>Todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+          <TodoForm
+            onAddTodo={onAddTodo}
           />
-        </form>
-      </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+          <AnimatePresence initial={false}>
+            {todos.length && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className={styles.actionContainer}
+              >
+                <ProgressBar todos={todos} setIsOpenModal={setIsOpenModal} />
+
+                <TodoActions
+                  filter={filter}
+                  setFilter={setFilter}
+                  handleClearCompletedTodo={handleClearCompletedTodo}
+                  handleToggleAllTodos={handleToggleAllTodos}
+                />
+
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <TodoList
+          todos={todos}
+          visibleTodos={visibleTodos}
+          setFilter={setFilter}
+          setTodos={setTodos}
+          setVisibleTodos={setVisibleTodos}
+          handleToggleTodo={handleToggleTodo}
+          handleDeleteTodo={handleDeleteTodo}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      </div>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <Modal
+        isOpenModal={isOpenModal}
+        setIsOpenModal={setIsOpenModal}
+      />
     </div>
   );
 };

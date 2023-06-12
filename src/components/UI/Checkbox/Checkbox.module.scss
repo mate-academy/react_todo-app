@@ -1,0 +1,66 @@
+@import "../../../variables";
+
+@keyframes explode {
+  30% {
+    stroke-width: 3;
+    stroke-opacity: 1;
+    transform: scale(0.8) rotate(40deg);
+  }
+  100% {
+    stroke-width: 0;
+    stroke-opacity: 0;
+    transform: scale(1.1) rotate(60deg);
+  }
+}
+
+.checkboxSvg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 12px;
+  width: 100%;
+  height: auto;
+  margin: auto;
+
+  fill: none;
+  stroke: $c-primary-dark;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+
+  .box,
+  .check {
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.9, 0, 0.5, 1);
+  }
+
+  .box {
+    stroke-dasharray: 56.11, 56.11;
+    stroke-dashoffset: 0;
+  }
+
+  .check {
+    stroke: $c-green;
+    stroke-dasharray: 9.9, 9.9;
+    stroke-dashoffset: 9.9;
+    transition-duration: 0.3s;
+  }
+
+  .line {
+    transition: stroke-dashoffset 0.4s cubic-bezier(0.9, 0, 0.5, 1);
+    stroke-dasharray: 400, 1684;
+    stroke-dashoffset: 400;
+  }
+
+  .circle {
+    stroke: $c-green;
+    stroke-dasharray: 1 6;
+    stroke-width: 0;
+
+    transform-origin: 13.5px 12.5px;
+    transform: scale(0.4) rotate(0deg);
+    animation: none 0.6s linear;
+
+    animation-delay: 0.5s;
+    animation-duration: 0.5s;
+  }
+}

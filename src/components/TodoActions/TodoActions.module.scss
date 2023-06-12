@@ -1,0 +1,70 @@
+@import "../../_variables.scss";
+
+.action {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 20px;
+
+  .filter {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+    width: 330px;
+    height: 40px;
+    box-shadow: $shadow;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    label {
+      width: 110px;
+      height: 40px;
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: $c-greyDark;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: $c-primary;
+      }
+    }
+
+    input {
+      display: none;
+
+      &:checked + label {
+        transition: all 0.3s ease;
+        color: $c-primary;
+      }
+    }
+
+    .segmented {
+      position: absolute;
+      height: 30px;
+      width: 100px;
+      margin-left: 5px;
+      border-radius: 5px;
+      box-shadow: $inner-shadow;
+      pointer-events: none;
+    }
+
+    input[id="tab-1"]:checked ~ .segmented {
+      transform: translateX(0);
+      transition: transform 0.3s cubic-bezier(0.65, 0.05, 0.35, 1);
+    }
+
+    input[id="tab-2"]:checked ~ .segmented {
+      transform: translateX(110px);
+      transition: transform 0.3s cubic-bezier(0.65, 0.05, 0.35, 1);
+    }
+
+    input[id="tab-3"]:checked ~ .segmented {
+      transform: translateX(220px);
+      transition: transform 0.3s cubic-bezier(0.65, 0.05, 0.35, 1);
+    }
+  }
+}
