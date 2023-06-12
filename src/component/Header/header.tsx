@@ -26,15 +26,17 @@ export const Header: React.FC<Props> = ({
 
   return (
     <header className="todoapp__header">
-      {/* eslint-disable-next-line */}
-      {hasSomeTodos && <button
-        type="button"
-        className={classNames(
-          'todoapp__toggle-all',
-          { active: isAllTodosCompleted },
-        )}
-        onClick={selectAllTodos}
-      />}
+      {hasSomeTodos && (
+        <button
+          type="button"
+          aria-label="delete tode"
+          className={classNames(
+            'todoapp__toggle-all',
+            { active: isAllTodosCompleted },
+          )}
+          onClick={selectAllTodos}
+        />
+      )}
 
       <form onSubmit={handleSubmit}>
         <input

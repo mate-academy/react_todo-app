@@ -19,6 +19,7 @@ export const Footer: React.FC<Props> = ({
   activeTodos,
 }) => {
   const buttonClear = todosShow.filter(todo => todo.completed).length;
+  const buttonClearActive = todosShow.filter(todo => todo.completed).length;
 
   return (
     <footer className="todoapp__footer">
@@ -61,16 +62,19 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      <button
-        type="button"
-        className={classNames(
-          'todoapp__clear-completed',
-          { opacity: buttonClear === 0 },
-        )}
-        onClick={handleDeleteTodoCompleted}
-      >
-        Clear completed
-      </button>
+      {buttonClearActive > 0 && (
+        <button
+          type="button"
+          aria-label="delete tode"
+          className={classNames(
+            'todoapp__clear-completed',
+            { opacity: buttonClear === 0 },
+          )}
+          onClick={handleDeleteTodoCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
