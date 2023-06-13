@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 
 type Props = {
-  addTodo: (title:string) => void;
+  handleAddTodo: (title:string) => void;
 };
 
-export const Header: React.FC<Props> = ({ addTodo }) => {
+export const Header: React.FC<Props> = ({ handleAddTodo }) => {
   const [query, setQuery] = useState('');
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -17,7 +17,7 @@ export const Header: React.FC<Props> = ({ addTodo }) => {
       return;
     }
 
-    addTodo(query);
+    handleAddTodo(query);
     setQuery('');
   };
 

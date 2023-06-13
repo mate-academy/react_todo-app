@@ -27,7 +27,7 @@ export const App: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const visibleTodos = filteredTodos(todos, filter);
 
-  const addTodo = (title: string) => {
+  const handleAddTodo = (title: string) => {
     const newTodo = {
       id: +new Date(),
       title,
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <Header addTodo={addTodo} />
+      <Header handleAddTodo={handleAddTodo} />
 
       {todos.length > 0 && (
         <>
