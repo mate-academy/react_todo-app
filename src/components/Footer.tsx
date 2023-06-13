@@ -1,5 +1,3 @@
-// import React from 'react';
-// import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
 import { TodosFilter } from './TodosFilter';
@@ -9,13 +7,13 @@ type Props = {
   todoStatus: Status,
   setTodoStatus: (status: Status) => void,
   setTodos: (value: (todos: Todo[]) => Todo[]) => void
-
-  // clearCompletedTodos: () => void,
 };
 
 export const Footer: React.FC<Props> = ({
-  todos, todoStatus, setTodoStatus, setTodos,
-  //  clearCompletedTodos,
+  todos,
+  todoStatus,
+  setTodoStatus,
+  setTodos,
 }) => {
   const countActiveTodo = todos.filter(todo => !todo.completed).length;
   const countCompletedTodo = todos.filter(todo => todo.completed).length;
@@ -27,7 +25,9 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {` ${countActiveTodo} items left`}
+        {countActiveTodo > 1
+          ? ` ${countActiveTodo} items left`
+          : ` ${countActiveTodo} item left`}
       </span>
 
       <TodosFilter

@@ -11,7 +11,9 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({
-  deleteTodo, toggleCompleteTodos, todo,
+  deleteTodo,
+  toggleCompleteTodos,
+  todo,
   changeTodoTitle,
 }) => {
   const { id, title, completed } = todo;

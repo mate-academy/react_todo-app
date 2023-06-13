@@ -11,7 +11,7 @@ export const Header: React.FC<Props> = ({ setTodos }) => {
   const addTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (todoTitle.trim() !== '') {
+    if (todoTitle.trim()) {
       const newTodo = {
         id: +new Date().getTime(),
         title: todoTitle,

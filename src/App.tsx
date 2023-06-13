@@ -16,7 +16,7 @@ export const App: React.FC = () => {
         setTodos={setTodos}
       />
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <TodoList
             todos={todos}

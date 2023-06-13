@@ -10,7 +10,9 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({
-  todos, todoStatus, setTodos,
+  todos,
+  todoStatus,
+  setTodos,
 }) => {
   const filteredTodos = useMemo(() => {
     switch (todoStatus) {
