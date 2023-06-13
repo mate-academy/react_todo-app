@@ -50,7 +50,7 @@ export const TodoItem: React.FC<Props> = ({
       setIsEditing(false);
     }
 
-    if (!newTitle.length) {
+    if (!newTitle.trim().length) {
       deleteTodo(id);
     }
 
