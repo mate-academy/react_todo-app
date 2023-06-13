@@ -1,22 +1,64 @@
 import classNames from 'classnames';
-import React, { FormEvent, useState } from 'react';
+import React, {
+  FormEvent, useCallback, useEffect, useState,
+} from 'react';
 import { Footer } from '../Footer/Footer';
 import { TodoList } from '../TodoList/TodoList';
-// import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
-import { useLocalStorage } from '../useLocalStorage/useLocalStorage';
+import {
+  deleteTodo, getTodos, getUser, postTodo, updateTodo,
+} from '../../api/todos';
+import { ErrorTypes } from '../../types/ErrorTypes';
+import { Notification } from '../Notification/Notification';
+import { UserResponce } from '../../types/UserResponce';
+import { Todo } from '../../types/Todo';
 
 export const TodoTable: React.FC = () => {
-  // const [todos, setTodos] = useState<Todo[]>([]);
-  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState<Status>(Status.All);
+  const [error, setError] = useState<ErrorTypes>(ErrorTypes.NONE);
+  const [user, setUser] = useState<UserResponce | null>(null);
 
-  const countNotCompleted = todos.filter(todo => !todo.completed).length;
   const hasCompleted = todos.some(todo => todo.completed);
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
   const allCompleted = todos.every(todo => todo.completed);
+  const countNotCompleted = activeTodos.length;
+
+  const USER_ID = 10278;
+
+  const handleGetUser = async () => {
+    setError(ErrorTypes.NONE);
+
+    try {
+      const userFromServer = await getUser(USER_ID);
+
+      setUser(userFromServer);
+    } catch {
+      setError(ErrorTypes.LoadUser);
+    } finally {
+      setTimeout(() => setError(ErrorTypes.NONE), 3000);
+    }
+  };
+
+  const handleGetTodos = async () => {
+    setError(ErrorTypes.NONE);
+    try {
+      const listOfTodos = await getTodos(USER_ID);
+
+      setTodos(listOfTodos);
+    } catch {
+      setError(ErrorTypes.LOAD);
+    } finally {
+      setTimeout(() => setError(ErrorTypes.NONE), 3000);
+    }
+  };
+
+  useEffect(() => {
+    handleGetUser();
+    handleGetTodos();
+  }, []);
 
   const filteredTodos = todos.filter(todo => {
     switch (filterType) {
@@ -31,16 +73,29 @@ export const TodoTable: React.FC = () => {
     }
   });
 
-  const handleAddTodo = (title: string) => {
-    const newTodo = {
-      id: +new Date(),
-      title,
-      completed: false,
-    };
+  const handleAddTodo = useCallback(async (title: string) => {
+    setError(ErrorTypes.NONE);
 
-    // setTodos(prevTodos => [...prevTodos, newTodo]);
-    setTodos([...todos, newTodo]);
-  };
+    try {
+      if (!title.trim()) {
+        setError(ErrorTypes.INPUT);
+
+        return;
+      }
+
+      const dataNewTodo = {
+        userId: USER_ID,
+        title,
+        completed: false,
+      };
+
+      const newTodo = await postTodo(dataNewTodo);
+
+      setTodos(prevTodos => [...prevTodos, newTodo]);
+    } catch {
+      setError(ErrorTypes.ADD);
+    }
+  }, []);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -52,61 +107,62 @@ export const TodoTable: React.FC = () => {
     setQuery('');
   };
 
-  const handleDeleteTodo = (todoId: number) => {
-    // setTodos(todos => todos.filter(todo => todo.id !== todoId));
-    setTodos(todos.filter(todo => todo.id !== todoId));
-  };
+  const handleDeleteTodo = useCallback(async (todoId: number) => {
+    setError(ErrorTypes.NONE);
+
+    try {
+      await deleteTodo(todoId);
+
+      setTodos(currentTodos => currentTodos
+        .filter(currentTodo => currentTodo.id !== todoId));
+    } catch {
+      setError(ErrorTypes.DELETE);
+    }
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
-  const handleCheckbox = (id: number, value: boolean) => {
-    // setTodos(curTodos => curTodos.map(curTodo => {
-    //   if(curTodo.id !== id) {
-    //     return curTodo;
-    //   }
+  const handleCheckbox = async (id: number, value: boolean) => {
+    setError(ErrorTypes.NONE);
+    try {
+      await updateTodo(id, { completed: !value });
 
-    //   return {
-    //     ...curTodo,
-    //     completed: !value,
-    //   }
-    // }))
+      setTodos(curTodos => curTodos.map(curTodo => {
+        if (curTodo.id !== id) {
+          return curTodo;
+        }
 
-    setTodos(todos.map(curTodo => {
-      if (curTodo.id !== id) {
-        return curTodo;
-      }
-
-      return {
-        ...curTodo,
-        completed: !value,
-      };
-    }));
+        return {
+          ...curTodo,
+          completed: !value,
+        };
+      }));
+    } catch {
+      setError(ErrorTypes.PATCH);
+    }
   };
 
-  const handleChangeTitle = (id: number, newTitle: string) => {
-    // setTodos(curTodos => curTodos.map(curTodo => {
-    //   if(curTodo.id !== id) {
-    //     return curTodo;
-    //   }
+  const handleChangeTitle = async (id: number, newTitle: string) => {
+    setError(ErrorTypes.NONE);
 
-    //   return {
-    //     ...curTodo,
-    //     title: newTitle,
-    //   }
-    // }));
+    try {
+      await updateTodo(id, { title: newTitle });
 
-    setTodos(todos.map(curTodo => {
-      if (curTodo.id !== id) {
-        return curTodo;
-      }
+      setTodos(curTodos => curTodos.map(curTodo => {
+        if (curTodo.id !== id) {
+          return curTodo;
+        }
 
-      return {
-        ...curTodo,
-        title: newTitle,
-      };
-    }));
+        return {
+          ...curTodo,
+          title: newTitle,
+        };
+      }));
+    } catch {
+      setError(ErrorTypes.PATCH);
+    }
   };
 
   const handleToogleAll = () => {
@@ -124,7 +180,7 @@ export const TodoTable: React.FC = () => {
   return (
     <>
       <header className="header">
-        <h1>todos</h1>
+        <h1>{`${user ? `${user.name}'s` : ''} todos`}</h1>
 
         <form onSubmit={handleSubmit}>
           <input
@@ -172,6 +228,11 @@ export const TodoTable: React.FC = () => {
         handleClearCompleted={handleClearCompleted}
       />
     )}
+
+      {error
+        && (
+          <Notification error={error} />
+        )}
     </>
   );
 };
