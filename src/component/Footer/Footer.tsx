@@ -5,7 +5,7 @@ import { TodoFilter } from '../../types/TodoFilter';
 
 interface FooterProps {
   todos: Todo[]
-  todoFilter: string;
+  todoFilter: TodoFilter;
   setTodoFilter: (option: TodoFilter) => void;
   deleteCompletedTodo: () => void,
 }
