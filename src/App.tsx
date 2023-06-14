@@ -120,7 +120,7 @@ export const App: React.FC = () => {
           ? todos.map(todo => ({ ...todo, completed: false }))
           : todos.map(todo => ({ ...todo, completed: true })),
       );
-    } catch {
+    } catch(error) {
       setIsError('Unable to update todos');
     }
   }, [todos]);
