@@ -113,23 +113,17 @@ export const App: React.FC = () => {
       }
     };
 
-  const isAllTodosCompleted = useMemo(() => (
-    todos.every(todo => todo.completed)
-  ), [todos]);
-
   const handleAllTasksCompleted = useCallback(async () => {
     try {
-      await Promise.all(todos.map(todo => (
-        handleUpdateTodoCompleted(todo.id, !isAllTodosCompleted)
-      )));
-      setTodos((prevTodos) => prevTodos.map((todo) => ({
-        ...todo,
-        completed: !isAllTodosCompleted,
-      })));
+      setTodos(
+        todos.every(todo => todo.completed)
+          ? todos.map(todo => ({ ...todo, completed: false }))
+          : todos.map(todo => ({ ...todo, completed: true })),
+      );
     } catch {
       setIsError('Unable to update todos');
     }
-  }, [todos, isAllTodosCompleted]);
+  }, [todos]);
 
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
