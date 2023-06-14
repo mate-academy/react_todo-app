@@ -22,11 +22,11 @@ const timeDelay = 3000;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredBy, setFilteredBy] = useState(TodoFilter.ALL);
+  const [todoFilter, setTodoFilter] = useState(TodoFilter.ALL);
   const [isError, setIsError] = useState('');
   const [query, setQuery] = useState('');
-  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  const [toggleAll] = useState(false);
+  const [, setTempTodo] = useState<Todo | null>(null);
+  const areAllTasksCompleted = false;
 
   const getAllTodos = async () => {
     try {
@@ -117,7 +117,7 @@ export const App: React.FC = () => {
     todos.every(todo => todo.completed)
   ), [todos]);
 
-  const handleToggleAll = useCallback(async () => {
+  const handleAllTasksCompleted = useCallback(async () => {
     try {
       await Promise.all(todos.map(todo => (
         handleUpdateTodoCompleted(todo.id, !isAllTodosCompleted)
@@ -133,7 +133,7 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
-      switch (filteredBy) {
+      switch (todoFilter) {
         case TodoFilter.ALL:
           return true;
         case TodoFilter.ACTIVE:
@@ -144,7 +144,7 @@ export const App: React.FC = () => {
           return false;
       }
     });
-  }, [todos, filteredBy]);
+  }, [todos, todoFilter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -160,19 +160,18 @@ export const App: React.FC = () => {
           addTodo={handleAddTodo}
           query={query}
           setQuery={setQuery}
-          toggleAll={toggleAll}
-          setToggleAll={handleToggleAll}
+          areAllTasksCompleted={areAllTasksCompleted}
+          handleAllTasksCompleted={handleAllTasksCompleted}
         />
         <TodoApp
           todos={filteredTodos}
-          tempTodo={tempTodo}
           deleteTodo={handleDeleteTodo}
           updateTodoCompleted={handleUpdateTodoCompleted}
 
         />
         <Footer
-          filteredBy={filteredBy}
-          setFilteredBy={setFilteredBy}
+          todoFilter={todoFilter}
+          setTodoFilter={setTodoFilter}
           todos={filteredTodos}
           deleteCompletedTodo={handleDeleteCompletedTodo}
         />

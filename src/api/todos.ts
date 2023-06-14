@@ -10,7 +10,7 @@ export const addTodo = (userId: number, data: NewTodo) => {
   return client.post<Todo>(`/todos?userId=${userId}`, data);
 };
 
-export const patchTodo = (todoId: number, data: any) => {
+export const patchTodo = (todoId: number, data: Partial<Todo>) => {
   return client.patch<Todo>(`/todos/${todoId}`, data);
 };
 

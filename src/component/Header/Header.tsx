@@ -7,8 +7,8 @@ interface HeaderProps {
   addTodo: (title: string) => void;
   query: string;
   setQuery: (query: string) => void;
-  toggleAll: boolean;
-  setToggleAll: (value: boolean) => void;
+  areAllTasksCompleted: boolean;
+  handleAllTasksCompleted: (value: boolean) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,8 +16,8 @@ export const Header: React.FC<HeaderProps> = ({
   addTodo,
   query,
   setQuery,
-  toggleAll,
-  setToggleAll,
+  areAllTasksCompleted,
+  handleAllTasksCompleted,
 }) => {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const handleToggleAll = () => {
-    setToggleAll(!toggleAll);
+    handleAllTasksCompleted(!areAllTasksCompleted);
   };
 
   return (

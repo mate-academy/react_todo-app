@@ -60,7 +60,6 @@ export const TodoInfo: React.FC<TodoInfoProps> = ({
 
   return (
     <div
-      key={id}
       className={
         classNames('todo',
           { completed, editing: isTitleEdit })

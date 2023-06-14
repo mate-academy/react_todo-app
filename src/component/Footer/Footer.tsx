@@ -5,14 +5,14 @@ import { TodoFilter } from '../../types/TodoFilter';
 
 interface FooterProps {
   todos: Todo[]
-  filteredBy: string;
-  setFilteredBy: (option: TodoFilter) => void;
+  todoFilter: string;
+  setTodoFilter: (option: TodoFilter) => void;
   deleteCompletedTodo: () => void,
 }
 export const Footer: React.FC<FooterProps> = ({
   todos,
-  filteredBy,
-  setFilteredBy,
+  todoFilter,
+  setTodoFilter,
   deleteCompletedTodo,
 }) => {
   const todoCount = todos.filter((todo) => !todo.completed).length;
@@ -20,7 +20,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todoCount} ${todoCount === 1
+        {`${todoCount} ${todoCount <= 1
           ? 'item'
           : 'items'
         } left`}
@@ -31,9 +31,9 @@ export const Footer: React.FC<FooterProps> = ({
           href="#/"
           className={classNames(
             'filter__link',
-            { selected: filteredBy === TodoFilter.ALL },
+            { selected: todoFilter === TodoFilter.ALL },
           )}
-          onClick={() => setFilteredBy(TodoFilter.ALL)}
+          onClick={() => setTodoFilter(TodoFilter.ALL)}
         >
           All
         </a>
@@ -42,9 +42,9 @@ export const Footer: React.FC<FooterProps> = ({
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: filteredBy === TodoFilter.ACTIVE },
+            { selected: todoFilter === TodoFilter.ACTIVE },
           )}
-          onClick={() => setFilteredBy(TodoFilter.ACTIVE)}
+          onClick={() => setTodoFilter(TodoFilter.ACTIVE)}
         >
           Active
         </a>
@@ -53,9 +53,9 @@ export const Footer: React.FC<FooterProps> = ({
           href="#/completed"
           className={classNames(
             'filter__link',
-            { selected: filteredBy === TodoFilter.COMPLETED },
+            { selected: todoFilter === TodoFilter.COMPLETED },
           )}
-          onClick={() => setFilteredBy(TodoFilter.COMPLETED)}
+          onClick={() => setTodoFilter(TodoFilter.COMPLETED)}
         >
           Completed
         </a>
