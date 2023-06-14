@@ -25,18 +25,18 @@ export const Header: React.FC<Props> = React.memo(({
         className={classNames('todoapp__toggle-all',
           { active: !isTodoStatus })}
         aria-label="toggle-all"
-        onClick={() => toggleAll()}
+        onClick={toggleAll}
       />
 
       <form
-        onSubmit={(event) => onSumbit(event)}
+        onSubmit={onSumbit}
       >
         <input
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={query}
-          onChange={(event) => handleChange(event)}
+          onChange={handleChange}
           disabled={IsDisabled}
         />
       </form>
