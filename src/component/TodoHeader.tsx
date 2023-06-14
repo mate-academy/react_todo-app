@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
@@ -33,6 +32,7 @@ export const TodoHeader: React.FC<Props> = ({
           { active: isActicve },
         )}
         onClick={handleUpdateAllTodoStatus}
+        aria-label="delete tode"
       />
       <form onSubmit={handleSubmit}>
         <input

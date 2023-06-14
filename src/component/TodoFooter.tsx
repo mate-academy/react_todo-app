@@ -57,16 +57,19 @@ export const TodoFooter: React.FC<Props> = (
           Completed
         </a>
       </nav>
-      <button
-        type="button"
-        className={classNames(
-          'todoapp__clear-completed',
-          { opacity: buttonClear === 0 },
-        )}
-        onClick={handleDeleteTodoCompleted}
-      >
-        Clear completed
-      </button>
+      {buttonClear > 0
+      && (
+        <button
+          type="button"
+          className={classNames(
+            'todoapp__clear-completed',
+            { opacity: buttonClear === 0 },
+          )}
+          onClick={handleDeleteTodoCompleted}
+        >
+          Clear completed
+        </button>
+      ) }
     </footer>
   );
 };

@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useState, useEffect, useMemo, useCallback,
 } from 'react';
@@ -275,11 +273,11 @@ export const App: React.FC = () => {
             type="button"
             className="delete"
             onClick={handleCleanErrorMessage}
+            aria-label="delete tode"
           />
           {isError}
         </div>
       )}
-
     </div>
   );
 };
