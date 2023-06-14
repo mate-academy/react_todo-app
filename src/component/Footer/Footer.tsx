@@ -4,10 +4,10 @@ import { Todo } from '../../types/Todo';
 import { TodoFilter } from '../../types/TodoFilter';
 
 interface FooterProps {
-  todos: Todo[]
+  todos: Todo[];
   todoFilter: TodoFilter;
   setTodoFilter: (option: TodoFilter) => void;
-  deleteCompletedTodo: () => void,
+  deleteCompletedTodo: () => void;
 }
 export const Footer: React.FC<FooterProps> = ({
   todos,
@@ -16,6 +16,13 @@ export const Footer: React.FC<FooterProps> = ({
   deleteCompletedTodo,
 }) => {
   const todoCount = todos.filter((todo) => !todo.completed).length;
+  const handleFilterClick = (
+    option: TodoFilter,
+    event: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    event.preventDefault();
+    setTodoFilter(option);
+  };
 
   return (
     <footer className="todoapp__footer">
@@ -33,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({
             'filter__link',
             { selected: todoFilter === TodoFilter.ALL },
           )}
-          onClick={() => setTodoFilter(TodoFilter.ALL)}
+          onClick={(event) => handleFilterClick(TodoFilter.ALL, event)}
         >
           All
         </a>
@@ -44,7 +51,7 @@ export const Footer: React.FC<FooterProps> = ({
             'filter__link',
             { selected: todoFilter === TodoFilter.ACTIVE },
           )}
-          onClick={() => setTodoFilter(TodoFilter.ACTIVE)}
+          onClick={(event) => handleFilterClick(TodoFilter.ACTIVE, event)}
         >
           Active
         </a>
@@ -55,7 +62,7 @@ export const Footer: React.FC<FooterProps> = ({
             'filter__link',
             { selected: todoFilter === TodoFilter.COMPLETED },
           )}
-          onClick={() => setTodoFilter(TodoFilter.COMPLETED)}
+          onClick={(event) => handleFilterClick(TodoFilter.COMPLETED, event)}
         >
           Completed
         </a>

@@ -2,13 +2,13 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo/TodoInfo';
 
-interface TodoAppProps {
+interface Props {
   todos: Todo[];
   deleteTodo: (id: number) => void;
   updateTodoCompleted: (id: number, completed: boolean) => void;
 }
 
-export const TodoApp: React.FC<TodoAppProps> = ({
+export const TodoApp: React.FC<Props> = ({
   todos,
   deleteTodo,
   updateTodoCompleted,

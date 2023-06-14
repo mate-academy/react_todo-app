@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useState, useMemo, useEffect, useCallback,
+  useState, useMemo, useEffect,
 } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
   const [isError, setIsError] = useState('');
   const [query, setQuery] = useState('');
   const [, setTempTodo] = useState<Todo | null>(null);
-  const areAllTasksCompleted = false;
+  const [areAllTasksCompleted] = useState(false);
 
   const getAllTodos = async () => {
     try {
@@ -113,17 +113,17 @@ export const App: React.FC = () => {
       }
     };
 
-  const handleAllTasksCompleted = useCallback(async () => {
+  const handleAllTasksCompleted = async () => {
     try {
       setTodos(
         todos.every(todo => todo.completed)
           ? todos.map(todo => ({ ...todo, completed: false }))
           : todos.map(todo => ({ ...todo, completed: true })),
       );
-    } catch(error) {
+    } catch (error) {
       setIsError('Unable to update todos');
     }
-  }, [todos]);
+  };
 
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
