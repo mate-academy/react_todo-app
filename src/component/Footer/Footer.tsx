@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({
   const todoCount = todos.filter((todo) => !todo.completed).length;
   const handleFilterClick = (
     option: TodoFilter,
-    event: React.MouseEvent<HTMLAnchorElement>
+    event: React.MouseEvent<HTMLAnchorElement>,
   ) => {
     event.preventDefault();
     setTodoFilter(option);
