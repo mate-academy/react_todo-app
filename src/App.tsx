@@ -15,12 +15,12 @@ const USER_ID = 10589;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [select, setSelect] = useState('all');
-  const [isError, setIsError] = useState('');
+  const [select, setSelect] = useState(SortEnum.ALL);
+  const [error, setError] = useState('');
   const [querySearch, setQuerySearch] = useState('');
   const [processing, setProcessing] = useState<number[]>([]);
 
-  const lengTodos = todos.filter(({ completed }) => !completed).length;
+  const uncompletedLength = todos.filter(({ completed }) => !completed).length;
 
   const addTodoToProcesing = (id : number | null) => {
     if (!id) {
@@ -36,9 +36,9 @@ export const App: React.FC = () => {
 
       setTodos(receivedTodos);
     } catch {
-      setIsError('Failed to load todos');
+      setError('Failed to load todos');
       setTimeout(() => {
-        setIsError('');
+        setError('');
       }, 3000);
     } finally {
       addTodoToProcesing(null);
@@ -76,9 +76,9 @@ export const App: React.FC = () => {
       await getPostTodos(USER_ID, newTodo);
       await getTodosAll();
     } catch {
-      setIsError('Unable to add a todo');
+      setError('Unable to add a todo');
       setTimeout(() => {
-        setIsError('');
+        setError('');
       }, 3000);
     } finally {
       addTodoToProcesing(null);
@@ -91,9 +91,9 @@ export const App: React.FC = () => {
       await getTodosAll();
       addTodoToProcesing(todoId);
     } catch {
-      setIsError('Unable to delete a todo');
+      setError('Unable to delete a todo');
       setTimeout(() => {
-        setIsError('');
+        setError('');
       }, 3000);
     } finally {
       addTodoToProcesing(null);
@@ -130,9 +130,9 @@ export const App: React.FC = () => {
         });
       }
     } catch {
-      setIsError('Unable to override task status');
+      setError('Unable to override task status');
       setTimeout(() => {
-        setIsError('');
+        setError('');
       }, 3000);
     } finally {
       addTodoToProcesing(null);
@@ -140,10 +140,10 @@ export const App: React.FC = () => {
   };
 
   const handleUpdateAllTodoStatus = async () => {
-    const someCompleted = todos.some(todo => !todo.completed);
+    const hasCompleted = todos.some(todo => !todo.completed);
 
     const updatedAllTodo = todos.map((todo) => {
-      if (someCompleted) {
+      if (hasCompleted) {
         return {
           ...todo,
           completed: true,
@@ -158,33 +158,27 @@ export const App: React.FC = () => {
 
     setTodos(updatedAllTodo);
     try {
-      if (someCompleted) {
+      if (hasCompleted) {
         todos.forEach(async ({
-          title, id,
+          id,
         }) => {
           await client.patch(`/todos/${id}`, {
             completed: true,
-            title,
-            userId: USER_ID,
-            id,
           });
         });
       } else {
         todos.forEach(async ({
-          title, id, completed,
+          id, completed,
         }) => {
           await client.patch(`/todos/${id}`, {
             completed: !completed,
-            title,
-            userId: USER_ID,
-            id,
           });
         });
       }
     } catch {
-      setIsError('Unable to override all tasks status');
+      setError('Unable to override all tasks status');
       setTimeout(() => {
-        setIsError('');
+        setError('');
       }, 3000);
     } finally {
       addTodoToProcesing(null);
@@ -216,9 +210,9 @@ export const App: React.FC = () => {
         addTodoToProcesing(todoToUpdate.id);
       }
     } catch {
-      setIsError('Unable to update a todo');
+      setError('Unable to update a todo');
       setTimeout(() => {
-        setIsError('');
+        setError('');
       }, 3000);
     } finally {
       addTodoToProcesing(null);
@@ -226,7 +220,7 @@ export const App: React.FC = () => {
   };
 
   const handleCleanErrorMessage = useCallback(() => {
-    setIsError('');
+    setError('');
   }, []);
 
   if (!USER_ID) {
@@ -261,11 +255,11 @@ export const App: React.FC = () => {
           select={select}
           setSelect={setSelect}
           todos={filteredTodos}
-          lengTodos={lengTodos}
+          lengTodos={uncompletedLength}
           handleDeleteTodoCompleted={handleDeleteTodoCompleted}
         />
       </div>
-      {isError && (
+      {error && (
         <div
           className="notification is-danger is-light has-text-weight-normal"
         >
@@ -275,7 +269,7 @@ export const App: React.FC = () => {
             onClick={handleCleanErrorMessage}
             aria-label="delete tode"
           />
-          {isError}
+          {error}
         </div>
       )}
     </div>

@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
+import { SortEnum } from '../types/sort';
 
 type Props = {
   select: string,
-  setSelect:(value: string) => void;
+  setSelect:(value: SortEnum) => void;
   todos: Todo[];
   lengTodos: number,
   handleDeleteTodoCompleted: () => void;
@@ -32,7 +33,7 @@ export const TodoFooter: React.FC<Props> = (
             'filter__link',
             { selected: select === 'all' },
           )}
-          onClick={() => setSelect('all')}
+          onClick={() => setSelect(SortEnum.ALL)}
         >
           All
         </a>
@@ -42,7 +43,7 @@ export const TodoFooter: React.FC<Props> = (
             'filter__link',
             { selected: select === 'active' },
           )}
-          onClick={() => setSelect('active')}
+          onClick={() => setSelect(SortEnum.ACTIVE)}
         >
           Active
         </a>
@@ -52,24 +53,22 @@ export const TodoFooter: React.FC<Props> = (
             'filter__link',
             { selected: select === 'completed' },
           )}
-          onClick={() => setSelect('completed')}
+          onClick={() => setSelect(SortEnum.COMPLETED)}
         >
           Completed
         </a>
       </nav>
-      {buttonClear > 0
-      && (
-        <button
-          type="button"
-          className={classNames(
-            'todoapp__clear-completed',
-            { opacity: buttonClear === 0 },
-          )}
-          onClick={handleDeleteTodoCompleted}
-        >
-          Clear completed
-        </button>
-      ) }
+      <button
+        type="button"
+        className={classNames(
+          'todoapp__clear-completed',
+          { todoapp_opacity: buttonClear < 1 },
+        )}
+        onClick={handleDeleteTodoCompleted}
+
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
