@@ -31,7 +31,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
     setIsEditing(false);
 
     if (title === todo.title) {
-      return undefined;
+      return;
     }
 
     if (!title) {
@@ -39,7 +39,9 @@ export const TodoItem: React.FC<Props> = React.memo(({
         currnetTodo.id !== todo.id
       ));
 
-      return setTodos(updatedTodos);
+      setTodos(updatedTodos);
+
+      return;
     }
 
     const updatedTodos = todos.map(item => {
@@ -53,7 +55,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
       };
     });
 
-    return setTodos(updatedTodos);
+    setTodos(updatedTodos);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {

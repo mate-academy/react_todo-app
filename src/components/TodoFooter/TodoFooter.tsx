@@ -24,7 +24,11 @@ export const TodoFooter: React.FC<Props> = React.memo(({
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todosLeft} items left`}
+        {
+          todosLeft === 1
+            ? `${todosLeft} item left`
+            : `${todosLeft} items left`
+        }
       </span>
 
       <Filter />
