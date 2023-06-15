@@ -1,1 +1,1 @@
-export * from './NewTodo'
+export * from './NewTodo';
