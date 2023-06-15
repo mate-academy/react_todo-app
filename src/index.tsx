@@ -1,9 +1,6 @@
 import ReactDOM from 'react-dom';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
-
+import './styles/main.scss';
 import { HashRouter } from 'react-router-dom';
 import { App } from './App';
 

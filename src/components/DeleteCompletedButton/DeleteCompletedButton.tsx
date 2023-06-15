@@ -17,7 +17,7 @@ export const DeleteCompletedButton: React.FC<Props> = ({
       {completedTodos ? (
         <button
           type="button"
-          className="clear-completed"
+          className="todoapp__clear-completed"
           onClick={onDeleteCompletedTodos}
         >
           Clear completed
@@ -25,7 +25,7 @@ export const DeleteCompletedButton: React.FC<Props> = ({
       ) : (
         <button
           type="button"
-          className="clear-completed"
+          className="todoapp__clear-completed"
           style={{ opacity: 0, cursor: 'auto' }}
           disabled
         >

@@ -12,8 +12,6 @@ function getVisibleTodos(todos: Todo[], currentFilter: string) {
           return !completed;
         case Status.COMPLETED:
           return completed;
-        // default:
-        //   return true;
         default:
           throw new Error('Unable to filter');
       }

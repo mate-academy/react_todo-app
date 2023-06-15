@@ -35,14 +35,10 @@ export const TodoItem: React.FC<Props> = ({
     if (!newTitle.trim()) {
       onDeleteTodo(id);
       setIsInEditMode(false);
-
-      return;
     }
 
     if (newTitle.trim() === title) {
       setIsInEditMode(false);
-
-      return;
     }
 
     onUpdateTodo(id, { title: newTitle });
@@ -55,22 +51,46 @@ export const TodoItem: React.FC<Props> = ({
     }
   };
 
+  let expired: number | null;
+
+  const doubleTouch = (event: React.TouchEvent) => {
+    if (event.touches.length === 1) {
+      if (!expired) {
+        expired = event.timeStamp + 400;
+      } else if (event.timeStamp <= expired) {
+        // remove the default of this event ( Zoom )
+        event.preventDefault();
+        setIsInEditMode(true);
+        // then reset the variable for other "double Touches" event
+        expired = null;
+      } else {
+        // if the second touch was expired, make it as it's the first
+        expired = event.timeStamp + 400;
+      }
+    }
+  };
+
   return (
     <li
       key={id}
       className={classNames(
-        { completed },
-        { editing: isInEditMode },
+        'todolist__item',
+        { 'todolist__item--completed': completed },
+        { 'todolist__item--editing': isInEditMode },
       )}
       onDoubleClick={() => {
         setIsInEditMode(true);
       }}
+      onTouchStart={doubleTouch}
     >
       {isInEditMode ? (
-        <form onSubmit={handleTitleChange}>
+        <form
+          onSubmit={handleTitleChange}
+        >
           <input
             type="text"
-            className="edit"
+            name="editTodoTitle"
+            className="todolist__edit-field"
             value={newTitle}
             onChange={(event) => {
               setNewTitle(event.target.value);
@@ -82,11 +102,12 @@ export const TodoItem: React.FC<Props> = ({
         </form>
       ) : (
         <div
-          className="view"
+          className="todolist__view-item"
         >
           <input
             type="checkbox"
-            className="toggle"
+            name="toggleTodoStatus"
+            className="todolist__toggle-item"
             onChange={() => {
               onUpdateTodo(id, { completed: !completed });
             }}
@@ -95,7 +116,7 @@ export const TodoItem: React.FC<Props> = ({
           <label>{title}</label>
           <button
             type="button"
-            className="destroy"
+            className="todolist__destroy-item"
             data-cy="deleteTodo"
             onClick={() => {
               onDeleteTodo(id);

@@ -22,14 +22,18 @@ export const Header: React.FC<Props> = ({
   };
 
   return (
-    <header className="header">
-      <h1>todos</h1>
+    <header className="todoapp__header">
 
-      <form onSubmit={handleSubmit}>
+      <form
+        action=""
+        onSubmit={handleSubmit}
+        onBlur={handleSubmit}
+      >
         <input
           type="text"
+          name="newTodoTitle"
           data-cy="createTodo"
-          className="new-todo"
+          className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={title}
           onChange={handleTitle}

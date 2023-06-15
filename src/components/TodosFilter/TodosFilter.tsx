@@ -13,42 +13,42 @@ export const TodosFilter: React.FC<Props> = ({
   onChangeFilter,
 }) => {
   return (
-    <ul className="filters">
-      <li>
-        <NavLink
-          to="/"
-          className={classNames({ selected: filterBy === Status.ALL })}
-          onClick={() => {
-            onChangeFilter(Status.ALL);
-          }}
-        >
-          All
-        </NavLink>
-      </li>
+    <nav className="filters" data-cy="todosFilter">
+      <NavLink
+        to="/"
+        className={classNames('filters__link', {
+          selected: filterBy === Status.ALL,
+        })}
+        onClick={() => {
+          onChangeFilter(Status.ALL);
+        }}
+      >
+        All
+      </NavLink>
 
-      <li>
-        <NavLink
-          to="/active"
-          className={classNames({ selected: filterBy === Status.ACTIVE })}
-          onClick={() => {
-            onChangeFilter(Status.ACTIVE);
-          }}
-        >
-          Active
-        </NavLink>
-      </li>
+      <NavLink
+        to="/active"
+        className={classNames('filters__link', {
+          selected: filterBy === Status.ACTIVE,
+        })}
+        onClick={() => {
+          onChangeFilter(Status.ACTIVE);
+        }}
+      >
+        Active
+      </NavLink>
 
-      <li>
-        <NavLink
-          to="/completed"
-          className={classNames({ selected: filterBy === Status.COMPLETED })}
-          onClick={() => {
-            onChangeFilter(Status.COMPLETED);
-          }}
-        >
-          Completed
-        </NavLink>
-      </li>
-    </ul>
+      <NavLink
+        to="/completed"
+        className={classNames('filters__link', {
+          selected: filterBy === Status.COMPLETED,
+        })}
+        onClick={() => {
+          onChangeFilter(Status.COMPLETED);
+        }}
+      >
+        Completed
+      </NavLink>
+    </nav>
   );
 };

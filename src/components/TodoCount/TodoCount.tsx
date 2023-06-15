@@ -6,11 +6,11 @@ type Props = {
 };
 
 export const TodoCount: React.FC<Props> = ({ todos }) => {
-  const activeTodos = todos.filter(todo => todo.completed === false);
+  const activeTodosQty = todos.filter(todo => !todo.completed).length;
 
   return (
-    <span className="todo-count" data-cy="todosCounter">
-      {`${activeTodos.length} items left`}
+    <span className="todoapp__todo-count" data-cy="todosCounter">
+      {`${activeTodosQty} items left`}
     </span>
   );
 };

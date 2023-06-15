@@ -18,7 +18,7 @@ export const Footer: React.FC<Props> = ({
   onDeleteCompletedTodos,
 }) => {
   return (
-    <footer className="footer">
+    <footer className="todoapp__footer">
       <TodoCount todos={todos} />
 
       <TodosFilter
