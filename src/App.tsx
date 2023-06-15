@@ -6,28 +6,19 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
 import { useLocalStorage } from './UseLocalStorage';
-import { Filter } from './types/Filter';
-
-function filteredTodos(todos:Todo[], filter:string) {
-  const returnArr = [...todos];
-
-  switch (filter) {
-    case Filter.ACTIVE:
-      return returnArr.filter(todo => !todo.completed);
-    case Filter.COMPLETED:
-      return returnArr.filter(todo => todo.completed);
-    default:
-      return returnArr;
-  }
-}
+import { getFilteredTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const { filter = '' } = useParams();
   const [isChecked, setIsChecked] = useState(false);
-  const visibleTodos = filteredTodos(todos, filter);
+  const visibleTodos = getFilteredTodos(todos, filter);
 
   const handleAddTodo = (title: string) => {
+    if (title.trim() === '') {
+      return;
+    }
+
     const newTodo = {
       id: +new Date(),
       title,
@@ -47,10 +38,10 @@ export const App: React.FC = () => {
   };
 
   const toggleAll = () => {
-    const allCompleted = todos.every(todo => todo.completed);
+    const isAllCompleted = todos.every(todo => todo.completed);
     const updatedTodos = todos.map(todo => ({
       ...todo,
-      completed: !allCompleted,
+      completed: !isAllCompleted,
     }));
 
     setTodos(updatedTodos);

@@ -11,7 +11,7 @@ export const Footer:React.FC<Props> = ({
   clearCompleted,
 }) => {
   const todosLeft = todos.filter(todoLeft => !todoLeft.completed).length;
-  const isVisibleButton = todos.filter(todo => todo.completed).length;
+  const isVisibleButton = todos.some(todo => todo.completed);
 
   return (
     <footer className="footer">
@@ -42,7 +42,7 @@ export const Footer:React.FC<Props> = ({
         </li>
       </ul>
 
-      {isVisibleButton > 0 && (
+      {isVisibleButton && (
         <button
           type="button"
           className="clear-completed"
