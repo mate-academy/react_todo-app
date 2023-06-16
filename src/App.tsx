@@ -12,11 +12,6 @@ export const App: React.FC = () => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [filterOption, setFilterOption] = useState(FilterType.ALL);
 
-  const saveTodos = (value: Todo[]) => {
-    setTodos(value);
-    localStorage.setItem('todos', JSON.stringify(value));
-  };
-
   useEffect(() => {
     switch (window.location.hash) {
       case '#/active':
@@ -31,6 +26,11 @@ export const App: React.FC = () => {
         setFilterOption(FilterType.ALL);
     }
   }, []);
+
+  const saveTodos = (value: Todo[]) => {
+    setTodos(value);
+    localStorage.setItem('todos', JSON.stringify(value));
+  };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
