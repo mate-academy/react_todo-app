@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FilterType } from '../types/FIlterType';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   activeTodosAmount: number,

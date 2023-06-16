@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
-import { TodosFilter } from './components/TodosFilter';
+import { TodosFilter } from './components/TodosFilter/TodosFilter';
 import { Header } from './components/Header';
-import { FilterType } from './types/FIlterType';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(
+    JSON.parse(localStorage.getItem('todos') || '') || [],
+  );
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [filterOption, setFilterOption] = useState(FilterType.ALL);
 
+  const saveTodos = (value: Todo[]) => {
+    setTodos(value);
+    localStorage.setItem('todos', JSON.stringify(value));
+  };
+
   useEffect(() => {
-    const todosFromLocalStorage = window.localStorage.getItem('todos');
-
-    if (!todosFromLocalStorage) {
-      return;
-    }
-
-    setTodos(JSON.parse(todosFromLocalStorage));
-
     switch (window.location.hash) {
       case '#/active':
         setFilterOption(FilterType.ACTIVE);
@@ -48,12 +47,7 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    const updatedTodos = [...todos, newTodo];
-
-    setTodos(updatedTodos);
-
-    window.localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
+    saveTodos([...todos, newTodo]);
     setNewTodoTitle('');
   };
 
@@ -81,8 +75,7 @@ export const App: React.FC = () => {
 
     updatedTodos[index].completed = !updatedTodos[index].completed;
 
-    window.localStorage.setItem('todos', JSON.stringify(updatedTodos));
-    setTodos(updatedTodos);
+    saveTodos(updatedTodos);
   };
 
   const handleToggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,22 +85,19 @@ export const App: React.FC = () => {
         completed: e.target.checked,
       }));
 
-    window.localStorage.setItem('todos', JSON.stringify(updatedTodos));
-    setTodos(updatedTodos);
+    saveTodos(updatedTodos);
   };
 
   const handleDeleteTodo = (todoId: number) => {
     const updatedTodos = [...todos].filter(todo => todo.id !== todoId);
 
-    window.localStorage.setItem('todos', JSON.stringify(updatedTodos));
-    setTodos(updatedTodos);
+    saveTodos(updatedTodos);
   };
 
   const handleClearCompletedTodos = () => {
     const updatedTodos = [...todos].filter(todo => !todo.completed);
 
-    window.localStorage.setItem('todos', JSON.stringify(updatedTodos));
-    setTodos(updatedTodos);
+    saveTodos(updatedTodos);
   };
 
   const handlePatchTodo = (todoId: number, title: string) => {
@@ -122,8 +112,7 @@ export const App: React.FC = () => {
       };
     });
 
-    setTodos(updatedTodos);
-    window.localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    saveTodos(updatedTodos);
   };
 
   return (
@@ -137,23 +126,23 @@ export const App: React.FC = () => {
       />
 
       {todos.length > 0 && (
-        <TodoList
-          todos={visibleTodos}
-          areAllCompleted={areAllCompleted}
-          onToggleComplete={handleToggleCompleted}
-          onToggleAll={handleToggleAll}
-          onDeleteTodo={handleDeleteTodo}
-          onPatchTodo={handlePatchTodo}
-        />
-      )}
+        <>
+          <TodoList
+            todos={visibleTodos}
+            areAllCompleted={areAllCompleted}
+            onToggleComplete={handleToggleCompleted}
+            onToggleAll={handleToggleAll}
+            onDeleteTodo={handleDeleteTodo}
+            onPatchTodo={handlePatchTodo}
+          />
 
-      {todos.length > 0 && (
-        <TodosFilter
-          activeTodosAmount={activeTodos.length}
-          completedTodosAmount={completedTodos.length}
-          onFilterTodos={setFilterOption}
-          onClearCompletedTodos={handleClearCompletedTodos}
-        />
+          <TodosFilter
+            activeTodosAmount={activeTodos.length}
+            completedTodosAmount={completedTodos.length}
+            onFilterTodos={setFilterOption}
+            onClearCompletedTodos={handleClearCompletedTodos}
+          />
+        </>
       )}
     </div>
   );

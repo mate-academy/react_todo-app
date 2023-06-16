@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { Todo } from '../types/Todo';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
@@ -48,6 +48,8 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (editingTitle === todo.title) {
+      setIsEditing(false);
+
       return;
     }
 
