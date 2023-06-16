@@ -55,6 +55,18 @@ export const TodoItem: React.FC<Props> = ({
     setIsClicked(false);
   };
 
+  const handleRemove = () => {
+    handleTodoRemove(id);
+  };
+
+  const handleUpdate = () => {
+    handleUpdateTodo(id, !completed);
+  };
+
+  const handleDoubleClick = () => {
+    setIsClicked(true);
+  };
+
   return (
     <div
       className={classNames('todo',
@@ -65,7 +77,7 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           defaultChecked={completed}
-          onChange={() => handleUpdateTodo(id, !completed)}
+          onChange={handleUpdate}
         />
       </label>
 
@@ -88,7 +100,7 @@ export const TodoItem: React.FC<Props> = ({
         <>
           <span
             className="todo__title"
-            onDoubleClick={() => setIsClicked(true)}
+            onDoubleClick={handleDoubleClick}
           >
             {title}
           </span>
@@ -96,7 +108,7 @@ export const TodoItem: React.FC<Props> = ({
           <button
             type="button"
             className="todo__remove"
-            onClick={() => handleTodoRemove(id)}
+            onClick={handleRemove}
           >
             ×
           </button>

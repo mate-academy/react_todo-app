@@ -60,11 +60,23 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
     }
   };
 
+  const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handleInputName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  const onCloseError = () => {
+    setIsError(ErrorMessage.None);
+  };
+
   return (
     <section className="section">
       <form
         method="post"
-        onSubmit={(e) => handleSubmit(e)}
+        onSubmit={handleSubmit}
         className="box mt-5"
       >
         <h1 className="title is-3">
@@ -78,7 +90,7 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
             name="email"
             placeholder="Enter your email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleInputEmail}
             className="input is-primary"
             minLength={2}
           />
@@ -99,7 +111,7 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
                 className="input is-primary"
                 placeholder="Enter your name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleInputName}
                 minLength={2}
                 required
               />
@@ -124,7 +136,7 @@ export const AuthorizationPage: FC<Props> = ({ setUser }) => {
       {isError && (
         <ErrorNotification
           errorMessage={isError}
-          closeError={() => setIsError(ErrorMessage.None)}
+          closeError={onCloseError}
         />
       )}
     </section>

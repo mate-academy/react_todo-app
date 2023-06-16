@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
+import { filteredLinks } from '../../utils/filterLinks';
 
 type Props = {
   isTodoCompleted: boolean,
@@ -13,21 +14,6 @@ export const Footer: React.FC<Props> = ({
   activeTodosCount,
   handleClearCompleted,
 }) => {
-  const filteredLinks = [
-    {
-      title: 'All',
-      to: '/',
-    },
-    {
-      title: 'Active',
-      to: '/active',
-    },
-    {
-      title: 'Completed',
-      to: '/completed',
-    },
-  ];
-
   return (
     <footer className="todoapp__footer">
       <span className="todo-count" data-cy="todosCounter">

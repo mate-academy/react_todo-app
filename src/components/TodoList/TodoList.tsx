@@ -25,16 +25,18 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const { pathname } = useLocation();
 
-  const filteredTodos = useMemo(() => todos.filter((todo) => {
-    switch (pathname) {
-      case TodoStatus.Active:
-        return !todo.completed;
-      case TodoStatus.Completed:
-        return todo.completed;
-      default:
-        return TodoStatus.All;
-    }
-  }), [todos, pathname]);
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (pathname) {
+        case TodoStatus.Active:
+          return !todo.completed;
+        case TodoStatus.Completed:
+          return todo.completed;
+        default:
+          return true;
+      }
+    });
+  }, [todos, pathname]);
 
   return (
     <ul className="todoapp__main" data-cy="TodoList">
