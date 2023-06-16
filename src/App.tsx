@@ -7,7 +7,7 @@ import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(
-    JSON.parse(localStorage.getItem('todos') || '') || [],
+    JSON.parse(localStorage.getItem('todos') || '[]') || [],
   );
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [filterOption, setFilterOption] = useState(FilterType.ALL);
