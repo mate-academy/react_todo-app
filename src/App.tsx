@@ -12,7 +12,11 @@ import { ErrorMessage } from './enums/ErrorMessages';
 import { Filter } from './enums/Filter';
 
 import {
-  USER_ID, deleteTodo, getTodos, patchTodos, postTodos,
+  USER_ID,
+  deleteTodo,
+  getTodos,
+  patchTodos,
+  postTodos,
 } from './api/todos';
 
 export const App: React.FC = () => {
@@ -26,20 +30,20 @@ export const App: React.FC = () => {
   const [error, setError] = useState(ErrorMessage.NONE);
   const [filterValue, setFilterValue] = useState(url || Filter.All);
 
+  const fetchData = async () => {
+    try {
+      const todos = await getTodos(USER_ID);
+
+      setTodoList(todos);
+    } catch (err) {
+      setError(ErrorMessage.LOAD);
+    }
+  };
+
   useEffect(() => {
     if (todoList.length) {
       return;
     }
-
-    const fetchData = async () => {
-      try {
-        const todos = await getTodos(USER_ID);
-
-        setTodoList(todos);
-      } catch (err) {
-        setError(ErrorMessage.LOAD);
-      }
-    };
 
     fetchData();
   }, []);
@@ -147,8 +151,10 @@ export const App: React.FC = () => {
       switch (filterValue) {
         case Filter.Active:
           return !todo.completed;
+
         case Filter.Completed:
           return todo.completed;
+
         default:
           return todo;
       }

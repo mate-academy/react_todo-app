@@ -41,7 +41,7 @@ export const NewTodo: React.FC<Props> = ({
   const handleSubmit = async (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
 
-    if (newTitle === '') {
+    if (!newTitle) {
       await removeTodo(id);
       onNeedChange(false);
 

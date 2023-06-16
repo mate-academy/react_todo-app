@@ -27,6 +27,14 @@ export const TodoItem: React.FC<Props> = ({
     setIsNeedChange(true);
   };
 
+  const handleChange = () => {
+    changeTodo(id, { completed: !completed });
+  };
+
+  const handleRemove = () => {
+    removeTodo(id);
+  };
+
   return (
     <li className={classNames('todo', { completed })}>
       <label className="todo__status-label">
@@ -34,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onChange={() => changeTodo(id, { completed: !completed })}
+          onChange={handleChange}
         />
       </label>
 
@@ -58,7 +66,7 @@ export const TodoItem: React.FC<Props> = ({
             type="button"
             className="todo__remove"
             data-cy="deleteTodo"
-            onClick={() => removeTodo(id)}
+            onClick={handleRemove}
           >
             ×
           </button>

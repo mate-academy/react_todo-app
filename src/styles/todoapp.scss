@@ -83,8 +83,9 @@
   }
 
   &__footer {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 100px 1fr 100px;
+    grid-template-rows: 20px;
     align-items: center;
 
     box-sizing: content-box;
