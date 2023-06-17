@@ -1,9 +1,11 @@
-import React, {
+import {
   useState, useEffect, useMemo, useCallback,
 } from 'react';
 import { UserWarning } from './component/UserWarning';
 import { client } from './utils/fetchClient';
-import { getTodos, getPostTodos, deleteTodos } from './api/todos';
+import {
+  getTodos, getPostTodos, deleteTodos,
+} from './api/todos';
 import { Todo } from './types/Todo';
 import { NewTodo } from './types/NewTodo';
 import { TodoList } from './component/TodoList';
@@ -23,11 +25,8 @@ export const App: React.FC = () => {
   const uncompletedLength = todos.filter(({ completed }) => !completed).length;
 
   const addTodoToProcesing = (id : number | null) => {
-    if (!id) {
-      setProcessing([]);
-    } else {
-      setProcessing(prev => [...prev, id]);
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    !id ? setProcessing([]) : setProcessing(prev => [...prev, id]);
   };
 
   const getTodosAll = async () => {
@@ -129,7 +128,7 @@ export const App: React.FC = () => {
           id,
         });
       }
-    } catch {
+    } catch (err) {
       setError('Unable to override task status');
       setTimeout(() => {
         setError('');
