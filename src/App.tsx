@@ -128,7 +128,7 @@ export const App: React.FC = () => {
           id,
         });
       }
-    } catch (err) {
+    } catch {
       setError('Unable to override task status');
       setTimeout(() => {
         setError('');
