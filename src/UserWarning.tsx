@@ -82,7 +82,7 @@ export const UserWarning: React.FC<Props> = ({ setUser }) => {
           )}
 
           {error && (
-            <span>
+            <span className="is-danger help">
               {error}
             </span>
           )}

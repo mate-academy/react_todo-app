@@ -62,7 +62,7 @@ export const AddInput: React.FC<Props> = React.memo(({
           placeholder="What needs to be done?"
           value={input}
           disabled={isDisableInput}
-          onChange={e => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)}
           onKeyUp={handleCancelInput}
           ref={inputElem}
         />
