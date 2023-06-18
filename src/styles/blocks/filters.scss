@@ -1,0 +1,28 @@
+.filters {
+  position: absolute;
+  right: 0;
+  left: 0;
+
+  @media (max-width: 430px) {
+    bottom: 10px;
+  }
+
+  &__link {
+    margin: 3px;
+    padding: 3px 7px;
+
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      border-color: $borderFilterHoveredColor;
+    }
+
+    &.selected {
+      border-color: $borderFilterSelectedColor;
+    }
+  }
+}

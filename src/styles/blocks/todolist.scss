@@ -1,0 +1,154 @@
+.todolist {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+
+  &__item {
+    position: relative;
+
+    border-bottom: 1px solid $mainAppColor;
+
+    font-size: 24px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &--editing {
+      padding: 0;
+
+      border-bottom: none;
+
+      &:last-child {
+        margin-bottom: -1px;
+      }
+    }
+
+    &--completed label {
+      color: $mainAppColor;
+      text-decoration: line-through;
+    }
+
+    & label {
+      display: block;
+
+      padding: 15px 15px 15px 60px;
+      transition: color 0.4s;
+
+      word-break: break-all;
+      line-height: 1.2;
+    }
+  }
+
+  &__edit-field {
+    display: none;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  &__item--editing &__edit-field {
+    display: block;
+
+    padding: 12px 16px;
+    margin: 0 0 0 $editFieldLeftMargin;
+    width: 467px;
+    box-sizing: border-box;
+    border: 1px solid $borderEditTodoColor;
+    box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+
+    font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: 1.4em;
+    -webkit-font-smoothing: antialiased;
+    color: inherit;
+
+    @media screen and (max-width: $mobileBreakpoint) {
+      & {
+        width: calc(100vw - 2 * #{$appSideMargin} - #{$editFieldLeftMargin});
+      }
+    }
+  }
+
+  &__item--editing &__view-item {
+    display: none;
+  }
+
+  &__toggle-item {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    margin: auto 0;
+
+    width: 40px;
+    height: auto;
+    border: none; /* Mobile Safari */
+
+    cursor: pointer;
+    opacity: 0;
+    text-align: center;
+    -webkit-appearance: none;
+    appearance: none;
+
+    & + label {
+      background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center left;
+    }
+
+    &:checked + label {
+      background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E");
+    }
+  }
+
+  &__destroy-item {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    bottom: 0;
+
+    width: 40px;
+    height: 40px;
+    margin: auto 0 11px;
+    padding: 0;
+    border: 0;
+
+    color: $deleteTodoColor;
+    transition: color 0.2s ease-out;
+    font-size: 30px;
+    font-family: inherit;
+    font-weight: inherit;
+    background: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    &:hover {
+      color: $deleteTodoHoveredColor;
+    }
+
+    &:after {
+      content: "×";
+    }
+  }
+
+  &__item:hover &__destroy-item {
+    display: block;
+  }
+
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    &__item &__toggle-item {
+      height: 40px;
+
+      background: none;
+    }
+  }
+}
