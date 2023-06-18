@@ -1,6 +1,5 @@
 .todoapp {
   margin: $appSideMargin 20px;
-  color: #4d4d4d;
 
   &__title {
     margin: 0;
@@ -8,7 +7,7 @@
     text-align: center;
     font-size: 100px;
     font-weight: 100;
-    color: rgba(175, 47, 47, 0.15);
+    color: $titleColor;
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -16,7 +15,7 @@
 
   &__userTitle {
     text-align: center;
-    color: rgba(175,47,47,0.25);
+    color: $userTitleColor;
     font-size: 24px;
     font-style: italic;
   }
@@ -41,6 +40,7 @@
     width: 1px;
     height: 1px;
     border: none; /* Mobile Safari */
+
     opacity: 0;
 
     @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -64,12 +64,13 @@
 
       content: "❯";
       font-size: 22px;
-      color: #e6e6e6;
+      cursor: pointer;
+      color: $mainAppColor;
     }
   }
 
   &__toggle-all:checked + &__toggle-all-label:before {
-    color: #737373;
+    color: $toggleAllCheckedColor;
   }
 
   &__new-todo {
@@ -96,7 +97,7 @@
     &::placeholder {
       font-style: italic;
       font-weight: 300;
-      color: #e6e6e6;
+      color: $mainAppColor;
     }
   }
 
@@ -104,7 +105,7 @@
     position: relative;
     z-index: 2;
 
-    border-top: 1px solid #e6e6e6;
+    border-top: 1px solid $mainAppColor;
   }
 
   &__footer {
@@ -112,9 +113,9 @@
 
     padding: 10px 15px;
     height: 20px;
-    border-top: 1px solid #e6e6e6;
+    border-top: 1px solid $mainAppColor;
 
-    color: #777;
+    color: $mainFooterColor;
     text-align: center;
 
     &:before {
@@ -134,7 +135,7 @@
       content: "";
     }
 
-    @media (max-width: 430px) {
+    @media  screen and (max-width: $mobileBreakpoint) {
       height: 50px;
     }
   }
@@ -142,11 +143,20 @@
   &__clear-completed {
     position: relative;
 
+    padding: 0;
     float: right;
+    border: none;
 
-    line-height: 20px;
     text-decoration: none;
-    cursor: pointer;
+    font-size: 100%;
+    font-family: inherit;
+    font-weight: inherit;
+    background: none;
+    color: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
     &:hover {
       text-decoration: underline;

@@ -5,13 +5,25 @@ import { Status } from '../../types/Status';
 
 type Props = {
   filterBy: Status,
-  onChangeFilter: (filterBy: Status) => void;
+  onChangeFilter: (filterBy: Status) => void,
 };
 
 export const TodosFilter: React.FC<Props> = ({
   filterBy,
   onChangeFilter,
 }) => {
+  const handleShowAll = () => {
+    onChangeFilter(Status.ALL);
+  };
+
+  const handleShowActive = () => {
+    onChangeFilter(Status.ACTIVE);
+  };
+
+  const handleShowCompleted = () => {
+    onChangeFilter(Status.COMPLETED);
+  };
+
   return (
     <nav className="filters" data-cy="todosFilter">
       <NavLink
@@ -19,9 +31,7 @@ export const TodosFilter: React.FC<Props> = ({
         className={classNames('filters__link', {
           selected: filterBy === Status.ALL,
         })}
-        onClick={() => {
-          onChangeFilter(Status.ALL);
-        }}
+        onClick={handleShowAll}
       >
         All
       </NavLink>
@@ -31,9 +41,7 @@ export const TodosFilter: React.FC<Props> = ({
         className={classNames('filters__link', {
           selected: filterBy === Status.ACTIVE,
         })}
-        onClick={() => {
-          onChangeFilter(Status.ACTIVE);
-        }}
+        onClick={handleShowActive}
       >
         Active
       </NavLink>
@@ -43,9 +51,7 @@ export const TodosFilter: React.FC<Props> = ({
         className={classNames('filters__link', {
           selected: filterBy === Status.COMPLETED,
         })}
-        onClick={() => {
-          onChangeFilter(Status.COMPLETED);
-        }}
+        onClick={handleShowCompleted}
       >
         Completed
       </NavLink>

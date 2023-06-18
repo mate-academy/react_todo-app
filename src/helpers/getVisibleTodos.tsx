@@ -1,8 +1,7 @@
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-export
-function getVisibleTodos(todos: Todo[], currentFilter: string) {
+export const getVisibleTodos = (todos: Todo[], currentFilter: string) => {
   let visibleTodos = todos;
 
   if (currentFilter !== Status.ALL) {
@@ -19,4 +18,4 @@ function getVisibleTodos(todos: Todo[], currentFilter: string) {
   }
 
   return visibleTodos;
-}
+};

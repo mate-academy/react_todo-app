@@ -18,11 +18,11 @@
     text-decoration: none;
 
     &:hover {
-      border-color: rgba(175, 47, 47, 0.1);
+      border-color: $borderFilterHoveredColor;
     }
 
     &.selected {
-      border-color: rgba(175, 47, 47, 0.2);
+      border-color: $borderFilterSelectedColor;
     }
   }
 }

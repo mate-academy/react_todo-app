@@ -1,11 +1,10 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  onUpdateTodo: (id: number, parameter: Partial<Todo>) => void;
+  onUpdateTodo: (id: number, parameter: Partial<Todo>) => void,
   onDeleteTodo: (id: number) => void,
 };
 
@@ -22,6 +21,7 @@ export const TodoItem: React.FC<Props> = ({
 
   const [isInEditMode, setIsInEditMode] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
+  const [expired, setExpired] = useState<number | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -31,17 +31,30 @@ export const TodoItem: React.FC<Props> = ({
     }
   }, [isInEditMode]);
 
-  const handleTitleChange = () => {
+  const handleEditMode = () => {
+    setIsInEditMode(true);
+  };
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(event.target.value);
+  };
+
+  const handleTitleUpdate = () => {
     if (!newTitle.trim()) {
       onDeleteTodo(id);
       setIsInEditMode(false);
+
+      return;
     }
 
     if (newTitle.trim() === title) {
+      setNewTitle(title.trim());
       setIsInEditMode(false);
+
+      return;
     }
 
-    onUpdateTodo(id, { title: newTitle });
+    onUpdateTodo(id, { title: newTitle.trim() });
     setIsInEditMode(false);
   };
 
@@ -51,51 +64,48 @@ export const TodoItem: React.FC<Props> = ({
     }
   };
 
-  let expired: number | null;
-
-  const doubleTouch = (event: React.TouchEvent) => {
+  const handleDoubleTouch = (event: React.TouchEvent) => {
     if (event.touches.length === 1) {
       if (!expired) {
-        expired = event.timeStamp + 400;
+        setExpired(event.timeStamp + 400);
       } else if (event.timeStamp <= expired) {
-        // remove the default of this event ( Zoom )
-        event.preventDefault();
         setIsInEditMode(true);
-        // then reset the variable for other "double Touches" event
-        expired = null;
+        setExpired(null);
       } else {
-        // if the second touch was expired, make it as it's the first
-        expired = event.timeStamp + 400;
+        setExpired(event.timeStamp + 400);
       }
     }
   };
 
+  const handleStatusChange = () => {
+    onUpdateTodo(id, { completed: !completed });
+  };
+
+  const handleTodoRemove = () => {
+    onDeleteTodo(id);
+  };
+
   return (
     <li
-      key={id}
       className={classNames(
         'todolist__item',
         { 'todolist__item--completed': completed },
         { 'todolist__item--editing': isInEditMode },
       )}
-      onDoubleClick={() => {
-        setIsInEditMode(true);
-      }}
-      onTouchStart={doubleTouch}
+      onDoubleClick={handleEditMode}
+      onTouchStart={handleDoubleTouch}
     >
       {isInEditMode ? (
         <form
-          onSubmit={handleTitleChange}
+          onSubmit={handleTitleUpdate}
         >
           <input
             type="text"
             name="editTodoTitle"
             className="todolist__edit-field"
             value={newTitle}
-            onChange={(event) => {
-              setNewTitle(event.target.value);
-            }}
-            onBlur={handleTitleChange}
+            onChange={handleTitleChange}
+            onBlur={handleTitleUpdate}
             onKeyDown={handleTitleReset}
             ref={inputRef}
           />
@@ -108,19 +118,16 @@ export const TodoItem: React.FC<Props> = ({
             type="checkbox"
             name="toggleTodoStatus"
             className="todolist__toggle-item"
-            onChange={() => {
-              onUpdateTodo(id, { completed: !completed });
-            }}
+            onChange={handleStatusChange}
             checked={completed}
           />
           <label>{title}</label>
           <button
             type="button"
             className="todolist__destroy-item"
+            aria-label="Delete todo item"
             data-cy="deleteTodo"
-            onClick={() => {
-              onDeleteTodo(id);
-            }}
+            onClick={handleTodoRemove}
           />
         </div>
       )}

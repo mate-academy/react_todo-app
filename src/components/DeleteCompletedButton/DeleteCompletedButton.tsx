@@ -13,25 +13,20 @@ export const DeleteCompletedButton: React.FC<Props> = ({
   const completedTodos = todos.filter(todo => todo.completed).length;
 
   return (
-    <>
-      {completedTodos ? (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          onClick={onDeleteCompletedTodos}
-        >
-          Clear completed
-        </button>
-      ) : (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          style={{ opacity: 0, cursor: 'auto' }}
-          disabled
-        >
-          Clear completed
-        </button>
-      )}
-    </>
+    <button
+      type="button"
+      className="todoapp__clear-completed"
+      {...(completedTodos ? ({
+        onClick: onDeleteCompletedTodos,
+      }) : (
+        { disabled: true }
+      ))}
+      style={{
+        opacity: completedTodos ? 1 : 0,
+        cursor: completedTodos ? 'pointer' : 'auto',
+      }}
+    >
+      Clear completed
+    </button>
   );
 };

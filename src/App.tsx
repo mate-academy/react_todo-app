@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -28,11 +27,15 @@ export const App: React.FC = () => {
     }, 3000);
   };
 
-  useEffect(() => {
-    const loadTodos1 = localStorage.getItem('todos');
+  const deleteError = () => {
+    setErrorMessage('');
+  };
 
-    if (loadTodos1) {
-      setTodos(JSON.parse(loadTodos1));
+  useEffect(() => {
+    const loadedTodos = localStorage.getItem('todos');
+
+    if (loadedTodos) {
+      setTodos(JSON.parse(loadedTodos));
     }
   }, []);
 
@@ -69,13 +72,11 @@ export const App: React.FC = () => {
     try {
       if (title.trim()) {
         const newTodo = {
-          // 1000 division is needed because server returns 500 otherwise.
-          id: Math.trunc(+new Date() / 1000),
+          id: 0,
           completed: false,
           userId: USER_ID,
-          title,
+          title: title.trim(),
         };
-
         const addedTodo = await addTodo(newTodo);
 
         setTodos((prevTodos: Todo[]) => [...prevTodos, addedTodo]);
@@ -213,9 +214,8 @@ export const App: React.FC = () => {
         <button
           type="button"
           className="error__delete"
-          onClick={() => {
-            setErrorMessage('');
-          }}
+          aria-label="Delete error-button"
+          onClick={deleteError}
         />
         {errorMessage}
       </div>

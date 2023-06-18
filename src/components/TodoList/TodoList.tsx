@@ -4,7 +4,7 @@ import { TodoItem } from '../TodoItem';
 
 type Props = {
   todos: Todo[];
-  onUpdateTodo: (id: number, parameter: Partial<Todo>) => void;
+  onUpdateTodo: (id: number, parameter: Partial<Todo>) => void,
   onDeleteTodo: (id: number) => void,
 };
 
