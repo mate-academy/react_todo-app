@@ -4,7 +4,7 @@
 
 This is a simple Todo app that allows you to create, manage, and organize your tasks efficiently. It is based on the Todo app originally created by [Oscar Godson](http://todomvc.com/examples/vanillajs/).
 
-[DEMO LINK](https://pushkarskiyrodion.github.io/react_todo-app/)
+Here is [DEMO LINK](https://pushkarskiyrodion.github.io/react_todo-app/)
 
 ## Features
 
@@ -21,3 +21,7 @@ This is a simple Todo app that allows you to create, manage, and organize your t
 + React.js
 + HTML
 + CSS
+
+#
+
+Thank you for checking out the BOSE landing page. If you have any questions or feedback, please don't hesitate to [contact me](mailto:pushkarskiyrodion@gmail.com).
