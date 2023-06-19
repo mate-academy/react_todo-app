@@ -31,7 +31,7 @@ export const TodoFooter: React.FC<Props> = (
           href="#/"
           className={classNames(
             'filter__link',
-            { selected: select === 'all' },
+            { selected: select === SortEnum.ALL },
           )}
           onClick={() => setSelect(SortEnum.ALL)}
         >
@@ -41,7 +41,7 @@ export const TodoFooter: React.FC<Props> = (
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: select === 'active' },
+            { selected: select === SortEnum.ACTIVE },
           )}
           onClick={() => setSelect(SortEnum.ACTIVE)}
         >
@@ -51,7 +51,7 @@ export const TodoFooter: React.FC<Props> = (
           href="#/completed"
           className={classNames(
             'filter__link',
-            { selected: select === 'completed' },
+            { selected: select === SortEnum.COMPLETED },
           )}
           onClick={() => setSelect(SortEnum.COMPLETED)}
         >

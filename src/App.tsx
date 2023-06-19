@@ -25,8 +25,7 @@ export const App: React.FC = () => {
   const uncompletedLength = todos.filter(({ completed }) => !completed).length;
 
   const addTodoToProcesing = (id : number | null) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    !id ? setProcessing([]) : setProcessing(prev => [...prev, id]);
+    setProcessing(prev => (!id ? [] : [...prev, id]));
   };
 
   const getTodosAll = async () => {
@@ -138,6 +137,10 @@ export const App: React.FC = () => {
     }
   };
 
+  const updateTodo = (id: number, data: object) => {
+    return client.patch<Todo>(`/todos/${id}`, data);
+  };
+
   const handleUpdateAllTodoStatus = async () => {
     const hasCompleted = todos.some(todo => !todo.completed);
 
@@ -161,7 +164,7 @@ export const App: React.FC = () => {
         todos.forEach(async ({
           id,
         }) => {
-          await client.patch(`/todos/${id}`, {
+          await updateTodo(id, {
             completed: true,
           });
         });
@@ -169,7 +172,7 @@ export const App: React.FC = () => {
         todos.forEach(async ({
           id, completed,
         }) => {
-          await client.patch(`/todos/${id}`, {
+          await updateTodo(id, {
             completed: !completed,
           });
         });
