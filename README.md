@@ -24,4 +24,4 @@ Here is [DEMO LINK](https://pushkarskiyrodion.github.io/react_todo-app/)
 
 #
 
-Thank you for checking out the BOSE landing page. If you have any questions or feedback, please don't hesitate to [contact me](mailto:pushkarskiyrodion@gmail.com).
+Thank you for checking out the ToDo App. If you have any questions or feedback, please don't hesitate to [contact me](mailto:pushkarskiyrodion@gmail.com).
