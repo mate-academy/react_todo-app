@@ -10,10 +10,10 @@ export const getPostTodos = (userId: number, data: NewTodo) => {
   return client.post<Todo[]>(`/todos?userId=${userId}`, data);
 };
 
-export const getPatchTodos = (userId: number, data: NewTodo) => {
-  return client.patch<Todo[]>(`/todos?userId=${userId}`, data);
-};
-
 export const deleteTodos = (userId: number) => {
   return client.delete(`/todos/${userId}`);
+};
+
+export const updateTodo = (id: number, data: object) => {
+  return client.patch<Todo>(`/todos/${id}`, data);
 };

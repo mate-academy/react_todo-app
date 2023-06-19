@@ -2,9 +2,8 @@ import {
   useState, useEffect, useMemo, useCallback,
 } from 'react';
 import { UserWarning } from './component/UserWarning';
-import { client } from './utils/fetchClient';
 import {
-  getTodos, getPostTodos, deleteTodos,
+  getTodos, getPostTodos, deleteTodos, updateTodo,
 } from './api/todos';
 import { Todo } from './types/Todo';
 import { NewTodo } from './types/NewTodo';
@@ -22,7 +21,7 @@ export const App: React.FC = () => {
   const [querySearch, setQuerySearch] = useState('');
   const [processing, setProcessing] = useState<number[]>([]);
 
-  const uncompletedLength = todos.filter(({ completed }) => !completed).length;
+  const unCompletedLength = todos.filter(({ completed }) => !completed).length;
 
   const addTodoToProcesing = (id : number | null) => {
     setProcessing(prev => (!id ? [] : [...prev, id]));
@@ -64,10 +63,16 @@ export const App: React.FC = () => {
   }, []);
 
   const addTodo = async () => {
+    const querySearchVerefy = querySearch.trim();
+
+    if (querySearchVerefy.length < 1) {
+      return;
+    }
+
     const newTodo: NewTodo = {
       userId: USER_ID,
       completed: false,
-      title: querySearch,
+      title: querySearch.trim(),
     };
 
     try {
@@ -120,7 +125,7 @@ export const App: React.FC = () => {
       const todoToUpdate = todos.find((todo) => todo.id === id);
 
       if (todoToUpdate) {
-        await client.patch(`/todos/${id}`, {
+        await updateTodo(id, {
           completed: !todoToUpdate.completed,
           title: todoToUpdate.title,
           userId: USER_ID,
@@ -135,10 +140,6 @@ export const App: React.FC = () => {
     } finally {
       addTodoToProcesing(null);
     }
-  };
-
-  const updateTodo = (id: number, data: object) => {
-    return client.patch<Todo>(`/todos/${id}`, data);
   };
 
   const handleUpdateAllTodoStatus = async () => {
@@ -204,7 +205,7 @@ export const App: React.FC = () => {
       const todoToUpdate = todos.find((todo) => todo.id === id);
 
       if (todoToUpdate) {
-        await client.patch(`/todos/${id}`, {
+        await updateTodo(id, {
           title: newTitle,
           userId: USER_ID,
           id,
@@ -257,7 +258,7 @@ export const App: React.FC = () => {
           select={select}
           setSelect={setSelect}
           todos={filteredTodos}
-          lengTodos={uncompletedLength}
+          lengTodos={unCompletedLength}
           handleDeleteTodoCompleted={handleDeleteTodoCompleted}
         />
       </div>

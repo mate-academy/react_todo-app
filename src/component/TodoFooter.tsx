@@ -10,15 +10,13 @@ type Props = {
   handleDeleteTodoCompleted: () => void;
 };
 
-export const TodoFooter: React.FC<Props> = (
-  {
-    setSelect,
-    lengTodos,
-    select,
-    handleDeleteTodoCompleted,
-    todos,
-  },
-) => {
+export const TodoFooter: React.FC<Props> = ({
+  setSelect,
+  lengTodos,
+  select,
+  handleDeleteTodoCompleted,
+  todos,
+}) => {
   const buttonClear = todos.filter(todo => todo.completed).length;
 
   return (
