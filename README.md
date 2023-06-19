@@ -4,7 +4,7 @@
 
 This is a simple Todo app that allows you to create, manage, and organize your tasks efficiently. It is based on the Todo app originally created by [Oscar Godson](http://todomvc.com/examples/vanillajs/).
 
-Here is [DEMO LINK](https://pushkarskiyrodion.github.io/react_todo-app/)
+Check out the [DEMO LINK](https://pushkarskiyrodion.github.io/react_todo-app/) to see the live version of the ToDo App.
 
 ## Features
 
