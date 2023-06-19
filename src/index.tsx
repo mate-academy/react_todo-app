@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
+import './styles/error.css';
+import './styles/transitions.css';
 
 import { HashRouter } from 'react-router-dom';
 import { App } from './App';
