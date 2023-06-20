@@ -190,10 +190,10 @@ export const App: React.FC = () => {
 
   const handleUpdateTitle = async (id: number, newTitle: string) => {
     const updatedTodo = todos.map((todo) => {
-      if (todo.id === id) {
+      if (todo.id === id && newTitle.trim().length > 0) {
         return {
           ...todo,
-          title: newTitle,
+          title: newTitle.trim(),
         };
       }
 
