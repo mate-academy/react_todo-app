@@ -1,12 +1,8 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
-
+import 'bulma/css/bulma.css';
+import './styles/index.scss';
 import { App } from './App';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root'),
-);
+createRoot(document.getElementById('root') as HTMLDivElement)
+  .render(<App />);

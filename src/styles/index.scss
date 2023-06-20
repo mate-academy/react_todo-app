@@ -1,0 +1,25 @@
+@import "./todo.css";
+@import "./filters.css";
+@import "./todoapp.css";
+
+iframe {
+  display: none;
+}
+
+body {
+  min-width: 230px;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.notification {
+  transition-property: opacity, min-height;
+  transition-duration: 1s;
+  min-height: 36px;
+}
+
+.notification.hidden {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
