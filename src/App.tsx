@@ -78,6 +78,7 @@ export const App: React.FC = () => {
             onToggleTodo={handleToggleTodo}
             onDeleteTodo={handleDeleteTodo}
             onToggleAll={handleToggleAll}
+            setAllTodos={setAllTodos}
           />
 
           <Footer

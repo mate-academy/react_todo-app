@@ -10,6 +10,7 @@ type Props = {
   onToggleTodo: (id: number) => void;
   onDeleteTodo: (id: number) => void;
   onToggleAll: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setAllTodos: (todos: Todo[]) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -18,6 +19,7 @@ export const TodoList: React.FC<Props> = ({
   onToggleTodo,
   onDeleteTodo,
   onToggleAll,
+  setAllTodos,
 }) => {
   const filteredTodos = todos.filter(todo => {
     if (filter === Filter.Active) {
@@ -49,8 +51,10 @@ export const TodoList: React.FC<Props> = ({
           <TodoItem
             key={todo.id}
             todo={todo}
+            todos={filteredTodos}
             onToggleTodo={onToggleTodo}
             onDeleteTodo={onDeleteTodo}
+            setAllTodos={setAllTodos}
           />
         ))}
       </ul>
