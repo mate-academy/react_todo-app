@@ -18,33 +18,38 @@ const USER_ID = 6771;
 export const App: React.FC = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [todos, setTodos] = useLocalStorage('todos', []);
-  const [errorType, setErrorType] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [sortBy, setSortBy] = useState<Sort>(Sort.All);
   const [isInputDisabled, setIsInputDisabled] = useState<boolean>(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadingTodo, setLoadingTodo] = useState<number[]>([0]);
   const location = useLocation();
 
-  const fetchTodos = useCallback(() => {
-    setLoading(true);
-    getTodos(USER_ID).then(res => {
-      setTodos(res);
-      setLoading(false);
-    }).catch(() => setErrorType('Error loading data'));
-  }, [setTodos, setLoading, setErrorType]);
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
   const sortedTodos = useFilter(todos, location);
   const activeTodos = todos.filter((todo: Todo) => !todo.completed);
   const completedTodos = todos.filter((todo: Todo) => todo.completed);
   const isCompletedTodos = todos.every((todo: Todo) => todo.completed);
 
+  const fetchTodos = useCallback(async () => {
+    try {
+      setLoading(true);
+      const todosData = await getTodos(USER_ID);
+
+      setTodos(todosData);
+    } catch {
+      setErrorMessage('Error loading data');
+    } finally {
+      setLoading(false);
+    }
+  }, [setTodos, setLoading, setErrorMessage]);
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   const addTodo = async (title: string) => {
     if (!title.trim()) {
-      setErrorType('Title can\'t be empty');
+      setErrorMessage('Title can\'t be empty');
 
       return;
     }
@@ -62,28 +67,25 @@ export const App: React.FC = () => {
 
       setTodos([...todos, newTodo]);
     } catch {
-      setErrorType('Unable to add a todo');
+      setErrorMessage('Unable to add a todo');
     } finally {
       setIsInputDisabled(false);
       setTempTodo(null);
     }
   };
 
-  const removeTodo = useCallback((selectedTodoId: number) => {
+  const removeTodo = useCallback(async (selectedTodoId: number) => {
     setLoadingTodo((prevTodo) => [...prevTodo, selectedTodoId]);
-    deleteTodo(selectedTodoId)
-      .then(() => {
-        setTodos(
-          (state: Todo[]) => state.filter(
-            stateItem => stateItem.id !== selectedTodoId,
-          ),
-        );
-      })
-      .catch(() => setErrorType('Unable to delete a todo'))
-      .finally(() => {
-        setLoadingTodo([0]);
-      });
-  }, [setErrorType, setLoading, setTodos]);
+    try {
+      await deleteTodo(selectedTodoId);
+      setTodos((state: Todo[]) => (
+        state.filter(stateItem => stateItem.id !== selectedTodoId)));
+    } catch {
+      setErrorMessage('Unable to delete a todo');
+    } finally {
+      setLoadingTodo([0]);
+    }
+  }, [setErrorMessage, setLoading, setTodos]);
 
   const handleRemoveCompletedTodos = useCallback(() => {
     completedTodos.forEach((todo: Todo) => removeTodo(todo.id));
@@ -109,7 +111,7 @@ export const App: React.FC = () => {
         };
       }));
     } catch {
-      setErrorType('Unable to edit a todo');
+      setErrorMessage('Unable to edit a todo');
     } finally {
       setLoadingTodo([0]);
     }
@@ -117,12 +119,12 @@ export const App: React.FC = () => {
 
   const handleToggleAll = () => {
     if (isCompletedTodos) {
-      todos.map((item: Todo) => {
-        return updateTodo(item.id, { completed: false });
+      completedTodos.map((item: Todo) => {
+        return editTodo(item.id, { completed: false });
       });
     } else {
-      activeTodos.map((todoElem: Todo) => {
-        return updateTodo(todoElem.id, { completed: true });
+      sortedTodos.map((todoElem: Todo) => {
+        return editTodo(todoElem.id, { completed: true });
       });
     }
   };
@@ -138,8 +140,8 @@ export const App: React.FC = () => {
       handleRemoveCompletedTodos,
       setSort: setSortBy,
       sort: sortBy,
-      errorType,
-      setErrorType,
+      errorType: errorMessage,
+      setErrorType: setErrorMessage,
       handleToggleAll,
       loadingTodo,
       tempTodo,
@@ -156,7 +158,7 @@ export const App: React.FC = () => {
           {sortedTodos.length > 0 && <Footer />}
         </div>
 
-        {errorType && (
+        {errorMessage && (
           <Error />
         )}
       </div>
