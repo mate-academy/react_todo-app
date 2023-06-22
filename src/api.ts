@@ -17,7 +17,7 @@ export const getTodos = (userId: number) => {
 };
 
 export const addTodo = (data: NewTodo) => {
-  return client.post<NewTodo>('/todos', data);
+  return client.post<Todo>('/todos', data);
 };
 
 export const deleteTodo = (todoId: number) => {
@@ -25,9 +25,9 @@ export const deleteTodo = (todoId: number) => {
 };
 
 export const toggleCompleted = (todoId: number, completed: boolean) => {
-  return client.patch<Todo>(`/todos/${todoId}`, { completed });
+  return client.patch(`/todos/${todoId}`, { completed });
 };
 
 export const updateTodoTitle = (todoId: number, title: string) => {
-  return client.patch<Todo>(`/todos/${todoId}`, { title });
+  return client.patch(`/todos/${todoId}`, { title });
 };

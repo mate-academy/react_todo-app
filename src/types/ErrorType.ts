@@ -1,5 +1,5 @@
 export enum ErrorType {
-  NONE = '',
+  None = '',
   EmptyTitle = 'Title can\'t be empty',
   NoUser = 'No such user',
   NoTodos = 'No current todos',

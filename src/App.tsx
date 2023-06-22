@@ -25,7 +25,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [filterOption, setFilterOption] = useState(FilterType.ALL);
-  const [errorMessage, setErrorMessage] = useState(ErrorType.NONE);
+  const [errorMessage, setErrorMessage] = useState(ErrorType.None);
 
   const defaultStyle = {
     transition: 'opacity 300ms ease-in-out',
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
   };
 
   const handleSetError = (msg: ErrorType) => {
-    if (msg === ErrorType.NONE) {
+    if (msg === ErrorType.None) {
       return;
     }
 
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleSetError(ErrorType.NONE);
+    handleSetError(ErrorType.None);
 
     if (!newTodoTitle.trim()) {
       setNewTodoTitle('');
@@ -91,19 +91,23 @@ export const App: React.FC = () => {
       return;
     }
 
-    const newTodo = {
-      id: +new Date(),
-      title: newTodoTitle,
-      completed: false,
-    };
-
     addTodo({
       userId: USER_ID,
       title: newTodoTitle,
       completed: false,
     })
-      .then(() => saveTodos([...todos, newTodo]))
-      .catch(() => handleSetError(ErrorType.UnableCompleteAction))
+      .then(response => {
+        const newTodo = {
+          id: response.id,
+          title: response.title,
+          completed: response.completed,
+        };
+
+        saveTodos([...todos, newTodo]);
+      })
+      .catch(() => {
+        handleSetError(ErrorType.UnableCompleteAction);
+      })
       .finally(() => setNewTodoTitle(''));
   };
 
@@ -155,7 +159,7 @@ export const App: React.FC = () => {
 
     saveTodos(updatedTodos);
 
-    Promise.all([...promises])
+    Promise.all(promises)
       .then()
       .catch(() => {
         handleSetError(ErrorType.UnableCompleteAction);
@@ -183,7 +187,7 @@ export const App: React.FC = () => {
 
     saveTodos(updatedTodos);
 
-    Promise.all([...promises])
+    Promise.all(promises)
       .then()
       .catch(() => {
         handleSetError(ErrorType.UnableCompleteAction);
@@ -215,20 +219,12 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      {userName
-      && (
+      {userName && (
         <>
           {!userName
             ? (
-              <h1
-                style={{
-                  fontSize: '100px',
-                  top: '-155px',
-                }}
-              >
-                todos
-              </h1>
-            ) : <h1>{`${userName}'s todos`}</h1>}
+              <h1 className="no-user">tasks</h1>
+            ) : <h1>{`${userName}'s tasks`}</h1>}
 
           <Header
             newTodoTitle={newTodoTitle}
@@ -238,6 +234,7 @@ export const App: React.FC = () => {
 
           <TodoList
             todos={visibleTodos}
+            isSomeTodos={todos.length > 0}
             areAllCompleted={areAllCompleted}
             onToggleComplete={handleToggleCompleted}
             onToggleAll={handleToggleAll}

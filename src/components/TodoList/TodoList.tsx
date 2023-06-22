@@ -8,6 +8,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[],
+  isSomeTodos: boolean,
   areAllCompleted: boolean,
   onToggleComplete: (todoId: number) => void,
   onToggleAll: (e: React.ChangeEvent<HTMLInputElement>) => void,
@@ -17,6 +18,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  isSomeTodos,
   areAllCompleted,
   onToggleComplete,
   onToggleAll,
@@ -24,7 +26,7 @@ export const TodoList: React.FC<Props> = ({
   onPatchTodo,
 }) => (
   <section className="main">
-    {todos.length > 0 && (
+    {isSomeTodos && (
       <>
         <input
           type="checkbox"

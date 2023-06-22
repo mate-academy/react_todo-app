@@ -82,6 +82,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.todoapp h1.no-user {
+  font-size: 100px;
+  top: -155px;
+}
+
 .new-todo,
 .edit {
   position: relative;
