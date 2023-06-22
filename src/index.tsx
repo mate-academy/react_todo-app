@@ -1,12 +1,20 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 import './styles/index.css';
 import './styles/todo-list.css';
 import './styles/filters.css';
+import './styles/error.css';
+import './styles/transitions.css';
 
+import { HashRouter } from 'react-router-dom';
 import { App } from './App';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root'),
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement,
+);
+
+root.render(
+  <HashRouter>
+    <App />
+  </HashRouter>,
 );
