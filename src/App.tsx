@@ -181,11 +181,9 @@ export const App: React.FC = () => {
   };
 
   const handleClearCompletedTodos = () => {
-    const updatedTodos = [...todos].filter(todo => !todo.completed);
+    const promises = completedTodos.map(todo => deleteTodo(todo.id));
 
-    const promises = updatedTodos.map(todo => deleteTodo(todo.id));
-
-    saveTodos(updatedTodos);
+    saveTodos(activeTodos);
 
     Promise.all(promises)
       .then()
