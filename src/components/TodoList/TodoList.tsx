@@ -1,5 +1,7 @@
-import { PatchTodo } from '../../types/PatchTodo';
-import { Todo } from '../../types/Todo';
+import React from 'react';
+
+import { PatchTodo } from 'types/PatchTodo';
+import { Todo } from 'types/Todo';
 import { TodoItem } from '../TodoItem';
 
 type Props = {
@@ -10,7 +12,7 @@ type Props = {
   removeTodo: (id: number) => void,
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = React.memo(({
   todos,
   tempTodo,
   loadingTodo,
@@ -37,4 +39,4 @@ export const TodoList: React.FC<Props> = ({
       />
     )}
   </ul>
-);
+));

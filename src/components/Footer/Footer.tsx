@@ -1,8 +1,9 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { Filter } from '../../enums/Filter';
-import { Todo } from '../../types/Todo';
+import { Filter } from 'enums/Filter';
+import { Todo } from 'types/Todo';
 import { ClearCompleted } from './ClearCompleted';
 
 type Props = {
@@ -14,7 +15,7 @@ type Props = {
   clearCompleted: () => void;
 };
 
-export const Footer: React.FC<Props> = ({
+export const Footer: React.FC<Props> = React.memo(({
   todos,
   filterValue,
   onCompleted,
@@ -66,4 +67,4 @@ export const Footer: React.FC<Props> = ({
       <ClearCompleted todos={todos} clearCompleted={clearCompleted} />
     </footer>
   );
-};
+});

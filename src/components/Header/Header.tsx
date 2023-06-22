@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
-import { Todo } from '../../types/Todo';
-import { ErrorMessage } from '../../enums/ErrorMessages';
+import { Todo } from 'types/Todo';
+import { ErrorMessage } from 'enums/ErrorMessages';
 
-import { USER_ID } from '../../api/todos';
+import { USER_ID } from 'api/todos';
 
 type Props = {
   onAdd: (title: string) => void;
@@ -15,7 +15,7 @@ type Props = {
   isInputDisabled: boolean;
 };
 
-export const Header: React.FC<Props> = ({
+export const Header: React.FC<Props> = React.memo(({
   todos,
   onAdd,
   toggleAll,
@@ -48,7 +48,6 @@ export const Header: React.FC<Props> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     const todo = {
       title,
       userId: USER_ID,
@@ -66,7 +65,6 @@ export const Header: React.FC<Props> = ({
       id: 0,
       ...todo,
     }));
-
     onAdd(title);
     setTitle('');
   };
@@ -98,4 +96,4 @@ export const Header: React.FC<Props> = ({
       </form>
     </header>
   );
-};
+});

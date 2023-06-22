@@ -1,3 +1,8 @@
+@import "./variables";
+@import "./todoapp";
+@import "./todo";
+@import "./filter";
+
 * {
   box-sizing: border-box;
 }
@@ -28,7 +33,3 @@ main {
   opacity: 0;
   pointer-events: none;
 }
-
-@import "./todoapp";
-@import "./todo";
-@import "./filter";

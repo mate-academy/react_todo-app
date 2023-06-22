@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { PatchTodo } from '../../types/PatchTodo';
-import { Todo } from '../../types/Todo';
+import { PatchTodo } from 'types/PatchTodo';
+import { Todo } from 'types/Todo';
 
 type Props = {
   todo: Todo;
@@ -10,7 +10,7 @@ type Props = {
   removeTodo: (id: number) => void;
 };
 
-export const NewTodo: React.FC<Props> = ({
+export const NewTodo: React.FC<Props> = React.memo(({
   todo,
   onNeedChange,
   changeTodo,
@@ -75,4 +75,4 @@ export const NewTodo: React.FC<Props> = ({
       />
     </form>
   );
-};
+});

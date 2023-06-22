@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
-import { Error } from './components/Error';
+import { Header } from 'components/Header';
+import { TodoList } from 'components/TodoList';
+import { Footer } from 'components/Footer';
+import { Error } from 'components/Error';
 
-import { Todo } from './types/Todo';
-import { PatchTodo } from './types/PatchTodo';
-import { ErrorMessage } from './enums/ErrorMessages';
-import { Filter } from './enums/Filter';
+import { Todo } from 'types/Todo';
+import { PatchTodo } from 'types/PatchTodo';
+import { ErrorMessage } from 'enums/ErrorMessages';
+import { Filter } from 'enums/Filter';
 
 import {
   USER_ID,
@@ -139,11 +139,11 @@ export const App: React.FC = () => {
   };
 
   const clearCompleted = () => {
-    todoList.forEach(async ({ completed, id }) => {
-      if (completed) {
-        await removeTodo(id);
-      }
-    });
+    const promises = todoList
+      .filter(({ completed }) => completed)
+      .map(({ id }) => removeTodo(id));
+
+    Promise.all(promises);
   };
 
   const filteredTodos = useMemo(() => {

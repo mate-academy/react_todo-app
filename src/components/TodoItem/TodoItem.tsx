@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 
+import { Todo } from 'types/Todo';
+import { PatchTodo } from 'types/PatchTodo';
 import { NewTodo } from '../NewTodo';
-
-import { Todo } from '../../types/Todo';
-import { PatchTodo } from '../../types/PatchTodo';
 
 type Props = {
   todo: Todo;
@@ -13,7 +12,7 @@ type Props = {
   removeTodo: (id: number) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({
+export const TodoItem: React.FC<Props> = React.memo(({
   todo,
   loadingTodo,
   changeTodo,
@@ -22,6 +21,7 @@ export const TodoItem: React.FC<Props> = ({
   const [isNeedChange, setIsNeedChange] = useState(false);
 
   const { completed, title, id } = todo;
+  const isLoading = loadingTodo.includes(id);
 
   const handleDoubleClick = () => {
     setIsNeedChange(true);
@@ -76,7 +76,7 @@ export const TodoItem: React.FC<Props> = ({
       <div
         className={classNames(
           'modal overlay',
-          { 'is-active': loadingTodo.includes(id) },
+          { 'is-active': isLoading },
         )}
       >
         <div className="modal-background has-background-white-ter" />
@@ -84,4 +84,4 @@ export const TodoItem: React.FC<Props> = ({
       </div>
     </li>
   );
-};
+});

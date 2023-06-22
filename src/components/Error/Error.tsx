@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 
 type Props = {
@@ -6,7 +6,10 @@ type Props = {
   closeError: () => void;
 };
 
-export const Error: React.FC<Props> = ({ error, closeError }) => {
+export const Error: React.FC<Props> = React.memo(({
+  error,
+  closeError,
+}) => {
   const [isVisible, setIsVisible] = useState(true);
 
   setTimeout(() => {
@@ -33,4 +36,4 @@ export const Error: React.FC<Props> = ({ error, closeError }) => {
       {error}
     </div>
   );
-};
+});
