@@ -1,12 +1,10 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/button-has-type */
 import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  todos: Todo[],
+  filteredTodos: Todo[],
   onToggleTodo: (id: number) => void;
   onDeleteTodo: (id: number) => void;
   setAllTodos: (todos: Todo[]) => void;
@@ -14,7 +12,7 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  todos,
+  filteredTodos,
   onToggleTodo,
   onDeleteTodo,
   setAllTodos,
@@ -24,17 +22,9 @@ export const TodoItem: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
-  const handleToggleTodo = (idT: number) => {
-    onToggleTodo(idT);
-  };
-
-  const handleDeleteTodo = (idT: number) => {
-    onDeleteTodo(idT);
-  };
-
   const renameTodo = (todoId: number, updatedTitle: string) => {
     setAllTodos(
-      todos.map(item => (
+      filteredTodos.map(item => (
         item.id === todoId
           ? { ...item, title: updatedTitle }
           : item
@@ -95,7 +85,7 @@ export const TodoItem: React.FC<Props> = ({
               type="checkbox"
               className="toggle"
               checked={completed}
-              onChange={() => handleToggleTodo(id)}
+              onChange={() => onToggleTodo(id)}
             />
 
             <label>{title}</label>
@@ -105,7 +95,7 @@ export const TodoItem: React.FC<Props> = ({
               className="destroy"
               data-cy="deleteTodo"
               aria-label="deleteTodo"
-              onClick={() => handleDeleteTodo(id)}
+              onClick={() => onDeleteTodo(id)}
             />
           </div>
         ) : (

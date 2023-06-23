@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/button-has-type */
 import { Filter } from '../../types/Filter';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
@@ -51,7 +49,7 @@ export const TodoList: React.FC<Props> = ({
           <TodoItem
             key={todo.id}
             todo={todo}
-            todos={filteredTodos}
+            filteredTodos={filteredTodos}
             onToggleTodo={onToggleTodo}
             onDeleteTodo={onDeleteTodo}
             setAllTodos={setAllTodos}

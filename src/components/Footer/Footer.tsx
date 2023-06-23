@@ -1,4 +1,3 @@
-/* eslint-disable react/button-has-type */
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
@@ -16,10 +15,6 @@ export const Footer: React.FC<Props> = ({
   onFilterChange,
   activeFilter,
 }) => {
-  const handleClearCompleted = () => {
-    onClearCompleted();
-  };
-
   const handleFilterChange = (filter: Filter) => {
     onFilterChange(filter);
   };
@@ -62,7 +57,11 @@ export const Footer: React.FC<Props> = ({
         </li>
       </ul>
       {hasCompletedTodos && (
-        <button className="clear-completed" onClick={handleClearCompleted}>
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={onClearCompleted}
+        >
           Clear completed
         </button>
       )}
