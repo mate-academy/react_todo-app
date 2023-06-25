@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from './UseLocalStorage';
+import { StorageKey } from './types/storagekey';
+import { FilterTypes } from './types/filtertypes';
 import { Todolist } from './Todolist';
 import { Todo } from './types/todo';
 import { TodoFilter } from './TodosFilter';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [todos, setTodos] = useLocalStorage<Todo[]>(StorageKey.todos, []);
   const [newTodo, setNewTodo] = useState('');
   const [filterOption, setFilterOption] = useState('');
   const [newTodos, setNewTodos] = useState<Todo[]>([]);
@@ -36,9 +38,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     setNewTodos(todos.filter(todo => {
       switch (filterOption) {
-        case 'Completed':
+        case FilterTypes.Completed:
           return todo.completed === true;
-        case 'Active':
+        case FilterTypes.Active:
           return todo.completed === false;
         default:
           return todo;

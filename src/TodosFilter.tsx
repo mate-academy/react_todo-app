@@ -1,45 +1,45 @@
+import { FilterTypes } from './types/filtertypes';
+
 type Props = {
-  setFilterOption: (option: string) => void;
+  setFilterOption: (option: FilterTypes) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   setFilterOption,
-}) => {
-  return (
-    <ul className="filters">
-      <li>
-        <a
-          href="#/"
-          className="selected"
-          onClick={(event) => {
-            setFilterOption(event.currentTarget.innerHTML);
-          }}
-        >
-          All
-        </a>
-      </li>
+}) => (
+  <ul className="filters">
+    <li>
+      <a
+        href="#/"
+        className="selected"
+        onClick={() => {
+          setFilterOption(FilterTypes.All);
+        }}
+      >
+        All
+      </a>
+    </li>
 
-      <li>
-        <a
-          href="#/active"
-          onClick={(event) => {
-            setFilterOption(event.currentTarget.innerHTML);
-          }}
-        >
-          Active
-        </a>
-      </li>
+    <li>
+      <a
+        href="#/active"
+        onClick={() => {
+          setFilterOption(FilterTypes.Active);
+        }}
+      >
+        Active
+      </a>
+    </li>
 
-      <li>
-        <a
-          href="#/completed"
-          onClick={(event) => {
-            setFilterOption(event.currentTarget.innerHTML);
-          }}
-        >
-          Completed
-        </a>
-      </li>
-    </ul>
-  );
-};
+    <li>
+      <a
+        href="#/completed"
+        onClick={() => {
+          setFilterOption(FilterTypes.Completed);
+        }}
+      >
+        Completed
+      </a>
+    </li>
+  </ul>
+);

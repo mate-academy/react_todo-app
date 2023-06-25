@@ -13,18 +13,16 @@ export const Todolist: React.FC<Props> = ({
   onDelete,
   onCheck,
   onEdit,
-}) => {
-  return (
-    <ul className="todo-list" data-cy="todoList">
-      {items.map(todo => (
-        <TodoItem
-          todo={todo}
-          onDelete={onDelete}
-          key={todo.id}
-          onCheck={onCheck}
-          onEdit={onEdit}
-        />
-      ))}
-    </ul>
-  );
-};
+}) => (
+  <ul className="todo-list" data-cy="todoList">
+    {items.map(todo => (
+      <TodoItem
+        todo={todo}
+        onDelete={onDelete}
+        key={todo.id}
+        onCheck={onCheck}
+        onEdit={onEdit}
+      />
+    ))}
+  </ul>
+);
