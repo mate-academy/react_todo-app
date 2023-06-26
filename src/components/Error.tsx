@@ -18,7 +18,7 @@ export const Error = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [errorType]);
 
   return (
     <div
@@ -29,7 +29,7 @@ export const Error = () => {
     >
       <button
         type="button"
-        className="delete hidden"
+        className="delete"
         onClick={handleCloseError}
         aria-label="delete"
       />

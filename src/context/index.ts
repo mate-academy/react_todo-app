@@ -2,26 +2,26 @@ import React from 'react';
 import { Sort } from '../types/Sort';
 import { TodosContextType } from '../types/TodoContext';
 
-const loop = () => {};
+const emptyFunction = () => {};
 
 const TodosContext = React.createContext<TodosContextType>({
   isLoading: false,
   todos: [],
-  addTodo: loop,
-  deleteTodo: loop,
-  editTodo: loop,
+  addTodo: emptyFunction,
+  deleteTodo: emptyFunction,
+  editTodo: emptyFunction,
   isInputDisabled: false,
-  handleRemoveCompletedTodos: loop,
-  setSort: loop,
+  handleRemoveCompletedTodos: emptyFunction,
+  setSort: emptyFunction,
   sort: Sort.All,
   errorType: '',
-  setErrorType: loop,
-  handleToggleAll: loop,
+  setErrorType: emptyFunction,
+  handleToggleAll: emptyFunction,
   loadingTodo: [],
   tempTodo: null,
   activeTodos: [],
   completedTodos: [],
-  isCompletedTodos: false || true,
+  isCompletedTodos: false,
 });
 
 export const useTodosContext = () => {

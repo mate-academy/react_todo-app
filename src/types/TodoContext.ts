@@ -5,10 +5,10 @@ export type TodosContextType = {
   isLoading: boolean,
   todos: Todo[],
   loadingTodo: number[]
-  deleteTodo: (value: number) => void,
-  editTodo: (value1: number,
+  deleteTodo: (todoId: number) => void,
+  editTodo: (todoId: number,
     data: { completed?: boolean, title?: string }) => void,
-  addTodo: (value: string) => void,
+  addTodo: (title: string) => void,
   isInputDisabled: boolean,
   handleRemoveCompletedTodos: ()=> void,
   setSort: (arg: Sort) => void,

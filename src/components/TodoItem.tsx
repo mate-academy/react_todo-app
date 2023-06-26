@@ -17,7 +17,7 @@ export const TodoItem: React.FC<Props> = ({
 
   const { deleteTodo, editTodo, loadingTodo } = useTodosContext();
 
-  const isLoading = todo.id && loadingTodo.includes(todo.id);
+  const isLoading = todo.id && loadingTodo.includes(todo?.id);
 
   const handleChangeTodoTitle
   = (event: React.ChangeEvent<HTMLInputElement>) => {
