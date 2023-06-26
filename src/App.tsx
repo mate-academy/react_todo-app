@@ -9,10 +9,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [todoTitle, setTodoTitle] = useState('');
 
-
   const checkAllTodosCompleted = todos.length === todos.filter(
     todo => todo.completed,
-  ).length && todos.length !== 0;
+  ).length && !!todos.length;
 
   const changeAllTodosCompleted = () => {
     if (todos.length === todos.filter(todo => todo.completed).length) {
@@ -24,14 +23,17 @@ export const App: React.FC = () => {
 
   const submitForm = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    setTodos(
-      [...todos, {
-        id: +new Date(),
-        title: todoTitle,
-        completed: false,
-      }],
-    );
-    setTodoTitle('');
+
+    if (todoTitle.trim()) {
+      setTodos(
+        [...todos, {
+          id: +new Date(),
+          title: todoTitle.trim(),
+          completed: false,
+        }],
+      );
+      setTodoTitle('');
+    }
   };
 
   return (

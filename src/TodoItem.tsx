@@ -83,7 +83,7 @@ export const TodoItem: React.FC<Props> = ({
         onBlur={(event) => {
           saveEditTodoTitle(event);
           setEditTodoId(0);
-          if (newTitle.length === 0) {
+          if (!newTitle.length) {
             setTodos(todos.filter(deleteTodo => deleteTodo.id !== todo.id));
           }
         }}
@@ -94,7 +94,7 @@ export const TodoItem: React.FC<Props> = ({
           if (event.key === 'Enter') {
             saveEditTodoTitle(event);
             setEditTodoId(0);
-            if (newTitle.length === 0) {
+            if (!newTitle.length) {
               setTodos(todos.filter(deleteTodo => deleteTodo.id !== todo.id));
             }
           }
