@@ -13,7 +13,7 @@ export const TodoApp: React.FC<Props> = ({ onAddTodo }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (inputValue.trim() === '') {
+    if (!inputValue.trim()) {
       return;
     }
 

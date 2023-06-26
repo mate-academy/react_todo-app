@@ -5,8 +5,8 @@ import { TodoItem } from '../TodoItem';
 type Props = {
   todos: Todo[];
   filter: Filter;
-  onToggleTodo: (id: number) => void;
-  onDeleteTodo: (id: number) => void;
+  onToggleTodo: (id: string) => void;
+  onDeleteTodo: (id: string) => void;
   onToggleAll: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setAllTodos: (todos: Todo[]) => void;
 };
@@ -31,6 +31,16 @@ export const TodoList: React.FC<Props> = ({
     return true;
   });
 
+  const renameTodo = (todoId: string, updatedTitle: string) => {
+    setAllTodos(
+      filteredTodos.map(item => (
+        item.id === todoId
+          ? { ...item, title: updatedTitle }
+          : item
+      )),
+    );
+  };
+
   const areAllCompleted = todos.every(todo => todo.completed);
 
   return (
@@ -49,10 +59,9 @@ export const TodoList: React.FC<Props> = ({
           <TodoItem
             key={todo.id}
             todo={todo}
-            filteredTodos={filteredTodos}
             onToggleTodo={onToggleTodo}
             onDeleteTodo={onDeleteTodo}
-            setAllTodos={setAllTodos}
+            onRenameTodo={renameTodo}
           />
         ))}
       </ul>

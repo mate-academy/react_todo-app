@@ -4,33 +4,21 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  filteredTodos: Todo[],
-  onToggleTodo: (id: number) => void;
-  onDeleteTodo: (id: number) => void;
-  setAllTodos: (todos: Todo[]) => void;
+  onToggleTodo: (id: string) => void;
+  onDeleteTodo: (id: string) => void;
+  onRenameTodo: (todoId: string, updatedTitle: string) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  filteredTodos,
   onToggleTodo,
   onDeleteTodo,
-  setAllTodos,
+  onRenameTodo,
 }) => {
   const { id, title, completed } = todo;
   const inputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
-
-  const renameTodo = (todoId: number, updatedTitle: string) => {
-    setAllTodos(
-      filteredTodos.map(item => (
-        item.id === todoId
-          ? { ...item, title: updatedTitle }
-          : item
-      )),
-    );
-  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedTitle(event.target.value);
@@ -46,7 +34,7 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (editedTitle !== title) {
-      renameTodo(todo.id, editedTitle);
+      onRenameTodo(todo.id, editedTitle);
     }
 
     setIsEditing(false);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { nanoid } from 'nanoid';
 
 import { TodoApp } from './components/TodoApp';
 import { TodoList } from './components/TodoList';
@@ -25,7 +26,7 @@ export const App: React.FC = () => {
 
   const handleAddTodo = (title: string) => {
     const newTodo: Todo = {
-      id: +new Date(),
+      id: nanoid(10),
       title,
       completed: false,
     };
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
     setAllTodos(prevTodos => [...prevTodos, newTodo]);
   };
 
-  const handleToggleTodo = (id: number) => {
+  const handleToggleTodo = (id: string) => {
     setAllTodos(prevTodos => prevTodos.map(
       todo => {
         if (todo.id === id) {
@@ -45,7 +46,7 @@ export const App: React.FC = () => {
     ));
   };
 
-  const handleDeleteTodo = (id: number) => {
+  const handleDeleteTodo = (id: string) => {
     setAllTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
