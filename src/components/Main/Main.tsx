@@ -16,7 +16,8 @@ type Props = {
   todoForUpdate: Todo | null,
   setTodoForUpdate: React.Dispatch<React.SetStateAction<Todo | null>>,
   idTodoForCheange: number[],
-  onEscKey: any,
+  handleEscEnterKey: (
+    event: React.KeyboardEvent<HTMLInputElement>, todo: Todo) => Todo[],
 };
 
 export const Main: React.FC<Props> = ({
@@ -30,14 +31,14 @@ export const Main: React.FC<Props> = ({
   todoForUpdate,
   setTodoForUpdate,
   idTodoForCheange,
-  onEscKey,
+  handleEscEnterKey,
 }) => {
   return (
     <section className="todoapp__main">
       {visibleTodos.map((todo, index) => {
         if (idTodoForCheange.includes(todo.id)) {
           return (
-            <div className="todo" key={`todo-${todo.id}`}>
+            <div className="todo" key={`todo-${todo.id}${+new Date()}`}>
               <label className="todo__status-label">
                 <input type="checkbox" className="todo__status" />
               </label>
@@ -100,7 +101,7 @@ export const Main: React.FC<Props> = ({
                         event.preventDefault();
                         onEditTodo(event, todo.id);
                       }}
-                      onKeyDown={(event) => (onEscKey(event, todo))}
+                      onKeyDown={(event) => (handleEscEnterKey(event, todo))}
                     />
                   </form>
                 </>

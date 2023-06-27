@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   const [hasEditTodo, setHasEditTodo] = useState(false);
   const [todoForUpdate, setTodoForUpdate] = useState<Todo | null>(null);
   const [idTodoForChange, setIdTodoForChange] = useState<number[]>([]);
+  const [titleBeforeEdit, setTitleBeforeEdit] = useState<string>('');
 
   const getVisibleTodos = (statusTodo: Status, todosArr: Todo[]) => {
     switch (statusTodo) {
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
     }
   };
 
-  let visibleTodos = getVisibleTodos(status, todos);
+  const visibleTodos = getVisibleTodos(status, todos);
 
   const itemsLeftCount = todos.filter(todo => !todo.completed).length;
 
@@ -182,29 +183,44 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleEscKey = (
-    event: React.KeyboardEvent<HTMLInputElement>, todo: Todo,
+  const handleEscEnterKey = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    todo: Todo,
   ) => {
     const todoCopy = { ...todo };
 
     if (event.key === 'Escape') {
       setHasEditTodo(false);
 
-      visibleTodos = visibleTodos.map(todoVisible => {
-        if (todoVisible.id === todoCopy.id) {
-          // eslint-disable-next-line no-param-reassign
+      setTodos(todos.map(todoVisible => {
+        if (todoVisible.id !== todoCopy.id) {
+          return todoVisible;
         }
 
-        return todoVisible;
-      });
+        return { ...todoVisible, title: titleBeforeEdit };
+      }));
+      setTitleBeforeEdit('');
     }
+
+    if (event.key === 'Enter') {
+      setTodos(visibleTodos);
+      setTitleBeforeEdit('');
+    }
+
+    return visibleTodos;
   };
 
   const handleEditTodo = (
     event: React.ChangeEvent<HTMLInputElement>,
     todoId: number,
   ) => {
-    setTodos(todos.map((todo) => {
+    const currentTodo = todos.find(t => t.id === todoId);
+
+    if (currentTodo) {
+      setTitleBeforeEdit(currentTodo.title);
+    }
+
+    setTodos(visibleTodos.map((todo) => {
       if (todo.id !== todoId) {
         return todo;
       }
@@ -251,7 +267,7 @@ export const App: React.FC = () => {
           todoForUpdate={todoForUpdate}
           setTodoForUpdate={setTodoForUpdate}
           idTodoForCheange={idTodoForChange}
-          onEscKey={handleEscKey}
+          handleEscEnterKey={handleEscEnterKey}
         />
 
         {!!todos.length && (
