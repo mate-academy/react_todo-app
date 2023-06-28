@@ -10,6 +10,7 @@ import { Main } from './components/Main/Main';
 import { ErrorMessages } from './components/ErrorMessages/ErrorMessages';
 import { ErrorTypes } from './types/ErrorTypes';
 import { Status } from './types/Status';
+import { getVisibleTodos } from './utils/getVisibleTodos';
 
 const USER_ID = 10548;
 
@@ -18,21 +19,7 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState<Status>(Status.default);
   const [disableInput, setDisableInput] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
-  const [hasEditTodo, setHasEditTodo] = useState(false);
-  const [todoForUpdate, setTodoForUpdate] = useState<Todo | null>(null);
   const [idTodoForChange, setIdTodoForChange] = useState<number[]>([]);
-  const [titleBeforeEdit, setTitleBeforeEdit] = useState<string>('');
-
-  const getVisibleTodos = (statusTodo: Status, todosArr: Todo[]) => {
-    switch (statusTodo) {
-      case Status.active:
-        return todosArr.filter(todo => !todo.completed);
-      case Status.completed:
-        return todosArr.filter(todo => todo.completed);
-      default:
-        return todosArr;
-    }
-  };
 
   const visibleTodos = getVisibleTodos(status, todos);
 
@@ -100,14 +87,12 @@ export const App: React.FC = () => {
 
   const handleUpdateTodo = async (todo: Todo) => {
     setIdTodoForChange((prev) => [...prev, todo.id]);
-
     try {
       await updateTodo(todo.id, {
         title: todo.title,
         completed: todo.completed,
       });
       setErrorMessage(null);
-      setTodoForUpdate(null);
       setIdTodoForChange([]);
     } catch (error) {
       setErrorMessage(ErrorTypes.ErrorPatch);
@@ -183,51 +168,17 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleEscEnterKey = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-    todo: Todo,
-  ) => {
-    const todoCopy = { ...todo };
-
-    if (event.key === 'Escape') {
-      setHasEditTodo(false);
-
-      setTodos(todos.map(todoVisible => {
-        if (todoVisible.id !== todoCopy.id) {
-          return todoVisible;
-        }
-
-        return { ...todoVisible, title: titleBeforeEdit };
-      }));
-      setTitleBeforeEdit('');
-    }
-
-    if (event.key === 'Enter') {
-      setTodos(visibleTodos);
-      setTitleBeforeEdit('');
-    }
-
-    return visibleTodos;
-  };
-
   const handleEditTodo = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    todoId: number,
+    todoEdited: Todo,
   ) => {
-    const currentTodo = todos.find(t => t.id === todoId);
-
-    if (currentTodo) {
-      setTitleBeforeEdit(currentTodo.title);
-    }
-
     setTodos(visibleTodos.map((todo) => {
-      if (todo.id !== todoId) {
+      if (todo.id !== todoEdited.id) {
         return todo;
       }
 
-      setTodoForUpdate({ ...todo, title: event.target.value });
+      handleUpdateTodo({ ...todo, title: todoEdited.title });
 
-      return { ...todo, title: event.target.value };
+      return { ...todo, title: todoEdited.title };
     }));
   };
 
@@ -259,15 +210,10 @@ export const App: React.FC = () => {
         <Main
           visibleTodos={visibleTodos}
           onRemoveTodo={handleRemoveTodo}
-          onEditTodo={handleEditTodo}
-          hasEditTodo={hasEditTodo}
-          setHasEditTodo={setHasEditTodo}
-          onUpdateTodo={handleUpdateTodo}
           onChangeStatusTodo={handleChangeStatusTodo}
-          todoForUpdate={todoForUpdate}
-          setTodoForUpdate={setTodoForUpdate}
-          idTodoForCheange={idTodoForChange}
-          handleEscEnterKey={handleEscEnterKey}
+          idTodoForChange={idTodoForChange}
+          setIdTodoForChange={setIdTodoForChange}
+          onEditTodo={handleEditTodo}
         />
 
         {!!todos.length && (
