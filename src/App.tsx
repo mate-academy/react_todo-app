@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import {
@@ -9,19 +10,18 @@ import { Header } from './components/Header/Header';
 import { Main } from './components/Main/Main';
 import { ErrorMessages } from './components/ErrorMessages/ErrorMessages';
 import { ErrorTypes } from './types/ErrorTypes';
-import { Status } from './types/Status';
 import { getVisibleTodos } from './utils/getVisibleTodos';
 
 const USER_ID = 10548;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState<Status>(Status.default);
   const [disableInput, setDisableInput] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
   const [idTodoForChange, setIdTodoForChange] = useState<number[]>([]);
+  const location = useLocation();
 
-  const visibleTodos = getVisibleTodos(status, todos);
+  const visibleTodos = getVisibleTodos(location.pathname, todos);
 
   const itemsLeftCount = todos.filter(todo => !todo.completed).length;
 
@@ -39,12 +39,6 @@ export const App: React.FC = () => {
       setErrorMessage(ErrorTypes.ErrorGet);
     }
   }
-
-  const handleStatus = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-  ) => {
-    setStatus(event.currentTarget.dataset.type as Status || Status.default);
-  };
 
   const handleAddTodo = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -218,8 +212,6 @@ export const App: React.FC = () => {
 
         {!!todos.length && (
           <Footer
-            selectedStatus={status}
-            onHandleStatus={handleStatus}
             itemsLeftCount={itemsLeftCount}
             onDeleteCompletedTodo={handleDeleteCompletedTodo}
             isAnyTodoCompleted={isAnyTodoCompleted}

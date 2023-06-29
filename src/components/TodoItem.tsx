@@ -34,6 +34,7 @@ export const TodoItem: FC<Props> = ({
 
   const handleBlur = () => {
     setEditing(false);
+    setTitleEdit(title);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

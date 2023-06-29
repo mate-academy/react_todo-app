@@ -1,22 +1,22 @@
 import React from 'react';
 import cn from 'classnames';
+import { Link, useLocation } from 'react-router-dom';
 import { Status } from '../../types/Status';
+import { LocationEnum } from '../../types/LocationEnum';
 
 type Props = {
-  selectedStatus: Status,
-  onHandleStatus:React.MouseEventHandler<HTMLAnchorElement>,
   itemsLeftCount: number,
   onDeleteCompletedTodo: () => Promise<void>,
   isAnyTodoCompleted: boolean,
 };
 
 export const Footer: React.FC<Props> = ({
-  selectedStatus,
-  onHandleStatus,
   itemsLeftCount,
   onDeleteCompletedTodo,
   isAnyTodoCompleted,
 }) => {
+  const location = useLocation();
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -25,47 +25,44 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter">
-        <a
-          href="#/"
+        <Link
+          to="/"
           className={
             cn(
               'filter__link',
-              { selected: selectedStatus === Status.default },
+              { selected: location.pathname === LocationEnum.all },
             )
           }
           data-type={Status.default}
-          onClick={onHandleStatus}
         >
           All
-        </a>
+        </Link>
 
-        <a
-          href="#/active"
+        <Link
+          to="active"
           className={
             cn(
               'filter__link',
-              { selected: selectedStatus === Status.active },
+              { selected: location.pathname === LocationEnum.active },
             )
           }
-          onClick={onHandleStatus}
           data-type={Status.active}
         >
           Active
-        </a>
+        </Link>
 
-        <a
-          href="#/completed"
+        <Link
+          to="completed"
           className={
             cn(
               'filter__link',
-              { selected: selectedStatus === Status.completed },
+              { selected: location.pathname === LocationEnum.completed },
             )
           }
-          onClick={onHandleStatus}
           data-type={Status.completed}
         >
           Completed
-        </a>
+        </Link>
       </nav>
 
       <button
