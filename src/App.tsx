@@ -14,7 +14,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [isUser, setIsUser] = useState(false);
   const location = useLocation();
-  const isAllCompleted = todos.every((todo: Todo) => todo.completed);
+  const isAllCompleted = useMemo(() => todos.every(
+    (todo: Todo) => todo.completed,
+  ), [todos]);
 
   const filteredTodos = useMemo(() => todos.filter((todo: Todo) => {
     const pathName = location.pathname;
@@ -22,8 +24,10 @@ export const App: React.FC = () => {
     switch (pathName) {
       case Status.ACTIVE:
         return !todo.completed;
+
       case Status.COMPLETED:
         return todo.completed;
+
       default:
         return Status.ALL;
     }
