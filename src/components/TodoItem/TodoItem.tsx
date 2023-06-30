@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-import { Todo } from 'types/Todo';
-import { PatchTodo } from 'types/PatchTodo';
+import { ITodo } from 'types/Todo';
+import { IPatchTodo } from 'types/PatchTodo';
 import { NewTodo } from '../NewTodo';
 
 type Props = {
-  todo: Todo;
+  todo: ITodo;
   loadingTodo: number[];
-  changeTodo: (id: number, data: PatchTodo) => void;
+  changeTodo: (id: number, data: Partial<IPatchTodo>) => void;
   removeTodo: (id: number) => void;
 };
 

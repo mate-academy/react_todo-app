@@ -12,12 +12,13 @@ export const Error: React.FC<Props> = React.memo(({
 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     setIsVisible(false);
     closeError();
   }, 3000);
 
   const handleClick = () => {
+    clearTimeout(timeoutId);
     closeError();
   };
 

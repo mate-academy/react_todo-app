@@ -6,8 +6,8 @@ import { TodoList } from 'components/TodoList';
 import { Footer } from 'components/Footer';
 import { Error } from 'components/Error';
 
-import { Todo } from 'types/Todo';
-import { PatchTodo } from 'types/PatchTodo';
+import { ITodo } from 'types/Todo';
+import { IPatchTodo } from 'types/PatchTodo';
 import { ErrorMessage } from 'enums/ErrorMessages';
 import { Filter } from 'enums/Filter';
 
@@ -23,11 +23,11 @@ export const App: React.FC = () => {
   const url = useLocation().pathname.replace('/', '');
   const storedTodos = localStorage.getItem('todos');
   const initialTodos = storedTodos ? JSON.parse(storedTodos) : [];
-  const [todoList, setTodoList] = useState<Todo[]>(initialTodos);
-  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [todoList, setTodoList] = useState<ITodo[]>(initialTodos);
+  const [tempTodo, setTempTodo] = useState<ITodo | null>(null);
   const [loadingTodo, setLoadingTodo] = useState([0]);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
-  const [error, setError] = useState(ErrorMessage.NONE);
+  const [error, setError] = useState<ErrorMessage | string>('');
   const [filterValue, setFilterValue] = useState(url || Filter.All);
 
   const fetchData = async () => {
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const changeTodo = async (id: number, data: PatchTodo) => {
+  const changeTodo = async (id: number, data: Partial<IPatchTodo>) => {
     try {
       setLoadingTodo(prev => [...prev, id]);
       const newData = await patchTodos(id, data);
@@ -198,7 +198,7 @@ export const App: React.FC = () => {
       {error && (
         <Error
           error={error}
-          closeError={() => setError(ErrorMessage.NONE)}
+          closeError={() => setError('')}
         />
       )}
     </div>

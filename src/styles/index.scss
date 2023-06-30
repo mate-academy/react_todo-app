@@ -2,6 +2,7 @@
 @import "./todoapp";
 @import "./todo";
 @import "./filter";
+@import "./notification.scss";
 
 * {
   box-sizing: border-box;
@@ -15,21 +16,11 @@ body {
   height: 100%;
   min-width: 230px;
   max-width: 550px;
+  font-size: $main-font-size;
   margin: 0 auto;
 }
 
 main {
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
-}
-
-.notification {
-  transition-property: opacity, min-height;
-  transition-duration: 1s;
-  min-height: 36px;
-}
-
-.notification.hidden {
-  min-height: 0;
-  opacity: 0;
-  pointer-events: none;
+  box-shadow: 0 2px 4px 0 rgba($black-color, 0.2),
+    0 25px 50px 0 rgba($black-color, 0.1);
 }

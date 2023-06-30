@@ -1,4 +1,4 @@
-export interface PatchTodo {
-  completed?: boolean;
-  title?: string;
+export interface IPatchTodo {
+  completed: boolean;
+  title: string;
 }

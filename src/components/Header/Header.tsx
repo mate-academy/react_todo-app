@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 
-import { Todo } from 'types/Todo';
+import { ITodo } from 'types/Todo';
 import { ErrorMessage } from 'enums/ErrorMessages';
 
 import { USER_ID } from 'api/todos';
@@ -9,9 +9,9 @@ import { USER_ID } from 'api/todos';
 type Props = {
   onAdd: (title: string) => void;
   toggleAll: (checked: boolean) => void;
-  onTempTodo: (todo: Todo) => void;
+  onTempTodo: (todo: ITodo) => void;
   onAddError: (error: ErrorMessage) => void;
-  todos: Todo[];
+  todos: ITodo[];
   isInputDisabled: boolean;
 };
 
@@ -26,7 +26,9 @@ export const Header: React.FC<Props> = React.memo(({
   const [title, setTitle] = useState('');
   const [isChecked, setIsChecked] = useState(false);
 
-  const hasUnCompleted = todos.every(todo => todo.completed);
+  const hasUnCompleted = useMemo(() => (
+    todos.every(todo => todo.completed)
+  ), [todos]);
 
   useEffect(() => {
     setIsChecked(hasUnCompleted);

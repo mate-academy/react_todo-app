@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { Filter } from 'enums/Filter';
-import { Todo } from 'types/Todo';
+import { ITodo } from 'types/Todo';
 import { ClearCompleted } from './ClearCompleted';
 
 type Props = {
-  todos: Todo[];
+  todos: ITodo[];
   filterValue: string | Filter;
   onCompleted: () => void;
   onAll: () => void;
@@ -23,8 +23,13 @@ export const Footer: React.FC<Props> = React.memo(({
   onActive,
   clearCompleted,
 }) => {
-  const remainingTodos = todos.filter(todo => !todo.completed);
-  const itemText = remainingTodos.length === 1 ? 'item' : 'items';
+  const remainingTodos = useMemo(() => (
+    todos.filter(todo => !todo.completed)
+  ), [todos]);
+
+  const itemText = useMemo(() => (
+    remainingTodos.length === 1 ? 'item' : 'items'
+  ), [remainingTodos]);
 
   return (
     <footer className="todoapp__footer">

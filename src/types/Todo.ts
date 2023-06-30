@@ -1,11 +1,11 @@
-export interface Todo {
+export interface ITodo {
   id: number;
   userId: number;
   title: string;
   completed: boolean;
 }
 
-export interface NewTodo {
+export interface INewTodo {
   userId: number;
   title: string;
   completed: boolean;

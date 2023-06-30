@@ -2,7 +2,6 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   height: 100%;
   box-sizing: content-box;
-  font-size: 24px;
   font-weight: 300;
   color: #4d4d4d;
   padding: 40px 20px;
@@ -16,7 +15,7 @@
     font-size: 100px;
     font-weight: 100;
     text-align: center;
-    color: rgba(175, 47, 47, 0.15);
+    color: rgba($dark-red-color, 0.15);
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -37,7 +36,7 @@
     justify-content: center;
     align-items: center;
 
-    font-size: 24px;
+    font-size: $main-font-size;
     color: $light-gray-color;
 
     border: 0;
@@ -59,7 +58,7 @@
     width: 100%;
     padding: 16px 16px 16px 60px;
 
-    font-size: 24px;
+    font-size: $main-font-size;
     line-height: 1.4em;
     font-family: inherit;
     font-weight: inherit;
@@ -68,8 +67,8 @@
     -moz-osx-font-smoothing: grayscale;
 
     border: none;
-    background-color: rgba(0, 0, 0, 0.01);
-    box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+    background-color: rgba($black-color, 0.01);
+    box-shadow: inset 0 -2px 1px rgba($black-color, 0.03);
     outline: none;
 
     &::placeholder {
@@ -100,11 +99,11 @@
     text-align: center;
     border-top: 1px solid $light-gray-color;
 
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+    box-shadow: 0 1px 1px rgba($black-color, 0.2),
       0 8px 0 -3px $very-light-gray-color,
-      0 9px 1px -3px rgba(0, 0, 0, 0.2),
+      0 9px 1px -3px rgba($black-color, 0.2),
       0 16px 0 -6px $very-light-gray-color,
-      0 17px 2px -6px rgba(0, 0, 0, 0.2);
+      0 17px 2px -6px rgba($black-color, 0.2);
   }
 
   &__clear-completed {

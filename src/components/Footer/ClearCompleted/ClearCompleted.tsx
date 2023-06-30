@@ -1,8 +1,8 @@
-import React from 'react';
-import { Todo } from 'types/Todo';
+import React, { useMemo } from 'react';
+import { ITodo } from 'types/Todo';
 
 type Props = {
-  todos: Todo[];
+  todos: ITodo[];
   clearCompleted: () => void;
 };
 
@@ -10,7 +10,9 @@ export const ClearCompleted: React.FC<Props> = React.memo(({
   todos,
   clearCompleted,
 }) => {
-  const hasCompleted = todos.some(todo => todo.completed);
+  const hasCompleted = useMemo(() => (
+    todos.some(todo => todo.completed)
+  ), [todos]);
 
   return (
     <>

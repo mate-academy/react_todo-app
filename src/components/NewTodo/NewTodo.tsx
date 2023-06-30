@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { PatchTodo } from 'types/PatchTodo';
-import { Todo } from 'types/Todo';
+import { IPatchTodo } from 'types/PatchTodo';
+import { ITodo } from 'types/Todo';
 
 type Props = {
-  todo: Todo;
+  todo: ITodo;
   onNeedChange: (value: boolean) => void;
-  changeTodo: (id: number, data: PatchTodo) => void;
+  changeTodo: (id: number, data: Partial<IPatchTodo>) => void;
   removeTodo: (id: number) => void;
 };
 
