@@ -47,8 +47,6 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const changeTitleOnBlur = (newTitle: string) => {
-    // eslint-disable-next-line no-console
-    console.log(newTitle);
     if (!newTitle) {
       deleteTodo(id);
 
