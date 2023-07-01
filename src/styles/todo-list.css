@@ -104,6 +104,36 @@
   display: block;
 }
 
+.todoapp__toggle-all {
+  position: absolute;
+
+  height: 100%;
+  width: 45px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 24px;
+  color: #e6e6e6;
+
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.todoapp__toggle-all.active {
+  color: #737373;
+  cursor: pointer;
+}
+
+.todoapp__toggle-all:before {
+  content: "❯";
+  transform: translateY(2px) rotate(90deg);
+  line-height: 0;
+  cursor: pointer;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox
