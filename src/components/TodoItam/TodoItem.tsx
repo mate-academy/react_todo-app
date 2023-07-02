@@ -51,7 +51,7 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (event.key === 'Enter') {
-      handleSaveChanges();
+      handleCancelEditing();
     }
   };
 

@@ -11,6 +11,7 @@ import { TodoList } from './components/TodoList';
 import { Loader } from './components/Loader';
 import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
+import { ErrorMesage } from './components/ErrorMesage';
 import {
   fetchTodos,
   addOneTodo,
@@ -28,8 +29,8 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState(Filter.ALL);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [newTodoTitle, setNewTodoTitle] = useState('');
-  // const [deleteTodoId, setDeleteTodoId] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [error, setError] = useState('');
 
   const addTodo = async (title: string) => {
     if (!title.trim()) {
@@ -59,7 +60,6 @@ export const App: React.FC = () => {
   };
 
   const deleteTodo = (id: number) => {
-    // setDeleteTodoId(id);
     setIsDisabled(true);
     remove(id)
       .then(() => {
@@ -108,7 +108,7 @@ export const App: React.FC = () => {
         setTodos(arrTodos);
         setIsDisabled(false);
       } catch {
-        throw new Error('Error');
+        setError('Unable to fetch todos');
       }
     };
 
@@ -195,7 +195,7 @@ export const App: React.FC = () => {
         onChangeTitle={setNewTodoTitle}
         isDisabled={isDisabled}
       />
-      {isDisabled
+      {isDisabled && !!error
         ? <Loader />
         : (
           <TodoList
@@ -203,9 +203,9 @@ export const App: React.FC = () => {
             tempTodo={tempTodo}
             deleteTodo={deleteTodo}
             onToggleTodo={toggleTodoStatus}
+            onToggleTodoStatus={handleToggleAll}
             onUpdateTodoTitle={updateTodoTitle}
             isDisabled={isDisabled}
-            onToggleTodoStatus={handleToggleAll}
           />
         )}
       {!!todos.length && (
@@ -215,6 +215,10 @@ export const App: React.FC = () => {
           onSelect={setFilter}
           onClearCompleted={handleClearCompleted}
         />
+      )}
+
+      {error && (
+        <ErrorMesage error={error} setError={setError} />
       )}
     </div>
   );
