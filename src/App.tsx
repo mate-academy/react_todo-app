@@ -34,7 +34,7 @@ export const App: React.FC = () => {
 
   const addTodo = async (title: string) => {
     if (!title.trim()) {
-      return;
+      setError("Title can't be empty");
     }
 
     const newTodo = {
@@ -46,6 +46,7 @@ export const App: React.FC = () => {
 
     setTempTodo(newTodo);
     setIsDisabled(true);
+    setError('');
 
     try {
       const res = await addOneTodo(USER_ID, newTodo);
@@ -53,6 +54,8 @@ export const App: React.FC = () => {
       setTodos((prevTodo) => [...prevTodo, res]);
       setFilter(Filter.ALL);
       setIsDisabled(false);
+    } catch {
+      setError('Unable to add a todo');
     } finally {
       setIsDisabled(false);
       setTempTodo(null);
@@ -67,9 +70,10 @@ export const App: React.FC = () => {
           return prevTodo.filter(todo => todo.id !== id);
         });
         setIsDisabled(false);
+        setError('');
       })
       .catch(() => {
-        throw new Error('Error');
+        setError('Unable to delete a todo');
       });
   };
 
@@ -93,7 +97,7 @@ export const App: React.FC = () => {
 
         setTodos(updatedTodos);
       } catch {
-        throw new Error('Error');
+        setError('Unable to update a todo');
       }
     },
     [todos],
@@ -109,6 +113,8 @@ export const App: React.FC = () => {
         setIsDisabled(false);
       } catch {
         setError('Unable to fetch todos');
+      } finally {
+        setIsDisabled(false);
       }
     };
 
@@ -146,7 +152,7 @@ export const App: React.FC = () => {
         setIsDisabled(false);
       })
       .catch(() => {
-        throw new Error('Error');
+        setError('Unable to delete todos');
       });
   }, [todos]);
 
@@ -166,7 +172,7 @@ export const App: React.FC = () => {
       setTodos(updatedTodos);
       await updateTodo(id, newTitle);
     } catch {
-      throw new Error('Error');
+      setError('Unable to update a todo');
     }
   };
 
@@ -183,7 +189,7 @@ export const App: React.FC = () => {
         setTodos(updatedTodos);
       })
       .catch(() => {
-        throw new Error('Error');
+        setError('Unable to complete todos');
       });
   }, [todos]);
 
@@ -195,7 +201,7 @@ export const App: React.FC = () => {
         onChangeTitle={setNewTodoTitle}
         isDisabled={isDisabled}
       />
-      {isDisabled && !!error
+      {isDisabled && !error
         ? <Loader />
         : (
           <TodoList
