@@ -16,7 +16,11 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${numberOfTodos} items left`}
+        {numberOfTodos === 1 ? (
+          `${numberOfTodos} item left`
+        ) : (
+          `${numberOfTodos} items left`
+        )}
       </span>
 
       <ul className="filters">

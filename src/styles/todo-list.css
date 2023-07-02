@@ -87,17 +87,18 @@
   height: 40px;
   margin: auto 0;
   font-size: 30px;
-  color: #cc9a9a;
+  color: transparent;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
 }
 
-.todo-list li .destroy:hover {
+.todo-list li .destroy:hover:after {
   color: #af5b5e;
 }
 
 .todo-list li .destroy:after {
   content: "×";
+  color: #cc9a9a;
 }
 
 .todo-list li:hover .destroy {

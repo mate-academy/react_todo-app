@@ -1,7 +1,4 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useCallback, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
@@ -21,29 +18,31 @@ export const TodoItem: React.FC<Props> = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [inputValue, setInputValue] = useState(todo.title);
 
-  const handleFormDisplay = (value: boolean) => {
-    setIsEditMode(value);
-  };
-
   const handleCancelEditing = (
-    event: KeyboardEvent<HTMLFormElement>,
+    event: KeyboardEvent<HTMLInputElement>,
     title: string,
   ) => {
     if (event.key === 'Escape') {
-      handleFormDisplay(false);
+      setIsEditMode(false);
       setInputValue(title);
     }
   };
 
   const handleFormSubmit = (value: boolean, title: string) => {
-    if (inputValue) {
+    if (inputValue.trim()) {
       onChange(inputValue, todo.id);
-      handleFormDisplay(value);
+      setIsEditMode(value);
     } else {
-      handleFormDisplay(false);
+      setIsEditMode(false);
       setInputValue(title);
     }
   };
+
+  const editInput = useCallback((inputElement: HTMLInputElement) => {
+    if (inputElement) {
+      inputElement.focus();
+    }
+  }, []);
 
   return (
     <li
@@ -54,42 +53,42 @@ export const TodoItem: React.FC<Props> = ({
         },
       )}
     >
-      {isEditMode ? (
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={todo.completed}
+          onChange={() => onToggle(todo.id, !todo.completed)}
+        />
+        <label
+          onDoubleClick={() => setIsEditMode(true)}
+        >
+          {todo.title}
+        </label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={() => onClose(todo.id)}
+        >
+          .
+        </button>
+      </div>
+      {isEditMode && (
         <form
           onSubmit={() => handleFormSubmit(false, todo.title)}
           onBlur={() => handleFormSubmit(false, todo.title)}
-          onKeyUp={(e) => handleCancelEditing(e, todo.title)}
         >
           <input
             type="text"
             className="edit"
-            autoFocus
+            ref={editInput}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            onKeyUp={(e) => handleCancelEditing(e, todo.title)}
           />
         </form>
-      ) : (
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            id="toggle-view"
-            checked={todo.completed}
-            onChange={() => onToggle(todo.id, !todo.completed)}
-          />
-          <label
-            htmlFor="toggle-view"
-            onDoubleClick={() => handleFormDisplay(true)}
-          >
-            {todo.title}
-          </label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            onClick={() => onClose(todo.id)}
-          />
-        </div>
       )}
     </li>
   );

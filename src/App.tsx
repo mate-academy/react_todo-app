@@ -23,8 +23,10 @@ export const App: React.FC = () => {
     switch (filter) {
       case Filter.Completed:
         return todos.filter((todo: Todo) => todo.completed);
+
       case Filter.Active:
         return todos.filter((todo: Todo) => !todo.completed);
+
       default:
         return todos;
     }
@@ -41,8 +43,10 @@ export const App: React.FC = () => {
       return;
     }
 
+    const id = +new Date();
+
     const newTodo = {
-      id: +new Date(),
+      id,
       title: query,
       completed: false,
     };
