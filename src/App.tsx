@@ -35,6 +35,8 @@ export const App: React.FC = () => {
   const addTodo = async (title: string) => {
     if (!title.trim()) {
       setError("Title can't be empty");
+
+      return;
     }
 
     const newTodo = {
