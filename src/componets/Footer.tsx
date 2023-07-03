@@ -14,18 +14,18 @@ export const Footer: React.FC<Props> = (
     todos, setTodos, filterId, setFilterId,
   },
 ) => {
-  const complatedTodoCount = todos.filter(item => item.complated);
+  const completedTodoCount = todos.filter(item => item.completed);
 
-  const hasTodos = todos.some(todo => todo.complated);
+  const hasTodos = todos.some(todo => todo.completed);
 
-  const clearComplated = () => {
-    setTodos(prevTodos => prevTodos.filter(todo => !todo.complated));
+  const clearcompleted = () => {
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length - complatedTodoCount.length} items left`}
+        {`${todos.length - completedTodoCount.length} items left`}
       </span>
 
       <Filters
@@ -38,7 +38,7 @@ export const Footer: React.FC<Props> = (
           <button
             type="button"
             className="clear-completed"
-            onClick={clearComplated}
+            onClick={clearcompleted}
           >
             Clear completed
           </button>

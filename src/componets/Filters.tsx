@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { FilterById } from '../type/FilterById';
 
-const { ALL, ACTIVE, COMPLATED } = FilterById;
+const { ALL, ACTIVE, COMPLETED } = FilterById;
 
 type Props = {
   filterId: FilterById
@@ -37,8 +37,8 @@ export const Filters: React.FC<Props> = (
 
       <li>
         <a
-          className={classNames({ selected: filterId === COMPLATED })}
-          onClick={() => setFilterId(COMPLATED)}
+          className={classNames({ selected: filterId === COMPLETED })}
+          onClick={() => setFilterId(COMPLETED)}
           href="#/completed"
         >
           Completed

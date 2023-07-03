@@ -10,7 +10,7 @@ export const Header: React.FC<Props> = ({ setTodos }) => {
       const newTodo: Todos = {
         id: +new Date(),
         title: event.target.value,
-        complated: false,
+        completed: false,
       };
 
       setTodos(prevTodos => [...prevTodos, newTodo]);

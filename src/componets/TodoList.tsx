@@ -12,7 +12,7 @@ type Props = {
   filterId: FilterById
 };
 
-const { ACTIVE, COMPLATED } = FilterById;
+const { ACTIVE, COMPLETED } = FilterById;
 
 export const TodoList: React.FC<Props> = ({
   todos,
@@ -22,25 +22,25 @@ export const TodoList: React.FC<Props> = ({
   const filteredTodos = useMemo(() => {
     switch (filterId) {
       case (ACTIVE):
-        return todos.filter(todo => !todo.complated);
+        return todos.filter(todo => !todo.completed);
 
-      case (COMPLATED):
-        return todos.filter(todo => todo.complated);
+      case (COMPLETED):
+        return todos.filter(todo => todo.completed);
 
       default:
         return todos;
     }
   }, [todos, filterId]);
 
-  const isAllComplated = todos.every(todo => todo.complated);
+  const isAllCompleted = todos.every(todo => todo.completed);
 
-  const changeComplated = (todoId: number) => {
+  const changeCompleted = (todoId: number) => {
     setTodos(prevTodos => prevTodos.map((todo: Todos) => {
       if (todo.id !== todoId) {
         return todo;
       }
 
-      return { ...todo, complated: !todo.complated };
+      return { ...todo, completed: !todo.completed };
     }));
   };
 
@@ -59,7 +59,7 @@ export const TodoList: React.FC<Props> = ({
   const allCopleteTodos = () => {
     setTodos(prevTodos => prevTodos.map(todo => ({
       ...todo,
-      complated: !isAllComplated,
+      completed: !isAllCompleted,
     })));
   };
 
@@ -74,7 +74,7 @@ export const TodoList: React.FC<Props> = ({
         id="toggle-all"
         className={classNames('toggle-all')}
         data-cy="toggleAll"
-        checked={isAllComplated}
+        checked={isAllCompleted}
         onChange={allCopleteTodos}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
@@ -86,7 +86,7 @@ export const TodoList: React.FC<Props> = ({
               key={todo.id}
               changeTitle={changeTitle}
               todo={todo}
-              changeComplated={changeComplated}
+              changeCompleted={changeCompleted}
               deletedTodo={deleteTodo}
 
             />

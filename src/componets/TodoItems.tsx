@@ -5,15 +5,15 @@ import { Todos } from '../type/Todos';
 
 type Props = {
   todo: Todos
-  changeComplated: (todoId: number) => void
+  changeCompleted: (todoId: number) => void
   deletedTodo: (todoId: number) => void
   changeTitle: (title: string, todoId: number) => void
 };
 
 export const TodoItems: React.FC<Props> = ({
-  todo, changeComplated, deletedTodo, changeTitle,
+  todo, changeCompleted, deletedTodo, changeTitle,
 }) => {
-  const { id, complated, title } = todo;
+  const { id, completed, title } = todo;
 
   const [isEding, setIsEding] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
@@ -68,7 +68,7 @@ export const TodoItems: React.FC<Props> = ({
     <li
       className={classNames(
         {
-          completed: complated,
+          completed,
           editing: isEding,
         },
       )}
@@ -79,8 +79,8 @@ export const TodoItems: React.FC<Props> = ({
           type="checkbox"
           className="toggle"
           id="toggle-completed"
-          checked={complated}
-          onChange={() => changeComplated(id)}
+          checked={completed}
+          onChange={() => changeCompleted(id)}
         />
         <label
           onDoubleClick={handleDuvleClick}
