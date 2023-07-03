@@ -6,6 +6,7 @@ import { Todo } from './Todo';
 import { TodoList } from './TodoList';
 import { TodoFilter } from './TodoFilter';
 import { Filters } from './Filters';
+import { toggleTodoComplete } from './toggle';
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -32,13 +33,13 @@ export const TodoApp = () => {
     let newTodos = todos;
 
     switch (filtered) {
-      case 'Active':
+      case Filters.Active:
         newTodos = newTodos.filter(todo => !todo.completed);
         break;
-      case 'Completed':
+      case Filters.Completed:
         newTodos = newTodos.filter(todo => todo.completed);
         break;
-      case 'All':
+      case Filters.All:
         newTodos = todos;
         break;
       default: throw new Error('wrong filters');
@@ -69,29 +70,14 @@ export const TodoApp = () => {
     };
 
     setTodos(prevState => [...prevState
-      .filter(todo => todo.id !== id), changeTodo].sort((a, b) => a.id - b.id));
+      .filter(todo => todo.id !== id), changeTodo]
+      .sort((todoSmall, todoBig) => todoSmall.id - todoBig.id));
   }, [todos, filteredTodos]);
 
   const handleAllToggle = useCallback(() => {
-    const newTodos = todos.find(todo => !todo.completed)
-      ? todos.map(todo => {
-        const toggleTodo = {
-          id: todo.id,
-          title: todo.title,
-          completed: true,
-        };
+    const isCompleted = todos.some(todo => !todo.completed);
 
-        return toggleTodo;
-      })
-      : todos.map(todo => {
-        const toggleTodo = {
-          id: todo.id,
-          title: todo.title,
-          completed: false,
-        };
-
-        return toggleTodo;
-      });
+    const newTodos = toggleTodoComplete(todos, isCompleted);
 
     setTodos(newTodos);
   }, [todos, filteredTodos]);
@@ -120,7 +106,7 @@ export const TodoApp = () => {
 
       setTodos(prevState => [...prevState
         .filter(todo => todo.id !== editById), creatingEdtion]
-        .sort((a, b) => a.id - b.id));
+        .sort((todoSmaller, todoBigger) => todoSmaller.id - todoBigger.id));
     }
   }, [title, todos, filteredTodos]);
 
