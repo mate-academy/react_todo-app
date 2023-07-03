@@ -8,7 +8,6 @@ interface Props {
   deleteTodo: (id: number) => void,
   onToggleTodo: (todoId: number) => void,
   onUpdateTodoTitle: (id: number, newTitle: string) => void;
-  isDisabled: boolean,
   onToggleTodoStatus: () => void;
 }
 
@@ -18,7 +17,6 @@ export const TodoList: React.FC<Props> = ({
   deleteTodo,
   onToggleTodo,
   onUpdateTodoTitle,
-  isDisabled,
   onToggleTodoStatus,
 }) => {
   return (
@@ -41,7 +39,6 @@ export const TodoList: React.FC<Props> = ({
               onDelete={deleteTodo}
               onToggleTodo={onToggleTodo}
               onUpdateTodoTitle={onUpdateTodoTitle}
-              isDisabled={isDisabled}
             />
           );
         })}
@@ -52,7 +49,6 @@ export const TodoList: React.FC<Props> = ({
             onDelete={deleteTodo}
             onToggleTodo={onToggleTodo}
             onUpdateTodoTitle={onUpdateTodoTitle}
-            isDisabled={isDisabled}
           />
         )}
 

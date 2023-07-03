@@ -8,7 +8,6 @@ import React, {
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
-import { Loader } from './components/Loader';
 import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
 import { ErrorMesage } from './components/ErrorMesage';
@@ -47,7 +46,6 @@ export const App: React.FC = () => {
     };
 
     setTempTodo(newTodo);
-    setIsDisabled(true);
     setError('');
 
     try {
@@ -55,23 +53,19 @@ export const App: React.FC = () => {
 
       setTodos((prevTodo) => [...prevTodo, res]);
       setFilter(Filter.ALL);
-      setIsDisabled(false);
     } catch {
       setError('Unable to add a todo');
     } finally {
-      setIsDisabled(false);
       setTempTodo(null);
     }
   };
 
   const deleteTodo = (id: number) => {
-    setIsDisabled(true);
     remove(id)
       .then(() => {
         setTodos((prevTodo) => {
           return prevTodo.filter(todo => todo.id !== id);
         });
-        setIsDisabled(false);
         setError('');
       })
       .catch(() => {
@@ -107,16 +101,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsDisabled(true);
       try {
         const arrTodos = await fetchTodos(USER_ID.toString());
 
         setTodos(arrTodos);
-        setIsDisabled(false);
       } catch {
         setError('Unable to fetch todos');
-      } finally {
-        setIsDisabled(false);
       }
     };
 
@@ -203,19 +193,14 @@ export const App: React.FC = () => {
         onChangeTitle={setNewTodoTitle}
         isDisabled={isDisabled}
       />
-      {isDisabled && !error
-        ? <Loader />
-        : (
-          <TodoList
-            todos={filteredTodos}
-            tempTodo={tempTodo}
-            deleteTodo={deleteTodo}
-            onToggleTodo={toggleTodoStatus}
-            onToggleTodoStatus={handleToggleAll}
-            onUpdateTodoTitle={updateTodoTitle}
-            isDisabled={isDisabled}
-          />
-        )}
+      <TodoList
+        todos={filteredTodos}
+        tempTodo={tempTodo}
+        deleteTodo={deleteTodo}
+        onToggleTodo={toggleTodoStatus}
+        onToggleTodoStatus={handleToggleAll}
+        onUpdateTodoTitle={updateTodoTitle}
+      />
       {!!todos.length && (
         <Footer
           todos={filteredTodos}

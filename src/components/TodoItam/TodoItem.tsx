@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
-import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -8,7 +7,6 @@ interface Props {
   onDelete: (id: number) => void,
   onUpdateTodoTitle: (id: number, newTitle: string) => void;
   onToggleTodo: (todoId: number) => void,
-  isDisabled: boolean,
 }
 
 export const TodoItem: React.FC<Props> = ({
@@ -16,7 +14,6 @@ export const TodoItem: React.FC<Props> = ({
   onDelete,
   onUpdateTodoTitle,
   onToggleTodo,
-  isDisabled,
 }) => {
   const [query, setQuery] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
@@ -51,7 +48,7 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (event.key === 'Enter') {
-      handleCancelEditing();
+      handleSaveChanges();
     }
   };
 
@@ -61,47 +58,37 @@ export const TodoItem: React.FC<Props> = ({
       editing: isEditing,
     })}
     >
-      {isDisabled ? (
-        <Loader />
-      ) : (
-        <>
-          <div
-            className="view"
-          >
-            <input
-              type="checkbox"
-              className="toggle"
-              checked={todo.completed}
-              onChange={() => onToggleTodo(todo.id)}
-            />
-            <label
-              onDoubleClick={() => setIsEditing(true)}
-            >
-              {todo.title}
-            </label>
-            <button
-              type="button"
-              className="destroy"
-              data-cy="deleteTodo"
-              aria-label="deleteTodo"
-              onClick={() => {
-                onDelete(todo.id);
-              }}
-            />
-          </div>
-          <input
-            type="text"
-            className="edit"
-            ref={inputRef}
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-            }}
-            onBlur={handleSaveChanges}
-            onKeyUp={handleKeyDown}
-          />
-        </>
-      )}
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          checked={todo.completed}
+          onChange={() => onToggleTodo(todo.id)}
+        />
+        <label onDoubleClick={() => setIsEditing(true)}>
+          {todo.title}
+        </label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          aria-label="deleteTodo"
+          onClick={() => onDelete(todo.id)}
+        />
+      </div>
+      {isEditing ? (
+        <input
+          type="text"
+          className="edit"
+          ref={inputRef}
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value);
+          }}
+          onBlur={handleSaveChanges}
+          onKeyUp={handleKeyDown}
+        />
+      ) : null}
     </li>
   );
 };
