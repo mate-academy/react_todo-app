@@ -59,9 +59,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (inputRef.current !== null) {
-      inputRef.current.focus();
-    }
+    inputRef.current?.focus();
   }, [isEdit]);
 
   return (

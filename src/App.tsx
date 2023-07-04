@@ -170,8 +170,7 @@ export const App: React.FC = () => {
   const takeUserID = () => {
     let id;
 
-    if ('userID' in localStorage
-      && localStorage.getItem('userID') !== null) {
+    if (localStorage.getItem('userID')) {
       id = Number(localStorage.getItem('userID'));
       setUserID(id);
     }
@@ -211,13 +210,11 @@ export const App: React.FC = () => {
         />
 
         {todos.length > 0 && (
-          <>
-            <Footer
-              onClearCompleted={handleClearCompleted}
-              activeTodosCount={activeTodosCount}
-              completedTodosCount={completedTodosCount}
-            />
-          </>
+          <Footer
+            onClearCompleted={handleClearCompleted}
+            activeTodosCount={activeTodosCount}
+            completedTodosCount={completedTodosCount}
+          />
         )}
       </div>
 
@@ -228,7 +225,7 @@ export const App: React.FC = () => {
         />
       )}
 
-      {('userID' in localStorage) && (
+      {localStorage.has('userID') && (
         <button
           type="button"
           className="button is-primary is-medium"
