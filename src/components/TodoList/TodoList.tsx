@@ -1,6 +1,7 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItam';
+import { TempTodo } from '../TempTodo';
 
 interface Props {
   todos: Todo[];
@@ -44,14 +45,8 @@ export const TodoList: React.FC<Props> = ({
         })}
 
         {tempTodo && (
-          <TodoItem
-            todo={tempTodo}
-            onDelete={deleteTodo}
-            onToggleTodo={onToggleTodo}
-            onUpdateTodoTitle={onUpdateTodoTitle}
-          />
+          <TempTodo title={tempTodo.title} />
         )}
-
       </ul>
     </section>
   );

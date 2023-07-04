@@ -76,7 +76,7 @@ export const TodoItem: React.FC<Props> = ({
           onClick={() => onDelete(todo.id)}
         />
       </div>
-      {isEditing ? (
+      {isEditing && (
         <input
           type="text"
           className="edit"
@@ -88,7 +88,7 @@ export const TodoItem: React.FC<Props> = ({
           onBlur={handleSaveChanges}
           onKeyUp={handleKeyDown}
         />
-      ) : null}
+      )}
     </li>
   );
 };

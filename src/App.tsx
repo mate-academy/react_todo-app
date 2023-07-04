@@ -73,31 +73,29 @@ export const App: React.FC = () => {
       });
   };
 
-  const toggleTodoStatus = useCallback(
-    async (todoId: number) => {
-      try {
-        const updatedTodos = todos.map(todo => {
-          if (todo.id === todoId) {
-            const updatedTodo = {
-              ...todo,
-              completed: !todo.completed,
-            };
+  const toggleTodoStatus = useCallback(async (todoId: number) => {
+    try {
+      const updatedTodos = todos.map(todo => {
+        if (todo.id === todoId) {
+          const updatedTodo = {
+            ...todo,
+            completed: !todo.completed,
+          };
 
-            updateTodoStatus(todoId, updatedTodo.completed);
+          updateTodoStatus(todoId, updatedTodo.completed);
 
-            return updatedTodo;
-          }
+          return updatedTodo;
+        }
 
-          return todo;
-        });
+        return todo;
+      });
 
-        setTodos(updatedTodos);
-      } catch {
-        setError('Unable to update a todo');
-      }
-    },
-    [todos],
-  );
+      setTodos(updatedTodos);
+    } catch {
+      setError('Unable to update a todo');
+    }
+  },
+  [todos]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -201,6 +199,7 @@ export const App: React.FC = () => {
         onToggleTodoStatus={handleToggleAll}
         onUpdateTodoTitle={updateTodoTitle}
       />
+
       {!!todos.length && (
         <Footer
           todos={filteredTodos}
@@ -211,7 +210,7 @@ export const App: React.FC = () => {
       )}
 
       {error && (
-        <ErrorMesage error={error} setError={setError} />
+        <ErrorMesage error={error} onError={setError} />
       )}
     </div>
   );

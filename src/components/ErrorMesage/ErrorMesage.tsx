@@ -4,23 +4,23 @@ import './ErrorMesage.css';
 
 type Props = {
   error: string,
-  setError: (value: string) => void,
+  onError: (value: string) => void,
 };
 
-export const ErrorMesage: React.FC<Props> = ({ error, setError }) => {
+export const ErrorMesage: React.FC<Props> = ({ error, onError }) => {
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (error) {
       timer = setTimeout(() => {
-        setError('');
+        onError('');
       }, 3000);
     }
 
     return () => {
       clearTimeout(timer);
     };
-  }, [error, setError]);
+  }, [error, onError]);
 
   return (
     <div
@@ -33,7 +33,7 @@ export const ErrorMesage: React.FC<Props> = ({ error, setError }) => {
       <button
         type="button"
         className="delete"
-        onClick={() => setError('')}
+        onClick={() => onError('')}
       >
         х
       </button>
