@@ -60,17 +60,14 @@ export const App: React.FC = () => {
     }
   };
 
-  const deleteTodo = (id: number) => {
-    remove(id)
-      .then(() => {
-        setTodos((prevTodo) => {
-          return prevTodo.filter(todo => todo.id !== id);
-        });
-        setError('');
-      })
-      .catch(() => {
-        setError('Unable to delete a todo');
-      });
+  const deleteTodo = async (id: number) => {
+    try {
+      await remove(id);
+      setTodos((prevTodo) => prevTodo.filter(todo => todo.id !== id));
+      setError('');
+    } catch {
+      setError('Unable to delete a todo');
+    }
   };
 
   const toggleTodoStatus = useCallback(async (todoId: number) => {
@@ -129,22 +126,21 @@ export const App: React.FC = () => {
     }
   }, [filter, todos]);
 
-  const handleClearCompleted = useCallback(() => {
+  const handleClearCompleted = async () => {
     const completedIds = todos
       .filter(todo => todo.completed)
       .map(todo => todo.id);
 
     setIsDisabled(true);
 
-    removeTodos(completedIds)
-      .then(() => {
-        setTodos(prev => prev.filter(todo => !todo.completed));
-        setIsDisabled(false);
-      })
-      .catch(() => {
-        setError('Unable to delete todos');
-      });
-  }, [todos]);
+    try {
+      await removeTodos(completedIds);
+      setTodos(prev => prev.filter(todo => !todo.completed));
+      setIsDisabled(false);
+    } catch {
+      setError('Unable to delete todos');
+    }
+  };
 
   const updateTodoTitle = async (id: number, newTitle: string) => {
     try {
