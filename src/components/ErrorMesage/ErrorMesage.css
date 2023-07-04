@@ -1,0 +1,44 @@
+div.notification {
+  position: relative;
+  padding: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+
+  font-size: 24px;
+  color: rgba(195, 18, 18);
+
+  background-color: #e7c1c1;
+
+  transition-duration: 1s;
+}
+
+.notification.hidden {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+button.delete {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 2px 6px;
+  font-size: 14px;
+  color: #777;
+
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+
+  cursor: pointer;
+  transform: translate(50%, -50%);
+  transition: transform 0.3s, color 0.3s;
+}
+
+button.delete:hover {
+  background: #ccc;
+  color: #fff;
+}
