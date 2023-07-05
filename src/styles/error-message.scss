@@ -1,0 +1,51 @@
+.error-message {
+  position: relative;
+  display: flex;
+  margin-bottom: 40px;
+  padding: 0 10px;
+  border: 1px solid #ffc9c9;
+  border-radius: 10px;
+  background-color: #ffe2e2;
+  text-align: center;
+
+  &__text {
+    font-weight: bold;
+    color: #ff5050;
+    width: 100%;
+  }
+
+  &__close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    border: 1px solid #ff5050;
+    border-radius: 50%;
+    transition: all 0.3s;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 7px;
+      right: 2px;
+      width: 10px;
+      height: 1px;
+      background: #ff5050;
+    }
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+
+    &:hover {
+      box-shadow: 0 0 3px #ff5050;
+    }
+  }
+}

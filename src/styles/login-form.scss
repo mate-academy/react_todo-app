@@ -1,0 +1,87 @@
+.login-form {
+  box-sizing: border-box;
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 15px 20px 25px;
+  background-color: #eee;
+  border: 1px solid #000;
+  border-radius: 10px;
+
+  &__header {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 3em;
+    line-height: 1em;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 20px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 30px;
+  }
+
+  &__label {
+    font-weight: bold;
+    padding-bottom: 5px;
+  }
+
+  &__input {
+    border-radius: 10px;
+    height: 40px;
+    font-size: 1.4em;
+    padding-left: 60px;
+    transition: box-shadow 0.3s;
+
+    &-icon {
+      position: absolute;
+      top: 37px;
+      left: 13px;
+      height: 20px;
+      width: 20px;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 10px #777;
+    }
+
+    &::placeholder {
+      opacity: 0.4;
+    }
+  }
+
+  &__button {
+    width: 100px;
+    font-weight: bold;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: #000;
+      color: #fff;
+      box-shadow: 0 0 5px #000;
+    }
+
+    &:disabled {
+      border-color: #aaa;
+      background-color: #fff;
+      box-shadow: none;
+      color: #aaa;
+      cursor: auto;
+    }
+  }
+}
