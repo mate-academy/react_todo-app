@@ -1,6 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoItem } from '../TodoItem';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[],
@@ -10,7 +10,7 @@ type Props = {
   loadedTodoIds: number[],
 };
 
-export const Main: React.FC<Props> = ({
+export const TodoList: React.FC<Props> = ({
   todos,
   onDelete,
   onUpdate,

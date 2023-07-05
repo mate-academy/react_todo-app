@@ -143,7 +143,7 @@ export const UserWarning: React.FC<Props> = ({
 
       {hasError && (
         <ErrorNotification
-          errorMessage={hasError}
+          errorType={hasError}
           onCloseError={onCloseError}
         />
       )}

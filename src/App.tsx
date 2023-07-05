@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
@@ -10,7 +11,7 @@ import {
   getTodos, createTodo, removeTodo, patchTodo,
 } from './api/todos';
 import { Header } from './components/Header';
-import { Main } from './components/Main';
+import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
 
@@ -201,7 +202,7 @@ export const App: React.FC = () => {
           onToggleAll={changeStatusForAll}
         />
 
-        <Main
+        <TodoList
           todos={visibleTodos}
           onDelete={deleteTodo}
           onUpdate={updateTodo}
@@ -220,7 +221,7 @@ export const App: React.FC = () => {
 
       {hasError && (
         <ErrorNotification
-          errorMessage={hasError}
+          errorType={hasError}
           onCloseError={onCloseError}
         />
       )}

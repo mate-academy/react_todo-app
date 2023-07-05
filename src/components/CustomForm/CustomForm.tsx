@@ -2,7 +2,7 @@ import React, {
   ChangeEvent, FormEvent, KeyboardEvent, FC,
 } from 'react';
 
-interface CustomFormProps {
+type Props = {
   onSubmit: (event: FormEvent) => void;
   className: string;
   type: string;
@@ -11,10 +11,10 @@ interface CustomFormProps {
   onBlur: (event: FormEvent) => void;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onKeyUp: (event: KeyboardEvent<HTMLInputElement>) => void;
-  ref: React.RefObject<HTMLInputElement>
-}
+  ref: React.RefObject<HTMLInputElement>,
+};
 
-export const CustomForm: FC<CustomFormProps> = ({
+export const CustomForm: FC<Props> = ({
   onSubmit,
   className,
   type,

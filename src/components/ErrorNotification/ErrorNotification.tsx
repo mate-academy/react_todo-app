@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
-  errorMessage: ErrorType;
+  errorType: ErrorType;
   onCloseError: () => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
-  errorMessage,
+  errorType,
   onCloseError,
 }) => {
   useEffect(() => {
@@ -28,7 +28,7 @@ export const ErrorNotification: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: !errorMessage },
+        { hidden: !errorType },
       )}
     >
       <button
@@ -39,7 +39,7 @@ export const ErrorNotification: React.FC<Props> = ({
         ×
       </button>
 
-      {errorMessage}
+      {errorType}
     </div>
   );
 };
