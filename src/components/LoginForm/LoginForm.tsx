@@ -71,7 +71,7 @@ export const LoginForm: React.FC<Props> = ({ setUser }) => {
             </label>
 
             <img
-              src="../icons/email.png"
+              src="./icons/email.png"
               alt=""
               className="login-form__input-icon"
             />
@@ -98,7 +98,7 @@ export const LoginForm: React.FC<Props> = ({ setUser }) => {
                   </label>
 
                   <img
-                    src="../icons/person.png"
+                    src="./icons/person.png"
                     alt=""
                     className="login-form__input-icon"
                   />
