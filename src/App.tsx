@@ -159,12 +159,14 @@ export const App: React.FC = () => {
   const visibleTodos = getVisibleTodos(todos, location);
 
   const fetchTodos = async () => {
-    try {
-      const getData = await getTodos(userID);
+    if (userID !== 0) {
+      try {
+        const getData = await getTodos(userID);
 
-      setTodos(getData);
-    } catch {
-      setHasError(ErrorType.LOAD);
+        setTodos(getData);
+      } catch {
+        setHasError(ErrorType.LOAD);
+      }
     }
   };
 
@@ -233,6 +235,7 @@ export const App: React.FC = () => {
           onClick={() => {
             localStorage.removeItem('userID');
             setUserID(0);
+            setTodos([]);
           }}
         >
           Log Out
