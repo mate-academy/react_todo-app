@@ -226,7 +226,7 @@ export const App: React.FC = () => {
         />
       )}
 
-      {localStorage.has('userID') && (
+      {('userID' in localStorage) && (
         <button
           type="button"
           className="button is-primary is-medium"
