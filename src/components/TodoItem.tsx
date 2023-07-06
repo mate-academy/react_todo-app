@@ -17,24 +17,25 @@ export const TodoItem: React.FC<Props> = ({
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [inputValue, setInputValue] = useState(todo.title);
+  const { title, id, completed } = todo;
 
   const handleCancelEditing = (
     event: KeyboardEvent<HTMLInputElement>,
-    title: string,
+    query: string,
   ) => {
     if (event.key === 'Escape') {
       setIsEditMode(false);
-      setInputValue(title);
+      setInputValue(query);
     }
   };
 
-  const handleFormSubmit = (value: boolean, title: string) => {
+  const handleFormSubmit = (value: boolean, query: string) => {
     if (inputValue.trim()) {
-      onChange(inputValue, todo.id);
+      onChange(inputValue, id);
       setIsEditMode(value);
     } else {
       setIsEditMode(false);
-      setInputValue(title);
+      setInputValue(query);
     }
   };
 
@@ -48,7 +49,7 @@ export const TodoItem: React.FC<Props> = ({
     <li
       className={classNames(
         {
-          completed: todo.completed,
+          completed,
           editing: isEditMode,
         },
       )}
@@ -58,27 +59,27 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          checked={todo.completed}
-          onChange={() => onToggle(todo.id, !todo.completed)}
+          checked={completed}
+          onChange={() => onToggle(id, !completed)}
         />
         <label
           onDoubleClick={() => setIsEditMode(true)}
         >
-          {todo.title}
+          {title}
         </label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => onClose(todo.id)}
+          onClick={() => onClose(id)}
         >
           .
         </button>
       </div>
       {isEditMode && (
         <form
-          onSubmit={() => handleFormSubmit(false, todo.title)}
-          onBlur={() => handleFormSubmit(false, todo.title)}
+          onSubmit={() => handleFormSubmit(false, title)}
+          onBlur={() => handleFormSubmit(false, title)}
         >
           <input
             type="text"

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { FormEvent } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
@@ -28,7 +27,9 @@ export const Header: React.FC<Props> = ({
           active: activeTodos.length === 0,
         })}
         onClick={onToggle}
-      />
+      >
+        .
+      </button>
 
       <form onSubmit={onSubmit}>
         <input

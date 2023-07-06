@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useState,
   useMemo,
@@ -39,7 +38,7 @@ export const App: React.FC = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!query) {
+    if (!query.trim()) {
       return;
     }
 

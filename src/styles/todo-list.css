@@ -92,13 +92,13 @@
   transition: color 0.2s ease-out;
 }
 
-.todo-list li .destroy:hover:after {
-  color: #af5b5e;
-}
-
 .todo-list li .destroy:after {
   content: "×";
   color: #cc9a9a;
+}
+
+.todo-list li .destroy:hover:after {
+  color: #af5b5e;
 }
 
 .todo-list li:hover .destroy {
@@ -116,7 +116,7 @@
   align-items: center;
 
   font-size: 24px;
-  color: #e6e6e6;
+  color: transparent;
 
   border: 0;
   background-color: transparent;
@@ -130,6 +130,7 @@
 
 .todoapp__toggle-all:before {
   content: "❯";
+  color: #e6e6e6;
   transform: translateY(2px) rotate(90deg);
   line-height: 0;
   cursor: pointer;
