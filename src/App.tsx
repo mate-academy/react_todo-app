@@ -33,7 +33,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(filterTodos, [todos, filter]);
   const activeTodos = todos?.filter((todo: Todo) => !todo.completed);
-  const isCompletedTodos = todos.some((todo: Todo) => todo.completed);
+  const hasCompletedTodos = todos.some((todo: Todo) => todo.completed);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
 
       return {
         ...todo,
-        title: value,
+        title: value.trim(),
       };
     }));
   };
@@ -117,7 +117,7 @@ export const App: React.FC = () => {
 
           <Footer
             numberOfTodos={activeTodos?.length}
-            isCompletedTodos={isCompletedTodos}
+            hasCompletedTodos={hasCompletedTodos}
             onRemove={handleRemoveAll}
           />
         </>
