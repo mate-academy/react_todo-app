@@ -11,14 +11,14 @@ export const LoginForm: React.FC<Props> = ({ setUser }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState<string>('');
-  const [wasUserNotFound, setWasUserNotFound] = useState<boolean>(false);
+  const [isUserFound, setIsUserFound] = useState<boolean>(true);
 
   const signInUser = async () => {
     try {
       const usersFromServer = await getUser(email);
 
       if (!usersFromServer.length) {
-        setWasUserNotFound(true);
+        setIsUserFound(false);
         setError('User was not found! Please register!');
       }
 
@@ -37,25 +37,21 @@ export const LoginForm: React.FC<Props> = ({ setUser }) => {
     } catch {
       setError('Unable to register a new user!');
     } finally {
-      setWasUserNotFound(false);
+      setIsUserFound(false);
     }
   };
 
   const handleSubmission = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (wasUserNotFound) {
-      signUpUser();
-    } else {
-      signInUser();
-    }
+    return isUserFound ? signInUser() : signUpUser();
   };
 
   return (
     <>
       <section className="login-form">
         <h1 className="login-form__header">
-          {wasUserNotFound
+          {isUserFound
             ? 'Please sign up'
             : 'Please sign in'}
         </h1>
@@ -89,7 +85,7 @@ export const LoginForm: React.FC<Props> = ({ setUser }) => {
             />
           </div>
 
-          {wasUserNotFound
+          {!isUserFound
             ? (
               <>
                 <div className="login-form__item">

@@ -8,14 +8,14 @@ export const App: React.FC = () => {
 
   return (
     <>
-      {user
-        ? (
-          <TodoApp
-            user={user}
-            setUser={setUser}
-          />
-        )
-        : <LoginForm setUser={setUser} />}
+      {user ? (
+        <TodoApp
+          user={user}
+          setUser={setUser}
+        />
+      ) : (
+        <LoginForm setUser={setUser} />
+      )}
     </>
   );
 };
