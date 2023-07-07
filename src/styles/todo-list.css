@@ -123,16 +123,16 @@
   cursor: pointer;
 }
 
-.todoapp__toggle-all.active {
-  color: #737373;
-  cursor: pointer;
-}
-
 .todoapp__toggle-all:before {
   content: "❯";
   color: #e6e6e6;
   transform: translateY(2px) rotate(90deg);
   line-height: 0;
+  cursor: pointer;
+}
+
+.todoapp__toggle-all.active:before {
+  color: #737373;
   cursor: pointer;
 }
 

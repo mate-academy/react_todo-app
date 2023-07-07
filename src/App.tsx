@@ -106,18 +106,22 @@ export const App: React.FC = () => {
         onToggle={handleTogleAll}
       />
 
-      <TodoList
-        todos={visibleTodos}
-        onClose={handleRemoveTodo}
-        onToggle={handleToggleTodo}
-        onChange={handleTitleChange}
-      />
+      {!!todos.length && (
+        <>
+          <TodoList
+            todos={visibleTodos}
+            onClose={handleRemoveTodo}
+            onToggle={handleToggleTodo}
+            onChange={handleTitleChange}
+          />
 
-      <Footer
-        numberOfTodos={activeTodos?.length}
-        isCompletedTodos={isCompletedTodos}
-        onRemove={handleRemoveAll}
-      />
+          <Footer
+            numberOfTodos={activeTodos?.length}
+            isCompletedTodos={isCompletedTodos}
+            onRemove={handleRemoveAll}
+          />
+        </>
+      )}
     </div>
   );
 };
