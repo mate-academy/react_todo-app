@@ -26,7 +26,7 @@ export const App: React.FC = () => {
     isAddError,
     isUpdateError,
   } = useContext(TodosContext);
-  const [filter, setFilter] = useState(FilterStatus.all);
+  const [setFilter] = useState(FilterStatus.all);
   const active = todos.filter(todo => todo.completed === false).length;
   const completed = todos.filter(todo => todo.completed).length;
 
@@ -65,16 +65,28 @@ export const App: React.FC = () => {
           setTodos={(todosArray) => setTodos(todosArray)}
         />
 
-        <Routes>
+        {todos.length > 0 && (
+          <Routes>
             <Route
               path="/"
               element={(
-                <TodoList
-                  todos={todos}
-                  visibleTodos={[...todos]}
-                  toggleAll={toggleAll}
-                  untoggleAll={untoggleAll}
-                />
+                <>
+                  <TodoList
+                    todos={todos}
+                    visibleTodos={[...todos]}
+                    toggleAll={toggleAll}
+                    untoggleAll={untoggleAll}
+                  />
+
+                  <Footer
+                    todos={todos}
+                    active={active}
+                    completed={completed}
+                    filter={FilterStatus.all}
+                    setFilter={() => setFilter}
+                    setTodos={(todosArray) => setTodos(todosArray)}
+                  />
+                </>
               )}
             />
 
@@ -86,24 +98,46 @@ export const App: React.FC = () => {
             <Route
               path={`/${FilterStatus.completed}`}
               element={(
-                <TodoList
-                  todos={todos}
-                  visibleTodos={[...todos].filter(todo => todo.completed)}
-                  toggleAll={toggleAll}
-                  untoggleAll={untoggleAll}
-                />
+                <>
+                  <TodoList
+                    todos={todos}
+                    visibleTodos={[...todos].filter(todo => todo.completed === true)}
+                    toggleAll={toggleAll}
+                    untoggleAll={untoggleAll}
+                  />
+
+                  <Footer
+                    todos={todos}
+                    active={active}
+                    completed={completed}
+                    filter={FilterStatus.completed}
+                    setFilter={() => setFilter}
+                    setTodos={(todosArray) => setTodos(todosArray)}
+                  />
+                </>
               )}
             />
 
             <Route
               path={`/${FilterStatus.active}`}
               element={(
-                <TodoList
-                  todos={todos}
-                  visibleTodos={[...todos].filter(todo => todo.completed === false)}
-                  toggleAll={toggleAll}
-                  untoggleAll={untoggleAll}
-                />
+                <>
+                  <TodoList
+                    todos={todos}
+                    visibleTodos={[...todos].filter(todo => todo.completed === false)}
+                    toggleAll={toggleAll}
+                    untoggleAll={untoggleAll}
+                  />
+
+                  <Footer
+                    todos={todos}
+                    active={active}
+                    completed={completed}
+                    filter={FilterStatus.active}
+                    setFilter={() => setFilter}
+                    setTodos={(todosArray) => setTodos(todosArray)}
+                  />
+                </>
               )}
             />
 
@@ -112,16 +146,6 @@ export const App: React.FC = () => {
               element={<Navigate to="/" replace />}
             />
           </Routes>
-
-        {todos.length > 0 && (
-          <Footer
-            todos={todos}
-            active={active}
-            completed={completed}
-            filter={filter}
-            setFilter={(status) => setFilter(status)}
-            setTodos={(todosArray) => setTodos(todosArray)}
-          />
         )}
       </div>
 
