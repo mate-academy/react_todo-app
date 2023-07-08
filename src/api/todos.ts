@@ -14,13 +14,13 @@ export const deleteTodos = (todoId: number) => {
 };
 
 export const updateTodos = (
-  todoId: number, completed: boolean
+  todoId: number, completed: boolean,
 ): Promise<Todo> => {
   return client.patch(`/todos/${todoId}?userId=$9968`, { completed });
 };
 
 export const renameTodos = (
-  todoId: number, title: string
+  todoId: number, title: string,
 ): Promise<Todo> => {
   return client.patch(`/todos/${todoId}?userId=$9968`, { title });
 };
