@@ -1,93 +1,165 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
+import { UserWarning } from './UserWarning';
+import { getTodos } from './api/todos';
+import { FilterStatus } from './types/FilterStatus';
+import { Error } from './Error';
+import { TodoList } from './TodoList';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { TodosContext } from './TodoContext';
+
+const USER_ID = 9968;
 
 export const App: React.FC = () => {
+  const {
+    todos,
+    setTodos,
+    isDeleteError,
+    isAddError,
+    isUpdateError,
+  } = useContext(TodosContext);
+  const [setFilter] = useState(FilterStatus.all);
+  const active = todos.filter(todo => todo.completed === false).length;
+  const completed = todos.filter(todo => todo.completed).length;
+
+  const toggleAll = todos.map(todo => (
+    {
+      ...todo,
+      completed: true,
+    }
+  ));
+
+  const untoggleAll = todos.map(todo => (
+    {
+      ...todo,
+      completed: false,
+    }
+  ));
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(value => {
+        setTodos(value);
+      });
+  }, []);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <Header
+          todos={todos}
+          setTodos={(todosArray) => setTodos(todosArray)}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <Routes>
+            <Route
+              path="/"
+              element={(
+                <>
+                  <TodoList
+                    todos={todos}
+                    visibleTodos={[...todos]}
+                    toggleAll={toggleAll}
+                    untoggleAll={untoggleAll}
+                  />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+                  <Footer
+                    todos={todos}
+                    active={active}
+                    completed={completed}
+                    filter={FilterStatus.all}
+                    setFilter={() => setFilter}
+                    setTodos={(todosArray) => setTodos(todosArray)}
+                  />
+                </>
+              )}
+            />
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Route
+              path={`/${FilterStatus.all}`}
+              element={<Navigate to="/" replace />}
+            />
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+            <Route
+              path={`/${FilterStatus.completed}`}
+              element={(
+                <>
+                  <TodoList
+                    todos={todos}
+                    visibleTodos={[...todos].filter(todo => todo.completed === true)}
+                    toggleAll={toggleAll}
+                    untoggleAll={untoggleAll}
+                  />
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
+                  <Footer
+                    todos={todos}
+                    active={active}
+                    completed={completed}
+                    filter={FilterStatus.completed}
+                    setFilter={() => setFilter}
+                    setTodos={(todosArray) => setTodos(todosArray)}
+                  />
+                </>
+              )}
+            />
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+            <Route
+              path={`/${FilterStatus.active}`}
+              element={(
+                <>
+                  <TodoList
+                    todos={todos}
+                    visibleTodos={[...todos].filter(todo => todo.completed === false)}
+                    toggleAll={toggleAll}
+                    untoggleAll={untoggleAll}
+                  />
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+                  <Footer
+                    todos={todos}
+                    active={active}
+                    completed={completed}
+                    filter={FilterStatus.active}
+                    setFilter={() => setFilter}
+                    setTodos={(todosArray) => setTodos(todosArray)}
+                  />
+                </>
+              )}
+            />
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+            <Route
+              path="/*"
+              element={<Navigate to="/" replace />}
+            />
+          </Routes>
+        )}
+      </div>
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {isAddError && (
+        <Error text="Unable to add a todo" />
+      )}
+
+      {isDeleteError && (
+        <Error text="Unable to delete a todo" />
+      )}
+
+      {isUpdateError && (
+        <Error text="Unable to update a todo" />
+      )}
     </div>
   );
 };

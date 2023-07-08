@@ -193,6 +193,28 @@ body {
   text-decoration: none;
 }
 
+.notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(215, 124, 124);
+  color: #e8e2e2;
+  font-size: 20px;
+  transition-property: opacity, min-height;
+  transition-duration: 1s;
+  height: 36px;
+}
+
+.notification.hidden {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.notification.removed {
+  display: none;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox
