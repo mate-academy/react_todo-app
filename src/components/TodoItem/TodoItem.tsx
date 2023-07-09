@@ -1,36 +1,41 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, {
+  FC, useContext, useEffect, useMemo, useState,
+} from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { deleteTodos, patchTodos } from '../../api/todos';
 import { Loader } from '../Loader';
+import { TodoContext } from '../TodoContext';
 
 import './todo-item.css';
 
 type Props = {
   todo: Todo
-  todosGetter: () => void
-  setDeleteError: (errorState: boolean) => void;
-  setPostError: (errorState: boolean) => void;
-  isClearCompleted: boolean,
-  toggleActive: boolean
-  toggleCompleted: boolean
 };
 
 export const TodoItem: FC<Props> = React.memo(
   ({
     todo,
-    todosGetter,
-    setDeleteError,
-    setPostError,
-    isClearCompleted,
-    toggleActive,
-    toggleCompleted,
   }) => {
     const { completed, title, id } = todo;
 
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEdit] = useState(false);
     const [inputValue, setIsInputValue] = useState(title);
+
+    const {
+      isClearAllCompleted,
+      isToggleAllCompleted,
+      isToggleAllActive,
+      todosGetter,
+      setIsDeleteError,
+      setIsPostError,
+    } = useContext(TodoContext);
+
+    const isClearAllActive = useMemo(
+      () => isClearAllCompleted && completed,
+      [completed, isClearAllCompleted],
+    );
 
     const setFocusOnForm = () => {
       const inputElement
@@ -49,7 +54,7 @@ export const TodoItem: FC<Props> = React.memo(
     ) => {
       setIsLoading(true);
       patchTodos(todoId, { completed: !currCompletedStatus })
-        .catch(setPostError)
+        .catch(setIsPostError)
         .finally(() => {
           todosGetter();
           setIsLoading(false);
@@ -60,14 +65,15 @@ export const TodoItem: FC<Props> = React.memo(
       setIsLoading(true);
 
       deleteTodos(id)
-        .catch(setDeleteError)
+        .then(() => todosGetter())
+        .catch(setIsDeleteError)
         .finally(() => {
-          todosGetter();
           setIsLoading(false);
         });
     };
 
-    const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    const handleItemBlur
+    = (event: React.FocusEvent<HTMLInputElement>) => {
       if (!inputValue.trim().length) {
         handleDeleteTodos();
       } else if (inputValue === title) {
@@ -77,10 +83,10 @@ export const TodoItem: FC<Props> = React.memo(
         setIsEdit(false);
         setIsLoading(true);
         patchTodos(id, { title: inputValue })
-          .catch(setPostError)
+          .then(() => todosGetter())
+          .catch(setIsPostError)
           .finally(() => {
             setIsLoading(false);
-            todosGetter();
           });
       }
     };
@@ -104,7 +110,10 @@ export const TodoItem: FC<Props> = React.memo(
     }, [isEditing]);
 
     const loading
-    = isLoading || isClearCompleted || toggleActive || toggleCompleted;
+    = isLoading
+    || isClearAllActive
+    || isToggleAllActive
+    || isToggleAllCompleted;
 
     return (
       <li className={cn({ completed }, { editing: isEditing })}>
@@ -137,7 +146,7 @@ export const TodoItem: FC<Props> = React.memo(
             className="edit"
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
+            onBlur={handleItemBlur}
           />
         )}
 

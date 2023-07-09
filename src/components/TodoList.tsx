@@ -5,27 +5,13 @@ import { TempTodo } from './TempTodo';
 
 type Props = {
   items: Todo[]
-  todosGetter: () => void
-  setDeleteError: (errorState: boolean) => void
-  setPostError: (errorState: boolean) => void
   tempTodo: string | null
-  inputValue: string
-  isClearCompleted: boolean
-  toggleActive: boolean
-  toggleCompleted: boolean
 };
 
 export const TodoList: FC<Props> = React.memo(
   ({
-    todosGetter,
-    setDeleteError,
-    setPostError,
     items,
     tempTodo,
-    inputValue,
-    isClearCompleted,
-    toggleActive,
-    toggleCompleted,
   }) => {
     return (
       <>
@@ -35,18 +21,10 @@ export const TodoList: FC<Props> = React.memo(
               <TodoItem
                 key={item.id}
                 todo={item}
-                todosGetter={todosGetter}
-                setDeleteError={setDeleteError}
-                setPostError={setPostError}
-                isClearCompleted={isClearCompleted}
-                toggleActive={toggleActive}
-                toggleCompleted={toggleCompleted}
               />
             );
           })}
-          {tempTodo && (
-            <TempTodo title={inputValue} />
-          )}
+          {tempTodo && <TempTodo /> }
         </ul>
       </>
     );

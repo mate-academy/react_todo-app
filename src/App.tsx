@@ -14,6 +14,7 @@ import { Error } from './components/Error/Error';
 import { TodoList } from './components/TodoList';
 import { FilterParams } from './Filter/FilterParams';
 import { Filter } from './Filter';
+import { TodoContext } from './components/TodoContext';
 
 const USER_ID = 9925;
 
@@ -50,6 +51,31 @@ export const App: React.FC = () => {
     });
   }, [todos, filterParam]);
 
+  useMemo(() => {
+    getActiveTodos(USER_ID)
+      .then(setActiveTodos)
+      .catch(setIsGetDataError);
+
+    getCompletedTodos(USER_ID)
+      .then(setCompletedTodos)
+      .catch(setIsGetDataError);
+  }, [todos, filterParam]);
+
+  const formInputHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.currentTarget;
+
+      setInputValue(value);
+    }, [],
+  );
+
+  const disableErrorHandling = useCallback(() => {
+    setIsGetDataError(false);
+    setIsPostError(false);
+    setIsDeleteError(false);
+    setIsInputEmpty(false);
+  }, []);
+
   const todosGetter = useCallback(() => {
     getTodos(USER_ID)
       .then(setTodos)
@@ -59,21 +85,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     todosGetter();
   }, []);
-
-  const disableErrorHandling = useCallback(() => {
-    setIsGetDataError(false);
-    setIsPostError(false);
-    setIsDeleteError(false);
-    setIsInputEmpty(false);
-  }, []);
-
-  const formInputHandler = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = event.currentTarget;
-
-      setInputValue(value);
-    }, [],
-  );
 
   const postTodoToServer
   = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -87,26 +98,16 @@ export const App: React.FC = () => {
         setTempTodo(inputValue);
 
         postTodos(USER_ID, inputValue)
+          .then(() => todosGetter())
           .catch(setIsPostError)
           .finally(() => {
             setIsLockInput(false);
             setTempTodo(null);
             setInputValue('');
-            todosGetter();
           });
       }
     }
   }, [inputValue]);
-
-  useMemo(() => {
-    getActiveTodos(USER_ID)
-      .then(setActiveTodos)
-      .catch(setIsGetDataError);
-
-    getCompletedTodos(USER_ID)
-      .then(setCompletedTodos)
-      .catch(setIsGetDataError);
-  }, [todos, filterParam]);
 
   const deleteAllCompleted = useCallback(async () => {
     try {
@@ -154,12 +155,37 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleBlur = () => {
+    if (inputValue.trim()) {
+      setIsLockInput(true);
+      setTempTodo(inputValue);
+
+      postTodos(USER_ID, inputValue)
+        .then(() => todosGetter())
+        .catch(setIsPostError)
+        .finally(() => {
+          setIsLockInput(false);
+          setTempTodo(null);
+          setInputValue('');
+        });
+    }
+  };
+
   const isFooterShown = !!todos.length || tempTodo;
   const isError
   = isGetDataError || isPostError || isDeleteError || isInputEmpty;
 
   return (
-    <>
+    <TodoContext.Provider value={{
+      isClearAllCompleted,
+      isToggleAllCompleted,
+      isToggleAllActive,
+      inputValue,
+      todosGetter,
+      setIsDeleteError,
+      setIsPostError,
+    }}
+    >
       <div className="todoapp">
         <header className="header">
           <h1>todos</h1>
@@ -173,6 +199,7 @@ export const App: React.FC = () => {
               value={inputValue}
               onChange={formInputHandler}
               onKeyDown={postTodoToServer}
+              onBlur={handleBlur}
               disabled={isInputLocked}
             />
           </form>
@@ -187,21 +214,14 @@ export const App: React.FC = () => {
                 className="toggle-all"
                 data-cy="toggleAll"
                 checked={!activeTodos.length}
-                onClick={toggleAll}
+                onChange={toggleAll}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
             </>
           )}
           <TodoList
             items={visibleTodos}
-            todosGetter={todosGetter}
-            setDeleteError={setIsDeleteError}
-            setPostError={setIsPostError}
             tempTodo={tempTodo}
-            inputValue={inputValue}
-            isClearCompleted={isClearAllCompleted}
-            toggleActive={isToggleAllActive}
-            toggleCompleted={isToggleAllCompleted}
           />
         </section>
 
@@ -237,6 +257,6 @@ export const App: React.FC = () => {
           disableErrorHandling={disableErrorHandling}
         />
       )}
-    </>
+    </TodoContext.Provider>
   );
 };

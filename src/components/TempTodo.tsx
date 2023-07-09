@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Loader } from './Loader';
+import { TodoContext } from './TodoContext';
 
-type Props = {
-  title: string
-};
+export const TempTodo:React.FC = () => {
+  const { inputValue } = useContext(TodoContext);
 
-export const TempTodo:React.FC<Props> = ({ title }) => {
   return (
     <li>
       <div className="view">
@@ -15,7 +14,7 @@ export const TempTodo:React.FC<Props> = ({ title }) => {
           id="toggle-view"
         />
         <label style={{ opacity: 0.5 }}>
-          {title}
+          {inputValue}
         </label>
         <button
           type="button"
