@@ -20,6 +20,7 @@ export const Header: React.FC<Props> = ({
   toggleCompleteAllTodos,
 }) => {
   const [todo, setTodo] = useState<Todo>();
+  const [showToggleAll, setShowToggleAll] = useState(false);
 
   useEffect(() => {
     if (todo) {
@@ -27,18 +28,26 @@ export const Header: React.FC<Props> = ({
     }
   });
 
+  useEffect(() => {
+    if (hasUncompletedTodo || todo) {
+      setShowToggleAll(true);
+    }
+  }, [hasUncompletedTodo, todo]);
+
   return (
     <header className="todoapp__header">
-      <button
-        data-cy="ToggleAllButton"
-        type="button"
-        className={classNames('todoapp__toggle-all', {
-          active: hasUncompletedTodo,
-        })}
-        onClick={() => {
-          toggleCompleteAllTodos();
-        }}
-      />
+      {showToggleAll && (
+        <button
+          data-cy="ToggleAllButton"
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: hasUncompletedTodo,
+          })}
+          onClick={() => {
+            toggleCompleteAllTodos();
+          }}
+        />
+      )}
 
       <form onSubmit={onSubmit}>
         <input

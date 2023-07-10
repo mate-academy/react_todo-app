@@ -72,24 +72,28 @@ export const App: React.FC = () => {
   };
 
   const updateTodo = (todoToUpdate: Todo) => {
-    setUpdatingTodos(curr => [...curr, todoToUpdate.id]);
+    return new Promise<void>((resolve, reject) => {
+      setUpdatingTodos(curr => [...curr, todoToUpdate.id]);
 
-    refreshTodo(todoToUpdate)
-      .then(() => {
-        setTodos(
-          todos.map(currentTodo => {
+      refreshTodo(todoToUpdate)
+        .then(() => {
+          setTodos(todos => todos.map(currentTodo => {
             if (currentTodo.id === todoToUpdate.id) {
               return todoToUpdate;
             }
 
             return currentTodo;
-          }),
-        );
-      })
-      .catch(() => setErrorMsg(ErrorMessage.onUpdate))
-      .finally(() => {
-        setUpdatingTodos(curr => curr.filter(id => id !== todoToUpdate.id));
-      });
+          }));
+          resolve();
+        })
+        .catch(error => {
+          setErrorMsg(ErrorMessage.onUpdate);
+          reject(error);
+        })
+        .finally(() => {
+          setUpdatingTodos(curr => curr.filter(id => id !== todoToUpdate.id));
+        });
+    });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -126,29 +130,19 @@ export const App: React.FC = () => {
     setTodos(oldTodos => oldTodos.filter(t => !t.completed));
   };
 
-  const hasUncompletedTodo = todos.some(todo => !todo.completed);
   const hasAllTodosCompleted = todos.every(todo => todo.completed);
 
   const toggleCompleteAllTodos = () => {
-    if (hasUncompletedTodo) {
-      todos.forEach(todo => {
-        if (!todo.completed) {
-          updateTodo({
-            ...todo,
-            completed: true,
-          });
-        }
-      });
-    }
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !hasAllTodosCompleted,
+    }));
 
-    if (hasAllTodosCompleted) {
-      todos.forEach(todo => {
-        updateTodo({
-          ...todo,
-          completed: false,
-        });
-      });
-    }
+    Promise.all(updatedTodos.map(updateTodo))
+      .then(() => {
+        setTodos(updatedTodos);
+      })
+      .catch(() => setErrorMsg(ErrorMessage.onUpdate));
   };
 
   return (
@@ -160,7 +154,7 @@ export const App: React.FC = () => {
           onSubmit={handleSubmit}
           newTodoTitle={newTodoTitle}
           setNewTodoTitle={setNewTodoTitle}
-          hasUncompletedTodo={hasAllTodosCompleted}
+          hasUncompletedTodo={!hasAllTodosCompleted}
           toggleCompleteAllTodos={toggleCompleteAllTodos}
         />
 
