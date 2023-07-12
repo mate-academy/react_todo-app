@@ -122,7 +122,7 @@ export const App: React.FC = () => {
       break;
   }
 
-  const clearCompleted = async () => {
+  const clearCompleted = () => {
     visibleTodos
       .filter(td => td.completed)
       .map(completed => completed.id)

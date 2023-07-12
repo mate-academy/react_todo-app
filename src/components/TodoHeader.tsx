@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { getTodo } from '../api/todos';
@@ -19,14 +18,14 @@ export const Header: React.FC<Props> = ({
   hasUncompletedTodo,
   toggleCompleteAllTodos,
 }) => {
-  const [todo, setTodo] = useState<Todo>();
+  const [todo, setTodo] = useState<Todo | undefined>();
   const [showToggleAll, setShowToggleAll] = useState(false);
 
   useEffect(() => {
     if (todo) {
       getTodo(todo.id).then(setTodo);
     }
-  });
+  }, [todo]);
 
   useEffect(() => {
     if (hasUncompletedTodo || todo) {
@@ -40,6 +39,7 @@ export const Header: React.FC<Props> = ({
         <button
           data-cy="ToggleAllButton"
           type="button"
+          aria-label="Toggle All"
           className={classNames('todoapp__toggle-all', {
             active: hasUncompletedTodo,
           })}

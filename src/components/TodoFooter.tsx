@@ -15,18 +15,29 @@ type Props = {
 };
 
 export const ToDoFooter: React.FC<Props> = ({
-  todos, setTodosStatus, todosStatus, onClearCompleted,
+  todos,
+  setTodosStatus,
+  todosStatus,
+  onClearCompleted,
 }) => {
-  const completedTodos = todos.filter(todo => todo.completed);
-  const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter((todo) => todo.completed);
+  const activeTodos = todos.filter((todo) => !todo.completed);
+
+  const handleStatusChange = (
+    status: Status,
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+    setTodosStatus(status);
+  };
+
+  const handleClearCompleted = () => {
+    onClearCompleted();
+  };
 
   return (
     <footer className="todoapp__footer">
-      <span
-        className="todo-count"
-      >
-        {`${activeTodos.length} items left`}
-      </span>
+      <span className="todo-count">{`${activeTodos.length} items left`}</span>
 
       <nav className="filter">
         <a
@@ -34,7 +45,7 @@ export const ToDoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: todosStatus === Status.All,
           })}
-          onClick={() => setTodosStatus(Status.All)}
+          onClick={(event) => handleStatusChange(Status.All, event)}
         >
           All
         </a>
@@ -44,7 +55,7 @@ export const ToDoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: todosStatus === Status.Active,
           })}
-          onClick={() => setTodosStatus(Status.Active)}
+          onClick={(event) => handleStatusChange(Status.Active, event)}
         >
           Active
         </a>
@@ -54,7 +65,7 @@ export const ToDoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: todosStatus === Status.Completed,
           })}
-          onClick={() => setTodosStatus(Status.Completed)}
+          onClick={(event) => handleStatusChange(Status.Completed, event)}
         >
           Completed
         </a>
@@ -65,11 +76,9 @@ export const ToDoFooter: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         className="todoapp__clear-completed"
         style={{
-          visibility: completedTodos.length
-            ? ('visible')
-            : ('hidden'),
+          visibility: completedTodos.length ? 'visible' : 'hidden',
         }}
-        onClick={() => onClearCompleted()}
+        onClick={handleClearCompleted}
       >
         Clear completed
       </button>

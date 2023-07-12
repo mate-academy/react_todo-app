@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 
 type Props = {
@@ -21,6 +20,7 @@ export const TodoError: React.FC<Props> = ({ error, errorMsg, setError }) => {
         type="button"
         className="delete"
         onClick={() => setError(false)}
+        aria-label="Close"
       />
       {errorMsg}
     </div>
