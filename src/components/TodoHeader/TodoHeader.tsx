@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
+import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
   areAllTodosCompleted: boolean,
@@ -39,7 +40,7 @@ export const TodoHeader: React.FC<Props> = React.memo(({
     const normalizedTitle = title.trim();
 
     if (!normalizedTitle) {
-      showErrorMessage('Title can\'t be empty');
+      showErrorMessage(ErrorMessage.Title);
 
       return;
     }
