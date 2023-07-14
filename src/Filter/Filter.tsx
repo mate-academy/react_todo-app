@@ -16,8 +16,9 @@ export const Filter: React.FC<Props>
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate(`${filterParam === 'all' ? '/' : filterParam}`);
-  }, []);
+    navigate(`${filterParam === FilterParams.All ? '/' : filterParam}`);
+    localStorage.setItem('filter', filterParam);
+  }, [filterParam]);
 
   return (
     <ul className="filters">

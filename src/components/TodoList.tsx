@@ -14,19 +14,17 @@ export const TodoList: FC<Props> = React.memo(
     tempTodo,
   }) => {
     return (
-      <>
-        <ul className="todo-list" data-cy="todoList">
-          {items.map(item => {
-            return (
-              <TodoItem
-                key={item.id}
-                todo={item}
-              />
-            );
-          })}
-          {tempTodo && <TempTodo /> }
-        </ul>
-      </>
+      <ul className="todo-list" data-cy="todoList">
+        {items.map(item => {
+          return (
+            <TodoItem
+              key={item.id}
+              todo={item}
+            />
+          );
+        })}
+        {tempTodo && <TempTodo value={tempTodo} /> }
+      </ul>
     );
   },
 );

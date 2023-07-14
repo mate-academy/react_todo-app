@@ -14,14 +14,13 @@ export const TodosFilterLink: FC<Props>
 
   return (
     <NavLink
-      to={filterParam === 'all' ? '/' : filterParam}
+      to={filterParam === FilterParams.All ? '/' : filterParam}
       className={({ isActive }) => classNames(
         'filter__link',
         { selected: isActive },
       )}
       onClick={() => {
         changeFilterParam(filterParam);
-        localStorage.setItem('filter', filterParam);
       }}
     >
       {title}

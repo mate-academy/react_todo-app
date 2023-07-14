@@ -1,5 +1,5 @@
 import React, {
-  FC, useContext, useEffect, useMemo, useState,
+  FC, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -23,11 +23,13 @@ export const TodoItem: FC<Props> = React.memo(
     const [isEditing, setIsEdit] = useState(false);
     const [inputValue, setIsInputValue] = useState(title);
 
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
     const {
       isClearAllCompleted,
       isToggleAllCompleted,
       isToggleAllActive,
-      todosGetter,
+      getTodos: todosGetter,
       setIsDeleteError,
       setIsPostError,
     } = useContext(TodoContext);
@@ -38,12 +40,8 @@ export const TodoItem: FC<Props> = React.memo(
     );
 
     const setFocusOnForm = () => {
-      const inputElement
-      = document
-        .querySelector('.edit') as HTMLInputElement | null;
-
-      if (inputElement) {
-        inputElement.focus();
+      if (inputRef.current) {
+        inputRef.current.focus();
       }
     };
 
@@ -142,8 +140,10 @@ export const TodoItem: FC<Props> = React.memo(
 
         {isEditing && (
           <input
+            ref={inputRef}
             type="text"
             className="edit"
+            defaultValue={title}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onBlur={handleItemBlur}

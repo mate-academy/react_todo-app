@@ -7,7 +7,11 @@ import React, {
 } from 'react';
 import {
   deleteTodos,
-  getActiveTodos, getCompletedTodos, getTodos, patchTodos, postTodos,
+  getActiveTodos,
+  getCompletedTodos,
+  getTodos,
+  patchTodos,
+  postTodos,
 } from './api/todos';
 import { Todo } from './types/Todo';
 import { Error } from './components/Error/Error';
@@ -27,9 +31,8 @@ export const App: React.FC = () => {
   const [isInputLocked, setIsLockInput] = useState(false);
   const [isDeleteError, setIsDeleteError] = useState(false);
   const [tempTodo, setTempTodo] = useState<string | null>(null);
-  const [filterParam, setFilterParam] = useState(
-    localStorage.getItem('filter') || FilterParams.All,
-  );
+  const [filterParam, setFilterParam]
+  = useState<string | FilterParams>(FilterParams.All);
   const [activeTodos, setActiveTodos] = useState<Todo[]>([]);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [isClearAllCompleted, setIsClearAllCompleted] = useState(false);
@@ -51,7 +54,19 @@ export const App: React.FC = () => {
     });
   }, [todos, filterParam]);
 
-  useMemo(() => {
+  const todosGetter = useCallback(() => {
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(setIsGetDataError);
+  }, []);
+
+  useEffect(() => {
+    todosGetter();
+
+    setFilterParam(localStorage.getItem('filter') || FilterParams.All);
+  }, []);
+
+  useEffect(() => {
     getActiveTodos(USER_ID)
       .then(setActiveTodos)
       .catch(setIsGetDataError);
@@ -76,18 +91,9 @@ export const App: React.FC = () => {
     setIsInputEmpty(false);
   }, []);
 
-  const todosGetter = useCallback(() => {
-    getTodos(USER_ID)
-      .then(setTodos)
-      .catch(setIsGetDataError);
-  }, []);
-
-  useEffect(() => {
-    todosGetter();
-  }, []);
-
-  const postTodoToServer
-  = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+  const postTodoToServer = useCallback((
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     const { key } = event.nativeEvent;
 
     if (key === 'Enter') {
@@ -126,32 +132,38 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const toggleAll = async () => {
-    try {
-      if (completedTodos !== null
-        && completedTodos.length === todos.length) {
-        setIsToggleAllCompleted(true);
+  const toggleAll = () => {
+    setIsToggleAllCompleted(false);
+    setIsToggleAllActive(false);
 
-        await Promise.all(completedTodos.map(
-          todo => patchTodos(todo.id, { completed: false }),
-        ));
-      }
-    } finally {
-      setIsToggleAllCompleted(false);
-      todosGetter();
+    if (completedTodos !== null && completedTodos.length === todos.length) {
+      setIsToggleAllCompleted(true);
+
+      Promise.all(
+        completedTodos.map(todo => patchTodos(todo.id, { completed: false })),
+      )
+        .then(() => {
+          todosGetter();
+        })
+        .catch(setIsPostError)
+        .finally(() => {
+          setIsToggleAllCompleted(false);
+        });
     }
 
-    try {
-      if (activeTodos !== null) {
-        setIsToggleAllActive(true);
+    if (activeTodos !== null) {
+      setIsToggleAllActive(true);
 
-        await Promise.all(activeTodos.map(
-          todo => patchTodos(todo.id, { completed: true }),
-        ));
-      }
-    } finally {
-      setIsToggleAllActive(false);
-      todosGetter();
+      Promise.all(
+        activeTodos.map(todo => patchTodos(todo.id, { completed: true })),
+      )
+        .then(() => {
+          todosGetter();
+        })
+        .catch(setIsPostError)
+        .finally(() => {
+          setIsToggleAllActive(false);
+        });
     }
   };
 
@@ -181,7 +193,7 @@ export const App: React.FC = () => {
       isToggleAllCompleted,
       isToggleAllActive,
       inputValue,
-      todosGetter,
+      getTodos: todosGetter,
       setIsDeleteError,
       setIsPostError,
     }}

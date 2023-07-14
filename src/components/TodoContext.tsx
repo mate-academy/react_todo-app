@@ -5,7 +5,7 @@ type Props = {
   isToggleAllCompleted: boolean
   isToggleAllActive: boolean
   inputValue: string,
-  todosGetter: () => void
+  getTodos: () => void
   setIsDeleteError: (errorState: boolean) => void
   setIsPostError: (errorState: boolean) => void
 };
@@ -16,7 +16,7 @@ export const TodoContext = createContext<Props>(
     isToggleAllCompleted: false,
     isToggleAllActive: false,
     inputValue: '',
-    todosGetter: () => {},
+    getTodos: () => {},
     setIsDeleteError: () => {},
     setIsPostError: () => {},
   },

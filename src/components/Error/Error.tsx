@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './Error.scss';
 
 type Props = {
@@ -16,19 +16,27 @@ export const Error: React.FC<Props> = ({
   inputState,
   disableErrorHandling,
 }) => {
-  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const timerId = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const id = setTimeout(() => disableErrorHandling(), 3000);
 
-    setTimerId(id);
+    timerId.current = id;
 
     return () => {
-      if (timerId) {
-        clearTimeout(timerId);
+      if (timerId.current) {
+        clearTimeout(timerId.current);
       }
     };
   }, []);
+
+  const handleErrorOff = () => {
+    if (timerId.current) {
+      clearTimeout(timerId.current);
+    }
+
+    disableErrorHandling();
+  };
 
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
@@ -36,13 +44,7 @@ export const Error: React.FC<Props> = ({
         type="button"
         className="delete"
         aria-label="delete"
-        onClick={() => {
-          if (timerId) {
-            clearTimeout(timerId);
-          }
-
-          disableErrorHandling();
-        }}
+        onClick={handleErrorOff}
       />
 
       {getDataError && 'Error, can\'t get todos from server'}
