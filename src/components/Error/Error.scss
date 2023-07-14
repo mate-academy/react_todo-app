@@ -1,0 +1,42 @@
+.notification {
+  position: relative;
+  padding: 1.5rem 2.5rem 1.5rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.25rem;
+  color: #fff;
+
+  &.is-danger {
+    background-color: #f1a446;
+  }
+
+  .delete {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      width: 0.75rem;
+      height: 0.06rem;
+      background-color: #fff;
+      transform-origin: center;
+    }
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+}
