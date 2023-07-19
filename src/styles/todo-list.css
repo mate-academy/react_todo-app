@@ -114,3 +114,7 @@
     background: none;
   }
 }
+
+input {
+  outline: none;
+}
