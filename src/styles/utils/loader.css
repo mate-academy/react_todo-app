@@ -7,9 +7,9 @@
   right: -5px;
   top: -5px;
   border: 10px solid;
-  border-color: rgba(147, 142, 142, 0.35),
-    rgba(213, 128, 128, 0.25),
-    rgba(223, 219, 219, 0.35),
+  border-color: rgba(147, 142, 142, 0.35)
+    rgba(213, 128, 128, 0.25)
+    rgba(223, 219, 219, 0.35)
     rgba(239, 235, 235, 0.5);
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
