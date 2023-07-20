@@ -1,0 +1,122 @@
+.form {
+  &__block {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  &__content {
+    padding: 20px;
+    margin-top: 24px;
+    max-width: 480px;
+    box-shadow: 0 0.5em 1em -0.13em hsla(0,0%,4%,.1), 0 0 0 1px hsla(0,0%,4%,.02);
+  }
+
+  &__title {
+    margin:0 0 1.5rem 0;
+    padding: 0;
+    font-size: 2rem;
+  }
+
+  &__label {
+    color: #363636;
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  &__field {
+    margin-bottom: 0.75rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__input {
+    padding: calc(0.5em - 1px) calc(0.75em - 1px);
+    padding-left: 2.5em;
+    outline: none;
+    width: 100%;
+    max-width: 100%;
+    box-sizing:border-box;
+    box-shadow: inset 0 0.0625em 0.125em hsla(0,0%,4%,.05);
+    border-color: #dbdbdb;
+    border-radius: 4px;
+    border-width:0;
+    border: 1px solid transparent;
+    display: flex;
+    align-items:center;
+    height: 100%;
+    font-size: 1rem;
+    border-color: #dbdbdb;
+   
+    
+
+    &:hover {
+      border-color: #b5b5b5;
+    }
+
+    &:focus {
+      border-color: #485fc7;
+      box-shadow: inset 0 0.0625em 0.125em hsla(0,0%,4%,.05);
+
+      &+ .form__icon {
+        opacity: 0.7;
+      }
+    }
+
+    &.error {
+      border-color: #db2745;
+    }
+
+    &::placeholder {
+      font-family: Arial, Helvetica, sans-serif;
+    } 
+
+    &-block {
+      height: 40px;
+      position: relative;
+    }
+  }
+
+  &__icon {
+    height: 100%;
+    width: 40px;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position: center center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.2;
+
+    &--user {
+      background-image: url(../img/user.svg);
+    }
+
+    &--envelope {
+      background-image: url(../img/envelope.svg);
+    }
+  }
+
+  &__button {
+    height: 100%;
+    background-color: #00d1b2;
+    border-color: transparent;
+    color: #fff;
+    padding: calc(0.5em - 1px) 1em;
+    border-radius: 4px;
+    height: 40px;
+    box-sizing: border-box;
+    font-size: 1rem;
+
+    &:hover {
+      background-color: #00c4a7;
+    }
+  }
+
+  &__error {
+    color:#db2745;
+    font-size: 0.7rem;
+  }
+}
