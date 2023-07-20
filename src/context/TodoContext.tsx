@@ -18,7 +18,7 @@ export interface ProvidedValue {
   toggleAllAsCompleted: () => void,
   handleSelectedStatus: (newStatus: TodoStatus) => void,
   handleDeleteCompleted: () => void,
-  editTodoTitile: (todoId: number, newTitle: string) => void,
+  editTodoTitle: (todoId: number, newTitle: string) => void,
 }
 
 type Props = {
@@ -78,7 +78,7 @@ export const TodoContextProvider = ({ children }: Props) => {
     setCompletedTodos([]);
   };
 
-  const editTodoTitile = (todoId: number, newTitle: string) => {
+  const editTodoTitle = (todoId: number, newTitle: string) => {
     if (newTitle) {
       setTodos(prev => prev.map(todo => {
         if (todo.id === todoId) {
@@ -118,7 +118,7 @@ export const TodoContextProvider = ({ children }: Props) => {
     toggleAllAsCompleted,
     handleSelectedStatus,
     handleDeleteCompleted,
-    editTodoTitile,
+    editTodoTitle,
   }), [
     todos,
     activeTodos,

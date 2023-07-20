@@ -13,13 +13,13 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
     toggleTodoComplete,
     deleteTodoFromList,
-    editTodoTitile,
+    editTodoTitle,
   } = useTodoContext();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
 
   const saveChanges = () => {
-    editTodoTitile(todo.id, title);
+    editTodoTitle(todo.id, title);
     setIsEditing(false);
   };
 
