@@ -1,93 +1,93 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import { Todos } from './Todos';
+import './styles/form.scss';
+import { client } from './utils/fetchClient';
+import { FormUser } from './FormUser';
 
-export const App: React.FC = () => {
+export enum ErrorInput {
+  NONE,
+  EMAILERROR,
+  NAMEERROR,
+}
+
+interface User {
+  email: string;
+  id: number;
+  name: string;
+}
+
+export const App = () => {
+  function useLocaleStorage<T>(
+    key: string,
+    initialValue: T,
+  ): [T, (value: T) => void] {
+    const [value, setValue] = useState<T>(() => {
+      try {
+        const item = localStorage.getItem(key);
+
+        return item ? JSON.parse(item) : initialValue;
+      } catch {
+        return initialValue;
+      }
+    });
+
+    const save = (v: T): void => {
+      setValue(v);
+      localStorage.setItem(key, JSON.stringify(v));
+    };
+
+    return [value, save];
+  }
+
+  const [userEmail, setUserEmail] = useState('');
+  const [userName, setUserName] = useState('');
+  const [errorInput, setErrorInput] = useState<ErrorInput>(ErrorInput.NONE);
+  const [secVisIn, setSecVisIn] = useState(false);
+  const [user, setUser] = useLocaleStorage<User[] | []>('user', []);
+
+  const addNewUser = (name:string, email:string) => {
+    return client.post('/users', { name, email });
+  };
+
+  const checkedUserEmail = () => {
+    client.get<User[]>(`/users?email=${userEmail}`).then(u => setUser(u));
+  };
+
+  const formSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const p = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$')
+      .test(userEmail);
+
+    if (p) {
+      checkedUserEmail();
+      setSecVisIn(true);
+      setErrorInput(ErrorInput.NONE);
+      if (userName.length >= 4) {
+        addNewUser(userName, userEmail);
+        setErrorInput(ErrorInput.NONE);
+      } else if (userName.length !== 0) {
+        setErrorInput(ErrorInput.NAMEERROR);
+      }
+    } else {
+      setErrorInput(ErrorInput.EMAILERROR);
+    }
+  };
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+    user.length > 0 ? (
+      <Todos user={user[0]} />
+    ) : (
+      <FormUser
+        setUserEmail={setUserEmail}
+        userEmail={userEmail}
+        formSubmit={formSubmit}
+        errorInput={errorInput}
+        secVisIn={secVisIn}
+        setUserName={setUserName}
+        userName={userName}
+      />
+    )
   );
 };
