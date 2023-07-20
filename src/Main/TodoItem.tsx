@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../utils/types/type';
 
@@ -57,6 +54,8 @@ export const TodoItem:React.FC<Props> = ({
     }
   };
 
+  const handleRemoveItem = () => setTodos(todos.filter(todo => todo.id !== id));
+
   const getClassName = () => {
     let className: ClassName;
 
@@ -75,10 +74,6 @@ export const TodoItem:React.FC<Props> = ({
     focusRef.current?.focus();
   }, [isEditing]);
 
-  useEffect(() => {
-    setIsEditing(false);
-  }, [focusRef]);
-
   return (
     <li
       className={currentClassName}
@@ -93,13 +88,13 @@ export const TodoItem:React.FC<Props> = ({
             onClick={() => handleChangeItem({ completed: !completed })}
           />
           <label onDoubleClick={() => setIsEditing(true)}>{title }</label>
-
           {!isProcessing.includes(id) && (
             <button
+              aria-label="Close"
               type="button"
               className="destroy"
               data-cy="deleteTodo"
-              onClick={() => setTodos(todos.filter(todo => todo.id !== id))}
+              onClick={handleRemoveItem}
             />
           )}
         </div>
@@ -108,7 +103,7 @@ export const TodoItem:React.FC<Props> = ({
         <input
           ref={focusRef}
           type="text"
-          className="edit"
+          className="edit outline-none"
           placeholder="An empty name will be deleted"
           value={editingTitle}
           onChange={(e) => setEditingTitle(e.target.value)}
@@ -118,8 +113,7 @@ export const TodoItem:React.FC<Props> = ({
 
       )}
 
-      <div style={{ position: 'absolute', top: 10, right: 10 }}>
-        {' '}
+      <div className="loader-wrap">
         {isProcessing.includes(id) && <span className="loader" />}
       </div>
 

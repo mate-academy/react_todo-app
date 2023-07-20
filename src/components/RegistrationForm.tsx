@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable max-len */
 
 import classNames from 'classnames';
@@ -12,6 +11,8 @@ type Props = {
   setShowForm: (boolean: boolean) => void,
 };
 
+const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+
 export const RegistrationForm:React.FC<Props> = ({ setShowForm }) => {
   const [data, setData] = useLocalStorage('userData', {
     email: '',
@@ -23,7 +24,6 @@ export const RegistrationForm:React.FC<Props> = ({ setShowForm }) => {
     password: '',
   });
   const [touched, setTouched] = useState(false);
-  const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
   const handleAddUser = () => {
     setTouched(true);
@@ -52,12 +52,13 @@ export const RegistrationForm:React.FC<Props> = ({ setShowForm }) => {
           >
             <input
               type="email"
+              className="outline-none"
               placeholder="Enter your email"
               required
               defaultValue={user.email}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
-            <img src={emailIcon} alt="" width={28} />
+            <img src={emailIcon} alt="email icon" width={28} />
           </div>
           <div className={classNames(
             'form__item',
@@ -67,11 +68,12 @@ export const RegistrationForm:React.FC<Props> = ({ setShowForm }) => {
             <input
               type="password"
               placeholder="Enter your password"
+              className="outline-none"
               required
               defaultValue={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
             />
-            <img src={passwordIcon} alt="" width={28} />
+            <img src={passwordIcon} alt="pasword icon" width={28} />
           </div>
           <button
             type="button"

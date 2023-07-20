@@ -11,7 +11,9 @@ type Props = {
 export const Filter:React.FC<Props> = ({ todos, setTodos }) => {
   const itemsLeft = useMemo(() => todos
     .filter(todo => !todo.completed).length, [todos]);
-  const hasComleatedItems = todos.length > itemsLeft;
+  const hasComletedItems = todos.length > itemsLeft;
+  const handleClearCompleted = () => setTodos(todos
+    .filter(item => !item.completed));
 
   return (
     <footer className="footer">
@@ -48,11 +50,11 @@ export const Filter:React.FC<Props> = ({ todos, setTodos }) => {
         </li>
       </ul>
 
-      {hasComleatedItems && (
+      {hasComletedItems && (
         <button
           type="button"
           className="clear-completed"
-          onClick={() => setTodos(todos.filter(item => !item.completed))}
+          onClick={handleClearCompleted}
         >
           Clear completed
         </button>

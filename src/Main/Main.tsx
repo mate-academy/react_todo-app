@@ -1,26 +1,25 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import { useLocation } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useMemo } from 'react';
 import { Todo } from '../utils/types/type';
 import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo [],
   setTodos: (todos: Todo[]) => void,
-  setIsProcessing: (ids: number[]) => void,
-  isProcessing: number[],
+  setProcessingIds: (ids: number[]) => void,
+  processingIds: number[],
 };
 
 export const Main:React.FC<Props> = ({
-  todos, setTodos, setIsProcessing, isProcessing,
+  todos, setTodos, setProcessingIds, processingIds,
 }) => {
   const location = useLocation();
   const pathName = location.pathname.slice(1);
   const handlerToggleAll = () => {
     const toggleVector = !!todos.some(todo => todo.completed === false);
 
-    setIsProcessing(toggleVector
+    setProcessingIds(toggleVector
       ? todos
         .filter(todo => todo.completed !== toggleVector)
         .map(todo => todo.id)
@@ -34,6 +33,9 @@ export const Main:React.FC<Props> = ({
     }));
   };
 
+  const checkedToggleAll = useMemo(() => todos
+    .some(todo => !todo.completed), [todos]);
+
   const filteredTodos = () => {
     if (['completed', 'active'].includes(pathName)) {
       return todos.filter(item => (pathName === 'active'
@@ -45,14 +47,14 @@ export const Main:React.FC<Props> = ({
 
   return (
     <section className="main">
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <input
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
             data-cy="toggleAll"
-            checked={todos.some(todo => !todo.completed)}
+            checked={checkedToggleAll}
             onClick={handlerToggleAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -69,11 +71,10 @@ export const Main:React.FC<Props> = ({
             >
               <TodoItem
                 item={item}
-                key={item.id}
                 setTodos={setTodos}
                 todos={todos}
-                isProcessing={isProcessing}
-                setIsProcessing={setIsProcessing}
+                isProcessing={processingIds}
+                setIsProcessing={setProcessingIds}
               />
             </CSSTransition>
           ))}

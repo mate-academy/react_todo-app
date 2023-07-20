@@ -7,7 +7,7 @@ import { RegistrationForm } from './components/RegistrationForm';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
-  const [isProcessing, setIsProcessing] = useState<number[]>([]);
+  const [processingIds, setProcessingIds] = useState<number[]>([]);
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -25,10 +25,10 @@ export const TodoApp: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isProcessing.length) {
-      setTimeout(() => setIsProcessing([]), 500);
+    if (processingIds.length) {
+      setTimeout(() => setProcessingIds([]), 500);
     }
-  }, [isProcessing.length]);
+  }, [processingIds.length]);
 
   return (
     <div className="todoapp">
@@ -38,18 +38,16 @@ export const TodoApp: React.FC = () => {
             <Header
               todos={todos}
               setTodos={setTodos}
-              setIsProcessing={(id: number) => setIsProcessing(
-                [...isProcessing, id],
-              )}
-              isProcessing={isProcessing}
+              setProcessingIds={setProcessingIds}
+              processingIds={processingIds}
             />
             <Main
               todos={todos}
               setTodos={setTodos}
-              setIsProcessing={setIsProcessing}
-              isProcessing={isProcessing}
+              setProcessingIds={setProcessingIds}
+              processingIds={processingIds}
             />
-            {todos.length > 0 && <Filter todos={todos} setTodos={setTodos} />}
+            {!!todos.length && <Filter todos={todos} setTodos={setTodos} />}
           </>
         )}
 

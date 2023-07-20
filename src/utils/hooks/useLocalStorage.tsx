@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
+import { StorageData } from '../types/type';
 
-export const useLocalStorage = (key: string, initialValue: any) => {
+export const useLocalStorage = (key: string, initialValue: StorageData) => {
   const getValues = () => {
     const storage = localStorage.getItem(key);
 
@@ -11,15 +11,15 @@ export const useLocalStorage = (key: string, initialValue: any) => {
       return initialValue;
     }
 
-    return JSON.parse(storage || '');
+    return JSON.parse(storage);
   };
 
-  const [value, setValue] = useState<any>(getValues());
+  const [value, setValue] = useState(getValues());
 
-  const setTodos = (newValue: any) => {
+  const setData = (newValue: StorageData) => {
     setValue(newValue);
     localStorage.setItem(key, JSON.stringify(newValue));
   };
 
-  return [value, setTodos];
+  return [value, setData];
 };

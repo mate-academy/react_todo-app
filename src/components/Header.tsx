@@ -4,23 +4,23 @@ import { Todo } from '../utils/types/type';
 type Props = {
   todos: Todo [],
   setTodos: (todos: Todo[]) => void,
-  setIsProcessing: (id: number) => void,
-  isProcessing: number[]
+  setProcessingIds: (ids: number[]) => void,
+  processingIds: number[]
 };
 
 export const Header:React.FC<Props> = ({
   todos,
   setTodos,
-  setIsProcessing,
-  isProcessing,
+  setProcessingIds,
+  processingIds,
 }) => {
   const [todoTitle, setTodoTitle] = useState('');
 
   const handleChangeValue = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && e.target.value.trim() && !isProcessing.length) {
+    if (e.key === 'Enter' && e.target.value.trim() && !processingIds.length) {
       const id = todos[todos.length - 1] ? todos[todos.length - 1].id + 1 : 0;
 
-      setIsProcessing(id);
+      setProcessingIds([...processingIds, id]);
       setTodos([...todos, {
         id,
         title: e.target.value,
@@ -40,7 +40,7 @@ export const Header:React.FC<Props> = ({
           onKeyDown={(e) => handleChangeValue(e)}
           type="text"
           data-cy="createTodo"
-          className="new-todo"
+          className="new-todo outline-none"
           placeholder="What needs to be done?"
         />
       </form>

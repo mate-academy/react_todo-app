@@ -88,6 +88,7 @@
   margin: auto 0;
   font-size: 30px;
   color: #cc9a9a;
+  border: none;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
 }
@@ -115,6 +116,6 @@
   }
 }
 
-input {
+.outline-none {
   outline: none;
 }
