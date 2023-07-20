@@ -241,10 +241,6 @@ body {
   transition: max-height 0.3s ease-in-out;
 }
 
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox
-*/
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   .toggle-all {
     background: none;

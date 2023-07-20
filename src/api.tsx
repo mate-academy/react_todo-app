@@ -1,12 +1,6 @@
 const BASE_URL = 'https://mate.academy/students-api';
 const userId = 11065;
 
-// function wait(delay: number) {
-//   return new Promise(resolve => {
-//     setTimeout(resolve, delay);
-//   });
-// }
-
 export const getUser = () => {
   return fetch(`${BASE_URL}/users/${userId}`, { method: 'GET' })
     .then(response => {
