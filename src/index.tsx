@@ -1,8 +1,7 @@
 import ReactDOM from 'react-dom';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+import 'bulma/css/bulma.css';
+import './styles/index.scss';
 
 import { App } from './App';
 

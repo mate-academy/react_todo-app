@@ -1,93 +1,253 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
+
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { Todo } from './types/Todo';
+import { Filter } from './enums/filter';
+import { ErrorMessage } from './enums/error';
+import { Error } from './components/Error';
+import { TodoList } from './components/TodoList';
+import {
+  getTodos,
+  addTodos,
+  deleteTodo,
+  updateTodos,
+} from './api/todos';
+
+const USER_ID = 10567;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterValue, setFilterValue] = useState(Filter.All);
+  const [errorMessage, setErrorMessage]
+  = useState<ErrorMessage>(ErrorMessage.NONE);
+  const [value, setValue] = useState('');
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [deletedTodosId, setDeletedTodosId] = useState<number[] | []>([]);
+  const [activeFormInput, setActiveFormInput] = useState(false);
+  const formInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (formInputRef.current && activeFormInput) {
+      formInputRef.current.focus();
+    }
+
+    setActiveFormInput(false);
+  }, [todos]);
+
+  const fetchData = async () => {
+    try {
+      const response = await getTodos(USER_ID);
+      const todosData = response as Todo[];
+
+      setTodos(todosData);
+    } catch (error) {
+      setErrorMessage(ErrorMessage.LOAD);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => (
+      setErrorMessage(ErrorMessage.NONE)
+    ), 3000);
+  }, [errorMessage]);
+
+  const handleDeletedTodo = (id: number) => {
+    setDeletedTodosId([id]);
+
+    deleteTodo(id)
+      .then(() => {
+        const newTodoList = todos.filter(todo => todo.id !== id);
+
+        setTodos(newTodoList);
+      })
+      .catch(() => setErrorMessage(ErrorMessage.DELETE))
+      .finally(() => setDeletedTodosId([]));
+  };
+
+  const handleUpdateTodo = (id: number) => {
+    setDeletedTodosId([id]);
+
+    const updateTodo = todos.find(todo => todo.id === id);
+
+    if (updateTodo) {
+      updateTodos(id, {
+        ...updateTodo,
+        completed: !updateTodo.completed,
+      })
+        .then(() => {
+          const newTodoList = todos.map(todo => {
+            return todo.id === id
+              ? { ...todo, completed: !todo.completed }
+              : todo;
+          });
+
+          setTodos(newTodoList);
+        })
+        .catch(() => setErrorMessage(ErrorMessage.UPDATE))
+        .finally(() => setDeletedTodosId([]));
+    }
+  };
+
+  const updateStatusTodos = (newStatus: boolean) => {
+    Promise.all(todos.map(todo => {
+      return todo.completed !== newStatus
+        ? updateTodos(todo.id, { ...todo, completed: newStatus })
+        : todo;
+    }))
+      .then(() => {
+        const newTodoList = todos.map(todo => ({
+          ...todo,
+          completed: newStatus,
+        }));
+
+        setTodos(newTodoList);
+      })
+      .catch(() => setErrorMessage(ErrorMessage.UPDATE))
+      .finally(() => setDeletedTodosId([]));
+  };
+
+  const handleUpdateStatusTodo = () => {
+    const isAllCompletedTodos = todos.every(todo => todo.completed);
+
+    if (isAllCompletedTodos) {
+      const allTodos = todos.map(todo => todo.id);
+
+      setDeletedTodosId(allTodos);
+
+      updateStatusTodos(false);
+    } else {
+      const activeTodosId = todos
+        .filter(todo => !todo.completed)
+        .map(todo => todo.id);
+
+      setDeletedTodosId(activeTodosId);
+
+      updateStatusTodos(true);
+    }
+  };
+
+  const handleClearTodo = () => {
+    const completedTodosId = todos
+      .filter(todo => todo.completed)
+      .map(todo => todo.id);
+
+    setDeletedTodosId(completedTodosId);
+
+    Promise.all(completedTodosId.map(id => deleteTodo(id)))
+      .then(() => {
+        const filteredTodos = todos.filter(todo => !todo.completed);
+
+        setTodos(filteredTodos);
+      })
+      .catch(() => setErrorMessage(ErrorMessage.DELETE))
+      .finally(() => setDeletedTodosId([]));
+  };
+
+  const handleAddTodo = (event:
+  React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (value.trim()) {
+      setDeletedTodosId([0]);
+
+      setTempTodo({
+        id: 0,
+        userId: USER_ID,
+        title: value,
+        completed: false,
+      });
+
+      const newTodo = {
+        id: Math.max(...todos.map(todo => todo.id)) + 1,
+        userId: USER_ID,
+        title: value,
+        completed: false,
+      };
+
+      addTodos(USER_ID, newTodo)
+        .then(() => {
+          setTodos([...todos, newTodo]);
+        })
+        .catch(() => setErrorMessage(ErrorMessage.ADD))
+        .finally(() => {
+          setValue('');
+          setTempTodo(null);
+          setDeletedTodosId([]);
+        });
+    } else {
+      setErrorMessage(ErrorMessage.EMPTY);
+    }
+
+    setActiveFormInput(true);
+  };
+
+  const filteredTodos = useMemo(() => {
+    return todos?.filter(todo => {
+      switch (filterValue) {
+        case Filter.Active:
+          return !todo.completed;
+        case Filter.Completed:
+          return todo.completed;
+        default:
+          return todo;
+      }
+    });
+  }, [todos, filterValue]);
+
+  const hasCompletedTodos = todos.some(todo => todo.completed);
+  const amountOfActiveTodos = todos.filter(todo => !todo.completed).length;
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <Header
+          amountOfActiveTodos={amountOfActiveTodos}
+          value={value}
+          setValue={setValue}
+          handleAddTodo={handleAddTodo}
+          deletedTodosId={deletedTodosId}
+          handleUpdateStatusTodos={handleUpdateStatusTodo}
+          todos={todos}
+          formInputRef={formInputRef}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <TodoList
+          todos={filteredTodos}
+          tempTodo={tempTodo}
+          deletedTodosId={deletedTodosId}
+          handleDeletedTodo={handleDeletedTodo}
+          handleUpdatedTodo={handleUpdateTodo}
+          setDeletedTodosId={setDeletedTodosId}
+          setTodos={setTodos}
+          setError={setErrorMessage}
+        />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {(!!todos.length || !!deletedTodosId.length) && (
+          <Footer
+            filterValue={filterValue}
+            setFilter={setFilterValue}
+            hasCompletedTodos={hasCompletedTodos}
+            amountOfActiveTodos={amountOfActiveTodos}
+            handleClearTodo={handleClearTodo}
+          />
+        )}
+      </div>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {!!errorMessage && (
+        <Error
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+        />
+      )}
     </div>
   );
 };
