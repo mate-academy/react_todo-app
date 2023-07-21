@@ -1,6 +1,5 @@
-import React from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Status, LinkHref } from '../../types/FilterTypes';
 
 const filterLinks = [
@@ -9,15 +8,7 @@ const filterLinks = [
   { name: Status.COMPLETED, way: LinkHref.COMPLETED },
 ];
 
-type TodosFilterProps = {
-  selectedFilter: Status;
-  setSelectedFilter: (filter: Status) => void,
-};
-
-export const TodosFilter: React.FC<TodosFilterProps> = ({
-  selectedFilter,
-  setSelectedFilter,
-}) => {
+export const TodosFilter = () => {
   return (
     <ul className="filters">
       {filterLinks.map(link => {
@@ -27,13 +18,12 @@ export const TodosFilter: React.FC<TodosFilterProps> = ({
           <li
             key={name}
           >
-            <Link
+            <NavLink
               to={`../${way}`}
-              className={classNames({ selected: selectedFilter === name })}
-              onClick={() => setSelectedFilter(name)}
+              className={({ isActive }) => classNames({ selected: isActive })}
             >
               {name}
-            </Link>
+            </NavLink>
           </li>
         );
       })}

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   createTodos, deleteTodos, getTodos, getUser, updateTodos,
 } from './api';
@@ -19,9 +19,6 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<Errors>(Errors.NONE);
   const [query, setQuery] = useState('');
   const [userName, setUserName] = useState('');
-  const [
-    selectedFilter, setSelectedFilter,
-  ] = useState<Status>(Status.ALL);
 
   const showAndDeleteError = (timer = 3000) => {
     return setTimeout(() => {
@@ -199,6 +196,11 @@ export const App: React.FC = () => {
                   )}
                 />
               </Route>
+
+              <Route
+                path="*"
+                element={<Navigate to="/" />}
+              />
             </Routes>
           )}
         </section>
@@ -209,10 +211,7 @@ export const App: React.FC = () => {
               {`${activeTodos.length} items left`}
             </span>
 
-            <TodosFilter
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
-            />
+            <TodosFilter />
 
             <button
               type="button"

@@ -31,15 +31,13 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   };
 
   const handleSaveOrDeleteTitle = () => {
-    if (!newTitle) {
-      setNewTitle('');
-      handleDeleteTodo(todoEditing);
+    if (todoEditing !== 0 && newTitle) {
+      handleUpdateTodo(todoEditing, { title: newTitle });
+
+      return setTodoEditing(0);
     }
 
-    if (todoEditing !== 0 && newTitle) {
-      setTodoEditing(0);
-      handleUpdateTodo(todoEditing, { title: newTitle });
-    }
+    return handleDeleteTodo(todoEditing);
   };
 
   const handleChangeTitle = (e: React.KeyboardEvent<HTMLInputElement>) => {
