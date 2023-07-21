@@ -17,7 +17,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 }) => {
   const { id, completed, title } = todo;
   const [todoEditing, setTodoEditing] = useState(0);
-  const [newTitle, setNewTitle] = useState('');
+  const [newTitle, setNewTitle] = useState(title);
   const inputField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -32,13 +32,13 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 
   const handleSaveOrDeleteTitle = () => {
     if (!newTitle) {
+      setNewTitle('');
       handleDeleteTodo(todoEditing);
     }
 
-    if (todoEditing !== 0) {
-      handleUpdateTodo(todoEditing, { title: newTitle });
-      setNewTitle('');
+    if (todoEditing !== 0 && newTitle) {
       setTodoEditing(0);
+      handleUpdateTodo(todoEditing, { title: newTitle });
     }
   };
 
