@@ -1,10 +1,7 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import { TodoForm } from './components/TodoForm';
-import { Filter } from './components/Filter';
-import { Section } from './components/Section';
+import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
-import { Toggler } from './components/Toggler';
 import { ITodo, StatusType } from './types';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
@@ -28,32 +25,27 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
+
       <TodoForm
         todos={todos}
         setTodos={setTodos}
       />
-      {
-        hasTodos && (
-          <>
-            <Section>
-              <Toggler
-                todos={todos}
-                setTodos={setTodos}
-              />
-              <TodoList
-                todos={visibleTodos}
-                setTodos={setTodos}
-              />
-            </Section>
 
-            <Filter
-              todos={todos}
-              setFilter={setFilter}
-              setTodos={setTodos}
-            />
-          </>
-        )
-      }
+      {hasTodos && (
+        <TodoList
+          todos={visibleTodos}
+          setTodos={setTodos}
+        />
+      )}
+
+      { hasTodos && (
+        <TodoFilter
+          todos={todos}
+          setFilter={setFilter}
+          setTodos={setTodos}
+        />
+      )}
+
     </div>
   );
 };

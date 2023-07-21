@@ -23,7 +23,7 @@ type Props = {
   setTodos: (todos: ITodo[]) => void;
 };
 
-export const Filter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = ({
   todos,
   setFilter,
   setTodos,
