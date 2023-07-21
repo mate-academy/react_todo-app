@@ -79,7 +79,7 @@ export const TodoContextProvider = ({ children }: Props) => {
   };
 
   const editTodoTitle = (todoId: number, newTitle: string) => {
-    if (newTitle) {
+    if (newTitle.trim() !== '') {
       setTodos(prev => prev.map(todo => {
         if (todo.id === todoId) {
           return {
