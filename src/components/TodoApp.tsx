@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { TodosContext, SetTodosContext } from '../contexts/TodosContext';
+import React, { useState, useContext, useEffect } from 'react';
+import { TodosContext } from '../contexts/TodosContext';
 import { Todo } from '../types/Todo';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
@@ -11,8 +11,7 @@ export const TodoApp = () => {
     filterStatus, setFilterStatus,
   ] = useState<FilterStatus>(FilterStatus.All);
 
-  const todosPrep = useContext(TodosContext);
-  const setTodos = useContext(SetTodosContext);
+  const [todosPrep, setTodos] = useContext(TodosContext);
 
   const todos = todosPrep.filter((todo) => {
     switch (filterStatus) {
@@ -33,7 +32,7 @@ export const TodoApp = () => {
     leftTodos.length === 0,
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setAllCompleted(leftTodos.length === 0);
   }, [leftTodos.length]);
 

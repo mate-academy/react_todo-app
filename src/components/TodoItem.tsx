@@ -4,7 +4,7 @@
 import React, { useContext, useState, useRef } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { SetTodosContext, TodosContext } from '../contexts/TodosContext';
+import { TodosContext } from '../contexts/TodosContext';
 
 type Props = {
   todo: Todo;
@@ -19,8 +19,7 @@ export const TodoItem: React.FC<Props> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const todos = useContext(TodosContext);
-  const setTodos = useContext(SetTodosContext);
+  const [todos, setTodos] = useContext(TodosContext);
 
   const [tempTitle, setTempTitle] = useState(todo.title);
 

@@ -3,5 +3,6 @@ import { Todo } from '../types/Todo';
 
 type SetTodos = (todos: Todo[]) => void;
 
-export const TodosContext = createContext<Todo[]>([]);
-export const SetTodosContext = createContext({} as SetTodos);
+export const TodosContext = createContext<[Todo[], SetTodos]>(
+  [[], {} as SetTodos],
+);
