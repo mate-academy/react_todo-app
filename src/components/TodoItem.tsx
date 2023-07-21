@@ -70,7 +70,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
           className="edit"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          onKeyUp={e => handleCancelEdit(e)}
+          onKeyUp={handleCancelEdit}
           onBlur={saveChanges}
           autoFocus
         />

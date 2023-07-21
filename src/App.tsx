@@ -23,7 +23,7 @@ export const App: React.FC = () => {
                 data-cy="toggleAll"
                 onChange={toggleAllAsCompleted}
               />
-              <label>Mark all as complete</label>
+              <label htmlFor="toggle-all">Mark all as complete</label>
               <TodoList />
             </section>
             <TodoFooter />
