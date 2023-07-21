@@ -1,4 +1,6 @@
 import React from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 import { TodoItem } from '../TodoItem/TodoItem';
 import { Todo } from '../../types/Todo';
 
@@ -17,15 +19,18 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   return (
     <ul className="todo-list" data-cy="todosList">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          handleToggleCompleted={handleToggleCompleted}
-          handleRemoveTodo={handleRemoveTodo}
-          handleChangeTitle={handleChangeTitle}
-        />
-      ))}
+      <TransitionGroup>
+        {todos.map((todo) => (
+          <CSSTransition key={todo.id} timeout={500} classNames="fade">
+            <TodoItem
+              todo={todo}
+              handleToggleCompleted={handleToggleCompleted}
+              handleRemoveTodo={handleRemoveTodo}
+              handleChangeTitle={handleChangeTitle}
+            />
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
     </ul>
   );
 };

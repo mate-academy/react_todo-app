@@ -4,7 +4,8 @@ import { Todo } from '../types/Todo';
 export const useLocalStorage = (
   key: string,
   initialValue: Todo[],
-): [Todo[], (value: (todos: Todo[]) => Todo[]) => void] => {
+): [Todo[], (value: (todos: Todo[]) => Todo[]
+  ) => void] => {
   const [value, setValue] = useState<Todo[]>(() => {
     try {
       const data = localStorage.getItem(key);
