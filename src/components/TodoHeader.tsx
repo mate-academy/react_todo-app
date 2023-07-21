@@ -10,7 +10,7 @@ const TodoHeader: React.FC = () => {
     if (todoTitle.trim()) {
       const newTodo = {
         id: +(new Date()),
-        title: todoTitle,
+        title: todoTitle.trim(),
         completed: false,
       };
 
