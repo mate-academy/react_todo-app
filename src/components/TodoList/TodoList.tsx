@@ -16,7 +16,7 @@ export const TodoList: React.FC<Props> = ({
   handleChangeTitle,
 }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {todos.map((todo) => (
         <TodoItem
           key={todo.id}

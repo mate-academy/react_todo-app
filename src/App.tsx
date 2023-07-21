@@ -28,7 +28,7 @@ export const App: React.FC = () => {
   );
 
   const handleAddTodo = (todo: Todo) => {
-    setTodos([...todos, todo]);
+    setTodos(prevTodos => [...prevTodos, todo]);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -48,30 +48,32 @@ export const App: React.FC = () => {
     setTodoTitle('');
   };
 
-  const handleToggleCompleted = (todoId?: number) => {
-    setTodos(todos.map((todo: Todo) => (todo.id === todoId
-      ? { ...todo, completed: !todo.completed }
-      : todo)));
+  const handleToggleCompleted = (todoId: number) => {
+    setTodos(prevTodos => prevTodos.map((todo) => {
+      if (todo.id !== todoId) {
+        return todo;
+      }
+
+      return { ...todo, completed: !todo.completed };
+    }));
   };
 
   const handleToggleAllTodosCompleted = () => {
-    setTodos(todos.map((todo: Todo) => (
-      { ...todo, completed: !todo.completed }
+    setTodos(prevTodos => prevTodos.map((todo: Todo) => (
+      { ...todo, completed: true }
     )));
   };
 
   const handleRemoveTodo = (todoId: number) => {
-    setTodos(todos.filter((todo: Todo) => todo.id !== todoId));
+    setTodos(prevTodos => prevTodos.filter((todo: Todo) => todo.id !== todoId));
   };
 
   const handleClearAllCompletedTodos = () => {
-    todos
-      .filter((todo: Todo) => todo.completed)
-      .map((todo: Todo) => handleRemoveTodo(todo.id));
+    setTodos(prevTodos => prevTodos.filter((todo: Todo) => !todo.completed));
   };
 
   const handleChangeTitle = (todoId: number, newTitle: string) => {
-    setTodos(todos.map((todo: Todo) => (todo.id === todoId
+    setTodos(prevTodos => prevTodos.map((todo: Todo) => (todo.id === todoId
       ? { ...todo, title: newTitle }
       : todo)));
   };
@@ -100,25 +102,27 @@ export const App: React.FC = () => {
         handleSubmit={handleSubmit}
       />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onClick={handleToggleAllTodosCompleted}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length !== 0 && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onClick={handleToggleAllTodosCompleted}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList
-          todos={visibleTodos}
-          handleToggleCompleted={handleToggleCompleted}
-          handleRemoveTodo={handleRemoveTodo}
-          handleChangeTitle={handleChangeTitle}
-        />
-      </section>
+          <TodoList
+            todos={visibleTodos}
+            handleToggleCompleted={handleToggleCompleted}
+            handleRemoveTodo={handleRemoveTodo}
+            handleChangeTitle={handleChangeTitle}
+          />
+        </section>
+      )}
 
-      {todos.length > 0 && (
+      {todos.length !== 0 && (
         <Footer
           uncompletedTodo={uncompletedTodo}
           completedTodo={completedTodo}

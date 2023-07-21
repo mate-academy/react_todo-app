@@ -1,28 +1,29 @@
 import { useState } from 'react';
 import { Todo } from '../types/Todo';
 
-export function useLocalStorage(key: string, startValue: Todo[]) {
-  const [value, setValue] = useState(() => {
-    const data = localStorage.getItem(key);
-
-    if (data === null) {
-      return startValue;
-    }
-
+export const useLocalStorage = (
+  key: string,
+  initialValue: Todo[],
+): [Todo[], (value: (todos: Todo[]) => Todo[]) => void] => {
+  const [value, setValue] = useState<Todo[]>(() => {
     try {
-      return JSON.parse(data);
-    } catch (error) {
-      localStorage.removeItem(key);
+      const data = localStorage.getItem(key);
 
-      return startValue;
+      return data ? JSON.parse(data) : initialValue;
+    } catch {
+      return initialValue;
     }
   });
 
-  const save = (newValue: Todo) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
+  const save = (data: (todos: Todo[]) => Todo[]) => {
+    setValue((prevValue) => {
+      const updatedValue = data(prevValue);
 
-    setValue(newValue);
+      localStorage.setItem(key, JSON.stringify(updatedValue));
+
+      return updatedValue;
+    });
   };
 
   return [value, save];
-}
+};

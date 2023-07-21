@@ -80,7 +80,7 @@ export const TodoItem: React.FC<Props> = ({
               checked={completed}
             />
             <label onDoubleClick={() => setIsEditing(true)}>{title}</label>
-            {/* eslint-disable-next-line */}
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="destroy"
