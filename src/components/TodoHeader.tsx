@@ -7,7 +7,7 @@ const TodoHeader: React.FC = () => {
 
   const handleAddTodo = (event: React.FormEvent) => {
     event?.preventDefault();
-    if (todoTitle) {
+    if (todoTitle.trim()) {
       const newTodo = {
         id: +(new Date()),
         title: todoTitle,
