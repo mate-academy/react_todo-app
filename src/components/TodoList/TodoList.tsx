@@ -8,13 +8,13 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const deleteTodo = (todoId: number) => {
+    setTodos(todos.filter((todo) => todo.id !== todoId));
   };
 
-  const toggleTodoStatus = (id: number) => {
+  const toggleTodoStatus = (todoId: number) => {
     setTodos(todos.map((todo) => {
-      if (todo.id === id) {
+      if (todo.id === todoId) {
         return {
           ...todo,
           completed: !todo.completed,
@@ -25,9 +25,9 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
     }));
   };
 
-  const editTodo = (id: number, newTitle: string) => {
+  const editTodo = (todoId: number, newTitle: string) => {
     setTodos(todos.map((todo) => {
-      if (todo.id === id) {
+      if (todo.id === todoId) {
         return {
           ...todo,
           title: newTitle,

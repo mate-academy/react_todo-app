@@ -21,28 +21,22 @@ export const Todo: React.FC<Props> = (
   const [newTitle, setNewTitle] = useState(title);
   const input = useRef<HTMLInputElement | null>(null);
 
-  // console.log(id, title, completed);
-
   useEffect(() => {
     if (isEditing && input.current) {
       input.current.focus();
     }
   }, [isEditing]);
 
-  console.log(isEditing);
+  const onDoubleClick = () => {
+    setIsEditing(true);
+    input.current?.focus();
+  };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setIsEditing(false);
       setNewTitle(title);
     }
-  };
-
-  const onSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    setIsEditing(false);
-    editTodo(id, newTitle);
   };
 
   const onBlur = () => {
@@ -52,12 +46,20 @@ export const Todo: React.FC<Props> = (
       return;
     }
 
+    if (!newTitle.trim()) {
+      deleteTodo?.(id);
+
+      return;
+    }
+
     editTodo(id, newTitle);
   };
 
-  const onDoubleClick = () => {
-    setIsEditing(true);
-    input.current?.focus();
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    setIsEditing(false);
+    editTodo(id, newTitle);
   };
 
   return (

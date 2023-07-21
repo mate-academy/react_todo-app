@@ -12,6 +12,10 @@ export const TodoForm: React.FC<Props> = ({ todos, setTodos }) => {
   const addNewTodo = (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (!title.trim()) {
+      return;
+    }
+
     const newTodo = {
       id: +new Date(),
       title,
