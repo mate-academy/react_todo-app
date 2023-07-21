@@ -1,52 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Todo } from '../Todo/Todo';
 import { ITodo } from '../../types';
 import { Section } from '../Section';
 import { Toggler } from '../Toggler';
+import { DispatchContext } from '../Store';
 
 type Props = {
-  todos: ITodo[]
-  setTodos: (todos: ITodo[]) => void;
+  todos: ITodo[];
 };
 
-export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
+  const dispatch = useContext(DispatchContext);
+
   const deleteTodo = (todoId: number) => {
-    setTodos(todos.filter((todo) => todo.id !== todoId));
+    dispatch({ type: 'DELETE_TODO', payload: todoId });
   };
 
   const toggleTodoStatus = (todoId: number) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }
-
-      return todo;
-    }));
+    dispatch({ type: 'TOGGLE_TODO', payload: todoId });
   };
 
   const editTodo = (todoId: number, newTitle: string) => {
-    setTodos(todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          title: newTitle,
-        };
-      }
-
-      return todo;
-    }));
+    dispatch({ type: 'EDIT_TODO', payload: { id: todoId, title: newTitle } });
   };
 
   return (
     <Section>
 
-      <Toggler
-        todos={todos}
-        setTodos={setTodos}
-      />
+      <Toggler />
 
       <ul className="todo-list" data-cy="todosList">
         {todos.map((todo) => (

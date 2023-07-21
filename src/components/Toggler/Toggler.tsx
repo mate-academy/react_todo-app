@@ -1,29 +1,16 @@
-import React from 'react';
-import { ITodo } from '../../types';
+import React, { useContext } from 'react';
+import { DispatchContext, StateContext } from '../Store';
 
-type Props = {
-  todos: ITodo[];
-  setTodos: (todos: ITodo[]) => void;
-
-};
-
-export const Toggler: React.FC<Props> = ({
-  todos,
-  setTodos,
-}) => {
+export const Toggler: React.FC = () => {
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
   const toggleAll = () => {
     const allCompleted = todos.every((todo) => todo.completed);
 
     if (allCompleted) {
-      setTodos(todos.map((todo) => ({
-        ...todo,
-        completed: false,
-      })));
+      dispatch({ type: 'TOGGLE_ALL_TODOS', payload: false });
     } else {
-      setTodos(todos.map((todo) => ({
-        ...todo,
-        completed: true,
-      })));
+      dispatch({ type: 'TOGGLE_ALL_TODOS', payload: true });
     }
   };
 

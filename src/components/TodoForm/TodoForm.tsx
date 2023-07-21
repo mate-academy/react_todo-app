@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
-import { ITodo } from '../../types';
+import React, { useContext, useState } from 'react';
+import { DispatchContext } from '../Store';
 
-type Props = {
-  todos: ITodo[];
-  setTodos: (todos: ITodo[]) => void;
-};
+export const TodoForm: React.FC = () => {
+  const dispatch = useContext(DispatchContext);
 
-export const TodoForm: React.FC<Props> = ({ todos, setTodos }) => {
   const [title, setTitle] = useState('');
 
   const addNewTodo = (event: React.FormEvent) => {
@@ -22,7 +19,10 @@ export const TodoForm: React.FC<Props> = ({ todos, setTodos }) => {
       completed: false,
     };
 
-    setTodos([...todos, newTodo]);
+    dispatch({
+      type: 'ADD_TODO',
+      payload: newTodo,
+    });
   };
 
   return (

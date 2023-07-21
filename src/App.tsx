@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodoForm } from './components/TodoForm';
+import { StateContext } from './components/Store';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { ITodo, StatusType } from './types';
-import { useLocalStorage } from './hooks/useLocalStorage';
 
 const getVisibleTodos = (todos: ITodo[], filter: StatusType) => {
   switch (filter) {
@@ -17,7 +17,7 @@ const getVisibleTodos = (todos: ITodo[], filter: StatusType) => {
 };
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocalStorage<ITodo[]>('todos', []);
+  const { todos } = useContext(StateContext);
   const [filter, setFilter] = useState<StatusType>(StatusType.All);
 
   const hasTodos = todos.length > 0;
@@ -26,23 +26,15 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
 
-      <TodoForm
-        todos={todos}
-        setTodos={setTodos}
-      />
+      <TodoForm />
 
       {hasTodos && (
-        <TodoList
-          todos={visibleTodos}
-          setTodos={setTodos}
-        />
+        <TodoList todos={visibleTodos} />
       )}
 
       { hasTodos && (
         <TodoFilter
-          todos={todos}
           setFilter={setFilter}
-          setTodos={setTodos}
         />
       )}
 

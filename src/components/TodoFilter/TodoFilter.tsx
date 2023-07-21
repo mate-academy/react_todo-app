@@ -1,6 +1,7 @@
 import classNames from 'classnames';
-import React from 'react';
-import { ITodo, StatusType } from '../../types';
+import React, { useContext } from 'react';
+import { StatusType } from '../../types';
+import { DispatchContext, StateContext } from '../Store';
 
 const filterOptions = [
   {
@@ -18,22 +19,21 @@ const filterOptions = [
 ];
 
 type Props = {
-  todos: ITodo[];
   setFilter: (filter: StatusType) => void;
-  setTodos: (todos: ITodo[]) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  todos,
   setFilter,
-  setTodos,
 }) => {
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+
   const numberOfActiveTodos = todos.filter((todo) => !todo.completed).length;
 
   const hasCompletedTodos = todos.some((todo) => todo.completed);
 
   const deleteCompletedTodos = () => {
-    setTodos(todos.filter((todo) => !todo.completed));
+    dispatch({ type: 'DELETE_ALL_COMPLETED_TODOS' });
   };
 
   return (
@@ -52,7 +52,7 @@ export const TodoFilter: React.FC<Props> = ({
             >
               <a
                 href={href}
-                onClick={() => setFilter(label as StatusType)}
+                onClick={() => setFilter(label)}
               >
                 {label}
               </a>
