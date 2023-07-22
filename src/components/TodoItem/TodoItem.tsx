@@ -31,7 +31,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   };
 
   const handleSaveOrDeleteTitle = () => {
-    if (todoEditing !== 0 && newTitle) {
+    if (todoEditing !== 0 && newTitle.trim()) {
       handleUpdateTodo(todoEditing, { title: newTitle });
 
       return setTodoEditing(0);

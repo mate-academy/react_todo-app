@@ -24,7 +24,8 @@ export const getTodos = () => {
 };
 
 export const updateTodos = (
-  todoId: number, data: { [key: string]: string | boolean },
+  todoId: number,
+  data: { [key: string]: string | boolean },
 ) => {
   return fetch(`${BASE_URL}/todos/${todoId}`, {
     method: 'PATCH',

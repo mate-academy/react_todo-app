@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import {
-  createTodos, deleteTodos, getTodos, getUser, updateTodos,
+  createTodos,
+  deleteTodos,
+  getTodos,
+  getUser,
+  updateTodos,
 } from './api';
 import { Todo } from './types/Todo';
 import { TodosFilter } from './components/Footer';
@@ -208,7 +212,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {`${activeTodos.length} items left`}
+              {activeTodos.length === 1 ? '1 item left' : `${activeTodos.length} items left`}
             </span>
 
             <TodosFilter />

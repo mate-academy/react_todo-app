@@ -97,6 +97,7 @@ body {
   position: relative;
   margin: 0;
   width: 100%;
+  outline: none;
   font-size: 24px;
   font-family: inherit;
   font-weight: inherit;
