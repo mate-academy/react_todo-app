@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useEffect, useMemo, useRef, useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 
 import { Header } from './components/Header';
@@ -23,7 +26,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterValue, setFilterValue] = useState(Filter.All);
   const [errorMessage, setErrorMessage]
-  = useState<ErrorMessage>(ErrorMessage.NONE);
+  = useState<ErrorMessage>(
+    ErrorMessage.NONE,
+  );
   const [value, setValue] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [deletedTodosId, setDeletedTodosId] = useState<number[] | []>([]);
@@ -194,8 +199,10 @@ export const App: React.FC = () => {
       switch (filterValue) {
         case Filter.Active:
           return !todo.completed;
+
         case Filter.Completed:
           return todo.completed;
+
         default:
           return todo;
       }
