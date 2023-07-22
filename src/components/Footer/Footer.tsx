@@ -1,28 +1,27 @@
 import React from 'react';
 
-import { Todo } from '../../types/Todo';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
 type Props = {
-  uncompletedTodo: Todo[];
-  completedTodo: Todo[];
+  uncompletedTodosLength: number;
+  completedTodosLength: number;
   handleClearAllCompletedTodos: () => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  uncompletedTodo,
-  completedTodo,
+  uncompletedTodosLength,
+  completedTodosLength,
   handleClearAllCompletedTodos,
 }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${uncompletedTodo.length} items left`}
+        {`${uncompletedTodosLength} items left`}
       </span>
 
       <TodosFilter />
 
-      {completedTodo.length > 0 && (
+      {completedTodosLength > 0 && (
         <button
           type="button"
           className="clear-completed"

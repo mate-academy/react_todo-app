@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type Props = {
-  todoTitle: string;
-  setTodoTitle: (todoTitle: string) => void;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleSubmit: (
+    event: React.FormEvent<HTMLFormElement>,
+    todoTitle: string,
+    setTodoTitle: (title: string) => void,
+  ) => void;
 };
 
-export const Header: React.FC<Props> = ({
-  todoTitle,
-  setTodoTitle,
-  handleSubmit,
-}) => {
+export const Header: React.FC<Props> = ({ handleSubmit }) => {
+  const [todoTitle, setTodoTitle] = useState('');
+
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e, todoTitle, setTodoTitle)}>
         <input
           type="text"
           data-cy="createTodo"

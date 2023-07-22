@@ -1,18 +1,18 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
 
+import { useLocalStorage } from './utils/useLocalStorage';
+
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
-import { useLocalStorage } from './utils/useLocalStorage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
-  const [todoTitle, setTodoTitle] = useState('');
 
   const [completedTodo, uncompletedTodo] = todos.reduce(
     (acc: Todo[][], todo: Todo) => {
@@ -31,7 +31,11 @@ export const App: React.FC = () => {
     setTodos(prevTodos => [...prevTodos, todo]);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+    todoTitle: string,
+    setTodoTitle: (title:string) => void,
+  ) => {
     event.preventDefault();
 
     if (!todoTitle.trim().length) {
@@ -97,8 +101,6 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <Header
-        todoTitle={todoTitle}
-        setTodoTitle={setTodoTitle}
         handleSubmit={handleSubmit}
       />
 
@@ -124,8 +126,8 @@ export const App: React.FC = () => {
 
       {todos.length !== 0 && (
         <Footer
-          uncompletedTodo={uncompletedTodo}
-          completedTodo={completedTodo}
+          uncompletedTodosLength={uncompletedTodo.length}
+          completedTodosLength={completedTodo.length}
           handleClearAllCompletedTodos={handleClearAllCompletedTodos}
         />
       )}
