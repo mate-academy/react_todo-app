@@ -31,27 +31,6 @@ export const App: React.FC = () => {
     setTodos(prevTodos => [...prevTodos, todo]);
   };
 
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement>,
-    todoTitle: string,
-    setTodoTitle: (title:string) => void,
-  ) => {
-    event.preventDefault();
-
-    if (!todoTitle.trim().length) {
-      return;
-    }
-
-    const newTodo: Todo = {
-      title: todoTitle,
-      id: +new Date(),
-      completed: false,
-    };
-
-    handleAddTodo(newTodo);
-    setTodoTitle('');
-  };
-
   const handleToggleCompleted = (todoId: number) => {
     setTodos(prevTodos => prevTodos.map((todo) => {
       if (todo.id !== todoId) {
@@ -101,7 +80,7 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <Header
-        handleSubmit={handleSubmit}
+        handleAddTodo={handleAddTodo}
       />
 
       {todos.length !== 0 && (

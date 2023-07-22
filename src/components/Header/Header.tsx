@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
 
+import { Todo } from '../../types/Todo';
+
 type Props = {
-  handleSubmit: (
-    event: React.FormEvent<HTMLFormElement>,
-    todoTitle: string,
-    setTodoTitle: (title: string) => void,
-  ) => void;
+  handleAddTodo: (todo: Todo) => void;
 };
 
-export const Header: React.FC<Props> = ({ handleSubmit }) => {
+export const Header: React.FC<Props> = ({ handleAddTodo }) => {
   const [todoTitle, setTodoTitle] = useState('');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!todoTitle.trim().length) {
+      return;
+    }
+
+    const newTodo: Todo = {
+      title: todoTitle,
+      id: +new Date(),
+      completed: false,
+    };
+
+    handleAddTodo(newTodo);
+    setTodoTitle('');
+  };
 
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={(e) => handleSubmit(e, todoTitle, setTodoTitle)}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           data-cy="createTodo"
