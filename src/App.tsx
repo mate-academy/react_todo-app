@@ -19,10 +19,9 @@ export const App: React.FC = () => {
           return !todo.completed;
         case TodoStatus.Completed:
           return todo.completed;
-        case TodoStatus.All:
-          return todo;
+
         default:
-          return true;
+          return todo;
       }
     });
   }, [filterBy, todos]);
@@ -70,12 +69,14 @@ export const App: React.FC = () => {
         <TodoList />
       </TodoListContext.Provider>
 
-      <Footer
-        todos={todos}
-        setTodos={setTodos}
-        todoFilter={filterBy}
-        setFilterBy={setFilterBy}
-      />
+      {todos.length > 0 && (
+        <Footer
+          todos={todos}
+          setTodos={setTodos}
+          todoFilter={filterBy}
+          setFilterBy={setFilterBy}
+        />
+      )}
     </div>
   );
 };
