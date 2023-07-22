@@ -4,6 +4,7 @@ import { DispatchContext, StateContext } from '../Store';
 export const Toggler: React.FC = () => {
   const { todos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+
   const toggleAll = () => {
     const allCompleted = todos.every((todo) => todo.completed);
 

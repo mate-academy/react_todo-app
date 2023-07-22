@@ -1,16 +1,26 @@
 import React, { useContext } from 'react';
 import { Todo } from '../Todo/Todo';
-import { ITodo } from '../../types';
+import { ITodo, StatusType } from '../../types';
 import { Section } from '../Section';
 import { Toggler } from '../Toggler';
-import { DispatchContext } from '../Store';
+import { DispatchContext, StateContext } from '../Store';
 
-type Props = {
-  todos: ITodo[];
+const getVisibleTodos = (todos: ITodo[], filter: StatusType) => {
+  switch (filter) {
+    case StatusType.Active:
+      return todos.filter((todo) => !todo.completed);
+    case StatusType.Completed:
+      return todos.filter((todo) => todo.completed);
+    default:
+      return todos;
+  }
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC = () => {
+  const { todos, filter } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+
+  const visibleTodos = getVisibleTodos(todos, filter);
 
   const deleteTodo = (todoId: number) => {
     dispatch({ type: 'DELETE_TODO', payload: todoId });
@@ -30,7 +40,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       <Toggler />
 
       <ul className="todo-list" data-cy="todosList">
-        {todos.map((todo) => (
+        {visibleTodos.map((todo) => (
           <Todo
             key={todo.id}
             todo={todo}

@@ -18,13 +18,7 @@ const filterOptions = [
   },
 ];
 
-type Props = {
-  setFilter: (filter: StatusType) => void;
-};
-
-export const TodoFilter: React.FC<Props> = ({
-  setFilter,
-}) => {
+export const TodoFilter: React.FC = () => {
   const { todos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
@@ -52,7 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
             >
               <a
                 href={href}
-                onClick={() => setFilter(label)}
+                onClick={() => dispatch({ type: 'SET_FILTER', payload: label })}
               >
                 {label}
               </a>

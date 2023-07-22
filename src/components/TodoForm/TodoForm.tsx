@@ -23,6 +23,8 @@ export const TodoForm: React.FC = () => {
       type: 'ADD_TODO',
       payload: newTodo,
     });
+
+    setTitle('');
   };
 
   return (
