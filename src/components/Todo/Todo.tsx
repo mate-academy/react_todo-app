@@ -37,6 +37,18 @@ export const Todo: React.FC<Props> = (
       setIsEditing(false);
       setNewTitle(title);
     }
+
+    if (event.key === 'Enter') {
+      setIsEditing(false);
+
+      if (!newTitle.trim()) {
+        deleteTodo(id);
+
+        return;
+      }
+
+      editTodo(id, newTitle);
+    }
   };
 
   const onBlur = () => {
@@ -47,18 +59,11 @@ export const Todo: React.FC<Props> = (
     }
 
     if (!newTitle.trim()) {
-      deleteTodo?.(id);
+      deleteTodo(id);
 
       return;
     }
 
-    editTodo(id, newTitle);
-  };
-
-  const onSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    setIsEditing(false);
     editTodo(id, newTitle);
   };
 
@@ -94,17 +99,17 @@ export const Todo: React.FC<Props> = (
         />
       </div>
 
-      <form onSubmit={onSubmit}>
-        <input
-          ref={input}
-          type="text"
-          className="edit"
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          onBlur={onBlur}
-          onKeyDown={onKeyDown}
-        />
-      </form>
+      {/* <form onSubmit={onSubmit}> */}
+      <input
+        ref={input}
+        type="text"
+        className="edit"
+        value={newTitle}
+        onChange={(e) => setNewTitle(e.target.value)}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+      />
+      {/* </form> */}
     </li>
   );
 };
