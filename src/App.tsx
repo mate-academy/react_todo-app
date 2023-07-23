@@ -162,7 +162,7 @@ export const App: React.FC = () => {
             id="toggle-all"
             className="toggle-all"
             data-cy="toggleAll"
-            onClick={() => toggleAll()}
+            onClick={toggleAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -221,7 +221,7 @@ export const App: React.FC = () => {
               type="button"
               className="clear-completed"
               hidden={completedTodos.length === 0}
-              onClick={() => handleDeleteAllCompletedTodos()}
+              onClick={handleDeleteAllCompletedTodos}
             >
               Clear completed
             </button>

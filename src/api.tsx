@@ -1,4 +1,4 @@
-const BASE_URL = 'https://mate.academy/students-api';
+const BASE_URL = 'https://mate.academy/students-ap';
 const userId = 11065;
 
 export const getUser = () => {

@@ -86,7 +86,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         className="edit"
         value={newTitle}
         onChange={handleNewTitle}
-        onBlur={() => handleSaveOrDeleteTitle()}
+        onBlur={handleSaveOrDeleteTitle}
         onKeyUp={handleChangeTitle}
       />
     </li>
