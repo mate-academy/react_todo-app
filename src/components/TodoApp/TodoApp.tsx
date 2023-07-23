@@ -1,10 +1,14 @@
 /*eslint-disable*/
-import React, { useContext, useState } from "react";
-import { TodosContext } from "../../TodosContext";
+import React, { useContext, useState, useCallback } from "react";
+import { TodosContext } from "../../context/TodosContext";
 import { TodoList } from "../TodoList";
+import { Todo } from "../../types/Todo";
+import { TodosFilter } from "../TodosFilter";
+import { filterTodo } from "../../helpers/filterTodo";
 
 export const TodoApp: React.FC = () => {
-  const { todos, saveTodo } = useContext(TodosContext);
+  const { todos, saveTodo, toggleAll, filterField, onClearCompleted } =
+    useContext(TodosContext);
 
   const [searchField, setSearchField] = useState("");
 
@@ -15,6 +19,24 @@ export const TodoApp: React.FC = () => {
 
     setSearchField("");
   };
+
+  const countUnfinished = useCallback(
+    (listTodo: Todo[]) => {
+      return listTodo.map((todo) => todo.completed).filter((todo) => !todo)
+        .length;
+    },
+    [todos]
+  );
+
+  const countFinished = useCallback(
+    (listTodo: Todo[]) => {
+      return listTodo.map((todo) => todo.completed).filter((todo) => todo)
+        .length;
+    },
+    [todos]
+  );
+
+  const visibleTodos = filterTodo(todos, filterField);
 
   return (
     <div className="todoapp">
@@ -43,35 +65,31 @@ export const TodoApp: React.FC = () => {
               className="toggle-all"
               data-cy="toggleAll"
             />
-            <label htmlFor="toggle-all">Mark all as complete</label>
+            <label onClick={() => toggleAll()} htmlFor="toggle-all">
+              Mark all as complete
+            </label>
 
-            <TodoList items={todos} />
+            <TodoList items={visibleTodos} />
           </section>
 
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              3 items left
+              {countUnfinished(todos)} items left
             </span>
 
-            <ul className="filters">
-              <li>
-                <a href="#/" className="selected">
-                  All
-                </a>
-              </li>
+            <TodosFilter />
 
-              <li>
-                <a href="#/active">Active</a>
-              </li>
-
-              <li>
-                <a href="#/completed">Completed</a>
-              </li>
-            </ul>
-
-            <button type="button" className="clear-completed">
-              Clear completed
-            </button>
+            {countFinished(todos) ? (
+              <button
+                onClick={() => onClearCompleted()}
+                type="button"
+                className="clear-completed"
+              >
+                Clear completed
+              </button>
+            ) : (
+              ""
+            )}
           </footer>
         </>
       )}
