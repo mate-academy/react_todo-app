@@ -79,7 +79,7 @@ export const TodoApp: React.FC = () => {
 
     const newTodo: Todo = {
       id: newTodoId,
-      title: newQuery,
+      title: newQuery.trim(),
       completed: false,
     };
 
