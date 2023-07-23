@@ -12,12 +12,18 @@ export const TodoApp = () => {
     <div className="todoapp">
       <Header />
       <section className="main">
-        <ToglerAllTodos />
+        {!!todos.length
+         && (
+           <ToglerAllTodos />
+         )}
 
         <TodoList todos={todos} />
       </section>
 
-      <Footer />
+      {!!todos.length
+        && (
+          <Footer todosLength={todos.length} />
+        )}
     </div>
   );
 };

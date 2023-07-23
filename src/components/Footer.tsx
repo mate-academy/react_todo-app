@@ -1,8 +1,12 @@
-export const Footer = () => {
+type Props = {
+  todosLength: number,
+};
+
+export const Footer: React.FC<Props> = ({ todosLength }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        3 items left
+        {`${todosLength} items left`}
       </span>
 
       <ul className="filters">
