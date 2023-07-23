@@ -121,6 +121,8 @@ export const App: React.FC = () => {
       .finally(() => {
         showAndDeleteError();
       });
+
+    return clearTimeout(showAndDeleteError());
   }, []);
 
   const handleDeleteAllCompletedTodos = () => {
