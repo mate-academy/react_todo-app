@@ -1,5 +1,5 @@
-import { Todo } from "./Todo";
-import { FILTERS } from "./filterEnum";
+import { Todo } from './Todo';
+import { FILTERS } from './filterEnum';
 
 export type Context = {
   todos: Todo[];

@@ -1,5 +1,5 @@
-import { Todo } from "../types/Todo";
-import { FILTERS } from "../types/filterEnum";
+import { Todo } from '../types/Todo';
+import { FILTERS } from '../types/filterEnum';
 
 export const filterTodo = (todos: Todo[], filterField: FILTERS): Todo[] => {
   const copyTodo = [...todos];
