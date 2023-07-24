@@ -99,7 +99,6 @@ export const Todo: React.FC<Props> = (
         />
       </div>
 
-      {/* <form onSubmit={onSubmit}> */}
       <input
         ref={input}
         type="text"
@@ -109,7 +108,6 @@ export const Todo: React.FC<Props> = (
         onBlur={onBlur}
         onKeyDown={onKeyDown}
       />
-      {/* </form> */}
     </li>
   );
 };
