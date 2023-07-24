@@ -3,22 +3,24 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import cn from 'classnames';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Todo } from '../../services/types';
+import { TodosContext } from '../../TodosContext';
 
 interface Props {
   todo: Todo,
-  hanldeTodoChange: (newTodo: Todo) => void,
-  hanldeOnDelete: (todoId: number) => void,
 }
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  hanldeTodoChange,
-  hanldeOnDelete,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleQuery, setTitleQuery] = useState(todo.title);
+
+  const {
+    hanldeTodoChange,
+    hanldeOnDelete,
+  } = useContext(TodosContext);
 
   const handleOnToggle = (isChecked: boolean) => {
     const newTodo: Todo = {

@@ -1,10 +1,8 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { TodosContext } from '../../TodosContext';
 
-interface Props {
-  handleOnAdd: (newQuery: string) => void,
-}
-
-export const TodoHeader: React.FC<Props> = ({ handleOnAdd }) => {
+export const TodoHeader: React.FC = () => {
+  const { handleOnAdd } = useContext(TodosContext);
   const [query, setQuery] = useState('');
 
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
