@@ -2,29 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import { Todo } from './types/Todo';
 import { FilterField } from './types/FilterField';
-
-function useLocaleStorage<T>(key:string, startValue: T): [T, (v: T) => void] {
-  const [value, setValue] = useState(() => {
-    const data = localStorage.getItem(key);
-
-    if (data === null) {
-      return startValue;
-    }
-
-    try {
-      return JSON.parse(data);
-    } catch (error) {
-      return startValue;
-    }
-  });
-
-  const save = (newValue: T) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
-    setValue(newValue);
-  };
-
-  return [value, save];
-}
+import { useLocaleStorage } from './hooks/useLocalStorage';
 
 const TodoContext = React.createContext({
   todos: [] as Todo[],
