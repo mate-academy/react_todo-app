@@ -1,9 +1,12 @@
-/*eslint-disable*/
-import cn from "classnames";
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import cn from 'classnames';
 
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Todo } from "../../types/Todo";
-import { TodosContext } from "../../context/TodosContext";
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
+import { Todo } from '../../types/Todo';
+import { TodosContext } from '../../context/TodosContext';
 
 type Props = {
   todo: Todo;
@@ -12,12 +15,12 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { toggleStatus, onDeleteTodo, onUpdateTodo } = useContext(TodosContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [updateField, setUpdateField] = useState(todo.title || "");
+  const [updateField, setUpdateField] = useState(todo.title || '');
   const [firstTitle, setFirstTitle] = useState(todo.title);
 
   useEffect(() => {
-    setFirstTitle(todo.title || "");
-    setUpdateField(todo.title || "");
+    setFirstTitle(todo.title || '');
+    setUpdateField(todo.title || '');
   }, [todo]);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,18 +30,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (event.detail === 2) {
       setIsEditing(true);
-      console.log("Double click");
     }
   };
 
   const onKeyUp = (event: React.KeyboardEvent<HTMLLIElement>) => {
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       setIsEditing(false);
       setUpdateField(firstTitle);
     }
 
-    if (event.key === "Enter") {
-      // console.log("DONE");
+    if (event.key === 'Enter') {
       setIsEditing(false);
 
       if (updateField.length === 0) {
@@ -50,6 +51,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const onEditTodo = (currentTodo: Todo) => {
     onUpdateTodo(currentTodo.title, updateField);
   };
+
   return (
     <li
       onClick={onDoubleClick}

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/*eslint-disable*/
-import React, { createContext, useState, useMemo } from "react";
-import { Todo } from "../types/Todo";
-import { Context } from "../types/TodoContext";
-import { FILTERS } from "../types/filterEnum";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import React, { createContext, useState, useMemo } from 'react';
+import { Todo } from '../types/Todo';
+import { Context } from '../types/TodoContext';
+import { FILTERS } from '../types/filterEnum';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = createContext<Context>({
   todos: [],
@@ -23,15 +22,15 @@ type Props = {
 };
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>([], "todos");
+  const [todos, setTodos] = useLocalStorage<Todo[]>([], 'todos');
   const [filterField, setFilterField] = useState<FILTERS>(FILTERS.ALL);
 
   const onUpdateTodo = (
     oldTodoTitle: string,
-    updateTodoTitle: string
+    updateTodoTitle: string,
   ): Todo[] | void => {
     const curentTodo = todos.find(
-      (todo) => todo.title === oldTodoTitle
+      (todo) => todo.title === oldTodoTitle,
     ) as Todo;
 
     if (oldTodoTitle !== updateTodoTitle) {
@@ -73,19 +72,15 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     const isEveryComplete = todos.every((todo) => todo.completed);
 
     if (isEveryComplete) {
-      setTodos((prev) =>
-        prev.map((todo) => ({
-          ...todo,
-          completed: false,
-        }))
-      );
+      setTodos((prev) => prev.map((todo) => ({
+        ...todo,
+        completed: false,
+      })));
     } else {
-      setTodos((prev) =>
-        prev.map((todo) => ({
-          ...todo,
-          completed: true,
-        }))
-      );
+      setTodos((prev) => prev.map((todo) => ({
+        ...todo,
+        completed: true,
+      })));
     }
   };
 
@@ -113,7 +108,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       onDeleteTodo,
       onUpdateTodo,
     }),
-    [todos, filterField]
+    [todos, filterField],
   );
 
   return (

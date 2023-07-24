@@ -1,23 +1,26 @@
-/*eslint-disable*/
-import React, { useContext, useState, useCallback } from "react";
-import { TodosContext } from "../../context/TodosContext";
-import { TodoList } from "../TodoList";
-import { Todo } from "../../types/Todo";
-import { TodosFilter } from "../TodosFilter";
-import { filterTodo } from "../../helpers/filterTodo";
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { useContext, useState, useCallback } from 'react';
+import { TodosContext } from '../../context/TodosContext';
+import { TodoList } from '../TodoList';
+import { Todo } from '../../types/Todo';
+import { TodosFilter } from '../TodosFilter';
+import { filterTodo } from '../../helpers/filterTodo';
 
 export const TodoApp: React.FC = () => {
-  const { todos, saveTodo, toggleAll, filterField, onClearCompleted } =
-    useContext(TodosContext);
+  const {
+    todos, saveTodo, toggleAll, filterField, onClearCompleted,
+  }
+    = useContext(TodosContext);
 
-  const [searchField, setSearchField] = useState("");
+  const [searchField, setSearchField] = useState('');
 
   const onSaveTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     saveTodo(searchField);
 
-    setSearchField("");
+    setSearchField('');
   };
 
   const countUnfinished = useCallback(
@@ -25,7 +28,7 @@ export const TodoApp: React.FC = () => {
       return listTodo.map((todo) => todo.completed).filter((todo) => !todo)
         .length;
     },
-    [todos]
+    [todos],
   );
 
   const countFinished = useCallback(
@@ -33,7 +36,7 @@ export const TodoApp: React.FC = () => {
       return listTodo.map((todo) => todo.completed).filter((todo) => todo)
         .length;
     },
-    [todos]
+    [todos],
   );
 
   const visibleTodos = filterTodo(todos, filterField);
@@ -57,7 +60,6 @@ export const TodoApp: React.FC = () => {
 
       {todos.length > 0 && (
         <>
-          {console.log(todos)}
           <section className="main">
             <input
               type="checkbox"
@@ -65,7 +67,10 @@ export const TodoApp: React.FC = () => {
               className="toggle-all"
               data-cy="toggleAll"
             />
-            <label onClick={() => toggleAll()} htmlFor="toggle-all">
+            <label
+              onClick={() => toggleAll()}
+              htmlFor="toggle-all"
+            >
               Mark all as complete
             </label>
 
@@ -74,7 +79,9 @@ export const TodoApp: React.FC = () => {
 
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
-              {countUnfinished(todos)} items left
+              {countUnfinished(todos)}
+              {' '}
+              items left
             </span>
 
             <TodosFilter />
@@ -88,7 +95,7 @@ export const TodoApp: React.FC = () => {
                 Clear completed
               </button>
             ) : (
-              ""
+              ''
             )}
           </footer>
         </>
