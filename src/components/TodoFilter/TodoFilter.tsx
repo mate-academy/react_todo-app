@@ -19,16 +19,11 @@ const filterOptions = [
 ];
 
 export const TodoFilter: React.FC = () => {
-  const { todos } = useContext(StateContext);
+  const { todos, filter } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const numberOfActiveTodos = todos.filter((todo) => !todo.completed).length;
-
   const hasCompletedTodos = todos.some((todo) => todo.completed);
-
-  const deleteCompletedTodos = () => {
-    dispatch({ type: 'DELETE_ALL_COMPLETED_TODOS' });
-  };
 
   return (
     <footer className="footer" data-cy="todosFilter">
@@ -40,12 +35,10 @@ export const TodoFilter: React.FC = () => {
 
         {filterOptions.map(
           ({ label, href }) => (
-            <li
-              key={label}
-              className={classNames({ selected: true })}
-            >
+            <li key={label}>
               <a
                 href={href}
+                className={classNames({ selected: filter === label })}
                 onClick={() => dispatch({ type: 'SET_FILTER', payload: label })}
               >
                 {label}
@@ -60,7 +53,7 @@ export const TodoFilter: React.FC = () => {
           <button
             type="button"
             className="clear-completed"
-            onClick={() => deleteCompletedTodos()}
+            onClick={() => dispatch({ type: 'DELETE_ALL_COMPLETED_TODOS' })}
           >
             Clear completed
           </button>
