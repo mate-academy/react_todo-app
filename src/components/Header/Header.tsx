@@ -9,6 +9,10 @@ export const Header: React.FC = () => {
   const onSaveTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!searchField) {
+      return;
+    }
+
     saveTodo(searchField);
 
     setSearchField("");
