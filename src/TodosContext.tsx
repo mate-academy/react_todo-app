@@ -38,20 +38,15 @@ function filterTodos(todos: Todo[], { filterBy }: FilterParams): Todo[] {
   return todosCopy;
 }
 
-function getTodosFromLocalStorage() {
-  const todos = localStorage.getItem('todos');
+function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
+  const [value, setValue] = useState(startValue);
 
-  if (todos === null) {
-    localStorage.setItem('todos', JSON.stringify([]));
+  const save = (newValue: T) => {
+    localStorage.setItem(key, JSON.stringify(value));
+    setValue(newValue);
+  };
 
-    return [];
-  }
-
-  return JSON.parse(todos);
-}
-
-function setTodosInLocalStorage(todos: Todo[]) {
-  localStorage.setItem('todos', JSON.stringify(todos));
+  return [value, save];
 }
 
 interface ContextProps {
@@ -87,7 +82,7 @@ interface ProviderProps {
 }
 
 export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>(getTodosFromLocalStorage());
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filterBy, setFilterBy] = useState(Filter.ALL);
 
   const visibleTodos = filterTodos(todos, { filterBy });
@@ -111,7 +106,6 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     ];
 
     setTodos(newTodos);
-    setTodosInLocalStorage(newTodos);
   };
 
   const handleAllCompletedToggle
@@ -124,14 +118,12 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
       });
 
       setTodos(newTodos);
-      setTodosInLocalStorage(newTodos);
     };
 
   const handleClearAllCompleted = () => {
     const activeTodos = [...todos].filter(todo => !todo.completed);
 
     setTodos(activeTodos);
-    setTodosInLocalStorage(activeTodos);
   };
 
   const hanldeTodoChange = (newTodo: Todo) => {
@@ -144,7 +136,6 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     newTodos.splice(indexOfOldTodo, 1, newTodo);
 
     setTodos(newTodos);
-    setTodosInLocalStorage(newTodos);
   };
 
   const hanldeOnDelete = (todoId: number) => {
@@ -157,7 +148,6 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     newTodos.splice(indexOfTodoToDelete, 1);
 
     setTodos(newTodos);
-    setTodosInLocalStorage(newTodos);
   };
 
   const isTodosHasCompleted = () => {
