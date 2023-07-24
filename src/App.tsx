@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const {
     todos,
     addTodo,
-    deleteTodo,
+    deleteCompletedTodos,
   } = todosContext;
 
   const incompletedTodosCount = todos.filter(
@@ -45,11 +45,7 @@ export const App: React.FC = () => {
   }
 
   function handleClearCompleted() {
-    todos.forEach(todo => {
-      if (todo.completed) {
-        deleteTodo(todo.id);
-      }
-    });
+    deleteCompletedTodos();
     setFilterStatus(Status.All);
   }
   // #endregion

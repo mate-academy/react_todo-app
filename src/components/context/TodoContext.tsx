@@ -1,6 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TodosContextType } from '../../types/TodosContext';
 import { Todo } from '../../types/Todo';
+
+function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
+  const [value, setValue] = useState(() => {
+    const storedValue = localStorage.getItem(key);
+
+    return storedValue ? JSON.parse(storedValue) : startValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+}
 
 export const TodosContext = React.createContext<TodosContextType | null>(null);
 
@@ -9,7 +23,7 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', [] as Todo[]);
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -18,17 +32,17 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       completed: false,
     };
 
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    setTodos([...todos, newTodo]);
   };
 
   const updateTodoTitle = (id: number, newTitle: string) => {
-    setTodos(prevTodos => prevTodos.map(prevTodo => (prevTodo.id === id
+    setTodos(todos.map(prevTodo => (prevTodo.id === id
       ? { ...prevTodo, title: newTitle }
       : prevTodo)));
   };
 
   const toggleTodo = (id: number) => {
-    setTodos((prevTodos) => prevTodos.map(
+    setTodos(todos.map(
       (todo) => (todo.id === id
         ? { ...todo, completed: !todo.completed }
         : todo),
@@ -36,9 +50,13 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   };
 
   const deleteTodo = (id: number) => {
-    setTodos((prevTodos) => prevTodos.filter(
+    setTodos(todos.filter(
       (todo) => todo.id !== id,
     ));
+  };
+
+  const deleteCompletedTodos = () => {
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   return (
@@ -48,6 +66,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       toggleTodo,
       deleteTodo,
       updateTodoTitle,
+      deleteCompletedTodos,
     }}
     >
       {children}

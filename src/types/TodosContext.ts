@@ -6,4 +6,5 @@ export type TodosContextType = {
   toggleTodo: (id: number) => void,
   deleteTodo: (id: number) => void,
   updateTodoTitle: (id: number, newTitle: string) => void,
+  deleteCompletedTodos: () => void;
 };

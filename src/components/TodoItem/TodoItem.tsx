@@ -94,6 +94,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={handleEditChange}
           onBlur={handleEditSubmit}
           onKeyUp={handleKeyUp}
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
         />
       )}
     </li>
