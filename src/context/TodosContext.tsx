@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /*eslint-disable*/
-import { createContext, useState, useMemo } from "react";
+import React, { createContext, useState, useMemo } from "react";
 import { Todo } from "../types/Todo";
 import { Context } from "../types/TodoContext";
 import { FILTERS } from "../types/filterEnum";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export const TodosContext = createContext<Context>({
   todos: [],
@@ -14,6 +15,7 @@ export const TodosContext = createContext<Context>({
   onChangeFilter: () => {},
   onClearCompleted: () => {},
   onDeleteTodo: () => {},
+  onUpdateTodo: () => {},
 });
 
 type Props = {
@@ -21,8 +23,28 @@ type Props = {
 };
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>([], "todos");
   const [filterField, setFilterField] = useState<FILTERS>(FILTERS.ALL);
+
+  const onUpdateTodo = (
+    oldTodoTitle: string,
+    updateTodoTitle: string
+  ): Todo[] | void => {
+    const curentTodo = todos.find(
+      (todo) => todo.title === oldTodoTitle
+    ) as Todo;
+
+    if (oldTodoTitle !== updateTodoTitle) {
+      curentTodo.title = updateTodoTitle;
+
+      setTodos((prev) => {
+        return prev.map((todo) => ({
+          ...todo,
+          curentTodo,
+        }));
+      });
+    }
+  };
 
   const saveTodo = (todoTitle: string) => {
     const newTodo: Todo = {
@@ -89,6 +111,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       onChangeFilter,
       onClearCompleted,
       onDeleteTodo,
+      onUpdateTodo,
     }),
     [todos, filterField]
   );

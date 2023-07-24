@@ -10,4 +10,5 @@ export type Context = {
   onChangeFilter: (str: FILTERS) => void;
   onClearCompleted: () => void;
   onDeleteTodo: (id: number) => void;
+  onUpdateTodo: (todoTitle: string, updateTodoTitle: string) => void;
 };

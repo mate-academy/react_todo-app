@@ -21,27 +21,19 @@ export const TodosFilter: React.FC = () => {
         </a>
       </li>
 
-      <li>
+      <li onClick={() => onChangeFilter(FILTERS.ACTIVE)}>
         <a
           className={classNames({
             selected: filterField === FILTERS.ACTIVE,
           })}
-          onClick={(e) => {
-            e.preventDefault();
-            onChangeFilter(FILTERS.ACTIVE);
-          }}
           href="#/active"
         >
           Active
         </a>
       </li>
 
-      <li>
+      <li onClick={() => onChangeFilter(FILTERS.COMPLETED)}>
         <a
-          onClick={(e) => {
-            e.preventDefault();
-            onChangeFilter(FILTERS.COMPLETED);
-          }}
           className={classNames({
             selected: filterField === FILTERS.COMPLETED,
           })}

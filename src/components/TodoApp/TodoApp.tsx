@@ -72,7 +72,7 @@ export const TodoApp: React.FC = () => {
             <TodoList items={visibleTodos} />
           </section>
 
-          <footer className="footer">
+          <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
               {countUnfinished(todos)} items left
             </span>
