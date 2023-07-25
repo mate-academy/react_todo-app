@@ -78,6 +78,7 @@ export const TodoItem: React.FC<Props> = React.memo((({
           type="checkbox"
           className="toggle"
           id={`${id}`}
+          defaultChecked={completed}
           onClick={handlerClickToToggle}
         />
         <label
