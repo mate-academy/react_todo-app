@@ -1,93 +1,177 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
+import classNames from 'classnames';
+import { AuthContext } from './Components/Auth/AuthContext';
+import { Todo } from './types/Todo';
+import * as postService from './api/todos';
+import { TodoFilter } from './types/TodoFilter';
+import { Errors } from './Components/Error/Error';
+import { TodoList } from './Components/TodoList/TodoList';
+import { Footer } from './Components/Footer/Footer';
 
 export const App: React.FC = () => {
+  const user = useContext(AuthContext);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [toggleAll, setToggleAll] = useState(true);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(TodoFilter.ALL);
+  const [isError, setIsError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState(0);
+
+  const showError = (text: string) => {
+    setIsError(text);
+    setTimeout(() => {
+      setIsError('');
+    }, 3000);
+  };
+
+  const addTodo = async () => {
+    if (!query.trim()) {
+      showError("Title can't be empty");
+
+      return;
+    }
+
+    try {
+      const newTodo = await postService.createTodo(user?.id, query);
+
+      setTodos((prevState) => {
+        return [newTodo, ...prevState];
+      });
+    } catch (error) {
+      showError('Unable to add a todo');
+    }
+  };
+
+  const updateTodos = (todoId: number, data: Partial<Todo>) => {
+    setIsLoading(true);
+    setSelectedId(todoId);
+
+    postService
+      .updateTodos(todoId, data)
+      .then((updateTodo) => {
+        setTodos((prev) => prev
+          .map((todo) => (todo.id === todoId ? updateTodo : todo)));
+      })
+      .catch(() => showError('Unable to update a todo'))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    postService
+      .getTodos(user?.id)
+      .then((todo: Todo[]) => todo
+        .map((tod) => setTodos((prev) => [tod, ...prev])))
+      .catch(() => setIsError('Unable to load a todo'));
+  }, []);
+
+  const deleteTodo = (todoId: number) => {
+    setIsLoading(true);
+    setSelectedId(todoId);
+
+    postService
+      .deleteTodos(todoId)
+      .then(() => setTodos((currentTodos) => currentTodos
+        .filter((todo) => todo.id !== todoId)))
+      .catch(() => showError('Unable to deletion a todo'))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const filteredTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      switch (filter) {
+        case TodoFilter.ACTIVE:
+          return !todo.completed;
+
+        case TodoFilter.COMPLETED:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+  }, [filter, todos]);
+
+  const handlerToggler = () => {
+    setToggleAll(!toggleAll);
+
+    return filteredTodos
+      .forEach((todo) => updateTodos(todo.id, { completed: toggleAll }));
+  };
+
+  const handleSubmit = (event: React.FormEvent<EventTarget>) => {
+    event.preventDefault();
+
+    addTodo();
+    setQuery('');
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <div className="todoapp__content">
+        <header className="todoapp__header">
+          {todos.length > 0 && (
+            <button
+              data-cy="ToggleAllButton"
+              aria-label="ToggleAllButton"
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                'todoapp__toggle-all active': todos.every(
+                  (todo) => todo.completed,
+                ),
+              })}
+              onClick={handlerToggler}
+            />
+          )}
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+          <form onSubmit={handleSubmit}>
+            <input
+              data-cy="NewTodoField"
+              type="text"
+              className="todoapp__new-todo"
+              placeholder="What needs to be done?"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+              }}
+            />
+          </form>
+        </header>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <>
+            <TodoList
+              todos={filteredTodos}
+              deleteTodo={deleteTodo}
+              updateTodos={updateTodos}
+              isLoading={isLoading}
+              selectedId={selectedId}
+            />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Footer
+              todos={todos}
+              filterBy={filter}
+              isActive={todos.filter((todo) => !todo.completed)}
+              deleteTodo={deleteTodo}
+              setFilterBy={setFilter}
+            />
+          </>
+        )}
+      </div>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {isError && <Errors error={isError} setIsError={setIsError} />}
     </div>
   );
 };
