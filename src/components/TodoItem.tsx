@@ -77,13 +77,14 @@ export const TodoItem: React.FC<Props> = ({
     >
       <div className="view">
         <input
+          id={`${id}`}
           type="checkbox"
           className="toggle"
           checked={completed}
           onChange={() => handleCompleted(id)}
         />
         <label
-          htmlFor="toggle-view"
+          htmlFor={`${id}`}
           onDoubleClick={handleDubleClick}
         >
           {title}
@@ -98,6 +99,7 @@ export const TodoItem: React.FC<Props> = ({
 
       <form onSubmit={isBlurInput}>
         <input
+          name="rename-todo"
           ref={inputRef}
           type="text"
           className="edit"

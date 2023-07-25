@@ -11,7 +11,9 @@ type Props = {
 export const Header: React.FC<Props> = ({ todos, setTodos, onSubmit }) => {
   const [query, setQuery] = useState('');
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = (event: React.FormEvent) => {
+    event?.preventDefault();
+
     if (query.trim() === '') {
       return;
     }
@@ -48,6 +50,7 @@ export const Header: React.FC<Props> = ({ todos, setTodos, onSubmit }) => {
       <h1>todos</h1>
       <form onSubmit={handleOnSubmit} onBlur={handleOnSubmit}>
         <input
+          name="new-todo"
           type="text"
           data-cy="createTodo"
           className="new-todo"

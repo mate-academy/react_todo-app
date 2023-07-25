@@ -18,7 +18,7 @@ export const TodoFilter: React.FC<Props> = ({
         className={classNames('toggle-all')}
         data-cy="toggleAll"
         checked={isAllCompleted}
-        onClick={allTodosCompleted}
+        onChange={allTodosCompleted}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
     </>
