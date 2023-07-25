@@ -20,12 +20,15 @@ export const TodoApp = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    const newTitle = title.trim();
 
-    if (!title) {
+    if (!newTitle) {
+      setTitle('');
+
       return;
     }
 
-    dispatch({ type: 'add', payLoad: title.trim() });
+    dispatch({ type: 'add', payLoad: newTitle });
     setTitle('');
   };
 
