@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   createTodos,
@@ -20,14 +20,14 @@ const userId = 11065;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.NONE);
+  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.None);
   const [query, setQuery] = useState('');
   const [userName, setUserName] = useState('');
 
   const showAndDeleteError = (timer = 3000) => {
     return setTimeout(() => {
       setIsError(false);
-      setErrorMessage(Errors.NONE);
+      setErrorMessage(Errors.None);
     }, timer);
   };
 
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
         })
         .catch(() => {
           setIsError(true);
-          setErrorMessage(Errors.ADD);
+          setErrorMessage(Errors.Add);
         })
         .finally(() => showAndDeleteError());
 
@@ -65,7 +65,7 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setIsError(true);
-        setErrorMessage(Errors.DELETE);
+        setErrorMessage(Errors.Delete);
       })
       .finally(() => showAndDeleteError());
   };
@@ -84,7 +84,7 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setIsError(true);
-        setErrorMessage(Errors.UPDATE);
+        setErrorMessage(Errors.Update);
       })
       .finally(() => showAndDeleteError());
   };
@@ -106,8 +106,8 @@ export const App: React.FC = () => {
     return todos;
   };
 
-  const completedTodos = filterTodos(Status.COMPLETED);
-  const activeTodos = filterTodos(Status.ACTIVE);
+  const completedTodos = useMemo(() => filterTodos(Status.COMPLETED), []);
+  const activeTodos = useMemo(() => filterTodos(Status.ACTIVE), []);
 
   useEffect(() => {
     getUser().then(res => setUserName(res.name));
@@ -116,7 +116,7 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => {
         setIsError(true);
-        setErrorMessage(Errors.GET);
+        setErrorMessage(Errors.Get);
       })
       .finally(() => {
         showAndDeleteError();
@@ -131,7 +131,9 @@ export const App: React.FC = () => {
 
   const toggleAll = () => {
     const list = activeTodos.length ? activeTodos : todos;
-    return list.map(todo => handleUpdateTodo(todo.id, { completed: !todo.completed }))
+
+    return list
+      .map(todo => handleUpdateTodo(todo.id, { completed: !todo.completed }));
   };
 
   return (
