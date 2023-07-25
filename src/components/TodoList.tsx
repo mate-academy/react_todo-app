@@ -7,7 +7,7 @@ export const TodoList: React.FC = React.memo(() => {
 
   return (
     <section className="main">
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {visibleTodos.map(todo => (
           <TodoItem
             key={todo.id}
