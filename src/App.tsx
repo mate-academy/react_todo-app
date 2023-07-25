@@ -130,11 +130,8 @@ export const App: React.FC = () => {
   };
 
   const toggleAll = () => {
-    return activeTodos.length > 0
-      ? activeTodos
-        .map(todo => handleUpdateTodo(todo.id, { completed: !todo.completed }))
-      : todos
-        .map(todo => handleUpdateTodo(todo.id, { completed: !todo.completed }));
+    const list = activeTodos.length ? activeTodos : todos;
+    return list.map(todo => handleUpdateTodo(todo.id, { completed: !todo.completed }))
   };
 
   return (
