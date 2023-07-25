@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import {
-  createTodos,
   deleteTodos,
   getTodos,
   getUser,
@@ -14,14 +13,12 @@ import { Status } from './types/FilterTypes';
 import { TodoList } from './components/TodoList';
 import { Errors } from './types/ErrorMessages';
 import { ErrorMessage } from './components/ErrorMessage';
-
-const userId = 11065;
+import { NewTodoForm } from './components/NewTodoForm';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<Errors>(Errors.None);
-  const [query, setQuery] = useState('');
   const [userName, setUserName] = useState('');
 
   const showAndDeleteError = (timer = 3000) => {
@@ -29,32 +26,6 @@ export const App: React.FC = () => {
       setIsError(false);
       setErrorMessage(Errors.None);
     }, timer);
-  };
-
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (query) {
-      createTodos({
-        title: query,
-        userId,
-        completed: false,
-      })
-        .then((res) => {
-          setTodos(prevTodos => [...prevTodos, res]);
-        })
-        .catch(() => {
-          setIsError(true);
-          setErrorMessage(Errors.Add);
-        })
-        .finally(() => showAndDeleteError());
-
-      setQuery('');
-    }
   };
 
   const handleDeleteTodo = (todoId: number) => {
@@ -92,10 +63,10 @@ export const App: React.FC = () => {
   const filterTodos = (filterBy: Status) => {
     if (todos.length > 0) {
       switch (filterBy) {
-        case Status.ACTIVE:
+        case Status.Active:
           return todos.filter(todo => !todo.completed);
 
-        case Status.COMPLETED:
+        case Status.Completed:
           return todos.filter(todo => todo.completed);
 
         default:
@@ -106,8 +77,9 @@ export const App: React.FC = () => {
     return todos;
   };
 
-  const completedTodos = useMemo(() => filterTodos(Status.COMPLETED), []);
-  const activeTodos = useMemo(() => filterTodos(Status.ACTIVE), []);
+  const completedTodos = useMemo(() => filterTodos(Status.Completed), [todos]);
+
+  const activeTodos = useMemo(() => filterTodos(Status.Active), [todos]);
 
   useEffect(() => {
     getUser().then(res => setUserName(res.name));
@@ -143,18 +115,12 @@ export const App: React.FC = () => {
           <h1>todos</h1>
           <p className="todoapp-username">{userName}</p>
 
-          <form
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="text"
-              data-cy="createTodo"
-              value={query}
-              className="new-todo"
-              placeholder="What needs to be done?"
-              onChange={handleQueryChange}
-            />
-          </form>
+          <NewTodoForm
+            setTodos={setTodos}
+            setIsError={setIsError}
+            setErrorMessage={setErrorMessage}
+            showAndDeleteError={showAndDeleteError}
+          />
         </header>
 
         <section className="main">
@@ -162,6 +128,7 @@ export const App: React.FC = () => {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
+            checked={todos.length > 0 && completedTodos.length === todos.length}
             data-cy="toggleAll"
             onClick={toggleAll}
           />

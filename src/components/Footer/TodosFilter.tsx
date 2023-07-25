@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { Status, LinkHref } from '../../types/FilterTypes';
 
 const filterLinks = [
-  { name: Status.ALL, way: LinkHref.ALL },
-  { name: Status.ACTIVE, way: LinkHref.ACTIVE },
-  { name: Status.COMPLETED, way: LinkHref.COMPLETED },
+  { name: Status.All, way: LinkHref.All },
+  { name: Status.Active, way: LinkHref.Active },
+  { name: Status.Completed, way: LinkHref.Completed },
 ];
 
 export const TodosFilter = () => {

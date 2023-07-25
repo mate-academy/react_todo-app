@@ -1,11 +1,11 @@
 export enum Status {
-  ALL = 'All',
-  ACTIVE = 'Active',
-  COMPLETED = 'Completed',
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
 }
 
 export enum LinkHref {
-  ALL = '',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
+  All = '',
+  Active = 'active',
+  Completed = 'completed',
 }
