@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { GlobalStateProvider } from './Components/Store';
 
 import './styles/index.css';
 import './styles/todo-list.css';
@@ -8,4 +9,8 @@ import { App } from './App';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <GlobalStateProvider>
+    <App />
+  </GlobalStateProvider>,
+);
