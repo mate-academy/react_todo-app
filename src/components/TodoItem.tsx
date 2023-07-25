@@ -3,28 +3,38 @@ import { Todo } from '../types/Todo';
 /* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   todo: Todo;
-  removeTodo: (id: number) => void,
+  removeTodoFromServer: (id: number) => void,
+  updateStatusTodoOnServer: (id: number, status: boolean) => void,
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  removeTodo,
+  removeTodoFromServer,
+  updateStatusTodoOnServer,
 }) => {
   const {
     id,
     title,
+    completed,
   } = todo;
 
   return (
     <>
       <div className="view">
-        <input type="checkbox" className="toggle" id="toggle-view" />
-        <label htmlFor="toggle-view">{title}</label>
+        <input
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={completed}
+          onChange={() => (
+            updateStatusTodoOnServer(id, completed))}
+        />
+        <label>{title}</label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => removeTodo(id)}
+          onClick={() => removeTodoFromServer(id)}
         />
       </div>
       <input type="text" className="edit" />

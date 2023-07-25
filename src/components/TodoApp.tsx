@@ -1,17 +1,23 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
-import { Footer } from './TodosFilter';
+import { TodosFilter } from './TodosFilter';
 import { Header } from './Header';
 import { TodoList } from './TodoList';
 import { ToglerAllTodos } from './ToglerAllTodos';
 import { Todo } from '../types/Todo';
-import { addTodo, deleteTodo, getTodos } from '../services/todos';
+import {
+  addTodo,
+  deleteTodo,
+  getTodos,
+  updateStatusTodo,
+} from '../services/todos';
 
 const USER_ID = 6650;
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   // getting todo list from server
 
@@ -65,6 +71,33 @@ export const TodoApp = () => {
     return addTodoToServer();
   };
 
+  // update status todo on server
+
+  const updateStatusTodoOnServer = async (id: number, status: boolean) => {
+    try {
+      await updateStatusTodo(id, !status);
+      await getTodosFromServer();
+    } catch {
+      console.warn('unable to update todo status');
+    }
+  };
+
+  // update status all todos on server
+
+  const updateStatusAllTodosOnServer = async () => {
+    try {
+      const processingTodos = activeTodos.length
+        ? activeTodos
+        : todos;
+
+      await Promise.all(processingTodos
+        .map(todo => updateStatusTodoOnServer(todo.id, todo.completed)));
+      await getTodosFromServer();
+    } catch {
+      console.warn('unable to update all todos status');
+    }
+  };
+
   return (
     <div className="todoapp">
       <Header
@@ -75,18 +108,22 @@ export const TodoApp = () => {
       <section className="main">
         {!!todos.length
          && (
-           <ToglerAllTodos />
+           <ToglerAllTodos
+             activeTodosListLength={activeTodos.length}
+             updateStatusAllTodosOnServer={updateStatusAllTodosOnServer}
+           />
          )}
 
         <TodoList
           todos={todos}
-          removeTodo={removeTodoFromServer}
+          removeTodoFromServer={removeTodoFromServer}
+          updateStatusTodoOnServer={updateStatusTodoOnServer}
         />
       </section>
 
       {!!todos.length
         && (
-          <Footer todosLength={todos.length} />
+          <TodosFilter todosLength={todos.length} />
         )}
     </div>
   );

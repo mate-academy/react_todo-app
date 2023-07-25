@@ -2,7 +2,7 @@ type Props = {
   todosLength: number,
 };
 
-export const Footer: React.FC<Props> = ({ todosLength }) => {
+export const TodosFilter: React.FC<Props> = ({ todosLength }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
