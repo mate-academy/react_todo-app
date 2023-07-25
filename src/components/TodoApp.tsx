@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
-import { Footer } from './Footer';
+import { Footer } from './TodosFilter';
 import { Header } from './Header';
 import { TodoList } from './TodoList';
 import { ToglerAllTodos } from './ToglerAllTodos';
