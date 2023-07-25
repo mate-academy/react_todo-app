@@ -1,10 +1,22 @@
-import { useState, useContext } from 'react';
+import {
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+} from 'react';
 import './todoApp.css';
 import { DispatchContext } from '../Store';
 
 export const TodoApp = () => {
   const dispatch = useContext(DispatchContext);
   const [title, setTitle] = useState('');
+  const titleField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (titleField.current) {
+      titleField.current.focus();
+    }
+  }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,6 +39,7 @@ export const TodoApp = () => {
       >
         <input
           type="text"
+          ref={titleField}
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
