@@ -31,15 +31,19 @@ export const TodoList: React.FC = () => {
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        data-cy="toggleAll"
-        checked={completedAll}
-        onChange={() => dispatch({ type: 'isCompleteAll' })}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      {filteredTodoList.length > 0 && (
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            checked={completedAll}
+            onChange={() => dispatch({ type: 'isCompleteAll' })}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        </>
+      )}
 
       <ul className="todo-list" data-cy="todoList">
         {filteredTodoList.map(todo => (
