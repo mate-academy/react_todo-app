@@ -8,35 +8,44 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ items }) => {
-  const { setTodo } = useContext(TodoContext);
+  const { setTodos } = useContext(TodoContext);
 
   const deleteTodo = (deleteId: number) => {
     const filteredTodos = items.filter(todo => todo.id !== deleteId);
 
-    setTodo(filteredTodos);
+    setTodos(filteredTodos);
   };
 
   const toggleTodo = (toggleId: number) => {
-    const cTodos = [...items];
-    const toggleTodoIndex = cTodos.findIndex(todo => todo.id === toggleId);
+    const copyTodos = [...items];
+    const toggleTodoIndex = copyTodos.findIndex(todo => todo.id === toggleId);
 
-    cTodos[toggleTodoIndex].completed = !cTodos[toggleTodoIndex].completed;
-    setTodo(cTodos);
+    copyTodos[toggleTodoIndex].completed
+      = !copyTodos[toggleTodoIndex].completed;
+    setTodos(copyTodos);
   };
 
   const changeTodoTitle = (todoTitle: string, todoId: number) => {
-    const cTodos = [...items];
-    const changeTodoIndex = cTodos.findIndex(todo => todo.id === todoId);
+    // const copyTodos = [...items];
 
     if (!todoTitle) {
-      cTodos.splice(changeTodoIndex, 1);
-      setTodo(cTodos);
+      const newItems = [...items].filter(item => item.id !== todoId);
+
+      setTodos(newItems);
 
       return;
     }
 
-    cTodos[changeTodoIndex].title = todoTitle;
-    setTodo(cTodos);
+    const newItems = [...items].map(todo => {
+      if (todo.id === todoId) {
+        // eslint-disable-next-line no-param-reassign
+        todo.title = todoTitle;
+      }
+
+      return todo;
+    });
+
+    setTodos(newItems);
   };
 
   return (

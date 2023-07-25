@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -13,106 +13,75 @@ type Props = {
   toChangeTitle: (title: string, id: number) => void;
 };
 
-enum EventTypes {
-  Blur = 'blur',
-  Escape = 'escape',
-  Enter = 'enter',
-}
-
 export const TodoItem: React.FC<Props> = React.memo((({
-  todo, toDelete, toToggle, toChangeTitle,
+  todo,
+  toDelete,
+  toToggle,
+  toChangeTitle,
 }) => {
   const { id, title, completed } = todo;
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [editableTodoId, setEditableTodoId] = useState<number | null>(null);
+  const refEditableTodoField = useRef<HTMLInputElement | null>(null);
 
-  const applyTodoTitleChanges = (
-    input: HTMLInputElement,
-    event: EventTypes,
-  ) => {
-    const editedTodo = input.closest('li');
-
-    switch (event) {
-      case EventTypes.Escape:
-      case EventTypes.Enter:
-      case EventTypes.Blur:
-        toChangeTitle(input.value, id);
-        break;
-      default:
-        toChangeTitle('', id);
+  useEffect(() => {
+    if (refEditableTodoField.current) {
+      refEditableTodoField.current.focus();
+      refEditableTodoField.current.value = title;
     }
+  }, [editableTodoId]);
 
-    if (editedTodo) {
-      editedTodo.classList.remove('editing');
+  const handlerClickToEdit = (event: React.MouseEvent) => {
+    if (event.detail === 2) {
+      setEditableTodoId(id);
     }
   };
 
-  // Handler for identifying single click and double click. And opened input for editing todo
-  const handlerClick = (event: React.MouseEvent) => {
-    if (timer.current) {
-      clearTimeout(timer.current);
+  const handlerClickToToggle = () => {
+    toToggle(id);
+  };
+
+  const handlerKeyboardEditTodo = (event: React.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setEditableTodoId(null);
     }
 
-    if (event.detail === 1) {
-      timer.current = setTimeout(() => toToggle(id), 200);
-    } else if (event.detail === 2) {
-      if (event.target) {
-        const targetTodo = event.target as HTMLInputElement;
-        const targetTodoParent = targetTodo.closest('li');
-        const targetTodoInput
-          = targetTodoParent?.querySelector('.edit') as HTMLInputElement;
-
-        if (targetTodoParent) {
-          targetTodoParent.classList.add('editing');
-        }
-
-        if (targetTodoInput) {
-          targetTodoInput.value = title;
-          targetTodoInput.focus();
-        }
+    if (event.key === 'Enter') {
+      if (refEditableTodoField.current) {
+        refEditableTodoField.current.blur();
       }
     }
   };
 
-  const handlerBlurEditInput = (
-    event: React.FocusEvent<HTMLInputElement>,
-  ) => {
-    applyTodoTitleChanges(event.target as HTMLInputElement, EventTypes.Blur);
-  };
+  const handlerOnBlurEditableTodoField = () => {
+    if (refEditableTodoField.current) {
+      const newTitle = refEditableTodoField.current.value;
 
-  const handlerKeyBoardEditInput = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    if (event.key === 'Escape') {
-      const editedText = event.target as HTMLInputElement;
+      if (newTitle === title) {
+        setEditableTodoId(null);
 
-      applyTodoTitleChanges(
-        editedText,
-        EventTypes.Escape,
-      );
-    }
+        return;
+      }
 
-    if (event.key === 'Enter') {
-      applyTodoTitleChanges(
-        event.target as HTMLInputElement,
-        EventTypes.Enter,
-      );
+      toChangeTitle(newTitle, id);
+      setEditableTodoId(null);
     }
   };
 
   return (
-    <li className={cn({ completed })}>
+    <li className={cn(
+      { completed },
+      { editing: editableTodoId === id },
+    )}
+    >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           id={`${id}`}
-          checked={completed}
-          onClick={handlerClick}
-          onChange={() => {}}
+          onClick={handlerClickToToggle}
         />
         <label
-          htmlFor={`${id}`}
-          onClick={handlerClick}
+          onClick={handlerClickToEdit}
         >
           {title}
         </label>
@@ -123,12 +92,15 @@ export const TodoItem: React.FC<Props> = React.memo((({
           onClick={() => toDelete(id)}
         />
       </div>
-      <input
-        type="text"
-        className="edit"
-        onBlur={handlerBlurEditInput}
-        onKeyUp={handlerKeyBoardEditInput}
-      />
+      {editableTodoId && (
+        <input
+          type="text"
+          className="edit"
+          onKeyDown={handlerKeyboardEditTodo}
+          onBlur={handlerOnBlurEditableTodoField}
+          ref={refEditableTodoField}
+        />
+      )}
     </li>
   );
 }));

@@ -14,11 +14,26 @@ export const NewTodo: React.FC<Props> = React.memo(({ onAddTodo }) => {
     }
   }, []);
 
-  const handlerInputEvent = (input: HTMLInputElement) => {
-    if (input.value.length > 0) {
-      onAddTodo(input.value);
-      // eslint-disable-next-line no-param-reassign
-      input.value = '';
+  const handlerKeyboardNewTodo = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      if (inputField.current) {
+        inputField.current.blur();
+      }
+    }
+  };
+
+  const handlerOnBlurNewTodo = () => {
+    if (inputField.current) {
+      const newTitle = inputField.current.value;
+
+      if (!newTitle) {
+        return;
+      }
+
+      onAddTodo(inputField.current.value);
+      inputField.current.value = '';
     }
   };
 
@@ -30,19 +45,8 @@ export const NewTodo: React.FC<Props> = React.memo(({ onAddTodo }) => {
         className="new-todo"
         placeholder="What needs to be done?"
         ref={inputField}
-        onBlur={e => {
-          handlerInputEvent(
-            e.target as HTMLInputElement,
-          );
-        }}
-        onKeyDown={e => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            handlerInputEvent(
-              e.target as HTMLInputElement,
-            );
-          }
-        }}
+        onBlur={handlerOnBlurNewTodo}
+        onKeyDown={handlerKeyboardNewTodo}
       />
     </form>
   );

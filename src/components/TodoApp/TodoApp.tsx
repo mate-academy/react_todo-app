@@ -9,7 +9,7 @@ import { Filter } from '../../types/Filter';
 
 export const TodoApp = () => {
   const [filter, setFilter] = useState<Filter>(Filter.All);
-  const { todos, setTodo } = useContext(TodoContext);
+  const { todos, setTodos: setTodo } = useContext(TodoContext);
 
   const todosAllCompleted = todos.filter(todo => !todo.completed).length === 0;
 
