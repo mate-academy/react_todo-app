@@ -59,23 +59,25 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <Header onSubmit={addTodo} todos={todos} setTodos={setTodos} />
 
-      <TodoListContext.Provider value={{
-        visibleTodos,
-        handleTodoRename,
-        handleCompleted,
-        handleDeletedTodo,
-      }}
-      >
-        <TodoList />
-      </TodoListContext.Provider>
-
       {todos.length > 0 && (
-        <Footer
-          todos={todos}
-          setTodos={setTodos}
-          todoFilter={filterBy}
-          setFilterBy={setFilterBy}
-        />
+        <>
+          <TodoListContext.Provider value={{
+            visibleTodos,
+            handleTodoRename,
+            handleCompleted,
+            handleDeletedTodo,
+          }}
+          >
+            <TodoList />
+          </TodoListContext.Provider>
+
+          <Footer
+            todos={todos}
+            setTodos={setTodos}
+            todoFilter={filterBy}
+            setFilterBy={setFilterBy}
+          />
+        </>
       )}
     </div>
   );
