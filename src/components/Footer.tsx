@@ -25,7 +25,7 @@ export const Footer: React.FC<Props> = ({
   };
 
   return (
-    <footer className="footer">
+    <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
         {`${itemsLeft} items left`}
       </span>
