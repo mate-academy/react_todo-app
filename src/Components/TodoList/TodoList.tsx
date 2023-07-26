@@ -43,7 +43,7 @@ export const TodoList: React.FC = () => {
         </>
       )}
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {filteredTodoList.map(todo => (
           <TodoItem key={todo.id} todo={todo} />
         ))}

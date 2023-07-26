@@ -11,7 +11,9 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <TodoApp />
 
-      <TodoList />
+      {todoList.length > 0 && (
+        <TodoList />
+      )}
 
       {todoList.length > 0 && (
         <TodosFilter />

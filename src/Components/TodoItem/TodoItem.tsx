@@ -20,11 +20,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editQuery, setEditQuery] = useState(todo.title);
   const titleField = useRef<HTMLInputElement>(null);
 
-  const handleSubmitEditTodo = (event?: React.FormEvent) => {
-    if (event) {
-      event.preventDefault();
-    }
-
+  const handleOnBlur = () => {
     const newTitle = editQuery.trim();
 
     if (newTitle && newTitle !== todo.title) {
@@ -42,23 +38,21 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEditTodo(false);
   };
 
+  const handleOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setEditQuery(todo.title);
+      setEditTodo(false);
+    }
+
+    if (event.key === 'Enter') {
+      handleOnBlur();
+    }
+  };
+
   useEffect(() => {
     if (titleField.current && editTodo) {
       titleField.current.focus();
     }
-
-    const handleEscKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setEditQuery(todo.title);
-        handleSubmitEditTodo();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscKeyPress);
-
-    return () => {
-      document.removeEventListener('keydown', handleEscKeyPress);
-    };
   }, [editTodo]);
 
   return (
@@ -91,18 +85,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </div>
 
-      <form
-        onSubmit={handleSubmitEditTodo}
-        onBlur={handleSubmitEditTodo}
-      >
-        <input
-          type="text"
-          className="edit"
-          ref={titleField}
-          value={editQuery}
-          onChange={(event) => setEditQuery(event.target.value)}
-        />
-      </form>
+      <input
+        type="text"
+        className="edit"
+        ref={titleField}
+        value={editQuery}
+        onChange={(event) => setEditQuery(event.target.value)}
+        onBlur={handleOnBlur}
+        onKeyDown={handleOnKeyDown}
+      />
     </li>
   );
 };

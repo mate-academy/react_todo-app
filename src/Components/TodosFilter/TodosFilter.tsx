@@ -15,7 +15,7 @@ export const TodosFilter: React.FC = () => {
         {`${itemsLeft} items left`}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         <li>
           <a
             href="#/"
