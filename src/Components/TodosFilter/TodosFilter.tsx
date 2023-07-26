@@ -20,7 +20,7 @@ export const TodosFilter: React.FC = () => {
           <a
             href="#/"
             className={classNames({ selected: filter === Status.all })}
-            onClick={() => dispatch({ type: 'filter', payLoad: Status.all })}
+            onClick={() => dispatch({ type: 'filter', payload: Status.all })}
           >
             All
           </a>
@@ -30,7 +30,7 @@ export const TodosFilter: React.FC = () => {
           <a
             href="#/active"
             className={classNames({ selected: filter === Status.active })}
-            onClick={() => dispatch({ type: 'filter', payLoad: Status.active })}
+            onClick={() => dispatch({ type: 'filter', payload: Status.active })}
           >
             Active
           </a>
@@ -42,7 +42,7 @@ export const TodosFilter: React.FC = () => {
             className={classNames({ selected: filter === Status.completed })}
             onClick={() => dispatch({
               type: 'filter',
-              payLoad: Status.completed,
+              payload: Status.completed,
             })}
           >
             Completed

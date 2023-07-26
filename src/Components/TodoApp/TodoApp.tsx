@@ -28,7 +28,7 @@ export const TodoApp = () => {
       return;
     }
 
-    dispatch({ type: 'add', payLoad: newTitle });
+    dispatch({ type: 'add', payload: newTitle });
     setTitle('');
   };
 

@@ -25,9 +25,7 @@ export const TodoList: React.FC = () => {
       filteredTodoList = [...todoList];
   }
 
-  const completedAll = todoList.length > 0
-    ? todoList.every(item => item.completed)
-    : false;
+  const completedAll = todoList.every(item => item.completed);
 
   return (
     <section className="main">

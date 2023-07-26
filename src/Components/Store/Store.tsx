@@ -9,14 +9,14 @@ function reducer(state: State, action: Action): State {
     case 'add':
       todoList = [
         ...todoList,
-        { id: +new Date(), title: action.payLoad, completed: false },
+        { id: +new Date(), title: action.payload, completed: false },
       ];
       break;
 
     case 'isComplete':
       todoList = todoList.map(todo => {
         return todo.id === action.id
-          ? { ...todo, completed: action.payLoad }
+          ? { ...todo, completed: action.payload }
           : { ...todo };
       });
       break;
@@ -47,7 +47,7 @@ function reducer(state: State, action: Action): State {
       break;
 
     case 'filter':
-      filter = action.payLoad;
+      filter = action.payload;
       break;
 
     default:

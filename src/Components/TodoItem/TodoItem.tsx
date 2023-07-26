@@ -20,7 +20,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editQuery, setEditQuery] = useState(todo.title);
   const titleField = useRef<HTMLInputElement>(null);
 
-  const handleSubmitEditTodo = () => {
+  const handleSubmitEditTodo = (event?: React.FormEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+
     const newTitle = editQuery.trim();
 
     if (newTitle && newTitle !== todo.title) {
@@ -70,7 +74,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={() => dispatch({
             type: 'isComplete',
-            payLoad: !todo.completed,
+            payload: !todo.completed,
             id: todo.id,
           })}
         />
