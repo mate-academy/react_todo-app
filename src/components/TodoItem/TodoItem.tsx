@@ -46,6 +46,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEdited(false);
   };
 
+  const removeWrapper = (e: React.MouseEvent, todoId: number) => {
+    e.stopPropagation();
+
+    removeTodoHandler(todoId);
+  }
+
   const removeTodoHandler = (todoId: number) => {
     const newTodos: Todo[] = todos.filter(t => t.id !== todoId);
 
@@ -78,46 +84,43 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <li
       className={classNames({
-        completed: todo.completed,
-        editing: isEdited,
+        'completed': todo.completed,
+        'editing': isEdited,
       })}
-      onDoubleClick={() => setIsEdited(true)}
     >
-      <div className="view">
-        {!isEdited ? (
-          <>
-            <input
-              type="checkbox"
-              className="toggle"
-              checked={todo.completed}
-              onChange={() => toggleComplete(todo.id)}
-            />
+      {!isEdited ? (
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            checked={todo.completed}
+            onChange={() => toggleComplete(todo.id)}
+          />
 
-            <label>
-              {todo.title}
-            </label>
+          <label onDoubleClick={() => setIsEdited(true)}>
+            {todo.title}
+          </label>
 
-            <button
-              type="button"
-              className="destroy"
-              data-cy="deleteTodo"
-              onClick={() => removeTodoHandler(todo.id)}
-            />
-          </>
-        ) : (
-          <form onSubmit={onSubmitHandler}>
-            <input
-              type="text"
-              className="edit"
-              ref={inputRef}
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-              onBlur={changeTodoTitle}
-              onKeyUp={handleClickEsc}
-            />
-          </form>
-        )}
-      </div>
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={(e) => removeWrapper(e, todo.id)}
+          />
+        </div>
+      ) : (
+        <form onSubmit={onSubmitHandler}>
+          <input
+            type="text"
+            className="edit"
+            ref={inputRef}
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+            onBlur={changeTodoTitle}
+            onKeyUp={handleClickEsc}
+          />
+        </form>
+      )}
     </li>
   );
 };
