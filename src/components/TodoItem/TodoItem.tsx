@@ -90,11 +90,13 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       <div className="view">
         <input
           type="checkbox"
+          id={todo.id.toString()}
           className="toggle"
           checked={todo.completed}
           onChange={() => handleCheckedTodo(todo.id as number)}
         />
         <label
+          htmlFor={todo.id.toString()}
           onDoubleClick={handleDoubleClick}
         >
           {title}
