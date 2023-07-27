@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
@@ -7,26 +6,25 @@ type Props = {
   todos: Todo[],
   removeTodoFromServer: (id: number) => void,
   updateStatusTodoOnServer: (id: number, status: boolean) => void,
+  updateTitleTodoOnServer: (id: number, title: string) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   removeTodoFromServer,
   updateStatusTodoOnServer,
+  updateTitleTodoOnServer,
 }) => {
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map(todo => (
-        <li
+        <TodoItem
           key={todo.id}
-          className={classNames({ completed: todo.completed })}
-        >
-          <TodoItem
-            todo={todo}
-            removeTodoFromServer={removeTodoFromServer}
-            updateStatusTodoOnServer={updateStatusTodoOnServer}
-          />
-        </li>
+          todo={todo}
+          removeTodoFromServer={removeTodoFromServer}
+          updateStatusTodoOnServer={updateStatusTodoOnServer}
+          updateTitleTodoOnServer={updateTitleTodoOnServer}
+        />
       ))}
     </ul>
   );

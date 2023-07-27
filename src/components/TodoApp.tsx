@@ -10,6 +10,7 @@ import {
   deleteTodo,
   getTodos,
   updateStatusTodo,
+  updateTitleTodo,
 } from '../services/todos';
 
 const USER_ID = 6650;
@@ -98,6 +99,17 @@ export const TodoApp = () => {
     }
   };
 
+  // change title todo on server
+
+  const updateTitleTodoOnServer = async (id: number, title: string) => {
+    try {
+      await updateTitleTodo(id, title);
+      await getTodosFromServer();
+    } catch {
+      console.warn('unable to update title todo');
+    }
+  };
+
   return (
     <div className="todoapp">
       <Header
@@ -118,12 +130,13 @@ export const TodoApp = () => {
           todos={todos}
           removeTodoFromServer={removeTodoFromServer}
           updateStatusTodoOnServer={updateStatusTodoOnServer}
+          updateTitleTodoOnServer={updateTitleTodoOnServer}
         />
       </section>
 
       {!!todos.length
         && (
-          <TodosFilter todosLength={todos.length} />
+          <TodosFilter activeTodosLength={activeTodos.length} />
         )}
     </div>
   );

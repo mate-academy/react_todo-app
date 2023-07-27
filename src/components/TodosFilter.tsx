@@ -1,12 +1,12 @@
 type Props = {
-  todosLength: number,
+  activeTodosLength: number,
 };
 
-export const TodosFilter: React.FC<Props> = ({ todosLength }) => {
+export const TodosFilter: React.FC<Props> = ({ activeTodosLength }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todosLength} items left`}
+        {`${activeTodosLength} items left`}
       </span>
 
       <ul className="filters">
