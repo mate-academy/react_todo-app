@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { TodoItem } from '../TodoItem';
 import { TodosContext } from '../../TodosContext';
 
-export const TodoList: React.FC = () => {
+export const TodoList: React.FC = React.memo(() => {
   const { visibleTodos } = useContext(TodosContext);
 
   return (
@@ -15,4 +15,4 @@ export const TodoList: React.FC = () => {
       ))}
     </ul>
   );
-};
+});
