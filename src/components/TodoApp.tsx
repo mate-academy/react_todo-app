@@ -110,6 +110,20 @@ export const TodoApp = () => {
     }
   };
 
+  // remove all completed todos from server
+
+  const removeAllCompletedTodosFromServer = async () => {
+    try {
+      const completedTodos = todos.filter(todo => todo.completed);
+
+      await Promise.all(completedTodos
+        .map(todo => removeTodoFromServer(todo.id)));
+      await getTodosFromServer();
+    } catch {
+      console.warn('unable to delete all completed todos');
+    }
+  };
+
   return (
     <div className="todoapp">
       <Header
@@ -136,7 +150,12 @@ export const TodoApp = () => {
 
       {!!todos.length
         && (
-          <TodosFilter activeTodosLength={activeTodos.length} />
+          <TodosFilter
+            activeTodosLength={activeTodos.length}
+            removeAllCompletedTodosFromServer={
+              removeAllCompletedTodosFromServer
+            }
+          />
         )}
     </div>
   );

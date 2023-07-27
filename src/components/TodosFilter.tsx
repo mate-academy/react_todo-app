@@ -1,8 +1,12 @@
 type Props = {
   activeTodosLength: number,
+  removeAllCompletedTodosFromServer: () => void,
 };
 
-export const TodosFilter: React.FC<Props> = ({ activeTodosLength }) => {
+export const TodosFilter: React.FC<Props> = ({
+  activeTodosLength,
+  removeAllCompletedTodosFromServer,
+}) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -23,7 +27,11 @@ export const TodosFilter: React.FC<Props> = ({ activeTodosLength }) => {
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={removeAllCompletedTodosFromServer}
+      >
         Clear completed
       </button>
     </footer>
