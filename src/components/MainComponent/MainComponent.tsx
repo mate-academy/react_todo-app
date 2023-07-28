@@ -17,22 +17,26 @@ export const MainComponent = () => {
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        defaultChecked={isSelectedAll}
-        id="toggle-all"
-        onClick={() => {
-          dispatch({
-            type: Types.ToggleSelectAll,
-            payload: {
-              isSelectedAll,
-            },
-          });
-        }}
-        className="toggle-all"
-        data-cy="toggleAll"
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      { !!state.todos.length && (
+        <>
+          <input
+            type="checkbox"
+            defaultChecked={isSelectedAll}
+            id="toggle-all"
+            onClick={() => {
+              dispatch({
+                type: Types.ToggleSelectAll,
+                payload: {
+                  isSelectedAll,
+                },
+              });
+            }}
+            className="toggle-all"
+            data-cy="toggleAll"
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        </>
+      )}
 
       <TodoListComponent />
     </section>

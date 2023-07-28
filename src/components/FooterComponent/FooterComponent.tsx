@@ -67,14 +67,16 @@ export const FooterComponent = () => {
           </a>
         </li>
       </ul>
+      {(state.itemsLeft() !== state.todos.length) && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={clearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={clearCompleted}
-      >
-        Clear completed
-      </button>
     </footer>
   );
 };
