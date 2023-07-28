@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-prototype-builtins */
 import React, { createContext, useReducer } from 'react';
 
 import {
@@ -9,11 +11,40 @@ import {
 import { InitialStateType } from './types/InitialStateType';
 import { TodoType } from './types/TodoType';
 
-let initialTodos = [];
+let initialTodos: TodoType[] | [] = [];
 const jsonTodos = localStorage.getItem('todos');
 
+function isJsonString(str: string) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
+
 if (jsonTodos) {
-  initialTodos = JSON.parse(jsonTodos);
+  if (isJsonString(jsonTodos)) {
+    initialTodos = JSON.parse(jsonTodos);
+  } else {
+    initialTodos = [];
+  }
+
+  if (!Array.isArray(initialTodos)) {
+    initialTodos = [];
+  }
+
+  if (initialTodos.length) {
+    initialTodos.forEach((todo) => {
+      if (todo.completed === undefined
+        || todo.id === undefined
+        || todo.title === undefined
+      ) {
+        initialTodos = [];
+      }
+    });
+  }
 }
 
 const initialState: InitialStateType = {
