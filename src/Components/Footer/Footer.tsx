@@ -4,14 +4,14 @@ import { useLocalStorage } from '../../hooks/UseLocalStorege';
 export const Footer = () => {
   const [todos] = useLocalStorage<Todo[]>('todos', []);
 
-  const isTodos = todos.length > 0;
+  // const isTodos = todos.length > 0;
 
-  console.log(!isTodos);
+  // console.log(!isTodos);
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        3 items left
+        {`${todos.length} items left`}
       </span>
 
       <ul className="filters">
