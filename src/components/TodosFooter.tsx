@@ -26,7 +26,7 @@ export const TodosFooter: React.FC = () => {
         <button
           type="button"
           className="clear-completed"
-          onClick={() => clearCompleted()}
+          onClick={clearCompleted}
         >
           Clear completed
         </button>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Todo } from '../types/Todo';
-// import { Todo } from "../types/Todo";
 
 export function useLocalStorage<T>(
   key: string,

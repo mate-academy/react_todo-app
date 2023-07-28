@@ -4,6 +4,8 @@ import { TodosContext } from './TodosContext';
 
 export const TodosFilter: React.FC = () => {
   const { filterType, setFilterType } = useContext(TodosContext);
+  const makeSetFilterType = (type: Filter) => (
+    () => setFilterType(type));
 
   return (
     <ul className="filters" data-cy="todosFilter">
@@ -11,7 +13,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/"
           className={filterType === Filter.ALL ? 'selected' : ''}
-          onClick={() => setFilterType(Filter.ALL)}
+          onClick={makeSetFilterType(Filter.ALL)}
         >
           All
         </a>
@@ -21,7 +23,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/active"
           className={filterType === Filter.ACTIVE ? 'selected' : ''}
-          onClick={() => setFilterType(Filter.ACTIVE)}
+          onClick={makeSetFilterType(Filter.ACTIVE)}
         >
           Active
         </a>
@@ -31,7 +33,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/completed"
           className={filterType === Filter.COMPLETED ? 'selected' : ''}
-          onClick={() => setFilterType(Filter.COMPLETED)}
+          onClick={makeSetFilterType(Filter.COMPLETED)}
         >
           Completed
         </a>
