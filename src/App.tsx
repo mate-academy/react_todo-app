@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form } from './Components/Header/Form/Form';
-import { Main } from './Components/Main/Main';
-import { Footer } from './Components/Header/Footer/Footer';
+import { Form } from './Components/Form/Form';
+import { TodoApp } from './Components/TodoApp/TodoApp';
+import { Footer } from './Components/Footer/Footer';
 
 export const App: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ export const App: React.FC = () => {
 
       <Form />
 
-      <Main />
+      <TodoApp />
 
       <Footer />
     </div>

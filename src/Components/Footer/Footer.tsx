@@ -1,4 +1,13 @@
+import { Todo } from '../../Types/Todo';
+import { useLocalStorage } from '../../hooks/UseLocalStorege';
+
 export const Footer = () => {
+  const [todos] = useLocalStorage<Todo[]>('todos', []);
+
+  const isTodos = todos.length > 0;
+
+  console.log(!isTodos);
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">

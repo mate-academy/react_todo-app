@@ -7,7 +7,7 @@ export function useLocalStorage<T>(
   const [value, setValue] = useState(() => {
     const date = localStorage.getItem(key);
 
-    if (!date) {
+    if (date === null) {
       return initialValue;
     }
 
@@ -18,12 +18,8 @@ export function useLocalStorage<T>(
     }
   });
 
-  const newDateId = +new Date();
-
-  JSON.stringify(newDateId);
-
   const save = (newValue: T) => {
-    localStorage.setItem(key, JSON.stringify(save));
+    localStorage.setItem(key, JSON.stringify(newValue));
     setValue(newValue);
   };
 
