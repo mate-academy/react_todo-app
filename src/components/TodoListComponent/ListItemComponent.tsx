@@ -33,6 +33,18 @@ export const ListItemComponent: React.FC<Props> = ({ todo }) => {
   };
 
   const editingTodoCompleted = () => {
+    if (!newTodoTitle.trim()) {
+      dispatch({
+        type: Types.Delete,
+        payload: {
+          id: todo.id,
+        },
+      });
+      setIsEditing(false);
+
+      return;
+    }
+
     dispatch({
       type: Types.Edit,
       payload: {
@@ -40,6 +52,11 @@ export const ListItemComponent: React.FC<Props> = ({ todo }) => {
       },
     });
     setIsEditing(false);
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setNewTodoTitle(todo.title);
   };
 
   // eslint-disable-next-line max-len
@@ -93,6 +110,10 @@ export const ListItemComponent: React.FC<Props> = ({ todo }) => {
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             editingTodoCompleted();
+          }
+
+          if (e.key === 'Escape') {
+            cancelEditing();
           }
         }}
       />

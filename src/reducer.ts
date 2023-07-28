@@ -68,8 +68,6 @@ export const todoReducer = (todos: TodoType[], action: TodoActions | FiltertActi
       ));
       const result = [...todos];
 
-      // eslint-disable-next-line no-console
-      console.log(index, action.payload.todoToEdit);
       result.splice(index, 1, action.payload.todoToEdit);
 
       return result;

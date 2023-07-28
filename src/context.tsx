@@ -9,8 +9,15 @@ import {
 import { InitialStateType } from './types/InitialStateType';
 import { TodoType } from './types/TodoType';
 
+let initialTodos = [];
+const jsonTodos = localStorage.getItem('todos');
+
+if (jsonTodos) {
+  initialTodos = JSON.parse(jsonTodos);
+}
+
 const initialState: InitialStateType = {
-  todos: [],
+  todos: initialTodos,
   itemsLeft() {
     if (this.todos.length) {
       return this.todos.filter(todo => todo.completed === false).length;

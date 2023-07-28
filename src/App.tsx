@@ -6,6 +6,9 @@ import { AppContext } from './context';
 
 export const App: React.FC = () => {
   const { state } = useContext(AppContext);
+  const { todos } = state;
+
+  localStorage.setItem('todos', JSON.stringify(todos));
 
   return (
     <div className="todoapp">
