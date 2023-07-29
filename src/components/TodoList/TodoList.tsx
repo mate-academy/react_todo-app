@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { TodoItem } from '../TodoItem';
 import { TodosContex } from '../../TodosContex';
+import { TodoItem } from '../TodoItem';
 
 export const TodoList: React.FC = React.memo(() => {
   const { visibleTodos } = useContext(TodosContex);
