@@ -1,41 +1,54 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
 
 import { Todo } from '../../Types/Todo';
-import { useLocalStorage } from '../../hooks/UseLocalStorege';
+import { TodosContext } from '../TodosContext/TodosContext';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [isComplete, setIsComplete] = useState(todo.completed);
+  const { todos, setTodos } = useContext(TodosContext);
 
-  // Функція для видалення todo за id зі списку todos
-  const handleDelete = () => {
+  const deleteTodo = () => {
     const updatedTodos = todos.filter((item) => item.id !== todo.id);
 
     setTodos(updatedTodos);
   };
 
+  const chengeChecked = () => {
+    const updatedTodos = todos.map(currentTodo => {
+      if (currentTodo.id === todo.id) {
+        return {
+          ...currentTodo,
+          completed: !todo.completed,
+        };
+      }
+
+      return currentTodo;
+    });
+
+    setTodos(updatedTodos);
+  };
+
   return (
-    <li className={classNames({ completed: isComplete })}>
+    <li className={classNames({ completed: todo.completed })}>
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           id={`toggle-view-${todo.id}`}
-          checked={isComplete}
-          onChange={(event) => setIsComplete(event.target.checked)}
+          checked={todo.completed}
+          onChange={() => chengeChecked()}
         />
         <label htmlFor={`toggle-view-${todo.id}`}>{todo.titleStorege}</label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleDelete}
+          onClick={deleteTodo}
         />
       </div>
       <input type="text" className="edit" />

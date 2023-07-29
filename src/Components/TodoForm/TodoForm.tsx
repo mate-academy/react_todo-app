@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import { useLocalStorage } from '../../hooks/UseLocalStorege';
+import React, { useState, useContext } from 'react';
+// import { useLocalStorage } from '../../hooks/UseLocalStorege';
 
-import { Todo } from '../../Types/Todo';
+// import { Todo } from '../../Types/Todo';
+import { TodosContext } from '../TodosContext/TodosContext';
 
-export const Form = () => {
+export const TodoForm = () => {
   const [title, setTitle] = useState('');
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const { todos, setTodos } = useContext(TodosContext);
+
+  // const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  // const { todos } = useContext(TodosContext);
 
   const resetForm = () => {
     setTitle('');
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const addNewTodo = (event: React.FormEvent) => {
     event.preventDefault();
 
     const newDateId = +new Date();
@@ -31,7 +35,7 @@ export const Form = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={addNewTodo}>
       <input
         type="text"
         data-cy="createTodo"
