@@ -18,7 +18,7 @@ export const TodoApp: React.FC = () => {
   const addTodo = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (todoContent.trim() === '') {
+    if (!todoContent.trim()) {
       return;
     }
 

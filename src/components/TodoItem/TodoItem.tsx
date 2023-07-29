@@ -37,17 +37,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, []);
 
   let id;
-  let htmlFor;
 
   if (editMode) {
     id = `toggle-editing${todo.id}`;
-    htmlFor = `toggle-editing${todo.id}`;
   } else if (todo.completed) {
     id = `toggle-completed${todo.id}`;
-    htmlFor = `toggle-completed${todo.id}`;
   } else {
     id = `toggle-view${todo.id}`;
-    htmlFor = `toggle-view${todo.id}`;
   }
 
   const renameTodo = (todoId: number, newTitle: string) => {
@@ -106,7 +102,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={() => toggleTodoCompleted(todo.id)}
         />
-        <label htmlFor={htmlFor}>
+        <label>
           {todo.title}
         </label>
 
