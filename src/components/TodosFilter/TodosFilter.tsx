@@ -21,7 +21,7 @@ export const TodosFilter: React.FC = React.memo(() => {
         <a
           href="#/"
           className={classNames({
-            selected: filter === Status.ALL,
+            selected: filter === Status.All,
           })}
           onClick={handleSelected}
         >
@@ -33,7 +33,7 @@ export const TodosFilter: React.FC = React.memo(() => {
         <a
           href="#/active"
           className={classNames({
-            selected: filter === Status.ACTIVE,
+            selected: filter === Status.Active,
           })}
           onClick={handleSelected}
         >
@@ -45,7 +45,7 @@ export const TodosFilter: React.FC = React.memo(() => {
         <a
           href="#/completed"
           className={classNames({
-            selected: filter === Status.COMPLETED,
+            selected: filter === Status.Completed,
           })}
           onClick={handleSelected}
         >

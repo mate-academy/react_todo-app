@@ -17,7 +17,7 @@ export const TodosContex = React.createContext<TodosContext>({
   todos: [],
   setTodos: () => {},
   visibleTodos: () => [],
-  filter: Status.ALL,
+  filter: Status.All,
   setFilter: () => { },
   checked: false,
   setChecked: () => {},
@@ -29,20 +29,16 @@ type Props = {
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [filter, setFilter] = useState(Status.ALL);
-  const [checked, setChecked] = useState<boolean>(
-    todos.every(todo => todo.completed) && todos.length > 0,
-  );
+  const [filter, setFilter] = useState(Status.All);
+  const checkedTodo = todos.every(todo => todo.completed) && todos.length > 0;
+  const [checked, setChecked] = useState<boolean>(checkedTodo);
 
   const visibleTodos = () => {
     switch (filter) {
-      case Status.ALL:
-        return todos;
-
-      case Status.ACTIVE:
+      case Status.Active:
         return todos.filter(todo => todo.completed === false);
 
-      case Status.COMPLETED:
+      case Status.Completed:
         return todos.filter(todo => todo.completed === true);
 
       default:

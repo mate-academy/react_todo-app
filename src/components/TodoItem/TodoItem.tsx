@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useCallback, useContext, useEffect, useRef, useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/ToDo';
@@ -27,13 +27,13 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     setChecked(newTodos.every(curTodo => curTodo.completed));
   };
 
-  const handleDoubleClick = useCallback((
+  const handleDoubleClick = (
     event: React.MouseEvent<HTMLLabelElement, MouseEvent>,
   ) => {
     event.preventDefault();
     setEditing(true);
     setFocus(true);
-  }, [editing]);
+  };
 
   useEffect(() => {
     if (focus && thisTodo.current) {
@@ -58,12 +58,15 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       return;
     }
 
-    setTodos(todos.map(t => (t !== todo
-      ? t
-      : {
-        ...todo,
-        title: title.trim(),
-      })));
+    setTodos(
+      todos.map(t => {
+        if (t !== todo) {
+          return t;
+        }
+
+        return { ...todo, title: title.trim() };
+      }),
+    );
     setTitle(title.trim());
   };
 
