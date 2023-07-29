@@ -82,32 +82,34 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   };
 
   return (
-    <li className={cn({ completed: todo.completed, editing })}>
-      <div className="view">
+    <>
+      <li className={cn({ completed: todo.completed, editing })}>
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id="toggle-view"
+            checked={todo.completed}
+            onChange={() => handleCheckedTodo(todo.id as number)}
+          />
+          <label onDoubleClick={handleDoubleClick}>{title}</label>
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={() => deletedTodo(todo)}
+          />
+        </div>
         <input
-          type="checkbox"
-          className="toggle"
-          id="toggle-view"
-          checked={todo.completed}
-          onChange={() => handleCheckedTodo(todo.id as number)}
+          type="text"
+          className="edit"
+          ref={thisTodo}
+          value={title}
+          onChange={event => setTitle(event.target.value)}
+          onBlur={handleBlur}
+          onKeyUp={handleKeyUp}
         />
-        <label onDoubleClick={handleDoubleClick}>{title}</label>
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={() => deletedTodo(todo)}
-        />
-      </div>
-      <input
-        type="text"
-        className="edit"
-        ref={thisTodo}
-        value={title}
-        onChange={event => setTitle(event.target.value)}
-        onBlur={handleBlur}
-        onKeyUp={handleKeyUp}
-      />
-    </li>
+      </li>
+    </>
   );
 });
