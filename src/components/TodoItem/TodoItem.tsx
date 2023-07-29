@@ -1,4 +1,6 @@
-import React, { useCallback } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../context/TodosContext';
@@ -8,8 +10,17 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { setTodos } = React.useContext(TodosContext);
-  // const [updatedTodo, setUpdatedTodo] = useState(todo.title);
+  const { todos, setTodos } = React.useContext(TodosContext);
+  const [editMode, setEditMode] = useState(false);
+  const [updatedTitle, setUpdatedTitle] = useState(todo.title);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current?.focus();
+    }
+  });
 
   const deleteTodo = useCallback((todoID: number) => {
     setTodos(currentTodos => currentTodos.filter(
@@ -25,10 +36,56 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     ));
   }, []);
 
-  // const updateTodo = (e: React.MouseEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
+  let id;
+  let htmlFor;
 
-  // };
+  if (editMode) {
+    id = `toggle-editing${todo.id}`;
+    htmlFor = `toggle-editing${todo.id}`;
+  } else if (todo.completed) {
+    id = `toggle-completed${todo.id}`;
+    htmlFor = `toggle-completed${todo.id}`;
+  } else {
+    id = `toggle-view${todo.id}`;
+    htmlFor = `toggle-view${todo.id}`;
+  }
+
+  const renameTodo = (todoId: number, newTitle: string) => {
+    setTodos(
+      todos.map(item => (
+        item.id === todoId
+          ? { ...item, title: newTitle }
+          : item
+      )),
+    );
+  };
+
+  const handleSave = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+
+    if (!updatedTitle) {
+      deleteTodo(todo.id);
+
+      return;
+    }
+
+    if (updatedTitle !== todo.title) {
+      renameTodo(todo.id, updatedTitle);
+    }
+
+    setEditMode(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSave(e);
+    }
+
+    if (e.key === 'Escape') {
+      setUpdatedTitle(todo.title);
+      setEditMode(false);
+    }
+  };
 
   return (
     <li
@@ -36,24 +93,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       className={classNames(
         {
           completed: todo.completed,
-          // editing
+          editing: editMode,
         },
       )}
-      // onDoubleClick={() => updateTodo}
-      // value={updatedTodo}
-      // onChange={(e) => setUpdatedTodo(e.target.value)}
-      // onDoubleClick={updateTodo}
-
+      onDoubleClick={() => setEditMode(true)}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={id}
           checked={todo.completed}
           onChange={() => toggleTodoCompleted(todo.id)}
         />
-        <label htmlFor="toggle-view">{todo.title}</label>
+        <label htmlFor={htmlFor}>
+          {todo.title}
+        </label>
 
         <button
           type="button"
@@ -64,50 +119,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </div>
 
-      <input
-        type="text"
-        className="edit"
-        // value={updatedTodo}
-        // onChange={(e) => setUpdatedTodo(e.target.value)}
-
-      />
+      {editMode
+        && (
+          <input
+            type="text"
+            className="edit"
+            ref={inputRef}
+            value={updatedTitle}
+            onChange={(e) => setUpdatedTitle(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleSave}
+          />
+        )}
     </li>
-
-  /* {<li>
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-view" />
-            <label htmlFor="toggle-view">asdfghj</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="completed">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-completed" />
-            <label htmlFor="toggle-completed">qwertyuio</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="editing">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-editing" />
-            <label htmlFor="toggle-editing">zxcvbnm</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-view2" />
-            <label htmlFor="toggle-view2">1234567890</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-      </ul> */
   );
 };

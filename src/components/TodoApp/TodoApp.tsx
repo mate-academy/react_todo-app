@@ -94,8 +94,8 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
-              // checked={todos.every(todo => todo.completed)}
-              onClick={toggleAllTodos}
+              checked={todos.every(todo => todo.completed)}
+              onChange={toggleAllTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
           </>

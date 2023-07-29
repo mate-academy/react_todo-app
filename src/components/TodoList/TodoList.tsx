@@ -6,7 +6,9 @@ type Props = {
   visibleTodos: Todo[],
 };
 
-export const TodoList: React.FC<Props> = React.memo(({ visibleTodos }) => (
+export const TodoList: React.FC<Props> = React.memo((
+  { visibleTodos },
+) => (
   <ul className="todo-list" data-cy="todoList">
     {visibleTodos.map(todo => (
       <TodoItem key={todo.id} todo={todo} />
