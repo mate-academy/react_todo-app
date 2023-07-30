@@ -1,50 +1,73 @@
-import React from 'react';
-import { TodosContext } from '../utils/context';
+import React, { useMemo } from 'react';
+import { FilterQuery, useTodosContext } from '../utils/utils';
 
-interface Props {
-  // filterActive: () => void;
-  // filterCompleted: () => void;
-  filter: (parameter: string) => void;
+interface FooterProps {
+  filterQuery: FilterQuery;
+  filter: (query: FilterQuery) => void;
+  handleClear: () => void;
 }
 
-export const Footer: React.FC<Props> = ({
-  // filterActive,
-  // filterCompleted
+export const Footer: React.FC<FooterProps> = ({
+  filterQuery,
   filter,
+  handleClear,
 }) => {
-  const todos = React.useContext(TodosContext);
-  // eslint-disable-next-line max-len
-  const uncompleted = todos?.filter((todo) => todo.completed === false);
+  const todos = useTodosContext();
+  const uncompleted = useMemo(() => {
+    return todos.filter((todo) => todo.completed === false);
+  }, [todos]);
+  const completed = useMemo(() => {
+    return todos.filter((todo) => todo.completed === true);
+  }, [todos]);
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${uncompleted?.length === 1 ? '1 item left' : `${uncompleted?.length} items left`}`}
+        {`${uncompleted.length === 1 ? '1 item left' : `${uncompleted.length} items left`}`}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         <li>
-          <a href="#/" className="selected" onClick={() => filter('all')}>
+          <a
+            href="#/"
+            onClick={() => filter(FilterQuery.All)}
+            className={filterQuery === 'all' ? 'selected' : ''}
+          >
             All
           </a>
         </li>
 
         <li>
-          {/* <a href="#/active" onClick={filterActive}>Active</a> */}
-          <a href="#/active" onClick={() => filter('active')}>Active</a>
+          <a
+            href="#/active"
+            onClick={() => filter(FilterQuery.Active)}
+            className={filterQuery === 'active' ? 'selected' : ''}
+          >
+            Active
+          </a>
         </li>
 
         <li>
-          {/* <a href="#/completed" onClick={filterCompleted}>Completed</a> */}
-          <a href="#/completed" onClick={() => filter('completed')}>
+          <a
+            href="#/completed"
+            onClick={() => filter(FilterQuery.Completed)}
+            className={filterQuery === 'completed' ? 'selected' : ''}
+          >
             Completed
           </a>
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {completed.length > 0
+      && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => handleClear()}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

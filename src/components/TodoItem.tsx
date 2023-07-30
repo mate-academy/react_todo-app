@@ -1,21 +1,61 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from 'react';
 import classNames from 'classnames';
-import { Todo } from '../utils/context';
+import { Todo } from '../utils/utils';
 
-interface Props {
+interface TodoItemProps {
   todo: Todo;
   onDelete: (todo: Todo) => void;
   onComplete: (todo: Todo) => void;
+  onTitleUpdate: (todo: Todo, newTitle: string) => void;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo, onDelete, onComplete }) => {
-  const [onEdit, setOnEdit] = React.useState(false);
-  const [newTitle, setNewTitle] = React.useState(todo.title);
+export const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  onDelete,
+  onComplete,
+  onTitleUpdate,
+}) => {
+  const [onEdit, setOnEdit] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
+  const [previousTitle, setPreviousTitle] = useState('');
+  const editRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = () => {
+    if (newTitle.trim() !== '') {
+      onTitleUpdate(todo, newTitle);
+    } else {
+      setNewTitle(previousTitle);
+    }
+
+    setOnEdit(false);
+  };
 
   const handleDoubleClick = () => {
-    setOnEdit(!onEdit);
+    setOnEdit(true);
+    setPreviousTitle(newTitle);
   };
+
+  const handleKeyUp = useCallback((
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === 'Enter') {
+      handleSubmit();
+    } else if (event.key === 'Escape') {
+      setNewTitle(previousTitle);
+      setOnEdit(false);
+    }
+  }, [previousTitle, newTitle]);
+
+  useEffect(() => {
+    if (onEdit && editRef.current) {
+      editRef.current.focus();
+    }
+  }, [onEdit]);
 
   return (
     <li
@@ -23,27 +63,39 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete, onComplete }) => {
         completed: todo.completed,
         editing: onEdit,
       })}
-      value={newTitle}
-      onChange={(event) => setNewTitle(event.currentTarget.value.toString())}
       onDoubleClick={handleDoubleClick}
     >
-      <div className="view">
+      {onEdit ? (
         <input
-          type="checkbox"
-          className="toggle"
-          id="toggle-view"
-          checked={todo.completed}
-          onChange={() => onComplete(todo)}
+          value={newTitle}
+          onChange={(event) => setNewTitle(event.currentTarget.value)}
+          onBlur={handleSubmit}
+          onKeyUp={(event) => handleKeyUp(event)}
+          type="text"
+          className="edit"
+          ref={editRef}
         />
-        <label>{todo.title}</label>
-        <button
-          onClick={() => onDelete(todo)}
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-        />
-      </div>
-      <input type="text" className="edit" />
+      ) : (
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id="toggle-view"
+            checked={todo.completed}
+            onChange={() => onComplete(todo)}
+          />
+
+          <label>{newTitle}</label>
+
+          <button
+            onClick={() => onDelete(todo)}
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            aria-label="Delete Todo"
+          />
+        </div>
+      )}
     </li>
   );
 };

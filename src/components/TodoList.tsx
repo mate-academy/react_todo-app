@@ -1,27 +1,29 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { Todo, TodosContext } from '../utils/context';
+import { Todo } from '../utils/utils';
 import { TodoItem } from './TodoItem';
 
-interface Props {
+interface TodoListProps {
+  todos: Todo[];
   onDelete: (todo: Todo) => void;
   onComplete: (todo: Todo) => void;
+  onTitleUpdate: (todo: Todo, newTitle: string) => void;
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<TodoListProps> = ({
+  todos,
   onDelete,
   onComplete,
+  onTitleUpdate,
 }) => {
-  const todos = React.useContext(TodosContext);
-
   return (
-    <ul className="todo-list" data-cy="todoList">
-      {todos && todos.length > 0 && todos.map((todo) => (
+    <ul className="todo-list" data-cy="todosList">
+      {todos.length > 0 && todos.map((todo) => (
         <TodoItem
           key={todo.id}
           todo={todo}
           onDelete={onDelete}
           onComplete={onComplete}
+          onTitleUpdate={onTitleUpdate}
         />
       ))}
     </ul>

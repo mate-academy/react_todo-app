@@ -1,96 +1,121 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-// for edit just class editing
-import React, { useState } from 'react';
-
-import { Todo, TodosContext, reducer } from './utils/context';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useReducer,
+  useEffect,
+} from 'react';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
+import {
+  TodosContext,
+  reducer,
+  FilterQuery,
+  Todo,
+} from './utils/utils';
+
+const initialTodos = JSON.parse(localStorage.getItem('todos')
+|| '[]') as Todo[];
 
 export const App: React.FC = () => {
-  const addTodoRef = React.useRef<HTMLInputElement | null>(null);
-  const [todos, dispatch] = React.useReducer(reducer, []);
+  const [todos, dispatch] = useReducer(reducer, initialTodos);
   const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [filterQuery, setFilterQuery] = useState<FilterQuery>(FilterQuery.All);
 
-  const toogleAll = () => {
-    const allDone = todos.every((todo) => todo.completed === true);
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
-    const updatedTodos = todos.map((todo) => {
-      if (allDone) {
-        return { ...todo, completed: false };
-      }
+  const filter = useCallback((query: FilterQuery) => {
+    setFilterQuery(query);
+  }, []);
 
-      return { ...todo, completed: true };
-    });
+  const filteredTodos = useMemo(() => {
+    switch (filterQuery) {
+      case 'active':
+        return todos.filter((todo) => !todo.completed);
+      case 'completed':
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  }, [filterQuery, todos]);
+
+  const toggleAll = useCallback(() => {
+    const allDone = todos.every((todo) => todo.completed);
+
+    const updatedTodos = todos.map((todo) => ({
+      ...todo,
+      completed: !allDone,
+    }));
 
     dispatch({ type: 'updateAll', payload: updatedTodos });
-  };
+  }, [todos]);
 
-  const addTodo = () => {
-    const newTodo: Todo = {
-      id: +new Date(),
-      title: newTodoTitle,
-      completed: false,
-    };
+  const handleAddTodo = useCallback(() => {
+    if (newTodoTitle.trim().length > 0) {
+      const newTodo: Todo = {
+        id: +new Date(),
+        title: newTodoTitle,
+        completed: false,
+      };
 
-    dispatch({ type: 'add', payload: newTodo });
-  };
+      const updatedTodos = [...todos, newTodo];
 
-  const handleDeleteTodo = (todo: Todo) => {
-    dispatch({ type: 'delete', payload: todo });
-  };
-
-  const handleTodoToggle = (todo: Todo) => {
-    dispatch({ type: 'toggle', payload: todo });
-  };
-
-  // const filterActive = () => {
-  //   const filteredTodos = todos.filter((todo) => todo.completed === false);
-
-  //   dispatch({ type: 'filterActive', payload: filteredTodos });
-  // };
-
-  // const filterCompleted = () => {
-  //   const filteredTodos = todos.filter((todo) => todo.completed === true);
-
-  //   dispatch({ type: 'filterActive', payload: filteredTodos });
-  // };
-
-  // const filter = (query: string) => {
-  //   if (query === 'active') {
-  //     return todos.filter((todo) => todo.completed === false);
-  //   }
-
-  //   if (query === 'completed') {
-  //     return todos.filter((todo) => todo.completed === true);
-  //   }
-
-  //   return todos;
-  // };
-
-  const filter = (query: string) => {
-    if (query === 'active') {
-      dispatch({ type: 'filterActive' });
-    } else if (query === 'completed') {
-      dispatch({ type: 'filterCompleted' });
-    } else {
-      dispatch({ type: 'updateAll', payload: todos });
-    }
-  };
-
-  const formSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (addTodoRef.current && addTodoRef.current.value.trim().length > 0) {
-      setNewTodoTitle(addTodoRef.current.value);
-    }
-  };
-
-  React.useEffect(() => {
-    if (newTodoTitle && addTodoRef.current !== null) {
-      addTodo();
-      addTodoRef.current.value = '';
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      dispatch({ type: 'add', payload: newTodo });
+      setNewTodoTitle('');
     }
   }, [newTodoTitle]);
+
+  const handleDeleteTodo = useCallback((todo: Todo) => {
+    localStorage.removeItem(todo.id.toString());
+    dispatch({ type: 'delete', payload: todo });
+  }, []);
+
+  const handleTodoToggle = useCallback((todo: Todo) => {
+    const todoFromStorageString = localStorage.getItem(todo.id.toString());
+
+    if (todoFromStorageString !== null) {
+      const todoFromStorage = JSON.parse(todoFromStorageString);
+
+      if (todoFromStorage.title !== todo.title) {
+        todoFromStorage.title = todo.title;
+      }
+
+      todoFromStorage.completed = !todoFromStorage.completed;
+      localStorage.setItem(todo.id.toString(), JSON.stringify(todoFromStorage));
+    }
+
+    dispatch({ type: 'toggle', payload: todo });
+  }, []);
+
+  const handleClear = useCallback(() => {
+    dispatch({ type: 'clear' });
+    localStorage.removeItem('todos');
+  }, []);
+
+  const handleInputChange = useCallback((
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setNewTodoTitle(event.target.value);
+  }, []);
+
+  const handleSubmit = useCallback((
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    handleAddTodo();
+  }, [handleAddTodo]);
+
+  const handleTodoTitleUpdate = useCallback((todo: Todo, newTitle: string) => {
+    const updatedTodos = todos.map((t) => (
+      t.id === todo.id ? { ...t, title: newTitle } : t
+    ));
+
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    dispatch({ type: 'updateAll', payload: updatedTodos });
+  }, [todos]);
 
   return (
     <TodosContext.Provider value={todos}>
@@ -98,13 +123,14 @@ export const App: React.FC = () => {
         <header className="header">
           <h1>todos</h1>
 
-          <form onSubmit={formSubmit}>
+          <form onSubmit={handleSubmit}>
             <input
-              ref={addTodoRef}
               type="text"
               data-cy="createTodo"
               className="new-todo"
               placeholder="What needs to be done?"
+              value={newTodoTitle}
+              onChange={handleInputChange}
             />
           </form>
         </header>
@@ -116,82 +142,25 @@ export const App: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
-              onClick={toogleAll}
+              onClick={toggleAll}
             />
+
             <label htmlFor="toggle-all">Mark all as complete</label>
 
             <TodoList
+              todos={filteredTodos}
               onDelete={handleDeleteTodo}
               onComplete={handleTodoToggle}
+              onTitleUpdate={handleTodoTitleUpdate}
             />
-
-            <ul className="todo-list" data-cy="todoList">
-              {/* <li>
-                  <div className="view">
-                    <input type="checkbox" className="toggle" id="toggle-view" />
-                    <label htmlFor="toggle-view">asdfghj</label>
-                    <button
-                      onClick={() => handleDeleteTodo}
-                      type="button"
-                      className="destroy"
-                      data-cy="deleteTodo"
-                    />
-                  </div>
-                  <input type="text" className="edit" />
-                </li>
-
-                <li className="completed">
-                  <div className="view">
-                    <input
-                      type="checkbox"
-                      className="toggle"
-                      id="toggle-completed"
-                    />
-                    <label htmlFor="toggle-completed">qwertyuio</label>
-                    <button
-                      type="button"
-                      className="destroy"
-                      data-cy="deleteTodo"
-                    />
-                  </div>
-                  <input type="text" className="edit" />
-                </li>
-
-                <li className="editing">
-                  <div className="view">
-                    <input type="checkbox" className="toggle" id="toggle-editing" />
-                    <label htmlFor="toggle-editing">zxcvbnm</label>
-                    <button
-                      type="button"
-                      className="destroy"
-                      data-cy="deleteTodo"
-                    />
-                  </div>
-                  <input type="text" className="edit" />
-                </li>
-
-                <li>
-                  <div className="view">
-                    <input type="checkbox" className="toggle" id="toggle-view2" />
-                    <label htmlFor="toggle-view2">1234567890</label>
-                    <button
-                      type="button"
-                      className="destroy"
-                      data-cy="deleteTodo"
-                    />
-                  </div>
-                  <input type="text" className="edit" />
-                </li> */}
-            </ul>
           </section>
         )}
 
-        {todos.length > 0
-        && (
+        {todos.length > 0 && (
           <Footer
-            // filterActive={filterActive}
-            // filterCompleted={filterCompleted}
+            filterQuery={filterQuery}
             filter={filter}
+            handleClear={handleClear}
           />
         )}
       </div>

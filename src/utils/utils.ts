@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 
 export interface Todo {
@@ -6,14 +7,18 @@ export interface Todo {
   completed: boolean;
 }
 
+export enum FilterQuery {
+  Completed = 'completed',
+  Active = 'active',
+  All = 'all',
+}
+
 export interface Action {
   type: 'add'
   | 'delete'
   | 'toggle'
   | 'updateAll'
-  | 'showAll'
-  | 'filterActive'
-  | 'filterCompleted';
+  | 'clear';
   payload?: Todo | Todo[];
 }
 
@@ -59,16 +64,8 @@ export function reducer(state: Todo[], action: Action): Todo[] {
       return state;
     }
 
-    case 'showAll': {
-      return state;
-    }
-
-    case 'filterActive': {
-      return state.filter((todo) => !todo.completed);
-    }
-
-    case 'filterCompleted': {
-      return state.filter((todo) => todo.completed);
+    case 'clear': {
+      return state.filter((todo) => todo.completed === false);
     }
 
     default:
@@ -77,3 +74,13 @@ export function reducer(state: Todo[], action: Action): Todo[] {
 }
 
 export const TodosContext = React.createContext<Todo[] | undefined>(undefined);
+
+export function useTodosContext() {
+  const todos = React.useContext(TodosContext);
+
+  if (todos === undefined) {
+    throw new Error('⚠ Component should be used Todos Context ⚠');
+  }
+
+  return todos;
+}
