@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { TodosContext } from './TodosContext';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
@@ -11,15 +11,23 @@ export const TodosFilter: React.FC = () => {
     setTodos,
   } = useContext(TodosContext);
 
-  const ItemsLeft = () => {
+  const itemsLeftCount = useMemo(() => {
     return todos.filter(todo => todo.completed === false).length;
-  };
+  }, [todos]);
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = useCallback(() => {
     const filterTodos = (prevTodos: Todo[]) => prevTodos
       .filter((todoitem) => todoitem.completed === false);
 
     setTodos(filterTodos(todos));
+  }, [todos]);
+
+  const handleStatusClick = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    status: Status,
+  ) => {
+    event.preventDefault();
+    handleStatus(status);
   };
 
   return (
@@ -27,15 +35,15 @@ export const TodosFilter: React.FC = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${ItemsLeft()} items left`}
+            {`${itemsLeftCount} items left`}
           </span>
 
           <ul className="filters" data-cy="todosFilter">
             <li>
               <a
-                href="#/"
+                href="/"
                 className={selectedStatus === Status.All ? 'selected' : ''}
-                onClick={() => handleStatus(Status.All)}
+                onClick={(event) => handleStatusClick(event, Status.All)}
               >
                 All
               </a>
@@ -43,9 +51,9 @@ export const TodosFilter: React.FC = () => {
 
             <li>
               <a
-                href="#/active"
+                href="/active"
                 className={selectedStatus === Status.Active ? 'selected' : ''}
-                onClick={() => handleStatus(Status.Active)}
+                onClick={(event) => handleStatusClick(event, Status.Active)}
               >
                 Active
               </a>
@@ -53,18 +61,18 @@ export const TodosFilter: React.FC = () => {
 
             <li>
               <a
-                href="#/completed"
+                href="/completed"
                 className={selectedStatus === Status.Completed
                   ? 'selected'
                   : ''}
-                onClick={() => handleStatus(Status.Completed)}
+                onClick={(event) => handleStatusClick(event, Status.Completed)}
               >
                 Completed
               </a>
             </li>
           </ul>
 
-          {ItemsLeft() < todos.length && (
+          {itemsLeftCount < todos.length && (
             <button
               type="button"
               className="clear-completed"

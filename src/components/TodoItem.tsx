@@ -56,7 +56,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleDeleteClick = (todoC: Todo) => {
     const filterTodo = todos.filter((todoitem) => todoitem !== todoC);
 
-    setTodos([...filterTodo]);
+    setTodos(filterTodo);
+  };
+
+  const handleDeleteButtonClick = () => {
+    handleDeleteClick(todo);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -104,7 +108,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => handleDeleteClick(todo)}
+          onClick={handleDeleteButtonClick}
         />
       </div>
       <input
