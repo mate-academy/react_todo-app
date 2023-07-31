@@ -1,19 +1,19 @@
 import { FiltersList, FilterLink } from './styled-components';
 
+const filters = [
+  { to: '/', label: 'All' },
+  { to: '/active', label: 'Active' },
+  { to: '/completed', label: 'Completed' },
+];
+
 export const TodoFilters = () => {
   return (
     <FiltersList>
-      <li>
-        <FilterLink to="/">All</FilterLink>
-      </li>
-
-      <li>
-        <FilterLink to="/active">Active</FilterLink>
-      </li>
-
-      <li>
-        <FilterLink to="/completed">Completed</FilterLink>
-      </li>
+      {filters.map((filter) => (
+        <li key={filter.label}>
+          <FilterLink to={filter.to}>{filter.label}</FilterLink>
+        </li>
+      ))}
     </FiltersList>
   );
 };

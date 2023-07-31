@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const DeleteButton = styled.button`
   display: none;
   position: absolute;

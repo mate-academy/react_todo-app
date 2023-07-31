@@ -50,7 +50,11 @@ export const TodoItem = ({ todo: { completed, id, title } }: TodoItemProps) => {
   };
 
   return (
-    <StyledTodoItem $edited={editing} $status={completed ? 'complete' : 'view'}>
+    <StyledTodoItem
+      $edited={editing}
+      $status={completed ? 'complete' : 'view'}
+      className={completed ? 'completed' : ''}
+    >
       <div className="view">
         <ToggleTodo
           onClick={() => handleToggleCompleted(id)}
@@ -66,6 +70,7 @@ export const TodoItem = ({ todo: { completed, id, title } }: TodoItemProps) => {
         />
       </div>
       <Input
+        className="edit"
         type="text"
         onBlur={handleTitleChange}
         value={inputValue}

@@ -39,7 +39,7 @@
   "scripts": {
     "start": "mate-scripts start -l",
     "build": "mate-scripts build",
-    "test": "mate-scripts test -l",
+    "test": "mate-scripts test",
     "lint-js": "mate-scripts lint -j",
     "lint-css": "mate-scripts lint -s",
     "lint": "npm run lint-js && npm run lint-css",

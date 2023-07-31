@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { TodoLabel } from './TodoLabel';
 
-
 export const ToggleTodo = styled.input`
   text-align: center;
   width: 40px;

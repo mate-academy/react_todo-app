@@ -17,7 +17,7 @@ export const TodoList = ({ todosMap }: TodoListProps) => {
     : todosMap[pathname.slice(1) as keyof TodosMap];
 
   return (
-    <StyledTodoList data-cy="todoList">
+    <StyledTodoList data-cy="todosList">
       {todos.map((todo: TodoType) => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
