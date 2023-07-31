@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 export const TodoFooter: React.FC = () => {
-  const { todos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const isTodos = todos.length > 0;
 
@@ -13,6 +13,12 @@ export const TodoFooter: React.FC = () => {
   const completed = todos.filter(currentTodo => (
     currentTodo.completed === true
   ));
+
+  const clearCompleted = () => {
+    const newTodos = todos.filter(item => item.completed !== true);
+
+    setTodos(newTodos);
+  };
 
   return (
     <footer className="footer">
@@ -35,7 +41,11 @@ export const TodoFooter: React.FC = () => {
       </ul>
 
       {completed.length > 0 && (
-        <button type="button" className="clear-completed">
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => clearCompleted()}
+        >
           Clear completed
         </button>
       )}
