@@ -11,13 +11,11 @@ export const TodoApp: React.FC = () => {
     isEveryTodoCompleted,
   } = useContext(TodosContext);
 
-  const isShowOnlyInput = todos.length === 0;
-
   return (
     <div className="todoapp">
       <TodoHeader />
 
-      {!isShowOnlyInput
+      {todos.length
         && (
           <>
             <section className="main">
@@ -26,8 +24,8 @@ export const TodoApp: React.FC = () => {
                 id="toggle-all"
                 className="toggle-all"
                 data-cy="toggleAll"
-                onClick={handleAllCompletedToggle}
-                defaultChecked={isEveryTodoCompleted()}
+                onChange={handleAllCompletedToggle}
+                checked={isEveryTodoCompleted()}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
 

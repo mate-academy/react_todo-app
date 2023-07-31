@@ -18,8 +18,8 @@ export const TodoItem: React.FC<Props> = ({
   const [titleQuery, setTitleQuery] = useState(todo.title);
 
   const {
-    hanldeTodoChange,
-    hanldeOnDelete,
+    handleTodoChange: hanldeTodoChange,
+    handleOnDelete: hanldeOnDelete,
   } = useContext(TodosContext);
 
   const handleOnToggle = (isChecked: boolean) => {
@@ -81,7 +81,7 @@ export const TodoItem: React.FC<Props> = ({
       <input
         type="text"
         className="edit"
-        defaultValue={todo.title}
+        value={todo.title}
         onKeyUp={(event) => handleOnKeyUp(event)}
       />
     </li>

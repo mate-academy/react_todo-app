@@ -29,20 +29,16 @@ function filterTodosByCompleted(todos: Todo[], filter: Filter): Todo[] {
 }
 
 function filterTodos(todos: Todo[], { filterBy }: FilterParams): Todo[] {
-  let todosCopy = [...todos];
-
-  if (filterBy) {
-    todosCopy = filterTodosByCompleted(todos, filterBy);
-  }
-
-  return todosCopy;
+  return filterBy
+    ? filterTodosByCompleted(todos, filterBy)
+    : todos;
 }
 
 function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
   const [value, setValue] = useState(startValue);
 
   const save = (newValue: T) => {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(newValue));
     setValue(newValue);
   };
 
@@ -55,8 +51,8 @@ interface ContextProps {
   handleOnAdd: (newQuery: string) => void,
   handleAllCompletedToggle: (event: React.FormEvent<HTMLInputElement>) => void,
   handleClearAllCompleted: () => void,
-  hanldeTodoChange: (newTodo: Todo) => void,
-  hanldeOnDelete: (todoId: number) => void,
+  handleTodoChange: (newTodo: Todo) => void,
+  handleOnDelete: (todoId: number) => void,
   isTodosHasCompleted: () => boolean,
   isEveryTodoCompleted: () => boolean,
   filterBy: Filter,
@@ -69,8 +65,8 @@ export const TodosContext = React.createContext<ContextProps>({
   handleOnAdd: () => {},
   handleAllCompletedToggle: () => {},
   handleClearAllCompleted: () => {},
-  hanldeTodoChange: () => {},
-  hanldeOnDelete: () => {},
+  handleTodoChange: () => {},
+  handleOnDelete: () => {},
   isTodosHasCompleted: () => false,
   isEveryTodoCompleted: () => false,
   filterBy: Filter.ALL,
@@ -126,7 +122,7 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     setTodos(activeTodos);
   };
 
-  const hanldeTodoChange = (newTodo: Todo) => {
+  const handleTodoChange = (newTodo: Todo) => {
     const indexOfOldTodo = todos.findIndex(todo => {
       return todo.id === newTodo.id;
     });
@@ -138,7 +134,7 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     setTodos(newTodos);
   };
 
-  const hanldeOnDelete = (todoId: number) => {
+  const handleOnDelete = (todoId: number) => {
     const indexOfTodoToDelete = todos.findIndex(todo => {
       return todo.id === todoId;
     });
@@ -164,8 +160,8 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     handleOnAdd,
     handleAllCompletedToggle,
     handleClearAllCompleted,
-    hanldeTodoChange,
-    hanldeOnDelete,
+    handleTodoChange,
+    handleOnDelete,
     isTodosHasCompleted,
     isEveryTodoCompleted,
     filterBy,
