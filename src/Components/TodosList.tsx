@@ -4,15 +4,11 @@ import { TodoItem } from './TodoItem';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 export const TodosList: React.FC = () => {
-  const { visibleTodos } = useContext(TodosContext);
-
-  // const filteredTodos: Todo[] = visibleTodos();
-
-  // console.log(filteredTodos);
+  const { todos } = useContext(TodosContext);
 
   return (
     <ul className="todo-list" data-cy="todoList">
-      {visibleTodos().map((todo: Todo) => (
+      {todos.map((todo: Todo) => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
     </ul>

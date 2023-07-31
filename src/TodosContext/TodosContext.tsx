@@ -10,7 +10,6 @@ type TodosContextProps = {
   setCheckbox: (v: boolean) => void;
   filter: Status;
   setFilter: (v: Status) => void;
-  visibleTodos: () => void;
 };
 
 export const TodosContext = React.createContext<TodosContextProps>({
@@ -20,7 +19,6 @@ export const TodosContext = React.createContext<TodosContextProps>({
   setCheckbox: () => { },
   filter: Status.ALL,
   setFilter: () => { },
-  visibleTodos: () => { },
 });
 
 type Props = {
@@ -49,13 +47,12 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   };
 
   const value = {
-    todos,
+    todos: visibleTodos(),
     setTodos,
     checkbox,
     setCheckbox,
     filter,
     setFilter,
-    visibleTodos,
   };
 
   return (

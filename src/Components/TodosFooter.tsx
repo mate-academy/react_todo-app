@@ -11,25 +11,21 @@ export const TodosFooter: React.FC = () => {
     return null;
   }
 
-  const completed = todos.filter(currentTodo => (
-    currentTodo.completed === true
-  ));
+  const completedTodos = todos.filter(todo => todo.completed === true).length;
 
   const clearCompleted = () => {
-    const newTodos = todos.filter(item => item.completed !== true);
-
-    setTodos(newTodos);
+    setTodos(todos.filter(item => item.completed !== true));
   };
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${completed.length} items left`}
+        {`${completedTodos} items left`}
       </span>
 
       <TodosFilter />
 
-      {completed.length > 0 && (
+      {completedTodos > 0 && (
         <button
           type="button"
           className="clear-completed"
