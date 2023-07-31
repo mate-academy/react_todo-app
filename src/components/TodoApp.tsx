@@ -19,6 +19,7 @@ export const TodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
 
   // getting todo list from server
 
@@ -114,9 +115,9 @@ export const TodoApp = () => {
 
   const removeAllCompletedTodosFromServer = async () => {
     try {
-      const completedTodos = todos.filter(todo => todo.completed);
+      const processingTodos = todos.filter(todo => todo.completed);
 
-      await Promise.all(completedTodos
+      await Promise.all(processingTodos
         .map(todo => removeTodoFromServer(todo.id)));
       await getTodosFromServer();
     } catch {
@@ -152,6 +153,7 @@ export const TodoApp = () => {
         && (
           <TodosFilter
             activeTodosLength={activeTodos.length}
+            completedTodosLength={completedTodos.length}
             removeAllCompletedTodosFromServer={
               removeAllCompletedTodosFromServer
             }

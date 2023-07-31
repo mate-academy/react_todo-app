@@ -3,11 +3,13 @@ import { FilterNavLink } from './FilterNavLink';
 
 type Props = {
   activeTodosLength: number,
+  completedTodosLength: number,
   removeAllCompletedTodosFromServer: () => void,
 };
 
 export const TodosFilter: React.FC<Props> = ({
   activeTodosLength,
+  completedTodosLength,
   removeAllCompletedTodosFromServer,
 }) => {
   const filters = [
@@ -32,13 +34,15 @@ export const TodosFilter: React.FC<Props> = ({
         ))}
       </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={removeAllCompletedTodosFromServer}
-      >
-        Clear completed
-      </button>
+      {!!completedTodosLength && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={removeAllCompletedTodosFromServer}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
