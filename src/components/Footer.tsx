@@ -1,18 +1,14 @@
 import React, { useMemo } from 'react';
-import { FilterQuery, useTodosContext } from '../utils/utils';
+import { FilterQuery, useTodosContext } from './utils';
 
-interface FooterProps {
-  filterQuery: FilterQuery;
-  filter: (query: FilterQuery) => void;
-  handleClear: () => void;
-}
+export const Footer: React.FC = () => {
+  const {
+    todos,
+    filterQuery,
+    filter,
+    clearTodos,
+  } = useTodosContext();
 
-export const Footer: React.FC<FooterProps> = ({
-  filterQuery,
-  filter,
-  handleClear,
-}) => {
-  const todos = useTodosContext();
   const uncompleted = useMemo(() => {
     return todos.filter((todo) => todo.completed === false);
   }, [todos]);
@@ -63,7 +59,7 @@ export const Footer: React.FC<FooterProps> = ({
         <button
           type="button"
           className="clear-completed"
-          onClick={() => handleClear()}
+          onClick={() => clearTodos()}
         >
           Clear completed
         </button>

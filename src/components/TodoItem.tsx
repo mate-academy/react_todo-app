@@ -5,21 +5,15 @@ import React, {
   useCallback,
 } from 'react';
 import classNames from 'classnames';
-import { Todo } from '../utils/utils';
+import { Todo, useTodosContext } from './utils';
 
 interface TodoItemProps {
   todo: Todo;
-  onDelete: (todo: Todo) => void;
-  onComplete: (todo: Todo) => void;
-  onTitleUpdate: (todo: Todo, newTitle: string) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({
-  todo,
-  onDelete,
-  onComplete,
-  onTitleUpdate,
-}) => {
+export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+  const { deleteTodo, toggleTodo, handleTodoTitleUpdate } = useTodosContext();
+
   const [onEdit, setOnEdit] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
   const [previousTitle, setPreviousTitle] = useState('');
@@ -27,9 +21,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 
   const handleSubmit = () => {
     if (newTitle.trim() !== '') {
-      onTitleUpdate(todo, newTitle);
+      handleTodoTitleUpdate(todo, newTitle);
     } else {
-      setNewTitle(previousTitle);
+      deleteTodo(todo);
     }
 
     setOnEdit(false);
@@ -82,13 +76,13 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             className="toggle"
             id="toggle-view"
             checked={todo.completed}
-            onChange={() => onComplete(todo)}
+            onChange={() => toggleTodo(todo)}
           />
 
           <label>{newTitle}</label>
 
           <button
-            onClick={() => onDelete(todo)}
+            onClick={() => deleteTodo(todo)}
             type="button"
             className="destroy"
             data-cy="deleteTodo"
