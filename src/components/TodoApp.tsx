@@ -1,46 +1,86 @@
+import { useRef } from 'react';
 import { TodoList } from './TodoList';
 import { TodoFilters } from './TodoFilters';
 
-import { Heading } from './styled-components/Heading';
-import { Main } from './styled-components/Main';
-import { ToggleAllInput } from './styled-components/ToggleAllInput';
-import { Footer } from './styled-components/Footer';
-import { ClearCompletedButton } from './styled-components/ClearCompletedButton';
-import { NewTodoInput } from './styled-components/NewTodoInput';
-import { TodoCount } from './styled-components/TodoCount';
-import { StyledTodoApp } from './styled-components/StyledTodoApp';
+import {
+  Heading,
+  Main,
+  ToggleAllInput,
+  Footer,
+  ClearCompletedButton,
+  NewTodoInput,
+  TodoCount,
+  StyledTodoApp,
+} from './styled-components';
+import { useTodos } from '../contexts/TodosContext';
 
 export const TodoApp = () => {
+  const {
+    handleAddTodo,
+    todosMap,
+    handleClearCompleted,
+    handleToggleCompletedAll,
+  } = useTodos();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (): void => {
+    if (!inputRef.current) {
+      return;
+    }
+
+    const { value } = inputRef.current;
+
+    if (!value) {
+      return;
+    }
+
+    handleAddTodo(value);
+    inputRef.current.value = '';
+  };
+
   return (
     <StyledTodoApp>
       <header>
         <Heading>todos</Heading>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <NewTodoInput
             type="text"
             data-cy="createTodo"
             placeholder="What needs to be done?"
+            ref={inputRef}
           />
         </form>
       </header>
 
       <Main>
-        <ToggleAllInput type="checkbox" id="toggle-all" data-cy="toggleAll" />
+        <ToggleAllInput
+          onClick={handleToggleCompletedAll}
+          type="checkbox"
+          defaultChecked={todosMap.active.length === 0}
+          id="toggle-all"
+          data-cy="toggleAll"
+        />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList />
+        <TodoList todosMap={todosMap} />
       </Main>
 
-      <Footer>
-        <TodoCount data-cy="todosCounter">3 items left</TodoCount>
+      {todosMap.all.length > 0 && (
+        <Footer>
+          <TodoCount data-cy="todosCounter">
+            {`${todosMap.active.length} items left`}
+          </TodoCount>
 
-        <TodoFilters />
+          <TodoFilters />
 
-        <ClearCompletedButton type="button">
-          Clear completed
-        </ClearCompletedButton>
-      </Footer>
+          {todosMap.completed.length > 0 && (
+            <ClearCompletedButton type="button" onClick={handleClearCompleted}>
+              Clear completed
+            </ClearCompletedButton>
+          )}
+        </Footer>
+      )}
     </StyledTodoApp>
   );
 };

@@ -1,16 +1,26 @@
-import { styled } from 'styled-components';
+import { useLocation } from 'react-router-dom';
+
 import { TodoItem } from './TodoItem';
+import { StyledTodoList } from './styled-components';
+import { TodosMap } from '../types/TodosMap';
+import { TodoType } from '../types/Todo';
 
-const StyledTodoList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`;
+type TodoListProps = {
+  todosMap: TodosMap;
+};
 
-export const TodoList = () => {
+export const TodoList = ({ todosMap }: TodoListProps) => {
+  const { pathname } = useLocation();
+
+  const todos = pathname === '/'
+    ? todosMap.all
+    : todosMap[pathname.slice(1) as keyof TodosMap];
+
   return (
     <StyledTodoList data-cy="todoList">
-      <TodoItem />
+      {todos.map((todo: TodoType) => (
+        <TodoItem todo={todo} key={todo.id} />
+      ))}
     </StyledTodoList>
   );
 };

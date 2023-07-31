@@ -1,5 +1,4 @@
-import { FiltersList } from './styled-components/FiltersList';
-import { FilterLink } from './styled-components/FilterLink';
+import { FiltersList, FilterLink } from './styled-components';
 
 export const TodoFilters = () => {
   return (

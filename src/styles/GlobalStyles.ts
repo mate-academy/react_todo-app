@@ -35,4 +35,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
 }
+
+input {
+  outline: none
+}
 `;
