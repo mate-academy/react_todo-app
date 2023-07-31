@@ -69,6 +69,14 @@ export const TodoItem: React.FC<Props> = ({
     setEditableTodoId(null);
   }
 
+  function handleEnterKey() {
+    throw new Error('Function not implemented.');
+  }
+
+  function handleEscapeKey() {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <li
       data-id={todo.id}
@@ -108,11 +116,11 @@ export const TodoItem: React.FC<Props> = ({
           onBlur={() => editTodo(todo)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              editTodo(todo);
+              handleEnterKey();
             }
 
             if (e.key === 'Escape') {
-              setEditableTodoId(null);
+              handleEscapeKey();
             }
           }}
           // eslint-disable-next-line

@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import classnames from 'classnames';
+import { useContext } from 'react';
 import { Filter } from '../types/Filter';
 import { TodosContext } from './TodosContext';
 
@@ -12,7 +13,9 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/"
-          className={filterType === Filter.ALL ? 'selected' : ''}
+          className={classnames('selected', {
+            selected: filterType === Filter.ALL,
+          })}
           onClick={makeSetFilterType(Filter.ALL)}
         >
           All
@@ -22,7 +25,9 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/active"
-          className={filterType === Filter.ACTIVE ? 'selected' : ''}
+          className={classnames({
+            selected: filterType === Filter.ACTIVE,
+          })}
           onClick={makeSetFilterType(Filter.ACTIVE)}
         >
           Active
@@ -32,7 +37,9 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          className={filterType === Filter.COMPLETED ? 'selected' : ''}
+          className={classnames({
+            selected: filterType === Filter.COMPLETED,
+          })}
           onClick={makeSetFilterType(Filter.COMPLETED)}
         >
           Completed
