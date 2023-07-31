@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback, useMemo, useState, useContext,
+} from 'react';
 import { Todo } from '../models/Todo';
 // eslint-disable-next-line import/no-cycle
 import {
@@ -18,7 +20,7 @@ interface TodoContextState {
   todosStats: TodosStats,
   clearTodos: () => void,
   toggleAllTodos: () => void,
-  handleEdit: (newTodo:Todo) => void,
+  handleEdit: (newTodo: Todo) => void,
 }
 
 export const TodoContext = React.createContext<TodoContextState>(
@@ -132,3 +134,6 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
     </TodoContext.Provider>
   );
 };
+
+// Custom hook to access the TodoContext values
+export const useTodo = (): TodoContextState => useContext(TodoContext);
