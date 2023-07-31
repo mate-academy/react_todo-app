@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { TodosContext } from '../TodosContext/TodosContext';
 
-export const TodoFooter: React.FC = () => {
+export const TodosFooter: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const isTodos = todos.length > 0;

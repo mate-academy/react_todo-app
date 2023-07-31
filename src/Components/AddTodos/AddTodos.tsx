@@ -1,15 +1,10 @@
 import React, { useState, useContext } from 'react';
-// import { useLocalStorage } from '../../hooks/UseLocalStorege';
 
-// import { Todo } from '../../Types/Todo';
 import { TodosContext } from '../TodosContext/TodosContext';
 
-export const TodoForm = () => {
+export const AddTodos = () => {
   const [title, setTitle] = useState('');
   const { todos, setTodos } = useContext(TodosContext);
-
-  // const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  // const { todos } = useContext(TodosContext);
 
   const resetForm = () => {
     setTitle('');
