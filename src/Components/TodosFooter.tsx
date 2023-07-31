@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { TodosContext } from '../TodosContext/TodosContext';
+import { TodosFilter } from './TodosFilter';
 
 export const TodosFooter: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
@@ -26,19 +27,7 @@ export const TodosFooter: React.FC = () => {
         {`${completed.length} items left`}
       </span>
 
-      <ul className="filters">
-        <li>
-          <a href="#/" className="selected">All</a>
-        </li>
-
-        <li>
-          <a href="#/active">Active</a>
-        </li>
-
-        <li>
-          <a href="#/completed">Completed</a>
-        </li>
-      </ul>
+      <TodosFilter />
 
       {completed.length > 0 && (
         <button
