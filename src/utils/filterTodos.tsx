@@ -1,15 +1,57 @@
+import React, { useContext } from 'react';
+import classNames from 'classnames';
+import { TodosContext } from '../TodosContext/TodosContext';
 import { Status } from '../Types/Status';
-import { Todo } from '../Types/Todo';
 
-export function filterTodos(filter: Status, todos: Todo[]) {
-  switch (filter) {
-    case Status.ACTIVE:
-      return todos.filter(todo => !todo.completed);
+export const TodosFilter: React.FC = React.memo(() => {
+  const { filter, setFilter } = useContext(TodosContext);
 
-    case Status.COMPLETED:
-      return todos.filter(todo => todo.completed);
+  const handleSelected = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    const targetValue = event.target as HTMLElement;
+    const ourText = targetValue.innerText;
 
-    default:
-      return todos;
-  }
-}
+    setFilter(ourText as Status);
+  };
+
+  return (
+    <ul className="filters" data-cy="todosFilter">
+      <li>
+        <a
+          href="#/"
+          className={classNames({
+            selected: filter === Status.ALL,
+          })}
+          onClick={handleSelected}
+        >
+          All
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/active"
+          className={classNames({
+            selected: filter === Status.ACTIVE,
+          })}
+          onClick={handleSelected}
+        >
+          Active
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/completed"
+          className={classNames({
+            selected: filter === Status.COMPLETED,
+          })}
+          onClick={handleSelected}
+        >
+          Completed
+        </a>
+      </li>
+    </ul>
+  );
+});

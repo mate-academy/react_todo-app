@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 
 import { TodosContext, TodosProvider } from '../TodosContext/TodosContext';
 
-import { AddTodos } from '../AddTodos/AddTodos';
-import { TodosList } from '../TodosList/TodosList';
-import { TodosFooter } from '../TodosFooter/TodosFooter';
+import { AddTodos } from './AddTodos';
+import { TodosList } from './TodosList';
+import { TodosFooter } from './TodosFooter';
 
 export const TodosApp: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);

@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
 
-import { Todo } from '../../Types/Todo';
+import { Todo } from '../Types/Todo';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 type Props = {
