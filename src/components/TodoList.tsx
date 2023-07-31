@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
@@ -15,9 +17,22 @@ export const TodoList: React.FC<Props> = ({
   updateStatusTodoOnServer,
   updateTitleTodoOnServer,
 }) => {
+  const { pathname } = useLocation();
+
+  const filteredTodos: Todo[] = todos.filter(todo => {
+    switch (pathname) {
+      case Status.Active:
+        return !todo.completed;
+      case Status.Completed:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
+
   return (
     <ul className="todo-list" data-cy="todoList">
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem
           key={todo.id}
           todo={todo}
