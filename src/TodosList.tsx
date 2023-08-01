@@ -15,7 +15,9 @@ export const TodosList: React.FC = () => {
 
   const handleToggle = () => {
     setToggleAll(!toggleAll);
+
     setTodos(oldTodos => oldTodos.map(todo => todo.completed = !toggleAll));
+
 
     // setTodos(
     //   (oldTodos: Todo[]) => (

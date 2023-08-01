@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-export const TodosList: React.FC = () => {
+export const TodoItem: React.FC = () => {
   return (
     <li>
       <div className="view">
