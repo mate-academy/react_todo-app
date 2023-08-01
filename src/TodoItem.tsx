@@ -1,13 +1,87 @@
+import classNames from 'classnames';
+import { useContext, useState } from 'react';
+import { Todo } from './types/Todo';
+import { TodoContextType, TodosContext } from './TodosContext';
+
 /* eslint-disable jsx-a11y/control-has-associated-label */
-export const TodoItem: React.FC = () => {
+type Props = {
+  todo: Todo,
+};
+
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { setTodos } = useContext<TodoContextType>(TodosContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState(todo.title);
+
+  const handleSubmit = () => {
+    if (title.length > 0) {
+      const newTodo = {
+        ...todo,
+        title,
+      };
+
+      setTodos(oldTodos => [
+        ...oldTodos,
+        newTodo,
+      ]);
+    } else {
+      setTitle('');
+    }
+
+    setIsEditing(false);
+  };
+
+  const handleDeleteTodo = () => {
+    setTodos(oldTodos => oldTodos.filter(oldTodo => oldTodo.id !== todo.id));
+  };
+
+  const handleToggle = () => {
+    const newTodo = {
+      ...todo,
+      completed: !todo.completed,
+    };
+
+    setTodos(oldTodos => [
+      ...oldTodos,
+      newTodo,
+    ]);
+  };
+
   return (
-    <li>
+    <li
+      className={classNames(
+        { completed: todo.completed },
+        { editing: isEditing },
+      )}
+    >
       <div className="view">
-        <input type="checkbox" className="toggle" id="toggle-view" />
-        <label htmlFor="toggle-view">asdfghj</label>
-        <button type="button" className="destroy" data-cy="deleteTodo" />
+        <input
+          type="checkbox"
+          className="toggle"
+          onClick={handleToggle}
+        />
+        <label>{title}</label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={handleDeleteTodo}
+        />
       </div>
-      <input type="text" className="edit" />
+      <input
+        type="text"
+        className="edit"
+        onDoubleClick={() => setIsEditing(true)}
+        onKeyUp={(e) => {
+          if (e.key === 'Escape') {
+            setIsEditing(false);
+          }
+        }}
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        onSubmit={handleSubmit}
+        onBlur={handleSubmit}
+      />
     </li>
   );
 };

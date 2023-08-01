@@ -9,16 +9,24 @@ type Props = {
 };
 
 export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
-  const { todos } = useContext(TodosContext);
-  const count = useMemo(
+  const { todos, setTodos } = useContext(TodosContext);
+  const countActive = useMemo(
     () => todos.filter(todo => todo.completed === false).length,
     todos,
   );
+  const countCompleted = useMemo(
+    () => todos.filter(todo => todo.completed === true).length,
+    todos,
+  );
+  const handleClear = () => {
+    setTodos(oldTodos => (
+      oldTodos.filter(oldTodo => oldTodo.completed === false)));
+  };
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${count} items left`}
+        {`${countActive} items left`}
       </span>
 
       <ul className="filters">
@@ -59,9 +67,15 @@ export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {(countCompleted > 0) && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleClear}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

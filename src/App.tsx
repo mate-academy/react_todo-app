@@ -13,14 +13,13 @@ import { TodosList } from './TodosList';
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('', []);
   const [filter, setFilter] = useState(FilterType.All);
-  // const [todos, setTodos] = useState<Todo[]>([]);
 
   return (
     <div className="todoapp">
       <TodosContext.Provider value={{ todos, setTodos }}>
         <Header />
 
-        <TodosList />
+        <TodosList filter={filter} />
 
         <TodosFilter filter={filter} setFilter={setFilter} />
       </TodosContext.Provider>

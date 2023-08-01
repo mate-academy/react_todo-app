@@ -1,29 +1,46 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { TodoContextType, TodosContext } from './TodosContext';
+import { TodoItem } from './TodoItem';
+import { FilterType } from './types/Filter';
+// import { Todo } from './types/Todo';
 // import { Todo } from './types/Todo';
 
+type Props = {
+  filter: FilterType,
+};
+
 /* eslint-disable jsx-a11y/control-has-associated-label */
-export const TodosList: React.FC = () => {
+export const TodosList: React.FC<Props> = ({ filter }) => {
   const { todos, setTodos } = useContext<TodoContextType>(TodosContext);
-  const [toggleAll, setToggleAll] = useState(() => {
-    if (todos.filter(todo => todo.completed === false).length > 0) {
-      return false;
+
+  const visibleTodos = useMemo(() => {
+    if (filter === FilterType.All) {
+      return [...todos];
     }
 
-    return true;
-  });
+    if (filter === FilterType.Active) {
+      return todos.filter(todo => todo.completed === false);
+    }
+
+    if (filter === FilterType.Completed) {
+      return todos.filter(todo => todo.completed === true);
+    }
+
+    return [...todos];
+  },
+  todos);
+
+  const [toggleAll, setToggleAll] = useState(
+    todos.every(todo => todo.completed === true),
+  );
 
   const handleToggle = () => {
     setToggleAll(!toggleAll);
 
-    setTodos(oldTodos => oldTodos.map(todo => todo.completed = !toggleAll));
-
-
-    // setTodos(
-    //   (oldTodos: Todo[]) => (
-    //     [...oldTodos].map((todo: Todo) => (
-    //       todo.completed = !toggleAll))),
-    // );
+    setTodos(oldTodos => oldTodos.map(todo => ({
+      ...todo,
+      completed: !toggleAll,
+    })));
   };
 
   return (
@@ -39,41 +56,12 @@ export const TodosList: React.FC = () => {
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
-        <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-view" />
-            <label htmlFor="toggle-view">asdfghj</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="completed">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-completed" />
-            <label htmlFor="toggle-completed">qwertyuio</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="editing">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-editing" />
-            <label htmlFor="toggle-editing">zxcvbnm</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-view2" />
-            <label htmlFor="toggle-view2">1234567890</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
+        {visibleTodos.map(todo => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+          />
+        ))}
       </ul>
     </section>
   );
