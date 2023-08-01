@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import cn from 'classnames';
-import { StatusTodoList, TodoContext } from '../context/todo.context';
+import { StatusTodoList, useTodo } from '../context/todo.context';
 
 const TodoFooter: React.FC = () => {
   const {
@@ -8,7 +8,7 @@ const TodoFooter: React.FC = () => {
     changeStatusTodoList,
     todosStats,
     clearTodos,
-  } = useContext(TodoContext);
+  } = useTodo();
 
   return (
     <footer className="footer" data-cy="todosFilter">
