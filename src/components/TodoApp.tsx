@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint-disable consistent-return */
 import { useEffect, useState } from 'react';
 import { TodosFilter } from './TodosFilter';
 import { Header } from './Header';
@@ -21,8 +22,6 @@ export const TodoApp = () => {
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
 
-  // getting todo list from server
-
   const getTodosFromServer = async () => {
     try {
       const data = await getTodos(USER_ID);
@@ -37,8 +36,6 @@ export const TodoApp = () => {
     getTodosFromServer();
   }, []);
 
-  // delete todo from server
-
   const removeTodoFromServer = async (id: number) => {
     try {
       await deleteTodo(id);
@@ -47,8 +44,6 @@ export const TodoApp = () => {
       console.warn('error of delete todo from server!');
     }
   };
-
-  // add todo to server
 
   const addTodoToServer = async () => {
     try {
@@ -69,11 +64,8 @@ export const TodoApp = () => {
       return;
     }
 
-    // eslint-disable-next-line consistent-return
     return addTodoToServer();
   };
-
-  // update status todo on server
 
   const updateStatusTodoOnServer = async (id: number, status: boolean) => {
     try {
@@ -83,8 +75,6 @@ export const TodoApp = () => {
       console.warn('unable to update todo status');
     }
   };
-
-  // update status all todos on server
 
   const updateStatusAllTodosOnServer = async () => {
     try {
@@ -100,8 +90,6 @@ export const TodoApp = () => {
     }
   };
 
-  // change title todo on server
-
   const updateTitleTodoOnServer = async (id: number, title: string) => {
     try {
       await updateTitleTodo(id, title);
@@ -110,8 +98,6 @@ export const TodoApp = () => {
       console.warn('unable to update title todo');
     }
   };
-
-  // remove all completed todos from server
 
   const removeAllCompletedTodosFromServer = async () => {
     try {
