@@ -56,26 +56,26 @@ describe('Page', () => {
     cy.getByDataCy('todosCounter').should('contain', 2);
   });
 
-  it('should have an option to complete a todo', () => {
-    page.checkTodo();
-
-    page.assertTodo('have.class', 'completed', 0);
-  });
-
   it('should have an option to toggle the completed status of all the todos', () => {
-    cy.getByDataCy('toggleAll').check();
+    cy.getByDataCy('toggleAll').click();
 
     cy.get('@todos').children()
       .each(() => {
         page.assertTodo('have.class', 'completed', 0);
       });
 
-    cy.getByDataCy('toggleAll').uncheck();
+    cy.getByDataCy('toggleAll').click();
 
     cy.get('@todos').children()
       .each(() => {
         page.assertTodo('not.have.class', 'completed', 0);
       });
+  });
+
+  it('should have an option to complete a todo', () => {
+    page.checkTodo();
+
+    page.assertTodo('have.class', 'completed', 0);
   });
 
   it('should have an option to switch between `all`/`active`/`completed` todos', () => {
@@ -109,7 +109,7 @@ describe('Page', () => {
   });
 
   it('should show only input on the page when there are no todos', () => {
-    cy.getByDataCy('toggleAll').check();
+    cy.getByDataCy('toggleAll').click();
 
     page.clickButton('Active');
 
