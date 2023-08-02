@@ -20,7 +20,6 @@ export const ToggleAllInput = styled.input`
     position: absolute;
     top: -52px;
     left: -13px;
-    -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 
     &:before {
@@ -31,7 +30,7 @@ export const ToggleAllInput = styled.input`
     }
   }
 
-  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+  @media screen and (min-resolution: 0dppx) {
     background: none;
   }
 `;

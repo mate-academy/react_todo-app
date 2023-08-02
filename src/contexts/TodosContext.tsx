@@ -1,4 +1,6 @@
 /* eslint-disable max-len */
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   createContext,
   useCallback,
@@ -13,11 +15,11 @@ import { TodosMap } from '../types/TodosMap';
 type ContextValue = {
   todosMap: TodosMap;
   handleClearCompleted: () => void;
-  handleToggleCompleted: (id: number) => void;
-  handleDeleteTodo: (id: number) => void;
+  handleToggleCompleted: (id: string) => void;
+  handleDeleteTodo: (id: string) => void;
   handleAddTodo: (title: string) => void;
   handleToggleCompletedAll: () => void;
-  handleTitleUpdate: (id: number, value: string) => void;
+  handleTitleUpdate: (id: string, value: string) => void;
 };
 
 const TodosContext = createContext<ContextValue | undefined>(undefined);
@@ -37,7 +39,7 @@ export const TodosProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleAddTodo = useCallback((title: string) => {
     const newTodo = {
-      id: +new Date(),
+      id: uuidv4(),
       title,
       completed: false,
     };
@@ -45,16 +47,16 @@ export const TodosProvider = ({ children }: React.PropsWithChildren) => {
     setTodos((curState) => [...curState, newTodo]);
   }, []);
 
-  const handleDeleteTodo = useCallback((id: number) => {
+  const handleDeleteTodo = useCallback((id: string) => {
     setTodos((curState) => curState.filter((todo) => todo.id !== id));
   }, []);
 
-  const handleToggleCompleted = useCallback((id: number) => {
+  const handleToggleCompleted = useCallback((id: string) => {
     setTodos((curState) => curState.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
   }, []);
 
   const handleTitleUpdate = useCallback(
-    (id: number, value: string) => setTodos((curState) => curState.map((todo) => (todo.id === id ? { ...todo, title: value } : todo))),
+    (id: string, value: string) => setTodos((curState) => curState.map((todo) => (todo.id === id ? { ...todo, title: value } : todo))),
     [],
   );
 

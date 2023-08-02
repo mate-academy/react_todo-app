@@ -17,8 +17,8 @@ type TodoItemProps = {
 export const TodoItem = ({ todo: { completed, id, title } }: TodoItemProps) => {
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState(title);
-  const { handleToggleCompleted, handleDeleteTodo, handleTitleUpdate }
-    = useTodos();
+  const { handleToggleCompleted, handleDeleteTodo, handleTitleUpdate } =
+    useTodos();
 
   const handleTitleChange = () => {
     if (!inputValue) {
@@ -57,9 +57,8 @@ export const TodoItem = ({ todo: { completed, id, title } }: TodoItemProps) => {
     >
       <div className="view">
         <ToggleTodo
-          onClick={() => handleToggleCompleted(id)}
+          onChange={() => handleToggleCompleted(id)}
           checked={completed}
-          readOnly
           type="checkbox"
         />
         <TodoLabel onDoubleClick={() => setEditing(true)}>{title}</TodoLabel>
@@ -67,7 +66,9 @@ export const TodoItem = ({ todo: { completed, id, title } }: TodoItemProps) => {
           onClick={() => handleDeleteTodo(id)}
           type="button"
           data-cy="deleteTodo"
-        />
+        >
+          ×
+        </DeleteButton>
       </div>
       <Input
         className="edit"

@@ -28,9 +28,9 @@ export const TodoApp = () => {
         <>
           <Main>
             <ToggleAllInput
-              onClick={handleToggleCompletedAll}
+              onChange={handleToggleCompletedAll}
               type="checkbox"
-              defaultChecked={todosMap.active.length === 0}
+              checked={todosMap.active.length === 0}
               id="toggle-all"
               data-cy="toggleAll"
             />

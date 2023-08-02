@@ -8,17 +8,12 @@ export const DeleteButton = styled.button`
   bottom: 0;
   width: 40px;
   height: 40px;
-  margin: auto 0;
+  margin: auto 0 11px 0;
   font-size: 30px;
   color: #cc9a9a;
-  margin-bottom: 11px;
   transition: color 0.2s ease-out;
 
   &:hover {
     color: #af5b5e;
-  }
-
-  &:after {
-    content: '×';
   }
 `;

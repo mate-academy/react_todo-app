@@ -5,6 +5,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  font-size: 10px;
 }
 
 button {
@@ -17,10 +18,8 @@ button {
   font-family: inherit;
   font-weight: inherit;
   color: inherit;
-  -webkit-appearance: none;
   appearance: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-smooth: always;
 }
 
 body {
