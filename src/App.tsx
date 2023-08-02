@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 import { filterTodos } from './helper/filterTodos';
 import { useLocaleStorage } from './helper/useLocalStorage';
 
