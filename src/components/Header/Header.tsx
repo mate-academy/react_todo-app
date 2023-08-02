@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { MakeChange } from '../../Types/Todo';
 
 type Props = {
@@ -9,11 +9,6 @@ export const Header: React.FC<Props> = ({
   setTodos,
 }) => {
   const [value, setValue] = useState('');
-  const input = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    input.current?.focus();
-  }, []);
 
   const hendlerInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -39,7 +34,6 @@ export const Header: React.FC<Props> = ({
 
       <form onSubmit={hendlerForm}>
         <input
-          ref={input}
           type="text"
           data-cy="createTodo"
           className="new-todo"

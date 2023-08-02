@@ -66,7 +66,6 @@ export const TodoInfo: FC<Props> = ({
           }}
         />
         <label
-          // htmlFor="toggle-view"
           onDoubleClick={() => hendlerDoubleClick(todo.id)}
         >
           {todo.title}
