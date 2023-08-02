@@ -6,7 +6,7 @@ export const Header: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState<string>('');
   const { todos, setTodos } = useContext(TodosContext);
 
-  const handlerSubmit = (e:React.FormEvent<HTMLInputElement>) => {
+  const handlerSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setTodos([...todos, {
@@ -14,13 +14,17 @@ export const Header: React.FC = () => {
       title: todoTitle,
       completed: false,
     }]);
+
+    setTodoTitle('');
   };
 
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form>
+      <form
+        onSubmit={handlerSubmit}
+      >
         <input
           type="text"
           data-cy="createTodo"
@@ -28,7 +32,6 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={todoTitle}
           onChange={(e) => setTodoTitle(e.target.value)}
-          onSubmit={handlerSubmit}
         />
       </form>
     </header>
