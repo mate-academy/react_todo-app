@@ -6,7 +6,9 @@ export const Header: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState<string>('');
   const { todos, setTodos } = useContext(TodosContext);
 
-  const handlerSubmit = () => {
+  const handlerSubmit = (e:React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
     setTodos([...todos, {
       id: +new Date(),
       title: todoTitle,
@@ -26,7 +28,7 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={todoTitle}
           onChange={(e) => setTodoTitle(e.target.value)}
-          onSubmit={() => handlerSubmit()}
+          onSubmit={handlerSubmit}
         />
       </form>
     </header>

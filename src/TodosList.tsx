@@ -51,6 +51,7 @@ export const TodosList: React.FC<Props> = ({ filter }) => {
         className="toggle-all"
         data-cy="toggleAll"
         onClick={handleToggle}
+        onChange={handleToggle}
         checked={toggleAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
