@@ -28,7 +28,7 @@ export const TodosList: React.FC<Props> = ({ filter }) => {
 
     return [...todos];
   },
-  todos);
+  [todos]);
 
   const [toggleAll, setToggleAll] = useState(
     todos.every(todo => todo.completed === true),

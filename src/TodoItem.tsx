@@ -42,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     };
 
     setTodos(oldTodos => [
-      ...oldTodos,
+      ...oldTodos.filter(el => el.id !== todo.id),
       newTodo,
     ]);
   };

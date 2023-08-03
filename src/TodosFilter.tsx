@@ -12,11 +12,11 @@ export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const countActive = useMemo(
     () => todos.filter(todo => todo.completed === false).length,
-    todos,
+    [todos],
   );
   const countCompleted = useMemo(
     () => todos.filter(todo => todo.completed === true).length,
-    todos,
+    [todos],
   );
   const handleClear = () => {
     setTodos(oldTodos => (
