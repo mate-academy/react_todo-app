@@ -5,23 +5,27 @@ import { TodosFilter } from './TodosFilter';
 export const TodosFooter: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
-  const isCompletedTodos = todos.some(todo => todo.completed === true);
-  const lenghtCompletedTodos = todos.filter(todo => todo.completed === true)
-    .length;
+  const isTodos = todos.length > 0;
+
+  if (!isTodos) {
+    return null;
+  }
+
+  const completedTodos = todos.filter(todo => todo.completed === true).length;
 
   const clearCompleted = () => {
-    setTodos(todos.filter(item => item.completed !== true));
+    setTodos(todos.filter(todo => todo.completed !== true));
   };
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${lenghtCompletedTodos} items left`}
+        {`${completedTodos} items left`}
       </span>
 
       <TodosFilter />
 
-      {isCompletedTodos && (
+      {completedTodos > 0 && (
         <button
           type="button"
           className="clear-completed"

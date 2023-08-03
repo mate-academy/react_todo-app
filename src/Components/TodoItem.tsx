@@ -34,12 +34,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(updatedTodos);
   };
 
-  const deletedTodo = (selectedTodo: Todo): void => {
+  function deletedTodo(selectedTodo: Todo): void {
     const filteredTodos = todos
       .filter(item => item !== selectedTodo);
 
     setTodos([...filteredTodos]);
-  };
+  }
 
   const handleDoubleClick = useCallback((
     event: React.MouseEvent<HTMLLabelElement, MouseEvent>,
