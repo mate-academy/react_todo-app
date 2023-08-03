@@ -4,7 +4,7 @@ import { TodosContext } from '../../providers/TodosContext';
 import { Status } from '../../utils/status';
 
 export const TodosFilter = () => {
-  const { setFilter, todos, deleteTodo } = useContext(TodosContext);
+  const { setFilter, todos, deleteAllTodos } = useContext(TodosContext);
   const [selectFiler, setSelectFilter] = useState(Status.All);
   const countActiveTodos = todos.filter(todo => !todo.completed).length;
   const countCompletedTodos = todos.filter(todo => todo.completed).length;
@@ -14,15 +14,7 @@ export const TodosFilter = () => {
     setFilter(filter);
   };
 
-  const clearAllCompleted = () => {
-    const todosIds = todos.filter(todo => todo.completed).map(todo => todo.id);
-
-    todosIds.forEach(id => {
-      deleteTodo(id);
-    });
-  };
-
-  return todos.length > 0 && (
+  return todos.length > 0 ? (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
         {`${countActiveTodos}
@@ -63,11 +55,11 @@ export const TodosFilter = () => {
         <button
           type="button"
           className="clear-completed"
-          onClick={clearAllCompleted}
+          onClick={deleteAllTodos}
         >
           Clear completed
         </button>
       )}
     </footer>
-  );
+  ) : null;
 };

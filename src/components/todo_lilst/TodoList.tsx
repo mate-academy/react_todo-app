@@ -5,7 +5,7 @@ import { TodosContext } from '../../providers/TodosContext';
 export const TodoList = () => {
   const { filteredTodos, allCompleted, todos } = useContext(TodosContext);
 
-  return todos.length > 0 && (
+  return todos.length > 0 ? (
     <section className="main">
       <input
         type="checkbox"
@@ -22,5 +22,5 @@ export const TodoList = () => {
         ))}
       </ul>
     </section>
-  );
+  ) : null;
 };
