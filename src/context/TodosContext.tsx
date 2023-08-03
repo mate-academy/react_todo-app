@@ -48,3 +48,5 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     </TodosContext.Provider>
   );
 };
+
+export const useTodo = ():TodoContext => React.useContext(TodosContext);

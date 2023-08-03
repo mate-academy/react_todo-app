@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { TodosContext } from '../../context/TodosContext';
+import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
+import { useTodo } from '../../context/TodosContext';
 
 export const TodoList = () => {
-  const { todosFilter } = useContext(TodosContext);
+  const { todosFilter } = useTodo();
 
   return (
     <ul className="todo-list" data-cy="todoList">

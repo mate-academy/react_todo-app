@@ -1,15 +1,14 @@
 import React, {
-  useContext,
   useState,
   useRef,
   useEffect,
 } from 'react';
 import { Todo } from '../../types/Todo';
-import { TodosContext } from '../../context/TodosContext';
+import { useTodo } from '../../context/TodosContext';
 
 export const TodoForm = () => {
   const [todoTitle, setTodoTitle] = useState('');
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useTodo();
   const inputFocus = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

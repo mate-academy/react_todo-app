@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { TodosContext } from '../../context/TodosContext';
+import { useTodo } from '../../context/TodosContext';
 import { Status } from '../../Enum/Status';
 
 export const Footer = () => {
@@ -9,7 +9,7 @@ export const Footer = () => {
     setTodos,
     setFilterBy,
     filterBy,
-  } = useContext(TodosContext);
+  } = useTodo();
 
   const notCompletedItems = todos.filter(todo => !todo.completed).length;
 
@@ -32,9 +32,7 @@ export const Footer = () => {
               <a
                 href="#/"
                 className={classNames(
-                  filterBy === Status.ALL
-                    ? 'selected'
-                    : '',
+                  { selected: filterBy === Status.ALL },
                 )}
                 onClick={() => setFilterBy(Status.ALL)}
               >
@@ -47,9 +45,7 @@ export const Footer = () => {
                 href="#/active"
                 onClick={() => setFilterBy(Status.ACTIVE)}
                 className={classNames(
-                  filterBy === Status.ACTIVE
-                    ? 'selected'
-                    : '',
+                  { selected: filterBy === Status.ACTIVE },
                 )}
               >
                 Active
@@ -61,9 +57,7 @@ export const Footer = () => {
                 href="#/completed"
                 onClick={() => setFilterBy(Status.COMPLETED)}
                 className={classNames(
-                  filterBy === Status.COMPLETED
-                    ? 'selected'
-                    : '',
+                  { selected: filterBy === Status.COMPLETED },
                 )}
               >
                 Completed

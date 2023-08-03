@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext,
   useState,
   useRef,
   useEffect,
 } from 'react';
 import classNames from 'classnames';
-import { TodosContext } from '../../context/TodosContext';
+import { useTodo } from '../../context/TodosContext';
 import { KeyUpStatus } from '../../Enum/KeyUpStatus';
 
 type Props = {
@@ -16,7 +15,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ title, completed, id }) => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useTodo();
   const [editTitle, setEditTitle] = useState(false);
   const [editedValue, setEditedValue] = useState(title);
   const inputRef = useRef<HTMLInputElement>(null);

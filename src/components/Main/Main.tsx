@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TodoList } from '../TodoList';
-import { TodosContext } from '../../context/TodosContext';
+import { useTodo } from '../../context/TodosContext';
 
 export const Main = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useTodo();
 
   const toggleAll = () => {
     const allComplete = todos.every(todo => todo.completed);
