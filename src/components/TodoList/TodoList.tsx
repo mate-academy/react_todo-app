@@ -7,7 +7,7 @@ export const TodoList = () => {
 
   return (
     <ul className="todo-list" data-cy="todoList">
-      {todosFilter().map(({ id, title, completed }) => (
+      {todosFilter.map(({ id, title, completed }) => (
         <TodoItem
           id={id}
           title={title}

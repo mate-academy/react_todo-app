@@ -8,7 +8,7 @@ type TodoContext = {
   setTodos: (todos: Todo[]) => void,
   filterBy: Status;
   setFilterBy: (status: Status) => void;
-  todosFilter: () => Todo[];
+  todosFilter: Todo[];
 };
 
 export const TodosContext = React.createContext<TodoContext>({} as TodoContext);
@@ -21,7 +21,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filterBy, setFilterBy] = useState<Status>(Status.ALL);
 
-  const todosFilter = () => {
+  const todosFilter = useMemo(() => {
     switch (filterBy) {
       case Status.ALL:
         return todos;
@@ -32,7 +32,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       default:
         return todos;
     }
-  };
+  }, [todos, filterBy]);
 
   const value = useMemo(() => ({
     todos,
