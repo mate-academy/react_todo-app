@@ -10,9 +10,9 @@ import { TodosContext } from '../../context/TodosContext';
 import { KeyUpStatus } from '../../Enum/KeyUpStatus';
 
 type Props = {
-  id: number;
-  title: string;
-  completed: boolean;
+  id: number,
+  title: string,
+  completed: boolean,
 };
 
 export const TodoItem: React.FC<Props> = ({ title, completed, id }) => {
@@ -55,7 +55,7 @@ export const TodoItem: React.FC<Props> = ({ title, completed, id }) => {
       if (todo.id === id) {
         return {
           ...todo,
-          title: editedValue && editedValue,
+          title: editedValue.trim(),
         };
       }
 
@@ -114,7 +114,7 @@ export const TodoItem: React.FC<Props> = ({ title, completed, id }) => {
         type="text"
         className="edit"
         value={editedValue}
-        onChange={(e) => setEditedValue(e.target.value.trim())}
+        onChange={(e) => setEditedValue(e.target.value)}
         ref={inputRef}
         onKeyUp={handleKeyUp}
         onBlur={handleOnBlur}

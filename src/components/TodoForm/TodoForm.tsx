@@ -21,7 +21,7 @@ export const TodoForm = () => {
 
     const newTodo: Todo = {
       id: +new Date(),
-      title: todoTitle,
+      title: todoTitle.trim(),
       completed: false,
     };
 
@@ -48,7 +48,7 @@ export const TodoForm = () => {
         className="new-todo"
         placeholder="What needs to be done?"
         value={todoTitle}
-        onChange={(e) => setTodoTitle(e.target.value.trim())}
+        onChange={(e) => setTodoTitle(e.target.value)}
       />
     </form>
   );
