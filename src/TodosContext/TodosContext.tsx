@@ -6,8 +6,6 @@ import { Status } from '../Types/Status';
 type TodosContextProps = {
   todos: Todo[];
   setTodos: (v: Todo[]) => void;
-  checkbox: boolean;
-  setCheckbox: (v: boolean) => void;
   filter: Status;
   setFilter: (v: Status) => void;
 };
@@ -15,8 +13,6 @@ type TodosContextProps = {
 export const TodosContext = React.createContext<TodosContextProps>({
   todos: [],
   setTodos: () => { },
-  checkbox: false,
-  setCheckbox: () => { },
   filter: Status.ALL,
   setFilter: () => { },
 });
@@ -27,7 +23,6 @@ type Props = {
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [checkbox, setCheckbox] = useState(false);
   const [filter, setFilter] = useState(Status.ALL);
 
   const visibleTodos = () => {
@@ -49,8 +44,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const value = {
     todos: visibleTodos(),
     setTodos,
-    checkbox,
-    setCheckbox,
     filter,
     setFilter,
   };

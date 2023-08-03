@@ -7,33 +7,9 @@ import { TodosList } from './TodosList';
 import { TodosFooter } from './TodosFooter';
 
 export const TodosApp: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos } = useContext(TodosContext);
 
-  const toggleTodos = () => {
-    let newTodos;
-
-    if (todos.some((item) => !item.completed)) {
-      newTodos = todos.map((item) => {
-        if (!item.completed) {
-          return {
-            ...item,
-            completed: true,
-          };
-        }
-
-        return item;
-      });
-    } else {
-      newTodos = todos.map((item) => {
-        return {
-          ...item,
-          completed: false,
-        };
-      });
-    }
-
-    setTodos(newTodos);
-  };
+  const isTodos = todos.length > 0;
 
   return (
     <TodosProvider>
@@ -43,22 +19,9 @@ export const TodosApp: React.FC = () => {
           <AddTodos />
         </header>
 
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all active"
-            data-cy="toggleAll"
-            onClick={() => toggleTodos()}
-            defaultChecked={todos.every((item) => item.completed)}
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+        {isTodos && (<TodosList />)}
 
-          <TodosList />
-
-        </section>
-
-        <TodosFooter />
+        {isTodos && (<TodosFooter />)}
       </div>
     </TodosProvider>
   );
