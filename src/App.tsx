@@ -11,7 +11,7 @@ import { TodosFilter } from './TodosFilter';
 import { TodosList } from './TodosList';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocalStorage('', []);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   const [filter, setFilter] = useState(FilterType.All);
 
   return (
