@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { TodosApp } from './Components/TodosApp';
 import { TodosProvider } from './TodosContext/TodosContext';
+import { TodosApp } from './Components/TodosApp';
 
 export const App: React.FC = () => {
   return (

@@ -6,15 +6,19 @@ import { Status } from '../Types/Status';
 type TodosContextProps = {
   todos: Todo[];
   setTodos: (v: Todo[]) => void;
-  filter: Status;
-  setFilter: (v: Status) => void;
+  selectedStatus: Status;
+  setSelectedStatus: (v: Status) => void;
+  handleStatus: (v: Status) => void;
+  filteredTodos: Todo[];
 };
 
 export const TodosContext = React.createContext<TodosContextProps>({
   todos: [],
   setTodos: () => { },
-  filter: Status.ALL,
-  setFilter: () => { },
+  selectedStatus: Status.ALL,
+  setSelectedStatus: () => { },
+  handleStatus: () => { },
+  filteredTodos: [],
 });
 
 type Props = {
@@ -23,29 +27,37 @@ type Props = {
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [filter, setFilter] = useState(Status.ALL);
+  const [selectedStatus, setSelectedStatus] = useState(Status.ALL);
 
-  const visibleTodos = () => {
-    switch (filter) {
+  const handleStatus = (status: Status) => {
+    setSelectedStatus(status);
+  };
+
+  const handleFilterTodos = (status: Status, filterTodos: Todo[]) => {
+    switch (status) {
       case Status.ALL:
-        return todos;
+        return filterTodos;
 
       case Status.ACTIVE:
-        return todos.filter(todo => todo.completed === false);
+        return filterTodos.filter(todo => todo.completed === false);
 
       case Status.COMPLETED:
-        return todos.filter(todo => todo.completed === true);
+        return filterTodos.filter(todo => todo.completed === true);
 
       default:
-        return todos;
+        return filterTodos;
     }
   };
 
+  const filteredTodos = handleFilterTodos(selectedStatus, todos);
+
   const value = {
-    todos: visibleTodos(),
+    todos,
     setTodos,
-    filter,
-    setFilter,
+    selectedStatus,
+    setSelectedStatus,
+    filteredTodos,
+    handleStatus,
   };
 
   return (

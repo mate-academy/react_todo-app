@@ -5,12 +5,6 @@ import { TodosFilter } from './TodosFilter';
 export const TodosFooter: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
-  const isTodos = todos.length > 0;
-
-  if (!isTodos) {
-    return null;
-  }
-
   const completedTodos = todos.filter(todo => todo.completed === true).length;
 
   const clearCompleted = () => {

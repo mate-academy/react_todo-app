@@ -4,7 +4,7 @@ import { TodoItem } from './TodoItem';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 export const TodosList: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos, filteredTodos } = useContext(TodosContext);
 
   const [checked, setCheced] = useState(false);
 
@@ -31,7 +31,7 @@ export const TodosList: React.FC = () => {
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
-        {todos.map((todo: Todo) => (
+        {filteredTodos.map((todo: Todo) => (
           <TodoItem todo={todo} key={todo.id} />
         ))}
       </ul>

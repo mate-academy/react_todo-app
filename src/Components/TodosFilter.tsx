@@ -4,7 +4,7 @@ import { TodosContext } from '../TodosContext/TodosContext';
 import { Status } from '../Types/Status';
 
 export const TodosFilter: React.FC = React.memo(() => {
-  const { filter, setFilter } = useContext(TodosContext);
+  const { selectedStatus, setSelectedStatus } = useContext(TodosContext);
 
   const handleSelected = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -12,7 +12,7 @@ export const TodosFilter: React.FC = React.memo(() => {
     const targetValue = event.target as HTMLElement;
     const ourText = targetValue.innerText;
 
-    setFilter(ourText as Status);
+    setSelectedStatus(ourText as Status);
   };
 
   return (
@@ -21,7 +21,7 @@ export const TodosFilter: React.FC = React.memo(() => {
         <a
           href="#/"
           className={classNames({
-            selected: filter === Status.ALL,
+            selected: selectedStatus === Status.ALL,
           })}
           onClick={handleSelected}
         >
@@ -33,7 +33,7 @@ export const TodosFilter: React.FC = React.memo(() => {
         <a
           href="#/active"
           className={classNames({
-            selected: filter === Status.ACTIVE,
+            selected: selectedStatus === Status.ACTIVE,
           })}
           onClick={handleSelected}
         >
@@ -45,7 +45,7 @@ export const TodosFilter: React.FC = React.memo(() => {
         <a
           href="#/completed"
           className={classNames({
-            selected: filter === Status.COMPLETED,
+            selected: selectedStatus === Status.COMPLETED,
           })}
           onClick={handleSelected}
         >
