@@ -20,7 +20,6 @@ export const TodosList: React.FC = () => {
 
   return (
     <section className="main">
-
       <input
         type="checkbox"
         id="toggle-all"
