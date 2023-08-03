@@ -5,7 +5,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Todo, TodosContext } from '../../providers/TodosContext';
+import { TodosContext } from '../../providers/TodosContext';
+import { Todo } from '../../utils/todo';
 /* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   todo: Todo

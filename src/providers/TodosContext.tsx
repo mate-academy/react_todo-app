@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { Status } from '../utils/status';
 import { useLocalStorage } from '../hook/useLocalStorage';
+import { Todo } from '../utils/todo';
 
-export interface Todo {
-  id: number,
-  title: string,
-  completed: boolean,
-}
-
-type TodosContextProps = {
+interface TodosContextProps {
   todos : Todo [];
   addTodo: (title: string) => void;
   toggleTodo: (id: number) => void;
@@ -17,18 +12,11 @@ type TodosContextProps = {
   allCompleted: () => void;
   filteredTodos: Todo[];
   setFilter: (string: Status) => void;
-};
+}
 
-export const TodosContext = React.createContext<TodosContextProps>({
-  todos: [],
-  addTodo: () => {},
-  toggleTodo: () => {},
-  deleteTodo: () => {},
-  editTodo: () => {},
-  allCompleted: () => {},
-  filteredTodos: [],
-  setFilter: () => {},
-});
+export const TodosContext = React.createContext<TodosContextProps>(
+  {} as TodosContextProps,
+);
 
 type Prop = {
   children: React.ReactNode,

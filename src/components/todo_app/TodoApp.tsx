@@ -3,7 +3,7 @@ import { TodosContext } from '../../providers/TodosContext';
 import { Status } from '../../utils/status';
 
 export const TodoApp = () => {
-  const { addTodo, allCompleted, setFilter } = useContext(TodosContext);
+  const { addTodo, setFilter } = useContext(TodosContext);
   const [newTitle, setNewTitle] = useState('');
 
   const handleAddTodo = () => {
@@ -36,16 +36,6 @@ export const TodoApp = () => {
           onKeyDown={handleKeyEnter}
         />
       </form>
-      <section className="main">
-        <input
-          type="checkbox"
-          data-cy="toggleAll"
-          className="toggle-all"
-          id="toggle-all"
-          onChange={allCompleted}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-      </section>
     </header>
   );
 };

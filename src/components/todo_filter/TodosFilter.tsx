@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { useContext, useState } from 'react';
 import { TodosContext } from '../../providers/TodosContext';
 import { Status } from '../../utils/status';
@@ -30,11 +31,11 @@ export const TodosFilter = () => {
           {`${countActiveTodos}
           item${countActiveTodos !== 1 ? 's' : ''} left`}
         </span>
-        <ul className="filters">
+        <ul className="filters" data-cy="todosFilter">
           <li>
             <a
               href="#/"
-              className={selectFiler === Status.All ? 'selected' : ''}
+              className={cn(selectFiler === Status.All ? 'selected' : '')}
               onClick={() => handlerFiler(Status.All)}
             >
               All
@@ -44,7 +45,7 @@ export const TodosFilter = () => {
           <li>
             <a
               href="#/active"
-              className={selectFiler === Status.Active ? 'selected' : ''}
+              className={cn(selectFiler === Status.Active ? 'selected' : '')}
               onClick={() => handlerFiler(Status.Active)}
             >
               Active
@@ -54,7 +55,7 @@ export const TodosFilter = () => {
           <li>
             <a
               href="#/completed"
-              className={selectFiler === Status.Completed ? 'selected' : ''}
+              className={cn(selectFiler === Status.Completed ? 'selected' : '')}
               onClick={() => handlerFiler(Status.Completed)}
             >
               Completed
