@@ -13,6 +13,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
 
+  const handleDeleteTodo = () => {
+    setTodos(oldTodos => oldTodos.filter(oldTodo => oldTodo.id !== todo.id));
+  };
+
   const handleSubmit = () => {
     if (title.length > 0) {
       const newTodo = {
@@ -26,14 +30,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       ]);
     } else {
       setTitle('');
+      handleDeleteTodo();
     }
 
     setIsEditing(false);
   };
 
-  const handleDeleteTodo = () => {
-    setTodos(oldTodos => oldTodos.filter(oldTodo => oldTodo.id !== todo.id));
-  };
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => (
+    setTitle(e.target.value));
 
   const handleToggle = () => {
     setTodos(oldTodos => oldTodos.map(oldTodo => {
@@ -80,7 +84,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           }
         }}
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={handleChangeTitle}
         onSubmit={handleSubmit}
         onBlur={handleSubmit}
       />

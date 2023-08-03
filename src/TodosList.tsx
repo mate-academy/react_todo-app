@@ -2,14 +2,11 @@ import { useContext, useMemo, useState } from 'react';
 import { TodoContextType, TodosContext } from './TodosContext';
 import { TodoItem } from './TodoItem';
 import { FilterType } from './types/Filter';
-// import { Todo } from './types/Todo';
-// import { Todo } from './types/Todo';
 
 type Props = {
   filter: FilterType,
 };
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 export const TodosList: React.FC<Props> = ({ filter }) => {
   const { todos, setTodos } = useContext<TodoContextType>(TodosContext);
 
@@ -50,7 +47,6 @@ export const TodosList: React.FC<Props> = ({ filter }) => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        onClick={handleToggle}
         onChange={handleToggle}
         checked={toggleAll}
       />

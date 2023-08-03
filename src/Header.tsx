@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-// import { Todo } from './types/Todo';
 import { TodosContext } from './TodosContext';
 
 export const Header: React.FC = () => {

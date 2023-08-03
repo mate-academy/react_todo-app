@@ -1,9 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-// import React, { useState } from 'react';
 import React, { useState } from 'react';
 import { TodosContext } from './TodosContext';
-// import { Todo } from './types/Todo';
 import { useLocalStorage } from './useLocalStorage';
 import { FilterType } from './types/Filter';
 import { Header } from './Header';
