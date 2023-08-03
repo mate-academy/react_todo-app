@@ -36,15 +36,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleToggle = () => {
-    const newTodo = {
-      ...todo,
-      completed: !todo.completed,
-    };
+    setTodos(oldTodos => oldTodos.map(oldTodo => {
+      if (oldTodo.id === todo.id) {
+        return {
+          ...oldTodo,
+          completed: !todo.completed,
+        };
+      }
 
-    setTodos(oldTodos => [
-      ...oldTodos.filter(el => el.id !== todo.id),
-      newTodo,
-    ]);
+      return oldTodo;
+    }));
   };
 
   return (
@@ -58,7 +59,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="toggle"
-          onClick={handleToggle}
+          onChange={handleToggle}
+          checked={todo.completed}
         />
         <label>{title}</label>
         <button
