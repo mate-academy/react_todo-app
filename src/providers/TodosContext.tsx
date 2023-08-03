@@ -12,7 +12,7 @@ interface TodosContextProps {
   allCompleted: () => void;
   filteredTodos: Todo[];
   setFilter: (string: Status) => void;
-  deleteAllTodos: () => void;
+  deleteCompetedTodos: () => void;
 }
 
 export const TodosContext = React.createContext<TodosContextProps>(
@@ -55,7 +55,7 @@ export const TodosProvider: React.FC<Prop> = ({ children }) => {
       ? { ...todo, title } : todo)));
   };
 
-  const deleteAllTodos = () => {
+  const deleteCompetedTodos = () => {
     setTodos((prevTodos: Todo[]) => prevTodos.filter(todo => !todo.completed));
   };
 
@@ -92,7 +92,7 @@ export const TodosProvider: React.FC<Prop> = ({ children }) => {
       allCompleted,
       filteredTodos,
       setFilter,
-      deleteAllTodos,
+      deleteCompetedTodos,
     }}
     >
       {children}

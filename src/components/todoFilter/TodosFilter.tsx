@@ -4,12 +4,17 @@ import { TodosContext } from '../../providers/TodosContext';
 import { Status } from '../../utils/status';
 
 export const TodosFilter = () => {
-  const { setFilter, todos, deleteAllTodos } = useContext(TodosContext);
-  const [selectFiler, setSelectFilter] = useState(Status.All);
-  const countActiveTodos = todos.filter(todo => !todo.completed).length;
-  const countCompletedTodos = todos.filter(todo => todo.completed).length;
+  const {
+    setFilter,
+    todos,
+    filteredTodos,
+    deleteCompetedTodos,
+  } = useContext(TodosContext);
+  const [selectFilter, setSelectFilter] = useState(Status.All);
+  const countActiveTodos = filteredTodos.filter(todo => !todo.completed).length;
+  const countCompletedTodos = filteredTodos.length - countActiveTodos;
 
-  const handlerFiler = (filter: Status) => {
+  const handleFilter = (filter: Status) => {
     setSelectFilter(filter);
     setFilter(filter);
   };
@@ -24,8 +29,8 @@ export const TodosFilter = () => {
         <li>
           <a
             href="#/"
-            className={cn(selectFiler === Status.All ? 'selected' : '')}
-            onClick={() => handlerFiler(Status.All)}
+            className={cn(selectFilter === Status.All ? 'selected' : '')}
+            onClick={() => handleFilter(Status.All)}
           >
             All
           </a>
@@ -34,8 +39,8 @@ export const TodosFilter = () => {
         <li>
           <a
             href="#/active"
-            className={cn(selectFiler === Status.Active ? 'selected' : '')}
-            onClick={() => handlerFiler(Status.Active)}
+            className={cn(selectFilter === Status.Active ? 'selected' : '')}
+            onClick={() => handleFilter(Status.Active)}
           >
             Active
           </a>
@@ -44,8 +49,8 @@ export const TodosFilter = () => {
         <li>
           <a
             href="#/completed"
-            className={cn(selectFiler === Status.Completed ? 'selected' : '')}
-            onClick={() => handlerFiler(Status.Completed)}
+            className={cn(selectFilter === Status.Completed ? 'selected' : '')}
+            onClick={() => handleFilter(Status.Completed)}
           >
             Completed
           </a>
@@ -55,7 +60,7 @@ export const TodosFilter = () => {
         <button
           type="button"
           className="clear-completed"
-          onClick={deleteAllTodos}
+          onClick={deleteCompetedTodos}
         >
           Clear completed
         </button>

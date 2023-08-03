@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TodoItem } from '../todo_item/TodoItem';
+import { TodoItem } from '../todoItem/TodoItem';
 import { TodosContext } from '../../providers/TodosContext';
 
 export const TodoList = () => {
