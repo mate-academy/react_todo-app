@@ -1,9 +1,8 @@
-import { useContext } from 'react';
 import { TodoItem } from '../todoItem/TodoItem';
-import { TodosContext } from '../../providers/TodosContext';
+import { useTodo } from '../../providers/TodosContext';
 
 export const TodoList = () => {
-  const { filteredTodos, allCompleted, todos } = useContext(TodosContext);
+  const { filteredTodos, allCompleted, todos } = useTodo();
 
   return todos.length > 0 ? (
     <section className="main">

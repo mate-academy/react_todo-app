@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react';
-import { TodosContext } from '../../providers/TodosContext';
+import { useState } from 'react';
+import { useTodo } from '../../providers/TodosContext';
 import { Status } from '../../utils/status';
 
 export const TodoApp = () => {
-  const { addTodo, setFilter } = useContext(TodosContext);
+  const { addTodo, setFilter } = useTodo();
   const [newTitle, setNewTitle] = useState('');
 
   const handleAddTodo = () => {

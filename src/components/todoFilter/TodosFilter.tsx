@@ -1,6 +1,6 @@
 import cn from 'classnames';
-import { useContext, useState } from 'react';
-import { TodosContext } from '../../providers/TodosContext';
+import { useState } from 'react';
+import { useTodo } from '../../providers/TodosContext';
 import { Status } from '../../utils/status';
 
 export const TodosFilter = () => {
@@ -9,7 +9,7 @@ export const TodosFilter = () => {
     todos,
     filteredTodos,
     deleteCompetedTodos,
-  } = useContext(TodosContext);
+  } = useTodo();
   const [selectFilter, setSelectFilter] = useState(Status.All);
   const countActiveTodos = filteredTodos.filter(todo => !todo.completed).length;
   const countCompletedTodos = filteredTodos.length - countActiveTodos;
@@ -29,7 +29,7 @@ export const TodosFilter = () => {
         <li>
           <a
             href="#/"
-            className={cn(selectFilter === Status.All ? 'selected' : '')}
+            className={cn({ selected: selectFilter === Status.All })}
             onClick={() => handleFilter(Status.All)}
           >
             All
@@ -39,7 +39,7 @@ export const TodosFilter = () => {
         <li>
           <a
             href="#/active"
-            className={cn(selectFilter === Status.Active ? 'selected' : '')}
+            className={cn({ selected: selectFilter === Status.Active })}
             onClick={() => handleFilter(Status.Active)}
           >
             Active
@@ -49,7 +49,7 @@ export const TodosFilter = () => {
         <li>
           <a
             href="#/completed"
-            className={cn(selectFilter === Status.Completed ? 'selected' : '')}
+            className={cn({ selected: selectFilter === Status.Completed })}
             onClick={() => handleFilter(Status.Completed)}
           >
             Completed

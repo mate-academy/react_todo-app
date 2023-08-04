@@ -19,6 +19,8 @@ export const TodosContext = React.createContext<TodosContextProps>(
   {} as TodosContextProps,
 );
 
+export const useTodo = ():TodosContextProps => React.useContext(TodosContext);
+
 type Prop = {
   children: React.ReactNode,
 };

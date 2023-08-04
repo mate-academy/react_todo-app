@@ -1,11 +1,10 @@
 import cn from 'classnames';
 import {
-  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { TodosContext } from '../../providers/TodosContext';
+import { useTodo } from '../../providers/TodosContext';
 import { Todo } from '../../utils/todo';
 /* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
@@ -18,7 +17,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     deleteTodo,
     editTodo,
     todos,
-  } = useContext(TodosContext);
+  } = useTodo();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
   const inputRef = useRef<HTMLInputElement>(null);
