@@ -12,7 +12,7 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <TodoForm />
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <section className="main">
             <TodoToggler />

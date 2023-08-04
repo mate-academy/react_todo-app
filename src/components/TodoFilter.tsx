@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import classNames from 'classnames';
 import { TodoContextDispatch, TodoContextList } from '../Services/TodosContext';
-import { Status } from '../Services/Types';
+import { ActionTypeEnum, Status } from '../Services/Types';
 
 const filters = [
   { href: '#/', status: Status.All },
@@ -16,6 +16,22 @@ export const TodoFilter: React.FC = () => {
   const todosLeft = todos.filter((todo) => !todo.completed);
   const isSomeCompleted = todos.some((todo) => todo.completed);
 
+  const handleFilterChange = (status: Status) => {
+    dispatch({
+      type: ActionTypeEnum.Filter,
+      payload: {
+        filterType: status,
+      },
+    });
+  };
+
+  const handleClearAll = () => {
+    dispatch({
+      type: ActionTypeEnum.ClearCompleted,
+      payload: {},
+    });
+  };
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -28,12 +44,7 @@ export const TodoFilter: React.FC = () => {
             <a
               href={href}
               className={classNames({ selected: filter === status })}
-              onClick={() => {
-                dispatch({
-                  type: 'toggle_filter',
-                  filterType: status,
-                });
-              }}
+              onClick={() => handleFilterChange(status)}
             >
               {status}
             </a>
@@ -45,9 +56,7 @@ export const TodoFilter: React.FC = () => {
         <button
           type="button"
           className="clear-completed"
-          onClick={() => {
-            dispatch({ type: 'clear_completed' });
-          }}
+          onClick={handleClearAll}
         >
           Clear completed
         </button>

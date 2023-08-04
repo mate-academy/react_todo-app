@@ -15,45 +15,68 @@ export type State = {
   filter: Status,
 };
 
+export enum ActionTypeEnum {
+  Add = 'add_todo',
+  Delete = 'delete_todo',
+  Edit = 'edit_todo',
+  Complete = 'complete_todo',
+  CompleteAll = 'toggle_all',
+  Filter = 'toggle_filter',
+  ClearCompleted = 'clear_completed',
+}
+
 export type Action = ActionAdd
 | ActionDelete
 | ActionEdit
 | ActionComplete
-| AcctionToggleAll
+| ActionToggleAll
 | ActionToggleFilter
 | ActionClearCompleted;
 
-type ActionAdd = {
-  type: 'add_todo',
-  todo: Todo,
+export type ActionAdd = {
+  type: ActionTypeEnum.Add,
+  payload: {
+    todo: Todo,
+  }
 };
 
-type ActionDelete = {
-  type: 'delete_todo',
-  todoId: number,
+export type ActionDelete = {
+  type: ActionTypeEnum.Delete,
+  payload: {
+    todoId: number,
+  }
 };
 
-type ActionComplete = {
-  type: 'complete_todo',
-  todoId: number,
+export type ActionComplete = {
+  type: ActionTypeEnum.Complete,
+  payload: {
+    todoId: number,
+  }
 };
 
-type AcctionToggleAll = {
-  type: 'toggle_all'
-  completed: boolean
+export type ActionToggleAll = {
+  type: ActionTypeEnum.CompleteAll,
+  payload: {
+    completed: boolean
+  }
 };
 
-type ActionToggleFilter = {
-  type: 'toggle_filter',
-  filterType: Status
+export type ActionToggleFilter = {
+  type: ActionTypeEnum.Filter,
+  payload: {
+    filterType: Status
+  }
 };
 
-type ActionClearCompleted = {
-  type: 'clear_completed',
+export type ActionClearCompleted = {
+  type: ActionTypeEnum.ClearCompleted,
+  payload: {}
 };
 
-type ActionEdit = {
-  type: 'edit_todo',
-  todoId: number,
-  newTitle: string,
+export type ActionEdit = {
+  type: ActionTypeEnum.Edit,
+  payload: {
+    todoId: number,
+    newTitle: string,
+  }
 };

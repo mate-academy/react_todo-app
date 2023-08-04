@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { TodoContextDispatch } from '../Services/TodosContext';
+import { ActionTypeEnum } from '../Services/Types';
 
 export const TodoForm: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -13,11 +14,13 @@ export const TodoForm: React.FC = () => {
     }
 
     dispatch({
-      type: 'add_todo',
-      todo: {
-        id: +new Date(),
-        title,
-        completed: false,
+      type: ActionTypeEnum.Add,
+      payload: {
+        todo: {
+          id: +new Date(),
+          title,
+          completed: false,
+        },
       },
     });
 

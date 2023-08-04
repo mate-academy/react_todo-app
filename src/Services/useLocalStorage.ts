@@ -1,40 +1,45 @@
 import { useReducer, useEffect } from 'react';
-import { State, Action } from './Types';
+import {
+  State, Action, ActionTypeEnum,
+} from './Types';
 
-function reducer(state: State, action:Action) {
-  switch (action.type) {
-    case 'add_todo':
+function reducer(
+  state: State,
+  { type, payload }: Action,
+) {
+  switch (type) {
+    case ActionTypeEnum.Add:
       return {
         ...state,
         todos: [
           ...state.todos,
-          action.todo,
+          payload.todo,
         ],
       };
-    case 'delete_todo':
+    case ActionTypeEnum.Delete:
       return {
         ...state,
-        todos: state.todos.filter(todo => todo.id !== action.todoId),
+        todos: state.todos.filter(todo => todo.id !== payload.todoId),
       };
-    case 'edit_todo':
+    case ActionTypeEnum.Edit:
       return {
         ...state,
         todos: state.todos.map(todo => {
-          if (todo.id === action.todoId) {
+          if (todo.id === payload.todoId) {
             return {
               ...todo,
-              title: action.newTitle,
+              title: payload.newTitle,
             };
           }
 
           return todo;
         }),
       };
-    case 'complete_todo':
+    case ActionTypeEnum.Complete:
       return {
         ...state,
         todos: state.todos.map(todo => {
-          if (todo.id === action.todoId) {
+          if (todo.id === payload.todoId) {
             return {
               ...todo,
               completed: !todo.completed,
@@ -44,18 +49,18 @@ function reducer(state: State, action:Action) {
           return todo;
         }),
       };
-    case 'toggle_all':
+    case ActionTypeEnum.CompleteAll:
       return {
         ...state,
         todos: state.todos
-          .map(todo => ({ ...todo, completed: action.completed })),
+          .map(todo => ({ ...todo, completed: payload.completed })),
       };
-    case 'toggle_filter':
+    case ActionTypeEnum.Filter:
       return {
         ...state,
-        filter: action.filterType,
+        filter: payload.filterType,
       };
-    case 'clear_completed':
+    case ActionTypeEnum.ClearCompleted:
       return {
         ...state,
         todos: state.todos.filter(todo => !todo.completed),

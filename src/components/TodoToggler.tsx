@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { TodoContextDispatch, TodoContextList } from '../Services/TodosContext';
+import { ActionTypeEnum } from '../Services/Types';
 
 export const TodoToggler: React.FC = () => {
   const { todos } = useContext(TodoContextList);
@@ -9,8 +10,10 @@ export const TodoToggler: React.FC = () => {
 
   const handleAllChecked = (event:React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
-      type: 'toggle_all',
-      completed: event.target.checked,
+      type: ActionTypeEnum.CompleteAll,
+      payload: {
+        completed: event.target.checked,
+      },
     });
   };
 
