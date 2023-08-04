@@ -8,11 +8,13 @@ export const Header: React.FC = () => {
   const handlerSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setTodos([...todos, {
-      id: +new Date(),
-      title: todoTitle,
-      completed: false,
-    }]);
+    if (todoTitle.trim().length > 0) {
+      setTodos([...todos, {
+        id: +new Date(),
+        title: todoTitle,
+        completed: false,
+      }]);
+    }
 
     setTodoTitle('');
   };
