@@ -18,7 +18,7 @@ type State = {
 
 const state: State = {
   items: intitialItems,
-  filterMode: 'all',
+  filterMode: FilterMode.all,
   addItem: () => { },
   deleteItem: () => { },
   setFilterMode: () => { },
@@ -37,9 +37,9 @@ type Props = {
 export const TodosGlobalProvider: React.FC<Props> = ({ children }) => {
   const getVisibleItems = (mode: FilterMode, itemsList: Todos[]) => {
     switch (mode) {
-      case 'activ':
+      case FilterMode.active:
         return itemsList.filter(item => !item.completed);
-      case 'completed':
+      case FilterMode.completed:
         return itemsList.filter(item => item.completed);
       default:
         return itemsList;
@@ -47,7 +47,7 @@ export const TodosGlobalProvider: React.FC<Props> = ({ children }) => {
   };
 
   const [items, setItems] = useLocalStorage(defoultKey, intitialItems);
-  const [filterMode, setFilterMode] = useState<FilterMode>('all');
+  const [filterMode, setFilterMode] = useState<FilterMode>(FilterMode.all);
 
   const deleteItem = (id: number) => {
     const newItems = items.filter(item => item.id !== id);

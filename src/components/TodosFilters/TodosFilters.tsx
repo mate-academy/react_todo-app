@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import cn from 'classnames';
 import { TodosContext } from '../../TodosContext';
+import { FilterMode } from '../../types/FilterMode';
 
 export const TodosFilters: React.FC = () => {
   const {
@@ -13,9 +14,9 @@ export const TodosFilters: React.FC = () => {
       <li>
         <a
           href="#/"
-          className={cn({ selected: filterMode === 'all' })}
+          className={cn({ selected: filterMode === FilterMode.all })}
           onClick={() => {
-            setFilterMode('all');
+            setFilterMode(FilterMode.all);
           }}
         >
           All
@@ -25,9 +26,9 @@ export const TodosFilters: React.FC = () => {
       <li>
         <a
           href="#/active"
-          className={cn({ selected: filterMode === 'activ' })}
+          className={cn({ selected: filterMode === FilterMode.active })}
           onClick={() => {
-            setFilterMode('activ');
+            setFilterMode(FilterMode.active);
           }}
         >
           Active
@@ -37,9 +38,9 @@ export const TodosFilters: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          className={cn({ selected: filterMode === 'completed' })}
+          className={cn({ selected: filterMode === FilterMode.completed })}
           onClick={() => {
-            setFilterMode('completed');
+            setFilterMode(FilterMode.completed);
           }}
         >
           Completed
