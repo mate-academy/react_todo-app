@@ -19,21 +19,24 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleSubmit = () => {
     if (title.length > 0) {
-      const newTodo = {
-        ...todo,
+      setTodos(oldTodos => oldTodos.map(todo_ => ({
+        ...todo_,
         title,
-      };
-
-      setTodos(oldTodos => [
-        ...oldTodos,
-        newTodo,
-      ]);
+      })));
     } else {
       setTitle('');
       handleDeleteTodo();
     }
 
     setIsEditing(false);
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setIsEditing(false);
+    } else if (e.key === 'Enter') {
+      handleSubmit();
+    }
   };
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => (
@@ -58,6 +61,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         { completed: todo.completed },
         { editing: isEditing },
       )}
+      onDoubleClick={() => setIsEditing(true)}
     >
       <div className="view">
         <input
@@ -77,17 +81,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <input
         type="text"
         className="edit"
-        onDoubleClick={() => setIsEditing(true)}
-        onKeyUp={(e) => {
-          if (e.key === 'Escape') {
-            setIsEditing(false);
-          } else if (e.key === 'Enter') {
-            handleSubmit();
-          }
-        }}
+        onKeyUp={handleKeyUp}
         value={title}
         onChange={handleChangeTitle}
-        // onSubmit={handleSubmit}
         onBlur={handleSubmit}
       />
     </li>
