@@ -27,16 +27,18 @@ export const TodoItem: React.FC<Props> = ({
   const editebleInput = useRef<HTMLInputElement>(null);
 
   const editItem = (itemId: number) => {
-    if (!editebleInputValue) {
-      setEditebleInputValue(title);
+    const newValue = editebleInputValue.trim();
+
+    if (!newValue) {
+      deleteItem(itemId);
     }
 
-    if (editebleInputValue && editebleInputValue !== title) {
+    if (newValue && newValue !== title) {
       const newItems = [...items];
       const currentItem = newItems.find(item => item.id === itemId);
 
       if (currentItem) {
-        currentItem.title = editebleInputValue;
+        currentItem.title = newValue;
       }
 
       setItems(newItems);
@@ -70,16 +72,23 @@ export const TodoItem: React.FC<Props> = ({
     editItem(id);
   };
 
-  const handleEditableInputPressEnter = (
+  const handleEditableInputPressKey = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (event.key !== 'Enter') {
+    if (event.key !== 'Enter' && event.key !== 'Escape') {
       return;
     }
 
     event.preventDefault();
 
-    editItem(id);
+    if (event.key === 'Enter') {
+      editItem(id);
+    }
+
+    if (event.key === 'Escape') {
+      setEditebleInputValue(title);
+      setIsEditableInput(false);
+    }
   };
 
   useEffect(() => {
@@ -121,7 +130,7 @@ export const TodoItem: React.FC<Props> = ({
           type="text"
           className="edit"
           onBlur={handleEditableInputBlur}
-          onKeyPress={handleEditableInputPressEnter}
+          onKeyUp={handleEditableInputPressKey}
         />
       )}
     </li>

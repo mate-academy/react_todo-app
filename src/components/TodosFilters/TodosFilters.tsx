@@ -9,7 +9,7 @@ export const TodosFilters: React.FC = () => {
   } = useContext(TodosContext);
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"

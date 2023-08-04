@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
+import { useLocalStorage } from './hooks/useLocalStorage';
 import { FilterMode } from './types/FilterMode';
 import { Todos } from './types/Todos';
 
 const intitialItems: Todos[] = [];
+const defoultKey = 'todos';
 
 type State = {
   items: Todos[];
@@ -44,7 +46,7 @@ export const TodosGlobalProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
-  const [items, setItems] = useState(intitialItems);
+  const [items, setItems] = useLocalStorage(defoultKey, intitialItems);
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
 
   const deleteItem = (id: number) => {

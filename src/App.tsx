@@ -18,6 +18,8 @@ export const App: React.FC = () => {
     [items],
   );
 
+  const isShowOtherElement = items.length > 0;
+
   const visibleItems = useMemo(
     () => getVisibleItems(filterMode as FilterMode, items),
     [filterMode, items],
@@ -30,16 +32,21 @@ export const App: React.FC = () => {
         <TodosForm />
       </header>
 
-      <section className="main">
-        <TodosToggleAll />
-        <TodosList list={visibleItems} />
-      </section>
+      { isShowOtherElement && (
+        <section className="main">
+          <TodosToggleAll />
+          <TodosList list={visibleItems} />
+        </section>
+      )}
 
-      <footer className="footer">
-        <TodosCounter />
-        <TodosFilters />
-        {isCompletedItems && <TodosClearAllButton />}
-      </footer>
+      {isShowOtherElement
+      && (
+        <footer className="footer">
+          <TodosCounter />
+          <TodosFilters />
+          {isCompletedItems && <TodosClearAllButton />}
+        </footer>
+      )}
     </div>
   );
 };

@@ -7,7 +7,7 @@ type Props = {
 
 export const TodosList: React.FC<Props> = ({ list }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {list.map((item) => {
         if (item) {
           return (
