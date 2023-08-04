@@ -66,7 +66,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={handleToggle}
           checked={todo.completed}
         />
-        <label>{title}</label>
+        {!isEditing && <label>{title}</label>}
         <button
           type="button"
           className="destroy"
@@ -81,11 +81,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         onKeyUp={(e) => {
           if (e.key === 'Escape') {
             setIsEditing(false);
+          } else if (e.key === 'Enter') {
+            handleSubmit();
           }
         }}
         value={title}
         onChange={handleChangeTitle}
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         onBlur={handleSubmit}
       />
     </li>
