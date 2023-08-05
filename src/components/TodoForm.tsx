@@ -1,20 +1,20 @@
 import { FC, FormEvent, useState } from 'react';
 import { useTodoContext } from '../hooks/useTodoContext';
-import { Todo, UpdateTodos } from '../types';
+import { Todo } from '../types';
 
 export const TodoForm: FC = () => {
   const {
     onAddTodo,
     activeTodosLeft,
     todosCount,
-    onUpdateSeveralTodos,
+    onToggleSeveralTodos,
   } = useTodoContext();
   const [title, setTitle] = useState('');
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    if (!title) {
+    if (!title.trim()) {
       return;
     }
 
@@ -27,16 +27,6 @@ export const TodoForm: FC = () => {
     onAddTodo(newTodo);
 
     setTitle('');
-  };
-
-  const toggleTodosCompleted = () => {
-    if ((activeTodosLeft === todosCount) || (activeTodosLeft === 0)) {
-      onUpdateSeveralTodos(UpdateTodos.Every);
-
-      return;
-    }
-
-    onUpdateSeveralTodos(UpdateTodos.Some);
   };
 
   return (
@@ -62,7 +52,7 @@ export const TodoForm: FC = () => {
             className="toggle-all"
             data-cy="toggleAll"
             checked={activeTodosLeft === 0}
-            onChange={toggleTodosCompleted}
+            onChange={onToggleSeveralTodos}
           />
 
           {/* eslint-disable-next-line */}

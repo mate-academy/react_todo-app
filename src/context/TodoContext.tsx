@@ -1,7 +1,7 @@
 import {
   FC, ReactNode, createContext, useState, useMemo,
 } from 'react';
-import { Status, Todo, UpdateTodos } from '../types';
+import { Status, Todo } from '../types';
 import { getFilteredTodos } from '../utils/getFilteredTodos';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
@@ -17,8 +17,9 @@ interface Context {
   onAddTodo: (todo: Todo) => void;
   onDeleteTodo: (todoId: number) => void;
   onDeleteCompetedTodos: () => void;
-  onUpdateTodo: (updatedTodo: Todo) => void;
-  onUpdateSeveralTodos: (amountTodosForUpdate: UpdateTodos) => void;
+  handleUpdateTodoTitle: (todoToUpdate: Todo, newTitle: string) => void;
+  handleToggleTodoStatus: (todoToUpdate: Todo) => void;
+  onToggleSeveralTodos: () => void;
   onFilterStatusChange: (status: Status) => void;
 }
 
@@ -33,13 +34,7 @@ export const TodoProvider: FC<Props> = ({ children }) => {
   ), [todos, filterStatus]);
 
   const activeTodosLeft = useMemo(() => (
-    todos.reduce((count, todo) => {
-      if (!todo.completed) {
-        return count + 1;
-      }
-
-      return count;
-    }, 0)
+    todos.filter(todo => !todo.completed).length
   ), [todos]);
 
   const onAddTodo = (todo: Todo) => {
@@ -55,34 +50,53 @@ export const TodoProvider: FC<Props> = ({ children }) => {
   };
 
   const onUpdateTodo = (updatedTodo: Todo) => {
-    setTodos(prevTodos => prevTodos.map(todo => {
-      return todo.id === updatedTodo.id
+    setTodos(prevTodos => prevTodos.map(todo => (
+      todo.id === updatedTodo.id
         ? updatedTodo
-        : todo;
-    }));
+        : todo
+    )));
   };
 
-  const onUpdateSeveralTodos = (amountTodosForUpdate: UpdateTodos) => {
-    const targetTodos = amountTodosForUpdate === UpdateTodos.Some
-      ? todos.filter(todo => !todo.completed)
-      : todos;
+  const handleUpdateTodoTitle = (todoToUpdate: Todo, newTitle: string) => {
+    if (todoToUpdate.title === newTitle) {
+      return;
+    }
 
-    setTodos(prevTodos => prevTodos.map(todo => {
-      const isTodoForUpdate = targetTodos
-        .some(targetTodo => targetTodo.id === todo.id);
+    if (!newTitle.trim()) {
+      onDeleteTodo(todoToUpdate.id);
 
-      if (isTodoForUpdate) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
+      return;
+    }
+
+    const updatedTodo: Todo = {
+      ...todoToUpdate,
+      title: newTitle,
+    };
+
+    onUpdateTodo(updatedTodo);
+  };
+
+  const handleToggleTodoStatus = (todoToUpdate: Todo) => {
+    const updatedTodo: Todo = {
+      ...todoToUpdate,
+      completed: !todoToUpdate.completed,
+    };
+
+    onUpdateTodo(updatedTodo);
+  };
+
+  const onToggleSeveralTodos = () => {
+    const nextTodoStatus = todos.some(todo => !todo.completed);
+
+    setTodos(prevTodos => prevTodos.map(todo => (
+      {
+        ...todo,
+        completed: nextTodoStatus,
       }
-
-      return todo;
-    }));
+    )));
   };
 
-  const contextValue: Context = {
+  const contextValue = useMemo<Context>(() => ({
     todos: filteredTodos,
     todosCount: todos.length,
     activeTodosLeft,
@@ -90,10 +104,11 @@ export const TodoProvider: FC<Props> = ({ children }) => {
     onAddTodo,
     onDeleteTodo,
     onDeleteCompetedTodos,
-    onUpdateTodo,
-    onUpdateSeveralTodos,
+    handleUpdateTodoTitle,
+    handleToggleTodoStatus,
+    onToggleSeveralTodos,
     onFilterStatusChange: setFilterStatus,
-  };
+  }), [todos, activeTodosLeft, filterStatus]);
 
   return (
     <TodoContext.Provider value={contextValue}>

@@ -1,5 +1,5 @@
 import {
-  FC, ChangeEvent, useState, useEffect, useRef,
+  FC, useState, useEffect, useRef,
 } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types';
@@ -10,54 +10,22 @@ type Props = {
 };
 
 export const TodoItem: FC<Props> = ({ todo }) => {
-  const { onUpdateTodo, onDeleteTodo } = useTodoContext();
+  const {
+    handleToggleTodoStatus,
+    handleUpdateTodoTitle,
+    onDeleteTodo,
+  } = useTodoContext();
 
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
-  const editRef = useRef<HTMLInputElement | null>(null);
-
-  const todoClassnames = classNames({
-    completed: todo.completed,
-    editing: isEditing,
-  });
-
-  const updateTodoCompleted = (event: ChangeEvent<HTMLInputElement>) => {
-    const completed = event.target.checked;
-
-    const updatedTodo: Todo = {
-      ...todo,
-      completed,
-    };
-
-    onUpdateTodo(updatedTodo);
-  };
-
-  const updateTodoTitle = () => {
-    if (todo.title === newTitle) {
-      return;
-    }
-
-    if (!newTitle) {
-      onDeleteTodo(todo.id);
-
-      return;
-    }
-
-    const updatedTodo: Todo = {
-      ...todo,
-      title: newTitle,
-    };
-
-    onUpdateTodo(updatedTodo);
-  };
+  const editRef = useRef<HTMLInputElement>(null);
 
   const handleEditTodoTitle = (
     event?: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (!event || event.key === 'Enter') {
-      updateTodoTitle();
-
+      handleUpdateTodoTitle(todo, newTitle);
       setIsEditing(false);
     }
   };
@@ -66,7 +34,6 @@ export const TodoItem: FC<Props> = ({ todo }) => {
     const cancelEditing = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsEditing(false);
-        setNewTitle(todo.title);
       }
     };
 
@@ -78,20 +45,27 @@ export const TodoItem: FC<Props> = ({ todo }) => {
   }, []);
 
   useEffect(() => {
+    setNewTitle(todo.title);
+
     if (isEditing && editRef.current) {
       editRef.current.focus();
     }
   }, [isEditing]);
 
   return (
-    <li className={todoClassnames}>
+    <li
+      className={classNames({
+        completed: todo.completed,
+        editing: isEditing,
+      })}
+    >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           id="toggle-view"
           checked={todo.completed}
-          onChange={updateTodoCompleted}
+          onChange={() => handleToggleTodoStatus(todo)}
         />
 
         <label

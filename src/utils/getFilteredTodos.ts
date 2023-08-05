@@ -1,6 +1,10 @@
 import { Status, Todo } from '../types';
 
 export const getFilteredTodos = (todos: Todo[], filterBy: Status) => {
+  if (filterBy === Status.All) {
+    return todos;
+  }
+
   return todos.filter(todo => {
     switch (filterBy) {
       case Status.Active:
@@ -9,9 +13,8 @@ export const getFilteredTodos = (todos: Todo[], filterBy: Status) => {
       case Status.Completed:
         return todo.completed;
 
-      case Status.All:
       default:
-        return todo;
+        return true;
     }
   });
 };
