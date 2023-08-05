@@ -1,93 +1,49 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext } from 'react';
+import { TodoApp } from './components/TodoApp/TodoApp';
+import { TodoList } from './components/TodoList/TodoList';
+import { TodoContext, TodoContextProvider } from './components/TodoContext';
+import { TodosFilter } from './components/TodosFilter/TodosFilter';
 
 export const App: React.FC = () => {
+  const { dispatch } = useContext(TodoContext);
+
+  const markAllComplete = () => {
+    dispatch({ type: 'mark_all_completed' });
+  };
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <TodoContextProvider>
+      <div className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <TodoApp />
+        </header>
 
-        <form>
+        <section className="main">
           <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+            onChange={markAllComplete}
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
           />
-        </form>
-      </header>
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+          <TodoList />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        </section>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            3 items left
+          </span>
+          <TodosFilter />
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+          <button type="button" className="clear-completed">
+            Clear completed
+          </button>
+        </footer>
+      </div>
+    </TodoContextProvider>
   );
 };
