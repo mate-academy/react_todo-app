@@ -1,15 +1,14 @@
 import { useContext } from 'react';
 
-import { TodoContext, TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 
 import { TodoFilter } from '../TodoFilter';
 
 export const TodoFooter: React.FC = () => {
-  const { todos } = useContext(TodoContext);
-  const { deleteCompletedTodos } = useContext(TodoUpdateContext);
+  const { todos, deleteCompletedTodos } = useContext(TodoContext);
 
   const notCompletedTodos = todos.filter(todo => !todo.completed).length;
-  const isCompletedTodos = todos.some(todo => todo.completed);
+  const isSomeTodoCompleted = todos.some(todo => todo.completed);
 
   return (
     <footer className="footer">
@@ -19,7 +18,7 @@ export const TodoFooter: React.FC = () => {
 
       <TodoFilter />
 
-      {isCompletedTodos && (
+      {isSomeTodoCompleted && (
         <button
           type="button"
           className="clear-completed"

@@ -1,14 +1,15 @@
 import { useContext } from 'react';
 
-import { TodoContext, TodoUpdateContext } from './context/TodoContext';
+import { TodoContext } from './context/TodoContext';
 
-import { TodoList } from './components/TodoList';
-import { TodoHeader } from './components/TodoHeader';
-import { TodoFooter } from './components/TodoFooter';
+import { TodoList, TodoHeader, TodoFooter } from './components';
 
 export const App: React.FC = () => {
-  const { changeTodosStatus, isTodosCompleted } = useContext(TodoUpdateContext);
-  const { todos } = useContext(TodoContext);
+  const {
+    todos,
+    changeTodosStatus,
+    isTodosCompleted,
+  } = useContext(TodoContext);
 
   return (
     <div className="todoapp">

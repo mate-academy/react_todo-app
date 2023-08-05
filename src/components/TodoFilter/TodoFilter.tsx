@@ -1,50 +1,33 @@
 import { useContext } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 
-import { TodoContext, TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 import { Status } from '../../types/Status';
 
+const links = [
+  { path: '#/', name: 'All', status: Status.All },
+  { path: '#/active', name: 'Active', status: Status.Active },
+  { path: '#/completed', name: 'Completed', status: Status.Completed },
+];
+
 export const TodoFilter: React.FC = () => {
-  const { status } = useContext(TodoContext);
-  const { setStatus } = useContext(TodoUpdateContext);
+  const { status, setStatus } = useContext(TodoContext);
 
   return (
     <ul className="filters" data-cy="todosFilter">
-      <li>
-        <a
-          href="#/"
-          className={classNames({
-            selected: status === Status.All,
-          })}
-          onClick={() => setStatus(Status.All)}
-        >
-          All
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/active"
-          className={classNames({
-            selected: status === Status.Active,
-          })}
-          onClick={() => setStatus(Status.Active)}
-        >
-          Active
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/completed"
-          className={classNames({
-            selected: status === Status.Completed,
-          })}
-          onClick={() => setStatus(Status.Completed)}
-        >
-          Completed
-        </a>
-      </li>
+      {links.map(link => (
+        <li key={link.name}>
+          <a
+            href={link.path}
+            className={cn({
+              selected: status === link.status,
+            })}
+            onClick={() => setStatus(link.status)}
+          >
+            {link.name}
+          </a>
+        </li>
+      ))}
     </ul>
   );
 };

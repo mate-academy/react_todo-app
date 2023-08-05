@@ -1,31 +1,50 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ReactNode, useState, useMemo } from 'react';
+import {
+  useState,
+  useMemo,
+  PropsWithChildren,
+  createContext,
+  FC,
+} from 'react';
 
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-type Props = {
-  children: ReactNode;
-};
+const TODO_KEY = 'todos';
 
-export const TodoContext = React.createContext({
-  todos: [] as Todo[],
+interface Context {
+  todos: Todo[];
+  setTodos: (todo: Todo[]) => void,
+  status: Status;
+  setStatus: (status: Status) => void;
+  isTodosCompleted: boolean;
+  addTodo: (todo: Todo) => void;
+  deleteTodo: (todoId: string) => void;
+  deleteCompletedTodos: () => void;
+  updateTodo: (
+    todoId: string,
+    fieldToUpdate: string,
+    newValue: unknown,
+  ) => void;
+  changeTodosStatus: () => void;
+}
+
+export const TodoContext = createContext<Context>({
+  todos: [],
+  setTodos: () => { },
   status: Status.All,
-});
-
-export const TodoUpdateContext = React.createContext({
-  addTodo: (_todo: Todo) => { },
-  deleteTodo: (_todoId: string) => { },
-  deleteCompletedTodos: () => { },
-  updateTodo: (_todo: Todo) => { },
-  changeTodosStatus: () => { },
-  setStatus: (_status: Status) => { },
+  setStatus: () => { },
   isTodosCompleted: false,
+  addTodo: () => { },
+  deleteTodo: () => { },
+  deleteCompletedTodos: () => { },
+  updateTodo: () => { },
+  changeTodosStatus: () => { },
 });
 
-export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+export const TodoProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
+  const [todos, setTodos] = useLocalStorage<Todo[]>(TODO_KEY, []);
   const [status, setStatus] = useState(Status.All);
 
   const isTodosCompleted = todos.every(todo => todo.completed);
@@ -42,9 +61,16 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setTodos(currentTodos => currentTodos.filter(todo => !todo.completed));
   };
 
-  const updateTodo = (currentTodo: Todo) => {
+  const updateTodo = (
+    todoId: string,
+    fieldToUpdate: string,
+    newValue: unknown,
+  ) => {
     setTodos(currentTodos => currentTodos
-      .map(todo => (todo.id === currentTodo.id ? currentTodo : todo)));
+      .map(todo => (todo.id === todoId
+        ? { ...todo, [fieldToUpdate]: newValue }
+        : todo
+      )));
   };
 
   const changeTodosStatus = () => {
@@ -55,6 +81,9 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   const value = useMemo(() => {
     return {
+      todos,
+      setTodos,
+      status,
       addTodo,
       deleteTodo,
       deleteCompletedTodos,
@@ -63,15 +92,11 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       setStatus,
       isTodosCompleted,
     };
-  }, [isTodosCompleted]);
+  }, [todos, status, isTodosCompleted]);
 
   return (
-    <TodoUpdateContext.Provider value={value}>
-      <TodoContext.Provider
-        value={{ todos, status }}
-      >
-        {children}
-      </TodoContext.Provider>
-    </TodoUpdateContext.Provider>
+    <TodoContext.Provider value={value}>
+      {children}
+    </TodoContext.Provider>
   );
 };

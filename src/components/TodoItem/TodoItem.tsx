@@ -6,11 +6,10 @@ import {
   useContext,
   memo,
 } from 'react';
-import classNames from 'classnames';
-
-import { TodoUpdateContext } from '../../context/TodoContext';
+import cn from 'classnames';
 
 import { Todo } from '../../types/Todo';
+import { TodoContext } from '../../context/TodoContext';
 
 type Props = {
   todo: Todo;
@@ -23,34 +22,23 @@ export const TodoItem: React.FC<Props> = memo(
     const [isEditing, setIsEditing] = useState(false);
     const [query, setQuery] = useState(todo.title);
 
-    const { updateTodo, deleteTodo } = useContext(TodoUpdateContext);
+    const { updateTodo, deleteTodo } = useContext(TodoContext);
 
-    const inputRef = useRef<null | HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleCheckboxChange = () => {
-      const updatedTodo = {
-        ...todo,
-        completed: !todo.completed,
-      };
-
-      updateTodo(updatedTodo);
+      updateTodo(todo.id, 'completed', !todo.completed);
     };
 
-    const handleTitleClick = (event: React.MouseEvent) => {
-      if (event.detail === 2) {
-        setIsEditing(true);
-      }
+    const handleBlur = () => {
+      updateTodo(todo.id, 'title', query);
+      setIsEditing(false);
     };
 
     const handleKeyboardClick = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        const updatedTodo = {
-          ...todo,
-          title: query,
-        };
-
         setIsEditing(false);
-        updateTodo(updatedTodo);
+        updateTodo(todo.id, 'title', query);
       }
 
       if (event.key === 'Escape') {
@@ -75,7 +63,7 @@ export const TodoItem: React.FC<Props> = memo(
     }, [isEditing, query]);
 
     return (
-      <li className={classNames({
+      <li className={cn({
         completed: todo.completed,
         editing: isEditing,
       })}
@@ -88,7 +76,7 @@ export const TodoItem: React.FC<Props> = memo(
             onChange={handleCheckboxChange}
           />
           <label
-            onClick={(event) => handleTitleClick(event)}
+            onDoubleClick={() => setIsEditing(true)}
           >
             {query}
           </label>
@@ -104,10 +92,7 @@ export const TodoItem: React.FC<Props> = memo(
           className="edit"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          onBlur={(event) => {
-            setQuery(event.target.value);
-            setIsEditing(false);
-          }}
+          onBlur={handleBlur}
           ref={inputRef}
         />
       </li>

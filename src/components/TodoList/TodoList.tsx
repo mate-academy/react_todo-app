@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { TodoContext } from '../../context/TodoContext';
 import { Status } from '../../types/Status';
@@ -8,21 +8,24 @@ import { TodoItem } from '../TodoItem';
 export const TodoList: React.FC = () => {
   const { todos, status } = useContext(TodoContext);
 
-  const updatedTodos = todos.filter(todo => {
-    switch (status) {
-      case Status.All:
-        return todo;
-
-      case Status.Completed:
-        return todo.completed;
-
-      case Status.Active:
-        return !todo.completed;
-
-      default:
-        return true;
+  const updatedTodos = useMemo(() => {
+    if (status === Status.All) {
+      return todos;
     }
-  });
+
+    return todos.filter(todo => {
+      switch (status) {
+        case Status.Completed:
+          return todo.completed;
+
+        case Status.Active:
+          return !todo.completed;
+
+        default:
+          return true;
+      }
+    });
+  }, [todos, status]);
 
   return (
     <ul className="todo-list" data-cy="todosList">

@@ -1,13 +1,13 @@
 import { useState, useContext } from 'react';
 import { nanoid } from 'nanoid';
 
-import { TodoUpdateContext } from '../../context/TodoContext';
 import { Todo } from '../../types/Todo';
+import { TodoContext } from '../../context/TodoContext';
 
 export const TodoHeader: React.FC = () => {
   const [query, setQuery] = useState('');
 
-  const { addTodo } = useContext(TodoUpdateContext);
+  const { addTodo } = useContext(TodoContext);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -15,7 +15,7 @@ export const TodoHeader: React.FC = () => {
     const newTodo: Todo = {
       completed: false,
       id: nanoid(),
-      title: query,
+      title: query.trim(),
     };
 
     addTodo(newTodo);
