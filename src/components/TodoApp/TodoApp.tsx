@@ -6,8 +6,8 @@ import { TodosFilter } from '../TodosFilter';
 
 export const TodoApp: React.FC = () => {
   const {
-    areTodos,
-    areAllCompleted,
+    hasTodos,
+    isEveryCompleted,
     toggleAllTodosStatus,
     addTodo,
   } = useContext(TodosContext);
@@ -47,12 +47,12 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {areTodos && (
+      {hasTodos && (
         <>
           <section className="main">
             <input
-              checked={areAllCompleted}
-              onChange={() => toggleAllTodosStatus()}
+              checked={isEveryCompleted}
+              onChange={toggleAllTodosStatus}
               type="checkbox"
               id="toggle-all"
               className="toggle-all"

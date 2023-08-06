@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types';
 import { TodosContext } from '../../TodosContext';
@@ -13,11 +18,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const {
     deleteTodo,
-    toggleCompletedTodo,
-    editTodo,
+    toggleTodoStatus,
+    editTodoTitle,
     todoEditId,
     setTodoEditId,
   } = useContext(TodosContext);
+
+  const titleInputRef: React.RefObject<HTMLInputElement> = useRef(null);
+
+  useEffect(() => {
+    if (todoEditId === todo.id) {
+      titleInputRef.current?.focus();
+    }
+  }, [todoEditId]);
 
   const handleEdit = (todoId: number, todoTitle: string) => {
     setTodoEditId(todoId);
@@ -32,7 +45,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (key === 'Enter' && newTodoTitle.trim()) {
-      editTodo(todoEditId as number, newTodoTitle);
+      editTodoTitle(todoEditId as number, newTodoTitle);
       setTodoEditId(null);
     }
 
@@ -45,15 +58,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleBlur = (todoId: number) => {
     if (!newTodoTitle.trim()) {
       deleteTodo(todoId);
-      setTodoEditId(null);
-      setNewTodoTitle('');
+    } else {
+      editTodoTitle(todoEditId as number, newTodoTitle);
     }
 
-    if (newTodoTitle.trim()) {
-      editTodo(todoEditId as number, newTodoTitle);
-      setTodoEditId(null);
-      setNewTodoTitle('');
-    }
+    setTodoEditId(null);
+    setNewTodoTitle('');
   };
 
   return (
@@ -68,7 +78,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           type="checkbox"
           className="toggle"
-          onChange={() => toggleCompletedTodo(todo.id)}
+          onChange={() => toggleTodoStatus(todo.id)}
         />
         <label
           onDoubleClick={() => handleEdit(todo.id, todo.title)}
@@ -83,6 +93,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </div>
       <input
+        ref={titleInputRef}
         type="text"
         className="edit"
         value={newTodoTitle}

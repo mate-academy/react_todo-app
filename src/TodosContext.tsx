@@ -1,30 +1,33 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, PropsWithChildren } from 'react';
 import { Todo, Status, Context } from './types';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
 export const TodosContext = React.createContext({} as Context);
+const storageKey = 'todos';
 
-type Props = {
-  children: React.ReactNode,
-};
-
-export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [allTodos, setAllTodos] = useLocalStorage<Todo[]>('todos', []);
+export const TodosProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const [allTodos, setAllTodos] = useLocalStorage<Todo[]>(storageKey, []);
   const [todoEditId, setTodoEditId] = useState<number | null>(null);
   const [status, setStatus] = useState(Status.All);
 
-  const visibleTodos = allTodos.filter(todo => {
-    switch (status) {
-      case Status.Active:
-        return !todo.completed;
-
-      case Status.Completed:
-        return todo.completed;
-
-      default:
-        return todo;
+  const visibleTodos = useMemo(() => {
+    if (status === Status.All) {
+      return allTodos;
     }
-  });
+
+    return allTodos.filter(todo => {
+      switch (status) {
+        case Status.Active:
+          return !todo.completed;
+
+        case Status.Completed:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+  }, [allTodos, status]);
 
   const addTodo = (todo: Todo) => {
     setAllTodos(prevTodos => [...prevTodos, todo]);
@@ -36,49 +39,42 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     ));
   };
 
-  const toggleCompletedTodo = (todoId: number) => {
-    setAllTodos(prevTodos => prevTodos.map(todo => {
-      if (todo.id !== todoId) {
-        return todo;
-      }
-
-      return { ...todo, completed: !todo.completed };
-    }));
+  const toggleTodoStatus = (todoId: number) => {
+    setAllTodos(prevTodos => prevTodos.map(
+      todo => (todo.id === todoId
+        ? { ...todo, completed: !todo.completed }
+        : todo),
+    ));
   };
 
-  const editTodo = (todoId: number, newTitle: string) => {
-    setAllTodos(prevTodos => prevTodos.map(todo => {
-      if (todo.id !== todoId) {
-        return todo;
-      }
-
-      return { ...todo, title: newTitle };
-    }));
+  const editTodoTitle = (todoId: number, newTitle: string) => {
+    setAllTodos(prevTodos => prevTodos.map(
+      todo => (todo.id === todoId
+        ? { ...todo, title: newTitle }
+        : todo),
+    ));
   };
 
-  const incompletedCount = allTodos.reduce((count, todo) => {
-    return todo.completed
-      ? count
-      : count + 1;
-  }, 0);
+  const incompletedCount = useMemo(() => {
+    return allTodos.filter(({ completed }) => !completed).length;
+  }, [allTodos]);
 
-  const areTodos = allTodos.length > 0;
-  const areAllCompleted = allTodos.every(todo => todo.completed);
-  const areSomeCompleted = allTodos.some(todo => todo.completed);
+  const hasTodos = useMemo(() => {
+    return allTodos.length > 0;
+  }, [allTodos]);
+
+  const isEveryCompleted = useMemo(() => {
+    return allTodos.every(todo => todo.completed);
+  }, [allTodos]);
+
+  const isAnyCompleted = useMemo(() => {
+    return allTodos.some(todo => todo.completed);
+  }, [allTodos]);
 
   const toggleAllTodosStatus = () => {
-    if (!areAllCompleted) {
-      setAllTodos(prevTodos => prevTodos.map(todo => ({
-        ...todo,
-        completed: true,
-      })));
-
-      return;
-    }
-
     setAllTodos(prevTodos => prevTodos.map(todo => ({
       ...todo,
-      completed: false,
+      completed: !isEveryCompleted,
     })));
   };
 
@@ -94,12 +90,12 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setStatus,
     addTodo,
     deleteTodo,
-    toggleCompletedTodo,
-    editTodo,
+    toggleTodoStatus,
+    editTodoTitle,
     incompletedCount,
-    areTodos,
-    areAllCompleted,
-    areSomeCompleted,
+    hasTodos,
+    isEveryCompleted,
+    isAnyCompleted,
     toggleAllTodosStatus,
     removeCompleted,
     todoEditId,

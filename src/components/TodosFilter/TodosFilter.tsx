@@ -3,10 +3,16 @@ import classNames from 'classnames';
 import { TodosContext } from '../../TodosContext';
 import { Status } from '../../types';
 
+const FILTER_BTNS_DATA = [
+  { path: '#/', filterValue: Status.All, label: 'All' },
+  { path: '#/active', filterValue: Status.Active, label: 'Active' },
+  { path: '#/completed', filterValue: Status.Completed, label: 'Completed' },
+];
+
 export const TodosFilter: React.FC = () => {
   const {
     incompletedCount,
-    areSomeCompleted,
+    isAnyCompleted,
     removeCompleted,
     status,
     setStatus,
@@ -19,44 +25,22 @@ export const TodosFilter: React.FC = () => {
       </span>
 
       <ul className="filters">
-        <li>
-          <a
-            href="#/"
-            className={classNames({
-              selected: status === Status.All,
-            })}
-            onClick={() => setStatus(Status.All)}
-          >
-            All
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/active"
-            className={classNames({
-              selected: status === Status.Active,
-            })}
-            onClick={() => setStatus(Status.Active)}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            className={classNames({
-              selected: status === Status.Completed,
-            })}
-            onClick={() => setStatus(Status.Completed)}
-          >
-            Completed
-          </a>
-        </li>
+        {FILTER_BTNS_DATA.map(item => (
+          <li key={item.path}>
+            <a
+              href={item.path}
+              className={classNames({
+                selected: status === item.filterValue,
+              })}
+              onClick={() => setStatus(item.filterValue)}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
 
-      {areSomeCompleted && (
+      {isAnyCompleted && (
         <button
           type="button"
           className="clear-completed"
