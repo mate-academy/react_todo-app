@@ -1,4 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+// This eslint-disable are necessary, because button in this task
+// should not have text label
 import cn from 'classnames';
 import {
   useContext,

@@ -15,10 +15,12 @@ export const App: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (todoTitle.trim()) {
+    const trimedTitle = todoTitle.trim();
+
+    if (trimedTitle) {
       const newTodo = {
         id: getRandomId(),
-        title: todoTitle.trim(),
+        title: trimedTitle,
         completed: false,
       };
 

@@ -30,7 +30,10 @@ export const TodoFooter: React.FC = () => {
             className={filterStatus === Status.All
               ? 'selected'
               : ''}
-            onClick={() => setFilterStatus(Status.All)}
+            onClick={(event) => {
+              event.preventDefault();
+              setFilterStatus(Status.All);
+            }}
           >
             All
           </a>
@@ -42,7 +45,10 @@ export const TodoFooter: React.FC = () => {
             className={filterStatus === Status.Active
               ? 'selected'
               : ''}
-            onClick={() => setFilterStatus(Status.Active)}
+            onClick={(event) => {
+              event.preventDefault();
+              setFilterStatus(Status.Active);
+            }}
           >
             Active
           </a>
@@ -54,7 +60,10 @@ export const TodoFooter: React.FC = () => {
             className={filterStatus === Status.Completed
               ? 'selected'
               : ''}
-            onClick={() => setFilterStatus(Status.Completed)}
+            onClick={(event) => {
+              event.preventDefault();
+              setFilterStatus(Status.Completed);
+            }}
           >
             Completed
           </a>
