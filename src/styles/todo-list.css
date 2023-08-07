@@ -60,10 +60,11 @@
   display: block;
   line-height: 1.2;
   transition: color 0.4s;
+  color: #3ebac0;
 }
 
 .todo-list li.completed label {
-  color: #d9d9d9;
+  color: rgba(73, 167, 172, 0.19);
   text-decoration: line-through;
 }
 
@@ -78,7 +79,7 @@
 }
 
 .todo-list li .destroy {
-  display: none;
+  display: block;
   position: absolute;
   top: 0;
   right: 10px;
@@ -87,21 +88,17 @@
   height: 40px;
   margin: auto 0;
   font-size: 30px;
-  color: #cc9a9a;
+  color: #3ae3ec;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
 }
 
 .todo-list li .destroy:hover {
-  color: #af5b5e;
+  color: #b75255;
 }
 
 .todo-list li .destroy:after {
   content: "×";
-}
-
-.todo-list li:hover .destroy {
-  display: block;
 }
 
 /*
