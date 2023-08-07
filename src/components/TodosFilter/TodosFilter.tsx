@@ -3,41 +3,67 @@ import { TodoContext } from '../TodoContext';
 import { Status } from './Status';
 
 export const TodosFilter: React.FC = () => {
-  const { dispatch, setFilter, filterTodos } = useContext(TodoContext);
+  const { setFilter, dispatch, state } = useContext(TodoContext);
 
-  const filterTodosByType = (filterType: Status) => {
+  const handleFilterChange = (filterType: Status) => {
     setFilter(filterType);
-    const filteredTodos = filterTodos(filterType);
-
-    dispatch({ type: 'set_filtered_todos', payload: filteredTodos });
   };
 
+  const handleDeleteComplete = () => {
+    dispatch({ type: 'delete_all_complete' });
+  };
+
+  const completedTodoLength
+    = state.allTodos.filter(todo => todo.completed).length;
+
+  const uncompletedTodos
+    = state.allTodos.filter(todo => !todo.completed).length;
+  const todoLength = state.allTodos.length;
+
   return (
-    <ul className="filters">
-      <li>
-        <button
-          type="button"
-          onClick={() => filterTodosByType(Status.All)}
-        >
-          All
-        </button>
-      </li>
-      <li>
-        <button
-          type="button"
-          onClick={() => filterTodosByType(Status.Completed)}
-        >
-          Completed
-        </button>
-      </li>
-      <li>
-        <button
-          type="button"
-          onClick={() => filterTodosByType(Status.Active)}
-        >
-          Active
-        </button>
-      </li>
-    </ul>
+    (todoLength > 0) ? (
+      <>
+        <span className="todo-count" data-cy="todosCounter">
+          {`${uncompletedTodos} items left`}
+        </span>
+        <ul className="filters">
+          <li>
+            <button
+              type="button"
+              onClick={() => handleFilterChange(Status.All)}
+            >
+              All
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              onClick={() => handleFilterChange(Status.Completed)}
+            >
+              Completed
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              onClick={() => handleFilterChange(Status.Active)}
+            >
+              Active
+            </button>
+          </li>
+        </ul>
+        {
+          !!completedTodoLength && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleDeleteComplete}
+            >
+              Clear completed
+            </button>
+          )
+        }
+      </>
+    ) : null
   );
 };
