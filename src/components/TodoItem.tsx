@@ -69,6 +69,16 @@ export const TodoItem: React.FC<Props> = ({
     setEditableTodoId(null);
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      editTodo(todo);
+    }
+
+    if (e.key === 'Escape') {
+      setEditableTodoId(null);
+    }
+  }
+
   return (
     <li
       data-id={todo.id}
@@ -78,7 +88,6 @@ export const TodoItem: React.FC<Props> = ({
       })}
       onDoubleClick={() => setEditableTodoId(todo.id)}
     >
-
       <div className="view">
         <input
           type="checkbox"
@@ -87,11 +96,7 @@ export const TodoItem: React.FC<Props> = ({
           checked={todo.completed}
           onChange={() => changeChecked(todo)}
         />
-
-        <label>
-          {todo.title}
-        </label>
-
+        <label>{todo.title}</label>
         <button
           type="button"
           className="destroy"
@@ -106,15 +111,7 @@ export const TodoItem: React.FC<Props> = ({
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
           onBlur={() => editTodo(todo)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              editTodo(todo);
-            }
-
-            if (e.key === 'Escape') {
-              setEditableTodoId(null);
-            }
-          }}
+          onKeyDown={handleKeyDown}
           // eslint-disable-next-line
           autoFocus
         />

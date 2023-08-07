@@ -7,30 +7,16 @@ export const TodoList: React.FC = () => {
   const { filteredTodos, todos, setTodos } = useContext(TodosContext);
 
   const toggleTodos = () => {
-    let newTodos;
-
-    if (todos.some((item) => !item.completed)) {
-      newTodos = todos.map((item) => {
-        if (!item.completed) {
-          return {
-            ...item,
-            completed: true,
-          };
-        }
-
-        return item;
-      });
-    } else {
-      newTodos = todos.map((item) => {
-        return {
-          ...item,
-          completed: false,
-        };
-      });
-    }
+    const shouldMarkAsCompleted = todos.some((item) => !item.completed);
+    const newTodos = todos.map((item) => ({
+      ...item,
+      completed: shouldMarkAsCompleted,
+    }));
 
     setTodos(newTodos);
   };
+
+  const areAllTodosCompleted = todos.every((item) => item.completed);
 
   return (
     <section className="main">
@@ -40,7 +26,7 @@ export const TodoList: React.FC = () => {
         className="toggle-all"
         data-cy="toggleAll"
         onClick={() => toggleTodos()}
-        defaultChecked={todos.every((item) => item.completed)}
+        defaultChecked={areAllTodosCompleted}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
