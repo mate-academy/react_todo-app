@@ -69,7 +69,7 @@ export const TodoApp: React.FC = () => {
 
       {todos.length !== 0
         && (
-          <footer className="footer">
+        <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
               {`${countNotCompletedTodo} items left`}
             </span>
