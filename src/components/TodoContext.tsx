@@ -30,7 +30,7 @@ type TodoAction =
   | { type: 'delete_todo'; payload: number }
   | { type: 'delete_all_complete' }
   | { type: 'toggle_completed'; payload: number }
-  | { type: 'mark_all_completed'; payload: boolean}
+  | { type: 'mark_all_completed'; payload: boolean }
   | { type: 'edit_todo'; payload: { id: number; title: string } }
   | { type: 'set_visible_todos'; payload: Todo[] };
 

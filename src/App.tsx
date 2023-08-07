@@ -10,7 +10,7 @@ export const App: React.FC = () => {
       <div className="todoapp">
         <header className="header">
 
-          <h1>My todo list</h1>
+          <h1>todos</h1>
           <TodoApp />
         </header>
 
