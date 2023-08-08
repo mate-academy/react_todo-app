@@ -1,32 +1,40 @@
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect, useContext } from 'react';
-import {
-  Navigate,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import React, { useEffect, useContext } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
-import { FilterStatus } from './types/FilterStatus';
 import { Error } from './Error';
 import { TodoList } from './TodoList';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { TodosContext } from './TodoContext';
+import { Todo } from './types/Todo';
+import { FilterStatus } from './types/FilterStatus';
+
+type Props = {
+  visibleTodos: Todo[];
+  filter: FilterStatus,
+  setFilter(filterType: FilterStatus): void,
+};
 
 const USER_ID = 9968;
 
-export const App: React.FC = () => {
+export const App: React.FC<Props> = ({
+  visibleTodos,
+  filter,
+  setFilter,
+}) => {
   const {
     todos,
     setTodos,
     isDeleteError,
+    setIsDeleteError,
     isAddError,
+    setIsAddError,
     isUpdateError,
+    setIsUpdateError,
   } = useContext(TodosContext);
-  const [setFilter] = useState(FilterStatus.all);
   const active = todos.filter(todo => todo.completed === false).length;
   const completed = todos.filter(todo => todo.completed).length;
 
@@ -62,103 +70,47 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           todos={todos}
-          setTodos={(todosArray) => setTodos(todosArray)}
+          setTodos={setTodos}
         />
 
         {todos.length > 0 && (
-          <Routes>
-            <Route
-              path="/"
-              element={(
-                <>
-                  <TodoList
-                    todos={todos}
-                    visibleTodos={[...todos]}
-                    toggleAll={toggleAll}
-                    untoggleAll={untoggleAll}
-                  />
-
-                  <Footer
-                    todos={todos}
-                    active={active}
-                    completed={completed}
-                    filter={FilterStatus.all}
-                    setFilter={() => setFilter}
-                    setTodos={(todosArray) => setTodos(todosArray)}
-                  />
-                </>
-              )}
-            />
-
-            <Route
-              path={`/${FilterStatus.all}`}
-              element={<Navigate to="/" replace />}
-            />
-
-            <Route
-              path={`/${FilterStatus.completed}`}
-              element={(
-                <>
-                  <TodoList
-                    todos={todos}
-                    visibleTodos={[...todos].filter(todo => todo.completed === true)}
-                    toggleAll={toggleAll}
-                    untoggleAll={untoggleAll}
-                  />
-
-                  <Footer
-                    todos={todos}
-                    active={active}
-                    completed={completed}
-                    filter={FilterStatus.completed}
-                    setFilter={() => setFilter}
-                    setTodos={(todosArray) => setTodos(todosArray)}
-                  />
-                </>
-              )}
-            />
-
-            <Route
-              path={`/${FilterStatus.active}`}
-              element={(
-                <>
-                  <TodoList
-                    todos={todos}
-                    visibleTodos={[...todos].filter(todo => todo.completed === false)}
-                    toggleAll={toggleAll}
-                    untoggleAll={untoggleAll}
-                  />
-
-                  <Footer
-                    todos={todos}
-                    active={active}
-                    completed={completed}
-                    filter={FilterStatus.active}
-                    setFilter={() => setFilter}
-                    setTodos={(todosArray) => setTodos(todosArray)}
-                  />
-                </>
-              )}
-            />
-
-            <Route
-              path="/*"
-              element={<Navigate to="/" replace />}
-            />
-          </Routes>
+          <TodoList
+            todos={todos}
+            visibleTodos={visibleTodos}
+            toggleAll={toggleAll}
+            untoggleAll={untoggleAll}
+          />
         )}
       </div>
 
+      <Footer
+        todos={todos}
+        active={active}
+        completed={completed}
+        filter={filter}
+        setFilter={setFilter}
+        setTodos={setTodos}
+      />
+
       {isAddError && (
-        <Error text="Unable to add a todo" />
+        <Error
+          text="Unable to add a todo"
+          setIsError={setIsAddError}
+        />
       )}
 
       {isDeleteError && (
-        <Error text="Unable to delete a todo" />
+        <Error
+          text="Unable to delete a todo"
+          setIsError={setIsDeleteError}
+        />
       )}
 
       {isUpdateError && (
-        <Error text="Unable to update a todo" />
+        <Error
+          text="Unable to update a todo"
+          setIsError={setIsUpdateError}
+        />
       )}
     </div>
   );

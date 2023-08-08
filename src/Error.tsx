@@ -3,37 +3,33 @@ import classNames from 'classnames';
 
 type Props = {
   text: string,
+  setIsError(condition: boolean): void,
 };
 
 export const Error: React.FC<Props> = ({
   text,
+  setIsError,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const [isRemoved, setIsRemoved] = useState(false);
 
   setTimeout(() => {
     setIsVisible(false);
   }, 3000);
 
-  setTimeout(() => {
-    setIsRemoved(true);
-  }, 4000);
+  if (!isVisible) {
+    setTimeout(() => {
+      setIsError(false);
+    }, 700);
+  }
 
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
       {
-        hidden: !isVisible,
-        removed: isRemoved,
+        hidden: isVisible === false,
       },
     )}
     >
-      <button
-        type="button"
-        aria-label="Mute volume"
-        className="delete"
-        onClick={() => setIsVisible(false)}
-      />
       {text}
     </div>
   );

@@ -17,7 +17,7 @@ export const TodoList: React.FC<Props> = ({
   toggleAll,
   untoggleAll,
 }) => {
-  const { tempTodo, setTodos } = useContext(TodosContext);
+  const { setTodos } = useContext(TodosContext);
   const { setIsUpdateError } = useContext(TodosContext);
 
   const updateAll = async () => {
@@ -45,7 +45,7 @@ export const TodoList: React.FC<Props> = ({
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        onClick={() => updateAll()}
+        onClick={updateAll}
       />
 
       <label htmlFor="toggle-all">Mark all as complete</label>
@@ -61,30 +61,6 @@ export const TodoList: React.FC<Props> = ({
             key={todo.id}
           />
         ))}
-
-        {tempTodo !== null && tempTodo !== undefined && (
-          <li>
-            <div
-              className="view"
-              key={tempTodo.title}
-            >
-              <input
-                type="checkbox"
-                className="toggle"
-                id="toggle-view"
-              />
-              <label>
-                {tempTodo.title}
-              </label>
-              <button
-                type="button"
-                aria-label="delete"
-                className="destroy"
-                data-cy="deleteTodo"
-              />
-            </div>
-          </li>
-        )}
       </ul>
     </section>
   );

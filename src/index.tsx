@@ -6,13 +6,13 @@ import './styles/index.scss';
 import './styles/todo-list.scss';
 import './styles/filters.scss';
 
-import { App } from './App';
+import { AppContainer } from './AppContainer';
 
 createRoot(document.getElementById('root') as HTMLDivElement)
   .render(
     <Router>
       <TodosProvider>
-        <App />
+        <AppContainer />
       </TodosProvider>
     </Router>,
   );

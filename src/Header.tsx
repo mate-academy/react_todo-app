@@ -18,7 +18,7 @@ export const Header: React.FC<Props> = ({
   } = useContext(TodosContext);
   const [todoTitle, setTodoTitle] = useState('');
   const [isInputDisabled, setIsInputDisabled] = useState(false);
-  const postTodo = async (todo: Omit<Todo, 'id'>) => {
+  const addTodo = async (todo: Omit<Todo, 'id'>) => {
     setIsAddError(false);
     setIsInputDisabled(true);
 
@@ -37,30 +37,36 @@ export const Header: React.FC<Props> = ({
     setIsInputDisabled(false);
   };
 
+  const handleAdding = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+
+    const newTodo = {
+      completed: false,
+      userId: 9968,
+      title: todoTitle,
+    };
+
+    addTodo(newTodo);
+
+    setTempTodo({
+      id: 0,
+      ...newTodo,
+    });
+
+    setTodoTitle('');
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoTitle(event.target.value);
+  };
+
   return (
 
     <header className="header">
       <h1>todos</h1>
 
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
-
-          const newTodo = {
-            completed: false,
-            userId: 9968,
-            title: todoTitle,
-          };
-
-          postTodo(newTodo);
-
-          setTempTodo({
-            id: 0,
-            ...newTodo,
-          });
-
-          setTodoTitle('');
-        }}
+        onSubmit={handleAdding}
       >
         <input
           type="text"
@@ -69,9 +75,7 @@ export const Header: React.FC<Props> = ({
           placeholder="What needs to be done?"
           value={todoTitle}
           disabled={isInputDisabled}
-          onChange={(event) => {
-            setTodoTitle(event.target.value);
-          }}
+          onChange={handleChange}
         />
       </form>
     </header>
