@@ -71,5 +71,5 @@ export const AppContainer: React.FC = () => {
         element={<Navigate to="/" replace />}
       />
     </Routes>
-  )
-}
+  );
+};
