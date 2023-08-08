@@ -20,8 +20,12 @@ export function useLocalStorage(
   });
 
   const save = (newValue: Todo[]) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
-    setValue(newValue);
+    try {
+      localStorage.setItem(key, JSON.stringify(newValue));
+      setValue(newValue);
+    } catch (e) {
+      // TODO: error handling
+    }
   };
 
   return [value, save];
