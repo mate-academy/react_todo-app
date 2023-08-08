@@ -13,8 +13,8 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/"
-          className={filterType === Filter.ALL ? 'selected' : ''}
-          onClick={makeSetFilterType(Filter.ALL)}
+          className={filterType === Filter.All ? 'selected' : ''}
+          onClick={makeSetFilterType(Filter.All)}
         >
           All
         </a>
@@ -23,8 +23,8 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/active"
-          className={filterType === Filter.ACTIVE ? 'selected' : ''}
-          onClick={makeSetFilterType(Filter.ACTIVE)}
+          className={filterType === Filter.Active ? 'selected' : ''}
+          onClick={makeSetFilterType(Filter.Active)}
         >
           Active
         </a>
@@ -33,8 +33,8 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          className={filterType === Filter.COMPLETED ? 'selected' : ''}
-          onClick={makeSetFilterType(Filter.COMPLETED)}
+          className={filterType === Filter.Completed ? 'selected' : ''}
+          onClick={makeSetFilterType(Filter.Completed)}
         >
           Completed
         </a>

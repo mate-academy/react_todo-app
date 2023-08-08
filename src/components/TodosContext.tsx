@@ -5,7 +5,7 @@ import { Filter } from '../types/Filter';
 export const TodosContext = React.createContext<TodosContextProps>({
   todos: [],
   filteredTodos: [],
-  filterType: Filter.ALL,
+  filterType: Filter.All,
   setTodos: () => {},
   setFilterType: () => {},
 });

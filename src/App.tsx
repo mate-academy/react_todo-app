@@ -9,10 +9,10 @@ import { TodosContext } from './components/TodosContext';
 
 function filter(type: Filter, toFilter: Todo[]) {
   switch (type) {
-    case Filter.ACTIVE:
+    case Filter.Active:
       return toFilter.filter((item) => !item.completed);
 
-    case Filter.COMPLETED:
+    case Filter.Completed:
       return toFilter.filter((item) => item.completed);
 
     default:
@@ -21,8 +21,8 @@ function filter(type: Filter, toFilter: Todo[]) {
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocalStorage('todos', []);
-  const [filterType, setFilterType] = useState<Filter>(Filter.ALL);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [filterType, setFilterType] = useState<Filter>(Filter.All);
   const filteredTodos = filter(filterType, todos) || [];
 
   return (

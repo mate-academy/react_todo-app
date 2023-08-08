@@ -4,13 +4,13 @@ import { TodosContext } from './TodosContext';
 
 export const TodosHeader: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
-
   const [title, setTitle] = useState('');
-  const id = +new Date();
-  const completed = false;
 
   function addTodo() {
     if (title.trim().length) {
+      const id = +new Date();
+      const completed = false;
+
       const newTodo: Todo = {
         title,
         id,
