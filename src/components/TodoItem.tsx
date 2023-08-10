@@ -29,7 +29,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   };
 
   const deleteTodo = (selectedTodo: Todo): void => {
-    const filteredTodos = todos.filter(t => t !== selectedTodo);
+    const filteredTodos = todos.filter(item => item !== selectedTodo);
 
     setTodos([...filteredTodos]);
   };
@@ -76,6 +76,10 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
   };
 
+  const handleTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
   return (
     <li
       key={todo.id}
@@ -109,7 +113,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
         type="text"
         className="edit no-outline"
         value={title}
-        onChange={(event) => setTitle(event?.target.value)}
+        onChange={handleTodoChange}
         onBlur={handleBlur}
         onKeyUp={handleKeyUp}
       />

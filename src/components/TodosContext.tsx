@@ -5,12 +5,12 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type TodosContextType = {
   todos: Todo[];
-  setTodos: (todo: Todo[]) => void;
+  setTodos: (value: Todo[]) => void;
   checked: boolean;
-  setChecked: (isChecked: boolean) => void;
+  setChecked: (value: boolean) => void;
   visibleTodos: () => Todo[];
   filter: Status;
-  setFilter: (filter: Status) => void;
+  setFilter: (value: Status) => void;
 };
 
 export const TodosContext = React.createContext<TodosContextType>({
