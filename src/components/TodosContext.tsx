@@ -29,9 +29,7 @@ type Props = {
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [isChecked, setIsChecked] = useState<boolean>(
-    todos.every(todo => todo.completed) && todos.length > 0,
-  );
+  const [isChecked, setIsChecked] = useState(false);
   const [filter, setFilter] = useState(Status.ALL);
 
   const visibleTodos = () => {
