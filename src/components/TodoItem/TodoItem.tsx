@@ -12,9 +12,10 @@ type Props = {
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const { todos, setTodos, setChecked } = useContext(TodosContext);
   const [title, setTitle] = useState(todo.title);
-  const [editing, setEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [focus, setFocus] = useState(false);
-  const thisTodo = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const trimmedTitle = title.trim();
 
   const handleCheckedTodo = (todoId: number) => {
     const newTodos = todos.map(curTodo => (
@@ -33,43 +34,47 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     setTodos([...filteredTodos]);
   }
 
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
   const handleDoubleClick = useCallback((
     event: React.MouseEvent<HTMLLabelElement, MouseEvent>,
   ) => {
     event.preventDefault();
-    setEditing(true);
+    setIsEditing(true);
     setFocus(true);
-  }, [editing]);
+  }, [isEditing]);
 
   useEffect(() => {
-    if (focus && thisTodo.current) {
-      thisTodo.current.focus();
+    if (focus && inputRef.current) {
+      inputRef.current.focus();
     }
   }, [focus]);
 
   const handleBlur = () => {
-    setEditing(false);
+    setIsEditing(false);
     setFocus(false);
 
-    if (title.trim() === '') {
+    if (trimmedTitle === '') {
       deletedTodo(todo);
 
       return;
     }
 
-    setTodos(todos.map(t => (t !== todo
+    setTodos(todos.map(t => (t.id !== todo.id
       ? t
       : {
         ...todo,
-        title: title.trim(),
+        title: trimmedTitle,
       })));
-    setTitle(title.trim());
+    setTitle(trimmedTitle);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setTitle(todo.title);
-      setEditing(false);
+      setIsEditing(false);
       setFocus(false);
 
       return;
@@ -83,7 +88,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   return (
     <li className={classNames({
       completed: todo.completed,
-      editing,
+      editing: isEditing,
     })}
     >
       <div className="view">
@@ -107,11 +112,11 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
         />
       </div>
       <input
-        ref={thisTodo}
+        ref={inputRef}
         type="text"
         className="edit"
         value={title}
-        onChange={event => setTitle(event.target.value)}
+        onChange={handleTitleChange}
         onBlur={handleBlur}
         onKeyUp={handleKeyUp}
       />

@@ -14,7 +14,7 @@ export const TodoApp = () => {
   const addNewTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (valueToAddTodo.trim() === '') {
+    if (!valueToAddTodo.trim()) {
       setValueToAddTodo('');
 
       return;
@@ -30,6 +30,10 @@ export const TodoApp = () => {
     setValueToAddTodo('');
   };
 
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueToAddTodo(event.target.value);
+  };
+
   const handleCheckedAllTodos = () => {
     setTodos(todos.map(todo => ({
       ...todo,
@@ -39,15 +43,15 @@ export const TodoApp = () => {
   };
 
   const uncompletedTodosCounter = useMemo(() => {
-    return todos.filter(todo => todo.completed === false).length;
+    return todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
   const completedTodosCounter = useMemo(() => {
-    return todos.filter(todo => todo.completed === true).length;
+    return todos.filter(todo => todo.completed).length;
   }, [todos]);
 
   const clearCompletedTodos = () => {
-    setTodos(todos.filter(todo => todo.completed === false));
+    setTodos(todos.filter(todo => !todo.completed));
     setChecked(false);
   };
 
@@ -60,7 +64,7 @@ export const TodoApp = () => {
           <input
             type="text"
             value={valueToAddTodo}
-            onChange={(event) => setValueToAddTodo(event.target.value)}
+            onChange={handleTitleChange}
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
