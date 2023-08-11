@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { TodosContext } from '../TodosContext';
 import { Status } from '../types/Status';
+import { useTodo } from '../hooks/useTodo';
 
 export const TodosFilter: React.FC = React.memo(() => {
-  const { filter, setFilter } = useContext(TodosContext);
+  const { filter, setFilter } = useTodo();
 
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,

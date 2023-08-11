@@ -1,16 +1,16 @@
 import React, {
-  useState, useContext, useRef, useCallback, useEffect,
+  useState, useRef, useCallback, useEffect,
 } from 'react';
 import classNames from 'classnames';
-import { TodosContext } from '../TodosContext';
 import { Todo } from '../types/Todo';
+import { useTodo } from '../hooks/useTodo';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
-  const { todos, setTodos, setIsChecked } = useContext(TodosContext);
+  const { todos, setTodos, setIsChecked } = useTodo();
   const [title, setTitle] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
   const [focus, setFocus] = useState(false);

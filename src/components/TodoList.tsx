@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { TodosContext } from '../TodosContext';
+import React from 'react';
 import { TodoItem } from './TodoItem';
+import { useTodo } from '../hooks/useTodo';
 
 export const TodoList: React.FC = React.memo(() => {
-  const { visibleTodos } = useContext(TodosContext);
+  const { visibleTodos } = useTodo();
 
   return (
     <ul className="todo-list" data-cy="todosList">

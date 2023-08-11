@@ -1,14 +1,14 @@
 import React, {
-  useState, useContext, useMemo, useRef, useEffect,
+  useState, useMemo, useRef, useEffect,
 } from 'react';
-import { TodosContext } from '../TodosContext';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
+import { useTodo } from '../hooks/useTodo';
 
 export const TodoApp = () => {
   const {
     todos, setTodos, isChecked, setIsChecked,
-  } = useContext(TodosContext);
+  } = useTodo();
 
   const [newTodoTitle, setNewTodoTitle] = useState('');
 
