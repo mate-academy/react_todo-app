@@ -1,15 +1,16 @@
-import {
-  useContext, useEffect, useMemo, useRef, useState,
+import React, {
+  useState, useContext, useMemo, useRef, useEffect,
 } from 'react';
+import { TodosContext } from '../TodosContext';
 import { TodoList } from './TodoList';
-import { TodosContext } from './TodosContext';
 import { TodosFilter } from './TodosFilter';
 
 export const TodoApp = () => {
   const {
     todos, setTodos, isChecked, setIsChecked,
   } = useContext(TodosContext);
-  const [todoTitle, setTodoTitle] = useState('');
+
+  const [newTodoTitle, setNewTodoTitle] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -20,52 +21,48 @@ export const TodoApp = () => {
   });
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTodoTitle(event.target.value);
+    setNewTodoTitle(event.target.value);
   };
 
-  const handleTodoSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const newTitle = todoTitle.trim();
+    const newTitle = newTodoTitle.trim();
 
     if (!newTitle) {
-      setTodoTitle('');
+      setNewTodoTitle('');
 
       return;
     }
 
     const newTodo = {
       id: +new Date(),
-      title: newTitle,
+      title: (newTitle),
       completed: false,
     };
 
-    setTodos([
-      newTodo,
-      ...todos,
-    ]);
-
-    setTodoTitle('');
+    setTodos([...todos, newTodo]);
+    setNewTodoTitle('');
   };
 
-  const handleCheckAllTodos = () => {
-    setTodos(todos.map(item => ({
-      ...item,
+  const handleCheckedAllTodos = () => {
+    setTodos(todos.map(todo => ({
+      ...todo,
       completed: !isChecked,
     })));
     setIsChecked(!isChecked);
   };
 
-  const uncompletedTodos = useMemo(() => {
-    return todos.filter(item => !item.completed).length;
+  const uncompletedTodosCounter = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
-  const completedTodos = useMemo(() => {
-    return todos.filter(item => item.completed).length;
+  const completedTodosCounter = useMemo(() => {
+    return todos.filter(todo => todo.completed).length;
   }, [todos]);
 
   const clearCompletedTodos = () => {
-    setTodos(todos.filter(item => !item.completed));
+    setTodos(todos.filter(todo => !todo.completed));
     setIsChecked(false);
   };
 
@@ -74,15 +71,15 @@ export const TodoApp = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={handleTodoSubmit}>
+        <form onSubmit={handleSubmit}>
           <input
             ref={inputRef}
             type="text"
+            value={newTodoTitle}
+            onChange={handleTitleChange}
             data-cy="createTodo"
             className="new-todo no-outline"
             placeholder="What needs to be done?"
-            value={todoTitle}
-            onChange={handleTitleChange}
           />
         </form>
       </header>
@@ -96,7 +93,7 @@ export const TodoApp = () => {
               className="toggle-all"
               data-cy="toggleAll"
               checked={isChecked}
-              onChange={handleCheckAllTodos}
+              onChange={handleCheckedAllTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -105,12 +102,12 @@ export const TodoApp = () => {
 
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {`${uncompletedTodos} item${uncompletedTodos === 1 ? '' : 's'} left`}
+              {`${uncompletedTodosCounter} item${uncompletedTodosCounter === 1 ? '' : 's'} left`}
             </span>
 
             <TodosFilter />
 
-            {completedTodos > 0 && (
+            {completedTodosCounter > 0 && (
               <button
                 type="button"
                 className="clear-completed"

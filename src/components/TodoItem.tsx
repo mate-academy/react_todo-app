@@ -1,10 +1,9 @@
 import React, {
-  useCallback, useContext, useEffect, useRef, useState,
+  useState, useContext, useRef, useCallback, useEffect,
 } from 'react';
 import classNames from 'classnames';
-
+import { TodosContext } from '../TodosContext';
 import { Todo } from '../types/Todo';
-import { TodosContext } from './TodosContext';
 
 type Props = {
   todo: Todo;
@@ -19,20 +18,21 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const checkTodo = (todoId: number): void => {
-    const newTodos = todos.map(item => (
+    const updatedTodos = todos.map(item => (
       item.id === todoId
         ? { ...item, completed: !item.completed }
         : item));
 
-    setTodos(newTodos);
-    setIsChecked(newTodos.every(item => item.completed));
+    setTodos(updatedTodos);
+    setIsChecked(updatedTodos.every(item => item.completed));
   };
 
-  const deleteTodo = (selectedTodo: Todo): void => {
-    const filteredTodos = todos.filter(item => item !== selectedTodo);
+  function deleteTodo(todoId: number): void {
+    const filteredTodos = todos
+      .filter(item => item.id !== todoId);
 
     setTodos(filteredTodos);
-  };
+  }
 
   const handleDoubleClick = useCallback(() => {
     setIsEditing(true);
@@ -48,20 +48,23 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const handleBlur = () => {
     const newTitle = title.trim();
 
-    setIsEditing(false);
-    setFocus(false);
-
     if (!newTitle) {
-      deleteTodo(todo);
+      deleteTodo(todo.id);
 
       return;
     }
 
-    setTodos(todos.map(item => {
-      return item.id !== todo.id ? item : { ...todo, title: newTitle };
-    }));
+    setTodos(todos.map(item => (
+      item.id === todo.id
+        ? {
+          ...todo,
+          title: newTitle,
+        }
+        : item)));
 
     setTitle(newTitle);
+    setIsEditing(false);
+    setFocus(false);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -69,8 +72,6 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       setTitle(todo.title);
       setIsEditing(false);
       setFocus(false);
-
-      return;
     }
 
     if (event.key === 'Enter') {
@@ -78,36 +79,30 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
   };
 
-  const handleTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
   return (
-    <li
-      key={todo.id}
-      className={classNames({
-        completed: todo.completed,
-        editing: isEditing,
-      })}
+    <li className={classNames({
+      completed: todo.completed,
+      editing: isEditing,
+    })}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
           checked={todo.completed}
-          onChange={() => checkTodo(todo.id)}
+          onChange={() => checkTodo(todo.id as number)}
         />
-        <label onDoubleClick={handleDoubleClick}>
+        <label
+          onDoubleClick={handleDoubleClick}
+        >
           {title}
         </label>
-
         <button
           type="button"
           aria-label="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => deleteTodo(todo)}
+          onClick={() => deleteTodo(todo.id)}
         />
       </div>
       <input
@@ -115,7 +110,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
         type="text"
         className="edit no-outline"
         value={title}
-        onChange={handleTodoChange}
+        onChange={event => setTitle(event.target.value)}
         onBlur={handleBlur}
         onKeyUp={handleKeyUp}
       />

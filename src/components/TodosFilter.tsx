@@ -1,19 +1,18 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-
-import { TodosContext } from './TodosContext';
+import { TodosContext } from '../TodosContext';
 import { Status } from '../types/Status';
 
-export const TodosFilter: React.FC = () => {
+export const TodosFilter: React.FC = React.memo(() => {
   const { filter, setFilter } = useContext(TodosContext);
 
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     const target = event.target as HTMLElement;
-    const value = target.innerText;
+    const newFilter = target.innerText;
 
-    setFilter(value as Status);
+    setFilter(newFilter as Status);
   };
 
   return (
@@ -55,4 +54,4 @@ export const TodosFilter: React.FC = () => {
       </li>
     </ul>
   );
-};
+});

@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
 export function useLocalStorage<T>(
-  key: string,
-  startValue:T,
+  key: string, startValue: T,
 ): [T, (value: T) => void] {
   const [value, setValue] = useState(() => {
     const data = localStorage.getItem(key);
@@ -13,7 +12,7 @@ export function useLocalStorage<T>(
 
     try {
       return JSON.parse(data);
-    } catch (e) {
+    } catch {
       localStorage.removeItem(key);
 
       return startValue;

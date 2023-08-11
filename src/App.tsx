@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { TodoProvider } from './TodosContext';
 import { TodoApp } from './components/TodoApp';
-import { TodoProvider } from './components/TodosContext';
 
 export const App: React.FC = () => {
   return (
