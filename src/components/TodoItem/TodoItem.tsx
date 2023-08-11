@@ -1,7 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import cn from 'classnames';
 import { useState, useContext } from 'react';
 import { Todo } from '../../services/types';
@@ -18,29 +16,29 @@ export const TodoItem: React.FC<Props> = ({
   const [titleQuery, setTitleQuery] = useState(todo.title);
 
   const {
-    handleTodoChange: hanldeTodoChange,
-    handleOnDelete: hanldeOnDelete,
+    handleTodoChange,
+    handleOnDelete,
+    handleToggleTodo,
   } = useContext(TodosContext);
 
-  const handleOnToggle = (isChecked: boolean) => {
+  const onChangeSubmit = (newQuery: string) => {
+    const normalaziedQuery = newQuery.trim();
+
     const newTodo: Todo = {
       ...todo,
-      completed: isChecked,
+      title: normalaziedQuery,
     };
 
-    hanldeTodoChange(newTodo);
+    if (!normalaziedQuery) {
+      handleOnDelete(newTodo.id);
+    } else {
+      handleTodoChange(newTodo);
+    }
   };
 
   const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    setTitleQuery(event.currentTarget.value);
-
     if (event.key === 'Enter') {
-      const newTodo: Todo = {
-        ...todo,
-        title: titleQuery,
-      };
-
-      hanldeTodoChange(newTodo);
+      onChangeSubmit(titleQuery);
       setIsEditing(false);
     }
 
@@ -64,7 +62,7 @@ export const TodoItem: React.FC<Props> = ({
           className="toggle"
           id="toggle-view"
           checked={todo.completed}
-          onChange={(event) => handleOnToggle(event.currentTarget.checked)}
+          onChange={() => handleToggleTodo(todo.id)}
         />
         <label
           onClick={() => setIsEditing(true)}
@@ -72,17 +70,19 @@ export const TodoItem: React.FC<Props> = ({
           {todo.title}
         </label>
         <button
+          aria-label="delete button"
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => hanldeOnDelete(todo.id)}
+          onClick={() => handleOnDelete(todo.id)}
         />
       </div>
       <input
         type="text"
         className="edit"
-        value={todo.title}
-        onKeyUp={(event) => handleOnKeyUp(event)}
+        value={titleQuery}
+        onChange={event => setTitleQuery(event.currentTarget.value)}
+        onKeyUp={handleOnKeyUp}
       />
     </li>
   );

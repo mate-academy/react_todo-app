@@ -16,7 +16,7 @@ export const TodoApp: React.FC = () => {
       <TodoHeader />
 
       {todos.length
-        && (
+        ? (
           <>
             <section className="main">
               <input
@@ -25,7 +25,7 @@ export const TodoApp: React.FC = () => {
                 className="toggle-all"
                 data-cy="toggleAll"
                 onChange={handleAllCompletedToggle}
-                checked={isEveryTodoCompleted()}
+                checked={isEveryTodoCompleted}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -34,6 +34,8 @@ export const TodoApp: React.FC = () => {
 
             <TodoFooter />
           </>
+        ) : (
+          ''
         )}
     </div>
   );

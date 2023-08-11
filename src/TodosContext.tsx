@@ -1,160 +1,95 @@
-import React, { useState } from 'react';
+import React, { useState, PropsWithChildren, useMemo } from 'react';
 import { Todo } from './services/types';
 import { Filter } from './services/enums';
+import { filterTodos } from './services/utils';
+import { useLocalStorage } from './services/utils/hook';
+import { ContextProps } from './services/types/types';
 
-interface FilterParams {
-  filterBy?: Filter,
-}
-
-function filterTodosByCompleted(todos: Todo[], filter: Filter): Todo[] {
-  let todosCopy = [...todos];
-
-  switch (filter) {
-    case (Filter.ACTIVE): {
-      todosCopy = todosCopy.filter(todo => !todo.completed);
-      break;
-    }
-
-    case (Filter.COMPLETED): {
-      todosCopy = todosCopy.filter(todo => todo.completed);
-      break;
-    }
-
-    default: {
-      break;
-    }
-  }
-
-  return todosCopy;
-}
-
-function filterTodos(todos: Todo[], { filterBy }: FilterParams): Todo[] {
-  return filterBy
-    ? filterTodosByCompleted(todos, filterBy)
-    : todos;
-}
-
-function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
-  const [value, setValue] = useState(startValue);
-
-  const save = (newValue: T) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
-    setValue(newValue);
-  };
-
-  return [value, save];
-}
-
-interface ContextProps {
-  todos: Todo[],
-  visibleTodos: Todo[],
-  handleOnAdd: (newQuery: string) => void,
-  handleAllCompletedToggle: (event: React.FormEvent<HTMLInputElement>) => void,
-  handleClearAllCompleted: () => void,
-  handleTodoChange: (newTodo: Todo) => void,
-  handleOnDelete: (todoId: number) => void,
-  isTodosHasCompleted: () => boolean,
-  isEveryTodoCompleted: () => boolean,
-  filterBy: Filter,
-  setFilterBy: (newFilter: Filter) => void,
-}
+const noop = () => {};
 
 export const TodosContext = React.createContext<ContextProps>({
   todos: [],
   visibleTodos: [],
-  handleOnAdd: () => {},
-  handleAllCompletedToggle: () => {},
-  handleClearAllCompleted: () => {},
-  handleTodoChange: () => {},
-  handleOnDelete: () => {},
-  isTodosHasCompleted: () => false,
-  isEveryTodoCompleted: () => false,
+  handleOnAdd: noop,
+  handleAllCompletedToggle: noop,
+  handleClearAllCompleted: noop,
+  handleTodoChange: noop,
+  handleOnDelete: noop,
+  handleToggleTodo: noop,
+  isTodosHasCompleted: false,
+  isEveryTodoCompleted: false,
   filterBy: Filter.ALL,
-  setFilterBy: () => {},
+  setFilterBy: noop,
+  activeTodos: [],
 });
 
-interface ProviderProps {
-  children: React.ReactNode,
-}
-
-export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
+export const TodosProvider: React.FC<PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filterBy, setFilterBy] = useState(Filter.ALL);
 
   const visibleTodos = filterTodos(todos, { filterBy });
 
   const handleOnAdd = (newQuery: string) => {
-    let newTodoId = 1;
-
-    if (todos.length !== 0) {
-      newTodoId = Math.max(...todos.map(todo => todo.id)) + 1;
-    }
-
     const newTodo: Todo = {
-      id: newTodoId,
+      id: +new Date(),
       title: newQuery.trim(),
       completed: false,
     };
 
-    const newTodos = [
-      ...todos,
-      newTodo,
-    ];
-
-    setTodos(newTodos);
+    setTodos([...todos, newTodo]);
   };
 
   const handleAllCompletedToggle
     = (event: React.FormEvent<HTMLInputElement>) => {
-      const newTodos = [...todos].map(todo => {
+      setTodos(todos.map(todo => {
         return {
           ...todo,
           completed: event.currentTarget.checked,
         };
-      });
-
-      setTodos(newTodos);
+      }));
     };
 
   const handleClearAllCompleted = () => {
-    const activeTodos = [...todos].filter(todo => !todo.completed);
-
-    setTodos(activeTodos);
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   const handleTodoChange = (newTodo: Todo) => {
-    const indexOfOldTodo = todos.findIndex(todo => {
-      return todo.id === newTodo.id;
-    });
-
-    const newTodos = [...todos];
-
-    newTodos.splice(indexOfOldTodo, 1, newTodo);
-
-    setTodos(newTodos);
+    setTodos(todos.map(todo => {
+      return todo.id === newTodo.id
+        ? newTodo
+        : todo;
+    }));
   };
 
   const handleOnDelete = (todoId: number) => {
-    const indexOfTodoToDelete = todos.findIndex(todo => {
-      return todo.id === todoId;
-    });
-
-    const newTodos = [...todos];
-
-    newTodos.splice(indexOfTodoToDelete, 1);
-
-    setTodos(newTodos);
+    setTodos(todos.filter(todo => todo.id !== todoId));
   };
 
-  const isTodosHasCompleted = () => {
+  const handleToggleTodo = (todoId: number) => {
+    setTodos(
+      todos.map(todo => {
+        return todo.id === todoId
+          ? { ...todo, completed: !todo.completed }
+          : todo;
+      }),
+    );
+  };
+
+  const isTodosHasCompleted = useMemo(() => {
     return todos.some(todo => todo.completed);
-  };
+  }, [todos]);
 
-  const isEveryTodoCompleted = () => {
+  const isEveryTodoCompleted = useMemo(() => {
     return todos.every(todo => todo.completed);
-  };
+  }, [todos]);
 
-  const value = {
+  const activeTodos = useMemo(() => {
+    return todos.filter(({ completed }) => !completed);
+  }, [todos]);
+
+  const value = useMemo(() => ({
     todos,
     visibleTodos,
     handleOnAdd,
@@ -162,11 +97,13 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     handleClearAllCompleted,
     handleTodoChange,
     handleOnDelete,
+    handleToggleTodo,
     isTodosHasCompleted,
     isEveryTodoCompleted,
     filterBy,
     setFilterBy,
-  };
+    activeTodos,
+  }), [todos, filterBy]);
 
   return (
     <TodosContext.Provider value={value}>

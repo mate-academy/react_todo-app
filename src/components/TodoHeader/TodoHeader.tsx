@@ -7,8 +7,11 @@ export const TodoHeader: React.FC = () => {
 
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (query !== '') {
-      handleOnAdd(query);
+
+    const normalaziedQuery = query.trim();
+
+    if (normalaziedQuery !== '') {
+      handleOnAdd(normalaziedQuery);
       setQuery('');
     }
   };
