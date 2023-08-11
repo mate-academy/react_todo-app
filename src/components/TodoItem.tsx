@@ -11,33 +11,33 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
-  const { todos, setTodos, setChecked } = useContext(TodosContext);
+  const { todos, setTodos, setIsChecked } = useContext(TodosContext);
   const [title, setTitle] = useState(todo.title);
-  const [shouldEdit, setShouldEdit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [focus, setFocus] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleCheckedTodo = (todoId: number) => {
-    const newTodos = todos.map(currentTodo => (
-      currentTodo.id === todoId
-        ? { ...currentTodo, completed: !currentTodo.completed }
-        : currentTodo));
+  const checkTodo = (todoId: number): void => {
+    const newTodos = todos.map(item => (
+      item.id === todoId
+        ? { ...item, completed: !item.completed }
+        : item));
 
     setTodos(newTodos);
-    setChecked(newTodos.every(currentTodo => currentTodo.completed));
+    setIsChecked(newTodos.every(item => item.completed));
   };
 
   const deleteTodo = (selectedTodo: Todo): void => {
     const filteredTodos = todos.filter(item => item !== selectedTodo);
 
-    setTodos([...filteredTodos]);
+    setTodos(filteredTodos);
   };
 
   const handleDoubleClick = useCallback(() => {
-    setShouldEdit(true);
+    setIsEditing(true);
     setFocus(true);
-  }, [shouldEdit]);
+  }, [isEditing]);
 
   useEffect(() => {
     if (focus && inputRef.current) {
@@ -46,26 +46,28 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   }, [focus]);
 
   const handleBlur = () => {
-    setShouldEdit(false);
+    const newTitle = title.trim();
+
+    setIsEditing(false);
     setFocus(false);
 
-    if (!title.trim()) {
+    if (!newTitle) {
       deleteTodo(todo);
 
       return;
     }
 
     setTodos(todos.map(item => {
-      return item.id !== todo.id ? item : { ...todo, title: title.trim() };
+      return item.id !== todo.id ? item : { ...todo, title: newTitle };
     }));
 
-    setTitle(title.trim());
+    setTitle(newTitle);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setTitle(todo.title);
-      setShouldEdit(false);
+      setIsEditing(false);
       setFocus(false);
 
       return;
@@ -85,7 +87,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       key={todo.id}
       className={classNames({
         completed: todo.completed,
-        editing: shouldEdit,
+        editing: isEditing,
       })}
     >
       <div className="view">
@@ -94,7 +96,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
           className="toggle"
           id="toggle-view"
           checked={todo.completed}
-          onChange={() => handleCheckedTodo(todo.id)}
+          onChange={() => checkTodo(todo.id)}
         />
         <label onDoubleClick={handleDoubleClick}>
           {title}

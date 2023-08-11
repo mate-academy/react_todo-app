@@ -7,9 +7,9 @@ import { TodosFilter } from './TodosFilter';
 
 export const TodoApp = () => {
   const {
-    todos, setTodos, checked, setChecked,
+    todos, setTodos, isChecked, setIsChecked,
   } = useContext(TodosContext);
-  const [newTodoValue, setNewTodoValue] = useState('');
+  const [todoTitle, setTodoTitle] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -19,22 +19,24 @@ export const TodoApp = () => {
     }
   });
 
-  const handleTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTodoValue(event.target.value);
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoTitle(event.target.value);
   };
 
-  const addNewTodo = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleTodoSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!newTodoValue.trim()) {
-      setNewTodoValue('');
+    const newTitle = todoTitle.trim();
+
+    if (!newTitle) {
+      setTodoTitle('');
 
       return;
     }
 
     const newTodo = {
       id: +new Date(),
-      title: newTodoValue.trim(),
+      title: newTitle,
       completed: false,
     };
 
@@ -43,15 +45,15 @@ export const TodoApp = () => {
       ...todos,
     ]);
 
-    setNewTodoValue('');
+    setTodoTitle('');
   };
 
   const handleCheckAllTodos = () => {
     setTodos(todos.map(item => ({
       ...item,
-      completed: !checked,
+      completed: !isChecked,
     })));
-    setChecked(!checked);
+    setIsChecked(!isChecked);
   };
 
   const uncompletedTodos = useMemo(() => {
@@ -64,7 +66,7 @@ export const TodoApp = () => {
 
   const clearCompletedTodos = () => {
     setTodos(todos.filter(item => !item.completed));
-    setChecked(false);
+    setIsChecked(false);
   };
 
   return (
@@ -72,15 +74,15 @@ export const TodoApp = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={addNewTodo}>
+        <form onSubmit={handleTodoSubmit}>
           <input
             ref={inputRef}
             type="text"
             data-cy="createTodo"
             className="new-todo no-outline"
             placeholder="What needs to be done?"
-            value={newTodoValue}
-            onChange={handleTodoChange}
+            value={todoTitle}
+            onChange={handleTitleChange}
           />
         </form>
       </header>
@@ -93,7 +95,7 @@ export const TodoApp = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
-              checked={checked}
+              checked={isChecked}
               onChange={handleCheckAllTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>

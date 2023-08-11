@@ -6,9 +6,9 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 type TodosContextType = {
   todos: Todo[];
   setTodos: (value: Todo[]) => void;
-  checked: boolean;
-  setChecked: (value: boolean) => void;
   visibleTodos: () => Todo[];
+  isChecked: boolean;
+  setIsChecked: (value: boolean) => void;
   filter: Status;
   setFilter: (value: Status) => void;
 };
@@ -16,9 +16,9 @@ type TodosContextType = {
 export const TodosContext = React.createContext<TodosContextType>({
   todos: [],
   setTodos: () => {},
-  checked: false,
-  setChecked: () => {},
   visibleTodos: () => [],
+  isChecked: false,
+  setIsChecked: () => {},
   filter: Status.ALL,
   setFilter: () => {},
 });
@@ -29,7 +29,7 @@ type Props = {
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [checked, setChecked] = useState<boolean>(
+  const [isChecked, setIsChecked] = useState<boolean>(
     todos.every(todo => todo.completed) && todos.length > 0,
   );
   const [filter, setFilter] = useState(Status.ALL);
@@ -53,9 +53,9 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const value = {
     todos,
     setTodos,
-    checked,
-    setChecked,
     visibleTodos,
+    isChecked,
+    setIsChecked,
     filter,
     setFilter,
   };
