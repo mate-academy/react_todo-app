@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { TodosContextType } from '../../types/TodosContext';
 import { Todo } from '../../types/Todo';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { Status } from '../../types/StatusEnum';
 
-function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
-  const [value, setValue] = useState(() => {
-    const storedValue = localStorage.getItem(key);
+const STORAGE_KEY = 'todos';
 
-    return storedValue ? JSON.parse(storedValue) : startValue;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
-
-  return [value, setValue];
-}
-
-export const TodosContext = React.createContext<TodosContextType | null>(null);
+export const TodosContext = React.createContext<TodosContextType>({
+  todos: [],
+  addTodo: () => {},
+  toggleTodo: () => {},
+  deleteTodo: () => {},
+  updateTodoTitle: () => {},
+  deleteCompletedTodos: () => {},
+  handleToggleAll: () => {},
+  incompletedTodosCount: 0,
+  hasCompletedTodos: false,
+  filterTodos: () => [],
+});
 
 type Props = {
   children: React.ReactNode,
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', [] as Todo[]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>(STORAGE_KEY, [] as Todo[]);
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -59,15 +60,53 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
+  const handleToggleAll = () => {
+    const hasAllCompleted = todos.every((todo) => todo.completed);
+
+    const updatedTodos = todos.map((todo) => ({
+      ...todo,
+      completed: !hasAllCompleted,
+    }));
+
+    setTodos(updatedTodos);
+  };
+
+  const incompletedTodosCount = todos.filter(
+    (todo: Todo) => !todo.completed,
+  ).length;
+
+  const hasCompletedTodos = todos.some((todo) => todo.completed);
+
+  const filterTodos = (filterStatus: string) => {
+    switch (filterStatus) {
+      case Status.All:
+        return todos;
+
+      case Status.Active:
+        return todos.filter((todo) => !todo.completed);
+
+      case Status.Completed:
+        return todos.filter((todo) => todo.completed);
+
+      default:
+        return todos;
+    }
+  };
+
   return (
-    <TodosContext.Provider value={{
-      todos,
-      addTodo,
-      toggleTodo,
-      deleteTodo,
-      updateTodoTitle,
-      deleteCompletedTodos,
-    }}
+    <TodosContext.Provider
+      value={{
+        todos,
+        addTodo,
+        toggleTodo,
+        deleteTodo,
+        updateTodoTitle,
+        deleteCompletedTodos,
+        handleToggleAll,
+        incompletedTodosCount,
+        hasCompletedTodos,
+        filterTodos,
+      }}
     >
       {children}
     </TodosContext.Provider>

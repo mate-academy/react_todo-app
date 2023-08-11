@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useMemo, useState } from 'react';
-import { TodoList } from './components/TodoList/TodoList';
+import classNames from 'classnames';
+import { TodoList } from './components/TodoList';
 import { TodosContext } from './components/context/TodoContext';
-import { Todo } from './types/Todo';
 import { Status } from './types/StatusEnum';
+import { linkOptions } from './data/linkData';
 
 export const App: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -11,28 +12,21 @@ export const App: React.FC = () => {
 
   const todosContext = useContext(TodosContext);
 
-  if (!todosContext) {
-    return null;
-  }
-
   const {
     todos,
     addTodo,
     deleteCompletedTodos,
+    handleToggleAll,
+    incompletedTodosCount,
+    hasCompletedTodos,
+    filterTodos,
   } = todosContext;
 
-  const incompletedTodosCount = todos.filter(
-    (todo: Todo) => !todo.completed,
-  ).length;
-
-  const hasCompletedTodos = todos.some(todo => todo.completed);
-
-  // #region #HANDLING EVENTS
-  function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-  }
+  };
 
-  function handleFormSubmit(event: React.FormEvent) {
+  const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     if (title.trim() === '') {
@@ -42,36 +36,21 @@ export const App: React.FC = () => {
     addTodo(title);
 
     setTitle('');
-  }
+  };
 
-  function handleClearCompleted() {
+  const handleClearCompleted = () => {
     deleteCompletedTodos();
     setFilterStatus(Status.All);
-  }
-  // #endregion
+  };
 
-  // #region #FILTERING
-  function handleFilterChange(status: Status) {
+  const handleFilterChange = (status: Status) => {
     setFilterStatus(status);
-  }
+  };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const filteredTodos = useMemo(() => {
-    switch (filterStatus) {
-      case Status.All:
-        return todos;
-
-      case Status.Active:
-        return todos.filter(todo => !todo.completed);
-
-      case Status.Completed:
-        return todos.filter(todo => todo.completed);
-
-      default:
-        return todos;
-    }
+    return filterTodos(filterStatus);
   }, [filterStatus, todos]);
-  // #endregion
 
   return (
     <div className="todoapp">
@@ -96,56 +75,46 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onClick={handleToggleAll}
         />
+        <label htmlFor="toggle-all">Mark all as completed</label>
 
         <TodoList todos={filteredTodos} />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${incompletedTodosCount} items left`}
-        </span>
+      {todos.length !== 0 && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {`${incompletedTodosCount} items left`}
+          </span>
 
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className="selected"
-              onClick={() => handleFilterChange(Status.All)}
+          <ul className="filters">
+            {linkOptions.map((link) => (
+              <li key={link.path}>
+                <a
+                  href={link.path}
+                  className={classNames({
+                    selected: filterStatus === link.filterValue,
+                  })}
+                  onClick={() => handleFilterChange(link.filterValue)}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          {hasCompletedTodos && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleClearCompleted}
             >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/active"
-              onClick={() => handleFilterChange(Status.Active)}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/completed"
-              onClick={() => handleFilterChange(Status.Completed)}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
-
-        {hasCompletedTodos && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={handleClearCompleted}
-          >
-            Clear completed
-          </button>
-        )}
-      </footer>
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
     </div>
   );
 };

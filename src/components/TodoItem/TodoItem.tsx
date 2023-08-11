@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../context/TodoContext';
@@ -10,34 +15,29 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
-  const todoContext = useContext(TodosContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
-
-  if (!todoContext) {
-    return null;
-  }
+  const todoContext = useContext(TodosContext);
 
   const { toggleTodo, deleteTodo, updateTodoTitle } = todoContext;
 
-  // #region #HANDLINGEVENTS
-  function handleToggleTodo() {
+  const handleToggleTodo = () => {
     toggleTodo(id);
-  }
+  };
 
-  function handleDeleteTodo() {
+  const handleDeleteTodo = () => {
     deleteTodo(id);
-  }
+  };
 
-  function handleEdit() {
+  const handleEdit = () => {
     setIsEditing(true);
-  }
+  };
 
-  function handleEditChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedTitle(event.target.value);
-  }
+  };
 
-  function handleEditSubmit() {
+  const handleEditSubmit = () => {
     const trimmedTitle = editedTitle.trim();
 
     if (trimmedTitle !== '') {
@@ -48,20 +48,28 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     updateTodoTitle(id, trimmedTitle);
-  }
+  };
 
-  function handleEditCancel() {
+  const handleEditCancel = () => {
     setIsEditing(false);
-  }
+  };
 
-  function handleKeyUp(event: React.KeyboardEvent) {
+  const handleKeyUp = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       handleEditSubmit();
     } else if (event.key === 'Escape') {
       handleEditCancel();
     }
-  }
-  // #endregion
+  };
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // to focus on the form field right after loading todo
+  useEffect(() => {
+    if (!isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   return (
     <li className={classNames({
@@ -89,13 +97,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       ) : (
         <input
           type="text"
+          ref={inputRef}
           className="edit"
           value={editedTitle}
           onChange={handleEditChange}
           onBlur={handleEditSubmit}
           onKeyUp={handleKeyUp}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
         />
       )}
     </li>
