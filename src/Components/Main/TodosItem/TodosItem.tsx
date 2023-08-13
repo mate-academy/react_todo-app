@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const TodosItem: React.FC<Props> = ({ items }) => {
-  const { todo, setTodo, setToggleAll } = useContext(TodoContext);
+  const { todo, setTodo, setIsAllToggle } = useContext(TodoContext);
   const [editTodo, setEditTodo] = useState(false);
   const [replaceTodo, setReplaceTodo] = useState(items.title);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +27,7 @@ export const TodosItem: React.FC<Props> = ({ items }) => {
         : todoItem
     ));
 
-    setToggleAll(newTodos.length < 1);
+    setIsAllToggle(newTodos.length < 1);
     setTodo(newTodos(todo));
   };
 

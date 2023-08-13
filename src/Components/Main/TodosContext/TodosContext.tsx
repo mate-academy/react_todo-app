@@ -13,8 +13,8 @@ type TodosContext = {
   filter: ListAction,
   setFilter: (v: ListAction) => void,
   filterTodos: () => Todos[],
-  toggleAll: boolean;
-  setToggleAll: (ListAction: boolean) => void,
+  isAllToggle: boolean;
+  setIsAllToggle: (ListAction: boolean) => void,
 };
 
 export const TodoContext = React.createContext<TodosContext>({
@@ -23,14 +23,14 @@ export const TodoContext = React.createContext<TodosContext>({
   filter: ListAction.ALL,
   setFilter: () => {},
   filterTodos: () => [],
-  toggleAll: false,
-  setToggleAll: () => {},
+  isAllToggle: false,
+  setIsAllToggle: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todo, setTodo] = useLocalStorage<Todos[]>('todo', []);
   const [filter, setFilter] = useState<ListAction>(ListAction.ALL);
-  const [toggleAll, setToggleAll] = useState(false);
+  const [isAllToggle, setIsAllToggle] = useState(false);
 
   const filterTodos = () => {
     switch (filter) {
@@ -51,8 +51,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     filter,
     setFilter,
     filterTodos,
-    toggleAll,
-    setToggleAll,
+    isAllToggle,
+    setIsAllToggle,
   }), [filter, todo]);
 
   return (
