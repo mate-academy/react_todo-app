@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../Main/TodosContext';
 import { ListAction } from '../Enum/ListAction';
@@ -12,7 +12,8 @@ export const Footer: React.FC = () => {
     setFilter,
   } = useContext(TodoContext);
 
-  const selectedTodos = todo.filter(todos => !todos.completed).length;
+  const selectedTodos = useMemo(() => (
+    todo.filter(todos => !todos.completed).length), [todo]);
 
   const deleteTodos = () => {
     const filterTodos = (currentTodos: Todos[]) => currentTodos.filter(

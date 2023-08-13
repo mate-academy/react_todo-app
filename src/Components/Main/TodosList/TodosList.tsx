@@ -7,20 +7,11 @@ export const TodosList: React.FC = () => {
     todo,
     setTodo,
     filterTodos,
-    toggleAll,
-    setToggleAll,
+    toggleAll: isAllToggled,
   } = useContext(TodoContext);
 
   const handleToggleAll = () => {
-    if (toggleAll) {
-      setTodo(todo.map(todos => (
-        { ...todos, completed: false })));
-    } else {
-      setTodo(todo.map(todos => (
-        { ...todos, completed: true })));
-    }
-
-    setToggleAll(!toggleAll);
+    setTodo(todo.map(todos => ({ ...todos, completed: isAllToggled })));
   };
 
   return (
@@ -33,7 +24,7 @@ export const TodosList: React.FC = () => {
             className="toggle-all"
             data-cy="toggleAll"
             onChange={() => handleToggleAll()}
-            checked={toggleAll}
+            checked={isAllToggled}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 

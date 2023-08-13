@@ -17,9 +17,7 @@ export const TodosItem: React.FC<Props> = ({ items }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    inputRef.current?.focus();
   }, [editTodo]);
 
   const handleCompleteTodo = () => {
@@ -29,12 +27,7 @@ export const TodosItem: React.FC<Props> = ({ items }) => {
         : todoItem
     ));
 
-    if (newTodos.length < 1) {
-      setToggleAll(true);
-    } else {
-      setToggleAll(false);
-    }
-
+    setToggleAll(newTodos.length < 1);
     setTodo(newTodos(todo));
   };
 

@@ -8,15 +8,15 @@ export const Header: React.FC = () => {
   const handleInputTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!inputTodo) {
-      return;
-    }
-
     const newTodo = {
       id: +Date.now(),
       title: inputTodo,
       completed: false,
     };
+
+    if (!inputTodo) {
+      return;
+    }
 
     setTodo([...todo, newTodo]);
     setInputTodo('');
