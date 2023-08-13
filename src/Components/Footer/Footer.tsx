@@ -27,7 +27,7 @@ export const Footer: React.FC = () => {
       {todo.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {todo.length === 1
+            {selectedTodos === 1
               ? '1 item left'
               : `${selectedTodos} items left`}
           </span>
