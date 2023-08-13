@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
     setFilter,
   } = useContext(TodoContext);
 
-  const selectedTodos = useMemo(() => (
+  const selectedTodosLength = useMemo(() => (
     todo.filter(todos => !todos.completed).length), [todo]);
 
   const deleteTodos = () => {
@@ -28,9 +28,9 @@ export const Footer: React.FC = () => {
       {todo.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {selectedTodos === 1
+            {selectedTodosLength === 1
               ? '1 item left'
-              : `${selectedTodos} items left`}
+              : `${selectedTodosLength} items left`}
           </span>
 
           <ul className="filters" data-cy="todosFilter">

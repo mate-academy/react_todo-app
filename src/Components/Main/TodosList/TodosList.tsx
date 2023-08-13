@@ -13,7 +13,6 @@ export const TodosList: React.FC = () => {
 
   const handleToggleAll = () => {
     setTodo(todo.map(todos => ({ ...todos, completed: isAllToggle })));
-
     setIsAllToggle(!isAllToggle);
   };
 
@@ -25,7 +24,7 @@ export const TodosList: React.FC = () => {
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
-            data-cy="isAllToggle"
+            data-cy="toggleAll"
             onChange={() => handleToggleAll()}
             checked={isAllToggle}
           />
