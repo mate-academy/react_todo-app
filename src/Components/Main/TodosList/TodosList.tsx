@@ -13,6 +13,7 @@ export const TodosList: React.FC = () => {
 
   const handleToggleAll = () => {
     setTodo(todo.map(todos => ({ ...todos, completed: isAllToggle })));
+
     setIsAllToggle(!isAllToggle);
   };
 
