@@ -9,9 +9,9 @@ type Props = {
 
 type TodosContext = {
   todo: Todos[],
-  setTodo: React.Dispatch<React.SetStateAction<Todos[]>>,
+  setTodo: (v: Todos[]) => void,
   filter: ListAction,
-  setFilter: (value: ListAction) => void,
+  setFilter: (v: ListAction) => void,
   filterTodos: () => Todos[],
   toggleAll: boolean;
   setToggleAll: (ListAction: boolean) => void,
@@ -28,7 +28,7 @@ export const TodoContext = React.createContext<TodosContext>({
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todo, setTodo] = useLocalStorage('todo', []);
+  const [todo, setTodo] = useLocalStorage<Todos[]>('todo', []);
   const [filter, setFilter] = useState<ListAction>(ListAction.ALL);
   const [toggleAll, setToggleAll] = useState(false);
 

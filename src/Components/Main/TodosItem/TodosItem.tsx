@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const TodosItem: React.FC<Props> = ({ items }) => {
-  const { setTodo, setToggleAll } = useContext(TodoContext);
+  const { todo, setTodo, setToggleAll } = useContext(TodoContext);
   const [editTodo, setEditTodo] = useState(false);
   const [replaceTodo, setReplaceTodo] = useState(items.title);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -23,30 +23,25 @@ export const TodosItem: React.FC<Props> = ({ items }) => {
   }, [editTodo]);
 
   const handleCompleteTodo = () => {
-    setTodo(currentTodos => {
-      const newTodos = currentTodos.map(todoItem => (
-        items.id === todoItem.id
-          ? { ...todoItem, completed: !items.completed }
-          : todoItem
-      ));
+    const newTodos = (currentTodos: Todos[]) => currentTodos.map(todoItem => (
+      items.id === todoItem.id
+        ? { ...todoItem, completed: !items.completed }
+        : todoItem
+    ));
 
-      const completedAllTodos = newTodos
-        .filter(todoItem => !todoItem.completed);
+    if (newTodos.length < 1) {
+      setToggleAll(true);
+    } else {
+      setToggleAll(false);
+    }
 
-      if (completedAllTodos.length < 1) {
-        setToggleAll(true);
-      } else {
-        setToggleAll(false);
-      }
-
-      return newTodos;
-    });
+    setTodo(newTodos(todo));
   };
 
-  const handleDeleteTodo = () => {
-    setTodo(currentTodos => currentTodos.filter(
-      todoItem => todoItem.id !== items.id,
-    ));
+  const handleDeleteTodo = (todos: Todos) => {
+    const filterTodos = todo.filter(todoItem => todoItem.id !== todos.id);
+
+    setTodo(filterTodos);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,13 +49,19 @@ export const TodosItem: React.FC<Props> = ({ items }) => {
   };
 
   const updateTodo = () => {
-    if (replaceTodo) {
-      setTodo(currentTodos => currentTodos.map(todos => (
-        items.id === todos.id
-          ? { ...todos, title: replaceTodo }
-          : todos
-      )));
+    if (!replaceTodo) {
+      setTodo(todo.filter(
+        todoItem => todoItem.id !== items.id,
+      ));
+
+      return;
     }
+
+    setTodo(todo.map(todos => {
+      return items.id === todos.id
+        ? { ...todos, title: replaceTodo.trim() }
+        : todos;
+    }));
   };
 
   const handleBlur = () => {
@@ -116,7 +117,7 @@ export const TodosItem: React.FC<Props> = ({ items }) => {
           aria-label="delete Todo"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleDeleteTodo}
+          onClick={() => handleDeleteTodo(items)}
         />
       </div>
       {editTodo && (

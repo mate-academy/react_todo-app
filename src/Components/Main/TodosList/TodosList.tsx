@@ -13,11 +13,11 @@ export const TodosList: React.FC = () => {
 
   const handleToggleAll = () => {
     if (toggleAll) {
-      setTodo(currentTodo => currentTodo
-        .map(todos => ({ ...todos, completed: false })));
+      setTodo(todo.map(todos => (
+        { ...todos, completed: false })));
     } else {
-      setTodo(currentTodo => currentTodo
-        .map(todos => ({ ...todos, completed: true })));
+      setTodo(todo.map(todos => (
+        { ...todos, completed: true })));
     }
 
     setToggleAll(!toggleAll);

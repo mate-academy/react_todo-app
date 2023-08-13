@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Todos } from '../Types';
 
-export function useLocalStorage(
+export function useLocalStorage<T>(
   key: string,
-  startValue: Todos[],
-): [Todos[], React.Dispatch<React.SetStateAction<Todos[]>>] {
+  startValue: T,
+): [T, (v: T) => void] {
   const [value, setValue] = useState(() => {
     const data = localStorage.getItem(key);
 
@@ -21,7 +20,7 @@ export function useLocalStorage(
     }
   });
 
-  const save: React.Dispatch<React.SetStateAction<Todos[]>> = (newValue) => {
+  const save = (newValue: T) => {
     localStorage.setItem(key, JSON.stringify(newValue));
     setValue(newValue);
   };

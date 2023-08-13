@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../Main/TodosContext';
 import { ListAction } from '../Enum/ListAction';
+import { Todos } from '../Types';
 
 export const Footer: React.FC = () => {
   const {
@@ -14,9 +15,11 @@ export const Footer: React.FC = () => {
   const selectedTodos = todo.filter(todos => !todos.completed).length;
 
   const deleteTodos = () => {
-    setTodo(currentTodos => currentTodos.filter(
+    const filterTodos = (currentTodos: Todos[]) => currentTodos.filter(
       todoItem => !todoItem.completed,
-    ));
+    );
+
+    setTodo(filterTodos(todo));
   };
 
   return (
@@ -24,12 +27,12 @@ export const Footer: React.FC = () => {
       {todo.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {selectedTodos}
-            {' '}
-            items left
+            {todo.length === 1
+              ? '1 item left'
+              : `${selectedTodos} items left`}
           </span>
 
-          <ul className="filters">
+          <ul className="filters" data-cy="todosFilter">
             <li>
               <a
                 href="#/selectedTodos"

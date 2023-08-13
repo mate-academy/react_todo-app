@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { TodoContext } from '../Main/TodosContext';
-import { Todos } from '../Types';
 
 export const Header: React.FC = () => {
   const [inputTodo, setInputTodo] = useState('');
@@ -9,15 +8,15 @@ export const Header: React.FC = () => {
   const handleInputTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const newTodo: Todos = {
-      id: Date.now(),
-      title: inputTodo.trim(),
-      completed: false,
-    };
-
     if (!inputTodo) {
       return;
     }
+
+    const newTodo = {
+      id: +Date.now(),
+      title: inputTodo,
+      completed: false,
+    };
 
     setTodo([...todo, newTodo]);
     setInputTodo('');
