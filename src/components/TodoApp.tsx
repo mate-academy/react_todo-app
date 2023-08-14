@@ -14,13 +14,25 @@ export const TodoApp = () => {
       </header>
 
       <section className="main">
-        <input
+        {!!todos.length && (
+          <>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          </>
+
+        )}
+        {/* <input
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <label htmlFor="toggle-all">Mark all as complete</label> */}
 
         <TodoList items={todos} />
       </section>

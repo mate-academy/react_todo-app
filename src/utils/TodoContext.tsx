@@ -49,22 +49,15 @@ export const TodosProvider: React.FC<Props> = ({
         completed: false,
       };
 
+      if (!title.length) {
+        return;
+      }
+
       setTodos(prevTodo => [newTodo, ...prevTodo]);
     } catch {
       throw new Error('Unable to add todo, please try again later');
     }
   }, [todos]);
-
-  const updateTodo = (updatedTodo: Todo) => {
-    setTodos(currTodos => {
-      const updTodos = [...currTodos];
-      const index = updTodos.findIndex(todo => todo.id === updatedTodo.id);
-
-      updTodos.splice(index, 1, updatedTodo);
-
-      return updTodos;
-    });
-  };
 
   // const updateTodo = useCallback((updatedTodo: Todo) => {
   //   setTodos(currTodos => {
@@ -76,6 +69,17 @@ export const TodosProvider: React.FC<Props> = ({
   //     return updTodos;
   //   });
   // }, []);
+
+  const updateTodo = (updatedTodo: Todo) => {
+    setTodos(currTodos => {
+      const updTodos = [...currTodos];
+      const index = updTodos.findIndex(todo => todo.id === updatedTodo.id);
+
+      updTodos.splice(index, 1, updatedTodo);
+
+      return updTodos;
+    });
+  };
 
   const deleteTodo = useCallback((todoId: number) => {
     try {
