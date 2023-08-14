@@ -53,7 +53,7 @@ export const TodoItem: React.FC<Props> = memo(
         window.addEventListener('keyup', handleKeyboardClick);
       }
 
-      if (!isEditing && !query) {
+      if (!isEditing && !query.trim()) {
         deleteTodo(todo.id);
       }
 

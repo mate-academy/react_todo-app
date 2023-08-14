@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { TodoContext } from '../../context/TodoContext';
 import { Status } from '../../types/Status';
 
-const links = [
+const LINKS = [
   { path: '#/', name: 'All', status: Status.All },
   { path: '#/active', name: 'Active', status: Status.Active },
   { path: '#/completed', name: 'Completed', status: Status.Completed },
@@ -15,7 +15,7 @@ export const TodoFilter: React.FC = () => {
 
   return (
     <ul className="filters" data-cy="todosFilter">
-      {links.map(link => (
+      {LINKS.map(link => (
         <li key={link.name}>
           <a
             href={link.path}
