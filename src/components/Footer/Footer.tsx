@@ -5,12 +5,12 @@ export const Footer: React.FC = () => {
   const {
     todos,
     selectedAll,
-    selectedActive,
+    showActiveTodos,
     selectedCompleted,
   } = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
 
-  const todosNotCompleted = [...todos].filter(todo => todo.completed === false);
+  const todosNotCompleted = todos.filter(todo => todo.completed === false);
   const numberNotCompletedTodos = todosNotCompleted.length;
 
   return (
@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/active"
-            className={`${selectedActive && 'selected'}`}
+            className={`${showActiveTodos && 'selected'}`}
             onClick={() => dispatch({ type: 'selectedActive' })}
           >
             Active

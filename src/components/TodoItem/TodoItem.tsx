@@ -1,4 +1,9 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, {
+  useContext,
+  useRef,
+  useEffect,
+} from 'react';
+
 import { DispatchContext, TodosContext } from '../../Store';
 import { Todo } from '../../Types/Todo';
 
@@ -10,21 +15,27 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ title, completed, todo }) => {
   const dispatch = useContext(DispatchContext);
-  const { edit, newTitle } = useContext(TodosContext);
+  const { edit } = useContext(TodosContext);
 
   const titleField = useRef<HTMLInputElement>(null);
+
+  const hasPressedEnter = (key: string) => {
+    return key === 'Enter';
+  };
 
   const handlerChange = () => {
     dispatch({ type: 'todoCompleted', payLoad: todo });
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && !event.target.value) {
+    if (hasPressedEnter(event.key) && !event.target.value) {
       dispatch({ type: 'removeTodo', payLoad: todo });
     }
 
-    if (event.key === 'Enter') {
-      dispatch({ type: 'saveNewTitleTodo', payLoad: todo });
+    if (hasPressedEnter(event.key)) {
+      dispatch({
+        type: 'saveNewTitleTodo', payLoad: todo, newTitle: event.target.value,
+      });
     }
 
     if (event.key === 'Escape') {
@@ -48,6 +59,7 @@ export const TodoItem: React.FC<Props> = ({ title, completed, todo }) => {
           className="toggle"
           id="toggle-view"
           onChange={handlerChange}
+          checked={completed === true}
         />
         <label
           htmlFor="toggle-view"
@@ -68,15 +80,13 @@ export const TodoItem: React.FC<Props> = ({ title, completed, todo }) => {
       </div>
       <input
         ref={titleField}
-        value={newTitle}
+        defaultValue={title}
         type="text"
         className="edit"
-        onChange={(event) => dispatch({
-          type: 'changeTitleTodo',
-          payLoad: event.target.value,
-        })}
         onKeyUp={handleKeyUp}
-        onBlur={() => dispatch({ type: 'saveNewTitleTodo', payLoad: todo })}
+        onBlur={(event) => dispatch({
+          type: 'saveNewTitleTodo', payLoad: todo, newTitle: event.target.value,
+        })}
       />
     </li>
   );

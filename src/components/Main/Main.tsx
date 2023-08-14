@@ -7,13 +7,13 @@ export const Main: React.FC = () => {
   const {
     todos,
     todosCompleted,
-    selectedActive,
+    showActiveTodos,
     selectedCompleted,
   } = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
 
   const handleChange = () => {
-    dispatch({ type: 'todosCompleted' });
+    dispatch({ type: 'toggleTodosCompleted' });
 
     if (!todosCompleted) {
       dispatch({ type: 'changeTodosCompletedTrue' });
@@ -25,16 +25,16 @@ export const Main: React.FC = () => {
   };
 
   const filterTodos = (items: Todo[]) => {
-    if (selectedActive) {
+    if (showActiveTodos) {
       const activeTodos = items.filter(todo => todo.completed === false);
 
       return activeTodos;
     }
 
     if (selectedCompleted) {
-      const activeTodos = items.filter(todo => todo.completed === true);
+      const completedTodos = items.filter(todo => todo.completed === true);
 
-      return activeTodos;
+      return completedTodos;
     }
 
     return items;

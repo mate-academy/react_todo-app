@@ -7,15 +7,14 @@ interface State {
   value: string,
   todosCompleted: boolean,
   selectedAll: boolean,
-  selectedActive: boolean,
+  showActiveTodos: boolean,
   selectedCompleted: boolean,
   edit: number,
-  newTitle: string,
 }
 
 type Action = { type: 'addTodo', payLoad: string }
 | { type: 'changeValue', payLoad: string }
-| { type: 'todosCompleted' }
+| { type: 'toggleTodosCompleted' }
 | { type: 'changeTodosCompletedTrue' }
 | { type: 'changeTodosCompletedFalse' }
 | { type: 'selectedAll' }
@@ -25,8 +24,7 @@ type Action = { type: 'addTodo', payLoad: string }
 | { type: 'removeTodo', payLoad: Todo }
 | { type: 'removeTodosCompleted' }
 | { type: 'edit', payLoad: Todo }
-| { type: 'changeTitleTodo', payLoad: string }
-| { type: 'saveNewTitleTodo', payLoad: Todo }
+| { type: 'saveNewTitleTodo', payLoad: Todo, newTitle: string }
 | { type: 'removeEdit' };
 
 function reducer(state: State, action: Action): State {
@@ -50,7 +48,7 @@ function reducer(state: State, action: Action): State {
         value: action.payLoad,
       };
 
-    case 'todosCompleted':
+    case 'toggleTodosCompleted':
       return {
         ...state,
         todosCompleted: !state.todosCompleted,
@@ -82,14 +80,14 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         selectedAll: true,
-        selectedActive: false,
+        showActiveTodos: false,
         selectedCompleted: false,
       };
 
     case 'selectedActive':
       return {
         ...state,
-        selectedActive: true,
+        showActiveTodos: true,
         selectedAll: false,
         selectedCompleted: false,
       };
@@ -99,7 +97,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         selectedCompleted: true,
         selectedAll: false,
-        selectedActive: false,
+        showActiveTodos: false,
       };
 
     case 'todoCompleted': {
@@ -120,9 +118,8 @@ function reducer(state: State, action: Action): State {
     case 'removeTodo': {
       const copyTodos = [...state.todos];
       const index = copyTodos.indexOf(action.payLoad);
-      const removeTodo = copyTodos.splice(index, 1);
 
-      window.console.log(removeTodo);
+      copyTodos.splice(index, 1);
 
       return {
         ...state,
@@ -144,19 +141,12 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         edit: action.payLoad.id,
-        newTitle: action.payLoad.title,
-      };
-
-    case 'changeTitleTodo':
-      return {
-        ...state,
-        newTitle: action.payLoad,
       };
 
     case 'saveNewTitleTodo': {
       const changeTitleTodo = state.todos.map(todo => {
         if (todo.id === action.payLoad.id) {
-          return { ...todo, title: state.newTitle };
+          return { ...todo, title: action.newTitle };
         }
 
         return todo;
@@ -185,14 +175,15 @@ const initialState: State = {
   value: '',
   todosCompleted: false,
   selectedAll: false,
-  selectedActive: false,
+  showActiveTodos: false,
   selectedCompleted: false,
   edit: 0,
-  newTitle: '',
 };
 
 export const TodosContext = React.createContext(initialState);
-export const DispatchContext = React.createContext((action: Action) => {});
+/* eslint-disable */
+export const DispatchContext = React.createContext((_action: Action) => {});
+/* eslint-enable */
 
 type Props = {
   children: React.ReactNode,
