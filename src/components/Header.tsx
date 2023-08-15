@@ -1,5 +1,5 @@
 import { FC, useContext, useState } from 'react';
-import { TodoContext } from '../TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import { Todo } from '../types/Todo';
 
 export const Header: FC = () => {
@@ -9,6 +9,10 @@ export const Header: FC = () => {
   const addTodo = (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (query.trim() === '') {
+      return;
+    }
+
     const newTodo: Todo = {
       id: +new Date(),
       title: query,
@@ -17,6 +21,10 @@ export const Header: FC = () => {
 
     setTodos([...todos, newTodo]);
     setQuery('');
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
   };
 
   return (
@@ -30,7 +38,7 @@ export const Header: FC = () => {
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
-          onChange={event => setQuery(event.target.value)}
+          onChange={handleInputChange}
         />
       </form>
     </header>

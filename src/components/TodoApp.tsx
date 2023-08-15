@@ -4,7 +4,7 @@ import {
 } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { TodoContext } from '../TodoContext';
+import { TodoContext } from '../context/TodoContext';
 import { TodosList } from './TodosList';
 
 export const TodoApp: FC = () => {

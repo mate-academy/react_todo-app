@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { FC, useContext, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { filters } from '../constants';
-import { TodoContext } from '../TodoContext';
+import { filters } from '../helpers/constants';
+import { TodoContext } from '../context/TodoContext';
 
 export const Footer: FC = () => {
   const { todos, setTodos } = useContext(TodoContext);

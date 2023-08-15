@@ -7,7 +7,7 @@ import {
 } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { TodoContext } from '../TodoContext';
+import { TodoContext } from '../context/TodoContext';
 
 type Props = {
   todo: Todo;
@@ -62,22 +62,14 @@ export const TodoItem: FC<Props> = ({ todo }) => {
   };
 
   const handleKeyUp = (event: React.KeyboardEvent) => {
-    switch (event.key) {
-      case 'Enter':
-        if (query) {
-          updateTitle(todo.id, query);
-        }
-
-        setIsEditing(false);
-        break;
-
-      case 'Escape':
-        setQuery(todo.title);
-        setIsEditing(false);
-        break;
-
-      default: break;
+    if (event.key === 'Escape') {
+      setQuery(todo.title);
+      setIsEditing(false);
     }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
   };
 
   const toggleTodo = (id: number) => {
@@ -129,7 +121,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
           ref={editingInput}
           onBlur={submitUpdateTitle}
           onKeyUp={handleKeyUp}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={handleInputChange}
           className="edit"
         />
       </form>

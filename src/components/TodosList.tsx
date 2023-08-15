@@ -1,8 +1,8 @@
 import { FC, useContext, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TodoItem } from './TodoItem';
-import { TodoContext } from '../TodoContext';
-import { FilterValues, filters } from '../constants';
+import { TodoContext } from '../context/TodoContext';
+import { filters } from '../helpers/constants';
 
 export const TodosList: FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
@@ -34,7 +34,7 @@ export const TodosList: FC = () => {
           return todo.completed;
 
         default:
-          return FilterValues.ALL;
+          return true;
       }
     })
   ), [todos, pathname]);
