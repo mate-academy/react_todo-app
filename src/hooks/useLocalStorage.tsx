@@ -1,26 +1,21 @@
 import { useState } from 'react';
+import { Todo } from '../types/Todo';
 
-// eslint-disable-next-line max-len
-export function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
-  const [value, setValue] = useState(() => {
-    const data = localStorage.getItem(key);
-
-    if (data === null) {
-      return startValue;
-    }
-
+export function useLocalStorage(
+  key: string,
+  startValue: Todo[],
+): [Todo[], (value: Todo[]) => void] {
+  const [value, setValue] = useState<Todo[]>(() => {
     try {
-      return JSON.parse(data);
-    } catch (error) {
-      localStorage.removeItem(key);
-
+      return JSON.parse(localStorage.getItem(key) || '');
+    } catch {
       return startValue;
     }
   });
 
-  const save = (newValue: T) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
-    setValue(newValue);
+  const save = (todo: Todo[]) => {
+    setValue(todo);
+    localStorage.setItem(key, JSON.stringify(todo));
   };
 
   return [value, save];

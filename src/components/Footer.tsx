@@ -13,7 +13,7 @@ export const Footer: FC = () => {
   const hasCompletedTodos = todos.length !== activeTodos.length;
 
   return (
-    <footer className="footer">
+    <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
         {`${activeTodos.length} items left`}
       </span>

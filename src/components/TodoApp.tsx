@@ -5,7 +5,7 @@ import {
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { TodoContext } from '../TodoContext';
-import { TodoList } from './TodoList';
+import { TodosList } from './TodosList';
 
 export const TodoApp: FC = () => {
   const { todos } = useContext(TodoContext);
@@ -16,7 +16,7 @@ export const TodoApp: FC = () => {
 
       {todos.length > 0 && (
         <>
-          <TodoList />
+          <TodosList />
           <Footer />
         </>
       )}

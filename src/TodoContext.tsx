@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { Todo } from './types/Todo';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { TodoContextType } from './types/TodoContexType';
 
@@ -8,14 +7,12 @@ export const TodoContext = React.createContext<TodoContextType>({
   setTodos: () => {},
 });
 
-const initialTodos: Todo[] = [];
-
 type Props = {
   children: React.ReactNode;
 };
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', initialTodos);
+  const [todos, setTodos] = useLocalStorage('todos', []);
 
   const value = useMemo(() => ({
     todos,

@@ -4,7 +4,7 @@ import { TodoItem } from './TodoItem';
 import { TodoContext } from '../TodoContext';
 import { FilterValues, filters } from '../constants';
 
-export const TodoList: FC = () => {
+export const TodosList: FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const { pathname } = useLocation();
 
@@ -51,7 +51,7 @@ export const TodoList: FC = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
 
         {visibleTodos.map(todo => (
           <TodoItem
