@@ -59,27 +59,20 @@ export const TodosProvider: React.FC<Props> = ({
     }
   }, [todos]);
 
-  // const updateTodo = useCallback((updatedTodo: Todo) => {
-  //   setTodos(currTodos => {
-  //     const updTodos = [...currTodos];
-  //     const index = updTodos.findIndex(todo => todo.id === updatedTodo.id);
+  const updateTodo = useCallback((updatedTodo: Todo) => {
+    try {
+      setTodos(currTodos => {
+        const updTodos = [...currTodos];
+        const index = updTodos.findIndex(todo => todo.id === updatedTodo.id);
 
-  //     updTodos.splice(index, 1, updatedTodo);
+        updTodos.splice(index, 1, updatedTodo);
 
-  //     return updTodos;
-  //   });
-  // }, []);
-
-  const updateTodo = (updatedTodo: Todo) => {
-    setTodos(currTodos => {
-      const updTodos = [...currTodos];
-      const index = updTodos.findIndex(todo => todo.id === updatedTodo.id);
-
-      updTodos.splice(index, 1, updatedTodo);
-
-      return updTodos;
-    });
-  };
+        return updTodos;
+      });
+    } catch {
+      throw new Error('Unable to update todo, please try again later');
+    }
+  }, []);
 
   const deleteTodo = useCallback((todoId: number) => {
     try {
