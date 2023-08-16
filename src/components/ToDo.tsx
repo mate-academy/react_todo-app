@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { ToDo } from '../types/ToDo';
 import { DispatchContext } from '../ToDoContext';
 import classNames from 'classnames';
+import { debounce } from 'lodash';
 
 type Props = {
   toDo: ToDo,
@@ -14,13 +15,16 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   const [editingtoDo, setEditingToDo] = useState(false);
   const [editingtoDoData, setEditingToDoData] = useState({} as ToDo);
 
-  const handleClick = useCallback(() => dispatch({ type: 'completed', payload: toDo.id }), []);
+  const handleClick = useCallback(debounce(() => dispatch({ type: 'completed', payload: toDo.id }), 200), []);
 
   function handleDoubleClickEdit(e: React.MouseEvent) {
-    e.preventDefault()
     if (e.detail === 2) {
+      // console.log(e.detail)
+
       setEditingToDo(true);
       setEditingToDoData(toDo);
+// console.log(editingtoDo, 'inside');
+
     }
   }
   useEffect(() => {
@@ -28,9 +32,9 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
       editingLi.current.focus();
     }
   })
+console.log(editingtoDo);
 
-  console.log(editingtoDoData.title)
-  const handleEditChanges = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+ const handleEditChanges = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value.split('').every(element => element === ' '));
 
     setEditingToDoData(state => ({
@@ -48,30 +52,35 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
         dispatch({ type: 'updatePost', payload: editingtoDoData });
         setEditingToDo(false)
       }
-
-
     }
-    // setEditingToDoData(state => ({
-    //   ...state,
-    //   title: e.target.value,
-    // }))
   }
 
-  // const handleOnBlur = useCallback(debounce(setFocused, 100), []);
+  function onBlurHelper(e: React.FocusEvent<HTMLInputElement, Element>) {
+    dispatch({ type: 'updatePost', payload: editingtoDoData });
+    setEditingToDo(false);
+    console.log(e.relatedTarget)
+  }
+
   return (
     <li
       className={classNames({
         'editing': editingtoDo,
+        'completed': toDo.completed,
       })}
+      onClick={(e) => handleDoubleClickEdit(e)}
+
     >
-      <div className="view">
+      <div className="view" key={toDo.id}>
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={String(toDo.id)}
+          checked={toDo.completed === true ? true : false}
           onChange={handleClick}
         />
-        <label htmlFor="toggle-view">{toDo.title}</label>
+        <label htmlFor={String(toDo.id)}
+          key={toDo.id}
+        >{toDo.title}</label>
         <button
           type="button"
           className="destroy"
@@ -83,10 +92,10 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
         type="text"
         className="edit"
         value={editingtoDoData.title || ''}
-        onChange={(event) =>  handleEditChanges(event)}
+        onChange={(event) => handleEditChanges(event)}
         ref={editingLi}
         onKeyDown={handleEnter}
-        onClick={(e) => handleDoubleClickEdit(e)}
+        onBlur={(e) => onBlurHelper(e)}
       />
     </li>
   )

@@ -9,10 +9,11 @@ type Action = { type: 'addPost', payload: string }
             | { type: 'updatePost', payload: ToDo }
             | { type: 'removePost', payload: ToDo }
             | { type: 'completed', payload: number }
-            | { type: 'filter', payload: boolean }
+            | { type: 'filterArray', payload: any }
 
 interface State {
   list: ToDo[];
+  visibleList: ToDo[];
 }
 
 function newToDo(name: string): ToDo {
@@ -28,6 +29,21 @@ function toggle(list: ToDo[], id: number): ToDo[] {
   return list;
 }
 
+function filterArray(list: ToDo[], trigger: any): ToDo[] {
+  let copyList: ToDo[] = _.cloneDeep(list);
+  switch (trigger) {
+    case true:
+      return copyList = [...list.filter(elem => elem.completed === trigger)];
+      // break;
+    case false:
+      return copyList = [...list.filter(elem => elem.completed === trigger)];
+      // break;
+    case 'all':
+      return copyList;
+    default:
+      return copyList;
+  }
+}
 
 function update(list: ToDo[], toDo: ToDo): ToDo[] {
   const copyList = [...list];
@@ -35,6 +51,7 @@ function update(list: ToDo[], toDo: ToDo): ToDo[] {
   copyList.splice(index, 1, toDo);
   return copyList;
 }
+
 function remove(list: ToDo[], toDo: ToDo): ToDo[] {
   const copyList = [...list];
   const index = copyList.findIndex(todo => todo.id === toDo.id);
@@ -42,7 +59,7 @@ function remove(list: ToDo[], toDo: ToDo): ToDo[] {
   return copyList;
 }
 function reducer(state: State, action: Action): State {
-
+  // const newList = [...state.list];
   switch (action.type) {
     case 'addPost':
       return {
@@ -59,10 +76,10 @@ function reducer(state: State, action: Action): State {
         ...state,
         list: remove(state.list, action.payload)
       }
-    case 'filter':
+    case 'filterArray':
       return {
         ...state,
-        list: state.list.filter(elem => elem.completed === true)
+        visibleList: filterArray(state.list, action.payload)
       }
     case 'completed':
       return {
@@ -75,7 +92,8 @@ function reducer(state: State, action: Action): State {
 }
 
 const initialState: State = {
-  list: []
+  list: [],
+  visibleList: [],
 }
 
 export const StateContext = React.createContext(initialState);

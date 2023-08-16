@@ -1,4 +1,4 @@
-import { ToDo } from "./types/ToDo";
+import { ToDo } from './types/ToDo';
 
 export const toDoList: ToDo[] = [
   {

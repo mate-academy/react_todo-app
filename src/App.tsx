@@ -4,22 +4,26 @@ import React, { useContext, useState } from 'react';
 // import { ToDo } from './types/ToDo';
 import { DispatchContext, StateContext } from './ToDoContext';
 import { ToDoList } from './components/TodoList';
+import _ from 'lodash';
+import { ToDo } from './types/ToDo';
+// import { ToDo } from './types/ToDo';
 /* eslint-disable */
 // eslint-disable
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
   const dispatch = useContext(DispatchContext);
-  let { list } = useContext(StateContext);
-  // const [filtered, setFiltered] = useState(false)
+  let { list, visibleList } = useContext(StateContext);
+  const [filterCheck, setFilterCheck] = useState('')
 
   function handleChange(event: React.KeyboardEvent<HTMLInputElement>) {
     event.preventDefault();
     setValue(event.currentTarget.value);
   }
 
+  let copyList: ToDo[] = _.cloneDeep(list)
+
   function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.code === 'Enter') {
-      // e.preventDefault();
       if (!e.target.value.split('').every(element => element === ' ')) {
         dispatch({ type: 'addPost', payload: e.currentTarget.value });
         setValue('');
@@ -27,8 +31,18 @@ export const App: React.FC = () => {
     }
   }
 
-  function handlerFilterCompletedClick() {
-    dispatch({ type: 'filter', payload: true })
+  const handlerFilterCompletedClick = () => {
+    dispatch({ type: 'filterArray', payload: true });
+    setFilterCheck('complited');
+  }
+  function handlerFilterActiveClick() {
+    dispatch({ type: 'filterArray', payload: false });
+    setFilterCheck('complited');
+  }
+
+  function handleAll() {
+    dispatch({ type: 'filterArray', payload: 'all'});
+    setFilterCheck('all');
   }
 
   return (
@@ -57,7 +71,10 @@ export const App: React.FC = () => {
           data-cy="toggleAll"
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-        <ToDoList />
+        <ul className="todo-list" data-cy="todoList">
+        <ToDoList list={filterCheck === 'complited' ? visibleList : copyList}/>
+        </ul>
+
       </section>
 
       <footer className="footer">
@@ -67,11 +84,19 @@ export const App: React.FC = () => {
 
         <ul className="filters">
           <li>
-            <a href="#/" className="selected">All</a>
+            <a href="#/" className="selected"
+              onClick={handleAll}
+            >
+              All</a>
           </li>
 
           <li>
-            <a href="#/active">Active</a>
+            <a
+              href="#/active"
+              onClick={handlerFilterActiveClick}
+            >
+              Active
+            </a>
           </li>
 
           <li>

@@ -1,14 +1,19 @@
 /* eslint-disable */
-import React, { useContext } from "react";
-import { StateContext } from '../ToDoContext';
-// import { ToDo } from "../types/ToDo";
+import React from "react";
+// import { StateContext } from '../ToDoContext';
+import { ToDo } from "../types/ToDo";
 import { ToDoItem } from './ToDo'
 /* eslint-disable */
 // eslint-disable
 
-export const ToDoList: React.FC = React.memo(() => {
-  const { list } = useContext(StateContext)
-  console.log(list)
+type Props = {
+  list: ToDo[],
+  visibleList?: ToDo[]
+}
+
+export const ToDoList: React.FC<Props> = ({ list, visibleList }) =>{
+  // const { list } = useContext(StateContext)
+  console.log(visibleList, 'list')
   return (
     <ul className="todo-list" data-cy="todoList">
       {list.map(toDo => {
@@ -18,4 +23,4 @@ export const ToDoList: React.FC = React.memo(() => {
       })}
     </ul>
   )
-})
+}
