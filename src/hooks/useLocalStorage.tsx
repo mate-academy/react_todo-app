@@ -1,7 +1,9 @@
 import { useState } from 'react';
 
-// eslint-disable-next-line max-len
-export function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
+export function useLocalStorage<T>(
+  key: string,
+  startValue: T,
+): [T, (v: T) => void] {
   const [value, setValue] = useState(() => {
     const data = localStorage.getItem(key);
 
