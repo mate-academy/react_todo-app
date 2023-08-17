@@ -11,9 +11,7 @@ type Props = {
   visibleList?: ToDo[]
 }
 
-export const ToDoList: React.FC<Props> = ({ list, visibleList }) =>{
-  // const { list } = useContext(StateContext)
-  console.log(visibleList, 'list')
+export const ToDoList: React.FC<Props> = ({ list }) =>{
   return (
     <ul className="todo-list" data-cy="todoList">
       {list.map(toDo => {

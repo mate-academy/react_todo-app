@@ -15,16 +15,12 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   const [editingtoDo, setEditingToDo] = useState(false);
   const [editingtoDoData, setEditingToDoData] = useState({} as ToDo);
 
-  const handleClick = useCallback(debounce(() => dispatch({ type: 'completed', payload: toDo.id }), 200), []);
+  const handleClick = useCallback(debounce(() => dispatch({ type: 'completed', payload: toDo.id }), 300), [editingtoDo]);
 
   function handleDoubleClickEdit(e: React.MouseEvent) {
     if (e.detail === 2) {
-      // console.log(e.detail)
-
       setEditingToDo(true);
       setEditingToDoData(toDo);
-// console.log(editingtoDo, 'inside');
-
     }
   }
   useEffect(() => {
@@ -32,33 +28,41 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
       editingLi.current.focus();
     }
   })
-console.log(editingtoDo);
 
- const handleEditChanges = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value.split('').every(element => element === ' '));
-
+  const handleEditChanges = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setEditingToDoData(state => ({
-    ...state,
-    title: event.target.value,
-  }))}, [editingtoDoData]);
+      ...state,
+      title: event.target.value,
+    }))
+  }, [toDo]);
 
-  function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
-    // e.preventDefault();
+  // function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+  //   if (e.nativeEvent.code === 'Enter') {
+  //     if (e.target.value.split('').every(element => element === ' ')) {
+  //       dispatch({ type: 'removePost', payload: editingtoDoData });
+  //       setEditingToDo(false)
+  //     } else {
+  //       dispatch({ type: 'updatePost', payload: editingtoDoData });
+  //       setEditingToDo(false)
+  //     }
+  //   }
+  // }
+
+  const handleEnter = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.code === 'Enter') {
-      if (e.target.value.split('').every(element => element === ' ')) {
-        dispatch({ type: 'removePost', payload: editingtoDoData });
-        setEditingToDo(false)
-      } else {
-        dispatch({ type: 'updatePost', payload: editingtoDoData });
-        setEditingToDo(false)
-      }
-    }
-  }
+          if (e.target.value.split('').every(element => element === ' ')) {
+            dispatch({ type: 'removePost', payload: editingtoDoData });
+            setEditingToDo(false)
+          } else {
+            dispatch({ type: 'updatePost', payload: editingtoDoData });
+            setEditingToDo(false)
+          }
+        }
+  }, [editingtoDoData.title]);
 
-  function onBlurHelper(e: React.FocusEvent<HTMLInputElement, Element>) {
+  function onBlurHelper() {
     dispatch({ type: 'updatePost', payload: editingtoDoData });
     setEditingToDo(false);
-    console.log(e.relatedTarget)
   }
 
   return (
@@ -95,7 +99,7 @@ console.log(editingtoDo);
         onChange={(event) => handleEditChanges(event)}
         ref={editingLi}
         onKeyDown={handleEnter}
-        onBlur={(e) => onBlurHelper(e)}
+        onBlur={onBlurHelper}
       />
     </li>
   )

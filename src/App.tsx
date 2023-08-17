@@ -20,7 +20,7 @@ export const App: React.FC = () => {
     setValue(event.currentTarget.value);
   }
 
-  let copyList: ToDo[] = _.cloneDeep(list)
+  const copyList: ToDo[] = _.cloneDeep(list);
 
   function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.code === 'Enter') {
@@ -41,7 +41,7 @@ export const App: React.FC = () => {
   }
 
   function handleAll() {
-    dispatch({ type: 'filterArray', payload: 'all'});
+    dispatch({ type: 'filterArray', payload: 'all' });
     setFilterCheck('all');
   }
 
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list" data-cy="todoList">
-        <ToDoList list={filterCheck === 'complited' ? visibleList : copyList}/>
+          <ToDoList list={filterCheck === 'complited' ? visibleList : copyList} />
         </ul>
 
       </section>
@@ -87,7 +87,8 @@ export const App: React.FC = () => {
             <a href="#/" className="selected"
               onClick={handleAll}
             >
-              All</a>
+              All
+            </a>
           </li>
 
           <li>

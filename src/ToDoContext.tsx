@@ -6,10 +6,10 @@ import _ from 'lodash';
 import { ToDo } from "./types/ToDo";
 
 type Action = { type: 'addPost', payload: string }
-            | { type: 'updatePost', payload: ToDo }
-            | { type: 'removePost', payload: ToDo }
-            | { type: 'completed', payload: number }
-            | { type: 'filterArray', payload: any }
+  | { type: 'updatePost', payload: ToDo }
+  | { type: 'removePost', payload: ToDo }
+  | { type: 'completed', payload: number }
+  | { type: 'filterArray', payload: any }
 
 interface State {
   list: ToDo[];
@@ -31,18 +31,12 @@ function toggle(list: ToDo[], id: number): ToDo[] {
 
 function filterArray(list: ToDo[], trigger: any): ToDo[] {
   let copyList: ToDo[] = _.cloneDeep(list);
-  switch (trigger) {
-    case true:
-      return copyList = [...list.filter(elem => elem.completed === trigger)];
-      // break;
-    case false:
-      return copyList = [...list.filter(elem => elem.completed === trigger)];
-      // break;
-    case 'all':
-      return copyList;
-    default:
-      return copyList;
+  if (trigger === 'all') {
+    return copyList;
+  } else {
+    return _.cloneDeep(copyList.filter(elem => elem.completed === trigger));
   }
+
 }
 
 function update(list: ToDo[], toDo: ToDo): ToDo[] {
@@ -59,7 +53,6 @@ function remove(list: ToDo[], toDo: ToDo): ToDo[] {
   return copyList;
 }
 function reducer(state: State, action: Action): State {
-  // const newList = [...state.list];
   switch (action.type) {
     case 'addPost':
       return {
@@ -93,7 +86,7 @@ function reducer(state: State, action: Action): State {
 
 const initialState: State = {
   list: [],
-  visibleList: [],
+  visibleList: [] ,
 }
 
 export const StateContext = React.createContext(initialState);
