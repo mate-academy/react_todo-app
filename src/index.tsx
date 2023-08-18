@@ -5,7 +5,12 @@ import './styles/todo-list.css';
 import './styles/filters.css';
 
 import { App } from './App';
+import { TodoGlobalProvider } from './TodoContext/TodoContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <TodoGlobalProvider>
+    <App />
+  </TodoGlobalProvider>,
+);
