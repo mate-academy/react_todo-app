@@ -24,7 +24,7 @@ export const Footer = () => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${amountOfUncompletedTodos} items left`}
+        {`${amountOfUncompletedTodos} ${amountOfUncompletedTodos === 1 ? 'item' : 'items'} left`}
       </span>
 
       <TodosFilter />
