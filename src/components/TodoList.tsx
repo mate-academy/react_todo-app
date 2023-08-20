@@ -8,10 +8,11 @@ import { ToDoItem } from './ToDo'
 
 type Props = {
   list: ToDo[],
-  visibleList?: ToDo[]
 }
 
 export const ToDoList: React.FC<Props> = ({ list }) =>{
+  console.log(list, 'list component')
+
   return (
     <ul className="todo-list" data-cy="todoList">
       {list.map(toDo => {

@@ -5,25 +5,22 @@ import React, { useContext, useState } from 'react';
 import { DispatchContext, StateContext } from './ToDoContext';
 import { ToDoList } from './components/TodoList';
 import _ from 'lodash';
-import { ToDo } from './types/ToDo';
-// import { ToDo } from './types/ToDo';
-/* eslint-disable */
-// eslint-disable
+
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
   const dispatch = useContext(DispatchContext);
-  let { list, visibleList } = useContext(StateContext);
-  const [filterCheck, setFilterCheck] = useState('')
+  let { list } = useContext(StateContext);
+  const [triggerForAll, setTriggerForAll] = useState(true);
 
   function handleChange(event: React.KeyboardEvent<HTMLInputElement>) {
     event.preventDefault();
     setValue(event.currentTarget.value);
   }
 
-  const copyList: ToDo[] = _.cloneDeep(list);
-
   function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.code === 'Enter') {
+          // debugger
+      e.preventDefault()
       if (!e.target.value.split('').every(element => element === ' ')) {
         dispatch({ type: 'addPost', payload: e.currentTarget.value });
         setValue('');
@@ -31,18 +28,17 @@ export const App: React.FC = () => {
     }
   }
 
-  const handlerFilterCompletedClick = () => {
-    dispatch({ type: 'filterArray', payload: true });
-    setFilterCheck('complited');
-  }
-  function handlerFilterActiveClick() {
-    dispatch({ type: 'filterArray', payload: false });
-    setFilterCheck('complited');
+  function sortBy(trigger: string) {
+    dispatch({ type: 'sortBy', payload: trigger });
   }
 
-  function handleAll() {
-    dispatch({ type: 'filterArray', payload: 'all' });
-    setFilterCheck('all');
+  function clearComplited() {
+    dispatch({ type: 'removeComplited'});
+  }
+
+  function toggleAll() {
+    dispatch({ type: 'TOGGLE_ALL', payload: triggerForAll });
+    setTriggerForAll(!triggerForAll);
   }
 
   return (
@@ -69,10 +65,11 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onClick={toggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list" data-cy="todoList">
-          <ToDoList list={filterCheck === 'complited' ? visibleList : copyList} />
+          <ToDoList list={list} />
         </ul>
 
       </section>
@@ -85,7 +82,7 @@ export const App: React.FC = () => {
         <ul className="filters">
           <li>
             <a href="#/" className="selected"
-              onClick={handleAll}
+              onClick={() => sortBy('ALL')}
             >
               All
             </a>
@@ -94,7 +91,7 @@ export const App: React.FC = () => {
           <li>
             <a
               href="#/active"
-              onClick={handlerFilterActiveClick}
+              onClick={() => sortBy('ACTIVE')}
             >
               Active
             </a>
@@ -102,14 +99,16 @@ export const App: React.FC = () => {
 
           <li>
             <a href="#/completed"
-              onClick={handlerFilterCompletedClick}
+              onClick={() => sortBy('COMPLITED')}
             >
               Completed
             </a>
           </li>
         </ul>
 
-        <button type="button" className="clear-completed">
+        <button type="button" className="clear-completed"
+          onClick={clearComplited}
+        >
           Clear completed
         </button>
       </footer>
