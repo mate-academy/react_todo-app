@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { TodoContext } from '../../TodoContext/TodoContext';
+import React from 'react';
+import { useTodo } from '../../hooks/useTodo';
 import { Todo } from '../../types/Todo';
 
 export const TodoToggleAll: React.FC = () => {
-  const { items, setItems } = useContext(TodoContext);
+  const { items, setItems } = useTodo();
   const isNotCompleted = items.some(item => !item.completed);
 
   const handleInputChange = () => {

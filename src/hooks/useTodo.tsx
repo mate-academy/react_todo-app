@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Filter } from '../types/Filters';
 import { Todo } from '../types/Todo';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useLocalStorage } from './useLocalStorage';
 
 const initialItems: Todo[] = [];
 const defaultKey = 'todo';
@@ -31,7 +31,9 @@ const state: State = {
   },
 };
 
-export const TodoContext = React.createContext(state);
+const TodoContext = React.createContext(state);
+
+export const useTodo = (): State => React.useContext(TodoContext);
 
 type Props = {
   children: React.ReactNode;

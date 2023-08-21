@@ -1,8 +1,7 @@
-import { useContext } from 'react';
-import { TodoContext } from '../../TodoContext/TodoContext';
+import { useTodo } from '../../hooks/useTodo';
 
 export const TodoCounter: React.FC = () => {
-  const { items } = useContext(TodoContext);
+  const { items } = useTodo();
 
   const activeItemsCount = items.filter(
     item => item.completed === false,
@@ -10,7 +9,7 @@ export const TodoCounter: React.FC = () => {
 
   return (
     <span className="todo-count" data-cy="todosCounter">
-      {`${activeItemsCount} items left`}
+      {`${activeItemsCount} ${activeItemsCount === 1 ? 'item' : 'items'} left`}
     </span>
   );
 };

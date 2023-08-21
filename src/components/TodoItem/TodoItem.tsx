@@ -1,8 +1,8 @@
 import React, {
-  useContext, useState, useRef, useEffect,
+  useState, useRef, useEffect,
 } from 'react';
 import classNames from 'classnames';
-import { TodoContext } from '../../TodoContext/TodoContext';
+import { useTodo } from '../../hooks/useTodo';
 
 type Props = {
   id: number;
@@ -19,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({
     items,
     setItems,
     deleteItem,
-  } = useContext(TodoContext);
+  } = useTodo();
 
   const [isEditableInput, setIsEditableInput] = useState(false);
   const [editebleInputValue, setEditebleInputValue] = useState(title);

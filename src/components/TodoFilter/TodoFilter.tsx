@@ -1,13 +1,13 @@
 import classNames from 'classnames';
-import React, { useContext } from 'react';
-import { TodoContext } from '../../TodoContext/TodoContext';
+import React from 'react';
+import { useTodo } from '../../hooks/useTodo';
 import { Filter } from '../../types/Filters';
 
 export const TodoFilter: React.FC = () => {
   const {
     filter,
     setFilter,
-  } = useContext(TodoContext);
+  } = useTodo();
 
   return (
     <ul className="filters" data-cy="todosFilter">

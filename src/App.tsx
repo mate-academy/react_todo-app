@@ -1,6 +1,6 @@
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { TodoContext } from './TodoContext/TodoContext';
+import { useTodo } from './hooks/useTodo';
 import { TodoForm } from './components/TodoForm/TodoForm';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
@@ -11,7 +11,7 @@ import { TodoCounter } from './components/TodoCounter/TodoCounter';
 import { TodoClearButton } from './components/TodoClearButton/TodoClearButton';
 
 export const App: React.FC = () => {
-  const { items, getVisibleItems, filter } = useContext(TodoContext);
+  const { items, getVisibleItems, filter } = useTodo();
 
   const isCompitedTasks = useMemo(
     () => items.some(item => item.completed),

@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { TodoContext } from '../../TodoContext/TodoContext';
+import React from 'react';
+import { useTodo } from '../../hooks/useTodo';
 
 export const TodoClearButton: React.FC = () => {
-  const { items, setItems } = useContext(TodoContext);
+  const { items, setItems } = useTodo();
 
   const handleButtonClick = () => {
     const notComplitedItems = items.filter(item => !item.completed);

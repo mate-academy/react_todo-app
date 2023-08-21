@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
-import { TodoContext } from '../../TodoContext/TodoContext';
+import React, { useState } from 'react';
+import { useTodo } from '../../hooks/useTodo';
 
 export const TodoForm: React.FC = () => {
   const [query, setQuery] = useState('');
 
-  const { addItem } = useContext(TodoContext);
+  const { addItem } = useTodo();
 
   const handleQueryChange = (
     event: React.ChangeEvent<HTMLInputElement>,
