@@ -1,15 +1,11 @@
-/* eslint-disable */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useState } from 'react';
-// import { ToDo } from './types/ToDo';
-import { DispatchContext, StateContext } from './ToDoContext';
 import { ToDoList } from './components/TodoList';
-import _ from 'lodash';
+import { DispatchContext, StateContext } from './ToDoContext';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
   const dispatch = useContext(DispatchContext);
-  let { list } = useContext(StateContext);
+  const { list } = useContext(StateContext);
   const [triggerForAll, setTriggerForAll] = useState(true);
 
   function handleChange(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -19,8 +15,7 @@ export const App: React.FC = () => {
 
   function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.code === 'Enter') {
-          // debugger
-      e.preventDefault()
+      e.preventDefault();
       if (!e.target.value.split('').every(element => element === ' ')) {
         dispatch({ type: 'addPost', payload: e.currentTarget.value });
         setValue('');
@@ -33,7 +28,7 @@ export const App: React.FC = () => {
   }
 
   function clearComplited() {
-    dispatch({ type: 'removeComplited'});
+    dispatch({ type: 'removeComplited' });
   }
 
   function toggleAll() {
@@ -81,7 +76,9 @@ export const App: React.FC = () => {
 
         <ul className="filters">
           <li>
-            <a href="#/" className="selected"
+            <a
+              href="#/"
+              className="selected"
               onClick={() => sortBy('ALL')}
             >
               All
@@ -98,7 +95,8 @@ export const App: React.FC = () => {
           </li>
 
           <li>
-            <a href="#/completed"
+            <a
+              href="#/completed"
               onClick={() => sortBy('COMPLITED')}
             >
               Completed
@@ -106,7 +104,9 @@ export const App: React.FC = () => {
           </li>
         </ul>
 
-        <button type="button" className="clear-completed"
+        <button
+          type="button"
+          className="clear-completed"
           onClick={clearComplited}
         >
           Clear completed

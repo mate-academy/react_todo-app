@@ -1,13 +1,13 @@
-/* eslint-disable */
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useRef, useState,
+} from 'react';
+import classNames from 'classnames';
 import { ToDo } from '../types/ToDo';
 import { DispatchContext } from '../ToDoContext';
-import classNames from 'classnames';
-// import { debounce } from 'lodash';
 
 type Props = {
   toDo: ToDo,
-}
+};
 
 export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   const dispatch = useContext(DispatchContext);
@@ -19,41 +19,41 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   const handleClick = useCallback(() => {
     dispatch({ type: 'completed', payload: toDo.id });
     setRerender(!rerender);
-  },[rerender])
+  }, [rerender]);
 
   function handleDoubleClickEdit(e: React.MouseEvent) {
-    // e.preventDefault()
     if (e.detail === 2) {
-      e.preventDefault()
+      e.preventDefault();
       setEditingToDo(true);
       setEditingToDoData(toDo);
     }
   }
+
   useEffect(() => {
     if (editingLi.current) {
       editingLi.current.focus();
     }
-  })
+  });
 
-  const handleEditChanges = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEditChanges = useCallback((
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setEditingToDoData(state => ({
       ...state,
       title: event.target.value,
-    }))
+    }));
   }, []);
 
-  const handleEnter = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    // e.preventDefault()
-    // debugger
+  const handleEnter = useCallback((
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.nativeEvent.code === 'Enter') {
-      // e.preventDefault()
       if (e.target.value.split('').every(element => element === ' ')) {
         dispatch({ type: 'removePost', payload: editingtoDoData });
-        setEditingToDo(false)
+        setEditingToDo(false);
       } else {
-        // e.preventDefault()
         dispatch({ type: 'updatePost', payload: editingtoDoData });
-        setEditingToDo(false)
+        setEditingToDo(false);
       }
     }
   }, [editingtoDoData.title]);
@@ -69,31 +69,30 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
 
   return (
     <li
-    key={toDo.id}
+      key={toDo.id}
       className={classNames({
-        'editing': editingtoDo,
-        'completed': toDo.completed,
+        editing: editingtoDo,
+        completed: toDo.completed,
       })}
-
-
     >
       <div className="view" key={toDo.id}>
         <input
           type="checkbox"
           className="toggle"
           id={String(toDo.id)}
-          checked={toDo.completed === true ? true : false}
+          checked={toDo.completed}
           onChange={handleClick}
 
         />
         <label
-          // htmlFor={String(toDo.id)}
           onClick={(e) => handleDoubleClickEdit(e)}
-        >{
-        toDo.title}
+          aria-hidden="true"
+        >
+          {toDo.title}
         </label>
         <button
           type="button"
+          aria-label="destroy"
           className="destroy"
           data-cy="deleteTodo"
           onClick={handlerRemove}
@@ -109,5 +108,5 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
         onBlur={onBlurHelper}
       />
     </li>
-  )
-}
+  );
+};
