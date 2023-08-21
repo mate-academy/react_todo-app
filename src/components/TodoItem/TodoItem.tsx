@@ -34,17 +34,22 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const saveTodo = () => {
-    if (editInputValue === todo.title) {
+    const trimmedValue = editInputValue.trim();
+
+    if (trimmedValue === todo.title) {
+      setEditInputValue(trimmedValue);
+
       return;
     }
 
-    if (editInputValue === '') {
+    if (trimmedValue === '') {
       deleteTodo(todo);
 
       return;
     }
 
-    updateTodo({ ...todo, title: editInputValue });
+    updateTodo({ ...todo, title: trimmedValue });
+    setEditInputValue(trimmedValue);
   };
 
   const handleEditInputKeyUp = (
