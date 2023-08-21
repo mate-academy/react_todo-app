@@ -43,15 +43,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (trimmedTitle !== '') {
       setEditedTitle(trimmedTitle);
       setIsEditing(false);
+      updateTodoTitle(id, trimmedTitle);
     } else {
       deleteTodo(id);
     }
-
-    updateTodoTitle(id, trimmedTitle);
   };
 
   const handleEditCancel = () => {
     setIsEditing(false);
+    setEditedTitle(title);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent) => {
@@ -100,6 +100,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           ref={inputRef}
           className="edit"
           value={editedTitle}
+          placeholder="Empty todo will be deleted"
           onChange={handleEditChange}
           onBlur={handleEditSubmit}
           onKeyUp={handleKeyUp}

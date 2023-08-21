@@ -40,7 +40,6 @@ export const App: React.FC = () => {
 
   const handleClearCompleted = () => {
     deleteCompletedTodos();
-    setFilterStatus(Status.All);
   };
 
   const handleFilterChange = (status: Status) => {
@@ -70,20 +69,23 @@ export const App: React.FC = () => {
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onClick={handleToggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as completed</label>
-
-        <TodoList todos={filteredTodos} />
+        {todos.length !== 0 && (
+          <>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={handleToggleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as completed</label>
+            <TodoList todos={filteredTodos} />
+          </>
+        )}
       </section>
 
       {todos.length !== 0 && (
-        <footer className="footer">
+        <footer className="footer" data-cy="todosFilter">
           <span className="todo-count" data-cy="todosCounter">
             {`${incompletedTodosCount} items left`}
           </span>
