@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
+import classNames from 'classnames';
 import { ToDoList } from './components/TodoList';
 import { DispatchContext, StateContext } from './ToDoContext';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
   const dispatch = useContext(DispatchContext);
-  const { list } = useContext(StateContext);
+  const { list, sortBy } = useContext(StateContext);
   const [triggerForAll, setTriggerForAll] = useState(true);
 
   function handleChange(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -23,7 +24,7 @@ export const App: React.FC = () => {
     }
   }
 
-  function sortBy(trigger: string) {
+  function sortButtonHandler(trigger: string) {
     dispatch({ type: 'sortBy', payload: trigger });
   }
 
@@ -78,8 +79,10 @@ export const App: React.FC = () => {
           <li>
             <a
               href="#/"
-              className="selected"
-              onClick={() => sortBy('ALL')}
+              className={classNames({
+                selected: sortBy === 'ALL',
+              })}
+              onClick={() => sortButtonHandler('ALL')}
             >
               All
             </a>
@@ -87,8 +90,11 @@ export const App: React.FC = () => {
 
           <li>
             <a
+              className={classNames({
+                selected: sortBy === 'ACTIVE',
+              })}
               href="#/active"
-              onClick={() => sortBy('ACTIVE')}
+              onClick={() => sortButtonHandler('ACTIVE')}
             >
               Active
             </a>
@@ -96,8 +102,11 @@ export const App: React.FC = () => {
 
           <li>
             <a
+              className={classNames({
+                selected: sortBy === 'COMPLITED',
+              })}
               href="#/completed"
-              onClick={() => sortBy('COMPLITED')}
+              onClick={() => sortButtonHandler('COMPLITED')}
             >
               Completed
             </a>
