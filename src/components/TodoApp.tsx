@@ -6,6 +6,8 @@ import { TodosFilter } from './TodosFilter';
 export const TodoApp: React.FC = () => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const {
     todos,
     addTodo,
@@ -20,14 +22,21 @@ export const TodoApp: React.FC = () => {
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (newTodoTitle.trim() !== '') {
+      if (newTodoTitle.trim()) {
         addTodo(newTodoTitle);
         setNewTodoTitle('');
+        setShowError(false);
+      } else {
+        setShowError(true);
+        setErrorMessage('Todo title cannot be empty.');
+        setTimeout(() => {
+          setShowError(false);
+        }, 2000);
       }
     }
   };
 
-  const toggleAllCheck = todos.every(todo => todo.completed === true);
+  const toggleAllCheck = todos.every(todo => todo.completed);
 
   const todosUncomplited = todos.filter(
     todo => !todo.completed,
@@ -52,6 +61,7 @@ export const TodoApp: React.FC = () => {
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
           />
+          {showError && <div className="error">{errorMessage}</div>}
         </form>
       </header>
 
@@ -81,7 +91,11 @@ export const TodoApp: React.FC = () => {
       {todosNotEmpty && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${todosUncomplited} items left`}
+            {todosUncomplited === 1 ? (
+              '1 item left'
+            ) : (
+              `${todosUncomplited} items left`
+            )}
           </span>
 
           <TodosFilter

@@ -49,7 +49,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      if (updatedTitle.trim() === '') {
+      if (!updatedTitle.trim()) {
         deleteTodo(item.id);
       } else {
         updateTodoTitle(updatedTitle, item.id);
@@ -61,7 +61,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   };
 
   const handleBlur = () => {
-    if (updatedTitle.trim() === '') {
+    if (!updatedTitle.trim()) {
       deleteTodo(item.id);
     } else {
       updateTodoTitle(updatedTitle, item.id);
