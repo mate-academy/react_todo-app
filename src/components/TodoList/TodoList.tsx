@@ -8,13 +8,13 @@ export const TodoList = () => {
   const {
     todos,
     setTodos,
-    toggleAllStatus,
-    setToggleAllStatus,
+    isToggleAllStatus,
+    setIsToggleAllStatus,
     todosFilter,
   } = useContext(TodosContext);
 
   const handleToggleAll = () => {
-    if (toggleAllStatus) {
+    if (isToggleAllStatus) {
       setTodos(currentTodos => currentTodos
         .map(todo => ({ ...todo, completed: false })));
     } else {
@@ -22,7 +22,7 @@ export const TodoList = () => {
         .map(todo => ({ ...todo, completed: true })));
     }
 
-    setToggleAllStatus(!toggleAllStatus);
+    setIsToggleAllStatus(!isToggleAllStatus);
   };
 
   return (
@@ -30,7 +30,7 @@ export const TodoList = () => {
       {todos.length > 0 && (
         <>
           <input
-            checked={toggleAllStatus}
+            checked={isToggleAllStatus}
             type="checkbox"
             id="toggle-all"
             className="toggle-all"

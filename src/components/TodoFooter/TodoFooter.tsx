@@ -1,13 +1,14 @@
-import {
+import React, {
   useCallback,
   useContext,
   useMemo,
 } from 'react';
+import cn from 'classnames';
 import { TodosContext } from '../../TodoContext/TodosContext';
 import { Status } from '../../Enum/Status';
 import { Todo } from '../../Interface/Todo';
 
-export const TodoFooter = () => {
+export const TodoFooter: React.FC = () => {
   const {
     todos,
     setTodos,
@@ -15,7 +16,7 @@ export const TodoFooter = () => {
     setFilterBy,
   } = useContext(TodosContext);
 
-  const uncomplitedTodos = useMemo(() => {
+  const uncompletedTodos = useMemo(() => {
     return todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
@@ -30,18 +31,16 @@ export const TodoFooter = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${uncomplitedTodos} items left`}
+            {`${uncompletedTodos} item${uncompletedTodos !== 1 ? 's' : ''} left`}
           </span>
 
           <ul className="filters" data-cy="todosFilter">
             <li>
               <a
                 href="#/"
-                className={
-                  Status.ALL === filterBy
-                    ? 'selected'
-                    : ''
-                }
+                className={cn({
+                  selected: Status.ALL === filterBy,
+                })}
                 onClick={() => setFilterBy(Status.ALL)}
               >
                 All
@@ -51,11 +50,9 @@ export const TodoFooter = () => {
             <li>
               <a
                 href="#/active"
-                className={
-                  Status.ACTIVE === filterBy
-                    ? 'selected'
-                    : ''
-                }
+                className={cn({
+                  selected: Status.ACTIVE === filterBy,
+                })}
                 onClick={() => setFilterBy(Status.ACTIVE)}
               >
                 Active
@@ -65,18 +62,16 @@ export const TodoFooter = () => {
             <li>
               <a
                 href="#/completed"
-                className={
-                  Status.COMPLETED === filterBy
-                    ? 'selected'
-                    : ''
-                }
+                className={cn({
+                  selected: Status.COMPLETED === filterBy,
+                })}
                 onClick={() => setFilterBy(Status.COMPLETED)}
               >
                 Completed
               </a>
             </li>
           </ul>
-          {uncomplitedTodos !== todos.length && (
+          {uncompletedTodos !== todos.length && (
             <button
               type="button"
               className="clear-completed"

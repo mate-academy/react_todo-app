@@ -10,12 +10,13 @@ import { TodosContext } from '../../TodoContext/TodosContext';
 import { KeyUpStatus } from '../../Enum/KeyUpStatus';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
+
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { setTodos, setToggleAllStatus } = useContext(TodosContext);
+  const { setTodos, setIsToggleAllStatus } = useContext(TodosContext);
   const [editStatus, setEditStatus] = useState(false);
   const [editInputValue, setEditInputValue] = useState(todo.title);
   const editFocus = useRef<HTMLInputElement>(null);
@@ -28,13 +29,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           : todoItem
       ));
 
-      const completedAllStatus = newTodos
-        .filter(todoItem => !todoItem.completed);
+      const completedAllStatus
+      = newTodos.filter(todoItem => !todoItem.completed);
 
       if (completedAllStatus.length < 1) {
-        setToggleAllStatus(true);
+        setIsToggleAllStatus(true);
       } else {
-        setToggleAllStatus(false);
+        setIsToggleAllStatus(false);
       }
 
       return newTodos;
@@ -60,20 +61,23 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       return;
     }
 
-    setTodos((currentTodos) => currentTodos.map(todoItem => {
-      return todo.id === todoItem.id
+    setTodos(currentTodos => currentTodos
+      .map(todoItem => (todo.id === todoItem.id
         ? { ...todoItem, title: editInputValue.trim() }
-        : todoItem;
-    }));
+        : todoItem)));
 
     setEditStatus(false);
+  };
+
+  const handleKeyUpAction = () => {
+    handleOnBlur();
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const { key } = event;
 
-    if (key === KeyUpStatus.Enter) {
-      handleOnBlur();
+    if (key === KeyUpStatus.Enter || key === KeyUpStatus.ESC) {
+      handleKeyUpAction();
     } else {
       setEditInputValue(todo.title);
       setEditStatus(false);
@@ -91,7 +95,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <div className="view">
         <input
           type="checkbox"
-          onChange={() => handleCompleteTodo()}
+          onChange={handleCompleteTodo}
           className="toggle"
           checked={todo.completed}
           id="toggle-view"
@@ -101,7 +105,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => handleDeleteTodo()}
+          onClick={handleDeleteTodo}
         />
       </div>
       <input
@@ -110,12 +114,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         value={editInputValue}
         ref={editFocus}
         onChange={(event) => setEditInputValue(event.target.value)}
-        onKeyUp={(event) => (
-          event.key === KeyUpStatus.Enter || KeyUpStatus.ESC === event.key
-            ? handleKeyUp(event)
-            : null
-        )}
-        onBlur={() => handleOnBlur()}
+        onKeyUp={handleKeyUp}
+        onBlur={handleOnBlur}
       />
     </li>
   );
