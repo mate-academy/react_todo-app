@@ -4,13 +4,24 @@ import _ from 'lodash';
 import React, { useEffect, useReducer } from 'react';
 import { ToDo } from './types/ToDo';
 
-type Action = { type: 'addPost', payload: string }
-| { type: 'updatePost', payload: ToDo }
-| { type: 'removePost', payload: ToDo }
-| { type: 'completed', payload: number }
-| { type: 'sortBy', payload: string }
-| { type: 'TOGGLE_ALL', payload: boolean }
-| { type: 'removeComplited' };
+export enum ACTIONS {
+  ADD = 'addPost',
+  REMOVE = 'removePost',
+  UPDATE = 'updatePost',
+  TOGGLE = 'completed',
+  SORT = 'sortBy',
+  TOGGLE_ALL = 'TOGGLE_ALL',
+  CLEAR = 'removeComplited',
+
+}
+
+type Action = { type: ACTIONS.ADD, payload: string }
+| { type: ACTIONS.UPDATE, payload: ToDo }
+| { type: ACTIONS.REMOVE, payload: ToDo }
+| { type: ACTIONS.TOGGLE, payload: number }
+| { type: ACTIONS.SORT, payload: string }
+| { type: ACTIONS.TOGGLE_ALL, payload: boolean }
+| { type: ACTIONS.CLEAR };
 
 interface State {
   list: ToDo[];
@@ -108,7 +119,7 @@ const localStorageData = () => {
   const data = localStorage.getItem('list');
   let parsedData: ToDo[] = [];
 
-  if (data !== null) {
+  if (data) {
     parsedData = JSON.parse(data);
   } else {
     return parsedData;
@@ -124,11 +135,17 @@ const initialState: State = {
 
 export const StateContext = React.createContext(initialState);
 /* eslint-disable */
-export const DispatchContext = React.createContext((_action: Action) => { });
+export const DispatchContext = React.createContext((_action: Action) => {});
 /* eslint-enable */
 type Props = {
   children: React.ReactNode;
 };
+
+export enum FILTER {
+  ALL = 'ALL',
+  ACTIVE = 'ACTIVE',
+  COMPLITED = 'COMPLITED',
+}
 
 export const ToDoProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -139,11 +156,11 @@ export const ToDoProvider: React.FC<Props> = ({ children }) => {
 
   const visibleList = () => {
     switch (state.sortBy) {
-      case 'ALL':
+      case FILTER.ALL:
         return [...state.list];
-      case 'COMPLITED':
+      case FILTER.COMPLITED:
         return state.list.filter(elem => elem.completed);
-      case 'ACTIVE':
+      case FILTER.ACTIVE:
         return state.list.filter(elem => !elem.completed);
       default:
         return state.list;

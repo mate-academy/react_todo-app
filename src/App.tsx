@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { ToDoList } from './components/TodoList';
-import { DispatchContext, StateContext } from './ToDoContext';
+import { ACTIONS, DispatchContext, StateContext } from './ToDoContext';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
@@ -18,22 +18,22 @@ export const App: React.FC = () => {
     if (e.nativeEvent.code === 'Enter') {
       e.preventDefault();
       if (!e.target.value.split('').every(element => element === ' ')) {
-        dispatch({ type: 'addPost', payload: e.currentTarget.value });
+        dispatch({ type: ACTIONS.ADD, payload: e.currentTarget.value });
         setValue('');
       }
     }
   }
 
   function sortButtonHandler(trigger: string) {
-    dispatch({ type: 'sortBy', payload: trigger });
+    dispatch({ type: ACTIONS.SORT, payload: trigger });
   }
 
   function clearComplited() {
-    dispatch({ type: 'removeComplited' });
+    dispatch({ type: ACTIONS.CLEAR });
   }
 
   function toggleAll() {
-    dispatch({ type: 'TOGGLE_ALL', payload: triggerForAll });
+    dispatch({ type: ACTIONS.TOGGLE_ALL, payload: triggerForAll });
     setTriggerForAll(!triggerForAll);
   }
 

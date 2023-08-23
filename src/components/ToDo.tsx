@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import { ToDo } from '../types/ToDo';
-import { DispatchContext } from '../ToDoContext';
+import { ACTIONS, DispatchContext } from '../ToDoContext';
 
 type Props = {
   toDo: ToDo,
@@ -17,7 +17,7 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   const [editingtoDoData, setEditingToDoData] = useState({} as ToDo);
 
   const handleClick = useCallback(() => {
-    dispatch({ type: 'completed', payload: toDo.id });
+    dispatch({ type: ACTIONS.TOGGLE, payload: toDo.id });
     setRerender(!rerender);
   }, [rerender]);
 
@@ -49,22 +49,22 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   ) => {
     if (e.nativeEvent.code === 'Enter') {
       if (e.target.value.split('').every(element => element === ' ')) {
-        dispatch({ type: 'removePost', payload: editingtoDoData });
+        dispatch({ type: ACTIONS.REMOVE, payload: editingtoDoData });
         setEditingToDo(false);
       } else {
-        dispatch({ type: 'updatePost', payload: editingtoDoData });
+        dispatch({ type: ACTIONS.UPDATE, payload: editingtoDoData });
         setEditingToDo(false);
       }
     }
   }, [editingtoDoData.title]);
 
   function onBlurHelper() {
-    dispatch({ type: 'updatePost', payload: editingtoDoData });
+    dispatch({ type: ACTIONS.UPDATE, payload: editingtoDoData });
     setEditingToDo(false);
   }
 
   function handlerRemove() {
-    dispatch({ type: 'removePost', payload: toDo });
+    dispatch({ type: ACTIONS.REMOVE, payload: toDo });
   }
 
   return (
