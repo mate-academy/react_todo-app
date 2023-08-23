@@ -4,7 +4,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { StateContext } from '../context/StateContext';
 
@@ -15,7 +15,7 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({
   todo: { id, completed, title },
 }) => {
-  const [newTitle, setEditingTitle] = useState(title);
+  const [newTitle, setNewTitle] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
   const [onFocus, setOnFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,7 +52,7 @@ export const TodoItem: React.FC<Props> = ({
     if (e.key === 'Escape') {
       setOnFocus(false);
       setIsEditing(false);
-      setEditingTitle(title);
+      setNewTitle(title);
     }
 
     if (e.key === 'Enter') {
@@ -67,7 +67,7 @@ export const TodoItem: React.FC<Props> = ({
   }, [onFocus]);
 
   return (
-    <li className={classNames({ completed }, { editing: isEditing })}>
+    <li className={cn({ completed }, { editing: isEditing })}>
       <div className="view">
         <input
           type="checkbox"
@@ -76,7 +76,9 @@ export const TodoItem: React.FC<Props> = ({
           checked={completed}
           onChange={handleChangeStatus}
         />
-        <label onDoubleClick={handleDoubleClick}>{title}</label>
+        <label onDoubleClick={handleDoubleClick}>
+          {title}
+        </label>
         <button
           type="button"
           className="destroy"
@@ -90,7 +92,7 @@ export const TodoItem: React.FC<Props> = ({
         className="edit"
         ref={inputRef}
         value={newTitle}
-        onChange={(event) => setEditingTitle(event.target.value)}
+        onChange={(event) => setNewTitle(event.target.value)}
         onKeyUp={handleSubmitNewTitle}
         onBlur={handleBlur}
       />
