@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { TodoList } from './TodoList';
-import { TodosContext } from './TodosContext';
 import { TodosFilter } from './TodosFilter';
+import { useTodo } from './TodosContext';
 
 export const TodoApp: React.FC = () => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
@@ -13,7 +13,7 @@ export const TodoApp: React.FC = () => {
     addTodo,
     toogleAll,
     deleteComplitedTodo,
-  } = useContext(TodosContext);
+  } = useTodo();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodoTitle(event.target.value);

@@ -1,25 +1,19 @@
 import classNames from 'classnames';
 
 import React, {
-  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { TodosContext } from './TodosContext';
-
-type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { useTodo } from './TodosContext';
+import { Todo } from '../types/todoTypes';
 
 interface Props {
   item: Todo;
 }
 
 export const TodoItem: React.FC<Props> = ({ item }) => {
-  const { toggleTodo, deleteTodo, updateTodoTitle } = useContext(TodosContext);
+  const { toggleTodo, deleteTodo, updateTodoTitle } = useTodo();
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);

@@ -1,17 +1,10 @@
 import React from 'react';
 import { useLocaleStorage } from './localStorage';
+import { Todo, Todos } from '../types/todoTypes';
 
 type Props = {
   children: React.ReactNode;
 };
-
-type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
-
-type Todos = Todo[] | [];
 
 type TodosContextValue = {
   todos: Todos;
@@ -112,3 +105,5 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     </TodosContext.Provider>
   );
 };
+
+export const useTodo = (): TodosContextValue => React.useContext(TodosContext);

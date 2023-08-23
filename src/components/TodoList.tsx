@@ -1,14 +1,9 @@
 import React from 'react';
 import { TodoItem } from './TodoItem';
-
-type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { Todo, Todos } from '../types/todoTypes';
 
 interface Props {
-  items: Todo[] | [];
+  items: Todos;
   selectedFilter: string;
 }
 
