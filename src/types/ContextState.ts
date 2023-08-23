@@ -3,7 +3,7 @@ import { Status } from './Filter';
 import { Todo } from './Todo';
 
 export type State = {
-  value: Todo[];
+  todos: Todo[];
   filterBy: Status;
   setFilterBy: React.Dispatch<React.SetStateAction<Status>>;
   dispatch: React.Dispatch<Action>

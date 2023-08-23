@@ -5,7 +5,7 @@ import { Status } from '../types/Filter';
 
 export const TodosFilter: React.FC = () => {
   const {
-    value: todos,
+    todos,
     filterBy,
     setFilterBy,
     dispatch,
@@ -15,6 +15,12 @@ export const TodosFilter: React.FC = () => {
 
   const handleDeleteCompleted = () => {
     dispatch({ type: 'remove_all_completed' });
+  };
+
+  const handleFilterBy = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    setFilterBy(event.currentTarget.innerText as Status);
   };
 
   return (
@@ -28,7 +34,7 @@ export const TodosFilter: React.FC = () => {
           <a
             href="#/"
             className={cn({ selected: filterBy === Status.ALL })}
-            onClick={() => setFilterBy(Status.ALL)}
+            onClick={handleFilterBy}
           >
             All
           </a>
@@ -38,7 +44,7 @@ export const TodosFilter: React.FC = () => {
           <a
             href="#/active"
             className={cn({ selected: filterBy === Status.ACTIVE })}
-            onClick={() => setFilterBy(Status.ACTIVE)}
+            onClick={handleFilterBy}
           >
             Active
           </a>
@@ -48,7 +54,7 @@ export const TodosFilter: React.FC = () => {
           <a
             href="#/completed"
             className={cn({ selected: filterBy === Status.COMPLETED })}
-            onClick={() => setFilterBy(Status.COMPLETED)}
+            onClick={handleFilterBy}
           >
             Completed
           </a>

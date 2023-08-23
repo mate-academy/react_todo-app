@@ -33,7 +33,7 @@ function reducer(todos: Todo[], action: Action): Todo[] {
 }
 
 const initialState: State = {
-  value: [],
+  todos: [],
   filterBy: Status.ALL,
   setFilterBy: () => {},
   dispatch: () => {},
@@ -46,22 +46,22 @@ type Props = {
 };
 
 export const TodosStateProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [value, dispatch] = useReducer(reducer, todos);
+  const [value, setValue] = useLocalStorage<Todo[]>('todos', []);
+  const [todos, dispatch] = useReducer(reducer, value);
   const [filterBy, setFilterBy] = useState(Status.ALL);
 
   const state = useMemo(() => {
     return {
-      value,
+      todos,
       filterBy,
       setFilterBy,
       dispatch,
     };
-  }, [value, filterBy]);
+  }, [todos, filterBy]);
 
   useEffect(() => {
-    setTodos(state.value);
-  }, [state.value]);
+    setValue(state.todos);
+  }, [state.todos]);
 
   return (
     <StateContext.Provider value={state}>

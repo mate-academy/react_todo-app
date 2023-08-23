@@ -4,7 +4,7 @@ import { StateContext } from '../context/StateContext';
 import { Status } from '../types/Filter';
 
 export const TodoList: React.FC = () => {
-  const { value: todos, filterBy, dispatch } = useContext(StateContext);
+  const { todos, filterBy, dispatch } = useContext(StateContext);
 
   const handleToggleAll = () => {
     dispatch({ type: 'toggle_all' });

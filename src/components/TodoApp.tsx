@@ -5,7 +5,7 @@ import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 
 export const TodoApp = () => {
-  const { value: todos } = useContext(StateContext);
+  const { todos } = useContext(StateContext);
 
   return (
     <div className="todoapp">
