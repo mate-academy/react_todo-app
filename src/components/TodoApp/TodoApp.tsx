@@ -7,9 +7,21 @@ import { TodosFilter } from '../TodosFilter';
 export const TodoApp: React.FC<{}> = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [hasTitleError, setHasTitleError] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodoTitle(e.target.value);
+    setHasTitleError(false);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!newTodoTitle.trim()) {
+      setHasTitleError(true);
+
+      return;
+    }
 
     setTodos([...todos, {
       id: `todo-${new Date()}`,
@@ -44,6 +56,7 @@ export const TodoApp: React.FC<{}> = () => {
         <h1>todos</h1>
 
         <form
+          className="todo-form"
           onSubmit={handleSubmit}
         >
           <input
@@ -52,8 +65,11 @@ export const TodoApp: React.FC<{}> = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={newTodoTitle}
-            onChange={(e) => setNewTodoTitle(e.target.value)}
+            onChange={handleInputChange}
           />
+          {hasTitleError && (
+            <p className="error">*Todo must be valid</p>
+          )}
         </form>
       </header>
 
@@ -83,7 +99,7 @@ export const TodoApp: React.FC<{}> = () => {
               <button
                 type="button"
                 className="clear-completed"
-                onClick={() => handleClear()}
+                onClick={handleClear}
               >
                 Clear completed
               </button>
