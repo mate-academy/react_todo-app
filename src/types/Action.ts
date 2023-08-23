@@ -1,9 +1,18 @@
 import { Todo } from './Todo';
 
-export type Action = { type: 'add_todo', payload: Todo }
-| { type: 'remove_todo', payload: number }
-| { type: 'change_status', payload: number }
-| { type: 'toggle_all' }
-| { type: 'remove_all_completed' }
-| { type: 'edit_todo', payload: { id: number, newTitle: string }
-};
+export enum ActionTypes {
+  ADD_TODO,
+  REMOVE_TODO,
+  CHANGE_STATUS,
+  TOGGLE_ALL,
+  REMOVE_ALL_COMPLETED,
+  EDIT_TODO,
+}
+
+export type Action =
+  | { type: ActionTypes.ADD_TODO, payload: Todo }
+  | { type: ActionTypes.REMOVE_TODO, payload: number }
+  | { type: ActionTypes.CHANGE_STATUS, payload: number }
+  | { type: ActionTypes.TOGGLE_ALL }
+  | { type: ActionTypes.REMOVE_ALL_COMPLETED }
+  | { type: ActionTypes.EDIT_TODO, payload: { id: number, newTitle: string } };

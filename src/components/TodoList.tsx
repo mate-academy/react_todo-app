@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 import { TodoItem } from './TodoItem';
 import { StateContext } from '../context/StateContext';
 import { Status } from '../types/Filter';
+import { ActionTypes } from '../types/Action';
 
 export const TodoList: React.FC = () => {
   const { todos, filterBy, dispatch } = useContext(StateContext);
 
   const handleToggleAll = () => {
-    dispatch({ type: 'toggle_all' });
+    dispatch({ type: ActionTypes.TOGGLE_ALL });
   };
 
   const filteredTodos = () => {

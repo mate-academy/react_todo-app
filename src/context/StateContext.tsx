@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { Todo } from '../types/Todo';
-import { Action } from '../types/Action';
+import { Action, ActionTypes } from '../types/Action';
 import { changeStatus } from '../utils/ChangeStatus';
 import { toggleAll } from '../utils/ToggleAll';
 import { Status } from '../types/Filter';
@@ -15,17 +15,17 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 
 function reducer(todos: Todo[], action: Action): Todo[] {
   switch (action.type) {
-    case 'add_todo':
+    case ActionTypes.ADD_TODO:
       return [...todos, action.payload];
-    case 'remove_todo':
+    case ActionTypes.REMOVE_TODO:
       return todos.filter((todo) => todo.id !== action.payload);
-    case 'change_status':
+    case ActionTypes.CHANGE_STATUS:
       return changeStatus(todos, action.payload);
-    case 'toggle_all':
+    case ActionTypes.TOGGLE_ALL:
       return toggleAll(todos);
-    case 'remove_all_completed':
+    case ActionTypes.REMOVE_ALL_COMPLETED:
       return todos.filter((todo) => !todo.completed);
-    case 'edit_todo':
+    case ActionTypes.EDIT_TODO:
       return editTodo(todos, action.payload);
     default:
       return todos;

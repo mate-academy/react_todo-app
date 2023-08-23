@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StateContext } from '../context/StateContext';
+import { ActionTypes } from '../types/Action';
 
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -20,7 +21,7 @@ export const Header: React.FC = () => {
       completed: false,
     };
 
-    dispatch({ type: 'add_todo', payload: newTodo });
+    dispatch({ type: ActionTypes.ADD_TODO, payload: newTodo });
     setTitle('');
   };
 

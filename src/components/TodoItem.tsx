@@ -7,6 +7,7 @@ import {
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { StateContext } from '../context/StateContext';
+import { ActionTypes } from '../types/Action';
 
 type Props = {
   todo: Todo;
@@ -22,11 +23,11 @@ export const TodoItem: React.FC<Props> = ({
   const { dispatch } = useContext(StateContext);
 
   const handleChangeStatus = () => {
-    dispatch({ type: 'change_status', payload: id });
+    dispatch({ type: ActionTypes.CHANGE_STATUS, payload: id });
   };
 
   const handleDeleteTodo = () => {
-    dispatch({ type: 'remove_todo', payload: id });
+    dispatch({ type: ActionTypes.REMOVE_TODO, payload: id });
   };
 
   const handleDoubleClick = () => {
@@ -38,12 +39,12 @@ export const TodoItem: React.FC<Props> = ({
     setIsEditing(false);
     setOnFocus(false);
     if (!newTitle.trim()) {
-      dispatch({ type: 'remove_todo', payload: id });
+      dispatch({ type: ActionTypes.REMOVE_TODO, payload: id });
 
       return;
     }
 
-    dispatch({ type: 'edit_todo', payload: { id, newTitle } });
+    dispatch({ type: ActionTypes.EDIT_TODO, payload: { id, newTitle } });
   };
 
   const handleSubmitNewTitle = (

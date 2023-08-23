@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import cn from 'classnames';
 import { StateContext } from '../context/StateContext';
 import { Status } from '../types/Filter';
+import { ActionTypes } from '../types/Action';
 
 export const TodosFilter: React.FC = () => {
   const {
@@ -14,7 +15,7 @@ export const TodosFilter: React.FC = () => {
   const uncompletedTodosCount = todos.filter((todo) => !todo.completed).length;
 
   const handleDeleteCompleted = () => {
-    dispatch({ type: 'remove_all_completed' });
+    dispatch({ type: ActionTypes.REMOVE_ALL_COMPLETED });
   };
 
   const handleFilterBy = (
@@ -26,7 +27,9 @@ export const TodosFilter: React.FC = () => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${uncompletedTodosCount} items left`}
+        {uncompletedTodosCount === 1
+          ? `${uncompletedTodosCount} item left`
+          : `${uncompletedTodosCount} items left`}
       </span>
 
       <ul className="filters" data-cy="todosFilter">
