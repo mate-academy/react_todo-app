@@ -9,7 +9,7 @@ enum Filter {
 
 type Props = {
   selectedFilter: string;
-  setSelectedFilter: (filter: string) => void;
+  setSelectedFilter: (filter: Filter) => void;
 };
 
 export const TodosFilter: React.FC<Props> = ({
