@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, FC, ReactNode } from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../enums/Status';
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -18,10 +18,10 @@ export const TodosContext = createContext<TodosContextProps>({
 });
 
 type TodosProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
+export const TodosProvider: FC<TodosProviderProps> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filter, setFilter] = useLocalStorage('filter', Status.All);
 

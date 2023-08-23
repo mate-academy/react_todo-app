@@ -1,25 +1,33 @@
-import { useContext, useMemo, useState } from 'react';
+import {
+  useContext,
+  useMemo,
+  useState,
+  FC,
+} from 'react';
 import { TodosContext } from '../../context/TodosContext';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList/TodoList';
-import { Status } from '../../enums/Status';
 
-export const Main = () => {
+export const Main: FC = () => {
   const { todos, updateTodos } = useContext(TodosContext);
-  const [isToggleAllChecked, setIsToggleAllChecked] = useState(true);
-
-  const isAllChecked = useMemo(() => {
-    return todos.every((todo: Todo) => todo.completed === Status.Completed);
-  }, [todos]);
+  const [isAllChecked, setIsAllChecked] = useState(false);
 
   const handleToggleAll = () => {
-    setIsToggleAllChecked(!isToggleAllChecked);
+    const newIsAllChecked = !isAllChecked;
 
-    updateTodos(todos.map((todo: Todo) => ({
+    const updatedTodos = todos.map((todo: Todo) => ({
       ...todo,
-      completed: isToggleAllChecked ? Status.Completed : '',
-    })));
+      completed: newIsAllChecked,
+    }));
+
+    updateTodos(updatedTodos);
+    setIsAllChecked(newIsAllChecked);
   };
+
+  const allTodosCompleted = useMemo(
+    () => todos.every((todo: Todo) => todo.completed),
+    [todos],
+  );
 
   return (
     <section className="main">
@@ -30,7 +38,7 @@ export const Main = () => {
             id="toggle-all"
             className="toggle-all"
             data-cy="toggleAll"
-            checked={isAllChecked}
+            checked={allTodosCompleted}
             onChange={handleToggleAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>

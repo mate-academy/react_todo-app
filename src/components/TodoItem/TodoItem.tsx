@@ -3,34 +3,56 @@ import React, {
   useContext,
   useRef,
   useEffect,
+  FC,
 } from 'react';
 import { useClickAway } from 'react-use';
+import classNames from 'classnames';
 import { TodosContext } from '../../context/TodosContext';
 import { Todo } from '../../types/Todo';
-import { Status } from '../../enums/Status';
 
 type Props = {
   item: Todo,
 };
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
-export const TodoItem: React.FC<Props> = ({ item }) => {
+export const TodoItem: FC<Props> = ({ item }) => {
+  const { title, id, completed } = item;
   const { todos, updateTodos } = useContext(TodosContext);
-  const [value, setValue] = useState(item.title);
-  const [completed, setCompleted] = useState(item.completed);
+  const [value, setValue] = useState(title);
+  const [isEdit, setIsEdit] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const hasEditingTodo = todos.some(todo => todo.completed === 'editing');
+
+  const handleToggleItem = () => {
+    updateTodos(todos.map((todo: Todo) => {
+      const isSelected = todo.id === id;
+
+      return ({
+        ...todo,
+        completed: isSelected
+          ? !todo.completed
+          : todo.completed,
+      });
+    }));
+  };
+
+  const handleDestroyItem = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+    updateTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const handleDoubleClickEdit = () => {
+    setIsEdit(true);
+    setValue(value.trim());
+  };
 
   useEffect(() => {
-    if (hasEditingTodo && inputRef.current) {
+    if (isEdit && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [hasEditingTodo]);
+  }, [isEdit]);
 
-  const saveEditedTodo = (
-    title: string,
-    id: number,
-  ) => {
+  const saveEditedTodo = () => {
     updateTodos(todos.map((todo: Todo) => {
       const isSelected = todo.id === id;
       const newTitle = value.trim() || title;
@@ -40,90 +62,47 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         title: isSelected
           ? newTitle
           : todo.title,
-        completed: isSelected && completed !== 'editing'
-          ? completed
-          : todo.completed,
       });
     }));
-  };
 
-  const handleToggleItem = (id: number) => {
-    updateTodos(todos.map((todo: Todo) => {
-      const isSelected = todo.id === id;
-
-      const reverseStatus = (status: string): string => {
-        return status === Status.Completed ? '' : Status.Completed;
-      };
-
-      return ({
-        ...todo,
-        completed: isSelected
-          ? reverseStatus(todo.completed)
-          : todo.completed,
-      });
-    }));
-  };
-
-  const handleDestroyItem = (id: number) => {
-    updateTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  const handleDoubleClickEdit = (id: number) => {
-    setValue(value.trim());
-
-    updateTodos(todos.map((todo: Todo) => {
-      const isSelected = todo.id === id;
-
-      if (isSelected) {
-        setCompleted(todo.completed);
-      }
-
-      return {
-        ...todo,
-        completed: isSelected ? 'editing' : todo.completed,
-      };
-    }));
+    setIsEdit(false);
   };
 
   const handleEditItemOnEnter = (
     event: React.KeyboardEvent<HTMLInputElement>,
-    title: string,
-    id: number,
   ) => {
     if (event.key === 'Enter') {
-      saveEditedTodo(title, id);
+      saveEditedTodo();
     }
   };
 
-  const isCompleted = item.completed === 'completed';
-
-  const labelProps = hasEditingTodo
-    ? {}
-    : { onDoubleClick: () => handleDoubleClickEdit(item.id) };
-
   useClickAway(inputRef, () => {
-    if (item.completed === 'editing') {
-      saveEditedTodo(value, item.id);
-    }
+    saveEditedTodo();
   });
 
   return (
-    <li className={item.completed} key={item.id}>
+    <li
+      className={classNames(item.completed, {
+        editing: isEdit,
+      })}
+      key={id}
+    >
       <div className="view">
         <input
-          checked={isCompleted}
+          checked={completed}
           type="checkbox"
           className="toggle"
-          onChange={() => handleToggleItem(item.id)}
+          onChange={() => handleToggleItem()}
         />
-        <label {...labelProps}>
-          {item.title}
+        <label onDoubleClick={() => handleDoubleClickEdit()}>
+          {title}
         </label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => handleDestroyItem(item.id)}
+          onClick={event => handleDestroyItem(event)}
+          aria-label="Delete"
         />
       </div>
       <input
@@ -134,8 +113,6 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         onChange={(event) => setValue(event.target.value)}
         onKeyDown={(event) => handleEditItemOnEnter(
           event,
-          item.title,
-          item.id,
         )}
       />
     </li>
