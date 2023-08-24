@@ -1,18 +1,31 @@
 import { useState } from 'react';
+import { Todo } from '../types/Todo';
 
-export function useLocalStorage<T>(key: string, initialValue: T) {
-  // Отримання збереженого значення з localStorage при завантаженні сторінки
-  const storageValue = localStorage.getItem(key);
-  const initial = storageValue ? JSON.parse(storageValue) : initialValue;
+export function useLocalStorage(
+  key: string,
+  startValue: Todo[],
+): [Todo[], React.Dispatch<React.SetStateAction<Todo[]>>] {
+  const [value, setValue] = useState(() => {
+    const data = localStorage.getItem(key);
 
-  // Створення стану, що використовується для зберігання значення
-  const [value, setValue] = useState<T>(initial);
+    if (data === null) {
+      return startValue;
+    }
 
-  // Оновлення збереженого значення в localStorage
-  const updateValue = (newValue: T) => {
-    setValue(newValue);
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      localStorage.removeItem(key);
+
+      return startValue;
+    }
+  });
+
+  const save: React.Dispatch<React.SetStateAction<Todo[]>> = newValue => {
     localStorage.setItem(key, JSON.stringify(newValue));
+
+    setValue(newValue);
   };
 
-  return [value, updateValue] as const;
+  return [value, save];
 }

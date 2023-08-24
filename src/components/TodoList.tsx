@@ -3,7 +3,7 @@ import { TodoItem } from './TodoItem';
 import { TodosContext } from './TodosContext';
 
 export const TodoList: React.FC = () => {
-  const { todos, toggleAllChange } = useContext(TodosContext);
+  const { toggleAllChange, filteredTodos } = useContext(TodosContext);
 
   return (
     <section className="main">
@@ -19,7 +19,7 @@ export const TodoList: React.FC = () => {
         className="todo-list"
         data-cy="todoList"
       >
-        {todos.map(todo => (
+        {filteredTodos.map(todo => (
           <TodoItem
             key={todo.id}
             todo={todo}

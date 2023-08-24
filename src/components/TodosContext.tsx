@@ -1,4 +1,9 @@
-import React, { ChangeEvent, useState, KeyboardEvent } from 'react';
+import React, {
+  ChangeEvent,
+  useState,
+  KeyboardEvent,
+  useMemo,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../services/Status';
 import { useLocalStorage } from '../services/localStorage';
@@ -54,25 +59,25 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [toggleAll, setToggleAll] = useState(false);
   const [newTodos, setNewTodos] = useState('');
 
-  // відфільтрувати завдання відповідно до вибраного фільтра
-  const filteredTodos = todos.filter(todo => {
+  // Filtrate the task according to the selected filter
+  const filteredTodos = useMemo(() => {
     if (filter === Status.COMPLETED) {
-      return todo.completed;
+      return todos.filter(todo => todo.completed);
     }
 
     if (filter === Status.ACTIVE) {
-      return !todo.completed;
+      return todos.filter(todo => !todo.completed);
     }
 
-    return true;
-  });
+    return todos;
+  }, [todos, filter]);
 
-  //  оновлювати стан newTodo з текстом введеного завдання
+  // Update NewTodo Status with Text Task Text
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTodos(event.target.value);
   };
 
-  // буде додавати нове завдання до списку
+  // will add a new task to the list
   const handleAddTodo = () => {
     if (newTodos.trim() !== '') {
       const newTask = {
@@ -86,8 +91,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
-  // для додавання нового завдання під час натискання Enter:
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // To add a new task while pressing Enter:
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -95,21 +99,21 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
-  // Для того щоб видалити завдання
+  // To delete the task
   const deleteTodo = (id: number) => {
     const updateTodos = todos.filter(todo => todo.id !== id);
 
     setTodos(updateTodos);
   };
 
-  // очистка завершених завдань
+  // Cleaning the completed tasks
   const clearForm = () => {
     const incompleteTodos = todos.filter(todo => !todo.completed);
 
     setTodos(incompleteTodos);
   };
 
-  // змінювати статус виконаності окремих завдань у списку
+  // change the status of the performance of individual tasks in the list
   const toggleCompleted = (id: number) => {
     const updatedTodos = todos.map(todo => {
       if (todo.id === id) {
@@ -122,7 +126,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(updatedTodos);
   };
 
-  //  перемикання статусу всіх завдань за допомогою toggleAll
+  // Switching the status of all tasks using Toggleall
   const toggleAllChange = () => {
     const updatedTodos = todos.map(todo => ({
       ...todo,
@@ -133,7 +137,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setToggleAll(!toggleAll);
   };
 
-  // редагування завдання в функцію editTodo
+  // Editing the task in the EditTodo function
   const editTodo: editTodoFunction = (id, newTitle) => {
     const updatedTodos = todos.map(todo => {
       if (todo.id === id) {

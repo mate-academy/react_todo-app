@@ -17,12 +17,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEditedTitle(todo.title);
   }, [todo.title]);
 
-  //  включає функціональність для ввімкнення режиму редагування
+  // includes functionality to enable editing mode
   const handleDoubleClick = () => {
     setIsEditing(true);
   };
 
-  // Обробник натискання клавіші для збереження/скасування редагування
+  // Pressing the key to save/cancel editing
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (editedTitle.trim() !== '') {
@@ -37,7 +37,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  // Обробник втрати фокусу для збереження змін при виході з поля редагування
+  // Facus loss handler to save changes when you leave the editing field
   const handleBlur = () => {
     if (editedTitle.trim() !== '') {
       editTodo(todo.id, editedTitle);
@@ -47,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  // Обробник вводу для зміни тексту редагованого завдання
+  //  Input handler to change the text of the edited task
   const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedTitle(event.target.value);
   };
@@ -92,8 +92,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={handleEditChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
         />
       )}
     </li>
