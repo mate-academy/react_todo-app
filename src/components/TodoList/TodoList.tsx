@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { TodosContext } from '../../TodosContext';
 import { TodoItem } from '../TodoItem';
 
-export const TodoList: React.FC<{}> = () => {
+export const TodoList: React.FC = () => {
   const { filteredTodos } = useContext(TodosContext);
 
   return (
