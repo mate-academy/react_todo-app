@@ -1,42 +1,43 @@
 import React from 'react';
 import { TodoItem } from './TodoItem';
 import { Todo, Todos } from '../types/todoTypes';
+import { Filter } from '../types/filterEnum';
 
 interface Props {
   items: Todos;
   selectedFilter: string;
 }
 
-function FilteredItems(items: Todo[], selectedFilter: string) {
-  let filteredItems;
+function filteredItems(items: Todo[], selectedFilter: string) {
+  let updatedItems;
 
   switch (selectedFilter) {
-    case 'all':
-      filteredItems = items;
+    case Filter.All:
+      updatedItems = items;
       break;
 
-    case 'active':
-      filteredItems = items.filter(item => !item.completed);
+    case Filter.Active:
+      updatedItems = items.filter(item => !item.completed);
       break;
 
-    case 'completed':
-      filteredItems = items.filter(item => item.completed);
+    case Filter.Complited:
+      updatedItems = items.filter(item => item.completed);
       break;
 
     default:
-      filteredItems = items;
+      updatedItems = items;
       break;
   }
 
-  return filteredItems;
+  return updatedItems;
 }
 
 export const TodoList: React.FC<Props> = ({ items, selectedFilter }) => {
-  const filteredItems = FilteredItems(items, selectedFilter);
+  const updatedItems = filteredItems(items, selectedFilter);
 
   return (
     <ul className="todo-list" data-cy="todosList">
-      {filteredItems.map(item => (
+      {updatedItems.map(item => (
         <TodoItem item={item} key={item.id} />
       ))}
     </ul>

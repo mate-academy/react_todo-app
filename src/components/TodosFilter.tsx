@@ -1,11 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-
-enum Filter {
-  All = 'all',
-  Active = 'active',
-  Complited = 'completed',
-}
+import { Filter } from '../types/filterEnum';
 
 type Props = {
   selectedFilter: string;
@@ -24,7 +19,9 @@ export const TodosFilter: React.FC<Props> = ({
       <li>
         <a
           href="#/"
-          className={classNames({ selected: selectedFilter === Filter.All })}
+          className={classNames(
+            { selected: selectedFilter === Filter.All },
+          )}
           onClick={() => setSelectedFilter(Filter.All)}
         >
           All
