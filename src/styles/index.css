@@ -193,6 +193,20 @@ body {
   text-decoration: none;
 }
 
+.todo-form {
+  position: relative;
+}
+
+.error {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 14px;
+  color: #af5b5e;
+  margin: 0;
+  padding: 0 16px;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox
