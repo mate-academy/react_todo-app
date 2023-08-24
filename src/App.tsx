@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
