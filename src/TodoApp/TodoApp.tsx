@@ -50,11 +50,15 @@ export const TodoApp: React.FC = () => {
 
   const deleteCompletedHandler = () => {
     setTodos(curTodos => {
-      const notCompleted = [...curTodos].filter(t => t.completed === false);
+      const notCompleted = [...curTodos]
+        .filter(currTodo => currTodo.completed === false);
 
       return notCompleted;
     });
   };
+
+  const completedTodosCounter = todos
+    .filter(currTodo => currTodo.completed === true).length;
 
   return (
     <div className="todoapp">
@@ -96,7 +100,7 @@ export const TodoApp: React.FC = () => {
 
         <TodosFilter />
 
-        {todos.filter(t => t.completed === true).length > 0 && (
+        {completedTodosCounter > 0 && (
           <button
             type="button"
             className="clear-completed"

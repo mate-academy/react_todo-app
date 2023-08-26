@@ -15,18 +15,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const trimmedTitle = title.trim();
 
   const deleteTodo = (selectedTodo: Todo) => {
-    setTodos(todos.filter(t => t !== selectedTodo));
+    setTodos(todos.filter(currTodo => currTodo !== selectedTodo));
   };
 
   const onCheckingHandler = () => {
     setTodos(currTodo => (
-      currTodo.map(t => (
-        todo.id === t.id
+      currTodo.map(selectedTodo => (
+        todo.id === selectedTodo.id
           ? ({
             ...todo,
             completed: !todo.completed,
           })
-          : t
+          : selectedTodo
       ))
     ));
   };
@@ -39,8 +39,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEditing(false);
 
     if (trimmedTitle) {
-      setTodos(todos.map(t => (t.id !== todo.id
-        ? t
+      setTodos(todos.map(currTodo => (currTodo.id !== todo.id
+        ? currTodo
         : {
           ...todo,
           title: trimmedTitle,
@@ -83,7 +83,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
         <label
           htmlFor="toggle-view"
-          onDoubleClick={doubleClickHandler}>
+          onDoubleClick={doubleClickHandler}
+        >
           {title}
         </label>
         <button

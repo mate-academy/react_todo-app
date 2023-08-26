@@ -32,10 +32,10 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const visibleTodos = useCallback(() => {
     switch (filter) {
       case Status.ACTIVE:
-        return todos.filter(t => t.completed === false);
+        return todos.filter(currTodo => currTodo.completed === false);
 
       case Status.COMPLETED:
-        return todos.filter(t => t.completed === true);
+        return todos.filter(currTodo => currTodo.completed === true);
 
       case Status.ALL:
       default:
@@ -49,7 +49,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     visibleTodos,
     filter,
     setFilter,
-  }), [todos]);
+  }), [todos, filter]);
 
   return (
     <TodosContext.Provider value={value}>
