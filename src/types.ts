@@ -9,3 +9,8 @@ export enum Status {
   ACTIVE = 'Active',
   COMPLETED = 'Completed',
 }
+
+export enum Key {
+  ENTER = 'Enter',
+  ESC = 'Escape',
+}

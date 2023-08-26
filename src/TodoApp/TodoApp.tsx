@@ -1,5 +1,5 @@
 import React, {
-  useContext, useState,
+  useContext, useMemo, useState,
 } from 'react';
 import { TodoList } from '../TodoList';
 import { TodosContext } from '../TodosContext';
@@ -50,15 +50,16 @@ export const TodoApp: React.FC = () => {
 
   const deleteCompletedHandler = () => {
     setTodos(curTodos => {
-      const notCompleted = [...curTodos]
+      const notCompleted = curTodos
         .filter(currTodo => currTodo.completed === false);
 
       return notCompleted;
     });
   };
 
-  const completedTodosCounter = todos
-    .filter(currTodo => currTodo.completed === true).length;
+  const completedTodosCounter = useMemo(() => (
+    todos.filter(currTodo => currTodo.completed === true).length
+  ), [todos]);
 
   return (
     <div className="todoapp">

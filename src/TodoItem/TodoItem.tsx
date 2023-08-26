@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import classNames from 'classnames';
-import { Todo } from '../types';
+import { Key, Todo } from '../types';
 import { TodosContext } from '../TodosContext';
 
 type Props = {
@@ -53,11 +53,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const onKeyDownHandler = (e: React.KeyboardEvent) => {
     switch (e.key) {
-      case 'Enter':
+      case Key.ENTER:
         onBlurHandler();
         break;
 
-      case 'Escape':
+      case Key.ESC:
         setTitle(todo.title);
         setIsEditing(false);
         break;
