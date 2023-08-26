@@ -1,7 +1,7 @@
 import React from 'react';
 import { TodoItem } from './TodoItem';
 import { Todo, Todos } from '../types/todoTypes';
-import { Filter } from '../types/filterEnum';
+import { Filter } from '../types/enum';
 
 interface Props {
   items: Todos;
@@ -9,27 +9,14 @@ interface Props {
 }
 
 function filteredItems(items: Todo[], selectedFilter: string) {
-  let updatedItems;
-
   switch (selectedFilter) {
-    case Filter.All:
-      updatedItems = items;
-      break;
-
     case Filter.Active:
-      updatedItems = items.filter(item => !item.completed);
-      break;
-
+      return items.filter(item => !item.completed);
     case Filter.Complited:
-      updatedItems = items.filter(item => item.completed);
-      break;
-
+      return items.filter(item => item.completed);
     default:
-      updatedItems = items;
-      break;
+      return items;
   }
-
-  return updatedItems;
 }
 
 export const TodoList: React.FC<Props> = ({ items, selectedFilter }) => {

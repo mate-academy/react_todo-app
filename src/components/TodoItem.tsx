@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { useTodo } from './TodosContext';
 import { Todo } from '../types/todoTypes';
+import { Keys } from '../types/enum';
 
 interface Props {
   item: Todo;
@@ -42,14 +43,14 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === Keys.Enter) {
       if (!updatedTitle.trim()) {
         deleteTodo(item.id);
       } else {
         updateTodoTitle(updatedTitle, item.id);
         setIsEditing(false);
       }
-    } else if (event.key === 'Escape') {
+    } else if (event.key === Keys.Esc) {
       setIsEditing(false);
     }
   };

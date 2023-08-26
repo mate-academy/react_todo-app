@@ -3,3 +3,8 @@ export enum Filter {
   Active = 'active',
   Complited = 'completed',
 }
+
+export enum Keys {
+  Enter = 'Enter',
+  Esc = 'Escape',
+}

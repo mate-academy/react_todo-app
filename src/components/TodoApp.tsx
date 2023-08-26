@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+} from 'react';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
 import { useTodo } from './TodosContext';
+import { Keys } from '../types/enum';
 
 export const TodoApp: React.FC = () => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  let timeoutId: NodeJS.Timeout | null = null;
   const {
     todos,
     addTodo,
@@ -15,36 +23,51 @@ export const TodoApp: React.FC = () => {
     deleteComplitedTodo,
   } = useTodo();
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (showError) {
+      setShowError(false);
+      setErrorMessage('');
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    }
+  }, [newTodoTitle, todos]);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodoTitle(event.target.value);
   };
 
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === Keys.Enter) {
       event.preventDefault();
       if (newTodoTitle.trim()) {
         addTodo(newTodoTitle);
         setNewTodoTitle('');
         setShowError(false);
       } else {
-        setShowError(true);
-        setErrorMessage('Todo title cannot be empty.');
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
+          setErrorMessage('');
           setShowError(false);
         }, 2000);
+        setShowError(true);
+        setErrorMessage('Todo title cannot be empty.');
       }
     }
   };
 
-  const toggleAllCheck = todos.every(todo => todo.completed);
+  const toggleAllCheck = useMemo(
+    () => todos.every(todo => todo.completed), [todos],
+  );
 
-  const todosUncomplited = todos.filter(
+  const todosUncomplited = useMemo(() => todos.filter(
     todo => !todo.completed,
-  ).length;
-
-  const someTodoIsComplited = todos.some(todo => todo.completed);
-
-  const todosNotEmpty = todos.length > 0;
+  ).length, [todos]);
 
   return (
     <div className="todoapp">
@@ -60,13 +83,14 @@ export const TodoApp: React.FC = () => {
             value={newTodoTitle}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
+            ref={inputRef}
           />
           {showError && <div className="error">{errorMessage}</div>}
         </form>
       </header>
 
       <section className="main">
-        {todosNotEmpty && (
+        {todos.length > 0 && (
           <>
             <input
               type="checkbox"
@@ -77,18 +101,16 @@ export const TodoApp: React.FC = () => {
               onChange={toogleAll}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
-          </>
-        )}
 
-        {todosNotEmpty && (
-          <TodoList
-            items={todos}
-            selectedFilter={selectedFilter}
-          />
+            <TodoList
+              items={todos}
+              selectedFilter={selectedFilter}
+            />
+          </>
         )}
       </section>
 
-      {todosNotEmpty && (
+      {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {todosUncomplited === 1 ? (
@@ -103,7 +125,7 @@ export const TodoApp: React.FC = () => {
             setSelectedFilter={setSelectedFilter}
           />
 
-          {someTodoIsComplited && (
+          {todos.length - todosUncomplited > 0 && (
             <button
               type="button"
               className="clear-completed"

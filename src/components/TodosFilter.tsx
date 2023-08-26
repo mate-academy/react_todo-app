@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Filter } from '../types/filterEnum';
+import { Filter } from '../types/enum';
 
 type Props = {
   selectedFilter: string;
