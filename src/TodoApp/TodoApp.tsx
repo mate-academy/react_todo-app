@@ -14,7 +14,7 @@ export const TodoApp: React.FC = () => {
     setInputValue(event.target.value);
   };
 
-  const notCompletedTodos = [...todos].filter(todo => todo.completed === false);
+  const notCompletedTodos = todos.filter(todo => todo.completed === false);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,9 +39,9 @@ export const TodoApp: React.FC = () => {
   };
 
   const checkingAllHandler = () => {
-    setTodos(todos.map(t => (
+    setTodos(todos.map(currTodo => (
       {
-        ...t,
+        ...currTodo,
         completed: !allCheckd,
       })));
 
