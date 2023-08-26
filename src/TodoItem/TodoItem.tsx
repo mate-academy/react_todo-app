@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Key, Todo } from '../types';
 import { TodosContext } from '../TodosContext';
@@ -11,7 +11,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const [title, setTitle] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
+  const [focused, setFocused] = useState(false)
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const trimmedTitle = title.trim();
 
   const deleteTodo = (selectedTodo: Todo) => {
@@ -33,10 +35,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const doubleClickHandler = () => {
     setIsEditing(true);
+    setFocused(true);
   };
+
+  useEffect(() => {
+    if (focused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [focused]);
 
   const onBlurHandler = () => {
     setIsEditing(false);
+    setFocused(false);
 
     if (trimmedTitle) {
       setTodos(todos.map(currTodo => (currTodo.id !== todo.id
@@ -60,6 +70,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       case Key.ESC:
         setTitle(todo.title);
         setIsEditing(false);
+        setFocused(false);
         break;
 
       default:
@@ -82,7 +93,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={onCheckingHandler}
         />
         <label
-          htmlFor="toggle-view"
           onDoubleClick={doubleClickHandler}
         >
           {title}
@@ -96,6 +106,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </div>
       <input
+        ref={inputRef}
         type="text"
         className="edit"
         value={title}
