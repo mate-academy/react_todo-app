@@ -28,6 +28,12 @@ interface State {
   sortBy: string;
 }
 
+export enum FILTER {
+  ALL = 'ALL',
+  ACTIVE = 'ACTIVE',
+  COMPLITED = 'COMPLITED',
+}
+
 function newToDo(name: string): ToDo {
   return { id: Date.now(), title: name, completed: false };
 }
@@ -74,37 +80,37 @@ function remove(list: ToDo[], toDo: ToDo): ToDo[] {
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'addPost':
+    case ACTIONS.ADD:
       return {
         ...state,
         list: [...state.list, newToDo(action.payload)],
       };
-    case 'updatePost':
+    case ACTIONS.UPDATE:
       return {
         ...state,
         list: update(state.list, action.payload),
       };
-    case 'removePost':
+    case ACTIONS.REMOVE:
       return {
         ...state,
         list: remove(state.list, action.payload),
       };
-    case 'completed':
+    case ACTIONS.TOGGLE:
       return {
         ...state,
         list: toggle(state.list, action.payload),
       };
-    case 'sortBy':
+    case ACTIONS.SORT:
       return {
         ...state,
         sortBy: action.payload,
       };
-    case 'removeComplited':
+    case ACTIONS.CLEAR:
       return {
         ...state,
         list: [...state.list.filter(elem => !elem.completed)],
       };
-    case 'TOGGLE_ALL':
+    case ACTIONS.TOGGLE_ALL:
       return {
         ...state,
         list: [...state.list.map(elem => toggleAllHelper(elem, action.payload)),
@@ -130,7 +136,7 @@ const localStorageData = () => {
 
 const initialState: State = {
   list: localStorageData(),
-  sortBy: 'ALL',
+  sortBy: FILTER.ALL,
 };
 
 export const StateContext = React.createContext(initialState);
@@ -140,12 +146,6 @@ export const DispatchContext = React.createContext((_action: Action) => {});
 type Props = {
   children: React.ReactNode;
 };
-
-export enum FILTER {
-  ALL = 'ALL',
-  ACTIVE = 'ACTIVE',
-  COMPLITED = 'COMPLITED',
-}
 
 export const ToDoProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

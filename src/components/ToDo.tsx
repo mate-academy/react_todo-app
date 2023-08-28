@@ -3,7 +3,10 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import { ToDo } from '../types/ToDo';
-import { ACTIONS, DispatchContext } from '../ToDoContext';
+import {
+  ACTIONS,
+  DispatchContext,
+} from '../ToDoContext';
 
 type Props = {
   toDo: ToDo,
@@ -12,9 +15,9 @@ type Props = {
 export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   const dispatch = useContext(DispatchContext);
   const editingLi: React.RefObject<HTMLInputElement> = useRef(null);
-  const [editingtoDo, setEditingToDo] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [rerender, setRerender] = useState(false);
-  const [editingtoDoData, setEditingToDoData] = useState({} as ToDo);
+  const [editingtoDoData, setEditingToDoData] = useState('');
 
   const handleClick = useCallback(() => {
     dispatch({ type: ACTIONS.TOGGLE, payload: toDo.id });
@@ -22,11 +25,9 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   }, [rerender]);
 
   function handleDoubleClickEdit(e: React.MouseEvent) {
-    if (e.detail === 2) {
-      e.preventDefault();
-      setEditingToDo(true);
-      setEditingToDoData(toDo);
-    }
+    e.preventDefault();
+    setIsEditing(true);
+    setEditingToDoData(toDo.title);
   }
 
   useEffect(() => {
@@ -38,10 +39,7 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   const handleEditChanges = useCallback((
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setEditingToDoData(state => ({
-      ...state,
-      title: event.target.value,
-    }));
+    setEditingToDoData(event.currentTarget.value);
   }, []);
 
   const handleEnter = useCallback((
@@ -49,18 +47,34 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
   ) => {
     if (e.nativeEvent.code === 'Enter') {
       if (e.target.value.split('').every(element => element === ' ')) {
-        dispatch({ type: ACTIONS.REMOVE, payload: editingtoDoData });
-        setEditingToDo(false);
+        dispatch({ type: ACTIONS.REMOVE, payload: toDo });
+        setIsEditing(false);
       } else {
-        dispatch({ type: ACTIONS.UPDATE, payload: editingtoDoData });
-        setEditingToDo(false);
+        dispatch({
+          type:
+            ACTIONS.UPDATE,
+          payload: {
+            id: toDo.id,
+            title: editingtoDoData,
+            completed: toDo.completed,
+          } as ToDo,
+        });
+        setIsEditing(false);
       }
     }
-  }, [editingtoDoData.title]);
+  }, [editingtoDoData]);
 
-  function onBlurHelper() {
-    dispatch({ type: ACTIONS.UPDATE, payload: editingtoDoData });
-    setEditingToDo(false);
+  function handleBlur() {
+    dispatch({
+      type:
+        ACTIONS.UPDATE,
+      payload: {
+        id: toDo.id,
+        title: editingtoDoData,
+        completed: toDo.completed,
+      } as ToDo,
+    });
+    setIsEditing(false);
   }
 
   function handlerRemove() {
@@ -71,7 +85,7 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
     <li
       key={toDo.id}
       className={classNames({
-        editing: editingtoDo,
+        editing: isEditing,
         completed: toDo.completed,
       })}
     >
@@ -85,7 +99,7 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
 
         />
         <label
-          onClick={(e) => handleDoubleClickEdit(e)}
+          onDoubleClick={(e) => handleDoubleClickEdit(e)}
           aria-hidden="true"
         >
           {toDo.title}
@@ -101,11 +115,11 @@ export const ToDoItem: React.FC<Props> = ({ toDo }) => {
       <input
         type="text"
         className="edit"
-        value={editingtoDoData.title || ''}
-        onChange={(event) => handleEditChanges(event)}
+        value={editingtoDoData || ''}
+        onChange={handleEditChanges}
         ref={editingLi}
         onKeyDown={handleEnter}
-        onBlur={onBlurHelper}
+        onBlur={handleBlur}
       />
     </li>
   );
