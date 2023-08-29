@@ -2,15 +2,20 @@ import React from 'react';
 import { useTodos } from '../TodosContext';
 import { TodoItem } from '../TodoItem';
 
+type MagicWords = 'active' | 'completed';
+
+const ACTIVE_TODOS: MagicWords = 'active';
+const COMPLETED_TODOS: MagicWords = 'completed';
+
 export const TodoList: React.FC = () => {
   const { todos, filter, setTodos } = useTodos();
 
   const filteredTodos = () => {
     switch (filter) {
-      case 'active':
+      case ACTIVE_TODOS:
         return todos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case COMPLETED_TODOS:
         return todos.filter(todo => todo.completed);
 
       default:
@@ -21,7 +26,6 @@ export const TodoList: React.FC = () => {
   const handleToggleAll = () => {
     const allCompleted = todos.every(todo => todo.completed);
 
-    // Оновлюємо статус всіх todo в залежності від поточного стану
     const updatedTodos = todos.map(todo => ({
       ...todo,
       completed: !allCompleted,

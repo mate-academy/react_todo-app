@@ -34,7 +34,7 @@ export const Header: React.FC = () => {
           type="text"
           data-cy="createTodo"
           className="new-todo"
-          placeholder="Що потрібно зробити?"
+          placeholder="What do you need to do?"
           value={newTodo}
           onChange={handleInputChange}
         />
