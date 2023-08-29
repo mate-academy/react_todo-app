@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { ToDo } from '../types/ToDo';
 import {
   ACTIONS,
-  DispatchContext,
+  StateContext,
 } from '../ToDoContext';
 
 type Props = {
@@ -13,16 +13,14 @@ type Props = {
 };
 
 export const ToDoItem: React.FC<Props> = ({ toDo }) => {
-  const dispatch = useContext(DispatchContext);
+  const [, dispatch] = useContext(StateContext);
   const editingLi: React.RefObject<HTMLInputElement> = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [rerender, setRerender] = useState(false);
   const [editingtoDoData, setEditingToDoData] = useState('');
 
   const handleClick = useCallback(() => {
     dispatch({ type: ACTIONS.TOGGLE, payload: toDo.id });
-    setRerender(!rerender);
-  }, [rerender]);
+  }, [toDo.id]);
 
   function handleDoubleClickEdit(e: React.MouseEvent) {
     e.preventDefault();

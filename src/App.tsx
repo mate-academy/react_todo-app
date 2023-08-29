@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { ToDoList } from './components/TodoList';
-import { ACTIONS, DispatchContext, StateContext } from './ToDoContext';
+import {
+  ACTIONS,
+  StateContext,
+} from './ToDoContext';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
-  const dispatch = useContext(DispatchContext);
-  const { list, sortBy } = useContext(StateContext);
+  const [state, dispatch] = useContext(StateContext);
   const [triggerForAll, setTriggerForAll] = useState(true);
 
   function handleChange(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -65,14 +67,14 @@ export const App: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list" data-cy="todoList">
-          <ToDoList list={list} />
+          <ToDoList list={state.list} />
         </ul>
 
       </section>
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          {`${list.length} items left`}
+          {`${state.list.length} items left`}
         </span>
 
         <ul className="filters">
@@ -80,7 +82,7 @@ export const App: React.FC = () => {
             <a
               href="#/"
               className={classNames({
-                selected: sortBy === 'ALL',
+                selected: state.sortBy === 'ALL',
               })}
               onClick={() => sortButtonHandler('ALL')}
             >
@@ -91,7 +93,7 @@ export const App: React.FC = () => {
           <li>
             <a
               className={classNames({
-                selected: sortBy === 'ACTIVE',
+                selected: state.sortBy === 'ACTIVE',
               })}
               href="#/active"
               onClick={() => sortButtonHandler('ACTIVE')}
@@ -103,7 +105,7 @@ export const App: React.FC = () => {
           <li>
             <a
               className={classNames({
-                selected: sortBy === 'COMPLITED',
+                selected: state.sortBy === 'COMPLITED',
               })}
               href="#/completed"
               onClick={() => sortButtonHandler('COMPLITED')}

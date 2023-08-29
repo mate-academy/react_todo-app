@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
-// eslint-disable-next-line
 import _ from 'lodash';
-import React, { useEffect, useReducer } from 'react';
+import React, { Dispatch, useEffect, useReducer } from 'react';
 import { ToDo } from './types/ToDo';
 
 export enum ACTIONS {
@@ -12,7 +11,6 @@ export enum ACTIONS {
   SORT = 'sortBy',
   TOGGLE_ALL = 'TOGGLE_ALL',
   CLEAR = 'removeComplited',
-
 }
 
 type Action = { type: ACTIONS.ADD, payload: string }
@@ -23,10 +21,15 @@ type Action = { type: ACTIONS.ADD, payload: string }
 | { type: ACTIONS.TOGGLE_ALL, payload: boolean }
 | { type: ACTIONS.CLEAR };
 
-interface State {
+type State2 = {
   list: ToDo[];
   sortBy: string;
-}
+};
+
+type State = [
+  state: State2,
+  dispatch: Dispatch<Action>,
+];
 
 export enum FILTER {
   ALL = 'ALL',
@@ -81,41 +84,63 @@ function remove(list: ToDo[], toDo: ToDo): ToDo[] {
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case ACTIONS.ADD:
-      return {
-        ...state,
-        list: [...state.list, newToDo(action.payload)],
-      };
+      return [
+        {
+          ...state[0],
+          list: [...state[0].list, newToDo(action.payload)],
+        },
+        () => { },
+      ];
     case ACTIONS.UPDATE:
-      return {
-        ...state,
-        list: update(state.list, action.payload),
-      };
+      return [
+        {
+          ...state[0],
+          list: update(state[0].list, action.payload),
+        },
+        () => { },
+      ];
     case ACTIONS.REMOVE:
-      return {
-        ...state,
-        list: remove(state.list, action.payload),
-      };
+      return [
+        {
+          ...state[0],
+          list: remove(state[0].list, action.payload),
+        },
+        () => { },
+      ];
     case ACTIONS.TOGGLE:
-      return {
-        ...state,
-        list: toggle(state.list, action.payload),
-      };
+      return [
+        {
+          ...state[0],
+          list: toggle(state[0].list, action.payload),
+        },
+        () => { },
+      ];
     case ACTIONS.SORT:
-      return {
-        ...state,
-        sortBy: action.payload,
-      };
+      return [
+        {
+          ...state[0],
+          sortBy: action.payload,
+        },
+        () => { },
+      ];
     case ACTIONS.CLEAR:
-      return {
-        ...state,
-        list: [...state.list.filter(elem => !elem.completed)],
-      };
+      return [
+        {
+          ...state[0],
+          list: [...state[0].list.filter(elem => !elem.completed)],
+        },
+        () => { },
+      ];
     case ACTIONS.TOGGLE_ALL:
-      return {
-        ...state,
-        list: [...state.list.map(elem => toggleAllHelper(elem, action.payload)),
-        ],
-      };
+      return [
+        {
+          ...state[0],
+          list: [
+            ...state[0].list.map(elem => toggleAllHelper(elem, action.payload)),
+          ],
+        },
+        () => { },
+      ];
     default:
       return state;
   }
@@ -134,15 +159,16 @@ const localStorageData = () => {
   return parsedData;
 };
 
-const initialState: State = {
-  list: localStorageData(),
-  sortBy: FILTER.ALL,
-};
+const initialState: State = [
+  {
+    list: localStorageData(),
+    sortBy: FILTER.ALL,
+  },
+  () => { },
+];
 
 export const StateContext = React.createContext(initialState);
-/* eslint-disable */
-export const DispatchContext = React.createContext((_action: Action) => {});
-/* eslint-enable */
+
 type Props = {
   children: React.ReactNode;
 };
@@ -151,31 +177,31 @@ export const ToDoProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localStorage.setItem('list', JSON.stringify(state.list));
-  }, [state.list]);
+    localStorage.setItem('list', JSON.stringify(state[0].list));
+  }, [state[0].list]);
 
   const visibleList = () => {
-    switch (state.sortBy) {
+    switch (state[0].sortBy) {
       case FILTER.ALL:
-        return [...state.list];
+        return [...state[0].list];
       case FILTER.COMPLITED:
-        return state.list.filter(elem => elem.completed);
+        return state[0].list.filter(elem => elem.completed);
       case FILTER.ACTIVE:
-        return state.list.filter(elem => !elem.completed);
+        return state[0].list.filter(elem => !elem.completed);
       default:
-        return state.list;
+        return state[0].list;
     }
   };
 
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={{
-        list: visibleList(),
-        sortBy: state.sortBy,
-      }}
-      >
-        {children}
-      </StateContext.Provider>
-    </DispatchContext.Provider>
+    // <DispatchContext.Provider value={dispatch}>
+    <StateContext.Provider value={[{
+      list: visibleList(),
+      sortBy: state[0].sortBy,
+    }, dispatch]}
+    >
+      {children}
+    </StateContext.Provider>
+    // </DispatchContext.Provider>
   );
 };
