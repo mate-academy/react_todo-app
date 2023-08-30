@@ -10,7 +10,7 @@ import {
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
   const [state, dispatch] = useContext(StateContext);
-  const [triggerForAll, setTriggerForAll] = useState(true);
+  const [isTriggerForAll, setIsTriggerForAll] = useState(true);
 
   function handleChange(event: React.KeyboardEvent<HTMLInputElement>) {
     event.preventDefault();
@@ -40,8 +40,8 @@ export const App: React.FC = () => {
   }
 
   function toggleAll() {
-    dispatch({ type: ACTIONS.TOGGLE_ALL, payload: triggerForAll });
-    setTriggerForAll(!triggerForAll);
+    dispatch({ type: ACTIONS.TOGGLE_ALL, payload: isTriggerForAll });
+    setIsTriggerForAll(!isTriggerForAll);
   }
 
   return (
