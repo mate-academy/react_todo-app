@@ -1,7 +1,49 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import classNames from 'classnames';
+import { ToDoList } from './components/TodoList';
+import {
+  ACTIONS,
+  StateContext,
+  FILTER,
+} from './ToDoContext';
 
 export const App: React.FC = () => {
+  const [value, setValue] = useState('');
+  const [state, dispatch] = useContext(StateContext);
+  const [isTriggerForAll, setIsTriggerForAll] = useState(true);
+
+  function handleChange(event: React.KeyboardEvent<HTMLInputElement>) {
+    event.preventDefault();
+    setValue(event.currentTarget.value);
+  }
+
+  const showClearComplited = state.list.filter(
+    todo => todo.completed,
+  ).length > 0;
+
+  function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.nativeEvent.code === 'Enter') {
+      e.preventDefault();
+      if (!e.target.value.split('').every(element => element === ' ')) {
+        dispatch({ type: ACTIONS.ADD, payload: e.currentTarget.value });
+        setValue('');
+      }
+    }
+  }
+
+  function sortButtonHandler(trigger: string) {
+    dispatch({ type: ACTIONS.SORT, payload: trigger });
+  }
+
+  function clearComplited() {
+    dispatch({ type: ACTIONS.CLEAR });
+  }
+
+  function toggleAll() {
+    dispatch({ type: ACTIONS.TOGGLE_ALL, payload: isTriggerForAll });
+    setIsTriggerForAll(!isTriggerForAll);
+  }
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -13,6 +55,9 @@ export const App: React.FC = () => {
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={value}
+            onChange={handleChange}
+            onKeyDown={handleEnter}
           />
         </form>
       </header>
@@ -23,71 +68,72 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onClick={toggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-
         <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <ToDoList list={state.list} />
         </ul>
+
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
+      {state.totalLength > 0 && (
+        <>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${state.totalLength} items left`}
+            </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+            <ul className="filters">
+              <li>
+                <a
+                  href="#/"
+                  className={classNames({
+                    selected: state.sortBy === FILTER.ALL,
+                  })}
+                  onClick={() => sortButtonHandler(FILTER.ALL)}
+                >
+                  All
+                </a>
+              </li>
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+              <li>
+                <a
+                  className={classNames({
+                    selected: state.sortBy === FILTER.ACTIVE,
+                  })}
+                  href="#/active"
+                  onClick={() => sortButtonHandler(FILTER.ACTIVE)}
+                >
+                  Active
+                </a>
+              </li>
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+              <li>
+                <a
+                  className={classNames({
+                    selected: state.sortBy === FILTER.COMPLITED,
+                  })}
+                  href="#/completed"
+                  onClick={() => sortButtonHandler(FILTER.COMPLITED)}
+                >
+                  Completed
+                </a>
+              </li>
+            </ul>
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            {showClearComplited && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearComplited}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </div>
   );
 };
