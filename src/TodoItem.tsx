@@ -66,22 +66,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   function updateTodo() {
     const newTodoTitle = todoValue;
 
-    const setTodosArgs = (prevTodos: Todo[]) => {
-      return prevTodos.map((prevTodo) => {
-        if (prevTodo.id === todo.id) {
-          return { ...prevTodo, title: newTodoTitle };
-        }
+    const updatedTodos = todos.map((prevTodo) => {
+      if (prevTodo.id === todo.id) {
+        return { ...prevTodo, title: newTodoTitle };
+      }
 
-        return prevTodo;
-      });
-    };
+      return prevTodo;
+    });
 
-    setTodos(setTodosArgs(todos));
+    setTodos(updatedTodos);
     setIsEdit(false);
   }
 
   const handleLabelKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (todoValue.length === 0 && event.key === 'Enter') {
+    if (!todoValue.length && event.key === 'Enter') {
       removeTodo(todo.id);
     }
 
@@ -89,7 +87,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       event.preventDefault();
       updateTodo();
     }
+  };
 
+  const handleLabelKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setTodoValue(todo.title);
       setIsEdit(false);
@@ -99,17 +99,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleLabelBlur = () => {
     if (shouldHandleBlur) {
-      if (todoValue.length === 0) {
+      if (!todoValue.length) {
         removeTodo(todo.id);
+      } else {
+        updateTodo();
       }
-
-      updateTodo();
     }
   };
 
   return (
     <li
-      className={classNames('', {
+      className={classNames({
         completed: todo.completed,
         editing: isEdit,
       })}
@@ -140,9 +140,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         value={todoValue}
         onChange={handleLabelChange}
         onKeyDown={handleLabelKeyDown}
+        onKeyUp={handleLabelKeyUp}
         onBlur={handleLabelBlur}
         ref={inputRef}
       />
+
     </li>
   );
 };

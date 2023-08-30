@@ -1,30 +1,33 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TodoItem } from './TodoItem';
 import { TodosContext } from './TodosContext';
 import { Status } from './types/Status';
+import { Todo } from './types/Todo';
 
 export const TodoList: React.FC = () => {
   const { todos, status } = useContext(TodosContext);
 
-  let visibleTodos = [];
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
-  switch (status) {
-    case Status.all:
-      visibleTodos = todos;
-      break;
+  useEffect(() => {
+    switch (status) {
+      case Status.all:
+        setVisibleTodos(todos);
+        break;
 
-    case Status.active:
-      visibleTodos = todos.filter(todo => !todo.completed);
-      break;
+      case Status.active:
+        setVisibleTodos(todos.filter(todo => !todo.completed));
+        break;
 
-    case Status.completed:
-      visibleTodos = todos.filter(todo => todo.completed);
-      break;
+      case Status.completed:
+        setVisibleTodos(todos.filter(todo => todo.completed));
+        break;
 
-    default:
-      visibleTodos = todos;
-      break;
-  }
+      default:
+        setVisibleTodos(todos);
+        break;
+    }
+  }, [todos, status]);
 
   return (
     <ul

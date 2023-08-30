@@ -1,9 +1,15 @@
+import classNames from 'classnames';
 import { useContext } from 'react';
 import { TodosContext } from './TodosContext';
 import { Status } from './types/Status';
 
 export const TodosFilter: React.FC = () => {
-  const { todos, setTodos, setStatus } = useContext(TodosContext);
+  const {
+    todos,
+    setTodos,
+    status,
+    setStatus,
+  } = useContext(TodosContext);
 
   const todosCompleted = todos.filter(todo => !todo.completed);
 
@@ -27,7 +33,9 @@ export const TodosFilter: React.FC = () => {
         <li>
           <a
             href="#/"
-            className="selected"
+            className={classNames({
+              selected: status === Status.all,
+            })}
             onClick={() => setStatus(Status.all)}
           >
             {Status.all}
@@ -37,6 +45,9 @@ export const TodosFilter: React.FC = () => {
         <li>
           <a
             href="#/active"
+            className={classNames({
+              selected: status === Status.active,
+            })}
             onClick={() => setStatus(Status.active)}
           >
             {Status.active}
@@ -46,6 +57,9 @@ export const TodosFilter: React.FC = () => {
         <li>
           <a
             href="#/completed"
+            className={classNames({
+              selected: status === Status.completed,
+            })}
             onClick={() => setStatus(Status.completed)}
           >
             {Status.completed}

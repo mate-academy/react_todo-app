@@ -10,27 +10,19 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
   const [status, setStatus] = useState(Status.all);
-  const [isAllChecked, setIsAllChecked] = useState(false);
   const [value, setValue] = useState('');
 
   const isAllCompleted = todos.every((todo: Todo) => todo.completed);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value.trim();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
-    setValue(newValue === '' ? '' : event.target.value);
-  };
-
-  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (value.length && event.key === 'Enter') {
-      event.preventDefault();
-      const newTodoTitle = value;
-
+    if (value.trim()) {
       setTodos([
         ...todos,
         {
           id: +new Date(),
-          title: newTodoTitle,
+          title: value.trim(),
           completed: false,
         },
       ]);
@@ -40,19 +32,10 @@ export const App: React.FC = () => {
   };
 
   const handleAllCheckboxes = () => {
-    if (isAllCompleted) {
-      setIsAllChecked(false);
-      setTodos(todos.map((todo: Todo) => ({
-        ...todo,
-        completed: false,
-      })));
-    } else {
-      setIsAllChecked(!isAllChecked);
-      setTodos(todos.map((todo: Todo) => ({
-        ...todo,
-        completed: !isAllChecked,
-      })));
-    }
+    setTodos(todos.map((todo: Todo) => ({
+      ...todo,
+      completed: !isAllCompleted,
+    })));
   };
 
   return (
@@ -65,20 +48,19 @@ export const App: React.FC = () => {
         <header className="header">
           <h1>todos</h1>
 
-          <form onSubmit={event => event.preventDefault()}>
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               data-cy="createTodo"
               className="new-todo"
               placeholder="What needs to be done?"
               value={value}
-              onChange={handleInputChange}
-              onKeyDown={handleInputKeyDown}
+              onChange={(event) => setValue(event.target.value)}
             />
           </form>
         </header>
         <section className="main">
-          {todos.length > 0
+          {!!todos.length
             && (
               <>
                 <input
@@ -92,11 +74,11 @@ export const App: React.FC = () => {
                 <label htmlFor="toggle-all">Mark all as complete</label>
               </>
             )}
-          {todos.length > 0 && <TodoList />}
+          {!!todos.length && <TodoList />}
 
         </section>
 
-        {todos.length > 0 && <TodosFilter />}
+        {!!todos.length && <TodosFilter />}
 
       </TodosContext.Provider>
     </div>
