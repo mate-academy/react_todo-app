@@ -4,6 +4,7 @@ import { ToDoList } from './components/TodoList';
 import {
   ACTIONS,
   StateContext,
+  FILTER,
 } from './ToDoContext';
 
 export const App: React.FC = () => {
@@ -72,57 +73,61 @@ export const App: React.FC = () => {
 
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${state.list.length} items left`}
-        </span>
+      {state.totalLength > 0 && (
+        <>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${state.totalLength} items left`}
+            </span>
 
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className={classNames({
-                selected: state.sortBy === 'ALL',
-              })}
-              onClick={() => sortButtonHandler('ALL')}
+            <ul className="filters">
+              <li>
+                <a
+                  href="#/"
+                  className={classNames({
+                    selected: state.sortBy === FILTER.ALL,
+                  })}
+                  onClick={() => sortButtonHandler(FILTER.ALL)}
+                >
+                  All
+                </a>
+              </li>
+
+              <li>
+                <a
+                  className={classNames({
+                    selected: state.sortBy === FILTER.ACTIVE,
+                  })}
+                  href="#/active"
+                  onClick={() => sortButtonHandler(FILTER.ACTIVE)}
+                >
+                  Active
+                </a>
+              </li>
+
+              <li>
+                <a
+                  className={classNames({
+                    selected: state.sortBy === FILTER.COMPLITED,
+                  })}
+                  href="#/completed"
+                  onClick={() => sortButtonHandler(FILTER.COMPLITED)}
+                >
+                  Completed
+                </a>
+              </li>
+            </ul>
+
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearComplited}
             >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              className={classNames({
-                selected: state.sortBy === 'ACTIVE',
-              })}
-              href="#/active"
-              onClick={() => sortButtonHandler('ACTIVE')}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              className={classNames({
-                selected: state.sortBy === 'COMPLITED',
-              })}
-              href="#/completed"
-              onClick={() => sortButtonHandler('COMPLITED')}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={clearComplited}
-        >
-          Clear completed
-        </button>
-      </footer>
+              Clear completed
+            </button>
+          </footer>
+        </>
+      )}
     </div>
   );
 };

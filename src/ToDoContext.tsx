@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import React, { Dispatch, useEffect, useReducer } from 'react';
 import { ToDo } from './types/ToDo';
 
@@ -11,6 +11,7 @@ export enum ACTIONS {
   SORT = 'sortBy',
   TOGGLE_ALL = 'TOGGLE_ALL',
   CLEAR = 'removeComplited',
+  SET_LENGTH = 'setLength',
 }
 
 type Action = { type: ACTIONS.ADD, payload: string }
@@ -19,11 +20,13 @@ type Action = { type: ACTIONS.ADD, payload: string }
 | { type: ACTIONS.TOGGLE, payload: number }
 | { type: ACTIONS.SORT, payload: string }
 | { type: ACTIONS.TOGGLE_ALL, payload: boolean }
-| { type: ACTIONS.CLEAR };
+| { type: ACTIONS.CLEAR }
+| { type: ACTIONS.SET_LENGTH, payload: number };
 
 type State2 = {
   list: ToDo[];
   sortBy: string;
+  totalLength: number,
 };
 
 type State = [
@@ -42,7 +45,7 @@ function newToDo(name: string): ToDo {
 }
 
 function toggle(list: ToDo[], id: number): ToDo[] {
-  const copyList = _.cloneDeep(list);
+  const copyList = cloneDeep(list);
 
   copyList.forEach(todo => {
     if (todo.id === id) {
@@ -64,7 +67,7 @@ function toggleAllHelper(elem: ToDo, trigger: boolean) {
 }
 
 function update(list: ToDo[], toDo: ToDo): ToDo[] {
-  const copyList = _.cloneDeep(list);
+  const copyList = cloneDeep(list);
   const index = copyList.findIndex(todo => todo.id === toDo.id);
 
   copyList.splice(index, 1, toDo);
@@ -73,7 +76,7 @@ function update(list: ToDo[], toDo: ToDo): ToDo[] {
 }
 
 function remove(list: ToDo[], toDo: ToDo): ToDo[] {
-  const copyList = _.cloneDeep(list);
+  const copyList = cloneDeep(list);
   const index = copyList.findIndex(todo => todo.id === toDo.id);
 
   copyList.splice(index, 1);
@@ -141,12 +144,20 @@ function reducer(state: State, action: Action): State {
         },
         () => { },
       ];
+    case ACTIONS.SET_LENGTH:
+      return [
+        {
+          ...state[0],
+          totalLength: action.payload,
+        },
+        () => { },
+      ];
     default:
       return state;
   }
 }
 
-const localStorageData = () => {
+export const localStorageData = () => {
   const data = localStorage.getItem('list');
   let parsedData: ToDo[] = [];
 
@@ -163,6 +174,7 @@ const initialState: State = [
   {
     list: localStorageData(),
     sortBy: FILTER.ALL,
+    totalLength: localStorageData().length,
   },
   () => { },
 ];
@@ -178,6 +190,7 @@ export const ToDoProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('list', JSON.stringify(state[0].list));
+    dispatch({ type: ACTIONS.SET_LENGTH, payload: state[0].list.length });
   }, [state[0].list]);
 
   const visibleList = () => {
@@ -194,14 +207,13 @@ export const ToDoProvider: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    // <DispatchContext.Provider value={dispatch}>
     <StateContext.Provider value={[{
       list: visibleList(),
       sortBy: state[0].sortBy,
+      totalLength: localStorageData().length,
     }, dispatch]}
     >
       {children}
     </StateContext.Provider>
-    // </DispatchContext.Provider>
   );
 };
