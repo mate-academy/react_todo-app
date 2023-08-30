@@ -17,6 +17,10 @@ export const App: React.FC = () => {
     setValue(event.currentTarget.value);
   }
 
+  const showClearComplited = state.list.filter(
+    todo => todo.completed,
+  ).length > 0;
+
   function handleEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.code === 'Enter') {
       e.preventDefault();
@@ -118,13 +122,15 @@ export const App: React.FC = () => {
               </li>
             </ul>
 
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={clearComplited}
-            >
-              Clear completed
-            </button>
+            {showClearComplited && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearComplited}
+              >
+                Clear completed
+              </button>
+            )}
           </footer>
         </>
       )}
