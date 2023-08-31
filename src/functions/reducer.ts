@@ -1,9 +1,10 @@
 import { Action } from '../types/Action';
 import { Todo } from '../types/Todo';
+import { TodoAction } from '../types/TodoActionEnum';
 
 export function reducer(state: Todo[], action: Action) {
   switch (action.type) {
-    case 'addTodo':
+    case TodoAction.add:
       return [
         ...state,
         {
@@ -13,21 +14,21 @@ export function reducer(state: Todo[], action: Action) {
         },
       ];
 
-    case 'deleteTodo':
+    case TodoAction.delete:
       return [
         ...state.filter(todo => todo.id !== action.payload),
       ];
-    case 'toggleTodo':
+    case TodoAction.toggle:
       return state.map(todo => (todo.id === action.payload
         ? { ...todo, completed: !todo.completed }
         : todo));
-    case 'toggleAllTodo':
+    case TodoAction.toggleAll:
       return state.map((todo) => ({
         ...todo, completed: !(state.every((todol) => todol.completed)),
       }));
-    case 'deleteCompletedTodo':
+    case TodoAction.deleteCompleted:
       return state.filter((todo) => !todo.completed);
-    case 'updateTodoTitle':
+    case TodoAction.updateTodo:
       return state.map(prevTodo => (prevTodo.id === action.payloadId
         ? { ...prevTodo, title: action.payloadTitle }
         : prevTodo));
