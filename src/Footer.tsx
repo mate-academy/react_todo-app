@@ -5,6 +5,7 @@ import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
 import { deleteTodos } from './api/todos';
 import { TodosContext } from './TodoContext';
+import { ErrorStatus } from './types/Error';
 
 type Props = {
   todos: Todo[],
@@ -23,11 +24,11 @@ export const Footer: React.FC<Props> = ({
   setFilter,
   setTodos,
 }) => {
-  const { setIsDeleteError } = useContext(TodosContext);
+  const { setError } = useContext(TodosContext);
   const removeCompleted = async () => {
     const completedTodos = [...todos].filter(todo => todo.completed);
 
-    setIsDeleteError(false);
+    setError(ErrorStatus.none);
 
     try {
       await Promise.all(completedTodos.map(todo => deleteTodos(todo.id)));
@@ -36,14 +37,14 @@ export const Footer: React.FC<Props> = ({
         [...todos].filter(todo => !todo.completed),
       );
     } catch {
-      setIsDeleteError(true);
+      setError(ErrorStatus.none);
     }
   };
 
   return (
     <footer className="footer">
       <span className="todo-count">
-        {`${active} items left`}
+        {active !== 1 ? `${active} items left` : `${active} items left`}
       </span>
 
       <ul className="filters">

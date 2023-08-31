@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Todo } from './types/Todo';
 import { postTodos } from './api/todos';
 import { TodosContext } from './TodoContext';
+import { ErrorStatus } from './types/Error';
 
 type Props = {
   todos: Todo[],
@@ -14,12 +15,12 @@ export const Header: React.FC<Props> = ({
 }) => {
   const {
     setTempTodo,
-    setIsAddError,
+    setError,
   } = useContext(TodosContext);
   const [todoTitle, setTodoTitle] = useState('');
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   const addTodo = async (todo: Omit<Todo, 'id'>) => {
-    setIsAddError(false);
+    setError(ErrorStatus.none);
     setIsInputDisabled(true);
 
     try {
@@ -30,7 +31,7 @@ export const Header: React.FC<Props> = ({
         response,
       ]);
     } catch {
-      setIsAddError(true);
+      setError(ErrorStatus.add);
     }
 
     setTempTodo(null);

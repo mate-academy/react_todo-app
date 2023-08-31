@@ -3,6 +3,7 @@ import { TodoCard } from './TodoCard';
 import { Todo } from './types/Todo';
 import { TodosContext } from './TodoContext';
 import { updateTodos } from './api/todos';
+import { ErrorStatus } from './types/Error';
 
 type Props = {
   todos: Todo[],
@@ -17,11 +18,13 @@ export const TodoList: React.FC<Props> = ({
   toggleAll,
   untoggleAll,
 }) => {
-  const { setTodos } = useContext(TodosContext);
-  const { setIsUpdateError } = useContext(TodosContext);
+  const {
+    setTodos,
+    setError,
+  } = useContext(TodosContext);
 
   const updateAll = async () => {
-    setIsUpdateError(false);
+    setError(ErrorStatus.none);
 
     try {
       if (todos.findIndex(todo => todo.completed === false) > -1) {
@@ -34,7 +37,7 @@ export const TodoList: React.FC<Props> = ({
         setTodos(untoggleAll);
       }
     } catch {
-      setIsUpdateError(true);
+      setError(ErrorStatus.update);
     }
   };
 

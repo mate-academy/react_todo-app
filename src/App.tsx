@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Error } from './Error';
@@ -11,6 +11,7 @@ import { Footer } from './Footer';
 import { TodosContext } from './TodoContext';
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
+import { ErrorStatus } from './types/Error';
 
 type Props = {
   visibleTodos: Todo[];
@@ -28,13 +29,10 @@ export const App: React.FC<Props> = ({
   const {
     todos,
     setTodos,
-    isDeleteError,
-    setIsDeleteError,
-    isAddError,
-    setIsAddError,
-    isUpdateError,
-    setIsUpdateError,
+    error,
+    setError,
   } = useContext(TodosContext);
+  const [isVisible, setIsVisible] = useState(true);
   const active = todos.filter(todo => todo.completed === false).length;
   const completed = todos.filter(todo => todo.completed).length;
 
@@ -58,6 +56,31 @@ export const App: React.FC<Props> = ({
         setTodos(value);
       });
   }, []);
+
+  useEffect(() => {
+    let timer1;
+    let timer2;
+
+    if (error) {
+      if (timer1) {
+        clearTimeout(timer1);
+      }
+
+      if (timer2) {
+        clearTimeout(timer2);
+      }
+
+      timer1 = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+
+      timer2 = setTimeout(() => {
+        setError(ErrorStatus.none);
+      }, 3700);
+    } else {
+      setIsVisible(true);
+    }
+  }, [error]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -92,24 +115,10 @@ export const App: React.FC<Props> = ({
         setTodos={setTodos}
       />
 
-      {isAddError && (
+      {error && (
         <Error
-          text="Unable to add a todo"
-          setIsError={setIsAddError}
-        />
-      )}
-
-      {isDeleteError && (
-        <Error
-          text="Unable to delete a todo"
-          setIsError={setIsDeleteError}
-        />
-      )}
-
-      {isUpdateError && (
-        <Error
-          text="Unable to update a todo"
-          setIsError={setIsUpdateError}
+          text={error}
+          isVisible={isVisible}
         />
       )}
     </div>

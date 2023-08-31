@@ -1,8 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, {
+  useState, useContext, useRef, useEffect,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
 import { TodosContext } from './TodoContext';
 import { deleteTodos, updateTodos, renameTodos } from './api/todos';
+import { ErrorStatus } from './types/Error';
 
 type Props = {
   todos: Todo[],
@@ -15,14 +18,14 @@ export const TodoCard: React.FC<Props> = ({
 }) => {
   const {
     setTodos,
-    setIsDeleteError,
+    setError,
     selectedTodo,
     setSelectedTodo,
-    setIsUpdateError,
   } = useContext(TodosContext);
   const [updatedTitle, setUpdatedTitle] = useState(currentTodo.title);
+  const focusedInput = useRef<HTMLInputElement>(null);
   const remove = async () => {
-    setIsDeleteError(false);
+    setError(ErrorStatus.none);
 
     try {
       const response = await deleteTodos(currentTodo.id);
@@ -32,15 +35,15 @@ export const TodoCard: React.FC<Props> = ({
           todos.filter(todo => todo.id !== currentTodo.id),
         );
       } else {
-        setIsDeleteError(true);
+        setError(ErrorStatus.delete);
       }
     } catch {
-      setIsDeleteError(true);
+      setError(ErrorStatus.delete);
     }
   };
 
   const rename = async () => {
-    setIsUpdateError(false);
+    setError(ErrorStatus.none);
 
     try {
       await renameTodos(
@@ -60,7 +63,7 @@ export const TodoCard: React.FC<Props> = ({
         });
       });
     } catch {
-      setIsUpdateError(true);
+      setError(ErrorStatus.update);
     }
   };
 
@@ -114,6 +117,12 @@ export const TodoCard: React.FC<Props> = ({
     }
   };
 
+  useEffect(() => {
+    if (focusedInput.current) {
+      focusedInput.current.focus();
+    }
+  }, [selectedTodo]);
+
   return (
     <li className={classNames({
       completed: currentTodo.completed && currentTodo !== selectedTodo,
@@ -146,6 +155,7 @@ export const TodoCard: React.FC<Props> = ({
 
       <input
         type="text"
+        ref={focusedInput}
         className="edit"
         placeholder="Empty todo will be deleted"
         value={updatedTitle}

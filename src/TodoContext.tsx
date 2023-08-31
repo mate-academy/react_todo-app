@@ -1,17 +1,14 @@
 import React, { ReactElement, useState } from 'react';
 import { Todo } from './types/Todo';
+import { ErrorStatus } from './types/Error';
 
 type ContextProps = {
   todos:[] | Todo[],
   isMouseEnter: boolean,
-  isDeleteError: boolean,
-  isAddError: boolean,
-  isUpdateError: boolean,
+  error: ErrorStatus,
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   setIsMouseEnter: (condition: boolean) => void,
-  setIsDeleteError: (condition: boolean) => void,
-  setIsAddError: (condition: boolean) => void,
-  setIsUpdateError: (condition: boolean) => void,
+  setError: (text: ErrorStatus) => void,
   tempTodo: null | Todo,
   setTempTodo: (todo: null | Todo) => void,
   selectedTodo: null | Todo,
@@ -21,16 +18,12 @@ type ContextProps = {
 export const TodosContext = React.createContext<ContextProps>({
   todos: [],
   isMouseEnter: false,
-  isDeleteError: false,
-  isAddError: false,
-  isUpdateError: false,
+  error: ErrorStatus.none,
   tempTodo: null,
   selectedTodo: null,
   setTodos: () => {},
   setIsMouseEnter: () => {},
-  setIsDeleteError: () => {},
-  setIsAddError: () => {},
-  setIsUpdateError: () => {},
+  setError: () => {},
   setTempTodo: () => {},
   setSelectedTodo: () => {},
 });
@@ -42,9 +35,7 @@ type ProviderProps = {
 export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isMouseEnter, setIsMouseEnter] = useState(false);
-  const [isDeleteError, setIsDeleteError] = useState(false);
-  const [isAddError, setIsAddError] = useState(false);
-  const [isUpdateError, setIsUpdateError] = useState(false);
+  const [error, setError] = useState(ErrorStatus.none);
   const [tempTodo, setTempTodo] = useState<null | Todo>(null);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
 
@@ -53,12 +44,8 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     setTodos,
     isMouseEnter,
     setIsMouseEnter,
-    isDeleteError,
-    setIsDeleteError,
-    isAddError,
-    setIsAddError,
-    isUpdateError,
-    setIsUpdateError,
+    error,
+    setError,
     tempTodo,
     setTempTodo,
     selectedTodo,
