@@ -1,60 +1,33 @@
-import { createContext, useReducer } from 'react';
+import { createContext } from 'react';
 import { Todo } from '../types/Todo';
+import { useLocaleStorage } from '../functions/useLocalStorage';
+import { reducer } from '../functions/reducer';
+import { TodoConstextType } from '../types/TodoContex';
 
-// type TodosTemplate = todos: Todo[];
-
-type Action = { type: 'addTodo', payload: string }
-| { type: 'deleteTodo', payload: number };
-
-export function reducer(state: Todo[], action: Action) {
-  switch (action.type) {
-    case 'addTodo':
-      return [
-        ...state,
-        {
-          id: Date.now(),
-          title: action.payload,
-          completed: false,
-        },
-      ];
-
-    case 'deleteTodo':
-      return [
-        ...state.filter(todo => todo.id !== action.payload),
-      ];
-    // case 'toggle':
-    //   return state.map(todo => {
-    //     if (todo.id === action.payload) {
-    //       todo.completed = !todo.completed
-    //     }
-    //     return todo
-    //   })
-    default:
-      return state;
-  }
-}
-
-export const initialTodos: Todo[] = [];
-
-export const TodoContext = createContext({
-  todos: initialTodos, dispatch: (action: Action) => {},
-});
-// export const DispatchContext = createContext((action: Action) => {});
+// export enum Status {
+//   All = 'all',
+//   Completed = 'completed',
+//   Active = 'active',
+// }
 
 type Props = {
   children: React.ReactNode;
 };
 
+export const initialTodos: Todo[] = [];
+
+export const TodoContext = createContext<TodoConstextType>({
+  todos: initialTodos, dispatch: () => { },
+});
+
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, dispatch] = useReducer(
-    reducer, initialTodos, // JSON.parse(localStorage.getItem('todos')) ?? [],
+  const [todos, dispatch] = useLocaleStorage<Todo[]>(
+    'todos', initialTodos, reducer, // JSON.parse(localStorage.getItem('todos')) ?? [],
   );
 
   return (
     <TodoContext.Provider value={{ todos, dispatch }}>
-      {/* <DispatchContext.Provider value={dispatch}> */}
       {children}
-      {/* </DispatchContext.Provider> */}
     </TodoContext.Provider>
   );
 };

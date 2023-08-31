@@ -1,22 +1,33 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useReducer, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { TodoList } from './components/TodoList/TodoList';
-import {
-  TodoContext, TodoProvider, initialTodos, reducer,
-} from './context/TodoContext';
+import { TodoContext } from './context/TodoContext';
+import { Status } from './types/Status';
+import { useGetVisibleTodos } from './functions/getVisibleTodos';
 
 export const App: React.FC = () => {
-  // const [todos, dispatch] = useReducer(reducer, initialTodos);
   const { todos, dispatch } = useContext(TodoContext);
   const [title, setTitle] = useState('');
-  // const todosContext = useContext(TodoContext);
+  const [filterStatus, setFilterStatus] = useState(Status.All);
 
-  const addTodo = () => {
-    dispatch({
-      type: 'addTodo',
-      payload: title,
-    });
-  };
+  const addTodo = () => dispatch({ type: 'addTodo', payload: title });
+  const toogleAll = () => dispatch({ type: 'toggleAllTodo' });
+  const deleteCompletedTodo = () => dispatch({ type: 'deleteCompletedTodo' });
+
+  const getVisibleTodos = useGetVisibleTodos(filterStatus);
+  //   switch (status) {
+  //     case Status.Active:
+  //       return todos.filter(todo => !todo.completed);
+
+  //     case Status.Completed:
+  //       return todos.filter(todo => todo.completed);
+
+  //     case Status.All:
+  //     default:
+  //       return todos;
+  //   }
+  // };
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,61 +41,109 @@ export const App: React.FC = () => {
     setTitle('');
   };
 
+  const handleFilterChange = (status: Status) => {
+    setFilterStatus(status);
+  };
+
+  const incompletedTodosCount = todos.filter(
+    (todo) => !todo.completed,
+  ).length;
+
+  const hasCompletedTodos = todos.some((todo) => todo.completed);
+
+  const filteredTodos = useMemo(() => {
+    return getVisibleTodos;
+  }, [filterStatus, todos]);
+
   return (
-    <TodoProvider>
-      <div className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
+    <div className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
 
-          <form onSubmit={handleFormSubmit}>
-            <input
-              type="text"
-              data-cy="createTodo"
-              className="new-todo"
-              value={title}
-              placeholder="What needs to be done?"
-              onChange={event => setTitle(event.target.value)}
-            />
-          </form>
-        </header>
-
-        <section className="main">
+        <form onSubmit={handleFormSubmit}>
           <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
+            type="text"
+            data-cy="createTodo"
+            className="new-todo"
+            value={title}
+            placeholder="What needs to be done?"
+            onChange={event => setTitle(event.target.value)}
           />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+        </form>
+      </header>
 
-          <TodoList todos={todos} />
+      {todos.length !== 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={toogleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        </section>
+            <TodoList todos={filteredTodos} />
 
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            3 items left
-          </span>
+          </section>
 
-          <ul className="filters">
-            <li>
-              <a href="#/" className="selected">All</a>
-            </li>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${incompletedTodosCount} items left`}
+            </span>
 
-            <li>
-              <a href="#/active">Active</a>
-            </li>
+            <ul className="filters">
+              <li>
+                <a
+                  href="#/"
+                  className={classNames({
+                    selected: filterStatus === Status.All,
+                  })}
+                  onClick={() => handleFilterChange(Status.All)}
 
-            <li>
-              <a href="#/completed">Completed</a>
-            </li>
-          </ul>
+                >
+                  All
+                </a>
+              </li>
 
-          <button type="button" className="clear-completed">
-            Clear completed
-          </button>
-        </footer>
-      </div>
-    </TodoProvider>
+              <li>
+                <a
+                  href="#/active"
+                  className={classNames({
+                    selected: filterStatus === Status.Active,
+                  })}
+                  onClick={() => handleFilterChange(Status.Active)}
+                >
+                  Active
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/completed"
+                  className={classNames({
+                    selected: filterStatus === Status.Completed,
+                  })}
+                  onClick={() => handleFilterChange(Status.Completed)}
+                >
+                  Completed
+                </a>
+              </li>
+            </ul>
+
+            {hasCompletedTodos && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={deleteCompletedTodo}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
+    </div>
   );
 };
