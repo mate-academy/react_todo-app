@@ -13,10 +13,10 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
   const { dispatch } = useContext(TodoContext);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(title);
+  const [isEditable, setIsEditable] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
 
-  const trimmedTitle = editedTitle.trim();
+  const trimmedTitle = newTitle.trim();
 
   const deleteTodo = () => dispatch({ type: 'deleteTodo', payload: id });
   const toggleTodo = () => dispatch({ type: 'toggleTodo', payload: id });
@@ -24,83 +24,83 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     type: 'updateTodoTitle', payloadId: id, payloadTitle: trimmedTitle,
   });
 
-  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedTitle(event.target.value);
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleEditSubmit = () => {
-    // const trimmedTitle = editedTitle.trim();
-
-    if (trimmedTitle !== '') {
-      setEditedTitle(trimmedTitle);
-      setIsEditing(false);
+  const handleEdit = (
+    value: string,
+  ) => {
+    if (value) {
       updateTodoTitle();
+      setIsEditable(false);
     } else {
       deleteTodo();
+      setIsEditable(false);
     }
   };
 
-  const handleEditCancel = () => {
-    setIsEditing(false);
-    setEditedTitle(title);
-  };
+  const handleKeyUpEdit = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === 'Enter') {
+      handleEdit(e.target.value);
+    }
 
-  const handleKeyUp = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      handleEditSubmit();
-    } else if (event.key === 'Escape') {
-      handleEditCancel();
+    if (e.key === 'Escape') {
+      setIsEditable(false);
     }
   };
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const editRef = useRef<HTMLInputElement>(null);
+  let editTimerId = 0;
 
   useEffect(() => {
-    if (!isEditing && inputRef.current) {
-      inputRef.current.focus();
+    if (isEditable) {
+      editTimerId = window.setTimeout(() => {
+        editRef.current?.focus();
+      }, 0);
     }
-  }, [isEditing]);
+
+    return () => {
+      window.clearTimeout(editTimerId);
+    };
+  }, [isEditable]);
 
   return (
     <li
       className={classNames({
         completed,
-        editing: isEditing,
+        editing: isEditable,
       })}
     >
-      {!isEditing ? (
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            id="toggle-view"
-            checked={completed}
-            onClick={toggleTodo}
-          />
-          <label onDoubleClick={handleEdit}>{title}</label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            onClick={deleteTodo}
-          />
-        </div>
-      ) : (
+      <div className="view">
         <input
-          type="text"
-          ref={inputRef}
-          className="edit"
-          value={editedTitle}
-          placeholder="Empty todo will be deleted"
-          onChange={handleEditChange}
-          onBlur={handleEditSubmit}
-          onKeyUp={handleKeyUp}
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={completed}
+          onChange={toggleTodo}
         />
-      )}
+        <label
+          onDoubleClick={() => setIsEditable(true)}
+        >
+          {title}
+        </label>
+
+        <button
+          type="button"
+          aria-label="Delete button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={deleteTodo}
+        />
+      </div>
+      <input
+        type="text"
+        className="edit"
+        ref={editRef}
+        value={newTitle}
+        onChange={(e) => setNewTitle(e.target.value)}
+        onKeyUp={handleKeyUpEdit}
+        onBlur={(e) => handleEdit(e.target.value)}
+      />
     </li>
   );
 };
