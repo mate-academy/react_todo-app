@@ -16,23 +16,11 @@ export const App: React.FC = () => {
   const deleteCompletedTodo = () => dispatch({ type: 'deleteCompletedTodo' });
 
   const getVisibleTodos = useGetVisibleTodos(filterStatus);
-  //   switch (status) {
-  //     case Status.Active:
-  //       return todos.filter(todo => !todo.completed);
-
-  //     case Status.Completed:
-  //       return todos.filter(todo => todo.completed);
-
-  //     case Status.All:
-  //     default:
-  //       return todos;
-  //   }
-  // };
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title.trim() === '') {
+    if (!title.trim()) {
       return;
     }
 
@@ -72,7 +60,7 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      {todos.length !== 0 && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <input
