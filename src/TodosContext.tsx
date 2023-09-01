@@ -1,6 +1,7 @@
 import {
-  createContext, Dispatch, SetStateAction, useCallback, useMemo, useState,
+  createContext, useCallback, useMemo, useState,
 } from 'react';
+import { useLocalStorage } from './hooks/useLocalSlorage';
 import { Todo, Status } from './types';
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 
 interface ITodosContext {
   todos: Todo[],
-  setTodos: Dispatch<SetStateAction<Todo[]>>,
+  setTodos: (newTodos: Todo[]) => void,
   visibleTodos: () => Todo[],
   filter: Status,
   setFilter: (f: Status) => void,
@@ -26,7 +27,8 @@ const defaultValue = {
 export const TodosContext = createContext<ITodosContext>(defaultValue);
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  // const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', [] as Todo[]);
   const [filter, setFilter] = useState(Status.ALL);
 
   const visibleTodos = useCallback(() => {

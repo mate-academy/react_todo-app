@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import classNames from 'classnames';
 import { Key, Todo } from '../types';
 import { TodosContext } from '../TodosContext';
@@ -11,7 +13,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const [title, setTitle] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
-  const [focused, setFocused] = useState(false)
+  const [focused, setFocused] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const trimmedTitle = title.trim();
