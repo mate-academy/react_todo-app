@@ -193,6 +193,10 @@ body {
   text-decoration: none;
 }
 
+.new-todo {
+  outline: none;
+}
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox

@@ -1,6 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import React, { useContext } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
 
 import { Todo } from '../types/Todo';
@@ -14,6 +19,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const { title, completed, id } = todo;
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [newTitle, setNewTitle] = useState(title);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [isEdit]);
 
   const handleCheckboxChange = () => {
     const toggleCompleted = () => {
@@ -35,11 +49,65 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(handleRemove);
   };
 
+  const updateItem = () => {
+    const newTodos = todos.map(currentTodo => {
+      if (currentTodo.id === id) {
+        return { ...currentTodo, title: newTitle };
+      }
+
+      return currentTodo;
+    });
+
+    setTodos(newTodos);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    setNewTitle(value);
+  };
+
+  const handleInputKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !newTitle.length) {
+      removeItem();
+    }
+
+    if (event.key === 'Enter' && newTitle.length) {
+      updateItem();
+      setIsEdit(false);
+    }
+  };
+
+  const handleInputKeyUp = (event: React.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setNewTitle(title);
+      setIsEdit(false);
+    }
+  };
+
+  const handleLableDoubleClick = () => {
+    setIsEdit(true);
+    inputRef.current?.focus();
+  };
+
+  const handleInputBlur = () => {
+    if (!newTitle.length) {
+      removeItem();
+    }
+
+    if (newTitle.length) {
+      updateItem();
+    }
+
+    setIsEdit(false);
+  };
+
   return (
     <>
       <li
         className={cn({
           completed,
+          editing: isEdit,
         })}
       >
         <div className="view">
@@ -50,7 +118,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             checked={completed}
             onChange={handleCheckboxChange}
           />
-          <label>{title}</label>
+          <label
+            onDoubleClick={handleLableDoubleClick}
+          >
+            {title}
+          </label>
           <button
             type="button"
             className="destroy"
@@ -58,7 +130,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             onClick={removeItem}
           />
         </div>
-        <input type="text" className="edit" />
+        <input
+          ref={inputRef}
+          type="text"
+          className="edit"
+          value={newTitle}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+          onBlur={handleInputBlur}
+          onKeyUp={handleInputKeyUp}
+        />
       </li>
     </>
   );

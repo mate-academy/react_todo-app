@@ -5,30 +5,30 @@ export const Header: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const [title, setTitle] = useState('');
 
-  const addTodo = (event: React.KeyboardEvent) => {
+  const addTodo = (event: React.FormEvent) => {
+    event.preventDefault();
+
     if (!title) {
       return;
     }
 
-    if (event.key === 'Enter') {
-      setTodos([
-        {
-          title,
-          id: +new Date(),
-          completed: false,
-        },
-        ...todos,
-      ]);
+    setTodos([
+      {
+        title,
+        id: +new Date(),
+        completed: false,
+      },
+      ...todos,
+    ]);
 
-      setTitle('');
-    }
+    setTitle('');
   };
 
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form>
+      <form onSubmit={addTodo}>
         <input
           type="text"
           data-cy="createTodo"
@@ -36,7 +36,6 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={title}
           onChange={(event) => setTitle(event.target.value.trimStart())}
-          onKeyDown={addTodo}
         />
       </form>
     </header>
