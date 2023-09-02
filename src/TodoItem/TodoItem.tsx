@@ -23,16 +23,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const onCheckingHandler = () => {
-    setTodos(currTodo => (
-      currTodo.map(selectedTodo => (
-        todo.id === selectedTodo.id
-          ? ({
-            ...todo,
-            completed: !todo.completed,
-          })
-          : selectedTodo
-      ))
-    ));
+    setTodos(todos.map(selectedTodo => (
+      todo.id === selectedTodo.id
+        ? ({
+          ...todo,
+          completed: !todo.completed,
+        })
+        : selectedTodo
+    )));
   };
 
   const doubleClickHandler = () => {

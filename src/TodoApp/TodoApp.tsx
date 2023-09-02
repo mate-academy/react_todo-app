@@ -4,7 +4,7 @@ import React, {
 import { TodoList } from '../TodoList';
 import { TodosContext } from '../TodosContext';
 import { TodosFilter } from '../TodosFilter';
-import { Todo } from '../types';
+// import { Todo } from '../types';
 
 export const TodoApp: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
@@ -29,11 +29,7 @@ export const TodoApp: React.FC = () => {
         completed: false,
       };
 
-      setTodos((prevTodos: Todo[]) => (
-        [...prevTodos,
-          newTodo,
-        ]
-      ));
+      setTodos([...todos, newTodo]);
 
       setInputValue('');
     }
@@ -50,12 +46,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const deleteCompletedHandler = () => {
-    setTodos(curTodos => {
-      const notCompleted = curTodos
-        .filter(currTodo => currTodo.completed === false);
-
-      return notCompleted;
-    });
+    setTodos(todos.filter(currTodo => currTodo.completed === false));
   };
 
   const completedTodosCounter = useMemo(() => (
