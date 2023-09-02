@@ -10,10 +10,9 @@ export const TodoApp = () => {
   return (
     <div className="todoapp">
       <Header />
-
       <Main />
 
-      {(todos.length !== 0) && (
+      {(todos.length) && (
         <Footer />
       )}
     </div>

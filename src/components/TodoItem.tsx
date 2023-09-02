@@ -103,44 +103,42 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   return (
-    <>
-      <li
-        className={cn({
-          completed,
-          editing: isEdit,
-        })}
-      >
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            id="toggle-view"
-            checked={completed}
-            onChange={handleCheckboxChange}
-          />
-          <label
-            onDoubleClick={handleLableDoubleClick}
-          >
-            {title}
-          </label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            onClick={removeItem}
-          />
-        </div>
+    <li
+      className={cn({
+        completed,
+        editing: isEdit,
+      })}
+    >
+      <div className="view">
         <input
-          ref={inputRef}
-          type="text"
-          className="edit"
-          value={newTitle}
-          onChange={handleInputChange}
-          onKeyDown={handleInputKeyDown}
-          onBlur={handleInputBlur}
-          onKeyUp={handleInputKeyUp}
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={completed}
+          onChange={handleCheckboxChange}
         />
-      </li>
-    </>
+        <label
+          onDoubleClick={handleLableDoubleClick}
+        >
+          {title}
+        </label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={removeItem}
+        />
+      </div>
+      <input
+        ref={inputRef}
+        type="text"
+        className="edit"
+        value={newTitle}
+        onChange={handleInputChange}
+        onKeyDown={handleInputKeyDown}
+        onBlur={handleInputBlur}
+        onKeyUp={handleInputKeyUp}
+      />
+    </li>
   );
 };
