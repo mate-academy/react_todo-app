@@ -4,7 +4,6 @@ import React, {
 import { TodoList } from '../TodoList';
 import { TodosContext } from '../TodosContext';
 import { TodosFilter } from '../TodosFilter';
-// import { Todo } from '../types';
 
 export const TodoApp: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);

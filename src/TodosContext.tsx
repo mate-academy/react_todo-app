@@ -27,7 +27,6 @@ const defaultValue = {
 export const TodosContext = createContext<ITodosContext>(defaultValue);
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  // const [todos, setTodos] = useState<Todo[]>([]);
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', [] as Todo[]);
   const [filter, setFilter] = useState(Status.ALL);
 
