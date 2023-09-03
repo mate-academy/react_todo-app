@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TodoItem } from './TodoItem';
-import { TodosContext } from '../TodosContext/TodosContext';
 import { Todo } from '../types/Todo';
+import { useTodos } from '../hooks/useTodo';
 
 export const TodoList: React.FC = () => {
-  const { filteredTodos, status } = useContext(TodosContext);
+  const { filteredTodos, status } = useTodos();
 
   return (
     <ul className="todo-list" data-cy="todosList">

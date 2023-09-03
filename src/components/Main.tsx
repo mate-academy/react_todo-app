@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { TodoList } from './TodoList';
-import { TodosContext } from '../TodosContext/TodosContext';
 import { Todo } from '../types/Todo';
+import { useTodos } from '../hooks/useTodo';
 
 export const Main: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useTodos();
   const [allCompleted, setAllComleted] = useState(true);
 
   const toggleTodosActive = () => {

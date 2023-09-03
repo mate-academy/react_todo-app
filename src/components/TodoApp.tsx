@@ -1,11 +1,10 @@
-import { useContext } from 'react';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Main } from './Main';
-import { TodosContext } from '../TodosContext/TodosContext';
+import { useTodos } from '../hooks/useTodo';
 
 export const TodoApp = () => {
-  const { todos } = useContext(TodosContext);
+  const { todos } = useTodos();
 
   return (
     <div className="todoapp">

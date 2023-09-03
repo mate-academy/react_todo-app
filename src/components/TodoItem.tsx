@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import React, {
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -9,14 +8,14 @@ import React, {
 import cn from 'classnames';
 
 import { Todo } from '../types/Todo';
-import { TodosContext } from '../TodosContext/TodosContext';
+import { useTodos } from '../hooks/useTodo';
 
 type Props = {
   todo: Todo,
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useTodos();
 
   const { title, completed, id } = todo;
 

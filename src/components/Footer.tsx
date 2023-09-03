@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import cn from 'classnames';
 
-import { TodosContext } from '../TodosContext/TodosContext';
 import { Status } from '../types/Status';
+import { useTodos } from '../hooks/useTodo';
 
 export const Footer: React.FC = () => {
   const {
@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
     setTodos,
     setStatus,
     status,
-  } = useContext(TodosContext);
+  } = useTodos();
 
   const completedTodos = todos.filter(todo => !todo.completed);
 
