@@ -12,7 +12,7 @@ export const TodoApp = () => {
       <Header />
       <Main />
 
-      {(todos.length) && (
+      {(!!todos.length) && (
         <Footer />
       )}
     </div>
