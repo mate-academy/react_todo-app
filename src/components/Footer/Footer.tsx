@@ -20,8 +20,6 @@ export const Footer: React.FC = () => {
   const {
     todos,
     todosStatus,
-    // setFilteredTodos,
-    setFilterCallback,
     setTodosStatus,
     setTodos,
   } = useContext(TodosContext);
@@ -42,30 +40,12 @@ export const Footer: React.FC = () => {
     const newStatus = event.currentTarget.textContent || 'All';
 
     setTodosStatus(newStatus);
-
-    switch (newStatus) {
-      case Status.Active:
-        // setFilteredTodos(todos.filter(todo => !todo.completed));
-        setFilterCallback((todo: Todo) => !todo.completed);
-        break;
-
-      case Status.Completed:
-        // setFilteredTodos(todos.filter(todo => todo.completed));
-        setFilterCallback((todo: Todo) => todo.completed);
-        break;
-
-      default:
-        // setFilteredTodos(todos);
-        setFilterCallback(() => true);
-    }
   };
 
   const clearCompleted = () => {
     const todosWithoutCompleted = todos.filter(todo => !todo.completed);
 
     setTodos(todosWithoutCompleted);
-    // setFilteredTodos(todosWithoutCompleted);
-    setFilterCallback((todo: Todo) => !todo.completed);
   };
 
   return (

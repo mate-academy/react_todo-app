@@ -2,16 +2,29 @@ import { useContext } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
 import { TodosContext } from '../TodosContext/TodosContext';
+import { Status } from '../../types/Status';
 
 type Props = {
-  // filteredTodos: Todo[],
   todos: Todo[],
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const { filterCallback } = useContext(TodosContext);
+  const { todosStatus } = useContext(TodosContext);
 
-  const filteredTodos = todos.filter((todo) => filterCallback(todo));
+  let filteredTodos = [...todos];
+
+  switch (todosStatus) {
+    case Status.Active:
+      filteredTodos = todos.filter(todo => !todo.completed);
+      break;
+
+    case Status.Completed:
+      filteredTodos = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      filteredTodos = todos.filter(todo => todo);
+  }
 
   return (
     <ul className="todo-list" data-cy="todoList">

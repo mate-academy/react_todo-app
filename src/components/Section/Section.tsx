@@ -1,11 +1,9 @@
-// import React, { useContext, useState, ChangeEvent } from 'react';
 import React, { useContext } from 'react';
 import { TodosContext } from '../TodosContext/TodosContext';
 import { TodoList } from '../TodoList/TodoList';
 
 export const Section: React.FC = () => {
   const {
-    // todos, filteredTodos, setTodos, setFilteredTodos,
     todos, setTodos,
   } = useContext(TodosContext);
 
@@ -22,10 +20,8 @@ export const Section: React.FC = () => {
 
     if (completed.length === todos.length) {
       setTodos(allActive);
-      // setFilteredTodos(allActive);
     } else {
       setTodos(allCompleted);
-      // setFilteredTodos(allCompleted);
     }
   };
 
@@ -40,7 +36,6 @@ export const Section: React.FC = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      {/* <TodoList filteredTodos={filteredTodos} /> */}
       <TodoList todos={todos} />
 
     </section>

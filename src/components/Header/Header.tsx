@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 export const Header: React.FC = () => {
-  // const { todos, setTodos, setFilteredTodos } = useContext(TodosContext);
   const { todos, setTodos } = useContext(TodosContext);
   const [title, setTitle] = useState('');
 
@@ -18,7 +17,6 @@ export const Header: React.FC = () => {
       };
 
       setTodos([...todos, todo]);
-      // setFilteredTodos([...todos, todo]);
       setTitle('');
     }
   };
