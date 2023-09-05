@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
+// import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../TodosContext/TodosContext';
@@ -11,7 +12,7 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo, id }) => {
   const { todos, setTodos } = useContext(TodosContext);
-  const [newTitle, setNewTitle] = useState(todo.title); // eslint-disable-line
+  // const [newTitle, setNewTitle] = useState(todo.title); // eslint-disable-line
 
   const handleCheckboxChange = () => {
     const updatedTodos = todos.map((item) => {
