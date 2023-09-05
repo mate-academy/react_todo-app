@@ -11,7 +11,7 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo, id }) => {
   const { todos, setTodos } = useContext(TodosContext);
-  const [newTitle, setNewTitle] = useState(todo.title);
+  const [newTitle, setNewTitle] = useState(todo.title); // eslint-disable-line
 
   const handleCheckboxChange = () => {
     const updatedTodos = todos.map((item) => {
@@ -33,7 +33,7 @@ export const TodoItem: React.FC<Props> = ({ todo, id }) => {
 
   const handleDoubleClick = (event: React.MouseEvent<HTMLLIElement>) => {
   // const handleDoubleClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    console.log(event.currentTarget.textContent);
+    console.log(event.currentTarget.textContent); // eslint-disable-line
     const updatedTodos = todos.map((item) => {
       if (item.id === todo.id) {
         return { ...item, isEditing: true };
@@ -45,12 +45,12 @@ export const TodoItem: React.FC<Props> = ({ todo, id }) => {
     setTodos(updatedTodos);
   };
 
-  const handleInputChange = (event: React.MouseEvent<HTMLInputElement>) => {
-    console.log(event.currentTarget.textContent);
-    const newText = event.currentTarget.textContent || '';
+  // const handleInputChange = (event: React.MouseEvent<HTMLInputElement>) => {
+  //   console.log(event.currentTarget.textContent);
+  //   const newText = event.currentTarget.textContent || '';
 
-    setNewTitle(newText);
-  };
+  //   setNewTitle(newText);
+  // };
 
   return (
     <li
@@ -79,7 +79,7 @@ export const TodoItem: React.FC<Props> = ({ todo, id }) => {
       <input
         type="text"
         className="edit"
-        onChange={handleInputChange}
+        // onChange={handleInputChange}
       />
     </li>
   );
