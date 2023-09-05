@@ -1,93 +1,135 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+
+import { TodoList } from './Components/TodoList';
+import { Footer } from './Components/Footer';
+
+import { useLocalStorage } from './utils/useLocalStorage';
+
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
+  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
+  const [inputQuery, setInputQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [todos, setTodos] = useLocalStorage('todos', []);
+
+  const addNewTodo = async () => {
+    if (!inputQuery.trim()) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const newTodo = {
+        id: +new Date(),
+        title: inputQuery.trim(),
+        completed: false,
+      };
+
+      const updatedTodos = [...todos, newTodo];
+
+      setTodos(updatedTodos);
+
+      setInputQuery('');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addNewTodo();
+  };
+
+  const handleTodoDelete = (todoId: number) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+
+    setTodos(updatedTodos);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputQuery(e.target.value);
+  };
+
+  const handleToggleAll = () => {
+    const areAllCompleted = todos.every(todo => todo.completed);
+
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !areAllCompleted,
+    }));
+
+    setTodos(updatedTodos);
+  };
+
+  const visibleTodos = useMemo(() => {
+    switch (filterBy) {
+      case FilterType.ACTIVE:
+        return todos.filter((todo) => !todo.completed);
+      case FilterType.COMPLETED:
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  }, [filterBy, todos]);
+
+  const deleteAllCompletedTodos = () => {
+    const updatedTodos = todos.filter((todo) => !todo.completed);
+
+    setTodos(updatedTodos);
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      <div className="todoapp__content">
+        <header className="todoapp__header">
+          <button
+            type="button"
+            className="todoapp__toggle-all active"
+            onClick={handleToggleAll}
           />
-        </form>
-      </header>
+          <form onSubmit={handleFormSubmit}>
+            <input
+              type="text"
+              className="todoapp__new-todo"
+              placeholder="What needs to be done?"
+              value={inputQuery}
+              onChange={handleInputChange}
+            />
+          </form>
+        </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {todos.length > 0 && (
+          <>
+            <TodoList
+              todos={visibleTodos}
+              onDelete={handleTodoDelete}
+              setTodos={setTodos}
+            />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <Footer
+              filterBy={filterBy}
+              setFilterBy={setFilterBy}
+              todos={visibleTodos}
+              onDelete={deleteAllCompletedTodos}
+            />
+          </>
+        )}
+      </div>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+      {isLoading && (
+        <div className="loader-overlay">
+          <div className="loader" />
+        </div>
+      )}
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
     </div>
   );
 };
