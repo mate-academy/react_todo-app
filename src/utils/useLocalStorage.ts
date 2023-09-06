@@ -7,7 +7,7 @@ export function useLocalStorage(
 ): [Todo[], (value: Todo[]) => void] {
   const [value, setValue] = useState<Todo[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem(key) || '');
+      return JSON.parse(localStorage.getItem(key) || '[]');
     } catch {
       return initialValue;
     }
