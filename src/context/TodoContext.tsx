@@ -19,6 +19,8 @@ export const TodosContext = React.createContext<TodoContextType>({
   filterTodos: () => [],
 });
 
+export const useTodos = (): TodoContextType => React.useContext(TodosContext);
+
 type Props = {
   children: React.ReactNode;
 };

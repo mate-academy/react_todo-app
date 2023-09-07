@@ -1,16 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 import { Status } from './types/filterENUM';
-import { TodosContext } from './context/TodoContext';
+import { useTodos } from './context/TodoContext';
 import { linkOptions } from './linkData';
 
 export const App: React.FC = () => {
   const [title, setTitle] = useState('');
   const [filterStatus, setFilterStatus] = useState(Status.ALL);
-
-  const todosContext = useContext(TodosContext);
 
   const {
     todos,
@@ -20,7 +18,7 @@ export const App: React.FC = () => {
     incompletedTodosCount,
     hasCompletedTodos,
     filterTodos,
-  } = todosContext;
+  } = useTodos();
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -87,7 +85,9 @@ export const App: React.FC = () => {
         <>
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
-              {`${incompletedTodosCount} items left`}
+              {incompletedTodosCount === 1
+                ? `${incompletedTodosCount} item left`
+                : `${incompletedTodosCount} items left`}
             </span>
 
             <ul className="filters">
