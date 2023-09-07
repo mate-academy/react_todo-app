@@ -1,7 +1,6 @@
-import { useContext } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
-import { TodosContext } from '../TodosContext/TodosContext';
+import { useTodos } from '../TodosContext/TodosContext';
 import { Status } from '../../types/Status';
 
 type Props = {
@@ -9,7 +8,7 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const { todosStatus } = useContext(TodosContext);
+  const { todosStatus } = useTodos();
 
   let filteredTodos = [...todos];
 
@@ -23,7 +22,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       break;
 
     default:
-      filteredTodos = todos.filter(todo => todo);
+      filteredTodos = todos;
   }
 
   return (

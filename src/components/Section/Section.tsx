@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import { TodosContext } from '../TodosContext/TodosContext';
+import React from 'react';
+import { useTodos } from '../TodosContext/TodosContext';
 import { TodoList } from '../TodoList/TodoList';
 
 export const Section: React.FC = () => {
   const {
     todos, setTodos,
-  } = useContext(TodosContext);
+  } = useTodos();
 
   const handleClick = () => {
     const completed = todos.filter(todo => todo.completed);

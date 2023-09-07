@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
-import { TodosContext } from '../TodosContext/TodosContext';
+import React, { useState } from 'react';
+import { useTodos } from '../TodosContext/TodosContext';
 
 export const Header: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useTodos();
   const [title, setTitle] = useState('');
 
   const handleSubmit = (event: React.FormEvent) => {

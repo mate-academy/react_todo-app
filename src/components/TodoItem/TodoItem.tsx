@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-// import React, { useContext, useState } from 'react';
-import React, { useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { TodosContext } from '../TodosContext/TodosContext';
+import { useTodos } from '../TodosContext/TodosContext';
 
 type Props = {
   todo: Todo,
@@ -11,8 +10,17 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo, id }) => {
-  const { todos, setTodos } = useContext(TodosContext);
-  // const [newTitle, setNewTitle] = useState(todo.title); // eslint-disable-line
+  const { todos, setTodos } = useTodos();
+
+  const [newTitle, setNewTitle] = useState(todo.title);
+
+  const newTitleField = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (todo.isEditing && newTitleField.current) {
+      newTitleField.current.focus();
+    }
+  }, [todo.isEditing]);
 
   const handleCheckboxChange = () => {
     const updatedTodos = todos.map((item) => {
@@ -32,9 +40,7 @@ export const TodoItem: React.FC<Props> = ({ todo, id }) => {
     setTodos(todosAfterRemoving);
   };
 
-  const handleDoubleClick = (event: React.MouseEvent<HTMLLIElement>) => {
-  // const handleDoubleClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    console.log(event.currentTarget.textContent); // eslint-disable-line
+  const handleDoubleClick = () => {
     const updatedTodos = todos.map((item) => {
       if (item.id === todo.id) {
         return { ...item, isEditing: true };
@@ -44,18 +50,69 @@ export const TodoItem: React.FC<Props> = ({ todo, id }) => {
     });
 
     setTodos(updatedTodos);
+
+    if (newTitleField.current && todo.isEditing) {
+      newTitleField.current.focus();
+    }
   };
 
-  // const handleInputChange = (event: React.MouseEvent<HTMLInputElement>) => {
-  //   console.log(event.currentTarget.textContent);
-  //   const newText = event.currentTarget.textContent || '';
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(event.target.value);
+  };
 
-  //   setNewTitle(newText);
-  // };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setNewTitle(event.target.value);
+      const updatedTodos = todos.map((item) => {
+        if (item.id === todo.id) {
+          return { ...item, isEditing: false, title: newTitle };
+        }
+
+        return item;
+      });
+
+      if (!newTitle.trim()) {
+        const newTodos = todos.filter(item => item.id !== todo.id);
+
+        setTodos(newTodos);
+
+        return;
+      }
+
+      setTodos(updatedTodos);
+    }
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setNewTitle(todo.title);
+      const updatedTodos = todos.map((item) => {
+        if (item.id === todo.id) {
+          return { ...item, isEditing: false };
+        }
+
+        return item;
+      });
+
+      setTodos(updatedTodos);
+    }
+  };
+
+  const blurHandle = () => {
+    setNewTitle(newTitle);
+    const updatedTodos = todos.map((item) => {
+      if (item.id === todo.id) {
+        return { ...item, isEditing: false, title: newTitle };
+      }
+
+      return item;
+    });
+
+    setTodos(updatedTodos);
+  };
 
   return (
     <li
-      onDoubleClick={handleDoubleClick}
       className={classNames({
         completed: todo.completed,
         editing: todo.isEditing,
@@ -69,7 +126,11 @@ export const TodoItem: React.FC<Props> = ({ todo, id }) => {
           id={todo.id.toString()}
           onChange={handleCheckboxChange}
         />
-        <label>{todo.title}</label>
+        <label
+          onDoubleClick={handleDoubleClick}
+        >
+          {todo.title}
+        </label>
         <button
           onClick={handleClick}
           type="button"
@@ -77,11 +138,18 @@ export const TodoItem: React.FC<Props> = ({ todo, id }) => {
           data-cy="deleteTodo"
         />
       </div>
-      <input
-        type="text"
-        className="edit"
-        // onChange={handleInputChange}
-      />
+      {todo.isEditing && (
+        <input
+          onChange={handleInputChange}
+          type="text"
+          className="edit"
+          value={newTitle}
+          ref={newTitleField}
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+          onBlur={blurHandle}
+        />
+      )}
     </li>
   );
 };

@@ -1,28 +1,31 @@
 import React, { useMemo, useState } from 'react';
-import { todos as todosFromServer } from '../../api/Todos';
 import { Todo } from '../../types/Todo';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { Status } from '../../types/Status';
 
 interface ITodosContext {
-  todosStatus: string,
+  todosStatus: Status,
   todos: Todo[],
-  setTodosStatus: React.Dispatch<React.SetStateAction<string>>,
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
+  setTodosStatus: React.Dispatch<React.SetStateAction<Status>>,
+  setTodos: (v: Todo[]) => void,
 }
 
 export const TodosContext = React.createContext<ITodosContext>({
-  todosStatus: '',
+  todosStatus: Status.All,
   todos: [],
   setTodosStatus: () => { },
   setTodos: () => { },
 });
+
+export const useTodos = (): ITodosContext => React.useContext(TodosContext);
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState(todosFromServer);
-  const [todosStatus, setTodosStatus] = useState('All');
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [todosStatus, setTodosStatus] = useState(Status.All);
 
   const value = useMemo(() => ({
     todosStatus,
