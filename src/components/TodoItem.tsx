@@ -62,7 +62,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (!isEditing && inputRef.current) {
+    if (isEditing && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isEditing]);

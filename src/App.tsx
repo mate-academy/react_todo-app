@@ -6,7 +6,7 @@ import { Status } from './types/filterENUM';
 import { useTodos } from './context/TodoContext';
 import { linkOptions } from './linkData';
 
-export const App: React.FC = () => {
+export const App = () => {
   const [title, setTitle] = useState('');
   const [filterStatus, setFilterStatus] = useState(Status.ALL);
 
@@ -20,10 +20,6 @@ export const App: React.FC = () => {
     filterTodos,
   } = useTodos();
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
   const handleForSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -35,13 +31,9 @@ export const App: React.FC = () => {
     setTitle('');
   };
 
-  const handleClearCompleted = () => {
-    deleteCompletedTodos();
-  };
-
-  const handleFilterChange = (status: Status) => {
-    setFilterStatus(status);
-  };
+  // const handleFilterChange = (status: Status) => {
+  //   setFilterStatus(status);
+  // };
 
   const filteredTodos = useMemo(() => {
     return filterTodos(filterStatus);
@@ -59,7 +51,7 @@ export const App: React.FC = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={title}
-            onChange={handleTitleChange}
+            onChange={(event) => setTitle(event.target.value)}
           />
         </form>
       </header>
@@ -98,7 +90,7 @@ export const App: React.FC = () => {
                     className={classNames({
                       selected: filterStatus === link.filterValue,
                     })}
-                    onClick={() => handleFilterChange(link.filterValue)}
+                    onClick={() => setFilterStatus(link.filterValue)}
                   >
                     {link.label}
                   </a>
@@ -110,7 +102,7 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 className="clear-completed"
-                onClick={handleClearCompleted}
+                onClick={() => deleteCompletedTodos()}
               >
                 Clear completed
               </button>

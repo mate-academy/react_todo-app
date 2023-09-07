@@ -25,9 +25,5 @@ export function useLocalStorage<T>(
     setValue(newValue);
   };
 
-  // useEffect(() => {
-  //   localStorage.setItem(key, JSON.stringify(value));
-  // }, [key, value]);
-
   return [value, save];
 }
