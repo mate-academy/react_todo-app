@@ -36,7 +36,7 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     - Todo title can't be empty! If a user presses `Enter` when the title is empty, this todo should be removed.
     - (*) save changes `onBlur`
 1. Save state of the APP to the `localStorage` using the name `todos` for the key (Watch Custom Hooks lesson)
-    - use `JSON.stringify` before saving and `JSON.parse` on reading
+    - use `JSON.stringify` before saving and `JSON.parse` on reading'
 
 ![todoedit](./description/edittodo.gif)
 
@@ -53,4 +53,4 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://vitalii-fedusov.github.io/react_todo-app/) and add it to the PR description.
