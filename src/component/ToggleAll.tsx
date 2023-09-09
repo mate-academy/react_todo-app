@@ -1,9 +1,7 @@
-import { useContext } from 'react';
-import { TodosContext } from './TodosContext';
+import { useTodos } from './TodosContext';
 
 export const ToggleAll = () => {
-  const todosContext = useContext(TodosContext);
-  const { handleToggleAll } = todosContext;
+  const { handleToggleAll } = useTodos();
 
   return (
     <>

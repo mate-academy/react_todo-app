@@ -1,20 +1,19 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
 
 import { TodoList } from './component/TodoList';
-import { TodosContext } from './component/TodosContext';
+import { useTodos } from './component/TodosContext';
 import { linkOptions } from './data/dataFromLink';
 import { Status } from './types/Status';
 import { ToggleAll } from './component/ToggleAll';
 import { ClearCompleted } from './component/ClearCompleted';
 
 export const App: React.FC = () => {
-  const todosContext = useContext(TodosContext);
   const {
     todos,
     addTodo,
     filterTodos,
-  } = todosContext;
+  } = useTodos();
 
   const [title, setTitle] = useState('');
   const [filterStatus, setFilterStatus] = useState(Status.All);
@@ -83,7 +82,9 @@ export const App: React.FC = () => {
 
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
-              {`${activeTodosCount} items left`}
+              {activeTodosCount === 1
+                ? (`${activeTodosCount} item left`)
+                : (`${activeTodosCount} items left`)}
             </span>
 
             <ul className="filters">

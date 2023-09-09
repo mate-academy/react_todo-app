@@ -1,23 +1,22 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useEffect, useRef, useState,
 } from 'react';
 import cn from 'classnames';
 
 import { Todo } from '../types/Todo';
-import { TodosContext } from './TodosContext';
+import { useTodos } from './TodosContext';
 
 type Props = {
   todo: Todo,
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const todosContext = useContext(TodosContext);
   const {
     toggleTodo,
     deleteTodo,
     updateTodoTitle,
-  } = todosContext;
+  } = useTodos();
 
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);

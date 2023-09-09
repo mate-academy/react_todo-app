@@ -1,9 +1,7 @@
-import { useContext } from 'react';
-import { TodosContext } from './TodosContext';
+import { useTodos } from './TodosContext';
 
 export const ClearCompleted = () => {
-  const todosContext = useContext(TodosContext);
-  const { deleteCompletedTodos } = todosContext;
+  const { deleteCompletedTodos } = useTodos();
 
   return (
     <button
