@@ -79,7 +79,9 @@ export const App: React.FC = () => {
 
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
-              {`${incompletedTodosCount} items left`}
+              {incompletedTodosCount === 1
+                ? `${incompletedTodosCount} item left`
+                : `${incompletedTodosCount} items left`}
             </span>
 
             <TodosFilter

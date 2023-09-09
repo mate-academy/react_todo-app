@@ -7,13 +7,17 @@ type Props = {
 };
 
 export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
+  const onFilterChange = (status: Status) => () => {
+    setFilter(status);
+  };
+
   return (
     <ul className="filters">
       <li>
         <a
           href="#/"
           className={filter === 'all' ? 'selected' : ''}
-          onClick={() => setFilter(Status.All)}
+          onClick={onFilterChange(Status.All)}
         >
           All
         </a>
@@ -23,7 +27,7 @@ export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
         <a
           href="#/active"
           className={filter === 'active' ? 'selected' : ''}
-          onClick={() => setFilter(Status.Active)}
+          onClick={onFilterChange(Status.Active)}
         >
           Active
         </a>
@@ -33,7 +37,7 @@ export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
         <a
           href="#/completed"
           className={filter === 'completed' ? 'selected' : ''}
-          onClick={() => setFilter(Status.Completed)}
+          onClick={onFilterChange(Status.Completed)}
         >
           Completed
         </a>
