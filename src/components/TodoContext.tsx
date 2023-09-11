@@ -27,7 +27,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     const newTask: Todo = {
       id: +new Date(),
       title,
-      competed: false,
+      completed: false,
     };
 
     setTodos([...todos, newTask]);
@@ -36,7 +36,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const toggleTodo = (id: number) => {
     setTodos(todos.map(
       (todo) => (todo.id === id
-        ? { ...todo, competed: !todo.competed }
+        ? { ...todo, completed: !todo.completed }
         : todo),
     ));
   };
@@ -52,32 +52,32 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   };
 
   const deleteCompletedTodos = () => {
-    setTodos(todos.filter(todo => !todo.competed));
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   const handleToggleAll = () => {
-    const hasAllCompleted = todos.every((todo) => todo.competed);
+    const hasAllCompleted = todos.every((todo) => todo.completed);
 
     const updateTodos = todos.map((todo) => ({
-      ...todo, competed: !hasAllCompleted,
+      ...todo, completed: !hasAllCompleted,
     }));
 
     setTodos(updateTodos);
   };
 
   const incompletedTodosCount = todos.filter(
-    (todo) => !todo.competed,
+    (todo) => !todo.completed,
   ).length;
 
-  const hasCompletedTodos = todos.some((todo) => todo.competed);
+  const hasCompletedTodos = todos.some((todo) => todo.completed);
 
   const filterTodos = (filterStatus: string) => {
     switch (filterStatus) {
       case Status.Active:
-        return todos.filter(todo => !todo.competed);
+        return todos.filter(todo => !todo.completed);
 
       case Status.Completed:
-        return todos.filter(todo => todo.competed);
+        return todos.filter(todo => todo.completed);
 
       case Status.All:
       default:
@@ -97,7 +97,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     const todosToStore = todos.map(todo => ({
       id: todo.id,
       title: todo.title,
-      competed: todo.competed,
+      completed: todo.completed,
     }));
 
     localStorage.setItem('todos', JSON.stringify(todosToStore));

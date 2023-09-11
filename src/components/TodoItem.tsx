@@ -2,7 +2,6 @@ import React, {
   useContext,
   useEffect, useRef, useState,
 } from 'react';
-
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodosContext } from './TodoContext';
@@ -12,8 +11,6 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const { title, completed, id } = todo;
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
