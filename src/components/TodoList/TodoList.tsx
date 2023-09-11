@@ -1,9 +1,17 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { TodosContext } from '../../TodosContext';
 import { TodoItem } from '../TodoItem';
 
 export const TodoList = () => {
-  const { todos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
+  const handleToggleAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const todosCopy = [...todos].map(todo => ({
+      ...todo, completed: event.target.checked,
+    }));
+
+    setTodos(todosCopy);
+  };
 
   return (
     <section className="main">
@@ -12,12 +20,13 @@ export const TodoList = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        onChange={handleToggleAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
         {todos.map(todo => (
-          <TodoItem key={todo.id} todo={todo} />
+          <TodoItem key={uuidv4()} todo={todo} />
         ))}
 
         {/* <li className="editing">

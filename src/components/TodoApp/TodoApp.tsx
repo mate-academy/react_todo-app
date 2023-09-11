@@ -1,29 +1,31 @@
 import React, { useContext, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { TodosContext } from '../../TodosContext';
 import { Todo } from '../../types/todo';
 
-const initialTodo = {
-  id: +new Date(),
-  title: '',
-  completed: false,
-};
+// const initialTodo = {
+//   id: uuidv4(),
+//   title: '',
+//   completed: false,
+// };
 
 type Props = {};
 
 export const TodoApp: React.FC<Props> = () => {
   const { setTodos } = useContext(TodosContext);
-  const [newTodo, setNewTodo] = useState(initialTodo);
+  const [newTodoTitle, setNewTodoTitle] = useState('');
 
   const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTodo((prev) => ({ ...prev, title: event.target.value }));
+    setNewTodoTitle(event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (newTodo.title) {
-      setTodos((prev: Todo[]) => [...prev, newTodo]);
-      setNewTodo(initialTodo);
+    if (newTodoTitle) {
+      setTodos((prev: Todo[]) => [...prev,
+        { id: uuidv4(), title: newTodoTitle, completed: false }]);
+      setNewTodoTitle('');
     }
   };
 
@@ -37,7 +39,7 @@ export const TodoApp: React.FC<Props> = () => {
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
-          value={newTodo.title}
+          value={newTodoTitle}
           onChange={handleChangeTitle}
         />
       </form>

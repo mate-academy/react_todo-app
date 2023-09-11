@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/todo';
 import { TodosContext } from '../../TodosContext';
@@ -11,16 +11,15 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const index = todos.findIndex(({ id }) => id === todo.id);
-  const updateTodo = (): Todo[] => {
+
+  const handleCompleteTodo = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const todosCopy = [...todos];
 
-    todosCopy.splice(index, 1, { ...todo, completed: !todo.completed });
+    todosCopy.splice(index, 1, { ...todo, completed: event.target.checked });
 
-    return todosCopy;
-  };
-
-  const handleCompleteTodo = () => {
-    setTodos(updateTodo());
+    setTodos(todosCopy);
   };
 
   return (
@@ -34,6 +33,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="toggle"
           id="toggle-view"
+          checked={todo.completed}
           onChange={handleCompleteTodo}
         />
         <label htmlFor="toggle-view">{todo.title}</label>
