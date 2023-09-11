@@ -1,56 +1,44 @@
-# React ToDo App
-Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as described below.
+# React Todo App with API (complete)
 
-> If you are not sure about how a feature should work just open the real TodoApp and look how it works there
+It is the third part of the React Todo App with API.
 
-![todoapp](./description/todoapp.gif)
+Take your code implemented for [Add and Delete](https://github.com/mate-academy/react_todo-app-add-and-delete)
+and implement the ability to toggle and rename todos.
 
-1. Use `TodosContext` to store and update the todos.
-1. Implement `TodoApp` component with an input field to create new todos on submit (Enter). Each item should have:
-    - `id` - unique identifier (`+new Date()` is good enough)
-    - `title` - the text of a todo
-    - `completed` - current status (`false` by default)
-1. Show the number of not completed todos in `TodoApp`;
-1. Implement `TodoList` component to display a list of todos;
-    ```jsx harmony
-    <TodoList items={todos} />
-    ```
-1. Implement `TodoItem` component with ability to toggle the `completed` status using a checkbox.
-    - move a `li` tag inside the `TodoItem`;
-    - add class `completed` if todo is completed;
-1. Add the ability to toggle the completed status of all the todos with the `toggleAll` checkbox.
-    - `toggleAll` checkbox is active only if all the todos are completed;
-    - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` checked;
-1. Create `TodosFilter` component to switch between `All`/`Active`/`Completed` todos (add it to the `App`)
-    - add the `Status` enum with the required values;
-    - href should be `#/`, `#/active` or `#/completed`)
-1. Add ability to remove a todo using the `destroy` button (`X`).
-1. Add ability to clear completed todos - remove all completed items from the list. The button should contain text `Clear completed` in it.
-    - It should be visible if there is at least 1 completed item in the list.
-1. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
-1. Make inline editing for the TODO item
-    - double click on the TODO title makes it editable (just add a class `editing` to a `li`)
-    - DON'T add `htmlFor` to the label!!!
-    - `Enter` saves changes
-    - `Ecs` cancels editing (use `onKeyup` and `event.key === 'Escape'`)
-    - Todo title can't be empty! If a user presses `Enter` when the title is empty, this todo should be removed.
-    - (*) save changes `onBlur`
-1. Save state of the APP to the `localStorage` using the name `todos` for the key (Watch Custom Hooks lesson)
-    - use `JSON.stringify` before saving and `JSON.parse` on reading
+> Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
 
-![todoedit](./description/edittodo.gif)
+## Toggling a todo status
 
-##  If you want to implement styles yourself
-- Font: 'helvetica neue'
-- Font sizes to use: 100px, 24px, 14px
-- implement arrow by rotating '❯' symbol
-- Use '✕' symbol to remove TODO item on hover
-- [checked](./public/icons/checked.svg)
-- [unchecked](./public/icons/unchecked.svg)
+Toggle the `completed` status on `TodoStatus` change:
+
+- covered the todo with a loader overlay while wating for API response;
+- the status should be changed on success;
+- show the `Unable to update a todo` notification in case of API error.
+
+Add the ability to toggle the completed status of all the todos with the `toggleAll` checkbox:
+
+- `toggleAll` button should have `active` class only if all the todos are completed;
+- `toggleAll` click changes its status to the oppsite one, and set it to all the todos;
+- it should work the same as several individual updates of the todos which statuses were actually changed;
+- do send requests for the todos that were not changed;
+
+## Renaming a todo
+
+Implement the ability to edit a todo title on double click:
+
+- show the edit form instead of the title and remove button;
+- saves changes on the form submit (just press `Enter`);
+- save changes when the field loses focus (`onBlur`);
+- if new title is the same as the old one just cancel editing;
+- cancel editing on `Esс` key `keyup` event;
+- if the new title is empty delete the todo the same way the `x` button does it;
+- if the title was changed show the loader while waiting for the API response;
+- update the todo title on success;
+- show `Unable to update a todo` in case of API error;
+- or the deletion error message if we tried to delete the todo.
 
 ## Instructions
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-with-api/) and add it to the PR description.

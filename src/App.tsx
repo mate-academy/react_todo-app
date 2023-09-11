@@ -1,93 +1,209 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import classNames from 'classnames';
+import { UserWarning } from './UserWarning';
+import * as postService from './api/todos';
+import { Todo } from './types/Todo';
+import { TodoApp } from './components/TodoApp';
+import { ErrorMessage } from './components/ErrorMessage';
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+import { Filter } from './types/Filter';
+
+const USER_ID = 10876;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterType, setFilterType] = useState<Filter>(Filter.ALL);
+  const [error, setError] = useState<string>('');
+  const [isShowError, setIsShowError] = useState<boolean>(false);
+  const [deleteTodoIds, setDeleteTodoIds] = useState([0]);
+  const [updatedTodoIds, setUpdatedTodoIds] = useState([0]);
+  const [isTodoLoaded, setIsTodoLoaded] = useState<boolean>(false);
+  const [isTodoSaved, setIsTodoSaved] = useState<boolean>(false);
+  const [query, setQuery] = useState<string>('');
+
+  useEffect(() => {
+    postService.getTodos(USER_ID)
+      .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
+      .catch(() => setError('Unable to get todos'));
+  }, []);
+
+  useEffect(() => {}, [todos, isShowError]);
+  const activeTodos = useMemo(
+    () => todos.filter(todo => !todo.completed), [todos],
+  );
+
+  useEffect(() => {
+    setIsTodoSaved(!!query && isTodoLoaded);
+  }, [query, isTodoLoaded]);
+
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed), [todos],
+  );
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
+  const filteredTodos = {
+    all: todos,
+    active: activeTodos,
+    completed: completedTodos,
+  };
+
+  const visibleTodos:Todo[] = filteredTodos[
+    filterType as keyof typeof filteredTodos
+  ];
+
+  const handleTodoInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  const handleFilterChange = (selectedFilter: Filter) => {
+    setFilterType(selectedFilter);
+  };
+
+  const handleErrorMessage = (message: string) => {
+    setIsShowError(true);
+    setError(message);
+
+    setTimeout(() => {
+      setIsShowError(false);
+    }, 3000);
+  };
+
+  const addTodo = async (event: React.FormEvent, title: string) => {
+    event.preventDefault();
+
+    if (!title.trim()) {
+      handleErrorMessage('Title can\'t be empty');
+      setQuery('');
+
+      return;
+    }
+
+    try {
+      setIsTodoLoaded(true);
+
+      const createdTodo = await postService.postTodo({
+        title,
+        userId: USER_ID,
+        completed: false,
+      });
+
+      setTodos(prevTodos => [...prevTodos, createdTodo]);
+    } catch {
+      handleErrorMessage('Unable to add a todo');
+    } finally {
+      setIsTodoLoaded(false);
+      setQuery('');
+    }
+  };
+
+  const deleteTodo = async (currentId: number) => {
+    try {
+      setDeleteTodoIds(prevIds => [...prevIds, currentId]);
+      await postService.deleteTodo(currentId);
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== currentId));
+    } catch {
+      handleErrorMessage('Unable to delete a todo');
+    }
+  };
+
+  const updateTodo = async (updatedTodo: Todo) => {
+    try {
+      setUpdatedTodoIds(prevIds => [...prevIds, updatedTodo.id]);
+
+      await postService.updateTodo(updatedTodo);
+
+      setTodos(prevTodos => {
+        const newTodos = [...prevTodos];
+        const index = newTodos.findIndex(
+          todo => todo.id === updatedTodo.id,
+        );
+
+        newTodos.splice(index, 1, updatedTodo);
+
+        return newTodos;
+      });
+    } catch {
+      handleErrorMessage('Unable to update a todo');
+    } finally {
+      setUpdatedTodoIds([0]);
+    }
+  };
+
+  const handleClearCompleted = () => {
+    completedTodos.forEach(todo => {
+      deleteTodo(todo.id);
+    });
+  };
+
+  const checkTodo = (selectedTodo: Todo, isCompleted?: boolean) => {
+    updateTodo({
+      ...selectedTodo,
+      completed: isCompleted || !selectedTodo.completed,
+    });
+  };
+
+  const handleToggleAll = () => {
+    const allTodosCompleted = todos.every(todo => todo.completed);
+
+    todos.forEach(todo => {
+      if ((allTodosCompleted && todo.completed)
+        || (!allTodosCompleted && !todo.completed)) {
+        checkTodo(todo, !todo.completed);
+      }
+    });
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      <div className="todoapp__content">
+        <header className="todoapp__header">
+          <button
+            type="button"
+            className={classNames('todoapp__toggle-all', {
+              active: activeTodos.length === 0,
+            })}
+            onClick={handleToggleAll}
           />
-        </form>
-      </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+          <TodoApp
+            query={query}
+            isTodoLoaded={isTodoLoaded}
+            handleTodoInput={handleTodoInput}
+            addTodo={addTodo}
+          />
+        </header>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <TodoList
+            todos={visibleTodos}
+            deleteTodoIds={deleteTodoIds}
+            updatedTodoIds={updatedTodoIds}
+            deleteTodo={deleteTodo}
+            updateTodo={updateTodo}
+            checkTodo={checkTodo}
+            isTodoSaved={isTodoSaved}
+          />
+        )}
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {todos.length > 0 && (
+          <TodoFilter
+            filterType={filterType}
+            activeTodos={activeTodos}
+            handleFilterChange={handleFilterChange}
+            handleClearCompleted={handleClearCompleted}
+            hideClearCompleted={completedTodos.length === 0}
+          />
+        )}
+      </div>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <ErrorMessage isShown={isShowError} errorContent={error} />
     </div>
   );
 };
