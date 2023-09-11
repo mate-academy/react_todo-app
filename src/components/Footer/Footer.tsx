@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import cn from 'classnames';
 import { FilterTypes } from '../../types/FilterTypes';
 import { DispatchContext, StateContext } from '../TodosContext/TodosContext';
+import { ActionType } from '../../types/ActionType';
 
 type Props = {
   activeLength: number,
@@ -21,15 +22,15 @@ export const Footer: React.FC<Props> = ({
   const { filter } = state;
 
   const handleAllBtn = () => {
-    reducer({ type: 'setFilterAll' });
+    reducer({ type: ActionType.SetFilterAll });
   };
 
   const handleActiveBtn = () => {
-    reducer({ type: 'setFilterActive' });
+    reducer({ type: ActionType.SetFilterActive });
   };
 
   const handleCompletedBtn = () => {
-    reducer({ type: 'setFilterCompleted' });
+    reducer({ type: ActionType.SetFilterCompleted });
   };
 
   return (
@@ -42,7 +43,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <a
             href="#/"
-            className={cn(filter === FilterTypes.all ? 'selected' : '')}
+            className={cn({ selected: filter === FilterTypes.all })}
             onClick={handleAllBtn}
           >
             All
@@ -52,7 +53,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <a
             href="#/active"
-            className={cn(filter === FilterTypes.active ? 'selected' : '')}
+            className={cn({ selected: filter === FilterTypes.active })}
             onClick={handleActiveBtn}
           >
             Active
@@ -62,7 +63,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <a
             href="#/completed"
-            className={cn(filter === FilterTypes.completed ? 'selected' : '')}
+            className={cn({ selected: filter === FilterTypes.completed })}
             onClick={handleCompletedBtn}
           >
             Completed

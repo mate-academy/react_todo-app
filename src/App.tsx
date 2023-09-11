@@ -6,6 +6,7 @@ import { TodoType } from './types/TodoType';
 import { FilterTypes } from './types/FilterTypes';
 import { DispatchContext, StateContext }
   from './components/TodosContext/TodosContext';
+import { ActionType } from './types/ActionType';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -30,13 +31,13 @@ export const App: React.FC = () => {
 
   const getMaxId = useMemo(() => {
     return (list: TodoType[]): number => {
-      const maxId = list.reduce((max, todo) => {
-        return todo.id > max ? todo.id : max;
-      }, 0);
+      if (list.length === 0) {
+        return 0;
+      }
 
-      return maxId;
+      return Math.max(...list.map(({ id }) => id));
     };
-  }, []);
+  }, [todos]);
 
   const handleKeyPress = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,13 +49,13 @@ export const App: React.FC = () => {
         completed: false,
       };
 
-      reducer({ type: 'add', payload: newTodo });
+      reducer({ type: ActionType.Add, payload: newTodo });
       setQuery('');
     }
   };
 
   const handleClearBtn = () => {
-    reducer({ type: 'clearCompleted' });
+    reducer({ type: ActionType.ClearCompleted });
   };
 
   const currentLength = state.todos.filter(todo => !todo.completed).length;
@@ -82,7 +83,7 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          onClick={() => reducer({ type: 'setCompletedAll' })}
+          onClick={() => reducer({ type: ActionType.SetCompletedAll })}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 

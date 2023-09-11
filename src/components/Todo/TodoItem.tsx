@@ -3,6 +3,7 @@
 import { useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { DispatchContext } from '../TodosContext/TodosContext';
+import { ActionType } from '../../types/ActionType';
 
 type Props = {
   todo: {
@@ -22,7 +23,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editedTitle, setEditedTitle] = useState(name);
 
   const handleSetCompleted = () => {
-    reducer({ type: 'setCompleted', payload: id });
+    reducer({ type: ActionType.SetCompleted, payload: id });
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +32,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleDeleteClick = () => {
-    reducer({ type: 'delete', payload: id });
+    reducer({ type: ActionType.Delete, payload: id });
   };
 
   const handleDoubleClick = () => {
@@ -44,9 +45,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleBlur = () => {
     if (editedTitle.trim() === '') {
-      reducer({ type: 'delete', payload: id });
+      reducer({ type: ActionType.Delete, payload: id });
     } else {
-      reducer({ type: 'editTitle', payload: { id, title: editedTitle } });
+      reducer({
+        type: ActionType.EditTitle,
+        payload: { id, title: editedTitle },
+      });
     }
 
     setIsEditing(false);

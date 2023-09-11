@@ -4,22 +4,23 @@ import { State } from '../../types/State';
 import { TodoType } from '../../types/TodoType';
 import { FilterTypes } from '../../types/FilterTypes';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { ActionType } from '../../types/ActionType';
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'delete': {
+    case ActionType.Delete: {
       const todos = state.todos.filter(todo => todo.id !== action.payload);
 
       return { ...state, todos };
     }
 
-    case 'add': {
+    case ActionType.Add: {
       const todos = [...state.todos, action.payload as TodoType];
 
       return { ...state, todos };
     }
 
-    case 'setCompleted': {
+    case ActionType.SetCompleted: {
       const updatedTodos = state.todos.map(todo => {
         return todo.id === action.payload
           ? { ...todo, completed: !todo.completed }
@@ -29,7 +30,7 @@ function reducer(state: State, action: Action): State {
       return { ...state, todos: updatedTodos };
     }
 
-    case 'editTitle': {
+    case ActionType.EditTitle: {
       const { id, title } = action.payload;
 
       const renamedTodos = state.todos.map(todo => {
@@ -39,7 +40,7 @@ function reducer(state: State, action: Action): State {
       return { ...state, todos: renamedTodos };
     }
 
-    case 'setCompletedAll': {
+    case ActionType.SetCompletedAll: {
       const newCompletedState = state.todos.every(todo => todo.completed);
       const newTodos = state.todos.map(todo => ({
         ...todo,
@@ -49,19 +50,19 @@ function reducer(state: State, action: Action): State {
       return { ...state, todos: newTodos };
     }
 
-    case 'clearCompleted': {
+    case ActionType.ClearCompleted: {
       const todos = state.todos.filter(todo => !todo.completed);
 
       return { ...state, todos };
     }
 
-    case 'setFilterActive':
+    case ActionType.SetFilterActive:
       return { ...state, filter: FilterTypes.active };
 
-    case 'setFilterCompleted':
+    case ActionType.SetFilterCompleted:
       return { ...state, filter: FilterTypes.completed };
 
-    case 'setFilterAll':
+    case ActionType.SetFilterAll:
       return { ...state, filter: FilterTypes.all };
 
     default:
