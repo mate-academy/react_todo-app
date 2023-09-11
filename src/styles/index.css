@@ -31,6 +31,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
+  background-image: url("../../public/icons/giphy.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .hidden {
@@ -76,10 +80,15 @@ body {
   font-size: 100px;
   font-weight: 100;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
+  background-image: linear-gradient(90deg, #0ff, #800080, #ffa500);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .new-todo,
