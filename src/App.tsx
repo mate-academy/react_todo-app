@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './Components/TodoList';
 import { Footer } from './Components/Footer';
-import { Header } from './Components/header';
+import { Header } from './Components/Header';
 
 import { useLocalStorage } from './utils/useLocalStorage';
 import { todoContext } from './utils/todoContext';

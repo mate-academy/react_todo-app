@@ -30,7 +30,9 @@ export const Footer: React.FC<Props> = React.memo(({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${itemsLeftLength} items left`}
+        {itemsLeftLength <= 1
+          ? `${itemsLeftLength} item left`
+          : `${itemsLeftLength} items left`}
       </span>
 
       <nav className="filter">

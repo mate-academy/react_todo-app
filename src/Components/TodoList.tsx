@@ -1,27 +1,16 @@
-/* eslint-disable react/no-unused-prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
+  todos: Todo[];
   onDelete: (id: number) => void;
   setTodos: (value: Todo[]) => void;
-  todos: Todo[];
 };
 
 export const TodoList: React.FC<Props> = ({ onDelete, todos, setTodos }) => {
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState('');
-
-  useEffect(() => {
-    const savedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
-
-    setTodos(savedTodos);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
 
   const handleStartEditing = (todoId: number, title: string) => {
     setEditingTodoId(todoId);
@@ -35,10 +24,9 @@ export const TodoList: React.FC<Props> = ({ onDelete, todos, setTodos }) => {
       const updatedTodos = todos.map((todo) => {
         if (todo.id === todoId) {
           return { ...todo, title };
-          // eslint-disable-next-line no-else-return
-        } else {
-          return todo;
         }
+
+        return todo;
       });
 
       setTodos(updatedTodos);
@@ -66,10 +54,9 @@ export const TodoList: React.FC<Props> = ({ onDelete, todos, setTodos }) => {
                   const updatedTodos = todos.map((todo) => {
                     if (todo.id === id) {
                       return { ...todo, completed: !completed };
-                    // eslint-disable-next-line no-else-return
-                    } else {
-                      return todo;
                     }
+
+                    return todo;
                   });
 
                   setTodos(updatedTodos);
