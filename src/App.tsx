@@ -45,8 +45,8 @@ export const App: React.FC = () => {
       value={{
         todos,
         setTodos,
-        filterBy,
-        setFilterBy,
+        filter: FilterType.ALL,
+        setFilter: setFilterBy,
       }}
     >
 
