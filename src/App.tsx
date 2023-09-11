@@ -7,8 +7,8 @@ import { Status } from './types/Status';
 import { useGetVisibleTodos } from './functions/getVisibleTodos';
 
 export const App: React.FC = () => {
-  const [title, setTitle] = useState('');
   const { todos, dispatch } = useContext(TodoContext);
+  const [title, setTitle] = useState('');
   const [filterStatus, setFilterStatus] = useState(Status.All);
 
   const addTodo = () => dispatch({ type: 'addTodo', payload: title });

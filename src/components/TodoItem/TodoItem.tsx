@@ -2,19 +2,18 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import classNames from 'classnames';
-
 import { Todo } from '../../types/Todo';
 import { TodoContext } from '../../context/TodoContext';
 
 type Props = {
-  todo: Todo,
+  todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
-  const [newTitle, setNewTitle] = useState(todo.title);
   const { dispatch } = useContext(TodoContext);
   const [isEditable, setIsEditable] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
 
   const trimmedTitle = newTitle.trim();
 
@@ -29,22 +28,27 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   ) => {
     if (value) {
       updateTodoTitle();
-      setIsEditable(false);
     } else {
       deleteTodo();
-      setIsEditable(false);
     }
+
+    setIsEditable(false);
   };
 
   const handleKeyUpEdit = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (e.key === 'Enter') {
-      handleEdit(e.target.value);
-    }
+    switch (e.key) {
+      case 'Enter':
+        handleEdit(e.target.value);
+        break;
 
-    if (e.key === 'Escape') {
-      setIsEditable(false);
+      case 'Escape':
+        setIsEditable(false);
+        break;
+
+      default:
+        break;
     }
   };
 

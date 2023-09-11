@@ -18,20 +18,16 @@ export function reducer(state: Todo[], action: Action) {
       return [
         ...state.filter(todo => todo.id !== action.payload),
       ];
-
-    case TodoAction.deleteCompleted:
-      return state.filter((todo) => !todo.completed);
-
     case TodoAction.toggle:
       return state.map(todo => (todo.id === action.payload
         ? { ...todo, completed: !todo.completed }
         : todo));
-
     case TodoAction.toggleAll:
       return state.map((todo) => ({
         ...todo, completed: !(state.every((todol) => todol.completed)),
       }));
-
+    case TodoAction.deleteCompleted:
+      return state.filter((todo) => !todo.completed);
     case TodoAction.updateTodo:
       return state.map(prevTodo => (prevTodo.id === action.payloadId
         ? { ...prevTodo, title: action.payloadTitle }

@@ -1,9 +1,8 @@
 import { createContext } from 'react';
-
 import { Todo } from '../types/Todo';
 import { reducer } from '../functions/reducer';
-import { TodoConstextType } from '../types/TodoContext';
 import { useLocaleStorage } from '../functions/useLocaleStorage';
+import { TodoConstextType } from '../types/TodoContext';
 
 type Props = {
   children: React.ReactNode;
