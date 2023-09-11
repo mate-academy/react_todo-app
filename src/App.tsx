@@ -66,7 +66,7 @@ export const App: React.FC = () => {
               <Footer
                 filterBy={filterBy}
                 setFilterBy={setFilterBy}
-                todos={visibleTodos}
+                todos={todos}
                 onDelete={deleteAllCompletedTodos}
               />
             </>
