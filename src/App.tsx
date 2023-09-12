@@ -1,93 +1,78 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+
+import { TodoList } from './Components/TodoList';
+import { Footer } from './Components/Footer';
+import { Header } from './Components/Header';
+
+import { useLocalStorage } from './utils/useLocalStorage';
+import { todoContext } from './utils/todoContext';
+
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
+  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
+  const [todos, setTodos] = useLocalStorage('todos', []);
+
+  const handleTodoDelete = (todoId: number) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+
+    setTodos(updatedTodos);
+  };
+
+  const visibleTodos = useMemo(() => {
+    switch (filterBy) {
+      case FilterType.ACTIVE:
+        return todos.filter((todo) => !todo.completed);
+      case FilterType.COMPLETED:
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  }, [filterBy, todos]);
+
+  const deleteAllCompletedTodos = () => {
+    const updatedTodos = todos.filter((todo) => !todo.completed);
+
+    setTodos(updatedTodos);
+  };
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <todoContext.Provider
+      value={{
+        todos,
+        setTodos,
+        filter: FilterType.ALL,
+        setFilter: setFilterBy,
+      }}
+    >
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <div className="todoapp__content">
+          <Header />
+          {!!todos.length && (
+            <>
+              <TodoList
+                todos={visibleTodos}
+                onDelete={handleTodoDelete}
+                setTodos={setTodos}
+              />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+              <Footer
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+                todos={todos}
+                onDelete={deleteAllCompletedTodos}
+              />
+            </>
+          )}
+        </div>
+      </div>
+    </todoContext.Provider>
   );
 };
