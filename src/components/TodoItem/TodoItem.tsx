@@ -44,6 +44,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       setTodos(todosCopy);
       setIsEditingEnabled(false);
     }
+
+    if (!title) {
+      handleRemoveTodo();
+    }
   };
 
   const handlePressEscape = (
