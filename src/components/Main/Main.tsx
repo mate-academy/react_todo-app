@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { useContext } from 'react';
 import { TodoList } from '../TodoList';
 import { TodoContext } from '../../TodoContext';
@@ -17,7 +18,7 @@ export const Main: React.FC<Props> = () => {
         onClick={() => toggleAllComplete()}
       />
       <label
-        className={state.length === 0 ? 'hidden' : ''}
+        className={cn({ hidden: state.length === 0 })}
         htmlFor="toggle-all"
       >
         Mark all as complete

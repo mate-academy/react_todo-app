@@ -2,18 +2,24 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import { Filter, TodoType } from './types/types';
 
-type Action = { type: 'add todo', payLoad: TodoType }
-| { type: 'remove todo', payLoad: number | 'All' }
-| { type: 'complete todo', payLoad: number }
-| { type: 'complete all todo' }
-| { type: 'update todo', payLoad: TodoType };
+const ADD_TODO = 'add todo';
+const REMOVE_TODO = 'remove todo';
+const COMPLETE_TODO = 'complete todo';
+const COMPLETE_ALL_TODO = 'complete all todo';
+const UPDATE_TODO = 'update todo';
+
+type Action = { type: typeof ADD_TODO, payLoad: TodoType }
+| { type: typeof REMOVE_TODO, payLoad: number | 'All' }
+| { type: typeof COMPLETE_TODO, payLoad: number }
+| { type: typeof COMPLETE_ALL_TODO }
+| { type: typeof UPDATE_TODO, payLoad: TodoType };
 
 function reducer(state: TodoType[], action: Action): TodoType[] {
   switch (action.type) {
-    case 'add todo':
+    case ADD_TODO:
       return [...state, action.payLoad];
 
-    case 'remove todo': {
+    case REMOVE_TODO: {
       if (action.payLoad === 'All') {
         const clearAllCompleted = state
           .filter((todo: TodoType) => todo.completed !== true);
@@ -27,7 +33,7 @@ function reducer(state: TodoType[], action: Action): TodoType[] {
       return availableTodos;
     }
 
-    case 'complete todo': {
+    case COMPLETE_TODO: {
       const toggleComplete = state
         .map((todo: TodoType) => {
           if (todo.id === action.payLoad) {
@@ -40,7 +46,7 @@ function reducer(state: TodoType[], action: Action): TodoType[] {
       return toggleComplete;
     }
 
-    case 'update todo': {
+    case UPDATE_TODO: {
       const updatedTodos = state.map(todo => {
         return { ...todo };
       });
@@ -52,7 +58,7 @@ function reducer(state: TodoType[], action: Action): TodoType[] {
       return updatedTodos;
     }
 
-    case 'complete all todo': {
+    case COMPLETE_ALL_TODO: {
       const isCompleted = state.some(todo => todo.completed === true);
       const allCompleted = state.every(todo => todo.completed === true);
 

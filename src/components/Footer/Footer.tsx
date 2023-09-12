@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React, { useContext } from 'react';
 import { TodoContext } from '../../TodoContext';
 import { Filter } from '../../types/types';
@@ -15,7 +16,10 @@ export const Footer: React.FC<Props> = () => {
   const isCompleted = state.some(todo => todo.completed === true);
 
   return (
-    <footer className={state.length === 0 ? 'footer hidden' : 'footer'}>
+    <footer className={cn('footer', {
+      hidden: state.length === 0,
+    })}
+    >
       <span className="todo-count" data-cy="todosCounter">
         {`${activeTodos.length} items left`}
       </span>
@@ -24,7 +28,7 @@ export const Footer: React.FC<Props> = () => {
         <li>
           <a
             href="#/"
-            className={filterTodo === Filter.All ? 'selected' : ''}
+            className={cn({ selected: filterTodo === Filter.All })}
             onClick={() => getFilteredTodo(Filter.All)}
           >
             All
@@ -34,7 +38,7 @@ export const Footer: React.FC<Props> = () => {
         <li>
           <a
             href="#/active"
-            className={filterTodo === Filter.Active ? 'selected' : ''}
+            className={cn({ selected: filterTodo === Filter.Active })}
             onClick={() => getFilteredTodo(Filter.Active)}
           >
             Active
@@ -44,7 +48,7 @@ export const Footer: React.FC<Props> = () => {
         <li>
           <a
             href="#/completed"
-            className={filterTodo === Filter.Completed ? 'selected' : ''}
+            className={cn({ selected: filterTodo === Filter.Completed })}
             onClick={() => getFilteredTodo(Filter.Completed)}
           >
             Completed
@@ -54,7 +58,9 @@ export const Footer: React.FC<Props> = () => {
 
       <button
         type="button"
-        className={isCompleted ? 'clear-completed' : 'clear-completed hidden'}
+        className={cn('clear-completed hidden', {
+          'clear-completed': isCompleted,
+        })}
         onClick={() => removeTodo('All')}
       >
         Clear completed
