@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useState } from 'react';
 import { TodosContext } from '../../TodosContext';
 import { TodoItem } from '../TodoItem';
@@ -45,14 +46,6 @@ export const TodoList = () => {
               }).map(todo => (
                 <TodoItem key={todo.id} todo={todo} />
               ))}
-              {/* <li className="editing">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-editing" />
-            <label htmlFor="toggle-editing">zxcvbnm</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li> */}
             </ul>
           </section>
           <TodosFilter

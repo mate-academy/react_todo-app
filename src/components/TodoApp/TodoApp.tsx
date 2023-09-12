@@ -3,12 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { TodosContext } from '../../TodosContext';
 import { Todo } from '../../types/todo';
 
-// const initialTodo = {
-//   id: uuidv4(),
-//   title: '',
-//   completed: false,
-// };
-
 type Props = {};
 
 export const TodoApp: React.FC<Props> = () => {
