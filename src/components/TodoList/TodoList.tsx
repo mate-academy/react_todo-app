@@ -18,32 +18,34 @@ export const TodoList = () => {
 
   return (
     <>
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={handleToggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {!!todos.length && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onChange={handleToggleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          {todos.filter(todo => {
-            switch (filterParam) {
-              case ('All'):
-                return true;
-              case ('Active'):
-                return !todo.completed;
-              case ('Completed'):
-                return todo.completed;
-              default:
-                return true;
-            }
-          }).map(todo => (
-            <TodoItem key={todo.id} todo={todo} />
-          ))}
-          {/* <li className="editing">
+            <ul className="todo-list" data-cy="todoList">
+              {todos.filter(todo => {
+                switch (filterParam) {
+                  case ('All'):
+                    return true;
+                  case ('Active'):
+                    return !todo.completed;
+                  case ('Completed'):
+                    return todo.completed;
+                  default:
+                    return true;
+                }
+              }).map(todo => (
+                <TodoItem key={todo.id} todo={todo} />
+              ))}
+              {/* <li className="editing">
           <div className="view">
             <input type="checkbox" className="toggle" id="toggle-editing" />
             <label htmlFor="toggle-editing">zxcvbnm</label>
@@ -51,12 +53,14 @@ export const TodoList = () => {
           </div>
           <input type="text" className="edit" />
         </li> */}
-        </ul>
-      </section>
-      <TodosFilter
-        onClick={(newFilter) => setFilterParam(newFilter)}
-        selectedFilterParam={filterParam}
-      />
+            </ul>
+          </section>
+          <TodosFilter
+            onClick={(newFilter) => setFilterParam(newFilter)}
+            selectedFilterParam={filterParam}
+          />
+        </>
+      )}
     </>
   );
 };
