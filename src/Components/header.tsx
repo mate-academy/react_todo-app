@@ -12,7 +12,6 @@ export const Header: React.FC = () => {
     setInputQuery(event.target.value);
   };
 
-
   const addNewTodo = () => {
     const newTodo = {
       id: +new Date(),
