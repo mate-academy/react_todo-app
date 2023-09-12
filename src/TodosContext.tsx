@@ -12,6 +12,9 @@ type Props = {
   children: React.ReactNode,
 };
 
+// [JSON.parse(localStorage.getItem('todos')
+//   || '{}')] as Todo[],
+
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 

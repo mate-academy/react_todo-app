@@ -33,6 +33,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(todosCopy);
   };
 
+  const handleEditTodo = (
+    title: string,
+  ) => {
+    const todosCopy = [...todos];
+
+    if (title && title !== todo.title) {
+      todosCopy.splice(index, 1, { ...todo, title });
+
+      setTodos(todosCopy);
+      setIsEditingEnabled(false);
+    }
+  };
+
   const handlePressEscape = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
@@ -44,21 +57,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handlePressEnter = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (event.key === 'Escape') {
-      setIsEditingEnabled(false);
-    }
-  };
-
-  const handleEditTodo = (
-    title: string,
-  ) => {
-    const todosCopy = [...todos];
-
-    if (title && title !== todo.title) {
-      todosCopy.splice(index, 1, { ...todo, title });
-
-      setTodos(todosCopy);
-      setIsEditingEnabled(false);
+    if (event.key === 'Enter') {
+      handleEditTodo(newTitle);
     }
   };
 
