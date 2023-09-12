@@ -17,15 +17,19 @@ export const TodosFilter: React.FC<Props> = ({
   selectedFilterParam,
   onClick,
 }) => {
-  const { todos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
-  const countUncompletedTodos = () => (
-    todos.filter(({ completed }) => !completed).length);
+  const getUncompletedTodos = () => (
+    todos.filter(({ completed }) => !completed));
+
+  const getCompletedTodos = () => (
+    todos.filter(({ completed }) => completed)
+  );
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${countUncompletedTodos()} items left`}
+        {`${getUncompletedTodos().length} items left`}
       </span>
 
       <ul className="filters">
@@ -61,10 +65,15 @@ export const TodosFilter: React.FC<Props> = ({
           </a>
         </li>
       </ul>
-
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {!!getCompletedTodos().length && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => setTodos(getUncompletedTodos())}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

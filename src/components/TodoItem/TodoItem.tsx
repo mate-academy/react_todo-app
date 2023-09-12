@@ -12,6 +12,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const index = todos.findIndex(({ id }) => id === todo.id);
 
+  const handleRemoveTodo = () => {
+    const todosCopy = [...todos];
+
+    todosCopy.splice(index, 1);
+
+    setTodos(todosCopy);
+  };
+
   const handleCompleteTodo = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -41,6 +49,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          onClick={handleRemoveTodo}
         />
       </div>
       <input type="text" className="edit" />
