@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState, useMemo } from 'react';
 import classNames from 'classnames';
-import { UserWarning } from './UserWarning';
 import * as postService from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoApp } from './components/TodoApp';
@@ -13,7 +12,9 @@ import { Filter } from './types/Filter';
 const USER_ID = 10876;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(
+    JSON.parse(localStorage.getItem('todos') || ''),
+  );
   const [filterType, setFilterType] = useState<Filter>(Filter.ALL);
   const [error, setError] = useState<string>('');
   const [isShowError, setIsShowError] = useState<boolean>(false);
@@ -24,37 +25,36 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
 
   useEffect(() => {
-    postService.getTodos(USER_ID)
-      .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
-      .catch(() => setError('Unable to get todos'));
-  }, []);
+    if (todos.length === 0) {
+      postService.getTodos(USER_ID)
+        .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
+        .catch(() => setError('Unable to get todos'));
 
-  useEffect(() => {}, [todos, isShowError]);
-  const activeTodos = useMemo(
-    () => todos.filter(todo => !todo.completed), [todos],
-  );
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, []);
 
   useEffect(() => {
     setIsTodoSaved(!!query && isTodoLoaded);
   }, [query, isTodoLoaded]);
 
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const activeTodos = useMemo(
+    () => todos.filter(todo => !todo.completed), [todos],
+  );
+
   const completedTodos = useMemo(
     () => todos.filter(todo => todo.completed), [todos],
   );
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   const filteredTodos = {
     all: todos,
     active: activeTodos,
     completed: completedTodos,
   };
-
-  const visibleTodos:Todo[] = filteredTodos[
-    filterType as keyof typeof filteredTodos
-  ];
 
   const handleTodoInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -117,16 +117,11 @@ export const App: React.FC = () => {
 
       await postService.updateTodo(updatedTodo);
 
-      setTodos(prevTodos => {
-        const newTodos = [...prevTodos];
-        const index = newTodos.findIndex(
-          todo => todo.id === updatedTodo.id,
-        );
+      const updatedTodosList = [...todos].map(todo => (
+        todo.id !== updatedTodo.id ? todo : updatedTodo
+      ));
 
-        newTodos.splice(index, 1, updatedTodo);
-
-        return newTodos;
-      });
+      setTodos(updatedTodosList);
     } catch {
       handleErrorMessage('Unable to update a todo');
     } finally {
@@ -182,7 +177,7 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <TodoList
-            todos={visibleTodos}
+            todos={filteredTodos[filterType]}
             deleteTodoIds={deleteTodoIds}
             updatedTodoIds={updatedTodoIds}
             deleteTodo={deleteTodo}

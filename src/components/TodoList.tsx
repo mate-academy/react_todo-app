@@ -24,6 +24,7 @@ export const TodoList:React.FC<Props> = ({
   <section className="todoapp__main">
     {todos.map(todo => (
       <TodoItem
+        key={todo.id}
         todo={todo}
         deleteTodoIds={deleteTodoIds}
         updatedTodoIds={updatedTodoIds}
