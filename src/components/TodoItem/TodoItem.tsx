@@ -11,7 +11,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const { id, title, completed } = todo;
 
-  const handleChecking = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTodoCompleting = (event: React.ChangeEvent<HTMLInputElement>) => {
     const todosCopy = [...todos];
     const todoIndex = todos.findIndex(({ id: todoId }) => todoId === id);
 
@@ -23,7 +23,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(todosCopy);
   };
 
-  const handleDeleting = () => {
+  const handleTodoDeleting = () => {
     const todosCopy = [...todos];
     const todoIndex = todosCopy.findIndex(({ id: todoId }) => todoId === id);
 
@@ -39,7 +39,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="toggle"
           id="toggle-view"
           checked={completed}
-          onChange={handleChecking}
+          onChange={handleTodoCompleting}
         />
         <label
           htmlFor="toggle-view"
@@ -51,7 +51,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleDeleting}
+          onClick={handleTodoDeleting}
         />
       </div>
       <input type="text" className="edit" />
