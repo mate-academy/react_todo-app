@@ -12,15 +12,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
 
   const handleChecking = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const todoIndex = todos.findIndex(({ id: todoId }) => todoId === id);
-
     const todosCopy = [...todos];
+    const todoIndex = todos.findIndex(({ id: todoId }) => todoId === id);
 
     todosCopy.splice(todoIndex, 1, {
       ...todo,
       completed: event.target.checked,
     });
 
+    setTodos(todosCopy);
+  };
+
+  const handleDeleting = () => {
+    const todosCopy = [...todos];
+    const todoIndex = todosCopy.findIndex(({ id: todoId }) => todoId === id);
+
+    todosCopy.splice(todoIndex, 1);
     setTodos(todosCopy);
   };
 
@@ -40,7 +47,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           {title}
         </label>
         {/* eslint-disable-next-line */}
-        <button type="button" className="destroy" data-cy="deleteTodo" />
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={handleDeleting}
+        />
       </div>
       <input type="text" className="edit" />
     </li>
