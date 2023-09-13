@@ -61,7 +61,9 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
   };
 
   const handleEditingBlur = () => {
-    saveChange();
+    if (isEdit) {
+      saveChange();
+    }
   };
 
   const handleEditingChange
