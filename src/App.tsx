@@ -1,93 +1,47 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import { useState, useCallback } from 'react';
+import { User } from './types/User';
+import { UserWarning } from './UserWarning';
+import { Registration } from './components/Registration/Registration';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { TodoApp } from './components/TodoApp/TodoApp';
+
+const USER_ID = 10326;
 
 export const App: React.FC = () => {
+  const [
+    currentUser,
+    setCurrentUser,
+  ] = useLocalStorage<User | null>('user', null);
+
+  const [errorType, setErrorType] = useState<string | null>(null);
+  const setError = useCallback((typeOfError: string | null) => {
+    setErrorType(typeOfError);
+    setTimeout(() => setErrorType(null), 3000);
+  }, [errorType]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+    <>
+      {currentUser
+        ? (
+          <TodoApp
+            currentUser={currentUser}
+            setErrorType={setErrorType}
+            errorType={errorType}
+            setError={setError}
           />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+        )
+        : (
+          <Registration
+            setCurrentUser={setCurrentUser}
+            setErrorType={setErrorType}
+            errorType={errorType}
+            setError={setError}
+          />
+        )}
+    </>
   );
 };
