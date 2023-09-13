@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Navigate,
   Route,
@@ -7,12 +7,12 @@ import {
 } from 'react-router-dom';
 import { App } from './App';
 import { FilterStatus } from './types/FilterStatus';
-import { TodosContext } from './TodoContext';
+import { useTodo } from './TodoContext';
 
 export const AppContainer: React.FC = () => {
   const {
     todos,
-  } = useContext(TodosContext);
+  } = useTodo();
   const { pathname } = useLocation();
   const [filter, setFilter] = useState(FilterStatus.all);
 
@@ -48,7 +48,7 @@ export const AppContainer: React.FC = () => {
         path={`/${FilterStatus.completed}`}
         element={(
           <App
-            visibleTodos={[...todos].filter(todo => todo.completed === true)}
+            visibleTodos={todos.filter(todo => todo.completed === true)}
             filter={filter}
             setFilter={setFilter}
           />
@@ -59,7 +59,7 @@ export const AppContainer: React.FC = () => {
         path={`/${FilterStatus.active}`}
         element={(
           <App
-            visibleTodos={[...todos].filter(todo => todo.completed === false)}
+            visibleTodos={todos.filter(todo => todo.completed === false)}
             filter={filter}
             setFilter={setFilter}
           />

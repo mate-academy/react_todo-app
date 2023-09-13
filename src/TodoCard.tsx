@@ -1,9 +1,9 @@
 import React, {
-  useState, useContext, useRef, useEffect,
+  useState, useRef, useEffect,
 } from 'react';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
-import { TodosContext } from './TodoContext';
+import { useTodo } from './TodoContext';
 import { deleteTodos, updateTodos, renameTodos } from './api/todos';
 import { ErrorStatus } from './types/Error';
 
@@ -21,7 +21,7 @@ export const TodoCard: React.FC<Props> = ({
     setError,
     selectedTodo,
     setSelectedTodo,
-  } = useContext(TodosContext);
+  } = useTodo();
   const [updatedTitle, setUpdatedTitle] = useState(currentTodo.title);
   const focusedInput = useRef<HTMLInputElement>(null);
   const remove = async () => {
@@ -67,7 +67,7 @@ export const TodoCard: React.FC<Props> = ({
     }
   };
 
-  const HandleDbClick = () => {
+  const handleDbClick = () => {
     setSelectedTodo(currentTodo);
   };
 
@@ -139,7 +139,7 @@ export const TodoCard: React.FC<Props> = ({
         />
 
         <label
-          onDoubleClick={HandleDbClick}
+          onDoubleClick={handleDbClick}
         >
           {currentTodo.title}
         </label>

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
 import { deleteTodos } from './api/todos';
-import { TodosContext } from './TodoContext';
+import { useTodo } from './TodoContext';
 import { ErrorStatus } from './types/Error';
 
 type Props = {
@@ -24,9 +24,9 @@ export const Footer: React.FC<Props> = ({
   setFilter,
   setTodos,
 }) => {
-  const { setError } = useContext(TodosContext);
+  const { setError } = useTodo();
   const removeCompleted = async () => {
-    const completedTodos = [...todos].filter(todo => todo.completed);
+    const completedTodos = todos.filter(todo => todo.completed);
 
     setError(ErrorStatus.none);
 
@@ -34,7 +34,7 @@ export const Footer: React.FC<Props> = ({
       await Promise.all(completedTodos.map(todo => deleteTodos(todo.id)));
 
       setTodos(
-        [...todos].filter(todo => !todo.completed),
+        todos.filter(todo => !todo.completed),
       );
     } catch {
       setError(ErrorStatus.none);
@@ -44,7 +44,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="footer">
       <span className="todo-count">
-        {active !== 1 ? `${active} items left` : `${active} items left`}
+        {active !== 1 ? `${active} items left` : `${active} item left`}
       </span>
 
       <ul className="filters">
@@ -109,7 +109,7 @@ export const Footer: React.FC<Props> = ({
         <button
           type="button"
           className="clear-completed"
-          onClick={() => removeCompleted()}
+          onClick={removeCompleted}
         >
           Clear completed
         </button>

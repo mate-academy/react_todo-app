@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TodoCard } from './TodoCard';
 import { Todo } from './types/Todo';
-import { TodosContext } from './TodoContext';
+import { useTodo } from './TodoContext';
 import { updateTodos } from './api/todos';
 import { ErrorStatus } from './types/Error';
 
@@ -21,7 +21,7 @@ export const TodoList: React.FC<Props> = ({
   const {
     setTodos,
     setError,
-  } = useContext(TodosContext);
+  } = useTodo();
 
   const updateAll = async () => {
     setError(ErrorStatus.none);

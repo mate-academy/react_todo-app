@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Error } from './Error';
 import { TodoList } from './TodoList';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { TodosContext } from './TodoContext';
+import { useTodo } from './TodoContext';
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
 import { ErrorStatus } from './types/Error';
@@ -31,7 +31,7 @@ export const App: React.FC<Props> = ({
     setTodos,
     error,
     setError,
-  } = useContext(TodosContext);
+  } = useTodo();
   const [isVisible, setIsVisible] = useState(true);
   const active = todos.filter(todo => todo.completed === false).length;
   const completed = todos.filter(todo => todo.completed).length;
@@ -52,9 +52,7 @@ export const App: React.FC<Props> = ({
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(value => {
-        setTodos(value);
-      });
+      .then (setTodos);
   }, []);
 
   useEffect(() => {
