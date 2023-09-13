@@ -52,7 +52,7 @@ export const App: React.FC<Props> = ({
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then (setTodos);
+      .then(setTodos);
   }, []);
 
   useEffect(() => {
