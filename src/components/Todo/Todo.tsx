@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { TodoType } from '../../types/types';
+import { TodoStyle, TodoType } from '../../types/types';
 import { TodoContext } from '../../TodoContext';
 
 type Props = {
@@ -19,14 +19,14 @@ export const Todo: React.FC<Props> = ({ todo }) => {
 
   const todoStyle = () => {
     if (editMode) {
-      return 'editing';
+      return TodoStyle.Editing;
     }
 
     if (todo.completed) {
-      return 'completed';
+      return TodoStyle.Completed;
     }
 
-    return 'view';
+    return TodoStyle.View;
   };
 
   const handleUpdate = () => {
@@ -36,14 +36,11 @@ export const Todo: React.FC<Props> = ({ todo }) => {
       return;
     }
 
-    if (editedTitle === todo.title) {
-      setEditMode(false);
-    }
-
     if (editedTitle !== todo.title) {
       updateTodo({ ...todo, title: editedTitle });
-      setEditMode(false);
     }
+
+    setEditMode(false);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -61,8 +58,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
       }
 
       default:
-        // eslint-disable-next-line no-useless-return
-        return;
+        break;
     }
   };
 

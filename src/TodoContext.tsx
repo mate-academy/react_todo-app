@@ -59,8 +59,8 @@ function reducer(state: TodoType[], action: Action): TodoType[] {
     }
 
     case COMPLETE_ALL_TODO: {
-      const isCompleted = state.some(todo => todo.completed === true);
-      const allCompleted = state.every(todo => todo.completed === true);
+      const isCompleted = state.some(({ completed }) => completed);
+      const allCompleted = state.every(({ completed }) => completed);
 
       if (allCompleted) {
         const AllIncomplete = state.map(todo => {

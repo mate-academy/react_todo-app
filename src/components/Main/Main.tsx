@@ -15,7 +15,7 @@ export const Main: React.FC<Props> = () => {
         id="toggle-all"
         className="toggle-all hidden"
         data-cy="toggleAll"
-        onClick={() => toggleAllComplete()}
+        onClick={toggleAllComplete}
       />
       <label
         className={cn({ hidden: state.length === 0 })}

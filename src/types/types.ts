@@ -9,3 +9,9 @@ export enum Filter {
   Active = 'Active',
   Completed = 'Completed',
 }
+
+export enum TodoStyle {
+  View = 'view',
+  Completed = 'completed',
+  Editing = 'editing',
+}
