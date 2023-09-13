@@ -10,9 +10,15 @@ import { Filters } from '../Filters/Filters';
 // };
 
 export const TodoList: React.FC = () => {
-  const { todos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const IncompleteTodos = todos.filter(({ completed }) => !completed);
+
+  const handleClearCompleteTodos = () => {
+    const clearedTodos = todos.filter(({ completed }) => !completed);
+
+    setTodos(clearedTodos);
+  };
 
   return (
     <>
@@ -41,9 +47,15 @@ export const TodoList: React.FC = () => {
 
         <Filters />
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
+        {todos.some(({ completed }) => completed) && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleClearCompleteTodos}
+          >
+            Clear completed
+          </button>
+        )}
       </footer>
     </>
   );
