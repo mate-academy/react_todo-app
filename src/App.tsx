@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Error } from './Error';
@@ -15,16 +16,12 @@ import { ErrorStatus } from './types/Error';
 
 type Props = {
   visibleTodos: Todo[];
-  filter: FilterStatus,
-  setFilter(filterType: FilterStatus): void,
 };
 
 const USER_ID = 9968;
 
 export const App: React.FC<Props> = ({
   visibleTodos,
-  filter,
-  setFilter,
 }) => {
   const {
     todos,
@@ -33,6 +30,9 @@ export const App: React.FC<Props> = ({
     setError,
   } = useTodo();
   const [isVisible, setIsVisible] = useState(true);
+  const { pathname } = useLocation();
+  const [filter, setFilter] = useState(FilterStatus.all);
+
   const active = todos.filter(todo => todo.completed === false).length;
   const completed = todos.filter(todo => todo.completed).length;
 
@@ -49,6 +49,16 @@ export const App: React.FC<Props> = ({
       completed: false,
     }
   ));
+
+  useEffect(() => {
+    if (pathname === '/completed') {
+      setFilter(FilterStatus.completed);
+    }
+
+    if (pathname === '/active') {
+      setFilter(FilterStatus.active);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     getTodos(USER_ID)

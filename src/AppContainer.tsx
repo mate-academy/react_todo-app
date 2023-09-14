@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import {
   Navigate,
   Route,
   Routes,
-  useLocation,
 } from 'react-router-dom';
 import { App } from './App';
 import { FilterStatus } from './types/FilterStatus';
@@ -13,18 +12,6 @@ export const AppContainer: React.FC = () => {
   const {
     todos,
   } = useTodo();
-  const { pathname } = useLocation();
-  const [filter, setFilter] = useState(FilterStatus.all);
-
-  useMemo(() => {
-    if (pathname === '/completed') {
-      setFilter(FilterStatus.completed);
-    }
-
-    if (pathname === '/active') {
-      setFilter(FilterStatus.active);
-    }
-  }, [pathname]);
 
   return (
     <Routes>
@@ -33,8 +20,6 @@ export const AppContainer: React.FC = () => {
         element={(
           <App
             visibleTodos={[...todos]}
-            filter={filter}
-            setFilter={setFilter}
           />
         )}
       />
@@ -49,8 +34,6 @@ export const AppContainer: React.FC = () => {
         element={(
           <App
             visibleTodos={todos.filter(todo => todo.completed === true)}
-            filter={filter}
-            setFilter={setFilter}
           />
         )}
       />
@@ -60,8 +43,6 @@ export const AppContainer: React.FC = () => {
         element={(
           <App
             visibleTodos={todos.filter(todo => todo.completed === false)}
-            filter={filter}
-            setFilter={setFilter}
           />
         )}
       />

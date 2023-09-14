@@ -51,10 +51,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <button
             type="button"
-            onClick={(event) => {
-              event.preventDefault();
-              setFilter(FilterStatus.all);
-            }}
+            onClick={() => setFilter(FilterStatus.all)}
           >
             <Link
               to="/"
@@ -70,10 +67,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <button
             type="button"
-            onClick={(event) => {
-              event.preventDefault();
-              setFilter(FilterStatus.active);
-            }}
+            onClick={() => setFilter(FilterStatus.active)}
           >
             <Link
               to="/active"
@@ -89,9 +83,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <button
             type="button"
-            onClick={() => {
-              setFilter(FilterStatus.completed);
-            }}
+            onClick={() => setFilter(FilterStatus.completed)}
           >
             <Link
               to="/completed"
