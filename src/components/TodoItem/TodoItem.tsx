@@ -15,7 +15,6 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
     todos,
-    preparedTodos,
     setTodos,
   } = useContext(TodoContext);
 
@@ -48,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     setTodos(
-      preparedTodos.map(item => {
+      todos.map(item => {
         if (item.id === id) {
           return { ...item, title: newTitle };
         }

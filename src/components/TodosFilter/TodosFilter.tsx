@@ -4,27 +4,29 @@ import { TodoContext } from '../TodoContext';
 
 export const TodosFilter: React.FC = () => {
   const {
-    preparedTodos,
+    todos,
     setTodos,
     filterBy,
     setFilterBy,
   } = useContext(TodoContext);
 
   const handleClearButton = useCallback(() => {
-    const completedTodos = preparedTodos.filter(todo => !todo.completed);
+    const completedTodos = todos.filter(todo => !todo.completed);
 
     setTodos(completedTodos);
-  }, [preparedTodos]);
+  }, [todos]);
 
   const handleCount = useCallback(() => {
-    const filteredTodos = preparedTodos.filter(todo => !todo.completed);
+    const filteredTodos = todos.filter(
+      todo => !todo.completed,
+    );
 
     return filteredTodos.length;
-  }, [preparedTodos]);
+  }, [todos]);
 
   const count = handleCount();
 
-  const clearButton = preparedTodos.find(todo => todo.completed);
+  const clearButton = todos.find(todo => todo.completed);
 
   return (
     <footer className="footer">

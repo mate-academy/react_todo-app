@@ -9,7 +9,7 @@ import { useLocalStorage } from './components/hooks/useLocalStorage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [filterBy, setFilterBy] = useState('');
+  const [filterBy, setFilterBy] = useState(Status.All);
 
   const handleTodosFilter = (
   ) => {
