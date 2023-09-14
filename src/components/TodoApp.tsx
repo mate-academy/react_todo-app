@@ -1,33 +1,9 @@
-import { ChangeEvent, useState } from 'react';
-import { Todo } from '../types';
-import { TodoList } from './TodoList';
+import { TodoList } from "./TodoList";
+import { useTodosContext } from "../TodosContext";
 
 export const TodoApp: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [title, setTitle] = useState('');
-
-  const toggleTodo = (id: number) => {
-    const updatedTodos = todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo));
-
-    setTodos(updatedTodos);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const newTodo = {
-      id: +new Date(),
-      title: title.trim(),
-      completed: false,
-    };
-
-    setTodos([...todos, newTodo]);
-    setTitle('');
-  };
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
+  const { todos, toggleTodo, handleSubmit, handleInputChange, title } =
+    useTodosContext();
 
   return (
     <div className="todoapp">
