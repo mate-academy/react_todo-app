@@ -1,16 +1,12 @@
-import { Todo } from '../types';
-import { TodoItem } from './TodoItem';
+import { TodoItem } from "./TodoItem";
+import { useTodosContext } from "../TodosContext";
 
-type TodoListProps = {
-  todos: Todo[];
-  toggleTodo: (id: number) => void;
-};
-
-export function TodoList({ todos, toggleTodo }: TodoListProps) {
+export function TodoList() {
+  const { todos } = useTodosContext();
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map((todo) => (
-        <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} />
+        <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>
   );

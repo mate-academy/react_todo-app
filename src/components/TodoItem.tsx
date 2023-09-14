@@ -1,17 +1,15 @@
-import { Todo } from '../types';
+import { useTodosContext } from "../TodosContext";
+import { TodoItemProps } from "../types";
 
-type TodoItemProps = {
-  todo: Todo;
-  toggleTodo: (id: number) => void;
-};
+export function TodoItem({ todo }: TodoItemProps) {
+  const { toggleTodo } = useTodosContext();
 
-export function TodoItem({ todo, toggleTodo }: TodoItemProps) {
-  const handleToggle = () => {
+  const handleToggle: React.ChangeEventHandler<HTMLInputElement> = () => {
     toggleTodo(todo.id);
   };
 
   return (
-    <li key={todo.id} className={todo.completed ? 'completed' : ''}>
+    <li key={todo.id} className={todo.completed ? "completed" : ""}>
       <div className="view">
         <input
           type="checkbox"

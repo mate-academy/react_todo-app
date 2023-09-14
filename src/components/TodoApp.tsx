@@ -2,8 +2,7 @@ import { TodoList } from "./TodoList";
 import { useTodosContext } from "../TodosContext";
 
 export const TodoApp: React.FC = () => {
-  const { todos, toggleTodo, handleSubmit, handleInputChange, title } =
-    useTodosContext();
+  const { handleSubmit, handleInputChange, title } = useTodosContext();
 
   return (
     <div className="todoapp">
@@ -30,7 +29,7 @@ export const TodoApp: React.FC = () => {
           data-cy="toggleAll"
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList todos={todos} toggleTodo={toggleTodo} />
+        <TodoList />
       </section>
 
       <footer className="footer">
