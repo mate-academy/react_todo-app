@@ -46,8 +46,6 @@ describe('Page', () => {
     const todos = window.localStorage.getItem('todos');
     const obj = JSON.parse(todos);
 
-    console.log(obj);
-
     expect(obj[0]).to.includes.keys('id', 'title', 'completed');
     expect(obj[0].completed).to.eq(false);
   });
