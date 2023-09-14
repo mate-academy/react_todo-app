@@ -95,23 +95,25 @@ export const App: React.FC<Props> = ({
         />
 
         {todos.length > 0 && (
-          <TodoList
-            todos={todos}
-            visibleTodos={visibleTodos}
-            toggleAll={toggleAll}
-            untoggleAll={untoggleAll}
-          />
+          <>
+            <TodoList
+              todos={todos}
+              visibleTodos={visibleTodos}
+              toggleAll={toggleAll}
+              untoggleAll={untoggleAll}
+            />
+
+            <Footer
+              todos={todos}
+              active={active}
+              completed={completed}
+              filter={filter}
+              setFilter={setFilter}
+              setTodos={setTodos}
+            />
+          </>
         )}
       </div>
-
-      <Footer
-        todos={todos}
-        active={active}
-        completed={completed}
-        filter={filter}
-        setFilter={setFilter}
-        setTodos={setTodos}
-      />
 
       {error && (
         <Error
