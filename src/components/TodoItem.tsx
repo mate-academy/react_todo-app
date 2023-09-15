@@ -52,10 +52,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyUp = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      handleEditSubmit();
-    } else if (event.key === 'Escape') {
-      handleEditCancel();
+    switch (event.key) {
+      case 'Enter':
+        handleEditSubmit();
+        break;
+
+      case 'Escape':
+        handleEditCancel();
+        break;
+
+      default:
+        break;
     }
   };
 
