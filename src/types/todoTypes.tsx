@@ -24,6 +24,8 @@ export type TodosContextType = {
   handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
   toggleAll: () => void;
   removeTodo: (id: number) => void;
+  clearCompleted: () => void;
+  editTodo: (id: number, newTitle: string) => void;
 };
 
 export enum FilterType {

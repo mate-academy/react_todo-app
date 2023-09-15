@@ -58,6 +58,16 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(updatedTodos);
   };
 
+  const clearCompleted = () => {
+    const updatedTodos = todos.filter((todo) => !todo.completed);
+
+    setTodos(updatedTodos);
+  };
+
+  const editTodo = (id: number, title: string) => {
+    setTodos((prevTodos: Todo[]) => prevTodos.map((todo) => (todo.id === id ? { ...todo, title } : todo)));
+  };
+
   return (
     <TodosContext.Provider
       value={{
@@ -69,6 +79,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         title,
         toggleAll,
         removeTodo,
+        clearCompleted,
+        editTodo,
       }}
     >
       {children}

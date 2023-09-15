@@ -4,9 +4,15 @@ import { TodosFilter } from './TodosFilter';
 
 export const TodoApp: React.FC = () => {
   const {
-    handleSubmit, handleInputChange, title, toggleAll, todos,
-  }
-    = useTodosContext();
+    handleSubmit,
+    handleInputChange,
+    title,
+    toggleAll,
+    todos,
+    clearCompleted,
+  } = useTodosContext();
+
+  const completedTodos = todos.filter((todo) => todo.completed);
 
   return (
     <div className="todoapp">
@@ -42,15 +48,23 @@ export const TodoApp: React.FC = () => {
         <TodoList />
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-        <TodosFilter />
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {todos.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            3 items left
+          </span>
+          <TodosFilter />
+          {completedTodos.length > 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
     </div>
   );
 };
