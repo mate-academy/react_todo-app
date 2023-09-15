@@ -10,11 +10,11 @@ export const TodoList: React.FC<Props> = () => {
   const getFilteredList = (currentState: TodoType[]) => {
     switch (filterTodo) {
       case Filter.Active: {
-        return currentState.filter(todo => todo.completed === false);
+        return currentState.filter(({ completed }) => !completed);
       }
 
       case Filter.Completed: {
-        return currentState.filter(todo => todo.completed === true);
+        return currentState.filter(({ completed }) => completed);
       }
 
       default:

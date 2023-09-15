@@ -12,12 +12,12 @@ export const Footer: React.FC<Props> = () => {
     removeTodo,
     getFilteredTodo,
   } = useContext(TodoContext);
-  const activeTodos = state.filter(todo => todo.completed === false);
-  const isCompleted = state.some(todo => todo.completed === true);
+  const activeTodos = state.filter(({ completed }) => completed);
+  const isCompleted = state.some(({ completed }) => completed);
 
   return (
     <footer className={cn('footer', {
-      hidden: state.length === 0,
+      hidden: !state.length,
     })}
     >
       <span className="todo-count" data-cy="todosCounter">

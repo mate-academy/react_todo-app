@@ -18,7 +18,7 @@ export const Main: React.FC<Props> = () => {
         onClick={toggleAllComplete}
       />
       <label
-        className={cn({ hidden: state.length === 0 })}
+        className={cn({ hidden: !state.length })}
         htmlFor="toggle-all"
       >
         Mark all as complete
