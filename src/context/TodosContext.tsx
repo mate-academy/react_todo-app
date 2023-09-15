@@ -1,5 +1,7 @@
-import React, { ChangeEvent, createContext, useContext, useState } from "react";
-import { TodosContextType, Todo } from "../types/todoTypes";
+import React, {
+  ChangeEvent, createContext, useContext, useState,
+} from 'react';
+import { TodosContextType, Todo } from '../types/todoTypes';
 
 const TodosContext = createContext<TodosContextType | undefined>(undefined);
 
@@ -7,10 +9,10 @@ type Props = { children: React.ReactNode };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
 
   const addTodo = (title: string) => {
-    if (title.trim() === "") {
+    if (title.trim() === '') {
       return;
     }
 
@@ -21,7 +23,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     };
 
     setTodos([...todos, newTodo]);
-    setTitle("");
+    setTitle('');
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,9 +32,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   };
 
   const toggleTodo = (id: number) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
+    const updatedTodos = todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo));
 
     setTodos(updatedTodos);
   };
@@ -52,6 +52,12 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(updatedTodos);
   };
 
+  const removeTodo = (id: number) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+
+    setTodos(updatedTodos);
+  };
+
   return (
     <TodosContext.Provider
       value={{
@@ -62,6 +68,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         handleInputChange,
         title,
         toggleAll,
+        removeTodo,
       }}
     >
       {children}
@@ -71,8 +78,10 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
 export const useTodosContext = () => {
   const context = useContext(TodosContext);
+
   if (context === undefined) {
-    throw new Error("useTodosContext must be used with a context");
+    throw new Error('useTodosContext must be used with a context');
   }
+
   return context;
 };

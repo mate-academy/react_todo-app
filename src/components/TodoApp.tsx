@@ -1,10 +1,12 @@
-import { TodoList } from "./TodoList";
-import { useTodosContext } from "../context/TodosContext";
-import { TodosFilter } from "./TodosFilter";
+import { TodoList } from './TodoList';
+import { useTodosContext } from '../context/TodosContext';
+import { TodosFilter } from './TodosFilter';
 
 export const TodoApp: React.FC = () => {
-  const { handleSubmit, handleInputChange, title, toggleAll, todos } =
-    useTodosContext();
+  const {
+    handleSubmit, handleInputChange, title, toggleAll, todos,
+  }
+    = useTodosContext();
 
   return (
     <div className="todoapp">
@@ -45,22 +47,6 @@ export const TodoApp: React.FC = () => {
           3 items left
         </span>
         <TodosFilter />
-        {/* <ul className="filters">
-          <li>
-            <a href="#/" className="selected">
-              All
-            </a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul> */}
-
         <button type="button" className="clear-completed">
           Clear completed
         </button>

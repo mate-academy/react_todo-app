@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent } from 'react';
 
 export type Todo = {
   id: number;
@@ -23,12 +23,13 @@ export type TodosContextType = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
   toggleAll: () => void;
+  removeTodo: (id: number) => void;
 };
 
 export enum FilterType {
-  All = "all",
-  Active = "active",
-  Completed = "completed",
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 export type TodosFilterContextType = {
