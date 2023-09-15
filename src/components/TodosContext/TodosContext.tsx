@@ -10,8 +10,10 @@ function reducer(state: Todo[], action: Action) {
       }
 
       return [...state, action.payload];
+
     case ActionType.DeleteComplited:
       return state.filter(({ completed }) => !completed);
+
     case ActionType.ChangeCompleted: {
       const index = state.findIndex(item => item.id === action.payload);
       const stateCopy = state.slice();
@@ -22,6 +24,25 @@ function reducer(state: Todo[], action: Action) {
       };
 
       return stateCopy;
+    }
+
+    case ActionType.ChangeAllCompleted: {
+      if (state.every(({ completed }) => completed)
+        || state.every(({ completed }) => !completed)) {
+        return state.map((item) => {
+          return {
+            ...item,
+            completed: !item.completed,
+          };
+        });
+      }
+
+      return state.map((item) => {
+        return {
+          ...item,
+          completed: true,
+        };
+      });
     }
 
     default:
@@ -36,7 +57,7 @@ type TC = {
 
 const DEFAULT_TODOSCONTEXT: TC = {
   todos: [],
-  dispatch: () => {},
+  dispatch: () => { },
 };
 
 export const TodosContext = React.createContext<TC>(DEFAULT_TODOSCONTEXT);

@@ -4,7 +4,12 @@ export enum ActionType {
   Add = 'ADD',
   DeleteComplited = 'DELETE_COMPLETED',
   ChangeCompleted = 'CHANGE_COMPLETED',
+  ChangeAllCompleted = 'CHANGE_ALL_COMPLETED',
 }
+
+type ActionChangeAllCompleted = {
+  type: ActionType.ChangeAllCompleted;
+};
 
 type ActionAdd = {
   type: ActionType.Add;
@@ -20,4 +25,7 @@ type ActionDeleteCompleted = {
   type: ActionType.DeleteComplited;
 };
 
-export type Action = ActionAdd | ActionChangeCompleted | ActionDeleteCompleted;
+export type Action = ActionAdd
+| ActionChangeCompleted
+| ActionDeleteCompleted
+| ActionChangeAllCompleted;

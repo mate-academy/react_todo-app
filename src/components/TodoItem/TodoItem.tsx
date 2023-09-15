@@ -25,11 +25,11 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         <input
           type="checkbox"
           className="toggle"
-          id="toggle"
+          id={`toggle-${id}`}
           checked={completed}
           onChange={handleChekBoxChange}
         />
-        <label htmlFor="toggle">
+        <label>
           {title}
         </label>
         <button
@@ -39,7 +39,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           data-cy="deleteTodo"
         />
       </div>
-      {/* <input type="text" className="edit" /> */}
+      <input type="text" className="edit" />
     </li>
   );
 };
