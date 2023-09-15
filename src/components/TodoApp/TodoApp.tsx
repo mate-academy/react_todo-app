@@ -16,7 +16,7 @@ export const TodoApp: React.FC = () => {
       completed: false,
     };
 
-    dispatch({ type: ActionType.Add, payload: newTodo });
+    dispatch({ type: ActionType.AddTodo, payload: newTodo });
     setQuery('');
   };
 

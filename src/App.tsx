@@ -1,24 +1,24 @@
 import React, { useContext, useState } from 'react';
 import { TodoApp } from './components/TodoApp';
-import { Filter } from './types/Filter';
+import { Status } from './types/Status';
 import { TodosContext } from './components/TodosContext';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
 export const App: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [status, setStatus] = useState<Status>(Status.All);
   const { todos } = useContext(TodosContext);
 
   const filtredTodo = todos.filter(({ completed }) => {
-    switch (filter) {
-      case Filter.Active:
+    switch (status) {
+      case Status.Active:
         return !completed;
-      case Filter.Completed:
+      case Status.Completed:
         return completed;
       default:
         return true;
     }
-  }, [filter]);
+  }, [status]);
 
   return (
     <div className="todoapp">
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
       {!!todos.length && (
         <>
           <TodoList items={filtredTodo} />
-          <TodoFilter filter={filter} onFilterChange={setFilter} />
+          <TodoFilter status={status} onStatusChange={setStatus} />
         </>
       )}
     </div>

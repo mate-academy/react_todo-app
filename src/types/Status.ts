@@ -1,4 +1,4 @@
-export enum Filter {
+export enum Status {
   All = '',
   Active = 'active',
   Completed = 'completed',

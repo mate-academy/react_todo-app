@@ -16,6 +16,10 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     dispatch({ type: ActionType.ChangeCompleted, payload: id });
   };
 
+  const handleDestroyButton = () => {
+    dispatch({ type: ActionType.DeleteTodo, payload: id });
+  };
+
   return (
     <li className={classNames({
       completed,
@@ -37,6 +41,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          onClick={handleDestroyButton}
         />
       </div>
       <input type="text" className="edit" />

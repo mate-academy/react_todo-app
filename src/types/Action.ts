@@ -1,18 +1,24 @@
 import { Todo } from './Todo';
 
 export enum ActionType {
-  Add = 'ADD',
+  AddTodo = 'ADD_TODO',
+  DeleteTodo = 'DELETE_TODO',
   DeleteComplited = 'DELETE_COMPLETED',
   ChangeCompleted = 'CHANGE_COMPLETED',
   ChangeAllCompleted = 'CHANGE_ALL_COMPLETED',
 }
 
+type ActionDeleteTodo = {
+  type: ActionType.DeleteTodo;
+  payload: number;
+};
+
 type ActionChangeAllCompleted = {
   type: ActionType.ChangeAllCompleted;
 };
 
-type ActionAdd = {
-  type: ActionType.Add;
+type ActionAddTodo = {
+  type: ActionType.AddTodo;
   payload: Todo;
 };
 
@@ -25,7 +31,8 @@ type ActionDeleteCompleted = {
   type: ActionType.DeleteComplited;
 };
 
-export type Action = ActionAdd
+export type Action = ActionAddTodo
 | ActionChangeCompleted
 | ActionDeleteCompleted
-| ActionChangeAllCompleted;
+| ActionChangeAllCompleted
+| ActionDeleteTodo;

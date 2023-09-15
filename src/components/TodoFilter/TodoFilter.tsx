@@ -1,32 +1,32 @@
 import { useContext, useMemo } from 'react';
 import classNames from 'classnames';
-import { Filter } from '../../types/Filter';
+import { Status } from '../../types/Status';
 import { TodosContext } from '../TodosContext';
 import { ActionType } from '../../types/Action';
 
 type Props = {
-  filter: Filter;
-  onFilterChange: (filter: Filter) => void;
+  status: Status;
+  onStatusChange: (status: Status) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, onFilterChange }) => {
+export const TodoFilter: React.FC<Props> = ({ status, onStatusChange }) => {
   const { todos, dispatch } = useContext(TodosContext);
 
   const handleActiveLinkClick = () => {
-    if (filter !== Filter.Active) {
-      onFilterChange(Filter.Active);
+    if (status !== Status.Active) {
+      onStatusChange(Status.Active);
     }
   };
 
   const handleCompletedLinkClick = () => {
-    if (filter !== Filter.Completed) {
-      onFilterChange(Filter.Completed);
+    if (status !== Status.Completed) {
+      onStatusChange(Status.Completed);
     }
   };
 
   const handleAllLinkClick = () => {
-    if (filter !== Filter.All) {
-      onFilterChange(Filter.All);
+    if (status !== Status.All) {
+      onStatusChange(Status.All);
     }
   };
 
@@ -42,9 +42,9 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilterChange }) => {
       <ul className="filters">
         <li>
           <a
-            href="#/"
+            href={`#/${status}`}
             className={classNames({
-              selected: filter === Filter.All,
+              selected: status === Status.All,
             })}
             onClick={handleAllLinkClick}
           >
@@ -56,7 +56,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilterChange }) => {
           <a
             href="#/active"
             className={classNames({
-              selected: filter === Filter.Active,
+              selected: status === Status.Active,
             })}
             onClick={handleActiveLinkClick}
           >
@@ -68,7 +68,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilterChange }) => {
           <a
             href="#/completed"
             className={classNames({
-              selected: filter === Filter.Completed,
+              selected: status === Status.Completed,
             })}
             onClick={handleCompletedLinkClick}
           >

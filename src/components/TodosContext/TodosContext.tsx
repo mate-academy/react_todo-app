@@ -4,12 +4,15 @@ import { Action, ActionType } from '../../types/Action';
 
 function reducer(state: Todo[], action: Action) {
   switch (action.type) {
-    case ActionType.Add:
+    case ActionType.AddTodo:
       if (!action.payload) {
         return state;
       }
 
       return [...state, action.payload];
+
+    case ActionType.DeleteTodo:
+      return state.filter(({ id }) => id !== action.payload);
 
     case ActionType.DeleteComplited:
       return state.filter(({ completed }) => !completed);
