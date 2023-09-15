@@ -48,6 +48,18 @@ function reducer(state: Todo[], action: Action) {
       });
     }
 
+    case ActionType.ChangeTitle: {
+      const index = state.findIndex(item => item.id === action.payload.id);
+      const stateCopy = state.slice();
+
+      stateCopy[index] = {
+        ...state[index],
+        title: action.payload.title,
+      };
+
+      return stateCopy;
+    }
+
     default:
       return state;
   }

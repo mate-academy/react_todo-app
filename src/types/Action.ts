@@ -6,7 +6,18 @@ export enum ActionType {
   DeleteComplited = 'DELETE_COMPLETED',
   ChangeCompleted = 'CHANGE_COMPLETED',
   ChangeAllCompleted = 'CHANGE_ALL_COMPLETED',
+  ChangeTitle = 'CHANGE_TITLE',
 }
+
+type NewTitle = {
+  id: number;
+  title: string;
+};
+
+type ActionChangeTitle = {
+  type: ActionType.ChangeTitle;
+  payload: NewTitle;
+};
 
 type ActionDeleteTodo = {
   type: ActionType.DeleteTodo;
@@ -35,4 +46,5 @@ export type Action = ActionAddTodo
 | ActionChangeCompleted
 | ActionDeleteCompleted
 | ActionChangeAllCompleted
-| ActionDeleteTodo;
+| ActionDeleteTodo
+| ActionChangeTitle;
