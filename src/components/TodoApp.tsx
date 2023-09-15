@@ -1,5 +1,6 @@
 import { TodoList } from "./TodoList";
-import { useTodosContext } from "../TodosContext";
+import { useTodosContext } from "../context/TodosContext";
+import { TodosFilter } from "./TodosFilter";
 
 export const TodoApp: React.FC = () => {
   const { handleSubmit, handleInputChange, title, toggleAll, todos } =
@@ -43,8 +44,8 @@ export const TodoApp: React.FC = () => {
         <span className="todo-count" data-cy="todosCounter">
           3 items left
         </span>
-
-        <ul className="filters">
+        <TodosFilter />
+        {/* <ul className="filters">
           <li>
             <a href="#/" className="selected">
               All
@@ -58,7 +59,7 @@ export const TodoApp: React.FC = () => {
           <li>
             <a href="#/completed">Completed</a>
           </li>
-        </ul>
+        </ul> */}
 
         <button type="button" className="clear-completed">
           Clear completed

@@ -1,5 +1,5 @@
-import { useTodosContext } from "../TodosContext";
-import { TodoItemProps } from "../types";
+import { useTodosContext } from "../context/TodosContext";
+import { TodoItemProps } from "../types/todoTypes";
 
 export function TodoItem({ todo }: TodoItemProps) {
   const { toggleTodo } = useTodosContext();

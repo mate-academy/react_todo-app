@@ -1,5 +1,5 @@
 import React, { ChangeEvent, createContext, useContext, useState } from "react";
-import { TodosContextType, Todo } from "./types";
+import { TodosContextType, Todo } from "../types/todoTypes";
 
 const TodosContext = createContext<TodosContextType | undefined>(undefined);
 
@@ -10,6 +10,10 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [title, setTitle] = useState("");
 
   const addTodo = (title: string) => {
+    if (title.trim() === "") {
+      return;
+    }
+
     const newTodo = {
       id: +new Date(),
       title: title.trim(),
