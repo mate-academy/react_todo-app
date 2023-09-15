@@ -1,8 +1,9 @@
-import { TodoItem } from "./TodoItem";
-import { useTodosContext } from "../TodosContext";
+import { TodoItem } from './TodoItem';
+import { useTodosContext } from '../TodosContext';
 
 export function TodoList() {
   const { todos } = useTodosContext();
+
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map((todo) => (

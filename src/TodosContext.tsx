@@ -37,6 +37,17 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTitle(e.target.value);
   };
 
+  const toggleAll = () => {
+    const allCompleted = todos.every((todo) => todo.completed);
+
+    const updatedTodos = todos.map((todo) => ({
+      ...todo,
+      completed: !allCompleted,
+    }));
+
+    setTodos(updatedTodos);
+  };
+
   return (
     <TodosContext.Provider
       value={{
@@ -46,6 +57,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         handleSubmit,
         handleInputChange,
         title,
+        toggleAll,
       }}
     >
       {children}

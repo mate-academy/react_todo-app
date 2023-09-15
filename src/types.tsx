@@ -22,4 +22,5 @@ export type TodosContextType = {
   toggleTodo: (id: number) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  toggleAll: () => void;
 };

@@ -2,7 +2,8 @@ import { TodoList } from "./TodoList";
 import { useTodosContext } from "../TodosContext";
 
 export const TodoApp: React.FC = () => {
-  const { handleSubmit, handleInputChange, title } = useTodosContext();
+  const { handleSubmit, handleInputChange, title, toggleAll, todos } =
+    useTodosContext();
 
   return (
     <div className="todoapp">
@@ -22,13 +23,19 @@ export const TodoApp: React.FC = () => {
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {todos.length > 0 && (
+          <>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={toggleAll}
+            />
+
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          </>
+        )}
         <TodoList />
       </section>
 
