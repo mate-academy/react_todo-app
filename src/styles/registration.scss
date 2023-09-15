@@ -1,0 +1,75 @@
+.registration {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  margin: 40px 20px;
+
+  &__wrapper {
+    position: relative;
+    max-width: 430px;
+    width: 100%;
+    background: #fff;
+    padding: 34px;
+    border-radius: 6px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+
+    & h2 {
+      text-align: center;
+      position: relative;
+      font-size: 26px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    &__form {
+      margin-top: 30px;
+    }
+  }
+}
+
+.form {
+  &__button {
+    color: #333;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 6px;
+    background: #333;
+    cursor: pointer;
+
+    & input {
+      letter-spacing: 1px;
+      border: none;
+      border-radius: 6px;
+      background: #444;
+      color: #fff;
+      font-weight: 600;
+    }
+  
+    & :hover {
+      background: #333;
+    }
+  }
+
+  &__input-box {
+    height: 52px;
+    margin: 18px 0;
+  }
+
+  &__input-box input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    padding: 0 15px;
+    font-size: 17px;
+    font-weight: 400;
+    border: 1.5px solid #c7bebe;
+    border-bottom-width: 2.5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+
+    &:focus,
+    :valid {
+      border-color: #737373;
+    }
+  }
+}
