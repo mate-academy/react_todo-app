@@ -84,6 +84,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           />
           <label onDoubleClick={handleEdit}>{title}</label>
           <button
+            aria-label="title"
             type="button"
             className="destroy"
             data-cy="deleteTodo"
