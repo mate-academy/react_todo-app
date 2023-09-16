@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { TodosContext } from '../../TodosContext';
+import React, { useMemo, useState } from 'react';
+import { useTodos } from '../../TodosContext';
 import { Status } from '../../types/Status';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList/TodoList';
@@ -14,7 +14,7 @@ export const TodoApp: React.FC = () => {
     addTodo,
     toggleAll,
     clearCompleted,
-  } = useContext(TodosContext);
+  } = useTodos();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -98,7 +98,7 @@ export const TodoApp: React.FC = () => {
                 setSelectedFilter={setSelectedStatus}
               />
 
-              {notCompletedTodos < filteredTodos.length && (
+              {notCompletedTodos < todos.length && (
                 <button
                   type="button"
                   className="clear-completed"

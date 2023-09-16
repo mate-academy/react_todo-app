@@ -10,6 +10,10 @@ export const TodosFilter: React.FC<Props> = ({
   selectedFilter,
   setSelectedFilter,
 }) => {
+  const onFilterSelect = (status: Status) => () => {
+    setSelectedFilter(status);
+  };
+
   return (
     <ul
       className="filters"
@@ -21,7 +25,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={classNames({
             selected: selectedFilter === Status.All,
           })}
-          onClick={() => setSelectedFilter(Status.All)}
+          onClick={onFilterSelect(Status.All)}
         >
           All
         </a>
@@ -33,7 +37,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={classNames({
             selected: selectedFilter === Status.Active,
           })}
-          onClick={() => setSelectedFilter(Status.Active)}
+          onClick={onFilterSelect(Status.Active)}
         >
           Active
         </a>
@@ -45,7 +49,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={classNames({
             selected: selectedFilter === Status.Completed,
           })}
-          onClick={() => setSelectedFilter(Status.Completed)}
+          onClick={onFilterSelect(Status.Completed)}
         >
           Completed
         </a>

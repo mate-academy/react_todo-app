@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { Todo } from './types/Todo';
 import { TodosContextType } from './types/TodosContextType';
@@ -77,3 +77,5 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     </TodosContext.Provider>
   );
 };
+
+export const useTodos = () => useContext(TodosContext);

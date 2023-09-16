@@ -1,11 +1,10 @@
 import React, {
-  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import classNames from 'classnames';
-import { TodosContext } from '../../TodosContext';
+import { useTodos } from '../../TodosContext';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { toggleTodo, deleteTodo, updateTodoTitle } = useContext(TodosContext);
+  const { toggleTodo, deleteTodo, updateTodoTitle } = useTodos();
   const { title, completed, id } = todo;
 
   const [editing, setEditing] = useState(false);
@@ -64,7 +63,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li
-      key={id}
       className={classNames({
         completed,
         editing,
