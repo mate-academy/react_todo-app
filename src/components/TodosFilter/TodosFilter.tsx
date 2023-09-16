@@ -1,17 +1,12 @@
 import { useContext } from 'react';
 import cn from 'classnames';
 import { TodosContext } from '../../TodosContext';
+import { Status } from '../../utils/Status';
 
 type Props = {
   selectedFilterParam: string,
   onClick: (filterParam: string) => void
 };
-
-enum Status {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
-}
 
 export const TodosFilter: React.FC<Props> = ({
   selectedFilterParam,
@@ -33,37 +28,19 @@ export const TodosFilter: React.FC<Props> = ({
       </span>
 
       <ul className="filters" data-cy="todosFilter">
-        <li>
-          <a
-            href="#/"
-            className={cn({ selected: selectedFilterParam === Status.All })}
-            onClick={() => onClick(Status.All)}
-          >
-            All
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/active"
-            className={cn({ selected: selectedFilterParam === Status.Active })}
-            onClick={() => onClick(Status.Active)}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            className={cn({
-              selected: selectedFilterParam === Status.Completed,
-            })}
-            onClick={() => onClick(Status.Completed)}
-          >
-            Completed
-          </a>
-        </li>
+        {(Object.keys(Status) as Array<keyof typeof Status>).map(key => (
+          <li key={key}>
+            <a
+              href={`#/${key !== 'All'
+                ? key
+                : ''}`}
+              className={cn({ selected: selectedFilterParam === Status[key] })}
+              onClick={() => onClick(Status[key])}
+            >
+              {Status[key].at(0)?.toUpperCase() + Status[key].slice(1)}
+            </a>
+          </li>
+        ))}
       </ul>
       {!!getCompletedTodos().length && (
         <button

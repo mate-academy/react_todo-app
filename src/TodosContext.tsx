@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Todo } from './types/todo';
 
 interface TodosContextType {
@@ -11,9 +11,6 @@ export const TodosContext = React.createContext({} as TodosContextType);
 type Props = {
   children: React.ReactNode,
 };
-
-// [JSON.parse(localStorage.getItem('todos')
-//   || '{}')] as Todo[],
 
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -39,4 +36,10 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
       {children}
     </TodosContext.Provider>
   );
+};
+
+export const useTodos = () => {
+  const todos = useContext(TodosContext);
+
+  return todos;
 };

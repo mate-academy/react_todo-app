@@ -20,17 +20,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     todosCopy.splice(index, 1);
 
-    setTodos(todosCopy);
+    setTodos(prev => prev.filter(({ id }) => id !== todo.id));
   };
 
   const handleCompleteTodo = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const todosCopy = [...todos];
+    setTodos(prev => prev.map(currentTodo => {
+      if (currentTodo.id === todo.id) {
+        return { ...currentTodo, completed: event.target.checked };
+      }
 
-    todosCopy.splice(index, 1, { ...todo, completed: event.target.checked });
-
-    setTodos(todosCopy);
+      return currentTodo;
+    }));
   };
 
   const handleEditTodo = (
@@ -41,7 +43,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (title && title !== todo.title) {
       todosCopy.splice(index, 1, { ...todo, title });
 
-      setTodos(todosCopy);
+      setTodos(prev => prev.map(currentTodo => {
+        if (currentTodo.id === todo.id) {
+          return { ...currentTodo, title };
+        }
+
+        return currentTodo;
+      }));
       setIsEditingEnabled(false);
     }
 
