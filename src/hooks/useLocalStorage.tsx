@@ -25,7 +25,13 @@ export function useLocalStorage<T, A>(
 
         dispatch(localAction);
       }
+
+      return;
     }
+
+    const localAction: A = { ...setAction, payload: initialState };
+
+    dispatch(localAction);
   }, [key]);
 
   useEffect(() => {

@@ -91,8 +91,12 @@ const localStorageAction: Action = {
 };
 
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
-  // eslint-disable-next-line max-len
-  const [todos, dispatch] = useLocalStorage<Todo[], Action>('todos', reducer, [] as Todo[], localStorageAction);
+  const [todos, dispatch] = useLocalStorage<Todo[], Action>(
+    'todos',
+    reducer,
+    [],
+    localStorageAction,
+  );
 
   return (
     <TodosContext.Provider value={{ todos, dispatch }}>
