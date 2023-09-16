@@ -1,7 +1,7 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { Action, ActionType } from '../../types/Action';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 function reducer(state: Todo[], action: Action) {
   switch (action.type) {
