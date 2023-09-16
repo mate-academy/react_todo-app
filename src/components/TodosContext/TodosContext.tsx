@@ -1,6 +1,7 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import { Action, ActionType } from '../../types/Action';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 function reducer(state: Todo[], action: Action) {
   switch (action.type) {
@@ -60,6 +61,9 @@ function reducer(state: Todo[], action: Action) {
       return stateCopy;
     }
 
+    case ActionType.SetTodos:
+      return action.payload;
+
     default:
       return state;
   }
@@ -81,8 +85,14 @@ type Props = {
   children: React.ReactNode;
 };
 
+const localStorageAction: Action = {
+  type: ActionType.SetTodos,
+  payload: [],
+};
+
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
-  const [todos, dispatch] = useReducer(reducer, [] as Todo[]);
+  // eslint-disable-next-line max-len
+  const [todos, dispatch] = useLocalStorage<Todo[], Action>('todos', reducer, [] as Todo[], localStorageAction);
 
   return (
     <TodosContext.Provider value={{ todos, dispatch }}>

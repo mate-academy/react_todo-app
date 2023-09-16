@@ -20,8 +20,28 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   const { dispatch } = useContext(TodosContext);
 
   const editInput = useRef<HTMLInputElement | null>(null);
+
   const cancelEdit = () => {
     setEditedTitle(title);
+    setIsEditing(false);
+  };
+
+  const enterEditing = () => {
+    if (editedTitle === '') {
+      dispatch({ type: ActionType.DeleteTodo, payload: id });
+
+      setIsEditing(false);
+
+      return;
+    }
+
+    if (editedTitle !== title) {
+      dispatch({
+        type: ActionType.ChangeTitle,
+        payload: { id, title: editedTitle },
+      });
+    }
+
     setIsEditing(false);
   };
 
@@ -39,22 +59,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
 
   const handleInputKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      if (editedTitle === '') {
-        dispatch({ type: ActionType.DeleteTodo, payload: id });
-
-        cancelEdit();
-
-        return;
-      }
-
-      if (editedTitle !== title) {
-        dispatch({
-          type: ActionType.ChangeTitle,
-          payload: { id, title: editedTitle },
-        });
-      }
-
-      setIsEditing(false);
+      enterEditing();
 
       return;
     }
@@ -65,7 +70,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   };
 
   const handleOnBlurInput = () => {
-    cancelEdit();
+    enterEditing();
   };
 
   useEffect(() => {
