@@ -8,11 +8,11 @@ import { TodoList } from './components/TodoList/TodoList';
 
 import { useLocalStorage } from './utils/useLocalStorage';
 
-import { Todo } from './types/Todo';
-import { Status } from './types/Status';
+import { Todo } from './interfaces/Todo';
+import { Status } from './enums/Status';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
   const [completedTodo, uncompletedTodo] = todos.reduce(
     (acc: Todo[][], todo: Todo) => {

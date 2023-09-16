@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Todo } from '../types/Todo';
+import { Todo } from '../interfaces/Todo';
 
-export const useLocalStorage = (
+export const useLocalStorage = <T extends Todo[]>(
   key: string,
-  initialValue: Todo[],
-): [Todo[], (value: (todos: Todo[]) => Todo[]
-  ) => void] => {
-  const [value, setValue] = useState<Todo[]>(() => {
+  initialValue: T,
+): [T, (value: (todos: T) => T) => void] => {
+  const [value, setValue] = useState<T>(() => {
     try {
       const data = localStorage.getItem(key);
 
@@ -16,7 +15,7 @@ export const useLocalStorage = (
     }
   });
 
-  const save = (data: (todos: Todo[]) => Todo[]) => {
+  const save = (data: (todos: T) => T) => {
     setValue((prevValue) => {
       const updatedValue = data(prevValue);
 

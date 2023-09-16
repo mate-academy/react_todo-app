@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Todo } from '../../types/Todo';
+import { Todo } from '../../interfaces/Todo';
 
 type Props = {
   handleAddTodo: (todo: Todo) => void;

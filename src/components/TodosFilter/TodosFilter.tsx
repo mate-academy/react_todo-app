@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 import { NavLink } from 'react-router-dom';
 
-import { Status } from '../../types/Status';
+import { Status } from '../../enums/Status';
 
 type Props = {};
 

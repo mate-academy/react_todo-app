@@ -2,7 +2,7 @@ import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { TodoItem } from '../TodoItem/TodoItem';
-import { Todo } from '../../types/Todo';
+import { Todo } from '../../interfaces/Todo';
 
 type Props = {
   todos: Todo[];

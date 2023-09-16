@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 
-import { Todo } from '../../types/Todo';
+import { Todo } from '../../interfaces/Todo';
+
+import '../../styles/TodoItem.css';
 
 type Props = {
   todo: Todo;
@@ -75,7 +77,6 @@ export const TodoItem: React.FC<Props> = ({
             <input
               type="checkbox"
               className="toggle"
-              style={{ cursor: 'pointer' }}
               onChange={() => handleToggleCompleted(id, completed)}
               checked={completed}
             />
@@ -86,7 +87,6 @@ export const TodoItem: React.FC<Props> = ({
               className="destroy"
               data-cy="deleteTodo"
               onClick={() => handleRemoveTodo(id)}
-              style={{ cursor: 'pointer' }}
             />
           </div>
         )
