@@ -9,6 +9,10 @@ export const NewTodo: React.FC = () => {
   const handleAddingTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!newTodoTitle) {
+      return;
+    }
+
     const newTodo: Todo = {
       id: +new Date(),
       title: newTodoTitle,
