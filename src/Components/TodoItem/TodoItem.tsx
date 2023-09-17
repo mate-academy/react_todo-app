@@ -47,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({ id, title, completed }) => {
   return (
     <li
       key={id}
-      className={cn({ completed: completed, editing: isEditing })}
+      className={cn({ completed, editing: isEditing })}
       onDoubleClick={() => setIsEditing(true)}
     >
       <div className="view">

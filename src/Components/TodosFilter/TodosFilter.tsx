@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import cn from 'classnames';
 import { TodosContext } from '../../Context/TodosContext';
-import { Status } from '../Status/Status';
+import { Status } from '../../type/Status';
 
 export const TodosFilter: React.FC = () => {
   const { filter, setFilter } = useContext(TodosContext);

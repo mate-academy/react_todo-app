@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Todo } from '../type/Todo';
-import { Status } from '../Components/Status/Status';
+import { Status } from '../type/Status';
 import { TodoContextType } from '../type/TodoContextType';
 import { useLocalSrorage } from '../hoocks/useLocalSrorage';
 
@@ -35,18 +35,18 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   };
 
   const clearedDone = () => {
-    const howDone = todos.filter(todo => todo.completed === true).length;
+    const compleatedTodosCount = todos.filter(todo => todo.completed).length;
 
-    if (howDone > 0) {
+    if (compleatedTodosCount > 0) {
       setTodos(todos.filter(todo => todo.completed !== true));
     }
   };
 
   const todoComplete = () => {
-    const howLeft = todos.filter(todo => todo.completed === false).length;
+    const leftTodosCount = todos.filter(todo => !todo.completed).length;
 
     setTodos(todos.map((todo) => {
-      if (howLeft === 0) {
+      if (leftTodosCount === 0) {
         return {
           ...todo,
           completed: !todo.completed,
