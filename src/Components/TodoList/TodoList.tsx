@@ -11,9 +11,9 @@ export const TodoList: React.FC = () => {
       case Status.ALL:
         return todos;
       case Status.ACTIVE:
-        return todos.filter((todo) => todo.completed === false);
+        return todos.filter((todo) => !todo.completed);
       case Status.COMPLETED:
-        return todos.filter((todo) => todo.completed === true);
+        return todos.filter((todo) => todo.completed);
       default:
         return todos;
     }
@@ -22,7 +22,12 @@ export const TodoList: React.FC = () => {
   return (
     <ul className="todo-list" data-cy="todoList">
       {filteredTodos().map(todo => (
-        <TodoItem todo={todo} key={todo.id} />
+        <TodoItem
+          id={todo.id}
+          title={todo.title}
+          completed={todo.completed}
+          key={todo.id}
+        />
       ))}
     </ul>
   );

@@ -7,13 +7,13 @@ import { useLocalSrorage } from '../hoocks/useLocalSrorage';
 export const TodosContext = React.createContext<TodoContextType>({
   todos: [],
   filter: Status.ALL,
-  setFilter: () => { },
-  addTodo: () => { },
-  clearedDone: () => { },
-  todoComplete: () => { },
-  completedTodo: () => { },
-  editTodo: () => { },
-  deleteItem: () => { },
+  setFilter: () => {},
+  addTodo: () => {},
+  clearedDone: () => {},
+  todoComplete: () => {},
+  completedTodo: () => {},
+  editTodo: () => {},
+  deleteItem: () => {},
 });
 
 type Props = {
