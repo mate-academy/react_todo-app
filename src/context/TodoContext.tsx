@@ -71,7 +71,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   };
 
   const toggleAllStatus = () => {
-    const isActive = todos.map((item) => item.completed).includes(false);
+    const isActive = todos.some((item) => !item.completed);
 
     const newTodos = todos.map((item) => {
       return {
@@ -133,12 +133,8 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   );
 };
 
-export function useTodo() {
-  const context = useContext(TodoContext);
-
-  if (!context) {
-    throw new Error('useTodo must be used within a TodoProvider');
-  }
+export function useTodo(): TodoContextType {
+  const context = useContext(TodoContext) as TodoContextType;
 
   return context;
 }

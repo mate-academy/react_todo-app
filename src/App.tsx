@@ -26,7 +26,7 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          checked={!visibleTodos.map((item) => item.completed).includes(false)}
+          checked={visibleTodos.every((item) => item.completed)}
           onChange={handleToggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>

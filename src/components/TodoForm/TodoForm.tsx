@@ -3,7 +3,7 @@ import { useTodo } from '../../context/TodoContext';
 import { Todo } from '../../types/todo.types';
 
 const TodoForm: React.FC = () => {
-  const [value, setValue] = useState('');
+  const [title, setTitle] = useState('');
   const { addTodo } = useTodo();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -11,16 +11,16 @@ const TodoForm: React.FC = () => {
 
     const newTodo: Todo = {
       id: new Date().getTime(),
-      title: value,
+      title,
       completed: false,
     };
 
-    setValue('');
+    setTitle('');
     addTodo(newTodo);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    setTitle(e.target.value);
   };
 
   return (
@@ -31,7 +31,7 @@ const TodoForm: React.FC = () => {
         className="new-todo"
         placeholder="What needs to be done?"
         onChange={handleChange}
-        value={value}
+        value={title}
       />
     </form>
   );
