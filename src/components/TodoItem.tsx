@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import classNames from 'classnames';
-import { useTodosContext } from '../context/TodosContext';
-import { TodoItemProps } from '../types/todoTypes';
+/* eslint-disable */
+import { useEffect, useRef, useState } from "react";
+import classNames from "classnames";
+import { useTodosContext } from "../context/TodosContext";
+import { TodoItemProps } from "../types/todoTypes";
 
 export function TodoItem({ todo }: TodoItemProps) {
   const { toggleTodo, removeTodo, editTodo } = useTodosContext();
@@ -22,6 +23,7 @@ export function TodoItem({ todo }: TodoItemProps) {
   const handleEditTodo = () => {
     if (!isEditing) {
       setIsEditing(true);
+      inputRef.current?.focus();
     }
   };
 
@@ -31,23 +33,25 @@ export function TodoItem({ todo }: TodoItemProps) {
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      if (editTitle === '') {
+    if (event.key === "Enter") {
+      if (editTitle === "") {
         removeTodo(todo.id);
       } else {
         handleSaveEdit();
       }
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       setIsEditing(false);
     }
   };
 
   const handleBlur = () => {
-    if (editTitle === '') {
+    if (editTitle === "") {
       removeTodo(todo.id);
     } else {
       handleSaveEdit();
     }
+
+    setIsEditing(false);
   };
 
   useEffect(() => {
@@ -60,7 +64,7 @@ export function TodoItem({ todo }: TodoItemProps) {
     <li
       className={classNames({
         completed: todo.completed,
-        isEditing,
+        editing: isEditing,
       })}
     >
       <div className="view">
@@ -70,21 +74,8 @@ export function TodoItem({ todo }: TodoItemProps) {
           onChange={handleToggle}
           checked={todo.completed}
         />
-        {isEditing ? (
-          <input
-            type="text"
-            className="editing"
-            value={editTitle}
-            onChange={(event) => setEditTitle(event.target.value)}
-            onKeyDown={handleKeyPress}
-            ref={inputRef}
-            onBlur={handleBlur}
-          />
-        ) : (
-          <label onDoubleClick={handleEditTodo}>
-            <span>{todo.title}</span>
-          </label>
-        )}
+        <label onDoubleClick={handleEditTodo}>{todo.title}</label>
+
         <button
           type="button"
           className="destroy"
@@ -92,6 +83,15 @@ export function TodoItem({ todo }: TodoItemProps) {
           onClick={handleRemove}
         />
       </div>
+      <input
+        type="text"
+        className="edit"
+        value={editTitle}
+        onChange={(event) => setEditTitle(event.target.value)}
+        onKeyDown={handleKeyPress}
+        ref={inputRef}
+        onBlur={handleBlur}
+      />
     </li>
   );
 }

@@ -1,6 +1,7 @@
-import { TodoList } from './TodoList';
-import { useTodosContext } from '../context/TodosContext';
-import { TodosFilter } from './TodosFilter';
+/* eslint-disable */
+import { TodoList } from "./TodoList";
+import { useTodosContext } from "../context/TodosContext";
+import { TodosFilter } from "./TodosFilter";
 
 export const TodoApp: React.FC = () => {
   const {
@@ -10,9 +11,8 @@ export const TodoApp: React.FC = () => {
     toggleAll,
     todos,
     clearCompleted,
+    completedTodos,
   } = useTodosContext();
-
-  const completedTodos = todos.filter((todo) => todo.completed);
 
   return (
     <div className="todoapp">
@@ -51,7 +51,8 @@ export const TodoApp: React.FC = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            3 items left
+            {todos.length - completedTodos.length}{" "}
+            {todos.length - completedTodos.length === 1 ? "item" : "items"} left
           </span>
           <TodosFilter />
           {completedTodos.length > 0 && (

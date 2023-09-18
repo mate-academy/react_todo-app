@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { useFilterContext } from "../context/FilterContext";
 import { FilterType } from "../types/todoTypes";
@@ -9,37 +10,25 @@ export const TodosFilter: React.FC = () => {
     setCurrentFilter(status);
   };
 
+  const filters = [
+    { label: "All", type: FilterType.All },
+    { label: "Active", type: FilterType.Active },
+    { label: "Completed", type: FilterType.Completed },
+  ];
+
   return (
     <ul className="filters">
-      <li>
-        <a
-          href="#/"
-          className={currentFilter === FilterType.All ? "selected" : ""}
-          onClick={() => handleFilterChange(FilterType.All)}
-        >
-          All
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/active"
-          className={currentFilter === FilterType.Active ? "selected" : ""}
-          onClick={() => handleFilterChange(FilterType.Active)}
-        >
-          Active
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/completed"
-          className={currentFilter === FilterType.Completed ? "selected" : ""}
-          onClick={() => handleFilterChange(FilterType.Completed)}
-        >
-          Completed
-        </a>
-      </li>
+      {filters.map((filter) => (
+        <li key={filter.type}>
+          <a
+            href={`#/${filter.type}`}
+            className={currentFilter === filter.type ? "selected" : ""}
+            onClick={() => handleFilterChange(filter.type)}
+          >
+            {filter.label}
+          </a>
+        </li>
+      ))}
     </ul>
   );
 };

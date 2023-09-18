@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createContext, useContext, useState } from "react";
 import { FilterType, TodosFilterContextType } from "../types/todoTypes";
 

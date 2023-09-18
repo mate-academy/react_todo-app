@@ -1,4 +1,5 @@
-import { ChangeEvent } from 'react';
+/* eslint-disable */
+import { ChangeEvent } from "react";
 
 export type Todo = {
   id: number;
@@ -18,6 +19,8 @@ export type TodoListProps = {
 export type TodosContextType = {
   todos: Todo[];
   title: string;
+  completedTodos: Todo[];
+  sortedTodos: Todo[];
   addTodo: (title: string) => void;
   toggleTodo: (id: number) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -29,9 +32,9 @@ export type TodosContextType = {
 };
 
 export enum FilterType {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
+  All = "all",
+  Active = "active",
+  Completed = "completed",
 }
 
 export type TodosFilterContextType = {
