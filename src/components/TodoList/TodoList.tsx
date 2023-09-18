@@ -7,10 +7,6 @@ import { Filters } from '../Filters/Filters';
 import { FilterKey } from '../../types/FilterKey';
 import { Todo } from '../../types/Todo';
 
-// type Props = {
-//   todos: Todo[],
-// };
-
 function getFilteredTodos(key: FilterKey, todos: Todo[]) {
   switch (key) {
     case FilterKey.All:
@@ -63,7 +59,7 @@ export const TodoList: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
+        <ul className="todo-list" data-cy="todosList">
           {filteredTodos.map(todo => (
             <TodoItem todo={todo} key={todo.id} />
           ))}

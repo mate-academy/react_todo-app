@@ -103,12 +103,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={handleChangeOfTitle}
           onKeyUp={handleKeyUp}
           onBlur={handleNewTitleSubmit}
+          /* eslint-disable-next-line */
           autoFocus
         />
       )}
     </li>
   );
 };
-
-// isBeingEdited - false
-// ondlbclick - isbeingedited - true; label => input

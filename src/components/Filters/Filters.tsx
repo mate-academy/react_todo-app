@@ -7,14 +7,9 @@ type Props = {
   filterKey: FilterKey,
 };
 
-// const filterKeys = Object.keys(FilterKey);
-// const filterValues = Object.values(FilterKey);
-
 export const Filters: React.FC<Props> = ({ onClick, filterKey }) => {
-  // console.log(FilterKey[filterKeys[1]]);
-
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
