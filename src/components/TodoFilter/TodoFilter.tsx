@@ -39,7 +39,7 @@ export const TodoFilter: React.FC<Props> = ({ status, onStatusChange }) => {
         {`${uncomplitedTodos} item${uncomplitedTodos === 1 ? '' : 's'} left`}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         <li>
           <a
             href={`#/${status}`}
