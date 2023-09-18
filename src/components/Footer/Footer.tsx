@@ -12,7 +12,7 @@ export const Footer: React.FC<Props> = () => {
     removeTodo,
     getFilteredTodo,
   } = useContext(TodoContext);
-  const activeTodos = state.filter(({ completed }) => completed);
+  const activeTodos = state.filter(({ completed }) => !completed);
   const isCompleted = state.some(({ completed }) => completed);
 
   return (
@@ -58,8 +58,8 @@ export const Footer: React.FC<Props> = () => {
 
       <button
         type="button"
-        className={cn('clear-completed hidden', {
-          'clear-completed': isCompleted,
+        className={cn('clear-completed', {
+          hidden: !isCompleted,
         })}
         onClick={() => removeTodo('All')}
       >
