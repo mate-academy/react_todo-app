@@ -9,17 +9,11 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { setTodos } = useContext(TodosContext);
   const [isEditingEnabled, setIsEditingEnabled] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
-  const index = todos.findIndex(({ id }) => id === todo.id);
-
   const handleRemoveTodo = () => {
-    const todosCopy = [...todos];
-
-    todosCopy.splice(index, 1);
-
     setTodos(prev => prev.filter(({ id }) => id !== todo.id));
   };
 
@@ -38,11 +32,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleEditTodo = (
     title: string,
   ) => {
-    const todosCopy = [...todos];
-
     if (title && title !== todo.title) {
-      todosCopy.splice(index, 1, { ...todo, title });
-
       setTodos(prev => prev.map(currentTodo => {
         if (currentTodo.id === todo.id) {
           return { ...currentTodo, title };

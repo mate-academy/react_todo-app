@@ -4,6 +4,7 @@ import { useTodos } from '../../TodosContext';
 import { TodoItem } from '../TodoItem';
 import { TodosFilter } from '../TodosFilter';
 import { Status } from '../../utils/Status';
+import { filterTodos } from '../../utils/filterTodos';
 
 export const TodoList = () => {
   const { todos, setTodos } = useTodos();
@@ -16,20 +17,8 @@ export const TodoList = () => {
     })));
   };
 
-  const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filterParam) {
-        case (Status.All):
-          return todo;
-        case (Status.Active):
-          return !todo.completed;
-        case (Status.Completed):
-          return todo.completed;
-        default:
-          return todo;
-      }
-    });
-  }, [filterParam, todos]);
+  const filteredTodos = useMemo(() => filterTodos(todos, filterParam),
+    [filterParam, todos]);
 
   return (
     <>
