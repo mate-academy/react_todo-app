@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TodosFilter } from './components/TodosFilter';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
@@ -17,7 +17,7 @@ if (todos !== null) {
 }
 
 export const App: React.FC = () => {
-  const [completedTodos, setCompletedTodos] = useState<number[]>(
+  const [completedTodosId, setCompletedTodosId] = useState<number[]>(
     todosFromLocalStorage.filter(todo => todo.completed)
       .map(todoId => todoId.id),
   );
@@ -25,13 +25,16 @@ export const App: React.FC = () => {
     todosFromLocalStorage,
   );
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.all);
+  const [todosLeft, setTodosLeft] = useState<number>(
+    todosList.length - completedTodosId.length,
+  );
 
-  const todosLeft = useMemo(() => {
-    return todosList.length - completedTodos.length;
-  }, [todos, completedTodos]);
+  useEffect(() => {
+    setTodosLeft(todosList.length - completedTodosId.length);
+  }, [todosList, completedTodosId]);
 
   const updateCheckTodo = (todoId: number) => {
-    setCompletedTodos((prevCompletedTodo) => {
+    setCompletedTodosId((prevCompletedTodo) => {
       if (prevCompletedTodo.includes(todoId)) {
         return prevCompletedTodo.filter((number) => number !== todoId);
       }
@@ -41,10 +44,10 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setTodos(todosList.map(todo => (completedTodos.includes(todo.id)
+    setTodos(todosList.map(todo => (completedTodosId.includes(todo.id)
       ? { ...todo, completed: true }
       : { ...todo, completed: false })));
-  }, [completedTodos]);
+  }, [completedTodosId]);
 
   useEffect(() => {
     localStorage.setItem('todosStorage', JSON.stringify(todosList));
@@ -57,11 +60,11 @@ export const App: React.FC = () => {
 
   const handleDeleteTodo = (todoId: number) => {
     setTodos(todosList.filter(todo => todo.id !== todoId));
-    setCompletedTodos(completedTodos.filter(number => number !== todoId));
+    setCompletedTodosId(completedTodosId.filter(number => number !== todoId));
   };
 
   const deleteCompletedTodos = () => {
-    setCompletedTodos([]);
+    setCompletedTodosId([]);
     setTodos(todosList.filter(todo => !todo.completed));
   };
 
@@ -76,10 +79,10 @@ export const App: React.FC = () => {
   const updateCheckAllTodo = () => {
     if (todosLeft === 0) {
       setTodos(todosList.map(todo => ({ ...todo, completed: false })));
-      setCompletedTodos([]);
+      setCompletedTodosId([]);
     } else {
       setTodos(todosList.map(todo => ({ ...todo, completed: true })));
-      setCompletedTodos(todosList.map(todo => todo.id));
+      setCompletedTodosId(todosList.map(todo => todo.id));
     }
   };
 
@@ -106,8 +109,9 @@ export const App: React.FC = () => {
             onClick={updateCheckAllTodo}
           />
         )}
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
+        {todosList.length > 0 ? (
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        ) : null}
         <ul className="todo-list" data-cy="todosList">
           <TodoList
             todos={todosList}
@@ -123,7 +127,7 @@ export const App: React.FC = () => {
           handleSetSortBy={handleSetSortBy}
           sortBy={sortBy}
           todosLeft={todosLeft}
-          completedTodos={completedTodos}
+          completedTodosId={completedTodosId}
           deleteCompletedTodos={deleteCompletedTodos}
         />
       ) : null}

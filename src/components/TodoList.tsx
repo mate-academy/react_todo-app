@@ -22,6 +22,7 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const [isTodoEdit, setIsTodoEdit] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
+  const [oldTitle, setOldTitle] = useState<string>('');
   const filteredTodos = useMemo(() => {
     if (sortBy === SortBy.all) {
       return todos;
@@ -72,8 +73,9 @@ export const TodoList: React.FC<Props> = ({
     }
 
     if (e.key === 'Escape') {
-      setInputValue('');
+      setInputValue(oldTitle);
       setIsTodoEdit(null);
+      setOldTitle('');
     }
   };
 
@@ -97,6 +99,7 @@ export const TodoList: React.FC<Props> = ({
               onDoubleClick={() => {
                 setIsTodoEdit(todo.id);
                 setInputValue(todo.title);
+                setOldTitle(todo.title);
               }}
             >
               {todo.title}

@@ -5,7 +5,7 @@ type Props = {
   sortBy: SortBy,
   deleteCompletedTodos: () => void,
   todosLeft: number;
-  completedTodos: number[];
+  completedTodosId: number[];
 };
 
 export const TodosFilter: React.FC<Props> = ({
@@ -13,7 +13,7 @@ export const TodosFilter: React.FC<Props> = ({
   sortBy,
   deleteCompletedTodos,
   todosLeft,
-  completedTodos,
+  completedTodosId,
 }) => (
   <footer className="footer">
     <span className="todo-count" data-cy="todosCounter">
@@ -62,8 +62,8 @@ export const TodosFilter: React.FC<Props> = ({
       type="button"
       className="clear-completed"
       onClick={() => deleteCompletedTodos()}
-      disabled={completedTodos.length === 0}
-      style={completedTodos.length === 0 ? { opacity: 0 } : { opacity: 1 }}
+      disabled={completedTodosId.length === 0}
+      style={completedTodosId.length === 0 ? { opacity: 0 } : { opacity: 1 }}
     >
       Clear completed
     </button>
