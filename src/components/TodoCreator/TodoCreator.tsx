@@ -3,21 +3,21 @@ import { TodosContext } from '../TodosContext';
 import { ActionType } from '../../types/Action';
 import { Todo } from '../../types/Todo';
 
-export const TodoApp: React.FC = () => {
-  const [query, setQuery] = useState('');
+export const TodoCreator: React.FC = () => {
+  const [text, setText] = useState('');
   const { dispatch } = useContext(TodosContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newTodo: Todo = {
-      title: query,
+      title: text,
       id: +new Date(),
       completed: false,
     };
 
     dispatch({ type: ActionType.AddTodo, payload: newTodo });
-    setQuery('');
+    setText('');
   };
 
   return (
@@ -32,8 +32,8 @@ export const TodoApp: React.FC = () => {
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          value={text}
+          onChange={(event) => setText(event.target.value)}
         />
       </form>
     </header>

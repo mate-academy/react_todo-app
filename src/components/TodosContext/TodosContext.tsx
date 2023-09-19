@@ -18,17 +18,10 @@ function reducer(state: Todo[], action: Action) {
     case ActionType.DeleteComplited:
       return state.filter(({ completed }) => !completed);
 
-    case ActionType.ChangeCompleted: {
-      const index = state.findIndex(item => item.id === action.payload);
-      const stateCopy = state.slice();
-
-      stateCopy[index] = {
-        ...state[index],
-        completed: !state[index].completed,
-      };
-
-      return stateCopy;
-    }
+    case ActionType.ChangeCompleted:
+      return state.map(item => (item.id === action.payload
+        ? { ...item, completed: !item.completed }
+        : item));
 
     case ActionType.ChangeAllCompleted: {
       if (state.every(({ completed }) => completed)
@@ -49,17 +42,10 @@ function reducer(state: Todo[], action: Action) {
       });
     }
 
-    case ActionType.ChangeTitle: {
-      const index = state.findIndex(item => item.id === action.payload.id);
-      const stateCopy = state.slice();
-
-      stateCopy[index] = {
-        ...state[index],
-        title: action.payload.title,
-      };
-
-      return stateCopy;
-    }
+    case ActionType.ChangeTitle:
+      return state.map(item => (item.id === action.payload.id
+        ? { ...item, title: action.payload.title }
+        : item));
 
     case ActionType.SetTodos:
       return action.payload;

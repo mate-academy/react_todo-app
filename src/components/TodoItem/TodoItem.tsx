@@ -16,18 +16,18 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ item }) => {
   const { id, title, completed } = item;
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(title);
+  const [finishEditing, setFinishEditing] = useState(title);
   const { dispatch } = useContext(TodosContext);
 
   const editInput = useRef<HTMLInputElement | null>(null);
 
   const cancelEdit = () => {
-    setEditedTitle(title);
+    setFinishEditing(title);
     setIsEditing(false);
   };
 
   const enterEditing = () => {
-    if (editedTitle === '') {
+    if (finishEditing === '') {
       dispatch({ type: ActionType.DeleteTodo, payload: id });
 
       setIsEditing(false);
@@ -35,10 +35,10 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
       return;
     }
 
-    if (editedTitle !== title) {
+    if (finishEditing !== title) {
       dispatch({
         type: ActionType.ChangeTitle,
-        payload: { id, title: editedTitle },
+        payload: { id, title: finishEditing },
       });
     }
 
@@ -110,8 +110,8 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         ref={editInput}
         type="text"
         className="edit"
-        value={editedTitle}
-        onChange={(event) => setEditedTitle(event.target.value)}
+        value={finishEditing}
+        onChange={(event) => setFinishEditing(event.target.value)}
         onKeyUp={handleInputKeyUp}
         onBlur={handleOnBlurInput}
       />

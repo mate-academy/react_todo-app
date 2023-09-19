@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { TodoApp } from './components/TodoApp';
+import { TodoCreator } from './components/TodoCreator';
 import { Status } from './types/Status';
 import { TodosContext } from './components/TodosContext';
 import { TodoList } from './components/TodoList';
@@ -22,7 +22,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <TodoApp />
+      <TodoCreator />
       {!!todos.length && (
         <>
           <TodoList items={filtredTodo} />
