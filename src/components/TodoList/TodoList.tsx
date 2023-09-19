@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-
 import { TodoContext } from '../../context/TodoContext';
 import { getFilteredTodos } from '../../utils/utils';
 import { FilterContext } from '../../context/FilterContext';
@@ -39,7 +38,7 @@ export const TodoList: React.FC = () => {
         </>
       )}
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {filteredTodos.map(todo => (
           <TodoItem
             key={todo.id}
