@@ -14,6 +14,7 @@ export type State = {
   todos: Todo[],
   setTodos: (todos: Todo[]) => void,
   addNewTodo: (todo: Todo) => void,
+  filterTodos: (status: Status) => Todo[],
   toggleAll: () => void,
   clearAllCompleted: () => void,
   toggleTodo: (id: string) => void,

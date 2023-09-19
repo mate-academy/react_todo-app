@@ -17,23 +17,23 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { toggleTodo, removeTodo, editTodo } = useContext(TodosContext);
   const { id, title, completed } = todo;
 
-  const [editingMode, setEditingMode] = useState(false);
+  const [isEditingMode, setIsEditingMode] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 
   const titleField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (titleField.current && editingMode) {
+    if (titleField.current && isEditingMode) {
       titleField.current.focus();
     }
-  }, [editingMode]);
+  }, [isEditingMode]);
 
   const handleTodoEditing = (event: React.KeyboardEvent) => {
     switch (event.key) {
       case 'Enter':
         if (newTitle.trim()) {
           editTodo(id, newTitle);
-          setEditingMode(false);
+          setIsEditingMode(false);
         } else {
           removeTodo(id);
         }
@@ -41,7 +41,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         break;
 
       case 'Escape':
-        setEditingMode(false);
+        setIsEditingMode(false);
         break;
 
       default:
@@ -52,7 +52,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleOnBlur = () => {
     if (newTitle.trim()) {
       editTodo(id, newTitle);
-      setEditingMode(false);
+      setIsEditingMode(false);
     } else {
       removeTodo(id);
     }
@@ -61,7 +61,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <li className={cn({
       completed,
-      editing: editingMode,
+      editing: isEditingMode,
     })}
     >
       <div className="view">
@@ -73,7 +73,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={() => toggleTodo(id)}
         />
         <label
-          onDoubleClick={() => setEditingMode(true)}
+          onDoubleClick={() => setIsEditingMode(true)}
         >
           {title}
         </label>

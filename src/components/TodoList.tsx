@@ -7,8 +7,8 @@ interface Props {
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
-      {!!todos.length && todos.map(todo => (
+    <ul className="todo-list" data-cy="todosList">
+      {todos.map(todo => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
     </ul>

@@ -5,7 +5,6 @@ import cn from 'classnames';
 import { TodoList } from './components/TodoList';
 import { Status } from './types';
 import { TodosContext } from './TodosContext';
-import { filterTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [fitlerParam, setFilterParam] = useState(Status.All);
@@ -15,11 +14,12 @@ export const App: React.FC = () => {
     todos,
     toggleAll,
     addNewTodo,
+    filterTodos,
     clearAllCompleted,
   } = useContext(TodosContext);
 
   const visibleTodos = useMemo(() => {
-    return filterTodos(todos, fitlerParam);
+    return filterTodos(fitlerParam);
   }, [todos, fitlerParam]);
 
   const uncompletedTodosAmount = useMemo(() => todos
@@ -27,6 +27,7 @@ export const App: React.FC = () => {
 
   const handleSubmitNewTodo = (event: React.FormEvent) => {
     event.preventDefault();
+
     if (newTodoTitle.trim()) {
       addNewTodo({
         id: `${+new Date()}`,
@@ -55,83 +56,85 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onClick={toggleAll}
-        />
-        <label
-          htmlFor="toggle-all"
-          className={cn({
-            hidden: !todos.length,
-          })}
-        >
-          Mark all as complete
-        </label>
-
-        <TodoList todos={visibleTodos} />
-
-      </section>
-
-      <footer className={cn('footer', {
-        hidden: !todos.length,
-      })}
-      >
-        <span className="todo-count" data-cy="todosCounter">
-          {`${uncompletedTodosAmount} items left`}
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
+      {!!todos.length && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={toggleAll}
+            />
+            <label
+              htmlFor="toggle-all"
               className={cn({
-                selected: fitlerParam === Status.All,
+                hidden: !todos.length,
               })}
-              onClick={() => setFilterParam(Status.All)}
             >
-              All
-            </a>
-          </li>
+              Mark all as complete
+            </label>
 
-          <li>
-            <a
-              href="#/active"
-              className={cn({
-                selected: fitlerParam === Status.Active,
-              })}
-              onClick={() => setFilterParam(Status.Active)}
-            >
-              Active
-            </a>
-          </li>
+            <TodoList todos={visibleTodos} />
+          </section>
 
-          <li>
-            <a
-              href="#/completed"
-              className={cn({
-                selected: fitlerParam === Status.Completed,
-              })}
-              onClick={() => setFilterParam(Status.Completed)}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
+          <footer className="footer" data-cy="todosFilter">
+            <span className="todo-count" data-cy="todosCounter">
+              {uncompletedTodosAmount === 1
+                ? '1 item left'
+                : `${uncompletedTodosAmount} items left`}
+            </span>
 
-        <button
-          type="button"
-          className={cn('clear-completed', {
-            hidden: uncompletedTodosAmount === todos.length,
-          })}
-          onClick={clearAllCompleted}
-        >
-          Clear completed
-        </button>
-      </footer>
+            <ul className="filters">
+              <li>
+                <a
+                  href="#/"
+                  className={cn({
+                    selected: fitlerParam === Status.All,
+                  })}
+                  onClick={() => setFilterParam(Status.All)}
+                >
+                  All
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/active"
+                  className={cn({
+                    selected: fitlerParam === Status.Active,
+                  })}
+                  onClick={() => setFilterParam(Status.Active)}
+                >
+                  Active
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/completed"
+                  className={cn({
+                    selected: fitlerParam === Status.Completed,
+                  })}
+                  onClick={() => setFilterParam(Status.Completed)}
+                >
+                  Completed
+                </a>
+              </li>
+            </ul>
+
+            {uncompletedTodosAmount !== todos.length && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearAllCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </div>
   );
 };

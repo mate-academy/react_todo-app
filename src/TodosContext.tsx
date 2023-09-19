@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
 
-import { Todo, State } from './types';
+import { Todo, State, Status } from './types';
 import { useLocalStorage } from './helpers';
 
 export const TodosContext = React.createContext<State>({
   todos: [],
   setTodos: () => {},
   addNewTodo: () => {},
+  filterTodos: () => [],
   toggleAll: () => {},
   clearAllCompleted: () => {},
   toggleTodo: () => {},
@@ -23,6 +24,17 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const addNewTodo = (newTodo: Todo) => {
     setTodos([...todos, newTodo]);
+  };
+
+  const filterTodos = (fitlerParam: Status) => {
+    switch (fitlerParam) {
+      case Status.Active:
+        return todos.filter(todo => !todo.completed);
+      case Status.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
   };
 
   const toggleAll = () => {
@@ -64,6 +76,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     todos,
     setTodos,
     addNewTodo,
+    filterTodos,
     toggleAll,
     clearAllCompleted,
     toggleTodo,
