@@ -1,23 +1,23 @@
-import { SortBy } from '../types';
+import { SortBy, Todo } from '../types';
 
 type Props = {
   handleSetSortBy: (value:SortBy) => void,
   sortBy: SortBy,
   deleteCompletedTodos: () => void,
-  todosLeft: number;
   completedTodosId: number[];
+  todosList: Todo[]
 };
 
 export const TodosFilter: React.FC<Props> = ({
   handleSetSortBy,
   sortBy,
   deleteCompletedTodos,
-  todosLeft,
   completedTodosId,
+  todosList,
 }) => (
   <footer className="footer">
     <span className="todo-count" data-cy="todosCounter">
-      {`${todosLeft} items left`}
+      {`${todosList.length - completedTodosId.length} items left`}
     </span>
 
     <ul className="filters">
@@ -61,9 +61,9 @@ export const TodosFilter: React.FC<Props> = ({
     <button
       type="button"
       className="clear-completed"
-      onClick={() => deleteCompletedTodos()}
+      onClick={deleteCompletedTodos}
       disabled={completedTodosId.length === 0}
-      style={completedTodosId.length === 0 ? { opacity: 0 } : { opacity: 1 }}
+      style={{ opacity: completedTodosId.length === 0 ? 0 : 1 }}
     >
       Clear completed
     </button>

@@ -6,32 +6,18 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { SortBy, Todo } from './types';
 
-let todos = localStorage.getItem('todosStorage');
-let todosFromLocalStorage: Todo[] = [];
-
-if (todos !== null) {
-  todosFromLocalStorage = JSON.parse(todos);
-  if (!Array.isArray(todosFromLocalStorage)) {
-    todosFromLocalStorage = [];
-  }
-}
+const todosFromLocalStorage = localStorage.getItem('todosStorage');
+const parsedTodos = todosFromLocalStorage
+  ? JSON.parse(todosFromLocalStorage) : [];
+const todosArray = Array.isArray(parsedTodos) ? parsedTodos : [];
 
 export const App: React.FC = () => {
   const [completedTodosId, setCompletedTodosId] = useState<number[]>(
-    todosFromLocalStorage.filter(todo => todo.completed)
+    todosArray.filter(todo => todo.completed)
       .map(todoId => todoId.id),
   );
-  const [todosList, setTodos] = useState<Todo[]>(
-    todosFromLocalStorage,
-  );
+  const [todosList, setTodos] = useState<Todo[]>(todosArray);
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.all);
-  const [todosLeft, setTodosLeft] = useState<number>(
-    todosList.length - completedTodosId.length,
-  );
-
-  useEffect(() => {
-    setTodosLeft(todosList.length - completedTodosId.length);
-  }, [todosList, completedTodosId]);
 
   const updateCheckTodo = (todoId: number) => {
     setCompletedTodosId((prevCompletedTodo) => {
@@ -51,7 +37,6 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('todosStorage', JSON.stringify(todosList));
-    todos = localStorage.getItem('todosStorage');
   }, [todosList]);
 
   const handleUpdateCheckTodo = (value: number) => updateCheckTodo(value);
@@ -77,7 +62,7 @@ export const App: React.FC = () => {
   };
 
   const updateCheckAllTodo = () => {
-    if (todosLeft === 0) {
+    if (todosList.length - completedTodosId.length === 0) {
       setTodos(todosList.map(todo => ({ ...todo, completed: false })));
       setCompletedTodosId([]);
     } else {
@@ -91,7 +76,7 @@ export const App: React.FC = () => {
       <Header handleAddTodo={handleAddTodo} />
 
       <section className="main">
-        {todosLeft !== 0 ? (
+        {todosList.length - completedTodosId.length !== 0 ? (
           <input
             type="checkbox"
             id="toggle-all"
@@ -126,9 +111,9 @@ export const App: React.FC = () => {
         <TodosFilter
           handleSetSortBy={handleSetSortBy}
           sortBy={sortBy}
-          todosLeft={todosLeft}
           completedTodosId={completedTodosId}
           deleteCompletedTodos={deleteCompletedTodos}
+          todosList={todosList}
         />
       ) : null}
     </div>

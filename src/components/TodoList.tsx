@@ -58,7 +58,7 @@ export const TodoList: React.FC<Props> = ({
         todo => todo.id === todoId,
       );
 
-      if (todoTitle === '' && updatedTodo) {
+      if (!todoTitle && updatedTodo) {
         handleDeleteTodo(todoId);
       } else if (updatedTodo && todoTitle !== updatedTodo.title) {
         updatedTodo = { ...updatedTodo, title: todoTitle };
@@ -79,6 +79,12 @@ export const TodoList: React.FC<Props> = ({
     }
   };
 
+  const handleOnDoubleClick = (todo: Todo) => {
+    setIsTodoEdit(todo.id);
+    setInputValue(todo.title);
+    setOldTitle(todo.title);
+  };
+
   return (
     <>
       {filteredTodos.map(todo => (
@@ -96,11 +102,7 @@ export const TodoList: React.FC<Props> = ({
               }}
             />
             <label
-              onDoubleClick={() => {
-                setIsTodoEdit(todo.id);
-                setInputValue(todo.title);
-                setOldTitle(todo.title);
-              }}
+              onDoubleClick={() => handleOnDoubleClick(todo)}
             >
               {todo.title}
             </label>
