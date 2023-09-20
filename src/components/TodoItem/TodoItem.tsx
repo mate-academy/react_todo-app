@@ -29,7 +29,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleTodoDeleting = () => {
-    const todosCopy = [...todos].filter(({ id: todoId }) => todoId !== id);
+    const todosCopy = todos.filter(({ id: todoId }) => todoId !== id);
 
     setTodos(todosCopy);
   };
@@ -97,7 +97,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={handleChangeOfTitle}
           onKeyUp={handleKeyUp}
           onBlur={handleNewTitleSubmit}
-          /* eslint-disable-next-line */
           autoFocus
         />
       )}
