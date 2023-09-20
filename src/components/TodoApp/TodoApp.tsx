@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 import { TodoList } from '../TodoList';
@@ -47,7 +47,9 @@ export const TodoApp: React.FC<Props> = () => {
     ));
   };
 
-  const uncompletedTodos = todos.filter(todo => !todo.completed);
+  const uncompletedTodos = useMemo(() => {
+    return todos.filter(todo => !todo.completed);
+  }, [todos]);
 
   return (
     <div className="todoapp">

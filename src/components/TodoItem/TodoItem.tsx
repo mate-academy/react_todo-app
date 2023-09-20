@@ -15,12 +15,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ item }) => {
-  const {
-    id,
-    title,
-    completed,
-  } = item;
-
+  const { id, title, completed } = item;
   const { setTodos } = useContext(TodosContext);
   const [isEditable, setIsEditable] = useState(false);
   const [editedTodo, setEditedTodo] = useState(title);
@@ -79,12 +74,12 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
       setIsEditable(false);
     }
 
-    if (event.key === 'Enter' && editedTodo.trim().length) {
-      saveChanges();
-    }
-
-    if (event.key === 'Enter' && !editedTodo.trim().length) {
-      handleRemoveTodo();
+    if (event.key === 'Enter') {
+      if (editedTodo.trim().length) {
+        saveChanges();
+      } else {
+        handleRemoveTodo();
+      }
     }
   };
 
@@ -103,7 +98,6 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           onChange={handleChangeStatus}
         />
         <label
-          htmlFor="toggle-view"
           onDoubleClick={() => setIsEditable(true)}
         >
           {title}

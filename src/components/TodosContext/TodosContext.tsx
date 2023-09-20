@@ -34,11 +34,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     const data = localStorage.getItem('todos');
 
-    if (!data) {
-      setTodos([]);
-    } else {
-      setTodos(JSON.parse(data));
-    }
+    setTodos(JSON.parse(data || '[]'));
   }, []);
 
   useEffect(() => {
