@@ -1,4 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../TodosContextProvider/TodosContextProvider';
@@ -12,6 +17,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
   const [isBeingEdited, setIsBeingEdited] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
+  const editedInput = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (editedInput.current) {
+      editedInput.current.focus();
+    }
+  }, [isBeingEdited]);
 
   const handleChangeOfTitle = ((
     event: React.ChangeEvent<HTMLInputElement>,
@@ -91,13 +103,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </div>
       {isBeingEdited && (
         <input
+          ref={editedInput}
           type="text"
           className="edit"
           value={newTitle}
           onChange={handleChangeOfTitle}
           onKeyUp={handleKeyUp}
           onBlur={handleNewTitleSubmit}
-          autoFocus
         />
       )}
     </li>
