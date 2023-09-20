@@ -21,21 +21,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleTodoCompleting = (event: React.ChangeEvent<HTMLInputElement>) => {
     const todosCopy = [...todos];
-    const todoIndex = todos.findIndex(({ id: todoId }) => todoId === id);
+    const searchedTodo = todos.find(({ id: todoId }) => todoId === id) as Todo;
 
-    todosCopy.splice(todoIndex, 1, {
-      ...todo,
-      completed: event.target.checked,
-    });
+    searchedTodo.completed = event.target.checked;
 
     setTodos(todosCopy);
   };
 
   const handleTodoDeleting = () => {
-    const todosCopy = [...todos];
-    const todoIndex = todosCopy.findIndex(({ id: todoId }) => todoId === id);
+    const todosCopy = [...todos].filter(({ id: todoId }) => todoId !== id);
 
-    todosCopy.splice(todoIndex, 1);
     setTodos(todosCopy);
   };
 
@@ -47,12 +42,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     const todosCopy = [...todos];
-    const todoIndex = todos.findIndex(({ id: todoId }) => todoId === id);
+    const searchedTodo = todos.find(({ id: todoId }) => todoId === id) as Todo;
 
-    todosCopy.splice(todoIndex, 1, {
-      ...todo,
-      title: newTitle.trim(),
-    });
+    searchedTodo.title = newTitle;
 
     setTodos(todosCopy);
     setIsBeingEdited(false);
@@ -84,15 +76,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={completed}
           onChange={handleTodoCompleting}
         />
+
         <label onDoubleClick={() => setIsBeingEdited(true)}>
           {title}
         </label>
-        {/* eslint-disable-next-line */}
+
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
           onClick={handleTodoDeleting}
+          aria-label="Delete the todo"
         />
       </div>
       {isBeingEdited && (

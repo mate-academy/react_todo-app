@@ -4,7 +4,6 @@ import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
 import {
   TodosContext,
-  // TodosContextProvider,
 } from './components/TodosContextProvider/TodosContextProvider';
 
 export const App = () => {
@@ -18,9 +17,7 @@ export const App = () => {
         <NewTodo />
       </header>
 
-      {todos.length !== 0 && (
-        <TodoList />
-      )}
+      {!!todos.length && <TodoList />}
     </div>
   );
 };

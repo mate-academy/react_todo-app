@@ -24,9 +24,9 @@ export const TodoList: React.FC = () => {
   const [filterKey, setFilterKey] = useState<FilterKey>(FilterKey.All);
   const { todos, setTodos } = useContext(TodosContext);
 
-  const areAllTodosCompleted = todos.every(({ completed }) => completed);
+  const isAllTodosCompleted = todos.every(({ completed }) => completed);
 
-  const IncompleteTodos = todos.filter(({ completed }) => !completed);
+  const activeTodos = todos.filter(({ completed }) => !completed);
 
   const filteredTodos = getFilteredTodos(filterKey, todos);
 
@@ -38,7 +38,7 @@ export const TodoList: React.FC = () => {
 
   const handleToggleAll = () => {
     setTodos(prevTodos => prevTodos.map(todo => ({
-      ...todo, completed: !areAllTodosCompleted,
+      ...todo, completed: !isAllTodosCompleted,
     })));
   };
 
@@ -54,7 +54,7 @@ export const TodoList: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          checked={areAllTodosCompleted}
+          checked={isAllTodosCompleted}
           onChange={handleToggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
@@ -68,9 +68,9 @@ export const TodoList: React.FC = () => {
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          {IncompleteTodos.length === 1
+          {activeTodos.length === 1
             ? '1 item left'
-            : `${IncompleteTodos.length} items left`}
+            : `${activeTodos.length} items left`}
         </span>
 
         <Filters

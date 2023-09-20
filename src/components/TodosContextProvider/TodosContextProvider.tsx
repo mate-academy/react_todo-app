@@ -32,9 +32,7 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <TodosContext.Provider
-      value={initialValue}
-    >
+    <TodosContext.Provider value={initialValue}>
       {children}
     </TodosContext.Provider>
   );
