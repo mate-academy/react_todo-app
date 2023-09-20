@@ -4,35 +4,26 @@ export function useLocalStorage<T, A>(
   key: string,
   reducer: (state: T, action: A) => T,
   initialState: T,
-  setAction: A,
 ): [T, (action: A) => void] {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
+  const init = (initState: T) => {
     const storedState = localStorage.getItem(key);
 
     if (storedState !== null) {
       try {
         const newInitialState: T = JSON.parse(storedState);
 
-        const localAction: A = { ...setAction, payload: newInitialState };
-
-        dispatch(localAction);
+        return newInitialState;
       } catch {
         localStorage.removeItem(key);
 
-        const localAction: A = { ...setAction, payload: initialState };
-
-        dispatch(localAction);
+        return initState;
       }
-
-      return;
     }
 
-    const localAction: A = { ...setAction, payload: initialState };
+    return initState;
+  };
 
-    dispatch(localAction);
-  }, [key]);
+  const [state, dispatch] = useReducer(reducer, initialState, init);
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(state));

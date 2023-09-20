@@ -71,17 +71,11 @@ type Props = {
   children: React.ReactNode;
 };
 
-const localStorageAction: Action = {
-  type: ActionType.SetTodos,
-  payload: [],
-};
-
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, dispatch] = useLocalStorage<Todo[], Action>(
     'todos',
     reducer,
     [],
-    localStorageAction,
   );
 
   return (
