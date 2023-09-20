@@ -9,7 +9,7 @@ export const TodoFooter = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const { selectedFilter, setSelectedFilter } = useContext(FilterContext);
 
-  const isActiveItemLeft = todos
+  const isActiveItemsLeft = todos
     .filter(({ completed }) => !completed).length;
   const isCompletedItemsLeft = todos
     .filter(({ completed }) => completed).length;
