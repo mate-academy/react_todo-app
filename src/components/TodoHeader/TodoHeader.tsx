@@ -39,9 +39,7 @@ export const TodoHeader = () => {
     <header className="header">
       <h1>todos</h1>
 
-      <form
-        onSubmit={handleSubmit}
-      >
+      <form onSubmit={handleSubmit}>
         <input
           ref={inputRef}
           type="text"

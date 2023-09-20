@@ -9,6 +9,9 @@ export const TodoFooter = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const { selectedFilter, setSelectedFilter } = useContext(FilterContext);
 
+  const activeItemLeft = todos.filter(({ completed }) => !completed).length;
+  const completedItemLeft = todos.filter(({ completed }) => completed).length;
+
   const clearCompleted = () => {
     const activeTodos = todos.filter(({ completed }) => !completed);
 
@@ -16,9 +19,9 @@ export const TodoFooter = () => {
   };
 
   return (
-    <footer className="footer">
+    <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(({ completed }) => !completed).length} items left`}
+        {`${activeItemLeft} items left`}
       </span>
 
       <ul className="filters">
@@ -65,7 +68,7 @@ export const TodoFooter = () => {
         </li>
       </ul>
 
-      {!!todos.filter(({ completed }) => completed).length && (
+      {!!completedItemLeft && (
         <button
           type="button"
           className="clear-completed"

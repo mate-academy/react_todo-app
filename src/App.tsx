@@ -11,9 +11,12 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <TodoHeader />
 
-      <TodoList />
-
-      {!!todos.length && <TodoFooter />}
+      {!!todos.length && (
+        <>
+          <TodoList />
+          <TodoFooter />
+        </>
+      )}
     </div>
   );
 };

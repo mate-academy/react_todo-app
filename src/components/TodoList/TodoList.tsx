@@ -11,9 +11,7 @@ export const TodoList: React.FC = () => {
 
   const toggleAll = () => {
     setTodos(currentTodos => {
-      const todosCopy = [...currentTodos];
-
-      return todosCopy.map(todo => ({
+      return currentTodos.map(todo => ({
         ...todo,
         completed: !todo.completed,
       }));
