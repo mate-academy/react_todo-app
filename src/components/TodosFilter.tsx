@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { SortBy, Todo } from '../types';
 
 type Props = {
@@ -7,6 +8,18 @@ type Props = {
   completedTodosId: number[];
   todosList: Todo[]
 };
+
+const FilterAllClassName = (sortBy: SortBy) => cn(
+  { selected: sortBy === SortBy.all },
+);
+
+const FilterActiveClassName = (sortBy: SortBy) => cn(
+  { selected: sortBy === SortBy.active },
+);
+
+const FilterCompletedClassName = (sortBy: SortBy) => cn(
+  { selected: sortBy === SortBy.completed },
+);
 
 export const TodosFilter: React.FC<Props> = ({
   handleSetSortBy,
@@ -24,9 +37,7 @@ export const TodosFilter: React.FC<Props> = ({
       <li>
         <a
           href="#/"
-          className={sortBy === SortBy.all
-            ? 'selected'
-            : ''}
+          className={FilterAllClassName(sortBy)}
           onClick={() => handleSetSortBy(SortBy.all)}
         >
           All
@@ -36,9 +47,7 @@ export const TodosFilter: React.FC<Props> = ({
       <li>
         <a
           href="#/active"
-          className={sortBy === SortBy.active
-            ? 'selected'
-            : ''}
+          className={FilterActiveClassName(sortBy)}
           onClick={() => handleSetSortBy(SortBy.active)}
         >
           Active
@@ -48,9 +57,7 @@ export const TodosFilter: React.FC<Props> = ({
       <li>
         <a
           href="#/completed"
-          className={sortBy === SortBy.completed
-            ? 'selected'
-            : ''}
+          className={FilterCompletedClassName(sortBy)}
           onClick={() => handleSetSortBy(SortBy.completed)}
         >
           Completed

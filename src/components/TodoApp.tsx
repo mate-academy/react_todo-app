@@ -10,13 +10,7 @@ export const TodoApp: React.FC<Props> = ({ handleAddTodo }) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const AddTodo = (
-    event: FormEvent<HTMLFormElement> & {
-      target: {
-        todoAdd: {
-          value:string;
-        };
-      };
-    },
+    event: FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
 

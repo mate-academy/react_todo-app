@@ -21,8 +21,8 @@ export const TodoList: React.FC<Props> = ({
   handleSetTodos,
 }) => {
   const [isTodoEdit, setIsTodoEdit] = useState<number | null>(null);
-  const [inputValue, setInputValue] = useState<string>('');
-  const [oldTitle, setOldTitle] = useState<string>('');
+  const [inputValue, setInputValue] = useState('');
+  const [oldTitle, setOldTitle] = useState('');
   const filteredTodos = useMemo(() => {
     if (sortBy === SortBy.all) {
       return todos;
