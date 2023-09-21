@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { TodosFilter } from './components/TodosFilter';
@@ -6,7 +5,7 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { SortBy, Todo } from './types';
 
-const todosFromLocalStorage = localStorage.getItem('todosStorage');
+const todosFromLocalStorage = localStorage.getItem('todos');
 const parsedTodos = todosFromLocalStorage
   ? JSON.parse(todosFromLocalStorage) : [];
 const todosArray = Array.isArray(parsedTodos) ? parsedTodos : [];
@@ -36,7 +35,7 @@ export const App: React.FC = () => {
   }, [completedTodosId]);
 
   useEffect(() => {
-    localStorage.setItem('todosStorage', JSON.stringify(todosList));
+    localStorage.setItem('todos', JSON.stringify(todosList));
   }, [todosList]);
 
   const handleUpdateCheckTodo = (value: number) => updateCheckTodo(value);
@@ -76,38 +75,30 @@ export const App: React.FC = () => {
       <Header handleAddTodo={handleAddTodo} />
 
       <section className="main">
-        {todosList.length - completedTodosId.length !== 0 ? (
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-            onClick={updateCheckAllTodo}
-          />
-        ) : (
-          <input
-            type="checkbox"
-            checked
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-            onClick={updateCheckAllTodo}
-          />
-        )}
-        {todosList.length > 0 ? (
+        <input
+          type="checkbox"
+          checked={todosList.length - completedTodosId.length === 0}
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+          onClick={updateCheckAllTodo}
+        />
+        {todosList.length > 0 && (
           <label htmlFor="toggle-all">Mark all as complete</label>
-        ) : null}
-        <ul className="todo-list" data-cy="todosList">
-          <TodoList
-            todos={todosList}
-            handleUpdateCheckTodo={handleUpdateCheckTodo}
-            handleDeleteTodo={handleDeleteTodo}
-            sortBy={sortBy}
-            handleSetTodos={handleSetTodos}
-          />
-        </ul>
+        )}
+        {todosList.length !== 0 && (
+          <ul className="todo-list" data-cy="todosList">
+            <TodoList
+              todos={todosList}
+              handleUpdateCheckTodo={handleUpdateCheckTodo}
+              handleDeleteTodo={handleDeleteTodo}
+              sortBy={sortBy}
+              handleSetTodos={handleSetTodos}
+            />
+          </ul>
+        )}
       </section>
-      {todosList.length !== 0 ? (
+      {todosList.length !== 0 && (
         <TodosFilter
           handleSetSortBy={handleSetSortBy}
           sortBy={sortBy}
@@ -115,7 +106,7 @@ export const App: React.FC = () => {
           deleteCompletedTodos={deleteCompletedTodos}
           todosList={todosList}
         />
-      ) : null}
+      )}
     </div>
   );
 };

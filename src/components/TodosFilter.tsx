@@ -15,7 +15,7 @@ export const TodosFilter: React.FC<Props> = ({
   completedTodosId,
   todosList,
 }) => (
-  <footer className="footer">
+  <footer className="footer" data-cy="todosFilter">
     <span className="todo-count" data-cy="todosCounter">
       {`${todosList.length - completedTodosId.length} items left`}
     </span>
@@ -58,14 +58,14 @@ export const TodosFilter: React.FC<Props> = ({
       </li>
     </ul>
 
-    <button
-      type="button"
-      className="clear-completed"
-      onClick={deleteCompletedTodos}
-      disabled={completedTodosId.length === 0}
-      style={{ opacity: completedTodosId.length === 0 ? 0 : 1 }}
-    >
-      Clear completed
-    </button>
+    {completedTodosId.length !== 0 && (
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={deleteCompletedTodos}
+      >
+        Clear completed
+      </button>
+    )}
   </footer>
 );
