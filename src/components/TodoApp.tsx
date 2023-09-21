@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTodos } from './TodosContext';
 import TodoList from './TodoList';
 import TodosFilter from './TodosFilter';
@@ -13,6 +13,12 @@ const TodoApp: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState<Status>(Status.All);
 
   const activeTodos = todos.filter(todo => !todo.completed);
+
+  useEffect(() => {
+    const allCompleted = todos.every(todo => todo.completed);
+
+    setToggleAll(allCompleted);
+  }, [todos]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
