@@ -6,7 +6,7 @@ type Props = {
   todo: Todo;
   deleteTodo: (todoId: number) => void;
   deleteId: number[];
-  selectedaTodo:  number | null | undefined;
+  selectedaTodo: number | null | undefined;
   onSelectedTodo: (id: number | null) => void;
   editTodo: (todoID: number, updatedTodo: Todo) => void;
   checkedTodo: (todo: Todo) => void;
@@ -56,66 +56,66 @@ export const TodoItem: React.FC<Props> = ({
     if (onSelectedTodo) {
       onSelectedTodo(null);
     }
-  }
+  };
 
   return (
     <>
-        <form
-          className={classNames('todo', {
-            completed: todo.completed,
-          })}
-          key={todo.id}
-          onSubmit={handleSubmit}
-        >
-      <label className="todo__status-label">
-        <input
-          type="checkbox"
-          className="todo__status"
-          onChange={() => checkedTodo(todo)}
-        />
-      </label>
+      <form
+        className={classNames('todo', {
+          completed: todo.completed,
+        })}
+        key={todo.id}
+        onSubmit={handleSubmit}
+      >
+        <label className="todo__status-label">
+          <input
+            type="checkbox"
+            className="todo__status"
+            onChange={() => checkedTodo(todo)}
+          />
+        </label>
 
-      {selectedaTodo === todo.id
-      ?(
-        <input
-          type="text"
-          className="todo__title-field"
-          placeholder="Please edit todo"
-          onChange={handleRenameTodo}
-          value={renameTodo}
-          onKeyUp={handleKey}
-          onBlur={handleBlur}
-        />
-      )
-      : (
-        <>
-        <span
-          className="todo__title"
-          onDoubleClick={() => onSelectedTodo(todo.id)}
-        >
-          {todo.title}
-        </span>
+        {selectedaTodo === todo.id
+          ? (
+            <input
+              type="text"
+              className="todo__title-field"
+              placeholder="Please edit todo"
+              onChange={handleRenameTodo}
+              value={renameTodo}
+              onKeyUp={handleKey}
+              onBlur={handleBlur}
+            />
+          )
+          : (
+            <>
+              <span
+                className="todo__title"
+                onDoubleClick={() => onSelectedTodo(todo.id)}
+              >
+                {todo.title}
+              </span>
 
-          <button
-            type="button"
-            className="todo__remove"
-            onClick={() => deleteTodo(todo.id)}
-          >
-            x
-          </button>
+              <button
+                type="button"
+                className="todo__remove"
+                onClick={() => deleteTodo(todo.id)}
+              >
+                x
+              </button>
 
-          <div className={classNames(
-            'modal overlay', {
-              'is-active': deleteItem,
-            },
+              <div className={classNames(
+                'modal overlay', {
+                  'is-active': deleteItem,
+                },
+              )}
+              >
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
+            </>
           )}
-          >
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-        </>
-      )}
-    </form>
+      </form>
     </>
   );
 };

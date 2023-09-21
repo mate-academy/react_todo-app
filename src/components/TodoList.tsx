@@ -18,7 +18,6 @@ export const TodoList: React.FC<Props> = ({
   editTodo,
   checkedTodo,
 }) => {
-
   const [selelectTodo, setSelelectTodo] = useState<number | null>();
 
   return (

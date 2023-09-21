@@ -181,12 +181,12 @@ export const App: React.FC = () => {
             </section>
           )}
 
-       {todos.length !== 0 && (
-       <TodoFooter
-          todos={todos}
-          filterBy={filterBy}
-          filterTodos={setFilterBy}
-        />
+        {todos.length !== 0 && (
+          <TodoFooter
+            todos={todos}
+            filterBy={filterBy}
+            filterTodos={setFilterBy}
+          />
         )}
 
         {newError
@@ -200,4 +200,3 @@ export const App: React.FC = () => {
     </div>
   );
 };
-
