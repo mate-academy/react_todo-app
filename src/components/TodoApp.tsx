@@ -13,6 +13,7 @@ const TodoApp: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState<Status>(Status.All);
 
   const activeTodos = todos.filter(todo => !todo.completed);
+  const isAnyTodoCompleted = todos.some(todo => todo.completed);
 
   useEffect(() => {
     const allCompleted = todos.every(todo => todo.completed);
@@ -32,11 +33,9 @@ const TodoApp: React.FC = () => {
   };
 
   const handleToggleAll = () => {
-    const newToggleAll = !toggleAll;
-
-    setToggleAll(newToggleAll);
+    setToggleAll(!toggleAll);
     const updatedTodos = todos.map(todo => (
-      { ...todo, completed: newToggleAll }
+      { ...todo, completed: !toggleAll }
     ));
 
     setTodos(updatedTodos);
@@ -72,7 +71,7 @@ const TodoApp: React.FC = () => {
             data-cy="toggleAll"
             checked={toggleAll}
             onChange={handleToggleAll}
-            disabled={todos.length === 0}
+            disabled={!todos.length}
           />
 
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -92,7 +91,7 @@ const TodoApp: React.FC = () => {
             onFilterChange={handleFilterChange}
           />
 
-          {todos.some(todo => todo.completed) && (
+          {isAnyTodoCompleted && (
             <button
               type="button"
               className="clear-completed"

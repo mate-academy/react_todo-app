@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 import { useTodos } from './TodosContext';
 import { Todo } from '../Types/Todo';
 
@@ -28,26 +29,35 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   };
 
   const handleInputBlur = () => {
-    if (editedText.trim() === '') {
-      deleteTodo(todo.id);
-    } else {
-      toggleTodo(todo.id, editedText);
-    }
+    const result = editedText.trim() === ''
+      ? deleteTodo(todo.id)
+      : toggleTodo(todo.id, editedText);
 
     setIsEditing(false);
+
+    return result;
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleInputBlur();
-    } else if (e.key === 'Escape') {
-      setEditedText(todo.title);
-      setIsEditing(false);
+    switch (e.key) {
+      case 'Enter':
+        handleInputBlur();
+        break;
+      case 'Escape':
+        setEditedText(todo.title);
+        setIsEditing(false);
+        break;
+      default:
+        break;
     }
   };
 
   return (
-    <li className={`${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}>
+    <li className={classNames({
+      completed: todo.completed,
+      editing: isEditing,
+    })}
+    >
       <div className="view">
         <input
           type="checkbox"
