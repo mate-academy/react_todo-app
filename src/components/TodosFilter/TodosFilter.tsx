@@ -11,7 +11,7 @@ export const TodosFilter: React.FC<Props> = () => {
   const { filter, setFilter } = useContext(TodosContext);
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
