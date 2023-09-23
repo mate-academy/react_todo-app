@@ -9,12 +9,13 @@ export const TodoList: React.FC<Props> = () => {
 
   return (
     <>
-      {filteredTodos().length === 0 && (
+      {filteredTodos && (
         <ul className="todo-list" data-cy="todoList">
           {filteredTodos().map(item => (
             <TodoItem
               key={item.id}
-              item={item}            />
+              item={item}
+            />
           ))}
         </ul>
       )}
