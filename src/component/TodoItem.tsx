@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { TodosContext } from '../TodosContext';
 import { Todo } from '../types/Todo';
+import { KeyStatus } from '../types/KeyStatus';
 
 type Props = {
   todo: Todo
@@ -44,7 +45,7 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
   const handleBlur = () => {
     setEditStatus(false);
 
-    if (editInputValue.trim() === '') {
+    if (!editInputValue.trim()) {
       handleDeleteTodo(todo);
 
       return;
@@ -60,15 +61,16 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape') {
-      setEditInputValue(todo.title);
-      setEditStatus(false);
-
-      return;
-    }
-
-    if (event.key === 'Enter') {
-      handleBlur();
+    switch (event.key) {
+      case KeyStatus.Esc:
+        setEditInputValue(todo.title);
+        setEditStatus(false);
+        break;
+      case KeyStatus.Enter:
+        handleBlur();
+        break;
+      default:
+        break;
     }
   };
 

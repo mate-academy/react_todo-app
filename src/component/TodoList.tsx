@@ -11,6 +11,8 @@ export default function TodoList() {
     todosFilter,
   } = useContext(TodosContext);
 
+  const filterTodos = todosFilter();
+
   const handleToggleAll = () => {
     setTodos(todos.map(todo => ({
       ...todo,
@@ -34,7 +36,7 @@ export default function TodoList() {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list" data-cy="todoList">
-            {todosFilter().map(todo => (
+            {filterTodos.map(todo => (
               <TodoItem todo={todo} key={todo.id} />
             ))}
           </ul>
