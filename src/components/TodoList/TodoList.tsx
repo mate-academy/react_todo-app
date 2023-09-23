@@ -10,7 +10,7 @@ export const TodoList: React.FC<Props> = () => {
   return (
     <>
       {filteredTodos && (
-        <ul className="todo-list" data-cy="todoList">
+        <ul className="todo-list" data-cy="todosList">
           {filteredTodos().map(item => (
             <TodoItem
               key={item.id}
