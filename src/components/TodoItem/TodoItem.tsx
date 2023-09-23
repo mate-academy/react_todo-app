@@ -97,16 +97,14 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         >
           {title}
         </label>
-
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
           onClick={handleRemoveTodo}
         >
-          Delete
+          {' '}
         </button>
-
       </div>
       <input
         type="text"
