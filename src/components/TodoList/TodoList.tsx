@@ -5,17 +5,16 @@ import { TodoItem } from '../TodoItem/TodoItem';
 type Props = {};
 
 export const TodoList: React.FC<Props> = () => {
-  const { filtredTodos } = useContext(TodosContext);
+  const { filteredTodos } = React.useContext(TodosContext);
 
   return (
     <>
-      {filtredTodos().length === 0 && (
+      {filteredTodos().length === 0 && (
         <ul className="todo-list" data-cy="todoList">
-          {filtredTodos().map((todo) => (
+          {filteredTodos().map(item => (
             <TodoItem
-              key={todo.id}
-              todo={todo}
-            />
+              key={item.id}
+              item={item}            />
           ))}
         </ul>
       )}

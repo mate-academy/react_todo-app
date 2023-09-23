@@ -107,7 +107,6 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           Delete
         </button>
 
-
       </div>
       <input
         type="text"

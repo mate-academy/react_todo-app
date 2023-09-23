@@ -1,7 +1,8 @@
-import React from 'react';
-import classNames from 'classnames';
-import { Status } from '../../types/Todo';
-import { TodosContext } from '../TodosContext/TodosContext';
+import React, { useContext } from 'react';
+
+import classNames from "classnames";
+import { Status } from "../../types/Todo";
+import { TodosContext } from "../TodosContext/TodosContext";
 
 type Props = {
 };
