@@ -1,11 +1,11 @@
 import { createContext, useMemo } from 'react';
 
-import { ActionType, Todo } from '../../types';
+import { Action, Todo } from '../../types';
 import { useLocalStorageReducer } from '../../hooks';
 
 type TodosContextValue = {
   todos: Todo[];
-  dispatch: React.Dispatch<Action>;
+  dispatch: React.Dispatch<DispatchAction>;
 };
 
 export const TodosContext = createContext<TodosContextValue>({
@@ -13,16 +13,16 @@ export const TodosContext = createContext<TodosContextValue>({
   dispatch: () => {},
 });
 
-type Action = { type: ActionType.Add, payload: string }
-| { type: ActionType.Remove, payload: number }
-| { type: ActionType.Edit, payload: { id: number, title: string } }
-| { type: ActionType.Toggle, payload: number }
-| { type: ActionType.ToggleAll }
-| { type: ActionType.ClearCompleted };
+type DispatchAction = { type: Action.Add, payload: string }
+| { type: Action.Remove, payload: number }
+| { type: Action.Edit, payload: { id: number, title: string } }
+| { type: Action.Toggle, payload: number }
+| { type: Action.ToggleAll }
+| { type: Action.ClearCompleted };
 
-function todosReducer(state: Todo[], action: Action): Todo[] {
+function todosReducer(state: Todo[], action: DispatchAction): Todo[] {
   switch (action.type) {
-    case ActionType.Add: {
+    case Action.Add: {
       const newTodo: Todo = {
         id: +new Date(),
         title: action.payload,
@@ -32,7 +32,7 @@ function todosReducer(state: Todo[], action: Action): Todo[] {
       return [...state, newTodo];
     }
 
-    case ActionType.Edit: {
+    case Action.Edit: {
       const index = state.findIndex(({ id }) => id === action.payload.id);
       const oldTodo = state[index];
       const newTodo = {
@@ -47,11 +47,11 @@ function todosReducer(state: Todo[], action: Action): Todo[] {
       ];
     }
 
-    case ActionType.Remove: {
+    case Action.Remove: {
       return state.filter(({ id }) => id !== action.payload);
     }
 
-    case ActionType.Toggle: {
+    case Action.Toggle: {
       const index = state.findIndex(({ id }) => id === action.payload);
       const oldTodo = state[index];
       const newTodo = {
@@ -66,7 +66,7 @@ function todosReducer(state: Todo[], action: Action): Todo[] {
       ];
     }
 
-    case ActionType.ToggleAll: {
+    case Action.ToggleAll: {
       const hasActive = state.some(({ completed }) => !completed);
 
       return state.map(todo => {
@@ -86,7 +86,7 @@ function todosReducer(state: Todo[], action: Action): Todo[] {
       });
     }
 
-    case ActionType.ClearCompleted: {
+    case Action.ClearCompleted: {
       return state.filter(({ completed }) => !completed);
     }
 

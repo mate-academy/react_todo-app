@@ -5,7 +5,7 @@ import React, {
   useContext,
 } from 'react';
 
-import { ActionType, Status } from '../../types';
+import { Action, Status } from '../../types';
 import { TodosContext } from '../TodosProvider';
 import { NewTodo } from '../NewTodo';
 import { TodoList } from '../TodoList';
@@ -17,13 +17,13 @@ export const TodoApp: React.FC = memo(() => {
 
   const handleToggleAllChange = () => {
     dispatch({
-      type: ActionType.ToggleAll,
+      type: Action.ToggleAll,
     });
   };
 
   const handleClearCompletedClick = () => {
     dispatch({
-      type: ActionType.ClearCompleted,
+      type: Action.ClearCompleted,
     });
   };
 

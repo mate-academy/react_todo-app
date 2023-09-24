@@ -6,7 +6,7 @@ import {
   useContext,
 } from 'react';
 
-import { ActionType } from '../../types';
+import { Action } from '../../types';
 import { TodosContext } from '../TodosProvider';
 
 export const NewTodo: React.FC = memo(() => {
@@ -30,7 +30,7 @@ export const NewTodo: React.FC = memo(() => {
     }
 
     dispatch({
-      type: ActionType.Add,
+      type: Action.Add,
       payload: todoTitle,
     });
     setTitle('');

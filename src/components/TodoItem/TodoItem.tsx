@@ -7,7 +7,7 @@ import {
 } from 'react';
 import classNames from 'classnames';
 
-import { ActionType, Todo } from '../../types';
+import { Action, Todo } from '../../types';
 import { TodosContext } from '../TodosProvider';
 
 type Props = {
@@ -47,12 +47,12 @@ export const TodoItem: React.FC<Props> = memo(({ item }) => {
 
     if (!newTitle) {
       dispatch({
-        type: ActionType.Remove,
+        type: Action.Remove,
         payload: id,
       });
     } else if (newTitle !== title) {
       dispatch({
-        type: ActionType.Edit,
+        type: Action.Edit,
         payload: { id, title: newTitle },
       });
     }
@@ -62,14 +62,14 @@ export const TodoItem: React.FC<Props> = memo(({ item }) => {
 
   const handleCheckboxChange = () => {
     dispatch({
-      type: ActionType.Toggle,
+      type: Action.Toggle,
       payload: id,
     });
   };
 
   const handleDeleteClick = () => {
     dispatch({
-      type: ActionType.Remove,
+      type: Action.Remove,
       payload: id,
     });
   };
