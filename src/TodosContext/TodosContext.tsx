@@ -35,8 +35,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const filterTodos = () => {
     switch (filterStatus) {
-      case Status.ALL:
-        return todos;
       case Status.ACTIVE:
         return todos.filter(todo => !todo.completed);
       case Status.COMPLETED:

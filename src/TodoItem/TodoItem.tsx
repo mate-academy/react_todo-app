@@ -39,11 +39,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     const completedAllStatus = updatedTodosStatus
       .filter(todoItem => !todoItem.completed);
 
-    if (completedAllStatus.length < 1) {
-      setToggleAllStatus(true);
-    } else {
-      setToggleAllStatus(false);
-    }
+    setToggleAllStatus(completedAllStatus.length < 1);
   };
 
   useEffect(() => {
