@@ -29,8 +29,9 @@ export const TodosContext = React.createContext<TodoContext>({
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [isToggleAllStatus, setIsToggleAllStatus]
-  = useState<boolean>(todos.every(todo => todo.completed) && todos.length > 0);
+  const [isToggleAllStatus, setIsToggleAllStatus] = useState<boolean>(
+    todos.every(todo => todo.completed) && todos.length > 0,
+  );
   const [filterBy, setFilterBy] = useState<Status>(Status.all);
 
   const todosFilter = () => {

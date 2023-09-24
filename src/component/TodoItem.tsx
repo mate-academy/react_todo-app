@@ -13,7 +13,6 @@ type Props = {
   todo: Todo
 };
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 export const TodoItem:React.FC<Props> = ({ todo }) => {
   const { todos, setTodos, setIsToggleAllStatus } = useContext(TodosContext);
   const [editStatus, setEditStatus] = useState(false);
@@ -41,6 +40,10 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
       editFocus.current.focus();
     }
   }, [editStatus]);
+
+  const handleLableDoubleClick = () => {
+    setEditStatus(true);
+  };
 
   const handleBlur = () => {
     setEditStatus(false);
@@ -90,9 +93,9 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={() => handleCompleteTodo(todo.id)}
         />
-        <label>{todo.title}</label>
-
+        <label onDoubleClick={handleLableDoubleClick}>{todo.title}</label>
         <button
+          aria-label="deleteTodo"
           type="button"
           className="destroy"
           data-cy="deleteTodo"

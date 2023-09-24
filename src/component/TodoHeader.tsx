@@ -20,7 +20,9 @@ export default function TodoHeader() {
   const handleSubmit = (event:React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!todoInput) {
+    if (todoInput.trim() === '') {
+      setTodoInput('');
+
       return;
     }
 

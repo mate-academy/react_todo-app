@@ -17,7 +17,7 @@ export const TodoFooter:React.FC = () => {
   }, [todos]);
 
   const deleteTodos = () => {
-    setTodos(todos.filter(todo => todo.completed === false));
+    setTodos(todos.filter(todo => !todo.completed));
     setIsToggleAllStatus(false);
   };
 
