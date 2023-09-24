@@ -1,4 +1,5 @@
 import { useContext, useMemo, useCallback } from 'react';
+import cn from 'classnames';
 
 import { TodosContext } from '../TodosContext/TodosContext';
 import { Status } from '../enum/Status';
@@ -46,9 +47,7 @@ export const TodoFooter = () => {
             <li>
               <a
                 href="#/active"
-                className={
-                  Status.ACTIVE === filterStatus ? 'selected' : ''
-                }
+                className={cn({ selected: Status.ACTIVE === filterStatus })}
                 onClick={() => setFilterStatus(Status.ACTIVE)}
               >
                 Active
