@@ -2,13 +2,17 @@ import React, { useContext, useState } from 'react';
 import { TodosContext } from '../../Store';
 
 export const Header: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos, setVisibleTodoApp } = useContext(TodosContext);
   const [value, setValue] = useState('');
 
   const resetForm = () => setValue('');
 
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (value.length === 0) {
+      return;
+    }
 
     const newTodo = {
       id: todos.length,
@@ -17,6 +21,7 @@ export const Header: React.FC = () => {
     };
 
     setTodos((prevState) => [...prevState, newTodo]);
+    setVisibleTodoApp(true);
     resetForm();
   };
 

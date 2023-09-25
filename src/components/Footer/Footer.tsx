@@ -1,11 +1,20 @@
 import React, { useContext, useMemo } from 'react';
 import { TodosContext } from '../../Store';
+import { TodosFilter } from '../TodosFilter';
 
-export const Footer: React.FC = () => {
+interface Props {
+  clearCompleted: () => void;
+}
+
+export const Footer: React.FC<Props> = ({ clearCompleted }) => {
   const { todos } = useContext(TodosContext);
 
   const getNotCompletedTodos = useMemo(() => {
     return todos.filter(({ completed }) => completed === false);
+  }, [todos]);
+
+  const completedTodos = useMemo(() => {
+    return todos.filter(({ completed }) => completed);
   }, [todos]);
 
   return (
@@ -14,25 +23,17 @@ export const Footer: React.FC = () => {
         {`${getNotCompletedTodos.length} items left`}
       </span>
 
-      <ul className="filters">
-        <li>
-          <a href="#/" className="selected">
-            All
-          </a>
-        </li>
+      <TodosFilter />
 
-        <li>
-          <a href="#/active">Active</a>
-        </li>
-
-        <li>
-          <a href="#/completed">Completed</a>
-        </li>
-      </ul>
-
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {completedTodos.length >= 1 && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={clearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
