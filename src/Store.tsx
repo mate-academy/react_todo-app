@@ -40,9 +40,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem('todos', JSON.stringify(todos));
-  // }, [todos]);
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const value = {
     todos,
