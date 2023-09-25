@@ -93,14 +93,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           className="toggle"
           id="toggle-view"
-          onChange={() => handleTodoStatus()}
+          onChange={handleTodoStatus}
         />
         <label>{todo.title}</label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => handleDeleteTodo()}
+          onClick={handleDeleteTodo}
         />
       </div>
       <input
@@ -109,7 +109,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         className="edit"
         value={inputValue}
         onChange={(event) => setInputValue(event.target.value)}
-        onBlur={() => handleOnBlur()}
+        onBlur={handleOnBlur}
         onKeyUp={(event) => (
           event.key === KeyUpStatus.Enter
             || event.key === KeyUpStatus.ESC ? handleKeyUp(event) : null

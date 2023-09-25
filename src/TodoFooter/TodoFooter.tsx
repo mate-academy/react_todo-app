@@ -35,9 +35,7 @@ export const TodoFooter = () => {
             <li>
               <a
                 href="#/"
-                className={
-                  Status.ALL === filterStatus ? 'selected' : ''
-                }
+                className={cn({ selected: Status.ALL === filterStatus })}
                 onClick={() => setFilterStatus(Status.ALL)}
               >
                 All
@@ -57,9 +55,7 @@ export const TodoFooter = () => {
             <li>
               <a
                 href="#/completed"
-                className={
-                  Status.COMPLETED === filterStatus ? 'selected' : ''
-                }
+                className={cn({ selected: Status.COMPLETED === filterStatus })}
                 onClick={() => setFilterStatus(Status.COMPLETED)}
               >
                 Completed
@@ -71,7 +67,7 @@ export const TodoFooter = () => {
             <button
               type="button"
               className="clear-completed"
-              onClick={() => clearCompletedTodo()}
+              onClick={clearCompletedTodo}
             >
               Clear completed
             </button>

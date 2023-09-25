@@ -34,7 +34,7 @@ export const TodoList = () => {
             id="toggle-all"
             className="toggle-all"
             data-cy="toggleAll"
-            onChange={() => handleToggleAll()}
+            onChange={handleToggleAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
