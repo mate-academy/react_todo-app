@@ -2,19 +2,20 @@ import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { DispatchTodos, StateTodos } from '../TodosContext/TodosContext';
 import { Query } from '../../helpers/Query';
+import { QueryEnum } from '../../helpers/QueryEnum';
 
 interface Props {
   setQuery: (value: Query) => void;
 }
 
 export const Footer: React.FC<Props> = ({ setQuery = () => { } }) => {
-  const [selected, setSelected] = useState('All');
+  const [selected, setSelected] = useState<Query>(QueryEnum.All);
   const todos = useContext(StateTodos);
   const dispatch = useContext(DispatchTodos);
   let itemsLeft = '';
 
-  const notCompletedTodos = todos.filter(todo => todo.completed === false);
-  const completedTodos = todos.filter(todo => todo.completed === true);
+  const notCompletedTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
 
   if (todos.length) {
     switch (notCompletedTodos.length) {
@@ -31,7 +32,7 @@ export const Footer: React.FC<Props> = ({ setQuery = () => { } }) => {
 
   const handleClick = (value: string) => {
     setQuery(value as Query);
-    setSelected(value);
+    setSelected(value as Query);
   };
 
   return (
@@ -47,9 +48,9 @@ export const Footer: React.FC<Props> = ({ setQuery = () => { } }) => {
               <a
                 href="#/"
                 className={classNames({
-                  selected: selected === 'All',
+                  selected: selected === QueryEnum.All,
                 })}
-                onClick={() => handleClick('All')}
+                onClick={() => handleClick(QueryEnum.All)}
               >
                 All
               </a>
@@ -59,9 +60,9 @@ export const Footer: React.FC<Props> = ({ setQuery = () => { } }) => {
               <a
                 href="#/active"
                 className={classNames({
-                  selected: selected === 'Active',
+                  selected: selected === QueryEnum.Active,
                 })}
-                onClick={() => handleClick('Active')}
+                onClick={() => handleClick(QueryEnum.Active)}
               >
                 Active
               </a>
@@ -71,16 +72,16 @@ export const Footer: React.FC<Props> = ({ setQuery = () => { } }) => {
               <a
                 href="#/completed"
                 className={classNames({
-                  selected: selected === 'Completed',
+                  selected: selected === QueryEnum.Completed,
                 })}
-                onClick={() => handleClick('Completed')}
+                onClick={() => handleClick(QueryEnum.Completed)}
               >
                 Completed
               </a>
             </li>
           </ul>
 
-          {completedTodos.length !== 0 && (
+          {!!completedTodos.length && (
             <button
               type="button"
               className="clear-completed"

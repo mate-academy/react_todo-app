@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../helpers/Todo';
 import { DispatchTodos } from '../TodosContext/TodosContext';
@@ -32,13 +37,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleDoubleClick = (
   ) => {
     setEdit(true);
-
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, 0);
   };
+
+  useEffect(() => {
+    if (inputRef.current && edit) {
+      inputRef.current.focus();
+    }
+  }, [edit]);
 
   const saveNewTitleTodo = (event: string) => {
     dispatch({

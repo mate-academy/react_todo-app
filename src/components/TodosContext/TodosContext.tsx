@@ -50,7 +50,7 @@ function reducer(todos: Todo[], action: Action): Todo[] {
       const index = [...todos].findIndex(todo => todo.id === action.id);
       const newTodos = [...todos];
 
-      if (action.newTitle !== undefined) {
+      if (action.newTitle) {
         if (action.newTitle.length) {
           newTodos[index].title = action.newTitle;
         } else {
@@ -110,7 +110,6 @@ export const StateTodos = React.createContext(initialTodos);
 
 export const TodosContext: React.FC<Props> = ({ children }) => {
   const [todos, dispatch] = useReducer(reducer, initialTodos);
-  // const [todos, dispatch] = useLocalStorage('todos', initialTodos);
 
   return (
     <DispatchTodos.Provider value={dispatch}>
