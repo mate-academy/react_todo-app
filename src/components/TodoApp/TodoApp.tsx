@@ -2,17 +2,16 @@ import React, {
   memo,
   useMemo,
   useState,
-  useContext,
 } from 'react';
 
 import { Action, Status } from '../../types';
-import { TodosContext } from '../TodosProvider';
+import { useTodos } from '../../hooks';
 import { NewTodo } from '../NewTodo';
 import { TodoList } from '../TodoList';
 import { TodosFilter } from '../TodosFilter';
 
 export const TodoApp: React.FC = memo(() => {
-  const { todos, dispatch } = useContext(TodosContext);
+  const { todos, dispatch } = useTodos();
   const [filterStatus, setFilterStatus] = useState(Status.All);
 
   const handleToggleAllChange = () => {

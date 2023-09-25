@@ -3,19 +3,18 @@ import {
   useRef,
   useState,
   useEffect,
-  useContext,
 } from 'react';
 import classNames from 'classnames';
 
 import { Action, Todo } from '../../types';
-import { TodosContext } from '../TodosProvider';
+import { useTodos } from '../../hooks';
 
 type Props = {
   item: Todo;
 };
 
 export const TodoItem: React.FC<Props> = memo(({ item }) => {
-  const { dispatch } = useContext(TodosContext);
+  const { dispatch } = useTodos();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(item.title);
   const editInputRef = useRef<HTMLInputElement | null>(null);

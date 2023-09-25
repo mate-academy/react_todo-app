@@ -3,14 +3,13 @@ import {
   useRef,
   useState,
   useEffect,
-  useContext,
 } from 'react';
 
 import { Action } from '../../types';
-import { TodosContext } from '../TodosProvider';
+import { useTodos } from '../../hooks';
 
 export const NewTodo: React.FC = memo(() => {
-  const { dispatch } = useContext(TodosContext);
+  const { dispatch } = useTodos();
   const [title, setTitle] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 

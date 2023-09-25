@@ -1,24 +1,8 @@
-import { createContext, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { Action, Todo } from '../../types';
+import { Action, DispatchAction, Todo } from '../../types';
 import { useLocalStorageReducer } from '../../hooks';
-
-type TodosContextValue = {
-  todos: Todo[];
-  dispatch: React.Dispatch<DispatchAction>;
-};
-
-export const TodosContext = createContext<TodosContextValue>({
-  todos: [],
-  dispatch: () => {},
-});
-
-type DispatchAction = { type: Action.Add, payload: string }
-| { type: Action.Remove, payload: number }
-| { type: Action.Edit, payload: { id: number, title: string } }
-| { type: Action.Toggle, payload: number }
-| { type: Action.ToggleAll }
-| { type: Action.ClearCompleted };
+import { TodosContext } from '../../contexts';
 
 function todosReducer(state: Todo[], action: DispatchAction): Todo[] {
   switch (action.type) {
@@ -33,18 +17,14 @@ function todosReducer(state: Todo[], action: DispatchAction): Todo[] {
     }
 
     case Action.Edit: {
-      const index = state.findIndex(({ id }) => id === action.payload.id);
-      const oldTodo = state[index];
-      const newTodo = {
-        ...oldTodo,
-        title: action.payload.title,
-      };
-
-      return [
-        ...state.slice(0, index),
-        newTodo,
-        ...state.slice(index + 1),
-      ];
+      return state.map(todo => {
+        return todo.id === action.payload.id
+          ? {
+            ...todo,
+            title: action.payload.title,
+          }
+          : todo;
+      });
     }
 
     case Action.Remove: {
@@ -52,18 +32,14 @@ function todosReducer(state: Todo[], action: DispatchAction): Todo[] {
     }
 
     case Action.Toggle: {
-      const index = state.findIndex(({ id }) => id === action.payload);
-      const oldTodo = state[index];
-      const newTodo = {
-        ...oldTodo,
-        completed: !oldTodo.completed,
-      };
-
-      return [
-        ...state.slice(0, index),
-        newTodo,
-        ...state.slice(index + 1),
-      ];
+      return state.map(todo => {
+        return todo.id === action.payload
+          ? {
+            ...todo,
+            completed: !todo.completed,
+          }
+          : todo;
+      });
     }
 
     case Action.ToggleAll: {
@@ -91,7 +67,7 @@ function todosReducer(state: Todo[], action: DispatchAction): Todo[] {
     }
 
     default:
-      throw new Error('Unsupported action.');
+      return state;
   }
 }
 
