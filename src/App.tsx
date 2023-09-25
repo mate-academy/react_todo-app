@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
+
 import React, { useEffect, useMemo, useState } from 'react';
-import { UserWarning } from './UserWarning';
 
 import { TodoHeader } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
@@ -10,49 +9,32 @@ import { ErrorOnPage } from './components/ErrorOnPage';
 
 import { FilterBy } from './utils/FilterBy';
 import { Todo } from './types/Todo';
-import {
-  getTodos, createTodo, removeTodo, updateTodo,
-} from './todos';
 
 import { getFilteredTodos } from './utils/NewfilterTodos';
 
 import { ErrorMessages } from './types/ErrorNessages';
-import { client } from './utils/fetchClient';
-
-const USER_ID = 1333;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const storedTodos = localStorage.getItem('todos');
+    return storedTodos ? JSON.parse(storedTodos) : [];
+  });
   const [filterBy, setFilterBy] = useState(FilterBy.All);
   const [newError, setNewError] = useState<ErrorMessages | null>(null);
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [deleteTodosId, setDeleteTodosId] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const isTodoShow = todos.length > 0;
 
   useEffect(() => {
-    setLoading(true);
-
-    getTodos(USER_ID)
-      .then(setTodos)
-      .catch(() => {
-        setNewError(ErrorMessages.LoadError);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+    if (todos.length !== 0) {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }
+  }, [todos]);
 
   const deleteTodo = async (todoId: number) => {
     try {
       setDeleteTodosId((prev) => [...prev, todoId]);
-
-      const removeNewTodo = await removeTodo(todoId);
-
-      if (!removeNewTodo) {
-        setNewError(ErrorMessages.DeleteError);
-
-        return;
-      }
 
       setTodos((prev) => {
         const filterPrev = prev.filter((todo) => todo.id !== todoId);
@@ -85,16 +67,14 @@ export const App: React.FC = () => {
       const newTodoStr = {
         completed: false,
         title,
-        userId: USER_ID,
+        id: +new Date(),
       };
 
-      const newTodo = await createTodo(newTodoStr);
+      setTodos( [...todos, newTodoStr]);
 
       clearTodoTitle();
 
-      setTodos((prev) => [...prev, newTodo]);
-
-      return newTodo;
+      return newTodoStr;
     } catch (error) {
       setNewError(ErrorMessages.TitleError);
 
@@ -109,7 +89,6 @@ export const App: React.FC = () => {
   const updateTodoItem = async (todoId: number, updatedTodo: Todo) => {
     try {
       setNewError(null);
-      await client.patch<Todo>(`/todos/${todoId}`, updatedTodo);
 
       setTodos(prevTodos => prevTodos.map(
         todo => (todo.id === todoId ? updatedTodo : todo),
@@ -130,25 +109,31 @@ export const App: React.FC = () => {
     setTodos(updateTodos);
   };
 
-  const handleChackBox = async (updateNewTodo: Todo): Promise<void> => {
+  const handleCheckBox = async (updateNewTodo: Todo): Promise<void> => {
     try {
       const newTodo = {
         ...updateNewTodo,
         completed: !updateNewTodo.completed,
       };
 
-      await updateTodo(newTodo);
+      localStorage.setItem('todos', JSON.stringify(newTodo));
 
       setTodos((current) => current
         .map((todo) => (todo.id === newTodo.id ? newTodo : todo)));
     } catch (error) {
-      setNewError(ErrorMessages.TitleError);
+      setNewError(ErrorMessages.UpdateError);
     }
   };
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  const removeCompletTodos = async (todoIds: number[]) => {
+    try {
+      const deletePromises = todoIds.map((todoId) => deleteTodo(todoId));
+
+      await Promise.all(deletePromises);
+    } catch (error) {
+      setNewError(ErrorMessages.DeleteError);
+    }
+  };
 
   return (
     <div className="todoapp">
@@ -163,29 +148,22 @@ export const App: React.FC = () => {
           checkAllTodos={handleAll}
         />
 
-        {loading
-          ? (
-            <div className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          ) : (
             <section className="todoapp__main">
               <TodoList
                 todos={filterTodos}
                 deleteId={deleteTodosId}
                 deleteTodo={deleteTodo}
                 editTodo={updateTodoItem}
-                checkedTodo={handleChackBox}
+                checkedTodo={handleCheckBox}
               />
             </section>
-          )}
 
         {todos.length !== 0 && (
           <TodoFooter
             todos={todos}
             filterBy={filterBy}
             filterTodos={setFilterBy}
+            deleteTodo={removeCompletTodos}
           />
         )}
 

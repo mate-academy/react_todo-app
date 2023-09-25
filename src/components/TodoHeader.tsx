@@ -57,7 +57,7 @@ export const TodoHeader: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={newTodoTitle}
-          onChange={(event) => handleNewTodoTitle(event)}
+          onChange={handleNewTodoTitle}
           disabled={todoAdd}
         />
       </form>
