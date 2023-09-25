@@ -17,7 +17,7 @@ type Props = {
 export const TodoItem: React.FC<Props> = memo(({ item }) => {
   const { dispatch } = useContext(TodosContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingTitle, setEditingTitle] = useState('');
+  const [editedTitle, setEditedTitle] = useState(item.title);
   const editInputRef = useRef<HTMLInputElement | null>(null);
 
   const { id, title, completed } = item;
@@ -28,22 +28,12 @@ export const TodoItem: React.FC<Props> = memo(({ item }) => {
     }
   }, [isEditing]);
 
-  const startEditing = () => {
-    setIsEditing(true);
-    setEditingTitle(title);
-  };
-
-  const stopEditing = () => {
-    setIsEditing(false);
-    setEditingTitle('');
-  };
-
   const submitEdit = () => {
     if (!isEditing) {
       return;
     }
 
-    const newTitle = editingTitle.trim();
+    const newTitle = editedTitle.trim();
 
     if (!newTitle) {
       dispatch({
@@ -57,7 +47,7 @@ export const TodoItem: React.FC<Props> = memo(({ item }) => {
       });
     }
 
-    stopEditing();
+    setIsEditing(false);
   };
 
   const handleCheckboxChange = () => {
@@ -75,7 +65,7 @@ export const TodoItem: React.FC<Props> = memo(({ item }) => {
   };
 
   const handleTitleDoubleClick = () => {
-    startEditing();
+    setIsEditing(true);
   };
 
   const handleEditKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -86,7 +76,7 @@ export const TodoItem: React.FC<Props> = memo(({ item }) => {
 
   const handleEditKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
-      stopEditing();
+      setIsEditing(false);
     }
   };
 
@@ -122,11 +112,11 @@ export const TodoItem: React.FC<Props> = memo(({ item }) => {
         type="text"
         className="edit"
         ref={editInputRef}
-        value={editingTitle}
+        value={editedTitle}
         onBlur={submitEdit}
         onKeyUp={handleEditKeyUp}
         onKeyDown={handleEditKeyDown}
-        onChange={event => setEditingTitle(event.target.value)}
+        onChange={event => setEditedTitle(event.target.value)}
       />
     </li>
   );
