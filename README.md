@@ -1,3 +1,3 @@
 # React ToDo App
 
-[DEMO LINK](https://medjidovKamran.github.io/react_todo-app/)
+[DEMO LINK](https://kamran-majidov.github.io/react_todo-app/)
