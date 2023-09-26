@@ -2,9 +2,7 @@ import { useContext } from 'react';
 import { TodosContext } from '../TodoContext/TodoContext';
 import { TodoItem } from '../TodoItem/TodoItem';
 
-type Props = {};
-
-export const TodoList: React.FC<Props> = () => {
+export const TodoList: React.FC = () => {
   const { filteredTodos } = useContext(TodosContext);
 
   return (

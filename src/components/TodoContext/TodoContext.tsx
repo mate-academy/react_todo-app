@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, {
   useCallback,
   useEffect,
@@ -8,18 +9,24 @@ import { Status, TaskType } from '../../types/TaskType';
 
 interface TotodosContext {
   todos: TaskType[],
-  addTodo: React.Dispatch<React.SetStateAction<TaskType[]>>,
+  setTodos: React.Dispatch<React.SetStateAction<TaskType[]>>,
   filter: Status,
   setFilter: React.Dispatch<React.SetStateAction<Status>>,
-  filteredTodos: () => TaskType[]
+  filteredTodos: () => TaskType[],
+  handleChangeStatus: (id: number) => void,
+  handleRemoveTodo: (id: number) => void,
+  saveChanges: (id: number, editedTodo: string) => void,
 }
 
 export const TodosContext = React.createContext<TotodosContext>({
   todos: [],
-  addTodo: () => {},
+  setTodos: () => {},
   filter: Status.ALL,
   setFilter: () => {},
   filteredTodos: () => [],
+  handleChangeStatus: () => {},
+  handleRemoveTodo: () => {},
+  saveChanges: () => {},
 });
 
 type Props = {
@@ -27,17 +34,17 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, addTodo] = useState<TaskType[]>([]);
+  const [todos, setTodos] = useState<TaskType[]>([]);
   const [filter, setFilter] = useState<Status>(Status.ALL);
 
   useEffect(() => {
-    const todosToStore = todos.map(todo => ({
-      id: todo.id,
-      title: todo.title,
-      completed: todo.completed,
-    }));
+    const data = localStorage.getItem('todos');
 
-    localStorage.setItem('todos', JSON.stringify(todosToStore));
+    setTodos(JSON.parse(data || '[]'));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const filteredTodos = useCallback(() => {
@@ -46,18 +53,43 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         return todos.filter(todo => !todo.completed);
       case 'Completed':
         return todos.filter(todo => todo.completed);
-      case 'All':
       default:
         return todos;
     }
   }, [filter, todos]);
 
+  const handleChangeStatus = (id: number) => {
+    setTodos((currentTodos) => currentTodos.map((currentTodo) => (currentTodo.id === id
+      ? {
+        ...currentTodo,
+        completed: !currentTodo.completed,
+      }
+      : currentTodo)));
+  };
+
+  const handleRemoveTodo = (id: number) => {
+    setTodos((currentTodos) => currentTodos.filter((curTodo) => curTodo.id !== id));
+  };
+
+  const saveChanges = (id: number, editedTodo: string) => {
+    setTodos((currentTodos) => currentTodos.map((currTodo) => (currTodo.id === id
+      ? {
+        ...currTodo,
+        title: editedTodo,
+      }
+      : currTodo)));
+  };
+
   const value = useMemo(() => ({
     todos,
-    addTodo,
+    setTodos,
     filter,
     setFilter,
     filteredTodos,
+    handleChangeStatus,
+    handleRemoveTodo,
+    saveChanges,
+
   }), [todos, filteredTodos]);
 
   return (

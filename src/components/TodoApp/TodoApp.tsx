@@ -4,23 +4,12 @@ import { Header } from '../Header/Header';
 import { Section } from '../Section/Section';
 import { TodosContext } from '../TodoContext/TodoContext';
 
-type Props = {};
-
-export const TodoApp: React.FC<Props> = () => {
+export const TodoApp: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
-  const { todos, addTodo } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const handleTodoTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(e.target.value);
-  };
-
-  const isAllCompleted = todos.every(todo => todo.completed === true);
-
-  const handleChangeStatusTodos = () => {
-    addTodo(curentTodos => curentTodos.map(curTodo => ({
-      ...curTodo,
-      completed: !isAllCompleted,
-    })));
   };
 
   const handleTodoAdd = (e: React.FormEvent) => {
@@ -36,12 +25,21 @@ export const TodoApp: React.FC<Props> = () => {
       completed: false,
     };
 
-    addTodo(currentTodos => [...currentTodos, newTodo]);
+    setTodos(currentTodos => [...currentTodos, newTodo]);
     setTodoTitle('');
   };
 
+  const isAllCompleted = todos.every(todo => todo.completed);
+
+  const handleChangeStatusTodos = () => {
+    setTodos(curentTodos => curentTodos.map(curTodo => ({
+      ...curTodo,
+      completed: !isAllCompleted,
+    })));
+  };
+
   const handleRemoveAllCompleted = () => {
-    addTodo(curruntTodos => (
+    setTodos(curruntTodos => (
       curruntTodos.filter(curTodo => !curTodo.completed)
     ));
   };
@@ -57,7 +55,7 @@ export const TodoApp: React.FC<Props> = () => {
         handleTodoAdd={handleTodoAdd}
         handleChange={handleTodoTitleChange}
       />
-      {todos.length > 0
+      {!!todos.length
         && (
           <>
             <Section

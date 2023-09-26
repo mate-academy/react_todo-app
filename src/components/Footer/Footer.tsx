@@ -64,7 +64,7 @@ export const Footer: React.FC<Props> = ({
         </li>
       </ul>
 
-      {todos.length - uncompletedTodos.length > 0 && (
+      {!!(todos.length - uncompletedTodos.length) && (
         <button
           type="button"
           className="clear-completed"

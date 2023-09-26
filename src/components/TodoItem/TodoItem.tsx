@@ -15,7 +15,11 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
-  const { addTodo } = useContext(TodosContext);
+  const {
+    handleChangeStatus,
+    handleRemoveTodo,
+    saveChanges,
+  } = useContext(TodosContext);
   const [isEditable, setIsEditable] = useState(false);
   const [editedTodo, setEditedTodo] = useState(title);
 
@@ -27,44 +31,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [isEditable]);
 
-  const handleChangeStatus = () => {
-    addTodo(currentTodos => (
-      currentTodos.map(currentTodo => (
-        currentTodo.id === id
-          ? {
-            ...currentTodo,
-            completed: !currentTodo.completed,
-          }
-          : currentTodo
-      ))
-    ));
+  const handleStatusChange = () => {
+    handleChangeStatus(id);
   };
 
-  const handleRemoveTodo = () => {
-    addTodo(currentTodos => (
-      currentTodos.filter(curTodo => curTodo.id !== id)
-    ));
+  const handleRemove = () => {
+    handleRemoveTodo(id);
+  };
+
+  const handleSave = () => {
+    saveChanges(id, editedTodo);
   };
 
   const handleChangeTitleTodo = (
     event:React.ChangeEvent<HTMLInputElement>,
   ) => {
     setEditedTodo(event.target.value);
-  };
-
-  const saveChanges = () => {
-    addTodo(currentTodos => (
-      currentTodos.map(currTodo => (
-        currTodo.id === id
-          ? {
-            ...currTodo,
-            title: editedTodo,
-          }
-          : currTodo
-      ))
-    ));
-
-    setIsEditable(false);
   };
 
   const handleKeyboardAction = (event: React.KeyboardEvent) => {
@@ -75,9 +57,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (event.key === 'Enter') {
       if (editedTodo.trim().length) {
-        saveChanges();
+        handleSave();
       } else {
-        handleRemoveTodo();
+        handleRemove();
       }
     }
   };
@@ -94,7 +76,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="toggle"
           id="toggle-view"
           checked={completed}
-          onChange={handleChangeStatus}
+          onChange={handleStatusChange}
         />
         <label
           onDoubleClick={() => setIsEditable(true)}
@@ -105,7 +87,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleRemoveTodo}
+          onClick={handleRemove}
         />
       </div>
       <input
@@ -115,7 +97,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         value={editedTodo}
         onChange={handleChangeTitleTodo}
         onKeyUp={handleKeyboardAction}
-        onBlur={saveChanges}
+        onBlur={handleSave}
       />
     </li>
   );
