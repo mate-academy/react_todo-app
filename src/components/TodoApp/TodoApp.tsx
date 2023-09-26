@@ -29,8 +29,8 @@ export const TodoApp: React.FC = memo(() => {
   const hasTodos = todos.length > 0;
   const hasCompleted = todos.some(({ completed }) => completed);
   const isAllCompleted = todos.every(({ completed }) => completed);
-  const activeCount = todos.filter(({ completed }) => !completed).length;
-  const activeText = ` ${activeCount === 1 ? 'item' : 'items'} left`;
+  const activeTodosCount = todos.filter(({ completed }) => !completed).length;
+  const activeText = ` ${activeTodosCount === 1 ? 'item' : 'items'} left`;
 
   const filteredTodos = useMemo(() => {
     return todos.filter(({ completed }) => {
@@ -78,7 +78,7 @@ export const TodoApp: React.FC = memo(() => {
           <footer className="footer">
             <span className="todo-count">
               <strong data-cy="todosCounter">
-                {activeCount}
+                {activeTodosCount}
               </strong>
 
               {activeText}
