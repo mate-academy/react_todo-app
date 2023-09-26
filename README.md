@@ -53,5 +53,9 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
+<<<<<<< HEAD
 - Replace `<your_account>` with your Github username in the [DEMO LINK](https://JulyaPetrovskaya
 .github.io/react_todo-app/) and add it to the PR description.
+=======
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://JulyaPetrovskaya.github.io/react_todo-app/) and add it to the PR description.
+>>>>>>> e4cc231ea8b00ccc76ac868f71e4d94866b7a5ab
