@@ -31,25 +31,23 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Status>(Status.ALL);
 
-  // извлекаем todos из localStorage
   useEffect(() => {
     const data = localStorage.getItem('todos');
 
     setTodos(JSON.parse(data || '[]'));
   }, []);
 
-  // сохраняем todos в localStorage
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const filteredTodos = useCallback(() => {
     switch (filter) {
-      case 'Active':
+      case Status.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'Completed':
+      case Status.COMPLETED:
         return todos.filter(todo => todo.completed);
-      case 'All':
+      case Status.ALL:
       default:
         return todos;
     }

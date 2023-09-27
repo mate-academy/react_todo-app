@@ -29,7 +29,7 @@ export const TodoApp: React.FC<Props> = () => {
   const handleTodoAdd = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (todoTitle.trim().length === 0) {
+    if (!todoTitle.trim().length) {
       return;
     }
 
