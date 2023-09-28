@@ -16,9 +16,9 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
   const {
-    handleChangeStatus,
-    handleRemoveTodo,
-    saveChanges,
+    handleStatusChange,
+    handleRemove,
+    handleSave,
   } = useContext(TodosContext);
   const [isEditable, setIsEditable] = useState(false);
   const [editedTodo, setEditedTodo] = useState(title);
@@ -31,18 +31,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [isEditable]);
 
-  const handleStatusChange = () => {
-    handleChangeStatus(id);
-  };
-
-  const handleRemove = () => {
-    handleRemoveTodo(id);
-  };
-
-  const handleSave = () => {
-    saveChanges(id, editedTodo);
-  };
-
   const handleChangeTitleTodo = (
     event:React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -50,25 +38,27 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyboardAction = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      setEditedTodo(title);
-      setIsEditable(false);
-    }
-
     if (event.key === 'Enter') {
       if (editedTodo.trim().length) {
-        handleSave();
+        handleSave(id, editedTodo);
+        setIsEditable(false);
       } else {
-        handleRemove();
+        handleRemove(id);
       }
+    }
+
+    if (event.key === 'Escape') {
+      setIsEditable(false);
     }
   };
 
   return (
-    <li className={className({
-      completed: todo.completed,
-      editing: isEditable,
-    })}
+    <li
+      className={className({
+        completed: todo.completed,
+        editing: isEditable,
+      })}
+      onDoubleClick={() => setIsEditable(true)}
     >
       <div className="view">
         <input
@@ -76,7 +66,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="toggle"
           id="toggle-view"
           checked={completed}
-          onChange={handleStatusChange}
+          onChange={() => handleStatusChange(id)}
         />
         <label
           onDoubleClick={() => setIsEditable(true)}
@@ -87,7 +77,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleRemove}
+          onClick={() => handleRemove(id)}
         />
       </div>
       <input
@@ -97,7 +87,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         value={editedTodo}
         onChange={handleChangeTitleTodo}
         onKeyUp={handleKeyboardAction}
-        onBlur={handleSave}
+        onBlur={() => handleSave(id, editedTodo)}
       />
     </li>
   );

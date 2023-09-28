@@ -13,9 +13,9 @@ interface TotodosContext {
   filter: Status,
   setFilter: React.Dispatch<React.SetStateAction<Status>>,
   filteredTodos: () => TaskType[],
-  handleChangeStatus: (id: number) => void,
-  handleRemoveTodo: (id: number) => void,
-  saveChanges: (id: number, editedTodo: string) => void,
+  handleStatusChange: (id: number) => void,
+  handleRemove: (id: number) => void,
+  handleSave: (id: number, editedTodo: string) => void,
 }
 
 export const TodosContext = React.createContext<TotodosContext>({
@@ -24,9 +24,9 @@ export const TodosContext = React.createContext<TotodosContext>({
   filter: Status.ALL,
   setFilter: () => {},
   filteredTodos: () => [],
-  handleChangeStatus: () => {},
-  handleRemoveTodo: () => {},
-  saveChanges: () => {},
+  handleStatusChange: () => {},
+  handleRemove: () => {},
+  handleSave: () => {},
 });
 
 type Props = {
@@ -58,26 +58,26 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   }, [filter, todos]);
 
-  const handleChangeStatus = (id: number) => {
-    setTodos((currentTodos) => currentTodos.map((currentTodo) => (currentTodo.id === id
+  const handleStatusChange = (id: number) => {
+    setTodos(todos.map(todo => (todo.id === id
       ? {
-        ...currentTodo,
-        completed: !currentTodo.completed,
+        ...todo,
+        completed: !todo.completed,
       }
-      : currentTodo)));
+      : todo)));
   };
 
-  const handleRemoveTodo = (id: number) => {
-    setTodos((currentTodos) => currentTodos.filter((curTodo) => curTodo.id !== id));
+  const handleRemove = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
   };
 
-  const saveChanges = (id: number, editedTodo: string) => {
-    setTodos((currentTodos) => currentTodos.map((currTodo) => (currTodo.id === id
+  const handleSave = (id: number, editedTodo: string) => {
+    setTodos(todos.map(todo => (todo.id === id
       ? {
-        ...currTodo,
+        ...todo,
         title: editedTodo,
       }
-      : currTodo)));
+      : todo)));
   };
 
   const value = useMemo(() => ({
@@ -86,9 +86,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     filter,
     setFilter,
     filteredTodos,
-    handleChangeStatus,
-    handleRemoveTodo,
-    saveChanges,
+    handleStatusChange,
+    handleRemove,
+    handleSave,
 
   }), [todos, filteredTodos]);
 
