@@ -37,6 +37,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEditedTodo(event.target.value);
   };
 
+  const handleEditChangeOnblur = () => {
+    if (editedTodo.trim() !== '') {
+      setEditedTodo(editedTodo.trim());
+      setIsEditable(false);
+      handleSave(id, editedTodo);
+    } else {
+      handleRemove(id);
+    }
+  };
+
   const handleKeyboardAction = (event: React.KeyboardEvent) => {
     const { key } = event;
 
@@ -53,6 +63,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       case 'Escape':
         setIsEditable(false);
+        setEditedTodo(title);
         break;
 
       default:
@@ -95,7 +106,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         value={editedTodo}
         onChange={handleChangeTitleTodo}
         onKeyUp={handleKeyboardAction}
-        onBlur={() => handleSave(id, editedTodo)}
+        onBlur={handleEditChangeOnblur}
       />
     </li>
   );

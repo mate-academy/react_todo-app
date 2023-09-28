@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -12,7 +11,7 @@ interface TotodosContext {
   setTodos: React.Dispatch<React.SetStateAction<TaskType[]>>,
   filter: Status,
   setFilter: React.Dispatch<React.SetStateAction<Status>>,
-  filteredTodos: () => TaskType[],
+  filteredTodos: TaskType[],
   handleStatusChange: (id: number) => void,
   handleRemove: (id: number) => void,
   handleSave: (id: number, editedTodo: string) => void,
@@ -23,7 +22,7 @@ export const TodosContext = React.createContext<TotodosContext>({
   setTodos: () => {},
   filter: Status.ALL,
   setFilter: () => {},
-  filteredTodos: () => [],
+  filteredTodos: [],
   handleStatusChange: () => {},
   handleRemove: () => {},
   handleSave: () => {},
@@ -47,7 +46,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const filteredTodos = useCallback(() => {
+  const filteredTodos = useMemo(() => {
     switch (filter) {
       case Status.ACTIVE:
         return todos.filter(todo => !todo.completed);
