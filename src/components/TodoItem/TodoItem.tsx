@@ -38,17 +38,25 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyboardAction = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      if (editedTodo.trim().length) {
-        handleSave(id, editedTodo);
-        setIsEditable(false);
-      } else {
-        handleRemove(id);
-      }
-    }
+    const { key } = event;
 
-    if (event.key === 'Escape') {
-      setIsEditable(false);
+    switch (key) {
+      case 'Enter':
+        if (editedTodo.trim().length) {
+          handleSave(id, editedTodo);
+          setIsEditable(false);
+        } else {
+          handleRemove(id);
+        }
+
+        break;
+
+      case 'Escape':
+        setIsEditable(false);
+        break;
+
+      default:
+        break;
     }
   };
 

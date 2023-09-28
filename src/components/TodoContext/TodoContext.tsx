@@ -49,9 +49,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const filteredTodos = useCallback(() => {
     switch (filter) {
-      case 'Active':
+      case Status.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'Completed':
+      case Status.COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
