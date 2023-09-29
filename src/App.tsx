@@ -68,7 +68,7 @@ export const App: React.FC = () => {
       </header>
 
       <section className="main">
-        {todos.length !== 0 && (
+        {todos.length && (
           <>
             <input
               type="checkbox"
@@ -84,7 +84,7 @@ export const App: React.FC = () => {
         )}
       </section>
 
-      {todos.length !== 0 && (
+      {todos.length && (
         <>
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
