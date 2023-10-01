@@ -63,13 +63,16 @@ export const Footer: React.FC = () => {
         </li>
       </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={() => dispatch({ type: 'removeTodosCompleted' })}
-      >
-        Clear completed
-      </button>
+      {numberNotComleteTodo < todos.length && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => dispatch({ type: 'removeTodosCompleted' })}
+        >
+          Clear completed
+        </button>
+      )}
+
     </footer>
   );
 };
