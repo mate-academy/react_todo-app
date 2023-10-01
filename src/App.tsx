@@ -66,7 +66,7 @@ export const App: React.FC = () => {
       </header>
 
       <section className="main">
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <>
             <input
               type="checkbox"
@@ -82,23 +82,23 @@ export const App: React.FC = () => {
         )}
       </section>
 
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <footer className="footer" data-cy="todosFilter">
           <span className="todo-count" data-cy="todosCounter">
             {`${incompletedTodosCount} items left`}
           </span>
 
           <ul className="filters">
-            {statusLinks.map((link) => (
-              <li key={link.path}>
+            {statusLinks.map(({ path, filterValue, label }) => (
+              <li key={path}>
                 <a
-                  href={link.path}
+                  href={path}
                   className={classNames({
-                    selected: filterStatus === link.filterValue,
+                    selected: filterStatus === filterValue,
                   })}
-                  onClick={() => handleFilterChange(link.filterValue)}
+                  onClick={() => handleFilterChange(filterValue)}
                 >
-                  {link.label}
+                  {label}
                 </a>
               </li>
             ))}

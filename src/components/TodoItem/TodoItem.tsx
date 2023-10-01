@@ -67,10 +67,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEditing]);
 
   return (
-    <li className={classNames({
-      completed,
-      editing: isEditing,
-    })}
+    <li
+      className={classNames({
+        completed,
+        editing: isEditing,
+      })}
     >
       {isEditing ? (
         <input

@@ -88,21 +88,21 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
+  const value = {
+    todos,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    updateTodoTitle,
+    deleteCompletedTodos,
+    handleToggleAll,
+    filterTodos,
+    hasCompletedTodos,
+    incompletedTodosCount,
+  };
+
   return (
-    <TodosContext.Provider
-      value={{
-        todos,
-        addTodo,
-        toggleTodo,
-        deleteTodo,
-        updateTodoTitle,
-        deleteCompletedTodos,
-        handleToggleAll,
-        filterTodos,
-        hasCompletedTodos,
-        incompletedTodosCount,
-      }}
-    >
+    <TodosContext.Provider value={value}>
       {children}
     </TodosContext.Provider>
   );
