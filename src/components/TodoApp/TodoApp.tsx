@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useState } from 'react';
-import classNames from 'classnames';
 import { TodoList } from '../TodoList';
-import { Status } from '../../types/Status';
 import { TodosContext } from '../../contexts/TodosContext';
+import { TodoFooter } from '../TodoFooter';
+import { Status } from '../../types/Status';
 
 export const TodoApp: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -12,7 +12,6 @@ export const TodoApp: React.FC = () => {
     todos,
     addTodo,
     markAllComplete,
-    clearCompleted,
     filterTodos,
   } = useContext(TodosContext);
 
@@ -31,20 +30,9 @@ export const TodoApp: React.FC = () => {
     setTitle('');
   };
 
-  const applyFilter = (value: Status) => {
-    setFilter(value);
-  };
-
   const filteredTodos = useMemo(() => {
     return filterTodos(filter);
   }, [filter, todos]);
-
-  const handleClearCompleted = () => {
-    clearCompleted();
-  };
-
-  const itemsLeft = todos.filter(el => !el.completed).length;
-  const hasCompletedTodos = todos.some((todo) => todo.completed);
 
   return (
     <div className="todoapp">
@@ -78,57 +66,7 @@ export const TodoApp: React.FC = () => {
             <TodoList todos={filteredTodos} />
           </section>
 
-          <footer className="footer">
-            <span className="todo-count" data-cy="todosCounter">
-              {`${itemsLeft} items left`}
-            </span>
-
-            <ul className="filters">
-              <li>
-                <a
-                  href="#/"
-                  className={classNames({
-                    selected: filter === Status.All,
-                  })}
-                  onClick={() => applyFilter(Status.All)}
-                >
-                  All
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#/active"
-                  className={classNames({
-                    selected: filter === Status.Active,
-                  })}
-                  onClick={() => applyFilter(Status.Active)}
-                >
-                  Active
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#/completed"
-                  className={classNames({
-                    selected: filter === Status.Completed,
-                  })}
-                  onClick={() => applyFilter(Status.Completed)}
-                >
-                  Completed
-                </a>
-              </li>
-            </ul>
-
-            {hasCompletedTodos && (
-              <button
-                type="button"
-                className="clear-completed"
-                onClick={handleClearCompleted}
-              >
-                Clear completed
-              </button>
-            )}
-          </footer>
+          <TodoFooter filter={filter} setFilter={setFilter} />
         </>
       )}
     </div>
