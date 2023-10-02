@@ -8,7 +8,7 @@ export const Header: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() === '') {
+    if (!title.trim()) {
       return;
     }
 

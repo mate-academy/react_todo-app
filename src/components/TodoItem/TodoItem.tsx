@@ -24,7 +24,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const updateTodoTitle = () => {
     const trimmedTitle = changedTitle.trim();
 
-    if (trimmedTitle !== '') {
+    if (trimmedTitle) {
       setChangedTitle(trimmedTitle);
       setIsEditing(false);
       changeTodoTitle(id, trimmedTitle);

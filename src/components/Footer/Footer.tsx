@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   } = useContext(TodosContext);
 
   const activeTodosCount = useMemo(() => {
-    return todos.filter(todo => todo.completed === false).length;
+    return todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
   const handleSelectedStatus = (status: Status) => () => {
