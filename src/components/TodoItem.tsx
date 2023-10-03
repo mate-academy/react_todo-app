@@ -66,7 +66,7 @@ export const TodoItem: React.FC<Props> = ({
             className="toggle"
             id={`toggle-${id}`}
             onClick={() => toggleCompleted(id)}
-            defaultChecked={completed}
+            checked={completed}
           />
           <label onDoubleClick={handleDoubleClick}>
             {title}
