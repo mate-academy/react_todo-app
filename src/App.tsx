@@ -52,42 +52,45 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onClick={toggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <TodoList
-          items={filteredTodos}
-        />
-      </section>
-
       {todos.length > 0 && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${todoCount} items left`}
-          </span>
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={toggleAll}
+            />
 
-          <TodosFilter
-            filter={filter}
-            setFilter={setFilter}
-          />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-          {isCompleted && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={clearCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            <TodoList
+              items={filteredTodos}
+            />
+          </section>
+
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${todoCount} items left`}
+            </span>
+
+            <TodosFilter
+              filter={filter}
+              setFilter={setFilter}
+            />
+
+            {isCompleted && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={clearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
       )}
 
     </div>

@@ -8,7 +8,10 @@ type Props = {
 
 export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
   return (
-    <ul className="filters">
+    <ul
+      className="filters"
+      data-cy="todosFilter"
+    >
       <li>
         <a
           href="#/"

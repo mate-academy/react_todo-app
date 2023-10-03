@@ -1,4 +1,9 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodosContext } from '../TodosContext';
@@ -21,7 +26,13 @@ export const TodoItem: React.FC<Props> = ({
   const [isTodoEditing, setIsTodoEditing] = useState(false);
   const [editTitle, setEditTitle] = useState('');
 
-  const inputRef = useRef(null);
+  const inputField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputField.current) {
+      inputField.current.focus();
+    }
+  }, [isTodoEditing]);
 
   function handleDoubleClick() {
     setIsTodoEditing(true);
@@ -65,7 +76,7 @@ export const TodoItem: React.FC<Props> = ({
             type="checkbox"
             className="toggle"
             id={`toggle-${id}`}
-            onClick={() => toggleCompleted(id)}
+            onChange={() => toggleCompleted(id)}
             checked={completed}
           />
           <label onDoubleClick={handleDoubleClick}>
@@ -84,7 +95,7 @@ export const TodoItem: React.FC<Props> = ({
         <input
           type="text"
           className="edit"
-          ref={inputRef}
+          ref={inputField}
           value={editTitle}
           placeholder="Empty todo will be deleted"
           onChange={event => setEditTitle(event.target.value)}

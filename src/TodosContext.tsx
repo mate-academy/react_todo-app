@@ -22,7 +22,7 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', [] as Todo[]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
   function deleteTodo(todoId: number) {
     setTodos(todos.filter((todo: Todo) => todo.id !== todoId));
@@ -60,10 +60,10 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
           return true;
 
         case Status.ACTIVE:
-          return todo.completed === false;
+          return !todo.completed;
 
         case Status.COMPLETED:
-          return todo.completed === true;
+          return todo.completed;
 
         default:
           return true;
@@ -77,7 +77,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   function toggleAll() {
     const everyTodoCompleted = todos
-      .every((todo: Todo) => todo.completed === true);
+      .every((todo: Todo) => todo.completed);
 
     setTodos(todos.map(currentTodo => {
       return {
@@ -88,7 +88,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   }
 
   const todoCount = todos
-    .filter((todo: Todo) => todo.completed === false).length;
+    .filter((todo: Todo) => !todo.completed).length;
 
   const isCompleted = todos.some((todo: Todo) => todo.completed);
 
