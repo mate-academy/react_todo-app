@@ -69,7 +69,7 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <section className="main">
           <input
             type="checkbox"
@@ -85,7 +85,7 @@ export const TodoApp: React.FC = () => {
         </section>
       )}
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <footer className="footer" data-cy="todosFilter">
           <span className="todo-count" data-cy="todosCounter">
             {`${notCompletedTodos.length} items left`}
@@ -93,7 +93,7 @@ export const TodoApp: React.FC = () => {
 
           <TodosFilter />
 
-          {completedTodosCounter > 0 && (
+          {!!completedTodosCounter && (
             <button
               type="button"
               className="clear-completed"
