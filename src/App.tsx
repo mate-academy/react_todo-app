@@ -59,7 +59,7 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <Header onSubmit={addTodo} todos={todos} setTodos={setTodos} />
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <TodoListContext.Provider value={{
             visibleTodos,

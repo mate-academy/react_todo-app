@@ -11,7 +11,6 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({
-
   todos,
   setTodos,
   todoFilter,
@@ -68,7 +67,7 @@ export const Footer: React.FC<Props> = ({
         </li>
       </ul>
 
-      {completedTodos.length > 0 && (
+      {!!completedTodos.length && (
         <button
           type="button"
           className="clear-completed"

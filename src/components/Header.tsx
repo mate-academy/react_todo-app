@@ -29,9 +29,8 @@ export const Header: React.FC<Props> = ({ todos, setTodos, onSubmit }) => {
   const isAllCompleted = todos.every(todo => todo.completed);
 
   const allTodosCompleted = useCallback(() => {
-    const todoToUpdate = isAllCompleted
-      ? todos.filter(todo => todo.completed)
-      : todos.filter(todo => !todo.completed);
+    const todoToUpdate = todos
+      .filter(todo => todo.completed === isAllCompleted);
 
     const updatedTodos = todoToUpdate.map(todo => (
       { ...todo, completed: !todo.completed }
