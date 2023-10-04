@@ -43,11 +43,11 @@ export const TodoApp: React.FC = () => {
   };
 
   const deleteCompletedHandler = () => {
-    setTodos(todos.filter(currentTodo => currentTodo.completed === false));
+    setTodos(todos.filter(currentTodo => !currentTodo.completed));
   };
 
   const completedTodosCounter = useMemo(() => (
-    todos.filter(currentTodo => currentTodo.completed === true).length
+    todos.filter(currentTodo => currentTodo.completed).length
   ), [todos]);
 
   return (
@@ -69,7 +69,7 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {todos.length && (
+      {todos.length > 0 && (
         <section className="main">
           <input
             type="checkbox"
@@ -85,7 +85,7 @@ export const TodoApp: React.FC = () => {
         </section>
       )}
 
-      {todos.length && (
+      {todos.length > 0 && (
         <footer className="footer" data-cy="todosFilter">
           <span className="todo-count" data-cy="todosCounter">
             {`${notCompletedTodos.length} items left`}
