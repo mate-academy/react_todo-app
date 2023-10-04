@@ -1,28 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
-import { TodosContext } from '../../TodosContext';
+import { Todo } from '../../types/Todo';
 
 type Props = {
-  filteredBy: string;
+  filteredTodos: Todo[];
 };
 
 export const TodoList: React.FC<Props> = React.memo((({
-  filteredBy,
+  filteredTodos,
 }) => {
-  const { todos } = useContext(TodosContext);
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filteredBy === 'Active') {
-      return !todo.completed;
-    }
-
-    if (filteredBy === 'Completed') {
-      return todo.completed;
-    }
-
-    return true;
-  });
-
   return (
     <ul
       className="todo-list"
@@ -31,7 +17,6 @@ export const TodoList: React.FC<Props> = React.memo((({
       {filteredTodos.map(todo => (
         <TodoItem
           todo={todo}
-          key={todo.id}
         />
       ))}
     </ul>

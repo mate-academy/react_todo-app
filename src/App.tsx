@@ -1,15 +1,31 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodosFilter } from './components/TodosFilter/TodosFilter';
 import { Todo } from './types/Todo';
 import { TodosContext } from './TodosContext';
+import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const {
+    todos,
+    setTodos,
+  } = useContext(TodosContext);
   const [filteredBy, setFilteredBy] = useState('');
+  const [toggleAll, setToggleAll] = useState(false);
   const [title, setTitle] = useState('');
   const numberOfNotCompleted = todos.filter(item => !item.completed).length;
-  const [toggleAll, setToggleAll] = useState(false);
+
+  const filteredTodos = todos.filter((todo) => {
+    switch (filteredBy) {
+      case FilterBy.active:
+        return !todo.completed;
+      case FilterBy.completed:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
 
   useEffect(() => {
     setToggleAll(numberOfNotCompleted === 0 && todos.length !== 0);
@@ -35,13 +51,13 @@ export const App: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!title) {
+    if (!title.trim()) {
       return;
     }
 
     addTodo({
       id: todos.length,
-      title,
+      title: title.trim(),
       completed: false,
     });
 
@@ -56,28 +72,15 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={title}
-            onChange={handleTitleChange}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSubmit(e);
-              }
-            }}
-          />
-        </form>
-      </header>
+      <Header
+        title="todos"
+        onTitleChange={handleTitleChange}
+        onSubmit={handleSubmit}
+        titleValue={title}
+      />
 
       <section className="main">
-        {(todos.length !== 0) && (
+        {!!todos.length && (
           <div>
             <input
               type="checkbox"
@@ -91,20 +94,23 @@ export const App: React.FC = () => {
           </div>
         )}
 
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <TodoList
-            filteredBy={filteredBy}
+            filteredTodos={filteredTodos}
           />
         )}
       </section>
 
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${numberOfNotCompleted} item${numberOfNotCompleted !== 1 ? 's' : ''} left`}
           </span>
 
-          <TodosFilter setFilteredBy={setFilteredBy} />
+          <TodosFilter
+            filteredBy={filteredBy}
+            setFilteredBy={setFilteredBy}
+          />
 
           {(todos.length !== numberOfNotCompleted) && (
             <button

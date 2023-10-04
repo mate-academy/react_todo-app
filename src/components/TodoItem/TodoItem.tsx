@@ -10,15 +10,16 @@ import { TodosContext } from '../../TodosContext';
 
 type Props = {
   todo: Todo,
-  key: number,
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  key,
-}) => {
-  const { todos, setTodos } = useContext(TodosContext);
-  const [deleted, setDeleted] = useState(false);
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const {
+    handleCheckboxClick,
+    handleDelete,
+    handleTitleEditing,
+    handleKeyDown,
+    handleBlur,
+  } = useContext(TodosContext);
   const [editing, setEditing] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
   const titleField = useRef<HTMLInputElement>(null);
@@ -29,70 +30,10 @@ export const TodoItem: React.FC<Props> = ({
     }
   }, [editing]);
 
-  function getTodoById(todoId: number): Todo | null {
-    return todos.find((item: Todo) => item.id === todoId) || null;
-  }
-
-  const handleCheckboxClick = () => {
-    setTodos(todos.map(item => {
-      if (item.id === todo.id) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }
-
-      return item;
-    }));
-  };
-
-  const handleDelete = () => {
-    const todoToUpdate = getTodoById(todo.id);
-
-    if (todoToUpdate) {
-      setTodos(todos.filter(obj => obj !== todoToUpdate));
-    }
-
-    setDeleted(true);
-  };
-
-  const handleTitleEditing = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTodoTitle(event.target.value);
-  };
-
-  const handleTitleSubmit = (PressedKey: string) => {
-    const todoToUpdate = getTodoById(todo.id);
-
-    if (!todoTitle && (PressedKey === 'Enter')) {
-      handleDelete();
-    }
-
-    if ((PressedKey === 'Enter') && todoToUpdate) {
-      (todoToUpdate.title = todoTitle);
-    }
-
-    if ((PressedKey === 'Escape') && todoToUpdate) {
-      setTodoTitle(todo.title);
-    }
-
-    setEditing(false);
-  };
-
-  const handleBlur = () => {
-    if (editing) {
-      handleTitleSubmit('Enter');
-    }
-  };
-
-  if (deleted) {
-    return null;
-  }
-
   return (
     <li
-      key={key}
       className={cn({
-        completed: todo.completed,
+        completed: todo.completed === true,
         editing,
       })}
     >
@@ -101,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="toggle"
           checked={todo.completed}
-          onClick={handleCheckboxClick}
+          onClick={() => handleCheckboxClick(todo.id)}
         />
         <label
           htmlFor="toggle-view"
@@ -114,7 +55,7 @@ export const TodoItem: React.FC<Props> = ({
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleDelete}
+          onClick={() => handleDelete(todo.id)}
         />
       </div>
       <input
@@ -122,13 +63,17 @@ export const TodoItem: React.FC<Props> = ({
         className="edit"
         ref={titleField}
         value={todoTitle}
-        onChange={handleTitleEditing}
-        onKeyDown={(e) => {
-          if ((e.key === 'Enter') || (e.key === 'Escape')) {
-            handleTitleSubmit(e.key);
-          }
-        }}
-        onBlur={handleBlur}
+        onChange={(e) => handleTitleEditing(setTodoTitle, e.target.value)}
+        onKeyDown={(e) => handleKeyDown(
+          todo.id,
+          e.key,
+          todoTitle,
+          setTodoTitle,
+          setEditing,
+        )}
+        onBlur={() => handleBlur(
+          todo.id, editing, todoTitle, setTodoTitle, setEditing,
+        )}
       />
     </li>
   );

@@ -1,23 +1,20 @@
 import React from 'react';
+import cn from 'classnames';
+import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
+  filteredBy: string;
   setFilteredBy: (filterBy: string) => void;
 };
 
-enum FilterBy {
-  all = 'All',
-  active = 'Active',
-  completed = 'Completed',
-}
-
-export const TodosFilter: React.FC<Props> = ({ setFilteredBy }) => {
+export const TodosFilter: React.FC<Props> = ({ filteredBy, setFilteredBy }) => {
   return (
     <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
-          className="selected"
-          onClick={() => setFilteredBy('All')}
+          className={cn({ selected: filteredBy === FilterBy.all })}
+          onClick={() => setFilteredBy(FilterBy.all)}
         >
           {FilterBy.all}
         </a>
@@ -26,7 +23,8 @@ export const TodosFilter: React.FC<Props> = ({ setFilteredBy }) => {
       <li>
         <a
           href="#/active"
-          onClick={() => setFilteredBy('Active')}
+          className={cn({ selected: filteredBy === FilterBy.active })}
+          onClick={() => setFilteredBy(FilterBy.active)}
         >
           {FilterBy.active}
         </a>
@@ -35,7 +33,8 @@ export const TodosFilter: React.FC<Props> = ({ setFilteredBy }) => {
       <li>
         <a
           href="#/completed"
-          onClick={() => setFilteredBy('Completed')}
+          className={cn({ selected: filteredBy === FilterBy.completed })}
+          onClick={() => setFilteredBy(FilterBy.completed)}
         >
           {FilterBy.completed}
         </a>
