@@ -8,18 +8,9 @@ interface TodosContextValue {
   getTodoById: (todoId: number) => Todo | null;
   handleCheckboxClick: (todoId: number) => void;
   handleDelete: (todoId: number) => void;
-  handleTitleEditing: (
-    setTodoTitle: (newTitle: string) => void, newTitle: string) => void;
-  handleKeyDown: (
+  handleTitleSubmit: (
     todoId: number,
     PressedKey: string,
-    todoTitle: string,
-    setTodoTitle: (newTitle: string) => void,
-    setEditing: (edit: boolean) => void,
-  ) => void;
-  handleBlur: (
-    todoId: number,
-    editing: boolean,
     todoTitle: string,
     setTodoTitle: (newTitle: string) => void,
     setEditing: (edit: boolean) => void,
@@ -32,9 +23,7 @@ export const TodosContext = React.createContext<TodosContextValue>({
   getTodoById: () => null,
   handleCheckboxClick: () => { },
   handleDelete: () => { },
-  handleTitleEditing: () => { },
-  handleKeyDown: () => { },
-  handleBlur: () => { },
+  handleTitleSubmit: () => { },
 });
 
 type Props = {
@@ -69,12 +58,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
-  const handleTitleEditing = (
-    setTodoTitle: (newTitle: string) => void, newTitle: string,
-  ) => {
-    setTodoTitle(newTitle);
-  };
-
   const handleTitleSubmit = (
     todoId: number,
     PressedKey: string,
@@ -93,7 +76,16 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
 
     if (PressedKey === 'Enter') {
-      todoToUpdate.title = todoTitle;
+      setTodos(todos.map(item => {
+        if (item.id === todoId) {
+          return {
+            ...item,
+            title: todoTitle,
+          };
+        }
+
+        return item;
+      }));
     }
 
     if (PressedKey === 'Escape') {
@@ -103,51 +95,13 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setEditing(false);
   };
 
-  const handleKeyDown = (
-    todoId: number,
-    PressedKey: string,
-    todoTitle: string,
-    setTodoTitle: (newTitle: string) => void,
-    setEditing: (edit: boolean) => void,
-  ) => {
-    if (PressedKey === 'Enter' || PressedKey === 'Escape') {
-      handleTitleSubmit(
-        todoId,
-        PressedKey,
-        todoTitle,
-        setTodoTitle,
-        setEditing,
-      );
-    }
-  };
-
-  const handleBlur = (
-    todoId: number,
-    editing: boolean,
-    todoTitle: string,
-    setTodoTitle: (newTitle: string) => void,
-    setEditing: (edit: boolean) => void,
-  ) => {
-    if (editing) {
-      handleTitleSubmit(
-        todoId,
-        'Enter',
-        todoTitle,
-        setTodoTitle,
-        setEditing,
-      );
-    }
-  };
-
   const value: TodosContextValue = useMemo(() => ({
     todos,
     setTodos,
     getTodoById,
     handleCheckboxClick,
     handleDelete,
-    handleTitleEditing,
-    handleKeyDown,
-    handleBlur,
+    handleTitleSubmit,
   }), [todos, setTodos]);
 
   return (

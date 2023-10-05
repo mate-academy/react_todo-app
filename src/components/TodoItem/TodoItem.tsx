@@ -16,9 +16,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
     handleCheckboxClick,
     handleDelete,
-    handleTitleEditing,
-    handleKeyDown,
-    handleBlur,
+    handleTitleSubmit,
   } = useContext(TodosContext);
   const [editing, setEditing] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
@@ -30,10 +28,38 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [editing]);
 
+  const handleTitleEditing = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoTitle(event?.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === 'Escape') {
+      handleTitleSubmit(
+        todo.id,
+        e.key,
+        todoTitle,
+        setTodoTitle,
+        setEditing,
+      );
+    }
+  };
+
+  const handleBlur = () => {
+    if (editing) {
+      handleTitleSubmit(
+        todo.id,
+        'Enter',
+        todoTitle,
+        setTodoTitle,
+        setEditing,
+      );
+    }
+  };
+
   return (
     <li
       className={cn({
-        completed: todo.completed === true,
+        completed: todo.completed,
         editing,
       })}
     >
@@ -63,17 +89,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         className="edit"
         ref={titleField}
         value={todoTitle}
-        onChange={(e) => handleTitleEditing(setTodoTitle, e.target.value)}
-        onKeyDown={(e) => handleKeyDown(
-          todo.id,
-          e.key,
-          todoTitle,
-          setTodoTitle,
-          setEditing,
-        )}
-        onBlur={() => handleBlur(
-          todo.id, editing, todoTitle, setTodoTitle, setEditing,
-        )}
+        onChange={handleTitleEditing}
+        onKeyDown={(e) => handleKeyDown(e)}
+        onBlur={handleBlur}
       />
     </li>
   );

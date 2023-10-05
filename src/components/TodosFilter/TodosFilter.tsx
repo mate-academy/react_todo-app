@@ -3,8 +3,8 @@ import cn from 'classnames';
 import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
-  filteredBy: string;
-  setFilteredBy: (filterBy: string) => void;
+  filteredBy: FilterBy;
+  setFilteredBy: (filterBy: FilterBy) => void;
 };
 
 export const TodosFilter: React.FC<Props> = ({ filteredBy, setFilteredBy }) => {

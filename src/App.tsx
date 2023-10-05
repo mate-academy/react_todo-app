@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodosFilter } from './components/TodosFilter/TodosFilter';
-import { Todo } from './types/Todo';
 import { TodosContext } from './TodosContext';
 import { FilterBy } from './types/FilterBy';
 
@@ -11,9 +10,8 @@ export const App: React.FC = () => {
     todos,
     setTodos,
   } = useContext(TodosContext);
-  const [filteredBy, setFilteredBy] = useState('');
+  const [filteredBy, setFilteredBy] = useState(FilterBy.all);
   const [toggleAll, setToggleAll] = useState(false);
-  const [title, setTitle] = useState('');
   const numberOfNotCompleted = todos.filter(item => !item.completed).length;
 
   const filteredTodos = todos.filter((todo) => {
@@ -28,7 +26,7 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    setToggleAll(numberOfNotCompleted === 0 && todos.length !== 0);
+    setToggleAll(!numberOfNotCompleted && !!todos.length);
   }, [numberOfNotCompleted]);
 
   const handleToggleAll = () => {
@@ -40,30 +38,6 @@ export const App: React.FC = () => {
     setToggleAll(!toggleAll);
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
-  function addTodo(newTodo: Todo) {
-    setTodos([...todos, newTodo]);
-  }
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!title.trim()) {
-      return;
-    }
-
-    addTodo({
-      id: todos.length,
-      title: title.trim(),
-      completed: false,
-    });
-
-    setTitle('');
-  };
-
   const handleClearCompleted = () => {
     const activeTodos = todos.filter(todo => !todo.completed);
 
@@ -72,12 +46,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <Header
-        title="todos"
-        onTitleChange={handleTitleChange}
-        onSubmit={handleSubmit}
-        titleValue={title}
-      />
+      <Header />
 
       <section className="main">
         {!!todos.length && (
