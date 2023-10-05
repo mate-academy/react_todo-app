@@ -1,11 +1,11 @@
-import React, { KeyboardEvent, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { DispatchContext } from '../TodosContext';
 
 export const Header: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const [newTodoTitle, setNewTodoTitle] = useState('');
 
-  const handleKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setNewTodoTitle('');
     }

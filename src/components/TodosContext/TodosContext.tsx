@@ -1,12 +1,16 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 
 import { Todo } from '../../types/Todo';
+import { Status } from '../../types/Status';
 
 const key = 'todos';
 
 type Action = { type: 'add', payload: Todo }
 | { type: 'remove', payload: number }
-| { type: 'toggle', payload: Todo };
+| { type: 'clearAllCompleted', payload: Todo[] }
+| { type: 'toggle', payload: Todo }
+| { type: 'toggleAll', payload: boolean }
+| { type: 'edit', payload: Todo };
 
 const save = (newState: Todo[]) => {
   localStorage.setItem(key, JSON.stringify(newState));
@@ -27,6 +31,10 @@ function reducer(state: Todo[], action: Action): Todo[] {
       currentState = [...state].filter(todo => todo.id !== action.payload);
       break;
 
+    case 'clearAllCompleted':
+      currentState = [...action.payload];
+      break;
+
     case 'toggle':
       currentState = [...state].map(todo => {
         if (todo.id === action.payload.id) {
@@ -40,8 +48,31 @@ function reducer(state: Todo[], action: Action): Todo[] {
       });
       break;
 
+    case 'toggleAll':
+      currentState = [...state].map(todo => {
+        return {
+          ...todo,
+          completed: action.payload,
+        };
+      });
+      break;
+
+    case 'edit':
+      currentState = [...state].map(todo => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            title: action.payload.title,
+          };
+        }
+
+        return { ...todo };
+      });
+      break;
+
     default:
       currentState = [...state];
+      break;
   }
 
   save(currentState);
@@ -74,18 +105,28 @@ export const DispatchContext = (
   React.createContext<React.Dispatch<Action>>(() => {})
 );
 
+export const FilterContext = React.createContext<Status>(Status.All);
+export const SetFilterContext = (
+  React.createContext<React.Dispatch<Status>>(() => {})
+);
+
 type Props = {
   children: React.ReactNode;
 };
 
 export const TodosContext: React.FC<Props> = ({ children }) => {
   const [todos, dispatch] = useReducer(reducer, startingState);
+  const [currentFilter, setCurrentFilter] = useState(Status.All);
 
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={todos}>
-        {children}
-      </StateContext.Provider>
-    </DispatchContext.Provider>
+    <SetFilterContext.Provider value={setCurrentFilter}>
+      <FilterContext.Provider value={currentFilter}>
+        <DispatchContext.Provider value={dispatch}>
+          <StateContext.Provider value={todos}>
+            {children}
+          </StateContext.Provider>
+        </DispatchContext.Provider>
+      </FilterContext.Provider>
+    </SetFilterContext.Provider>
   );
 };

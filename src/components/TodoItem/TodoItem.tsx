@@ -1,5 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext } from 'react';
+import React, {
+  useContext, useRef, useState, useEffect,
+} from 'react';
+
 import classNames from 'classnames';
 
 import { Todo } from '../../types/Todo';
@@ -11,8 +14,12 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ item }) => {
   const dispatch = useContext(DispatchContext);
+  const editRef = useRef<HTMLInputElement | null>(null);
 
-  const handleRemoveClick = () => dispatch({
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTodoTitle, setEditedTodoTitle] = useState(item.title);
+
+  const handleRemoveItem = () => dispatch({
     type: 'remove',
     payload: item.id,
   });
@@ -22,56 +29,81 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     payload: item,
   });
 
+  const saveChanges = () => {
+    if (editedTodoTitle.trim().length !== 0) {
+      dispatch({
+        type: 'edit',
+        payload: item,
+      });
+    } else {
+      handleRemoveItem();
+    }
+
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    if (isEditing) {
+      editRef.current?.focus();
+    }
+  }, [isEditing]);
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setEditedTodoTitle(item.title);
+      setIsEditing(false);
+    }
+
+    if (event.key === 'Enter') {
+      saveChanges();
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedTodoTitle(event.target.value);
+  };
+
   return (
     <li
       className={classNames({
         completed: item.completed,
+        editing: isEditing,
       })}
     >
-      <div className="view">
+      {!isEditing ? (
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id="toggle-view"
+            checked={item.completed}
+            onClick={handleCompletedClick}
+          />
+
+          <label onDoubleClick={handleDoubleClick}>{editedTodoTitle}</label>
+
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={handleRemoveItem}
+          />
+        </div>
+      ) : (
         <input
-          type="checkbox"
-          className="toggle"
-          id="toggle-view"
-          checked={item.completed}
-          onClick={handleCompletedClick}
+          ref={editRef}
+          type="text"
+          className="edit"
+          value={editedTodoTitle}
+          onChange={handleChange}
+          onKeyUp={handleKeyUp}
+          onBlur={saveChanges}
         />
-        <label htmlFor="toggle-view">{item.title}</label>
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={handleRemoveClick}
-        />
-      </div>
-      <input type="text" className="edit" />
+      )}
     </li>
-
-  // <li className="completed">
-  //   <div className="view">
-  //     <input type="checkbox" className="toggle" id="toggle-completed" />
-  //     <label htmlFor="toggle-completed">qwertyuio</label>
-  //     <button type="button" className="destroy" data-cy="deleteTodo" />
-  //   </div>
-  //   <input type="text" className="edit" />
-  // </li>
-
-  // <li className="editing">
-  //   <div className="view">
-  //     <input type="checkbox" className="toggle" id="toggle-editing" />
-  //     <label htmlFor="toggle-editing">zxcvbnm</label>
-  //     <button type="button" className="destroy" data-cy="deleteTodo" />
-  //   </div>
-  //   <input type="text" className="edit" />
-  // </li>
-
-  // <li>
-  //   <div className="view">
-  //     <input type="checkbox" className="toggle" id="toggle-view2" />
-  //     <label htmlFor="toggle-view2">1234567890</label>
-  //     <button type="button" className="destroy" data-cy="deleteTodo" />
-  //   </div>
-  //   <input type="text" className="edit" />
-  // </li>
   );
 };
