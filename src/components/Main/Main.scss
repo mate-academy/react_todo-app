@@ -1,7 +1,9 @@
+@import "../../utils/variables.scss";
+
 .main {
   position: relative;
   z-index: 2;
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid $main-border-color;
 }
 
 .toggle-all {
@@ -26,13 +28,13 @@
     &:before {
       content: "❯";
       font-size: 22px;
-      color: #e6e6e6;
+      color: $main-border-color;
       padding: 10px 27px;
     }
   }
 
   &:checked + label:before {
-    color: #737373;
+    color: $toogle-all-color;
   }
 
   @media screen and (-webkit-min-device-pixel-ratio:0) {

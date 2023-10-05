@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
     }
 
     if (event.key === 'Enter') {
-      if (newTodoTitle.trim().length !== 0) {
+      if (newTodoTitle.trim().length) {
         dispatch({
           type: 'add',
           payload: {

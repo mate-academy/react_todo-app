@@ -1,7 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useRef, useState, useEffect,
+  useContext,
+  useRef,
+  useState,
+  useEffect,
 } from 'react';
+
 import classNames from 'classnames';
 
 import './TodoItem.scss';

@@ -6,7 +6,7 @@ const initialState: Todo[] = [];
 export const getStartingState = (): Todo[] => {
   const data = localStorage.getItem(key);
 
-  if (data === null) {
+  if (!data) {
     return initialState;
   }
 

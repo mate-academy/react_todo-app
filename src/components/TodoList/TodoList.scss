@@ -1,3 +1,5 @@
+@import "../../utils/variables.scss";
+
 .todo-list {
   margin: 0;
   padding: 0;
@@ -6,7 +8,7 @@
   & li {
     position: relative;
     font-size: 24px;
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid $todo-border-color;
 
     &:last-child {
       border-bottom: none;
@@ -59,7 +61,7 @@
     }
 
     &.completed label {
-      color: #d9d9d9;
+      color: $todo-completed-label-color;
       text-decoration: line-through;
     }
 
@@ -83,13 +85,13 @@
       height: 40px;
       margin: auto 0;
       font-size: 30px;
-      color: #cc9a9a;
+      color: $todo-destroy-color;
       margin-bottom: 11px;
       transition: color 0.2s ease-out;
     }
 
     & .destroy:hover {
-      color: #af5b5e;
+      color: $todo-destroy-hover-color;
     }
 
     & .destroy:after {

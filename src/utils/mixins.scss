@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 @mixin editTitle {
   position: relative;
   margin: 0;
@@ -5,12 +7,16 @@
   font-size: 24px;
   font-family: inherit;
   font-weight: inherit;
-  line-height: 1.4em;
+  line-height: 1.45em;
   color: inherit;
   padding: 6px;
-  border: 1px solid #999;
-  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid $todo-border-color;
+  box-shadow: inset 0 -1px 5px 0 $app-main-shadow-color;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  &:focus {
+    outline: none;
+  }
 }

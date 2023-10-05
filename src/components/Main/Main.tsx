@@ -11,7 +11,7 @@ export const Main: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const filterStatus = useContext(FilterContext);
 
-  const [checked, setChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   let filteredTodos: Todo[] = [...todos];
 
@@ -35,10 +35,10 @@ export const Main: React.FC = () => {
   }, [filterStatus]);
 
   const handleToggleAllClick = () => {
-    setChecked(!checked);
+    setIsChecked(!isChecked);
     dispatch({
       type: 'toggleAll',
-      payload: !checked,
+      payload: !isChecked,
     });
   };
 
@@ -49,7 +49,7 @@ export const Main: React.FC = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        checked={checked}
+        checked={isChecked}
         onClick={handleToggleAllClick}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
