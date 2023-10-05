@@ -90,7 +90,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         ref={titleField}
         value={todoTitle}
         onChange={handleTitleEditing}
-        onKeyDown={(e) => handleKeyDown(e)}
+        onKeyDown={handleKeyDown}
         onBlur={handleBlur}
       />
     </li>

@@ -42,6 +42,7 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={title}
           onChange={handleTitleChange}
+          style={{ outline: 'none' }}
         />
       </form>
     </header>
