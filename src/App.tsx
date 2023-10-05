@@ -14,7 +14,8 @@ export const App: React.FC = () => {
   const [toggleAll, setToggleAll] = useState(false);
   const numberOfNotCompleted = todos.filter(item => !item.completed).length;
 
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos
+  = (filteredBy === FilterBy.all) ? todos : todos.filter((todo) => {
     switch (filteredBy) {
       case FilterBy.active:
         return !todo.completed;

@@ -16,6 +16,7 @@ export const TodoList: React.FC<Props> = React.memo((({
     >
       {filteredTodos.map(todo => (
         <TodoItem
+          key={todo.id}
           todo={todo}
         />
       ))}
