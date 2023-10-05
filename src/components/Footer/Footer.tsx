@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 
+import './Footer.scss';
 import { DispatchContext, StateContext } from '../TodosContext';
 import { TodosFilter } from '../TodosFilter';
 

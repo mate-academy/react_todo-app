@@ -2,9 +2,9 @@
 import React, {
   useContext, useRef, useState, useEffect,
 } from 'react';
-
 import classNames from 'classnames';
 
+import './TodoItem.scss';
 import { Todo } from '../../types/Todo';
 import { DispatchContext } from '../TodosContext';
 
@@ -19,15 +19,29 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTodoTitle, setEditedTodoTitle] = useState(item.title);
 
-  const handleRemoveItem = () => dispatch({
-    type: 'remove',
-    payload: item.id,
-  });
+  useEffect(() => {
+    if (isEditing) {
+      editRef.current?.focus();
+    }
+  }, [isEditing]);
 
   const handleCompletedClick = () => dispatch({
     type: 'toggle',
     payload: item,
   });
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleRemoveItem = () => dispatch({
+    type: 'remove',
+    payload: item.id,
+  });
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedTodoTitle(event.target.value);
+  };
 
   const saveChanges = () => {
     if (editedTodoTitle.trim().length !== 0) {
@@ -42,16 +56,6 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     setIsEditing(false);
   };
 
-  useEffect(() => {
-    if (isEditing) {
-      editRef.current?.focus();
-    }
-  }, [isEditing]);
-
-  const handleDoubleClick = () => {
-    setIsEditing(true);
-  };
-
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setEditedTodoTitle(item.title);
@@ -61,10 +65,6 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     if (event.key === 'Enter') {
       saveChanges();
     }
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedTodoTitle(event.target.value);
   };
 
   return (
@@ -99,7 +99,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           type="text"
           className="edit"
           value={editedTodoTitle}
-          onChange={handleChange}
+          onChange={handleTitleChange}
           onKeyUp={handleKeyUp}
           onBlur={saveChanges}
         />

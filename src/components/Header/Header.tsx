@@ -1,4 +1,6 @@
 import React, { useContext, useState } from 'react';
+
+import './Header.scss';
 import { DispatchContext } from '../TodosContext';
 
 export const Header: React.FC = () => {

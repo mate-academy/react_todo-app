@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 
+import './TodoApp.scss';
 import { Header } from '../Header';
 import { Main } from '../Main';
 import { Footer } from '../Footer';

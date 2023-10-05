@@ -1,4 +1,6 @@
 import React, { useContext, useState, useMemo } from 'react';
+
+import './Main.scss';
 import { TodoList } from '../TodoList';
 import { DispatchContext, FilterContext, StateContext } from '../TodosContext';
 import { Status } from '../../types/Status';

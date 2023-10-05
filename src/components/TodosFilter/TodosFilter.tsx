@@ -1,16 +1,13 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
 
+import './TodosFilter.scss';
 import { Status } from '../../types/Status';
 import { FilterContext, SetFilterContext } from '../TodosContext';
 
 export const TodosFilter: React.FC = () => {
   const currentFilter = useContext(FilterContext);
   const setCurrentFilter = useContext(SetFilterContext);
-
-  const handleFilterChange = (status: Status) => {
-    setCurrentFilter(status);
-  };
 
   return (
     <ul className="filters" data-cy="todosFilter">
@@ -20,7 +17,7 @@ export const TodosFilter: React.FC = () => {
           className={classNames({
             selected: currentFilter === Status.All,
           })}
-          onClick={() => handleFilterChange(Status.All)}
+          onClick={() => setCurrentFilter(Status.All)}
         >
           {Status.All}
         </a>
@@ -32,7 +29,7 @@ export const TodosFilter: React.FC = () => {
           className={classNames({
             selected: currentFilter === Status.Active,
           })}
-          onClick={() => handleFilterChange(Status.Active)}
+          onClick={() => setCurrentFilter(Status.Active)}
         >
           {Status.Active}
         </a>
@@ -44,7 +41,7 @@ export const TodosFilter: React.FC = () => {
           className={classNames({
             selected: currentFilter === Status.Completed,
           })}
-          onClick={() => handleFilterChange(Status.Completed)}
+          onClick={() => setCurrentFilter(Status.Completed)}
         >
           {Status.Completed}
         </a>
