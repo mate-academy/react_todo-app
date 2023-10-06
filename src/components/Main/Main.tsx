@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState } from 'react';
 
 import './Main.scss';
 import { TodoList } from '../TodoList';
@@ -13,26 +13,24 @@ export const Main: React.FC = () => {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  let filteredTodos: Todo[] = [...todos];
+  let filteredTodos: Todo[] = [];
 
-  useMemo(() => {
-    switch (filterStatus) {
-      case Status.All:
-        filteredTodos = [...todos];
-        break;
+  switch (filterStatus) {
+    case Status.All:
+      filteredTodos = [...todos];
+      break;
 
-      case Status.Active:
-        filteredTodos = [...todos].filter(todo => !todo.completed);
-        break;
+    case Status.Active:
+      filteredTodos = [...todos].filter(todo => !todo.completed);
+      break;
 
-      case Status.Completed:
-        filteredTodos = [...todos].filter(todo => todo.completed);
-        break;
+    case Status.Completed:
+      filteredTodos = [...todos].filter(todo => todo.completed);
+      break;
 
-      default:
-        break;
-    }
-  }, [filterStatus]);
+    default:
+      throw Error('Unknown filter');
+  }
 
   const handleToggleAllClick = () => {
     setIsChecked(!isChecked);
