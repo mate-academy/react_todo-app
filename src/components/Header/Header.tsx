@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
 
 import './Header.scss';
-import { DispatchContext } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
 
 export const Header: React.FC = () => {
-  const dispatch = useContext(DispatchContext);
+  const { dispatch } = useContext(TodosContext);
   const [newTodoTitle, setNewTodoTitle] = useState('');
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {

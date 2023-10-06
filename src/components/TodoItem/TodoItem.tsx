@@ -10,14 +10,14 @@ import classNames from 'classnames';
 
 import './TodoItem.scss';
 import { Todo } from '../../types/Todo';
-import { DispatchContext } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
 
 type Props = {
   item: Todo,
 };
 
 export const TodoItem: React.FC<Props> = ({ item }) => {
-  const dispatch = useContext(DispatchContext);
+  const { dispatch } = useContext(TodosContext);
   const editRef = useRef<HTMLInputElement | null>(null);
 
   const [isEditing, setIsEditing] = useState(false);

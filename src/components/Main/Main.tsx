@@ -2,20 +2,18 @@ import React, { useContext, useState } from 'react';
 
 import './Main.scss';
 import { TodoList } from '../TodoList';
-import { DispatchContext, FilterContext, StateContext } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
 import { Status } from '../../types/Status';
 import { Todo } from '../../types/Todo';
 
 export const Main: React.FC = () => {
-  const todos = useContext(StateContext);
-  const dispatch = useContext(DispatchContext);
-  const filterStatus = useContext(FilterContext);
+  const { todos, dispatch, currentFilter } = useContext(TodosContext);
 
   const [isChecked, setIsChecked] = useState(false);
 
   let filteredTodos: Todo[] = [];
 
-  switch (filterStatus) {
+  switch (currentFilter) {
     case Status.All:
       filteredTodos = [...todos];
       break;

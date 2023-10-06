@@ -15,7 +15,7 @@
   right: 100%;
   bottom: 100%;
 
-  & + label {
+  + label {
     width: 60px;
     height: 34px;
     font-size: 0;
@@ -38,8 +38,6 @@
   }
 
   @media screen and (-webkit-min-device-pixel-ratio:0) {
-    & {
-      background: none;
-    }
+    background: none;
   }
 }

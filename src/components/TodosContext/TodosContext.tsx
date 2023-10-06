@@ -9,33 +9,39 @@ import { todosReducer } from '../../utils/todosReducer';
 
 const startingState = getStartingState();
 
-export const StateContext = React.createContext<Todo[]>(startingState);
-export const DispatchContext = (
-  React.createContext<React.Dispatch<Action>>(() => {})
-);
+type Context = {
+  todos: Todo[],
+  dispatch: React.Dispatch<Action>,
+  currentFilter: Status,
+  setCurrentFilter: React.Dispatch<Status>,
+};
 
-export const FilterContext = React.createContext<Status>(Status.All);
-export const SetFilterContext = (
-  React.createContext<React.Dispatch<Status>>(() => {})
-);
+const initialContext: Context = {
+  todos: startingState,
+  dispatch: () => {},
+  currentFilter: Status.All,
+  setCurrentFilter: () => {},
+};
+
+export const TodosContext = React.createContext<Context>(initialContext);
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const TodosContext: React.FC<Props> = ({ children }) => {
+export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [todos, dispatch] = useReducer(todosReducer, startingState);
   const [currentFilter, setCurrentFilter] = useState(Status.All);
 
   return (
-    <SetFilterContext.Provider value={setCurrentFilter}>
-      <FilterContext.Provider value={currentFilter}>
-        <DispatchContext.Provider value={dispatch}>
-          <StateContext.Provider value={todos}>
-            {children}
-          </StateContext.Provider>
-        </DispatchContext.Provider>
-      </FilterContext.Provider>
-    </SetFilterContext.Provider>
+    <TodosContext.Provider value={{
+      todos,
+      dispatch,
+      currentFilter,
+      setCurrentFilter,
+    }}
+    >
+      {children}
+    </TodosContext.Provider>
   );
 };

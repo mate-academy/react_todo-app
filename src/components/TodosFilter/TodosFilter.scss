@@ -8,10 +8,10 @@
   right: 0;
   left: 0;
 
-  & li {
+  li {
     display: inline;
 
-    & a {
+    a {
       color: inherit;
       margin: 3px;
       padding: 3px 7px;
@@ -30,8 +30,6 @@
   }
 
   @media (max-width: 430px) {
-    & {
-      bottom: 10px;
-    }
+    bottom: 10px;
   }
 }

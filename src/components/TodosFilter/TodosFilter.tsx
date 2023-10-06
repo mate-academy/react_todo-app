@@ -3,11 +3,10 @@ import classNames from 'classnames';
 
 import './TodosFilter.scss';
 import { Status } from '../../types/Status';
-import { FilterContext, SetFilterContext } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
 
 export const TodosFilter: React.FC = () => {
-  const currentFilter = useContext(FilterContext);
-  const setCurrentFilter = useContext(SetFilterContext);
+  const { currentFilter, setCurrentFilter } = useContext(TodosContext);
 
   return (
     <ul className="filters" data-cy="todosFilter">

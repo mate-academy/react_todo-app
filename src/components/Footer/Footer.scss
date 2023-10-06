@@ -23,9 +23,7 @@
   }
 
   @media (max-width: 430px) {
-    & {
-      height: 50px;
-    }
+    height: 50px;
   }
 }
 
@@ -33,7 +31,7 @@
   float: left;
   text-align: left;
 
-  & strong {
+  strong {
     font-weight: 300;
   }
 }
