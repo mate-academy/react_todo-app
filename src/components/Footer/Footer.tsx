@@ -27,7 +27,6 @@ export const Footer: React.FC = () => {
         ) : (
           `${notCompletedLength} items left`
         )}
-        {}
       </span>
 
       <TodosFilter />

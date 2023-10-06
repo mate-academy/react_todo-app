@@ -21,15 +21,15 @@ export const Main: React.FC = () => {
       break;
 
     case Status.Active:
-      filteredTodos = [...todos].filter(todo => !todo.completed);
+      filteredTodos = todos.filter(todo => !todo.completed);
       break;
 
     case Status.Completed:
-      filteredTodos = [...todos].filter(todo => todo.completed);
+      filteredTodos = todos.filter(todo => todo.completed);
       break;
 
     default:
-      throw Error('Unknown filter');
+      throw new Error('Unknown filter!');
   }
 
   const handleToggleAllClick = () => {

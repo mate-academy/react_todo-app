@@ -14,7 +14,7 @@ export function todosReducer(state: Todo[], action: Action): Todo[] {
       break;
 
     case 'remove':
-      currentState = [...state].filter(todo => todo.id !== action.payload);
+      currentState = state.filter(todo => todo.id !== action.payload);
       break;
 
     case 'clearAllCompleted':
@@ -22,7 +22,7 @@ export function todosReducer(state: Todo[], action: Action): Todo[] {
       break;
 
     case 'toggle':
-      currentState = [...state].map(todo => {
+      currentState = state.map(todo => {
         if (todo.id === action.payload.id) {
           return {
             ...todo,
@@ -35,7 +35,7 @@ export function todosReducer(state: Todo[], action: Action): Todo[] {
       break;
 
     case 'toggleAll':
-      currentState = [...state].map(todo => {
+      currentState = state.map(todo => {
         return {
           ...todo,
           completed: action.payload,
@@ -44,7 +44,7 @@ export function todosReducer(state: Todo[], action: Action): Todo[] {
       break;
 
     case 'edit':
-      currentState = [...state].map(todo => {
+      currentState = state.map(todo => {
         if (todo.id === action.payload.id) {
           return {
             ...todo,
