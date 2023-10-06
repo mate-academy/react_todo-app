@@ -8,6 +8,10 @@ import { TodosContext } from '../TodosContext';
 export const TodosFilter: React.FC = () => {
   const { currentFilter, setCurrentFilter } = useContext(TodosContext);
 
+  const onFilterSelect = (status: Status) => () => {
+    setCurrentFilter(status);
+  };
+
   return (
     <ul className="filters" data-cy="todosFilter">
       <li>
@@ -16,7 +20,7 @@ export const TodosFilter: React.FC = () => {
           className={classNames({
             selected: currentFilter === Status.All,
           })}
-          onClick={() => setCurrentFilter(Status.All)}
+          onClick={onFilterSelect(Status.All)}
         >
           {Status.All}
         </a>
@@ -28,7 +32,7 @@ export const TodosFilter: React.FC = () => {
           className={classNames({
             selected: currentFilter === Status.Active,
           })}
-          onClick={() => setCurrentFilter(Status.Active)}
+          onClick={onFilterSelect(Status.Active)}
         >
           {Status.Active}
         </a>
@@ -40,7 +44,7 @@ export const TodosFilter: React.FC = () => {
           className={classNames({
             selected: currentFilter === Status.Completed,
           })}
-          onClick={() => setCurrentFilter(Status.Completed)}
+          onClick={onFilterSelect(Status.Completed)}
         >
           {Status.Completed}
         </a>

@@ -11,24 +11,30 @@ export const Main: React.FC = () => {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  let filteredTodos: Todo[] = [];
+  const getVisibleTodos = (allTodos: Todo[], filter: Status) => {
+    let shownTodos: Todo[] = [];
 
-  switch (currentFilter) {
-    case Status.All:
-      filteredTodos = [...todos];
-      break;
+    switch (filter) {
+      case Status.All:
+        shownTodos = [...allTodos];
+        break;
 
-    case Status.Active:
-      filteredTodos = todos.filter(todo => !todo.completed);
-      break;
+      case Status.Active:
+        shownTodos = allTodos.filter(todo => !todo.completed);
+        break;
 
-    case Status.Completed:
-      filteredTodos = todos.filter(todo => todo.completed);
-      break;
+      case Status.Completed:
+        shownTodos = allTodos.filter(todo => todo.completed);
+        break;
 
-    default:
-      throw new Error('Unknown filter!');
-  }
+      default:
+        throw new Error('Unknown filter!');
+    }
+
+    return shownTodos;
+  };
+
+  const visibleTodos = getVisibleTodos(todos, currentFilter);
 
   const handleToggleAllClick = () => {
     setIsChecked(!isChecked);
@@ -50,7 +56,7 @@ export const Main: React.FC = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <TodoList items={filteredTodos} />
+      <TodoList items={visibleTodos} />
     </section>
   );
 };
