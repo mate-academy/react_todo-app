@@ -39,10 +39,10 @@ body {
 
 .todoapp {
   background: #fff;
-  margin: 130px 0 40px;
+  margin: 150px 0 40px;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-    0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px 0 #0003,
+    0 25px 50px 0 #0000001a;
 }
 
 .todoapp input::-webkit-input-placeholder {
@@ -105,6 +105,10 @@ body {
   border: none;
   background: rgba(0, 0, 0, 0.01);
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+}
+
+.new-todo:focus-visible {
+  outline: none;
 }
 
 .main {
