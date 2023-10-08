@@ -1,0 +1,6 @@
+[
+  {"id": 1, "title": "Learn Javascript", "completed": true},
+  {"id": 2, "title": "Learn HTML + CSS", "completed": true},
+  {"id": 3, "title": "Learn TypeScript", "completed": false},
+  {"id": 4, "title": "Learn React", "completed": false}
+]
