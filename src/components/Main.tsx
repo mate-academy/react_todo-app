@@ -15,11 +15,7 @@ export const Main: React.FC = () => {
     setTodos(updatedTodos);
   };
 
-  if (todos.length === 0) {
-    return null;
-  }
-
-  return (
+  return (!!todos.length && (
     <section className="main">
       <input
         type="checkbox"
@@ -33,5 +29,5 @@ export const Main: React.FC = () => {
 
       <TodoList />
     </section>
-  );
+  )) || null;
 };

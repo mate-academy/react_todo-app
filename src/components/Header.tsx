@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
     if (inputRef.current) {
       const newTodoTitle = inputRef.current.value;
 
-      if (!newTodoTitle) {
+      if (!newTodoTitle.trim()) {
         return;
       }
 

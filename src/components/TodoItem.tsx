@@ -74,7 +74,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleEditBlur = () => {
-    if (editTitle.trim() === '') {
+    if (!editTitle.trim()) {
       deleteTodo(todo.id);
     } else {
       updateTodo(todo.id, editTitle);
