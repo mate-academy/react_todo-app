@@ -12,6 +12,10 @@ export const Header: React.FC = () => {
     if (inputRef.current) {
       const newTodoTitle = inputRef.current.value;
 
+      if (!newTodoTitle) {
+        return;
+      }
+
       const newTodo: Todo = {
         id: new Date().getTime(),
         title: newTodoTitle,

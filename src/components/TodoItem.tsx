@@ -10,8 +10,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
     todos,
     setTodos,
-  }
-    = useContext(TodosContext);
+  } = useContext(TodosContext);
 
   const [editTitle, setEditTitle] = useState(todo.title);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
@@ -55,7 +54,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleEditKeyUp = (event: React.KeyboardEvent) => {
     switch (event.key) {
       case 'Enter':
-        if (editTitle.trim() === '') {
+        if (!editTitle.trim()) {
           deleteTodo(todo.id);
         } else {
           updateTodo(todo.id, editTitle);
@@ -102,7 +101,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={() => toggleTodo(todo.id)}
         />
 
-        {isEditingThisTodo ? null : (
+        {!isEditingThisTodo && (
           <label onDoubleClick={handleDoubleClick}>
             {todo.title}
           </label>
