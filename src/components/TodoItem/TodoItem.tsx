@@ -1,4 +1,6 @@
-import { useContext, useState, useRef } from 'react';
+import {
+  useContext, useState, useRef, useEffect,
+} from 'react';
 import classNames from 'classnames';
 import { TodosContext } from '../../TodosContext';
 import { Todo } from '../../types/Todo';
@@ -20,6 +22,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editTitle, setEditTitle] = useState('');
 
   const inputField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputField.current) {
+      inputField.current.focus();
+    }
+  }, [isTodoEdit]);
 
   function handleDoubleClick() {
     setIsTodoEdit(true);
