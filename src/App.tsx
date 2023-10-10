@@ -1,18 +1,87 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import cl from 'classnames';
+
+type Todo = {
+  id?: number;
+  name?: string;
+  completed?: boolean;
+};
+
+// const todoList: Todo[] = [];
 
 export const App: React.FC = () => {
+  const [inputText, setInputText] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [changedElement, setChangedElement] = useState('');
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const generateId = (todoslist: Todo[] | undefined): number => {
+    if (todoslist && todoslist.length > 0) {
+      const existingIds = todoslist.map(item => item.id || 0);
+      const maxId = Math.max(...existingIds);
+
+      return maxId + 1;
+    }
+
+    return 1;
+  };
+
+  const handleTodoChange = (index: number, newName: string) => {
+    const updatedTodos = [...todos];
+
+    updatedTodos[index].name = newName;
+    setTodos(updatedTodos);
+  };
+
+  const handleDoubleClick = (index: number) => {
+    const selectedTodo = todos[index];
+
+    if (selectedTodo && selectedTodo.name) {
+      setChangedElement(selectedTodo.name);
+      setEditIndex(index);
+      setIsEditing(true);
+    }
+  };
+
+  const handleImputChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (inputText.trim() !== '') {
+      setTodos([
+        ...todos,
+        {
+          id: generateId(todos),
+          name: inputText.trim(),
+          completed: false,
+        },
+      ]);
+      setInputText('');
+    }
+  };
+
+  const handleDeleteTodo = (todo: Todo) => {
+    const updatedTodos = todos.filter(item => item.id !== todo.id);
+
+    setTodos(updatedTodos);
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={inputText}
+            onChange={handleImputChange}
           />
         </form>
       </header>
@@ -27,41 +96,42 @@ export const App: React.FC = () => {
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          {todos.map((todo, index) => (
+            <li
+              key={todo.id}
+              onDoubleClick={() => handleDoubleClick(index)}
+              className={cl({ editing: editIndex === index })}
+            >
+              <div className="view">
+                <input type="checkbox" className="toggle" id="toggle-view" />
+                <label htmlFor="toggle-view">{todo.name}</label>
+                <button
+                  type="button"
+                  className="destroy"
+                  data-cy="deleteTodo"
+                  onClick={() => handleDeleteTodo(todo)}
+                />
+              </div>
+              {editIndex === index && isEditing && (
+                <input
+                  type="text"
+                  className="edit"
+                  value={changedElement || ''}
+                  onChange={(event) => setChangedElement(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleTodoChange(index, changedElement);
+                      setIsEditing(false);
+                    }
+                  }}
+                  onBlur={() => {
+                    handleTodoChange(index, changedElement);
+                    setIsEditing(false);
+                  }}
+                />
+              )}
+            </li>
+          ))}
         </ul>
       </section>
 
