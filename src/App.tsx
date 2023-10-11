@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import { useState, useContext, useCallback } from 'react';
+import { useState, useContext, useMemo } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 import { TodosContext } from './stores/TodosContext';
@@ -10,11 +10,12 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const { lsTodos, setLsTodos } = useContext(TodosContext);
   const [todoTitle, setTodoTitle] = useState('');
-  const allCompleted = useCallback(
-    lsTodos.every((todo: { completed: boolean; }) => {
+
+  const allCompleted = useMemo(() => {
+    return lsTodos.every((todo: Todo) => {
       return todo.completed === true;
-    }), [lsTodos],
-  );
+    });
+  }, [lsTodos]);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
   const uncompletedCount = lsTodos.filter((todo: Todo) => {
@@ -79,7 +80,7 @@ export const App: React.FC = () => {
 
   function clearAll() {
     setLsTodos((prev: Todo[]) => {
-      return [...prev].filter(todo => todo.completed === false);
+      return [...prev].filter(todo => !todo.completed);
     });
   }
 
@@ -100,7 +101,7 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      {lsTodos.length > 0 && (
+      {!!lsTodos.length && (
         <>
           <section className="main">
             <input

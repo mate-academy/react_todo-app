@@ -19,7 +19,7 @@ export const TodoItem: React.FC<Todo> = ({ title, completed, id }) => {
     if (editInput.current && currentTitle) {
       editInput.current.focus();
     }
-  }, [editable]);
+  }, [editable, currentTitle]);
 
   function toggleCompleted() {
     setLsTodos((prev: Todo[]) => {
@@ -80,10 +80,18 @@ export const TodoItem: React.FC<Todo> = ({ title, completed, id }) => {
     }
   }
 
+  function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCurrentTitle(e.target.value);
+  }
+
+  function handleDoubleClick() {
+    setEditable(true);
+  }
+
   return (
     <li className={classNames({
-      completed: completed === true,
-      editing: editable === true,
+      completed,
+      editing: editable,
     })}
     >
       <div className="view">
@@ -95,7 +103,7 @@ export const TodoItem: React.FC<Todo> = ({ title, completed, id }) => {
           onChange={toggleCompleted}
 
         />
-        <label onDoubleClick={() => setEditable(true)}>{currentTitle}</label>
+        <label onDoubleClick={handleDoubleClick}>{currentTitle}</label>
 
         <button
           aria-label="Remove Todo"
@@ -110,7 +118,7 @@ export const TodoItem: React.FC<Todo> = ({ title, completed, id }) => {
         type="text"
         className="edit"
         value={currentTitle}
-        onChange={(e => setCurrentTitle(e.target.value))}
+        onChange={handleTitleChange}
         onBlur={editTodo}
         onKeyUp={handleKeyUp}
       />

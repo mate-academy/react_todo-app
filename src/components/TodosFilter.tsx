@@ -7,15 +7,27 @@ type Props = {
 };
 
 export const TodosFilter: React.FC<Props> = ({ filterBy, setFilterBy }) => {
+  const setFilterByAll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setFilterBy(FilterBy.All);
+  };
+
+  const setFilterByActive = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setFilterBy(FilterBy.Active);
+  };
+
+  const setFilterByCompleted = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setFilterBy(FilterBy.Completed);
+  };
+
   return (
     <ul className="filters">
       <li>
         <a
           href="#/"
-          onClick={e => {
-            e.preventDefault();
-            setFilterBy(FilterBy.All);
-          }}
+          onClick={setFilterByAll}
           className={classNames(
             { selected: filterBy === FilterBy.All },
           )}
@@ -27,10 +39,7 @@ export const TodosFilter: React.FC<Props> = ({ filterBy, setFilterBy }) => {
       <li>
         <a
           href="#/active"
-          onClick={e => {
-            e.preventDefault();
-            setFilterBy(FilterBy.Active);
-          }}
+          onClick={setFilterByActive}
           className={classNames(
             { selected: filterBy === FilterBy.Active },
           )}
@@ -42,10 +51,7 @@ export const TodosFilter: React.FC<Props> = ({ filterBy, setFilterBy }) => {
       <li>
         <a
           href="#/completed"
-          onClick={e => {
-            e.preventDefault();
-            setFilterBy(FilterBy.Completed);
-          }}
+          onClick={setFilterByCompleted}
           className={classNames(
             { selected: filterBy === FilterBy.Completed },
           )}
