@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import cl from 'classnames';
 
 type Todo = {
@@ -14,8 +14,8 @@ export const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [changedElement, setChangedElement] = useState('');
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const generateId = (todoslist: Todo[] | undefined): number => {
     if (todoslist && todoslist.length > 0) {
@@ -28,24 +28,36 @@ export const App: React.FC = () => {
     return 1;
   };
 
-  const handleTodoChange = (index: number, newName: string) => {
-    const updatedTodos = [...todos];
+  const handleTodoChange = () => {
+    let updatedTodos = [...todos];
 
-    updatedTodos[index].name = newName;
+    updatedTodos = updatedTodos.map(elem => {
+      if (elem.id === editId) {
+        return { ...elem, name: changedElement };
+      }
+
+      return elem;
+    });
+
     setTodos(updatedTodos);
   };
 
-  const handleDoubleClick = (index: number) => {
-    const selectedTodo = todos[index];
+  const handleDoubleClick = (id: number | undefined) => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    const selectedTodo = todos.find(elem => elem.id === id);
 
     if (selectedTodo && selectedTodo.name) {
       setChangedElement(selectedTodo.name);
-      setEditIndex(index);
-      setIsEditing(true);
+      if (id) {
+        setEditId(id);
+      }
     }
   };
 
-  const handleImputChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddTodo = (event:React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
   };
 
@@ -81,7 +93,7 @@ export const App: React.FC = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={inputText}
-            onChange={handleImputChange}
+            onChange={handleAddTodo}
           />
         </form>
       </header>
@@ -96,11 +108,11 @@ export const App: React.FC = () => {
         <label htmlFor="toggle-all">Mark all as complete</label>
 
         <ul className="todo-list" data-cy="todoList">
-          {todos.map((todo, index) => (
+          {todos.map((todo) => (
             <li
               key={todo.id}
-              onDoubleClick={() => handleDoubleClick(index)}
-              className={cl({ editing: editIndex === index })}
+              onDoubleClick={() => handleDoubleClick(todo.id)}
+              className={cl({ editing: editId === todo.id })}
             >
               <div className="view">
                 <input type="checkbox" className="toggle" id="toggle-view" />
@@ -112,24 +124,16 @@ export const App: React.FC = () => {
                   onClick={() => handleDeleteTodo(todo)}
                 />
               </div>
-              {editIndex === index && isEditing && (
-                <input
-                  type="text"
-                  className="edit"
-                  value={changedElement || ''}
-                  onChange={(event) => setChangedElement(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      handleTodoChange(index, changedElement);
-                      setIsEditing(false);
-                    }
-                  }}
-                  onBlur={() => {
-                    handleTodoChange(index, changedElement);
-                    setIsEditing(false);
-                  }}
-                />
-              )}
+              <input
+                type="text"
+                className="edit"
+                value={changedElement || ''}
+                onChange={(event) => {
+                  setChangedElement(event.target.value);
+                  handleTodoChange();
+                }}
+                ref={inputRef}
+              />
             </li>
           ))}
         </ul>
