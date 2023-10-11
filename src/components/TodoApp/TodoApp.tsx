@@ -25,7 +25,7 @@ export const TodoApp: React.FC = () => {
   const handleAddSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title.trim() !== '') {
+    if (title.trim()) {
       setTodos((prevTodos) => [
         ...prevTodos,
         {
@@ -39,7 +39,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const handlerCompleteAll = useCallback(() => {
-    if (todos.some(todo => todo.completed === false)) {
+    if (todos.some(todo => !todo.completed)) {
       const updatedTodos = todos.map(todo => ({
         ...todo,
         completed: true,
@@ -76,7 +76,7 @@ export const TodoApp: React.FC = () => {
 
   const noCompleteTodos = todos.filter(element => !element.completed);
   const hasJustOneCompleted = todos.some(element => element.completed);
-  const todosAllCompleted = todos.every(element => element.completed === true);
+  const todosAllCompleted = todos.every(element => element.completed);
 
   return (
     <header className="header">
@@ -97,7 +97,7 @@ export const TodoApp: React.FC = () => {
         />
       </form>
 
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <section className="main">
           <input
             checked={todosAllCompleted}
@@ -113,7 +113,7 @@ export const TodoApp: React.FC = () => {
         </section>
       )}
 
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${noCompleteTodos.length} items left`}
