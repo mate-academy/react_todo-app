@@ -8,6 +8,7 @@ import { TodoList } from './components/TodoList';
 export const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isFilter, setIsFilter] = useState('');
   const generateId = (): number => {
     return +new Date();
   };
@@ -58,9 +59,13 @@ export const App: React.FC = () => {
         <TodoList
           todos={todos}
           setTodos={setTodos}
+          isFilter={isFilter}
         />
       </section>
-      <TodosFilter />
+      <TodosFilter
+        isFilter={isFilter}
+        setIsFilter={setIsFilter}
+      />
     </div>
   );
 };

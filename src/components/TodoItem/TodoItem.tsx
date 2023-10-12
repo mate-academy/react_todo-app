@@ -29,6 +29,31 @@ export const TodoItem: React.FC<Props> = ({
     });
 
     setTodos(updatedTodos);
+    setEditId(null);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const keyDown = event.key;
+
+    if (keyDown === 'Enter') {
+      handleTodoChange();
+    }
+
+    if (keyDown === 'Escape') {
+      setEditId(null);
+    }
+  };
+
+  const handleCompleted = (elem: number | undefined) => {
+    const updatedTodos: Todo[] = todos.map(item => {
+      if (item.id === elem) {
+        return { ...item, completed: !item.completed };
+      }
+
+      return item;
+    });
+
+    setTodos(updatedTodos);
   };
 
   const handleDeleteTodo = (elem: Todo) => {
@@ -56,10 +81,18 @@ export const TodoItem: React.FC<Props> = ({
     <li
       key={todo.id}
       onDoubleClick={() => handleDoubleClick(todo.id)}
-      className={cl({ editing: editId === todo.id })}
+      className={cl(
+        { editing: editId === todo.id },
+        { completed: todo.completed },
+      )}
     >
       <div className="view">
-        <input type="checkbox" className="toggle" id="toggle-view" />
+        <input
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          onChange={() => handleCompleted(todo.id)}
+        />
         <label htmlFor="toggle-view">{todo.title}</label>
         <button
           type="button"
@@ -77,6 +110,7 @@ export const TodoItem: React.FC<Props> = ({
           setChangedElement(event.target.value);
         }}
         onBlur={handleTodoChange}
+        onKeyDown={handleKeyDown}
         ref={inputRef}
       />
     </li>

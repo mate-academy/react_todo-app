@@ -1,6 +1,16 @@
 import React from 'react';
+import cl from 'classnames';
 
-export const TodosFilter: React.FC = () => {
+interface Props {
+  isFilter: string | undefined;
+  setIsFilter: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const TodosFilter: React.FC<Props> = ({ isFilter, setIsFilter }) => {
+  const handleFilterClick = (filter: string) => {
+    setIsFilter(filter);
+  };
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -9,15 +19,33 @@ export const TodosFilter: React.FC = () => {
 
       <ul className="filters">
         <li>
-          <a href="#/" className="selected">All</a>
+          <a
+            href="#/"
+            className={cl({ selected: isFilter === 'All' })}
+            onClick={() => handleFilterClick('All')}
+          >
+            All
+          </a>
         </li>
 
         <li>
-          <a href="#/active">Active</a>
+          <a
+            href="#/active"
+            className={cl({ selected: isFilter === 'Active' })}
+            onClick={() => handleFilterClick('Active')}
+          >
+            Active
+          </a>
         </li>
 
         <li>
-          <a href="#/completed">Completed</a>
+          <a
+            href="#/completed"
+            className={cl({ selected: isFilter === 'Completed' })}
+            onClick={() => handleFilterClick('Completed')}
+          >
+            Completed
+          </a>
         </li>
       </ul>
 
