@@ -1,11 +1,18 @@
 import { createRoot } from 'react-dom/client';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+import './styles/index.scss';
 
 import { App } from './App';
+import { NotificationContextProvider } from './context/NotificationContext';
+import { LoadingContextProvider } from './context/LoadingContext';
 
-const container = document.getElementById('root') as HTMLDivElement;
-
-createRoot(container).render(<App />);
+createRoot(document.getElementById('root') as HTMLDivElement)
+  .render(
+    <NotificationContextProvider>
+      <LoadingContextProvider>
+        <App />
+      </LoadingContextProvider>
+    </NotificationContextProvider>,
+  );
