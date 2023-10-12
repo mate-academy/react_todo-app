@@ -34,8 +34,6 @@ export const TodoItem: React.FC<Props> = ({
     }
   }, [isEditing]);
 
-  const handleOnDoubleClick = () => setIsEditing(true);
-
   const handleEditing = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedTitle(event.target.value);
   };
@@ -61,8 +59,6 @@ export const TodoItem: React.FC<Props> = ({
     }
   };
 
-  const handleOnBlur = () => applyChanges();
-
   return (
     <div
       className={classNames('todo', {
@@ -86,7 +82,7 @@ export const TodoItem: React.FC<Props> = ({
             value={editedTitle}
             onChange={handleEditing}
             onKeyDown={handleApplyChanges}
-            onBlur={handleOnBlur}
+            onBlur={applyChanges}
             ref={inputRef}
           />
         </form>
@@ -94,7 +90,7 @@ export const TodoItem: React.FC<Props> = ({
         <>
           <span
             className="todo__title"
-            onDoubleClick={handleOnDoubleClick}
+            onDoubleClick={() => setIsEditing(true)}
           >
             {editedTitle}
           </span>

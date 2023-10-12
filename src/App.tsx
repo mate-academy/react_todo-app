@@ -114,9 +114,7 @@ export const App: React.FC = () => {
     const areAllCompleted = todos.every(({ completed }) => completed);
 
     todos.forEach(({ id, completed }) => {
-      if (areAllCompleted) {
-        updateCurrentTodo(id, { completed: !completed });
-      } else if (!completed) {
+      if (!completed || areAllCompleted) {
         updateCurrentTodo(id, { completed: !completed });
       }
     });

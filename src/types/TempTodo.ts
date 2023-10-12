@@ -1,5 +1,3 @@
-export interface TempTodo {
-  userId: number;
-  title: string;
-  completed: boolean;
-}
+import { Todo } from './Todo';
+
+export type TempTodo = Omit<Todo, 'id'>;
