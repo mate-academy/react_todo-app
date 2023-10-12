@@ -1,93 +1,168 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useCallback,
+  useContext, useEffect, useMemo, useState,
+} from 'react';
+import { UserWarning } from './UserWarning';
+import { Header } from './components/Header';
+import { TodosList } from './components/TodosList';
+import { Footer } from './components/Footer';
+import { Todo } from './types/Todo';
+import {
+  addTodo, deleteTodo, getTodos, updateTodo,
+} from './api/todos';
+import { FilterOptions } from './types/FilterOptions';
+import { filteringTodos } from './utils/filteringTodos';
+import { Notification } from './components/Notification';
+import { Errors } from './types/Errors';
+import { NotificationContext } from './context/NotificationContext';
+import { LoadingContext } from './context/LoadingContext';
+
+const USER_ID = 10516;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [
+    filterOption,
+    setFilterOption,
+  ] = useState<FilterOptions>(FilterOptions.All);
+
+  const { errorMessage, setErrorMessage } = useContext(NotificationContext);
+  const {
+    focusInput,
+    disableInput,
+    addTodoIdToLoading,
+    deleteTodoIdFromLoading,
+  } = useContext(LoadingContext);
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => setErrorMessage(Errors.Loading));
+  }, []);
+
+  const currentTodos = useMemo(() => {
+    return filteringTodos(todos, filterOption);
+  }, [todos, filterOption]);
+
+  const todosCountByStatus = useMemo(() => {
+    return {
+      active: filteringTodos(todos, FilterOptions.Active).length,
+      completed: filteringTodos(todos, FilterOptions.Completed).length,
+    };
+  }, [todos]);
+
+  const addNewTodoToMainTodosList = (todo: Todo) => {
+    setTodos(prevTodos => [...prevTodos, todo]);
+  };
+
+  const deleteTodoFromMainTodosList = (todoId: number) => {
+    setTodos(prevTodos => prevTodos.filter(({ id }) => id !== todoId));
+  };
+
+  const addNewTodo = useCallback((title: string) => {
+    const newTodo = {
+      userId: USER_ID,
+      title,
+      completed: false,
+    };
+
+    disableInput();
+    addTodoIdToLoading(0);
+    setTempTodo({ ...newTodo, id: 0 });
+
+    addTodo(newTodo)
+      .then(addNewTodoToMainTodosList)
+      .catch(() => setErrorMessage(Errors.Adding))
+      .finally(() => {
+        deleteTodoIdFromLoading(0);
+        setTempTodo(null);
+        focusInput();
+      });
+  }, []);
+
+  const deleteCurrentTodo = useCallback((todoId: number) => {
+    addTodoIdToLoading(todoId);
+
+    deleteTodo(todoId)
+      .then(() => deleteTodoFromMainTodosList(todoId))
+      .catch(() => setErrorMessage(Errors.Deletion))
+      .finally(() => {
+        deleteTodoIdFromLoading(todoId);
+      });
+  }, []);
+
+  const updateCurrentTodo = useCallback((
+    todoId: number,
+    data: Partial<Todo>,
+  ) => {
+    addTodoIdToLoading(todoId);
+
+    updateTodo(todoId, data)
+      .then((response) => {
+        setTodos(prevTodos => prevTodos.map(todo => {
+          return todo.id === todoId ? { ...todo, ...response } : todo;
+        }));
+      })
+      .catch(() => setErrorMessage(Errors.Updating))
+      .finally(() => {
+        deleteTodoIdFromLoading(todoId);
+      });
+  }, []);
+
+  const handleToggleCompleted = () => {
+    const areAllCompleted = todos.every(({ completed }) => completed);
+
+    todos.forEach(({ id, completed }) => {
+      if (!completed || areAllCompleted) {
+        updateCurrentTodo(id, { completed: !completed });
+      }
+    });
+  };
+
+  const handleDeleteCompletedTodos = useCallback(() => {
+    todos.forEach(({ id, completed }) => {
+      if (completed) {
+        deleteCurrentTodo(id);
+      }
+    });
+  }, [todos]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <h1 className="todoapp__title">todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <div className="todoapp__content">
+        <Header
+          activeTodosCount={todosCountByStatus.active}
+          handleToggleCompleted={handleToggleCompleted}
+          addNewTodo={addNewTodo}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <TodosList
+          todos={currentTodos}
+          tempTodo={tempTodo}
+          deleteCurrentTodo={deleteCurrentTodo}
+          updateCurrentTodo={updateCurrentTodo}
+        />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {!!todos.length && (
+          <Footer
+            todosCountByStatus={todosCountByStatus}
+            filterOption={filterOption}
+            setFilterOption={setFilterOption}
+            handleDeleteCompletedTodos={handleDeleteCompletedTodos}
+          />
+        )}
+      </div>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {errorMessage && (
+        <Notification />
+      )}
     </div>
   );
 };
