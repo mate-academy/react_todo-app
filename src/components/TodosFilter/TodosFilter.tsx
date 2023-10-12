@@ -1,8 +1,7 @@
 import React from 'react';
 
 export const TodosFilter: React.FC = () => {
-
- return (
+  return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
         3 items left
@@ -26,5 +25,5 @@ export const TodosFilter: React.FC = () => {
         Clear completed
       </button>
     </footer>
-  )
-}
+  );
+};
