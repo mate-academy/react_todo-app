@@ -35,10 +35,6 @@ export const App: React.FC = () => {
 
   const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (!query.trim()) {
-        return;
-      }
-
       e.preventDefault();
 
       submitTodo();
