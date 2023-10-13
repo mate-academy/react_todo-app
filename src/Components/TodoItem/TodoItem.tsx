@@ -11,32 +11,32 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({ title, completed, todo }) => {
   const dispatch = useContext(DispatchContext);
   const { edit } = useContext(TodoContext);
-  const pressedEnter = (key: string) => key === 'Enter';
 
   const titleField = useRef<HTMLInputElement>(null);
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (pressedEnter(event.key) && !event.currentTarget.value) {
-      dispatch({ type: 'removeTodo', payLoad: todo });
-    }
-
-    if (pressedEnter(event.key)) {
-      dispatch({
-        type: 'newTitleTodo',
-        payLoad: todo,
-        newTitle: event.currentTarget.value,
-      });
-
-      if (event.key === 'Escape') {
-        dispatch({ type: 'removeEdit' });
-      }
-    }
-  };
+  const pressedEnter = (key: string) => key === 'Enter';
 
   const handleChange = () => {
     dispatch({
       type: 'todoCompleted',
       payLoad: todo,
     });
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (pressedEnter(event.key) && !event.currentTarget.value) {
+      dispatch({ type: 'removeTodo', payLoad: todo });
+    }
+    if (pressedEnter(event.key)){
+      dispatch({
+        type: 'newTitleTodo',
+        payLoad: todo,
+        newTitle: event.currentTarget.value,
+      });
+    }
+
+    if (event.key === 'Escape') {
+      dispatch({ type: 'removeEdit' });
+    }
   };
 
   useEffect(() => {
@@ -79,12 +79,13 @@ export const TodoItem: React.FC<Props> = ({ title, completed, todo }) => {
         ref={titleField}
         type="text"
         className="edit"
+        defaultValue={title}
         onKeyUp={handleKeyUp}
-        onBlur={(event) => {
+        onBlur={() => {
           dispatch({
             type: 'newTitleTodo',
             payLoad: todo,
-            newTitle: event.target.value,
+            newTitle: title,
           });
         }}
       />

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DispatchContext, TodoContext } from '../../Data/Store';
 
 export const Footer: React.FC = () => {
@@ -12,6 +12,10 @@ export const Footer: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const todosNotCompleted = todos.filter(todo => todo.completed === false);
   const numberItemsLeft = todosNotCompleted.length;
+
+  useEffect(() => {
+    dispatch({ type: 'selectedAll' });
+  }, [dispatch]);
 
   return (
     <footer className="footer">

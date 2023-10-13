@@ -25,7 +25,6 @@ export const Main: React.FC = () => {
     }
   };
 
-  
   const filterTodos = (todoItems: Todo[]) => {
     if (filterActive) {
       const activeTodos = todoItems.filter(todo => todo.completed === false);

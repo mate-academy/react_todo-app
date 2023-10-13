@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Todo } from '../Types/Todo';
 
 export const todos: Todo[] = [];
@@ -11,7 +11,6 @@ interface State {
   selectedCompleted: boolean,
   selectedAll: boolean,
   edit: number,
-
 }
 
 type Action = { type: 'addTodo', payLoad: string }
@@ -29,7 +28,7 @@ type Action = { type: 'addTodo', payLoad: string }
 | { type: 'removeEdit' }
 | { type: 'clearCompleted' };
 
-function reducer(state: State, action: Action): State {
+export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'addTodo':
       return {
@@ -187,6 +186,20 @@ const initialState: State = {
   edit: 0,
 };
 
+export function useLocalStorage(key: string, startValue: State): [State, React.Dispatch<Action>] {
+  const storedValue
+    = JSON.parse(localStorage.getItem(key)
+    || JSON.stringify(startValue));
+
+  const [store, dispatch] = useReducer(reducer, storedValue);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(store))
+  }, [key, store]);
+
+  return [store, dispatch];
+}
+
 export const TodoContext = React.createContext(initialState);
 /* eslint-disable */
 export const DispatchContext = React.createContext((_action: Action) => {});
@@ -196,7 +209,7 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useLocalStorage('todos', initialState);
 
   return (
     <DispatchContext.Provider value={dispatch}>
