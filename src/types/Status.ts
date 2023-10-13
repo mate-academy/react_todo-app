@@ -1,5 +1,5 @@
 export enum Status {
-  ALL = '/',
+  ALL = '/all',
   ACTIVE = '/active',
   COMPLETED = '/completed',
 }
