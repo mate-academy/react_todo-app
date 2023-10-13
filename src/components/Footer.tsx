@@ -42,7 +42,7 @@ export const Footer: React.FC<Props> = React.memo(() => {
         )}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosList">
         <li>
           <a
             href="#/"
