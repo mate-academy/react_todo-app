@@ -1,0 +1,21 @@
+.notification {
+  height: 100px;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #f00;
+  background-color: rgba(175, 47, 47, 0.15);
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 400;
+  transition-property: opacity, min-height;
+  transition-duration: 1s;
+  min-height: 36px;
+}
+
+.notification.hidden {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
