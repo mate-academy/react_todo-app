@@ -63,7 +63,11 @@ const TodoList: React.FC = () => {
 
       <footer className="footer" data-cy="todosFilter">
         <span className="todo-count" data-cy="todosCounter">
-          {`${activeItems} items left`}
+          {
+            activeItems === 1
+              ? '1 item left'
+              : `${activeItems} items left`
+          }
         </span>
 
         <ul className="filters">

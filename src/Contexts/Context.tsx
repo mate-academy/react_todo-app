@@ -27,9 +27,7 @@ export type QueryConditions = 'all' | 'active' | 'completed';
 export const todoContext = React.createContext<DefaultValueType | null>(null);
 
 export const AppContext: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', [
-    // { id: +new Date(), completed: false, title: 'fiska' },
-  ]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [visibleTodos, setVisibleTodos] = useLocalStorage<Todo[]>(
     'visible-todos',
     todos,
