@@ -1,11 +1,27 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import { Todo } from '../../types/Todo';
+import React, { useContext } from 'react';
+import { TodoContext } from './TodoContext';
+import { TodoItems } from './TodoItems';
 
-type Props = {
-  todos: Todo[];
-};
+type Props = {};
 
-export const Main: React.FC<Props> = ({ todos }) => {
+export const Main: React.FC<Props> = () => {
+  const {
+    todos,
+    setTodos,
+    checked,
+    setChecked,
+    visibleTodos,
+  } = useContext(TodoContext);
+
+  const handleCheckedAllTodos = () => {
+    setTodos(todos.map(todo => ({
+      ...todo,
+      completed: !checked,
+    })));
+
+    setChecked(!checked);
+  };
+
   return (
     <section className="main">
       <input
@@ -13,27 +29,14 @@ export const Main: React.FC<Props> = ({ todos }) => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        checked={checked}
+        onChange={handleCheckedAllTodos}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
-        {todos.map(todo => (
-          <li key={todo.id}>
-            <div className="view">
-              <input
-                type="checkbox"
-                className="toggle"
-                id="toggle-view"
-              />
-              <label htmlFor="toggle-view">{todo.title}</label>
-              <button
-                type="button"
-                className="destroy"
-                data-cy="deleteTodo"
-              />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {visibleTodos().map(todo => (
+          <TodoItems key={todo.id} todo={todo} />
         ))}
 
         {/* <li className="completed">
@@ -66,5 +69,3 @@ export const Main: React.FC<Props> = ({ todos }) => {
     </section>
   );
 };
-
-// onDoubleClick={}
