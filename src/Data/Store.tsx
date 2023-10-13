@@ -208,6 +208,7 @@ type Props = {
   children: React.ReactNode;
 };
 
+
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useLocalStorage('todos', initialState);
 
