@@ -8,6 +8,7 @@ import './styles/filters.css';
 
 import { App } from './App';
 
+// without directly calling React it fails to completelast test.
 React.createElement('div');
 
 const container = document.getElementById('root') as HTMLDivElement;
