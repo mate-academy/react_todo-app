@@ -1,5 +1,4 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import { AppContext } from './Contexts/Context';
 
 import './styles/index.css';
@@ -8,13 +7,9 @@ import './styles/filters.css';
 
 import { App } from './App';
 
-// without directly calling React it fails to completelast test.
-React.createElement('div');
-
-const container = document.getElementById('root') as HTMLDivElement;
-
-createRoot(container).render(
+ReactDOM.render(
   <AppContext>
     <App />
   </AppContext>,
+  document.getElementById('root'),
 );
