@@ -32,17 +32,17 @@ export const Footer: React.FC<Props> = React.memo(() => {
     setChecked(false);
   };
 
+  const uncompletedTodosCounter = useMemo(() => {
+    return todos.filter(todo => todo.completed === false).length;
+  }, [todos]);
+
   return (
-    <footer className="footer">
+    <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {todos.length === 1 ? (
-          `${todos.length} items left`
-        ) : (
-          `${todos.length} item left`
-        )}
+        {`${uncompletedTodosCounter} item${uncompletedTodosCounter === 1 ? '' : 's'} left`}
       </span>
 
-      <ul className="filters" data-cy="todosList">
+      <ul className="filters" data-cy="todosFilter">
         <li>
           <a
             href="#/"

@@ -34,7 +34,7 @@ export const Main: React.FC<Props> = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {visibleTodos().map(todo => (
           <TodoItems key={todo.id} todo={todo} />
         ))}
