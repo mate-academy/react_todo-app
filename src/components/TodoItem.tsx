@@ -7,14 +7,16 @@ import React, {
   useRef,
   useEffect,
 } from 'react';
-import { Todo, todoContext, DefaultValueType } from '../Contexts/Context';
+import { Todo, todoContext, ContextType } from '../Contexts/Context';
 
 type Props = {
   todo: Todo;
 };
 
 const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { setTodos, todos } = useContext(todoContext) as DefaultValueType;
+  const { setTodos, todos } = useContext(
+    todoContext,
+  ) as ContextType;
   const [isEditiing, setIsEditiing] = useState(false);
   const [editQuery, setEditQuery] = useState(todo.title);
   const editRef = useRef<HTMLInputElement>(null);

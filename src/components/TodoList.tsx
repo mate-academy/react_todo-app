@@ -1,7 +1,9 @@
 import cn from 'classnames';
 
-import React, { useContext, useCallback } from 'react';
-import { Todo, todoContext, DefaultValueType } from '../Contexts/Context';
+import React, {
+  useContext, useCallback, useRef, useEffect,
+} from 'react';
+import { Todo, todoContext, ContextType } from '../Contexts/Context';
 import { TodoComponent } from './TodoItem';
 
 const TodoList: React.FC = () => {
@@ -11,7 +13,11 @@ const TodoList: React.FC = () => {
     visibleTodos,
     queryCondition,
     setQueryCondition,
-  } = useContext(todoContext) as DefaultValueType;
+    isAllCompleted,
+    checkIsAllCompleted,
+  } = useContext(todoContext) as ContextType;
+
+  const toggleAllRef = useRef<HTMLInputElement>(null);
 
   const activeItems = todos.filter((todo) => !todo.completed).length;
   const completedItems = todos.filter((todo) => todo.completed).length;
@@ -38,6 +44,13 @@ const TodoList: React.FC = () => {
     setTodos(updatedTodos);
   }, [setTodos, todos]);
 
+  useEffect(() => {
+    checkIsAllCompleted();
+    if (toggleAllRef.current) {
+      toggleAllRef.current.checked = !isAllCompleted;
+    }
+  }, [checkIsAllCompleted, isAllCompleted, todos]);
+
   const clearCompleted = useCallback(() => {
     setTodos([...todos.filter((todo) => !todo.completed)]);
   }, [setTodos, todos]);
@@ -46,6 +59,7 @@ const TodoList: React.FC = () => {
     <>
       <section className="main">
         <input
+          ref={toggleAllRef}
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
@@ -63,11 +77,7 @@ const TodoList: React.FC = () => {
 
       <footer className="footer" data-cy="todosFilter">
         <span className="todo-count" data-cy="todosCounter">
-          {
-            activeItems === 1
-              ? '1 item left'
-              : `${activeItems} items left`
-          }
+          {activeItems === 1 ? '1 item left' : `${activeItems} items left`}
         </span>
 
         <ul className="filters">

@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { AppContext } from './Contexts/Context';
 
 import './styles/index.css';
@@ -7,9 +7,10 @@ import './styles/filters.css';
 
 import { App } from './App';
 
-ReactDOM.render(
+const container = document.getElementById('root') as HTMLDivElement;
+
+createRoot(container).render(
   <AppContext>
     <App />
   </AppContext>,
-  document.getElementById('root'),
 );

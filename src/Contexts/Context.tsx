@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
-export type DefaultValueType = {
+export type ContextType = {
   todos: Todo[];
   setTodos: (e: Todo[]) => void;
   visibleTodos: Todo[];
@@ -10,6 +10,8 @@ export type DefaultValueType = {
   setQuery: (e: string) => void;
   queryCondition: QueryConditions;
   setQueryCondition: (e: QueryConditions) => void;
+  isAllCompleted: boolean;
+  checkIsAllCompleted: () => void;
 };
 
 export type Todo = {
@@ -24,7 +26,7 @@ interface Props {
 
 export type QueryConditions = 'all' | 'active' | 'completed';
 
-export const todoContext = React.createContext<DefaultValueType | null>(null);
+export const todoContext = React.createContext<ContextType | null>(null);
 
 export const AppContext: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
@@ -37,8 +39,16 @@ export const AppContext: React.FC<Props> = ({ children }) => {
     'query-condition',
     'all',
   );
+  const [isAllCompleted, setIsAllCompleted] = useLocalStorage(
+    'is-all-completed',
+    false,
+  );
 
-  const states: DefaultValueType = {
+  const checkIsAllCompleted = useCallback(() => {
+    setIsAllCompleted(todos.some((todo) => !todo.completed));
+  }, [setIsAllCompleted, todos]);
+
+  const states: ContextType = {
     todos,
     setTodos,
     query,
@@ -47,6 +57,8 @@ export const AppContext: React.FC<Props> = ({ children }) => {
     setQueryCondition,
     visibleTodos,
     setVisibleTodos,
+    isAllCompleted,
+    checkIsAllCompleted,
   };
 
   useEffect(() => {
@@ -61,10 +73,6 @@ export const AppContext: React.FC<Props> = ({ children }) => {
         setVisibleTodos(todos);
     }
   }, [queryCondition, setVisibleTodos, todos]);
-
-  // useEffect(() => {
-  //   console.log(todos);
-  // }, [todos]);
 
   return (
     <todoContext.Provider value={{ ...states }}>

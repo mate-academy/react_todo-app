@@ -1,17 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
-import { todoContext, DefaultValueType } from './Contexts/Context';
+import { todoContext, ContextType } from './Contexts/Context';
 import TodoList from './components/TodoList';
 
 export const App: React.FC = () => {
   const {
-    setTodos,
-    query,
-    setQuery,
-    todos,
+    setTodos, query, setQuery, todos,
   } = useContext(
     todoContext,
-  ) as DefaultValueType;
+  ) as ContextType;
 
   function createTodo() {
     setTodos([
