@@ -12,8 +12,11 @@ type TodoInfoProps = {
   todo: Todo
 };
 
+const NO_EDITED_ID = -1;
+const DOUBLE_CLICK_CODE = 2;
+
 export const TodoItem = ({ todo: { id, title, completed } }: TodoInfoProps) => {
-  const [editedId, setEditedId] = useState(-1);
+  const [editedId, setEditedId] = useState(NO_EDITED_ID);
   const [editedTitle, setEdtedTitle] = useState(title);
   const { todos, setNewTodos } = useContext(TodosContext);
   const [, setStorageTodos] = useLocalStorage();
@@ -46,7 +49,7 @@ export const TodoItem = ({ todo: { id, title, completed } }: TodoInfoProps) => {
   };
 
   const handleDoubleClick = (event: React.MouseEvent) => {
-    if (event.detail === 2) {
+    if (event.detail === DOUBLE_CLICK_CODE) {
       setEditedId(id);
     }
   };
@@ -72,15 +75,15 @@ export const TodoItem = ({ todo: { id, title, completed } }: TodoInfoProps) => {
       handleClick();
     }
 
-    setEditedId(-1);
+    setEditedId(NO_EDITED_ID);
   };
 
   const handleKeyClick = (event: KeyboardEvent) => {
-    if (editedId !== -1) {
+    if (editedId !== NO_EDITED_ID) {
       const clickedKey = event.key;
 
       if (clickedKey === 'Escape') {
-        setEditedId(-1);
+        setEditedId(NO_EDITED_ID);
         setEdtedTitle(title);
       } else if (clickedKey === 'Enter') {
         handleBlur();
