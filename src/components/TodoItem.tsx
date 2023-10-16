@@ -69,7 +69,7 @@ export const TodoItem: React.FC<Props> = ({
     <li
       className={cn({
         editing: isEdit,
-        completed: completed,
+        completed,
       })}
     >
       {isEdit ? (
