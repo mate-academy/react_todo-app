@@ -23,7 +23,7 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` checked;
 1. Create `TodosFilter` component to switch between `All`/`Active`/`Completed` todos (add it to the `App`)
     - add the `Status` enum with the required values;
-    - href should be `#/`, `#/active` or `#/completed`)
+    - href should be `#/`, `#/active` or `#/completed`
 1. Add ability to remove a todo using the `destroy` button (`X`).
 1. Add ability to clear completed todos - remove all completed items from the list. The button should contain text `Clear completed` in it.
     - It should be visible if there is at least 1 completed item in the list.
@@ -39,6 +39,32 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     - use `JSON.stringify` before saving and `JSON.parse` on reading
 
 ![todoedit](./description/edittodo.gif)
+
+## Instructions
+
+- Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
+- Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
+- Open one more terminal and run tests with `npm test` to ensure your solution is correct.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://Pavlo-Petrashevskyi.github.io/react_todo-app/) and add it to the PR description.
+
+## (*) Advanced tasks (Optional)
+Implement saving the todos in [the API](https://mate-academy.github.io/fe-students-api/).
+
+**BEFORE you started:**
+1. Create a user by sending a POST request to the `/users`.
+1. Save the `userId` in your code and use it for all the future request where it is required
+
+**Tasks**
+1. Load a user from `/users/:userId` and show your name on the page
+1. Load all the todos from `/todos` and filter them by `userId` to show only your todos in the App
+1. Save new todos by sending POST request to `/todos` (don't forget to add `userId`)
+    - use `JSON.stringify` when sending a `body`
+    - Think what to do in case of a server error (at least notify the user)
+1. Delete the todo by sending DELETE to `/todos/:todoId`
+1. Toggle completed status or rename the todo by sending `PATCH` to the `/todos/:todoId`
+    - you can send only changed fields (`completed` of `title`)
+1. Implement `toggleAll` functionality (try to send as few requests as possible)
+1. Implement `clear completed` sending as few requests as possible
 
 ##  If you want to implement styles yourself
 - Font: 'helvetica neue'

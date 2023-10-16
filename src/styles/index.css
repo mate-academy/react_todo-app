@@ -82,11 +82,22 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.todoapp-username {
+  position: absolute;
+  top: -55px;
+  width: 100%;
+  font-size: 24px;
+  font-weight: 100;
+  text-align: center;
+  color: rgba(175, 47, 47, 0.2);
+}
+
 .new-todo,
 .edit {
   position: relative;
   margin: 0;
   width: 100%;
+  outline: none;
   font-size: 24px;
   font-family: inherit;
   font-weight: inherit;
@@ -193,10 +204,44 @@ body {
   text-decoration: none;
 }
 
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox
-*/
+.error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 550px;
+  min-height: 100px;
+  font-size: 30px;
+  opacity: 1;
+  background-color: rgb(136, 0, 0, 0.3);
+  border-radius: 10px;
+  transition: opacity, min-height, 1s;
+}
+
+.error-message.hidden {
+  opacity: 0;
+  min-height: 0;
+}
+
+.item-enter {
+  max-height: 0;
+}
+
+.item-enter-active {
+  overflow: hidden;
+  max-height: 58px;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.item-exit {
+  max-height: 58px;
+}
+
+.item-exit-active {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-in-out;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   .toggle-all {
     background: none;
