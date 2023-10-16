@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList/TodoList';
 import { getVisibleTodos } from '../../utils/getVisibleTodos';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   todos: Todo[],
@@ -57,35 +58,18 @@ export const TodoSection: React.FC<Props> = React.memo(({
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <Routes>
-            <Route
-              path="/"
-              element={(
-                <TodoList
-                  todos={getVisibleTodos(pathname, todos)}
-                  setTodos={setTodos}
-                />
-              )}
-            />
-
-            <Route
-              path="/active"
-              element={(
-                <TodoList
-                  todos={getVisibleTodos(pathname, todos)}
-                  setTodos={setTodos}
-                />
-              )}
-            />
-
-            <Route
-              path="/completed"
-              element={(
-                <TodoList
-                  todos={getVisibleTodos(pathname, todos)}
-                  setTodos={setTodos}
-                />
-              )}
-            />
+            {Object.values(FilterType).map(value => (
+              <Route
+                key={value}
+                path={value}
+                element={(
+                  <TodoList
+                    todos={getVisibleTodos(pathname, todos)}
+                    setTodos={setTodos}
+                  />
+                )}
+              />
+            ))}
           </Routes>
         </>
       )}
