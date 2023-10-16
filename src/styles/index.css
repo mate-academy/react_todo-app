@@ -142,10 +142,6 @@ body {
   padding: 10px 27px;
 }
 
-/* .toggle-color {
-  color: #e6e6e6;
-} */
-
 .toggle-all:checked + label:before {
   color: #737373;
 }

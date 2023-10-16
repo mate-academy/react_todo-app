@@ -2,7 +2,8 @@ import { useContext, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 import { DispatchTodo, StateTodo } from '../context';
-import { Status, ActionTypes } from '../types';
+import { ActionTypes } from '../types';
+import { FILTER_BUTTONS } from '../utils';
 
 type Props = {
   location: {
@@ -13,9 +14,6 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({ location }) => {
   const { todos } = useContext(StateTodo);
   const dispatch = useContext(DispatchTodo);
-
-  const status = [Status.ALL, Status.ACTIVE, Status.COMPLETED];
-  const naming = ['All', 'Active', 'Completed'];
 
   const itemsLeft = useMemo(
     () => todos.filter((todo) => !todo.completed).length, [todos],
@@ -36,13 +34,13 @@ export const TodoFilter: React.FC<Props> = ({ location }) => {
       </span>
 
       <ul className="filters">
-        {status.map((item, index) => (
-          <li key={item}>
+        {FILTER_BUTTONS.map(({ id, caption }) => (
+          <li key={id}>
             <NavLink
-              to={{ pathname: item, search: location.search }}
+              to={{ pathname: id, search: location.search }}
               className={({ isActive }) => classNames({ selected: isActive })}
             >
-              {naming[index]}
+              {caption}
             </NavLink>
           </li>
         ))}
@@ -61,33 +59,3 @@ export const TodoFilter: React.FC<Props> = ({ location }) => {
     </footer>
   );
 };
-
-/* <ul className="filters">
-        <li>
-          <a
-            href="#/"
-            className="selected"
-            onClick={() => changeStatus(Status.ALL)}
-          >
-            All
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/active"
-            onClick={() => changeStatus(Status.ACTIVE)}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            onClick={() => changeStatus(Status.COMPLETED)}
-          >
-            Completed
-          </a>
-        </li>
-      </ul> */

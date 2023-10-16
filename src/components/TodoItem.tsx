@@ -20,19 +20,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { id, title, completed } = todo;
 
-  const changeTodoStatus = (todoId: number, completeTodo: boolean) => {
+  const changeTodoStatus = () => {
     dispatch({
       type: ActionTypes.CHANGE_TODO_STATUS,
-      payloadId: todoId,
-      payloadCompleted: completeTodo,
+      payloadId: id,
+      payloadCompleted: !completed,
     });
   };
 
-  const changeTodoTitle = (text: string, todoId: number) => {
+  const changeTodoTitle = () => {
     dispatch({
       type: ActionTypes.CHANGE_TODO_TITLE,
-      payloadText: text,
-      payloadId: todoId,
+      payloadText: query,
+      payloadId: id,
     });
   };
 
@@ -48,16 +48,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  const deleteTodos = (todoId: number) => {
-    dispatch({ type: ActionTypes.DELETE_TODO, payload: todoId });
+  const deleteTodos = () => {
+    dispatch({ type: ActionTypes.DELETE_TODO, payload: id });
   };
 
   const onNewTitle = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    changeTodoTitle(query, id);
+    changeTodoTitle();
 
     if (query === '') {
-      deleteTodos(id);
+      deleteTodos();
     }
 
     if (query === title) {
@@ -102,7 +102,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="checkbox"
             className="toggle"
             id="toggle-view"
-            onClick={() => changeTodoStatus(id, !completed)}
+            onClick={changeTodoStatus}
             checked={completed}
           />
           <label
@@ -114,7 +114,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="destroy"
             data-cy="deleteTodo"
-            onClick={() => deleteTodos(id)}
+            onClick={deleteTodos}
           />
         </div>
       )}

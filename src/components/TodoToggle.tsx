@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import { DispatchTodo, StateTodo } from '../context';
 import { ActionTypes } from '../types';
 
@@ -6,9 +6,7 @@ export const TodoToggle = () => {
   const dispatch = useContext(DispatchTodo);
   const { todos } = useContext(StateTodo);
 
-  const isAllCompleted = useMemo(() => todos.every(
-    (todo) => todo.completed,
-  ), [todos]);
+  const isAllCompleted = todos.every((todo) => todo.completed);
 
   const allTodosCompleted = () => {
     dispatch({

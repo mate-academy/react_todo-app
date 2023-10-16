@@ -32,7 +32,7 @@ export const App: React.FC = () => {
         return todo.completed;
 
       default:
-        return Status.ALL;
+        return true;
     }
   }), [todos, location]);
 
