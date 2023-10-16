@@ -77,9 +77,9 @@ body {
   font-weight: 100;
   text-align: center;
   color: rgba(175, 47, 47, 0.15);
-  -webkit-text-rendering: optimizeLegibility;
-  -moz-text-rendering: optimizeLegibility;
-  text-rendering: optimizeLegibility;
+  -webkit-text-rendering: optimizelegibility;
+  -moz-text-rendering: optimizelegibility;
+  text-rendering: optimizelegibility;
 }
 
 .new-todo,
@@ -207,4 +207,8 @@ body {
   .footer {
     height: 50px;
   }
+}
+
+.page {
+  display: flex;
 }
