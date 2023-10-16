@@ -21,8 +21,7 @@ export const App: React.FC = () => {
 
   const [title, setTitle] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
-  const isAllCompleted = todos.every(todo => todo.completed)
-    && todos.length > 0;
+  const isAllCompleted = todos.every(todo => todo.completed);
 
   const handleTodoSubmit = useCallback((
     e: React.FormEvent<HTMLFormElement>,
@@ -65,48 +64,44 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onClick={handleToggleAll}
-          checked={isAllCompleted}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {!!todos.length && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={handleToggleAll}
+              checked={isAllCompleted}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        {todos.length > 0 && (
-          <TodoList todos={filteredTodos} />
-        )}
+            <TodoList todos={filteredTodos} />
 
-      </section>
+          </section>
 
-      {todos.length > 0 && (
-        <footer className="footer" data-cy="todosFilter">
-          <span className="todo-count" data-cy="todosCounter">
-            {todoCount === 1 ? (
-              `${todoCount} item left`
-            ) : (
-              `${todoCount} items left`
+          <footer className="footer" data-cy="todosFilter">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${todoCount} ${todoCount === 1 ? 'item' : 'items'} left`}
+            </span>
+
+            <TodosFilter
+              filter={filter}
+              setFilter={setFilter}
+            />
+
+            {completedTodos && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={deleteCompletedTodos}
+              >
+                Clear completed
+              </button>
             )}
-          </span>
-
-          <TodosFilter
-            filter={filter}
-            setFilter={setFilter}
-          />
-
-          {completedTodos && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={deleteCompletedTodos}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+          </footer>
+        </>
       )}
 
     </div>
