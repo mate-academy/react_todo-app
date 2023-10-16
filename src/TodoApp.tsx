@@ -16,7 +16,7 @@ export const TodoApp: React.FC = () => {
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
   const activesCount = activeTodos.length;
-  const activesText = `${activesCount} items left`;
+  const activesText = `${activesCount} item${activesCount === 1 ? '' : 's'} left`;
   const allCompleted = completedTodos.length === todos.length;
 
   const setNewTodos = (newTodos: Todo[]) => {
