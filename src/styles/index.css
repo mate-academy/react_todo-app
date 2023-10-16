@@ -142,7 +142,7 @@ body {
   padding: 10px 27px;
 }
 
-.toggle-all:checked + label:before {
+.checked:checked + label:before {
   color: #737373;
 }
 

@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import cn from 'classnames';
 import { DispatchTodo, StateTodo } from '../context';
 import { ActionTypes } from '../types';
 
@@ -20,7 +21,10 @@ export const TodoToggle = () => {
       <input
         type="checkbox"
         id="toggle-all"
-        className="toggle-all"
+        className={cn(
+          'toggle-all',
+          { checked: todos.length > 0 && isAllCompleted },
+        )}
         data-cy="toggleAll"
         onClick={allTodosCompleted}
       />
