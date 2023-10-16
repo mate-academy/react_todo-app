@@ -1,20 +1,39 @@
 import React from 'react';
 import cl from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface Props {
+  todos: Todo[];
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   isFilter: string | undefined;
   setIsFilter: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const TodosFilter: React.FC<Props> = ({ isFilter, setIsFilter }) => {
+export const TodosFilter: React.FC<Props> = ({
+  todos,
+  setTodos,
+  isFilter,
+  setIsFilter,
+}) => {
   const handleFilterClick = (filter: string) => {
     setIsFilter(filter);
+  };
+
+  const todoNotCompleted = (): number => {
+    return todos.filter(item => item.completed === false).length;
+  };
+
+  const handleDeleteTodoCompleted = () => {
+    const updatedTodos = todos.filter(item => item.completed !== true);
+
+    setTodos(updatedTodos);
   };
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        3 items left
+        {`${todoNotCompleted()}
+        items left`}
       </span>
 
       <ul className="filters">
@@ -49,7 +68,11 @@ export const TodosFilter: React.FC<Props> = ({ isFilter, setIsFilter }) => {
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={handleDeleteTodoCompleted}
+      >
         Clear completed
       </button>
     </footer>

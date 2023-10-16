@@ -1,4 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
 import cl from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -8,13 +13,17 @@ interface Props {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
-export const TodoItem: React.FC<Props> = ({
+export const TodoItem: React.FC<Props> = React.memo(({
   todos,
   todo,
   setTodos,
 }) => {
   const [changedElement, setChangedElement] = useState('');
   const [editId, setEditId] = useState<number | null>(null);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [focus, setFocus] = useState(false);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleTodoChange = () => {
@@ -29,7 +38,6 @@ export const TodoItem: React.FC<Props> = ({
     });
 
     setTodos(updatedTodos);
-    setEditId(null);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -37,16 +45,20 @@ export const TodoItem: React.FC<Props> = ({
 
     if (keyDown === 'Enter') {
       handleTodoChange();
+      setIsEditing(false);
+      setFocus(false);
     }
 
     if (keyDown === 'Escape') {
       setEditId(null);
+      setIsEditing(false);
+      setFocus(false);
     }
   };
 
-  const handleCompleted = (elem: number | undefined) => {
+  const handleCompleted = (elem: Todo) => {
     const updatedTodos: Todo[] = todos.map(item => {
-      if (item.id === elem) {
+      if (item.id === elem.id) {
         return { ...item, completed: !item.completed };
       }
 
@@ -62,27 +74,32 @@ export const TodoItem: React.FC<Props> = ({
     setTodos(updatedTodos);
   };
 
-  const handleDoubleClick = (id: number | undefined) => {
-    if (inputRef.current) {
+  useEffect(() => {
+    if (focus && inputRef.current) {
       inputRef.current.focus();
     }
+  }, [focus]);
 
-    const selectedTodo = todos.find(elem => elem.id === id);
+  const handleDoubleClick = useCallback((elem: Todo) => {
+    const selectedTodo = todos.find(item => item.id === elem.id);
 
     if (selectedTodo && selectedTodo.title) {
       setChangedElement(selectedTodo.title);
-      if (id) {
-        setEditId(id);
+      if (elem.id) {
+        setEditId(elem.id);
       }
     }
-  };
+
+    setIsEditing(true);
+    setFocus(true);
+  }, [todos, setChangedElement, setEditId, inputRef, setIsEditing, setFocus]);
 
   return (
     <li
       key={todo.id}
-      onDoubleClick={() => handleDoubleClick(todo.id)}
+      onDoubleClick={() => handleDoubleClick(todo)}
       className={cl(
-        { editing: editId === todo.id },
+        { editing: isEditing },
         { completed: todo.completed },
       )}
     >
@@ -90,10 +107,10 @@ export const TodoItem: React.FC<Props> = ({
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
-          onChange={() => handleCompleted(todo.id)}
+          id={`toggle-view${todo.id}`}
+          onClick={() => handleCompleted(todo)}
         />
-        <label htmlFor="toggle-view">{todo.title}</label>
+        <label>{todo.title}</label>
         <button
           type="button"
           aria-label="deleteTodo"
@@ -115,4 +132,4 @@ export const TodoItem: React.FC<Props> = ({
       />
     </li>
   );
-};
+});

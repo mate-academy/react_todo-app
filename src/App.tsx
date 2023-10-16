@@ -9,6 +9,7 @@ export const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isFilter, setIsFilter] = useState('');
+
   const generateId = (): number => {
     return +new Date();
   };
@@ -30,6 +31,19 @@ export const App: React.FC = () => {
       ]);
       setInputText('');
     }
+  };
+
+  const handleAllCompleted = () => {
+    let updatedTodos = [...todos];
+    const allCompleted = updatedTodos.every(elem => elem.completed === true);
+
+    if (allCompleted) {
+      updatedTodos = updatedTodos.map(elem => ({ ...elem, completed: false }));
+    } else {
+      updatedTodos = updatedTodos.map(elem => ({ ...elem, completed: true }));
+    }
+
+    setTodos(updatedTodos);
   };
 
   return (
@@ -54,6 +68,7 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onClick={handleAllCompleted}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList
@@ -63,6 +78,8 @@ export const App: React.FC = () => {
         />
       </section>
       <TodosFilter
+        todos={todos}
+        setTodos={setTodos}
         isFilter={isFilter}
         setIsFilter={setIsFilter}
       />
