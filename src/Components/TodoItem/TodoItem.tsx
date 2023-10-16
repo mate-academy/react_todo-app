@@ -26,7 +26,8 @@ export const TodoItem: React.FC<Props> = ({ title, completed, todo }) => {
     if (pressedEnter(event.key) && !event.currentTarget.value) {
       dispatch({ type: 'removeTodo', payLoad: todo });
     }
-    if (pressedEnter(event.key)){
+
+    if (pressedEnter(event.key)) {
       dispatch({
         type: 'newTitleTodo',
         payLoad: todo,

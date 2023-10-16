@@ -186,7 +186,10 @@ const initialState: State = {
   edit: 0,
 };
 
-export function useLocalStorage(key: string, startValue: State): [State, React.Dispatch<Action>] {
+export function useLocalStorage(
+  key: string,
+  startValue: State
+  ): [State, React.Dispatch<Action>] {
   const storedValue
     = JSON.parse(localStorage.getItem(key)
     || JSON.stringify(startValue));
@@ -194,7 +197,7 @@ export function useLocalStorage(key: string, startValue: State): [State, React.D
   const [store, dispatch] = useReducer(reducer, storedValue);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(store))
+    localStorage.setItem('todos', JSON.stringify(store));
   }, [key, store]);
 
   return [store, dispatch];
