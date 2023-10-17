@@ -47,6 +47,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
       handleTodoChange();
       setIsEditing(false);
       setFocus(false);
+      setEditId(null);
     }
 
     if (keyDown === 'Escape') {
@@ -97,20 +98,24 @@ export const TodoItem: React.FC<Props> = React.memo(({
   return (
     <li
       key={todo.id}
-      onDoubleClick={() => handleDoubleClick(todo)}
       className={cl(
-        { editing: isEditing },
+        { editing: isEditing && todo.id === editId },
         { completed: todo.completed },
       )}
     >
       <div className="view">
         <input
           type="checkbox"
+          checked={todo.completed}
           className="toggle"
           id={`toggle-view${todo.id}`}
           onClick={() => handleCompleted(todo)}
         />
-        <label>{todo.title}</label>
+        <label
+          onDoubleClick={() => handleDoubleClick(todo)}
+        >
+          {todo.title}
+        </label>
         <button
           type="button"
           aria-label="deleteTodo"
@@ -126,7 +131,12 @@ export const TodoItem: React.FC<Props> = React.memo(({
         onChange={(event) => {
           setChangedElement(event.target.value);
         }}
-        onBlur={handleTodoChange}
+        onBlur={() => {
+          handleTodoChange();
+          setIsEditing(false);
+          setFocus(false);
+          setEditId(null);
+        }}
         onKeyDown={handleKeyDown}
         ref={inputRef}
       />
