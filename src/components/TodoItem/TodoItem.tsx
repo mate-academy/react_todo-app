@@ -11,12 +11,16 @@ interface Props {
   todos: Todo[];
   todo: Todo;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  handleCompleted: (elem: Todo) => void;
+  handleDeleteTodo: (elem: Todo) => void;
 }
 
 export const TodoItem: React.FC<Props> = React.memo(({
   todos,
   todo,
   setTodos,
+  handleCompleted,
+  handleDeleteTodo,
 }) => {
   const [changedElement, setChangedElement] = useState('');
   const [editId, setEditId] = useState<number | null>(null);
@@ -40,39 +44,23 @@ export const TodoItem: React.FC<Props> = React.memo(({
     setTodos(updatedTodos);
   };
 
+  const loseFocus = () => {
+    setIsEditing(false);
+    setFocus(false);
+    setEditId(null);
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const keyDown = event.key;
 
     if (keyDown === 'Enter') {
       handleTodoChange();
-      setIsEditing(false);
-      setFocus(false);
-      setEditId(null);
+      loseFocus();
     }
 
     if (keyDown === 'Escape') {
-      setEditId(null);
-      setIsEditing(false);
-      setFocus(false);
+      loseFocus();
     }
-  };
-
-  const handleCompleted = (elem: Todo) => {
-    const updatedTodos: Todo[] = todos.map(item => {
-      if (item.id === elem.id) {
-        return { ...item, completed: !item.completed };
-      }
-
-      return item;
-    });
-
-    setTodos(updatedTodos);
-  };
-
-  const handleDeleteTodo = (elem: Todo) => {
-    const updatedTodos = todos.filter(item => item.id !== elem.id);
-
-    setTodos(updatedTodos);
   };
 
   useEffect(() => {
@@ -94,6 +82,13 @@ export const TodoItem: React.FC<Props> = React.memo(({
     setIsEditing(true);
     setFocus(true);
   }, [todos, setChangedElement, setEditId, inputRef, setIsEditing, setFocus]);
+
+  const handleOnBlur = () => {
+    handleTodoChange();
+    setIsEditing(false);
+    setFocus(false);
+    setEditId(null);
+  };
 
   return (
     <li
@@ -131,12 +126,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
         onChange={(event) => {
           setChangedElement(event.target.value);
         }}
-        onBlur={() => {
-          handleTodoChange();
-          setIsEditing(false);
-          setFocus(false);
-          setEditId(null);
-        }}
+        onBlur={handleOnBlur}
         onKeyDown={handleKeyDown}
         ref={inputRef}
       />

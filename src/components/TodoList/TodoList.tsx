@@ -5,20 +5,18 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  isFilter: string | undefined;
+  handleCompleted: (elem: Todo) => void;
+  handleDeleteTodo: (elem: Todo) => void;
+  filteredTodos: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ todos, setTodos, isFilter }) => {
-  let filteredTodos: Todo[] = [];
-
-  if (isFilter === 'Completed') {
-    filteredTodos = todos.filter(todo => todo.completed);
-  } else if (isFilter === 'Active') {
-    filteredTodos = todos.filter(todo => !todo.completed);
-  } else {
-    filteredTodos = todos;
-  }
-
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setTodos,
+  filteredTodos,
+  handleCompleted,
+  handleDeleteTodo,
+}) => {
   return (
     <ul className="todo-list" data-cy="todoList">
       {filteredTodos.map(todo => (
@@ -27,6 +25,8 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos, isFilter }) => {
           todos={todos}
           todo={todo}
           setTodos={setTodos}
+          handleCompleted={handleCompleted}
+          handleDeleteTodo={handleDeleteTodo}
         />
       ))}
     </ul>

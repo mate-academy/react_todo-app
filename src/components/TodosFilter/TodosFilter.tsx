@@ -1,26 +1,28 @@
 import React from 'react';
 import cl from 'classnames';
 import { Todo } from '../../types/Todo';
+import { FilterStatus } from '../../types/FilterStatus';
 
 interface Props {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  isFilter: string | undefined;
-  setIsFilter: React.Dispatch<React.SetStateAction<string>>;
+  filterStatus: FilterStatus;
+  setFilterStatus: React.Dispatch<React.SetStateAction<FilterStatus>>;
 }
 
 export const TodosFilter: React.FC<Props> = ({
   todos,
   setTodos,
-  isFilter,
-  setIsFilter,
+  filterStatus,
+  setFilterStatus,
 }) => {
-  const handleFilterClick = (filter: string) => {
-    setIsFilter(filter);
+  const isCompleted = todos.find(item => item.completed);
+  const handleFilterClick = (filter: FilterStatus) => {
+    setFilterStatus(filter);
   };
 
   const todoNotCompleted = (): number => {
-    return todos.filter(item => item.completed === false).length;
+    return todos.filter(item => !item.completed).length;
   };
 
   const handleDeleteTodoCompleted = () => {
@@ -29,52 +31,57 @@ export const TodosFilter: React.FC<Props> = ({
     setTodos(updatedTodos);
   };
 
-  return (
-    <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        {`${todoNotCompleted()}
-        items left`}
-      </span>
+  if (todos.length > 0) {
+    return (
+      <footer className="footer">
+        <span className="todo-count" data-cy="todosCounter">
+          {`${todoNotCompleted()}
+          items left`}
+        </span>
 
-      <ul className="filters">
-        <li>
-          <a
-            href="#/"
-            className={cl({ selected: isFilter === 'All' })}
-            onClick={() => handleFilterClick('All')}
+        <ul className="filters">
+          <li>
+            <a
+              href="#/"
+              className={cl({ selected: filterStatus === 'All' })}
+              onClick={() => handleFilterClick(FilterStatus.All)}
+            >
+              All
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#/active"
+              className={cl({ selected: filterStatus === 'Active' })}
+              onClick={() => handleFilterClick(FilterStatus.Active)}
+            >
+              Active
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#/completed"
+              className={cl({ selected: filterStatus === 'Completed' })}
+              onClick={() => handleFilterClick(FilterStatus.Completed)}
+            >
+              Completed
+            </a>
+          </li>
+        </ul>
+        {isCompleted && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleDeleteTodoCompleted}
           >
-            All
-          </a>
-        </li>
+            Clear completed
+          </button>
+        )}
+      </footer>
+    );
+  }
 
-        <li>
-          <a
-            href="#/active"
-            className={cl({ selected: isFilter === 'Active' })}
-            onClick={() => handleFilterClick('Active')}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            className={cl({ selected: isFilter === 'Completed' })}
-            onClick={() => handleFilterClick('Completed')}
-          >
-            Completed
-          </a>
-        </li>
-      </ul>
-
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={handleDeleteTodoCompleted}
-      >
-        Clear completed
-      </button>
-    </footer>
-  );
+  return null;
 };
