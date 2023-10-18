@@ -6,8 +6,8 @@ import { useLocalStorage } from './hooks/useLoclStorage';
 type TodoContext = {
   todos: Todo[],
   setTodos: (v: Todo[]) => void,
-  toggleAllStatus: boolean,
-  setToggleAllStatus: (value: boolean) => void,
+  isToggleAllStatus: boolean,
+  setIsToggleAllStatus: (value: boolean) => void,
   filterStatus: Status,
   setFilterStatus: (status: Status) => void,
   filterTodos: () => Todo[],
@@ -16,8 +16,8 @@ type TodoContext = {
 export const TodosContext = React.createContext<TodoContext>({
   todos: [],
   setTodos: () => { },
-  toggleAllStatus: false,
-  setToggleAllStatus: () => { },
+  isToggleAllStatus: false,
+  setIsToggleAllStatus: () => { },
   filterStatus: Status.ALL,
   setFilterStatus: () => { },
   filterTodos: () => [],
@@ -29,7 +29,7 @@ type Props = {
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [toggleAllStatus, setToggleAllStatus] = useState<boolean>(false);
+  const [isToggleAllStatus, setIsToggleAllStatus] = useState<boolean>(false);
   const [filterStatus, setFilterStatus] = useState<Status>(Status.ALL);
 
   const filterTodos = () => {
@@ -48,12 +48,12 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const todoState = useMemo(() => ({
     todos,
     setTodos,
-    toggleAllStatus,
-    setToggleAllStatus,
+    isToggleAllStatus,
+    setIsToggleAllStatus,
     filterStatus,
     setFilterStatus,
     filterTodos,
-  }), [todos, filterStatus]);
+  }), [todos, filterStatus, filterTodos, setTodos, isToggleAllStatus]);
 
   return (
     <TodosContext.Provider value={todoState}>

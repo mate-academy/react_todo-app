@@ -13,9 +13,12 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { todos, setTodos, setToggleAllStatus } = useContext(TodosContext);
-  const [editStatus, setEditStatus] = useState(false);
-  const [editInput, setEditInput] = useState(todo.title);
+  const { todos, setTodos, setIsToggleAllStatus } = useContext(TodosContext);
+  const [isEditStatus, setIsEditStatus] = useState(false);
+
+  const { completed, id, title } = todo;
+
+  const [editInput, setEditInput] = useState(title);
 
   const editFocus = useRef<HTMLInputElement | null>(null);
 
@@ -23,7 +26,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (editFocus.current) {
       editFocus.current.focus();
     }
-  }, [editStatus]);
+  }, [isEditStatus]);
 
   const handleCompletedTodo = (todoID: number) => {
     const newTodo = todos.map(el => (
@@ -34,7 +37,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     setTodos(newTodo);
 
-    setToggleAllStatus(newTodo.every(curTodo => curTodo.completed));
+    setIsToggleAllStatus(newTodo.every(curTodo => curTodo.completed));
   };
 
   const handleDeletedTodo = (selected: Todo) => {
@@ -44,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleOnBlur = () => {
-    setEditStatus(false);
+    setIsEditStatus(false);
 
     if (!editInput.trim()) {
       handleDeletedTodo(todo);
@@ -64,8 +67,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleKey = (event: React.KeyboardEvent) => {
     switch (event.key) {
       case ('Escape'):
-        setEditInput(todo.title);
-        setEditStatus(false);
+        setEditInput(title);
+        setIsEditStatus(false);
         break;
 
       case ('Enter'):
@@ -81,22 +84,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     <li
       className={classNames({
         completed: todo.completed,
-        editing: editStatus,
+        editing: isEditStatus,
       })}
-      onDoubleClick={() => setEditStatus(true)}
+      onDoubleClick={() => setIsEditStatus(true)}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          checked={todo.completed}
-          onChange={() => handleCompletedTodo(todo.id)}
+          checked={completed}
+          onChange={() => handleCompletedTodo(id)}
         />
         <label
-          onDoubleClick={() => setEditStatus(true)}
+          onDoubleClick={() => setIsEditStatus(true)}
         >
-          {todo.title}
+          {title}
         </label>
         <button
           aria-label="toggle-view"

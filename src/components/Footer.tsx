@@ -11,14 +11,14 @@ export const Footer: React.FC<Props> = () => {
   const {
     todos,
     setTodos,
-    setToggleAllStatus,
+    setIsToggleAllStatus,
     filterStatus,
     setFilterStatus,
   } = useContext(TodosContext);
 
   const handleClearTodo = () => {
     setTodos(todos.filter(todo => !todo.completed));
-    setToggleAllStatus(false);
+    setIsToggleAllStatus(false);
   };
 
   const uncompletedTodos = todos.filter(todo => !todo.completed).length;
@@ -28,7 +28,7 @@ export const Footer: React.FC<Props> = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${uncompletedTodos} items left`}
+            {uncompletedTodos === 1 ? '1 item left' : `${uncompletedTodos} items left`}
           </span>
 
           <ul className="filters" data-cy="todosFilter">

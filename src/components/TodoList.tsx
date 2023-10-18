@@ -8,18 +8,18 @@ export const TodoList: React.FC<Props> = () => {
   const {
     todos,
     setTodos,
-    toggleAllStatus,
-    setToggleAllStatus,
+    isToggleAllStatus,
+    setIsToggleAllStatus,
     filterTodos,
   } = useContext(TodosContext);
 
   const handleTogleAll = () => {
     setTodos(todos.map(todo => ({
       ...todo,
-      completed: !toggleAllStatus,
+      completed: !isToggleAllStatus,
     })));
 
-    setToggleAllStatus(!toggleAllStatus);
+    setIsToggleAllStatus(!isToggleAllStatus);
   };
 
   const todosFilter = filterTodos();
