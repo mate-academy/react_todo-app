@@ -83,7 +83,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <li
       className={classNames({
-        completed: todo.completed,
+        completed,
         editing: isEditStatus,
       })}
       onDoubleClick={() => setIsEditStatus(true)}
