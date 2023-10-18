@@ -16,7 +16,7 @@ export const Header = () => {
     if (inputFocus.current) {
       inputFocus.current.focus();
     }
-  }, [todos]);
+  }, []);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitleTodo(event.target.value);

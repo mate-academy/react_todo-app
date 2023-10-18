@@ -17,10 +17,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editStatus, setEditStatus] = useState(false);
   const [editInput, setEditInput] = useState(todo.title);
 
-  const editFocus = useRef<HTMLInputElement>(null);
+  const editFocus = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (editFocus.current && !editStatus) {
+    if (editFocus.current) {
       editFocus.current.focus();
     }
   }, [editStatus]);
@@ -55,10 +55,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(todos.map(el => (
       el !== todo
         ? el
-        : {
-          ...el,
-          title: editInput.trim(),
-        }
+        : { ...todo, title: editInput.trim() }
     )));
 
     setEditInput(editInput.trim());
@@ -97,7 +94,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={() => handleCompletedTodo(todo.id)}
         />
         <label
-          htmlFor="toggle-view"
           onDoubleClick={() => setEditStatus(true)}
         >
           {todo.title}
