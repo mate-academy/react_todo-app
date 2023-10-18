@@ -1,0 +1,9 @@
+@import "../../utils/mixins.scss";
+
+.edit {
+  @include editTitle;
+
+  &:focus {
+    outline: none;
+  }
+}

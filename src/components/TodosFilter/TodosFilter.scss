@@ -1,0 +1,35 @@
+@import "../../utils/variables.scss";
+
+.filters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  left: 0;
+
+  li {
+    display: inline;
+
+    a {
+      color: inherit;
+      margin: 3px;
+      padding: 3px 7px;
+      text-decoration: none;
+      border: 1px solid transparent;
+      border-radius: 3px;
+
+      &:hover {
+        border-color: $filters-hover-color;
+      }
+
+      &.selected {
+        border-color: $filters-selected-color;
+      }
+    }
+  }
+
+  @media (max-width: 430px) {
+    bottom: 10px;
+  }
+}
