@@ -24,7 +24,7 @@ export const TodoApp: React.FC<Props> = () => {
   const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (title.trim() !== '') {
+    if (title.trim()) {
       const newTask = {
         id: +new Date(),
         title,
@@ -37,7 +37,7 @@ export const TodoApp: React.FC<Props> = () => {
   };
 
   const handleCompleteAll = () => {
-    if (todos.some(todo => todo.completed === false)) {
+    if (todos.some(todo => !todo.completed)) {
       const updatedTodos = todos.map((todo) => ({
         ...todo,
         completed: true,
@@ -71,8 +71,8 @@ export const TodoApp: React.FC<Props> = () => {
   });
 
   const noCompletedTodos = todos.filter(elem => !elem.completed);
-  const someCompleted = todos.some(todo => todo.completed === true);
-  const allCompleted = todos.every(todo => todo.completed === true);
+  const someCompleted = todos.some(todo => todo.completed);
+  const allCompleted = todos.every(todo => todo.completed);
 
   return (
     <div className="todoapp">
@@ -91,48 +91,48 @@ export const TodoApp: React.FC<Props> = () => {
         </form>
       </header>
 
-      {todos.length !== 0 && (
-        <section className="main">
-          <input
-            type="checkbox"
-            checked={allCompleted}
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-            onChange={handleCompleteAll}
-          />
-          {todos.length !== 0 && (
-            <label htmlFor="toggle-all">
-              Mark all as complete
-            </label>
-          )}
+      {todos.length && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              checked={allCompleted}
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onChange={handleCompleteAll}
+            />
+            {todos.length !== 0 && (
+              <label htmlFor="toggle-all">
+                Mark all as complete
+              </label>
+            )}
 
-          <TodoList todos={filteredTodos} />
+            <TodoList todos={filteredTodos} />
 
-        </section>
-      )}
+          </section>
 
-      {todos.length !== 0 && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${noCompletedTodos.length} items left`}
-          </span>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${noCompletedTodos.length} items left`}
+            </span>
 
-          <TodoFilter
-            currentFilter={filter}
-            onFilterChange={handleFilterChange}
-          />
+            <TodoFilter
+              currentFilter={filter}
+              onFilterChange={handleFilterChange}
+            />
 
-          {someCompleted && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={handleClearCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            {someCompleted && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleClearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
       )}
     </div>
   );
