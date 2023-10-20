@@ -1,7 +1,9 @@
 import React, { useCallback, useContext, useMemo } from 'react';
 import classNames from 'classnames';
-import { DispatchContext, StateContext } from '../states/TodosContext';
+
 import { FilterBy } from '../types/FilterBy';
+import { ActionType } from '../types/Action';
+import { DispatchContext, StateContext } from '../states/TodosContext';
 
 interface Props {
   selectedFilter: FilterBy,
@@ -24,13 +26,14 @@ export const TodoFooter: React.FC<Props> = React.memo(({
       return !todo.completed ? acc + 1 : acc;
     }, 0);
   }, [todos]);
+
   const clearCompleted = () => {
     const completedIds = todos.reduce((acc, todo) => {
       return todo.completed ? [...acc, todo.id] : acc;
     }, [] as number[]);
 
     completedIds.forEach((todoId) => {
-      dispatch({ type: 'remove', payload: { id: todoId } });
+      dispatch({ type: ActionType.Remove, payload: { id: todoId } });
     });
   };
 

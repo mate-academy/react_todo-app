@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { DispatchContext } from '../states/TodosContext';
+import { ActionType } from '../types/Action';
 
 export const TodoHeader: React.FC = React.memo(() => {
   const dispatch = useContext(DispatchContext);
@@ -10,11 +11,13 @@ export const TodoHeader: React.FC = React.memo(() => {
 
     if (todoContent !== '') {
       dispatch({
-        type: 'add',
+        type: ActionType.Add,
         payload: {
-          id: +new Date(),
-          title: todoContent,
-          completed: false,
+          todo: {
+            id: +new Date(),
+            title: todoContent,
+            completed: false,
+          },
         },
       });
     }

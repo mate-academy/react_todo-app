@@ -18,8 +18,7 @@ const prepareTodos = (todos: Todo[], filterBy: FilterBy): Todo[] => {
       default:
         return true;
     }
-  })
-    .sort((a, b) => a.id - b.id);
+  });
 };
 
 export const App: React.FC = () => {
@@ -33,9 +32,7 @@ export const App: React.FC = () => {
 
       { todos.length !== 0 && (
         <>
-          <TodoList
-            todos={preparedTodos}
-          />
+          <TodoList todos={preparedTodos} />
           <TodoFooter
             selectedFilter={filterBy}
             onFilterSelected={setFilterBy}

@@ -1,14 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
-  useContext, useEffect,
+  useContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
 import classNames from 'classnames';
 
-import { DispatchContext } from '../states/TodosContext';
 import { Todo } from '../types/Todo';
+import { ActionType } from '../types/Action';
+import { DispatchContext } from '../states/TodosContext';
 
 interface Props {
   todo: Todo
@@ -23,14 +25,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const toggleTodo = useCallback((todoId: number) => {
     dispatch({
-      type: 'toggleCheck',
+      type: ActionType.ToggleCheck,
       payload: { id: todoId },
     });
   }, [dispatch]);
 
   const deleteTodo = useCallback((todoId: number) => {
     dispatch({
-      type: 'remove',
+      type: ActionType.Remove,
       payload: { id: todoId },
     });
   }, [dispatch]);
@@ -38,7 +40,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleSubmit = useCallback(() => {
     if (newContent !== '') {
       dispatch({
-        type: 'update',
+        type: ActionType.Update,
         payload: {
           id,
           content: newContent,
@@ -48,7 +50,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (newContent === '') {
       dispatch({
-        type: 'remove',
+        type: ActionType.Remove,
         payload: {
           id,
         },

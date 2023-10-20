@@ -1,7 +1,8 @@
 import React, { useCallback, useContext, useState } from 'react';
 
-import { DispatchContext } from '../states/TodosContext';
 import { Todo } from '../types/Todo';
+import { ActionType } from '../types/Action';
+import { DispatchContext } from '../states/TodosContext';
 import { TodoItem } from './TodoItem';
 
 interface Props {
@@ -16,7 +17,7 @@ export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
     setIsEnabledAll(prevState => !prevState);
 
     dispatch({
-      type: 'toggleAll',
+      type: ActionType.toggleAll,
       payload: { type: isEnabledAll },
     });
   }, [dispatch, isEnabledAll]);
@@ -33,11 +34,9 @@ export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todosList">
-        {
-          todos.map((todo) => (
-            <TodoItem todo={todo} key={todo.id} />
-          ))
-        }
+        {todos.map((todo) => (
+          <TodoItem todo={todo} key={todo.id} />
+        ))}
       </ul>
     </section>
   );

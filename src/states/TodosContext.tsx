@@ -1,13 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { Todo } from '../types/Todo';
 
-type Action
-  = { type: 'add', payload: Todo }
-  | { type: 'update', payload: { id: number, content: string } }
-  | { type: 'remove', payload: { id: number } }
-  | { type: 'toggleCheck', payload: { id: number } }
-  | { type: 'toggleAll', payload: { type: boolean } };
+import { Todo } from '../types/Todo';
+import { ActionType } from '../types/Action';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+
+type Action = { type: ActionType.Add, payload: { todo: Todo } }
+| { type: ActionType.Update, payload: { id: number, content: string } }
+| { type: ActionType.Remove, payload: { id: number } }
+| { type: ActionType.ToggleCheck, payload: { id: number } }
+| { type: ActionType.toggleAll, payload: { type: boolean } };
 
 interface State {
   todos: Todo[]
@@ -19,9 +20,9 @@ interface Props {
 
 const reducer = ({ todos }: State, { type, payload }: Action): State => {
   switch (type) {
-    case 'add':
-      return { todos: [...todos, payload] };
-    case 'update':
+    case ActionType.Add:
+      return { todos: [...todos, payload.todo] };
+    case ActionType.Update:
       return {
         todos: todos.map((todo) => {
           if (todo.id === payload.id) {
@@ -31,11 +32,11 @@ const reducer = ({ todos }: State, { type, payload }: Action): State => {
           return todo;
         }),
       };
-    case 'remove':
+    case ActionType.Remove:
       return {
         todos: todos.filter((todo) => todo.id !== payload.id),
       };
-    case 'toggleCheck':
+    case ActionType.ToggleCheck:
       return {
         todos: todos.map((todo) => {
           if (todo.id === payload.id) {
@@ -45,7 +46,7 @@ const reducer = ({ todos }: State, { type, payload }: Action): State => {
           return todo;
         }),
       };
-    case 'toggleAll':
+    case ActionType.toggleAll:
       return {
         todos: todos.map((todo) => {
           return {
@@ -63,14 +64,18 @@ const initialState: State = {
   todos: [],
 };
 
-export const DispatchContext
-  = React.createContext((_action: Action) => {}); // eslint-disable-line
-export const StateContext
-  = React.createContext(initialState);
+export const DispatchContext = React.createContext(
+  (_action: Action) => {}, // eslint-disable-line @typescript-eslint/no-unused-vars
+);
+export const StateContext = React.createContext(
+  initialState,
+);
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  // eslint-disable-next-line max-len
-  const [storedTodos, setStoredTodos] = useLocalStorage<Todo[]>('todos', initialState.todos);
+  const [storedTodos, setStoredTodos] = useLocalStorage<Todo[]>(
+    'todos',
+    initialState.todos,
+  );
   const [state, dispatch] = useReducer(reducer, { todos: storedTodos });
 
   useEffect(() => {
