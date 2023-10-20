@@ -35,7 +35,7 @@ export const TodoApp: React.FC<Props> = () => {
       completed: false,
     };
 
-    setTodos([...todos, newTodo]);
+    setTodos(prevTodos => [...prevTodos, newTodo]);
     setNewTitle('');
   };
 
@@ -95,7 +95,7 @@ export const TodoApp: React.FC<Props> = () => {
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
               {
-                `${uncompletedTodos.length} items left`
+                `${uncompletedTodos.length} ${uncompletedTodos.length === 1 ? 'item' : 'items'} left`
               }
             </span>
             <TodosFilter />

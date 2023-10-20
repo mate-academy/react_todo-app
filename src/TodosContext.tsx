@@ -7,14 +7,14 @@ type Context = {
   filter: Status,
   setFilter: React.Dispatch<React.SetStateAction<Status>>;
   filteredTodos: () => Todo[],
-}
+};
 
 type Props = {
   children: React.ReactNode;
-}
+};
 
 export const TodosContext = React.createContext<Context>({
-  todos:[],
+  todos: [],
   setTodos: () => {},
   filter: Status.ALL,
   setFilter: () => {},
@@ -22,9 +22,8 @@ export const TodosContext = React.createContext<Context>({
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [ todos, setTodos ] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Status>(Status.ALL);
-
 
   const filteredTodos = useCallback(() => {
     switch (filter) {
@@ -39,7 +38,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   }, [todos, filter]);
 
-
   const value = useMemo(() => ({
     todos,
     setTodos,
@@ -49,8 +47,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   }), [todos, setTodos, filter, setFilter, filteredTodos]);
 
   return (
-    <TodosContext.Provider value={ value }>
+    <TodosContext.Provider value={value}>
       {children}
     </TodosContext.Provider>
   );
-}
+};
