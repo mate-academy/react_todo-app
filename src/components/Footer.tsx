@@ -18,7 +18,7 @@ export const Footer: React.FC<Props> = React.memo(() => {
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     const targetValue = event.target as HTMLElement;
-    const ourText = targetValue.innerText;
+    const ourText = targetValue.value;
 
     setFilter(ourText as Status);
   };
@@ -45,6 +45,7 @@ export const Footer: React.FC<Props> = React.memo(() => {
       <ul className="filters" data-cy="todosFilter">
         <li>
           <a
+            value={Status.ALL}
             href="#/"
             className={cn({
               selected: filter === Status.ALL,
@@ -56,6 +57,7 @@ export const Footer: React.FC<Props> = React.memo(() => {
         </li>
         <li>
           <a
+            value={Status.ACTIVE}
             href="#/active"
             className={cn({
               selected: filter === Status.ACTIVE,
@@ -68,6 +70,7 @@ export const Footer: React.FC<Props> = React.memo(() => {
 
         <li>
           <a
+            value={Status.COMPLETED}
             href="#/completed"
             className={cn({
               selected: filter === Status.COMPLETED,
