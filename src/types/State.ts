@@ -1,0 +1,7 @@
+export enum State {
+  ADDED = 'ADDED',
+  EDIT = 'EDIT',
+  DELETED = 'DELETED',
+  TOGGLE_ALL = 'TOGGLE_ALL',
+  CLEAR_COMPLETED = 'CLEAR_COMPLETED',
+}
