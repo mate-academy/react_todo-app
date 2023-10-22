@@ -70,9 +70,8 @@ export const TodoApp: React.FC<Props> = () => {
     return todo.completed;
   });
 
-  const noCompleteTodos = todos.filter(elem => !elem.completed);
-  const isSomeComplete = todos.some(todo => todo.completed === true);
-  const allCompleted = todos.every(todo => todo.completed === true);
+  const noCompleteTodos = todos.filter((elem) => !elem.completed);
+  const isSomeComplete = noCompleteTodos.length !== todos.length;
 
   return (
     <div className="todoapp">
@@ -98,7 +97,7 @@ export const TodoApp: React.FC<Props> = () => {
         <section className="main">
 
           <input
-            checked={allCompleted}
+            checked={isSomeComplete}
             type="checkbox"
             id="toggle-all"
             className="toggle-all"
