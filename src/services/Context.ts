@@ -1,5 +1,5 @@
-import { Todo } from "../types/Todo";
-import { Status } from "./EnumStatusFilter";
+import { Todo } from '../types/Todo';
+import { Status } from './EnumStatusFilter';
 
 export type Context = {
   todos: Todo[],
@@ -13,6 +13,5 @@ export type Context = {
   selectTodoFilteredList: Status,
   setSelectTodoFilteredList: (filter: Status) => void,
   deleteTodo: (tId: number) => void,
-  filterTodos: Todo[],
   deleteAllCompleted: () => void,
 };

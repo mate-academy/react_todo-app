@@ -8,13 +8,14 @@ import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodoContext } from './TodoContext';
 
-type Props = { todo: Todo };
+type Props = { toDo: Todo };
 
-export const TodoItem:React.FC<Props> = ({ todo }) => {
+export const TodoItem:React.FC<Props> = ({ toDo }) => {
   const { updateTodo, deleteTodo } = useContext(TodoContext);
   const [switchEditTodo, setSwitchEditTodo] = useState(false);
-  const [newTitle, setNewTitle] = useState('' || todo.title);
+  const [newTitle, setNewTitle] = useState('' || toDo.title);
   const todoItemEditRef = useRef<HTMLInputElement | null>(null);
+  const { id, title, completed } = toDo;
 
   useEffect(() => {
     if (switchEditTodo) {
@@ -22,68 +23,72 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
     }
   }, [switchEditTodo]);
 
-  const handleUpdateTitle = (tod: Todo) => {
+  const handleUpdateTitle = (todo: Todo) => {
     if (!newTitle.trim()) {
-      deleteTodo(todo.id);
+      deleteTodo(id);
       setSwitchEditTodo(false);
     } else {
-      updateTodo({ ...tod, title: newTitle.trim() });
+      updateTodo({
+        ...todo,
+        title: newTitle.trim(),
+        completed: false,
+      });
       setSwitchEditTodo(false);
     }
   };
 
-  const handlesForUpdateTitle = () => {
+  const handlesToChangeTitle = () => {
     setNewTitle(newTitle);
-    handleUpdateTitle(todo);
+    handleUpdateTitle(toDo);
   };
 
-  const handlesCurrentTitle = () => {
-    setNewTitle(todo.title);
+  const handleToPreviousTitle = () => {
+    setNewTitle(title);
     setSwitchEditTodo(false);
   };
 
   const handleOnBlur = () => {
-    if (newTitle === todo.title) {
-      handlesCurrentTitle();
+    if (newTitle === title) {
+      handleToPreviousTitle();
     } else {
-      handlesForUpdateTitle();
+      handlesToChangeTitle();
     }
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      if (newTitle === todo.title) {
-        handlesCurrentTitle();
-      } else {
-        handlesForUpdateTitle();
-      }
-    } else if (e.key === 'Escape') {
-      handlesCurrentTitle();
+    if (e.key !== 'Enter' && e.key !== 'Escape') {
+      return;
+    }
+
+    if (newTitle === title || e.key === 'Escape') {
+      handleToPreviousTitle();
+    } else {
+      handlesToChangeTitle();
     }
   };
 
   return (
     <li
-      data-id={todo.id}
+      data-id={id}
       className={cn({
-        completed: todo.completed,
+        completed: toDo.completed,
         editing: switchEditTodo,
       })}
-      key={todo.id}
+      key={id}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          onChange={(e) => updateTodo({ ...todo, completed: e.target.checked })}
-          checked={todo.completed}
+          onChange={(e) => updateTodo({ ...toDo, completed: e.target.checked })}
+          checked={completed}
         />
 
         <label onDoubleClick={() => {
           setSwitchEditTodo(true);
         }}
         >
-          {todo.title}
+          {title}
         </label>
 
         <button
@@ -91,7 +96,7 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => deleteTodo(todo.id)}
+          onClick={() => deleteTodo(id)}
         />
       </div>
       <input

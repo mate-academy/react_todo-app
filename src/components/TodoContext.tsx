@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../services/EnumStatusFilter';
 import { useLocaleStorage } from '../hooks/useLocaleStorage';
@@ -20,7 +20,6 @@ export const TodoContext = React.createContext<Context>({
   selectTodoFilteredList: Status.ALL,
   setSelectTodoFilteredList: () => {},
   deleteTodo: () => {},
-  filterTodos: [],
   deleteAllCompleted: () => {},
 });
 
@@ -46,12 +45,12 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   };
 
   const checkedAll = () => {
-    const todosCompleted = todos.every(todo => todo.completed);
+    const isTodosCompleted = todos.every(todo => todo.completed);
 
     setTodos(todos.map(currentTodo => {
       return {
         ...currentTodo,
-        completed: !todosCompleted,
+        completed: !isTodosCompleted,
       };
     }));
   };
@@ -63,19 +62,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const deleteAllCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
-
-  const filterTodos = useMemo(() => {
-    return todos.filter((todo) => {
-      const { completed } = todo;
-
-      switch (selectTodoFilteredList) {
-        case Status.ALL: return true;
-        case Status.ACTIVE: return !completed;
-        case Status.COMPLETED: return completed;
-        default: return true;
-      }
-    });
-  }, [todos, selectTodoFilteredList]);
 
   const value = {
     todos,
@@ -89,7 +75,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     selectTodoFilteredList,
     setSelectTodoFilteredList,
     deleteTodo,
-    filterTodos,
     deleteAllCompleted,
   };
 

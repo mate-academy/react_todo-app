@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { TodoContext } from './TodoContext';
 import { TodoItem } from './TodoItem';
+import { Todo } from '../types/Todo';
 
-type Props = {};
+type Props = { filterTodos: Todo[] };
 
-export const TodoList: React.FC<Props> = () => {
+export const TodoList: React.FC<Props> = ({ filterTodos }) => {
   const {
     todos,
-    filterTodos,
     checkedAll,
   } = useContext(TodoContext);
 
@@ -29,7 +29,7 @@ export const TodoList: React.FC<Props> = () => {
           filterTodos.map((todo) => (
             <TodoItem
               key={todo.id}
-              todo={todo}
+              toDo={todo}
             />
           ))
         }
