@@ -31,9 +31,7 @@ export const Header: React.FC = () => {
     <header className="header">
       <h1>todos</h1>
 
-      <form
-        onSubmit={handleSubmit}
-      >
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           data-cy="createTodo"
