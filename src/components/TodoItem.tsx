@@ -13,7 +13,7 @@ type Props = { toDo: Todo };
 export const TodoItem:React.FC<Props> = ({ toDo }) => {
   const { updateTodo, deleteTodo } = useContext(TodoContext);
   const [switchEditTodo, setSwitchEditTodo] = useState(false);
-  const [newTitle, setNewTitle] = useState('' || toDo.title);
+  const [newTitle, setNewTitle] = useState(toDo.title);
   const todoItemEditRef = useRef<HTMLInputElement | null>(null);
   const { id, title, completed } = toDo;
 

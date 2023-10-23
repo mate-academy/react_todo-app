@@ -18,13 +18,10 @@ export const Header: React.FC = () => {
       return;
     }
 
-    const trimTitle = title.trim();
-    const notComplete = false;
-
     const newTodo = {
       id: +new Date(),
-      title: trimTitle,
-      completed: notComplete,
+      title: title.trim(),
+      completed: false,
     };
 
     addTodo(newTodo);
@@ -45,7 +42,6 @@ export const Header: React.FC = () => {
           ref={fieldTitle}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          onBlur={handleSubmit}
         />
       </form>
     </header>

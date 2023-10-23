@@ -7,15 +7,17 @@ export const Footer: React.FC = () => {
   const {
     deleteAllCompleted,
     count,
-    selectTodoFilteredList,
-    setSelectTodoFilteredList,
+    selTodoFilterList,
+    setSelTodoFilterList,
     todos,
   } = useContext(TodoContext);
+  const hasCompletedTodos = todos.some((todo) => todo.completed);
+  const countNotCompletedTodos = (count === 1) ? `${count} item left` : `${count} items left`;
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${count} items left`}
+        {countNotCompletedTodos}
       </span>
 
       <ul
@@ -26,14 +28,8 @@ export const Footer: React.FC = () => {
           <a
             data-value={Status.ALL}
             href="#/"
-            className={
-              cn({
-                selected: selectTodoFilteredList === Status.ALL,
-              })
-            }
-            onClick={() => {
-              setSelectTodoFilteredList(Status.ALL);
-            }}
+            className={cn({ selected: selTodoFilterList === Status.ALL })}
+            onClick={() => setSelTodoFilterList(Status.ALL)}
           >
             All
           </a>
@@ -43,14 +39,8 @@ export const Footer: React.FC = () => {
           <a
             data-value={Status.ACTIVE}
             href="#/active"
-            className={
-              cn({
-                selected: selectTodoFilteredList === Status.ACTIVE,
-              })
-            }
-            onClick={() => {
-              setSelectTodoFilteredList(Status.ACTIVE);
-            }}
+            className={cn({ selected: selTodoFilterList === Status.ACTIVE })}
+            onClick={() => setSelTodoFilterList(Status.ACTIVE)}
           >
             Active
           </a>
@@ -60,14 +50,8 @@ export const Footer: React.FC = () => {
           <a
             data-value={Status.COMPLETED}
             href="#/completed"
-            className={
-              cn({
-                selected: selectTodoFilteredList === Status.COMPLETED,
-              })
-            }
-            onClick={() => {
-              setSelectTodoFilteredList(Status.COMPLETED);
-            }}
+            className={cn({ selected: selTodoFilterList === Status.COMPLETED })}
+            onClick={() => setSelTodoFilterList(Status.COMPLETED)}
           >
             Completed
           </a>
@@ -75,7 +59,7 @@ export const Footer: React.FC = () => {
       </ul>
 
       {
-        todos.some((todo) => todo.completed) && (
+        hasCompletedTodos && (
           <button
             type="button"
             className="clear-completed"

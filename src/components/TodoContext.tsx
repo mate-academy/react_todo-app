@@ -17,8 +17,8 @@ export const TodoContext = React.createContext<Context>({
   setTitle: () => {},
   updateTodo: () => {},
   checkedAll: () => {},
-  selectTodoFilteredList: Status.ALL,
-  setSelectTodoFilteredList: () => {},
+  selTodoFilterList: Status.ALL,
+  setSelTodoFilterList: () => {},
   deleteTodo: () => {},
   deleteAllCompleted: () => {},
 });
@@ -28,8 +28,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [title, setTitle] = useState('');
   const count = todos.filter((todo) => !todo.completed).length;
   const [
-    selectTodoFilteredList,
-    setSelectTodoFilteredList,
+    selTodoFilterList,
+    setSelTodoFilterList,
   ] = useState(Status.ALL);
 
   const addTodo = (newTodo: Todo) => {
@@ -56,7 +56,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   };
 
   const deleteTodo = (todoId: number) => {
-    setTodos([...(todos.filter((currTodo: Todo) => currTodo.id !== todoId))]);
+    setTodos([...(todos.filter((currTodo) => currTodo.id !== todoId))]);
   };
 
   const deleteAllCompleted = () => {
@@ -72,8 +72,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setTitle,
     updateTodo,
     checkedAll,
-    selectTodoFilteredList,
-    setSelectTodoFilteredList,
+    selTodoFilterList,
+    setSelTodoFilterList,
     deleteTodo,
     deleteAllCompleted,
   };

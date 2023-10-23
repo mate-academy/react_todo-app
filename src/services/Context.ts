@@ -10,8 +10,8 @@ export type Context = {
   setTitle: (titl: string) => void,
   updateTodo: (todo: Todo) => void,
   checkedAll: () => void,
-  selectTodoFilteredList: Status,
-  setSelectTodoFilteredList: (filter: Status) => void,
+  selTodoFilterList: Status,
+  setSelTodoFilterList: (filter: Status) => void,
   deleteTodo: (tId: number) => void,
   deleteAllCompleted: () => void,
 };
