@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
+import cn from 'classnames';
 import { Status } from '../services/EnumStatusFilter';
 import { TodoContext } from './TodoContext';
 
-type Props = {};
-
-export const Footer: React.FC<Props> = () => {
+export const Footer: React.FC = () => {
   const {
     deleteAllCompleted,
     count,
@@ -27,9 +26,11 @@ export const Footer: React.FC<Props> = () => {
           <a
             data-value={Status.ALL}
             href="#/"
-            className={selectTodoFilteredList === Status.ALL
-              ? 'selected'
-              : ''}
+            className={
+              cn({
+                selected: selectTodoFilteredList === Status.ALL,
+              })
+            }
             onClick={() => {
               setSelectTodoFilteredList(Status.ALL);
             }}
@@ -42,9 +43,11 @@ export const Footer: React.FC<Props> = () => {
           <a
             data-value={Status.ACTIVE}
             href="#/active"
-            className={selectTodoFilteredList === Status.ACTIVE
-              ? 'selected'
-              : ''}
+            className={
+              cn({
+                selected: selectTodoFilteredList === Status.ACTIVE,
+              })
+            }
             onClick={() => {
               setSelectTodoFilteredList(Status.ACTIVE);
             }}
@@ -57,9 +60,11 @@ export const Footer: React.FC<Props> = () => {
           <a
             data-value={Status.COMPLETED}
             href="#/completed"
-            className={selectTodoFilteredList === Status.COMPLETED
-              ? 'selected'
-              : ''}
+            className={
+              cn({
+                selected: selectTodoFilteredList === Status.COMPLETED,
+              })
+            }
             onClick={() => {
               setSelectTodoFilteredList(Status.COMPLETED);
             }}

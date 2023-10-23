@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { TodoContext } from './TodoContext';
 
-type Props = {};
-
-export const Header: React.FC<Props> = () => {
+export const Header: React.FC = () => {
   const { title, setTitle, addTodo } = useContext(TodoContext);
   const fieldTitle = useRef<HTMLInputElement | null>(null);
 
