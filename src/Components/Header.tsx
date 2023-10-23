@@ -2,22 +2,22 @@ import { useContext, useState } from 'react';
 import { TodosContext } from '../TodosContext';
 
 export const Header: React.FC = () => {
-  const [creatTodo, setCreatTodo] = useState('');
+  const [newTodo, setNewTodo] = useState('');
   const { addTodos } = useContext(TodosContext);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!creatTodo.trim()) {
+    if (!newTodo.trim()) {
       return;
     }
 
-    addTodos(creatTodo);
-    setCreatTodo('');
+    addTodos(newTodo);
+    setNewTodo('');
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreatTodo(event.target.value);
+    setNewTodo(event.target.value);
   };
 
   return (
@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
-          value={creatTodo}
+          value={newTodo}
           onChange={handleChange}
         />
       </form>

@@ -5,7 +5,7 @@ import { Footer } from './Components/Footer';
 import { TodosContext } from './TodosContext';
 
 export const App: React.FC = () => {
-  const { todos, allComplet, filteredTodos } = useContext(TodosContext);
+  const { todos, allCompleted, filteredTodos } = useContext(TodosContext);
 
   return (
     <div className="todoapp">
@@ -19,7 +19,7 @@ export const App: React.FC = () => {
                 id="toggle-all"
                 className="toggle-all"
                 data-cy="toggleAll"
-                onClick={allComplet}
+                onClick={allCompleted}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
               <Todos todos={filteredTodos} />

@@ -18,7 +18,7 @@ interface TodosContextType {
   changeTitle: (id: number, changedTitle: string) => void;
   filterTodos: (filterStatus: Status, todos: Todo[]) => Todo[];
   deletedCompled: () => void;
-  allComplet: () => void;
+  allCompleted: () => void;
 }
 
 export const TodosContext = React.createContext<TodosContextType >({
@@ -32,7 +32,7 @@ export const TodosContext = React.createContext<TodosContextType >({
   changeTitle: () => {},
   filterTodos: () => [],
   deletedCompled: () => {},
-  allComplet: () => {},
+  allCompleted: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
@@ -90,11 +90,11 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     return filterTodos(selectStatus);
   }, [selectStatus, filterTodos]);
 
-  const allComplet = () => {
-    const allCompleted = todos.every((todo) => todo.completed);
+  const allCompleted = () => {
+    const allCompleteded = todos.every((todo) => todo.completed);
 
     const updateCompletedTodos = todos.map((todo) => ({
-      ...todo, completed: !allCompleted,
+      ...todo, completed: !allCompleteded,
     }));
 
     setTodos(updateCompletedTodos);
@@ -105,7 +105,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       value={{
         todos,
         addTodos,
-        // incompletedTodosLeft,
         selectStatus,
         setSelectStatus,
         changeStatus,
@@ -114,7 +113,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         filterTodos,
         deletedCompled,
         filteredTodos,
-        allComplet,
+        allCompleted,
       }}
     >
       {children}
