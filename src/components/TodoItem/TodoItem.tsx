@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { useTodosDispatch } from '../TodosContext/TodosContext';
 import { State } from '../../types/State';
+import { KeyEvent } from '../../types/KeyEvent';
 
 type Props = {
   todo: Todo;
@@ -34,20 +35,27 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && editedTitle.trim() !== '') {
-      dispatch({
-        type: State.EDIT,
-        task: { ...todo, title: editedTitle },
-      });
-      setIsEditing(false);
-    } else if (e.key === 'Escape') {
-      setEditedTitle(todo.title);
-      setIsEditing(false);
-    } else if (e.key === 'Enter' && editedTitle.trim() === '') {
-      dispatch({
-        type: State.DELETED,
-        id: todo.id,
-      });
+    switch (e.key) {
+      case KeyEvent.ENTER:
+        if (editedTitle.trim() !== '') {
+          dispatch({
+            type: State.EDIT,
+            task: { ...todo, title: editedTitle },
+          });
+          setIsEditing(false);
+        } else {
+          dispatch({
+            type: State.DELETED,
+            id: todo.id,
+          });
+        }
+
+        break;
+      case KeyEvent.ESCAPE:
+        setEditedTitle(todo.title);
+        setIsEditing(false);
+        break;
+      default:
     }
   };
 

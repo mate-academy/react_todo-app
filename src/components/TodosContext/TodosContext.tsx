@@ -1,9 +1,10 @@
-import {
+import React, {
   Dispatch,
   createContext,
   useContext,
   useState,
 } from 'react';
+
 import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 import { useLocalStorage } from '../../CustomHooks/useLocalStorage';
@@ -28,7 +29,7 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, dispatch] = useLocalStorage('todo', intitialTodos);
+  const [todos, dispatch] = useLocalStorage('todos', intitialTodos);
   const [filter, setFilter] = useState(Status.All);
 
   return (

@@ -13,7 +13,7 @@ export const Header: React.FC = React.memo(() => {
   const submitForm = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title !== '') {
+    if (title) {
       dispatch({
         type: State.ADDED,
         id: +new Date(),
@@ -31,7 +31,7 @@ export const Header: React.FC = React.memo(() => {
       <form onSubmit={submitForm}>
         <input
           onChange={handleTitleEvent}
-          value={title.trim()}
+          value={title.trimStart()}
           type="text"
           data-cy="createTodo"
           className="new-todo"

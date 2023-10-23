@@ -26,7 +26,7 @@ export const TodosFilter = React.memo(() => {
         {`${activeTodos.length} items left`}
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         <li>
           <a
             href="#/"
