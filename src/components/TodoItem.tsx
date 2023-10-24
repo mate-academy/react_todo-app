@@ -78,11 +78,10 @@ export const TodoItem: React.FC<{ myTodo: Todo }> = ({ myTodo }) => {
         <input
           type="checkbox"
           className="toggle"
-          // id={`toggle-view${todo.completed ? '-completed' : ''}`}
+          id={`toggle-view${myTodo.completed ? '-completed' : ''}`}
           onChange={() => onChange(myTodo, CHANGE)}
           checked={myTodo.completed}
         />
-        {/* <label htmlFor={`toggle-view${todo.completed ? '-completed' : ''}`}>{todo.title}</label> */}
         {isEditing ? (
           <input
             type="text"

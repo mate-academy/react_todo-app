@@ -4,12 +4,11 @@ import { useContext } from 'react';
 import { TodosContext, filterTodos } from '../TodosContext';
 import { TodoItem } from './TodoItem';
 
-
 export const TodosSection = () => {
   const { todos, filterType, setTodos } = useContext(TodosContext);
   const todosCompleted = todos.every(todo => todo.completed);
 
-  const abc = () => {
+  const handleInputChange = () => {
     let updatedTodos;
 
     if (todos.filter(todo => todo.completed).length !== todos.length) {
@@ -28,7 +27,7 @@ export const TodosSection = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        onChange={() => abc()}
+        onChange={() => handleInputChange()}
         checked={todosCompleted}
       />
 
@@ -40,7 +39,7 @@ export const TodosSection = () => {
 
       <ul className="todo-list" data-cy="todoList">
         {filterTodos(todos, filterType).map(todo => (
-          <TodoItem myTodo={todo} />
+          <TodoItem myTodo={todo} key={todo.id} />
         ))}
       </ul>
     </section>

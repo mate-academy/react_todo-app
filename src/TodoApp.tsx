@@ -5,7 +5,7 @@ import { TodosFooter } from './components/footer';
 
 export const TodoApp: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
-  const { setTodos } = useContext(TodosContext);
+  const { setTodos, todos } = useContext(TodosContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,7 +40,9 @@ export const TodoApp: React.FC = () => {
 
       <TodosSection />
 
-      <TodosFooter />
+      {todos.length > 0 && (
+        <TodosFooter />
+      )}
     </div>
   );
 };
