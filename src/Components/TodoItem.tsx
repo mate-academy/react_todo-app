@@ -20,9 +20,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     changeTitle,
   } = useContext(TodosContext);
 
-  const [isEditing, setIsEditing] = useState(false);
   const [changedTitle, setChangedTitle] = useState(title);
-
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState(editingId === id);
   const input = useRef<HTMLInputElement | null>(null);
 
   const updateTodoTitle = () => {
@@ -43,6 +43,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleEditing = () => {
     setIsEditing(true);
+    setEditingId(id);
   };
 
   const handleDeleteTodo = () => {
@@ -52,6 +53,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const cancelEditing = () => {
     setIsEditing(false);
     setChangedTitle(title);
+    setEditingId(null);
   };
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,8 +69,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   useEffect(() => {
-    if (!isEditing && input.current) {
+    if (editingId === id && input.current) {
       input.current.focus();
+    }
+  }, [isEditing, editingId, id]);
+
+  useEffect(() => {
+    if (!isEditing) {
+      setEditingId(null);
     }
   }, [isEditing]);
 
@@ -87,7 +95,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             checked={completed}
             onChange={handlechangeStatus}
           />
-          <label onDoubleClick={handleEditing}>
+          <label
+            onDoubleClick={handleEditing}
+          >
             {title}
           </label>
           {/* eslint-disable-next-line */}
@@ -107,6 +117,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             onChange={handleChangeTitle}
             onKeyUp={handlekeyUp}
             onBlur={updateTodoTitle}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
           />
         )}
     </li>
