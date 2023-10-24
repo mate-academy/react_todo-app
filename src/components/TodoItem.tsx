@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { useContext, useState } from 'react';
-import { Todo, TodosContext } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
+import { Todo } from '../types';
 
 export const TodoItem: React.FC<{ myTodo: Todo }> = ({ myTodo }) => {
   const { todos, setTodos } = useContext(TodosContext);
@@ -47,7 +48,7 @@ export const TodoItem: React.FC<{ myTodo: Todo }> = ({ myTodo }) => {
   };
 
   const handleBlur = (todoEdit: Todo) => {
-    if (editedText.trim() === '') {
+    if (!editedText.trim()) {
       onChange(todoEdit, DELETE);
     } else {
       onChange(todoEdit, CHANGE_NAME, editedText);
@@ -78,7 +79,6 @@ export const TodoItem: React.FC<{ myTodo: Todo }> = ({ myTodo }) => {
         <input
           type="checkbox"
           className="toggle"
-          id={`toggle-view${myTodo.completed ? '-completed' : ''}`}
           onChange={() => onChange(myTodo, CHANGE)}
           checked={myTodo.completed}
         />

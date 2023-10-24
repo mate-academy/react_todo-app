@@ -1,15 +1,19 @@
 import classNames from 'classnames';
 import { useContext } from 'react';
-import { TodosContext, EStatus, filterTodos } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
+import { EStatus } from '../types';
+import { filterTodos } from '../functions';
 
 export const TodosFooter = () => {
   const { todos } = useContext(TodosContext);
   const { setFilterType, filterType, setTodos } = useContext(TodosContext);
 
+  const localFilterTodos = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {localFilterTodos !== 1 ? `${localFilterTodos} items left` : '1 item left'}
       </span>
 
       <ul className="filters">

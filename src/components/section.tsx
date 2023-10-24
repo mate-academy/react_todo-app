@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import { useContext } from 'react';
-import { TodosContext, filterTodos } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
 import { TodoItem } from './TodoItem';
+import { filterTodos } from '../functions';
 
 export const TodosSection = () => {
   const { todos, filterType, setTodos } = useContext(TodosContext);
@@ -11,7 +12,10 @@ export const TodosSection = () => {
   const handleInputChange = () => {
     let updatedTodos;
 
-    if (todos.filter(todo => todo.completed).length !== todos.length) {
+    const localTodosCompleted = todos.filter(todo => todo.completed).length
+      !== todos.length;
+
+    if (localTodosCompleted) {
       updatedTodos = todos.map((todo) => ({ ...todo, completed: true }));
     } else {
       updatedTodos = todos.map((todo) => ({ ...todo, completed: false }));
