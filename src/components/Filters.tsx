@@ -25,7 +25,7 @@ export const Filters: React.FC = () => {
   return (
     <ul className="filters">
       {filters.map(filter => (
-        <li>
+        <li key={filter}>
           <a
             href={`#/${filter !== Status.All
               ? filter.toLowerCase()
