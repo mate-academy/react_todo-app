@@ -9,13 +9,13 @@ export const TodoHeader: React.FC = React.memo(() => {
   const handleSubmit = useCallback((event: React.FormEvent) => {
     event.preventDefault();
 
-    if (todoContent !== '') {
+    if (todoContent.trim() !== '') {
       dispatch({
         type: ActionType.Add,
         payload: {
           todo: {
             id: +new Date(),
-            title: todoContent,
+            title: todoContent.trim(),
             completed: false,
           },
         },
