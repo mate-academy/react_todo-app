@@ -74,3 +74,6 @@ Implement saving the todos in [the API](https://mate-academy.github.io/fe-studen
 - Use '✕' symbol to remove TODO item on hover
 - [checked](./public/icons/checked.svg)
 - [unchecked](./public/icons/unchecked.svg)
+
+## fixed admin panel style and overlaping
+## added deleting confirmation dialogue

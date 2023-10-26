@@ -89,13 +89,15 @@ export function updateTodo(
   });
 }
 
-/* this is a placeholder deleting function, to use in development
+// below is a placeholder deleting function, to use in development
+// while real deleting function is commented for safety purposes
 
-  export function deleteUser(UserId: number | undefined) {
-  console.log(`user ${UserId} has been deleted`);
-} */
+export function deleteUser(UserId: number | undefined) {
+  // eslint-disable-next-line no-alert
+  alert(`user ${UserId} has been deleted`);
+}
 
-export function deleteUser(UserId: number | undefined)
+/* export function deleteUser(UserId: number | undefined)
   : Promise<Response | void> {
   return fetch(`${API_URL}/users/${UserId}`, {
     method: 'DELETE',
@@ -103,7 +105,7 @@ export function deleteUser(UserId: number | undefined)
       'Content-type': 'application/json; charset=UTF-8',
     },
   });
-/* .then(() => {
+ .then(() => {
       console.log(`user #${UserId} deleted from MATE SERVER`);
-    }); */
-}
+    });
+} */

@@ -32,6 +32,7 @@ export const CloudTodos: React.FC = () => {
     userName: false,
     email: true,
   });
+  const [candidateToDelete, setCandidatetoDelete] = useState<number>();
   /* stage 0 - loginCheck - checking if valid login stored in session memory
      stage 1 - if login valid - todos from server showed up
      stage 2 - if login absent - input form waits for an email input
@@ -155,6 +156,19 @@ export const CloudTodos: React.FC = () => {
 
         mainInput.blur();
         setUnknownUserError(false);
+
+        const loginWrapper = document.querySelector('.login-input-wrapper');
+
+        if (loginWrapper) {
+          loginWrapper.classList.remove('visible');
+        }
+
+        const newTodo = document
+          .querySelector('#new-todo-top-input') as HTMLElement;
+
+        if (newTodo) {
+          newTodo.focus();
+        }
       } else {
         setUnknownUserError(true);
         sessionStorage.removeItem('todosUserId');
@@ -392,20 +406,29 @@ export const CloudTodos: React.FC = () => {
   }
 
   const openUserRegForm = () => {
+    const loginWrapper = document.querySelector('.login-input-wrapper');
+
+    if (loginWrapper) {
+      loginWrapper.classList.remove('visible');
+    }
+
     const newUserForm = document.querySelector('.new-user-form__wrapper');
 
     if (newUserForm) { // this is just for TS
       newUserForm.classList.add('visible');
 
-      newUserForm.addEventListener('click', (e) => {
+      const cllbck = (e:Event) => {
         const formMain = document.querySelector('.new-user-form__wrapper');
 
         if (e.target instanceof HTMLElement) {
           if (e.target === formMain) {
             newUserForm.classList.remove('visible');
+            newUserForm.removeEventListener('click', cllbck);
           }
         }
-      });
+      };
+
+      newUserForm.addEventListener('click', cllbck);
     }
   };
 
@@ -524,8 +547,9 @@ export const CloudTodos: React.FC = () => {
   }, []);
 
   const handleUserDelete = (userId: number | undefined) => {
-    deleteUser(userId)
-      .then(() => getUsersFromServer());
+    deleteUser(userId);
+    // .then(() => getUsersFromServer());
+    setCandidatetoDelete(undefined);
   };
 
   const switchUserHandle = (userEmail:string | undefined) => {
@@ -577,24 +601,79 @@ export const CloudTodos: React.FC = () => {
   };
 
   const NewTodoPlaceholder = () => {
+    const input = document.querySelector('#new-todo-top-input');
+
     if (mainEmail) {
+      input?.removeAttribute('disabled');
+
       return 'What needs to be done?';
     }
+
+    input?.setAttribute('disabled', '');
 
     return 'You need to log in first';
   };
 
   const emailIdPlaceholder = () => {
     if (mainEmail) {
-      return `You are logged in as ${mainEmail}`;
+      return 'To change user put here new email-ID';
     }
 
     return 'put your email here and press Enter';
   };
 
+  const openLoginForm = () => {
+    const inputField = document.querySelector('.login-input-wrapper');
+    const inputToFocus = document.querySelector('.login-input') as HTMLElement;
+
+    if (inputField) {
+      inputField.classList.toggle('visible');
+
+      const callback = (e:Event) => {
+        if (e.target instanceof HTMLElement) {
+          if (e.target === inputField) {
+            inputField.classList.remove('visible');
+            inputField.removeEventListener('click', callback);
+          }
+        }
+      };
+
+      inputField.addEventListener('click', callback);
+    }
+
+    if (inputToFocus) {
+      inputToFocus.focus();
+    }
+  };
+
   return (
     <>
-      <h1 className="title">These are your</h1>
+      <div className="title__wrapper">
+        <button
+          type="button"
+          className={classNames('title__login',
+            { loginValid: mainEmail })}
+          onClick={() => openLoginForm()}
+        >
+          {mainEmail
+            ? (
+              <div title="click to change user">
+                logged in as
+                <span className="title__userId">
+                  {` ${mainEmail}`}
+                </span>
+              </div>
+            )
+            : (
+              <div className="title__noId">
+                Log In
+              </div>
+            )}
+        </button>
+        <h1 className="title_explanation">
+          {mainEmail ? 'These are your' : ''}
+        </h1>
+      </div>
       <div className="todoapp">
         <header className="header">
           <h1 id="cloudTodos-title">Cloud Todos</h1>
@@ -606,6 +685,7 @@ export const CloudTodos: React.FC = () => {
               type="text"
               data-cy="createTodo"
               className="new-todo"
+              id="new-todo-top-input"
               placeholder={NewTodoPlaceholder()}
               value={newTodoInput}
               onChange={newTodoInputHandle}
@@ -747,33 +827,37 @@ export const CloudTodos: React.FC = () => {
         </div>
       </div>
 
-      <form
-        onSubmit={submitNewEmailId}
-      >
-        <input
-          type="text"
-          className="new-todo"
-          placeholder={emailIdPlaceholder()}
-          value={emailIdInput}
-          onChange={emailIdInputHandle}
-        />
-      </form>
+      <div className="login-input-wrapper">
+        <form
+          // login form
+          onSubmit={submitNewEmailId}
+        >
+          <input
+            type="text"
+            className="new-todo login-input"
+            placeholder={emailIdPlaceholder()}
+            value={emailIdInput}
+            onChange={emailIdInputHandle}
+          />
+        </form>
 
-      {UnknownUserError && (
-        <div>
-          <span className="error-tip">
-            User with such email does not exist.
-            You may correct your input or&#160;
-          </span>
-          <button
-            type="button"
-            onClick={openUserRegForm}
-            className="new-user-button"
-          >
-            register a new User
-          </button>
-        </div>
-      )}
+        {UnknownUserError && (
+          <div>
+            <span className="error-tip">
+              User with such email does not exist.
+              You may correct your input or&#160;
+            </span>
+            <button
+              type="button"
+              onClick={openUserRegForm}
+              className="new-user-button"
+            >
+              register a new User
+            </button>
+          </div>
+        )}
+      </div>
+
       <br />
       {adminAccess && (
         <div className="adminPanel">
@@ -828,34 +912,70 @@ export const CloudTodos: React.FC = () => {
             </thead>
             <tbody>
               {loadedUsers.map(user => (
-                <tr key={user.id}>
-                  <td>
-                    {user.name}
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        switchUserHandle(user.email);
-                      }}
-                      className="new-user-button"
+                <React.Fragment key={`${user.id}table-row-key`}>
+                  <tr key={user.id} className="userTableRow">
+                    <td>
+                      {user.name}
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          switchUserHandle(user.email);
+                        }}
+                        className="new-user-button"
+                      >
+                        {user.email}
+                      </button>
+                    </td>
+                    <td>
+                      {user.id}
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => setCandidatetoDelete(user.id)}
+                        className="new-user-button"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr
+                    key={`${user.id} deletion-diag`}
+                    className={classNames('deletionDialog__row',
+                      { row_visible: user.id === candidateToDelete })}
+                  >
+                    <td className="deletionDialog" colSpan={2}>
+                      Are You sure You want to remove&#160;
+                      <b className="bold">{user.name}</b>
+                      &#160;from database?
+
+                    </td>
+                    <td
+                      className="deletionDialog yes_no"
+                      colSpan={2}
                     >
-                      {user.email}
-                    </button>
-                  </td>
-                  <td>
-                    {user.id}
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleUserDelete(user.id)}
-                      className="new-user-button"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                      <button
+                        type="button"
+                        onClick={() => handleUserDelete(user.id)}
+                        className="new-user-button"
+                      >
+                        Yes
+                      </button>
+                      &#160;/&#160;
+                      <button
+                        type="button"
+                        onClick={() => setCandidatetoDelete(undefined)}
+                        className="new-user-button"
+                      >
+                        No
+                      </button>
+                    </td>
+                  </tr>
+
+                </React.Fragment>
               ))}
             </tbody>
           </table>

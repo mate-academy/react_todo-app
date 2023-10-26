@@ -259,7 +259,7 @@ body {
     height: 100vh;
     margin: 0;
     overflow: hidden;
-    background-color: rgba(rgb(255, 255, 255), 0.0001);
+    background-color: rgba(rgb(255, 255, 255), 0.01);
     z-index: 3;
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(4px);
@@ -300,18 +300,19 @@ body {
     &:focus {
       outline: 1px solid rgb(105, 107, 255);
     }
-    // background-color: red;
   }
 
   &__submit-button {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.16, 
-      rgb(207, 207, 207)), color-stop(0.79, rgb(252, 252, 252)));
-    background-image: -moz-linear-gradient(center bottom, rgb(207, 207, 207) 16%, rgb(252, 252, 252) 79%);
-    background-image: linear-gradient(to top, rgb(207, 207, 207) 16%, 
-      rgb(252, 252, 252) 79%);
+    background-image: -webkit-gradient(linear, to left bottom, to left top,
+    color-stop(0.16, rgb(207, 207, 207)),
+    color-stop(0.79, rgb(252, 252, 252))),
+      -moz-linear-gradient(bottom, rgb(207, 207, 207) 16%,
+    rgb(252, 252, 252) 79%),
+      linear-gradient(to top, rgb(207, 207, 207) 16%,
+    rgb(252, 252, 252) 79%);
     padding: 3px;
     border: 1px solid #fff;
     color: black;
@@ -343,6 +344,8 @@ body {
   transition: transform 0.5s;
   border: 1px solid grey;
   border-radius: 10px;
+  background-color: #fff;
+  z-index: 3;
 
   &.visible {
     transform: translateX(0%);
@@ -440,7 +443,7 @@ body {
   &__container {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
 
     & > :last-child {
       margin-right: 150px;
@@ -451,4 +454,109 @@ body {
 .has-background-grey-lighter {
   border: 1px solid rgb(158, 158, 158);
   border-radius: 2rem;
+}
+
+.deletionDialog {
+  background-color: rgb(255, 196, 196);
+  padding: 0 0.5rem;
+  margin-bottom: 1rem;
+  vertical-align: top;
+  font-size: 1rem;
+  overflow: hidden;
+}
+
+.yes_no {
+  text-align: right;
+}
+
+.deletionDialog__row {
+  visibility: collapse;
+}
+
+.row_visible {
+  visibility: visible;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.title {
+  &__wrapper {
+    display: flex;
+    padding-top: 0.3rem;
+    //justify-content: space-between;
+    flex-direction: column;
+  }
+
+  &__login {
+    display: block;
+    font-size: 2em;
+    /*  margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px; */
+    cursor: pointer;
+    align-self: end;
+  }
+
+  &__userId {
+    font-weight: 400;
+  }
+
+  &__noId {
+    animation-name: flash;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
+}
+
+@keyframes flash {
+  0% {
+    font-weight: 200;
+  }
+  50% {
+    font-weight: 400;
+  }
+  100% {
+    font-weight: 200;
+  }
+}
+
+.loginValid {
+  position: relative;
+  //top: -43px;
+  font-size: 1rem;
+  //text-decoration: underline;
+}
+
+.login-input {
+  background-color: #fff;
+  border-radius: 2rem;
+  width: 50vw;
+}
+
+.login-input-wrapper {
+  position: fixed;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  background-color: rgba(rgb(255, 255, 255), 0.01);
+  z-index: 5;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
+  transform: translateY(200%);
+  transition: transform 0.5s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    transform: translateY(0);
+  }
 }
