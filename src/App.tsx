@@ -1,93 +1,44 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext, useState } from 'react';
+
+import { Todo } from './types/Todo';
+import { FilterBy } from './types/FilterBy';
+import { StateContext } from './states/TodosContext';
+import { TodoHeader } from './components/TodoHeader';
+import { TodoFooter } from './components/TodoFooter';
+import { TodoList } from './components/TodoList';
+
+const prepareTodos = (todos: Todo[], filterBy: FilterBy): Todo[] => {
+  return todos.filter((todo) => {
+    switch (filterBy) {
+      case FilterBy.Completed:
+        return todo.completed;
+      case FilterBy.Active:
+        return !todo.completed;
+      default:
+        return true;
+    }
+  });
+};
 
 export const App: React.FC = () => {
+  const { todos } = useContext(StateContext);
+  const [filterBy, setFilterBy] = useState(FilterBy.All);
+  const preparedTodos = prepareTodos(todos, filterBy);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <TodoHeader />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      { todos.length !== 0 && (
+        <>
+          <TodoList todos={preparedTodos} />
+          <TodoFooter
+            selectedFilter={filterBy}
+            onFilterSelected={setFilterBy}
           />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+        </>
+      )}
     </div>
   );
 };
