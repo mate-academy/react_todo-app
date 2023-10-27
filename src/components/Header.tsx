@@ -4,7 +4,7 @@ import { TodosContext } from '../contexts/TodosContext';
 
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
-  const [todos, setTodos] = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

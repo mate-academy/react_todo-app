@@ -32,7 +32,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     toggle: todo.completed ? ToggleStatus.Completed : ToggleStatus.View,
   };
 
-  const [todos, setTodos] = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
   const [todoStatus, setTodoStatus] = useState<InitialStatus>(initialStatus);
   const [newTitle, setNewTitle] = useState(todo.title);
 

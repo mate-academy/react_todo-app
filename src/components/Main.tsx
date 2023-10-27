@@ -4,7 +4,7 @@ import { TodosContext } from '../contexts/TodosContext';
 import { Todo } from '../types/Todo';
 
 export const Main: React.FC = () => {
-  const [todos, setTodos] = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const handleToggleAll = () => {
     let modifiedTodos: Todo[] = [];
