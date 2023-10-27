@@ -10,9 +10,7 @@ export const TodoApp: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState(Filter.ALL);
   const [count, setCount] = useState(0);
 
-  const handleTodoAdd = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const handleAddOnBlur = () => {
     if (todoTitle.trim()) {
       setTodos([
         {
@@ -25,6 +23,11 @@ export const TodoApp: React.FC = () => {
     }
 
     setTodoTitle('');
+  };
+
+  const handleTodoAdd = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleAddOnBlur();
   };
 
   const handleCompleteAll = () => {
@@ -82,7 +85,8 @@ export const TodoApp: React.FC = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={todoTitle}
-            onChange={(event) => setTodoTitle(event.target.value)}
+            onChange={event => setTodoTitle(event.target.value)}
+            onBlur={handleAddOnBlur}
           />
         </form>
       </header>
