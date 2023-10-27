@@ -32,7 +32,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const [todos, setTodos] = useContext(TodosContext);
   const [todoStatus, setTodoStatus] = useState<InitialStatus>(initialStatus);
-  const [newTitle, setNewTitle] = useState('');
+  const [newTitle, setNewTitle] = useState(todo.title);
 
   const editInputRef = useRef<HTMLInputElement>(null);
 
@@ -78,6 +78,32 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }, 1);
   };
 
+  const saveChanges = (titleToSet: string) => {
+    if (!titleToSet) {
+      const modifiedTodos = todos
+        .filter(currentTodo => currentTodo.id !== todo.id);
+
+      setTodos(modifiedTodos);
+    } else {
+      const modifiedTodos = todos.map(currentTodo => {
+        if (currentTodo.id === todo.id) {
+          return {
+            ...currentTodo,
+            title: titleToSet,
+          };
+        }
+
+        return currentTodo;
+      });
+
+      setTodos(modifiedTodos);
+    }
+  };
+
+  const discardChanges = () => {
+    setNewTitle(todo.title);
+  };
+
   const handleOnBlur = () => {
     const status = todo.completed;
 
@@ -85,11 +111,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       input: status ? TodoStatus.Completed : TodoStatus.View,
       toggle: status ? ToggleStatus.Completed : ToggleStatus.View,
     });
+
+    saveChanges(newTitle);
   };
 
-  // const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   console.log(e.key);
-  // };
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleOnBlur();
+    }
+
+    if (e.key === 'Escape') {
+      discardChanges();
+      handleOnBlur();
+    }
+  };
 
   return (
     <li className={todoStatus.input}>
@@ -118,7 +153,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         className="edit"
         value={newTitle}
         onBlur={handleOnBlur}
-        // onKeyUp={handleKeyUp}
+        onKeyUp={handleKeyUp}
         onChange={e => setNewTitle(e.target.value)}
         ref={editInputRef}
       />
