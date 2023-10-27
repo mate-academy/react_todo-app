@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import cn from 'classnames';
 import { TodosContext } from '../TodosContext/TodosContext';
 import { Status } from '../../data/enums';
 
@@ -12,11 +13,11 @@ export const TodosFilter: React.FC<Props> = ({
   onFilterChange,
 }) => {
   const { todos, setTodos } = useContext(TodosContext);
-  const notCompletedTodos = todos.filter(todo => todo.completed === false);
-  const completedTodos = todos.filter(todo => todo.completed === true);
+  const notCompletedTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
 
   const handleClearCompletedClick = () => {
-    const updatedTodos = todos.filter(item => item.completed === false);
+    const updatedTodos = todos.filter(item => !item.completed);
 
     setTodos(updatedTodos);
   };
@@ -31,7 +32,7 @@ export const TodosFilter: React.FC<Props> = ({
         <li>
           <a
             href="#/"
-            className={currentAppliedFilter === Status.All ? 'selected' : ''}
+            className={cn({ selected: currentAppliedFilter === Status.All })}
             onClick={() => onFilterChange(Status.All)}
           >
             {Status.All}
@@ -41,7 +42,7 @@ export const TodosFilter: React.FC<Props> = ({
         <li>
           <a
             href="#/active"
-            className={currentAppliedFilter === Status.Active ? 'selected' : ''}
+            className={cn({ selected: currentAppliedFilter === Status.Active })}
             onClick={() => onFilterChange(Status.Active)}
           >
             {Status.Active}
@@ -51,8 +52,9 @@ export const TodosFilter: React.FC<Props> = ({
         <li>
           <a
             href="#/completed"
-            className={currentAppliedFilter === Status.Completed
-              ? 'selected' : ''}
+            className={cn({
+              selected: currentAppliedFilter === Status.Completed,
+            })}
             onClick={() => onFilterChange(Status.Completed)}
           >
             {Status.Completed}
