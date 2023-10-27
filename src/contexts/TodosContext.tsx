@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { Tabs } from '../types/Tabs';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type DefaultValueType = {
   todos: Todo[];
@@ -15,25 +16,6 @@ export const TodosContext = createContext<DefaultValueType>({
   selectedFilter: Tabs.All,
   setSelectedFilter: () => {},
 });
-
-function useLocalStorage(key: string, initialTodos: Todo[]) {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    try {
-      const storedData = localStorage.getItem(key);
-
-      return storedData ? JSON.parse(storedData) : initialTodos;
-    } catch (e) {
-      return initialTodos;
-    }
-  });
-
-  const save = (todosToSet: Todo[]) => {
-    setTodos(todosToSet);
-    localStorage.setItem(key, JSON.stringify(todosToSet));
-  };
-
-  return [todos, save] as [Todo[], (todosToSet: Todo[]) => void];
-}
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useLocalStorage('todos', []);
