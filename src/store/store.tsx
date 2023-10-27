@@ -19,43 +19,43 @@ const reducer = (state: Todo[], action: Actions) => {
       ];
 
     case Dispatchers.DeleteComplited:
-      return [...state].filter(elem => !elem.completed);
+      return [...state].filter(todo => !todo.completed);
 
     case Dispatchers.DeleteWithId:
-      return [...state].filter(elem => elem.id !== action.payload);
+      return [...state].filter(todo => todo.id !== action.payload);
 
     case Dispatchers.ChangeStatus: {
-      return [...state].map(elem => {
-        if (elem.id === action.payload) {
+      return [...state].map(todo => {
+        if (todo.id === action.payload) {
           return {
-            ...elem,
-            completed: !elem.completed,
+            ...todo,
+            completed: !todo.completed,
           };
         }
 
-        return elem;
+        return todo;
       });
     }
 
     case Dispatchers.UpdateTitle: {
       const { title, id } = action.payload;
 
-      return [...state].map(elem => {
-        if (elem.id === id) {
+      return [...state].map(todo => {
+        if (todo.id === id) {
           return {
-            ...elem,
+            ...todo,
             title,
           };
         }
 
-        return elem;
+        return todo;
       });
     }
 
     case Dispatchers.ChangeAllStatuses: {
-      return [...state].map(elem => {
+      return [...state].map(todo => {
         return {
-          ...elem,
+          ...todo,
           completed: action.payload,
         };
       });

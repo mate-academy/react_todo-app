@@ -26,6 +26,10 @@ export const TodoFilter: React.FC<Props> = ({
   const { state } = useContext(TodosContext);
   const { dispatch } = useContext(TodosContext);
 
+  const handleDeleteComplited = () => {
+    dispatch({ type: Dispatchers.DeleteComplited });
+  };
+
   const count = state.filter(todo => !todo.completed).length;
 
   const shouldClearButtonRender = shouldRenderButton(count, state.length);
@@ -77,7 +81,7 @@ export const TodoFilter: React.FC<Props> = ({
           className={cn(
             'clear-completed',
           )}
-          onClick={() => dispatch({ type: Dispatchers.DeleteComplited })}
+          onClick={handleDeleteComplited}
         >
           Clear completed
         </button>

@@ -14,11 +14,13 @@ export const App: React.FC = () => {
     setFilterParam(param);
   };
 
+  const souldRenderList = Boolean(state.length);
+
   return (
     <div className="todoapp">
       <Header />
 
-      {state.length > 0
+      {souldRenderList
         && (
           <>
             <section className="main">

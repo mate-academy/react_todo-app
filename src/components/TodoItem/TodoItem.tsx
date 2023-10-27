@@ -16,7 +16,6 @@ interface Props {
 }
 
 export const TodoItem: React.FC<Props> = ({ todo, toggleStatus }) => {
-  // const state = useContext(TodosContext);
   const { dispatch } = useContext(TodosContext);
   const [titleCurrent, setTitleCurrent] = useState('');
   const [updatedTitle, setUpdatedTitle] = useState('');
@@ -71,6 +70,7 @@ export const TodoItem: React.FC<Props> = ({ todo, toggleStatus }) => {
     setTitleCurrent(title);
     setUpdatedTitle(title);
     setStatus(completed);
+
     if (completed && checkbox.current) {
       checkbox.current.checked = true;
     }

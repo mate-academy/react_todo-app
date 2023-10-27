@@ -26,5 +26,4 @@ export function useLocalStorage<T>(
   };
 
   return { value, save };
-  // return [value, save];
 }
