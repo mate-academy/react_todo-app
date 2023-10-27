@@ -1,7 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TodoList } from './TodoList';
+import { TodosContext } from '../contexts/TodosContext';
+import { Todo } from '../types/Todo';
 
 export const Main: React.FC = () => {
+  const [todos, setTodos] = useContext(TodosContext);
+
+  const handleToggleAll = () => {
+    let modifiedTodos: Todo[] = [];
+    const areAllSameTodoStatus
+      = todos.every(todo => todo.completed)
+      || todos.every(todo => !todo.completed);
+
+    if (areAllSameTodoStatus) {
+      modifiedTodos = todos.map(todo => ({
+        ...todo,
+        completed: !todo.completed,
+      }));
+    } else {
+      modifiedTodos = todos.map(todo => ({
+        ...todo,
+        completed: true,
+      }));
+    }
+
+    setTodos(modifiedTodos);
+  };
+
   return (
     <section className="main">
       <input
@@ -9,6 +34,7 @@ export const Main: React.FC = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        onClick={handleToggleAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 

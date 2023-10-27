@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState, useRef } from 'react';
+import React, {
+  useContext, useState, useRef, useEffect,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { TodosContext } from '../contexts/TodosContext';
 
@@ -14,7 +16,7 @@ enum TodoStatus {
 }
 
 enum ToggleStatus {
-  View = 'toggle-view2',
+  View = 'toggle-view',
   Editing = 'toggle-editing',
   Completed = 'toggle-completed',
 }
@@ -45,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(filteredTodos);
   };
 
-  const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToggle = () => {
     const modifiedTodos = todos.map(currentTodo => {
       if (currentTodo.id === todo.id) {
         return {
@@ -55,13 +57,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       }
 
       return currentTodo;
-    });
-
-    const isChecked = e.target.checked;
-
-    setTodoStatus({
-      input: isChecked ? TodoStatus.Completed : TodoStatus.View,
-      toggle: isChecked ? ToggleStatus.Completed : ToggleStatus.View,
     });
 
     setTodos(modifiedTodos);
@@ -105,13 +100,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleOnBlur = () => {
-    const status = todo.completed;
-
-    setTodoStatus({
-      input: status ? TodoStatus.Completed : TodoStatus.View,
-      toggle: status ? ToggleStatus.Completed : ToggleStatus.View,
-    });
-
     saveChanges(newTitle);
   };
 
@@ -125,6 +113,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       handleOnBlur();
     }
   };
+
+  useEffect(() => {
+    setTodoStatus({
+      input: todo.completed ? TodoStatus.Completed : TodoStatus.View,
+      toggle: todo.completed ? ToggleStatus.Completed : ToggleStatus.View,
+    });
+  }, [todo]);
 
   return (
     <li className={todoStatus.input}>
