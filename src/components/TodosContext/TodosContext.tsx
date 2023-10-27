@@ -19,7 +19,6 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     const newTodos: Todo[] = [...todos, newTodo];
 
     setTodos(newTodos);
-    // setTodos(prevTodos => [...prevTodos, newTodo]);
   };
 
   const updateTodoTitleHandler = (updatedTodo: Todo) => {
@@ -27,15 +26,12 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
       .map(todo => (todo.id === updatedTodo.id ? updatedTodo : todo));
 
     setTodos(updatedTodos);
-    // setTodos(prevTodos => prevTodos
-    //   .map(todo => (todo.id === updatedTodo.id ? updatedTodo : todo)));
   };
 
   const deleteTodoHandler = (todoId: number) => {
     const todosAfterDeleting = todos.filter(todo => todo.id !== todoId);
 
     setTodos(todosAfterDeleting);
-    // setTodos(prevTodos => prevTodos.filter(todo => todo.id !== todoId));
   };
 
   const value = {
