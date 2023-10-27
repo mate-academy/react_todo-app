@@ -7,11 +7,17 @@ import { TodosContext } from '../contexts/TodosContext';
 export const TodoApp: React.FC = () => {
   const { todos } = useContext(TodosContext);
 
+  const isContentDisplayed = todos.length > 0;
+
   return (
     <div className="todoapp">
       <Header />
-      <Main />
-      {todos.length > 0 && <Footer />}
+      {isContentDisplayed && (
+        <>
+          <Main />
+          <Footer />
+        </>
+      )}
     </div>
   );
 };

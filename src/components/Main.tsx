@@ -6,6 +6,8 @@ import { Todo } from '../types/Todo';
 export const Main: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
+  const isChecked = todos.every(todo => todo.completed);
+
   const handleToggleAll = () => {
     let modifiedTodos: Todo[] = [];
     const areAllSameTodoStatus
@@ -35,6 +37,7 @@ export const Main: React.FC = () => {
         className="toggle-all"
         data-cy="toggleAll"
         onClick={handleToggleAll}
+        checked={isChecked}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 

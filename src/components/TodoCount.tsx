@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/naming-convention */
 import React, { useContext } from 'react';
 import { TodosContext } from '../contexts/TodosContext';
 

@@ -20,7 +20,7 @@ export const Filters: React.FC = () => {
   const filters = useMemo(() => enumToArray(Tabs), [enumToArray]);
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       {filters.map(filter => (
         <li key={filter}>
           <a

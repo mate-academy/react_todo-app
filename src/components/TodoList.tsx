@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 import { TodoItem } from './TodoItem';
@@ -23,7 +21,7 @@ export const TodoList: React.FC = () => {
   });
 
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {todosToDisplay.map(todo => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
