@@ -97,7 +97,7 @@ export const TodoItem: React.FC<Props> = ({ todo, toggleStatus }) => {
           className="toggle"
           id={String(id)}
         />
-        <label htmlFor="toggle-view">
+        <label>
           {titleCurrent}
         </label>
         <button
