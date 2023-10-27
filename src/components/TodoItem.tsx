@@ -75,10 +75,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const saveChanges = (titleToSet: string) => {
     if (!titleToSet) {
-      const modifiedTodos = todos
-        .filter(currentTodo => currentTodo.id !== todo.id);
-
-      setTodos(modifiedTodos);
+      handleTodoDelete(todo.id);
     } else {
       const modifiedTodos = todos.map(currentTodo => {
         if (currentTodo.id === todo.id) {

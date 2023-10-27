@@ -7,7 +7,9 @@ export const TodoCount: React.FC = () => {
 
   return (
     <span className="todo-count" data-cy="todosCounter">
-      {`${todosLeft} items left`}
+      {todosLeft === 1
+        ? `${todosLeft} item left`
+        : `${todosLeft} items left`}
     </span>
   );
 };
