@@ -42,7 +42,7 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     return filterTodos(filter);
-  }, [filter, todos]);
+  }, [filter, filterTodos]);
 
   return (
     <div className="todoapp">
