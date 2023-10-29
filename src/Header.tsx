@@ -1,4 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Todo } from './types/Todo';
 import { postTodos } from './api/todos';
 import { TodosContext } from './TodoContext';
@@ -19,6 +24,7 @@ export const Header: React.FC<Props> = ({
   } = useContext(TodosContext);
   const [todoTitle, setTodoTitle] = useState('');
   const [isInputDisabled, setIsInputDisabled] = useState(false);
+  const focusedInput = useRef<HTMLInputElement>(null);
   const addTodo = async (todo: Omit<Todo, 'id'>) => {
     setError(ErrorStatus.none);
     setIsInputDisabled(true);
@@ -41,25 +47,33 @@ export const Header: React.FC<Props> = ({
   const handleAdding = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    const newTodo = {
-      completed: false,
-      userId: 9968,
-      title: todoTitle,
-    };
+    if (todoTitle) {
+      const newTodo = {
+        completed: false,
+        userId: 9968,
+        title: todoTitle,
+      };
 
-    addTodo(newTodo);
+      addTodo(newTodo);
 
-    setTempTodo({
-      id: 0,
-      ...newTodo,
-    });
+      setTempTodo({
+        id: 0,
+        ...newTodo,
+      });
 
-    setTodoTitle('');
+      setTodoTitle('');
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(event.target.value);
   };
+
+  useEffect(() => {
+    if (focusedInput.current) {
+      focusedInput.current.focus();
+    }
+  }, [todos.length]);
 
   return (
 
@@ -73,7 +87,8 @@ export const Header: React.FC<Props> = ({
           type="text"
           data-cy="createTodo"
           className="new-todo"
-          placeholder="What needs to be done?"
+          placeholder={isInputDisabled ? 'Adding...' : 'What needs to be done?'}
+          ref={focusedInput}
           value={todoTitle}
           disabled={isInputDisabled}
           onChange={handleChange}

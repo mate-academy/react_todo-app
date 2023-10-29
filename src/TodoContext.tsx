@@ -13,6 +13,10 @@ type ContextProps = {
   setTempTodo: (todo: null | Todo) => void,
   selectedTodo: null | Todo,
   setSelectedTodo: (todo: null | Todo) => void,
+  todosToDelete: number[],
+  setTodosToDelete: (ids: number[]) => void,
+  toggleAll: string,
+  setTogglingAll: (message: string) => void,
 };
 
 export const TodosContext = React.createContext<ContextProps>({
@@ -26,6 +30,10 @@ export const TodosContext = React.createContext<ContextProps>({
   setError: () => {},
   setTempTodo: () => {},
   setSelectedTodo: () => {},
+  todosToDelete: [],
+  setTodosToDelete: () => {},
+  toggleAll: '',
+  setTogglingAll: () => {},
 });
 
 type ProviderProps = {
@@ -38,6 +46,8 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
   const [error, setError] = useState(ErrorStatus.none);
   const [tempTodo, setTempTodo] = useState<null | Todo>(null);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
+  const [todosToDelete, setTodosToDelete] = useState<number[]>([]);
+  const [toggleAll, setTogglingAll] = useState<string>('');
 
   const contextValue = {
     todos,
@@ -50,6 +60,10 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
     setTempTodo,
     selectedTodo,
     setSelectedTodo,
+    todosToDelete,
+    setTodosToDelete,
+    toggleAll,
+    setTogglingAll,
   };
 
   return (

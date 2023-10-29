@@ -24,9 +24,14 @@ export const Footer: React.FC<Props> = ({
   setFilter,
   setTodos,
 }) => {
-  const { setError } = useTodo();
+  const {
+    setError,
+    setTodosToDelete,
+  } = useTodo();
   const removeCompleted = async () => {
     const completedTodos = todos.filter(todo => todo.completed);
+
+    setTodosToDelete([...completedTodos].map(todo => todo.id));
 
     setError(ErrorStatus.none);
 
@@ -37,7 +42,9 @@ export const Footer: React.FC<Props> = ({
         todos.filter(todo => !todo.completed),
       );
     } catch {
-      setError(ErrorStatus.none);
+      setError(ErrorStatus.delete);
+    } finally {
+      setTodosToDelete([]);
     }
   };
 

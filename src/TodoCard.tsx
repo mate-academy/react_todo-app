@@ -6,6 +6,7 @@ import { Todo } from './types/Todo';
 import { useTodo } from './TodoContext';
 import { deleteTodos, updateTodos, renameTodos } from './api/todos';
 import { ErrorStatus } from './types/Error';
+import { Loader } from './Loader';
 
 type Props = {
   todos: Todo[],
@@ -21,49 +22,58 @@ export const TodoCard: React.FC<Props> = ({
     setError,
     selectedTodo,
     setSelectedTodo,
+    todosToDelete,
+    toggleAll,
   } = useTodo();
   const [updatedTitle, setUpdatedTitle] = useState(currentTodo.title);
+  const [isUpdating, setIsUpdating] = useState(false);
   const focusedInput = useRef<HTMLInputElement>(null);
   const remove = async () => {
+    setIsUpdating(true);
     setError(ErrorStatus.none);
 
     try {
-      const response = await deleteTodos(currentTodo.id);
+      await deleteTodos(currentTodo.id);
 
-      if (response !== 0) {
-        setTodos(
-          todos.filter(todo => todo.id !== currentTodo.id),
-        );
-      } else {
-        setError(ErrorStatus.delete);
-      }
+      setTodos(
+        todos.filter(todo => todo.id !== currentTodo.id),
+      );
     } catch {
+      setUpdatedTitle(currentTodo.title);
       setError(ErrorStatus.delete);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   const rename = async () => {
-    setError(ErrorStatus.none);
+    if (updatedTitle !== '') {
+      setError(ErrorStatus.none);
+      setIsUpdating(true);
 
-    try {
-      await renameTodos(
-        currentTodo.id,
-        updatedTitle,
-      ).then((response) => {
-        setTodos((prevTodos) => {
-          return (
-            prevTodos.map(todo => (
-              todo.id === currentTodo.id
-                ? {
-                  ...todo,
-                  title: response.title,
-                }
-                : todo))
-          );
+      try {
+        await renameTodos(
+          currentTodo.id,
+          updatedTitle,
+        ).then((response) => {
+          setTodos((prevTodos) => {
+            return (
+              prevTodos.map(todo => (
+                todo.id === currentTodo.id
+                  ? {
+                    ...todo,
+                    title: response.title,
+                  }
+                  : todo))
+            );
+          });
         });
-      });
-    } catch {
-      setError(ErrorStatus.update);
+      } catch {
+        setError(ErrorStatus.update);
+        setUpdatedTitle(currentTodo.title);
+      } finally {
+        setIsUpdating(false);
+      }
     }
   };
 
@@ -87,22 +97,31 @@ export const TodoCard: React.FC<Props> = ({
     setUpdatedTitle(event.target.value);
   };
 
-  const handleToggle = () => {
-    updateTodos(
-      currentTodo.id,
-      !currentTodo.completed,
-    ).then((response) => {
-      setTodos((prevTodos) => {
-        return (
-          prevTodos.map(todo => (
-            todo.id === currentTodo.id
-              ? {
-                ...todo,
-                completed: response.completed,
-              } : todo))
-        );
+  const handleToggle = async () => {
+    setError(ErrorStatus.none);
+    setIsUpdating(true);
+
+    try {
+      await updateTodos(
+        currentTodo.id,
+        !currentTodo.completed,
+      ).then((response) => {
+        setTodos((prevTodos) => {
+          return (
+            prevTodos.map(todo => (
+              todo.id === currentTodo.id
+                ? {
+                  ...todo,
+                  completed: response.completed,
+                } : todo))
+          );
+        });
       });
-    });
+    } catch {
+      setError(ErrorStatus.update);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const handleConfirm = (event: React.KeyboardEvent) => {
@@ -118,6 +137,24 @@ export const TodoCard: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    if (todosToDelete.includes(currentTodo.id)) {
+      setIsUpdating(true);
+    } else {
+      setIsUpdating(false);
+    }
+  }, [todosToDelete]);
+
+  useEffect(() => {
+    if (toggleAll === 'completed' && !currentTodo.completed) {
+      setIsUpdating(true);
+    } else if (toggleAll === 'active' && currentTodo.completed) {
+      setIsUpdating(true);
+    } else {
+      setIsUpdating(false);
+    }
+  }, [toggleAll]);
+
+  useEffect(() => {
     if (focusedInput.current) {
       focusedInput.current.focus();
     }
@@ -129,7 +166,7 @@ export const TodoCard: React.FC<Props> = ({
       editing: currentTodo === selectedTodo,
     })}
     >
-      <div className="view">
+      <div className={classNames('view', { 'view--updating': isUpdating })}>
         <input
           type="checkbox"
           className="toggle"
@@ -163,6 +200,12 @@ export const TodoCard: React.FC<Props> = ({
         onChange={handleChange}
         onKeyUp={handleConfirm}
       />
+
+      {isUpdating && (
+        <div className="loader_container">
+          <Loader />
+        </div>
+      )}
     </li>
   );
 };
