@@ -4,17 +4,11 @@ import cn from 'classnames';
 import { Tabs } from '../types/Tabs';
 import { TodosContext } from '../contexts/TodosContext';
 
-type EnumType = {
-  [key: string]: Tabs;
-};
-
 export const Filters: React.FC = () => {
   const { selectedFilter, setSelectedFilter } = useContext(TodosContext);
 
-  const enumToArray = useCallback((data: EnumType): Tabs[] => {
-    return Object.keys(data).map(key => (
-      data[key]
-    ));
+  const enumToArray = useCallback((data: typeof Tabs): string[] => {
+    return Object.values(data);
   }, []);
 
   const filters = useMemo(() => enumToArray(Tabs), [enumToArray]);
@@ -28,7 +22,7 @@ export const Filters: React.FC = () => {
               ? filter.toLowerCase()
               : ''}`}
             className={cn({ selected: selectedFilter === filter })}
-            onClick={() => setSelectedFilter(filter)}
+            onClick={() => setSelectedFilter(filter as Tabs)}
           >
             {filter}
           </a>
