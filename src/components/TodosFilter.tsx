@@ -10,6 +10,8 @@ export const TodosFilter: React.FC = () => {
     setVisibleTodos,
   } = useContext(TodoContext);
 
+  const hasCompletedTodo = todos.some(todo => todo.completed);
+
   const [selectedFilter, setSelectedFilter] = useState(Status.All);
 
   const handleFilterTodo = (typeFilter: Status) => {
@@ -81,11 +83,11 @@ export const TodosFilter: React.FC = () => {
           </a>
         </li>
       </ul>
-      {todos.some(todo => todo.completed) && (
+      {hasCompletedTodo && (
         <button
           type="button"
           className="clear-completed"
-          onClick={() => handleClearCompleted()}
+          onClick={handleClearCompleted}
         >
           Clear completed
         </button>

@@ -10,14 +10,12 @@ export const TodoApp: React.FC = () => {
   return (
     <div className="todoapp">
       <Header />
-      {todos.length > 0
-      && (
+      {!!todos.length && (
         <>
           <Main />
           <TodosFilter />
         </>
       )}
-
     </div>
   );
 };

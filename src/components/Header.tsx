@@ -4,21 +4,21 @@ import { TodoContext } from '../TodoContext';
 export const Header: React.FC = () => {
   const { todos, setTodos, setVisibleTodos } = useContext(TodoContext);
 
-  const [value, setValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (value.trim()) {
+    if (inputValue.trim()) {
       const newTodo = {
         id: +new Date(),
-        title: value,
+        title: inputValue,
         completed: false,
       };
 
       setTodos([...todos, newTodo]);
       setVisibleTodos([...todos, newTodo]);
-      setValue('');
+      setInputValue('');
     }
   };
 
@@ -30,9 +30,9 @@ export const Header: React.FC = () => {
         <input
           type="text"
           data-cy="createTodo"
-          value={value}
+          value={inputValue}
           onChange={(event) => {
-            setValue(event.target.value);
+            setInputValue(event.target.value);
           }}
           className="new-todo"
           placeholder="What needs to be done?"
