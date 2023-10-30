@@ -7,7 +7,20 @@ import React, {
 import { TodosContext } from '../../store/TodoContext';
 import { TodoFilter } from '../TodoFilter.tsx/TodoFilter';
 import { TodoList } from '../TodoList/TodoList';
-import { State, Action } from '../../types/Context';
+import { State, Action, Filter } from '../../types/Context';
+import { Todo } from '../../types/Todo';
+
+const getVisibleTodos = (filter: Filter, todos: Todo[]) => {
+  if (filter === 'ACTIVE') {
+    return todos.filter(todo => !todo.completed);
+  }
+
+  if (filter === 'COMPLETED') {
+    return todos.filter(todo => todo.completed);
+  }
+
+  return todos;
+};
 
 export const TodoApp: React.FC = () => {
   const [state, dispatch]
@@ -26,19 +39,7 @@ export const TodoApp: React.FC = () => {
     }
   }, [state, todos]);
 
-  const getVisibleTodos = () => {
-    if (filter === 'ACTIVE') {
-      return todos.filter(todo => !todo.completed);
-    }
-
-    if (filter === 'COMPLETED') {
-      return todos.filter(todo => todo.completed);
-    }
-
-    return todos;
-  };
-
-  const visibleTodos = getVisibleTodos();
+  const visibleTodos = getVisibleTodos(filter, todos);
 
   const changeTextHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoText(event.target.value);

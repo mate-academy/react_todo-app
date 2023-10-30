@@ -40,6 +40,25 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEditText(event.target.value);
   };
 
+  const saveChangesHandler = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setIsEditing(false);
+
+    if (!editText.trim()) {
+      removeTodoHandler();
+    }
+
+    dispatch({
+      type: 'CHANGE_TODO',
+      payload: {
+        id: todo.id,
+        title: event.currentTarget.value,
+        completed: false,
+      },
+    });
+  };
+
   const keyDownEditInputHandler = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
@@ -109,6 +128,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           value={editText}
           onChange={changeEditInputHandler}
           onKeyDown={keyDownEditInputHandler}
+          onBlur={saveChangesHandler}
         />
       </li>
     </>
