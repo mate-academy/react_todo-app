@@ -49,14 +49,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleToggle = () => {
     const modifiedTodos = todos.map(currentTodo => {
-      if (currentTodo.id === todo.id) {
-        return {
+      return currentTodo.id === id
+        ? {
           ...currentTodo,
           completed: !currentTodo.completed,
-        };
-      }
-
-      return currentTodo;
+        }
+        : currentTodo;
     });
 
     setTodos(modifiedTodos);
