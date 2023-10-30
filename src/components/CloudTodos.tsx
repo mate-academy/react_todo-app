@@ -547,8 +547,8 @@ export const CloudTodos: React.FC = () => {
   }, []);
 
   const handleUserDelete = (userId: number | undefined) => {
-    deleteUser(userId);
-    // .then(() => getUsersFromServer());
+    deleteUser(userId)
+      .then(() => getUsersFromServer());
     setCandidatetoDelete(undefined);
   };
 

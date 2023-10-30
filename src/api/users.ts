@@ -90,14 +90,16 @@ export function updateTodo(
 }
 
 // below is a placeholder deleting function, to use in development
-// while real deleting function is commented for safety purposes
+// portfolio version will contain more features, as current version
+// is already far beyond the scope of task. So please don`t mind
+// the commented sections.
 
-export function deleteUser(UserId: number | undefined) {
+/* export function deleteUser(UserId: number | undefined) {
   // eslint-disable-next-line no-alert
   alert(`user ${UserId} has been deleted`);
-}
+} */
 
-/* export function deleteUser(UserId: number | undefined)
+export function deleteUser(UserId: number | undefined)
   : Promise<Response | void> {
   return fetch(`${API_URL}/users/${UserId}`, {
     method: 'DELETE',
@@ -105,7 +107,7 @@ export function deleteUser(UserId: number | undefined) {
       'Content-type': 'application/json; charset=UTF-8',
     },
   });
- .then(() => {
+/*  .then(() => {
       console.log(`user #${UserId} deleted from MATE SERVER`);
-    });
-} */
+    }); */
+}
