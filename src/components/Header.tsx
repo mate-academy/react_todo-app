@@ -34,6 +34,7 @@ export const Header: React.FC = () => {
           className="new-todo"
           placeholder="What needs to be done?"
           onChange={e => setTitle(e.target.value)}
+          onBlur={handleSubmit}
         />
       </form>
     </header>
