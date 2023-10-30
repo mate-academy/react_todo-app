@@ -8,6 +8,7 @@ type DefaultValueType = {
   setTodos: (todosToSet: Todo[]) => void;
   selectedFilter: Tabs;
   setSelectedFilter: (tab: Tabs) => void;
+  todosToDisplay: Todo[]
 };
 
 export const TodosContext = createContext<DefaultValueType>({
@@ -15,11 +16,25 @@ export const TodosContext = createContext<DefaultValueType>({
   setTodos: () => {},
   selectedFilter: Tabs.All,
   setSelectedFilter: () => {},
+  todosToDisplay: [],
 });
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [selectedFilter, setSelectedFilter] = useState<Tabs>(Tabs.All);
+
+  const todosToDisplay = todos.filter(todo => {
+    switch (selectedFilter) {
+      case Tabs.All:
+        return todo;
+      case Tabs.Active:
+        return !todo.completed;
+      case Tabs.Completed:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
 
   return (
     <TodosContext.Provider
@@ -28,6 +43,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
         setTodos,
         selectedFilter,
         setSelectedFilter,
+        todosToDisplay,
       }}
     >
       {children}
