@@ -49,6 +49,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (event.key === 'Enter' && isEditing) {
+      if (!editText.trim()) {
+        removeTodoHandler();
+      }
+    }
+
+    if (event.key === 'Enter' && isEditing) {
       dispatch({
         type: 'CHANGE_TODO',
         payload: {
