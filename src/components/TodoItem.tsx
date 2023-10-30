@@ -1,30 +1,23 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useState, useRef, useEffect,
+  useContext, useState, useRef,
 } from 'react';
 import { Todo } from '../types/Todo';
 import { TodosContext } from '../contexts/TodosContext';
-import { InitialStatus } from '../types/status/InitialStatus';
-import { TodoStatus } from '../types/status/TodoStatus';
-import { ToggleStatus } from '../types/status/ToggleStatus';
+import { TodoStatus } from '../types/TodoStatus';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const initialStatus = {
-    input: todo.completed ? TodoStatus.Completed : TodoStatus.View,
-    toggle: todo.completed ? ToggleStatus.Completed : ToggleStatus.View,
-  };
-
   const { todos, setTodos } = useContext(TodosContext);
-  const [todoStatus, setTodoStatus] = useState<InitialStatus>(initialStatus);
+  const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
   const editInputRef = useRef<HTMLInputElement>(null);
 
-  const { id, title } = todo;
+  const { id, title, completed } = todo;
 
   const handleTodoDelete = (todoId: number) => {
     const filteredTodos
@@ -47,10 +40,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleDoubleClick = () => {
-    setTodoStatus({
-      input: TodoStatus.Editing,
-      toggle: ToggleStatus.Editing,
-    });
+    setIsEditing(true);
 
     setTimeout(() => {
       editInputRef.current?.focus();
@@ -74,10 +64,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       setTodos(modifiedTodos);
     }
+
+    setIsEditing(false);
   };
 
   const discardChanges = () => {
     setNewTitle(todo.title);
+    setIsEditing(false);
   };
 
   const handleOnBlur = () => {
@@ -95,20 +88,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  useEffect(() => {
-    setTodoStatus({
-      input: todo.completed ? TodoStatus.Completed : TodoStatus.View,
-      toggle: todo.completed ? ToggleStatus.Completed : ToggleStatus.View,
-    });
-  }, [todo]);
+  let todoClassName = TodoStatus.View;
+
+  if (isEditing) {
+    todoClassName = TodoStatus.Editing;
+  } else if (completed) {
+    todoClassName = TodoStatus.Completed;
+  }
 
   return (
-    <li className={todoStatus.input}>
+    <li className={todoClassName}>
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id={todoStatus.toggle}
           onChange={handleToggle}
           checked={todo.completed}
         />
