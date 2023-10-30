@@ -4,26 +4,12 @@ import React, {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { TodosContext } from '../contexts/TodosContext';
+import { InitialStatus } from '../types/status/InitialStatus';
+import { TodoStatus } from '../types/status/TodoStatus';
+import { ToggleStatus } from '../types/status/ToggleStatus';
 
 type Props = {
   todo: Todo;
-};
-
-enum TodoStatus {
-  View = 'view',
-  Editing = 'editing',
-  Completed = 'completed',
-}
-
-enum ToggleStatus {
-  View = 'toggle-view',
-  Editing = 'toggle-editing',
-  Completed = 'toggle-completed',
-}
-
-type InitialStatus = {
-  input: TodoStatus,
-  toggle: ToggleStatus,
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
