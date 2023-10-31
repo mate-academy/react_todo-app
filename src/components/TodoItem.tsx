@@ -2,6 +2,8 @@
 import React, {
   useContext, useState, useRef,
 } from 'react';
+import cn from 'classnames';
+
 import { Todo } from '../types/Todo';
 import { TodosContext } from '../contexts/TodosContext';
 import { TodoStatus } from '../types/TodoStatus';
@@ -20,8 +22,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
 
   const handleTodoDelete = (todoId: number) => {
-    const filteredTodos
-      = todos.filter(currentTodo => currentTodo.id !== todoId);
+    const filteredTodos = todos
+      .filter(currentTodo => currentTodo.id !== todoId);
 
     setTodos(filteredTodos);
   };
@@ -88,16 +90,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  let todoClassName = TodoStatus.View;
-
-  if (isEditing) {
-    todoClassName = TodoStatus.Editing;
-  } else if (completed) {
-    todoClassName = TodoStatus.Completed;
-  }
-
   return (
-    <li className={todoClassName}>
+    <li className={cn({
+      [TodoStatus.View]: true,
+      [TodoStatus.Editing]: isEditing,
+      [TodoStatus.Completed]: completed,
+    })}
+    >
       <div className="view">
         <input
           type="checkbox"
