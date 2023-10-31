@@ -8,6 +8,8 @@ import { ActionType, FilterType } from '../../types/Todo';
 export const TodoApp: React.FC = () => {
   const { state, dispatch } = useContext(TodosContext);
 
+  const { todos } = state;
+
   const addTodoItem = (title: string) => {
     dispatch({ type: ActionType.ADD, payload: title });
   };
@@ -23,11 +25,11 @@ export const TodoApp: React.FC = () => {
   const filteredTodos = () => {
     switch (state.filterBy) {
       case FilterType.ACTIVE:
-        return state.todos.filter(item => !item.completed);
+        return todos.filter(item => !item.completed);
       case FilterType.COMPLETED:
-        return state.todos.filter(item => item.completed);
+        return todos.filter(item => item.completed);
       default:
-        return state.todos;
+        return todos;
     }
   };
 
@@ -39,7 +41,7 @@ export const TodoApp: React.FC = () => {
         <TodoForm onSubmit={addTodoItem} />
       </header>
 
-      {state.todos.length > 0 && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <input
@@ -47,7 +49,7 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               onChange={toggleAllTodoItems}
-              checked={state.todos.every(item => item.completed)}
+              checked={todos.every(item => item.completed)}
               data-cy="toggleAll"
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
@@ -57,12 +59,12 @@ export const TodoApp: React.FC = () => {
 
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {`${state.todos.filter(item => !item.completed).length}  items left`}
+              {`${todos.filter(item => !item.completed).length}  items left`}
             </span>
 
             <TodosFilter />
 
-            {state.todos.some(item => item.completed) && (
+            {todos.some(item => item.completed) && (
               <button
                 type="button"
                 className="clear-completed"
