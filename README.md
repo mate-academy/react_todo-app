@@ -1,4 +1,5 @@
 # React ToDo App
+
 Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as described below.
 
 > If you are not sure about how a feature should work just open the real TodoApp and look how it works there
@@ -12,9 +13,11 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     - `completed` - current status (`false` by default)
 1. Show the number of not completed todos in `TodoApp`;
 1. Implement `TodoList` component to display a list of todos;
+
     ```jsx harmony
     <TodoList items={todos} />
     ```
+
 1. Implement `TodoItem` component with ability to toggle the `completed` status using a checkbox.
     - move a `li` tag inside the `TodoItem`;
     - add class `completed` if todo is completed;
@@ -40,7 +43,8 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
 
 ![todoedit](./description/edittodo.gif)
 
-##  If you want to implement styles yourself
+## If you want to implement styles yourself
+
 - Font: 'helvetica neue'
 - Font sizes to use: 100px, 24px, 14px
 - implement arrow by rotating '❯' symbol
@@ -53,4 +57,4 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://Pa1eOrc.github.io/react_todo-app/) and add it to the PR description.
