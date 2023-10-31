@@ -1,17 +1,17 @@
 import classNames from 'classnames';
 import { useContext, useEffect, useRef } from 'react';
-import { Todo } from '../types/Todo';
+import { Action, Todo } from '../types/Todo';
 import { TodosContext } from './TodosContext';
 
 type Props = {
   todo: Todo,
-  editing: Todo | null,
+  selectedTodo: Todo | null,
   onEdit: (todo: Todo | null) => void,
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  editing,
+  selectedTodo,
   onEdit,
 }) => {
   const {
@@ -24,34 +24,41 @@ export const TodoItem: React.FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (editing) {
+    if (selectedTodo) {
       inputRef.current?.focus();
     }
-  }, [editing]);
+  }, [selectedTodo]);
 
   const onEditSubmit = (
     event: React.KeyboardEvent<HTMLInputElement>,
     currentId: number,
   ) => {
-    if (event.key === 'Escape') {
-      onEdit(null);
-    }
-
-    if (event.key === 'Enter') {
-      if (!editing?.title) {
-        onDeleteTodo(currentId);
+    switch (event.key) {
+      case Action.Escape:
         onEdit(null);
+        break;
 
-        return;
+      case Action.Enter: {
+        if (!selectedTodo?.title) {
+          onDeleteTodo(currentId);
+          onEdit(null);
+
+          return;
+        }
+
+        if (selectedTodo) {
+          onUpdateTodos({
+            ...todo,
+            title: selectedTodo.title,
+          });
+          onEdit(null);
+        }
+
+        break;
       }
 
-      if (editing) {
-        onUpdateTodos({
-          ...todo,
-          title: editing.title,
-        });
-        onEdit(null);
-      }
+      default:
+        break;
     }
   };
 
@@ -59,7 +66,7 @@ export const TodoItem: React.FC<Props> = ({
     <li
       className={classNames({
         completed,
-        editing: id === editing?.id,
+        editing: id === selectedTodo?.id,
       })}
       onDoubleClick={() => {
         onEdit(todo);
@@ -84,7 +91,7 @@ export const TodoItem: React.FC<Props> = ({
       </div>
       <input
         ref={inputRef}
-        value={editing?.title}
+        value={selectedTodo?.title}
         type="text"
         className="edit"
         onChange={(event => onEdit({ ...todo, title: event.target.value }))}

@@ -13,3 +13,8 @@ export interface Todos {
   uncompletedTodos: Todo[],
   onToggleAll: () => void,
 }
+
+export enum Action {
+  Escape = 'Escape',
+  Enter = 'Enter',
+}

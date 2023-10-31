@@ -22,11 +22,11 @@ export const TodoApp: React.FC = () => {
 
   const [title, setTitle] = useState('');
   const [filterBy, setFilterBy] = useState(Status.All);
-  const [editing, setEditing] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const newTodo: Todo = {
     id: +new Date(),
-    title,
+    title: title.trim(),
     completed: false,
   };
 
@@ -37,14 +37,16 @@ export const TodoApp: React.FC = () => {
   };
 
   const onEdit = (todo: Todo | null) => {
-    setEditing(todo);
+    setSelectedTodo(todo);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    setTodos([...todos, newTodo]);
-    setTitle('');
+    if (newTodo.title && !newTodo.title.startsWith(' ')) {
+      setTodos([...todos, newTodo]);
+      setTitle('');
+    }
   };
 
   return (
@@ -52,7 +54,7 @@ export const TodoApp: React.FC = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form onSubmit={(event) => handleSubmit(event)}>
+        <form onSubmit={handleSubmit}>
           <input
             value={title}
             type="text"
@@ -79,7 +81,7 @@ export const TodoApp: React.FC = () => {
 
             <TodoList
               todos={renderedTodos[filterBy]}
-              editing={editing}
+              selectedTodo={selectedTodo}
               onEdit={onEdit}
             />
           </section>

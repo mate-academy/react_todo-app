@@ -3,13 +3,13 @@ import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[],
-  editing: Todo | null,
+  selectedTodo: Todo | null,
   onEdit: (todo: Todo | null) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  editing,
+  selectedTodo,
   onEdit,
 }) => {
   return (
@@ -18,7 +18,7 @@ export const TodoList: React.FC<Props> = ({
         <TodoItem
           key={todo.id}
           todo={todo}
-          editing={editing}
+          selectedTodo={selectedTodo}
           onEdit={onEdit}
         />
       ))}
