@@ -1,4 +1,4 @@
-export enum TodoActions {
+export enum Status {
   All = 'All',
   Active = 'Active',
   Completed = 'Completed',

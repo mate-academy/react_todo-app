@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
-import { TodoActions } from '../types/TodoActions';
+import { Status } from '../types/Status';
 import { useLocalStorage } from '../hooks/UseLocalStorage';
 
 type Props = {
   todos: Todo[];
   setTodos: (todosToSet: Todo[]) => void;
-  selectedFilter: TodoActions;
-  setSelectedFilter: (action: TodoActions) => void;
+  selectedFilter: Status;
+  setSelectedFilter: (action: Status) => void;
   isShownTodos: Todo[]
 };
 
 export const TodosContext = React.createContext<Props>({
   todos: [],
-  setTodos: () => {},
-  selectedFilter: TodoActions.All,
-  setSelectedFilter: () => {},
+  setTodos: () => { },
+  selectedFilter: Status.All,
+  setSelectedFilter: () => { },
   isShownTodos: [],
 });
 
@@ -25,18 +25,18 @@ type PropsWithChildren = {
 
 export const TodoProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage('todos', []);
-  // eslint-disable-next-line
-  const [selectedFilter, setSelectedFilter] = useState<TodoActions>(TodoActions.All);
+  const [selectedFilter, setSelectedFilter] = useState<Status>(Status.All);
 
   const isShownTodos = todos.filter(todo => {
-    switch (selectedFilter) {
-      case TodoActions.Active:
-        return !todo.completed;
-      case TodoActions.Completed:
-        return todo.completed;
-      default:
-        return todo;
+    if (selectedFilter === Status.All) {
+      return true;
     }
+
+    if (selectedFilter === Status.Active) {
+      return !todo.completed;
+    }
+
+    return todo.completed;
   });
 
   return (

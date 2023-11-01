@@ -1,13 +1,13 @@
 import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import { TodosContext } from '../contexts/TodosContext';
-import { TodoActions } from '../types/TodoActions';
+import { Status } from '../types/Status';
 
 export const TodosFilter: React.FC = () => {
   const { selectedFilter, setSelectedFilter } = useContext(TodosContext);
 
   const filters = useMemo(() => {
-    return Object.values(TodoActions);
+    return Object.values(Status);
   }, []);
 
   return (
@@ -15,11 +15,11 @@ export const TodosFilter: React.FC = () => {
       {filters.map(filter => (
         <li key={filter}>
           <a
-            href={`#/${filter !== TodoActions.All
+            href={`#/${filter !== Status.All
               ? filter.toLowerCase()
               : ''}`}
             className={classNames({ selected: selectedFilter === filter })}
-            onClick={() => setSelectedFilter(filter as TodoActions)}
+            onClick={() => setSelectedFilter(filter as Status)}
           >
             {filter}
           </a>
