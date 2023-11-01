@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 
 export type Todo = {
   title: string,
@@ -11,6 +11,23 @@ type Props = {
 };
 
 export const todos: Todo[] = [];
+
+interface Action {
+  type: string,
+}
+
+function reducer(state: Todo[], action: Action) {
+  switch (action.type) {
+    case 'all':
+      return state;
+    case 'completed':
+      return state.filter(todo => (todo.completed === true));
+    case 'active':
+      return state.filter(todo => (todo.completed === false));
+    default:
+      return state;
+  }
+}
 
 interface Context {
   newTodos: Todo[],
@@ -26,6 +43,11 @@ interface Context {
   activeTodos: Todo[],
   handleClearCompleted: () => void,
   completedTodos: Todo[],
+  handleFilterChange: (filterType: string) => void,
+  handleFilterClick: (
+    filterType: string,
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => void
 }
 
 export const TodosContext = React.createContext<Context>({
@@ -44,6 +66,8 @@ export const TodosContext = React.createContext<Context>({
   activeTodos: [],
   handleClearCompleted: () => {},
   completedTodos: [],
+  handleFilterChange: () => {},
+  handleFilterClick: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
@@ -56,6 +80,42 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [allCompleted, setAllCompleted] = useState(false);
 
   const [newTodos, setNewTodos] = useState(todos);
+
+  const activeTodos = newTodos.filter(todo => !todo.completed);
+
+  const completedTodos = newTodos.filter(todo => todo.completed);
+
+  const [, dispatch] = useReducer(reducer, newTodos);
+
+  const handleFilterChange = (filterType: string) => {
+    switch (filterType) {
+      case 'all':
+        dispatch({ type: 'all' });
+        break;
+      case 'completed':
+        dispatch({ type: 'completed' });
+        break;
+      case 'active':
+        dispatch({ type: 'active' });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleFilterClick = (
+    filterType: string,
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    event.preventDefault();
+    handleFilterChange(filterType);
+  };
+
+  const updateAllCompleted = (todosList: Todo[]) => {
+    const allTodosCompleted = todosList.every((todo) => todo.completed);
+
+    setAllCompleted(allTodosCompleted);
+  };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo({
@@ -81,9 +141,11 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
     setNewTodos(filteredTodos);
 
-    const allTodosCompleted = filteredTodos.every((todo) => todo.completed);
-
-    setAllCompleted(filteredTodos.length > 0 && allTodosCompleted);
+    if (filteredTodos.length === 0) {
+      setAllCompleted(false);
+    } else {
+      updateAllCompleted(filteredTodos);
+    }
   };
 
   const handleCompletedChange = (id: number) => {
@@ -99,36 +161,31 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     });
 
     setNewTodos(updatedTodos);
-
-    const allTodosCompleted = updatedTodos.every((todo) => todo.completed);
-
-    setAllCompleted(allTodosCompleted);
+    updateAllCompleted(updatedTodos);
   };
 
   const handleAllCompletedChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setAllCompleted(event.target.checked);
-
-    const updatedTodos = newTodos.map((todo) => {
-      return {
-        ...todo,
-        completed: event.target.checked,
-      };
-    });
+    const updatedTodos = newTodos.map((todo) => ({
+      ...todo,
+      completed: event.target.checked,
+    }));
 
     setNewTodos(updatedTodos);
+    updateAllCompleted(updatedTodos);
   };
 
   const handleClearCompleted = () => {
-    const filteredTodos = newTodos.filter(todo => todo.completed === false);
+    setNewTodos(activeTodos);
 
-    setNewTodos(filteredTodos);
+    if (activeTodos.length === 0) {
+      setAllCompleted(false);
+    } else {
+      updateAllCompleted(activeTodos);
+    }
   };
-
-  const activeTodos = [...newTodos].filter(todo => !todo.completed);
-
-  const completedTodos = [...newTodos].filter(todo => todo.completed);
 
   return (
     <TodosContext.Provider
@@ -144,6 +201,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         activeTodos,
         handleClearCompleted,
         completedTodos,
+        handleFilterChange,
+        handleFilterClick,
       }}
     >
       {children}

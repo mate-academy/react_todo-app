@@ -6,6 +6,7 @@ export const Footer: React.FC = () => {
     activeTodos,
     handleClearCompleted,
     completedTodos,
+    handleFilterClick,
   } = useContext(TodosContext);
 
   return (
@@ -16,15 +17,31 @@ export const Footer: React.FC = () => {
 
       <ul className="filters">
         <li>
-          <a href="#/" className="selected">All</a>
+          <a
+            href="#/"
+            className="selected"
+            onClick={(event) => handleFilterClick('all', event)}
+          >
+            All
+          </a>
         </li>
 
         <li>
-          <a href="#/active">Active</a>
+          <a
+            href="#/active"
+            onClick={(event) => handleFilterClick('active', event)}
+          >
+            Active
+          </a>
         </li>
 
         <li>
-          <a href="#/completed">Completed</a>
+          <a
+            href="#/completed"
+            onClick={(event) => handleFilterClick('completed', event)}
+          >
+            Completed
+          </a>
         </li>
       </ul>
 
