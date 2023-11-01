@@ -69,18 +69,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEditing(false);
   };
 
-  const handleOnBlur = () => {
+  const handleBlur = () => {
     saveChanges(newTitle);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      handleOnBlur();
+      handleBlur();
     }
 
     if (event.key === 'Escape') {
       discardChanges();
-      handleOnBlur();
+      handleBlur();
     }
   };
 
@@ -118,7 +118,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         className="edit"
         value={newTitle}
-        onBlur={handleOnBlur}
+        onBlur={handleBlur}
         onKeyUp={handleKeyUp}
         onChange={event => setNewTitle(event.target.value)}
         ref={editInputRef}

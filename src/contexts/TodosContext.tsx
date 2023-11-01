@@ -19,16 +19,17 @@ export const TodosContext = React.createContext<Props>({
   isShownTodos: [],
 });
 
-// eslint-disable-next-line
-export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
+type PropsWithChildren = {
+  children: React.ReactNode;
+};
+
+export const TodoProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage('todos', []);
   // eslint-disable-next-line
   const [selectedFilter, setSelectedFilter] = useState<TodoActions>(TodoActions.All);
 
   const isShownTodos = todos.filter(todo => {
     switch (selectedFilter) {
-      case TodoActions.All:
-        return todo;
       case TodoActions.Active:
         return !todo.completed;
       case TodoActions.Completed:
