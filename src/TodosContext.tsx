@@ -134,6 +134,18 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     updateAllCompleted(updatedTodos);
   };
 
+  useEffect(() => {
+    const savedTodos = localStorage.getItem('todos');
+
+    if (savedTodos) {
+      setNewTodos(JSON.parse(savedTodos));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(newTodos));
+  }, [newTodos]);
+
   return (
     <TodosContext.Provider
       value={{
