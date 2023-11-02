@@ -19,6 +19,10 @@ const initialTodos: Todo[] = [];
 export function reducer(todos: Todo[], action: Action): Todo[] {
   switch (action.type) {
     case 'add': {
+      if (!action.data.title.replace(/\s/g, '').length) {
+        return todos;
+      }
+
       return [
         ...todos,
         {
