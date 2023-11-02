@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import cn from 'classnames';
 import { TodosContext } from '../TodosContext';
 
 export const Footer: React.FC = () => {
@@ -6,21 +7,29 @@ export const Footer: React.FC = () => {
     activeTodos,
     handleClearCompleted,
     completedTodos,
-    handleFilterClick,
+    setFilterBy,
+    filterBy,
   } = useContext(TodosContext);
+
+  if (activeTodos.length === 0 && completedTodos.length === 0) {
+    return null;
+  }
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${activeTodos.length} items left`}
+        {(activeTodos.length > 1 || activeTodos.length === 0) && `${activeTodos.length} items left`}
+        {activeTodos.length === 1 && `${activeTodos.length} item left`}
       </span>
 
       <ul className="filters">
         <li>
           <a
             href="#/"
-            className="selected"
-            onClick={(event) => handleFilterClick('all', event)}
+            onClick={() => {
+              setFilterBy('all');
+            }}
+            className={cn({ selected: filterBy === 'all' })}
           >
             All
           </a>
@@ -29,7 +38,10 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/active"
-            onClick={(event) => handleFilterClick('active', event)}
+            onClick={() => {
+              setFilterBy('active');
+            }}
+            className={cn({ selected: filterBy === 'active' })}
           >
             Active
           </a>
@@ -38,7 +50,8 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/completed"
-            onClick={(event) => handleFilterClick('completed', event)}
+            onClick={() => setFilterBy('completed')}
+            className={cn({ selected: filterBy === 'completed' })}
           >
             Completed
           </a>

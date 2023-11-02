@@ -3,11 +3,11 @@ import { TodoItem } from './TodoItem';
 import { TodosContext } from '../TodosContext';
 
 export const TodoList: React.FC = () => {
-  const { newTodos } = useContext(TodosContext);
+  const { myNewTodos } = useContext(TodosContext);
 
   return (
     <ul className="todo-list" data-cy="todoList">
-      {newTodos.map(todo => (<TodoItem todo={todo} key={todo.id} />))}
+      {myNewTodos.map(todo => (<TodoItem todo={todo} key={todo.id} />))}
     </ul>
   );
 };

@@ -1,9 +1,10 @@
-import React, { useReducer, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export type Todo = {
   title: string,
   id: number,
   completed: boolean,
+  editing: boolean,
 };
 
 type Props = {
@@ -12,21 +13,17 @@ type Props = {
 
 export const todos: Todo[] = [];
 
-interface Action {
-  type: string,
-}
-
-function reducer(state: Todo[], action: Action) {
-  switch (action.type) {
-    case 'all':
-      return state;
-    case 'completed':
-      return state.filter(todo => (todo.completed === true));
-    case 'active':
-      return state.filter(todo => (todo.completed === false));
-    default:
-      return state;
-  }
+function prepareTodos(todosList: Todo[], status: string): Todo[] {
+  return todosList.filter((todo) => {
+    switch (status) {
+      case 'completed':
+        return todo.completed;
+      case 'active':
+        return !todo.completed;
+      default:
+        return true;
+    }
+  });
 }
 
 interface Context {
@@ -34,8 +31,6 @@ interface Context {
   newTodo: Todo,
   handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   handleOnSubmit: (event: React.FormEvent) => void,
-  handleCompletedChange: (id: number) => void,
-  handleTodoDelete: (id: number) => void,
   handleAllCompletedChange: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void,
@@ -43,11 +38,11 @@ interface Context {
   activeTodos: Todo[],
   handleClearCompleted: () => void,
   completedTodos: Todo[],
-  handleFilterChange: (filterType: string) => void,
-  handleFilterClick: (
-    filterType: string,
-    event: React.MouseEvent<HTMLAnchorElement>,
-  ) => void
+  myNewTodos: Todo[],
+  setFilterBy: React.Dispatch<React.SetStateAction<string>>,
+  filterBy: string,
+  setNewTodos: (value: React.SetStateAction<Todo[]>) => void,
+  setMyNewTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
 }
 
 export const TodosContext = React.createContext<Context>({
@@ -56,18 +51,20 @@ export const TodosContext = React.createContext<Context>({
     title: '',
     id: 0,
     completed: false,
+    editing: false,
   },
   handleTitleChange: () => { },
   handleOnSubmit: () => { },
-  handleCompletedChange: () => { },
-  handleTodoDelete: () => { },
   handleAllCompletedChange: () => {},
   allCompleted: false,
   activeTodos: [],
   handleClearCompleted: () => {},
   completedTodos: [],
-  handleFilterChange: () => {},
-  handleFilterClick: () => {},
+  myNewTodos: [],
+  setFilterBy: () => {},
+  filterBy: 'all',
+  setNewTodos: () => {},
+  setMyNewTodos: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
@@ -75,41 +72,15 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     title: '',
     id: 0,
     completed: false,
+    editing: false,
   });
 
   const [allCompleted, setAllCompleted] = useState(false);
-
   const [newTodos, setNewTodos] = useState(todos);
-
   const activeTodos = newTodos.filter(todo => !todo.completed);
-
   const completedTodos = newTodos.filter(todo => todo.completed);
-
-  const [, dispatch] = useReducer(reducer, newTodos);
-
-  const handleFilterChange = (filterType: string) => {
-    switch (filterType) {
-      case 'all':
-        dispatch({ type: 'all' });
-        break;
-      case 'completed':
-        dispatch({ type: 'completed' });
-        break;
-      case 'active':
-        dispatch({ type: 'active' });
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleFilterClick = (
-    filterType: string,
-    event: React.MouseEvent<HTMLAnchorElement>,
-  ) => {
-    event.preventDefault();
-    handleFilterChange(filterType);
-  };
+  const [filterBy, setFilterBy] = useState('all');
+  const [myNewTodos, setMyNewTodos] = useState(newTodos);
 
   const updateAllCompleted = (todosList: Todo[]) => {
     const allTodosCompleted = todosList.every((todo) => todo.completed);
@@ -136,47 +107,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     });
   };
 
-  const handleTodoDelete = (id: number) => {
-    const filteredTodos = newTodos.filter((todo) => todo.id !== id);
-
-    setNewTodos(filteredTodos);
-
-    if (filteredTodos.length === 0) {
-      setAllCompleted(false);
-    } else {
-      updateAllCompleted(filteredTodos);
-    }
-  };
-
-  const handleCompletedChange = (id: number) => {
-    const updatedTodos = newTodos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }
-
-      return todo;
-    });
-
-    setNewTodos(updatedTodos);
-    updateAllCompleted(updatedTodos);
-  };
-
-  const handleAllCompletedChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setAllCompleted(event.target.checked);
-    const updatedTodos = newTodos.map((todo) => ({
-      ...todo,
-      completed: event.target.checked,
-    }));
-
-    setNewTodos(updatedTodos);
-    updateAllCompleted(updatedTodos);
-  };
-
   const handleClearCompleted = () => {
     setNewTodos(activeTodos);
 
@@ -187,6 +117,23 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    setMyNewTodos(prepareTodos(newTodos, filterBy));
+  }, [newTodos, filterBy]);
+
+  const handleAllCompletedChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setAllCompleted(event.target.checked);
+    const updatedTodos = myNewTodos.map((todo) => ({
+      ...todo,
+      completed: event.target.checked,
+    }));
+
+    setNewTodos(updatedTodos);
+    updateAllCompleted(updatedTodos);
+  };
+
   return (
     <TodosContext.Provider
       value={{
@@ -194,15 +141,16 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         handleTitleChange,
         newTodo,
         handleOnSubmit,
-        handleCompletedChange,
-        handleTodoDelete,
         handleAllCompletedChange,
         allCompleted,
         activeTodos,
         handleClearCompleted,
         completedTodos,
-        handleFilterChange,
-        handleFilterClick,
+        myNewTodos,
+        setFilterBy,
+        filterBy,
+        setNewTodos,
+        setMyNewTodos,
       }}
     >
       {children}

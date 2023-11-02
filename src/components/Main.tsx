@@ -7,21 +7,24 @@ export const Main: React.FC = () => {
   const {
     allCompleted,
     handleAllCompletedChange,
-    newTodos,
+    myNewTodos,
   } = useContext(TodosContext);
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        data-cy="toggleAll"
-        checked={allCompleted}
-        onChange={handleAllCompletedChange}
-        disabled={newTodos.length === 0}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      {myNewTodos.length > 0 && (
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+          checked={allCompleted}
+          onChange={handleAllCompletedChange}
+        />
+      )}
+      {myNewTodos.length > 0 && (
+        <label htmlFor="toggle-all">Mark all as complete</label>
+      )}
       <TodoList />
     </section>
   );
