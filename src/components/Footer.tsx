@@ -1,29 +1,13 @@
-import cn from 'classnames';
-
 import { useContext } from 'react';
 import { TodosContext } from './TodosContext';
-import { FilterOption } from '../types/FilterOption';
 import { getNumberActiveTodo } from '../tools/getNumberActiveTodo';
+import { TodosFilter } from './TodosFilter';
 
 export const Footer: React.FC = () => {
   const {
     todos,
     setTodos,
-    filterOption,
-    setFilterOption,
   } = useContext(TodosContext);
-
-  const handleClickAll = () => {
-    setFilterOption(FilterOption.All);
-  };
-
-  const handleClickActive = () => {
-    setFilterOption(FilterOption.Active);
-  };
-
-  const handleClickCompleted = () => {
-    setFilterOption(FilterOption.Completed);
-  };
 
   const handleDeleteCompleted = () => {
     const newTodos = todos.filter(todo => !todo.completed);
@@ -41,43 +25,7 @@ export const Footer: React.FC = () => {
           {`${getNumberActiveTodo(todos)} items left`}
         </span>
 
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className={cn({
-                selected: filterOption === FilterOption.All,
-              })}
-              onClick={handleClickAll}
-            >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/active"
-              className={cn({
-                selected: filterOption === FilterOption.Active,
-              })}
-              onClick={handleClickActive}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/completed"
-              onClick={handleClickCompleted}
-              className={cn({
-                selected: filterOption === FilterOption.Completed,
-              })}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
+        <TodosFilter />
 
         {todos.some(todo => todo.completed) && (
           <button

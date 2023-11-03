@@ -42,7 +42,7 @@ export const TodoList: React.FC = () => {
   };
 
   return (
-    <ul className="todo-list">
+    <ul className="todo-list" data-cy="todosList">
       {visiableTodo.map(todo => (
         <TodoItem
           todo={todo}
