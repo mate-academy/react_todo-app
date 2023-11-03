@@ -8,16 +8,20 @@ import { FilterOption } from '../types/FilterOption';
 export const TodoList: React.FC = () => {
   const { todos, setTodos, filterOption } = useContext(TodosContext);
 
-  const visiableTodo = todos.filter(todo => {
-    if (filterOption === FilterOption.All) {
-      return true;
-    }
+  const visibleTodo = todos.filter(todo => {
+    switch (filterOption) {
+      case FilterOption.All:
+        return true;
 
-    if (filterOption === FilterOption.Active) {
-      return !todo.completed;
-    }
+      case FilterOption.Active:
+        return !todo.completed;
 
-    return todo.completed;
+      case FilterOption.Completed:
+        return todo.completed;
+
+      default:
+        return true;
+    }
   });
 
   const handleChangeCheckbox = (id: number) => {
@@ -43,7 +47,7 @@ export const TodoList: React.FC = () => {
 
   return (
     <ul className="todo-list" data-cy="todosList">
-      {visiableTodo.map(todo => (
+      {visibleTodo.map(todo => (
         <TodoItem
           todo={todo}
           changeCompleted={handleChangeCheckbox}

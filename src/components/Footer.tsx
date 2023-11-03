@@ -15,6 +15,8 @@ export const Footer: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const isVisibleClearBtn = todos.some(todo => todo.completed);
+
   return (
     todos.length !== 0 ? (
       <footer className="footer">
@@ -22,12 +24,12 @@ export const Footer: React.FC = () => {
           className="todo-count"
           data-cy="todosCounter"
         >
-          {`${getNumberActiveTodo(todos)} items left`}
+          {`${getNumberActiveTodo(todos)} item left`}
         </span>
 
         <TodosFilter />
 
-        {todos.some(todo => todo.completed) && (
+        {isVisibleClearBtn && (
           <button
             type="button"
             className="clear-completed"

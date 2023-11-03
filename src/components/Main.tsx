@@ -19,25 +19,36 @@ export const Main: React.FC = () => {
   };
 
   return (
-    todos.length !== 0 ? (
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={handleChangeToggle}
-        />
+    <section className="main">
+      <input
+        type="checkbox"
+        id="toggle-all"
+        className="toggle-all"
+        data-cy="toggleAll"
+        onChange={handleChangeToggle}
+      />
 
-        {todos.length !== 0 && (
-          <label htmlFor="toggle-all">Mark all as complete</label>
-        )}
+      {todos.length !== 0 && (
+        <label htmlFor="toggle-all">Mark all as complete</label>
+      )}
 
-        <TodoList data-cy="todoList" />
-      </section>
-    ) : (
-      <></>
-    )
-
+      <TodoList data-cy="todoList" />
+    </section>
   );
 };
+
+// return !!todos.length && (
+//   <section className="main">
+//     <input
+//       type="checkbox"
+//       id="toggle-all"
+//       className="toggle-all"
+//       data-cy="toggleAll"
+//       onChange={handleChangeToggle}
+//     />
+//     {!!todos.length && (
+//       <label htmlFor="toggle-all">Mark all as complete</label>
+//     )}
+//     <TodoList data-cy="todoList" />
+//   </section>
+// );

@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import {
-  useState, useEffect, useRef, useContext,
+  useState,
+  useEffect,
+  useRef,
+  useContext,
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
@@ -30,7 +33,7 @@ export const TodoItem: React.FC<Props> = ({
   }, [editTodosId, todo.id]);
 
   const updateValue = (newValue: string) => {
-    if (newValue === '') {
+    if (!newValue) {
       deleteTodo(todo.id);
     } else {
       const updatedTodos = todos.map((todoCurrent) => {

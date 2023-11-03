@@ -10,7 +10,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const handlePressEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && inputValue.trim() !== '') {
+    if (event.key === 'Enter' && inputValue.trim()) {
       const newTodos = [...todos];
 
       newTodos.push({
