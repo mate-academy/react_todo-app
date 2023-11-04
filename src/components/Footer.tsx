@@ -16,6 +16,7 @@ export const Footer: React.FC = () => {
   };
 
   const isVisibleClearBtn = todos.some(todo => todo.completed);
+  const countTodosActive = getNumberActiveTodo(todos);
 
   return (
     todos.length !== 0 ? (
@@ -24,7 +25,7 @@ export const Footer: React.FC = () => {
           className="todo-count"
           data-cy="todosCounter"
         >
-          {`${getNumberActiveTodo(todos)} item left`}
+          {`${countTodosActive} item${countTodosActive !== 1 ? 's' : ''} left`}
         </span>
 
         <TodosFilter />

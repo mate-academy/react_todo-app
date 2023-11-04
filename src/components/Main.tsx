@@ -28,7 +28,7 @@ export const Main: React.FC = () => {
         onChange={handleChangeToggle}
       />
 
-      {todos.length !== 0 && (
+      {todos.length && (
         <label htmlFor="toggle-all">Mark all as complete</label>
       )}
 
@@ -36,19 +36,3 @@ export const Main: React.FC = () => {
     </section>
   );
 };
-
-// return !!todos.length && (
-//   <section className="main">
-//     <input
-//       type="checkbox"
-//       id="toggle-all"
-//       className="toggle-all"
-//       data-cy="toggleAll"
-//       onChange={handleChangeToggle}
-//     />
-//     {!!todos.length && (
-//       <label htmlFor="toggle-all">Mark all as complete</label>
-//     )}
-//     <TodoList data-cy="todoList" />
-//   </section>
-// );
