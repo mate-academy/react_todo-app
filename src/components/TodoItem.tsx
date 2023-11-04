@@ -37,6 +37,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     event.preventDefault();
+    setNewTitile(title);
     setNewTitile(event.target.value);
   };
 
@@ -49,6 +50,9 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     });
 
     setIsEditing(false);
+    if (newTitile.length === 0) {
+      setNewTitile(title);
+    }
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
