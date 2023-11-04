@@ -17,6 +17,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const dispatch = useContext(DispatchContext);
   const [isEditing, setIsEditing] = useState(false);
+  const [newTitile, setNewTitile] = useState(title);
   const titleField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -36,15 +37,17 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     event.preventDefault();
-
-    dispatch({
-      type: 'edit',
-      id,
-      title: event.target.value,
-    });
+    setNewTitile(event.target.value);
   };
 
   const handleBlur = () => {
+    dispatch({
+      type: 'edit',
+      id,
+      oldTitle: title,
+      title: newTitile,
+    });
+
     setIsEditing(false);
   };
 
@@ -98,7 +101,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
         onChange={edit}
         onKeyUp={handleKeyUp}
         onBlur={handleBlur}
-        value={title}
+        value={newTitile}
       />
     </li>
   );

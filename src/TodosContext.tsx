@@ -3,7 +3,7 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 
 type Action = { type: 'add', data: Todo }
 | { type: 'complete', id: number }
-| { type: 'edit', id: number, title: string }
+| { type: 'edit', id: number, oldTitle: string, title: string }
 | { type: 'delete', id: number }
 | { type: 'deleteAllCompleted' }
 | { type: 'completeAll' };
@@ -36,8 +36,14 @@ export function reducer(todos: Todo[], action: Action): Todo[] {
     case 'edit': {
       const newTodos = todos.map(todo => (
         todo.id === action.id
-          ? { ...todo, title: action.title }
+          ? {
+            ...todo,
+            title: action.title.length === 0
+              ? action.oldTitle
+              : action.title,
+          }
           : { ...todo }
+
       ));
 
       return newTodos;
@@ -54,7 +60,14 @@ export function reducer(todos: Todo[], action: Action): Todo[] {
     }
 
     case 'completeAll': {
-      return todos.map(todo => ({ ...todo, completed: !todo.completed }));
+      const index = todos.findIndex(todo => todo.completed === false);
+      const newTodos = todos.map(todo => {
+        const comp = !todos[index === -1 ? 0 : index].completed;
+
+        return { ...todo, completed: comp };
+      });
+
+      return newTodos;
     }
 
     case 'delete': {
