@@ -27,34 +27,45 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyDown
-  = (event: React.KeyboardEvent, updated: TodoItemType) => {
-    if (event.key === 'Enter' && updatedName.trim() !== '') {
-      const updatedCopy = { ...updated, title: updatedName.trim() };
+    = (event: React.KeyboardEvent, updated: TodoItemType) => {
+      if (event.key === 'Enter' && updatedName.trim() !== '') {
+        const updatedCopy = { ...updated, title: updatedName.trim() };
 
-      dispatch(
-        { type: AllActions.Update, payload: updated.id, value: updatedCopy },
-      );
+        dispatch(
+          { type: AllActions.Update, payload: updated.id, value: updatedCopy },
+        );
 
-      setIsEditingMode(false);
-    }
+        setIsEditingMode(false);
+      }
 
-    if (event.key === 'Enter' && updatedName.trim() === '') {
-      dispatch({
-        type: AllActions.Remove, payload: todo.id,
-      });
-    }
-  };
+      if (event.key === 'Enter' && updatedName.trim() === '') {
+        dispatch({
+          type: AllActions.Remove, payload: todo.id,
+        });
+      }
+    };
 
   const handleKeyUp
-  = (event: React.KeyboardEvent<HTMLInputElement>, updated: TodoItemType) => {
-    if (event.key === 'Escape') {
-      setUpdatedName(updated.title);
-      setIsEditingMode(false);
-    }
-  };
+    = (event: React.KeyboardEvent<HTMLInputElement>, updated: TodoItemType) => {
+      if (event.key === 'Escape') {
+        setUpdatedName(updated.title);
+        setIsEditingMode(false);
+      }
+    };
 
   const handleOnBlur = (updated: TodoItemType) => {
-    setUpdatedName(updated.title);
+    if (updatedName.trim() === '') {
+      setUpdatedName(updated.title);
+      setIsEditingMode(false);
+
+      return;
+    }
+
+    const updatedCopy = { ...updated, title: updatedName.trim() };
+
+    dispatch(
+      { type: AllActions.Update, payload: updated.id, value: updatedCopy },
+    );
     setIsEditingMode(false);
   };
 
