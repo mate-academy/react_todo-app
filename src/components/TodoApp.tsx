@@ -12,10 +12,11 @@ export const TodoApp: React.FC = () => {
       <Header />
 
       {todos.length !== 0 && (
-        <Main />
+        <>
+          <Main />
+          <Footer />
+        </>
       )}
-
-      <Footer />
     </>
   );
 };
