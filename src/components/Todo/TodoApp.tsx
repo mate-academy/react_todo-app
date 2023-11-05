@@ -96,22 +96,22 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        {todos.length > 0 && (
-          <div>
-            <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              data-cy="toggleAll"
-              onClick={handleSetAllCompleted}
-            />
+      {todos.length > 0 && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onClick={handleSetAllCompleted}
+          />
+          {todos.length > 0 && (
             <label htmlFor="toggle-all">Mark all as complete</label>
-          </div>
-        )}
+          )}
 
-        <TodoList todos={filterTodos} />
-      </section>
+          <TodoList todos={filterTodos} />
+        </section>
+      )}
 
       {todos.length > 0 && (
         <footer className="footer">
