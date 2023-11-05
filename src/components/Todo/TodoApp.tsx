@@ -57,6 +57,26 @@ export const TodoApp: React.FC = () => {
     reset();
   };
 
+  const handleSetAllCompleted = () => {
+    const allCompleted = todos.every(todo => todo.completed === true);
+
+    if (allCompleted) {
+      const updatedTodos = todos.map(todo => ({
+        ...todo,
+        completed: false,
+      }));
+
+      setTodos(updatedTodos);
+    } else {
+      const updatedTodos = todos.map(todo => ({
+        ...todo,
+        completed: true,
+      }));
+
+      setTodos(updatedTodos);
+    }
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -84,6 +104,7 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
+              onClick={handleSetAllCompleted}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
           </div>
@@ -100,13 +121,15 @@ export const TodoApp: React.FC = () => {
 
           <TodosFilter />
 
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={() => handleClearCompleted}
-          >
-            Clear completed
-          </button>
+          {todos.filter(todo => todo.completed).length > 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleClearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
         </footer>
       )}
     </div>

@@ -31,6 +31,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/completed"
+          // eslint-disable-next-line max-len
           className={classNames({ selected: filteredType === Status.Completed })}
           onClick={() => setFilteredType(Status.Completed)}
         >
