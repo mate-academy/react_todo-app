@@ -23,14 +23,15 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+  const contextValues = {
+    todos,
+    setTodos,
+    filteredType,
+    setFilteredType,
+  };
+
   return (
-    <TodosContext.Provider value={{
-      todos,
-      setTodos,
-      filteredType,
-      setFilteredType,
-    }}
-    >
+    <TodosContext.Provider value={contextValues}>
       {children}
     </TodosContext.Provider>
   );

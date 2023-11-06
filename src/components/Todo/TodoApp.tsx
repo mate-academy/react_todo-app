@@ -28,6 +28,9 @@ export const TodoApp: React.FC = () => {
     });
   }, [filteredType, todos]);
 
+  const showClearButton = todos.filter(todo => todo.completed).length > 0;
+  const completedTodoCounter = todos.filter(todo => !todo.completed).length;
+
   const handleClearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
@@ -116,12 +119,12 @@ export const TodoApp: React.FC = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${todos.filter(todo => !todo.completed).length} items left`}
+            {`${completedTodoCounter} items left`}
           </span>
 
           <TodosFilter />
 
-          {todos.filter(todo => todo.completed).length > 0 && (
+          {showClearButton && (
             <button
               type="button"
               className="clear-completed"

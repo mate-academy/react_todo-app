@@ -77,10 +77,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
+  const {
+    completed,
+    title,
+    id,
+  } = todo;
+
   return (
     <li
       className={classNames({
-        completed: todo.completed,
+        completed,
         editing: isEditing,
       })}
       onDoubleClick={() => setIsEditing(true)}
@@ -89,19 +95,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="toggle"
-          checked={todo.completed}
-          id={`toggle-view${todo.id}`}
-          onClick={() => handleMarkTodoAsCompleted(todo.id)}
+          checked={completed}
+          id={`toggle-view${id}`}
+          onClick={() => handleMarkTodoAsCompleted(id)}
         />
         <label>
-          {todo.title}
+          {title}
         </label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
           aria-label="deleteTodo"
-          onClick={() => handleDeleteTodo(todo.id)}
+          onClick={() => handleDeleteTodo(id)}
         />
       </div>
       <input
