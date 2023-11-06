@@ -25,22 +25,20 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <>
-      <header className="header">
-        <h1>todos</h1>
+    <header className="header">
+      <h1>todos</h1>
 
-        <form onSubmit={(event) => event.preventDefault()}>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            value={inputValue}
-            placeholder="What needs to be done?"
-            onChange={handleChange}
-            onKeyPress={handlePressEnter}
-          />
-        </form>
-      </header>
-    </>
+      <form onSubmit={(event) => event.preventDefault()}>
+        <input
+          type="text"
+          data-cy="createTodo"
+          className="new-todo"
+          value={inputValue}
+          placeholder="What needs to be done?"
+          onChange={handleChange}
+          onKeyPress={handlePressEnter}
+        />
+      </form>
+    </header>
   );
 };

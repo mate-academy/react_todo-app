@@ -19,29 +19,25 @@ export const Footer: React.FC = () => {
   const countTodosActive = getNumberActiveTodo(todos);
 
   return (
-    todos.length !== 0 ? (
-      <footer className="footer">
-        <span
-          className="todo-count"
-          data-cy="todosCounter"
+    <footer className="footer">
+      <span
+        className="todo-count"
+        data-cy="todosCounter"
+      >
+        {`${countTodosActive} item${countTodosActive !== 1 ? 's' : ''} left`}
+      </span>
+
+      <TodosFilter />
+
+      {isVisibleClearBtn && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleDeleteCompleted}
         >
-          {`${countTodosActive} item${countTodosActive !== 1 ? 's' : ''} left`}
-        </span>
-
-        <TodosFilter />
-
-        {isVisibleClearBtn && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={handleDeleteCompleted}
-          >
-            Clear completed
-          </button>
-        )}
-      </footer>
-    ) : (
-      <></>
-    )
+          Clear completed
+        </button>
+      )}
+    </footer>
   );
 };
