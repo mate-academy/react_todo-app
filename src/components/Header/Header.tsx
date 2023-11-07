@@ -9,7 +9,9 @@ export const Header: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const todos = useContext(TodosContext);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (value.trim() === '') {
       return;
     }
@@ -25,14 +27,13 @@ export const Header: React.FC = () => {
 
     dispatch({ type: AllActions.Add, payload: addition });
     setValue('');
-    // console.log(todos);
   };
 
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <input
           type="text"
           data-cy="createTodo"
