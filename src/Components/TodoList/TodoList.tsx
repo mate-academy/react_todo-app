@@ -7,19 +7,21 @@ import { Status } from '../../types/Status';
 export const TodoList: React.FC = () => {
   const todos: Todo[] = useTodos();
   const { filter } = useTodosFilter();
+  const getVisibleTodos = (currentTodos: Todo[], currentFilter: Status) => {
+    switch (currentFilter) {
+      case Status.Active:
+        return currentTodos.filter((todo) => !todo.completed);
+      case Status.Completed:
+        return currentTodos.filter((todo) => todo.completed);
+      default:
+        return currentTodos;
+    }
+  };
+
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    switch (filter) {
-      case Status.Active:
-        setVisibleTodos(todos.filter((todo) => !todo.completed));
-        break;
-      case Status.Completed:
-        setVisibleTodos(todos.filter((todo) => todo.completed));
-        break;
-      default:
-        setVisibleTodos(todos);
-    }
+    setVisibleTodos(getVisibleTodos(todos, filter));
   }, [filter, todos]);
 
   return (

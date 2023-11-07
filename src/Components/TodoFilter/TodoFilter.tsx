@@ -13,7 +13,7 @@ export const TodoFilter = React.memo(() => {
   const dispatch = useTodosDispatch();
   const { filter, setFilter } = useTodosFilter();
 
-  const handleFilterChange = (newFilter: Status) => {
+  const handleFilterChange = (newFilter: Status) => () => {
     setFilter(newFilter);
   };
 
@@ -25,33 +25,30 @@ export const TodoFilter = React.memo(() => {
       <span className="todo-count" data-cy="todosCounter">
         {`${activeTodos.length} items left`}
       </span>
-
       <ul className="filters" data-cy="todosFilter">
         <li>
           <a
             href="#/"
             className={cn({ selected: filter === Status.All })}
-            onClick={() => handleFilterChange(Status.All)}
+            onClick={handleFilterChange(Status.All)}
           >
             All
           </a>
         </li>
-
         <li>
           <a
             href="#/active"
             className={cn({ selected: filter === Status.Active })}
-            onClick={() => handleFilterChange(Status.Active)}
+            onClick={handleFilterChange(Status.Active)}
           >
             Active
           </a>
         </li>
-
         <li>
           <a
             href="#/completed"
             className={cn({ selected: filter === Status.Completed })}
-            onClick={() => handleFilterChange(Status.Completed)}
+            onClick={handleFilterChange(Status.Completed)}
           >
             Completed
           </a>

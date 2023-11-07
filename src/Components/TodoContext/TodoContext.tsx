@@ -4,22 +4,25 @@ import React, {
   useContext,
   useState,
 } from 'react';
-
 import { Todo } from '../../types/Todo';
 import { Action } from '../../types/Action';
 import { Status } from '../../types/Status';
 import { useLocalStorage } from '../CustomHooks/useLOcalStorage';
 
-const intitialTodos: Todo[] = [];
+const initialTodos: Todo[] = [];
 
-export const TodosContex = createContext(intitialTodos);
-export const TodosDispatchContext = createContext<Dispatch<Action>>(() => {});
-export const FilterContext = createContext<{
+type TodosContextType = {
+  todos: Todo[];
   filter: Status;
   setFilter: Dispatch<React.SetStateAction<Status>>;
-}>({
+  dispatch: Dispatch<Action>;
+};
+
+export const TodosContext = createContext<TodosContextType>({
+  todos: initialTodos,
   filter: Status.All,
   setFilter: () => {},
+  dispatch: () => {},
 });
 
 type Props = {
@@ -27,28 +30,33 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, dispatch] = useLocalStorage('todos', intitialTodos);
+  const [todos, dispatch] = useLocalStorage('todos', initialTodos);
   const [filter, setFilter] = useState(Status.All);
 
   return (
-    <TodosContex.Provider value={todos}>
-      <FilterContext.Provider value={{ filter, setFilter }}>
-        <TodosDispatchContext.Provider value={dispatch}>
-          {children}
-        </TodosDispatchContext.Provider>
-      </FilterContext.Provider>
-    </TodosContex.Provider>
+    <TodosContext.Provider
+      value={{
+        todos,
+        filter,
+        setFilter,
+        dispatch,
+      }}
+    >
+      {children}
+    </TodosContext.Provider>
   );
 };
 
 export function useTodos() {
-  return useContext(TodosContex);
+  return useContext(TodosContext).todos;
 }
 
 export function useTodosDispatch() {
-  return useContext(TodosDispatchContext);
+  return useContext(TodosContext).dispatch;
 }
 
 export function useTodosFilter() {
-  return useContext(FilterContext);
+  const { filter, setFilter } = useContext(TodosContext);
+
+  return { filter, setFilter };
 }
