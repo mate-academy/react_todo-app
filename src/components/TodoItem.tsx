@@ -90,13 +90,12 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={`toggle-view-${id}`}
           onChange={() => handleCheckbox(id)}
           checked={completed}
         />
 
         <label
-          htmlFor="toggle-view"
           onDoubleClick={() => handleDoubleClick(id, title)}
         >
           {title}
