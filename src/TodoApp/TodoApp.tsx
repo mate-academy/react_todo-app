@@ -11,7 +11,7 @@ export const TodoApp: React.FC = () => {
     <div className="todoapp">
       <Header />
       <Main />
-      {todos.length && <TodoFilter />}
+      {todos.length > 0 && <TodoFilter />}
     </div>
   );
 };

@@ -35,19 +35,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case KeyEvent.ENTER:
-        if (editedTitle.trim()) {
+        if (editedTitle.trim() !== '') {
           dispatch({
             type: State.EDIT,
             task: { ...todo, title: editedTitle },
           });
-          setEditedTitle('');
-        } else {
-          dispatch({
-            type: State.DELETED,
-            id: todo.id,
-          });
         }
 
+        setIsEditing(false);
         break;
       case KeyEvent.ESCAPE:
         setEditedTitle(todo.title);
@@ -59,16 +54,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleEdit = () => {
     if (editedTitle.trim()) {
-      dispatch({
-        type: State.DELETED,
-        id: todo.id,
-      });
-    } else {
-      dispatch({
-        type: State.EDIT,
-        task: { ...todo, title: editedTitle },
-      });
+      setEditedTitle(todo.title);
     }
+
+    dispatch({
+      type: State.EDIT,
+      task: { ...todo, title: editedTitle },
+    });
 
     setIsEditing(false);
   };

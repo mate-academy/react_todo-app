@@ -58,7 +58,7 @@ export const TodoFilter = React.memo(() => {
         </li>
       </ul>
 
-      {showClearTodosButton.length < 0 && (
+      {showClearTodosButton.length > 0 && (
         <button
           onClick={() => {
             dispatch({ type: State.CLEAR_COMPLETED, completed: true });
