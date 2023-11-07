@@ -12,9 +12,14 @@ import { Status } from '../../types/Status';
 const reducer = (state: TodoItemType[], action: Action): TodoItemType[] => {
   switch (action.type) {
     case AllActions.Add:
+      localStorage.setItem('todos', JSON.stringify([...state, action.payload]));
+
       return [...state, action.payload];
 
     case AllActions.Remove:
+      localStorage.setItem('todos',
+        JSON.stringify(state.filter(todo => todo.id !== action.payload)));
+
       return state.filter(todo => todo.id !== action.payload);
 
     case AllActions.Update:
@@ -22,10 +27,14 @@ const reducer = (state: TodoItemType[], action: Action): TodoItemType[] => {
       const index = allTodos.findIndex(item => item.id === action.payload);
 
       allTodos[index] = action.value;
+      localStorage.setItem('todos', JSON.stringify(allTodos));
 
       return allTodos;
 
     case AllActions.RemoveCompleted:
+      localStorage.setItem('todos',
+        JSON.stringify(state.filter(item => item.completed !== true)));
+
       return state.filter(item => item.completed !== true);
 
     case AllActions.CompleteAll:
@@ -35,11 +44,17 @@ const reducer = (state: TodoItemType[], action: Action): TodoItemType[] => {
         status = false;
       }
 
+      localStorage.setItem('todos', JSON.stringify(state.map(item => {
+        return { ...item, completed: status };
+      })));
+
       return state.map(item => {
         return { ...item, completed: status };
       });
 
     default:
+      localStorage.setItem('todos', JSON.stringify(state));
+
       return state;
   }
 };
@@ -58,7 +73,8 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [todos, dispatch] = useReducer(reducer, []);
+  const todosFromStorage = JSON.parse(localStorage.getItem('todos') || '[]');
+  const [todos, dispatch] = useReducer(reducer, todosFromStorage);
   const [visibleTodos, setVisibleTodos] = useState(todos);
   const [visibleStatus, setVisibleStatus] = useState(Status.All);
 
