@@ -6,13 +6,13 @@ import { State } from '../../types/State';
 export const Main: React.FC = () => {
   const todos = useTodos();
   const dispatch = useTodosDispatch();
-  const [toggleAll, setToggleAll] = useState(false);
+  const [isToggleAll, setIsToggleAll] = useState(false);
 
   const handleToggleAll = () => {
-    const completed = !toggleAll;
+    const completed = !isToggleAll;
 
     dispatch({ type: State.TOGGLE_ALL, completed });
-    setToggleAll(completed);
+    setIsToggleAll(completed);
   };
 
   const allCompleted = todos.every((todo) => todo.completed);

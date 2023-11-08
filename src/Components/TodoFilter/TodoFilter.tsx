@@ -23,7 +23,7 @@ export const TodoFilter = React.memo(() => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${activeTodos.length} items left`}
+        {`${activeTodos.length} item left`}
       </span>
       <ul className="filters" data-cy="todosFilter">
         <li>
