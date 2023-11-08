@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { Todo } from '../../types/Todo';
 import { State } from '../../types/State';
 import { useTodosDispatch } from '../TodoContext/TodoContext';
 
 export const Header: React.FC = React.memo(() => {
   const [title, setTitle] = useState('');
   const dispatch = useTodosDispatch();
-  const [editedTitle, setEditedTitle] = useState('');
 
   const handleTitleEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -28,20 +25,12 @@ export const Header: React.FC = React.memo(() => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && editedTitle.trim().length > 0) {
-      const newTodo: Todo = {
-        id: +uuidv4(),
-        title: editedTitle.trim(),
-        completed: false,
-      };
+    if (e.key === ' ') {
+      const text = e.currentTarget.value;
 
-      dispatch({
-        type: State.EDIT,
-        task: newTodo,
-      });
-      setEditedTitle('');
-    } else if (e.key === ' ') {
-      e.preventDefault(); // Ігноруємо натискання пробілу
+      if (text.trim().length === 0) {
+        e.preventDefault(); // Ігноруємо натискання пробілу, якщо поле порожнє
+      }
     }
   };
 
