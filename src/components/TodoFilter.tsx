@@ -45,7 +45,7 @@ export const TodoFilter: React.FC = () => {
             className={cn({
               selected: filter.all,
             })}
-            onClick={() => selectAll()}
+            onClick={selectAll}
           >
             All
 
@@ -57,7 +57,7 @@ export const TodoFilter: React.FC = () => {
             className={cn({
               selected: filter.active,
             })}
-            onClick={() => selectActiv()}
+            onClick={selectActiv}
             href="#/active"
           >
             Active
@@ -71,7 +71,7 @@ export const TodoFilter: React.FC = () => {
               selected: filter.completed,
             })}
             href="#/completed"
-            onClick={() => selectCompleted()}
+            onClick={selectCompleted}
           >
             Completed
 

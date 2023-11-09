@@ -58,6 +58,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         },
       },
     );
+    if (event.target.value.length === 0) {
+      deleteField(id);
+    }
   };
 
   return (
@@ -82,9 +85,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
         <label
           htmlFor="toggle-view"
-          onDoubleClick={() => {
-            onEdit();
-          }}
+          onDoubleClick={onEdit}
 
         >
           {todo.value}
@@ -108,12 +109,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         onChange={(event) => {
           changeFild(event, todo.id);
         }}
-        onFocus={() => {
-          HandeltEdit();
-        }}
-        onBlur={() => {
-          onBlur();
-        }}
+        onFocus={HandeltEdit}
+        onBlur={onBlur}
         onKeyUp={(event) => {
           if (event.key === 'Enter' || event.key === 'Escape') {
             onBlur();

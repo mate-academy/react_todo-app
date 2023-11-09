@@ -11,24 +11,15 @@ export const ToggleAll : React.FC = () => {
   const checkedAllTodo = useRef<HTMLInputElement>(null);
   const handeltAll = ():void => {
     setCheckbox(checked => {
-      if (!checked) {
-        dispatch({ type: ActionType.toggleAll, payload: !checked });
-      }
-
-      if (checked) {
-        dispatch({ type: ActionType.toggleAll, payload: !checked });
-      }
+      dispatch({ type: ActionType.toggleAll, payload: !checked });
 
       return !checked;
     });
   };
 
   useEffect(() => {
-    if (!state.some(elem => elem.completed === false) && state.length > 0) {
-      setCheckbox(true);
-    } else {
-      setCheckbox(false);
-    }
+    setCheckbox(!state.some(elem => elem.completed === false)
+    && state.length > 0);
   }, [state]);
 
   return (
@@ -37,7 +28,7 @@ export const ToggleAll : React.FC = () => {
         checked={checkbox}
         ref={checkedAllTodo}
         readOnly
-        onClick={() => handeltAll()}
+        onClick={handeltAll}
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
