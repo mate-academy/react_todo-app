@@ -7,12 +7,14 @@ export const Header = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch({
-      type: 'add',
-      payload: title,
-    });
+    if (title.trim()) {
+      dispatch({
+        type: 'add',
+        payload: title,
+      });
 
-    setTitle('');
+      setTitle('');
+    }
   };
 
   return (

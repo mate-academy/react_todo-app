@@ -6,7 +6,7 @@ type Action = { type: 'add', payload: string }
 | { type: 'complete', payload: number }
 | { type: 'delete', payload: number }
 | { type: 'deleteCompleted' }
-| { type: 'edit' }
+| { type: 'edit', payload: Todo }
 | { type: 'filter', payload: FilterType };
 
 function reduser(state: State, action: Action) {
@@ -63,6 +63,21 @@ function reduser(state: State, action: Action) {
       return {
         ...state,
         todos: state.todos.filter(todo => !todo.completed),
+      };
+
+    case 'edit':
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo.id === action.payload.id) {
+            return {
+              ...todo,
+              title: action.payload.title,
+            };
+          }
+
+          return todo;
+        }),
       };
 
     default:

@@ -23,7 +23,7 @@ export const Main = () => {
         className="toggle-all"
         data-cy="toggleAll"
         checked={isChecked}
-        onClick={toggleCheckbox}
+        onChange={toggleCheckbox}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
