@@ -7,10 +7,10 @@ export const Form : React.FC = () => {
   const dispatch = useContext(DispatchContext);
 
   const handleAddTodo = () => {
-    if (inputValue) {
+    if (inputValue.trim()) {
       dispatch({
         type: ActionType.add,
-        payload: inputValue,
+        payload: inputValue.trim(),
       });
 
       setInputValue('');
