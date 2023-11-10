@@ -6,6 +6,7 @@ import { FilterContext } from './FilterContext';
 
 export const TodoFilter: React.FC = () => {
   const state = useContext(StateContext);
+
   const dispatch = useContext(DispatchContext);
   const { filter, setFilter } = useContext(FilterContext);
   const selectActiv = ():void => {
@@ -35,7 +36,7 @@ export const TodoFilter: React.FC = () => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${state.filter(item => item.completed === true).length} items left`}
+        {`${state.filter(item => item.completed === false).length} items left`}
       </span>
 
       <ul className="filters">

@@ -1,5 +1,6 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Todo, Action } from '../Type/Type';
+import { useLocalStorage } from './Hooks/LocalStorages';
 
 const reducer = (state: Todo[], action: Action) => {
   let newState:Todo[] = [];
@@ -59,7 +60,15 @@ type Props = {
   children:React.ReactNode
 };
 export const GlobalStateProvider : React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, []);
+  const [storagedState, setStoragedState] = useLocalStorage<Todo[]>(
+    'todos',
+    [],
+  );
+  const [state, dispatch] = useReducer(reducer, storagedState);
+
+  useEffect(() => {
+    setStoragedState(state);
+  }, [setStoragedState, state]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

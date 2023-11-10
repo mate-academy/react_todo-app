@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { TodoItem } from './TodoItem';
 import { StateContext } from './Store';
 import { FilterContext } from './FilterContext';
+import { Todo } from '../Type/Type';
 
 export const TodoList: React.FC = () => {
   const state = useContext(StateContext);
@@ -26,7 +27,7 @@ export const TodoList: React.FC = () => {
 
   return (
     <ul className="todo-list" data-cy="todosList">
-      {filterField().map((todo) => (
+      {filterField().map((todo:Todo) => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
     </ul>
