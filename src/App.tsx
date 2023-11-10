@@ -1,18 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import Todo from './types/Todo';
-import { TodosFilter } from './types/TodosFilter';
 import { TodoContent } from './components/TodoConent';
 import { TodoFooter } from './components/TodoFooter';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import { TodosContext } from './components/TodosContext';
+import { TodoProvider } from './components/TodosContext';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [todosFilter, setTodosFilter] = useState<TodosFilter>(TodosFilter.all);
-  const [todoEditId, setTodoEditId] = useState(0);
-  const [todoEdit, setTodoEdit] = useState('');
+  console.log('Todos from useLocalStorage:', todos);
 
   const handleQuertChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -22,7 +19,11 @@ export const App: React.FC = () => {
     event.preventDefault();
 
     if (query.trim()) {
-      setTodos([...todos, { id: Date.now(), title: query, completed: false }]);
+      const newTodos
+      = [...todos, { id: Date.now(), title: query, completed: false }];
+      console.log('New Todos:', newTodos);
+
+      setTodos(newTodos);
       setQuery('');
     }
   };
@@ -44,26 +45,10 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      <TodosContext.Provider
-        value={{
-          todos,
-          todosFilter,
-          todoEditId,
-          todoEdit,
-          setTodos,
-          setTodosFilter,
-          setTodoEditId,
-          setTodoEdit,
-        }}
-      >
-        {todos.length > 0
-          && (
-            <>
-              <TodoContent />
-              <TodoFooter />
-            </>
-          )}
-      </TodosContext.Provider>
+      <TodoProvider>
+        <TodoContent />
+        <TodoFooter />
+      </TodoProvider>
     </div>
   );
 };

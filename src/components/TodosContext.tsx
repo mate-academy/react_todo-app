@@ -1,25 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TodosFilter } from '../types/TodosFilter';
 import Todo from '../types/Todo';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type Props = {
   todos: Todo[],
   todosFilter: TodosFilter,
-  todoEditId: number,
-  todoEdit: string,
   setTodos: (todos: Todo[]) => void,
   setTodosFilter: (filter: TodosFilter) => void,
-  setTodoEditId: (id: number) => void,
-  setTodoEdit: (edit: string) => void,
 };
 
 export const TodosContext = React.createContext<Props>({
   todos: [],
   todosFilter: TodosFilter.all,
-  todoEditId: 0,
-  todoEdit: 'string',
   setTodos: () => {},
   setTodosFilter: () => {},
-  setTodoEditId: () => {},
-  setTodoEdit: () => {},
 });
+
+type TodoChildren = {
+  children: React.ReactNode;
+};
+
+export const TodoProvider: React.FC<TodoChildren> = ({ children }) => {
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [todosFilter, setTodosFilter] = useState<TodosFilter>(TodosFilter.all);
+
+  return (
+    <TodosContext.Provider
+      value={{
+        todos,
+        todosFilter,
+        setTodos,
+        setTodosFilter,
+      }}
+    >
+      {children}
+    </TodosContext.Provider>
+  );
+};

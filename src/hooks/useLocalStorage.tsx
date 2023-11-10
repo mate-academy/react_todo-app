@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function useLocalStorage<T>(
   key: string,
@@ -15,10 +15,28 @@ export function useLocalStorage<T>(
       return JSON.parse(data);
     } catch (e) {
       localStorage.removeItem(key);
-
       return startValue;
     }
   });
+
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === key) {
+        try {
+          const newValue = JSON.parse(event.newValue || '');
+          setValue(newValue);
+        } catch (e) {
+          // Handle parsing error if needed
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [key]);
 
   const save = (newValue: T) => {
     localStorage.setItem(key, JSON.stringify(newValue));

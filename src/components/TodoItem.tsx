@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import cn from 'classnames';
 import { TodosContext } from './TodosContext';
 import Todo from '../types/Todo';
@@ -10,12 +12,11 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ getTodo }) => {
   const {
     todos,
-    todoEditId,
-    todoEdit,
     setTodos,
-    setTodoEditId,
-    setTodoEdit,
   } = useContext(TodosContext);
+
+  const [todoEditId, setTodoEditId] = useState(0);
+  const [todoEdit, setTodoEdit] = useState('');
 
   const editRef = useRef<HTMLInputElement>(null);
 
