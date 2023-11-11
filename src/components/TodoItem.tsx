@@ -33,6 +33,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEditing(true);
   };
 
+  const handleDelete = () => {
+    dispatch({ type: 'delete', payload: id });
+  };
+
   const saveNewTitle = () => {
     if (newTitle.trim()) {
       dispatch({
@@ -42,12 +46,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       setIsEditing(false);
     } else {
-      dispatch(
-        {
-          type: 'delete',
-          payload: todo.id,
-        },
-      );
+      handleDelete();
     }
   };
 
@@ -63,10 +62,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleBlur = () => {
     saveNewTitle();
-  };
-
-  const handleDelete = () => {
-    dispatch({ type: 'delete', payload: id });
   };
 
   return (

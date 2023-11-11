@@ -31,6 +31,7 @@ export const Header = () => {
           onChange={(event) => {
             setTitle(event.target.value);
           }}
+          onBlur={handleSubmit}
         />
       </form>
     </header>
