@@ -26,6 +26,12 @@ export const TodoAppList: React.FC = () => {
   const updateTodoTitile = (id: number, title: string) => {
     const copiedTodos = [...todos];
 
+    if (!title.length) {
+      const indexOfTodo = copiedTodos.findIndex(todo => todo.id === id);
+
+      copiedTodos.splice(indexOfTodo, 1);
+    }
+
     copiedTodos.map((todo) => {
       const todoElement = todo;
 

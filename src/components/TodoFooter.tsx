@@ -25,17 +25,15 @@ export const TodoFooter: React.FC = () => {
       <TodosFilter />
 
       {
-        completedTodosCount
-          ? (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={handleClearComleted}
-            >
-              Clear completed
-            </button>
-          )
-          : ''
+        completedTodosCount && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleClearComleted}
+          >
+            Clear completed
+          </button>
+        )
       }
     </footer>
   );

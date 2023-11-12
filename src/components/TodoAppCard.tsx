@@ -15,11 +15,11 @@ export const TodoAppCard: React.FC<Props> = ({
   onRemove,
   onModofiedTitile,
 }) => {
-  const [editingTitle, seteditingTitle] = useState(false);
+  const [editingTitle, setEditingTitle] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
 
   const handleDoubleCklick = () => {
-    seteditingTitle(true);
+    setEditingTitle(true);
     setTodoTitle(todo.title);
   };
 
@@ -29,19 +29,19 @@ export const TodoAppCard: React.FC<Props> = ({
 
   const handlerInputOnEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      seteditingTitle(!editingTitle);
+      setEditingTitle(!editingTitle);
       onModofiedTitile(todo.id, todoTitle);
     }
   };
 
   const handlerInputOnBlur = () => {
-    seteditingTitle(!editingTitle);
+    setEditingTitle(!editingTitle);
     onModofiedTitile(todo.id, todoTitle);
   };
 
   const handlerInputOnEscape = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
-      seteditingTitle(!editingTitle);
+      setEditingTitle(!editingTitle);
       onModofiedTitile(todo.id, todo.title);
     }
   };

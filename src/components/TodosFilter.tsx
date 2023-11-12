@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useContext } from 'react';
 import { TodosContext } from '../services/Store';
 import { Status } from '../types/Status';
@@ -13,7 +14,9 @@ export const TodosFilter: React.FC = () => {
             setFilter(Status.All);
           }}
           href="#/"
-          className={filter === Status.All ? 'selected' : ''}
+          className={classNames(
+            { selected: filter === Status.All },
+          )}
         >
           All
         </a>
@@ -24,7 +27,9 @@ export const TodosFilter: React.FC = () => {
           onClick={() => {
             setFilter(Status.Active);
           }}
-          className={filter === Status.Active ? 'selected' : ''}
+          className={classNames(
+            { selected: filter === Status.Active },
+          )}
           href="#/active"
         >
           Active
@@ -36,7 +41,9 @@ export const TodosFilter: React.FC = () => {
           onClick={() => {
             setFilter(Status.Completed);
           }}
-          className={filter === Status.Completed ? 'selected' : ''}
+          className={classNames(
+            { selected: filter === Status.Completed },
+          )}
           href="#/completed"
         >
           Completed
