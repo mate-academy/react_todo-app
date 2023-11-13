@@ -1,9 +1,24 @@
 import React, { useEffect, useReducer } from 'react';
-import { State } from '../types/Todo';
+import { FilterType, State } from '../types/Todo';
 import { Action, reduser } from '../redusecers/reduser';
 import { getStoredTodos, saveToLocalStorage } from '../api/localStorageApi';
 
-const initialState: State = getStoredTodos();
+const getFilterBy = () => {
+  if (document.URL.endsWith('/#/completed')) {
+    return FilterType.COMPLITED;
+  }
+
+  if (document.URL.endsWith('/#/active')) {
+    return FilterType.ACTIVE;
+  }
+
+  return FilterType.ALL;
+};
+
+const initialState: State = {
+  todos: getStoredTodos(),
+  filterBy: getFilterBy(),
+};
 
 type Props = {
   children: React.ReactNode;
@@ -17,10 +32,10 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reduser, initialState);
 
   useEffect(() => {
-    if (state) {
-      saveToLocalStorage(state);
+    if (state.todos) {
+      saveToLocalStorage(state.todos);
     }
-  }, [state]);
+  }, [state.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

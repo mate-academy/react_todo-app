@@ -18,7 +18,7 @@ export const TodoList = () => {
   };
 
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {filterTodos().map(todo => (<TodoItem todo={todo} key={todo.id} />))}
     </ul>
   );

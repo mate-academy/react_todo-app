@@ -1,8 +1,9 @@
 import { useContext, useState } from 'react';
 import { TodoList } from './TodoList';
-import { DispatchContext } from './TodosContext';
+import { DispatchContext, StateContext } from './TodosContext';
 
 export const Main = () => {
+  const state = useContext(StateContext);
   const [isChecked, setIsChecked] = useState(false);
   const dispatch = useContext(DispatchContext);
 
@@ -27,7 +28,9 @@ export const Main = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <TodoList />
+      {state.todos.length > 0 && (
+        <TodoList />
+      )}
     </section>
   );
 };
