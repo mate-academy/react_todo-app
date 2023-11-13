@@ -1,17 +1,9 @@
 import { Status } from './Status';
 import { Todo } from './Todo';
 
-export type Context = {
+export interface Context {
   todos: Todo[];
-  filteredTodos: Todo[];
-  addTodo: (title: string) => void;
-  deleteTodo: (id: number) => void;
-  editTodo: (id: number, newTitle: string) => void;
-  deleteCompletedTodos: () => void;
-  toggleTodo: (id: number) => void;
-  toggleAll: () => void;
-  activeTodoCount: number;
-  hasCompletedTodos: boolean;
+  setTodos: (v: Todo[]) => void;
   filter: Status;
-  onFilterChange: (filterBy:Status) => void;
-};
+  setFilter: (filterBy:Status) => void;
+}

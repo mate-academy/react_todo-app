@@ -10,14 +10,23 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
+  const { todos, setTodos } = useContext(TodosContext);
   const [editedTitle, setEditedTitle] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
 
-  const {
-    toggleTodo,
-    deleteTodo,
-    editTodo,
-  } = useContext(TodosContext);
+  const toggleTodo = (todoId: number) => {
+    setTodos(todos.map(todoItem => (todoItem.id === todoId
+      ? { ...todoItem, completed: !todoItem.completed } : todoItem)));
+  };
+
+  const deleteTodo = (todoId: number) => {
+    setTodos(todos.filter(todoItem => todoItem.id !== todoId));
+  };
+
+  const editTodo = (todoId: number, newTitle: string) => {
+    setTodos(todos.map(todoItem => (todoItem.id === todoId
+      ? { ...todoItem, title: newTitle } : todoItem)));
+  };
 
   const handleEditSubmit = () => {
     if (!editedTitle.trim()) {

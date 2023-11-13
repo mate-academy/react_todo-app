@@ -3,19 +3,21 @@ import React, { useContext, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodosContext } from './components/TodosContext';
 import { TodosFilter } from './components/TodosFilter';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const { todos, setTodos } = useContext(TodosContext);
   const [newTitle, setNewTitle] = useState('');
-  const todosContext = useContext(TodosContext);
 
-  const {
-    todos,
-    addTodo,
-    toggleAll,
-    deleteCompletedTodos,
-    activeTodoCount,
-    hasCompletedTodos,
-  } = todosContext;
+  const addTodo = (value: string) => {
+    const newTodo:Todo = {
+      id: +new Date(),
+      title: value,
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+  };
 
   const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,9 +30,21 @@ export const App: React.FC = () => {
     setNewTitle('');
   };
 
-  // const filteredTodos = useMemo(() => {
-  //   return filterTodos(filter);
-  // }, [filter, todos]);
+  const toggleAll = () => {
+    const areAllTodosCompleted = todos.every(todo => todo.completed);
+    const updatedTodos
+      = todos.map(todo => ({ ...todo, completed: !areAllTodosCompleted }));
+
+    setTodos(updatedTodos);
+  };
+
+  const deleteCompletedTodos = () => {
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
+  const activeTodoCount = todos.filter(todo => !todo.completed).length;
+
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   return (
     <div className="todoapp">

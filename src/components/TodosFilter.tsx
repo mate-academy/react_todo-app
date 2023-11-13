@@ -4,7 +4,7 @@ import { Status } from '../types/Status';
 import { TodosContext } from './TodosContext';
 
 export const TodosFilter: React.FC = () => {
-  const { filter, onFilterChange } = useContext(TodosContext);
+  const { filter, setFilter } = useContext(TodosContext);
 
   return (
     <ul className="filters">
@@ -12,7 +12,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/"
           className={cn({ selected: filter === Status.All })}
-          onClick={() => onFilterChange(Status.All)}
+          onClick={() => setFilter(Status.All)}
         >
           All
         </a>
@@ -22,7 +22,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/active"
           className={cn({ selected: filter === Status.Active })}
-          onClick={() => onFilterChange(Status.Active)}
+          onClick={() => setFilter(Status.Active)}
         >
           Active
         </a>
@@ -32,7 +32,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/completed"
           className={cn({ selected: filter === Status.Completed })}
-          onClick={() => onFilterChange(Status.Completed)}
+          onClick={() => setFilter(Status.Completed)}
         >
           Completed
         </a>
