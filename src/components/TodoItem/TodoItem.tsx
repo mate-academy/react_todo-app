@@ -1,5 +1,10 @@
 import cn from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../store/TodosContext';
 
@@ -9,28 +14,21 @@ interface Props {
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const {
+    setTodos,
+    handleCheckboxClick,
+    handleDelete,
+    findTodo,
+  } = useContext(TodosContext);
   const { id, title, completed } = todo;
 
   const [newTitle, setNewTitle] = useState(title);
   const [isTodoClicked, setIsTodoClicked] = useState(false);
 
-  const handleCheckboxClick = () => {
-    setTodos(todos.map(currentTodo => {
-      if (currentTodo.id === id) {
-        return { ...currentTodo, completed: !completed };
-      }
-
-      return currentTodo;
-    }));
-  };
+  const inputField = useRef<HTMLInputElement>(null);
 
   const handleDoubleClick = () => {
     setIsTodoClicked(true);
-  };
-
-  const handleDelete = () => {
-    setTodos(todos.filter(currentTodo => currentTodo.id !== id));
   };
 
   const handleNewTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +39,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsTodoClicked(false);
 
     if (!newTitle.trim()) {
-      handleDelete();
+      handleDelete(id);
 
       return;
     }
@@ -50,13 +48,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       return;
     }
 
-    setTodos(todos.map(currentTodo => {
-      if (currentTodo.id === id) {
-        return { ...currentTodo, title: newTitle };
-      }
-
-      return currentTodo;
-    }));
+    setTodos(findTodo(id, newTitle));
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,44 +62,49 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
+  useEffect(() => {
+    if (inputField.current) {
+      inputField.current.focus();
+    }
+  }, [isTodoClicked]);
+
   return (
-    <>
-      <li
-        className={cn({
-          completed,
-          editing: isTodoClicked,
-        })}
-      >
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            id="toggle-view"
-            checked={completed}
-            onClick={handleCheckboxClick}
-          />
-          <label
-            htmlFor="toggle-view"
-            onDoubleClick={handleDoubleClick}
-          >
-            {title}
-          </label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            onClick={handleDelete}
-          />
-        </div>
+    <li
+      className={cn({
+        completed,
+        editing: isTodoClicked,
+      })}
+    >
+      <div className="view">
         <input
-          type="text"
-          className="edit"
-          value={newTitle}
-          onChange={handleNewTitle}
-          onBlur={saveNewTitle}
-          onKeyUp={handleKeyUp}
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={completed}
+          onClick={() => handleCheckboxClick(id, completed)}
         />
-      </li>
-    </>
+        <label
+          htmlFor="toggle-view"
+          onDoubleClick={handleDoubleClick}
+        >
+          {title}
+        </label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={() => handleDelete(id)}
+        />
+      </div>
+      <input
+        type="text"
+        className="edit"
+        ref={inputField}
+        value={newTitle}
+        onChange={handleNewTitle}
+        onBlur={saveNewTitle}
+        onKeyUp={handleKeyUp}
+      />
+    </li>
   );
 };

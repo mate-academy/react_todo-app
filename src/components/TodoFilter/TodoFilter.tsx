@@ -32,7 +32,11 @@ export const TodoFilter: React.FC = () => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todosLeftCount} items left`}
+        {
+          todosLeftCount === 1
+            ? `${todosLeftCount} item left`
+            : `${todosLeftCount} items left`
+        }
       </span>
 
       <ul className="filters" data-cy="todosFilter">

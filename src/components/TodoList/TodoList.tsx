@@ -1,16 +1,16 @@
 import cn from 'classnames';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { TodosContext } from '../../store/TodosContext';
-import { getVisibleTodos } from '../../utils/getVisibleTodos';
 import { TodoItem } from '../TodoItem';
 
 export const TodoList: React.FC = () => {
-  const { todos, setTodos, filter } = useContext(TodosContext);
+  const {
+    todos,
+    setTodos,
+    getVisibleTodos,
+  } = useContext(TodosContext);
 
-  const visibleTodos = useMemo(() => {
-    return getVisibleTodos(todos, filter);
-  }, [todos, filter]);
-
+  const visibleTodos = getVisibleTodos();
   const areCompleted = todos.every(todo => todo.completed);
 
   const toggleAll = () => {
@@ -23,7 +23,7 @@ export const TodoList: React.FC = () => {
   return (
 
     <section className="main">
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <input
             type="checkbox"
@@ -34,7 +34,7 @@ export const TodoList: React.FC = () => {
               })}
             data-cy="toggleAll"
             checked={areCompleted}
-            onClick={toggleAll}
+            onChange={toggleAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 

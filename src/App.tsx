@@ -1,17 +1,24 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useRef, useEffect } from 'react';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { Todo } from './types/Todo';
-import { FilterOptions } from './types/FilterOptions';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+} from 'react';
 import { TodosContext } from './store/TodosContext';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [newTitle, setNewTitle] = useState('');
-  const [filter, setFilter] = useState(FilterOptions.All);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const todosContext = useContext(TodosContext);
+
+  const {
+    todos,
+    setTodos,
+  } = todosContext;
 
   const addTodo = () => {
     const newTodo = {
@@ -62,17 +69,8 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      <TodosContext.Provider
-        value={{
-          todos,
-          filter,
-          setTodos,
-          setFilter,
-        }}
-      >
-        <TodoList />
-        {todos.length > 0 && <TodoFilter />}
-      </TodosContext.Provider>
+      <TodoList />
+      {!!todos.length && <TodoFilter />}
     </div>
   );
 };
