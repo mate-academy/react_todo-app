@@ -43,6 +43,9 @@ export const App: React.FC = () => {
   };
 
   const activeTodoCount = todos.filter(todo => !todo.completed).length;
+  const activeTodoCountMsg = activeTodoCount === 1
+    ? ('1 item left')
+    : (`${activeTodoCount} items left`);
 
   const hasCompletedTodos = todos.some(todo => todo.completed);
 
@@ -81,9 +84,7 @@ export const App: React.FC = () => {
         && (
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
-              {activeTodoCount === 1
-                ? ('1 item left')
-                : (`${activeTodoCount} items left`)}
+              {activeTodoCountMsg}
             </span>
 
             <TodosFilter />
