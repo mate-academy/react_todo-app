@@ -73,11 +73,11 @@ export const App: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        {todos.length && <TodoList />}
+        {!!todos.length && <TodoList />}
 
       </section>
 
-      {todos.length > 0
+      {!!todos.length
         && (
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
