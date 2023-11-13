@@ -9,3 +9,8 @@ export enum FilterType {
   ACTIVE = 'active',
   COMPLITED = 'completed',
 }
+
+export interface State {
+  todos: Todo[],
+  filterBy: FilterType,
+}

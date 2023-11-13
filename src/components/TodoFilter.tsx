@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
-import { DispatchContext } from './TodosContext';
+import { DispatchContext, StateContext } from './TodosContext';
 import { FilterType } from '../types/Todo';
 
 export const TodoFilter = () => {
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const state = useContext(StateContext);
+  const [selectedFilter, setSelectedFilter] = useState(state.filterBy);
   const dispatch = useContext(DispatchContext);
 
   const handleClick = (filterBy: FilterType) => {
