@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { DispatchContext } from './TodosContext';
+import { DispatchContext } from '../context/TodosContext';
 
 export const Header = () => {
   const dispatch = useContext(DispatchContext);

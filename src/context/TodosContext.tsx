@@ -1,24 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
-import { FilterType, State } from '../types/Todo';
 import { Action, reduser } from '../redusecers/reduser';
-import { getStoredTodos, saveToLocalStorage } from '../api/localStorageApi';
-
-const getFilterBy = () => {
-  if (document.URL.endsWith('/#/completed')) {
-    return FilterType.COMPLITED;
-  }
-
-  if (document.URL.endsWith('/#/active')) {
-    return FilterType.ACTIVE;
-  }
-
-  return FilterType.ALL;
-};
-
-const initialState: State = {
-  todos: getStoredTodos(),
-  filterBy: getFilterBy(),
-};
+import { saveToLocalStorage } from '../api/localStorageApi';
+import { initialState } from '../utils/utils';
 
 type Props = {
   children: React.ReactNode;

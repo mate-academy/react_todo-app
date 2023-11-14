@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { TodoFilter } from './TodoFilter';
-import { DispatchContext, StateContext } from './TodosContext';
+import { DispatchContext, StateContext } from '../context/TodosContext';
 
 export const Footer = () => {
   const { todos } = useContext(StateContext);

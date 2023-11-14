@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import cn from 'classnames';
-import { DispatchContext } from './TodosContext';
+import { DispatchContext } from '../context/TodosContext';
 import { Todo } from '../types/Todo';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */

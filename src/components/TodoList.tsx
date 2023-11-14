@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { TodoItem } from './TodoItem';
-import { StateContext } from './TodosContext';
-import { FilterType } from '../types/Todo';
+import { StateContext } from '../context/TodosContext';
+import { FilterType } from '../types/FilterType';
 
 export const TodoList = () => {
   const { todos, filterBy } = useContext(StateContext);
@@ -10,7 +10,7 @@ export const TodoList = () => {
     switch (filterBy) {
       case FilterType.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case FilterType.COMPLITED:
+      case FilterType.COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;

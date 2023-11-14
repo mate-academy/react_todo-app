@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import { DispatchContext, StateContext } from './TodosContext';
-import { FilterType } from '../types/Todo';
+import { DispatchContext, StateContext } from '../context/TodosContext';
+import { FilterType } from '../types/FilterType';
 
 export const TodoFilter = () => {
   const state = useContext(StateContext);
@@ -22,7 +22,7 @@ export const TodoFilter = () => {
         <a
           href="#/"
           onClick={() => handleClick(FilterType.ALL)}
-          className={selectedFilter === 'all' ? 'selected' : ''}
+          className={selectedFilter === FilterType.ALL ? 'selected' : ''}
         >
           All
         </a>
@@ -32,7 +32,7 @@ export const TodoFilter = () => {
         <a
           href="#/active"
           onClick={() => handleClick(FilterType.ACTIVE)}
-          className={selectedFilter === 'active' ? 'selected' : ''}
+          className={selectedFilter === FilterType.ACTIVE ? 'selected' : ''}
         >
           Active
         </a>
@@ -41,8 +41,8 @@ export const TodoFilter = () => {
       <li>
         <a
           href="#/completed"
-          onClick={() => handleClick(FilterType.COMPLITED)}
-          className={selectedFilter === 'completed' ? 'selected' : ''}
+          onClick={() => handleClick(FilterType.COMPLETED)}
+          className={selectedFilter === FilterType.COMPLETED ? 'selected' : ''}
         >
           Completed
         </a>

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { TodoList } from './TodoList';
-import { DispatchContext, StateContext } from './TodosContext';
+import { DispatchContext, StateContext } from '../context/TodosContext';
 
 export const Main = () => {
   const state = useContext(StateContext);

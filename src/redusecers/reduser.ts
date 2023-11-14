@@ -1,4 +1,6 @@
-import { FilterType, State, Todo } from '../types/Todo';
+import { FilterType } from '../types/FilterType';
+import { State } from '../types/State';
+import { Todo } from '../types/Todo';
 
 export type Action = { type: 'add', payload: string }
 | { type: 'toggleAll', payload: boolean }
