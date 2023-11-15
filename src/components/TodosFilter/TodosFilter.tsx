@@ -29,7 +29,7 @@ export const TodosFilter: React.FC = () => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
