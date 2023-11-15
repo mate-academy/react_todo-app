@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props>
     }, [todos]);
 
     return (
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {todos.map(todo => (
           <li
             className={cn({

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodosFilter } from './components/TodosFilter/TodoFilter';
@@ -24,22 +24,17 @@ function filterTodos(todos: Todo[], status: string):Todo[] {
   });
 }
 
+const storedTodos = localStorage.getItem('todos');
+const todos = storedTodos ? JSON.parse(storedTodos) : [];
+
 export const App: React.FC = () => {
   const [todo, setTodo] = useState('');
-  const [todoList, setTodoList] = useState<Todo[]>([]);
+  const [todoList, setTodoList] = useState<Todo[]>(todos);
   const [statusButton, setStatusButton] = useState('#/');
   const [isEdited, setIsEdited] = useState('');
 
   const visibleTodos = useMemo(() => filterTodos(todoList, statusButton),
     [todoList, statusButton]);
-
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-
-    if (storedTodos) {
-      setTodoList(JSON.parse(storedTodos));
-    }
-  }, []);
 
   const changeNameAction
     = (
@@ -193,17 +188,19 @@ export const App: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList
-          todos={visibleTodos}
-          onChange={handleChangeCheckbox}
-          onDelete={handleDeleteTodo}
-          edit={isEdited}
-          onEdit={handleChangeTodoTitle}
-          onChangeName={changeNameAction}
-        />
+        {todoList.length > 0 && (
+          <TodoList
+            todos={visibleTodos}
+            onChange={handleChangeCheckbox}
+            onDelete={handleDeleteTodo}
+            edit={isEdited}
+            onEdit={handleChangeTodoTitle}
+            onChangeName={changeNameAction}
+          />
+        )}
       </section>
 
-      {Boolean(todoList.length) && (
+      {todoList.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${todoLeftCount()} items left`}

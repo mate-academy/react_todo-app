@@ -16,7 +16,10 @@ export const TodosFilter: React.FC<Props> = ({ status, onChangeStatus }) => {
   // const [statusButton, setStatusButton] = useState(Status.all);
 
   return (
-    <ul className="filters">
+    <ul
+      className="filters"
+      data-cy="todosFilter"
+    >
       <li>
         <a
           href={Status.all}
