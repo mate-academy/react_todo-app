@@ -16,8 +16,6 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  // console.log('rendering TodoItem');
-
   const { todos, setTodos } = useContext(TodosContext);
   const [newName, setNewName] = useState<string | null>(null);
 
@@ -79,7 +77,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      blurEventHandler();
+      if (event.currentTarget instanceof HTMLInputElement) {
+        event.currentTarget.blur();
+      }
     }
   };
 
