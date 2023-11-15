@@ -15,8 +15,6 @@ type Props = {
   ) => void,
 };
 
-// де змінюється туду там сет, там де використовується - гет
-
 export const TodoList: React.FC<Props>
   = ({
     todos,
