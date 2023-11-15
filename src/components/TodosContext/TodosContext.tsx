@@ -29,21 +29,20 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [filterTodos, setFilterTodos] = useState<FilterTodos>(FilterTodos.All);
 
-  const visibleTodos = todos.filter(todo => {
-    switch (filterTodos) {
-      case FilterTodos.All:
-        return todo;
+  const visibleTodos = filterTodos === FilterTodos.All
+    ? todos
+    : todos.filter(todo => {
+      switch (filterTodos) {
+        case FilterTodos.Active:
+          return !todo.completed;
 
-      case FilterTodos.Active:
-        return !todo.completed;
+        case FilterTodos.Completed:
+          return todo.completed;
 
-      case FilterTodos.Completed:
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
+        default:
+          return todo;
+      }
+    });
 
   const value = useMemo(() => ({
     todos,
@@ -51,7 +50,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     filterTodos,
     setFilterTodos,
     visibleTodos,
-  }), [todos, filterTodos]);
+  }), [todos, setTodos, filterTodos, visibleTodos]);
 
   return (
     <TodosContext.Provider value={value}>

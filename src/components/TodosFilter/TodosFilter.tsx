@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import classNames from 'classnames';
 
 import { FilterTodos } from '../../types/FilterTodos';
@@ -9,7 +9,7 @@ type Props = {};
 export const TodosFilter: React.FC<Props> = () => {
   const { filterTodos, setFilterTodos } = useContext(TodosContext);
 
-  const filters = useMemo(() => Object.values(FilterTodos), [FilterTodos]);
+  const filters = Object.values(FilterTodos);
 
   return (
     <ul className="filters">
