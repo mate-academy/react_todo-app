@@ -10,7 +10,6 @@ export const Header: React.FC = () => {
 
   const { todos, setTodos } = useContext(TodosContext);
 
-  // // // // // // // // // // // // // //
   const inputEventHandler = useCallback((
     event: React.FormEvent<HTMLInputElement>,
   ) => {
@@ -24,7 +23,7 @@ export const Header: React.FC = () => {
 
     const id = +new Date();
 
-    setTodos([...todos, { id, name: newTodoName, completed: false }]);
+    setTodos([...todos, { id, title: newTodoName, completed: false }]);
   };
 
   const inputKeyDown = (event: React.KeyboardEvent) => {

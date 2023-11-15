@@ -27,7 +27,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     newTodos.splice(newTodos.indexOf(todo), 1, {
       id: todo.id,
       completed: !todo.completed,
-      name: todo.name,
+      title: todo.title,
     });
 
     setTodos(newTodos);
@@ -42,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const startEdit = () => {
-    setNewName(todo.name);
+    setNewName(todo.title);
   };
 
   const inputEventHandler = (event: React.FormEvent<HTMLInputElement>) => {
@@ -64,13 +64,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (newName === '') {
       removeTodo();
-    } else if (todo.name !== newName) {
+    } else if (todo.title !== newName) {
       const newTodos = [...todos];
 
       newTodos.splice(newTodos.indexOf(todo), 1, {
         id: todo.id,
         completed: todo.completed,
-        name: newName || '',
+        title: newName || '',
       });
 
       setTodos(newTodos);
@@ -113,7 +113,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={event => event.preventDefault()}
           onDoubleClick={startEdit}
         >
-          {todo.name}
+          {todo.title}
         </label>
         <button
           type="button"
