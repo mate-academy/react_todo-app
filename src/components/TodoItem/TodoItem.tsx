@@ -58,6 +58,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const blurEventHandler = () => {
+    if (newName === null) {
+      return;
+    }
+
     if (newName === '') {
       removeTodo();
     } else if (todo.name !== newName) {
@@ -75,11 +79,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setNewName(null);
   };
 
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const keyUpHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (event.currentTarget instanceof HTMLInputElement) {
         event.currentTarget.blur();
       }
+    } else if (event.key === 'Escape') {
+      setNewName(null);
     }
   };
 
@@ -123,7 +129,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         className="edit"
         onChange={inputEventHandler}
         onBlur={blurEventHandler}
-        onKeyDown={keyDownHandler}
+        onKeyUp={keyUpHandler}
       />
     </li>
   );

@@ -13,34 +13,35 @@ export const Footer: React.FC<Props> = () => {
   };
 
   return (
-    <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
-      </span>
+    todos.length ? (
+      <footer className="footer">
+        <span className="todo-count" data-cy="todosCounter">
+          {`${todos.filter(todo => !todo.completed).length} items left`}
+        </span>
 
-      <ul className="filters">
-        <li>
-          <a href="#/" className="selected">All</a>
-        </li>
+        <ul className="filters">
+          <li>
+            <a href="#/" className="selected">All</a>
+          </li>
 
-        <li>
-          <a href="#/active">Active</a>
-        </li>
+          <li>
+            <a href="#/active">Active</a>
+          </li>
 
-        <li>
-          <a href="#/completed">Completed</a>
-        </li>
-      </ul>
+          <li>
+            <a href="#/completed">Completed</a>
+          </li>
+        </ul>
 
-      {todos.find(todo => todo.completed) && (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={clearDoneTodos}
-        >
-          Clear completed
-        </button>
-      )}
-    </footer>
-  );
+        {todos.find(todo => todo.completed) && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={clearDoneTodos}
+          >
+            Clear completed
+          </button>
+        )}
+      </footer>
+    ) : <></>);
 };
