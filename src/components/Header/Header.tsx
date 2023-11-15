@@ -1,13 +1,12 @@
 import { useContext, useState } from 'react';
 import './style.css';
-import { DispatchContext, TodosContext } from '../GlobalStateProvider';
 import { AllActions } from '../../types/Action';
-import { TodoItemType } from '../../types/TodoItemType';
+import { TodoItem } from '../../types/TodoItem';
+import { GlobalContextController } from '../GlobalStateProvider';
 
 export const Header: React.FC = () => {
+  const { dispatch, todos } = useContext(GlobalContextController);
   const [value, setValue] = useState('');
-  const dispatch = useContext(DispatchContext);
-  const todos = useContext(TodosContext);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,7 +18,7 @@ export const Header: React.FC = () => {
     let maxId = todos.map(todo => todo.id).sort()[todos.length - 1] || 0;
     // eslint-disable-next-line no-plusplus
     const newId = ++maxId;
-    const addition: TodoItemType = {
+    const addition: TodoItem = {
       id: newId,
       title: value,
       completed: false,

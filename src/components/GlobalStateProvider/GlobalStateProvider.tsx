@@ -1,15 +1,14 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable-next-line no-case-declarations */
 
 import React, {
-  createContext, useEffect, useReducer, useState,
+  createContext, useReducer, useState,
 } from 'react';
-import { TodoItemType } from '../../types/TodoItemType';
+import { TodoItem } from '../../types/TodoItem';
 import { Action, AllActions } from '../../types/Action';
 import { Status } from '../../types/Status';
 
-const reducer = (state: TodoItemType[], action: Action): TodoItemType[] => {
+const reducer = (state: TodoItem[], action: Action): TodoItem[] => {
   switch (action.type) {
     case AllActions.Add:
       localStorage.setItem('todos', JSON.stringify([...state, action.payload]));
@@ -59,14 +58,21 @@ const reducer = (state: TodoItemType[], action: Action): TodoItemType[] => {
   }
 };
 
-const initial: TodoItemType[] = [];
-const visible: TodoItemType[] = [];
+type Controller = {
+  dispatch: React.Dispatch<Action>,
+  todos: TodoItem[],
+  visibleStatus: Status,
+  setVisibleStatus: React.Dispatch<React.SetStateAction<Status>>
+};
 
-export const TodosContext = createContext(initial);
-export const DispatchContext = createContext((_action: Action) => { });
-export const VisibleTodosContext = createContext(visible);
-export const DispatchVisibleItemsContext
-= createContext((_arg: Status) => {});
+const controllerObject: Controller = {
+  dispatch: () => {},
+  todos: [],
+  visibleStatus: Status.All,
+  setVisibleStatus: () => {},
+};
+
+export const GlobalContextController = createContext(controllerObject);
 
 type Props = {
   children: React.ReactNode,
@@ -75,49 +81,17 @@ type Props = {
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const todosFromStorage = JSON.parse(localStorage.getItem('todos') || '[]');
   const [todos, dispatch] = useReducer(reducer, todosFromStorage);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
   const [visibleStatus, setVisibleStatus] = useState(Status.All);
 
-  useEffect(() => {
-    let visibleItems: TodoItemType[];
-
-    if (todos.length === 0) {
-      setVisibleStatus(Status.All);
-      setVisibleTodos([]);
-
-      return;
-    }
-
-    switch (visibleStatus) {
-      case Status.All:
-        visibleItems = [...todos];
-        setVisibleTodos(visibleItems);
-        break;
-
-      case Status.Active:
-        visibleItems = todos.filter(item => !item.completed);
-        setVisibleTodos(visibleItems);
-        break;
-
-      case Status.Completed:
-        visibleItems = todos.filter(item => item.completed);
-        setVisibleTodos(visibleItems);
-        break;
-
-      default:
-        break;
-    }
-  }, [todos, visibleStatus]);
-
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <TodosContext.Provider value={todos}>
-        <DispatchVisibleItemsContext.Provider value={setVisibleStatus}>
-          <VisibleTodosContext.Provider value={visibleTodos}>
-            {children}
-          </VisibleTodosContext.Provider>
-        </DispatchVisibleItemsContext.Provider>
-      </TodosContext.Provider>
-    </DispatchContext.Provider>
+    <GlobalContextController.Provider value={{
+      dispatch,
+      todos,
+      visibleStatus,
+      setVisibleStatus,
+    }}
+    >
+      {children}
+    </GlobalContextController.Provider>
   );
 };

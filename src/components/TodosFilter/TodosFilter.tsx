@@ -1,50 +1,26 @@
 import cn from 'classnames';
-import React, { useContext, useState } from 'react';
-// import { DispatchVisibleItemsContext, TodosContext }
-import { DispatchVisibleItemsContext }
+import React, { useContext } from 'react';
+import { GlobalContextController }
   from '../GlobalStateProvider';
 import './style.css';
 import { Status } from '../../types/Status';
-// import { TodoItemType } from '../../types/TodoItemType';
 
 export const TodosFilter: React.FC = () => {
-  // const setVisible = useContext(DispatchVisibleItemsContext);
-  const setVisibleStatus = useContext(DispatchVisibleItemsContext);
-  // const allTodos = useContext(TodosContext);
-
-  const [allSelected, setAllSelected] = useState(true);
-  const [activeSelected, setActiveSelected] = useState(false);
-  const [completedSelected, setCompletedSelected] = useState(false);
+  const { setVisibleStatus, visibleStatus }
+  = useContext(GlobalContextController);
 
   const handleSelection = (status: Status) => {
-    // let visible: TodoItemType[];
-
     switch (status) {
       case Status.All:
-        // visible = [...allTodos];
-        // setVisible(visible);
         setVisibleStatus(Status.All);
-        setAllSelected(true);
-        setActiveSelected(false);
-        setCompletedSelected(false);
         break;
 
       case Status.Active:
-        // visible = allTodos.filter(todo => !todo.completed);
-        // setVisible(visible);
         setVisibleStatus(Status.Active);
-        setAllSelected(false);
-        setActiveSelected(true);
-        setCompletedSelected(false);
         break;
 
       case Status.Completed:
-        // visible = allTodos.filter(todo => todo.completed);
-        // setVisible(visible);
         setVisibleStatus(Status.Completed);
-        setAllSelected(false);
-        setActiveSelected(false);
-        setCompletedSelected(true);
         break;
 
       default:
@@ -57,7 +33,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/"
-          className={cn({ selected: allSelected })}
+          className={cn({ selected: visibleStatus === Status.All })}
           onClick={() => handleSelection(Status.All)}
         >
           All
@@ -67,7 +43,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/active"
-          className={cn({ selected: activeSelected })}
+          className={cn({ selected: visibleStatus === Status.Active })}
           onClick={() => handleSelection(Status.Active)}
         >
           Active
@@ -77,7 +53,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          className={cn({ selected: completedSelected })}
+          className={cn({ selected: visibleStatus === Status.Completed })}
           onClick={() => handleSelection(Status.Completed)}
         >
           Completed

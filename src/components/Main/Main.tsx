@@ -1,13 +1,11 @@
 import { useContext } from 'react';
 import { TodoList } from '../TodoList/TodoList';
 import './style.css';
-import { DispatchContext, TodosContext } from '../GlobalStateProvider';
 import { AllActions } from '../../types/Action';
+import { GlobalContextController } from '../GlobalStateProvider';
 
 export const Main: React.FC = () => {
-  const dispatch = useContext(DispatchContext);
-  const todos = useContext(TodosContext);
-
+  const { dispatch, todos } = useContext(GlobalContextController);
   const handleToggleClick = () => {
     dispatch({ type: AllActions.CompleteAll });
   };

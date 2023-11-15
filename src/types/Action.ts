@@ -1,5 +1,5 @@
 import { Status } from './Status';
-import { TodoItemType } from './TodoItemType';
+import { TodoItem } from './TodoItem';
 
 export enum AllActions {
   Add,
@@ -10,9 +10,9 @@ export enum AllActions {
   GetTasks,
 }
 
-export type Action = { type: AllActions.Add, payload: TodoItemType } |
+export type Action = { type: AllActions.Add, payload: TodoItem } |
 { type: AllActions.Remove, payload: number } |
-{ type: AllActions.Update, payload: number, value: TodoItemType } |
+{ type: AllActions.Update, payload: number, value: TodoItem } |
 { type: AllActions.CompleteAll } |
 { type: AllActions.RemoveCompleted } |
 { type: AllActions.GetTasks, payload: Status };

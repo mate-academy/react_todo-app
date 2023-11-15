@@ -1,12 +1,11 @@
 import { useContext } from 'react';
 import './style.css';
-import { DispatchContext, TodosContext } from '../GlobalStateProvider';
 import { AllActions } from '../../types/Action';
 import { TodosFilter } from '../TodosFilter';
+import { GlobalContextController } from '../GlobalStateProvider';
 
 export const Footer: React.FC = () => {
-  const todos = useContext(TodosContext);
-  const dispatch = useContext(DispatchContext);
+  const { todos, dispatch } = useContext(GlobalContextController);
   const handleRemoveCompletedClick = () => {
     dispatch({ type: AllActions.RemoveCompleted });
   };
