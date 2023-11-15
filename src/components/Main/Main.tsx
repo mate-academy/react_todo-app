@@ -1,14 +1,14 @@
 import { useContext } from 'react';
 import { TodosContext } from '../../context/TodosContext';
 import { Todo } from '../../types/todo';
-import { TodosFilter } from '../TodosFilter';
+import { TodoList } from '../TodoList';
 
 type Props = {
 
 };
 
 export const Main: React.FC<Props> = () => {
-  const { todos, setTodos, status } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const markAllPressed = (todosList: Todo[]) => {
     if (todosList.find(todo => todo.completed === false)) {
@@ -42,7 +42,7 @@ export const Main: React.FC<Props> = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <TodosFilter status={status} />
+      <TodoList items={todos} />
 
     </section>
   );

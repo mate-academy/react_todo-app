@@ -1,34 +1,53 @@
-import { useContext, useCallback } from 'react';
-import { TodosContext } from '../../context/TodosContext';
-import { TodoList } from '../TodoList';
+import cn from 'classnames';
+import { useCallback, useContext } from 'react';
 import { Status } from '../../enums/Status';
-import { Todo } from '../../types/todo';
+import { TodosContext } from '../../context/TodosContext';
 
 type Props = {
   status: Status,
 };
 
 export const TodosFilter: React.FC<Props> = ({ status }) => {
-  const { todos } = useContext(TodosContext);
+  const { setStatus } = useContext(TodosContext);
 
-  const filterItems
-  = useCallback((filterOption: Status, itemsList: Todo[]): Todo[] => {
-    return itemsList.filter(item => {
-      if (filterOption === Status.Active) {
-        return !item.completed;
-      }
-
-      if (filterOption === Status.Completed) {
-        return item.completed;
-      }
-
-      return true;
-    });
-  }, []);
+  const statusButtonClick
+  = useCallback((currentStatus: Status, statusToSet: Status) => {
+    if (currentStatus !== statusToSet) {
+      setStatus(statusToSet);
+    }
+  }, [setStatus]);
 
   return (
-    <div data-cy="todosFilter">
-      <TodoList items={filterItems(status, todos)} />
-    </div>
+    <ul className="filters" data-cy="todosFilter">
+      <li>
+        <a
+          href="#/"
+          className={cn({ selected: status === Status.All })}
+          onClick={() => statusButtonClick(status, Status.All)}
+        >
+          All
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/active"
+          className={cn({ selected: status === Status.Active })}
+          onClick={() => statusButtonClick(status, Status.Active)}
+        >
+          Active
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/completed"
+          className={cn({ selected: status === Status.Completed })}
+          onClick={() => statusButtonClick(status, Status.Completed)}
+        >
+          Completed
+        </a>
+      </li>
+    </ul>
   );
 };

@@ -1,7 +1,6 @@
-import cn from 'classnames';
-import { useContext, useCallback } from 'react';
+import { useContext } from 'react';
 import { TodosContext } from '../../context/TodosContext';
-import { Status } from '../../enums/Status';
+import { TodosFilter } from '../TodosFilter';
 
 type Props = {
 
@@ -12,19 +11,11 @@ export const Footer: React.FC<Props> = () => {
     todos,
     setTodos,
     status,
-    setStatus,
   } = useContext(TodosContext);
 
   const clearDoneTodos = () => {
     setTodos(todos.filter(todo => todo.completed === false));
   };
-
-  const statusButtonClick
-  = useCallback((currentStatus: Status, statusToSet: Status) => {
-    if (currentStatus !== statusToSet) {
-      setStatus(statusToSet);
-    }
-  }, [setStatus]);
 
   return (
     todos.length ? (
@@ -33,37 +24,7 @@ export const Footer: React.FC<Props> = () => {
           {`${todos.filter(todo => !todo.completed).length} items left`}
         </span>
 
-        <ul className="filters">
-          <li>
-            <a
-              href="#/"
-              className={cn({ selected: status === Status.All })}
-              onClick={() => statusButtonClick(status, Status.All)}
-            >
-              All
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/active"
-              className={cn({ selected: status === Status.Active })}
-              onClick={() => statusButtonClick(status, Status.Active)}
-            >
-              Active
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="#/completed"
-              className={cn({ selected: status === Status.Completed })}
-              onClick={() => statusButtonClick(status, Status.Completed)}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
+        <TodosFilter status={status} />
 
         {todos.find(todo => todo.completed) && (
           <button
