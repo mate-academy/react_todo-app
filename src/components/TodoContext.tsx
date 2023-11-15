@@ -1,18 +1,15 @@
-import React, {
-  useMemo,
-  useState,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import React, { useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
 
 interface ITodoContext {
   todos: Todo[];
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   removeTodo: (id: number) => void;
-  setFilterStatus: Dispatch<SetStateAction<Status>>;
+  setFilterStatus: React.Dispatch<React.SetStateAction<Status>>;
   visibleTodos: Todo[];
+  setIsCompleted: React.Dispatch<React.SetStateAction<number[]>>;
+  filterStatus: Status,
 }
 
 export const defaultValue: ITodoContext = {
@@ -21,6 +18,8 @@ export const defaultValue: ITodoContext = {
   removeTodo: () => {},
   setFilterStatus: () => {},
   visibleTodos: [],
+  setIsCompleted: () => {},
+  filterStatus: Status.All,
 };
 
 export const TodoContext = React.createContext<ITodoContext>(defaultValue);
@@ -36,7 +35,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const visibleTodos = useMemo(() => {
     switch (filterStatus) {
       case Status.Active:
-        return todos.filter((todo) => todo.status === Status.Active);
+        return todos.filter((todo) => todo.status !== Status.Completed);
       case Status.Completed:
         return todos.filter((todo) => todo.status === Status.Completed);
       default:
@@ -58,6 +57,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         setTodos,
         setFilterStatus,
         visibleTodos,
+        filterStatus,
+        setIsCompleted: () => {},
       }}
     >
       {children}

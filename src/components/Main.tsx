@@ -1,38 +1,64 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
-import { Footer } from './Footer';
-import { Todo } from '../types/Todo';
 import { TodoContext } from './TodoContext';
+import { Status } from '../types/Status';
 
-type Props = {
-  todos: Todo[];
-  removeTodo: (id: number) => void;
-};
-
-export const Main: React.FC<Props> = ({ todos, removeTodo }) => {
+export const Main: React.FC = () => {
   const [isCompleted, setIsCompleted] = useState<number[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editedText, setEditedText] = useState<string>('');
 
-  const { setTodos } = React.useContext(TodoContext);
+  const {
+    setTodos,
+    todos,
+    removeTodo,
+    visibleTodos,
+  } = React.useContext(TodoContext);
 
   const toggleCompleted = (id: number) => {
     if (isCompleted.includes(id)) {
+      const completedTodo = todos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, status: Status.All };
+        }
+
+        return todo;
+      });
+
+      setTodos(completedTodo);
       setIsCompleted(isCompleted.filter((todoId) => todoId !== id));
     } else {
+      const allTodo = todos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, status: Status.Completed };
+        }
+
+        return todo;
+      });
+
+      setTodos(allTodo);
       setIsCompleted([...isCompleted, id]);
     }
   };
 
   const allCompleted = () => {
     const completedId = todos.map(todo => todo.id);
-
     const allIsCompleted = completedId.every(id => isCompleted.includes(id));
 
     if (allIsCompleted) {
+      const checkboxAllStatus = todos.map(todo => {
+        return { ...todo, status: Status.All };
+      });
+
+      setTodos(checkboxAllStatus);
       setIsCompleted([]);
     } else {
+      const checkboxAllCompleted = todos.map(todo => {
+        return { ...todo, status: Status.Completed };
+      });
+
+      setTodos(checkboxAllCompleted);
       setIsCompleted(completedId);
     }
   };
@@ -68,13 +94,6 @@ export const Main: React.FC<Props> = ({ todos, removeTodo }) => {
     }
   };
 
-  const memoizedTodos = useMemo(() => {
-    return todos.map((todo) => ({
-      ...todo,
-
-    }));
-  }, [todos]);
-
   return (
     <>
       <section className="main">
@@ -89,7 +108,7 @@ export const Main: React.FC<Props> = ({ todos, removeTodo }) => {
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
             <ul className="todo-list" data-cy="todoList">
-              {memoizedTodos.map((todo) => (
+              {visibleTodos.map((todo) => (
                 <li
                   key={todo.id}
                   className={
@@ -128,7 +147,6 @@ export const Main: React.FC<Props> = ({ todos, removeTodo }) => {
                 </li>
               ))}
             </ul>
-            <Footer setIsCompleted={setIsCompleted} todos={todos} />
           </>
         )}
       </section>

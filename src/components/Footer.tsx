@@ -1,16 +1,15 @@
 import React from 'react';
-import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
 import { TodoContext } from './TodoContext';
 
-type Props = {
-  setIsCompleted: (value: []) => void;
-  todos: Todo[];
-};
-
-export const Footer: React.FC<Props> = ({ setIsCompleted, todos }) => {
-  const { visibleTodos, setFilterStatus } = React.useContext(TodoContext);
-
+export const Footer: React.FC = () => {
+  const {
+    visibleTodos,
+    setFilterStatus,
+    setIsCompleted,
+    todos,
+    filterStatus,
+  } = React.useContext(TodoContext);
   const handleFilterChange = (filter: Status) => {
     setFilterStatus(filter);
   };
@@ -19,61 +18,67 @@ export const Footer: React.FC<Props> = ({ setIsCompleted, todos }) => {
     setIsCompleted([]);
   };
 
+  const noCompleteTodos = visibleTodos.filter(
+    (todo) => todo.status !== Status.Completed,
+  );
+
   return (
-    <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        {`${visibleTodos.length} items left`}
-      </span>
-
-      <ul className="filters">
-        <li>
-          <a
-            onClick={() => handleFilterChange(Status.All)}
-            href="#/"
-            className={visibleTodos.length === todos.length ? 'selected' : ''}
-          >
-            All
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/active"
-            className={
-              visibleTodos.some(todo => todo.status === Status.Active)
-                ? 'selected'
-                : ''
-            }
-            onClick={() => handleFilterChange(Status.Active)}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#/completed"
-            className={
-              visibleTodos.some(todo => todo.status === Status.Completed)
-                ? 'selected'
-                : ''
-            }
-            onClick={() => handleFilterChange(Status.Completed)}
-          >
-            Completed
-          </a>
-        </li>
-      </ul>
-
+    <>
       {todos.length > 0 && (
-        <button
-          onClick={clearCompleted}
-          type="button"
-          className="clear-completed"
-        >
-          Clear completed
-        </button>
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {`${noCompleteTodos.length === 1 ? `${noCompleteTodos.length} item left` : `${noCompleteTodos.length} items left`}`}
+          </span>
+
+          <ul className="filters">
+            <li>
+              <a
+                onClick={() => handleFilterChange(Status.All)}
+                href="#/"
+                className={
+                  filterStatus === Status.All ? 'selected' : ''
+                }
+              >
+                All
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#/active"
+                className={
+                  filterStatus === Status.Active ? 'selected' : ''
+                }
+                onClick={() => handleFilterChange(Status.Active)}
+              >
+                Active
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#/completed"
+                className={
+                  filterStatus === Status.Completed ? 'selected' : ''
+                }
+                onClick={() => handleFilterChange(Status.Completed)}
+              >
+                Completed
+              </a>
+            </li>
+          </ul>
+
+          {todos.length > 0 && (
+            <button
+              onClick={clearCompleted}
+              type="button"
+              className="clear-completed"
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
       )}
-    </footer>
+    </>
   );
 };

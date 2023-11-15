@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Main } from './Main';
 import { Todo } from '../types/Todo';
 import { TodoContext } from './TodoContext';
 import { Status } from '../types/Status';
@@ -7,7 +6,7 @@ import { Status } from '../types/Status';
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
 
-  const { todos, removeTodo, setTodos } = React.useContext(TodoContext);
+  const { setTodos } = React.useContext(TodoContext);
 
   const handlerNewTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -45,7 +44,6 @@ export const Header: React.FC = () => {
           />
         </form>
       </header>
-      <Main todos={todos} removeTodo={removeTodo} />
     </>
   );
 };
