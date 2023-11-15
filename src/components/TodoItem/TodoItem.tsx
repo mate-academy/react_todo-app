@@ -77,7 +77,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="edit"
           value={newTitle}
           onChange={(event) => setNewTitle(event.target.value)}
-          onKeyUp={(event) => handleInputKeyEvent(event)}
+          onKeyUp={handleInputKeyEvent}
           onBlur={handleInputBlur}
         />
       ) : (

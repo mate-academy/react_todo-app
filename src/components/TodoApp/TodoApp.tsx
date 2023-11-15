@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList/TodoList';
 import { Status } from '../../data/enums';
@@ -26,13 +26,12 @@ export const TodoApp: React.FC = () => {
     return filteredTodos;
   };
 
-  useEffect(() => {
-    const updatedTodos = todos.map(item => {
-      return { ...item, completed: completeAllTodos };
-    });
-
-    setTodos(updatedTodos);
-  }, [completeAllTodos]);
+  const toggleAll = () => {
+    setTodos(todos.map(todo => ({
+      ...todo,
+      completed: !completeAllTodos,
+    })));
+  };
 
   const filteredTodos = filterTodos(todos, filter);
 
@@ -50,6 +49,7 @@ export const TodoApp: React.FC = () => {
                 className="toggle-all"
                 data-cy="toggleAll"
                 onClick={() => setCompleteAllTodos(!completeAllTodos)}
+                onChange={toggleAll}
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
 
