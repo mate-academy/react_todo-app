@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Main } from './Main';
 import { Todo } from '../types/Todo';
 import { TodoContext } from './TodoContext';
+import { Status } from '../types/Status';
 
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -13,7 +14,12 @@ export const Header: React.FC = () => {
     const newTodo: Todo = {
       id: +new Date(),
       title,
+      status: Status.All,
     };
+
+    if (title.trim() === '') {
+      return;
+    }
 
     setTodos((currentTodo) => [...currentTodo, newTodo]);
     setTitle('');
