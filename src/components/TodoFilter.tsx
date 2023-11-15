@@ -22,7 +22,7 @@ export const TodoFilter = () => {
         <a
           href="#/"
           onClick={() => handleClick(FilterType.ALL)}
-          className={selectedFilter === FilterType.ALL ? 'selected' : ''}
+          className={selectedFilter === 'all' ? 'selected' : ''}
         >
           All
         </a>
@@ -32,7 +32,7 @@ export const TodoFilter = () => {
         <a
           href="#/active"
           onClick={() => handleClick(FilterType.ACTIVE)}
-          className={selectedFilter === FilterType.ACTIVE ? 'selected' : ''}
+          className={selectedFilter === 'active' ? 'selected' : ''}
         >
           Active
         </a>
@@ -42,7 +42,7 @@ export const TodoFilter = () => {
         <a
           href="#/completed"
           onClick={() => handleClick(FilterType.COMPLETED)}
-          className={selectedFilter === FilterType.COMPLETED ? 'selected' : ''}
+          className={selectedFilter === 'completed' ? 'selected' : ''}
         >
           Completed
         </a>

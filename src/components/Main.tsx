@@ -3,7 +3,7 @@ import { TodoList } from './TodoList';
 import { DispatchContext, StateContext } from '../context/TodosContext';
 
 export const Main = () => {
-  const state = useContext(StateContext);
+  const { todos } = useContext(StateContext);
   const [isChecked, setIsChecked] = useState(false);
   const dispatch = useContext(DispatchContext);
 
@@ -28,7 +28,7 @@ export const Main = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      {state.todos.length > 0 && (
+      {todos.length > 0 && (
         <TodoList />
       )}
     </section>
