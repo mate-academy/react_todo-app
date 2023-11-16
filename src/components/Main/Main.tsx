@@ -10,7 +10,11 @@ export const Main: React.FC = () => {
     dispatch({ type: AllActions.CompleteAll });
   };
 
-  return todos.length > 0 ? (
+  if (!todos.length) {
+    return null;
+  }
+
+  return (
     <section className="main">
       {todos.length > 0 && (
         <>
@@ -29,5 +33,5 @@ export const Main: React.FC = () => {
 
       <TodoList />
     </section>
-  ) : <></>;
+  );
 };

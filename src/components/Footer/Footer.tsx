@@ -12,7 +12,11 @@ export const Footer: React.FC = () => {
 
   const tasksLeft = todos.filter(todo => todo.completed === false).length;
 
-  return todos.length > 0 ? (
+  if (!todos.length) {
+    return null;
+  }
+
+  return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
         {`${tasksLeft} ${tasksLeft === 1 ? 'item' : 'items'} left`}
@@ -32,6 +36,5 @@ export const Footer: React.FC = () => {
         )
       }
     </footer>
-  )
-    : <></>;
+  );
 };
