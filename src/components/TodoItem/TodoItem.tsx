@@ -61,6 +61,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       });
 
       setTodos(modifiedTodos);
+    } else {
+      handleTodoDelete(id);
     }
   };
 
