@@ -10,6 +10,10 @@ export const TodosFilter: React.FC<Props> = ({
   currentFilter,
   onFilterChange = () => {},
 }) => {
+  const handleFilterChange = (newFilter: string) => () => {
+    onFilterChange(newFilter);
+  };
+
   return (
     <ul className="filters" data-cy="todosFilter">
       <li>
@@ -18,9 +22,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={classNames({
             selected: currentFilter === Filter.All,
           })}
-          onClick={() => {
-            onFilterChange(Filter.All);
-          }}
+          onClick={handleFilterChange(Filter.All)}
         >
           All
         </a>
@@ -32,9 +34,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={classNames({
             selected: currentFilter === Filter.Active,
           })}
-          onClick={() => {
-            onFilterChange(Filter.Active);
-          }}
+          onClick={handleFilterChange(Filter.Active)}
         >
           Active
         </a>
@@ -46,9 +46,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={classNames({
             selected: currentFilter === Filter.Completed,
           })}
-          onClick={() => {
-            onFilterChange(Filter.Completed);
-          }}
+          onClick={handleFilterChange(Filter.Completed)}
         >
           Completed
         </a>

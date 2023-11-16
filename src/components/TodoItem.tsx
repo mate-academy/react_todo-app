@@ -33,9 +33,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setNewTitle(todo.title);
 
     setTimeout(() => {
-      if (titleField.current !== null) {
-        titleField.current.focus();
-      }
+      titleField.current?.focus();
     }, 0);
   };
 
@@ -46,10 +44,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleEditTodoOnBlur = () => {
     if (isEditing) {
-      if (newTitle !== '') {
+      if (newTitle) {
         const updatedTodos = [...todos];
         const currentTodoIndex = updatedTodos
-          .findIndex((elem: Todo) => elem.id === todo.id);
+          .findIndex((updatedTodo: Todo) => updatedTodo.id === todo.id);
 
         if (currentTodoIndex !== -1) {
           updatedTodos[currentTodoIndex] = {
@@ -68,10 +66,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape' && isEditing) {
-      setIsEditing(false);
-    } else if (event.key === 'Enter' && isEditing) {
-      handleEditTodoOnBlur();
+    if (isEditing) {
+      switch (event.key) {
+        case 'Escape':
+          setIsEditing(false);
+          break;
+
+        case 'Enter':
+          handleEditTodoOnBlur();
+          break;
+
+        default:
+          break;
+      }
     }
   };
 

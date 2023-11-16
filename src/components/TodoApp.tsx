@@ -10,8 +10,8 @@ export const TodoApp: React.FC = () => {
   const [title, setTitle] = useState('');
   const [filter, setFilter] = useState(Filter.All);
   const noCompleteTodos = todos.filter(elem => !elem.completed);
-  const isSomeComplete = todos.some(todo => todo.completed === true);
-  const allCompleted = todos.every(todo => todo.completed === true);
+  const isSomeComplete = todos.some(todo => todo.completed);
+  const isAllCompleted = todos.every(todo => todo.completed);
 
   const handleSetTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,33 +28,25 @@ export const TodoApp: React.FC = () => {
   };
 
   const handleCompleteAll = () => {
-    if (todos.some(todo => todo.completed === false)) {
-      const updatedTodos = todos.map((todo) => ({
-        ...todo,
-        completed: true,
-      }));
+    const updatedTodos = todos.map((todo) => ({
+      ...todo,
+      completed: !isAllCompleted,
+    }));
 
-      setTodos(updatedTodos);
-    } else {
-      const updatedTodos = todos.map((todo) => ({
-        ...todo,
-        completed: false,
-      }));
-
-      setTodos(updatedTodos);
-    }
+    setTodos(updatedTodos);
   };
 
   const filteredTodos = todos.filter((todo) => {
-    if (filter === Filter.All) {
-      return true;
-    }
+    switch (filter) {
+      case Filter.Completed:
+        return todo.completed;
 
-    if (filter === Filter.Active) {
-      return !todo.completed;
-    }
+      case Filter.Active:
+        return !todo.completed;
 
-    return todo.completed;
+      default:
+        return true;
+    }
   });
 
   const handleFilterChange = (newFilter: string) => {
@@ -90,7 +82,7 @@ export const TodoApp: React.FC = () => {
         <>
           <section className="main">
             <input
-              checked={allCompleted}
+              checked={isAllCompleted}
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
