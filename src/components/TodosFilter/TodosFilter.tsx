@@ -1,9 +1,11 @@
 import React from 'react';
+import cn from 'classnames';
+
 import { Filter } from '../../types/Filter';
 
 type Props = {
   crntFilterState: Filter;
-  onFilter: (filter: Filter) => void ;
+  onFilter: (filter: Filter) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ crntFilterState, onFilter }) => {
@@ -12,11 +14,13 @@ export const TodoFilter: React.FC<Props> = ({ crntFilterState, onFilter }) => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
-          className={crntFilterState === 'all' ? 'selected' : ''}
+          className={cn({
+            selected: crntFilterState === Filter.ALL,
+          })}
           onClick={handleFilterChange(Filter.ALL)}
         >
           All
@@ -26,7 +30,9 @@ export const TodoFilter: React.FC<Props> = ({ crntFilterState, onFilter }) => {
       <li>
         <a
           href="#/active"
-          className={crntFilterState === 'active' ? 'selected' : ''}
+          className={cn({
+            selected: crntFilterState === Filter.ACTIVE,
+          })}
           onClick={handleFilterChange(Filter.ACTIVE)}
         >
           Active
@@ -36,7 +42,9 @@ export const TodoFilter: React.FC<Props> = ({ crntFilterState, onFilter }) => {
       <li>
         <a
           href="#/completed"
-          className={crntFilterState === 'completed' ? 'selected' : ''}
+          className={cn({
+            selected: crntFilterState === Filter.COMPLETED,
+          })}
           onClick={handleFilterChange(Filter.COMPLETED)}
         >
           Completed

@@ -71,6 +71,7 @@ export const TodoItem: React.FC<Props> = React.memo(
 
     const handleEditingTitleStart = () => {
       setIsEditing(true);
+      setEditingTitle(title);
     };
 
     const handleEditingTitlegOnBlur = () => {
@@ -120,7 +121,7 @@ export const TodoItem: React.FC<Props> = React.memo(
                 className="toggle"
                 id="toggle-view"
                 checked={completed}
-                onChange={(event) => handleTodoChecked(event)}
+                onChange={handleTodoChecked}
               />
 
               <label onDoubleClick={handleEditingTitleStart}>

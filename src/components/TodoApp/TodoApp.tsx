@@ -11,7 +11,7 @@ function getPraperedTodos(
   todos: Todo[],
   filter: Filter,
 ): Todo[] {
-  return [...todos].filter(todo => {
+  return todos.filter(todo => {
     switch (filter) {
       case Filter.ACTIVE:
         return !todo.completed;
@@ -33,13 +33,22 @@ export const TodoApp: React.FC = () => {
     setTodos,
   } = useContext(TodosContext);
 
-  const isAnyTodo = !!todos.length;
   const visibleTodos = getPraperedTodos(todos, filter);
+  const activeTodos = getPraperedTodos(todos, Filter.ACTIVE);
+  const isAnyTodo = !!todos.length;
+  const isEachTodoComplete = todos.some(todo => !todo.completed);
+  const isAnyTodoComplete = todos.some(todo => todo.completed);
 
   // #region HANDLER
-  const handleAllTodosComplet = (event: TyChangeEvtInputElmt) => {
+  const handleAllTodosComplete = (event: TyChangeEvtInputElmt) => {
     setTodos(todos.map(
       todo => ({ ...todo, completed: event.target.checked }),
+    ));
+  };
+
+  const handleRemoveTodosComplete = () => {
+    setTodos([...todos].filter(
+      todo => !todo.completed,
     ));
   };
   // #endregion
@@ -51,10 +60,11 @@ export const TodoApp: React.FC = () => {
       <section className="main">
         <input
           type="checkbox"
+          checked={isEachTodoComplete}
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          onChange={handleAllTodosComplet}
+          onChange={handleAllTodosComplete}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -66,7 +76,7 @@ export const TodoApp: React.FC = () => {
       {isAnyTodo && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            3 items left
+            {`${activeTodos.length} item${activeTodos.length <= 1 ? '' : 's'} left`}
           </span>
 
           <TodoFilter
@@ -74,9 +84,15 @@ export const TodoApp: React.FC = () => {
             onFilter={setFilter}
           />
 
-          <button type="button" className="clear-completed">
-            Clear completed
-          </button>
+          {isAnyTodoComplete && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleRemoveTodosComplete}
+            >
+              Clear completed
+            </button>
+          )}
         </footer>
       )}
     </div>
