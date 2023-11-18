@@ -11,7 +11,7 @@ function getPraperedTodos(
   todos: Todo[],
   filter: Filter,
 ): Todo[] {
-  return todos.filter(todo => {
+  return [...todos].filter(todo => {
     switch (filter) {
       case Filter.ACTIVE:
         return !todo.completed;
@@ -36,7 +36,8 @@ export const TodoApp: React.FC = () => {
   const visibleTodos = getPraperedTodos(todos, filter);
   const activeTodos = getPraperedTodos(todos, Filter.ACTIVE);
   const isAnyTodo = !!todos.length;
-  const isEachTodoComplete = todos.some(todo => !todo.completed);
+  const isEachTodoComplete
+    = isAnyTodo && todos.every(todo => todo.completed);
   const isAnyTodoComplete = todos.some(todo => todo.completed);
 
   // #region HANDLER
