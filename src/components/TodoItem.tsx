@@ -70,6 +70,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          aria-label="deleteTodo"
           onClick={() => {
             dispatch({ type: 'delete', todoId: todo.id });
           }}
