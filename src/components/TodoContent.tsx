@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import cn from 'classnames';
 import { TodosContext } from './TodosContext';
 import { TodoList } from './TodoList';
+import { Todo } from '../types/Todo';
 
 export const TodoContent: React.FC = () => {
   const context = useContext(TodosContext);
@@ -15,9 +16,14 @@ export const TodoContent: React.FC = () => {
   const isCompleted = todos.every(todo => todo.completed);
 
   const toggleAll = () => {
-    setTodos(todos.map(todo => {
-      return { ...todo, completed: !isCompleted };
-    }));
+    setTodos((prevTodos: Todo[]) => {
+      const updatedTodos = prevTodos.map(todo => ({
+        ...todo,
+        completed: !isCompleted,
+      }));
+
+      return updatedTodos;
+    });
   };
 
   return (

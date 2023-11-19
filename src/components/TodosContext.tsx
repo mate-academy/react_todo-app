@@ -12,7 +12,7 @@ type TodosContextProps = {
   todosFilter: TodosFilter;
   todoEditId: number;
   todoEdit: string;
-  setTodos: (todos: Todo[]) => void;
+  setTodos: (updater: (prevTodos: Todo[]) => Todo[]) => void;
   setTodosFilter: (filter: TodosFilter) => void;
   setTodoEditId: (id: number) => void;
   setTodoEdit: (edit: string) => void;

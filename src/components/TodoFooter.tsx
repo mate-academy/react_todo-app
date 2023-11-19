@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { TodosContext } from './TodosContext';
 import { TodoFilter } from './TodoFilter';
+import { Todo } from '../types/Todo';
 
 export const TodoFooter: React.FC = () => {
   const context = useContext(TodosContext);
@@ -12,12 +13,16 @@ export const TodoFooter: React.FC = () => {
   const { todos, setTodos } = context;
 
   const clearComplete = () => {
-    setTodos(todos.filter(todo => !todo.completed));
+    setTodos((prevTodos: Todo[]) => {
+      const updatedTodos = prevTodos.filter(todo => !todo.completed);
+
+      return updatedTodos;
+    });
   };
 
   const isCompleted = todos.some(todo => todo.completed);
 
-  const todosLeft = todos.filter(todo => todo.completed === false).length;
+  const todosLeft = todos.filter(todo => !todo.completed).length;
 
   return (
     <footer className="footer">

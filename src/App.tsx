@@ -8,7 +8,10 @@ import { TodosFilter } from './types/TodosFilter';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []) as [
+    Todo[],
+    React.Dispatch<React.SetStateAction<Todo[]>>,
+  ];
   const [todosFilter, setTodosFilter] = useState<TodosFilter>(TodosFilter.all);
   const [todoEditId, setTodoEditId] = useState<number>(0);
   const [todoEdit, setTodoEdit] = useState<string>('');
@@ -22,7 +25,7 @@ export const App: React.FC = () => {
         completed: false,
       };
 
-      setTodos([...todos, todo]);
+      setTodos((prevTodos: Todo[]) => [...prevTodos, todo]);
       setQuery('');
     }
   };

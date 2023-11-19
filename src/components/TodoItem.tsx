@@ -17,7 +17,6 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
   }
 
   const {
-    todos,
     todoEditId,
     todoEdit,
     setTodos,
@@ -31,7 +30,7 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
   }, [todoEditId]);
 
   const handleCheckbox = (id: number) => {
-    setTodos(todos.map(todo => {
+    setTodos(prevTodos => prevTodos.map(todo => {
       return todo.id === id
         ? { ...todo, completed: !todo.completed }
         : todo;
@@ -39,7 +38,7 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
   };
 
   const handleDelete = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
   const handleDoubleClick = (id: number, title: string) => {
@@ -53,7 +52,7 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
   };
 
   const saveChange = () => {
-    setTodos(todos.map(todo => {
+    setTodos(prevTodos => prevTodos.map(todo => {
       return todo.id === todoEditId
         ? { ...todo, title: todoEdit }
         : todo;
@@ -70,7 +69,8 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
         break;
       case 'Enter':
         if (!todoEdit) {
-          setTodos(todos.filter(todo => todo.id !== todoEditId));
+          setTodos(prevTodos => prevTodos
+            .filter(todo => todo.id !== todoEditId));
           resetChange();
 
           return;
