@@ -4,10 +4,13 @@ import { TodosContext } from './TodosContext';
 import { TodosFilter } from '../types/TodosFilter';
 
 export const TodoFilter: React.FC = () => {
-  const {
-    todosFilter,
-    setTodosFilter,
-  } = useContext(TodosContext);
+  const context = useContext(TodosContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { todosFilter, setTodosFilter } = context;
 
   const handleLink = (val: string) => {
     if (TodosFilter.all) {

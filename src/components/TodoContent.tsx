@@ -4,10 +4,13 @@ import { TodosContext } from './TodosContext';
 import { TodoList } from './TodoList';
 
 export const TodoContent: React.FC = () => {
-  const {
-    todos,
-    setTodos,
-  } = useContext(TodosContext);
+  const context = useContext(TodosContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { todos, setTodos } = context;
 
   const isCompleted = todos.every(todo => todo.completed);
 

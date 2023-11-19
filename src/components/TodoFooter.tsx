@@ -3,10 +3,13 @@ import { TodosContext } from './TodosContext';
 import { TodoFilter } from './TodoFilter';
 
 export const TodoFooter: React.FC = () => {
-  const {
-    todos,
-    setTodos,
-  } = useContext(TodosContext);
+  const context = useContext(TodosContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { todos, setTodos } = context;
 
   const clearComplete = () => {
     setTodos(todos.filter(todo => !todo.completed));

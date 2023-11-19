@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { TodosContext } from './components/TodosContext';
 import { Todo } from './types/Todo';
 import { TodoContent } from './components/TodoContent';
@@ -10,13 +10,19 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [todosFilter, setTodosFilter] = useState<TodosFilter>(TodosFilter.all);
-  const [todoEditId, setTodoEditId] = useState(0);
-  const [todoEdit, setTodoEdit] = useState('');
+  const [todoEditId, setTodoEditId] = useState<number>(0);
+  const [todoEdit, setTodoEdit] = useState<string>('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (query.trim()) {
-      setTodos([...todos, { id: Date.now(), title: query, completed: false }]);
+      const todo = {
+        id: Date.now(),
+        title: query,
+        completed: false,
+      };
+
+      setTodos([...todos, todo]);
       setQuery('');
     }
   };
@@ -50,14 +56,12 @@ export const App: React.FC = () => {
           setTodoEdit,
         }}
       >
-        {todos.length > 0
-          && (
-            <>
-              <TodoContent />
-
-              <TodoFooter />
-            </>
-          )}
+        {todos.length > 0 && (
+          <>
+            <TodoContent />
+            <TodoFooter />
+          </>
+        )}
       </TodosContext.Provider>
     </div>
   );

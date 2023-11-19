@@ -8,6 +8,14 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ getTodo }) => {
+  const context = useContext(TodosContext);
+
+  const editRef = useRef<HTMLInputElement>(null);
+
+  if (!context) {
+    return null;
+  }
+
   const {
     todos,
     todoEditId,
@@ -15,10 +23,9 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
     setTodos,
     setTodoEditId,
     setTodoEdit,
-  } = useContext(TodosContext);
+  } = context;
 
-  const editRef = useRef<HTMLInputElement>(null);
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     editRef.current?.focus();
   }, [todoEditId]);
