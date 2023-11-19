@@ -95,6 +95,9 @@ export const TodoItem: React.FC<Props> = React.memo(
     };
     // #endregion
 
+    // eslint-disable-next-line no-console
+    console.debug('render TodoItem %d', id);
+
     return (
       <li className={cn({
         completed,

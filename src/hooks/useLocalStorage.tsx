@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-export function useLocalStorage<Ty>(
+export function useLocalStorage<T>(
   key: string,
-  startValue: Ty,
-): [val: Ty, saveFn: (newVal: Ty) => void] {
+  startValue: T,
+): [val: T, saveFn: (newVal: T) => void] {
   const [value, setValue] = useState(() => {
     const data = localStorage.getItem(key);
 
@@ -20,7 +20,7 @@ export function useLocalStorage<Ty>(
     }
   });
 
-  const saveFn = (newValue: Ty) => {
+  const saveFn = (newValue: T) => {
     setValue(newValue);
     localStorage.setItem(key, JSON.stringify(newValue));
   };
