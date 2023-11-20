@@ -65,6 +65,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleBlur = () => {
     edit(isEditing, todos, todo, newTitle, setTodos, handleTodoDelete);
+    setNewTitle(todo.title);
     setIsEditing(false);
   };
 
@@ -76,6 +77,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (event.key === 'Enter') {
       edit(isEditing, todos, todo, newTitle, setTodos, handleTodoDelete);
+      setNewTitle(todo.title);
       setIsEditing(false);
     }
   };
