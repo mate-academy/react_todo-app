@@ -3,3 +3,8 @@ export enum TodosFilter {
   active = 'Active',
   completed = 'Completed',
 }
+
+export enum TodosCases {
+  escape = 'Escape',
+  enter = 'Enter',
+}

@@ -16,14 +16,10 @@ export const TodoContent: React.FC = () => {
   const isCompleted = todos.every(todo => todo.completed);
 
   const toggleAll = () => {
-    setTodos((prevTodos: Todo[]) => {
-      const updatedTodos = prevTodos.map(todo => ({
-        ...todo,
-        completed: !isCompleted,
-      }));
-
-      return updatedTodos;
-    });
+    setTodos((prevTodos: Todo[]) => prevTodos.map(todo => ({
+      ...todo,
+      completed: !todo.completed,
+    })));
   };
 
   return (

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodosContext } from './TodosContext';
+import { TodosCases } from '../types/TodosFilter';
 
 type Props = {
   getTodo: Todo
@@ -63,11 +64,11 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
 
   const handleChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
-      case 'Escape':
+      case TodosCases.escape:
         resetChange();
         break;
 
-      case 'Enter':
+      case TodosCases.enter:
         if (!todoEdit) {
           setTodos(prevTodos => prevTodos
             .filter(todo => todo.id !== todoEditId));
