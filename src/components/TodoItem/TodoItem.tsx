@@ -15,15 +15,22 @@ function edit(
   todo: Todo,
   newTitle: string,
   setTodos: (t: Todo[]) => void,
+  handleDelete: () => void,
 ) {
   if (isEditing) {
+    if (!newTitle.trim()) {
+      handleDelete();
+
+      return;
+    }
+
     const copy = [...todos];
     const temp = copy.find(t => t.id === todo.id);
 
     if (temp) {
       const index = copy.indexOf(temp);
 
-      copy[index].title = newTitle;
+      copy[index].title = newTitle.trim();
     }
 
     setTodos(copy);
@@ -35,9 +42,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
   const inputRef = useRef<HTMLInputElement>(null);
-  const handleTodoCompletedState = (id: number) => {
+  const handleTodoCompletedState = () => {
     const copy = [...todos];
-    const temp = copy.find(t => t.id === id);
+    const temp = copy.find(t => t.id === todo.id);
 
     if (temp) {
       const index = copy.indexOf(temp);
@@ -48,8 +55,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(copy);
   };
 
-  const handleTodoDelete = (id: number) => {
-    setTodos(todos.filter(t => t.id !== id));
+  const handleTodoDelete = () => {
+    setTodos(todos.filter(t => t.id !== todo.id));
   };
 
   const handleDoubleClick = () => {
@@ -57,7 +64,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleBlur = () => {
-    edit(isEditing, todos, todo, newTitle, setTodos);
+    edit(isEditing, todos, todo, newTitle, setTodos, handleTodoDelete);
     setIsEditing(false);
   };
 
@@ -68,7 +75,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (event.key === 'Enter') {
-      edit(isEditing, todos, todo, newTitle, setTodos);
+      edit(isEditing, todos, todo, newTitle, setTodos, handleTodoDelete);
       setIsEditing(false);
     }
   };
@@ -92,9 +99,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="toggle"
           id="toggle-view"
           checked={todo.completed}
-          onChange={() => {
-            handleTodoCompletedState(todo.id);
-          }}
+          onChange={handleTodoCompletedState}
         />
         <label
           onDoubleClick={handleDoubleClick}
@@ -106,9 +111,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="destroy"
           data-cy="deleteTodo"
           aria-label="deleteTodo"
-          onClick={() => {
-            handleTodoDelete(todo.id);
-          }}
+          onClick={handleTodoDelete}
         />
       </div>
       <input
