@@ -4,16 +4,16 @@ import { TodoContext } from './TodoContext';
 import { Status } from '../types/Status';
 
 export const Main: React.FC = () => {
-  const [isCompleted, setIsCompleted] = useState<number[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editedText, setEditedText] = useState<string>('');
-
   const {
     setTodos,
     todos,
     removeTodo,
     visibleTodos,
+    isCompleted,
+    setIsCompleted,
   } = React.useContext(TodoContext);
 
   const toggleCompleted = (id: number) => {
@@ -142,7 +142,7 @@ export const Main: React.FC = () => {
                     className="edit"
                     value={editedText}
                     onChange={handleEditChange}
-                    onKeyDown={(e) => handleEditKeyDown(e)}
+                    onKeyDown={handleEditKeyDown}
                   />
                 </li>
               ))}

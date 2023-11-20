@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { Status } from '../types/Status';
 import { TodoContext } from './TodoContext';
 
@@ -6,15 +7,22 @@ export const Footer: React.FC = () => {
   const {
     visibleTodos,
     setFilterStatus,
-    setIsCompleted,
+    setTodos,
     todos,
     filterStatus,
+    setIsCompleted,
   } = React.useContext(TodoContext);
+
   const handleFilterChange = (filter: Status) => {
     setFilterStatus(filter);
   };
 
   const clearCompleted = () => {
+    const checkboxAllStatus = todos.map(todo => {
+      return { ...todo, status: Status.All };
+    });
+
+    setTodos(checkboxAllStatus);
     setIsCompleted([]);
   };
 
@@ -35,9 +43,7 @@ export const Footer: React.FC = () => {
               <a
                 onClick={() => handleFilterChange(Status.All)}
                 href="#/"
-                className={
-                  filterStatus === Status.All ? 'selected' : ''
-                }
+                className={cn({ selected: filterStatus === Status.All })}
               >
                 All
               </a>
@@ -46,9 +52,7 @@ export const Footer: React.FC = () => {
             <li>
               <a
                 href="#/active"
-                className={
-                  filterStatus === Status.Active ? 'selected' : ''
-                }
+                className={cn({ selected: filterStatus === Status.Active })}
                 onClick={() => handleFilterChange(Status.Active)}
               >
                 Active
@@ -58,9 +62,7 @@ export const Footer: React.FC = () => {
             <li>
               <a
                 href="#/completed"
-                className={
-                  filterStatus === Status.Completed ? 'selected' : ''
-                }
+                className={cn({ selected: filterStatus === Status.Completed })}
                 onClick={() => handleFilterChange(Status.Completed)}
               >
                 Completed
@@ -68,7 +70,7 @@ export const Footer: React.FC = () => {
             </li>
           </ul>
 
-          {todos.length > 0 && (
+          {todos.length && (
             <button
               onClick={clearCompleted}
               type="button"

@@ -10,6 +10,7 @@ interface ITodoContext {
   visibleTodos: Todo[];
   setIsCompleted: React.Dispatch<React.SetStateAction<number[]>>;
   filterStatus: Status,
+  isCompleted: number[],
 }
 
 export const defaultValue: ITodoContext = {
@@ -20,6 +21,7 @@ export const defaultValue: ITodoContext = {
   visibleTodos: [],
   setIsCompleted: () => {},
   filterStatus: Status.All,
+  isCompleted: [],
 };
 
 export const TodoContext = React.createContext<ITodoContext>(defaultValue);
@@ -31,6 +33,7 @@ type Props = {
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterStatus, setFilterStatus] = useState<Status>(Status.All);
+  const [isCompleted, setIsCompleted] = useState<number[]>([]);
 
   const visibleTodos = useMemo(() => {
     switch (filterStatus) {
@@ -58,7 +61,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         setFilterStatus,
         visibleTodos,
         filterStatus,
-        setIsCompleted: () => {},
+        isCompleted,
+        setIsCompleted,
       }}
     >
       {children}
