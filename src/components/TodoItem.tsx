@@ -65,8 +65,8 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
     switch (event.key) {
       case 'Escape':
         resetChange();
-
         break;
+
       case 'Enter':
         if (!todoEdit) {
           setTodos(prevTodos => prevTodos
@@ -77,8 +77,8 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
         }
 
         saveChange();
-
         break;
+
       default:
         break;
     }

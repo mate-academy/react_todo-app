@@ -26,9 +26,11 @@ export const TodoList: React.FC = () => {
     });
   };
 
+  const filteredTodos = filterTodos(todos, todosFilter);
+
   return (
     <ul className="todo-list" data-cy="todosList">
-      {filterTodos(todos, todosFilter).map((todo) => (
+      {filteredTodos.map((todo) => (
         <TodoItem getTodo={todo} key={todo.id} />
       ))}
     </ul>
