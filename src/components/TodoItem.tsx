@@ -53,13 +53,17 @@ export const TodoItem: React.FC<Props> = ({ getTodo }) => {
   };
 
   const saveChange = () => {
-    setTodos(prevTodos => prevTodos.map(todo => {
-      return todo.id === todoEditId
-        ? { ...todo, title: todoEdit }
-        : todo;
-    }));
+    if (todoEditId !== 0) {
+      if (!todoEdit) {
+        setTodos(prevTodos => prevTodos.filter(todo => todo.id !== todoEditId));
+      } else {
+        setTodos(prevTodos => prevTodos
+          .map(todo => (todo.id === todoEditId
+            ? { ...todo, title: todoEdit } : todo)));
+      }
 
-    resetChange();
+      resetChange();
+    }
   };
 
   const handleChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
