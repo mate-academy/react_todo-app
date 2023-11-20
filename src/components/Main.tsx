@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { TodoContext } from './TodoContext';
 import { Status } from '../types/Status';
+import { KeyboardKeys } from '../types/KeyboardKeys';
 
 export const Main: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -76,7 +77,7 @@ export const Main: React.FC = () => {
   const handleEditKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (event.key === 'Enter') {
+    if (event.key === KeyboardKeys.Enter) {
       const changeTodo = todos.map(todo => {
         if (todo.id === editingTodoId) {
           return { ...todo, title: editedText };
@@ -86,9 +87,6 @@ export const Main: React.FC = () => {
       });
 
       setTodos(changeTodo);
-      setIsEditing(false);
-      setEditingTodoId(null);
-    } else if (event.key === 'Escape') {
       setIsEditing(false);
       setEditingTodoId(null);
     }
