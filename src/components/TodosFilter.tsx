@@ -7,7 +7,7 @@ export const TodosFilter: React.FC = () => {
   const { todos, status, dispatch } = useContext(TodosContext);
   const [showButton, setShowButton] = useState(false);
 
-  const uncompletedTodos = todos.filter(todo => todo.completed === false);
+  const uncompletedTodos = todos.filter(todo => !todo.completed);
   const hasCompleted = todos.some(todo => todo.completed);
 
   if (hasCompleted !== showButton) {

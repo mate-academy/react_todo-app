@@ -12,7 +12,7 @@ export const App: React.FC = () => {
         <h1>todos</h1>
       </header>
       <TodoApp />
-      {todos.length !== 0 && <TodosFilter />}
+      {!!todos.length && <TodosFilter />}
     </div>
   );
 };
