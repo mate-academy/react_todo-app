@@ -1,13 +1,22 @@
-import React, { useState, ReactNode, useMemo } from 'react';
+import React, {
+  useState, ReactNode, useMemo,
+} from 'react';
 import { Todo } from '../types/Todo';
 
-const getTodos = JSON.parse(localStorage.getItem('todos') || '[]') as Todo[];
+const TODO_STORAGE_KEY = 'todos';
+
+const getTodos = (): Todo[] => {
+  const storedTodos = localStorage.getItem(TODO_STORAGE_KEY);
+
+  return storedTodos
+    ? JSON.parse(storedTodos) : [];
+};
 
 export const TodoContext = React.createContext<{
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }>({
-  todos: getTodos,
+  todos: [],
   setTodos: () => {},
 });
 
@@ -16,7 +25,8 @@ interface TodoProviderProps {
 }
 
 export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
-  const [todos, setTodos] = useState(getTodos);
+  const [todos, setTodos] = useState<Todo[]>(getTodos());
+
   const value = useMemo(() => ({
     todos,
     setTodos,

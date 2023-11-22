@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext } from 'react';
-import { TodoContext, TodoProvider } from './context/TodoContext';
+import React from 'react';
+import { TodoProvider } from './context/TodoContext';
 import { AddTodo } from './components/AddTodo';
 import { TodoList } from './components/TodoList';
 
 export const App: React.FC = () => {
-  const { todos } = useContext(TodoContext);
-
   return (
     <TodoProvider>
       <div className="todoapp">
@@ -16,7 +14,7 @@ export const App: React.FC = () => {
           <AddTodo />
         </header>
 
-        <TodoList todos={todos} />
+        <TodoList />
       </div>
     </TodoProvider>
   );
