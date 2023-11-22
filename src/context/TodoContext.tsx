@@ -5,6 +5,8 @@ import { Todo } from '../types/Todo';
 
 const TODO_STORAGE_KEY = 'todos';
 
+localStorage.clear();
+
 const getTodos = (): Todo[] => {
   const storedTodos = localStorage.getItem(TODO_STORAGE_KEY);
 
