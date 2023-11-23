@@ -17,10 +17,12 @@ export const Footer: React.FC<Props> = ({
   completedTodos,
   filter,
 }) => {
+  const ONE_ELEMENT = 1;
+
   return (
     <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {todoCount === 1
+        {todoCount === ONE_ELEMENT
           ? `${todoCount} item left`
           : `${todoCount} items left`}
       </span>
