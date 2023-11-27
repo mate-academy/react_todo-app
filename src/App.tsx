@@ -2,8 +2,8 @@
 import React from 'react';
 import { TodoProvider } from './context/TodoContext';
 import { AddTodo } from './components/AddTodo';
-import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
+import { ToggleAll } from './components/ToggleAll';
 
 export const App: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ export const App: React.FC = () => {
           <AddTodo />
         </header>
 
-        <TodoList />
+        <ToggleAll />
         <Footer />
       </div>
     </TodoProvider>
