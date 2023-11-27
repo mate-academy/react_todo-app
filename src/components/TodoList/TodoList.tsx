@@ -9,26 +9,27 @@ type Props = {
 
 export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
   const { filter } = useContext(StateContext);
-
-  const isDisplayed = (todo: Todo) => {
+  const filterTodos = (todosToFilter: Todo[]) => {
     switch (filter.title) {
       case 'All':
       default:
-        return true;
+        return todosToFilter;
 
       case 'Active':
-        return !todo.completed;
+        return todosToFilter.filter(todo => !todo.completed);
 
       case 'Completed':
-        return todo.completed;
+        return todosToFilter.filter(todo => todo.completed);
     }
   };
 
+  const filteredTodos = filterTodos(todos);
+
   return (
     <>
-      {!!todos.length && (
+      {todos.length > 0 && (
         <ul className="todo-list" data-cy="todosList">
-          {todos.map(todo => isDisplayed(todo) && (
+          {filteredTodos.map(todo => (
             <TodoItem key={todo.id} todo={todo} />
           ))}
         </ul>
