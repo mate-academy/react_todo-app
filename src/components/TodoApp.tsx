@@ -2,14 +2,19 @@ import { useContext, useState } from 'react';
 import { TodoList } from './TodoList';
 import { TodoFilter } from './TodosFilter';
 import { DispatchContext, StateContext } from './TodosContext';
+import { filterItems } from '../helpers/filterItems';
 
 export const TodoApp: React.FC = () => {
-  const { todos, toggleAll } = useContext(StateContext);
+  const { todos, toggleAll, filteredBy } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const [newTitle, setNewTitle] = useState('');
 
-  const notCompleted = todos.filter(todo => !todo.completed).length;
+  const completedTodos = todos.filter(
+    todo => todo.completed,
+  ).length;
+  const notCompleted = todos.length - completedTodos;
+  const filtereTodos = filterItems(todos, filteredBy);
 
   const createTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,6 +35,12 @@ export const TodoApp: React.FC = () => {
     dispatch({
       type: 'toggleAll',
       payload: e.target.checked,
+    });
+  };
+
+  const handleClear = () => {
+    dispatch({
+      type: 'clear',
     });
   };
 
@@ -63,7 +74,7 @@ export const TodoApp: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList items={todos} />
+        <TodoList items={filtereTodos} />
       </section>
 
       <footer className="footer">
@@ -73,9 +84,15 @@ export const TodoApp: React.FC = () => {
 
         <TodoFilter />
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
+        {!!completedTodos && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleClear}
+          >
+            Clear completed
+          </button>
+        )}
       </footer>
     </div>
   );

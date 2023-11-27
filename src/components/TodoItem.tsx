@@ -25,28 +25,45 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     });
   };
 
+  const handleDestroy = (todoId: number) => {
+    dispatch({
+      type: 'destroy',
+      payload: todoId,
+    });
+  };
+
   return (
     <>
-      <li className={
-        cn({
-          completed,
-          editing: false,
-        })
-      }
+      <li
+        className={
+          cn({
+            completed,
+            editing: false,
+          })
+        }
       >
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
-            id="toggle-view"
+            id={String(todo.id)}
             checked={completed}
             onChange={toggleStatus}
           />
-          <label htmlFor="toggle-view">
+          <label
+            role="presentation"
+            htmlFor={String(todo.id)}
+            onClick={e => e.preventDefault()}
+          >
             {todo.title}
           </label>
 
-          <button type="button" className="destroy" data-cy="deleteTodo" />
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={() => handleDestroy(todo.id)}
+          />
         </div>
 
         <input type="text" className="edit" />

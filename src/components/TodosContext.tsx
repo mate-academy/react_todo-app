@@ -1,20 +1,26 @@
 import React, { useReducer } from 'react';
 
 import { Todo } from '../types/Todo';
+import { Status } from '../types/Status';
 
 type Action =
   { type: 'createTodo', payload: Todo }
   | { type: 'updateTodo', payload: Todo }
-  | { type: 'toggleAll', payload: boolean };
+  | { type: 'toggleAll', payload: boolean }
+  | { type: 'filter', payload: Status }
+  | { type: 'destroy', payload: number }
+  | { type: 'clear' };
 
 type State = {
-  toggleAll: boolean,
   todos: Todo[]
+  toggleAll: boolean,
+  filteredBy: Status,
 };
 
 const initialState = {
-  toggleAll: false,
   todos: [] as Todo[],
+  toggleAll: false,
+  filteredBy: Status.All,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -62,6 +68,31 @@ const reducer = (state: State, action: Action): State => {
       }
 
       return { ...state };
+    }
+
+    case 'filter': {
+      return {
+        ...state,
+        filteredBy: action.payload,
+      };
+    }
+
+    case 'destroy': {
+      const filteredTodos = state.todos.filter(t => t.id !== action.payload);
+
+      return {
+        ...state,
+        todos: filteredTodos,
+      };
+    }
+
+    case 'clear': {
+      const filteredTodos = state.todos.filter(t => !t.completed);
+
+      return {
+        ...state,
+        todos: filteredTodos,
+      };
     }
 
     default:
