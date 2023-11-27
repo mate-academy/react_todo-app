@@ -1,5 +1,10 @@
 import React, {
-  useContext, useState, useEffect, useRef, ChangeEvent,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  ChangeEvent,
+  KeyboardEvent,
 } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import { Todo } from '../types/Todo';
@@ -16,7 +21,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
 
   const completeTodo = (e: ChangeEvent<HTMLInputElement>) => {
     const updatedTodos = todos.map((item: Todo) => (item.id === todo.id
-      ? { ...item, completed: e.target.checked } : item));
+      ? { ...item, completed: e.target.checked }
+      : item));
 
     setTodos(updatedTodos);
   };
@@ -35,8 +41,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     if (editedTitle.trim() === '') {
       deleteTodo();
     } else {
-      const updatedTodos = todos.map((item) => (item.id === todo.id
-        ? { ...item, title: editedTitle.trim() } : item));
+      const updatedTodos
+        = todos.map((item) => (item.id === todo.id
+          ? { ...item, title: editedTitle.trim() } : item));
 
       setTodos(updatedTodos);
     }
@@ -44,7 +51,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     setEditing(false);
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
       setEditedTitle(todo.title);
       setEditing(false);
@@ -60,7 +67,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   }, [isEditing]);
 
   return (
-    <li className={`todo-item ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}>
+    <li
+      className={`todo-item ${todo.completed ? 'completed' : 'active'} ${
+        isEditing ? 'editing' : ''
+      }`}
+    >
       <div className="view">
         <input
           type="checkbox"
@@ -76,7 +87,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           type="button"
           aria-label="Delete Todo"
         />
-
       </div>
       {isEditing && (
         <input
