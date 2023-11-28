@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function useLocaleStrogare<T>(
+export function useLocaleStorage<T>(
   key: string,
   startValue: T,
 ): [T, (value: T) => void] {

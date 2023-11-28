@@ -1,9 +1,16 @@
 import { TodoItem } from './TodoItem';
+import { Todo } from '../types/Todo';
 
-export const TodoList = () => {
+interface Props {
+  items: Todo[];
+}
+
+export const TodoList: React.FC<Props> = ({ items }) => {
   return (
     <ul className="todo-list" data-cy="todoList">
-      <TodoItem />
+      {items && items.map(todo => (
+        <TodoItem todo={todo} key={todo.id} />
+      ))}
 
       {/* <li className="completed">
         <div className="view">
