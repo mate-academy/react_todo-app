@@ -11,11 +11,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
 
   const handleToggleViewChange = () => {
-    console.log('checkbox', title);
+
   };
 
   const handleDestroyClick = () => {
-    console.log('destroy', title);
+
   };
 
   return (

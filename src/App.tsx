@@ -1,55 +1,24 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
-import { TodoContext, TodoProvider } from './TodoContext';
+import React from 'react';
+import { useLocaleStorage } from './hooks/useLocaleStorage';
+
+import { TodoContext } from './TodoContext';
 import { TodoList } from './components/TodoList';
+import { TodoForm } from './components/TodoForm';
 
 import { Todo } from './types/Todo';
 
+const LOCAL_STORAGE_KEY = 'todos';
+
 export const App: React.FC = () => {
-  const { todos, setTodos } = useContext(TodoContext);
-  const [title, setTitle] = useState('');
-
-  const handleTodoFormSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    const reset = () => {
-      setTitle('');
-    };
-
-    if (title.trim()) {
-      const todo: Todo = {
-        id: +new Date(),
-        title: title.trim(),
-        completed: false,
-      };
-
-      setTodos([...todos, todo]);
-      reset();
-    }
-  };
-
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const todoTitle = event.target.value;
-
-    setTitle(todoTitle);
-  };
+  const [todos, setTodos] = useLocaleStorage<Todo[]>(LOCAL_STORAGE_KEY, []);
 
   return (
     <div className="todoapp">
-      <TodoProvider>
+      <TodoContext.Provider value={{ todos, setTodos }}>
         <header className="header">
           <h1>todos</h1>
-
-          <form onSubmit={handleTodoFormSubmit}>
-            <input
-              type="text"
-              data-cy="createTodo"
-              className="new-todo"
-              placeholder="What needs to be done?"
-              onChange={handleTitleChange}
-              value={title}
-            />
-          </form>
+          <TodoForm />
         </header>
 
         <section className="main">
@@ -66,7 +35,7 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {/* {`${todos.length}  items left`} */}
+              {`${todos.length}  items left`}
             </span>
 
             <ul className="filters">
@@ -88,7 +57,7 @@ export const App: React.FC = () => {
             </button>
           </footer>
         )}
-      </TodoProvider>
+      </TodoContext.Provider>
     </div>
   );
 };

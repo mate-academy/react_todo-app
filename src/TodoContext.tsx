@@ -1,8 +1,5 @@
-import React, { useMemo } from 'react';
-import { useLocaleStorage } from './hooks/useLocaleStorage';
+import React from 'react';
 import { Todo } from './types/Todo';
-
-const LOCAL_STORAGE_KEY = 'todos';
 
 export const TodoContext = React.createContext({
   todos: [] as Todo[],
@@ -10,21 +7,19 @@ export const TodoContext = React.createContext({
   setTodos: (_todos: Todo[]) => {},
 });
 
-interface Props {
-  children: React.ReactNode;
-}
+// interface Props {
+//   children: React.ReactNode;
+// }
 
-export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useLocaleStorage<Todo[]>(LOCAL_STORAGE_KEY, []);
+// export const TodoProvider: React.FC<Props> = ({ children }) => {
+//   // const value = useMemo(() => ({
+//   //   todos,
+//   //   setTodos,
+//   // }), [todos, setTodos]);
 
-  const value = useMemo(() => ({
-    todos,
-    setTodos,
-  }), [todos]);
-
-  return (
-    <TodoContext.Provider value={value}>
-      {children}
-    </TodoContext.Provider>
-  );
-};
+//   return (
+//     <TodoContext.Provider value={{ todos, setTodos }}>
+//       {children}
+//     </TodoContext.Provider>
+//   );
+// };
