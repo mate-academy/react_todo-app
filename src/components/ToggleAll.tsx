@@ -6,10 +6,8 @@ export const ToggleAll: React.FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
 
   const completeAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedTodos
-    = todos.map((item) => ({ ...item, completed: e.target.checked }));
-
-    setTodos(updatedTodos);
+    // eslint-disable-next-line max-len
+    setTodos((prevTodos) => prevTodos.map((item) => ({ ...item, completed: e.target.checked })));
   };
 
   return (
@@ -19,7 +17,7 @@ export const ToggleAll: React.FC = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        checked={!todos.find(todo => !todo.completed)}
+        checked={!todos.find((todo) => !todo.completed)}
         onChange={completeAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>

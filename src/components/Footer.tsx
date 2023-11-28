@@ -8,7 +8,6 @@ export const Footer: React.FC = () => {
   const itemsLeft = todos.filter(todo => !todo.completed).length;
 
   const handleClearCompleted = () => {
-    // Filter out completed todos and update the state
     const uncompletedTodos = todos.filter(todo => !todo.completed);
 
     setTodos(uncompletedTodos);
