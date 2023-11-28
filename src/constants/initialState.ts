@@ -5,5 +5,4 @@ export const initialState = {
   todos: [] as Todo[],
   toggleAll: false,
   filteredBy: Status.All,
-  editingTodo: 0,
 };

@@ -16,7 +16,7 @@ export const TodoFilter = () => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       {
         filters.map(filter => {
           const filterName = filter[0].toUpperCase() + filter.slice(1);

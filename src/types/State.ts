@@ -5,5 +5,4 @@ export type State = {
   todos: Todo[]
   toggleAll: boolean,
   filteredBy: Status,
-  editingTodo: number,
 };
