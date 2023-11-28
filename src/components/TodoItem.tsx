@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
 
-import { useContext } from 'react';
+import {
+  useContext, useState,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { DispatchContext } from './TodosContext';
 
@@ -12,6 +14,8 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { completed, id, title } = todo;
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState(title);
   const dispatch = useContext(DispatchContext);
 
   const toggleStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,11 +29,58 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     });
   };
 
-  const handleDestroy = (todoId: number) => {
+  const handleDestroy = () => {
     dispatch({
       type: 'destroy',
-      payload: todoId,
+      payload: todo.id,
     });
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case 'Enter': {
+        if (!newTitle) {
+          dispatch({
+            type: 'destroy',
+            payload: todo.id,
+          });
+
+          return;
+        }
+
+        dispatch({
+          type: 'edit',
+          payload: { ...todo, title: newTitle },
+        });
+        setIsEditing(false);
+        break;
+      }
+
+      case 'Escape':
+        setIsEditing(false);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleOnBlur = () => {
+    if (!newTitle) {
+      dispatch({
+        type: 'destroy',
+        payload: todo.id,
+      });
+
+      return;
+    }
+
+    dispatch({
+      type: 'edit',
+      payload: { ...todo, title: newTitle },
+    });
+    setIsEditing(false);
+    setNewTitle(title);
   };
 
   return (
@@ -38,7 +89,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         className={
           cn({
             completed,
-            editing: false,
+            editing: isEditing,
           })
         }
       >
@@ -52,8 +103,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           />
           <label
             role="presentation"
-            htmlFor={String(todo.id)}
             onClick={e => e.preventDefault()}
+            onDoubleClick={() => setIsEditing(true)}
           >
             {todo.title}
           </label>
@@ -62,40 +113,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="destroy"
             data-cy="deleteTodo"
-            onClick={() => handleDestroy(todo.id)}
+            onClick={handleDestroy}
           />
         </div>
 
-        <input type="text" className="edit" />
+        <input
+          type="text"
+          className="edit"
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+          onKeyUp={handleKeyUp}
+          onBlur={handleOnBlur}
+        />
       </li>
-
-      {/* <li className="completed">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-completed" />
-          <label htmlFor="toggle-completed">qwertyuio</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-editing" />
-          <label htmlFor="toggle-editing">zxcvbnm</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view2" />
-          <label htmlFor="toggle-view2">1234567890</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li> */}
     </>
-
   );
 };

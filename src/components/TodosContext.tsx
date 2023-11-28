@@ -2,6 +2,8 @@ import React, { useReducer } from 'react';
 
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
+import { State } from '../types/State';
+import { initialState } from '../constants/initialState';
 
 type Action =
   { type: 'createTodo', payload: Todo }
@@ -9,19 +11,8 @@ type Action =
   | { type: 'toggleAll', payload: boolean }
   | { type: 'filter', payload: Status }
   | { type: 'destroy', payload: number }
-  | { type: 'clear' };
-
-type State = {
-  todos: Todo[]
-  toggleAll: boolean,
-  filteredBy: Status,
-};
-
-const initialState = {
-  todos: [] as Todo[],
-  toggleAll: false,
-  filteredBy: Status.All,
-};
+  | { type: 'clear' }
+  | { type: 'edit', payload: Todo };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -67,7 +58,10 @@ const reducer = (state: State, action: Action): State => {
         updatedTodo.title = title;
       }
 
-      return { ...state };
+      return {
+        ...state,
+        toggleAll: state.todos.every(t => t.completed),
+      };
     }
 
     case 'filter': {
@@ -95,6 +89,22 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case 'edit': {
+      const { id, title } = action.payload;
+
+      const updatedTodo = state.todos.find(
+        todo => (todo.id === id),
+      );
+
+      if (updatedTodo) {
+        updatedTodo.title = title;
+      }
+
+      return {
+        ...state,
+      };
+    }
+
     default:
       return state;
   }
@@ -105,7 +115,7 @@ export const DispatchContext
   = React.createContext<(action: Action) => void>(() => {});
 
 type Props = {
-  children: React.ReactNode
+  children: React.ReactNode,
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
