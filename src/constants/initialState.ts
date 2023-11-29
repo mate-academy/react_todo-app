@@ -3,6 +3,5 @@ import { Todo } from '../types/Todo';
 
 export const initialState = {
   todos: [] as Todo[],
-  toggleAll: false,
   filteredBy: Status.All,
 };

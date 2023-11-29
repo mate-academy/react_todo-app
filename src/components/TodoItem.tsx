@@ -2,7 +2,7 @@
 import cn from 'classnames';
 
 import {
-  useContext, useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
 import { Todo } from '../types/Todo';
 import { DispatchContext } from './TodosContext';
@@ -16,7 +16,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
+
   const dispatch = useContext(DispatchContext);
+  const titleRef = useRef<HTMLInputElement>(null);
 
   const toggleStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
@@ -36,10 +38,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     });
   };
 
+  const handleDoubleClick = () => {
+    setNewTitle(title);
+    setIsEditing(true);
+  };
+
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case 'Enter': {
-        if (!newTitle) {
+        if (!newTitle.trim()) {
           dispatch({
             type: 'destroy',
             payload: todo.id,
@@ -49,7 +56,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         }
 
         dispatch({
-          type: 'edit',
+          type: 'updateTodo',
           payload: { ...todo, title: newTitle },
         });
         setIsEditing(false);
@@ -57,6 +64,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       }
 
       case 'Escape':
+        setNewTitle(title);
         setIsEditing(false);
         break;
 
@@ -66,7 +74,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleOnBlur = () => {
-    if (!newTitle) {
+    if (!newTitle.trim()) {
       dispatch({
         type: 'destroy',
         payload: todo.id,
@@ -76,12 +84,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     dispatch({
-      type: 'edit',
+      type: 'updateTodo',
       payload: { ...todo, title: newTitle },
     });
     setIsEditing(false);
-    setNewTitle(title);
   };
+
+  useEffect(() => {
+    if (isEditing && titleRef.current) {
+      titleRef.current.focus();
+    }
+  }, [isEditing]);
 
   return (
     <>
@@ -92,6 +105,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             editing: isEditing,
           })
         }
+        key={todo.id}
       >
         <div className="view">
           <input
@@ -104,7 +118,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           <label
             role="presentation"
             onClick={e => e.preventDefault()}
-            onDoubleClick={() => setIsEditing(true)}
+            onDoubleClick={handleDoubleClick}
           >
             {todo.title}
           </label>
@@ -124,6 +138,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={(e) => setNewTitle(e.target.value)}
           onKeyUp={handleKeyUp}
           onBlur={handleOnBlur}
+          ref={titleRef}
         />
       </li>
     </>

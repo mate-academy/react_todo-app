@@ -13,10 +13,7 @@ export const reducer = (state: State, action: Action): State => {
       const { todos } = state;
 
       if (!todos.length) {
-        return {
-          ...state,
-          toggleAll: action.payload,
-        };
+        return { ...state };
       }
 
       const toggledTodos = state.todos.map(todo => (
@@ -28,15 +25,15 @@ export const reducer = (state: State, action: Action): State => {
 
       return {
         ...state,
-        toggleAll: action.payload,
         todos: toggledTodos,
       };
     }
 
     case 'updateTodo': {
       const { completed, id, title } = action.payload;
+      const { todos } = state;
 
-      const updatedTodo = state.todos.find(
+      const updatedTodo = todos.find(
         todo => (todo.id === id),
       );
 
@@ -47,7 +44,7 @@ export const reducer = (state: State, action: Action): State => {
 
       return {
         ...state,
-        toggleAll: state.todos.every(t => t.completed),
+        todos: [...todos],
       };
     }
 
@@ -73,22 +70,6 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         todos: filteredTodos,
-      };
-    }
-
-    case 'edit': {
-      const { id, title } = action.payload;
-
-      const updatedTodo = state.todos.find(
-        todo => (todo.id === id),
-      );
-
-      if (updatedTodo) {
-        updatedTodo.title = title;
-      }
-
-      return {
-        ...state,
       };
     }
 

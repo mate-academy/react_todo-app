@@ -1,10 +1,11 @@
 import cn from 'classnames';
 import { useContext } from 'react';
-import { DispatchContext } from './TodosContext';
+import { DispatchContext, StateContext } from './TodosContext';
 import { Status } from '../types/Status';
 
 export const TodoFilter = () => {
   const dispatch = useContext(DispatchContext);
+  const { filteredBy } = useContext(StateContext);
 
   const filters = Object.values(Status);
 
@@ -27,7 +28,7 @@ export const TodoFilter = () => {
                 href={`#/${filter === 'all' ? '' : filter}`}
                 className={
                   cn({
-                    selected: true,
+                    selected: filteredBy === filter,
                   })
                 }
                 onClick={() => handleFilter(filter)}

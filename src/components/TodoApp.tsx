@@ -5,16 +5,17 @@ import { DispatchContext, StateContext } from './TodosContext';
 import { filterItems } from '../helpers/filterItems';
 
 export const TodoApp: React.FC = () => {
-  const { todos, toggleAll, filteredBy } = useContext(StateContext);
+  const { todos, filteredBy } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
-
-  const [newTitle, setNewTitle] = useState('');
 
   const completedTodos = todos.filter(
     todo => todo.completed,
   ).length;
   const notCompleted = todos.length - completedTodos;
-  const filtereTodos = filterItems(todos, filteredBy);
+  const filteredTodos = filterItems(todos, filteredBy);
+
+  const [newTitle, setNewTitle] = useState('');
+  const isToggleAll = completedTodos === todos.length;
 
   const createTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,12 +72,12 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
-              checked={toggleAll}
+              checked={isToggleAll}
               onChange={handleToggleAll}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
 
-            <TodoList items={filtereTodos} />
+            <TodoList items={filteredTodos} />
           </section>
 
           <footer className="footer">
