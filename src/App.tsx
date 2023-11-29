@@ -1,23 +1,18 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { useLocaleStorage } from './hooks/useLocaleStorage';
+import React, { useContext } from 'react';
 
-import { TodoContext } from './TodoContext';
-import { TodoList } from './components/TodoList';
+import { TodoContext, TodoProvider } from './TodoContext';
 import { TodoForm } from './components/TodoForm';
 import { TodoAllChecked } from './components/TodoAllChecked';
-import { TodoClear } from './components/TodoClear';
-
-import { Todo } from './types/Todo';
-
-const LOCAL_STORAGE_KEY = 'todos';
+import { TodoList } from './components/TodoList';
+import { TodoFooter } from './components/TodoFooter';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocaleStorage<Todo[]>(LOCAL_STORAGE_KEY, []);
+  const { todos } = useContext(TodoContext);
 
   return (
-    <div className="todoapp">
-      <TodoContext.Provider value={{ todos, setTodos }}>
+    <TodoProvider>
+      <div className="todoapp">
         <header className="header">
           <h1>todos</h1>
           <TodoForm />
@@ -28,30 +23,8 @@ export const App: React.FC = () => {
           <TodoList items={todos} />
         </section>
 
-        {todos.length !== 0 && (
-          <footer className="footer">
-            <span className="todo-count" data-cy="todosCounter">
-              {`${todos.length}  items left`}
-            </span>
-
-            <ul className="filters">
-              <li>
-                <a href="#/" className="selected">All</a>
-              </li>
-
-              <li>
-                <a href="#/active">Active</a>
-              </li>
-
-              <li>
-                <a href="#/completed">Completed</a>
-              </li>
-            </ul>
-
-            <TodoClear />
-          </footer>
-        )}
-      </TodoContext.Provider>
-    </div>
+        <TodoFooter />
+      </div>
+    </TodoProvider>
   );
 };

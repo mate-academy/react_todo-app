@@ -2,13 +2,11 @@ import { useContext, useState } from 'react';
 import { TodoContext } from '../TodoContext';
 import { Todo } from '../types/Todo';
 
-export const TodoForm = () => {
+export const TodoForm: React.FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const [title, setTitle] = useState('');
 
-  const handleTodoFormSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
+  const addTodo = () => {
     const reset = () => {
       setTitle('');
     };
@@ -25,6 +23,11 @@ export const TodoForm = () => {
     }
   };
 
+  const handleTodoFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    addTodo();
+  };
+
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const todoTitle = event.target.value;
 
@@ -39,6 +42,7 @@ export const TodoForm = () => {
         className="new-todo"
         placeholder="What needs to be done?"
         onChange={handleTitleChange}
+        onBlur={() => addTodo()}
         value={title}
       />
     </form>
