@@ -5,6 +5,7 @@ import { useLocaleStorage } from './hooks/useLocaleStorage';
 import { TodoContext } from './TodoContext';
 import { TodoList } from './components/TodoList';
 import { TodoForm } from './components/TodoForm';
+import { TodoAllChecked } from './components/TodoAllChecked';
 
 import { Todo } from './types/Todo';
 
@@ -22,13 +23,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-          />
-          <label htmlFor="toggle-all">Mark all as complete</label>
+          <TodoAllChecked />
           <TodoList items={todos} />
         </section>
 
