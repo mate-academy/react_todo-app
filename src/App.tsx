@@ -6,6 +6,7 @@ import { TodoContext } from './TodoContext';
 import { TodoList } from './components/TodoList';
 import { TodoForm } from './components/TodoForm';
 import { TodoAllChecked } from './components/TodoAllChecked';
+import { TodoClear } from './components/TodoClear';
 
 import { Todo } from './types/Todo';
 
@@ -47,9 +48,7 @@ export const App: React.FC = () => {
               </li>
             </ul>
 
-            <button type="button" className="clear-completed">
-              Clear completed
-            </button>
+            <TodoClear />
           </footer>
         )}
       </TodoContext.Provider>
