@@ -6,6 +6,7 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { DispatchContext } from './TodosContext';
+import { KeyCode } from '../types/KeyCode';
 
 type Props = {
   todo: Todo,
@@ -45,7 +46,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
-      case 'Enter': {
+      case KeyCode.Enter: {
         if (!newTitle.trim()) {
           dispatch({
             type: 'destroy',
@@ -63,7 +64,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         break;
       }
 
-      case 'Escape':
+      case KeyCode.Escape:
         setNewTitle(title);
         setIsEditing(false);
         break;

@@ -25,7 +25,7 @@ export const TodoFilter = () => {
           return (
             <li key={filter}>
               <a
-                href={`#/${filter === 'all' ? '' : filter}`}
+                href={`#/${filter === Status.All ? '' : filter}`}
                 className={
                   cn({
                     selected: filteredBy === filter,
