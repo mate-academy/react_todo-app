@@ -14,7 +14,7 @@ export const TodoApp: React.FC = () => {
   const addNewToDo = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (trimedValue === '') {
+    if (!trimedValue) {
       return;
     }
 
@@ -24,7 +24,7 @@ export const TodoApp: React.FC = () => {
       completed: false,
     };
 
-    if (todos.length > 0) {
+    if (todos.length) {
       todos.push(newTodo);
       dispatch({ type: 'add', payload: todos });
     } else {
@@ -37,7 +37,7 @@ export const TodoApp: React.FC = () => {
   const toggleAll = () => {
     let toggleTodos = todos;
 
-    if (todos.find(todo => todo.completed === false)) {
+    if (todos.find(todo => !todo.completed)) {
       toggleTodos = todos.map(todo => {
         return {
           ...todo,

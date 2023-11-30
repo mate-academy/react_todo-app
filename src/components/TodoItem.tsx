@@ -59,7 +59,7 @@ export const TodoItem: React.FC<Props> = ({
     event.preventDefault();
     let editTodos = todos;
 
-    if (newTitle.length > 0) {
+    if (newTitle.length) {
       editTodos = todos
         .map(todo => {
           if (todo.id === id) {

@@ -32,11 +32,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/"
           className={classNames({ selected: filterStatus === Status.all })}
-          onClick={event => {
-            event.preventDefault();
-
-            return chooseStatus(Status.all);
-          }}
+          onClick={() => chooseStatus(Status.all)}
         >
           All
         </a>
@@ -46,11 +42,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/active"
           className={classNames({ selected: filterStatus === Status.activ })}
-          onClick={event => {
-            event.preventDefault();
-
-            return chooseStatus(Status.activ);
-          }}
+          onClick={() => chooseStatus(Status.activ)}
         >
           Active
         </a>
@@ -62,11 +54,7 @@ export const TodosFilter: React.FC = () => {
           className={
             classNames({ selected: filterStatus === Status.completed })
           }
-          onClick={event => {
-            event.preventDefault();
-
-            return chooseStatus(Status.completed);
-          }}
+          onClick={() => chooseStatus(Status.completed)}
         >
           Completed
         </a>
