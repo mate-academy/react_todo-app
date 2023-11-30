@@ -2,15 +2,9 @@ import { useContext, useState, useEffect } from 'react';
 import { TodoItem } from './TodoItem';
 import { Todo } from '../types/Todo';
 import { TodoContext } from '../TodoContext';
-import { FilterContext } from '../FilterContext';
 
-type Props = {
-  items: Todo[];
-};
-
-export const TodoList: React.FC<Props> = ({ items }) => {
-  const { todos } = useContext(TodoContext);
-  const { status } = useContext(FilterContext);
+export const TodoList: React.FC = () => {
+  const { todos, status } = useContext(TodoContext);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
 
   useEffect(() => {
@@ -31,7 +25,7 @@ export const TodoList: React.FC<Props> = ({ items }) => {
   if (todos.length > 0) {
     return (
       <ul className="todo-list" data-cy="todosList">
-        {items && filteredTodos
+        {filteredTodos
           .map((todo: Todo) => <TodoItem todo={todo} key={todo.id} />)}
       </ul>
     );

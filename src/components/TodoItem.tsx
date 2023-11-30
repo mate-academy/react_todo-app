@@ -14,6 +14,9 @@ type Props = {
   todo: Todo;
 };
 
+const ENTER = 'Enter';
+const ESC = 'Escape';
+
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodoContext);
   const { id, title, completed } = todo;
@@ -29,17 +32,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEdit]);
 
   const handleToggleViewChange = () => {
-    let isChecked: boolean = completed;
-
-    if (completed) {
-      isChecked = false;
-    } else {
-      isChecked = true;
-    }
-
     setTodos(todos
       .map(todoItem => (todoItem.id === id
-        ? { ...todoItem, completed: isChecked }
+        ? { ...todoItem, completed: !completed }
         : todoItem)));
   };
 
@@ -73,13 +68,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleTodoTitleKeyUp = (
     event: React.KeyboardEvent,
   ) => {
-    if (event.key === 'Enter') {
+    if (event.key === ENTER) {
       if (editNameRef.current) {
         saveTitle(editNameRef.current.value);
       }
     }
 
-    if (event.key === 'Escape') {
+    if (event.key === ESC) {
       setEditTitle(title);
       setIsEdit(false);
     }

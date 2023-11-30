@@ -42,7 +42,7 @@ export const TodoForm: React.FC = () => {
         className="new-todo"
         placeholder="What needs to be done?"
         onChange={handleTitleChange}
-        onBlur={() => addTodo()}
+        onBlur={addTodo}
         value={title}
       />
     </form>
