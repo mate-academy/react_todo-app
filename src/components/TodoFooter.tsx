@@ -8,7 +8,7 @@ export const TodoFooter: React.FC = () => {
 
   return (
     <>
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <footer className="footer" data-cy="todosFilter">
           <span className="todo-count" data-cy="todosCounter">
             {`${todos.filter(todo => !todo.completed).length} items left`}

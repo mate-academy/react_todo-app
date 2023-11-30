@@ -22,14 +22,14 @@ export const TodoList: React.FC = () => {
     }
   }, [status, todos]);
 
-  if (todos.length > 0) {
-    return (
-      <ul className="todo-list" data-cy="todosList">
-        {filteredTodos
-          .map((todo: Todo) => <TodoItem todo={todo} key={todo.id} />)}
-      </ul>
-    );
-  }
-
-  return null;
+  return (
+    <>
+      {!!todos.length && (
+        <ul className="todo-list" data-cy="todosList">
+          {filteredTodos
+            .map((todo: Todo) => <TodoItem todo={todo} key={todo.id} />)}
+        </ul>
+      )}
+    </>
+  );
 };
