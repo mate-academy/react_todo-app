@@ -80,52 +80,50 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   return (
-    <>
-      <li className={classNames({
-        completed,
-        editing,
-      })}
-      >
-        {editing
-          ? (
-            <form onSubmit={editTitle} method="POST">
-              <input
-                type="text"
-                className="edit"
-                value={newTitle}
-                onChange={event => setNewTitle(event.target.value)}
-                onBlur={editTitle}
-                onKeyUp={
-                  event => (event.key === 'Escape') && setNewTitle(title)
-                }
-              />
-            </form>
-          ) : (
-            <div className="view">
-              <input
-                type="checkbox"
-                className="toggle"
-                id={`${id}`}
-                checked={completed}
-                onChange={handleChecked}
-              />
-              <label
-                onDoubleClick={() => {
-                  return setEditing(true);
-                }}
-              >
-                {title}
-              </label>
-              <button
-                aria-label="deleteTodo"
-                type="button"
-                className="destroy"
-                data-cy="deleteTodo"
-                onClick={removeToDo}
-              />
-            </div>
-          )}
-      </li>
-    </>
+    <li className={classNames({
+      completed,
+      editing,
+    })}
+    >
+      {editing
+        ? (
+          <form onSubmit={editTitle} method="POST">
+            <input
+              type="text"
+              className="edit"
+              value={newTitle}
+              onChange={event => setNewTitle(event.target.value)}
+              onBlur={editTitle}
+              onKeyUp={
+                event => (event.key === 'Escape') && setNewTitle(title)
+              }
+            />
+          </form>
+        ) : (
+          <div className="view">
+            <input
+              type="checkbox"
+              className="toggle"
+              id={`${id}`}
+              checked={completed}
+              onChange={handleChecked}
+            />
+            <label
+              onDoubleClick={() => {
+                return setEditing(true);
+              }}
+            >
+              {title}
+            </label>
+            <button
+              aria-label="deleteTodo"
+              type="button"
+              className="destroy"
+              data-cy="deleteTodo"
+              onClick={removeToDo}
+            />
+          </div>
+        )}
+    </li>
   );
 };

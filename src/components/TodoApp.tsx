@@ -6,8 +6,7 @@ import { ToDo } from '../types/todo';
 
 export const TodoApp: React.FC = () => {
   const dispatch = useContext(DispatchContex);
-  const todos = useContext(TodosContext);
-  const todoList = todos.todos;
+  const { todos, filtred } = useContext(TodosContext);
 
   const [value, setValue] = useState('');
   const trimedValue = value.trim();
@@ -25,9 +24,9 @@ export const TodoApp: React.FC = () => {
       completed: false,
     };
 
-    if (todoList.length > 0) {
-      todoList.push(newTodo);
-      dispatch({ type: 'add', payload: todoList });
+    if (todos.length > 0) {
+      todos.push(newTodo);
+      dispatch({ type: 'add', payload: todos });
     } else {
       dispatch({ type: 'add', payload: [newTodo] });
     }
@@ -36,17 +35,17 @@ export const TodoApp: React.FC = () => {
   };
 
   const toggleAll = () => {
-    let toggleTodos = todoList;
+    let toggleTodos = todos;
 
-    if (todoList.find(todo => todo.completed === false)) {
-      toggleTodos = todoList.map(todo => {
+    if (todos.find(todo => todo.completed === false)) {
+      toggleTodos = todos.map(todo => {
         return {
           ...todo,
           completed: true,
         };
       });
     } else {
-      toggleTodos = todoList.map(todo => {
+      toggleTodos = todos.map(todo => {
         return {
           ...todo,
           completed: false,
@@ -58,14 +57,14 @@ export const TodoApp: React.FC = () => {
   };
 
   const clearAllCompleted = () => {
-    const clearCompleted = todoList.filter(todo => !todo.completed);
+    const clearCompleted = todos.filter(todo => !todo.completed);
 
     dispatch({ type: 'clearAllCompleted', payload: clearCompleted });
   };
 
   const todoLeft = () => {
-    if (todoList) {
-      return todoList.filter((todo: ToDo) => !todo.completed).length;
+    if (todos) {
+      return todos.filter((todo: ToDo) => !todo.completed).length;
     }
 
     return [];
@@ -89,7 +88,7 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {(todoList.length > 0)
+      {(todos.length > 0)
         && (
           <>
             <section className="main">
@@ -102,7 +101,7 @@ export const TodoApp: React.FC = () => {
               />
               <label htmlFor="toggle-all">Mark all as complete</label>
 
-              <TodoList items={todos} />
+              <TodoList items={todos} filtred={filtred} />
 
             </section>
 
@@ -113,7 +112,7 @@ export const TodoApp: React.FC = () => {
 
               <TodosFilter />
 
-              {todoList.find((todo: ToDo) => todo.completed)
+              {todos.find((todo: ToDo) => todo.completed)
                 && (
                   <button
                     type="button"

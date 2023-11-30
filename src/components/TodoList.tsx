@@ -1,26 +1,27 @@
 import React from 'react';
 import { TodoItem } from './TodoItem';
-import { State } from '../types/State';
 import { Status } from '../types/Filter';
+import { ToDo } from '../types/todo';
 
 type Props = {
-  items: State,
+  items: ToDo[],
+  filtred: Status,
 };
 
-export const TodoList: React.FC<Props> = ({ items: { todos, filtred } }) => {
-  let todosForSowing = todos;
+export const TodoList: React.FC<Props> = ({ items, filtred }) => {
+  let todosForSowing = items;
 
   switch (filtred) {
     case Status.activ:
-      todosForSowing = todos.filter(todo => !todo.completed);
+      todosForSowing = items.filter(todo => !todo.completed);
       break;
 
     case Status.completed:
-      todosForSowing = todos.filter(todo => todo.completed);
+      todosForSowing = items.filter(todo => todo.completed);
       break;
 
     default:
-      todosForSowing = todos;
+      todosForSowing = items;
       break;
   }
 
