@@ -15,10 +15,27 @@ export const TodoApp: React.FC = () => {
   const filteredTodos = filterItems(todos, filteredBy);
 
   const [newTitle, setNewTitle] = useState('');
+  const [timerId, setTimerId] = useState(0);
   const isToggleAll = completedTodos === todos.length;
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    clearTimeout(timerId);
+    setNewTitle(e.target.value);
+    setTimerId(0);
+  };
 
   const createTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!newTitle.trim()) {
+      setNewTitle(
+        'Todo can not be empty',
+      );
+
+      setTimerId(+setTimeout(() => setNewTitle(''), 3000));
+
+      return;
+    }
 
     dispatch({
       type: 'createTodo',
@@ -59,7 +76,10 @@ export const TodoApp: React.FC = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={newTitle}
-            onChange={e => setNewTitle(e.target.value)}
+            onChange={handleOnChange}
+            style={{
+              color: timerId ? 'red' : '',
+            }}
           />
         </form>
       </header>
