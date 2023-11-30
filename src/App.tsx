@@ -1,93 +1,74 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState, useContext, useMemo } from 'react';
+import { TodosContext } from './components/TodosContext/TodosContext';
+import { Filter } from './types/Filter';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { Main } from './components/Main';
 
 export const App: React.FC = () => {
+  const [title, setTitle] = useState('');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+
+  const todosContext = useContext(TodosContext);
+
+  const {
+    todos,
+    addTodo,
+    deleteCompletedTodos,
+    handlerToggleAll,
+    todoCount,
+    completedTodos,
+    filterTodos,
+  } = todosContext;
+
+  const handlerTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
+  const handlerFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!title.trim()) {
+      return;
+    }
+
+    addTodo(title);
+
+    setTitle('');
+  };
+
+  const handlerClearCompleted = () => {
+    deleteCompletedTodos();
+  };
+
+  const filteredTodos = useMemo(() => {
+    return filterTodos(filter);
+  }, [filter, filterTodos]);
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <Header
+        title={title}
+        onFormSubmit={handlerFormSubmit}
+        onTitleChange={handlerTitleChange}
+      />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+      {!!todos.length && (
+        <>
+          <Main
+            handlerToggleAll={handlerToggleAll}
+            filteredTodos={filteredTodos}
           />
-        </form>
-      </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          <Footer
+            todoCount={todoCount}
+            setFilter={setFilter}
+            handlerClearCompleted={handlerClearCompleted}
+            completedTodos={completedTodos}
+            filter={filter}
+          />
+        </>
+      )}
     </div>
   );
 };
