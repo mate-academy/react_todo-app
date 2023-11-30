@@ -28,10 +28,14 @@ export const TodoList: React.FC<Props> = ({ items }) => {
     }
   }, [status, todos]);
 
-  return (
-    <ul className="todo-list" data-cy="todoList">
-      {items && filteredTodos
-        .map((todo: Todo) => <TodoItem todo={todo} key={todo.id} />)}
-    </ul>
-  );
+  if (todos.length > 0) {
+    return (
+      <ul className="todo-list" data-cy="todosList">
+        {items && filteredTodos
+          .map((todo: Todo) => <TodoItem todo={todo} key={todo.id} />)}
+      </ul>
+    );
+  }
+
+  return null;
 };

@@ -57,6 +57,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           : todoItem)));
 
       setEditTitle(value.trim());
+    } else {
+      setTodos(todos.filter(todoItem => todoItem.id !== id));
     }
 
     setIsEdit(false);
@@ -89,44 +91,48 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li
-      data-id={id}
       className={cn({
         editing: isEdit,
         completed: !isEdit && completed,
       })}
     >
-      <div className="view">
-        <input
-          type="checkbox"
-          className="toggle"
-          onChange={handleToggleViewChange}
-          checked={completed}
-        />
+      {!isEdit
+        ? (
+          <div className="view">
+            <input
+              type="checkbox"
+              id={`toggle-${id}`}
+              className="toggle"
+              onChange={handleToggleViewChange}
+              checked={completed}
+            />
 
-        <label
-          onDoubleClick={() => setIsEdit(true)}
-        >
-          {title}
-        </label>
+            <label
+              onDoubleClick={() => setIsEdit(true)}
+            >
+              {title}
+            </label>
 
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={handleDeleteClick}
-        />
-      </div>
-      {isEdit && (
-        <input
-          type="text"
-          className="edit"
-          ref={editNameRef}
-          onChange={handleTodoTitleChange}
-          onKeyUp={handleTodoTitleKeyUp}
-          onBlur={handleTodoTitleBlur}
-          value={editTitle}
-        />
-      )}
+            <button
+              type="button"
+              className="destroy"
+              data-cy="deleteTodo"
+              aria-label="deleteTodo"
+              onClick={handleDeleteClick}
+            />
+          </div>
+        )
+        : (
+          <input
+            type="text"
+            className="edit"
+            ref={editNameRef}
+            onChange={handleTodoTitleChange}
+            onKeyUp={handleTodoTitleKeyUp}
+            onBlur={handleTodoTitleBlur}
+            value={editTitle}
+          />
+        )}
     </li>
   );
 };

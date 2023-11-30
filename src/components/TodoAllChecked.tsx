@@ -28,17 +28,21 @@ export const TodoAllChecked: React.FC = () => {
     )));
   };
 
-  return (
-    <>
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        data-cy="toggleAll"
-        onChange={handleToggleAllChange}
-        checked={isChecked}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
-    </>
-  );
+  if (todos.length > 0) {
+    return (
+      <>
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+          onChange={handleToggleAllChange}
+          checked={isChecked}
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
+      </>
+    );
+  }
+
+  return null;
 };

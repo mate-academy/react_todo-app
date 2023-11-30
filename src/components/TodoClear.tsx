@@ -8,19 +8,17 @@ export const TodoClear: React.FC = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
-  return (
-    <>
-      {
-        todos.filter(todo => todo.completed).length > 0 && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={handleCompletedDeleteClick}
-          >
-            Clear completed
-          </button>
-        )
-      }
-    </>
-  );
+  if (todos.filter(todo => todo.completed).length > 0) {
+    return (
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={handleCompletedDeleteClick}
+      >
+        Clear completed
+      </button>
+    );
+  }
+
+  return null;
 };
