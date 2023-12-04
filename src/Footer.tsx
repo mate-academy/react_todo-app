@@ -5,6 +5,8 @@ import { TodosContext } from './TodosContext';
 export const Footer: React.FC = () => {
   const { handleClear, todos } = useContext(TodosContext);
   const notCompletedCount = todos.filter((el) => !el.completed).length;
+  const completedCount = todos.filter((el) => el.completed).length;
+
 
   return (
     <footer className="footer">
@@ -13,9 +15,11 @@ export const Footer: React.FC = () => {
         ${notCompletedCount === 1 ? 'item' : 'items'} left`}
       </span>
       <TodoFilter />
-      <button type="button" className="clear-completed" onClick={handleClear}>
-        Clear completed
-      </button>
+      {completedCount > 0 && (
+        <button type="button" className="clear-completed" onClick={handleClear}>
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
