@@ -7,7 +7,6 @@ export const Footer: React.FC = () => {
   const notCompletedCount = todos.filter((el) => !el.completed).length;
   const completedCount = todos.filter((el) => el.completed).length;
 
-
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
