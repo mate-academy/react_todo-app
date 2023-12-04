@@ -1,5 +1,6 @@
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback,
+  useEffect, useMemo, useState,
 } from 'react';
 import { ContextType } from './types/ContextType';
 import { Todo } from './types/Todo';
@@ -21,9 +22,9 @@ export const TodosContext = React.createContext<ContextType>({
   handleAddTodo: () => {},
   handleDelete: () => {},
   handleInputChange: () => {},
-  setSelectedTodo: () => {},
   handleEnter: () => {},
   setFilt: () => {},
+  toggled: () => {},
 });
 
 type Props = {
@@ -34,7 +35,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
   const [title, setTitle] = useState('');
   const [filt, setFilt] = useState<Position>(Position.All);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -69,25 +69,35 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
       setTodos(newTodos);
     };
-  }, []);
+  }, [todos]);
 
   const handleInputChange = useCallback((updatedTodo: Todo) => {
+    console.log(updatedTodo);
     setTodos(currentTodos => {
       const newTodos = [...currentTodos];
-      const found = newTodos.find((item) => item.id === selectedTodo?.id);
+      const found = newTodos.findIndex(item => item.id === updatedTodo.id);
 
-      if (found) {
-        const index = newTodos.findIndex(todo => todo.id === found.id);
-
-        newTodos.splice(index, 1, updatedTodo);
-      }
+      newTodos.splice(found, 1, updatedTodo);
 
       return newTodos;
     });
   }, []);
 
+  const toggled = (id: number) => {
+    const done = todos.map((item: Todo) => {
+      if (item.id === id) {
+        const newItem = { ...item, completed: !item.completed };
+
+        return newItem;
+      }
+
+      return item;
+    });
+
+    setTodos(done);
+  };
+
   const filteredTodos = todos.filter((todo) => {
-    console.log(todos);
     switch (filt) {
       case Position.Active:
         return !todo.completed;
@@ -109,9 +119,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     handleAddTodo,
     handleDelete,
     handleInputChange,
-    setSelectedTodo,
     handleEnter,
     setFilt,
+    toggled,
   };
 
   return (

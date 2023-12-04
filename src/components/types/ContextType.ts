@@ -7,11 +7,11 @@ export type ContextType = {
   filt: any,
   Position: any,
   setTodos: (todo:[] | Todo[]) => void,
-  handleTitleChange: (event: any) => any,
-  handleAddTodo: (event: any) => void,
+  handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => any,
+  handleAddTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void,
   handleDelete: (id: number) => void
   handleInputChange: (updatedTodo: Todo) => void,
-  setSelectedTodo: (todo: Todo | null) => void,
-  handleEnter: (event: any) => void,
+  handleEnter: (event: React.KeyboardEvent<HTMLInputElement>) => void,
   setFilt: (event: any) => void,
+  toggled: (id: number) => void,
 };

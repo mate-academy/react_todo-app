@@ -5,13 +5,13 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todo: Todo;
+  togLeTodo: (id: number) => void;
 };
 
-export const TodoItem:React.FC<Props> = ({ todo }) => {
+export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
   const {
     handleDelete,
     handleInputChange,
-    setSelectedTodo,
   } = useContext(TodosContext);
 
   return (
@@ -23,8 +23,14 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
         },
       )}
       >
-        <input type="checkbox" className="toggle" id="toggle-view" />
-        <label htmlFor="toggle-view">{todo.title}</label>
+        <input
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={todo.completed}
+          onChange={() => togLeTodo(todo.id)}
+        />
+        <label htmlFor="toggle">{todo.title}</label>
         <button
           type="button"
           className="destroy"
@@ -37,8 +43,7 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
       <input
         type="text"
         className="edit"
-        onClick={() => handleInputChange(todo)}
-        onSelect={() => setSelectedTodo(todo)}
+        onChange={() => handleInputChange(todo)}
       />
     </li>
   );

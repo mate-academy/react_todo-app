@@ -6,6 +6,7 @@ export const Footer:React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const filteredTodos = todos.filter(todo => !todo.completed).length;
+  const filtToComplete = todos.filter(todo => todo.completed).length;
 
   const handleClear = () => {
     const toComplete = todos.filter(todo => !todo.completed);
@@ -21,13 +22,16 @@ export const Footer:React.FC = () => {
 
       <FilteredTodos />
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={handleClear}
-      >
-        Clear completed
-      </button>
+      {filtToComplete > 0
+      && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleClear}
+        >
+          Clear completed
+        </button>
+      )}
     </>
   );
 };

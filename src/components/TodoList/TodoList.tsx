@@ -1,21 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { TodosContext } from '../TodosContext';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList:React.FC = () => {
-  const { filteredTodos, setTodos } = useContext(TodosContext);
+  const {
+    filteredTodos, toggled, setTodos,
+  } = useContext(TodosContext);
 
-  const completeAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const done = filteredTodos.map((item) => ({ ...item, completed: event.target.checked }));
+  const completeAll = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const done = filteredTodos.map((item) => ({
+        ...item, completed: event.target.checked,
+      }));
 
-    setTodos(done);
-  };
-
-  // const toggled = () => {
-  //   const done = todos.map((item) => ({...item, completed: !item.completed}));
-
-  //   setTodos(done);
-  // }
+      setTodos(done);
+    }, [filteredTodos],
+  );
 
   return (
     <section className="main">
@@ -34,7 +34,7 @@ export const TodoList:React.FC = () => {
         && (
           <ul className="todo-list" data-cy="todoList">
             {filteredTodos.map((todo) => (
-              <TodoItem todo={todo} key={todo.id} />
+              <TodoItem todo={todo} key={todo.id} togLeTodo={toggled} />
             ))}
           </ul>
         )}
