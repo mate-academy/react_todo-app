@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useEffect, useMemo, useState,
 } from 'react';
 import { ContextType } from './types/ContextType';
@@ -71,8 +70,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     };
   }, [todos]);
 
-  const handleInputChange = useCallback((updatedTodo: Todo) => {
-    console.log(updatedTodo);
+  const handleInputChange = (updatedTodo: Todo) => {
+    console.log('typed', updatedTodo);
     setTodos(currentTodos => {
       const newTodos = [...currentTodos];
       const found = newTodos.findIndex(item => item.id === updatedTodo.id);
@@ -81,7 +80,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
       return newTodos;
     });
-  }, []);
+  };
 
   const toggled = (id: number) => {
     const done = todos.map((item: Todo) => {
