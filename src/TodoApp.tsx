@@ -23,7 +23,7 @@ export const TodoApp = () => {
         <TodoList />
       </section>
 
-      {todos.length > 0 && <Footer />}
+      {!!todos.length && <Footer />}
     </div>
   );
 };

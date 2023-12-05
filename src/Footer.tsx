@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
         ${notCompletedCount === 1 ? 'item' : 'items'} left`}
       </span>
       <TodoFilter />
-      {completedCount > 0 && (
+      {!!completedCount && (
         <button type="button" className="clear-completed" onClick={handleClear}>
           Clear completed
         </button>
