@@ -1,20 +1,19 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoChanges } from '../../types/TodoChanges';
 import { TodoInfo } from '../TodoInfo';
 
 type Props = {
   someCompletedTodo: boolean,
   todos: Todo[],
-  toggleTodo: (todos: Todo[]) => void,
-  removeTodo: (todoIds: number[]) => void,
+  setTodos: TodoChanges,
 };
 
 export const TodoList: React.FC<Props> = ({
   someCompletedTodo,
   todos,
-  toggleTodo,
-  removeTodo,
+  setTodos,
 }) => {
   const [changeTitle, setChangeTitle] = useState<number | null>(null);
 
@@ -25,7 +24,7 @@ export const TodoList: React.FC<Props> = ({
       allCompleted = [...todos];
     }
 
-    toggleTodo(allCompleted.map(todo => (
+    setTodos.toggle(allCompleted.map(todo => (
       { ...todo, completed: !todo.completed }
     )));
   };
@@ -55,8 +54,7 @@ export const TodoList: React.FC<Props> = ({
               )}
             >
               <TodoInfo
-                toggleTodo={toggleTodo}
-                removeTodo={removeTodo}
+                setTodos={setTodos}
                 todo={todo}
                 setChangeTitle={setChangeTitle}
               />

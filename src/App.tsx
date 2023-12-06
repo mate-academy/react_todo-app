@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
-import { useTodos } from './helpers/useTodos';
+import { useLocalStorage } from './helpers/useLocalStorage';
 import { TodoList } from './components/TodoList';
 import { filterTodos } from './helpers/filterTodos';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
-  const [todos, addTodo, removeTodo, toggleTodo] = useTodos();
+  const [todos, setTodos] = useLocalStorage('todos');
 
   const completedTodosCounter = useMemo(() => {
     return todos.reduce((acc, curr) => {
@@ -25,21 +25,20 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <Header addTodo={addTodo} />
+      <Header setTodos={setTodos} />
 
       {!!todos.length && (
         <>
           <TodoList
-            toggleTodo={toggleTodo}
-            removeTodo={removeTodo}
             someCompletedTodo={someCompletedTodo}
             todos={visibleTodos}
+            setTodos={setTodos}
           />
 
           <Footer
             completedTodosCounter={completedTodosCounter}
             todos={todos}
-            removeTodo={removeTodo}
+            setTodos={setTodos}
           />
         </>
       )}

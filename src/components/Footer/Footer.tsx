@@ -2,11 +2,12 @@ import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { LinksPath } from '../../types/LinksPath';
 import { Todo } from '../../types/Todo';
+import { TodoChanges } from '../../types/TodoChanges';
 
 type Props = {
   completedTodosCounter: number,
   todos: Todo[],
-  removeTodo: (todoIds: number[]) => void,
+  setTodos: TodoChanges,
 };
 
 const links = [{
@@ -23,12 +24,12 @@ const links = [{
 export const Footer: React.FC<Props> = ({
   completedTodosCounter,
   todos,
-  removeTodo,
+  setTodos,
 }) => {
   const handleRemoveAll = () => {
     const completedTodos = todos.filter(({ completed }) => completed === true);
 
-    removeTodo(completedTodos.map(({ id }) => id));
+    setTodos.remove(completedTodos.map(({ id }) => id));
   };
 
   const isCompleted = todos.some(({ completed }) => completed === true);

@@ -1,16 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoChanges } from '../../types/TodoChanges';
 
 type Props = {
-  toggleTodo: (todos: Todo[]) => void,
-  removeTodo: (todoIds: number[]) => void,
+  setTodos: TodoChanges,
   todo: Todo,
   setChangeTitle: React.Dispatch<React.SetStateAction<number | null>>,
 };
 
 export const TodoInfo: React.FC<Props> = ({
-  toggleTodo,
-  removeTodo,
+  setTodos,
   todo,
   setChangeTitle,
 }) => {
@@ -25,11 +24,11 @@ export const TodoInfo: React.FC<Props> = ({
   }, [isEditing]);
 
   const handlerRemove = (id: number) => {
-    removeTodo([id]);
+    setTodos.remove([id]);
   };
 
   const handlerToggler = (currentTodo: Todo) => {
-    toggleTodo([{ ...currentTodo, completed: !todo.completed }]);
+    setTodos.toggle([{ ...currentTodo, completed: !todo.completed }]);
   };
 
   const handlerTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,13 +44,13 @@ export const TodoInfo: React.FC<Props> = ({
     }
 
     if (!newTitle.trim()) {
-      removeTodo([todo.id]);
+      setTodos.remove([todo.id]);
       setChangeTitle(null);
 
       return;
     }
 
-    toggleTodo([{ ...todo, title: newTitle }]);
+    setTodos.toggle([{ ...todo, title: newTitle }]);
     setChangeTitle(null);
   };
 
