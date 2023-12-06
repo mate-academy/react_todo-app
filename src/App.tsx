@@ -10,7 +10,7 @@ function getStorageData() {
   const storedData = localStorage.getItem('todos');
 
   if (storedData === null) {
-    return null;
+    return [];
   }
 
   try {
@@ -18,7 +18,7 @@ function getStorageData() {
 
     return data;
   } catch (err) {
-    return null;
+    return [];
   }
 }
 
@@ -53,13 +53,15 @@ export const App: React.FC = () => {
     let itemsToDoCount = 0;
     let itemsDoneCount = 0;
 
-    todoList.forEach(item => {
-      if (item.completed) {
-        itemsDoneCount += 1;
-      } else {
-        itemsToDoCount += 1;
-      }
-    });
+    if (todoList) {
+      todoList.forEach(item => {
+        if (item.completed) {
+          itemsDoneCount += 1;
+        } else {
+          itemsToDoCount += 1;
+        }
+      });
+    }
 
     return [itemsToDoCount, itemsDoneCount];
   }, [todoList]);
