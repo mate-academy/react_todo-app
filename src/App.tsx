@@ -17,7 +17,7 @@ export const App: React.FC = () => {
 
   const { pathname: location } = useLocation();
 
-  const someCompletedTodo = useMemo(() => {
+  const hasCompletedTodo = useMemo(() => {
     return !todos.some(({ completed }) => completed === false);
   }, [todos]);
 
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
           <TodoList
             toggleTodo={toggleTodo}
             removeTodo={removeTodo}
-            someCompletedTodo={someCompletedTodo}
+            hasCompletedTodo={hasCompletedTodo}
             todos={visibleTodos}
           />
 

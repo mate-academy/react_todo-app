@@ -4,14 +4,14 @@ import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo';
 
 type Props = {
-  someCompletedTodo: boolean,
+  hasCompletedTodo: boolean,
   todos: Todo[],
   toggleTodo: (todos: Todo[]) => void,
   removeTodo: (todoIds: number[]) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
-  someCompletedTodo,
+  hasCompletedTodo,
   todos,
   toggleTodo,
   removeTodo,
@@ -19,7 +19,7 @@ export const TodoList: React.FC<Props> = ({
   const [changeTitle, setChangeTitle] = useState<number | null>(null);
 
   const handleToggleAll = () => {
-    let allCompleted = todos.filter(todo => todo.completed === false);
+    let allCompleted = todos.filter(todo => !todo.completed);
 
     if (!allCompleted.length) {
       allCompleted = [...todos];
@@ -37,7 +37,7 @@ export const TodoList: React.FC<Props> = ({
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        checked={someCompletedTodo}
+        checked={hasCompletedTodo}
         onClick={handleToggleAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
