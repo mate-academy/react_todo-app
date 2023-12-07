@@ -36,7 +36,7 @@ export const TodoApp: React.FC<Props> = () => {
   };
 
   const handlerCompleteAll = () => {
-    if (todos.some(todo => todo.completed === false)) {
+    if (todos.some(todo => todo.completed)) {
       const updatedTodos = todos.map((todo) => ({
         ...todo,
         completed: true,
@@ -71,8 +71,8 @@ export const TodoApp: React.FC<Props> = () => {
   });
 
   const noCompleteTodos = todos.filter(elem => !elem.completed);
-  const isSomeComplete = todos.some(todo => todo.completed === true);
-  const allCompleted = todos.every(todo => todo.completed === true);
+  const isSomeComplete = todos.some(todo => todo.completed);
+  const allCompleted = todos.every(todo => todo.completed);
 
   return (
     <div className="todoapp">
