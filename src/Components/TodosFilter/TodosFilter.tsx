@@ -59,7 +59,7 @@ export const TodosFilter: React.FC = () => {
       </ul>
 
       {
-        todoCompleted > 0 && (
+        !!todoCompleted && (
           <button
             type="button"
             className="clear-completed"
