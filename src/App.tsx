@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { TodoApp } from './components/TodoApp/TodoApp';
 
 export const App: React.FC = () => {
   return (
     <div className="todoapp">
-      <header className="header">
+      <TodoApp />
+
+      {/* <header className="header">
         <h1>todos</h1>
 
         <form>
@@ -15,9 +18,9 @@ export const App: React.FC = () => {
             placeholder="What needs to be done?"
           />
         </form>
-      </header>
+      </header> */}
 
-      <section className="main">
+      {/* <section className="main">
         <input
           type="checkbox"
           id="toggle-all"
@@ -63,9 +66,9 @@ export const App: React.FC = () => {
             <input type="text" className="edit" />
           </li>
         </ul>
-      </section>
+      </section> */}
 
-      <footer className="footer">
+      {/* <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
           3 items left
         </span>
@@ -87,7 +90,7 @@ export const App: React.FC = () => {
         <button type="button" className="clear-completed">
           Clear completed
         </button>
-      </footer>
+      </footer> */}
     </div>
   );
 };
