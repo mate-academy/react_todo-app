@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
-export const Footer: React.FC = () => (
-  <footer className="footer">
-    <TodosFilter />
-  </footer>
-);
+import { TodoContext } from '../../contexts/TodoContext';
+
+export const Footer: React.FC = () => {
+  const { todoList } = useContext(TodoContext);
+  const todoLeft = todoList.length;
+
+  return (
+    <>
+      {todoLeft > 0 && (
+        <footer className="footer">
+          <TodosFilter />
+        </footer>
+      )}
+    </>
+  );
+};

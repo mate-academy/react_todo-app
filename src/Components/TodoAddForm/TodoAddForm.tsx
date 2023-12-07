@@ -9,7 +9,7 @@ export const TodoAddForm: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (inputTitle.length > 0) {
+    if (inputTitle.trim().length > 0) {
       dispatch({ type: 'addTodo', title: inputTitle });
 
       setInputTitle('');
