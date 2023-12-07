@@ -32,9 +32,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={classNames({
             selected: currentFilter === Filter.ACTIVE,
           })}
-          onClick={() => {
-            onFilterChange(Filter.ACTIVE);
-          }}
+          onClick={() => onFilterChange(Filter.ACTIVE)}
         >
           Active
         </a>
