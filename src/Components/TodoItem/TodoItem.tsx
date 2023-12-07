@@ -1,131 +1,108 @@
-import React, { useContext, useRef, useState } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import classNames from 'classnames';
-
-import { Todo } from '../../Utils/Types/Todo';
-import { TodosContext } from '../../Utils/TodosContext';
+import { Todo } from '../../types/Todo';
+import { TodosContext } from '../context/TodoContext';
 
 type Props = {
-  todo: Todo,
+  todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { todos, setTodos } = useContext(TodosContext);
-  const [newTitle, setNewTitle] = useState('');
+  const { title, completed, id } = todo;
   const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(title);
+  const todoContext = useContext(TodosContext);
 
-  const titleField = useRef<HTMLInputElement>(null);
+  const { toggleTodo, deleteTodo, updateTodoTitle } = todoContext;
 
-  const handlerDeleteTodo = () => {
-    setTodos(currentTodos => currentTodos
-      .filter(elem => elem.id !== todo.id));
+  const handleToggleTodo = () => {
+    toggleTodo(id);
   };
 
-  const handlerCompleteTodo = () => {
-    const updatedTodos = [...todos];
-    const currentTodoIndex = updatedTodos
-      .findIndex((elem: Todo) => elem.id === todo.id);
-
-    if (currentTodoIndex !== -1) {
-      const newCompleted = !updatedTodos[currentTodoIndex].completed;
-
-      updatedTodos[currentTodoIndex] = {
-        ...updatedTodos[currentTodoIndex],
-        completed: newCompleted,
-      };
-      updatedTodos.splice(currentTodoIndex, 1, updatedTodos[currentTodoIndex]);
-
-      setTodos(updatedTodos);
-    }
+  const handleDeleteTodo = () => {
+    deleteTodo(id);
   };
 
-  const handlerEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTitle(event.target.value);
-  };
-
-  const handlerEditTodo = () => {
-    setNewTitle(todo.title);
+  const handleEdit = () => {
     setIsEditing(true);
-
-    setTimeout(() => {
-      if (titleField.current !== null) {
-        titleField.current.focus();
-      }
-    }, 0);
   };
 
-  const handlerEndEditTodoOnBlur = () => {
-    if (isEditing) {
-      if (newTitle !== '') {
-        const updatedTodos = [...todos];
-        const currentTodoIndex = updatedTodos
-          .findIndex((elem: Todo) => elem.id === todo.id);
-
-        if (currentTodoIndex !== -1) {
-          updatedTodos[currentTodoIndex] = {
-            ...updatedTodos[currentTodoIndex],
-            title: newTitle.trim(),
-          };
-          updatedTodos
-            .splice(currentTodoIndex, 1, updatedTodos[currentTodoIndex]);
-
-          setTodos(updatedTodos);
-        }
-      } else {
-        setTodos(currentTodos => currentTodos
-          .filter(elem => elem.id !== todo.id));
-      }
-    }
-
-    setIsEditing(false);
+  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedTitle(event.target.value);
   };
 
-  const handlerKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape' && isEditing) {
+  const handleEditSubmit = () => {
+    const trimmedTitle = editedTitle.trim();
+
+    if (trimmedTitle !== '') {
+      setEditedTitle(trimmedTitle);
       setIsEditing(false);
-    } else if (event.key === 'Enter' && isEditing) {
-      handlerEndEditTodoOnBlur();
+      updateTodoTitle(id, trimmedTitle);
+    } else {
+      deleteTodo(id);
     }
   };
+
+  const handleEditCancel = () => {
+    setIsEditing(false);
+    setEditedTitle(title);
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleEditSubmit();
+    } else if (event.key === 'Escape') {
+      handleEditCancel();
+    }
+  };
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (!isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   return (
-    <li
-      className={classNames({
-        completed: todo.completed,
-        editing: isEditing,
-      })}
+    <li className={classNames({
+      completed,
+      editing: isEditing,
+    })}
     >
-      <div
-        className="view"
-      >
-        <input
-          type="checkbox"
-          className="toggle"
-          id={`toggle-view${todo.id}`}
-          checked={todo.completed}
-          onChange={handlerCompleteTodo}
-        />
-        <label
-          onDoubleClick={handlerEditTodo}
-        >
-          {todo.title}
-        </label>
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          aria-label="deleteTodo"
-          onClick={handlerDeleteTodo}
-        />
-      </div>
-      <input
-        ref={titleField}
-        type="text"
-        className="edit"
-        value={newTitle}
-        onChange={handlerEditTitle}
-        onBlur={handlerEndEditTodoOnBlur}
-        onKeyUp={handlerKeyUp}
-      />
+      {!isEditing ? (
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id={`toggle-${id}`}
+            checked={completed}
+            onChange={handleToggleTodo}
+          />
+          <label onDoubleClick={handleEdit}>{title}</label>
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={handleDeleteTodo}
+          />
+        </div>
+      )
+        : (
+          <input
+            type="text"
+            ref={inputRef}
+            className="edit"
+            value={editedTitle}
+            placeholder="Empty todo will be deleted"
+            onChange={handleEditChange}
+            onBlur={handleEditSubmit}
+            onKeyUp={handleKeyUp}
+          />
+        )}
     </li>
   );
 };
