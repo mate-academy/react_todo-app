@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { DispachContext } from './TodosContext/TodosContext';
+import { DispatchContext } from './TodosContext/TodosContext';
 
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
-  const dispatch = useContext(DispachContext);
+  const dispatch = useContext(DispatchContext);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);

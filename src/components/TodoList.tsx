@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TodoItem } from './TodoItem';
+import { StateContext } from './TodosContext/TodosContext';
 
 export const TodoList: React.FC = () => {
-  // const { todos, filterBy } = useContext(TodosContext);
+  const { todos } = useContext(StateContext);
 
   return (
     <ul className="todo-list" data-cy="todoList">

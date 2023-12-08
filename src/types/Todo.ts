@@ -1,10 +1,10 @@
 export interface Todo {
   id: number,
   title: string,
-  completed: false,
+  completed: boolean,
 }
 
-export enum TodosFilter {
+export enum Filter {
   ALL = 'All',
   ACTIVE = 'Active',
   COMPLETED = 'Comleted',

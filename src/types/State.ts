@@ -1,6 +1,6 @@
-import { Todo, TodosFilter } from './Todo';
+import { Todo, Filter } from './Todo';
 
 export interface State {
   todos: Todo[],
-  filterBy: TodosFilter,
+  filterBy: Filter,
 }

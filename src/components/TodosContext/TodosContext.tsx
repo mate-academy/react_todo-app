@@ -1,10 +1,12 @@
-import React, { useReducer } from 'react';
-import { TodosFilter } from '../../types/Todo';
+import React, { Dispatch, useReducer } from 'react';
+import { Filter } from '../../types/Todo';
 import { State } from '../../types/State';
 
 type Action = { type: 'addTodo', title: string }
 | { type: 'removeTodo', id: number }
-| { type: 'toggleCompleted', payload: boolean };
+| { type: 'toggleCompleted', payload: boolean }
+| { type: 'filter', payload: Filter }
+| { type: 'removeCompletedTodods', };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -18,18 +20,47 @@ function reducer(state: State, action: Action): State {
         }],
       };
 
+    case 'removeTodo':
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.id),
+      };
+
+    case 'removeCompletedTodods':
+      return {
+
+      };
+
+    case 'filter':
+      return {
+        ...state,
+        filterBy: action.payload,
+      };
+
+    case 'toggleCompleted': {
+      return {
+        ...state,
+        todos: state.todos.map(todo => (
+          {
+            ...todo,
+            completed: action.payload,
+          }
+        )),
+      };
+    }
+
     default:
       return state;
   }
 }
 
-const initialState = {
+const initialState: State = {
   todos: [],
-  filterBy: TodosFilter.ALL,
+  filterBy: Filter.ALL,
 };
 
 export const StateContext = React.createContext(initialState);
-export const DispatchContext = React.createContext((action: Action) => {});
+export const DispatchContext = React.createContext<Dispatch<Action>>(() => {});
 
 type Props = {
   children: React.ReactNode
