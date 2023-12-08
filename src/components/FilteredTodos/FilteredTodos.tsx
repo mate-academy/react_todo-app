@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { TodosContext } from '../TodosContext';
+import { Position } from '../types/Position';
 
 export const FilteredTodos:React.FC = () => {
-  const { filt, Position, setFilt } = useContext(TodosContext);
+  const { filt, setFilt } = useContext(TodosContext);
 
-  const handleChange = (status: any) => {
+  const handleChange = (status: Position) => {
     setFilt(status);
   };
 

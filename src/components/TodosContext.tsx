@@ -1,26 +1,20 @@
 import React, {
-  useEffect, useMemo, useState,
+  useMemo, useState,
 } from 'react';
+import { useLocalStorage } from './LocaleStorageHooksg/LocaleStorageHooks';
 import { ContextType } from './types/ContextType';
+import { Position } from './types/Position';
 import { Todo } from './types/Todo';
-
-enum Position {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
-}
 
 export const TodosContext = React.createContext<ContextType>({
   todos: [],
   title: '',
   filteredTodos: [],
   filt: '',
-  Position,
   setTodos: () => {},
   handleTitleChange: () => {},
   handleAddTodo: () => {},
   handleDelete: () => {},
-  handleInputChange: () => {},
   handleEnter: () => {},
   setFilt: () => {},
   toggled: () => {},
@@ -31,7 +25,7 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[] | []>('todos', []);
   const [title, setTitle] = useState('');
   const [filt, setFilt] = useState<Position>(Position.All);
 
@@ -44,17 +38,13 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     if (title.trim() === '') {
       setTitle('');
     } else {
-      setTodos((allTodos) => [
-        ...allTodos,
+      setTodos([
+        ...todos,
         { id: +new Date(), title, completed: false },
       ]);
       setTitle('');
     }
   };
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
 
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -64,23 +54,11 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const handleDelete = useMemo(() => {
     return (id: number) => {
-      const newTodos = todos.filter((todo) => todo.id !== id);
+      const newTodos = todos.filter((todo: { id: number; }) => todo.id !== id);
 
       setTodos(newTodos);
     };
-  }, [todos]);
-
-  const handleInputChange = (updatedTodo: Todo) => {
-    console.log('typed', updatedTodo);
-    setTodos(currentTodos => {
-      const newTodos = [...currentTodos];
-      const found = newTodos.findIndex(item => item.id === updatedTodo.id);
-
-      newTodos.splice(found, 1, updatedTodo);
-
-      return newTodos;
-    });
-  };
+  }, [todos, setTodos]);
 
   const toggled = (id: number) => {
     const done = todos.map((item: Todo) => {
@@ -96,7 +74,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(done);
   };
 
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos = todos.filter((todo: { completed: boolean; }) => {
     switch (filt) {
       case Position.Active:
         return !todo.completed;
@@ -112,12 +90,10 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     title,
     filteredTodos,
     filt,
-    Position,
     setTodos,
     handleTitleChange,
     handleAddTodo,
     handleDelete,
-    handleInputChange,
     handleEnter,
     setFilt,
     toggled,

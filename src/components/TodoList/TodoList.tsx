@@ -14,7 +14,7 @@ export const TodoList:React.FC = () => {
       }));
 
       setTodos(done);
-    }, [filteredTodos],
+    }, [filteredTodos, setTodos],
   );
 
   return (
