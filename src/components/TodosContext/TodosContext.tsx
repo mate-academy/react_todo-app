@@ -6,7 +6,8 @@ type Action = { type: 'addTodo', title: string }
 | { type: 'removeTodo', id: number }
 | { type: 'toggleCompleted', payload: boolean }
 | { type: 'filter', payload: Filter }
-| { type: 'removeCompletedTodods', };
+| { type: 'removeCompletedTodods', }
+| { type: 'editTitle', id: number, newTitle: string };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -26,9 +27,25 @@ function reducer(state: State, action: Action): State {
         todos: state.todos.filter(todo => todo.id !== action.id),
       };
 
+    case 'editTitle':
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              title: action.newTitle,
+            };
+          }
+
+          return todo;
+        }),
+      };
+
     case 'removeCompletedTodods':
       return {
-
+        ...state,
+        todos: state.todos.filter(todo => !todo.completed),
       };
 
     case 'filter':

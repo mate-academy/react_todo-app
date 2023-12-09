@@ -6,6 +6,7 @@ export const Footer:React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
   const completedTodos = todos.some(todo => todo.completed);
+  const activeTodos = todos.filter(todo => !todo.completed).length;
 
   const handleRemoveCompletedTodos = () => {
     dispatch({
@@ -16,7 +17,13 @@ export const Footer:React.FC = () => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        3 items left
+        {activeTodos === 1
+          ? (
+            `${activeTodos} item left`
+          )
+          : (
+            `${activeTodos} items left`
+          )}
       </span>
 
       <TodosFilter />
