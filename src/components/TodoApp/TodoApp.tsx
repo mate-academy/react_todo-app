@@ -33,9 +33,8 @@ export const TodoApp: React.FC = () => {
     reset();
   };
 
-
   const filterTodos = todos.filter((todo: Todo) => {
-    switch(filterListTodos) {
+    switch (filterListTodos) {
       case 'active':
         return todo.completed === false;
       case 'completed':

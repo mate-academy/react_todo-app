@@ -15,15 +15,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [value, setValue] = useState(todo.title);
 
   const replaceCompleted = (id: number) => {
-    const newTodo = [...todos].map(todo => {
-      if (todo.id === id) {
+    const newTodo = [...todos].map(item => {
+      if (item.id === id) {
         return {
-          ...todo,
-          completed: !todo.completed
+          ...item,
+          completed: !item.completed,
         };
       }
 
-      return {...todo};
+      return { ...item };
     });
 
     setTodos(newTodo);
