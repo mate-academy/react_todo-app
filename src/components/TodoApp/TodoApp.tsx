@@ -33,23 +33,23 @@ export const TodoApp: React.FC = () => {
     reset();
   };
 
+
   const filterTodos = todos.filter((todo: Todo) => {
-    if (filterListTodos === 'active') {
-      return todo.completed === false;
+    switch(filterListTodos) {
+      case 'active':
+        return todo.completed === false;
+      case 'completed':
+        return todo.completed === true;
+      default:
+        return todo;
     }
-
-    if (filterListTodos === 'completed') {
-      return todo.completed === true;
-    }
-
-    return todo;
   });
 
   const filterTodosCount = todos
-    .filter((todo: Todo) => todo.completed === false);
+    .filter((todo: Todo) => !todo.completed);
 
   const completedAll = () => {
-    const verifyCompleted = todos.some(todo => todo.completed === false);
+    const verifyCompleted = todos.some(todo => !todo.completed);
 
     setTodos(todos.map((todo) => {
       return {

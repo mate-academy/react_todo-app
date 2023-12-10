@@ -15,15 +15,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [value, setValue] = useState(todo.title);
 
   const replaceCompleted = (id: number) => {
-    const newTodo = [...todos];
-    const findIndex = newTodo.findIndex(item => item.id === id);
-    const valueCompleted = !newTodo[findIndex].completed;
+    const newTodo = [...todos].map(todo => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !todo.completed
+        };
+      }
 
-    newTodo[findIndex] = {
-      ...newTodo[findIndex],
-      completed: valueCompleted,
-    };
-    newTodo.splice(findIndex, 1, newTodo[findIndex]);
+      return {...todo};
+    });
+
     setTodos(newTodo);
   };
 
@@ -36,12 +38,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEditing]);
 
   const deleteTask = (id: number) => {
-    const newTodo = [...todos];
-    const findIndex = newTodo.findIndex(i => i.id === id);
-
-    newTodo.splice(findIndex, 1);
-
-    setTodos(newTodo);
+    setTodos(todos.filter(prevTodo => prevTodo.id !== id));
   };
 
   const editTodos = () => {
