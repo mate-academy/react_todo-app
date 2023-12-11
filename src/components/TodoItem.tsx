@@ -26,21 +26,25 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEdited(true);
   };
 
-  const handlerEditTodoTitle = () => {
-    dispatch({
-      type: 'editTitle',
-      id: todo.id,
-      newTitle: editedTitle,
-    });
-
-    setEdited(false);
-  };
-
   const handleDeleteTodo = () => {
     dispatch({
       type: 'removeTodo',
       id: todo.id,
     });
+  };
+
+  const handlerEditTodoTitle = () => {
+    if (editedTitle.trim()) {
+      dispatch({
+        type: 'editTitle',
+        id: todo.id,
+        newTitle: editedTitle,
+      });
+
+      setEdited(false);
+    } else {
+      handleDeleteTodo();
+    }
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -56,7 +60,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li className={classNames({
-      completed: todo.completed,
+      completed: todo.completed === true,
       editing: edited,
     })}
     >

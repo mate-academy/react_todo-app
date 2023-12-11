@@ -1,4 +1,4 @@
-import React, { Dispatch, useReducer } from 'react';
+import React, { Dispatch, useEffect, useReducer } from 'react';
 import { Filter } from '../../types/Todo';
 import { State } from '../../types/State';
 
@@ -76,6 +76,15 @@ const initialState: State = {
   filterBy: Filter.ALL,
 };
 
+const getStoredTodos = () => {
+  const storedTodos = localStorage.getItem('todos');
+
+  return {
+    ...initialState,
+    todos: storedTodos ? JSON.parse(storedTodos) : [],
+  };
+};
+
 export const StateContext = React.createContext(initialState);
 export const DispatchContext = React.createContext<Dispatch<Action>>(() => {});
 
@@ -84,7 +93,14 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, getStoredTodos);
+  const { todos } = state;
+
+  useEffect(() => {
+    if (todos) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, [todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

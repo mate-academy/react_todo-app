@@ -11,10 +11,13 @@ export const Header: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch({
-      type: 'addTodo',
-      title,
-    });
+
+    if (title.trim()) {
+      dispatch({
+        type: 'addTodo',
+        title,
+      });
+    }
 
     setTitle('');
   };
