@@ -4,24 +4,21 @@ import React, {
 } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoContext } from '../TodoContext/TodoContext';
+import { Keyboard } from '../enum/Keyboard';
 
 type Props = {
   todo: Todo;
 };
 
-enum Keyboard {
-  Escape = 'Escape',
-  Enter = 'Enter',
-}
-
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { title, id, completed } = todo;
   const { todos, setTodos } = useContext(TodoContext);
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(todo.title);
 
-  const replaceCompleted = (id: number) => {
+  const replaceCompleted = (idTodo: number) => {
     const newTodo = todos.map(item => {
-      if (item.id === id) {
+      if (item.id === idTodo) {
         return {
           ...item,
           completed: !item.completed,
@@ -42,8 +39,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [isEditing]);
 
-  const deleteTask = (id: number) => {
-    setTodos(todos.filter(prevTodo => prevTodo.id !== id));
+  const deleteTask = (idTodo: number) => {
+    setTodos(todos.filter(prevTodo => prevTodo.id !== idTodo));
   };
 
   const editTodos = () => {
@@ -58,7 +55,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (isEditing) {
       const newTodos = [...todos];
       const findIndex = newTodos
-        .findIndex(elem => elem.id === todo.id);
+        .findIndex(elem => elem.id === id);
 
       newTodos[findIndex].title = value;
       setTodos(newTodos);
@@ -67,23 +64,25 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (value.length === 0) {
-      deleteTask(todo.id)
+      deleteTask(id);
     }
   };
 
   const handleInput = () => {
     setIsEditing(false);
-    setValue(todo.title);
+    setValue(title);
   };
 
   const hendleKeyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case Keyboard.Escape:
         return value.length === 0
-          ? deleteTask(todo.id)
+          ? deleteTask(id)
           : handleInput();
+
       case Keyboard.Enter:
         return handleBlurSeve();
+
       default:
         return setIsEditing(true);
     }
@@ -92,9 +91,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <li className={classNames(
       {
-        completed: todo.completed,
+        completed,
         editing: isEditing,
-      },
+      }
     )}
     >
       <div className="completed">
@@ -104,20 +103,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               type="checkbox"
               className="toggle"
               id="toggle-view"
-              checked={todo.completed}
-              onChange={() => replaceCompleted(todo.id)}
+              checked={completed}
+              onChange={() => replaceCompleted(id)}
             />
             <label
               onDoubleClick={editTodos}
             >
-              {todo.title}
+              {title}
             </label>
             <button
               type="button"
               className="destroy"
               aria-label="deleteTodo"
               data-cy="deleteTodo"
-              onClick={() => deleteTask(todo.id)}
+              onClick={() => deleteTask(id)}
             />
           </>
         )}

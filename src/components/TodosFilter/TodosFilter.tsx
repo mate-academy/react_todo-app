@@ -2,17 +2,12 @@ import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../TodoContext/TodoContext';
 import { Todo } from '../../types/Todo';
+import { ButtonFilter } from '../enum/ButtonFilter';
 
 type Props = {
   setChooseTodos: (select: string) => void,
   filterTodosCount: Todo[],
   filterListTodos: string,
-};
-
-const ButtonFilter = {
-  all: '',
-  active: 'active',
-  completed: 'completed',
 };
 
 export const TodosFilter: React.FC<Props> = ({
