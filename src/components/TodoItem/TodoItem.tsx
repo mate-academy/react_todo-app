@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Todo from '../../types/Todo';
 import CloseButton from '../UI/CloseButton';
 
@@ -14,17 +14,17 @@ const TodoItem: React.FC<Props> = ({
   },
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const editingInput = useRef<HTMLInputElement | null>(null);
 
-  let className = '';
-
-  if (isEditing) {
-    className = 'editing';
-  } else if (completed) {
-    className = 'completed';
-  }
+  const completedClass = completed && 'completed';
+  const editingClass = isEditing && 'editing';
 
   const handleDouble = () => {
     setIsEditing(true);
+    if (editingInput.current) {
+      editingInput.current.focus();
+    }
+
     // console.log('Double: ', document.activeElement);
   };
 
@@ -33,11 +33,11 @@ const TodoItem: React.FC<Props> = ({
     // console.log('Blur: ', document.activeElement);
   };
 
+  // console.log(`${editingClass || completedClass || ''}`);
+
   return (
     <li
-      className={className}
-      onDoubleClick={handleDouble}
-      onBlur={handleBlur}
+      className={`${editingClass || completedClass}`}
     >
       <div className="view">
         <input
@@ -46,17 +46,23 @@ const TodoItem: React.FC<Props> = ({
           id={`todo-${id}`}
         />
 
-        <label htmlFor={`todo-${id}`}>{title}</label>
+        <label
+          htmlFor={`todo-${id}`}
+          onDoubleClick={handleDouble}
+        // onBlur={handleBlur}
+        >
+          {title}
+        </label>
 
         <CloseButton />
       </div>
 
-      {isEditing && (
-        <input
-          type="text"
-          className="edit"
-        />
-      )}
+      <input
+        type="text"
+        className="edit"
+        ref={editingInput}
+        onBlur={handleBlur}
+      />
     </li>
   );
 };
