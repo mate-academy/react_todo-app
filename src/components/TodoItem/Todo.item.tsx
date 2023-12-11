@@ -28,7 +28,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         };
       }
 
-      return {...item};
+      return { ...item };
     });
 
     setTodos(newTodo);
