@@ -58,9 +58,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
+  const handleChangeCompleted = () => {
+    dispatch({
+      type: 'markCompleted',
+      id: todo.id,
+    });
+  };
+
   return (
     <li className={classNames({
-      completed: todo.completed === true,
+      completed: todo.completed,
       editing: edited,
     })}
     >
@@ -69,6 +76,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="toggle"
           id="toggle-view"
+          checked={todo.completed}
+          onChange={handleChangeCompleted}
         />
         <label>{todo.title}</label>
         {/* eslint-disable-next-line */}

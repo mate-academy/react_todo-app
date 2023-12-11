@@ -7,6 +7,7 @@ type Action = { type: 'addTodo', title: string }
 | { type: 'toggleCompleted', payload: boolean }
 | { type: 'filter', payload: Filter }
 | { type: 'removeCompletedTodods', }
+| { type: 'markCompleted', id: number }
 | { type: 'editTitle', id: number, newTitle: string };
 
 function reducer(state: State, action: Action): State {
@@ -63,6 +64,22 @@ function reducer(state: State, action: Action): State {
             completed: action.payload,
           }
         )),
+      };
+    }
+
+    case 'markCompleted': {
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              completed: !todo.completed,
+            };
+          }
+
+          return todo;
+        }),
       };
     }
 
