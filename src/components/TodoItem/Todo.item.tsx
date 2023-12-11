@@ -65,6 +65,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       setIsEditing(false);
     }
+
+    if (value.length === 0) {
+      deleteTask(todo.id)
+    }
   };
 
   const handleInput = () => {
