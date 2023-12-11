@@ -24,12 +24,12 @@ export const TodosFilter: React.FC<Props> = ({
 
   const clearPerformedTask = () => {
     const newTodos = [...todos]
-      .filter(todo => todo.completed !== true);
+      .filter(todo => !todo.completed);
 
     setTodos(newTodos);
   };
 
-  const findClearTasK = todos.find(todo => todo.completed === true);
+  const findClearTasK = todos.find(todo => todo.completed);
 
   return (
     <footer className="footer">

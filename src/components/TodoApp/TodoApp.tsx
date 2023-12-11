@@ -4,6 +4,11 @@ import { TodosFilter } from '../TodosFilter/TodosFilter';
 import { Todo } from '../../types/Todo';
 import { TodoContext } from '../TodoContext/TodoContext';
 
+const ButtonFilter = {
+  active: 'active',
+  completed: 'completed',
+};
+
 export const TodoApp: React.FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const [title, setTitle] = useState('');
@@ -35,10 +40,10 @@ export const TodoApp: React.FC = () => {
 
   const filterTodos = todos.filter((todo: Todo) => {
     switch (filterListTodos) {
-      case 'active':
-        return todo.completed === false;
-      case 'completed':
-        return todo.completed === true;
+      case ButtonFilter.active:
+        return !todo.completed;
+      case ButtonFilter.completed:
+        return todo.completed;
       default:
         return todo;
     }

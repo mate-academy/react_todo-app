@@ -8,7 +8,7 @@ type Props = {
 
 export const TodoContext = React.createContext<{
   todos: Todo[],
-  setTodos(todos: Todo[]):void
+  setTodos(todos: Todo[]): void
 }>({
       todos: [],
       setTodos: () => {},

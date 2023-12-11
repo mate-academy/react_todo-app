@@ -9,13 +9,18 @@ type Props = {
   todo: Todo;
 };
 
+enum Keyboard {
+  Escape = 'Escape',
+  Enter = 'Enter',
+}
+
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodoContext);
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(todo.title);
 
   const replaceCompleted = (id: number) => {
-    const newTodo = [...todos].map(item => {
+    const newTodo = todos.map(item => {
       if (item.id === id) {
         return {
           ...item,
@@ -23,7 +28,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         };
       }
 
-      return { ...item };
+      return {...item};
     });
 
     setTodos(newTodo);
@@ -62,17 +67,21 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
+  const handleInput = () => {
+    setIsEditing(false);
+    setValue(todo.title);
+  };
+
   const hendleKeyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      if (value.length === 0) {
-        deleteTask(todo.id);
-      }
-
-      setIsEditing(false);
-    }
-
-    if (e.key === 'Enter') {
-      handleBlurSeve();
+    switch (e.key) {
+      case Keyboard.Escape:
+        return value.length === 0
+          ? deleteTask(todo.id)
+          : handleInput();
+      case Keyboard.Enter:
+        return handleBlurSeve();
+      default:
+        return setIsEditing(true);
     }
   };
 
