@@ -53,35 +53,41 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleEndEditTodoOnBlur = () => {
-    if (isEditing) {
-      if (newTitle !== '') {
-        const updatedTodos = [...todos];
-        const currentTodoIndex = updatedTodos
-          .findIndex((elem: Todo) => elem.id === todo.id);
+    if (!isEditing || !newTitle) {
+      setIsEditing(false);
 
-        if (currentTodoIndex !== -1) {
-          updatedTodos[currentTodoIndex] = {
-            ...updatedTodos[currentTodoIndex],
-            title: newTitle.trim(),
-          };
-          updatedTodos
-            .splice(currentTodoIndex, 1, updatedTodos[currentTodoIndex]);
+      return;
+    }
 
-          setTodos(updatedTodos);
-        }
-      } else {
-        setTodos(currentTodos => currentTodos
-          .filter(elem => elem.id !== todo.id));
-      }
+    const updatedTodos = [...todos];
+    const currentTodoIndex = updatedTodos
+      .findIndex((elem: Todo) => elem.id === todo.id);
+
+    if (currentTodoIndex !== -1) {
+      updatedTodos[currentTodoIndex] = {
+        ...updatedTodos[currentTodoIndex],
+        title: newTitle.trim(),
+      };
+      updatedTodos.splice(currentTodoIndex, 1, updatedTodos[currentTodoIndex]);
+      setTodos(updatedTodos);
+    } else {
+      setTodos(currentTodos => currentTodos
+        .filter(elem => elem.id !== todo.id));
     }
 
     setIsEditing(false);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape' && isEditing) {
+    if (!isEditing) {
+      return;
+    }
+
+    if (event.key === 'Escape') {
       setIsEditing(false);
-    } else if (event.key === 'Enter' && isEditing) {
+    }
+
+    if (event.key === 'Enter') {
       handleEndEditTodoOnBlur();
     }
   };

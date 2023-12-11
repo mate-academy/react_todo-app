@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { TodosContext } from '../utils/TodoContext';
 import { Filter } from '../types/Filter';
 import { TodoList } from './TodoList';
@@ -22,7 +22,7 @@ export const TodoMainApp: React.FC<Props> = () => {
 
   const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (title.trim() !== '') {
+    if (title.trim()) {
       const newTask = {
         id: +new Date(),
         title,
@@ -60,9 +60,14 @@ export const TodoMainApp: React.FC<Props> = () => {
     return todo.completed;
   });
 
-  const noCompleteTodos = todos.filter(elem => !elem.completed);
-  const isSomeComplete = todos.some(todo => todo.completed === true);
-  const allCompleted = todos.every(todo => todo.completed === true);
+  const { noCompleteTodos, isSomeComplete, allCompleted } = useMemo(
+    () => ({
+      noCompleteTodos: todos.filter((elem) => !elem.completed),
+      isSomeComplete: todos.some((todo) => todo.completed),
+      allCompleted: todos.every((todo) => todo.completed),
+    }),
+    [todos],
+  );
 
   return (
     <div className="todoapp">
