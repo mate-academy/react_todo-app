@@ -11,7 +11,7 @@ export const Main: React.FC = () => {
 
   const handleToggleAll = () => {
     dispatch({
-      type: 'toggleCompleted',
+      type: 'toggleAll',
       payload: !allCompleted,
     });
   };

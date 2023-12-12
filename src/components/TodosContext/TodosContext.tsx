@@ -4,10 +4,10 @@ import { State } from '../../types/State';
 
 type Action = { type: 'addTodo', title: string }
 | { type: 'removeTodo', id: number }
-| { type: 'toggleCompleted', payload: boolean }
+| { type: 'toggleAll', payload: boolean }
 | { type: 'filter', payload: Filter }
 | { type: 'removeCompletedTodods', }
-| { type: 'markCompleted', id: number }
+| { type: 'toggleCompleted', id: number }
 | { type: 'editTitle', id: number, newTitle: string };
 
 function reducer(state: State, action: Action): State {
@@ -55,7 +55,7 @@ function reducer(state: State, action: Action): State {
         filterBy: action.payload,
       };
 
-    case 'toggleCompleted': {
+    case 'toggleAll': {
       return {
         ...state,
         todos: state.todos.map(todo => (
@@ -67,7 +67,7 @@ function reducer(state: State, action: Action): State {
       };
     }
 
-    case 'markCompleted': {
+    case 'toggleCompleted': {
       return {
         ...state,
         todos: state.todos.map(todo => {

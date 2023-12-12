@@ -62,13 +62,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (event.key === 'Enter') {
-      handlerEditTodoTitle();
+      if (editedTitle.length !== 0) {
+        setShowEmptyTitleAlert(false);
+        handlerEditTodoTitle();
+      } else {
+        setShowEmptyTitleAlert(true);
+      }
     }
   };
 
   const handleChangeCompleted = () => {
     dispatch({
-      type: 'markCompleted',
+      type: 'toggleCompleted',
       id: todo.id,
     });
   };
