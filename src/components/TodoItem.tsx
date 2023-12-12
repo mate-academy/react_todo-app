@@ -15,9 +15,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { deleteTodo, todos, setTodos } = useContext(TodoContext);
 
   const handleTodoCompleted = (todoId: number) => {
-    const updatedTodos = todos.map(currentTodo => (currentTodo.id === todoId
-      ? { ...todo, completed: !todo.completed }
-      : todo));
+    const updatedTodos = todos.map(currentTodo => (
+      currentTodo.id === todoId
+        ? { ...currentTodo, completed: !currentTodo.completed }
+        : currentTodo
+    ));
 
     setTodos(updatedTodos);
   };
@@ -30,7 +32,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEditing(false);
 
     const updatedTodos = todos.map((currentTodo) => (
-      currentTodo.id === id ? { ...todo, title: editedTitle } : todo));
+      currentTodo.id === id ?
+      { ...currentTodo, title: editedTitle } : currentTodo));
 
     setTodos(updatedTodos);
   };
