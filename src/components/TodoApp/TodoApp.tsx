@@ -47,9 +47,8 @@ export const TodoApp: React.FC = () => {
     }
   }), [filterListTodos, todos]);
 
-  const filterTodosCount = useMemo(() =>
-    todos.filter((todo: Todo) => !todo.completed), [todos]
-  );
+  const filterTodosCount = useMemo(() => todos
+    .filter((todo: Todo) => !todo.completed), [todos]);
 
   const completedAll = () => {
     const verifyCompleted = todos.some(todo => !todo.completed);

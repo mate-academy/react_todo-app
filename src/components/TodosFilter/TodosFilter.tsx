@@ -24,9 +24,8 @@ export const TodosFilter: React.FC<Props> = ({
     setTodos(newTodos);
   };
 
-  const findClearTasK = useMemo(() =>
-    todos.find(todo => todo.completed), [todos]
-  );
+  const findClearTasK = useMemo(() => todos
+    .find(todo => todo.completed), [todos]);
 
   return (
     <footer className="footer">
