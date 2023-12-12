@@ -21,10 +21,15 @@ export const App: React.FC = () => {
   };
 
   const handleMakeAllCompletedTodo = () => {
-    const updatedTodo = todos.map(todo => (
-      { ...todo, completed: !todo.completed }));
+    const areMostTodosCompleted
+    = todos.filter(todo => todo.completed).length > todos.length / 2;
 
-    setTodos(updatedTodo);
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !areMostTodosCompleted,
+    }));
+
+    setTodos(updatedTodos);
   };
 
   return (
@@ -57,7 +62,7 @@ export const App: React.FC = () => {
         </ul>
       </section>
       <footer>
-        <TodoFilter />
+        {todos.length > 0 && <TodoFilter />}
       </footer>
     </div>
   );

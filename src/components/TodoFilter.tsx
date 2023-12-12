@@ -1,8 +1,11 @@
 import { useContext } from 'react';
+import cn from 'classnames';
 import { TodoContext } from '../context/TodoContext';
 
 export const TodoFilter = () => {
-  const { todos, setTodos, setFilterStatus } = useContext(TodoContext);
+  const {
+    todos, setTodos, filterStatus, setFilterStatus,
+  } = useContext(TodoContext);
 
   const handleNewStatus = (status: string) => {
     setFilterStatus(status);
@@ -27,7 +30,7 @@ export const TodoFilter = () => {
         <li>
           <a
             href="#/"
-            className="selected"
+            className={cn({ selected: filterStatus === 'all' })}
             onClick={() => handleNewStatus('all')}
           >
             All
@@ -37,6 +40,7 @@ export const TodoFilter = () => {
         <li>
           <a
             href="#/active"
+            className={cn({ selected: filterStatus === 'active' })}
             onClick={() => handleNewStatus('active')}
           >
             Active
@@ -46,6 +50,7 @@ export const TodoFilter = () => {
         <li>
           <a
             href="#/completed"
+            className={cn({ selected: filterStatus === 'completed' })}
             onClick={() => handleNewStatus('completed')}
           >
             Completed

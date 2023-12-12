@@ -44,7 +44,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      if (editedTitle !== '') {
+      if (editedTitle) {
         handleEditEnd();
       } else {
         deleteTodo(id);
