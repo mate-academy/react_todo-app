@@ -32,8 +32,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEditing(false);
 
     const updatedTodos = todos.map((currentTodo) => (
-      currentTodo.id === id ?
-      { ...currentTodo, title: editedTitle } : currentTodo));
+      currentTodo.id === id
+        ? { ...currentTodo, title: editedTitle } : currentTodo));
 
     setTodos(updatedTodos);
   };
