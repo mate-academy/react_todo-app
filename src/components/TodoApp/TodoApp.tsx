@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { TodoList } from '../TodoList.tsx/TodoList';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 import { Todo } from '../../types/Todo';
@@ -34,7 +34,7 @@ export const TodoApp: React.FC = () => {
     reset();
   };
 
-  const filterTodos = todos.filter((todo: Todo) => {
+  const filterTodos = useMemo(() => todos.filter((todo: Todo) => {
     switch (filterListTodos) {
       case ButtonFilter.active:
         return !todo.completed;
@@ -45,10 +45,11 @@ export const TodoApp: React.FC = () => {
       default:
         return todo;
     }
-  });
+  }), [filterListTodos, todos]);
 
-  const filterTodosCount = todos
-    .filter((todo: Todo) => !todo.completed);
+  const filterTodosCount = useMemo(() =>
+    todos.filter((todo: Todo) => !todo.completed), [todos]
+  );
 
   const completedAll = () => {
     const verifyCompleted = todos.some(todo => !todo.completed);

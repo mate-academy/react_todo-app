@@ -47,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEditing(true);
   };
 
-  const changeTudo = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
@@ -93,7 +93,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       {
         completed,
         editing: isEditing,
-      }
+      },
     )}
     >
       <div className="completed">
@@ -126,7 +126,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         value={value}
         className="edit"
-        onChange={changeTudo}
+        onChange={changeTodo}
         onKeyUp={hendleKeyup}
         onBlur={handleBlurSeve}
       />

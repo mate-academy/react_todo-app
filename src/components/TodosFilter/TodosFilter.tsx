@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../TodoContext/TodoContext';
 import { Todo } from '../../types/Todo';
@@ -24,7 +24,9 @@ export const TodosFilter: React.FC<Props> = ({
     setTodos(newTodos);
   };
 
-  const findClearTasK = todos.find(todo => todo.completed);
+  const findClearTasK = useMemo(() =>
+    todos.find(todo => todo.completed), [todos]
+  );
 
   return (
     <footer className="footer">

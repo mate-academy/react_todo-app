@@ -8,14 +8,12 @@ type Props = {
 export const TodoList:React.FC<Props> = ({ filterTodos }) => {
   return (
     <ul className="todo-list" data-cy="todosList">
-      {
-        filterTodos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-          />
-        ))
-      }
+      {filterTodos.map((todo) => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+        />
+      ))}
     </ul>
   );
 };
