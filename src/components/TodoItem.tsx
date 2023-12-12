@@ -13,7 +13,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
   const [edited, setEdited] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
-  const [showEmptyTitleAlert, setShowEmptyTitleAlert] = useState(false);
 
   const titleRef = useRef<HTMLInputElement | null>(null);
 
@@ -35,9 +34,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handlerEditTodoTitle = () => {
-    if (showEmptyTitleAlert) {
-      setEdited(false);
-      setEditedTitle(todo.title);
+    if (editedTitle.trim().length === 0) {
+      handleDeleteTodo();
     }
 
     if (editedTitle.trim()) {
@@ -48,9 +46,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       });
 
       setEdited(false);
-    } else {
-      setShowEmptyTitleAlert(true);
-      // handleDeleteTodo();
     }
   };
 
@@ -58,15 +53,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (event.key === 'Escape') {
       setEdited(false);
       setEditedTitle(todo.title);
-      setShowEmptyTitleAlert(false);
     }
 
     if (event.key === 'Enter') {
       if (editedTitle.length !== 0) {
-        setShowEmptyTitleAlert(false);
         handlerEditTodoTitle();
       } else {
-        setShowEmptyTitleAlert(true);
+        handleDeleteTodo();
       }
     }
   };
@@ -105,7 +98,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         ref={titleRef}
         value={editedTitle}
-        placeholder={showEmptyTitleAlert ? "Title can't be empty!" : ''}
+        placeholder="Empty todo will be deleted"
         className="edit"
         onChange={event => setEditedTitle(event.target.value)}
         onKeyUp={handleKeyUp}
