@@ -2,4 +2,4 @@
 
 useReducer, useContext, useEffect hooks were used
 
-[DEMO LINK](https://kirillmaslov.github.io/react_todo-app/) and add it to the PR description.
+[DEMO LINK](https://kirillmaslov.github.io/react_todo-app/)
