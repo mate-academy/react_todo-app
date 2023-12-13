@@ -31,11 +31,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleEditEnd = () => {
     setIsEditing(false);
 
-    const updatedTodos = todos.map((currentTodo) => (
-      currentTodo.id === id
-        ? { ...currentTodo, title: editedTitle } : currentTodo));
-
-    setTodos(updatedTodos);
+    if (editedTitle.trim()) {
+      const updatedTodos = todos.map((currentTodo) =>
+        currentTodo.id === id
+          ? { ...currentTodo, title: editedTitle.trim() }
+          : currentTodo
+      );
+      setTodos(updatedTodos);
+    } else {
+      deleteTodo(id);
+    }
   };
 
   const handleNewTodoTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
