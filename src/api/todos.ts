@@ -1,6 +1,7 @@
 import { Todo } from '../types/Todo';
+import { TodoUpdate } from '../types/TodoUpdate';
 import { User } from '../types/User';
-import { UserResponce } from '../types/UserResponce';
+import { UserResponse } from '../types/UserResponse';
 import { client } from '../utils/fetchClient';
 
 export const createUser = (data: User) => {
@@ -8,7 +9,7 @@ export const createUser = (data: User) => {
 };
 
 export const getUser = (userId: number) => {
-  return client.get<UserResponce>(`/users/${userId}`);
+  return client.get<UserResponse>(`/users/${userId}`);
 };
 
 export const getTodos = (userId: number) => {
@@ -23,6 +24,6 @@ export const deleteTodo = (todoId: number) => {
   return client.delete(`/todos/${todoId}`);
 };
 
-export const updateTodo = (todoId: number, data: object) => {
+export const updateTodo = (todoId: number, data: TodoUpdate) => {
   return client.patch(`/todos/${todoId}`, data);
 };

@@ -10,7 +10,7 @@ import {
 } from '../../api/todos';
 import { ErrorTypes } from '../../types/ErrorTypes';
 import { Notification } from '../Notification/Notification';
-import { UserResponce } from '../../types/UserResponce';
+import { UserResponse } from '../../types/UserResponse';
 import { Todo } from '../../types/Todo';
 
 export const TodoTable: React.FC = () => {
@@ -18,7 +18,7 @@ export const TodoTable: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState<Status>(Status.All);
   const [error, setError] = useState<ErrorTypes>(ErrorTypes.NONE);
-  const [user, setUser] = useState<UserResponce | null>(null);
+  const [user, setUser] = useState<UserResponse | null>(null);
 
   const hasCompleted = todos.some(todo => todo.completed);
   const activeTodos = todos.filter(todo => !todo.completed);

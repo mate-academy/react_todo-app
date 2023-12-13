@@ -62,7 +62,6 @@ export const TodoItem: React.FC<Props> = ({
 
   return (
     <li
-      key={todo.id}
       className={classNames({
         completed,
         editing: isEditing,

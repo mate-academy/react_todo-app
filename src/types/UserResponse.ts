@@ -1,4 +1,4 @@
-export interface UserResponce {
+export interface UserResponse {
   id: number;
   createdAt: string;
   email: string;
@@ -6,5 +6,5 @@ export interface UserResponce {
   phone: string;
   updatedAt: string;
   username: string;
-  website: null | unknown;
+  website: string | null;
 }

@@ -7,16 +7,16 @@ type Props = {
 };
 
 export const Notification: React.FC<Props> = ({ error }) => {
-  const [onButtonDelete, setOnButtonDelete] = useState(true);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(true);
 
   const onHiddenError = () => {
-    setOnButtonDelete(false);
+    setIsNotificationVisible(false);
   };
 
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
-      { hidden: !onButtonDelete },
+      { hidden: !isNotificationVisible },
     )}
     >
       <button
