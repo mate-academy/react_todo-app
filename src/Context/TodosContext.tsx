@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Status } from '../Types/Status';
 import Todos from '../Types/Todos';
 
 type Props = {
@@ -7,21 +8,28 @@ type Props = {
 
 interface Context {
   todos: Todos[],
+  status: Status,
   handleTodo: (newTodo: string) => void,
   handleCompleted: (todoId: number) => void,
   handleAllCompleted: () => void,
-  handleUpdateTodo: (changeId: number, updateTitle: string) => void
+  handleStatus: (newStatus: Status) => void,
+  handleUpdateTodo: (changeId: number, updateTitle: string) => void,
+  handleDeleteTodo: (deleteId: number) => void
 }
 export const TodosContext = React.createContext<Context>({
   todos: [],
+  status: Status.all,
   handleTodo: () => {},
   handleCompleted: () => {},
+  handleStatus: () => {},
   handleAllCompleted: () => {},
   handleUpdateTodo: () => {},
+  handleDeleteTodo: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todos[]>([]);
+  const [status, setStatus] = useState(Status.all);
 
   const handleCompleted = (todoId: number) => {
     setTodos(prevTodos => prevTodos.map(todo => (todo.id === todoId
@@ -30,9 +38,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   };
 
   const handleAllCompleted = () => {
-    const status = todos.some(todo => !todo.completed);
+    const statusCompleted = todos.some(todo => !todo.completed);
 
-    if (status) {
+    if (statusCompleted) {
       setTodos(prevTodos => prevTodos.map(todo => (todo.completed === false
         ? { ...todo, completed: !todo.completed }
         : todo)));
@@ -60,13 +68,26 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       : todo)));
   };
 
+  const handleDeleteTodo = (deleteId: number) => {
+    const filteredTodos = todos.filter(todo => todo.id !== deleteId);
+
+    setTodos(filteredTodos);
+  };
+
+  const handleStatus = (newStatus: Status) => {
+    setStatus(newStatus);
+  };
+
   const value = useMemo(() => ({
     todos,
+    status,
     handleTodo,
     handleCompleted,
+    handleStatus,
     handleAllCompleted,
     handleUpdateTodo,
-  }), [todos]);
+    handleDeleteTodo,
+  }), [todos, status]);
 
   return (
     <TodosContext.Provider value={value}>

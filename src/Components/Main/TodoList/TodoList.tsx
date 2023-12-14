@@ -1,49 +1,57 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodosContext } from '../../../Context/TodosContext';
+import { Status } from '../../../Types/Status';
+import Todos from '../../../Types/Todos';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList: React.FC = () => {
   const {
     todos,
+    status,
   } = useContext(TodosContext);
+
+  const [filterTodos, setFilterTodos] = useState(todos);
+
+  // const handleFilterActive = () => {
+  //   const activeFilter = filterTodos.filter((todo: Todos) => !todo.completed);
+
+  //   setFilterTodos(activeFilter);
+  // };
+
+  // const handleFilterCompleted = () => {
+  //   const completedFilter = filterTodos.filter((todo: Todos) => todo.completed);
+
+  //   setFilterTodos(completedFilter);
+  // };
+
+  const activeFilter = filterTodos.filter((todo: Todos) => !todo.completed);
+  const completedFilter = filterTodos.filter((todo: Todos) => todo.completed);
+
+  switch (status) {
+    case Status.all:
+      setFilterTodos(todos);
+      break;
+
+    case Status.active:
+      setFilterTodos(activeFilter);
+      break;
+
+    case Status.completed:
+      setFilterTodos(completedFilter);
+      break;
+
+    default:
+      break;
+  }
 
   return (
     <ul className="todo-list" data-cy="todoList">
-      {todos.map((todo) => (
+      {filterTodos.map((todo) => (
         <TodoItem
           key={`${todo.id}`}
           todo={todo}
         />
       ))}
-
-      {/*
-        <li className="completed">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-completed" />
-            <label htmlFor="toggle-completed">qwertyuio</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li className="editing">
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-editing" />
-            <label htmlFor="toggle-editing">zxcvbnm</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-
-        <li>
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-view2" />
-            <label htmlFor="toggle-view2">1234567890</label>
-            <button type="button" className="destroy" data-cy="deleteTodo" />
-          </div>
-          <input type="text" className="edit" />
-        </li>
-        */}
     </ul>
   );
 };

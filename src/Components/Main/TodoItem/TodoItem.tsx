@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { TodosContext } from '../../../Context/TodosContext';
 import Todos from '../../../Types/Todos';
 
@@ -12,27 +14,58 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
     handleCompleted,
     handleUpdateTodo,
+    handleDeleteTodo,
   } = useContext(TodosContext);
 
   const [isEdit, setIsEdit] = useState(false);
   const [editingText, setEditingText] = useState(todo.title);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    event.preventDefault();
+  const inputFocus = useRef<HTMLInputElement>(null);
 
-    if (event.key === 'Enter') {
+  useEffect(() => {
+    if (inputFocus.current) {
+      inputFocus.current.focus();
+    }
+  }, [isEdit]);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && editingText) {
       setIsEdit(false);
       handleUpdateTodo(todo.id, editingText);
+    }
+
+    if (event.key === 'Enter' && !editingText) {
+      setIsEdit(false);
+      handleDeleteTodo(todo.id);
     }
   };
 
   const handleBlur = () => {
-    setIsEdit(false);
-    handleUpdateTodo(todo.id, editingText);
+    if (editingText) {
+      setIsEdit(false);
+      handleUpdateTodo(todo.id, editingText);
+    }
+
+    if (!editingText) {
+      setIsEdit(false);
+      handleDeleteTodo(todo.id);
+    }
+  };
+
+  const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setIsEdit(false);
+      setEditingText(todo.title);
+      handleUpdateTodo(todo.id, todo.title);
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditingText(event.target.value);
+  };
+
+  const handleLable = () => {
+    setIsEdit(true);
   };
 
   return (
@@ -43,7 +76,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       })}
       key={todo.id}
     >
-      <div className="view">
+      <div>
         <input
           type="checkbox"
           checked={todo.completed}
@@ -58,22 +91,29 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               type="text"
               className="edit"
               name="editingField"
+              ref={inputFocus}
               value={editingText}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
+              onKeyUp={handleOnKeyUp}
               tabIndex={0}
               onBlur={handleBlur}
             />
           )
           : (
             <label
-              onDoubleClick={() => setIsEdit(true)}
+              onDoubleClick={handleLable}
             >
               {todo.title}
             </label>
           )}
 
-        <button type="button" className="destroy" data-cy="deleteTodo" />
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={() => handleDeleteTodo(todo.id)}
+        />
       </div>
     </li>
   );

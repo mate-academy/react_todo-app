@@ -1,4 +1,4 @@
-import { Footer } from './Components/Footer/Footer';
+import { TodosFilter } from './Components/Footer/TodosFilter';
 import { Header } from './Components/Header/Header';
 import { Main } from './Components/Main/Main';
 import { TodosProvider } from './Context/TodosContext';
@@ -11,7 +11,7 @@ export const App: React.FC = () => {
 
         <Main />
 
-        <Footer />
+        <TodosFilter />
       </TodosProvider>
     </div>
   );
