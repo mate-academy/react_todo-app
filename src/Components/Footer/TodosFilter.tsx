@@ -4,12 +4,19 @@ import { TodosContext } from '../../Context/TodosContext';
 import { Status } from '../../Types/Status';
 
 export const TodosFilter: React.FC = () => {
-  const { todos, handleStatus, status } = useContext(TodosContext);
+  const {
+    leftCount,
+    todos,
+    handleStatus,
+    status,
+  } = useContext(TodosContext);
+
+  const clearButton = todos.length !== leftCount;
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length} items left`}
+        {`${leftCount} items left`}
       </span>
 
       <ul className="filters">
@@ -50,9 +57,16 @@ export const TodosFilter: React.FC = () => {
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {clearButton && (
+        <button
+          type="button"
+          className="clear-completed"
+          // onClick={}
+        >
+          Clear completed
+        </button>
+      )}
+
     </footer>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { TodosContext } from '../../../Context/TodosContext';
 import { Status } from '../../../Types/Status';
 import Todos from '../../../Types/Todos';
@@ -8,36 +8,35 @@ export const TodoList: React.FC = () => {
   const {
     todos,
     status,
+    // filterTodos,
+    // handleActiveFilter,
+    // handleCompletedFilter,
+    // handleNoFilter,
+    handleLeftCount,
   } = useContext(TodosContext);
 
-  const [filterTodos, setFilterTodos] = useState(todos);
-
-  // const handleFilterActive = () => {
-  //   const activeFilter = filterTodos.filter((todo: Todos) => !todo.completed);
-
-  //   setFilterTodos(activeFilter);
-  // };
-
-  // const handleFilterCompleted = () => {
-  //   const completedFilter = filterTodos.filter((todo: Todos) => todo.completed);
-
-  //   setFilterTodos(completedFilter);
-  // };
+  let filterTodos = todos;
 
   const activeFilter = filterTodos.filter((todo: Todos) => !todo.completed);
   const completedFilter = filterTodos.filter((todo: Todos) => todo.completed);
 
   switch (status) {
     case Status.all:
-      setFilterTodos(todos);
+      // handleNoFilter();
+      filterTodos = todos;
+      handleLeftCount(activeFilter.length);
       break;
 
     case Status.active:
-      setFilterTodos(activeFilter);
+      // handleActiveFilter();
+      filterTodos = activeFilter;
+      handleLeftCount(activeFilter.length);
       break;
 
     case Status.completed:
-      setFilterTodos(completedFilter);
+      // handleCompletedFilter();
+      filterTodos = completedFilter;
+      handleLeftCount(activeFilter.length);
       break;
 
     default:
