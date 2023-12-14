@@ -4,11 +4,13 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { TodosContext } from '../../../Context/TodosContext';
-import Todos from '../../../Types/Todos';
+import { Todos } from '../../../Types/Todos';
 
 type Props = {
   todo: Todos
 };
+
+const ENTER_KEY = 'Enter';
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
@@ -29,12 +31,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEdit]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && editingText) {
+    if (event.key === ENTER_KEY && editingText) {
       setIsEdit(false);
       handleUpdateTodo(todo.id, editingText);
     }
 
-    if (event.key === 'Enter' && !editingText) {
+    if (event.key === ENTER_KEY && !editingText) {
       setIsEdit(false);
       handleDeleteTodo(todo.id);
     }

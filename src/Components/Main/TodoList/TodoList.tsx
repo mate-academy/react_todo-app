@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { TodosContext } from '../../../Context/TodosContext';
 import { Status } from '../../../Types/Status';
-import Todos from '../../../Types/Todos';
+import { Todos } from '../../../Types/Todos';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList: React.FC = () => {
@@ -16,15 +16,15 @@ export const TodoList: React.FC = () => {
   const completedFilter = filterTodos.filter((todo: Todos) => todo.completed);
 
   switch (status) {
-    case Status.all:
+    case Status.All:
       filterTodos = todos;
       break;
 
-    case Status.active:
+    case Status.Active:
       filterTodos = activeFilter;
       break;
 
-    case Status.completed:
+    case Status.Completed:
       filterTodos = completedFilter;
       break;
 

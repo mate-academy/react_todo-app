@@ -2,7 +2,7 @@ import cn from 'classnames';
 import React, { useContext } from 'react';
 import { TodosContext } from '../../Context/TodosContext';
 import { Status } from '../../Types/Status';
-import Todos from '../../Types/Todos';
+import { Todos } from '../../Types/Todos';
 
 export const TodosFilter: React.FC = () => {
   const {
@@ -25,11 +25,11 @@ export const TodosFilter: React.FC = () => {
       <ul className="filters">
         <li>
           <a
-            href={Status.all}
+            href={Status.All}
             className={cn({
-              selected: status === Status.all,
+              selected: status === Status.All,
             })}
-            onClick={() => handleStatus(Status.all)}
+            onClick={() => handleStatus(Status.All)}
           >
             All
           </a>
@@ -37,11 +37,11 @@ export const TodosFilter: React.FC = () => {
 
         <li>
           <a
-            href={Status.active}
+            href={Status.Active}
             className={cn({
-              selected: status === Status.active,
+              selected: status === Status.Active,
             })}
-            onClick={() => handleStatus(Status.active)}
+            onClick={() => handleStatus(Status.Active)}
           >
             Active
           </a>
@@ -49,11 +49,11 @@ export const TodosFilter: React.FC = () => {
 
         <li>
           <a
-            href={Status.completed}
+            href={Status.Completed}
             className={cn({
-              selected: status === Status.completed,
+              selected: status === Status.Completed,
             })}
-            onClick={() => handleStatus(Status.completed)}
+            onClick={() => handleStatus(Status.Completed)}
           >
             Completed
           </a>
@@ -69,7 +69,6 @@ export const TodosFilter: React.FC = () => {
           Clear completed
         </button>
       )}
-
     </footer>
   );
 };

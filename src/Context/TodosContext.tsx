@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Status } from '../Types/Status';
-import Todos from '../Types/Todos';
+import { Todos } from '../Types/Todos';
 import { useLocalStorage } from '../Hooks/useLocalStorage';
 
 type Props = {
@@ -20,7 +20,7 @@ interface Context {
 }
 export const TodosContext = React.createContext<Context>({
   todos: [],
-  status: Status.all,
+  status: Status.All,
   handleTodo: () => { },
   handleCompleted: () => { },
   handleDeleteCompleted: () => { },
@@ -32,7 +32,7 @@ export const TodosContext = React.createContext<Context>({
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todos[]>('todos', []);
-  const [status, setStatus] = useState(Status.all);
+  const [status, setStatus] = useState(Status.All);
 
   const handleDeleteCompleted = () => {
     const deleteAllCompleted = todos.filter(todo => !todo.completed);

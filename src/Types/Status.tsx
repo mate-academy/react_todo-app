@@ -1,7 +1,5 @@
 export enum Status {
-  all = '#/',
-  active = '#/active',
-  completed = '#/completed',
+  All = '#/',
+  Active = '#/active',
+  Completed = '#/completed',
 }
-
-export default Status;
