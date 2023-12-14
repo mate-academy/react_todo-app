@@ -2,7 +2,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { TodoList } from './Components/TodoList';
-import { DispatchContext, StateContext } from './Components/Store/Store';
+import {
+  Actions,
+  DispatchContext,
+  Keys,
+  StateContext,
+} from './Components/Store/Store';
 import { Todo } from './types/Todo';
 
 enum TodosType {
@@ -44,7 +49,7 @@ export const App: React.FC = () => {
   const handleBlur = () => {
     if (todoTitle.trim() !== '') {
       dispatch({
-        type: 'addNew',
+        type: Actions.addNew,
         todo: {
           id: +new Date(),
           title: todoTitle,
@@ -56,10 +61,10 @@ export const App: React.FC = () => {
   };
 
   const handleKeyDown = (e : React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && todoTitle.trim() !== '') {
+    if (e.key === Keys.Enter && todoTitle.trim() !== '') {
       e.preventDefault();
       dispatch({
-        type: 'addNew',
+        type: Actions.addNew,
         todo: {
           id: +new Date(),
           title: todoTitle,
@@ -88,11 +93,11 @@ export const App: React.FC = () => {
   };
 
   const handleToogleAll = () => {
-    dispatch({ type: 'markAll' });
+    dispatch({ type: Actions.markAll });
   };
 
   const destroyCompletedTodos = () => {
-    dispatch({ type: 'destroyCompleted' });
+    dispatch({ type: Actions.destroyCompleted });
   };
 
   return (

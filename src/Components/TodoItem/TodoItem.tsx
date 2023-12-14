@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
-import { DispatchContext } from '../Store';
+import { Actions, DispatchContext, Keys } from '../Store';
 
 interface Props {
   todo: Todo,
@@ -21,24 +21,24 @@ export const TodoItem: React.FC<Props> = ({
 
   const handleInputToogle = () => {
     dispatch({
-      type: 'mark',
+      type: Actions.mark,
       todo,
     });
   };
 
   const deleteTodo = () => {
     dispatch({
-      type: 'destroy',
+      type: Actions.destroy,
       todo,
     });
   };
 
   const handleTodoEditKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape') {
+    if (event.key === Keys.Escape) {
       setIsEditing(false);
-    } else if (event.key === 'Enter') {
+    } else if (event.key === Keys.Enter) {
       dispatch({
-        type: 'edit',
+        type: Actions.edit,
         todo: {
           ...todo,
           title: currentTitle,
@@ -50,7 +50,7 @@ export const TodoItem: React.FC<Props> = ({
 
   const handleEditingInputBlur = () => {
     dispatch({
-      type: 'edit',
+      type: Actions.edit,
       todo: {
         ...todo,
         title: currentTitle,

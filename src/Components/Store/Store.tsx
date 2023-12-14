@@ -1,12 +1,26 @@
 import React, { useEffect, useReducer } from 'react';
 import { Todo } from '../../types/Todo';
 
-type Action = { type: 'markAll' }
-| { type: 'addNew', todo: Todo }
-| { type: 'mark', todo: Todo }
-| { type: 'destroy', todo: Todo }
-| { type: 'edit', todo: Todo }
-| { type: 'destroyCompleted' };
+export enum Actions {
+  markAll = 'markAll',
+  addNew = 'addNew',
+  mark = 'mark',
+  destroy = 'destroy',
+  edit = 'edit',
+  destroyCompleted = 'destroyCompleted',
+}
+
+export enum Keys {
+  Escape = 'Escape',
+  Enter = 'Enter',
+}
+
+type Action = { type: Actions.markAll }
+| { type: Actions.addNew, todo: Todo }
+| { type: Actions.mark, todo: Todo }
+| { type: Actions.destroy, todo: Todo }
+| { type: Actions.edit, todo: Todo }
+| { type: Actions.destroyCompleted };
 
 interface State {
   allTodos: Todo[],
