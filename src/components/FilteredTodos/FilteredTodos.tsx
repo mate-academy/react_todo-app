@@ -14,7 +14,7 @@ export const FilteredTodos:React.FC = () => {
       <li>
         <a
           href="#/"
-          className={filt === Position.All ? 'active' : ''}
+          className={filt === Position.All ? 'selected' : ''}
           onClick={() => handleChange(Position.All)}
         >
           All
@@ -24,6 +24,7 @@ export const FilteredTodos:React.FC = () => {
       <li>
         <a
           href="#/active"
+          className={filt === Position.Active ? 'selected' : ''}
           onClick={() => handleChange(Position.Active)}
         >
           Active
@@ -33,6 +34,7 @@ export const FilteredTodos:React.FC = () => {
       <li>
         <a
           href="#/completed"
+          className={filt === Position.Completed ? 'selected' : ''}
           onClick={() => handleChange(Position.Completed)}
         >
           Completed

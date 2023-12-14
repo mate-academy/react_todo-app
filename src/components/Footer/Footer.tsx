@@ -17,10 +17,13 @@ export const Footer:React.FC = () => {
   return (
     <>
       <span className="todo-count" data-cy="todosCounter">
-        {`${filteredTodos} items${filteredTodos !== 1 ? 's' : ''} left`}
+        {`${filteredTodos} items left`}
       </span>
 
-      <FilteredTodos />
+      {todos.length > 0
+        && (
+          <FilteredTodos />
+        ) }
 
       {filtToComplete > 0
       && (

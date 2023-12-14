@@ -34,7 +34,11 @@ export const TodoList:React.FC = () => {
         && (
           <ul className="todo-list" data-cy="todoList">
             {filteredTodos.map((todo) => (
-              <TodoItem todo={todo} key={todo.id} togLeTodo={toggled} />
+              <TodoItem
+                todo={todo}
+                key={todo.id || +new Date()}
+                togLeTodo={toggled}
+              />
             ))}
           </ul>
         )}

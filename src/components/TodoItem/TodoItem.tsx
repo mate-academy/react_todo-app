@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import { TodosContext } from '../TodosContext';
 import { Todo } from '../types/Todo';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 type Props = {
   todo: Todo;
   togLeTodo: (id: number) => void;
@@ -14,13 +12,13 @@ type Props = {
 
 export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
   const {
-    setTodos,
     todos,
     handleDelete,
   } = useContext(TodosContext);
 
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = useState<string>(todo.title);
   const [isEditing, setIsEditing] = useState(false);
+  const todoFocus = useRef<HTMLInputElement>(null);
 
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -33,17 +31,14 @@ export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
   const clickEnterOrEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
 
-    if (value.trim() === '') {
-      handleDelete(todo.id);
-      setIsEditing(false);
-    }
-
     if (event.key === 'Enter') {
-      setIsEditing(false);
-    }
+      if (value.trim() === '') {
+        handleDelete(todo.id);
+        setIsEditing(false);
+      }
 
-    if (event.key === 'Escape') {
-      setValue(todo.title);
+      setIsEditing(false);
+    } else if (event.key === 'Escape') {
       setIsEditing(false);
     }
   };
@@ -52,19 +47,16 @@ export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
     const newTodos = [...todos];
     const findIndex = newTodos.findIndex((el) => el.id === id);
 
-    newTodos[findIndex].title = value;
-    setTodos(newTodos);
+    newTodos[findIndex].title = value || todo.title;
 
     setIsEditing(false);
   };
 
-  const todoFocus = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
-    if (todoFocus.current && value) {
+    if (todoFocus.current && isEditing) {
       todoFocus.current.focus();
     }
-  }, [value]);
+  }, [isEditing]);
 
   return (
     <li
@@ -76,7 +68,6 @@ export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
         },
       )}
     >
-      {/* <div className="completed"> */}
       {!isEditing && (
         <>
           <input
@@ -87,11 +78,11 @@ export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
             onChange={() => togLeTodo(todo.id)}
           />
           <label
-            htmlFor="toggle"
             onDoubleClick={doubleClick}
           >
             {todo.title}
           </label>
+          {/* eslint-disable-next-line */}
           <button
             type="button"
             className="destroy"
@@ -102,7 +93,6 @@ export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
           />
         </>
       )}
-      {/* </div> */}
       <input
         type="text"
         className="edit"
