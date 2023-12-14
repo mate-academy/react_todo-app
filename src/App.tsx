@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { AddTodo } from './components/AddTodo/AddTodo';
 import { Footer } from './components/Footer';
@@ -14,9 +13,7 @@ export const App: React.FC = () => {
           <AddTodo />
         </header>
         <TodoList />
-        <footer className="footer">
-          <Footer />
-        </footer>
+        <Footer />
       </TodosProvider>
     </div>
   );

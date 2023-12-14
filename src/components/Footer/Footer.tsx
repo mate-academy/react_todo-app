@@ -16,25 +16,27 @@ export const Footer:React.FC = () => {
 
   return (
     <>
-      <span className="todo-count" data-cy="todosCounter">
-        {`${filteredTodos} items left`}
-      </span>
-
       {todos.length > 0
         && (
-          <FilteredTodos />
-        ) }
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${filteredTodos} items left`}
+            </span>
 
-      {filtToComplete > 0
-      && (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={handleClear}
-        >
-          Clear completed
-        </button>
-      )}
+            <FilteredTodos />
+
+            {filtToComplete > 0
+        && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleClear}
+          >
+            Clear completed
+          </button>
+        )}
+          </footer>
+        )}
     </>
   );
 };

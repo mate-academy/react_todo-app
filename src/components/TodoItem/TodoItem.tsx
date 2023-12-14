@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
@@ -37,6 +38,10 @@ export const TodoItem:React.FC<Props> = ({ todo, togLeTodo }) => {
         setIsEditing(false);
       }
 
+      const newTodos = [...todos];
+      const findIndex = newTodos.findIndex((el) => el.title === todo.title);
+
+      newTodos[findIndex].title = value;
       setIsEditing(false);
     } else if (event.key === 'Escape') {
       setIsEditing(false);

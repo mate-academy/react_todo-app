@@ -36,7 +36,7 @@ export const TodoList:React.FC = () => {
             {filteredTodos.map((todo) => (
               <TodoItem
                 todo={todo}
-                key={todo.id || +new Date()}
+                key={todo.id}
                 togLeTodo={toggled}
               />
             ))}
