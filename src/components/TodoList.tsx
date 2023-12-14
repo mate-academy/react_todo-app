@@ -6,16 +6,19 @@ export const TodoList = () => {
   const { todos, filterStatus } = useContext(TodoContext);
 
   const filterTodos = () => {
-    switch (filterStatus) {
-      case 'all':
-        return todos;
-      case 'active':
-        return todos.filter(todo => !todo.completed);
-      case 'completed':
-        return todos.filter(todo => todo.completed);
-      default:
-        return todos;
-    }
+
+    return todos.filter(todo => {
+      switch (filterStatus) {
+        case 'all':
+          return todos;
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return todo;
+      }
+    })
   };
 
   return (

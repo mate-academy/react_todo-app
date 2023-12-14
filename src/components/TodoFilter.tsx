@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import cn from 'classnames';
 import { TodoContext } from '../context/TodoContext';
+import { Status } from '../types/Status';
 
 export const TodoFilter = () => {
   const {
@@ -24,14 +25,18 @@ export const TodoFilter = () => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${completedTodos.length} items left`}
+        {completedTodos.length === 1 ? (
+          `${completedTodos.length} item left`
+        ) : (
+          `${completedTodos.length} items left`
+        )}
       </span>
       <ul className="filters">
         <li>
           <a
             href="#/"
-            className={cn({ selected: filterStatus === 'all' })}
-            onClick={() => handleNewStatus('all')}
+            className={cn({ selected: filterStatus === Status.All })}
+            onClick={() => handleNewStatus(Status.All)}
           >
             All
           </a>
@@ -40,8 +45,8 @@ export const TodoFilter = () => {
         <li>
           <a
             href="#/active"
-            className={cn({ selected: filterStatus === 'active' })}
-            onClick={() => handleNewStatus('active')}
+            className={cn({ selected: filterStatus === Status.Active })}
+            onClick={() => handleNewStatus(Status.Active)}
           >
             Active
           </a>
@@ -50,8 +55,8 @@ export const TodoFilter = () => {
         <li>
           <a
             href="#/completed"
-            className={cn({ selected: filterStatus === 'completed' })}
-            onClick={() => handleNewStatus('completed')}
+            className={cn({ selected: filterStatus === Status.Completed })}
+            onClick={() => handleNewStatus(Status.Completed)}
           >
             Completed
           </a>

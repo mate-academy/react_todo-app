@@ -8,6 +8,7 @@ type TodoContextType = {
   deleteTodo: (todoId: number) => void,
   filterStatus: string,
   setFilterStatus: (status: string) => void;
+  handleTodoCompleted: (todoId: number) => void;
 };
 
 type Props = {
@@ -21,6 +22,7 @@ export const TodoContext = createContext<TodoContextType>({
   deleteTodo: () => {},
   filterStatus: 'all',
   setFilterStatus: () => {},
+  handleTodoCompleted: () => {},
 });
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
@@ -56,6 +58,16 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
+  const handleTodoCompleted = (todoId: number) => {
+    const updatedTodos = todos.map(currentTodo => (
+      currentTodo.id === todoId
+        ? { ...currentTodo, completed: !currentTodo.completed }
+        : currentTodo
+    ));
+
+    setTodos(updatedTodos);
+  };
+
   const deleteTodo = (todoId: number) => {
     const updatedTodo = todos.filter(todo => todo.id !== todoId);
 
@@ -71,6 +83,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         deleteTodo,
         filterStatus,
         setFilterStatus,
+        handleTodoCompleted
       }}
     >
       {children}
