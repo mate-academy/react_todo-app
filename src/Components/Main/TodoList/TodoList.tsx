@@ -8,11 +8,6 @@ export const TodoList: React.FC = () => {
   const {
     todos,
     status,
-    // filterTodos,
-    // handleActiveFilter,
-    // handleCompletedFilter,
-    // handleNoFilter,
-    handleLeftCount,
   } = useContext(TodosContext);
 
   let filterTodos = todos;
@@ -22,21 +17,15 @@ export const TodoList: React.FC = () => {
 
   switch (status) {
     case Status.all:
-      // handleNoFilter();
       filterTodos = todos;
-      handleLeftCount(activeFilter.length);
       break;
 
     case Status.active:
-      // handleActiveFilter();
       filterTodos = activeFilter;
-      handleLeftCount(activeFilter.length);
       break;
 
     case Status.completed:
-      // handleCompletedFilter();
       filterTodos = completedFilter;
-      handleLeftCount(activeFilter.length);
       break;
 
     default:
