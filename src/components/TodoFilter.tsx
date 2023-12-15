@@ -8,7 +8,7 @@ export const TodoFilter = () => {
     todos, setTodos, filterStatus, setFilterStatus,
   } = useContext(TodoContext);
 
-  const handleNewStatus = (status: string) => {
+  const handleNewStatus = (status: Status) => {
     setFilterStatus(status);
   };
 

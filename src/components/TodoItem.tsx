@@ -11,9 +11,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
-  const { deleteTodo, todos, setTodos, handleTodoCompleted } = useContext(TodoContext);
-
-
+  const {
+    deleteTodo, todos, setTodos, handleTodoCompleted,
+  } = useContext(TodoContext);
 
   const handleEditStart = () => {
     setIsEditing(true);
@@ -45,6 +45,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         deleteTodo(id);
       }
     }
+
     if (event.key === 'Escape') {
       setEditedTitle(title);
       setIsEditing(false);
@@ -57,34 +58,36 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       completed,
     })}
     >
-      {!isEditing ?
-      (<div className="view">
-        <input
-            type="checkbox"
-            className="toggle"
-            checked={completed}
-            onChange={() => handleTodoCompleted(id)}
-        />
-        <label htmlFor="toggle-view" onDoubleClick={handleEditStart}>
-          {title}
-        </label>
-        <button
-          aria-label="text"
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={() => deleteTodo(id)}
-        />
-      </div>) : (
-      <input
-        type="text"
-        className="edit"
-        value={editedTitle}
-        onChange={handleNewTodoTitle}
-        onBlur={handleEditEnd}
-        onKeyDown={handleKeyDown}
-      />
-      )}
+      {!isEditing
+        ? (
+          <div className="view">
+            <input
+              type="checkbox"
+              className="toggle"
+              checked={completed}
+              onChange={() => handleTodoCompleted(id)}
+            />
+            <label htmlFor="toggle-view" onDoubleClick={handleEditStart}>
+              {title}
+            </label>
+            <button
+              aria-label="text"
+              type="button"
+              className="destroy"
+              data-cy="deleteTodo"
+              onClick={() => deleteTodo(id)}
+            />
+          </div>
+        ) : (
+          <input
+            type="text"
+            className="edit"
+            value={editedTitle}
+            onChange={handleNewTodoTitle}
+            onBlur={handleEditEnd}
+            onKeyDown={handleKeyDown}
+          />
+        )}
     </li>
   );
 };

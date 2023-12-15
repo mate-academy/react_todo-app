@@ -1,24 +1,24 @@
 import { useContext } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import { TodoItem } from './TodoItem';
+import { Status } from '../types/Status';
 
 export const TodoList = () => {
   const { todos, filterStatus } = useContext(TodoContext);
 
   const filterTodos = () => {
-
     return todos.filter(todo => {
       switch (filterStatus) {
-        case 'all':
+        case Status.All:
           return todos;
-        case 'active':
+        case Status.Active:
           return !todo.completed;
-        case 'completed':
+        case Status.Completed:
           return todo.completed;
         default:
           return todo;
       }
-    })
+    });
   };
 
   return (

@@ -1,8 +1,7 @@
-import { useContext, useState } from "react";
-import { TodoContext } from "../context/TodoContext";
+import { useContext, useState } from 'react';
+import { TodoContext } from '../context/TodoContext';
 
 export const Header = () => {
-
   const { addTodo } = useContext(TodoContext);
 
   const [query, setQuery] = useState('');
@@ -32,5 +31,5 @@ export const Header = () => {
         />
       </form>
     </header>
-  )
-}
+  );
+};

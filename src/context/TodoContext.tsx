@@ -1,13 +1,14 @@
 import { createContext, useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
+import { Status } from '../types/Status';
 
 type TodoContextType = {
   todos: Todo[],
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   addTodo: (title: string) => void,
   deleteTodo: (todoId: number) => void,
-  filterStatus: string,
-  setFilterStatus: (status: string) => void;
+  filterStatus: Status,
+  setFilterStatus: (status: Status) => void;
   handleTodoCompleted: (todoId: number) => void;
 };
 
@@ -20,7 +21,7 @@ export const TodoContext = createContext<TodoContextType>({
   setTodos: () => {},
   addTodo: () => {},
   deleteTodo: () => {},
-  filterStatus: 'all',
+  filterStatus: Status.All,
   setFilterStatus: () => {},
   handleTodoCompleted: () => {},
 });
@@ -28,7 +29,7 @@ export const TodoContext = createContext<TodoContextType>({
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState(Status.All);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
@@ -83,7 +84,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         deleteTodo,
         filterStatus,
         setFilterStatus,
-        handleTodoCompleted
+        handleTodoCompleted,
       }}
     >
       {children}
