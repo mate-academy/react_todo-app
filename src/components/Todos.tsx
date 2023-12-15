@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TodosContext } from '../contexts/TodosContext';
+import { Todo } from './Todo';
 
 export const Todos = () => {
   const {
@@ -31,39 +32,16 @@ export const Todos = () => {
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map((todoItem) => (
-        <li
-          className={`item ${todoItem.completed ? 'completed' : ''}`}
+        <Todo
           key={todoItem.id}
-        >
-          <div className="view">
-            <input type="checkbox" className="toggle" id="toggle-completed" />
-            {edit ? (
-              <form onSubmit={(e) => handleTitleSave(e, todoItem.id)}>
-                <input
-                  type="text"
-                  className="edit"
-                  value={editedTitle}
-                  onChange={handleTitle}
-                />
-              </form>
-            ) : (
-              <label
-                htmlFor="toggle-completed"
-                onDoubleClick={handleLabel}
-              >
-                {todoItem.title}
-              </label>
-            )}
-            <button
-              type="button"
-              className="destroy"
-              data-cy="deleteTodo"
-              onClick={() => handleDelete(todoItem.id)}
-            >
-              .
-            </button>
-          </div>
-        </li>
+          editTodo={edit}
+          editedTitleTodo={editedTitle}
+          todoItem={todoItem}
+          onItemDelete={handleDelete}
+          onLabelClick={handleLabel}
+          onTitleChange={handleTitle}
+          onTitleSave={handleTitleSave}
+        />
       ))}
     </ul>
   );

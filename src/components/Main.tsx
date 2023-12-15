@@ -1,6 +1,13 @@
+import React from 'react';
+import { TodosContext } from '../contexts/TodosContext';
 import { Todos } from './Todos';
 
 export const Main = () => {
+  const { dispatch } = React.useContext(TodosContext);
+  const handleToggleAll = () => {
+    dispatch({ type: 'MARK_ALL_AS_COMPLETED' });
+  };
+
   return (
     <section className="main">
       <input
@@ -9,7 +16,12 @@ export const Main = () => {
         className="toggle-all"
         data-cy="toggleAll"
       />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      <label
+        onClick={handleToggleAll}
+        htmlFor="toggle-all"
+      >
+        Mark all as complete
+      </label>
       <Todos />
     </section>
   );
