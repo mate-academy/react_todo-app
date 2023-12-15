@@ -1,4 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { Actions, DispatchContext, Keys } from '../Store';
@@ -14,6 +19,14 @@ export const TodoItem: React.FC<Props> = ({
   const { title, completed } = todo;
   const [currentTitle, setCurrentTitle] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -33,30 +46,32 @@ export const TodoItem: React.FC<Props> = ({
     });
   };
 
+  const validateTitle = (currentTodo: Todo, targetTitle: string) => {
+    if (targetTitle.trim().length === 0) {
+      deleteTodo();
+    } else {
+      dispatch({
+        type: Actions.edit,
+        todo: {
+          ...currentTodo,
+          title: targetTitle,
+        },
+      });
+    }
+
+    setIsEditing(false);
+  };
+
   const handleTodoEditKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === Keys.Escape) {
       setIsEditing(false);
     } else if (event.key === Keys.Enter) {
-      dispatch({
-        type: Actions.edit,
-        todo: {
-          ...todo,
-          title: currentTitle,
-        },
-      });
-      setIsEditing(false);
+      validateTitle(todo, currentTitle);
     }
   };
 
   const handleEditingInputBlur = () => {
-    dispatch({
-      type: Actions.edit,
-      todo: {
-        ...todo,
-        title: currentTitle,
-      },
-    });
-    setIsEditing(false);
+    validateTitle(todo, currentTitle);
   };
 
   const handleTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,6 +104,7 @@ export const TodoItem: React.FC<Props> = ({
         />
       </div>
       <input
+        ref={inputRef}
         type="text"
         className="edit"
         value={currentTitle}

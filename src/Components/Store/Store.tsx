@@ -34,7 +34,7 @@ function saveTodos(updatedTodos: Todo[]) {
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'mark': {
+    case Actions.mark: {
       const updatedTodos = state.allTodos.map((todo: Todo) => {
         return (todo.id === action.todo.id ? {
           ...todo,
@@ -45,7 +45,7 @@ function reducer(state: State, action: Action): State {
       return saveTodos(updatedTodos);
     }
 
-    case 'markAll': {
+    case Actions.markAll: {
       const completedTodos = state.allTodos.filter(todo => todo.completed);
 
       if (state.allTodos.length === completedTodos.length) {
@@ -69,19 +69,19 @@ function reducer(state: State, action: Action): State {
       return saveTodos(updatedTodos);
     }
 
-    case 'addNew': {
+    case Actions.addNew: {
       const updatedTodos = [...state.allTodos, action.todo];
 
       return saveTodos(updatedTodos);
     }
 
-    case 'destroyCompleted': {
+    case Actions.destroyCompleted: {
       const updatedTodos = state.allTodos.filter((todo) => !todo.completed);
 
       return saveTodos(updatedTodos);
     }
 
-    case 'destroy': {
+    case Actions.destroy: {
       const updatedTodos = state.allTodos.filter((todo) => {
         return (action.todo.id !== todo.id);
       });
@@ -89,7 +89,7 @@ function reducer(state: State, action: Action): State {
       return saveTodos(updatedTodos);
     }
 
-    case 'edit': {
+    case Actions.edit: {
       const index = state.allTodos.findIndex(todo => {
         return todo.id === action.todo.id;
       });

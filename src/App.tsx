@@ -1,5 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useState,
+} from 'react';
 import cn from 'classnames';
 import { TodoList } from './Components/TodoList';
 import {
@@ -8,7 +11,6 @@ import {
   Keys,
   StateContext,
 } from './Components/Store/Store';
-import { Todo } from './types/Todo';
 
 enum TodosType {
   all = 'All',
@@ -22,25 +24,19 @@ export const App: React.FC = () => {
   const {
     allTodos,
   } = useContext(StateContext);
-  const [visibleTodos, setVisibleTodos] = useState(allTodos);
-  const [activeTodos, setActiveTodos] = useState<Todo[]>([]);
-  const [completedTodos, setComplitedTodos] = useState<Todo[]>([]);
+  const activeTodos = allTodos?.filter(todo => !todo.completed) || [];
+  const completedTodos = allTodos?.filter(todo => todo.completed) || [];
   const [visibleTodosType, setVisibleTodosType] = useState(TodosType.all);
 
-  useEffect(() => {
-    setActiveTodos(allTodos.filter(todo => !todo.completed) || []);
-    setComplitedTodos(allTodos.filter(todo => todo.completed) || []);
-  }, [allTodos]);
+  let visibleTodos = allTodos;
 
-  useEffect(() => {
-    if (visibleTodosType === TodosType.all) {
-      setVisibleTodos(allTodos);
-    } else if (visibleTodosType === TodosType.active) {
-      setVisibleTodos(activeTodos);
-    } else {
-      setVisibleTodos(completedTodos);
-    }
-  }, [allTodos, completedTodos, activeTodos, visibleTodosType]);
+  if (visibleTodosType === TodosType.all) {
+    visibleTodos = allTodos;
+  } else if (visibleTodosType === TodosType.active) {
+    visibleTodos = activeTodos;
+  } else {
+    visibleTodos = completedTodos;
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(event.target.value);
@@ -60,7 +56,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleKeyDown = (e : React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === Keys.Enter && todoTitle.trim() !== '') {
       e.preventDefault();
       dispatch({
@@ -78,17 +74,17 @@ export const App: React.FC = () => {
   };
 
   const setAllTodosVisible = () => {
-    setVisibleTodos(allTodos);
+    visibleTodos = allTodos;
     setVisibleTodosType(TodosType.all);
   };
 
   const setActiveTodosVisible = () => {
-    setVisibleTodos(activeTodos);
+    visibleTodos = activeTodos;
     setVisibleTodosType(TodosType.active);
   };
 
   const setComplitedTodosVisible = () => {
-    setVisibleTodos(completedTodos);
+    visibleTodos = completedTodos;
     setVisibleTodosType(TodosType.completed);
   };
 
@@ -135,7 +131,8 @@ export const App: React.FC = () => {
 
           <footer className="footer" data-cy="todosFilter">
             <span className="todo-count" data-cy="todosCounter">
-              {activeTodos.length === 1 ? `${activeTodos.length} item left`
+              {activeTodos.length === 1
+                ? `${activeTodos.length} item left`
                 : `${activeTodos.length} items left`}
             </span>
 
