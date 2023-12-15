@@ -36,7 +36,7 @@ export const TodoList: React.FC = () => {
     <ul className="todo-list" data-cy="todoList">
       {filterTodos.map((todo) => (
         <TodoItem
-          key={`${todo.id}`}
+          key={todo.id}
           todo={todo}
         />
       ))}

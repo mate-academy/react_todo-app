@@ -13,8 +13,9 @@ export const TodosFilter: React.FC = () => {
   } = useContext(TodosContext);
 
   const activeLength = todos.filter((todo: Todos) => !todo.completed);
+  const completedTodos = todos.filter((todo: Todos) => todo.completed);
 
-  const clearButton = activeLength.length > 0;
+  const clearButton = completedTodos.length > 0;
 
   return (
     <footer className="footer">
