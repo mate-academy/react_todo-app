@@ -2,12 +2,12 @@ import React from 'react';
 import { TodosContext } from '../contexts/TodosContext';
 
 export const Footer = () => {
-  const { todoList } = React.useContext(TodosContext);
+  const { state } = React.useContext(TodosContext);
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {todoList.length}
+        {state.todos.length}
         <span> items left</span>
       </span>
 

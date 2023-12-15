@@ -3,10 +3,12 @@ import { TodosContext } from '../contexts/TodosContext';
 
 export const Header = () => {
   const [input, setInput] = useState('');
-  const { addItem } = React.useContext(TodosContext);
+  const { dispatch } = React.useContext(TodosContext);
 
-  const handleSubmit = () => {
-    addItem(input);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch({ type: 'ADD_TODO_ITEM', title: input });
+    setInput('');
   };
 
   return (
