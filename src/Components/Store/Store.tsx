@@ -130,7 +130,6 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
 
   const [state, dispatch] = useReducer(reducer, initialTodos);
 
-  // Save the state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(state.allTodos));
   }, [state.allTodos]);

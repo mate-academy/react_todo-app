@@ -47,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const validateTitle = (currentTodo: Todo, targetTitle: string) => {
-    if (targetTitle.trim().length === 0) {
+    if (targetTitle.trim()) {
       deleteTodo();
     } else {
       dispatch({

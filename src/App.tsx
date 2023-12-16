@@ -43,7 +43,7 @@ export const App: React.FC = () => {
   };
 
   const handleBlur = () => {
-    if (todoTitle.trim() !== '') {
+    if (todoTitle.trim()) {
       dispatch({
         type: Actions.addNew,
         todo: {
@@ -57,7 +57,7 @@ export const App: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === Keys.Enter && todoTitle.trim() !== '') {
+    if (e.key === Keys.Enter && todoTitle.trim()) {
       e.preventDefault();
       dispatch({
         type: Actions.addNew,
