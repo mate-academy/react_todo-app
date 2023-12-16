@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { TodosContext } from '../contexts/TodosContext';
 
 export const Todo = ({
@@ -7,19 +7,18 @@ export const Todo = ({
   editedTitleTodo,
   todoItem,
   onLabelClick,
-  onTitleChange,
-  onTitleSave,
 }) => {
-  const {
-    state: { todos },
-    dispatch,
-  } = React.useContext(TodosContext);
-  const handleDelete = (id: number) => {
-    dispatch({ type: 'REMOVE_TODO_ITEM', id });
-  };
-
   const [edit, setEdit] = useState(editTodo);
   const [editedTitle, setEditedTitle] = useState(editedTitleTodo);
+  const {
+    dispatch,
+  } = React.useContext(TodosContext);
+
+  const handleTitleSave = (e, id: number) => {
+    e.preventDefault();
+    dispatch({ type: 'SAVE_EDITED_TITLE', title: editedTitle, titleId: id });
+    setEdit(!edit);
+  };
 
   return (
     <li
@@ -32,15 +31,15 @@ export const Todo = ({
           className="toggle"
           id={`toggle-completed-${todoItem.id}`}
           checked={todoItem.completed}
-          onChange={() => {}}
+          onChange={() => { }}
         />
-        {edit ? (
-          <form onSubmit={(e) => onTitleSave(e, todoItem.id)}>
+        {edit !== editTodo ? (
+          <form onSubmit={(e) => handleTitleSave(e, todoItem.id)}>
             <input
               type="text"
               className="edit"
               value={editedTitle}
-              onChange={onTitleChange}
+              onChange={(e) => setEditedTitle(e.target.value)}
             />
           </form>
         ) : (

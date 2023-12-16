@@ -19,16 +19,6 @@ export const Todos = () => {
     setEditedTitle('');
   };
 
-  const handleTitle = (e) => {
-    setEditedTitle(e.target.value);
-  };
-
-  const handleTitleSave = (e, id: number) => {
-    e.preventDefault();
-    dispatch({ type: 'SAVE_EDITED_TITLE', title: editedTitle, titleId: id });
-    setEdit(false);
-  };
-
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map((todoItem) => (
@@ -39,8 +29,6 @@ export const Todos = () => {
           todoItem={todoItem}
           onItemDelete={handleDelete}
           onLabelClick={handleLabel}
-          onTitleChange={handleTitle}
-          onTitleSave={handleTitleSave}
         />
       ))}
     </ul>
