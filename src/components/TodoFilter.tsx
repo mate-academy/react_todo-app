@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
       <li>
         <a
           href="#/"
-          className={filter === 'all' ? 'selected' : ''}
+          className={filter === Filter.All ? 'selected' : ''}
           onClick={onFilterChange(Filter.All)}
         >
           All

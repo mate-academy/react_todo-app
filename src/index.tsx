@@ -5,7 +5,7 @@ import './styles/todo-list.css';
 import './styles/filters.css';
 
 import { App } from './App';
-import { TodosProvider } from './components/TodosContext';
+import { TodosProvider } from './components/TodosProvider';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
