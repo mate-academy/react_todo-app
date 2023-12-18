@@ -8,11 +8,11 @@ import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodosContext } from '../context/TodosContext';
 
-type PropsTodoItem = {
+type Props = {
   todo: Todo
 };
 
-export const TodoItem: React.FC<PropsTodoItem> = ({
+export const TodoItem: React.FC<Props> = ({
   todo,
 }) => {
   const { todos, setTodos } = useContext(TodosContext);
@@ -58,13 +58,17 @@ export const TodoItem: React.FC<PropsTodoItem> = ({
 
   const handleSave = () => {
     if (editingTodo) {
-      setTodos(todos.map(task => {
-        if (task.id === editingTodo.id) {
-          return { ...task, title: editingTodo.title };
-        }
+      const newTitle = editingTodo.title.trim();
 
-        return task;
-      }));
+      if (newTitle !== '') {
+        setTodos(todos.map(task => {
+          if (task.id === editingTodo.id) {
+            return { ...task, title: newTitle };
+          }
+
+          return task;
+        }));
+      }
     }
 
     setEditingTodo(null);

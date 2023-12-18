@@ -4,10 +4,10 @@ import { TodoClearCompleted } from './TodoClearCompleted';
 import { TodoActiveCount } from './TodoActiveCount';
 import { TodosContext } from '../context/TodosContext';
 
-type PropsFooter = {
+type Props = {
 };
 
-export const Footer: React.FC<PropsFooter> = () => {
+export const Footer: React.FC<Props> = () => {
   const { todos } = useContext(TodosContext);
   const completedTasksCount = todos.filter(todo => todo.completed).length;
 

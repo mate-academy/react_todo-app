@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { TodosContext } from '../context/TodosContext';
 import { filterOptions } from '../constants/filterOptions';
 
-type PropsTodoFilter = {};
+type Props = {};
 
-export const TodoFilter: React.FC<PropsTodoFilter> = () => {
+export const TodoFilter: React.FC<Props> = () => {
   const { filter, setFilter } = useContext(TodosContext);
 
   return (
