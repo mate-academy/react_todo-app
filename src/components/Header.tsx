@@ -13,10 +13,14 @@ export const Header: React.FC<PropsHeader> = () => {
     setTodos([todo, ...todos]);
   };
 
+  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (title.trim() !== '') {
+    if (title.trim()) {
       addTodo({
         id: +new Date(),
         title,
@@ -41,7 +45,7 @@ export const Header: React.FC<PropsHeader> = () => {
           className="new-todo"
           placeholder="What needs to be done?"
           value={title}
-          onChange={event => setTitle(event.target.value)}
+          onChange={handleChangeTitle}
         />
       </form>
     </header>

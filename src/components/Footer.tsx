@@ -17,7 +17,7 @@ export const Footer: React.FC<PropsFooter> = () => {
 
       <TodoFilter />
 
-      {completedTasksCount !== 0 && (
+      {!!completedTasksCount && (
         <TodoClearCompleted />
       )}
     </footer>

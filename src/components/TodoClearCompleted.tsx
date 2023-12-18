@@ -16,7 +16,7 @@ export const TodoClearCompleted: React.FC<PropsTodoClearCompleted> = () => {
     <button
       type="button"
       className="clear-completed"
-      onClick={() => handleDeleteCompleted()}
+      onClick={handleDeleteCompleted}
     >
       Clear completed
     </button>

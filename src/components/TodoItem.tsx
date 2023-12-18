@@ -47,6 +47,11 @@ export const TodoItem: React.FC<PropsTodoItem> = ({
     setTodos(updatedTasks);
   };
 
+  const handleToggleTasks = (taskId: number) => {
+    changeStatusCompleted(taskId);
+    handleToggleTask(taskId);
+  };
+
   const handleDoubleClick = (task: Todo) => {
     setEditingTodo(task);
   };
@@ -65,11 +70,11 @@ export const TodoItem: React.FC<PropsTodoItem> = ({
     setEditingTodo(null);
   };
 
-  const handleChangeTitle = (newTitle: string) => {
+  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (editingTodo) {
       setEditingTodo({
         ...editingTodo,
-        title: newTitle,
+        title: event.target.value,
       });
     }
   };
@@ -103,10 +108,7 @@ export const TodoItem: React.FC<PropsTodoItem> = ({
           className="toggle"
           checked={todo.completed}
           id={`toggle-view-${todo.id}`}
-          onChange={() => {
-            changeStatusCompleted(todo.id);
-            handleToggleTask(todo.id);
-          }}
+          onChange={() => handleToggleTasks(todo.id)}
         />
 
         <label
@@ -129,7 +131,7 @@ export const TodoItem: React.FC<PropsTodoItem> = ({
           type="text"
           className="edit"
           value={editingTodo.title}
-          onChange={(event) => handleChangeTitle(event.target.value)}
+          onChange={handleChangeTitle}
           onBlur={handleSave}
           onKeyDown={handleKeyDown}
           ref={inputRef}

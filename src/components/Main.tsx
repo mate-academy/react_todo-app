@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { TodosContext } from '../context/TodosContext';
 import { TodoList } from './TodoList';
+import { Todo } from '../types/Todo';
 
 type PropsMain = {
 };
@@ -18,6 +19,10 @@ export const Main: React.FC<PropsMain> = () => {
     setTodos(updetedTodos);
   };
 
+  const areAllTodosCompleted = (todosToCheck: Todo[]) => {
+    return todosToCheck.every((todo) => todo.completed);
+  };
+
   return (
     <section className="main">
       <input
@@ -26,7 +31,7 @@ export const Main: React.FC<PropsMain> = () => {
         className="toggle-all"
         data-cy="toggleAll"
         onChange={changeAllDone}
-        checked={todos.every(todo => todo.completed)}
+        checked={areAllTodosCompleted(todos)}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
