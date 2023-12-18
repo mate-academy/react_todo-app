@@ -42,6 +42,7 @@
 .todo-list li .toggle {
   text-align: center;
   width: 40px;
+
   /* auto, since non-WebKit browsers doesn't support input styling */
   height: auto;
   position: absolute;
@@ -96,21 +97,10 @@
   color: #af5b5e;
 }
 
-.todo-list li .destroy:after {
+.todo-list li .destroy::after {
   content: "×";
 }
 
 .todo-list li:hover .destroy {
   display: block;
-}
-
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox
-*/
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  .todo-list li .toggle {
-    height: 40px;
-    background: none;
-  }
 }
