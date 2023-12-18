@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
 import { TodosContext } from '../context/TodosContext';
 
-type Props = {
-};
-
-export const TodoClearCompleted: React.FC<Props> = () => {
+export const TodoClearCompleted: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const handleDeleteCompleted = () => {
     const updatedTodos = todos.filter(todo => !todo.completed);

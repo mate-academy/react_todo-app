@@ -2,10 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodosContext } from '../context/TodosContext';
 
-type Props = {
-};
-
-export const Header: React.FC<Props> = () => {
+export const Header: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const [title, setTitle] = useState<string>('');
 

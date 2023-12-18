@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
 import { TodosContext } from '../context/TodosContext';
 
-type Props = {
-};
-
-export const TodoActiveCount: React.FC<Props> = () => {
+export const TodoActiveCount: React.FC = () => {
   const { todos } = useContext(TodosContext);
   const activeTasksCount = todos.filter(todo => !todo.completed).length;
 

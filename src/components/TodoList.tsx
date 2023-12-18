@@ -3,10 +3,7 @@ import { TodoItem } from './TodoItem';
 import { TodosContext } from '../context/TodosContext';
 import { getFilteredTasks } from '../service/getFilteredTasks';
 
-type Props = {
-};
-
-export const TodoList: React.FC<Props> = () => {
+export const TodoList: React.FC = () => {
   const { todos, filter } = useContext(TodosContext);
 
   const filterCompletedTasks = getFilteredTasks(todos, filter);

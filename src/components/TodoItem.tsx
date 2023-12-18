@@ -60,7 +60,7 @@ export const TodoItem: React.FC<Props> = ({
     if (editingTodo) {
       const newTitle = editingTodo.title.trim();
 
-      if (newTitle !== '') {
+      if (newTitle) {
         setTodos(todos.map(task => {
           if (task.id === editingTodo.id) {
             return { ...task, title: newTitle };
@@ -68,6 +68,8 @@ export const TodoItem: React.FC<Props> = ({
 
           return task;
         }));
+      } else {
+        deleteTodo(editingTodo.id);
       }
     }
 

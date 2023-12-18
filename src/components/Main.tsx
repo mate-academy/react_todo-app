@@ -3,10 +3,7 @@ import { TodosContext } from '../context/TodosContext';
 import { TodoList } from './TodoList';
 import { Todo } from '../types/Todo';
 
-type Props = {
-};
-
-export const Main: React.FC<Props> = () => {
+export const Main: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const changeAllDone = () => {
