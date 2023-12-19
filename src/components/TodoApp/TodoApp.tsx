@@ -54,7 +54,7 @@ export const TodoApp: React.FC = () => {
     window.addEventListener('hashchange', handleHashChange);
 
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="todoapp">
