@@ -8,16 +8,24 @@ interface ITodo {
 
 type InitialStateType = {
   todos: ITodo[];
+  filteredTodos: ITodo[];
 };
 
 const initialState = {
   todos: [],
+  filteredTodos: [],
 };
 
 type Action = { type: 'ADD_TODO_ITEM'; title: string } |
 { type: 'REMOVE_TODO_ITEM', id: number } |
 { type: 'MARK_ALL_AS_COMPLETED' } |
-{ type: 'SAVE_EDITED_TITLE', title: string, id: number };
+{ type: 'MARK_ALL_AS_UNCOMPLETED' } |
+{ type: 'MARK_TASK_AS_COMPLETED', id: number } |
+{ type: 'SAVE_EDITED_TITLE', title: string, titleId: number } |
+{ type: 'SHOW_ALL_TASKS' } |
+{ type: 'SHOW_ACTIVE_TASKS', filter: 'Active_Tasks' } |
+{ type: 'SHOW_COMPLETED_TASKS', filter: 'Completed_Tasks' } |
+{ type: 'CLEAR_COMPLETED' };
 
 export const todosReducer = (state: InitialStateType, action: Action) => {
   switch (action.type) {
@@ -36,9 +44,10 @@ export const todosReducer = (state: InitialStateType, action: Action) => {
 
     case 'SAVE_EDITED_TITLE':
       return {
+
         ...state,
         todos: state.todos.map((todo) => (
-          todo.id === action.id
+          todo.id === action.titleId
             ? { ...todo, title: action.title }
             : todo
         )),
@@ -51,10 +60,59 @@ export const todosReducer = (state: InitialStateType, action: Action) => {
         todos: state.todos.filter((todoItem) => todoItem.id !== action.id),
       };
 
-    case 'MARK_ALL_AS_COMPLETED':
+    case 'MARK_TASK_AS_COMPLETED':
       return {
         ...state,
-        todos: state.todos.map((todo) => !todo.completed),
+        todos: state.todos.map((todo) => (
+          todo.id === action.id ? {
+            ...todo,
+            completed: !todo.completed,
+          } : todo)),
+
+      };
+
+    case 'MARK_ALL_AS_COMPLETED':
+
+      return {
+        ...state,
+        todos: state.todos
+          .map((todo) => ({
+            ...todo,
+            completed: true,
+          })),
+      };
+
+    case 'MARK_ALL_AS_UNCOMPLETED':
+
+      return {
+        ...state,
+        todos: state.todos
+          .map((todo) => ({
+            ...todo,
+            completed: false,
+          })),
+      };
+
+    case 'SHOW_ACTIVE_TASKS':
+      const filterActiveTasks = action.filter;
+
+      return {
+        ...state,
+        todos: filterActiveTasks,
+      };
+
+    case 'SHOW_COMPLETED_TASKS':
+      const filterCompletedTasks = action.filter;
+
+      return {
+        ...state,
+        todos: filterCompletedTasks,
+      };
+
+    case 'CLEAR_COMPLETED':
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo.completed === false),
       };
 
     default:

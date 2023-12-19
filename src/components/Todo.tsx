@@ -8,8 +8,8 @@ export const Todo = ({
   todoItem,
   onLabelClick,
 }) => {
-  const [edit, setEdit] = useState(editTodo);
-  const [editedTitle, setEditedTitle] = useState(editedTitleTodo);
+  const [edit, setEdit] = useState(false);
+  const [editedTitle, setEditedTitle] = useState('');
   const {
     dispatch,
   } = React.useContext(TodosContext);
@@ -18,6 +18,15 @@ export const Todo = ({
     e.preventDefault();
     dispatch({ type: 'SAVE_EDITED_TITLE', title: editedTitle, titleId: id });
     setEdit(!edit);
+  };
+
+  const handleLabel = () => {
+    setEdit(!edit);
+    setEditedTitle('');
+  };
+
+  const changeCheckbox = () => {
+    dispatch({ type: 'MARK_TASK_AS_COMPLETED', id: todoItem.id });
   };
 
   return (
@@ -31,9 +40,9 @@ export const Todo = ({
           className="toggle"
           id={`toggle-completed-${todoItem.id}`}
           checked={todoItem.completed}
-          onChange={() => { }}
+          onChange={changeCheckbox}
         />
-        {edit !== editTodo ? (
+        {edit ? (
           <form onSubmit={(e) => handleTitleSave(e, todoItem.id)}>
             <input
               type="text"
@@ -45,7 +54,7 @@ export const Todo = ({
         ) : (
           <label
             htmlFor={`toggle-completed-${todoItem.id}`}
-            onDoubleClick={onLabelClick}
+            onDoubleClick={handleLabel}
           >
             {todoItem.title}
           </label>
