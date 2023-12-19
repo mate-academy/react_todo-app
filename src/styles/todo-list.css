@@ -104,3 +104,8 @@
 .todo-list li:hover .destroy {
   display: block;
 }
+
+.todo-list li input:focus,
+input.new-todo:focus {
+  outline: none;
+}
