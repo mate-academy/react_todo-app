@@ -4,7 +4,7 @@ import { Todo } from './Todo';
 
 export const Todos = () => {
   const {
-    state: { todos },
+    state: { todos, filter },
     dispatch,
   } = React.useContext(TodosContext);
   const handleDelete = (id: number) => {
@@ -13,13 +13,39 @@ export const Todos = () => {
 
   return (
     <ul className="todo-list" data-cy="todoList">
-      {todos.map((todoItem) => (
-        <Todo
-          key={todoItem.id}
-          todoItem={todoItem}
-          onItemDelete={handleDelete}
-        />
-      ))}
+      {filter === 'all' && (
+        todos
+          .map((todoItem) => (
+            <Todo
+              key={todoItem.id}
+              todoItem={todoItem}
+              onItemDelete={handleDelete}
+            />
+          ))
+      )}
+      {filter === 'active' && (
+        todos
+          .filter((todoItem) => todoItem.completed === false)
+          .map((todoItem) => (
+            <Todo
+              key={todoItem.id}
+              todoItem={todoItem}
+              onItemDelete={handleDelete}
+            />
+          ))
+      )}
+      {filter === 'completed' && (
+        todos
+          .filter((todoItem) => todoItem.completed === true)
+          .map((todoItem) => (
+            <Todo
+              key={todoItem.id}
+              todoItem={todoItem}
+              onItemDelete={handleDelete}
+            />
+          ))
+      )}
+
     </ul>
   );
 };

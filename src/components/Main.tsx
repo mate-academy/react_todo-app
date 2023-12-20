@@ -17,16 +17,16 @@ export const Main = () => {
   return (
     <section className="main">
       <input
+        onClick={handleToggleAll}
         type="checkbox"
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
       />
       <label
-        onClick={handleToggleAll}
         htmlFor="toggle-all"
       >
-        Mark all as complete
+        Mark all as completed
       </label>
       <Todos />
     </section>

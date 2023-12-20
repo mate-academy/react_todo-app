@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { TodosContext } from '../contexts/TodosContext';
+import { ITodo } from '../types/types';
 
-export const Todo = ({
+type Props = {
+  onItemDelete: (id: number) => void;
+  todoItem: ITodo;
+};
+
+export const Todo: React.FC<Props> = ({
   onItemDelete,
-  editTodo,
-  editedTitleTodo,
   todoItem,
-  onLabelClick,
 }) => {
   const [edit, setEdit] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
@@ -14,7 +17,7 @@ export const Todo = ({
     dispatch,
   } = React.useContext(TodosContext);
 
-  const handleTitleSave = (e, id: number) => {
+  const handleTitleSave = (e: React.SyntheticEvent, id: number) => {
     e.preventDefault();
     dispatch({ type: 'SAVE_EDITED_TITLE', title: editedTitle, titleId: id });
     setEdit(!edit);

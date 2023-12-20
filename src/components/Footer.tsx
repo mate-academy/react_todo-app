@@ -5,25 +5,15 @@ export const Footer = () => {
   const { state: { todos }, dispatch } = React.useContext(TodosContext);
 
   const handleAllTasks = () => {
-    dispatch({ type: 'SHOW_ALL_TASKS' });
+    dispatch({ type: 'SHOW_ALL_TASKS', filter: 'all' });
   };
 
   const handleActiveTasks = () => {
-    dispatch({ type: 'SHOW_ACTIVE_TASKS', filter: 'Active_Tasks' });
-
-    if (todos === 'Completed_Tasks') {
-      const filteredTodos = todos
-        .filter((todo) => todo.completed === true);
-    }
+    dispatch({ type: 'SHOW_ACTIVE_TASKS', filter: 'active' });
   };
 
   const handleCompletedTasks = () => {
-    dispatch({ type: 'SHOW_COMPLETED_TASKS', filter: 'Completed_Tasks' });
-
-    if (todos === 'Completed_Tasks') {
-      const filteredTodos = todos
-        .filter((todo) => todo.completed === true);
-    }
+    dispatch({ type: 'SHOW_COMPLETED_TASKS', filter: 'completed' });
   };
 
   const handleClearCompleted = () => {

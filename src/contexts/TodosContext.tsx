@@ -1,34 +1,48 @@
 import React, { createContext, useReducer } from 'react';
-
-interface ITodo {
-  id: number;
-  completed: boolean;
-  title: string;
-}
-
-type InitialStateType = {
-  todos: ITodo[];
-  filteredTodos: ITodo[];
-};
+import { InitialStateType } from '../types/types';
 
 const initialState = {
   todos: [],
-  filteredTodos: [],
+  filter: 'all',
 };
 
-type Action = { type: 'ADD_TODO_ITEM'; title: string } |
+type Action = { type: 'SHOW_ACTIVE_TASKS', filter: 'active' } |
+{ type: 'SHOW_COMPLETED_TASKS', filter: 'completed' } |
+{ type: 'SHOW_ALL_TASKS', filter: 'all' } |
+{ type: 'ADD_TODO_ITEM', title: string } |
 { type: 'REMOVE_TODO_ITEM', id: number } |
 { type: 'MARK_ALL_AS_COMPLETED' } |
 { type: 'MARK_ALL_AS_UNCOMPLETED' } |
 { type: 'MARK_TASK_AS_COMPLETED', id: number } |
 { type: 'SAVE_EDITED_TITLE', title: string, titleId: number } |
-{ type: 'SHOW_ALL_TASKS' } |
-{ type: 'SHOW_ACTIVE_TASKS', filter: 'Active_Tasks' } |
-{ type: 'SHOW_COMPLETED_TASKS', filter: 'Completed_Tasks' } |
 { type: 'CLEAR_COMPLETED' };
 
 export const todosReducer = (state: InitialStateType, action: Action) => {
   switch (action.type) {
+    case 'SHOW_ACTIVE_TASKS':
+
+      return {
+        ...state,
+        todos: state.todos,
+        filter: action.filter,
+      };
+
+    case 'SHOW_COMPLETED_TASKS':
+
+      return {
+        ...state,
+        todos: state.todos,
+        filter: action.filter,
+      };
+
+    case 'SHOW_ALL_TASKS':
+
+      return {
+        ...state,
+        todos: state.todos,
+        filter: action.filter,
+      };
+
     case 'ADD_TODO_ITEM':
       return {
         ...state,
@@ -91,22 +105,6 @@ export const todosReducer = (state: InitialStateType, action: Action) => {
             ...todo,
             completed: false,
           })),
-      };
-
-    case 'SHOW_ACTIVE_TASKS':
-      const filterActiveTasks = action.filter;
-
-      return {
-        ...state,
-        todos: filterActiveTasks,
-      };
-
-    case 'SHOW_COMPLETED_TASKS':
-      const filterCompletedTasks = action.filter;
-
-      return {
-        ...state,
-        todos: filterCompletedTasks,
       };
 
     case 'CLEAR_COMPLETED':
