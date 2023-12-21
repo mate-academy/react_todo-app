@@ -23,19 +23,23 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
     }
   }, [isEdited]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = e.target;
-
+  const updateTodoValue = (key: keyof Todo, newValue: string | boolean) => {
     todos.value = todos.value.map((t) => {
-      if (t.id === todo.id) {
+      if (t.id === id) {
         return {
           ...t,
-          completed: checked,
+          [key]: newValue,
         };
       }
 
       return t;
     });
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target;
+
+    updateTodoValue('completed', checked);
   };
 
   const handleDeleteTodo = () => {
@@ -49,9 +53,25 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
   const finishEditing = () => {
     if (!inputValue.trim()) {
       handleDeleteTodo();
+    } else {
+      updateTodoValue('title', inputValue);
     }
 
     setIsEdited(false);
+  };
+
+  const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (event.key) {
+      case 'Enter':
+        finishEditing();
+        break;
+      case 'Escape':
+        event.stopPropagation();
+        setIsEdited(false);
+        setInputValue(title);
+        break;
+      default:
+    }
   };
 
   return (
@@ -79,6 +99,7 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
         value={inputValue}
         onInput={handleInput}
         onBlur={finishEditing}
+        onKeyUp={handleOnKeyUp}
       />
     </li>
   );
