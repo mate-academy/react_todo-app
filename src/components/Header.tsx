@@ -7,7 +7,10 @@ export const Header = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch({ type: 'ADD_TODO_ITEM', title: input });
+    if (input.trim()) {
+      dispatch({ type: 'ADD_TODO_ITEM', title: input });
+    }
+
     setInput('');
   };
 

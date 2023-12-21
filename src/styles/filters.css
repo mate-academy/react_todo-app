@@ -33,3 +33,9 @@
     bottom: 10px;
   }
 }
+
+.edit {
+  position: relative;
+  left: 10%;
+  width: 90%;
+}

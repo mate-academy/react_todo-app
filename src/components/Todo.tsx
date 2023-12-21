@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TodosContext } from '../contexts/TodosContext';
 import { ITodo } from '../types/types';
 
@@ -12,20 +12,31 @@ export const Todo: React.FC<Props> = ({
   todoItem,
 }) => {
   const [edit, setEdit] = useState(false);
-  const [editedTitle, setEditedTitle] = useState('');
+  const [editedTitle, setEditedTitle] = useState(todoItem.title);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const {
     dispatch,
   } = React.useContext(TodosContext);
 
   const handleTitleSave = (e: React.SyntheticEvent, id: number) => {
     e.preventDefault();
-    dispatch({ type: 'SAVE_EDITED_TITLE', title: editedTitle, titleId: id });
+    if (!editedTitle.trim()) {
+      dispatch({ type: 'REMOVE_TODO_ITEM', id });
+    } else {
+      dispatch({ type: 'SAVE_EDITED_TITLE', title: editedTitle, titleId: id });
+    }
+
     setEdit(!edit);
   };
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [edit]);
+
   const handleLabel = () => {
-    setEdit(!edit);
-    setEditedTitle('');
+    setEdit(true);
   };
 
   const changeCheckbox = () => {
@@ -48,15 +59,18 @@ export const Todo: React.FC<Props> = ({
         {edit ? (
           <form onSubmit={(e) => handleTitleSave(e, todoItem.id)}>
             <input
+              ref={inputRef}
               type="text"
+              id="editID"
               className="edit"
               value={editedTitle}
+              onBlur={() => setEdit(false)}
               onChange={(e) => setEditedTitle(e.target.value)}
             />
           </form>
         ) : (
           <label
-            htmlFor={`toggle-completed-${todoItem.id}`}
+            htmlFor="editID"
             onDoubleClick={handleLabel}
           >
             {todoItem.title}

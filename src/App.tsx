@@ -1,17 +1,26 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { Footer } from './components/Footer';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
-import { Provider } from './contexts/TodosContext';
+import { Footer } from './components/Footer';
+import { Provider, TodosContext } from './contexts/TodosContext';
 
 export const App: React.FC = () => {
+  const { state: { todos } } = React.useContext(TodosContext);
+  const [tasksLength, setTasksLength] = useState(todos.length);
+
+  useEffect(() => {
+    setTasksLength(todos.length);
+  }, [todos]);
+
   return (
     <Provider>
       <div className="todoapp">
         <Header />
         <Main />
-        <Footer />
+        {tasksLength > 0 && (
+          <Footer />
+        )}
       </div>
     </Provider>
   );
