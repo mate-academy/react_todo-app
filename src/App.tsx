@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
-import { Provider, TodosContext } from './contexts/TodosContext';
+import { TodosContext } from './contexts/TodosContext';
 
 export const App: React.FC = () => {
   const { state: { todos } } = React.useContext(TodosContext);
@@ -14,14 +14,12 @@ export const App: React.FC = () => {
   }, [todos]);
 
   return (
-    <Provider>
-      <div className="todoapp">
-        <Header />
-        <Main />
-        {tasksLength > 0 && (
-          <Footer />
-        )}
-      </div>
-    </Provider>
+    <div className="todoapp">
+      <Header />
+      <Main />
+      {tasksLength > 0 && (
+        <Footer />
+      )}
+    </div>
   );
 };

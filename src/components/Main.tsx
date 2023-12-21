@@ -4,7 +4,7 @@ import { Todos } from './Todos';
 
 export const Main = () => {
   const [labelClick, setLabelClick] = useState(1);
-  const { dispatch } = React.useContext(TodosContext);
+  const { state: { todos }, dispatch } = React.useContext(TodosContext);
   const handleToggleAll = () => {
     setLabelClick(labelClick + 1);
     if (labelClick % 2 === 0) {
@@ -13,6 +13,10 @@ export const Main = () => {
       dispatch({ type: 'MARK_ALL_AS_COMPLETED' });
     }
   };
+
+  if (!todos.length) {
+    return null;
+  }
 
   return (
     <section className="main">

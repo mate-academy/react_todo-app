@@ -29,6 +29,10 @@ export const Footer = () => {
     dispatch({ type: 'CLEAR_COMPLETED' });
   };
 
+  if (!todos.length) {
+    return null;
+  }
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
