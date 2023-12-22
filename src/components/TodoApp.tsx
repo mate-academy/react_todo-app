@@ -10,6 +10,7 @@ export const TodoApp = () => {
   useSignals();
 
   const activeItemsLeft = `${activeTodosCounter.value} ${activeTodosCounter.value === 1 ? 'item left' : 'items left'}`;
+  const anyCompletedItems = todos.value.some(todo => todo.completed);
 
   const handleToggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
@@ -49,7 +50,7 @@ export const TodoApp = () => {
 
           <TodosFilter />
 
-          {todos.value.some(todo => todo.completed) && (
+          {anyCompletedItems && (
             <button
               type="button"
               className="clear-completed"
