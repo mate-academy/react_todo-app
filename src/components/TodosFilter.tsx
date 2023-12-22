@@ -1,21 +1,27 @@
 import classNames from 'classnames';
 import { useSignals } from '@preact/signals-react/runtime';
 import { filter } from '../signals/filter-signal';
+import { FilterValues } from '../types';
 
 export const TodosFilter = () => {
   useSignals();
 
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     switch (event.currentTarget.innerText) {
+      case FilterValues.All:
+        filter.value = FilterValues.All;
+        break;
+
+      case FilterValues.Active:
+        filter.value = FilterValues.Active;
+        break;
+
+      case FilterValues.Completed:
+        filter.value = FilterValues.Completed;
+        break;
+
       default:
-      case 'All':
-        filter.value = 'all';
         break;
-      case 'Active':
-        filter.value = 'active';
-        break;
-      case 'Completed':
-        filter.value = 'completed';
     }
   };
 
@@ -24,7 +30,9 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/"
-          className={classNames({ selected: filter.value === 'all' })}
+          className={classNames(
+            { selected: filter.value === FilterValues.All },
+          )}
           onClick={handleClick}
         >
           All
@@ -35,7 +43,9 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/active"
-          className={classNames({ selected: filter.value === 'active' })}
+          className={classNames(
+            { selected: filter.value === FilterValues.Active },
+          )}
           onClick={handleClick}
         >
           Active
@@ -46,7 +56,9 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/completed"
-          className={classNames({ selected: filter.value === 'completed' })}
+          className={classNames(
+            { selected: filter.value === FilterValues.Completed },
+          )}
           onClick={handleClick}
         >
           Completed

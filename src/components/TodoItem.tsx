@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { Todo } from '../types';
+import { Keys, Todo } from '../types';
 import { todos } from '../signals/todos-signal';
 
 type TodoItemProps = {
@@ -60,15 +60,18 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
 
   const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
-      case 'Enter':
+      case Keys.Enter:
         finishEditing();
         break;
-      case 'Escape':
+
+      case Keys.Escape:
         event.stopPropagation();
         setIsEdited(false);
         setInputValue(title);
         break;
+
       default:
+        break;
     }
   };
 

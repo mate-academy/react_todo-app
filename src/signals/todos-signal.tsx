@@ -3,7 +3,7 @@ import {
   getTodosFromLocalStorage,
   setTodosToLocalStorage,
 } from '../local-storage';
-import { Todo } from '../types';
+import { FilterValues, Todo } from '../types';
 import { filter } from './filter-signal';
 
 export const todos = signal<Todo[]>(getTodosFromLocalStorage());
@@ -30,11 +30,11 @@ export const allTodosCompleted = computed<boolean>(() => {
 export const filteredTodos = computed<Todo[]>(() => {
   switch (filter.value) {
     default:
-    case 'all':
+    case FilterValues.All:
       return todos.value;
-    case 'active':
+    case FilterValues.Active:
       return todos.value.filter(todo => !todo.completed);
-    case 'completed':
+    case FilterValues.Completed:
       return todos.value.filter(todo => todo.completed);
   }
 });

@@ -1,5 +1,6 @@
 import { signal } from '@preact/signals-react';
+import { FilterValues } from '../types';
 
-type Filter = 'all' | 'active' | 'completed';
+type Filter = keyof typeof FilterValues;
 
-export const filter = signal<Filter>('all');
+export const filter = signal<Filter>(FilterValues.All);
