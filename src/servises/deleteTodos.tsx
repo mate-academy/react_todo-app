@@ -11,12 +11,3 @@ export const deleteTodos = (
 
   callback(filtered);
 };
-
-// export const clearComplited = (
-//   array: Todo[],
-//   callBack: (newTodos: Todo[]) => void,
-// ) => {
-//   const filtered = array.filter(todo => !todo.complited);
-
-//   callBack(filtered);
-// };
