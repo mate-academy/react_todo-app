@@ -1,15 +1,24 @@
-import { useState } from 'react';
 import { useSignals } from '@preact/signals-react/runtime';
-import { activeTodosCounter, todos } from '../signals/todos-signal';
+import {
+  activeTodosCounter, allTodosCompleted, todos,
+} from '../signals/todos-signal';
 import { Header } from './Header';
 import { TodoList } from './TodoList';
+import { TodosFilter } from './TodosFilter';
 
 export const TodoApp = () => {
-  // eslint-disable-next-line
-  console.log('TodoApp render');
   useSignals();
 
-  const [isChecked, setIsChecked] = useState(false);
+  const handleToggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target;
+
+    todos.value = todos.value.map(todo => {
+      return {
+        ...todo,
+        completed: checked,
+      };
+    });
+  };
 
   const handleClearCompleted = () => {
     todos.value = todos.value.filter(todo => !todo.completed);
@@ -24,41 +33,32 @@ export const TodoApp = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          checked={isChecked}
+          checked={allTodosCompleted.value}
+          onChange={handleToggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList />
       </section>
+      {!!todos.value.length && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {`${activeTodosCounter.value} ${activeTodosCounter.value === 1 ? 'item left' : 'items left'}`}
+          </span>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${activeTodosCounter.value} ${activeTodosCounter.value === 1 ? 'item left' : 'items left'}`}
-        </span>
+          <TodosFilter />
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+          {todos.value.some(todo => todo.completed) && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleClearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        {todos.value.some(todo => todo.completed) && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={handleClearCompleted}
-          >
-            Clear completed
-          </button>
-        )}
-      </footer>
     </div>
   );
 };

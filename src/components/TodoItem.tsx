@@ -10,11 +10,9 @@ type TodoItemProps = {
 };
 
 export const TodoItem = ({ todo }: TodoItemProps) => {
-  // eslint-disable-next-line
-  console.log('TodoItem render');
   const { id, title, completed } = todo;
-  const [isEdited, setIsEdited] = useState(false);
-  const [inputValue, setInputValue] = useState(title);
+  const [isEdited, setIsEdited] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>(title);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

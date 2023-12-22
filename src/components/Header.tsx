@@ -3,10 +3,7 @@ import { Todo } from '../types';
 import { todos } from '../signals/todos-signal';
 
 export const Header = () => {
-  // eslint-disable-next-line
-  console.log('Header render');
-
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
