@@ -1,9 +1,19 @@
+import { useState } from 'react';
+import { useSignals } from '@preact/signals-react/runtime';
+import { activeTodosCounter, todos } from '../signals/todos-signal';
 import { Header } from './Header';
 import { TodoList } from './TodoList';
 
 export const TodoApp = () => {
   // eslint-disable-next-line
   console.log('TodoApp render');
+  useSignals();
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleClearCompleted = () => {
+    todos.value = todos.value.filter(todo => !todo.completed);
+  };
 
   return (
     <div className="todoapp">
@@ -14,6 +24,7 @@ export const TodoApp = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          checked={isChecked}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <TodoList />
@@ -21,7 +32,7 @@ export const TodoApp = () => {
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          3 items left
+          {`${activeTodosCounter.value} ${activeTodosCounter.value === 1 ? 'item left' : 'items left'}`}
         </span>
 
         <ul className="filters">
@@ -38,9 +49,15 @@ export const TodoApp = () => {
           </li>
         </ul>
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
+        {todos.value.some(todo => todo.completed) && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleClearCompleted}
+          >
+            Clear completed
+          </button>
+        )}
       </footer>
     </div>
   );

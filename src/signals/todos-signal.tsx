@@ -1,4 +1,4 @@
-import { effect, signal } from '@preact/signals-react';
+import { computed, effect, signal } from '@preact/signals-react';
 import {
   getTodosFromLocalStorage,
   setTodosToLocalStorage,
@@ -11,4 +11,8 @@ effect(() => {
   if (todos.value) {
     setTodosToLocalStorage(todos.value);
   }
+});
+
+export const activeTodosCounter = computed<number>(() => {
+  return todos.value.filter(todo => !todo.completed).length;
 });
