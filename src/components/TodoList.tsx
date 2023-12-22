@@ -7,7 +7,7 @@ export const TodoList = () => {
   useSignals();
 
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {filteredTodos.value.map((todo: Todo) => (
         <TodoItem todo={todo} key={todo.id} />
       ))}

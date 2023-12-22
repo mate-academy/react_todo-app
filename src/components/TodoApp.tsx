@@ -37,7 +37,7 @@ export const TodoApp = () => {
           onChange={handleToggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList />
+        {!!todos.value.length && <TodoList />}
       </section>
       {!!todos.value.length && (
         <footer className="footer">

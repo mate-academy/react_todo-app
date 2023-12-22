@@ -20,7 +20,7 @@ export const TodosFilter = () => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
