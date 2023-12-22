@@ -9,6 +9,8 @@ import { TodosFilter } from './TodosFilter';
 export const TodoApp = () => {
   useSignals();
 
+  const activeItemsLeft = `${activeTodosCounter.value} ${activeTodosCounter.value === 1 ? 'item left' : 'items left'}`;
+
   const handleToggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
 
@@ -42,7 +44,7 @@ export const TodoApp = () => {
       {!!todos.value.length && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${activeTodosCounter.value} ${activeTodosCounter.value === 1 ? 'item left' : 'items left'}`}
+            {activeItemsLeft}
           </span>
 
           <TodosFilter />
