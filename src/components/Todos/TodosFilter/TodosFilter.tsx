@@ -32,7 +32,7 @@ export const TodosFilter = () => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       {filters.map(({ href, title }) => (
         <li key={title}>
           <a

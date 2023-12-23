@@ -38,7 +38,7 @@ export const TodosList: FC<Props> = ({ todos }) => {
             : 'Mark all as complete'
         }
       </label>
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {todos.map(todo => (
           <TodoItem key={todo.id} todo={todo} />
         ))}
