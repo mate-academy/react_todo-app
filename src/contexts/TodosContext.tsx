@@ -106,7 +106,7 @@ export const GlobalStateProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     setTodos(state.todos);
-  }, [state.todos]);
+  }, [state.todos, setTodos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
