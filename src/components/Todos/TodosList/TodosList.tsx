@@ -10,14 +10,16 @@ type Props = {
 export const TodosList: FC<Props> = ({ todos }) => {
   const dispatch = useDispatch();
 
-  const allIsCompleted = useMemo(
-    () => todos.every(({ completed }) => completed), [todos],
+  const isAllCompleted = useMemo(
+    () => (todos.length === 0
+      ? false
+      : todos.every(({ completed }) => completed)), [todos],
   );
 
   const handleToggleAll = () => {
     dispatch({
       type: 'toggleAll',
-      payload: !allIsCompleted,
+      payload: !isAllCompleted,
     });
   };
 
@@ -28,12 +30,12 @@ export const TodosList: FC<Props> = ({ todos }) => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        checked={allIsCompleted}
+        checked={isAllCompleted}
         onClick={handleToggleAll}
       />
       <label htmlFor="toggle-all">
         {
-          allIsCompleted
+          isAllCompleted
             ? 'Mark all as active'
             : 'Mark all as complete'
         }
