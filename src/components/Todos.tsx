@@ -11,6 +11,11 @@ export const Todos = () => {
     dispatch({ type: 'REMOVE_TODO_ITEM', id });
   };
 
+  const activeFilter = todos
+    .filter((todoItem) => todoItem.completed === false);
+  const complietedFilter = todos
+    .filter((todoItem) => todoItem.completed === true);
+
   return (
     <ul className="todo-list" data-cy="todoList">
       {filter === 'all' && (
@@ -24,8 +29,7 @@ export const Todos = () => {
           ))
       )}
       {filter === 'active' && (
-        todos
-          .filter((todoItem) => todoItem.completed === false)
+        activeFilter
           .map((todoItem) => (
             <Todo
               key={todoItem.id}
@@ -35,8 +39,7 @@ export const Todos = () => {
           ))
       )}
       {filter === 'completed' && (
-        todos
-          .filter((todoItem) => todoItem.completed === true)
+        complietedFilter
           .map((todoItem) => (
             <Todo
               key={todoItem.id}

@@ -3,11 +3,11 @@ import { TodosContext } from '../contexts/TodosContext';
 
 export const Footer = () => {
   const { state: { todos }, dispatch } = React.useContext(TodosContext);
-  const [state, setState] = useState(todos);
+  const [tasks, setTasks] = useState(todos);
   const [buttonsState, setButtonsState] = useState('all');
 
   useEffect(() => {
-    setState(todos.filter((todo) => todo.completed === false));
+    setTasks(todos.filter((todo) => todo.completed === false));
   }, [todos]);
 
   const handleAllTasks = () => {
@@ -36,7 +36,7 @@ export const Footer = () => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {state.length}
+        {tasks.length}
         <span> items left</span>
       </span>
 

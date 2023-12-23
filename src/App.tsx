@@ -7,17 +7,17 @@ import { TodosContext } from './contexts/TodosContext';
 
 export const App: React.FC = () => {
   const { state: { todos } } = React.useContext(TodosContext);
-  const [tasksLength, setTasksLength] = useState(todos.length);
+  const [tasks, setTasks] = useState(todos);
 
   useEffect(() => {
-    setTasksLength(todos.length);
+    setTasks(todos);
   }, [todos]);
 
   return (
     <div className="todoapp">
       <Header />
       <Main />
-      {tasksLength > 0 && (
+      {tasks.length > 0 && (
         <Footer />
       )}
     </div>

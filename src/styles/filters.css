@@ -35,7 +35,11 @@
 }
 
 .edit {
+  box-sizing: border-box;
+  height: 58px;
+  width: 90%;
+  margin: 0;
+  padding: 0 4px;
   position: relative;
   left: 10%;
-  width: 90%;
 }
