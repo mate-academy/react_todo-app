@@ -2,6 +2,7 @@ import {
   FC, createContext, useContext, useEffect, useReducer,
 } from 'react';
 import { Todo } from '../types/Todo';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type Action =
   { type: 'addTodo', payload: Todo }
@@ -97,18 +98,15 @@ type Props = {
 };
 
 export const GlobalStateProvider: FC<Props> = ({ children }) => {
-  if (!localStorage.getItem('todos')) {
-    localStorage.setItem('todos', JSON.stringify(initialState));
-  }
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
-  const storage = localStorage.getItem('todos');
-  const storageObj = JSON.parse(storage || '');
-
-  const [state, dispatch] = useReducer(reducer, storageObj);
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState, todos,
+  });
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(state));
-  }, [state]);
+    setTodos(state.todos);
+  }, [state.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

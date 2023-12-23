@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useDispatch } from '../../../contexts/TodosContext';
 
 export const TodosHeader = () => {
@@ -6,10 +6,8 @@ export const TodosHeader = () => {
 
   const dispatch = useDispatch();
 
-  const handleAddTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code !== 'Enter') {
-      return;
-    }
+  const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     if (title.trim()) {
       dispatch({
@@ -28,7 +26,7 @@ export const TodosHeader = () => {
   return (
     <header className="header">
       <h1>todos</h1>
-      <form>
+      <form onSubmit={handleAddTodo}>
         <input
           type="text"
           data-cy="createTodo"
@@ -36,7 +34,6 @@ export const TodosHeader = () => {
           placeholder="What needs to be done?"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          onKeyDown={handleAddTodo}
         />
       </form>
     </header>
