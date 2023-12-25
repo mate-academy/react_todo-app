@@ -21,8 +21,8 @@ export const TodoApp: React.FC = () => {
   });
 
   const updateFilteredTodos = useCallback((updatedTodos: Todo[]) => {
-    const urlHash = getHash();
-    const filtered = getFilteredTodos(updatedTodos, urlHash);
+    const filterHash = getHash();
+    const filtered = getFilteredTodos(updatedTodos, filterHash);
 
     setFilterdTodos(filtered);
   }, []);
