@@ -2,7 +2,7 @@ import { useMyContext } from '../TodosContext';
 import { TodoList } from './TodoList';
 
 export const Main = () => {
-  const { todos } = useMyContext();
+  const { todos, allCompleted, setAll } = useMyContext();
 
   return (
     <section className="main">
@@ -11,6 +11,8 @@ export const Main = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        checked={allCompleted()}
+        onChange={setAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 

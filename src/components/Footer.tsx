@@ -1,27 +1,42 @@
+import classNames from 'classnames';
+import { NavLink } from 'react-router-dom';
+import { useMyContext } from '../TodosContext';
+
 export const Footer = () => {
+  const { left, complited, clearCompleted } = useMyContext();
+  const getSelected = ({ isActive }: { isActive: boolean }) => {
+    return classNames({ selected: isActive });
+  };
+
   return (
-    <footer className="footer">
+    <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        3 items left
+        {`${left()} items left`}
       </span>
 
       <ul className="filters">
         <li>
-          <a href="#/" className="selected">All</a>
+          <NavLink to="/" className={getSelected}>All</NavLink>
         </li>
 
         <li>
-          <a href="#/active">Active</a>
+          <NavLink to="/active" className={getSelected}>Active</NavLink>
         </li>
 
         <li>
-          <a href="#/completed">Completed</a>
+          <NavLink to="/completed" className={getSelected}>Completed</NavLink>
         </li>
       </ul>
 
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {complited() > 0 && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={clearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

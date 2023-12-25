@@ -11,6 +11,10 @@ interface MyContextProps {
   removeTodo: (id: number) => void
   clearCompleted: () => void
   updateTitle: (id: number, title: string) => void
+  left: () => number
+  complited: () => number
+  allCompleted: () => boolean
+  setAll: () => void
 }
 
 const MyContext = createContext<MyContextProps | undefined>(undefined);
@@ -57,7 +61,7 @@ export const MyContextProvider: React.FC<MyContextProviderProps>
   };
 
   const clearCompleted = () => {
-    const updatedTodos = todos.filter((item) => item.completed === false);
+    const updatedTodos = todos.filter((item) => !item.completed);
 
     setTodos(updatedTodos);
   };
@@ -80,6 +84,38 @@ export const MyContextProvider: React.FC<MyContextProviderProps>
     }
   };
 
+  const left = (): number => {
+    return todos.reduce((sum, item) => {
+      if (!item.completed) {
+        return sum + 1;
+      }
+
+      return sum;
+    }, 0);
+  };
+
+  const complited = (): number => {
+    return todos.reduce((sum, item) => {
+      if (item.completed) {
+        return sum + 1;
+      }
+
+      return sum;
+    }, 0);
+  };
+
+  const allCompleted = (): boolean => {
+    return todos.every((item) => item.completed);
+  };
+
+  const setAll = () => {
+    if (allCompleted()) {
+      setTodos((prev) => prev.map((item) => ({ ...item, completed: false })));
+    } else {
+      setTodos((prev) => prev.map((item) => ({ ...item, completed: true })));
+    }
+  };
+
   return (
     <MyContext.Provider value={{
       todos,
@@ -88,6 +124,10 @@ export const MyContextProvider: React.FC<MyContextProviderProps>
       removeTodo,
       clearCompleted,
       updateTitle,
+      left,
+      complited,
+      allCompleted,
+      setAll,
     }}
     >
       {children}
