@@ -89,6 +89,10 @@ body {
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
 }
 
+.new-todo:focus {
+  outline: none;
+}
+
 .main {
   position: relative;
   z-index: 2;
@@ -114,6 +118,7 @@ body {
   left: -13px;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+  cursor: pointer;
 }
 
 .toggle-all + label::before {

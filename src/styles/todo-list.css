@@ -28,6 +28,10 @@
   display: none;
 }
 
+.todo-list li .edit:focus {
+  outline: none;
+}
+
 .todo-list li.editing .edit {
   display: block;
   width: 506px;
@@ -53,6 +57,7 @@
   -webkit-appearance: none;
   appearance: none;
   opacity: 0;
+  cursor: pointer;
 }
 
 .todo-list li label {
@@ -61,6 +66,7 @@
   display: block;
   line-height: 1.2;
   transition: color 0.4s;
+  cursor: pointer;
 }
 
 .todo-list li.completed label {
@@ -91,6 +97,7 @@
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
+  cursor: pointer;
 }
 
 .todo-list li .destroy:hover {
