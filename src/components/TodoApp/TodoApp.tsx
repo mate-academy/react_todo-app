@@ -14,11 +14,7 @@ export const TodoApp: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const todos = useContext(TodosContext);
 
-  const [filteredTodos, setFilterdTodos] = useState(() => {
-    const initialFilterHash = getHash();
-
-    return getFilteredTodos(todos, initialFilterHash);
-  });
+  const [filteredTodos, setFilterdTodos] = useState<Todo[]>([]);
 
   const updateFilteredTodos = useCallback((updatedTodos: Todo[]) => {
     const filterHash = getHash();
