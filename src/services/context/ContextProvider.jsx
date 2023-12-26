@@ -30,7 +30,7 @@ export const ContextProvider = ({ children }) => {
   }
 
   function removeTodo(id) {
-    setTodos(prevTodos => prevTodos.filter(item => item.id !== id))
+    setTodos(prevTodos => prevTodos.filter(item => item.id !== id));
   }
 
   return (
