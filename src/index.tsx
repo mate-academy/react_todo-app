@@ -11,5 +11,9 @@ import { MyContextProvider } from './TodosContext';
 const container = document.getElementById('root') as HTMLDivElement;
 
 createRoot(container).render(
-  <MyContextProvider><HashRouter><App /></HashRouter></MyContextProvider>,
+  <MyContextProvider>
+    <HashRouter>
+      <App />
+    </HashRouter>
+  </MyContextProvider>,
 );
