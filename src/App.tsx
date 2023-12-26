@@ -5,14 +5,18 @@ import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 
+import { ContextProvider } from './services/context/ContextProvider';
+
 export const App: React.FC = () => {
   return (
     <div className="todoapp">
-      <Header />
+      <ContextProvider>
+        <Header />
 
-      <Main />
+        <Main />
 
-      <Footer />
+        <Footer />
+      </ContextProvider>
     </div>
   );
 };
