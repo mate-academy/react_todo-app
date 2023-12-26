@@ -1,9 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactNode } from 'react';
 
-export const Context = React.createContext();
+import { Todo } from '../../types/Todo';
 
-export const ContextProvider = ({ children }) => {
-  const [todos, setTodos] = useState([]);
+interface ContextProps {
+  todos: Todo[];
+  addTodo: (newItem: Todo) => void;
+  removeTodo: (id: number) => void;
+}
+
+interface Props {
+  children: ReactNode;
+}
+
+export const Context = React.createContext<ContextProps>({
+  todos: [],
+  addTodo: () => {},
+  removeTodo: () => {},
+});
+
+export const ContextProvider: React.FC<Props> = ({ children }) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     setTodos(() => {
@@ -25,11 +41,11 @@ export const ContextProvider = ({ children }) => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  function addTodo(newItem) {
+  function addTodo(newItem: Todo) {
     setTodos(prevTodos => [...prevTodos, newItem]);
   }
 
-  function removeTodo(id) {
+  function removeTodo(id: number) {
     setTodos(prevTodos => prevTodos.filter(item => item.id !== id));
   }
 

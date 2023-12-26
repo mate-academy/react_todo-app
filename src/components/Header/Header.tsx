@@ -13,23 +13,32 @@ export const initialTodo: Todo = {
 export const Header = () => {
   const { todos, addTodo } = useContext(Context);
 
+  const [query, setQuery] = useState('');
   const [newTodo, setNewTodo] = useState(initialTodo);
 
   const plusTodo = (event:React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let newId = 0;
+
+    if (todos.length) {
+      newId = todos[todos.length - 1].id + 1;
+    }
 
     addTodo({
       ...newTodo,
-      id: todos.length + 1,
+      id: newId,
     });
 
+    setQuery('');
     setNewTodo(initialTodo);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+
     setNewTodo({
       ...newTodo,
-      title: event.target.value,
+      title: query,
     });
   };
 
@@ -43,6 +52,7 @@ export const Header = () => {
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
+          value={query}
           onChange={event => handleInputChange(event)}
         />
       </form>
