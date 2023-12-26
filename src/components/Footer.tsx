@@ -31,59 +31,59 @@ export const Footer = () => {
     dispatch({ type: 'CLEAR_COMPLETED' });
   };
 
-  if (!todos.length) {
-    return null;
-  }
-
   return (
-    <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        {tasks.length}
-        <span> items left</span>
-      </span>
+    todos.length ? (
+      <footer className="footer">
+        <span className="todo-count" data-cy="todosCounter">
+          {tasks.length}
+          <span> items left</span>
+        </span>
 
-      <ul className="filters">
-        <li>
-          <a
-            onClick={handleAllTasks}
-            href="#/"
-            className={buttonsState === 'all' ? 'selected' : ''}
+        <ul className="filters">
+          <li>
+            <a
+              onClick={handleAllTasks}
+              href="#/"
+              className={buttonsState === 'all' ? 'selected' : ''}
+            >
+              All
+            </a>
+          </li>
+
+          <li>
+            <a
+              onClick={handleActiveTasks}
+              href="#/active"
+              className={buttonsState === 'active' ? 'selected' : ''}
+            >
+              Active
+            </a>
+          </li>
+
+          <li>
+            <a
+              onClick={handleCompletedTasks}
+              href="#/active"
+              className={buttonsState === 'completed' ? 'selected' : ''}
+            >
+              Completed
+            </a>
+          </li>
+        </ul>
+
+        {completedTasks.length > 0 && (
+          <button
+            type="button"
+            onClick={handleClearCompleted}
+            className="clear-completed"
           >
-            All
-          </a>
-        </li>
+            Clear completed
+          </button>
+        )}
 
-        <li>
-          <a
-            onClick={handleActiveTasks}
-            href="#/active"
-            className={buttonsState === 'active' ? 'selected' : ''}
-          >
-            Active
-          </a>
-        </li>
-
-        <li>
-          <a
-            onClick={handleCompletedTasks}
-            href="#/active"
-            className={buttonsState === 'completed' ? 'selected' : ''}
-          >
-            Completed
-          </a>
-        </li>
-      </ul>
-
-      {completedTasks.length && (
-        <button
-          type="button"
-          onClick={handleClearCompleted}
-          className="clear-completed"
-        >
-          Clear completed
-        </button>
-      )}
-
-    </footer>
+      </footer>
+    ) : (
+      <></>
+    )
   );
 };
