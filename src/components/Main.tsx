@@ -15,7 +15,7 @@ export const Main = () => {
   };
 
   return (
-    todos.length > 0 && (
+    todos.length > 0 ? (
       <section className="main">
         <input
           onClick={handleToggleAll}
@@ -29,6 +29,8 @@ export const Main = () => {
         </label>
         <Todos />
       </section>
+    ) : (
+      <></>
     )
   );
 };
