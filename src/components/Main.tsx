@@ -3,15 +3,14 @@ import { TodosContext } from '../contexts/TodosContext';
 import { Todos } from './Todos';
 
 export const Main = () => {
-  const [labelClick, setLabelClick] = useState(1);
+  const [labelClick, setLabelClick] = useState(0);
   const { state: { todos }, dispatch } = React.useContext(TodosContext);
   const handleToggleAll = () => {
     setLabelClick(labelClick + 1);
-    if (labelClick % 2 === 0) {
-      dispatch({ type: 'MARK_ALL_AS_UNCOMPLETED' });
-    } else {
-      dispatch({ type: 'MARK_ALL_AS_COMPLETED' });
-    }
+    dispatch({
+      type: (labelClick % 2)
+        ? 'MARK_ALL_AS_UNCOMPLETED' : 'MARK_ALL_AS_COMPLETED',
+    });
   };
 
   if (!todos.length) {

@@ -4,10 +4,12 @@ import { TodosContext } from '../contexts/TodosContext';
 export const Footer = () => {
   const { state: { todos }, dispatch } = React.useContext(TodosContext);
   const [tasks, setTasks] = useState(todos);
+  const [completedTasks, setCompletedTasks] = useState(todos);
   const [buttonsState, setButtonsState] = useState('all');
 
   useEffect(() => {
     setTasks(todos.filter((todo) => todo.completed === false));
+    setCompletedTasks(todos.filter((todo) => todo.completed === true));
   }, [todos]);
 
   const handleAllTasks = () => {
@@ -72,13 +74,16 @@ export const Footer = () => {
         </li>
       </ul>
 
-      <button
-        type="button"
-        onClick={handleClearCompleted}
-        className="clear-completed"
-      >
-        Clear completed
-      </button>
+      {completedTasks.length && (
+        <button
+          type="button"
+          onClick={handleClearCompleted}
+          className="clear-completed"
+        >
+          Clear completed
+        </button>
+      )}
+
     </footer>
   );
 };

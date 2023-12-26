@@ -76,14 +76,16 @@ export const Todo: React.FC<Props> = ({
             {todoItem.title}
           </label>
         )}
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={() => onItemDelete(todoItem.id)}
-        >
-          .
-        </button>
+        {!edit && (
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={() => onItemDelete(todoItem.id)}
+          >
+            .
+          </button>
+        )}
       </div>
     </li>
   );
