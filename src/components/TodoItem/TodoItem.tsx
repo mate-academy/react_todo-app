@@ -1,8 +1,6 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useRef } from 'react';
 import cn from 'classnames';
-
-import { Input } from '../UI/Input';
-import { Button } from '../UI/Button';
 
 import { Todo } from '../../types/Todo';
 
@@ -31,7 +29,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleTitleUpdate = () => {
-    if (inputRef.current) {
+    if (!inputRef.current) {
+      return;
+    }
+
+    if (inputRef.current.value.trim()) {
       editTitle(id, inputRef.current.value);
     } else {
       removeTodo(id);
@@ -51,30 +53,35 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <li className={cn({ completed, editing })}>
       <div className="view">
-        <Input
+        <input
           type="checkbox"
           className="toggle"
           id={`toggle-${id}`}
           checked={completed}
           onChange={() => editStatus(id)}
         />
+
         <label
           htmlFor={`toggle-${id}`}
           onDoubleClick={handleEdit}
         >
           {title}
         </label>
-        <Button
+
+        <button
+          type="button"
           className="destroy"
           data-cy="deleteTodo"
           onClick={() => removeTodo(id)}
         />
       </div>
+
       <input
         type="text"
         className="edit"
         onKeyDown={handleKeyDown}
         ref={inputRef}
+        onBlur={() => setEditing(false)}
       />
     </li>
   );

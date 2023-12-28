@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { Input } from '../UI/Input';
 
 import { Todo } from '../../types/Todo';
 import { Context } from '../ContextProvider/ContextProvider';
@@ -56,13 +55,13 @@ export const Header = () => {
       <h1>todos</h1>
 
       <form onSubmit={addingTodo}>
-        <Input
+        <input
           type="text"
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
           value={query}
-          onChange={event => handleInputChange(event)}
+          onChange={handleInputChange}
         />
       </form>
     </header>
