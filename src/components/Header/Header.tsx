@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Input } from '../UI/Input';
 
 import { Todo } from '../../types/Todo';
-import { Context } from '../../services/context/ContextProvider';
+import { Context } from '../ContextProvider/ContextProvider';
 
 export const initialTodo: Todo = {
   id: 0,
@@ -16,8 +16,15 @@ export const Header = () => {
   const [query, setQuery] = useState('');
   const [newTodo, setNewTodo] = useState(initialTodo);
 
-  const plusTodo = (event:React.FormEvent<HTMLFormElement>) => {
+  const addingTodo = (event:React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!query.trim()) {
+      setQuery('');
+
+      return;
+    }
+
     let newId = 0;
 
     if (todos.length) {
@@ -34,11 +41,13 @@ export const Header = () => {
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    const { value } = event.target;
+
+    setQuery(value);
 
     setNewTodo({
       ...newTodo,
-      title: query,
+      title: value,
     });
   };
 
@@ -46,7 +55,7 @@ export const Header = () => {
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={plusTodo}>
+      <form onSubmit={addingTodo}>
         <Input
           type="text"
           data-cy="createTodo"
