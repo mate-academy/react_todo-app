@@ -93,12 +93,15 @@ export const DispatchContext
 
 export const TodoStateProvider: React.FC<Props> = ({ children }) => {
   const [initialState, setInitialState]
-    = useLocalStorage('todos', defaultState);
-  const [state, dispatch] = useReducer(reducer, initialState);
+    = useLocalStorage('todos', defaultState.todos);
+  const [state, dispatch] = useReducer(reducer, {
+    ...defaultState,
+    todos: initialState,
+  });
 
   useEffect(() => {
-    setInitialState(state);
-  }, [state]);
+    setInitialState(state.todos);
+  }, [setInitialState, state]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

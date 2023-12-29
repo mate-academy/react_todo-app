@@ -26,21 +26,24 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
 
   const { id, title, completed } = todo;
 
-  const handleDoubleClick = () => {
-    setIsEditing(true);
-  };
-
   const handleSubmitInput = () => {
     setIsEditing(false);
 
-    dispatch({
-      type: ReducerType.ChangeTodo,
-      payload: {
-        id,
-        title: title.trim(),
-        completed,
-      },
-    });
+    if (title.trim()) {
+      dispatch({
+        type: ReducerType.ChangeTodo,
+        payload: {
+          id,
+          title: title.trim(),
+          completed,
+        },
+      });
+    } else {
+      dispatch({
+        type: ReducerType.DeleteTodo,
+        payload: id,
+      });
+    }
   };
 
   const handleKeySubmitInput = (
@@ -97,7 +100,7 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
         completed,
         editing: isEditing,
       })}
-      onDoubleClick={handleDoubleClick}
+      onDoubleClick={() => setIsEditing(true)}
     >
       <div className="view">
         <input
