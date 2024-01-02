@@ -53,6 +53,7 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
     if (event.key === 'Enter') {
       handleInputSubmit();
     }
+
     if (event.key === 'Escape') {
       setEdit(false);
       setTodo({ ...todo, title: initialTitle });
