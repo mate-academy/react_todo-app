@@ -16,6 +16,8 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({ todoItem }) => {
   const [edit, setEdit] = useState(false);
   const [todo, setTodo] = useState(todoItem);
+  const [initialTitle, setInitialTitle] = useState(todo.title);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useContext(DispatchContext);
 
@@ -48,10 +50,18 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (event.key === 'Escape' || event.key === 'Enter') {
+    if (event.key === 'Enter') {
       handleInputSubmit();
     }
+    if (event.key === 'Escape') {
+      setEdit(false);
+      setTodo({ ...todo, title: initialTitle });
+    }
   };
+
+  useEffect(() => {
+    setInitialTitle(todo.title);
+  }, [todoItem]);
 
   const toggleCompleted = () => {
     dispatch({

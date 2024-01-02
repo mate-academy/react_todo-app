@@ -12,12 +12,8 @@ export const Footer: React.FC = () => {
     <footer className="footer">
       <TodosCounter />
       <Filter />
-
-      {
-        hasCompletedTodos && (
-          <ClearCompleted />
-        )
-      }
+      {hasCompletedTodos && (
+        <ClearCompleted />)}
     </footer>
   );
 };

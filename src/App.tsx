@@ -16,14 +16,12 @@ export const App: React.FC = () => {
 
       {todos.length !== 0
         && (
-          <>
-            <section className="main">
-              <ToggleAll />
-
-              <TodoList />
-            </section>
+          <section className="main">
+            <ToggleAll />
+            <TodoList />
             <Footer />
-          </>
+          </section>
+
         )}
     </div>
   );
