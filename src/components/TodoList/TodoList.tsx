@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { TodoItem } from '../TodoItem';
@@ -7,19 +7,20 @@ import { Context } from '../ContextProvider/ContextProvider';
 import { Todo } from '../../types/Todo';
 
 export const TodoList = () => {
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const { todos } = useContext(Context);
 
   const location = useLocation().pathname.slice(1);
 
-  useEffect(() => {
+  const filteredTodos = useMemo(() => {
     if (location === 'active') {
-      setFilteredTodos(() => todos.filter((item) => !item.completed));
-    } else if (location === 'completed') {
-      setFilteredTodos(() => todos.filter((item) => item.completed));
-    } else {
-      setFilteredTodos(() => todos);
+      return todos.filter((item) => !item.completed);
     }
+
+    if (location === 'completed') {
+      return todos.filter((item) => item.completed);
+    }
+
+    return todos;
   }, [location, todos]);
 
   return (

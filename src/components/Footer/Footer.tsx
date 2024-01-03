@@ -12,7 +12,7 @@ export const Footer = () => {
   return (
     <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {`${notCompleted()} items left`}
+        {`${notCompleted} items left`}
       </span>
 
       <ul className="filters">
@@ -29,7 +29,7 @@ export const Footer = () => {
         </li>
       </ul>
 
-      {notCompleted() < todos.length && (
+      {notCompleted < todos.length && (
         <button
           type="button"
           className="clear-completed"

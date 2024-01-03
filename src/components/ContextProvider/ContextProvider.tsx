@@ -1,4 +1,9 @@
-import React, { useEffect, useState, ReactNode } from 'react';
+import React, {
+  useEffect,
+  useState,
+  ReactNode,
+  useMemo,
+} from 'react';
 
 import { Todo } from '../../types/Todo';
 
@@ -13,7 +18,7 @@ interface ContextProps {
   editStatus: (todoId: number) => void;
   clearCompleted: () => void;
   toggleAll: () => void;
-  notCompleted: () => number;
+  notCompleted: number;
   allCompleted: () => boolean;
 }
 
@@ -29,7 +34,7 @@ export const Context = React.createContext<ContextProps>({
   editStatus: () => {},
   clearCompleted: () => {},
   toggleAll: () => {},
-  notCompleted: () => 0,
+  notCompleted: 0,
   allCompleted: () => false,
 });
 
@@ -84,7 +89,7 @@ export const ContextProvider: React.FC<Props> = ({ children }) => {
     setTodos(updatedTodos);
   };
 
-  const notCompleted = () => {
+  const notCompleted = useMemo(() => {
     return todos.reduce((sum, item) => {
       if (!item.completed) {
         return sum + 1;
@@ -92,7 +97,7 @@ export const ContextProvider: React.FC<Props> = ({ children }) => {
 
       return sum;
     }, 0);
-  };
+  }, [todos]);
 
   const allCompleted = (): boolean => {
     return todos.every((item) => item.completed);
