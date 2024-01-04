@@ -1,18 +1,53 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
+import { TodoList } from './todoList/todoList';
+import { Todo } from './types/todoType';
 
 export const App: React.FC = () => {
+  const [title, setTitle] = useState('');
+  const [itemLeft, setItemLeft] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState('All');
+
+  const addTodo = (newTodo: Todo) => {
+    setTodos([...todos, newTodo]);
+  };
+
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (title) {
+      setItemLeft(itemLeft + 1);
+      const id = (+new Date());
+
+      const newTodo: Todo = {
+        id,
+        title,
+        completed: false,
+      };
+
+      addTodo(newTodo);
+      setTitle('');
+    }
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={title}
+            onChange={handleInput}
           />
         </form>
       </header>
@@ -23,64 +58,58 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList items={todos} />
       </section>
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          3 items left
+          {itemLeft}
         </span>
 
         <ul className="filters">
           <li>
-            <a href="#/" className="selected">All</a>
+            <a
+              href="#/"
+              className={classNames({
+                selected: selectedFilter === 'All',
+              })}
+              onClick={() => {
+                setSelectedFilter('All');
+              }}
+            >
+              All
+            </a>
           </li>
 
           <li>
-            <a href="#/active">Active</a>
+            <a
+              href="#/active"
+              className={classNames({
+                selected: selectedFilter === 'Active',
+              })}
+              onClick={() => {
+                setSelectedFilter('Active');
+              }}
+            >
+              Active
+            </a>
           </li>
 
           <li>
-            <a href="#/completed">Completed</a>
+            <a
+              href="#/completed"
+              className={classNames({
+                selected: selectedFilter === 'Completed',
+              })}
+              onClick={() => {
+                setSelectedFilter('Completed');
+              }}
+            >
+              Completed
+            </a>
           </li>
         </ul>
 
