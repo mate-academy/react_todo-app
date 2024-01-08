@@ -40,7 +40,7 @@ export const TodosFilter: React.FC<Props> = ({ sortBy }) => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"

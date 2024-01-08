@@ -32,20 +32,25 @@ export const App: React.FC = () => {
       <div className="todoapp">
         <Header />
 
-        <section className="main">
-          {todos.length !== 0 && (
-            <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              data-cy="toggleAll"
-              onChange={() => onChange({ type: 'toggle-all' })}
-            />
-          )}
-          <label htmlFor="toggle-all"> </label>
-          <TodoList items={filteredTodos} />
-          {todos.length !== 0
-            && (
+        {todos.length !== 0
+          && (
+            <>
+              <section className="main">
+                {todos.length !== 0 && (
+                  <>
+                    <input
+                      type="checkbox"
+                      id="toggle-all"
+                      className="toggle-all"
+                      data-cy="toggleAll"
+                      onChange={() => onChange({ type: 'toggle-all' })}
+                    />
+                    <label htmlFor="toggle-all"> </label>
+                  </>
+                )}
+                <TodoList items={filteredTodos} />
+              </section>
+
               <footer className="footer">
                 <span className="todo-count" data-cy="todosCounter">
                   {`${todos.filter((todo => !todo.completed)).length} items left`}
@@ -62,9 +67,9 @@ export const App: React.FC = () => {
                 )}
 
               </footer>
-            )}
+            </>
+          )}
 
-        </section>
       </div>
     </>
 

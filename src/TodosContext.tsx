@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { useEffect, useReducer, useState } from 'react';
+import React, {
+  useEffect, useReducer, useRef, useState,
+} from 'react';
 import { Todo } from './types/Todo';
 import { todosFromServer } from './api/todos';
 
@@ -12,8 +14,6 @@ type Action = { type: 'add'; payload: Todo }
 function reducer(todos: Todo[], action: Action) {
   switch (action.type) {
     case 'add':
-      // useLocalStorage('todos', [...todos, action.payload]);
-
       return [...todos, action.payload];
     case 'delete':
       return todos.filter(currentPost => currentPost.id !== action.payload);
@@ -88,10 +88,16 @@ type Props = {
 export const GlobalTodosProvider: React.FC<Props> = ({ children }) => {
   const [localsTodos, setLocalsTodos]
     = useLocalStorage('todos', todosFromServer);
-
-   const [todos, dispatch] = useReducer(reducer, localsTodos);
+  const firstRender = useRef(true);
+  const [todos, dispatch] = useReducer(reducer, localsTodos);
 
   useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+
+      return;
+    }
+
     setLocalsTodos(todos);
   }, [todos]);
 

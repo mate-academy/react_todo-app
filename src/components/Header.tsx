@@ -1,23 +1,15 @@
 import { useState, useContext } from 'react';
 import classNames from 'classnames';
-import { DispatchContext, TodosContext } from '../TodosContext';
-import { Todo } from '../types/Todo';
+import { DispatchContext } from '../TodosContext';
 
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
   const [isHasError, setIsHasError] = useState(false);
-  const todos = useContext(TodosContext);
   const onSubmit = useContext(DispatchContext);
   const handleChandge = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     setIsHasError(false);
   };
-
-  function getNewTodoID(todosArray: Todo[]) {
-    const maxId = Math.max(...todosArray.map(todo => todo.id)) + 1;
-
-    return maxId;
-  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,7 +19,7 @@ export const Header: React.FC = () => {
       onSubmit({
         type: 'add',
         payload: {
-          id: getNewTodoID(todos),
+          id: +new Date(),
           title,
           completed: false,
         },
