@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import classNames from 'classnames';
 import { DispatchContext } from '../TodosContext';
 
 export const Header: React.FC = () => {
@@ -38,12 +37,12 @@ export const Header: React.FC = () => {
           autoFocus
           type="text"
           data-cy="createTodo"
-          className={classNames(isHasError
+          className={isHasError
             ? 'new-todo error'
-            : 'new-todo')}
-          placeholder={classNames(isHasError
+            : 'new-todo'}
+          placeholder={isHasError
             ? 'Please add a text'
-            : 'What needs to be done?')}
+            : 'What needs to be done?'}
           onChange={handleChandge}
           value={title}
         />

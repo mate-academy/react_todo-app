@@ -99,7 +99,7 @@ export const GlobalTodosProvider: React.FC<Props> = ({ children }) => {
     }
 
     setLocalsTodos(todos);
-  }, [todos]);
+  }, [todos, setLocalsTodos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
