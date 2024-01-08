@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Todo } from './types/Todo';
 import { todosFromServer } from './api/todos';
-import { useLocalStorage } from './hooks/useLocalStogare';
 
 type Action = { type: 'add'; payload: Todo }
   | { type: 'delete'; payload: number }
@@ -13,7 +12,8 @@ type Action = { type: 'add'; payload: Todo }
 function reducer(todos: Todo[], action: Action) {
   switch (action.type) {
     case 'add':
-      useLocalStorage('todos', [...todos, action.payload]);
+      // useLocalStorage('todos', [...todos, action.payload]);
+
       return [...todos, action.payload];
     case 'delete':
       return todos.filter(currentPost => currentPost.id !== action.payload);
@@ -54,18 +54,46 @@ export const DispatchContext = React.createContext((action: Action) => {
   console.log(action);
 });
 
+function useLocalStorage(
+  key: string, initialValue: Todo[],
+): [Todo[], (v: Todo[]) => void] {
+  const [value, setValue] = useState(() => {
+    /* get value by key from the local storage and save it to the `value` */
+    const data = localStorage.getItem(key);
+
+    if (data === null) {
+      return initialValue;
+    }
+
+    try {
+      return JSON.parse(data);
+    } catch {
+      return initialValue;
+    }
+  });
+
+  // save `value` to the `state` and local storage
+  const save = (newValue: Todo[]) => {
+    localStorage.setItem(key, JSON.stringify(newValue));
+    setValue(newValue);
+  };
+
+  return [value, save];
+}
+
 type Props = {
   children: React.ReactNode;
 };
 
 export const GlobalTodosProvider: React.FC<Props> = ({ children }) => {
   const [localsTodos, setLocalsTodos]
-    = useLocalStorage('todos', []);
-  const [todos, dispatch] = useReducer(reducer, localsTodos);
+    = useLocalStorage('todos', todosFromServer);
 
-  if (localsTodos !== todos) {
-    setLocalsTodos([...todos]);
-  }
+   const [todos, dispatch] = useReducer(reducer, localsTodos);
+
+  useEffect(() => {
+    setLocalsTodos(todos);
+  }, [todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
