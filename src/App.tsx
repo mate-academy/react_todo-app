@@ -26,6 +26,8 @@ export const App: React.FC = () => {
   const onChange = useContext(DispatchContext);
   const [filteredField, setFilteredField] = useState('all');
   const filteredTodos = getFilteredTodos(todos, filteredField);
+  const unCompletedTodo = todos.filter((todo => !todo.completed));
+  const completedTodo = todos.filter((todo => todo.completed));
 
   return (
     <>
@@ -53,10 +55,10 @@ export const App: React.FC = () => {
 
               <footer className="footer">
                 <span className="todo-count" data-cy="todosCounter">
-                  {`${todos.filter((todo => !todo.completed)).length} items left`}
+                  {`${unCompletedTodo.length} items left`}
                 </span>
                 <TodosFilter sortBy={setFilteredField} />
-                {todos.filter((todo => todo.completed)).length !== 0 && (
+                {completedTodo.length !== 0 && (
                   <button
                     type="button"
                     className="clear-completed"
