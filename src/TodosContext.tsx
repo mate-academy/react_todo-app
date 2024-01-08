@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import React, {
   useEffect, useReducer, useRef, useState,
 } from 'react';
@@ -6,10 +5,10 @@ import { Todo } from './types/Todo';
 import { todosFromServer } from './api/todos';
 
 type Action = { type: 'add'; payload: Todo }
-  | { type: 'delete'; payload: number }
-  | { type: 'done'; payload: Todo }
-  | { type: 'toggle-all' }
-  | { type: 'clear-completed' };
+| { type: 'delete'; payload: number }
+| { type: 'done'; payload: Todo }
+| { type: 'toggle-all' }
+| { type: 'clear-completed' };
 
 function reducer(todos: Todo[], action: Action) {
   switch (action.type) {
@@ -49,10 +48,9 @@ function reducer(todos: Todo[], action: Action) {
 }
 
 export const TodosContext = React.createContext(todosFromServer);
-export const DispatchContext = React.createContext((action: Action) => {
-  // eslint-disable-next-line no-console
-  console.log(action);
-});
+export const DispatchContext = React.createContext<(action: Action) => void>(
+  () => {
+  });
 
 function useLocalStorage(
   key: string, initialValue: Todo[],
