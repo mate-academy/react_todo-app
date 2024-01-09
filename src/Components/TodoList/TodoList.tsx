@@ -23,6 +23,17 @@ export const TodoList: React.FC = () => {
                 return true;
             }
           })
+          .sort((a, b) => {
+            if (a.id < b.id) {
+              return 1;
+            }
+
+            if (a.id > b.id) {
+              return -1;
+            }
+
+            return 0;
+          })
           .map((todo) => <TodoItem key={todo.id} todoItem={todo} />)
       }
     </ul>

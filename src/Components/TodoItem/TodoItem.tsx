@@ -111,6 +111,7 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
         />
         <label>{title}</label>
         <button
+          aria-label="Delete Todo"
           type="button"
           className="destroy"
           data-cy="deleteTodo"
