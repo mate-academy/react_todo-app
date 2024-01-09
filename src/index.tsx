@@ -5,7 +5,7 @@ import './styles/todo-list.css';
 import './styles/filters.css';
 
 import { App } from './App';
-import { GlobalStateProvider } from './Store';
+import { GlobalStateProvider } from './store/Store';
 
 const container = document.getElementById('root') as HTMLDivElement;
 

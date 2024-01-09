@@ -1,13 +1,18 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useState } from 'react';
-import TodoList from './TodoList';
-import { DispatchContext, TodosContext } from './Store';
-import TodosFilter from './TodosFilter';
-import { Status } from './Status';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import TodoList from './components/TodoList';
+import { DispatchContext, TodosContext } from './store/Store';
+import TodosFilter from './components/TodosFilter';
+import { Status } from './type/Status';
+import getFilterTodos from './helpers/getFilterTodos';
 
 export const App: React.FC = () => {
-  const state = useContext(TodosContext);
-  const { todos } = state;
+  const { todos } = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
 
   const [inputValue, setInputValue] = useState<string>('');
@@ -53,24 +58,18 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  const filterTodos = (filter: Status) => {
-    switch (filter) {
-      case Status.active: {
-        return [...todos].filter((todo) => !todo.completed);
-      }
+  const filteredTodos = useMemo(
+    () => getFilterTodos(currentUrl as Status, todos),
+    [currentUrl, todos],
+  );
 
-      case Status.completed: {
-        return [...todos].filter((todo) => todo.completed);
-      }
+  const activeTodos = useMemo(
+    () => getFilterTodos(Status.active, todos), [todos],
+  );
 
-      default:
-        return [...todos];
-    }
-  };
-
-  const filteredTodos = filterTodos(currentUrl as Status);
-  const activeTodo = filterTodos(Status.active);
-  const completedTodo = filterTodos(Status.completed);
+  const completedTodos = useMemo(
+    () => getFilterTodos(Status.completed, todos), [todos],
+  );
 
   return (
     <div className="todoapp">
@@ -106,13 +105,13 @@ export const App: React.FC = () => {
       {!!todos.length && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {activeTodo.length}
+            {activeTodos.length}
             items left
           </span>
 
           <TodosFilter currentUrl={currentUrl} />
 
-          {completedTodo.length > 0 && (
+          {completedTodos.length > 0 && (
             <button
               type="button"
               className="clear-completed"

@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
-import { Todo } from './type/Todo';
-import { Action } from './type/Action';
-import { useLocalStorage } from './hooks/useLocalStorage';
+import { Todo } from '../type/Todo';
+import { Action } from '../type/Action';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface State {
   todos: Todo[];
@@ -23,15 +23,18 @@ function reducer(state: State, action: Action): State {
         }),
       };
     case 'setCompleted': {
-      const complitedItem = state.todos.filter(
-        (todo) => todo.id === action.payload,
-      );
-
-      complitedItem[0].completed = !complitedItem[0].completed;
-
       return {
         ...state,
-        todos: [...state.todos],
+        todos: state.todos.map((todo) => {
+          if (todo.id === action.payload) {
+            return {
+              ...todo,
+              completed: !todo.completed,
+            };
+          }
+
+          return todo;
+        }),
       };
     }
 
@@ -74,9 +77,9 @@ function reducer(state: State, action: Action): State {
 
       return {
         ...state,
-        todos: state.todos.map(item => (
+        todos: state.todos.map(todo => (
           {
-            ...item,
+            ...todo,
             completed: !allCompleted,
           }
         )),

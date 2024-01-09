@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Status } from './Status';
+import { Status } from '../type/Status';
 
 const filters = [
   {

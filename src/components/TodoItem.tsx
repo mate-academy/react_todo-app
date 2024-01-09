@@ -2,8 +2,8 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import classNames from 'classnames';
-import { Todo } from './type/Todo';
-import { DispatchContext } from './Store';
+import { Todo } from '../type/Todo';
+import { DispatchContext } from '../store/Store';
 
 type Props = {
   item: Todo;
@@ -95,6 +95,7 @@ const TodoItem: React.FC<Props> = ({ item }) => {
         <button
           type="button"
           className="destroy"
+          aria-label="destroy"
           data-cy="deleteTodo"
           onClick={handleDeleteToDo}
         />
