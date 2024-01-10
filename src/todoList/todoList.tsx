@@ -1,17 +1,18 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { Todo } from '../types/todoType';
+import React, { useContext } from 'react';
 import { TodoItem } from '../todoItem';
+import { TodoContext } from '../todoContext';
 
 type Props = {
-  items: Todo[];
 };
 
-export const TodoList: React.FC<Props> = ({ items }) => {
+export const TodoList: React.FC<Props> = () => {
+  const { filteredTodo } = useContext(TodoContext);
+
   return (
     <ul className="todo-list" data-cy="todoList">
-      {items.map(item => (
-        <TodoItem item={item} key={item.id} />
+      {filteredTodo.map(todo => (
+        <TodoItem todo={todo} key={todo.id} />
       ))}
     </ul>
   );
