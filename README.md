@@ -3,6 +3,7 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
 
 > If you are not sure about how a feature should work just open the real TodoApp and look how it works there
 
+
 ![todoapp](./description/todoapp.gif)
 
 1. Use `TodosContext` to store and update the todos.
