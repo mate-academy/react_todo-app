@@ -3,8 +3,7 @@ import React, { useContext } from 'react';
 import { TodoItem } from '../todoItem';
 import { TodoContext } from '../todoContext';
 
-type Props = {
-};
+type Props = {};
 
 export const TodoList: React.FC<Props> = () => {
   const { filteredTodo } = useContext(TodoContext);
