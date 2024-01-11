@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { ToDoProvider } from './Components/Context/ToDoContext';
-import { ToDoApp } from './Components/ToDoApp';
+import { TodoProvider } from './Components/Context/TodoContext';
+import { TodoApp } from './Components/TodoApp';
 
 export const App: React.FC = () => (
 
-  <ToDoProvider>
-    <ToDoApp />
-  </ToDoProvider>
+  <TodoProvider>
+    <TodoApp />
+  </TodoProvider>
 );

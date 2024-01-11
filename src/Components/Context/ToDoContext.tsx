@@ -3,14 +3,14 @@ import { Todo } from '../../Types/Todo';
 import { Status } from '../../Types/Status';
 import { useLocaleStorage } from '../../hooks/useLocaleStorage';
 
-type PropsToDoContext = {
+type PropsTodoContext = {
   todos: Todo[];
   setTodos: (todos: Todo[]) => void;
   filter: string;
   setFilter: (filter: string) => void;
 };
 
-export const ToDoContext = React.createContext<PropsToDoContext>({
+export const TodoContext = React.createContext<PropsTodoContext>({
   todos: [],
   setTodos: () => {},
   filter: '',
@@ -21,7 +21,7 @@ type Props = {
   children: React.ReactNode
 };
 
-export const ToDoProvider: React.FC<Props> = ({ children }) => {
+export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
   const [filter, setFilter] = useState<string>(Status.ALL);
   const val = {
@@ -32,8 +32,8 @@ export const ToDoProvider: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <ToDoContext.Provider value={val}>
+    <TodoContext.Provider value={val}>
       {children}
-    </ToDoContext.Provider>
+    </TodoContext.Provider>
   );
 };

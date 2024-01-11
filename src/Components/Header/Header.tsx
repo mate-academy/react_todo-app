@@ -1,23 +1,23 @@
 import React, { useContext, useState } from 'react';
-import { ToDoContext } from '../Context/ToDoContext';
+import { TodoContext } from '../Context/TodoContext';
 import { Todo } from '../../Types/Todo';
 
 export const Header: React.FC = () => {
-  const { todos, setTodos } = useContext(ToDoContext);
+  const { todos, setTodos } = useContext(TodoContext);
   const [title, setTitle] = useState('');
 
   const handleTitleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(ev.target.value);
   };
 
-  const addToDO = () => {
-    const newToDo:Todo = {
+  const addTodo = () => {
+    const newTodo:Todo = {
       id: +new Date(),
       title,
       completed: false,
     };
 
-    setTodos([...todos, newToDo]);
+    setTodos([...todos, newTodo]);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
       return;
     }
 
-    addToDO();
+    addTodo();
     setTitle('');
   };
 

@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 
 import { TodosFilter } from './TodosFilter';
-import { ToDoContext } from '../Context/ToDoContext';
+import { TodoContext } from '../Context/TodoContext';
 
 export const Footer: React.FC = () => {
-  const { todos, setTodos } = useContext(ToDoContext);
+  const { todos, setTodos } = useContext(TodoContext);
 
-  const unCompleted = [...todos].filter(todo => todo.completed === false);
-  const completed = [...todos].filter(todo => todo.completed === true);
+  const unCompleted = todos.filter(todo => !todo.completed);
+  const completed = todos.filter(todo => todo.completed);
 
   const handleClearCompleted = () => {
-    setTodos(todos.filter(todo => todo.completed === false));
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   return (

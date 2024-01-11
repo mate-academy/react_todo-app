@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { ToDoList } from './ToDoList';
-import { ToDoContext } from '../Context/ToDoContext';
+import { TodoList } from './TodoList';
+import { TodoContext } from '../Context/TodoContext';
 import { Todo } from '../../Types/Todo';
 import { Status } from '../../Types/Status';
 
 export const Section: React.FC = () => {
-  const { todos, setTodos, filter } = useContext(ToDoContext);
+  const { todos, setTodos, filter } = useContext(TodoContext);
   const [toggle, setToggle] = useState(true);
 
   const filteredTodos = () => {
@@ -15,9 +15,9 @@ export const Section: React.FC = () => {
       case Status.ALL:
         return todos;
       case Status.ACTIVE:
-        return todosCopy.filter(item => item.completed === false);
+        return todosCopy.filter(item => !item.completed);
       case Status.COMPLETED:
-        return todosCopy.filter(item => item.completed === true);
+        return todosCopy.filter(item => item.completed);
       default:
         return todos;
     }
@@ -49,7 +49,7 @@ export const Section: React.FC = () => {
 
       )}
 
-      <ToDoList items={filteredTodos()} />
+      <TodoList items={filteredTodos()} />
     </section>
   );
 };

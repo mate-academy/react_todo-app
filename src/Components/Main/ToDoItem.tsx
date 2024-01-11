@@ -3,15 +3,15 @@ import React, {
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../Types/Todo';
-import { ToDoContext } from '../Context/ToDoContext';
+import { TodoContext } from '../Context/TodoContext';
 
 type Props = {
   todo: Todo
 };
 
-export const ToDoItem: React.FC<Props> = ({ todo }) => {
-  const [editedToDo, setEditedToDo] = useState<Todo | null>(null);
-  const { todos, setTodos } = useContext(ToDoContext);
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const [editedToDo, setEditedTodo] = useState<Todo | null>(null);
+  const { todos, setTodos } = useContext(TodoContext);
 
   const titleField = useRef<HTMLInputElement>(null);
 
@@ -48,16 +48,16 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
       }));
     }
 
-    setEditedToDo(null);
+    setEditedTodo(null);
   };
 
   const handleDoubleClick = (item:Todo) => {
-    setEditedToDo(item);
+    setEditedTodo(item);
   };
 
   const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (editedToDo) {
-      setEditedToDo({
+      setEditedTodo({
         ...editedToDo,
         title: event.target.value,
       });
@@ -66,7 +66,7 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
-      setEditedToDo(null);
+      setEditedTodo(null);
     }
   };
 
@@ -81,10 +81,10 @@ export const ToDoItem: React.FC<Props> = ({ todo }) => {
           className="toggle"
           checked={todo.completed}
           onClick={() => changeComplete(todo.id)}
-          id={todo.completed === true ? 'toggle-completed' : 'toggle-view'}
+          id={todo.completed ? 'toggle-completed' : 'toggle-view'}
         />
         <label
-          htmlFor={todo.completed === true ? 'toggle-completed' : 'toggle-view'}
+          htmlFor={todo.completed ? 'toggle-completed' : 'toggle-view'}
           onDoubleClick={() => handleDoubleClick(todo)}
         >
           {todo.title}

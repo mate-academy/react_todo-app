@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import cn from 'classnames';
 
-import { ToDoContext } from '../Context/ToDoContext';
+import { TodoContext } from '../Context/TodoContext';
 import { filterNames } from '../../Constants/filterNames';
 
 export const TodosFilter = () => {
-  const { setFilter, filter } = useContext(ToDoContext);
+  const { setFilter, filter } = useContext(TodoContext);
 
   return (
     <ul className="filters">

@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { ToDoProvider } from './Context/ToDoContext';
+import { TodoProvider } from './Context/TodoContext';
 import { Footer } from './Footer/Footer';
 import { Header } from './Header/Header';
 import { Section } from './Main/Section';
 
-export const ToDoApp: React.FC = () => {
+export const TodoApp: React.FC = () => {
   return (
     <div className="todoapp">
-      <ToDoProvider>
+      <TodoProvider>
         <Header />
         <Section />
         <Footer />
-      </ToDoProvider>
+      </TodoProvider>
     </div>
   );
 };
