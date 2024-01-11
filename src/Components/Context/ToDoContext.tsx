@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Todo } from '../../Types/Todo';
 import { Status } from '../../Types/Status';
 import { useLocaleStorage } from '../../hooks/useLocaleStorage';
@@ -24,12 +24,12 @@ type Props = {
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocaleStorage<Todo[]>('todos', []);
   const [filter, setFilter] = useState<string>(Status.ALL);
-  const val = {
+  const val = useMemo(() => ({
     todos,
     setTodos,
     filter,
     setFilter,
-  };
+  }), [todos, filter, setTodos]);
 
   return (
     <TodoContext.Provider value={val}>
