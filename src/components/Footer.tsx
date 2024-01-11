@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
 
       <TodoFilter />
 
-      {!filteredTodos.length && (
+      {!!filteredTodos.length && (
         <button
           type="button"
           className="clear-completed"
