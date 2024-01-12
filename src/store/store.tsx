@@ -89,24 +89,25 @@ const initialState:State = {
 
 export const StateContext = React.createContext(initialState);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const DispatchContext = React.createContext((_action: Action) => {});
+export const DispatchContext = React.createContext<(action: Action) => void>(
+  () => { });
 
 type Props = {
   children: React.ReactNode
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [localState, setLocalState] = useLocalStorage(KEY,
+  const [localStorage, setLocalStorage] = useLocalStorage(KEY,
     initialState.todos);
 
   const [state, dispatch] = useReducer(Reducer, {
     ...initialState,
-    todos: localState,
+    todos: localStorage,
   });
 
   useEffect(() => {
-    setLocalState(state.todos);
-  }, [setLocalState, state.todos]);
+    setLocalStorage(state.todos);
+  }, [setLocalStorage, state.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
