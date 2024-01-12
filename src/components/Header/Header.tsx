@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { DispatchContext } from '../../store/store';
 import { Todo } from '../../types/Todo';
+import { ActionType } from '../../types/ActionType';
 
 import './Header.scss';
 
@@ -26,7 +27,7 @@ export const Header = () => {
         completed: false,
       };
 
-      dispatch({ type: 'createTodo', payload: newTodo });
+      dispatch({ type: ActionType.Create, payload: newTodo });
 
       setTitle('');
     }

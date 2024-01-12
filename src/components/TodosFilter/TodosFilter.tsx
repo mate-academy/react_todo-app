@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import cn from 'classnames';
 import { DispatchContext, StateContext } from '../../store/store';
 import { StatusTodos } from '../../types/StatusTodos';
+import { ActionType } from '../../types/ActionType';
 
 import './TodosFilter.scss';
 
@@ -18,7 +19,7 @@ export const TodosFilter = () => {
             { selected: selectedTodos === StatusTodos.All },
           )}
           onClick={() => dispatch(
-            { type: 'selectedTodos', payload: StatusTodos.All },
+            { type: ActionType.SelectedTodos, payload: StatusTodos.All },
           )}
         >
           All
@@ -32,7 +33,7 @@ export const TodosFilter = () => {
             { selected: selectedTodos === StatusTodos.Active },
           )}
           onClick={() => dispatch(
-            { type: 'selectedTodos', payload: StatusTodos.Active },
+            { type: ActionType.SelectedTodos, payload: StatusTodos.Active },
           )}
         >
           Active
@@ -46,7 +47,7 @@ export const TodosFilter = () => {
             { selected: selectedTodos === StatusTodos.Completed },
           )}
           onClick={() => dispatch(
-            { type: 'selectedTodos', payload: StatusTodos.Completed },
+            { type: ActionType.SelectedTodos, payload: StatusTodos.Completed },
           )}
         >
           Completed

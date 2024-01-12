@@ -2,6 +2,7 @@ import { useContext, useMemo } from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 import { TodoList } from '../TodoList';
 import { getFilteredTodos } from '../../utils/getFilteredTodos';
+import { ActionType } from '../../types/ActionType';
 
 import './Main.scss';
 
@@ -39,7 +40,7 @@ export const Main = () => {
               className="toggle-all"
               data-cy="toggleAll"
               checked={completedAll}
-              onChange={() => dispatch({ type: 'toggleAllTodos' })}
+              onChange={() => dispatch({ type: ActionType.ToggleAll })}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
           </>

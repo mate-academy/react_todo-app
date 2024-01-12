@@ -1,6 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 import { TodosFilter } from '../TodosFilter';
+import { ActionType } from '../../types/ActionType';
 
 import './Footer.scss';
 
@@ -35,7 +36,7 @@ export const Footer = () => {
         <button
           type="button"
           className="clear-completed"
-          onClick={() => dispatch({ type: 'clearCompletedTodos' })}
+          onClick={() => dispatch({ type: ActionType.ClearCompletedTodos })}
         >
           Clear completed
         </button>

@@ -5,6 +5,7 @@ import React, {
 import cn from 'classnames';
 import { DispatchContext } from '../../store/store';
 import { Todo } from '../../types/Todo';
+import { ActionType } from '../../types/ActionType';
 
 import './TodoItem.scss';
 
@@ -18,11 +19,11 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
   const inputEditRef = useRef<HTMLInputElement>(null);
 
   const toggleTodo = (todoId: number) => {
-    dispatch({ type: 'toggleTodo', payload: todoId });
+    dispatch({ type: ActionType.Toggle, payload: todoId });
   };
 
   const deleteTodo = (todoId: number) => {
-    dispatch({ type: 'deleteTodo', payload: todoId });
+    dispatch({ type: ActionType.Delete, payload: todoId });
   };
 
   const updateTodo = () => {
@@ -34,11 +35,11 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
     const isEmptyTitle = (tempTodo.title === '');
 
     if (!isEqualTitles && !isEmptyTitle) {
-      dispatch({ type: 'updateTodo', payload: tempTodo });
+      dispatch({ type: ActionType.Update, payload: tempTodo });
     }
 
     if (isEmptyTitle) {
-      dispatch({ type: 'deleteTodo', payload: tempTodo.id });
+      dispatch({ type: ActionType.Delete, payload: tempTodo.id });
     }
 
     setTempTodo(null);

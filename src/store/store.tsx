@@ -1,18 +1,19 @@
 import React, { useReducer } from 'react';
 import { initStotage } from '../utils/initStotage';
 import { saveStotage } from '../utils/saveStorage';
+import { ActionType } from '../types/ActionType';
 import { StatusTodos } from '../types/StatusTodos';
 import { Todo } from '../types/Todo';
 
 const KEY = 'todos';
 
-type Action = { type: 'createTodo', payload: Todo }
-| { type: 'deleteTodo', payload: number }
-| { type: 'updateTodo', payload: Todo }
-| { type: 'toggleTodo', payload: number }
-| { type: 'toggleAllTodos' }
-| { type: 'clearCompletedTodos' }
-| { type: 'selectedTodos', payload: StatusTodos };
+type Action = { type: ActionType.Create, payload: Todo }
+| { type: ActionType.Update, payload: Todo }
+| { type: ActionType.Delete, payload: number }
+| { type: ActionType.Toggle, payload: number }
+| { type: ActionType.ToggleAll }
+| { type: ActionType.ClearCompletedTodos }
+| { type: ActionType.SelectedTodos, payload: StatusTodos };
 
 type State = {
   todos: Todo[],
@@ -21,7 +22,7 @@ type State = {
 
 function Reducer(state: State, action:Action):State {
   switch (action.type) {
-    case 'createTodo': {
+    case ActionType.Create: {
       const newTodos = [...state.todos, action.payload];
 
       saveStotage(KEY, newTodos);
@@ -29,7 +30,7 @@ function Reducer(state: State, action:Action):State {
       return { ...state, todos: newTodos };
     }
 
-    case 'updateTodo': {
+    case ActionType.Update: {
       const newTodos = state.todos.map(todo => (
         todo.id === action.payload.id
           ? {
@@ -45,7 +46,7 @@ function Reducer(state: State, action:Action):State {
       return { ...state, todos: newTodos };
     }
 
-    case 'deleteTodo': {
+    case ActionType.Delete: {
       const newTodos = state.todos
         .filter(todo => todo.id !== action.payload);
 
@@ -54,7 +55,7 @@ function Reducer(state: State, action:Action):State {
       return { ...state, todos: newTodos };
     }
 
-    case 'toggleTodo': {
+    case ActionType.Toggle: {
       const newTodos = state.todos.map(todo => (
         todo.id === action.payload
           ? { ...todo, completed: !todo.completed }
@@ -66,7 +67,7 @@ function Reducer(state: State, action:Action):State {
       return { ...state, todos: newTodos };
     }
 
-    case 'toggleAllTodos': {
+    case ActionType.ToggleAll: {
       const newTodos = state.todos.map(todo => (
         { ...todo, completed: !todo.completed }
       ));
@@ -76,7 +77,7 @@ function Reducer(state: State, action:Action):State {
       return { ...state, todos: newTodos };
     }
 
-    case 'clearCompletedTodos': {
+    case ActionType.ClearCompletedTodos: {
       const newTodos = state.todos
         .filter(todo => !todo.completed);
 
@@ -85,7 +86,7 @@ function Reducer(state: State, action:Action):State {
       return { ...state, todos: newTodos };
     }
 
-    case 'selectedTodos': {
+    case ActionType.SelectedTodos: {
       return { ...state, selectedTodos: action.payload };
     }
 
