@@ -94,17 +94,11 @@ function Reducer(state: State, action:Action):State {
   }
 }
 
-const initialStateTodos = initStotage<State>(
-  KEY,
-  {
-    todos: [],
-    selectedTodos: StatusTodos.All,
-  },
-);
+const initialTodos = initStotage<Todo[]>(KEY, []);
 
 const initialState:State = {
-  todos: initialStateTodos.todos,
-  selectedTodos: initialStateTodos.selectedTodos,
+  todos: initialTodos,
+  selectedTodos: StatusTodos.All,
 };
 
 export const StateContext = React.createContext(initialState);
