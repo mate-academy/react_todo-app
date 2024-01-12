@@ -15,7 +15,7 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     ```jsx harmony
     <TodoList items={todos} />
     ```
-1. Implement `TodoItem` component with ability to toggle the `completed` status using a checkbox.
+1. Implement `title` component with ability to toggle the `completed` status using a checkbox.
     - move a `li` tag inside the `TodoItem`;
     - add class `completed` if todo is completed;
 1. Add the ability to toggle the completed status of all the todos with the `toggleAll` checkbox.
