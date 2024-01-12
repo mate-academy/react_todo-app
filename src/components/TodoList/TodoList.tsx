@@ -12,7 +12,7 @@ export const TodoList:React.FC<Props> = memo(({ todos }) => {
   return (
     <ul className="todo-list" data-cy="todoList">
       {todos.map(todo => (
-        <TodoItem todo={todo} key={todo.id.toString(10)} />
+        <TodoItem todo={todo} key={todo.id} />
       ))}
     </ul>
   );

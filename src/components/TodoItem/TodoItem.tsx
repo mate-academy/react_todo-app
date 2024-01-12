@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import cn from 'classnames';
 import { DispatchContext } from '../../store/store';
@@ -72,17 +72,22 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
     inputEditRef.current?.focus();
   }, [tempTodo?.id]);
 
+  const isEditing = useMemo(
+    () => todo.id === tempTodo?.id,
+    [todo.id, tempTodo?.id],
+  );
+
   return (
     <li className={cn(
       { completed: todo.completed },
-      { editing: todo.id === tempTodo?.id },
+      { editing: isEditing },
     )}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={`toggle-view-${todo.id}`}
           checked={todo.completed}
           onChange={() => toggleTodo(todo.id)}
         />

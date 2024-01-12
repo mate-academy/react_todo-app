@@ -10,7 +10,7 @@ export const Header = () => {
   const dispatch = useContext(DispatchContext);
 
   const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = event.currentTarget.value.trim();
+    const newTitle = event.target.value.trim();
 
     if (newTitle) {
       setTitle(newTitle);
