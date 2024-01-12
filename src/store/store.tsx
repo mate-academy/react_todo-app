@@ -1,9 +1,8 @@
-import React, { useReducer } from 'react';
-import { initStotage } from '../utils/initStotage';
-import { saveStotage } from '../utils/saveStorage';
+import React, { useEffect, useReducer } from 'react';
 import { ActionType } from '../types/ActionType';
 import { StatusTodos } from '../types/StatusTodos';
 import { Todo } from '../types/Todo';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const KEY = 'todos';
 
@@ -25,8 +24,6 @@ function Reducer(state: State, action:Action):State {
     case ActionType.Create: {
       const newTodos = [...state.todos, action.payload];
 
-      saveStotage(KEY, newTodos);
-
       return { ...state, todos: newTodos };
     }
 
@@ -41,16 +38,12 @@ function Reducer(state: State, action:Action):State {
           : todo
       ));
 
-      saveStotage(KEY, newTodos);
-
       return { ...state, todos: newTodos };
     }
 
     case ActionType.Delete: {
       const newTodos = state.todos
         .filter(todo => todo.id !== action.payload);
-
-      saveStotage(KEY, newTodos);
 
       return { ...state, todos: newTodos };
     }
@@ -62,8 +55,6 @@ function Reducer(state: State, action:Action):State {
           : todo
       ));
 
-      saveStotage(KEY, newTodos);
-
       return { ...state, todos: newTodos };
     }
 
@@ -72,16 +63,12 @@ function Reducer(state: State, action:Action):State {
         { ...todo, completed: !todo.completed }
       ));
 
-      saveStotage(KEY, newTodos);
-
       return { ...state, todos: newTodos };
     }
 
     case ActionType.ClearCompletedTodos: {
       const newTodos = state.todos
         .filter(todo => !todo.completed);
-
-      saveStotage(KEY, newTodos);
 
       return { ...state, todos: newTodos };
     }
@@ -95,10 +82,8 @@ function Reducer(state: State, action:Action):State {
   }
 }
 
-const initialTodos = initStotage<Todo[]>(KEY, []);
-
 const initialState:State = {
-  todos: initialTodos,
+  todos: [],
   selectedTodos: StatusTodos.All,
 };
 
@@ -111,7 +96,17 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(Reducer, initialState);
+  const [localState, setLocalState] = useLocalStorage(KEY,
+    initialState.todos);
+
+  const [state, dispatch] = useReducer(Reducer, {
+    ...initialState,
+    todos: localState,
+  });
+
+  useEffect(() => {
+    setLocalState(state.todos);
+  }, [setLocalState, state.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
