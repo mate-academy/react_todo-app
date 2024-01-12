@@ -1,6 +1,6 @@
 import { ChangeEvent, useContext, useState } from 'react';
-import { Todo } from '../types/Todo';
-import { DispatchContext } from '../state/State';
+import { Todo } from '../../types/Todo';
+import { DispatchContext } from '../../state/State';
 
 type Props = {
   todo: Todo,

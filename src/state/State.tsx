@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import todos from '../api/todos.json';
+import { deleteTodo, switchCompleted } from '../services/todo';
 
 type State = {
   todos: Todo[];
@@ -9,7 +10,8 @@ type State = {
 type Action
   = { type: 'addTodo', payload: string }
   | { type: 'toggle', payload: { id: number, status: boolean } }
-  | { type: 'delete', payload: number };
+  | { type: 'delete', payload: number }
+  | { type: 'toggleAll', payload: boolean };
 
 type Props = {
   children: React.ReactNode;
@@ -19,21 +21,16 @@ export const initialState: State = {
   todos: [...todos],
 };
 
-const switchCompleted = (
-  id: number,
-  status: boolean,
-  previousTodos: Todo[],
-) => {
+const switchToggleAll = (status: boolean, previousTodos: Todo[]): Todo[] => {
   const newTodos = [...previousTodos];
-  const index = newTodos.findIndex(el => el.id === id);
 
-  newTodos[index].completed = !status;
+  return newTodos.map(el => {
+    const newTodo = el;
 
-  return newTodos;
-};
+    newTodo.completed = status;
 
-const deleteTodo = (id: number, previousTodos: Todo[]): Todo[] => {
-  return previousTodos.filter(el => el.id !== id);
+    return newTodo;
+  });
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -63,6 +60,12 @@ const reducer = (state: State, action: Action): State => {
         todos: deleteTodo(action.payload, state.todos),
       };
 
+    case 'toggleAll':
+      return {
+        ...state,
+        todos: switchToggleAll(action.payload, state.todos),
+      };
+
     default:
       return state;
   }
@@ -70,7 +73,7 @@ const reducer = (state: State, action: Action): State => {
 
 export const TodosContext = React.createContext(initialState);
 export const DispatchContext
-  = React.createContext((() => {}) as React.Dispatch<Action>);
+  = React.createContext((() => { }) as React.Dispatch<Action>);
 
 export const GlobalProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
