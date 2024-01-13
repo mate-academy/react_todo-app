@@ -85,7 +85,7 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <header className="header">
-        <h1>{todo}</h1>
+        <h1>todos</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
