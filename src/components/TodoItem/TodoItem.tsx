@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useContext } from 'react';
 import { Todo } from '../../types/Todo';
 import { DispatchContext } from '../../state/State';
 
@@ -8,18 +8,15 @@ type Props = {
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [isCompleted, setIsCompleted] = useState(false);
   const { id, title, completed } = todo;
   const dispatch = useContext(DispatchContext);
 
   const handleChecbox = (event: ChangeEvent<HTMLInputElement>) => {
-    setIsCompleted(event.target.checked);
-
     dispatch({
       type: 'toggle',
       payload: {
         id,
-        status: isCompleted,
+        status: event.target.checked,
       },
     });
   };
@@ -33,7 +30,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <div className="view">
         <input
           type="checkbox"
-          checked={isCompleted}
+          checked={completed}
           className="toggle"
           id={`toggle-view-${id}`}
           onChange={handleChecbox}
@@ -42,6 +39,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           htmlFor={`toggle-view-${id}`}
           style={{
             opacity: completed ? 0.5 : 1,
+            textDecoration: completed ? 'line-through' : 'none',
           }}
         >
           {title}

@@ -1,10 +1,11 @@
 import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
-import todos from '../api/todos.json';
 import { deleteTodo, switchCompleted, switchToggleAll } from '../services/todo';
+import { Filter } from '../types/Filter';
 
 type State = {
   todos: Todo[];
+  filterBy: Filter;
 };
 
 type Action
@@ -12,18 +13,24 @@ type Action
   | { type: 'toggle', payload: { id: number, status: boolean } }
   | { type: 'delete', payload: number }
   | { type: 'toggleAll', payload: boolean }
-  | { type: 'loadFromStorage' };
+  | { type: 'loadFromStorage' }
+  | { type: 'setFilter', payload: Filter }
+  | { type: 'clearCompleted' };
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const initialState: State = {
-  todos: [...todos],
+  todos: [],
+  filterBy: 'all',
 };
 
 const reducer = (state: State, action: Action): State => {
-  let newState: State = { ...state };
+  let newState: State = {
+    ...state,
+  };
+
   let stateFromStorage: string | null = null;
 
   switch (action.type) {
@@ -75,6 +82,21 @@ const reducer = (state: State, action: Action): State => {
       if (stateFromStorage) {
         newState = JSON.parse(stateFromStorage);
       }
+
+      return newState;
+
+    case 'setFilter':
+      return {
+        ...newState,
+        filterBy: action.payload,
+      };
+
+    case 'clearCompleted':
+      newState = {
+        ...newState,
+        todos: newState.todos.filter(el => el.completed === false),
+      };
+      localStorage.setItem('todos', JSON.stringify(newState));
 
       return newState;
 

@@ -12,7 +12,7 @@ export const switchCompleted = (
   const newTodos = [...previousTodos];
   const index = newTodos.findIndex(el => el.id === id);
 
-  newTodos[index].completed = !status;
+  newTodos[index].completed = status;
 
   return newTodos;
 };
@@ -26,7 +26,7 @@ export const switchToggleAll = (
   return newTodos.map(el => {
     const newTodo = el;
 
-    newTodo.completed = status;
+    newTodo.completed = !status;
 
     return newTodo;
   });

@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent, useContext, useEffect, useState,
+} from 'react';
 import { DispatchContext } from './state/State';
 import { TodoList } from './components/TodoList';
+import { Filters } from './components/Filters';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
@@ -56,21 +59,13 @@ export const App: React.FC = () => {
           3 items left
         </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+        <Filters />
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => dispatch({ type: 'clearCompleted' })}
+        >
           Clear completed
         </button>
       </footer>
