@@ -104,3 +104,13 @@
 .todo-list li:hover .destroy {
   display: block;
 }
+/*
+.toggle {
+  position: relative;
+  z-index: 9999;
+}
+
+.toggle-view {
+  position: relative;
+  z-index: 500;
+} */
