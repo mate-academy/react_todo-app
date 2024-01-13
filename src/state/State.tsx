@@ -50,6 +50,7 @@ const reducer = (state: State, action: Action): State => {
           ...state.todos,
           { id: +new Date(), title: action.payload, completed: false },
         ],
+        todosCounter: state.todosCounter + 1,
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
@@ -74,6 +75,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         todos: deleteTodo(action.payload, state.todos),
       };
+      newState.todosCounter = countTodos(newState.todos);
       localStorage.setItem('todos', JSON.stringify(newState));
 
       return newState;
@@ -119,6 +121,7 @@ const reducer = (state: State, action: Action): State => {
       localStorage.setItem('todos', JSON.stringify(newState));
 
       return newState;
+
     default:
       return state;
   }
