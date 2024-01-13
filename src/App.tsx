@@ -2,13 +2,14 @@
 import React, {
   ChangeEvent, useContext, useEffect, useState,
 } from 'react';
-import { DispatchContext } from './state/State';
+import { DispatchContext, TodosContext } from './state/State';
 import { TodoList } from './components/TodoList';
 import { Filters } from './components/Filters';
 
 export const App: React.FC = () => {
   const [value, setValue] = useState('');
   const dispatch = useContext(DispatchContext);
+  const { todosCounter } = useContext(TodosContext);
 
   const handleOnSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -56,7 +57,7 @@ export const App: React.FC = () => {
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          3 items left
+          {`${todosCounter} items left`}
         </span>
 
         <Filters />

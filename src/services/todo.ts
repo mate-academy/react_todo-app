@@ -44,3 +44,10 @@ export const editTodoItem = (
 
   return upDatedTotos;
 };
+
+export const countTodos = (todos: Todo[]) => {
+  const counter
+   = todos.filter((el: Todo) => el.completed === false).length;
+
+  return counter;
+};

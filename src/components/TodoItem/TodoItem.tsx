@@ -12,7 +12,7 @@ type Props = {
   todo: Todo,
 };
 
-type EditTypes = KeyboardEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>
+type EditTypes = KeyboardEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>;
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 export const TodoItem: React.FC<Props> = ({ todo }) => {

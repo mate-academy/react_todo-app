@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
 import {
+  countTodos,
   deleteTodo,
   editTodoItem,
   switchCompleted,
@@ -11,6 +12,7 @@ import {
 type State = {
   todos: Todo[];
   filterBy: Filter;
+  todosCounter: number;
 };
 
 type Action
@@ -30,6 +32,7 @@ type Props = {
 export const initialState: State = {
   todos: [],
   filterBy: 'all',
+  todosCounter: 0,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -60,6 +63,7 @@ const reducer = (state: State, action: Action): State => {
           action.payload.status,
           state.todos,
         ),
+        todosCounter: countTodos(state.todos),
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
@@ -78,6 +82,7 @@ const reducer = (state: State, action: Action): State => {
       newState = {
         ...state,
         todos: switchToggleAll(action.payload, state.todos),
+        todosCounter: countTodos(state.todos),
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
