@@ -1,4 +1,10 @@
-import { ChangeEvent, useContext, useState } from 'react';
+import {
+  ChangeEvent,
+  useContext,
+  useState,
+  KeyboardEvent,
+  FocusEvent,
+} from 'react';
 import { Todo } from '../../types/Todo';
 import { DispatchContext } from '../../state/State';
 
@@ -6,11 +12,14 @@ type Props = {
   todo: Todo,
 };
 
+type EditTypes = KeyboardEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>
+
 /* eslint-disable jsx-a11y/control-has-associated-label */
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [edit, setEdit] = useState(false);
   const { id, title, completed } = todo;
+  const [edit, setEdit] = useState(false);
   const [newValue, setNewValue] = useState(title);
+  const [escapePressed, setEscapePressed] = useState(false);
   const dispatch = useContext(DispatchContext);
 
   const handleChecbox = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,17 +36,29 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({ type: 'delete', payload: id });
   };
 
-  const hangleEditInput = (event: any) => {
-    if (event.code === 'Enter' || event.type === 'blur') {
+  const hangleEditInput = (event: EditTypes) => {
+    if (escapePressed) {
+      if ((event as KeyboardEvent).key === 'Escape') {
+        setEdit(false);
+        setNewValue(title);
+      }
+
+      return;
+    }
+
+    if ((event as KeyboardEvent).code === 'Enter' || event.type === 'blur') {
       dispatch({
         type: 'edit',
-        payload: {
-          value: newValue,
-          id,
-        },
+        payload: { value: newValue, id },
       });
 
       setEdit(false);
+    }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setEscapePressed(true);
     }
   };
 
@@ -70,11 +91,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           style={{
             display: edit ? 'block' : 'none',
           }}
+          onFocus={() => setEscapePressed(false)}
           onBlur={hangleEditInput}
-          onChange={event => {
-            setNewValue(event.target.value);
-          }}
+          onChange={event => setNewValue(event.target.value)}
           onKeyUp={hangleEditInput}
+          onKeyDown={handleKeyDown}
         />
 
         <button
