@@ -1,7 +1,12 @@
 import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
-import { deleteTodo, switchCompleted, switchToggleAll } from '../services/todo';
 import { Filter } from '../types/Filter';
+import {
+  deleteTodo,
+  editTodoItem,
+  switchCompleted,
+  switchToggleAll,
+} from '../services/todo';
 
 type State = {
   todos: Todo[];
@@ -15,7 +20,8 @@ type Action
   | { type: 'toggleAll', payload: boolean }
   | { type: 'loadFromStorage' }
   | { type: 'setFilter', payload: Filter }
-  | { type: 'clearCompleted' };
+  | { type: 'clearCompleted' }
+  | { type: 'edit', payload: { value: string, id: number } };
 
 type Props = {
   children: React.ReactNode;
@@ -100,6 +106,14 @@ const reducer = (state: State, action: Action): State => {
 
       return newState;
 
+    case 'edit':
+      newState = {
+        ...newState,
+        todos: editTodoItem(newState.todos, action.payload),
+      };
+      localStorage.setItem('todos', JSON.stringify(newState));
+
+      return newState;
     default:
       return state;
   }

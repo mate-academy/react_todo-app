@@ -31,3 +31,16 @@ export const switchToggleAll = (
     return newTodo;
   });
 };
+
+export const editTodoItem = (
+  previousTodos: Todo[],
+  payload: { id: number; value: string; },
+): Todo[] => {
+  const upDatedTotos = [...previousTodos];
+  const { id, value } = payload;
+  const index = previousTodos.findIndex(el => el.id === id);
+
+  upDatedTotos[index].title = value;
+
+  return upDatedTotos;
+};
