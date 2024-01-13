@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import todos from '../api/todos.json';
-import { deleteTodo, switchCompleted } from '../services/todo';
+import { deleteTodo, switchCompleted, switchToggleAll } from '../services/todo';
 
 type State = {
   todos: Todo[];
@@ -11,7 +11,8 @@ type Action
   = { type: 'addTodo', payload: string }
   | { type: 'toggle', payload: { id: number, status: boolean } }
   | { type: 'delete', payload: number }
-  | { type: 'toggleAll', payload: boolean };
+  | { type: 'toggleAll', payload: boolean }
+  | { type: 'loadFromStorage' };
 
 type Props = {
   children: React.ReactNode;
@@ -21,31 +22,25 @@ export const initialState: State = {
   todos: [...todos],
 };
 
-const switchToggleAll = (status: boolean, previousTodos: Todo[]): Todo[] => {
-  const newTodos = [...previousTodos];
-
-  return newTodos.map(el => {
-    const newTodo = el;
-
-    newTodo.completed = status;
-
-    return newTodo;
-  });
-};
-
 const reducer = (state: State, action: Action): State => {
+  let newState: State = { ...state };
+  let stateFromStorage: string | null = null;
+
   switch (action.type) {
     case 'addTodo':
-      return {
+      newState = {
         ...state,
         todos: [
           ...state.todos,
           { id: +new Date(), title: action.payload, completed: false },
         ],
       };
+      localStorage.setItem('todos', JSON.stringify(newState));
+
+      return newState;
 
     case 'toggle':
-      return {
+      newState = {
         ...state,
         todos: switchCompleted(
           action.payload.id,
@@ -53,18 +48,35 @@ const reducer = (state: State, action: Action): State => {
           state.todos,
         ),
       };
+      localStorage.setItem('todos', JSON.stringify(newState));
+
+      return newState;
 
     case 'delete':
-      return {
+      newState = {
         ...state,
         todos: deleteTodo(action.payload, state.todos),
       };
+      localStorage.setItem('todos', JSON.stringify(newState));
+
+      return newState;
 
     case 'toggleAll':
-      return {
+      newState = {
         ...state,
         todos: switchToggleAll(action.payload, state.todos),
       };
+      localStorage.setItem('todos', JSON.stringify(newState));
+
+      return newState;
+
+    case 'loadFromStorage':
+      stateFromStorage = localStorage.getItem('todos');
+      if (stateFromStorage) {
+        newState = JSON.parse(stateFromStorage);
+      }
+
+      return newState;
 
     default:
       return state;

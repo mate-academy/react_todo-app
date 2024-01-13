@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { DispatchContext } from './state/State';
 import { TodoList } from './components/TodoList';
 
@@ -16,6 +16,10 @@ export const App: React.FC = () => {
   const handleToggleAll = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'toggleAll', payload: event.target.checked });
   };
+
+  useEffect(() => {
+    dispatch({ type: 'loadFromStorage' });
+  }, [dispatch]);
 
   return (
     <div className="todoapp">

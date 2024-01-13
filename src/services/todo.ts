@@ -16,3 +16,18 @@ export const switchCompleted = (
 
   return newTodos;
 };
+
+export const switchToggleAll = (
+  status: boolean,
+  previousTodos: Todo[],
+): Todo[] => {
+  const newTodos = [...previousTodos];
+
+  return newTodos.map(el => {
+    const newTodo = el;
+
+    newTodo.completed = status;
+
+    return newTodo;
+  });
+};
