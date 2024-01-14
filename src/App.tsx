@@ -1,93 +1,116 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { TodoForm } from './components/TodoForm';
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+import { TodosProvider } from './components/Store';
 
 export const App: React.FC = () => {
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <TodosProvider>
+        <header className="header">
+          <h1>todos</h1>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+          <TodoForm />
+        </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        <section className="main">
+          <TodoList />
+        </section>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <footer className="footer">
+          <TodoFilter />
+        </footer>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        {
+          // #region
+          /* <header className="header">
+            <h1>todos</h1>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <form>
+              <input
+                type="text"
+                data-cy="createTodo"
+                className="new-todo"
+                placeholder="What needs to be done?"
+              />
+            </form>
+          </header>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
+            <ul className="todo-list" data-cy="todoList">
+              <li>
+                <div className="view">
+                  <input type="checkbox" className="toggle" id="toggle-view" />
+                  <label htmlFor="toggle-view">asdfghj</label>
+                  <button type="button" className="destroy" data-cy="deleteTodo" />
+                </div>
+                <input type="text" className="edit" />
+              </li>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
+              <li className="completed">
+                <div className="view">
+                  <input type="checkbox" className="toggle" id="toggle-completed" />
+                  <label htmlFor="toggle-completed">qwertyuio</label>
+                  <button type="button" className="destroy" data-cy="deleteTodo" />
+                </div>
+                <input type="text" className="edit" />
+              </li>
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
+              <li className="editing">
+                <div className="view">
+                  <input type="checkbox" className="toggle" id="toggle-editing" />
+                  <label htmlFor="toggle-editing">zxcvbnm</label>
+                  <button type="button" className="destroy" data-cy="deleteTodo" />
+                </div>
+                <input type="text" className="edit" />
+              </li>
 
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+              <li>
+                <div className="view">
+                  <input type="checkbox" className="toggle" id="toggle-view2" />
+                  <label htmlFor="toggle-view2">1234567890</label>
+                  <button type="button" className="destroy" data-cy="deleteTodo" />
+                </div>
+                <input type="text" className="edit" />
+              </li>
+            </ul>
+          </section>
 
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              3 items left
+            </span>
+
+            <ul className="filters">
+              <li>
+                <a href="#/" className="selected">All</a>
+              </li>
+
+              <li>
+                <a href="#/active">Active</a>
+              </li>
+
+              <li>
+                <a href="#/completed">Completed</a>
+              </li>
+            </ul>
+
+            <button type="button" className="clear-completed">
+              Clear completed
+            </button>
+          </footer> */
+          // #endregion
+        }
+      </TodosProvider>
     </div>
   );
 };
