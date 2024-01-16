@@ -57,9 +57,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type: 'edit',
           payload: { value: newValue, id },
         });
+      } else {
+        dispatch({ type: 'delete', payload: id });
       }
 
-      dispatch({ type: 'delete', payload: id });
       setEdit(false);
     }
   };
