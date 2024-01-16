@@ -1,93 +1,117 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import cn from 'classnames';
+
+import { TodoList } from './component/TodoList';
+import { useTodos } from './component/TodosContext';
+import { linkOptions } from './data/dataFromLink';
+import { Status } from './types/Status';
+import { ToggleAll } from './component/ToggleAll';
+import { ClearCompleted } from './component/ClearCompleted';
 
 export const App: React.FC = () => {
+  const {
+    todos,
+    addTodo,
+    filterTodos,
+  } = useTodos();
+
+  const [title, setTitle] = useState('');
+  const [filterStatus, setFilterStatus] = useState(Status.All);
+
+  const activeTodosCount = useMemo(() => {
+    return todos.reduce((prev, todo) => {
+      if (!todo.completed) {
+        return prev + 1;
+      }
+
+      return prev;
+    }, 0);
+  }, [todos]);
+
+  const hasCompletedTodo = useMemo(() => {
+    return todos.some(todo => todo.completed);
+  }, [todos]);
+
+  const filteredTodos = useMemo(() => {
+    return filterTodos(filterStatus);
+  }, [todos, filterStatus]);
+
+  function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setTitle(event.target.value);
+  }
+
+  function handleFormSubmit(event: React.FormEvent) {
+    event.preventDefault();
+
+    if (title.trim() === '') {
+      return;
+    }
+
+    addTodo(title);
+    setTitle('');
+  }
+
+  function handleFilterChange(status: Status) {
+    setFilterStatus(status);
+  }
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={handleFormSubmit}>
           <input
             type="text"
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={title}
+            onChange={handleTitleChange}
           />
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {todos.length !== 0 && (
+        <>
+          <section className="main">
+            <ToggleAll />
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <TodoList todos={filteredTodos} />
+          </section>
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+          <footer className="footer" data-cy="todosFilter">
+            <span className="todo-count" data-cy="todosCounter">
+              {activeTodosCount === 1
+                ? (`${activeTodosCount} item left`)
+                : (`${activeTodosCount} items left`)}
+            </span>
 
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+            <ul className="filters">
+              {linkOptions.map(link => (
+                <li key={link.path}>
+                  <a
+                    href={link.path}
+                    className={cn(
+                      { selected: filterStatus === link.filterValue },
+                    )}
+                    onClick={() => handleFilterChange(link.filterValue)}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
 
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+            {hasCompletedTodo && (
+              <ClearCompleted />
+            )}
+          </footer>
+        </>
+      )}
+      <div className="modal-background has-background-white-ter" />
+      <div className="loader" />
     </div>
+
   );
 };
