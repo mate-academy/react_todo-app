@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import './Filters.scss';
 import { useContext } from 'react';
 import { DispatchContext, TodosContext } from '../../state/State';
 import { Filter } from '../../types/Filter';
@@ -12,11 +13,11 @@ export const Filters: React.FC = () => {
   return (
     <ul className="filters">
       {filterFilds.map(el => (
-        <li key={el}>
+        <li key={el} className="filters__item">
           <a
             href="#/"
-            className={cn({
-              selected: filterBy === el,
+            className={cn('filters__link', {
+              'filters__link--selected': filterBy === el,
             })}
             onClick={() => dispatch({ type: 'setFilter', payload: el })}
           >

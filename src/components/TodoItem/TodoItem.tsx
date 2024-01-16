@@ -1,12 +1,15 @@
-import {
+import React, {
   ChangeEvent,
   useContext,
   useState,
   KeyboardEvent,
   FocusEvent,
+  useRef,
+  useEffect,
 } from 'react';
 import { Todo } from '../../types/Todo';
 import { DispatchContext } from '../../state/State';
+import './TodoItem.scss';
 
 type Props = {
   todo: Todo,
@@ -22,7 +25,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [escapePressed, setEscapePressed] = useState(false);
   const dispatch = useContext(DispatchContext);
 
-  const handleChecbox = (event: ChangeEvent<HTMLInputElement>) => {
+  const editInput = useRef(null);
+
+  const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: 'toggle',
       payload: {
@@ -47,11 +52,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if ((event as KeyboardEvent).code === 'Enter' || event.type === 'blur') {
-      dispatch({
-        type: 'edit',
-        payload: { value: newValue, id },
-      });
+      if (newValue.trim()) {
+        dispatch({
+          type: 'edit',
+          payload: { value: newValue, id },
+        });
+      }
 
+      dispatch({ type: 'delete', payload: id });
       setEdit(false);
     }
   };
@@ -62,18 +70,26 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
+  useEffect(() => {
+    if (editInput.current !== null && edit) {
+      (editInput.current as HTMLInputElement).focus();
+    }
+  }, [edit]);
+
   return (
-    <li>
-      <div className="view">
+    <li className="todoItem">
+      <div className="todoItem__view">
         <input
           type="checkbox"
           checked={completed}
-          className="toggle"
+          className="todoItem__toggle"
           id={`toggle-view-${id}`}
-          onChange={handleChecbox}
+          onChange={handleCheckbox}
         />
+
         <label
           htmlFor={`toggle-view-${id}`}
+          className="todoItem__label"
           style={{
             opacity: completed ? 0.5 : 1,
             textDecoration: completed ? 'line-through' : 'none',
@@ -85,8 +101,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         </label>
 
         <input
+          ref={editInput}
           type="text"
-          className="edit"
+          className="todoItem__edit"
           value={newValue}
           style={{
             display: edit ? 'block' : 'none',
@@ -100,13 +117,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
         <button
           type="button"
-          className="destroy"
+          className="todoItem__destroy"
           data-cy="deleteTodo"
           onClick={handleDelete}
         />
       </div>
-
-      <input type="text" className="edit" />
     </li>
   );
 };

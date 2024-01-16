@@ -1,8 +1,9 @@
 import { useContext } from 'react';
-import { TodoItem } from '../TodoItem';
 import { TodosContext } from '../../state/State';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
+import './TodoList.scss';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 const getFilteredState = (previousTodos: Todo[], sortBy: Filter): Todo[] => {
   switch (sortBy) {
@@ -19,7 +20,6 @@ const getFilteredState = (previousTodos: Todo[], sortBy: Filter): Todo[] => {
 
 export const TodoList: React.FC = () => {
   const { todos, filterBy } = useContext(TodosContext);
-
   const filteredTodos = getFilteredState(todos, filterBy);
 
   return (

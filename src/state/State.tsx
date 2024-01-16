@@ -13,6 +13,8 @@ type State = {
   todos: Todo[];
   filterBy: Filter;
   todosCounter: number;
+  toggleAll: boolean;
+  isCompleted: boolean;
 };
 
 type Action
@@ -33,6 +35,8 @@ export const initialState: State = {
   todos: [],
   filterBy: 'all',
   todosCounter: 0,
+  toggleAll: false,
+  isCompleted: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -51,6 +55,7 @@ const reducer = (state: State, action: Action): State => {
           { id: +new Date(), title: action.payload, completed: false },
         ],
         todosCounter: state.todosCounter + 1,
+        isCompleted: state.todos.some(todo => todo.completed),
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
@@ -65,6 +70,7 @@ const reducer = (state: State, action: Action): State => {
           state.todos,
         ),
         todosCounter: countTodos(state.todos),
+        isCompleted: state.todos.some(todo => todo.completed),
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
@@ -76,6 +82,7 @@ const reducer = (state: State, action: Action): State => {
         todos: deleteTodo(action.payload, state.todos),
       };
       newState.todosCounter = countTodos(newState.todos);
+      newState.isCompleted = newState.todos.some(todo => todo.completed);
       localStorage.setItem('todos', JSON.stringify(newState));
 
       return newState;
@@ -85,6 +92,8 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         todos: switchToggleAll(action.payload, state.todos),
         todosCounter: countTodos(state.todos),
+        toggleAll: action.payload,
+        isCompleted: state.todos.some(todo => todo.completed),
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
@@ -99,15 +108,19 @@ const reducer = (state: State, action: Action): State => {
       return newState;
 
     case 'setFilter':
-      return {
+      newState = {
         ...newState,
         filterBy: action.payload,
       };
+      localStorage.setItem('todos', JSON.stringify(newState));
+
+      return newState;
 
     case 'clearCompleted':
       newState = {
         ...newState,
         todos: newState.todos.filter(el => el.completed === false),
+        isCompleted: false,
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
@@ -117,12 +130,15 @@ const reducer = (state: State, action: Action): State => {
       newState = {
         ...newState,
         todos: editTodoItem(newState.todos, action.payload),
+        isCompleted: state.todos.some(todo => todo.completed),
       };
       localStorage.setItem('todos', JSON.stringify(newState));
 
       return newState;
 
     default:
+      localStorage.setItem('todos', JSON.stringify(newState));
+
       return state;
   }
 };

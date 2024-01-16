@@ -1,25 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  ChangeEvent, useContext, useEffect, useState,
+  useContext,
+  useEffect,
 } from 'react';
 import { DispatchContext, TodosContext } from './state/State';
-import { TodoList } from './components/TodoList';
-import { Filters } from './components/Filters';
+import { Header } from './components/Header/Header';
+import { Main } from './components/Main/Main';
+import { Footer } from './components/Footer/Footer';
 
 export const App: React.FC = () => {
-  const [value, setValue] = useState('');
   const dispatch = useContext(DispatchContext);
-  const { todosCounter } = useContext(TodosContext);
-
-  const handleOnSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    dispatch({ type: 'addTodo', payload: value });
-    setValue('');
-  };
-
-  const handleToggleAll = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'toggleAll', payload: event.target.checked });
-  };
+  const { todos } = useContext(TodosContext);
 
   useEffect(() => {
     dispatch({ type: 'loadFromStorage' });
@@ -27,49 +18,11 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form onSubmit={handleOnSubmit}>
-          <input
-            value={value}
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onChange={event => setValue(event.target.value)}
-          />
-        </form>
-      </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onChange={handleToggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <TodoList />
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${todosCounter} items left`}
-        </span>
-
-        <Filters />
-
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={() => dispatch({ type: 'clearCompleted' })}
-        >
-          Clear completed
-        </button>
-      </footer>
+      <Header />
+      <Main />
+      {todos.length !== 0 && (
+        <Footer />
+      )}
     </div>
   );
 };

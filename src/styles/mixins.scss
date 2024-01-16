@@ -1,0 +1,17 @@
+@mixin input-field {
+  position: relative;
+  left: 50px;
+  margin: 5px 0;
+  width: 90%;
+  font-size: 24px;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: 1.4em;
+  color: inherit;
+  padding: 6px;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  outline: none;
+  border: none;
+};

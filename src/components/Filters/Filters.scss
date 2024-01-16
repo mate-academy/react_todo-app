@@ -1,0 +1,36 @@
+@import '../../styles/variables';
+
+.filters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  left: 0;
+
+  @media (max-width: 430px) {
+    bottom: 10px;
+  }
+
+  &__item {
+    display: inline;
+  }
+
+  &__link {
+    color: inherit;
+    margin: 3px;
+    padding: 3px 7px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    transition: border-color $transition-duration ease;
+
+    &:hover {
+      border-color: rgba(1, 5, 241, 0.3);
+    }
+
+    &--selected {
+      border-color: rgba(1, 5, 241, 0.1);
+    }
+  }
+}
