@@ -15,7 +15,7 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     ```jsx harmony
     <TodoList items={todos} />
     ```
-1. Implement `TodoItem` component with ability to toggle the `completed` status using a checkbox.
+1. Implement `title` component with ability to toggle the `completed` status using a checkbox.
     - move a `li` tag inside the `TodoItem`;
     - add class `completed` if todo is completed;
 1. Add the ability to toggle the completed status of all the todos with the `toggleAll` checkbox.
@@ -53,4 +53,4 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://boytrend0108.github.io/react_todo-app/) and add it to the PR description.
