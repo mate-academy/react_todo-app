@@ -25,7 +25,7 @@ type Props = {
 
 export const initialState: State = {
   todos: [],
-  filterBy: 'all',
+  filterBy: Filter.all,
   todosCounter: 0,
   toggleAll: false,
   isCompleted: false,

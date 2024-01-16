@@ -20,7 +20,7 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <Header />
       <Main />
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <Footer />
       )}
     </div>

@@ -8,7 +8,7 @@ export const Filters: React.FC = () => {
   const { filterBy } = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
 
-  const filterFilds = useRef(['all', 'active', 'completed']);
+  const filterFilds = useRef([Filter.all, Filter.active, Filter.completed]);
 
   return (
     <ul className="filters">

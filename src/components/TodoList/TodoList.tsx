@@ -7,11 +7,11 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 const getFilteredState = (previousTodos: Todo[], sortBy: Filter): Todo[] => {
   switch (sortBy) {
-    case 'active':
-      return previousTodos.filter(todo => todo.completed === false);
+    case Filter.active:
+      return previousTodos.filter(todo => !todo.completed);
 
-    case 'completed':
-      return previousTodos.filter(todo => todo.completed === true);
+    case Filter.completed:
+      return previousTodos.filter(todo => todo.completed);
 
     default:
       return previousTodos;
