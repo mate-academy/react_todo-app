@@ -1,21 +1,13 @@
 import React, { useReducer } from 'react';
-import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
 import {
-  countTodos,
   deleteTodo,
   editTodoItem,
   switchCompleted,
   switchToggleAll,
+  updateAndSave,
 } from '../services/todo';
-
-type State = {
-  todos: Todo[];
-  filterBy: Filter;
-  todosCounter: number;
-  toggleAll: boolean;
-  isCompleted: boolean;
-};
+import { State } from '../types/State';
 
 type Action
   = { type: 'addTodo', payload: string }
@@ -48,18 +40,16 @@ const reducer = (state: State, action: Action): State => {
 
   switch (action.type) {
     case 'addTodo':
+
       newState = {
         ...state,
         todos: [
           ...state.todos,
           { id: +new Date(), title: action.payload, completed: false },
         ],
-        todosCounter: state.todosCounter + 1,
-        isCompleted: state.todos.some(todo => todo.completed),
       };
-      localStorage.setItem('todos', JSON.stringify(newState));
 
-      return newState;
+      return updateAndSave(newState);
 
     case 'toggle':
       newState = {
@@ -69,35 +59,26 @@ const reducer = (state: State, action: Action): State => {
           action.payload.status,
           state.todos,
         ),
-        todosCounter: countTodos(state.todos),
-        isCompleted: state.todos.some(todo => todo.completed),
       };
-      localStorage.setItem('todos', JSON.stringify(newState));
 
-      return newState;
+      return updateAndSave(newState);
 
     case 'delete':
       newState = {
         ...state,
         todos: deleteTodo(action.payload, state.todos),
       };
-      newState.todosCounter = countTodos(newState.todos);
-      newState.isCompleted = newState.todos.some(todo => todo.completed);
-      localStorage.setItem('todos', JSON.stringify(newState));
 
-      return newState;
+      return updateAndSave(newState);
 
     case 'toggleAll':
       newState = {
         ...state,
         todos: switchToggleAll(action.payload, state.todos),
-        todosCounter: countTodos(state.todos),
         toggleAll: action.payload,
-        isCompleted: state.todos.some(todo => todo.completed),
       };
-      localStorage.setItem('todos', JSON.stringify(newState));
 
-      return newState;
+      return updateAndSave(newState);
 
     case 'loadFromStorage':
       stateFromStorage = localStorage.getItem('todos');
@@ -120,21 +101,17 @@ const reducer = (state: State, action: Action): State => {
       newState = {
         ...newState,
         todos: newState.todos.filter(el => el.completed === false),
-        isCompleted: false,
       };
-      localStorage.setItem('todos', JSON.stringify(newState));
 
-      return newState;
+      return updateAndSave(newState);
 
     case 'edit':
       newState = {
         ...newState,
         todos: editTodoItem(newState.todos, action.payload),
-        isCompleted: state.todos.some(todo => todo.completed),
       };
-      localStorage.setItem('todos', JSON.stringify(newState));
 
-      return newState;
+      return updateAndSave(newState);
 
     default:
       localStorage.setItem('todos', JSON.stringify(newState));

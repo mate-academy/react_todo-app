@@ -1,3 +1,4 @@
+import { State } from '../types/State';
 import { Todo } from '../types/Todo';
 
 export const deleteTodo = (id: number, previousTodos: Todo[]): Todo[] => {
@@ -26,7 +27,7 @@ export const switchToggleAll = (
   return newTodos.map(el => {
     const newTodo = el;
 
-    newTodo.completed = !status;
+    newTodo.completed = status;
 
     return newTodo;
   });
@@ -50,4 +51,16 @@ export const countTodos = (todos: Todo[]) => {
    = todos.filter((el: Todo) => el.completed === false).length;
 
   return counter;
+};
+
+export const updateAndSave = (state : State): State => {
+  const updatedState = {
+    ...state,
+  };
+
+  updatedState.todosCounter = countTodos(updatedState.todos);
+  updatedState.isCompleted = updatedState.todos.some(todo => todo.completed);
+  localStorage.setItem('todos', JSON.stringify(updatedState));
+
+  return updatedState;
 };
