@@ -153,7 +153,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
           value={onChange}
           onChange={handleOnChange}
           onKeyUp={(event) => handleKeyUp(event, todoProps.id)}
-          // onBlur={(event) => handleSubmit(event, todo.id)}
+          onBlur={(event) => handleSubmit(event, todoProps.id)}
           ref={inputRef}
         />
       </form>
