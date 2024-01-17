@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Todo } from '../types/todo';
+import { CompleteAll } from '../types/completeAll';
 
 function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
   const [value, setValue] = useState(() => {
@@ -26,8 +27,9 @@ function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
 
 type TodosContextType = {
   todos: Todo[];
-  addTodo: (newTodo: Todo) => void;
-  updateTodo: (c: Todo) => void;
+  setTodos: React.Dispatch<Todo[]>;
+  completeAll: CompleteAll;
+  setCompleteAll: React.Dispatch<React.SetStateAction<CompleteAll>>;
 };
 
 type Props = {
@@ -36,35 +38,38 @@ type Props = {
 
 export const TodosContext = React.createContext<TodosContextType>({
   todos: [],
-  addTodo: () => {},
-  updateTodo: () => {},
+  setTodos: () => {},
+  completeAll: null,
+  setCompleteAll: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [completeAll, setCompleteAll] = useState<CompleteAll>(null);
 
-  const addTodo = useCallback((newTodo: Todo) => {
-    setTodos([...todos, newTodo]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [todos]);
+  // const addTodo = useCallback((newTodo: Todo) => {
+  //   setTodos([...todos, newTodo]);
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [todos]);
 
-  const updateTodo = useCallback((updatedTodo: Todo) => {
-    const updatedTodos = todos.map(todo => (
-      todo.id === updatedTodo.id
-        ? { ...todo, complete: updatedTodo.complete }
-        : todo
-    ));
+  // const updateTodo = useCallback((updatedTodo: Todo) => {
+  //   const updatedTodos = todos.map(todo => (
+  //     todo.id === updatedTodo.id
+  //       ? { ...todo, complete: updatedTodo.complete }
+  //       : todo
+  //   ));
 
-    // console.log(updatedTodos);
+  //   // console.log(updatedTodos);
 
-    setTodos(updatedTodos);
-  }, [todos]);
+  //   setTodos(updatedTodos);
+  // }, [todos]);
 
   const value = useMemo(() => ({
     todos,
-    addTodo,
-    updateTodo,
-  }), [addTodo, todos, updateTodo]);
+    setTodos,
+    completeAll,
+    setCompleteAll,
+  }), [setTodos, todos, completeAll]);
 
   return (
     <TodosContext.Provider value={value}>

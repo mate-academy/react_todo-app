@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -10,16 +12,31 @@ import { Todo } from '../types/todo';
 import { TodosContext } from './Store';
 
 type Props = {
-  todo: Todo
+  todo: Todo;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const [completed, setCompleted] = useState(todo.complete);
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const titleField = useRef<HTMLInputElement>(null);
 
-  const { updateTodo } = useContext(TodosContext);
+  const {
+    todos,
+    setTodos,
+    completeAll,
+    setCompleteAll,
+  } = useContext(TodosContext);
+
+  const updateTodo = useCallback((updatedTodo: Todo) => {
+    const updatedTodos = todos.map(upTodo => (
+      upTodo.id === updatedTodo.id
+        ? { ...updatedTodo }
+        : upTodo
+    ));
+
+    setTodos(updatedTodos);
+  }, [setTodos, todos]);
 
   const handleCheckbox = () => {
     setCompleted(!completed);
@@ -32,21 +49,89 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setEditing(!editing);
   };
 
+  const handleEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
+  const applyRemoveTodo = () => {
+    const updatedTodos = todos.filter(upTodo => upTodo.id !== todo.id);
+
+    setTodos(updatedTodos);
+  };
+
+  const applyEditing = () => {
+    if (title !== todo.title) {
+      const updatedTodo = { ...todo, title };
+
+      updateTodo(updatedTodo);
+    }
+
+    if (title.length === 0) {
+      applyRemoveTodo();
+    }
+
+    setEditing(!editing);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => { // switch case?
+    if (event.key === 'Enter') {
+      titleField.current?.blur();
+    }
+
+    if (event.key === 'Enter' && title.length === 0) {
+      applyRemoveTodo();
+    }
+
+    if (event.key === 'Escape') {
+      setTitle(todo.title);
+      titleField.current?.blur();
+    }
+  };
+
   useEffect(() => {
     if (editing && titleField.current) {
       titleField.current.focus();
     }
   }, [editing]);
 
-  const handleEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
+  useEffect(() => {
+    if (completeAll === true) {
+      setCompleted(true);
+
+      const updatedTodos = todos.map(upTodo => (
+        { ...upTodo, complete: completeAll }
+      ));
+
+      setTodos(updatedTodos);
+    }
+
+    if (completeAll === false) {
+      setCompleted(false);
+
+      const updatedTodos = todos.map(upTodo => (
+        { ...upTodo, complete: completeAll }
+      ));
+
+      setTodos(updatedTodos);
+    }
+  }, [completeAll]);
+
+  useEffect(() => {
+    const allCompleted = todos.every(item => item.complete === true);
+
+    if (allCompleted) {
+      setCompleteAll(true);
+    }
+
+    // if (!completed) {
+    //   setCompleteAll(null);
+    // }
+  }, [completed]);
 
   return (
     <li className={cn({ completed, editing })}>
       <div
         className="view"
-        onDoubleClick={handleEdit}
       >
         <input
           type="checkbox"
@@ -55,13 +140,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={completed}
           onChange={handleCheckbox}
         />
-        <label>
+        <label onDoubleClick={handleEdit}>
           {title}
         </label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          onClick={applyRemoveTodo}
         />
       </div>
       <input
@@ -70,8 +156,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         ref={titleField}
         value={title}
         onChange={handleEditTitle}
-        onBlur={handleEdit}
+        onBlur={applyEditing}
+        onKeyDown={handleKeyDown}
       />
     </li>
   );
-};
+});
