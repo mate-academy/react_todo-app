@@ -95,7 +95,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     if (startLongPress) {
       timerId = setTimeout(() => {
         setEditing(!editing);
-      }, 1500);
+      }, 3500);
     } else {
       clearTimeout(timerId);
     }
