@@ -26,6 +26,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [completed, setCompleted] = useState(todo.complete);
+  const [startLongPress, setStartLongPress] = useState(false);
   const titleField = useRef<HTMLInputElement>(null);
 
   const updateTodo = useCallback((updatedTodo: Todo) => {
@@ -88,22 +89,17 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
   };
 
-  let editTimeoutRef = 0;
+  useEffect(() => {
+    let timerId;
 
-  const handleEditStart = (e: React.TouchEvent) => {
-    e.preventDefault();
-
-    editTimeoutRef = window.setTimeout(() => {
-      setEditing(!editing);
-    }, 1500);
-  };
-
-  const handleEditEnd = () => {
-    clearTimeout(editTimeoutRef);
-
-    setEditing(!editing);
-    editTimeoutRef = 0;
-  };
+    if (startLongPress) {
+      timerId = setTimeout(() => {
+        setEditing(!editing);
+      }, 1500);
+    } else {
+      clearTimeout(timerId);
+    }
+  }, [startLongPress]);
 
   // useEffect to set focus for editing
   useEffect(() => {
@@ -162,8 +158,8 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
         />
         <label
           onDoubleClick={handleEdit}
-          onTouchStart={handleEditStart}
-          onTouchEnd={handleEditEnd}
+          onTouchStart={() => setStartLongPress(true)}
+          onTouchEnd={() => setStartLongPress(false)}
         >
           {title}
         </label>
