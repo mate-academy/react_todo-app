@@ -5,15 +5,15 @@ import { useLocaleStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = React.createContext<{
   todos: Todo[];
-  setTodo: (todos: Todo[]) => void;
+  setTodo:(todos: Todo[]) => void;
   renderTodo: Todo[];
   setRenderTodo: (renderTodo: Todo[]) => void;
 }>({
-  todos: [],
-  setTodo: () => { },
-  renderTodo: [],
-  setRenderTodo: () => { },
-});
+      todos: [],
+      setTodo: () => { },
+      renderTodo: [],
+      setRenderTodo: () => { },
+    });
 
 type Props = {
   children: React.ReactNode;
