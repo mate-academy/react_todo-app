@@ -90,7 +90,9 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   let editTimeoutRef = 0;
 
-  const handleEditStart = () => {
+  const handleEditStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+
     editTimeoutRef = window.setTimeout(() => {
       setEditing(!editing);
     }, 1500);
