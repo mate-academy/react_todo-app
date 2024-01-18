@@ -14,11 +14,6 @@ const todos = [
     title: 'zxcvbnm',
     completed: false,
   },
-  {
-    id: 8,
-    title: '1234567890',
-    completed: false,
-  },
 ];
 
 export default todos;
