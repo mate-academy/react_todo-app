@@ -55,6 +55,10 @@ body {
   color: #e6e6e6;
 }
 
+.todoapp input.error::placeholder {
+  color: rgb(139, 0, 0, 0.3);
+}
+
 .todoapp h1 {
   position: absolute;
   top: -155px;
