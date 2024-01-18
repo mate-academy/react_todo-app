@@ -5,12 +5,12 @@ import './styles/todo-list.css';
 import './styles/filters.css';
 
 import { App } from './App';
-// import { GlobalStateProvider } from './components/Store';
+import { TodosProvider } from './components/Store';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
 createRoot(container).render(
-  // <GlobalStateProvider>
-  <App />,
-  // </GlobalStateProvider>,
+  <TodosProvider>
+    <App />
+  </TodosProvider>,
 );

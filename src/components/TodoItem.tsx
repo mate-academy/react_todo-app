@@ -16,17 +16,17 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
-  const [completed, setCompleted] = useState(todo.complete);
-  const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState(todo.title);
-  const titleField = useRef<HTMLInputElement>(null);
-
   const {
     todos,
     setTodos,
-    completeAll,
-    setCompleteAll,
+    completedAll,
+    setCompletedAll,
   } = useContext(TodosContext);
+
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(todo.title);
+  const [completed, setCompleted] = useState(todo.complete);
+  const titleField = useRef<HTMLInputElement>(null);
 
   const updateTodo = useCallback((updatedTodo: Todo) => {
     const updatedTodos = todos.map(upTodo => (
@@ -36,7 +36,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     ));
 
     setTodos(updatedTodos);
-  }, [setTodos, todos]);
+  }, [todos]);
 
   const handleCheckbox = () => {
     setCompleted(!completed);
@@ -88,44 +88,47 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
   };
 
+  // useEffect to set focus for editing
   useEffect(() => {
     if (editing && titleField.current) {
       titleField.current.focus();
     }
   }, [editing]);
 
+  // useEffect to set complete for all items
   useEffect(() => {
-    if (completeAll === true) {
+    if (completedAll === true) {
       setCompleted(true);
 
       const updatedTodos = todos.map(upTodo => (
-        { ...upTodo, complete: completeAll }
+        { ...upTodo, complete: completedAll }
       ));
 
       setTodos(updatedTodos);
     }
 
-    if (completeAll === false) {
+    if (completedAll === false) {
       setCompleted(false);
 
       const updatedTodos = todos.map(upTodo => (
-        { ...upTodo, complete: completeAll }
+        { ...upTodo, complete: completedAll }
       ));
 
       setTodos(updatedTodos);
     }
-  }, [completeAll]);
+  }, [completedAll]);
 
+  // useEffect for cotrol state allCompleted
   useEffect(() => {
     const allCompleted = todos.every(item => item.complete === true);
 
     if (allCompleted) {
-      setCompleteAll(true);
+      setCompletedAll(true);
     }
 
-    // if (!completed) {
-    //   setCompleteAll(null);
-    // }
+    if (!completed) {
+      setCompletedAll(null);
+    }
   }, [completed]);
 
   return (
@@ -140,7 +143,9 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
           checked={completed}
           onChange={handleCheckbox}
         />
-        <label onDoubleClick={handleEdit}>
+        <label
+          onDoubleClick={handleEdit}
+        >
           {title}
         </label>
         <button

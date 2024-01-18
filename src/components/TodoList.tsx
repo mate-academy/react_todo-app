@@ -1,109 +1,72 @@
 import React, {
   useContext,
-  // useEffect,
+  useState,
+  useEffect,
 } from 'react';
 import { TodosContext } from './Store';
 import { TodoItem } from './TodoItem';
-import { CompleteAll } from '../types/completeAll';
+import { CompletedAll } from '../types/completedAll';
 
 type Props = {};
 
 export const TodoList: React.FC<Props> = React.memo(() => {
   const {
     todos,
-    // setTodos,
-    // completeAll,
-    setCompleteAll,
+    setCompletedAll,
+    filteredTodos,
   } = useContext(TodosContext);
 
-  const handleClick = () => {
-    setCompleteAll((prevCompleteAll: CompleteAll) => {
-      if (prevCompleteAll === null) {
+  const [checked, setChecked] = useState(() => {
+    return todos.every(todo => todo.complete === true);
+  });
+
+  const [hasToggle, setHasToggle] = useState(() => {
+    return todos.length > 0;
+  });
+
+  // useEffect for updating checked toggle-all and hasToggle
+  useEffect(() => {
+    const updateChecked = todos.every(todo => todo.complete === true);
+
+    setChecked(updateChecked);
+    setHasToggle(() => {
+      return todos.length > 0;
+    });
+  }, [todos]);
+
+  const handleCheckedAll = () => {
+    setCompletedAll((prevCompletedAll: CompletedAll) => {
+      if (prevCompletedAll === null) {
         return true;
       }
 
-      return !prevCompleteAll;
+      return !prevCompletedAll;
     });
   };
 
-  // useEffect(() => {
-  //   const checkbox = document.getElementById('toggle-all');
-
-  //   if (checkbox && completeAll) {
-  //     checkbox.click();
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (completeAll !== null) {
-  //     const updatedTodos = todos.map(todo => (
-  //       { ...todo, complete: completeAll }
-  //     ));
-
-  //     setTodos(updatedTodos);
-  //   }
-  // }, [completeAll]);
-
   return (
     <>
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        data-cy="toggleAll"
-        onClick={handleClick}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      {hasToggle && (
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onChange={handleCheckedAll}
+            checked={checked}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        </>
+      )}
 
       <ul className="todo-list" data-cy="todoList">
-        {todos.map(todo => (
+        {filteredTodos.map(todo => (
           <TodoItem
             key={todo.id}
             todo={todo}
-            // clickEvent={completeAll}
           />
         ))}
-        {
-          // #region
-          /*
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-          */
-          // #endregion
-        }
       </ul>
     </>
   );
