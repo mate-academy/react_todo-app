@@ -8,7 +8,8 @@ export const TodosFilter = () => {
   const { todos, setTodo, setRenderTodo } = useContext(TodosContext);
   const [filterType, setFilterType] = useState('all');
 
-  const activeTodos = todos.filter(todo => !todo.completed);
+  const activeTodos = todos.filter(todo => todo.completed === false);
+  const todosCounter = activeTodos.length;
   const completedTodos = todos.filter(todo => todo.completed);
 
   const clearCompleted = () => {
@@ -16,11 +17,11 @@ export const TodosFilter = () => {
     setRenderTodo([...activeTodos]);
   };
 
-  const handleFilterTodo = (sellect: string) => {
-    setFilterType(sellect);
+  const handleFilterTodo = (select: string) => {
+    setFilterType(select);
 
     const newTodo: Todo[] = todos.filter(todo => {
-      switch (sellect) {
+      switch (select) {
         case 'active':
           return !todo.completed;
 
@@ -39,14 +40,13 @@ export const TodosFilter = () => {
       {todos.length > 0 && (
         <>
           <span className="todo-count" data-cy="todosCounter">
-            {`${activeTodos.length} items left`}
+            {`${todosCounter} items left`}
           </span>
 
-          <ul className="filters">
+          <ul className="filters" data-cy="todosFilter">
             <li>
               <a
                 href="#/"
-                // className="selected"
                 className={classNames({
                   selected: filterType === 'all',
                 })}

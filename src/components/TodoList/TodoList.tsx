@@ -35,7 +35,7 @@ export const TodoList = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {renderTodo.map(todo => (
           <TodoItem todoProps={todo} key={todo.id} />
         ))}

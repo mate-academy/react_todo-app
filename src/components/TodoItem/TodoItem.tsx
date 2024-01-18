@@ -12,14 +12,15 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todoProps }) => {
   const { todos, setTodo, setRenderTodo } = useContext(TodosContext);
+  const [editing, setEditing] = useState<number | null>(null);
   const [onChange, setOnChange] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (todoProps.editing && inputRef.current) {
+    if (todoProps.id === editing && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [todoProps.editing]);
+  }, [editing]);
 
   const handleDeleteTodo = (id: number) => {
     const newTodo = [...todos].filter((todo: Todo) => (
@@ -46,18 +47,12 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
   };
 
   const onDoubleClick = (id: number) => {
-    const newTodo = todos.map((todo: Todo) => {
-      if (todo.id !== id) {
-        return { ...todo, editing: false };
-      }
+    const selectedTodo = todos.find((todo: Todo) => todo.id === id);
 
-      setOnChange(todo.title);
-
-      return { ...todo, editing: true };
-    });
-
-    setTodo([...newTodo]);
-    setRenderTodo([...newTodo]);
+    if (selectedTodo) {
+      setOnChange(selectedTodo.title);
+      setEditing(id);
+    }
   };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,22 +67,24 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     event.preventDefault();
 
     if (!onChange.trim()) {
-      const newTodo = todos.filter((todo: Todo) => !todo.editing);
+      const newTodo = todos.filter((todo: Todo) => todo.id !== editing);
 
       setTodo([...newTodo]);
       setRenderTodo([...newTodo]);
 
       setOnChange('');
+      setEditing(null);
 
       return;
     }
 
     const newTodo = todos.map((todo: Todo) => {
-      if (todo.id === id && todo.editing) {
+      if (todo.id === id && todo.id === editing) {
+        setEditing(null);
+
         return {
           ...todo,
           title: onChange,
-          editing: false,
         };
       }
 
@@ -103,10 +100,11 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
   const handleKeyUp = (event: React.KeyboardEvent, id: number) => {
     if (event.key === 'Escape') {
       const newTodo = todos.map((todo: Todo) => {
-        if (todo.id === id && todo.editing) {
+        if (todo.id === id && todo.id === editing) {
+          setEditing(null);
+
           return {
             ...todo,
-            editing: false,
           };
         }
 
@@ -122,7 +120,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     <li
       onDoubleClick={() => onDoubleClick(todoProps.id)}
       className={classNames({
-        editing: todoProps.editing,
+        editing: todoProps.id === editing,
         completed: todoProps.completed,
       })}
     >
@@ -136,12 +134,13 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
           checked={todoProps.completed}
           onChange={() => handleCheckboxClick(todoProps.id)}
         />
-        <label htmlFor={`toggle-view-${todoProps.id}`}>{todoProps.title}</label>
+        <label htmlFor="toggle-view">{todoProps.title}</label>
         <button
           onClick={() => handleDeleteTodo(todoProps.id)}
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          aria-label="handleDeleteTodo"
         />
       </div>
       <form
