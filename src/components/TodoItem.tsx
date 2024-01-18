@@ -88,6 +88,21 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
   };
 
+  let editTimeoutRef = 0;
+
+  const handleEditStart = () => {
+    editTimeoutRef = window.setTimeout(() => {
+      setEditing(!editing);
+    }, 1500);
+  };
+
+  const handleEditEnd = () => {
+    clearTimeout(editTimeoutRef);
+
+    setEditing(!editing);
+    editTimeoutRef = 0;
+  };
+
   // useEffect to set focus for editing
   useEffect(() => {
     if (editing && titleField.current) {
@@ -145,6 +160,8 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
         />
         <label
           onDoubleClick={handleEdit}
+          onTouchStart={handleEditStart}
+          onTouchEnd={handleEditEnd}
         >
           {title}
         </label>
