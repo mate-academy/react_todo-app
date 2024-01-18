@@ -89,16 +89,21 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
   };
 
+  // UseEffect for longPress
   useEffect(() => {
-    let timerId;
+    let timerId: NodeJS.Timeout | undefined;
 
     if (startLongPress) {
       timerId = setTimeout(() => {
         setEditing(!editing);
-      }, 3500);
+      }, 1000);
     } else {
       clearTimeout(timerId);
     }
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [startLongPress]);
 
   // useEffect to set focus for editing
