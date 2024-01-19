@@ -2,6 +2,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { TodosContext } from './Store';
+import { FilterParams } from '../types/filterParams';
+import { getFilteredTodos } from '../services/getFilteredTodos';
 
 export const TodoFilter: React.FC = () => {
   const {
@@ -10,42 +12,12 @@ export const TodoFilter: React.FC = () => {
     setFilteredTodos,
   } = useContext(TodosContext);
 
-  const [selectedAll, setSelectedAll] = useState(true);
-  const [selectedActive, setSelectedActive] = useState(false);
-  const [selectedCompleted, setSelectedCompleted] = useState(false);
-  const [itemsLeft, setItemsLeft] = useState(() => {
-    return todos.filter(todo => todo.complete === false).length;
-  });
-  const [hasCompletedItems, setHasCompletedItems] = useState(() => {
-    return todos.some(todo => todo.complete === true);
-  });
+  const [filter, setFilter] = useState(FilterParams.All);
 
-  const handleAllItems = () => {
-    const allItems = todos;
+  const filteredTodos = getFilteredTodos(todos, filter);
 
-    setSelectedAll(true);
-    setSelectedActive(false);
-    setSelectedCompleted(false);
-    setFilteredTodos(allItems);
-  };
-
-  const handleActiveItems = () => {
-    const activeItems = todos.filter(todo => todo.complete === false);
-
-    setSelectedAll(false);
-    setSelectedActive(true);
-    setSelectedCompleted(false);
-    setFilteredTodos(activeItems);
-  };
-
-  const handleCompletedItems = () => {
-    const activeItems = todos.filter(todo => todo.complete === true);
-
-    setSelectedAll(false);
-    setSelectedActive(false);
-    setSelectedCompleted(true);
-    setFilteredTodos(activeItems);
-  };
+  let itemsLeft = todos.filter(todo => todo.complete === false).length;
+  let hasCompletedItems = todos.some(todo => todo.complete === true);
 
   const handleClearCompleted = () => {
     const clearCompleted = todos.filter(todo => todo.complete === false);
@@ -53,33 +25,13 @@ export const TodoFilter: React.FC = () => {
     setTodos(clearCompleted);
   };
 
-  // useEffect for to show count items left
   useEffect(() => {
-    setItemsLeft(() => {
-      return todos.filter(todo => todo.complete === false).length;
-    });
-  }, [todos]);
+    setFilteredTodos(filteredTodos);
+  }, [filter, todos]);
 
-  // useEffect for updating completed items
   useEffect(() => {
-    setHasCompletedItems(() => {
-      return todos.some(todo => todo.complete === true);
-    });
-  }, [todos]);
-
-  // useEffect for updating filtered todos
-  useEffect(() => {
-    if (selectedAll) {
-      handleAllItems();
-    }
-
-    if (selectedActive) {
-      handleActiveItems();
-    }
-
-    if (selectedCompleted) {
-      handleCompletedItems();
-    }
+    itemsLeft = todos.filter(todo => todo.complete === false).length;
+    hasCompletedItems = todos.some(todo => todo.complete === true);
   }, [todos]);
 
   return (
@@ -92,8 +44,8 @@ export const TodoFilter: React.FC = () => {
         <li>
           <a
             href="#/"
-            className={cn({ selected: selectedAll })}
-            onClick={handleAllItems}
+            className={cn({ selected: filter === FilterParams.All })}
+            onClick={() => setFilter(FilterParams.All)}
           >
             All
           </a>
@@ -102,8 +54,8 @@ export const TodoFilter: React.FC = () => {
         <li>
           <a
             href="#/active"
-            className={cn({ selected: selectedActive })}
-            onClick={handleActiveItems}
+            className={cn({ selected: filter === FilterParams.Active })}
+            onClick={() => setFilter(FilterParams.Active)}
           >
             Active
           </a>
@@ -112,8 +64,8 @@ export const TodoFilter: React.FC = () => {
         <li>
           <a
             href="#/completed"
-            className={cn({ selected: selectedCompleted })}
-            onClick={handleCompletedItems}
+            className={cn({ selected: filter === FilterParams.Completed })}
+            onClick={() => setFilter(FilterParams.Completed)}
           >
             Completed
           </a>

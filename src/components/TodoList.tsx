@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   useContext,
-  useState,
+  // useState,
   useEffect,
 } from 'react';
 import { TodosContext } from './Store';
@@ -16,22 +17,12 @@ export const TodoList: React.FC<Props> = React.memo(() => {
     filteredTodos,
   } = useContext(TodosContext);
 
-  const [checked, setChecked] = useState(() => {
-    return todos.every(todo => todo.complete === true);
-  });
+  let checked = todos.every(todo => todo.complete === true);
+  let hasToggle = todos.length > 0;
 
-  const [hasToggle, setHasToggle] = useState(() => {
-    return todos.length > 0;
-  });
-
-  // useEffect for updating checked toggle-all and hasToggle
   useEffect(() => {
-    const updateChecked = todos.every(todo => todo.complete === true);
-
-    setChecked(updateChecked);
-    setHasToggle(() => {
-      return todos.length > 0;
-    });
+    checked = todos.every(todo => todo.complete === true);
+    hasToggle = todos.length > 0;
   }, [todos]);
 
   const handleCheckedAll = () => {

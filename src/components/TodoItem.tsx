@@ -51,7 +51,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   };
 
   const handleEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
+    setTitle(event.target.value.trimStart());
   };
 
   const applyRemoveTodo = () => {

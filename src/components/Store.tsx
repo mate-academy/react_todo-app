@@ -74,37 +74,3 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     </TodosContext.Provider>
   );
 };
-
-// #region
-// interface Action {
-//   type: string;
-//   payload: Todo;
-// }
-
-// function reducer(todos: Todo[], action: Action) {
-//   switch (action.type) {
-//     case 'addTodo':
-//       return [...todos, action.payload];
-
-//     default:
-//       return todos;
-//   }
-// }
-
-// const [todos, dispatch] = useReducer(reducer, []);
-// const addTodo = useCallback((newTodo: Todo) => {
-//   dispatch({ type: 'addTodo', payload: newTodo });
-// }, []);
-
-// const StateContext = React.createContext<Todo[]>(initialTodos);
-// const DicpatchContext = React.createContext((action: Action) => {});
-
-//   return (
-//     <DicpatchContext.Provider value={dispatch}>
-//       <StateContext.Provider value={todos}>
-//         {children}
-//       </StateContext.Provider>
-//     </DicpatchContext.Provider>
-//   );
-// }
-// #endregion

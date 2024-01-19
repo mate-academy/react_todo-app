@@ -52,7 +52,7 @@ body {
 .todoapp input::placeholder {
   font-style: italic;
   font-weight: 300;
-  color: #e6e6e6;
+  color: #c1c1c1;
 }
 
 .todoapp input.error::placeholder {

@@ -13,6 +13,13 @@ export const TodoForm: React.FC<Props> = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === ' ') {
+      setError('Todo cannot start with spaces');
+
+      return;
+    }
+
+    setError('');
     setTitle(event.target.value);
   };
 
@@ -23,20 +30,13 @@ export const TodoForm: React.FC<Props> = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title.length === 0) {
-      setError('Please add a text');
-
-      return;
-    }
-
     addTodo({
       id: +new Date(),
-      title: title.trim(),
+      title: title.trimEnd(),
       complete: false,
     });
 
     setTitle('');
-    setError('');
   };
 
   return (
@@ -51,6 +51,7 @@ export const TodoForm: React.FC<Props> = () => {
         placeholder={error || 'What needs to be done?'}
         value={title}
         onChange={handleTitle}
+        required
       />
     </form>
   );
