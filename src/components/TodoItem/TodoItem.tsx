@@ -82,7 +82,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
   return (
     <li className={cn({
       completed: todos[indexTodo].completed,
-      isEditing,
+      editing: isEditing,
     })}
     >
       <div className="view">
