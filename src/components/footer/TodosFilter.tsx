@@ -16,7 +16,7 @@ const TodosFilter: React.FC = () => {
 
   return (
     <div>
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         <li>
           <a
             href="#/"

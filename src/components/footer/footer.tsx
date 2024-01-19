@@ -9,10 +9,10 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+      <span data-cy="todosCounter" className="todo-count">
+        {todos.filter(todo => !todo.completed).length}
+        {` ${todos.filter(todo => !todo.completed).length > 1 ? 'items' : 'item'} left`}
       </span>
-
       <TodosFilter />
       {isCompletedTodos && (
         <button

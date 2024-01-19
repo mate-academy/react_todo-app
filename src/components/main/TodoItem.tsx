@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { DispatchContext } from '../../Store';
 
@@ -45,9 +45,9 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
 
   return (
     <li
-      className={classNames(
-        { editing },
+      className={cn(
         { completed: todo.completed },
+        { editing },
       )}
       onDoubleClick={() => setEditing(true)}
     >
@@ -62,7 +62,7 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
           id={`toggle-view-${todo.id}`}
           onChange={() => dispatch({ type: 'toggleTodo', payload: todo.id })}
         />
-        <label>{todo.title}</label>
+        <label htmlFor={`toggle-view-${todo.id}`}>{todo.title}</label>
         <button
           type="button"
           className="destroy"
