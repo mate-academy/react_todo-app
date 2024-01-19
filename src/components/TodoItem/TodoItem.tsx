@@ -18,7 +18,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
   const { todos } = useContext(StateContext);
 
   const [newTitle, setNewTitle] = useState(title);
-  const [editing, setEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const indexTodo: number = todos.findIndex((todo) => todo.id === id);
 
@@ -33,13 +33,13 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
   };
 
   const handleEdit = () => {
-    setEditing(!editing);
+    setIsEditing(!isEditing);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setNewTitle(title);
-      setEditing(false);
+      setIsEditing(false);
     }
 
     if (event.key === 'Enter') {
@@ -54,7 +54,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
         handleRemove();
       }
 
-      setEditing(false);
+      setIsEditing(false);
     }
   };
 
@@ -70,19 +70,19 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
       handleRemove();
     }
 
-    setEditing(false);
+    setIsEditing(false);
   };
 
   useEffect(() => {
-    if (inputRef.current && editing) {
+    if (inputRef.current && isEditing) {
       inputRef.current.focus();
     }
-  }, [editing]);
+  }, [isEditing]);
 
   return (
     <li className={cn({
       completed: todos[indexTodo].completed === true,
-      editing,
+      isEditing,
     })}
     >
       <div className="view">
@@ -106,7 +106,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
         />
       </div>
 
-      {editing && (
+      {isEditing && (
         <input
           type="text"
           className="edit"

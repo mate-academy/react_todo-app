@@ -11,10 +11,10 @@ export const TodoApp = () => {
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
 
-  const completed = todos.every((todo: Todo) => todo.completed === true);
+  const isEachTodosCompleted = todos.every((todo: Todo) => todo.completed);
 
   const completedTodos = todos.filter(
-    (todo: Todo) => todo.completed === true,
+    (todo: Todo) => todo.completed,
   );
 
   const differenceTodos = todos.length - completedTodos.length;
@@ -41,9 +41,9 @@ export const TodoApp = () => {
             className="toggle-all"
             data-cy="toggleAll"
             type="checkbox"
-            checked={completed}
+            checked={isEachTodosCompleted}
             defaultChecked={allCompleted}
-            onClick={() => getAllCompleted()}
+            onClick={getAllCompleted}
           />
 
           <label htmlFor="toggle-all">Mark all as complete</label>
@@ -65,7 +65,7 @@ export const TodoApp = () => {
           <button
             type="button"
             className="clear-completed"
-            onClick={() => handleRemoveAll()}
+            onClick={handleRemoveAll}
           >
             {completedTodos.length > 0 && (
               'Clear completed'
