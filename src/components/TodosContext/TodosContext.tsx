@@ -13,6 +13,12 @@ const initialState: State = {
   filter: Status.All,
 };
 
+const data = localStorage.getItem('todos');
+
+if (data !== null) {
+  initialState.todos = JSON.parse(data);
+}
+
 function reducer(state: State, action: Action): State {
   let todos: Todo[] = [...state.todos];
 

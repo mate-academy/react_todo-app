@@ -18,7 +18,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
   const { todos } = useContext(StateContext);
 
   const [newTitle, setNewTitle] = useState(title);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
 
   const indexTodo: number = todos.findIndex((todo) => todo.id === id);
 
@@ -81,7 +81,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
 
   return (
     <li className={cn({
-      completed: todos[indexTodo].completed === true,
+      completed: todos[indexTodo].completed,
       isEditing,
     })}
     >
@@ -89,11 +89,11 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
         <input
           type="checkbox"
           className="toggle"
-          onChange={() => handleComplete()}
+          onChange={handleComplete}
           checked={todos[indexTodo].completed}
         />
 
-        <label onDoubleClick={() => handleEdit()}>
+        <label onDoubleClick={handleEdit}>
           {title}
         </label>
 
@@ -102,7 +102,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
           className="destroy"
           data-cy="deleteTodo"
           aria-label="Edit"
-          onClick={() => handleRemove()}
+          onClick={handleRemove}
         />
       </div>
 
