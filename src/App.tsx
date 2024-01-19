@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { Header } from './components/header/header';
 import { Main } from './components/main/Main';
+import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
 import { TodosContext } from './Store';
 
