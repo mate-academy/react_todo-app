@@ -29,6 +29,8 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const [startLongPress, setStartLongPress] = useState(false);
   const titleField = useRef<HTMLInputElement>(null);
 
+  const [blur, setBlur] = useState(true);
+
   const updateTodo = useCallback((updatedTodo: Todo) => {
     const updatedTodos = todos.map(upTodo => (
       upTodo.id === updatedTodo.id
@@ -47,6 +49,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   };
 
   const handleEdit = () => {
+    setBlur(false);
     setEditing(!editing);
   };
 
@@ -76,7 +79,8 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => { // switch case?
     if (event.key === 'Enter') {
-      titleField.current?.blur();
+      setBlur(true);
+      // titleField.current?.blur();
     }
 
     if (event.key === 'Enter' && title.length === 0) {
@@ -85,11 +89,17 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
     if (event.key === 'Escape') {
       setTitle(todo.title);
-      titleField.current?.blur();
+      setBlur(true);
+      // titleField.current?.blur();
     }
   };
 
-  // UseEffect for longPress
+  useEffect(() => {
+    if (blur) {
+      titleField.current?.blur();
+    }
+  }, [blur]);
+
   useEffect(() => {
     let timerId: NodeJS.Timeout | undefined;
 
@@ -106,14 +116,12 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     };
   }, [startLongPress]);
 
-  // useEffect to set focus for editing
   useEffect(() => {
     if (editing && titleField.current) {
       titleField.current.focus();
     }
   }, [editing]);
 
-  // useEffect to set complete for all items
   useEffect(() => {
     if (completedAll === true) {
       setCompleted(true);
@@ -136,7 +144,6 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
   }, [completedAll]);
 
-  // useEffect for cotrol state allCompleted
   useEffect(() => {
     const allCompleted = todos.every(item => item.complete === true);
 
