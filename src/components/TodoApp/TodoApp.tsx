@@ -1,6 +1,13 @@
+import React from 'react';
+// import { useContext } from 'react';
 import { TodoList } from '../TodoList/TodoList';
+// import { TodosContext } from '../../contexts/TodosContext';
 
-export const TodoApp = () => {
+type Props = {};
+
+export const TodoApp: React.FC<Props> = () => {
+  // const lang = useContext(TodosContext);
+
   return (
     <section className="main">
       <input

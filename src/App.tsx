@@ -3,13 +3,16 @@ import React from 'react';
 import { Header } from './components/Header';
 import { TodoApp } from './components/TodoApp/TodoApp';
 import { Footer } from './components/Footer';
+import { TodosProvider } from './contexts/TodosContext';
 
 export const App: React.FC = () => {
   return (
     <div className="todoapp">
-      <Header />
-      <TodoApp />
-      <Footer />
+      <TodosProvider>
+        <Header />
+        <TodoApp />
+        <Footer />
+      </TodosProvider>
     </div>
   );
 };

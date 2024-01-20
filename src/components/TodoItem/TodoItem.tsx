@@ -1,5 +1,12 @@
-export const TodoItem = () => {
-  // { id, title, completed } = todo;
+import React from 'react';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todo: Todo,
+};
+
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { id, title /* , completed */ } = todo;
 
   return (
     <div>
@@ -8,9 +15,10 @@ export const TodoItem = () => {
           <input
             type="checkbox"
             className="toggle"
-            id="toggle-view"
+            id={`toggle-view-${id}`}
+            // onClick={}
           />
-          <label htmlFor="toggle-view">asdfghj</label>
+          <label htmlFor={`toggle-view-${id}`}>{title}</label>
           <button
             type="button"
             className="destroy"
@@ -21,28 +29,29 @@ export const TodoItem = () => {
         <input type="text" className="edit" />
       </li>
 
-      <li className="completed">
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            id="toggle-completed"
-          />
-          <label htmlFor="toggle-completed">qwertyuio</label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            aria-label="qwertyuio"
-          />
-        </div>
-        <input type="text" className="edit" />
-      </li>
+      {/*
+  <li className="completed">
+    <div className="view">
+      <input
+        type="checkbox"
+        className="toggle"
+        id={`toggle-completed-${id}`}
+      />
+      <label htmlFor={`toggle-completed-${id}`}>qwertyuio</label>
+      <button
+        type="button"
+        className="destroy"
+        data-cy="deleteTodo"
+        aria-label="qwertyuio"
+      />
+    </div>
+    <input type="text" className="edit" />
+  </li>
 
       <li className="editing">
         <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-editing" />
-          <label htmlFor="toggle-editing">zxcvbnm</label>
+          <input type="checkbox" className="toggle" id={`toggle-editing-${id}`} />
+          <label htmlFor={`toggle-editing-${id}`}>zxcvbnm</label>
           <button
             type="button"
             className="destroy"
@@ -66,6 +75,17 @@ export const TodoItem = () => {
         </div>
         <input type="text" className="edit" />
       </li>
+      */}
+
     </div>
   );
 };
+
+// <li></li>
+// <label htmlFor={`toggle-view-${id}`}>{title}</label>
+
+//  <li className="completed">
+// <label htmlFor={`toggle-completed-${id}`}>qwertyuio</label>
+
+//  <li className="editing">
+// <label htmlFor={`toggle-editing-${id}`}>zxcvbnm</label>
