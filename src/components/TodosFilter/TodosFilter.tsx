@@ -14,13 +14,13 @@ export const TodosFilter = () => {
 
   const clearCompleted = () => {
     setTodo([...activeTodos]);
-    setRenderTodo([...activeTodos]);
+    // setRenderTodo([...activeTodos]);
   };
 
   const handleFilterTodo = (select: string) => {
     setFilterType(select);
 
-    const newTodo: Todo[] = todos.filter(todo => {
+    const newTodo: Todo[] = [...todos].filter(todo => {
       switch (select) {
         case 'active':
           return !todo.completed;

@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todoProps }) => {
-  const { todos, setTodo, setRenderTodo } = useContext(TodosContext);
+  const { todos, setTodo } = useContext(TodosContext);
   const [editing, setEditing] = useState<number | null>(null);
   const [onChange, setOnChange] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -28,7 +28,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     ));
 
     setTodo([...newTodo]);
-    setRenderTodo([...newTodo]);
+    // setRenderTodo([...newTodo]);
   };
 
   const handleCheckboxClick = (id: number) => {
@@ -42,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
         completed: !newTodos[todoIndex].completed,
       };
       setTodo(newTodos);
-      setRenderTodo(newTodos);
+      // setRenderTodo(newTodos);
     }
   };
 
@@ -70,7 +70,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
       const newTodo = todos.filter((todo: Todo) => todo.id !== editing);
 
       setTodo([...newTodo]);
-      setRenderTodo([...newTodo]);
+      // setRenderTodo([...newTodo]);
 
       setOnChange('');
       setEditing(null);
@@ -92,7 +92,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     });
 
     setTodo([...newTodo]);
-    setRenderTodo([...newTodo]);
+    // setRenderTodo([...newTodo]);
 
     setOnChange('');
   };
@@ -112,7 +112,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
       });
 
       setTodo([...newTodo]);
-      setRenderTodo([...newTodo]);
+      // setRenderTodo([...newTodo]);
     }
   };
 

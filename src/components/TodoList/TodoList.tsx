@@ -9,7 +9,6 @@ export const TodoList = () => {
     todos,
     setTodo,
     renderTodo,
-    setRenderTodo,
   } = useContext(TodosContext);
 
   const handleCheckboxClickAll = () => {
@@ -21,7 +20,7 @@ export const TodoList = () => {
     }));
 
     setTodo([...newTodo]);
-    setRenderTodo([...newTodo]);
+    // setRenderTodo([...newTodo]);
   };
 
   return (

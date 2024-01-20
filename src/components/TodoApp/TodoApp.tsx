@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { TodosContext } from '../../context/TodosContext';
 
 export const TodoApp = () => {
-  const { todos, setTodo, setRenderTodo } = useContext(TodosContext);
+  const { todos, setTodo } = useContext(TodosContext);
   const [onChange, setOnChange] = useState('');
 
   const maxId = Math.max(...todos.map(todo => Number(todo.id)), 0);
@@ -30,7 +30,7 @@ export const TodoApp = () => {
     }];
 
     setTodo([...newTodo]);
-    setRenderTodo([...newTodo]);
+    // setRenderTodo([...newTodo]);
 
     setOnChange('');
   };
