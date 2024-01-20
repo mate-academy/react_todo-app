@@ -7,6 +7,7 @@ type TodosContextType = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   filterValue: Status,
   setFilterValue: React.Dispatch<React.SetStateAction<Status>>;
+  // todo: Todo,
 };
 
 export const TodosContext = React.createContext<TodosContextType>({
@@ -14,6 +15,7 @@ export const TodosContext = React.createContext<TodosContextType>({
   setTodos: () => {},
   filterValue: Status.All,
   setFilterValue: () => {},
+  // todo: Todo,
 });
 
 type Props = {
@@ -30,6 +32,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos,
     filterValue,
     setFilterValue,
+    // todo,
   };
 
   return (

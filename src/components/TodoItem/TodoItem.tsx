@@ -11,14 +11,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
   const { todos, setTodos } = useContext(TodosContext);
 
-  // const handleCompleteTodo = () => {
-  //   setTodos(todos.map((task) => ({ ...task, completed: !task.completed })));
-  // };
-
   const handleCompleteTodo = () => {
-    setTodos(prevTodos => prevTodos.map(
-      (task) => ({ ...task, completed: !task.completed }),
-    ));
+    setTodos(prevTodos => prevTodos.map((task) => (
+      (todo.id === task.id)
+        ? ({ ...task, completed: !task.completed })
+        : (task)
+    )));
   };
 
   const handleDeleteTodo = () => {
@@ -119,4 +117,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 //   remainedTodos.splice(index, 1);
 
 //   setTodos(remainedTodos);
+// };
+
+// const handleCompleteTodo = () => {
+//   setTodos(todos.map((task) => ({ ...task, completed: !task.completed })));
+// };
+
+// const handleCompleteTodo = () => {
+//   setTodos(prevTodos => prevTodos.map(
+//     (task) => {
+//       if (task.id === id) {
+//         return { ...task, completed: !task.completed };
+//       }
+
+//       return task;
+//     },
+//   ));
 // };
