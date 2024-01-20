@@ -1,20 +1,68 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { TodoForm } from './components/TodoForm';
+import { Status, Todo } from './types/todo';
+import { TodoList } from './components/TodoList';
+import { TodosFilter } from './components/TodosFilter';
 
 export const App: React.FC = () => {
+  const [todoItems, setTodoItems] = useState<Todo[]>([]);
+  const [filterStatus, setFilterStatus] = useState<Status>(Status.all);
+
+  const addTodo = useCallback(({ id, ...data }: Todo) => {
+    const newTodo = {
+      id: +new Date(),
+      ...data,
+    };
+
+    setTodoItems(currentTodos => {
+      if (!newTodo.title.trim()) {
+        return [...currentTodos];
+      }
+
+      return [newTodo, ...currentTodos];
+    });
+  }, []);
+
+  const updateTodo = useCallback((updatedTodo: Todo) => {
+    setTodoItems((currentTodos) => {
+      const newTodoItems = [...currentTodos];
+      const index = newTodoItems.findIndex(todo => todo.id === updatedTodo.id);
+
+      newTodoItems.splice(index, 1, updatedTodo);
+
+      return newTodoItems;
+    });
+  }, []);
+
+  // const updateCompleted = useCallback(() => {
+
+  // }, []);
+
+  const deleteTodo = useCallback((todoId: number) => {
+    setTodoItems(currentTodos => currentTodos
+      .filter(todo => todo.id !== todoId));
+  }, []);
+
+  const visibleTodos = [...todoItems].filter(todo => {
+    switch (filterStatus) {
+      case Status.active:
+        return !todo.completed;
+      case Status.completed:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+
+  // eslint-disable-next-line no-console
+  console.log('Visible Todos:', visibleTodos);
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
+        <TodoForm onSubmit={addTodo} />
       </header>
 
       <section className="main">
@@ -26,63 +74,20 @@ export const App: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
+        <TodoList
+          todos={visibleTodos}
+          onDelete={deleteTodo}
+          onUpdate={updateTodo}
+        />
 
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
       </section>
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          3 items left
+          {`${visibleTodos.filter(todo => !todo.completed).length} items left`}
         </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
+        <TodosFilter setFilterStatus={setFilterStatus} />
 
         <button type="button" className="clear-completed">
           Clear completed
