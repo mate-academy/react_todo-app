@@ -4,9 +4,9 @@ import { Status } from '../types/Status';
 
 type TodosContextType = {
   todos: Todo[],
-  setTodos: (arrTodos: Todo[]) => void,
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   filterValue: Status,
-  setFilterValue: React.Dispatch<React.SetStateAction<string>>;
+  setFilterValue: React.Dispatch<React.SetStateAction<Status>>;
 };
 
 export const TodosContext = React.createContext<TodosContextType>({
@@ -21,15 +21,9 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([
-    { id: 1, title: 'fight with cat', completed: true },
-    { id: 2, title: 'buy meat', completed: false },
-    { id: 3, title: 'drink coffee', completed: true },
-    { id: 4, title: 'clean room', completed: false },
-    { id: 5, title: 'clean room', completed: false },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-  const [filterValue, setFilterValue] = useState('All');
+  const [filterValue, setFilterValue] = useState<Status>(Status.All);
 
   const value = {
     todos,
@@ -44,3 +38,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     </TodosContext.Provider>
   );
 };
+
+// { id: 1, title: 'fight with cat', completed: true },
+// { id: 2, title: 'buy meat', completed: false },
+// { id: 3, title: 'drink coffee', completed: true },
+// { id: 4, title: 'clean room', completed: false },
+// { id: 5, title: 'clean room', completed: false },

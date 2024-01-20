@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import cn from 'classnames';
+import { TodosContext } from '../../contexts/TodosContext';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -6,17 +8,37 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { id, title /* , completed */ } = todo;
+  const { id, title, completed } = todo;
+  const { todos, setTodos } = useContext(TodosContext);
+
+  // const handleCompleteTodo = () => {
+  //   setTodos(todos.map((task) => ({ ...task, completed: !task.completed })));
+  // };
+
+  const handleCompleteTodo = () => {
+    setTodos(prevTodos => prevTodos.map(
+      (task) => ({ ...task, completed: !task.completed }),
+    ));
+  };
+
+  const handleDeleteTodo = () => {
+    const remainedTodos = todos.filter((task) => task.id !== id);
+
+    setTodos(remainedTodos);
+  };
 
   return (
     <div>
-      <li>
+      <li className={cn({
+        completed: completed === true,
+      })}
+      >
         <div className="view">
           <input
             type="checkbox"
             className="toggle"
             id={`toggle-view-${id}`}
-            // onClick={}
+            onClick={handleCompleteTodo}
           />
           <label htmlFor={`toggle-view-${id}`}>{title}</label>
           <button
@@ -24,6 +46,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="destroy"
             data-cy="deleteTodo"
             aria-label="asdfghj"
+            onClick={handleDeleteTodo}
           />
         </div>
         <input type="text" className="edit" />
@@ -89,3 +112,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
 //  <li className="editing">
 // <label htmlFor={`toggle-editing-${id}`}>zxcvbnm</label>
+
+// const handleDeleteTodo = (index: number) => {
+//   const remainedTodos = [...todos];
+
+//   remainedTodos.splice(index, 1);
+
+//   setTodos(remainedTodos);
+// };
