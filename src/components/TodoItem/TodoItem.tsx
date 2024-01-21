@@ -38,7 +38,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             id={`toggle-view-${id}`}
             onClick={handleCompleteTodo}
           />
-          <label htmlFor={`toggle-view-${id}`}>{title}</label>
+          <label htmlFor={`toggle-view-${id}`}>
+            {title}
+          </label>
           <button
             type="button"
             className="destroy"

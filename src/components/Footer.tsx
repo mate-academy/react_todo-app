@@ -13,21 +13,31 @@ export const Footer: React.FC<Props> = () => {
     setTodos(todos.filter(todo => (todo.completed === false)));
   };
 
+  const hasEnoughCompletedTodo = todos.some(todo => todo.completed === true);
+
+  const hasEnoughTodos = todos.length > 0;
+
   return (
     <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        {`${uncompletedTodos.length} items left`}
-      </span>
+      {hasEnoughTodos && (
+        <div>
+          <span className="todo-count" data-cy="todosCounter">
+            {`${uncompletedTodos.length} items left`}
+          </span>
 
-      <TodoFilter />
+          <TodoFilter />
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={handleTodoCleaning}
-      >
-        Clear completed
-      </button>
+          {hasEnoughCompletedTodo && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleTodoCleaning}
+            >
+              Clear completed
+            </button>
+          )}
+        </div>
+      )}
     </footer>
   );
 };
