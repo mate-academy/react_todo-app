@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Status } from '../types/todo';
 
 type Props = {
@@ -5,13 +6,20 @@ type Props = {
 };
 
 export const TodosFilter: React.FC<Props> = ({ setFilterStatus }) => {
+  const [selectedStatus, setSelectedStatus] = useState(Status.all);
+
+  const handleStatusClick = (status: Status) => {
+    setSelectedStatus(status);
+    setFilterStatus(status);
+  };
+
   return (
     <ul className="filters">
       <li>
         <a
           href="#/"
-          className="selected"
-          onClick={() => setFilterStatus(Status.all)}
+          className={`${selectedStatus === Status.all ? 'selected' : ''}`}
+          onClick={() => handleStatusClick(Status.all)}
         >
           All
         </a>
@@ -20,7 +28,8 @@ export const TodosFilter: React.FC<Props> = ({ setFilterStatus }) => {
       <li>
         <a
           href="#/active"
-          onClick={() => setFilterStatus(Status.active)}
+          className={`${selectedStatus === Status.active ? 'selected' : ''}`}
+          onClick={() => handleStatusClick(Status.active)}
         >
           Active
         </a>
@@ -29,7 +38,8 @@ export const TodosFilter: React.FC<Props> = ({ setFilterStatus }) => {
       <li>
         <a
           href="#/completed"
-          onClick={() => setFilterStatus(Status.completed)}
+          className={`${selectedStatus === Status.completed ? 'selected' : ''}`}
+          onClick={() => handleStatusClick(Status.completed)}
         >
           Completed
         </a>

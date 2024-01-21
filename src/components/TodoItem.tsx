@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import cn from 'classnames';
+import { useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/todo';
-import { TodoForm } from './TodoForm';
 
 type Props = {
   todo: Todo,
@@ -10,16 +10,20 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  onDelete = () => {},
-  onUpdate = () => {},
+  onDelete = () => { },
+  onUpdate = () => { },
 }) => {
-  const [todoCompleted, setTodoCompleted] = useState(todo.completed);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const setTodoCompleted = (completed: boolean) => {
+    onUpdate({ ...todo, completed });
+  };
+
   const handleCheckboxChange = () => {
-    setTodoCompleted(!todoCompleted);
-    onUpdate({ ...todo, completed: !todoCompleted });
+    setTodoCompleted(!todo.completed);
   };
 
   const handleDeleteButtonClick = () => {
@@ -40,60 +44,61 @@ export const TodoItem: React.FC<Props> = ({
     setEditedTitle(newTitle);
   };
 
+  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      finishEditing();
+    }
+  };
+
+  const handleEscapePress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setEditedTitle(todo.title);
+      setSelectedTodo(null);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedTodo === todo && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [selectedTodo, todo]);
+
   return (
     <li
-      className={`${selectedTodo === todo ? 'editing' : ''} ${
-        todoCompleted ? 'completed' : ''
-      } ${!todoCompleted && selectedTodo === todo ? 'view' : ''}`}
+      className={cn({
+        editing: selectedTodo === todo,
+        completed: todo.completed,
+        view: !todo.completed && selectedTodo === todo,
+      })}
+      onDoubleClick={startEditing}
     >
-      <div className="view" onDoubleClick={startEditing}>
-        {selectedTodo === todo ? (
-          <div>
-            <input
-              type="checkbox"
-              className="toggle"
-              id={`toggle-view-${todo.id}`}
-              checked={todoCompleted}
-              onChange={handleCheckboxChange}
-            />
-            <TodoForm
-              onSubmit={() => {}}
-              todo={{ ...todo, title: editedTitle }}
-            />
-            <input
-              type="text"
-              value={editedTitle}
-              onChange={(e) => handleEditChange(e.target.value)}
-              onBlur={finishEditing}
-            />
-            <button
-              type="button"
-              className="destroy"
-              data-cy="deleteTodo"
-              aria-label="Delete"
-              onClick={handleDeleteButtonClick}
-            />
-          </div>
-        ) : (
-          <div>
-            <input
-              type="checkbox"
-              className="toggle"
-              id={`toggle-view-${todo.id}`}
-              checked={todoCompleted}
-              onChange={handleCheckboxChange}
-            />
-            <label htmlFor={`toggle-view-${todo.id}`}>{todo.title}</label>
-            <button
-              type="button"
-              className="destroy"
-              data-cy="deleteTodo"
-              aria-label="Delete"
-              onClick={handleDeleteButtonClick}
-            />
-          </div>
-        )}
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          id={`toggle-editing-${todo.id}`}
+          checked={todo.completed}
+          onChange={handleCheckboxChange}
+        />
+        <label>{todo.title}</label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          aria-label="Delete"
+          onClick={handleDeleteButtonClick}
+        />
       </div>
+      <input
+        type="text"
+        className="edit"
+        value={editedTitle}
+        onChange={(e) => handleEditChange(e.target.value)}
+        onBlur={finishEditing}
+        onKeyDown={handleEnterPress}
+        onKeyUp={handleEscapePress}
+        ref={inputRef}
+      />
     </li>
   );
 };

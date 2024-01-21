@@ -35,13 +35,14 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  // const updateCompleted = useCallback(() => {
-
-  // }, []);
-
   const deleteTodo = useCallback((todoId: number) => {
     setTodoItems(currentTodos => currentTodos
       .filter(todo => todo.id !== todoId));
+  }, []);
+
+  const deleteCompletedTodos = useCallback(() => {
+    setTodoItems(currentTodos => currentTodos
+      .filter(todo => !todo.completed));
   }, []);
 
   const visibleTodos = [...todoItems].filter(todo => {
@@ -82,17 +83,25 @@ export const App: React.FC = () => {
 
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {`${visibleTodos.filter(todo => !todo.completed).length} items left`}
-        </span>
+      {todoItems.length > 0 && (
+        <footer className="footer">
+          <span className="todo-count" data-cy="todosCounter">
+            {`${todoItems.filter(todo => !todo.completed).length} items left`}
+          </span>
 
-        <TodosFilter setFilterStatus={setFilterStatus} />
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          <TodosFilter setFilterStatus={setFilterStatus} />
+          {todoItems.filter(todo => todo.completed).length > 0 && (
+            <button
+              type="button"
+              className="clear-completed"
+              aria-label="Delete"
+              onClick={deleteCompletedTodos}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
+      )}
     </div>
   );
 };
