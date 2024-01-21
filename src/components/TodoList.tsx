@@ -1,33 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {
-  useContext,
-  // useState,
-  useEffect,
-} from 'react';
+import React, { useContext, useEffect } from 'react';
 import { TodosContext } from './Store';
 import { TodoItem } from './TodoItem';
-import { CompletedAll } from '../types/completedAll';
+import { IsCompletedAll } from '../types/isCompletedAll';
 
 type Props = {};
 
 export const TodoList: React.FC<Props> = React.memo(() => {
   const {
     todos,
-    setCompletedAll,
+    setIsCompletedAll,
     filteredTodos,
   } = useContext(TodosContext);
 
-  let checked = todos.every(todo => todo.complete === true);
+  let checked = todos.every(todo => todo.complete);
   let hasToggle = todos.length > 0;
 
   useEffect(() => {
-    checked = todos.every(todo => todo.complete === true);
+    checked = todos.every(todo => todo.complete);
     hasToggle = todos.length > 0;
   }, [todos]);
 
   const handleCheckedAll = () => {
-    setCompletedAll((prevCompletedAll: CompletedAll) => {
-      if (prevCompletedAll === null) {
+    setIsCompletedAll((prevCompletedAll: IsCompletedAll) => {
+      if (!prevCompletedAll) {
         return true;
       }
 

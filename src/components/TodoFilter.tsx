@@ -16,11 +16,11 @@ export const TodoFilter: React.FC = () => {
 
   const filteredTodos = getFilteredTodos(todos, filter);
 
-  let itemsLeft = todos.filter(todo => todo.complete === false).length;
-  let hasCompletedItems = todos.some(todo => todo.complete === true);
+  let itemsLeft = todos.filter(todo => !todo.complete).length;
+  let hasCompletedItems = todos.some(todo => todo.complete);
 
   const handleClearCompleted = () => {
-    const clearCompleted = todos.filter(todo => todo.complete === false);
+    const clearCompleted = todos.filter(todo => !todo.complete);
 
     setTodos(clearCompleted);
   };
@@ -30,8 +30,8 @@ export const TodoFilter: React.FC = () => {
   }, [filter, todos]);
 
   useEffect(() => {
-    itemsLeft = todos.filter(todo => todo.complete === false).length;
-    hasCompletedItems = todos.some(todo => todo.complete === true);
+    itemsLeft = todos.filter(todo => !todo.complete).length;
+    hasCompletedItems = todos.some(todo => todo.complete);
   }, [todos]);
 
   return (

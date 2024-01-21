@@ -19,17 +19,16 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const {
     todos,
     setTodos,
-    completedAll,
-    setCompletedAll,
+    isCompletedAll,
+    setIsCompletedAll,
   } = useContext(TodosContext);
 
-  const [editing, setEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [completed, setCompleted] = useState(todo.complete);
   const [startLongPress, setStartLongPress] = useState(false);
-  const titleField = useRef<HTMLInputElement>(null);
-
   const [blur, setBlur] = useState(true);
+  const titleField = useRef<HTMLInputElement>(null);
 
   const updateTodo = useCallback((updatedTodo: Todo) => {
     const updatedTodos = todos.map(upTodo => (
@@ -50,7 +49,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const handleEdit = () => {
     setBlur(false);
-    setEditing(!editing);
+    setIsEditing(!isEditing);
   };
 
   const handleEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,13 +73,12 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       applyRemoveTodo();
     }
 
-    setEditing(!editing);
+    setIsEditing(!isEditing);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => { // switch case?
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       setBlur(true);
-      // titleField.current?.blur();
     }
 
     if (event.key === 'Enter' && title.length === 0) {
@@ -90,7 +88,6 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     if (event.key === 'Escape') {
       setTitle(todo.title);
       setBlur(true);
-      // titleField.current?.blur();
     }
   };
 
@@ -105,7 +102,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
     if (startLongPress) {
       timerId = setTimeout(() => {
-        setEditing(!editing);
+        setIsEditing(!isEditing);
       }, 1000);
     } else {
       clearTimeout(timerId);
@@ -117,47 +114,47 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   }, [startLongPress]);
 
   useEffect(() => {
-    if (editing && titleField.current) {
+    if (isEditing && titleField.current) {
       titleField.current.focus();
     }
-  }, [editing]);
+  }, [isEditing]);
 
   useEffect(() => {
-    if (completedAll === true) {
+    if (isCompletedAll) {
       setCompleted(true);
 
       const updatedTodos = todos.map(upTodo => (
-        { ...upTodo, complete: completedAll }
+        { ...upTodo, complete: isCompletedAll }
       ));
 
       setTodos(updatedTodos);
     }
 
-    if (completedAll === false) {
+    if (isCompletedAll === false) {
       setCompleted(false);
 
       const updatedTodos = todos.map(upTodo => (
-        { ...upTodo, complete: completedAll }
+        { ...upTodo, complete: isCompletedAll }
       ));
 
       setTodos(updatedTodos);
     }
-  }, [completedAll]);
+  }, [isCompletedAll]);
 
   useEffect(() => {
-    const allCompleted = todos.every(item => item.complete === true);
+    const allCompleted = todos.every(item => item.complete);
 
     if (allCompleted) {
-      setCompletedAll(true);
+      setIsCompletedAll(true);
     }
 
     if (!completed) {
-      setCompletedAll(null);
+      setIsCompletedAll(null);
     }
   }, [completed]);
 
   return (
-    <li className={cn({ completed, editing })}>
+    <li className={cn({ completed, isEditing })}>
       <div
         className="view"
       >

@@ -10,7 +10,7 @@ export const App: React.FC = () => {
   const [hasTodos, setHasTodos] = useState(() => {
     const data = localStorage.getItem('todos');
 
-    if (data === null || JSON.parse(data).length === 0) {
+    if (!data || !JSON.parse(data).length) {
       return false;
     }
 
@@ -18,13 +18,7 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    setHasTodos(() => {
-      if (todos.length > 0) {
-        return true;
-      }
-
-      return false;
-    });
+    setHasTodos(todos.length > 0);
   }, [todos]);
 
   return (

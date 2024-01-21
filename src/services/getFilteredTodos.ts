@@ -8,10 +8,10 @@ export function getFilteredTodos(todos: Todo[], filterParams: FilterParams) {
     filteredTodos = filteredTodos.filter(todo => {
       switch (filterParams) {
         case FilterParams.Active:
-          return todo.complete === false;
+          return !todo.complete;
 
         case FilterParams.Completed:
-          return todo.complete === true;
+          return todo.complete;
 
         default:
           return todo;

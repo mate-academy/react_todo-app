@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from '../types/todo';
-import { CompletedAll } from '../types/completedAll';
+import { IsCompletedAll } from '../types/isCompletedAll';
 
 function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
   const [value, setValue] = useState(() => {
     const data = localStorage.getItem(key);
 
-    if (data === null) {
+    if (!data) {
+      localStorage.setItem(key, JSON.stringify(startValue));
+
       return startValue;
     }
 
@@ -28,8 +30,8 @@ function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
 type TodosContextType = {
   todos: Todo[];
   setTodos: React.Dispatch<Todo[]>;
-  completedAll: CompletedAll;
-  setCompletedAll: React.Dispatch<React.SetStateAction<CompletedAll>>;
+  isCompletedAll: IsCompletedAll;
+  setIsCompletedAll: React.Dispatch<React.SetStateAction<IsCompletedAll>>;
   filteredTodos: Todo[];
   setFilteredTodos: React.Dispatch<Todo[]>;
 };
@@ -41,32 +43,32 @@ type Props = {
 export const TodosContext = React.createContext<TodosContextType>({
   todos: [],
   setTodos: () => {},
-  completedAll: null,
-  setCompletedAll: () => {},
+  isCompletedAll: null,
+  setIsCompletedAll: () => {},
   filteredTodos: [],
   setFilteredTodos: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [completedAll, setCompletedAll] = useState<CompletedAll>(null);
+  const [isCompletedAll, setIsCompletedAll] = useState<IsCompletedAll>(null);
   const [filteredTodos, setFilteredTodos] = useState(todos);
 
   useEffect(() => {
     if (todos.length === 0) {
-      setCompletedAll(null);
+      setIsCompletedAll(null);
     }
   }, [todos]);
 
   const value = useMemo(() => ({
     todos,
     setTodos,
-    completedAll,
-    setCompletedAll,
+    isCompletedAll,
+    setIsCompletedAll,
     filteredTodos,
     setFilteredTodos,
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [todos, completedAll, filteredTodos]);
+  }), [todos, isCompletedAll, filteredTodos]);
 
   return (
     <TodosContext.Provider value={value}>
