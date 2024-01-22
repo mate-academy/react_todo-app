@@ -31,8 +31,8 @@ function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
 }
 
 export const App: React.FC = () => {
-  const [title, setTitle] = useState('');
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [title, setTitle] = useState('');
   const [itemLeft, setItemLeft] = useState(todos.filter(
     todo => !todo.completed,
   ).length);
@@ -73,6 +73,8 @@ export const App: React.FC = () => {
 
     return setTodos(todos.filter(todo => todo.id !== deleteId));
   };
+
+  const checkForCompleted = todos.filter(todo => todo.completed).length;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -139,79 +141,85 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="main">
-          <input
-            type="checkbox"
-            id="toggle-all"
-            className="toggle-all"
-            data-cy="toggleAll"
-            onClick={handleToggleAll}
-          />
-          <label
-            htmlFor="toggle-all"
-          >
-            Mark all as complete
-          </label>
-          <TodoList />
-        </section>
+        {todos.length ? (
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onClick={handleToggleAll}
+            />
+            <label
+              htmlFor="toggle-all"
+            >
+              Mark all as complete
+            </label>
+            <TodoList />
+          </section>
+        ) : null}
 
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {itemLeft}
-          </span>
+        {todos.length ? (
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {itemLeft}
+            </span>
 
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className={classNames({
-                  selected: selectedFilter === 'All',
-                })}
-                onClick={() => {
-                  handleFilter('All');
-                }}
+            <ul className="filters">
+              <li>
+                <a
+                  href="#/"
+                  className={classNames({
+                    selected: selectedFilter === 'All',
+                  })}
+                  onClick={() => {
+                    handleFilter('All');
+                  }}
+                >
+                  All
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/active"
+                  className={classNames({
+                    selected: selectedFilter === 'Active',
+                  })}
+                  onClick={() => {
+                    handleFilter('Active');
+                  }}
+                >
+                  Active
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#/completed"
+                  className={classNames({
+                    selected: selectedFilter === 'Completed',
+                  })}
+                  onClick={() => {
+                    handleFilter('Completed');
+                  }}
+                >
+                  Completed
+                </a>
+              </li>
+            </ul>
+
+            {checkForCompleted ? (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleClear}
               >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                className={classNames({
-                  selected: selectedFilter === 'Active',
-                })}
-                onClick={() => {
-                  handleFilter('Active');
-                }}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                className={classNames({
-                  selected: selectedFilter === 'Completed',
-                })}
-                onClick={() => {
-                  handleFilter('Completed');
-                }}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
-
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={handleClear}
-          >
-            Clear completed
-          </button>
-        </footer>
+                Clear completed
+              </button>
+            ) : null}
+          </footer>
+        ) : null}
       </TodoContext.Provider>
     </div>
   );
