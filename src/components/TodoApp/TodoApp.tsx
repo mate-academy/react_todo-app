@@ -11,6 +11,8 @@ export const TodoApp: React.FC = () => {
   } = useContext(TodosContext);
   const [filteredTodos, setFilteredTodos] = useState(todos);
 
+  const footerActive = todos.length > 0;
+
   const handleToggleAll = () => {
     if (todos.every((todo) => todo.completed === true)) {
       setTodos(todos.map((todo) => {
@@ -79,7 +81,8 @@ export const TodoApp: React.FC = () => {
         <TodoList items={filteredTodos} />
       </section>
 
-      <footer className="footer">
+      {footerActive && (
+        <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
           {todos.filter((todo) => todo.completed === false).length}
           &nbsp;items left
@@ -97,6 +100,7 @@ export const TodoApp: React.FC = () => {
           Clear completed
         </button>
       </footer>
+      )}
     </div>
   );
 };
