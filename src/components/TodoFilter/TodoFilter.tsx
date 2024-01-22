@@ -7,7 +7,7 @@ export const TodoFilter = () => {
   const { filterField, setFilterField } = useContext(TodosContext);
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"

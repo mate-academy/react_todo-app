@@ -1,3 +1,4 @@
+import React from 'react';
 import { TodoApp } from './components/TodoApp/TodoApp';
 import { TodoProvider } from './contextes/TodosContext';
 

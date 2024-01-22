@@ -59,7 +59,9 @@ export const TodoApp = () => {
           </>
         )}
 
-        <TodoList items={preparedTodosList} />
+        {Boolean(todos.length) && (
+          <TodoList items={preparedTodosList} />
+        )}
       </section>
 
       {Boolean(todos.length) && (
