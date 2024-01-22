@@ -103,18 +103,19 @@ body {
   justify-content: center;
 
   height: 40px;
-  width: 55%;
+  width: 45%;
   max-height: 0;
 
-  font-size: 20px;
+  font-size: 16px;
 
   border: 1px solid #aaa;
   border-radius: 8px;
-  background-color: rgba(175, 47, 47, 0.15);
+  background-color: rgb(255, 220, 220);
   transition: opacity 0.2s ease-in-out, max-height 0.2s ease-in-out;
-  cursor: none;
+  pointer-events: none;
 
   opacity: 0;
+  z-index: 3;
 }
 
 .warning-empty::before,

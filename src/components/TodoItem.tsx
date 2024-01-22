@@ -25,7 +25,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
-  const [completed, setCompleted] = useState(todo.complete);
+  const [isCompleted, setIsCompleted] = useState(todo.complete);
   const [startLongPress, setStartLongPress] = useState(false);
   const [blur, setBlur] = useState(true);
   const titleField = useRef<HTMLInputElement>(null);
@@ -41,8 +41,8 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   }, [todos]);
 
   const handleCheckbox = () => {
-    setCompleted(!completed);
-    const updatedTodo = { ...todo, complete: !completed };
+    setIsCompleted(!isCompleted);
+    const updatedTodo = { ...todo, complete: !isCompleted };
 
     updateTodo(updatedTodo);
   };
@@ -121,7 +121,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   useEffect(() => {
     if (isCompletedAll) {
-      setCompleted(true);
+      setIsCompleted(true);
 
       const updatedTodos = todos.map(upTodo => (
         { ...upTodo, complete: isCompletedAll }
@@ -131,7 +131,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     }
 
     if (isCompletedAll === false) {
-      setCompleted(false);
+      setIsCompleted(false);
 
       const updatedTodos = todos.map(upTodo => (
         { ...upTodo, complete: isCompletedAll }
@@ -148,13 +148,13 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       setIsCompletedAll(true);
     }
 
-    if (!completed) {
+    if (!isCompleted) {
       setIsCompletedAll(null);
     }
-  }, [completed]);
+  }, [isCompleted]);
 
   return (
-    <li className={cn({ completed, isEditing })}>
+    <li className={cn({ isCompleted, isEditing })}>
       <div
         className="view"
       >
@@ -162,7 +162,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          checked={completed}
+          checked={isCompleted}
           onChange={handleCheckbox}
         />
         <label
