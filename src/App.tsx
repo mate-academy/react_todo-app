@@ -110,7 +110,7 @@ export const App: React.FC = () => {
   };
 
   const handleClear = () => {
-    const updatingTodos = todos.filter(todo => todo.completed === false);
+    const updatingTodos = todos.filter(todo => !todo.completed);
 
     setTodos(updatingTodos);
     setItemLeft(updatingTodos.length);
