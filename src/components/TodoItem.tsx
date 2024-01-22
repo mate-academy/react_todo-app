@@ -49,7 +49,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const handleEdit = () => {
     setBlur(false);
-    setIsEditing(!isEditing);
+    setIsEditing(true);
   };
 
   const handleEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {

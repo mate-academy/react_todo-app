@@ -8,19 +8,27 @@ type Props = {};
 
 export const TodoForm: React.FC<Props> = () => {
   const [title, setTitle] = useState('');
-  const [error, setError] = useState('');
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [hasSpaces, setHasSpaces] = useState(false);
 
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos, setIsCompletedAll } = useContext(TodosContext);
+
+  const reset = () => {
+    setIsEmpty(false);
+    setHasSpaces(false);
+  };
 
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === ' ') {
-      setError('Todo cannot start with spaces');
+      setIsEmpty(false);
+      setHasSpaces(true);
 
       return;
     }
 
-    setError('');
+    reset();
     setTitle(event.target.value);
+    setIsCompletedAll(null);
   };
 
   const addTodo = useCallback((newTodo: Todo) => {
@@ -29,6 +37,13 @@ export const TodoForm: React.FC<Props> = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (!title) {
+      setIsEmpty(true);
+      setHasSpaces(false);
+
+      return;
+    }
 
     addTodo({
       id: +new Date(),
@@ -40,19 +55,29 @@ export const TodoForm: React.FC<Props> = () => {
   };
 
   return (
-    <form
-      method="POST"
-      onSubmit={handleSubmit}
-    >
-      <input
-        type="text"
-        data-cy="createTodo"
-        className={cn('new-todo', { error })}
-        placeholder={error || 'What needs to be done?'}
-        value={title}
-        onChange={handleTitle}
-        required
-      />
-    </form>
+    <>
+      <form
+        method="POST"
+        onSubmit={handleSubmit}
+      >
+        <input
+          type="text"
+          data-cy="createTodo"
+          className="new-todo"
+          placeholder="What needs to be done?"
+          value={title}
+          onChange={handleTitle}
+          onBlur={() => reset()}
+        />
+      </form>
+
+      <div className={cn('warning-empty', { show: isEmpty })}>
+        Please fill out this field
+      </div>
+
+      <div className={cn('warning-spaces', { show: hasSpaces })}>
+        Todo cannot start with spaces
+      </div>
+    </>
   );
 };
