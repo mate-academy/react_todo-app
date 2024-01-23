@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/todoType';
 import { TodoContext } from '../todoContext';
@@ -10,32 +15,40 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const activeTodo = todo;
-  const [active, setActive] = useState(false);
-  const { deleteTodo, setItemLeft, itemLeft } = useContext(TodoContext);
+  const {
+    deleteTodo,
+    setItemLeft,
+    itemLeft,
+    setTodos,
+    todos,
+  } = useContext(TodoContext);
   const [editing, setEditing] = useState(false);
   const [titleEdit, setTitleEdit] = useState(activeTodo.title);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputFocus = useRef<HTMLInputElement>(null);
 
   const handleCheckbox = () => {
-    if (!active) {
+    if (!activeTodo.completed) {
       activeTodo.completed = true;
-      setActive(true);
       setItemLeft(itemLeft - 1);
+      setTodos(todos);
     } else {
       activeTodo.completed = false;
-      setActive(false);
       setItemLeft(itemLeft + 1);
+      setTodos(todos);
     }
   };
 
   const isChecked = activeTodo.completed;
 
+  useEffect(() => {
+    if (editing && inputFocus.current) {
+      inputFocus.current.focus();
+    }
+  }, [editing]);
+
   const handleDoubleClick = () => {
     setEditing(true);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
   };
 
   const handleEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +58,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       if (!titleEdit.length) {
-        deleteTodo(activeTodo.id);
+        return deleteTodo(activeTodo.id);
       }
 
       activeTodo.title = titleEdit;
@@ -56,6 +69,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       setEditing(false);
       setTitleEdit(activeTodo.title);
     }
+
+    return setTodos(todos);
+  };
+
+  const handleBlur = () => {
+    setEditing(false);
+    if (!titleEdit.length) {
+      return deleteTodo(activeTodo.id);
+    }
+
+    activeTodo.title = titleEdit;
+
+    return setTodos(todos);
   };
 
   return (
@@ -70,7 +96,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="toggle"
           onClick={handleCheckbox}
           checked={isChecked}
-          ref={inputRef}
         />
         <label
           htmlFor="toggle-view"
@@ -90,13 +115,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <input
         type="text"
         className="edit"
+        ref={inputFocus}
         value={titleEdit}
         onChange={handleEdit}
         onKeyUp={handleKey}
-        onBlur={() => {
-          setEditing(false);
-          activeTodo.title = titleEdit;
-        }}
+        onBlur={handleBlur}
       />
     </li>
   );

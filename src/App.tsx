@@ -78,7 +78,10 @@ export const App: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (title) {
+
+    const trimedTitle = title.trim();
+
+    if (trimedTitle.length) {
       setItemLeft(itemLeft + 1);
       const id = (+new Date());
 
@@ -91,6 +94,8 @@ export const App: React.FC = () => {
       addTodo(newTodo);
       setTitle('');
     }
+
+    return setTitle('');
   };
 
   const handleToggleAll = () => {
@@ -121,6 +126,8 @@ export const App: React.FC = () => {
     deleteTodo,
     setItemLeft,
     itemLeft,
+    setTodos,
+    todos,
   };
 
   return (
@@ -141,7 +148,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length ? (
+        {todos && (
           <section className="main">
             <input
               type="checkbox"
@@ -157,12 +164,13 @@ export const App: React.FC = () => {
             </label>
             <TodoList />
           </section>
-        ) : null}
+        )}
 
-        {todos.length ? (
+        {todos.length > 0 && (
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {itemLeft}
+              {itemLeft === 1 ? `${itemLeft} item left`
+                : `${itemLeft} items left`}
             </span>
 
             <ul className="filters">
@@ -209,7 +217,7 @@ export const App: React.FC = () => {
               </li>
             </ul>
 
-            {checkForCompleted ? (
+            {checkForCompleted && (
               <button
                 type="button"
                 className="clear-completed"
@@ -217,9 +225,9 @@ export const App: React.FC = () => {
               >
                 Clear completed
               </button>
-            ) : null}
+            )}
           </footer>
-        ) : null}
+        )}
       </TodoContext.Provider>
     </div>
   );

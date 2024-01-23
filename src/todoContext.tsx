@@ -6,6 +6,8 @@ type TodoContextType = {
   deleteTodo: (id:number) => void
   setItemLeft: (count: number) => void
   itemLeft:number
+  setTodos:(v: Todo[]) => void
+  todos:Todo[]
 };
 
 export const TodoContext = React.createContext<TodoContextType>({
@@ -13,4 +15,6 @@ export const TodoContext = React.createContext<TodoContextType>({
   deleteTodo: () => {},
   setItemLeft: () => {},
   itemLeft: 0,
+  setTodos: () => {},
+  todos: [],
 });
