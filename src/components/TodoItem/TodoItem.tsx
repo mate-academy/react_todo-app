@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import React, {
+  useState, useContext, useRef, useEffect,
+} from 'react';
 import cn from 'classnames';
 import { TodosContext } from '../../contexts/TodosContext';
 import { Todo } from '../../types/Todo';
@@ -10,6 +12,49 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
   const { todos, setTodos } = useContext(TodosContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(title);
+
+  const titleField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (titleField.current) {
+      titleField.current.focus();
+    }
+  }, [isEditing]);
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedTitle(event.target.value);
+  };
+
+  const handleHideInput = () => {
+    setIsEditing(false);
+  };
+
+  const handleAddChangedTodo = (event: React.
+    KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && editedTitle.length > 0) {
+      setTodos(todos.map(
+        (task) => ({
+          ...task,
+          title: id === task.id
+            ? editedTitle.trim()
+            : task.title,
+        }),
+      ));
+
+      handleHideInput();
+    }
+
+    if (event.key === 'Escape') {
+      setEditedTitle(title);
+      handleHideInput();
+    }
+  };
 
   const handleCompleteTodo = () => {
     setTodos(prevTodos => prevTodos.map((task) => (
@@ -27,79 +72,46 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <div>
-      <li className={cn({
-        completed: completed === true,
-      })}
+      <li
+        className={cn({
+          completed: completed === true,
+          editing: isEditing === true,
+        })}
+        onDoubleClick={handleDoubleClick}
+
       >
-        <div className="view">
+        {isEditing ? (
           <input
-            type="checkbox"
-            className="toggle"
-            id={`toggle-view-${id}`}
-            onClick={handleCompleteTodo}
+            type="text"
+            className="edit"
+            onChange={handleTitleChange}
+            onKeyUp={handleAddChangedTodo}
+            onBlur={handleHideInput}
+            value={editedTitle}
+            ref={titleField}
           />
-          <label htmlFor={`toggle-view-${id}`}>
-            {title}
-          </label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            aria-label="asdfghj"
-            onClick={handleDeleteTodo}
-          />
-        </div>
-        <input type="text" className="edit" />
+        ) : (
+          <div className="view">
+            <input
+              type="checkbox"
+              className="toggle"
+              id={`toggle-view-${id}`}
+              onClick={handleCompleteTodo}
+              checked={completed}
+            />
+            <label htmlFor={`toggle-view-${id}`}>
+              {title}
+            </label>
+            <button
+              type="button"
+              className="destroy"
+              data-cy="deleteTodo"
+              aria-label="asdfghj"
+              onClick={handleDeleteTodo}
+            />
+          </div>
+        )}
       </li>
-
-      {/*
-  <li className="completed">
-    <div className="view">
-      <input
-        type="checkbox"
-        className="toggle"
-        id={`toggle-completed-${id}`}
-      />
-      <label htmlFor={`toggle-completed-${id}`}>qwertyuio</label>
-      <button
-        type="button"
-        className="destroy"
-        data-cy="deleteTodo"
-        aria-label="qwertyuio"
-      />
-    </div>
-    <input type="text" className="edit" />
-  </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id={`toggle-editing-${id}`} />
-          <label htmlFor={`toggle-editing-${id}`}>zxcvbnm</label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            aria-label="zxcvbnm"
-          />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view2" />
-          <label htmlFor="toggle-view2">1234567890</label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            aria-label="1234567890"
-          />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-      */}
-
     </div>
   );
 };
@@ -113,26 +125,41 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 //  <li className="editing">
 // <label htmlFor={`toggle-editing-${id}`}>zxcvbnm</label>
 
-// const handleDeleteTodo = (index: number) => {
-//   const remainedTodos = [...todos];
+/*
+  const handleHideInput = () => {
+    if (editedTitle.length === 0) {
+      setTodos(prevTodos => prevTodos.map(
+        task => task.id !== id;
+      ));
+    } else {
+      setTodos(prevTodos => prevTodos.map(
+        task => task.title = editedTitle;
+      ));
+    }
 
-//   remainedTodos.splice(index, 1);
+    setIsEditing(false);
+  };
 
-//   setTodos(remainedTodos);
-// };
+  const handleAddChangedTodo = (event: React.
+    KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && editedTitle.length > 0) {
+      setTodos([
+        ...todos,
+        {
+          id,
+          title: editedTitle,
+          completed,
+        }]);
+    }
 
-// const handleCompleteTodo = () => {
-//   setTodos(todos.map((task) => ({ ...task, completed: !task.completed })));
-// };
-
-// const handleCompleteTodo = () => {
-//   setTodos(prevTodos => prevTodos.map(
-//     (task) => {
-//       if (task.id === id) {
-//         return { ...task, completed: !task.completed };
-//       }
-
-//       return task;
-//     },
-//   ));
-// };
+    if (event.key === 'Escape') {
+      setTodos([
+        ...todos,
+        {
+          id,
+          title,
+          completed,
+        }]);
+    }
+  };
+*/

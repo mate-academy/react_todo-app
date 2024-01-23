@@ -5,12 +5,20 @@ import { TodosContext } from '../../contexts/TodosContext';
 type Props = {};
 
 export const TodoApp: React.FC<Props> = () => {
-  const { setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const handleCompleteAllTodo = () => {
-    setTodos(prevTodos => prevTodos.map(
-      (task) => ({ ...task, completed: !task.completed }),
-    ));
+    const notAllCompleted = todos.some(task => task.completed === false);
+
+    if (notAllCompleted) {
+      setTodos(prevTodos => prevTodos.map(
+        (task) => ({ ...task, completed: true }),
+      ));
+    } else {
+      setTodos(prevTodos => prevTodos.map(
+        (task) => ({ ...task, completed: false }),
+      ));
+    }
   };
 
   return (
