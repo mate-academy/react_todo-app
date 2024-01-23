@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import './header.css';
 
 // interface Props {
@@ -5,6 +6,8 @@ import './header.css';
 // }
 
 export const Header: React.FC = () => {
+  // const {} = useContext;
+
   return (
     <header className="header">
       <h1>todos</h1>
