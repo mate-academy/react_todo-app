@@ -13,8 +13,10 @@ export const Header: React.FC<Props> = () => {
     setTitle(event.target.value);
   };
 
-  const handleTodoAdding = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && correctTitle.length > 0) {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+
+    if (correctTitle.length > 0) {
       setTodos([
         ...todos,
         {
@@ -30,7 +32,7 @@ export const Header: React.FC<Props> = () => {
   return (
     <header className="header">
       <h1>todos</h1>
-      <form>
+      <form onSubmit={onSubmit}>
         <input
           type="text"
           data-cy="createTodo"
@@ -38,7 +40,6 @@ export const Header: React.FC<Props> = () => {
           placeholder="What needs to be done?"
           value={title}
           onChange={handleTitleChange}
-          onKeyUp={handleTodoAdding}
         />
       </form>
     </header>

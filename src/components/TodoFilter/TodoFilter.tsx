@@ -9,7 +9,7 @@ export const TodoFilter: React.FC<Props> = () => {
   const { filterValue, setFilterValue } = useContext(TodosContext);
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href={Status.All}

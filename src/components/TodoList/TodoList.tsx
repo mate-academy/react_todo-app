@@ -22,7 +22,7 @@ export const TodoList: React.FC<Props> = () => {
   });
 
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {filteredTodos.map((todo: Todo) => (
         <TodoItem
           todo={todo}
