@@ -1,12 +1,16 @@
-import { useState } from 'react';
-// import { Todo } from '../types/Todo';
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 
 export function useLocalStorage<T>(
   key: string,
   startValue: T,
-): [T, (v: T) => void] {
+): [T, Dispatch<SetStateAction<T>>] {
   const [value, setValue] = useState<T>(() => {
-    const data = localStorage.getItem(key);
+    const data = localStorage.getItem(key) as string;
 
     if (data === null) {
       return startValue;
@@ -21,10 +25,9 @@ export function useLocalStorage<T>(
     }
   });
 
-  const save = (newValue: T) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
-    setValue(newValue);
-  };
+  useEffect((): void => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
 
-  return [value, save];
+  return [value, setValue];
 }
