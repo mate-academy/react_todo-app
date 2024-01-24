@@ -28,11 +28,13 @@ export const TodoApp: React.FC<Props> = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        onClick={handleCompleteAllTodo}
+        onChange={handleCompleteAllTodo}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <TodoList />
+      {todos.length > 0 && (
+        <TodoList />
+      )}
     </section>
   );
 };

@@ -71,47 +71,46 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   return (
-    <div>
-      <li
-        className={cn({
-          completed: completed === true,
-          editing: isEditing === true,
-        })}
-        onDoubleClick={handleDoubleClick}
-
-      >
-        {isEditing ? (
+    <li
+      className={cn({
+        completed: completed === true,
+        editing: isEditing === true,
+      })}
+      onDoubleClick={handleDoubleClick}
+    >
+      {isEditing ? (
+        <input
+          type="text"
+          className="edit"
+          onChange={handleTitleChange}
+          onKeyUp={handleAddChangedTodo}
+          onBlur={handleHideInput}
+          value={editedTitle}
+          ref={titleField}
+        />
+      ) : (
+        <div className="view">
           <input
-            type="text"
-            className="edit"
-            onChange={handleTitleChange}
-            onKeyUp={handleAddChangedTodo}
-            onBlur={handleHideInput}
-            value={editedTitle}
-            ref={titleField}
+            type="checkbox"
+            className="toggle"
+            id={`toggle-view-${id}`}
+            onChange={handleCompleteTodo}
+            checked={completed}
           />
-        ) : (
-          <div className="view">
-            <input
-              type="checkbox"
-              className="toggle"
-              id={`toggle-view-${id}`}
-              onClick={handleCompleteTodo}
-              checked={completed}
-            />
-            <label htmlFor={`toggle-view-${id}`}>
-              {title}
-            </label>
-            <button
-              type="button"
-              className="destroy"
-              data-cy="deleteTodo"
-              aria-label="asdfghj"
-              onClick={handleDeleteTodo}
-            />
-          </div>
-        )}
-      </li>
-    </div>
+          <label
+            htmlFor={`toggle-view-${id}`}
+          >
+            {title}
+          </label>
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            aria-label="asdfghj"
+            onClick={handleDeleteTodo}
+          />
+        </div>
+      )}
+    </li>
   );
 };
