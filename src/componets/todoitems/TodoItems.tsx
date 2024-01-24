@@ -50,7 +50,7 @@ export const TodoItems: React.FC<Props> = ({ todo }) => {
 
   return (
     <li className={cn({
-      completed: completed === true,
+      completed,
       editing: isEdit,
     })}
     >

@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
       </span>
       <FilterTodo />
 
-      {completedCount !== 0 && (
+      {completedCount > 0 && (
         <button
           type="button"
           className="clear-completed"
