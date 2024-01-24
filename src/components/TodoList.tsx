@@ -1,25 +1,18 @@
-import { Todo } from '../types/todo';
+import { useContext } from 'react';
 import { TodoItem } from './TodoItem';
+import { TodosContext } from './TodosContext';
 
-type Props = {
-  todos: Todo[],
-  onDelete?: (id: number) => void;
-  onUpdate?: (todo: Todo) => void;
-};
+type Props = {};
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  onDelete = () => {},
-  onUpdate = () => {},
-}) => {
+export const TodoList: React.FC<Props> = () => {
+  const { visibleTodos } = useContext(TodosContext);
+
   return (
     <ul className="todo-list" data-cy="todoList">
-      {todos.map(todo => (
+      {visibleTodos.map(todo => (
         <TodoItem
           todo={todo}
           key={todo.id}
-          onUpdate={onUpdate}
-          onDelete={onDelete}
         />
       ))}
     </ul>

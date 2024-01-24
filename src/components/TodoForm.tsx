@@ -1,13 +1,27 @@
-import { useState } from 'react';
+import { useCallback, useContext } from 'react';
+
+import { TodosContext } from './TodosContext';
 import { Todo } from '../types/todo';
 
-type Props = {
-  onSubmit: (todo: Todo) => void,
-  todo?: Todo,
-};
+type Props = {};
 
-export const TodoForm: React.FC<Props> = ({ onSubmit, todo }) => {
-  const [title, setTitle] = useState('');
+export const TodoForm: React.FC<Props> = () => {
+  const { title, setTitle, setTodoItems } = useContext(TodosContext);
+
+  const addTodo = useCallback(({ id, ...data }: Todo) => {
+    const newTodo = {
+      id: +new Date(),
+      ...data,
+    };
+
+    setTodoItems((currentTodos: Todo[]) => {
+      if (!newTodo.title.trim()) {
+        return [...currentTodos];
+      }
+
+      return [newTodo, ...currentTodos];
+    });
+  }, [setTodoItems]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -16,8 +30,8 @@ export const TodoForm: React.FC<Props> = ({ onSubmit, todo }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    onSubmit({
-      id: todo?.id || 0,
+    addTodo({
+      id: 0,
       title,
       completed: false,
     });

@@ -1,25 +1,42 @@
 import cn from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { Todo } from '../types/todo';
+import { TodosContext } from './TodosContext';
 
 type Props = {
   todo: Todo,
-  onDelete: (id: number) => void;
-  onUpdate: (todo: Todo) => void; // completed
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  onDelete = () => { },
-  onUpdate = () => { },
-}) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
 
+  const { setTodoItems } = useContext(TodosContext);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const updateTodo = useCallback((updatedTodo: Todo) => {
+    setTodoItems((currentTodos) => {
+      const newTodoItems = [...currentTodos];
+      const index = newTodoItems
+        .findIndex(todoForUpdate => todoForUpdate.id === updatedTodo.id);
+
+      newTodoItems.splice(index, 1, updatedTodo);
+
+      return newTodoItems;
+    });
+  }, [setTodoItems]);
+
+  const deleteTodo = useCallback((todoId: number) => {
+    setTodoItems(currentTodos => currentTodos
+      .filter(todoForDelete => todoForDelete.id !== todoId));
+  }, [setTodoItems]);
+
   const setTodoCompleted = (completed: boolean) => {
-    onUpdate({ ...todo, completed });
+    updateTodo({ ...todo, completed });
   };
 
   const handleCheckboxChange = () => {
@@ -27,7 +44,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const handleDeleteButtonClick = () => {
-    onDelete(todo.id);
+    deleteTodo(todo.id);
   };
 
   const startEditing = () => {
@@ -36,8 +53,7 @@ export const TodoItem: React.FC<Props> = ({
 
   const finishEditing = () => {
     setSelectedTodo(null);
-    // Update the title when finishing editing
-    onUpdate({ ...todo, title: editedTitle });
+    updateTodo({ ...todo, title: editedTitle });
   };
 
   const handleEditChange = (newTitle: string) => {
@@ -102,6 +118,3 @@ export const TodoItem: React.FC<Props> = ({
     </li>
   );
 };
-
-// id = toggle-view toggle-completed, toggle-editing, className=toggle
-// li view completed editing

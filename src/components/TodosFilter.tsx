@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { Status } from '../types/todo';
+import { TodosContext } from './TodosContext';
 
-type Props = {
-  setFilterStatus: (status: Status) => void,
-};
+type Props = {};
 
-export const TodosFilter: React.FC<Props> = ({ setFilterStatus }) => {
-  const [selectedStatus, setSelectedStatus] = useState(Status.all);
+export const TodosFilter: React.FC<Props> = () => {
+  const {
+    selectedStatus, setSelectedStatus,
+  } = useContext(TodosContext);
 
   const handleStatusClick = (status: Status) => {
     setSelectedStatus(status);
-    setFilterStatus(status);
   };
 
   return (
