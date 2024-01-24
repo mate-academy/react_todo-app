@@ -26,6 +26,7 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
         <input
           type="checkbox"
           className="toggle"
+          checked={completed}
           onChange={handleOnChange}
         />
         <label>
