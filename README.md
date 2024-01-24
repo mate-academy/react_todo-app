@@ -1,5 +1,5 @@
 # React ToDo App
-Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as described below.
+Implement a simple [TODO app](https://todomvc.com/examples/javascript-es6/dist/) working as described below.
 
 > If you are not sure about how a feature should work just open the real TodoApp and look how it works there
 
