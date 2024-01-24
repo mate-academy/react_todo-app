@@ -2,37 +2,47 @@ import { useContext } from 'react';
 import './TodosFilter.css';
 import { TodosContext } from '../../context/TodosContext';
 import { Status } from '../../types/Status';
+import classNames from 'classnames';
 
 export const TodosFilter: React.FC = () => {
-  const { setFilterTodos } = useContext(TodosContext);
+  const { filteredTodos, setFilterTodos } = useContext(TodosContext);
+  // хотів зробити
 
   return (
     <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
-          className="selected"
+          className={classNames({
+            selected: filteredTodos === Status.all,
+          })}
           onClick={() => setFilterTodos(Status.all)}
         >
-          All
+          {Status.all}
         </a>
       </li>
 
       <li>
         <a
           href="#/active"
+          className={classNames({
+            selected: filteredTodos === Status.active,
+          })}
           onClick={() => setFilterTodos(Status.active)}
         >
-          Active
+          {Status.active}
         </a>
       </li>
 
       <li>
         <a
           href="#/completed"
+          className={classNames({
+            selected: filteredTodos === Status.completed,
+          })}
           onClick={() => setFilterTodos(Status.completed)}
         >
-          Completed
+          {Status.completed}
         </a>
       </li>
     </ul>
