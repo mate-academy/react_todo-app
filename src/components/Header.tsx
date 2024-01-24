@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import { useContext, useState } from 'react';
 import { DispatchContext } from '../Store';
+import { ActionType } from '../utils/enums';
 
 export const Header = () => {
   const [inputValue, setInputValue] = useState('');
@@ -15,8 +16,8 @@ export const Header = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       dispatch({
-        type: 'add',
-        payload: { title: inputValue, id: +new Date(), completed: false },
+        type: ActionType.Add,
+        payload: { id: +new Date(), title: inputValue, completed: false },
       });
 
       setInputValue('');

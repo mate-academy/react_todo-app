@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import React, { useEffect, useReducer } from 'react';
-import { FilterForTodos } from './utils/enum';
-import { State } from './utils/interface';
+import { ActionType, FilterForTodos } from './utils/enums';
+import { State } from './utils/interfaces';
 import { Action, DispatchFunction, GlobalStateProps } from './utils/types';
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'add': {
+    case ActionType.Add: {
       return {
         ...state,
         todos: [...state.todos, action.payload],
       };
     }
 
-    case 'onEdit': {
+    case ActionType.OnEdit: {
       return {
         ...state,
         todoEdit: action.payload,
       };
     }
 
-    case 'edit': {
+    case ActionType.Edit: {
       const changeTodo = () => {
         const indexOfTodo = state.todos.indexOf(action.payload.todo);
         const newStateTodos = [...state.todos];
@@ -38,14 +38,14 @@ function reducer(state: State, action: Action): State {
       };
     }
 
-    case 'delete': {
+    case ActionType.Delete: {
       return {
         ...state,
-        todos: state.todos.filter((todo) => todo.id !== action.payload),
+        todos: [...state.todos.filter((todo) => todo.id !== action.payload)],
       };
     }
 
-    case 'complited': {
+    case ActionType.Completed: {
       const complitedTodo = () => {
         const indexOfTodo = state.todos.indexOf(action.payload);
         const newStateTodos = [...state.todos];
@@ -62,21 +62,21 @@ function reducer(state: State, action: Action): State {
       };
     }
 
-    case 'clearComplited': {
+    case ActionType.ClearCompleted: {
       return {
         ...state,
-        todos: state.todos.filter(todo => todo.completed !== true),
+        todos: [...state.todos.filter(todo => todo.completed !== true)],
       };
     }
 
-    case 'filterBy': {
+    case ActionType.FilterBy: {
       return {
         ...state,
         todofilter: action.payload,
       };
     }
 
-    case 'toggleAll': {
+    case ActionType.ToggleAll: {
       return {
         ...state,
         todoToggleAll: !state.todoToggleAll,
@@ -86,7 +86,7 @@ function reducer(state: State, action: Action): State {
       };
     }
 
-    case 'cancelEdit': {
+    case ActionType.CancelEdit: {
       return {
         ...state,
         todoEdit: 0,
@@ -109,7 +109,8 @@ export const StateContext = React.createContext<State>(initialState);
 export const DispatchContext = React.createContext<DispatchFunction>((_action: Action) => {});
 
 export const GlobalStateProvider: React.FC<GlobalStateProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+  const [state, dispatch] = useReducer(reducer, { ...initialState, todos: storedTodos });
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(state.todos));

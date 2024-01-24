@@ -1,13 +1,16 @@
 import { useContext } from 'react';
 import { DispatchContext, StateContext } from '../Store';
 import { TodosFilter } from './TodosFilter';
+import { ActionType } from '../utils/enums';
 
 export const Footer = () => {
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
 
+  const completedTodos = todos.filter(todo => todo.completed === true);
+
   function handlerClearCompleted() {
-    dispatch({ type: 'clearComplited' });
+    dispatch({ type: ActionType.ClearCompleted });
   }
 
   return (
@@ -17,14 +20,16 @@ export const Footer = () => {
       </span>
 
       <TodosFilter />
+      {completedTodos.length > 0 ? (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handlerClearCompleted}
+        >
+          Clear completed
+        </button>
+      ) : null }
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={handlerClearCompleted}
-      >
-        Clear completed
-      </button>
     </footer>
   );
 };

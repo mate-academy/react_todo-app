@@ -1,12 +1,12 @@
-/* eslint-disable no-console */
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import classNames from 'classnames';
-import { useContext, useState } from 'react';
-import { DispatchContext, StateContext } from '../Store';
-import { Todo } from '../utils/interface';
-
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import classNames from 'classnames';
+import {
+  useContext, useEffect, useRef, useState,
+} from 'react';
+import { DispatchContext, StateContext } from '../Store';
+import { Todo } from '../utils/interfaces';
+import { ActionType } from '../utils/enums';
+
 type Props = {
   todo: Todo
 };
@@ -14,38 +14,50 @@ type Props = {
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(todo.title);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       dispatch({
-        type: 'edit',
+        type: ActionType.Edit,
         payload: { todo, title: inputValue },
       });
 
       setInputValue('');
     } else if (event.key === 'Escape') {
       setInputValue('');
-      dispatch({ type: 'cancelEdit' });
+      dispatch({ type: ActionType.CancelEdit });
     }
   };
 
   const handleOnEdit = () => {
-    dispatch({ type: 'onEdit', payload: todo.id });
+    dispatch({ type: ActionType.OnEdit, payload: todo.id });
   };
 
   const handleDelete = () => {
-    dispatch({ type: 'delete', payload: todo.id });
+    dispatch({ type: ActionType.Delete, payload: todo.id });
   };
 
   const handleCheck = () => {
-    dispatch({ type: 'complited', payload: todo });
+    dispatch({ type: ActionType.Completed, payload: todo });
   };
 
+  useEffect(() => {
+    if (state.todoEdit === todo.id && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [state.todoEdit, todo.id]);
+
   return (
-    <li className={classNames('', { completed: todo.completed })}>
+    <li className={classNames('',
+      {
+        completed: todo.completed,
+        editing: state.todoEdit,
+      })}
+    >
       {state.todoEdit === todo.id
         ? (
           <input
@@ -54,6 +66,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyPress}
+            ref={inputRef}
           />
         )
         : (

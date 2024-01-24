@@ -1,11 +1,9 @@
-/* eslint-disable no-console */
 /* eslint-disable default-case */
 import { useContext } from 'react';
 import { TodoInfo } from './TodoItem';
 import { DispatchContext, StateContext } from '../Store';
-import { FilterForTodos } from '../utils/enum';
+import { ActionType, FilterForTodos } from '../utils/enums';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 export const TodoList = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, todofilter } = useContext(StateContext);
@@ -26,7 +24,7 @@ export const TodoList = () => {
   });
 
   function handleToggleAll() {
-    dispatch({ type: 'toggleAll' });
+    dispatch({ type: ActionType.ToggleAll });
   }
 
   return (
@@ -44,7 +42,7 @@ export const TodoList = () => {
         Mark all as complete
       </label>
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {filteredTodos.map(todo => <TodoInfo key={todo.id} todo={todo} />)}
       </ul>
     </section>

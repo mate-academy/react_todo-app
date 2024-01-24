@@ -2,18 +2,21 @@
 import classNames from 'classnames';
 import { useContext } from 'react';
 import { DispatchContext, StateContext } from '../Store';
-import { FilterForTodos } from '../utils/enum';
+import { ActionType, FilterForTodos } from '../utils/enums';
 
 export const TodosFilter = () => {
   const dispatch = useContext(DispatchContext);
   const { todofilter } = useContext(StateContext);
 
   function handlerFilterBy(filter: FilterForTodos) {
-    dispatch({ type: 'filterBy', payload: filter });
+    dispatch({ type: ActionType.FilterBy, payload: filter });
   }
 
   return (
-    <ul className="filters">
+    <ul
+      className="filters"
+      data-cy="todosFilter"
+    >
       <li>
         <a
           href="#/"

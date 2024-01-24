@@ -1,15 +1,16 @@
-import { FilterForTodos } from './enum';
-import { Todo } from './interface';
+import { ActionType, FilterForTodos } from './enums';
+import { Todo } from './interfaces';
 
-export type Action = { type: 'add', payload: Todo }
-| { type: 'onEdit', payload: number }
-| { type: 'delete', payload: number }
-| { type: 'edit', payload: { todo: Todo, title: string } }
-| { type: 'complited', payload: Todo }
-| { type: 'clearComplited' }
-| { type: 'toggleAll' }
-| { type: 'cancelEdit' }
-| { type: 'filterBy', payload: FilterForTodos };
+export type Action =
+  | { type: ActionType.Add; payload: Todo }
+  | { type: ActionType.OnEdit; payload: number }
+  | { type: ActionType.Delete; payload: number }
+  | { type: ActionType.Edit; payload: { todo: Todo; title: string } }
+  | { type: ActionType.Completed; payload: Todo }
+  | { type: ActionType.ClearCompleted }
+  | { type: ActionType.ToggleAll }
+  | { type: ActionType.CancelEdit }
+  | { type: ActionType.FilterBy; payload: FilterForTodos };
 
 export type GlobalStateProps = {
   children: React.ReactNode
