@@ -1,19 +1,47 @@
-import { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import './header.css';
+import { TodosContext } from '../../context/TodosContext';
 
-// interface Props {
+export const Header = () => {
+  const {
+    todos,
+    setTodos,
+  } = useContext(TodosContext);
+  const [titleField, setTitleField] = useState('');
 
-// }
+  const newTodoItem = {
+    id: +new Date(),
+    title: titleField,
+    completed: false,
+  };
 
-export const Header: React.FC = () => {
-  // const {} = useContext;
+  const reset = () => {
+    setTitleField('');
+  };
+
+  const addTodos = () => setTodos([
+    ...todos,
+    newTodoItem,
+  ]);
+
+  const handleOnSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (titleField.trim()) {
+      addTodos();
+    }
+
+    reset();
+  };
 
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form>
+      <form onSubmit={handleOnSubmit}>
         <input
+          value={titleField}
+          onChange={(event) => setTitleField(event.target.value)}
           type="text"
           data-cy="createTodo"
           className="new-todo"

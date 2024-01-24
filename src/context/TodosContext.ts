@@ -1,13 +1,7 @@
 import React from 'react';
-import { Todos } from '../types/Todos';
+import { Context } from '../types/Context';
 
-export const TodosContext = React.createContext<Todos>({
+export const TodosContext = React.createContext<Context>({
   todos: [],
   setTodos: () => { },
-  id: +new Date(),
-  setId: () => { },
-  title: '',
-  setTitle: () => { },
-  isCompleted: false,
-  setIsCompleted: () => { },
 });

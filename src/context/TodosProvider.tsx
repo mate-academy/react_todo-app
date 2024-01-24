@@ -1,27 +1,18 @@
 import React, { useMemo, useState } from 'react';
 import { TodosContext } from './TodosContext';
+import { Todo } from '../types/Todo';
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState([]);
-  const [id, setId] = useState(+new Date());
-  const [title, setTitle] = useState('');
-  const [isCompleted, setIsCompleted] = useState(false);
-  // const [field, setField] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const value = useMemo(() => ({
     todos,
     setTodos,
-    id,
-    setId,
-    title,
-    setTitle,
-    isCompleted,
-    setIsCompleted,
-  }), [todos, id, title, isCompleted]);
+  }), [todos]);
 
   return (
     <TodosContext.Provider value={value}>

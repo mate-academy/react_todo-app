@@ -1,76 +1,18 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import './todo-list.css';
 
 import { TodoItem } from '../todoItem';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => {
+interface Props {
+  items: Todo[]
+}
+
+export const TodoList: React.FC<Props> = ({ items }) => {
   return (
     <ul className="todo-list" data-cy="todosList">
-      <TodoItem />
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view" />
-
-          <label htmlFor="toggle-view">asdfghj</label>
-
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-          />
-        </div>
-
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="completed">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-completed" />
-
-          <label htmlFor="toggle-completed">qwertyuio</label>
-
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-          />
-        </div>
-
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-editing" />
-
-          <label htmlFor="toggle-editing">zxcvbnm</label>
-
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-          />
-        </div>
-
-        <input type="text" className="edit" />
-      </li>
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view2" />
-
-          <label htmlFor="toggle-view2">1234567890</label>
-
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-          />
-        </div>
-
-        <input type="text" className="edit" />
-      </li>
+      {items.map((todoItem) => (
+        <TodoItem key={todoItem.id} todoItem={todoItem} />
+      ))}
     </ul>
   );
 };

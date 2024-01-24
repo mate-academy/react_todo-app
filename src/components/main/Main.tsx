@@ -1,8 +1,12 @@
+import { useContext } from 'react';
 import './main.css';
 
 import { TodoList } from '../todoList';
+import { TodosContext } from '../../context/TodosContext';
 
 export const Main: React.FC = () => {
+  const { todos } = useContext(TodosContext);
+
   return (
     <section className="main">
       <input
@@ -13,7 +17,7 @@ export const Main: React.FC = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <TodoList />
+      <TodoList items={todos} />
     </section>
   );
 };

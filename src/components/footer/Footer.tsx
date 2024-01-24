@@ -1,15 +1,15 @@
+import { useContext } from 'react';
 import './footer.css';
 import { Filters } from '../filters/Filters';
-
-// interface Props {
-
-// }
+import { TodosContext } from '../../context/TodosContext';
 
 export const Footer: React.FC = () => {
+  const { todos } = useContext(TodosContext);
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        3 items left
+        {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
       <Filters />
