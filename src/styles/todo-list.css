@@ -24,10 +24,6 @@
   margin-bottom: -1px;
 }
 
-.todo-list li .edit {
-  display: none;
-}
-
 .todo-list li.editing .edit {
   display: block;
   width: 506px;
@@ -79,6 +75,7 @@
 }
 
 .todo-list li .destroy {
+  font-size: 0;
   display: none;
   position: absolute;
   top: 0;
@@ -87,7 +84,6 @@
   width: 40px;
   height: 40px;
   margin: auto 0;
-  font-size: 30px;
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
@@ -99,8 +95,10 @@
 
 .todo-list li .destroy::after {
   content: "×";
+  font-size: 30px;
 }
 
 .todo-list li:hover .destroy {
   display: block;
 }
+
