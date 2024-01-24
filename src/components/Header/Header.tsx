@@ -24,7 +24,7 @@ export const Header = () => {
   const handleOnSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (newTodo.title) {
+    if (newTodo.title.trim()) {
       changeValues();
       setNewTodo(reset());
     }

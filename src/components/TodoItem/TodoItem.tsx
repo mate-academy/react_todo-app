@@ -21,12 +21,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const onSubmitChanges = (event: React.FormEvent<HTMLInputElement>) => {
     event.preventDefault();
-    if (!editedTitle) {
+    if (!editedTitle.trim()) {
       setTodos(todos
         .filter(currentTodo => currentTodo.id !== id));
     }
 
-    if (editedTitle) {
+    if (editedTitle.trim()) {
       setEditing(false);
       setTodos(todos
         .map(currentTodo => (currentTodo.id === id
