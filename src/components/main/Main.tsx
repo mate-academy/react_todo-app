@@ -5,9 +5,10 @@ import './main.css';
 import { TodosContext } from '../../context/TodosContext';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../todoList';
+import { Status } from '../../types/Status';
 
 export const Main: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, setTodos, filterTodos } = useContext(TodosContext);
 
   const checked = todos.every((todo: Todo) => todo.completed);
 
@@ -33,6 +34,19 @@ export const Main: React.FC = () => {
     setTodos(toogleTodosList(todos));
   };
 
+  const filteredTodos = todos.filter(todo => {
+    switch (filterTodos) {
+      case Status.active:
+        return !todo.completed;
+
+      case Status.completed:
+        return todo.completed;
+
+      default:
+        return todo;
+    }
+  });
+
   return (
     <section className="main">
       <input
@@ -45,7 +59,7 @@ export const Main: React.FC = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <TodoList items={todos} />
+      <TodoList items={filteredTodos} />
     </section>
   );
 };

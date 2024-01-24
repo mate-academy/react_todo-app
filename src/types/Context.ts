@@ -1,6 +1,9 @@
+import { Status } from './Status';
 import { Todo } from './Todo';
 
-export type Context = {
+export interface Context {
   todos: Todo[],
-  setTodos: (todosArr: Todo[]) => void,
-};
+  setTodos: (todos: Todo[]) => void,
+  filterTodos: Status,
+  setFilterTodos: (filterField: Status) => void,
+}

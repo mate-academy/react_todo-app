@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import './footer.css';
-import { Filters } from '../filters/Filters';
+import { TodosFilter } from '../TodosFilter/TodosFilter';
 import { TodosContext } from '../../context/TodosContext';
 
 export const Footer: React.FC = () => {
@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
         {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
-      <Filters />
+      <TodosFilter />
 
       <button type="button" className="clear-completed">
         Clear completed
