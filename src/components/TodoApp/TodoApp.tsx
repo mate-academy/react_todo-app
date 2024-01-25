@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useContext } from 'react';
-import { Todo } from '../../types/Todo';
+import { useContext, useMemo } from 'react';
 import { TodoList } from '../TodoList/TodoList';
 import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
@@ -9,23 +8,23 @@ import { TodosContext } from '../../contextes/TodosContext';
 export const TodoApp = () => {
   const { todos, setTodos, filterField } = useContext(TodosContext);
 
-  const conuterOfCompletedTodos = (todosList: Todo[]) => {
-    return todosList.filter(todo => !todo.completed).length === 0;
-  };
+  const conuterOfCompletedTodos = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length === 0;
+  }, [todos]);
 
-  const toggledTodosList = (currentTodos: Todo[]) => {
-    if (conuterOfCompletedTodos(todos)) {
-      return currentTodos.map(todo => ({
+  const toggledTodosList = useMemo(() => {
+    if (conuterOfCompletedTodos) {
+      return todos.map(todo => ({
         ...todo,
         completed: false,
       }));
     }
 
-    return currentTodos.map(todo => ({
+    return todos.map(todo => ({
       ...todo,
       completed: true,
     }));
-  };
+  }, [todos, conuterOfCompletedTodos]);
 
   const preparedTodosList = todos.filter(todo => {
     switch (filterField) {
@@ -48,8 +47,8 @@ export const TodoApp = () => {
         {!todos.length || (
           <>
             <input
-              checked={conuterOfCompletedTodos(todos)}
-              onChange={() => setTodos(toggledTodosList(todos))}
+              checked={conuterOfCompletedTodos}
+              onChange={() => setTodos(toggledTodosList)}
               type="checkbox"
               id="toggle-all"
               className="toggle-all"
@@ -59,13 +58,13 @@ export const TodoApp = () => {
           </>
         )}
 
-        {Boolean(todos.length) && (
+        {!!todos.length && (
           <TodoList items={preparedTodosList} />
         )}
 
       </section>
 
-      {Boolean(todos.length) && (
+      {!!todos.length && (
         <Footer />
       )}
     </div>

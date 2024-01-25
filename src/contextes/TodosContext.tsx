@@ -1,19 +1,15 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useMemo, useState } from 'react';
 import { TodoContext } from '../types/TodoContext';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = createContext<TodoContext>({
   todos: [],
-  setTodos: () => {},
-  newTodo: {
-    id: +new Date(),
-    title: '',
-    completed: false,
-  },
-  setNewTodo: () => {},
+  setTodos: () => { },
+  title: '',
+  setTitle: () => { },
   filterField: 'All',
-  setFilterField: () => {},
+  setFilterField: () => { },
 });
 
 type Props = {
@@ -22,24 +18,21 @@ type Props = {
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [newTodo, setNewTodo] = useState<Todo>({
-    id: +new Date(),
-    title: '',
-    completed: false,
-  });
+  const [title, setTitle] = useState('');
 
   const [filterField, setFilterField] = useState('All');
 
+  const preparedValue = useMemo(() => ({
+    todos,
+    setTodos,
+    title,
+    setTitle,
+    filterField,
+    setFilterField,
+  }), [todos, title, filterField, setTodos]);
+
   return (
-    <TodosContext.Provider value={{
-      todos,
-      setTodos,
-      newTodo,
-      setNewTodo,
-      filterField,
-      setFilterField,
-    }}
-    >
+    <TodosContext.Provider value={preparedValue}>
       {children}
     </TodosContext.Provider>
   );

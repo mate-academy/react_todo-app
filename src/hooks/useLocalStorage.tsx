@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export function useLocalStorage<T>(key: string,
-  initialValue: T): [T, (v: T) => void] {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T,
+): [T, (v: T | ((n: T) => T)) => void] {
   const [value, setValue] = useState(() => {
     const data = localStorage.getItem(key);
 
@@ -10,16 +12,15 @@ export function useLocalStorage<T>(key: string,
     }
 
     try {
-      return JSON.parse(data);
+      return JSON.parse(data) as T;
     } catch {
       return initialValue;
     }
   });
 
-  const save = (newValue: T) => {
-    setValue(newValue);
-    localStorage.setItem(key, JSON.stringify(newValue));
-  };
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [value, key]);
 
-  return [value, save];
+  return [value, setValue];
 }

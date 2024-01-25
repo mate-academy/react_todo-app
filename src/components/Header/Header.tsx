@@ -1,50 +1,47 @@
 import { useContext } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { TodosContext } from '../../contextes/TodosContext';
-
-const reset = () => ({
-  id: +new Date(),
-  title: '',
-  completed: false,
-  editing: false,
-});
 
 export const Header = () => {
   const {
+    title,
+    setTitle,
     todos,
     setTodos,
-    newTodo,
-    setNewTodo,
   } = useContext(TodosContext);
 
   const changeValues = () => setTodos([
     ...todos,
-    newTodo,
+    {
+      id: uuidv4(),
+      title,
+      completed: false,
+    },
   ]);
 
-  const handleOnSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (newTodo.title.trim()) {
+    if (title.trim()) {
       changeValues();
-      setNewTodo(reset());
+      setTitle('');
     }
   };
 
-  const hendlerOnChange
-  = (event: React.ChangeEvent<HTMLInputElement>) => setNewTodo({
-    ...newTodo,
-    title: event.target.value,
-  });
+  const hendlerChange
+  = (event: React.ChangeEvent<HTMLInputElement>) => setTitle(
+    event.target.value,
+  );
 
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form onSubmit={event => handleOnSubmit(event)}>
+      <form onSubmit={handleSubmit}>
         <input
-          onChange={hendlerOnChange}
+          onChange={hendlerChange}
           type="text"
-          value={newTodo.title}
+          value={title}
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
