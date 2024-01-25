@@ -10,4 +10,5 @@ export interface Context {
 
 export interface ContextUpdate {
   deleteTodo: (todoId: number) => void,
+  clearCompleted: () => void,
 }

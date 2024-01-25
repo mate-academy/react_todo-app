@@ -1,10 +1,13 @@
 import { useContext } from 'react';
 import './footer.css';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
-import { TodosContext } from '../../context/TodosContext';
+import { TodoUpdateContext, TodosContext } from '../../context/TodosContext';
 
 export const Footer: React.FC = () => {
   const { todos } = useContext(TodosContext);
+  const { clearCompleted } = useContext(TodoUpdateContext);
+
+  const vissible = todos.some(todo => todo.completed);
 
   return (
     <footer className="footer">
@@ -14,9 +17,15 @@ export const Footer: React.FC = () => {
 
       <TodosFilter />
 
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {vissible && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={clearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

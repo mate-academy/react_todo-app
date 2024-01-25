@@ -15,16 +15,21 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(current => current.filter(todo => todo.id !== goodId));
   }
 
+  function clearCompleted() {
+    setTodos(current => current.filter(todo => !todo.completed));
+  }
+
+  const updateValue = useMemo(() => ({
+    deleteTodo,
+    clearCompleted,
+  }), []);
+
   const value = useMemo(() => ({
     todos,
     setTodos,
     filterTodos,
     setFilterTodos,
   }), [todos, filterTodos]);
-
-  const updateValue = useMemo(() => ({
-    deleteTodo,
-  }), []);
 
   return (
     <TodoUpdateContext.Provider value={updateValue}>
