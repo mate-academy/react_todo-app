@@ -7,3 +7,7 @@ export interface Context {
   filterTodos: Status,
   setFilterTodos: (filterField: Status) => void,
 }
+
+export interface ContextUpdate {
+  deleteTodo: (todoId: number) => void,
+}

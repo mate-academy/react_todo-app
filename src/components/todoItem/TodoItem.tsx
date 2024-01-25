@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import classNames from 'classnames';
-import { TodosContext } from '../../context/TodosContext';
+import { TodoUpdateContext, TodosContext } from '../../context/TodosContext';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({ todoItem }) => {
   const { id, title, completed } = todoItem;
   const { todos, setTodos } = useContext(TodosContext);
+  const { deleteTodo } = useContext(TodoUpdateContext);
 
   const handleOnChange = () => setTodos(todos.map((todo: Todo) => (
     todo.id === id
@@ -37,6 +38,7 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          onClick={() => deleteTodo(id)}
         />
       </div>
 
