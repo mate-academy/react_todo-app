@@ -2,16 +2,16 @@ import React, {
   Dispatch,
   SetStateAction, useMemo, useState,
 } from 'react';
-import { Status, Todo } from '../types/todo';
+import { Status, TodoType } from '../types/todo';
 
 export const TodosContext = React.createContext({
-  todoItems: [] as Todo[],
-  setTodoItems: {} as Dispatch<SetStateAction<Todo[]>>,
+  todos: [] as TodoType[],
+  setTodos: {} as Dispatch<SetStateAction<TodoType[]>>,
   selectedStatus: Status.all,
   setSelectedStatus: {} as Dispatch<SetStateAction<Status>>,
   title: '' as string,
   setTitle: {} as Dispatch<SetStateAction<string>>,
-  visibleTodos: [] as Todo[],
+  visibleTodos: [] as TodoType[],
 });
 
 type Props = {
@@ -33,8 +33,6 @@ function useLocalStorage<T>(
     try {
       return JSON.parse(data);
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(`Error parsing localStorage data for key "${key}":`, e);
       localStorage.removeItem(key);
 
       return startValue;
@@ -46,26 +44,19 @@ function useLocalStorage<T>(
   const [value, setValue] = useState(start);
 
   const save: Dispatch<SetStateAction<T>> = (newValue) => {
-    try {
-      localStorage.setItem(key, JSON.stringify(newValue));
-      setValue(newValue);
-      // eslint-disable-next-line no-console
-      console.log(newValue);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(`Error saving to localStorage for key "${key}":`, e);
-    }
+    localStorage.setItem(key, JSON.stringify(newValue));
+    setValue(newValue);
   };
 
   return [value, save];
 }
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todoItems, setTodoItems] = useLocalStorage<Todo[]>('todoItems', []);
+  const [todos, setTodos] = useLocalStorage<TodoType[]>('todos', []);
   const [selectedStatus, setSelectedStatus] = useState(Status.all);
   const [title, setTitle] = useState('');
 
-  const visibleTodos = [...todoItems].filter(todo => {
+  const visibleTodos = [...todos].filter(todo => {
     switch (selectedStatus) {
       case Status.active:
         return !todo.completed;
@@ -77,14 +68,14 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   });
 
   const values = useMemo(() => ({
-    todoItems,
-    setTodoItems,
+    todos,
+    setTodos,
     selectedStatus,
     setSelectedStatus,
     title,
     setTitle,
     visibleTodos,
-  }), [todoItems, setTodoItems, selectedStatus, title, visibleTodos]);
+  }), [todos, setTodos, selectedStatus, title, visibleTodos]);
 
   return (
     <TodosContext.Provider value={values}>

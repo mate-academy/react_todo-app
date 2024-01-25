@@ -3,37 +3,34 @@ import {
   useCallback,
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { Todo } from '../types/todo';
+import { TodoType } from '../types/todo';
 import { TodosContext } from './TodosContext';
 
 type Props = {
-  todo: Todo,
+  todo: TodoType,
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<TodoType | null>(null);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
 
-  const { setTodoItems } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const updateTodo = useCallback((updatedTodo: Todo) => {
-    setTodoItems((currentTodos) => {
-      const newTodoItems = [...currentTodos];
-      const index = newTodoItems
-        .findIndex(todoForUpdate => todoForUpdate.id === updatedTodo.id);
+  const updateTodo = useCallback((updatedTodo: TodoType) => {
+    const newTodoItems = [...todos];
+    const index = newTodoItems
+      .findIndex(todoForUpdate => todoForUpdate.id === updatedTodo.id);
 
-      newTodoItems.splice(index, 1, updatedTodo);
-
-      return newTodoItems;
-    });
-  }, [setTodoItems]);
+    newTodoItems.splice(index, 1, updatedTodo);
+    setTodos(newTodoItems);
+  }, [todos, setTodos]);
 
   const deleteTodo = useCallback((todoId: number) => {
-    setTodoItems(currentTodos => currentTodos
+    setTodos(todos
       .filter(todoForDelete => todoForDelete.id !== todoId));
-  }, [setTodoItems]);
+  }, [todos, setTodos]);
 
   const setTodoCompleted = (completed: boolean) => {
     updateTodo({ ...todo, completed });
@@ -105,6 +102,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={handleDeleteButtonClick}
         />
       </div>
+
       <input
         type="text"
         className="edit"

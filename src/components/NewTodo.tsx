@@ -1,27 +1,32 @@
 import { useCallback, useContext } from 'react';
 
 import { TodosContext } from './TodosContext';
-import { Todo } from '../types/todo';
+import { TodoType } from '../types/todo';
 
 type Props = {};
 
-export const TodoForm: React.FC<Props> = () => {
-  const { title, setTitle, setTodoItems } = useContext(TodosContext);
+export const NewTodo: React.FC<Props> = () => {
+  const {
+    title, setTitle, todos, setTodos,
+  } = useContext(TodosContext);
 
-  const addTodo = useCallback(({ id, ...data }: Todo) => {
+  const addTodo = useCallback(({
+    title: currentTitle, completed,
+  }: TodoType) => {
     const newTodo = {
       id: +new Date(),
-      ...data,
+      title: currentTitle.trim(),
+      completed,
     };
 
-    setTodoItems((currentTodos: Todo[]) => {
-      if (!newTodo.title.trim()) {
-        return [...currentTodos];
-      }
+    if (!newTodo.title.trim()) {
+      setTodos([...todos]);
 
-      return [newTodo, ...currentTodos];
-    });
-  }, [setTodoItems]);
+      return;
+    }
+
+    setTodos([newTodo, ...todos]);
+  }, [todos, setTodos]);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);

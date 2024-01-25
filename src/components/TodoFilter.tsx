@@ -4,7 +4,7 @@ import { TodosContext } from './TodosContext';
 
 type Props = {};
 
-export const TodosFilter: React.FC<Props> = () => {
+export const TodoFilter: React.FC<Props> = () => {
   const {
     selectedStatus, setSelectedStatus,
   } = useContext(TodosContext);
