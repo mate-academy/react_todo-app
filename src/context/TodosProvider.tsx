@@ -2,13 +2,14 @@ import React, { useMemo, useState } from 'react';
 import { TodoUpdateContext, TodosContext } from './TodosContext';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filterTodos, setFilterTodos] = useState<Status>(Status.all);
 
   function deleteTodo(todoId: number) {
