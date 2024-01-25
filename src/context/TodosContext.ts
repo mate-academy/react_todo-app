@@ -12,4 +12,5 @@ export const TodosContext = React.createContext<Context>({
 export const TodoUpdateContext = React.createContext<ContextUpdate>({
   deleteTodo: () => { },
   clearCompleted: () => { },
+  editTodo: () => { },
 });

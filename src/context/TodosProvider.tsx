@@ -11,17 +11,28 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterTodos, setFilterTodos] = useState<Status>(Status.all);
 
-  function deleteTodo(goodId: number) {
-    setTodos(current => current.filter(todo => todo.id !== goodId));
+  function deleteTodo(todoId: number) {
+    setTodos(current => current.filter(todo => todo.id !== todoId));
   }
 
   function clearCompleted() {
     setTodos(current => current.filter(todo => !todo.completed));
   }
 
+  function editTodo(titleId: number, editTitle: string) {
+    setTodos(currentTodos => currentTodos
+      .map(todo => (todo.id === titleId
+        ? {
+          ...todo,
+          title: editTitle,
+        }
+        : todo)));
+  }
+
   const updateValue = useMemo(() => ({
     deleteTodo,
     clearCompleted,
+    editTodo,
   }), []);
 
   const value = useMemo(() => ({
