@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
@@ -7,9 +8,12 @@ import { TodoUpdateContext } from '../../context/TodoContext';
 
 interface Props {
   todo: Todo;
+  setScrollVisible: (arg: boolean) => void;
 }
 
-export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
+export const TodoItem: React.FC<Props> = React.memo(({
+  todo, setScrollVisible,
+}) => {
   const { title, completed } = todo;
 
   const [editing, setEditing] = useState(false);
@@ -30,6 +34,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
     updateTodo(updTodo);
     setEditing(false);
+    setScrollVisible(true);
   };
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +45,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const handleDoubleClick = () => {
     setEditing(true);
+    setScrollVisible(false);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -73,7 +79,6 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
           onChange={handleChecked}
         />
         <label>{title}</label>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           type="button"
           className="destroy"
