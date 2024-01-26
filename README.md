@@ -45,7 +45,7 @@ Implement a simple [TODO app](https://todomvc.com/examples/javascript-es6/dist/)
 - Font sizes to use: 100px, 24px, 14px
 - implement arrow by rotating '❯' symbol
 - Use '✕' symbol to remove TODO item on hover
-- [checked](./public/icons/checked.svg)
+- [checked](./publ`ic/icons/checked.svg)
 - [unchecked](./public/icons/unchecked.svg)
 
 ## Instructions
@@ -53,4 +53,4 @@ Implement a simple [TODO app](https://todomvc.com/examples/javascript-es6/dist/)
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://yevhen-baiev.github.io/react_todo-app/) and add it to the PR description.
