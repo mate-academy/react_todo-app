@@ -5,17 +5,17 @@ import { useLocaleStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = React.createContext<{
   todos: Todo[];
-  setTodo: (todos: Todo[]) => void;
+  setTodo:(todos: Todo[]) => void;
   filter: string;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   visibleTodos: Todo[];
 }>({
-  todos: [],
-  setTodo: () => { },
-  filter: 'all',
-  setFilter: () => { },
-  visibleTodos: [],
-});
+      todos: [],
+      setTodo: () => { },
+      filter: 'all',
+      setFilter: () => { },
+      visibleTodos: [],
+    });
 
 type Props = {
   children: React.ReactNode;
