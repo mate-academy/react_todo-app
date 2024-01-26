@@ -1,17 +1,13 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { Header } from './components/Header';
-import { TodoApp } from './components/TodoApp/TodoApp';
-import { Footer } from './components/Footer';
 import { TodosProvider } from './contexts/TodosContext';
+import { Container } from './components/Container/Container';
 
 export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <TodosProvider>
-        <Header />
-        <TodoApp />
-        <Footer />
+        <Container />
       </TodosProvider>
     </div>
   );

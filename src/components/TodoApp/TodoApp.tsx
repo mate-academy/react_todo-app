@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import { TodoList } from '../TodoList/TodoList';
 import { TodosContext } from '../../contexts/TodosContext';
 
-type Props = {};
-
-export const TodoApp: React.FC<Props> = () => {
+export const TodoApp: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const handleCompleteAllTodo = () => {
@@ -32,9 +30,7 @@ export const TodoApp: React.FC<Props> = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      {todos.length > 0 && (
-        <TodoList />
-      )}
+      <TodoList />
     </section>
   );
 };

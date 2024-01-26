@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import { TodoFilter } from './TodoFilter/TodoFilter';
-import { TodosContext } from '../contexts/TodosContext';
+import { TodoFilter } from '../TodoFilter/TodoFilter';
+import { TodosContext } from '../../contexts/TodosContext';
 
-type Props = {};
-
-export const Footer: React.FC<Props> = () => {
+export const Footer: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const uncompletedTodos = todos.filter(todo => (todo.completed === false));

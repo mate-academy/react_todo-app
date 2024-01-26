@@ -4,9 +4,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 
-type Props = {};
-
-export const TodoList: React.FC<Props> = () => {
+export const TodoList: React.FC = () => {
   const { todos, filterValue } = useContext(TodosContext);
 
   const filteredTodos = todos.filter(todo => {
