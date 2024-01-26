@@ -44,6 +44,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
+      setEditedTitle(title);
       setEditing(false);
     }
 
