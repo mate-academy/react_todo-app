@@ -1,0 +1,123 @@
+import React, { useContext, useEffect, useRef } from 'react';
+import cn from 'classnames';
+import { Todo } from '../types/Todo';
+import { TodosContext } from './TodosContext';
+
+type Props = {
+  getTodo: Todo
+};
+
+export const TodoItem: React.FC<Props> = ({ getTodo }) => {
+  const {
+    todos,
+    todoEditId,
+    todoEdit,
+    setTodos,
+    setTodoEditId,
+    setTodoEdit,
+  } = useContext(TodosContext);
+
+  const editRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    editRef.current?.focus();
+  }, [todoEditId]);
+
+  const handleCheckbox = (id: number) => {
+    setTodos(todos.map(todo => {
+      return todo.id === id
+        ? { ...todo, completed: !todo.completed }
+        : todo;
+    }));
+  };
+
+  const handleDelete = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const handleDoubleClick = (id: number, title: string) => {
+    setTodoEditId(id);
+    setTodoEdit(title);
+  };
+
+  const resetChange = () => {
+    setTodoEditId(0);
+    setTodoEdit('');
+  };
+
+  const saveChange = () => {
+    setTodos(todos.map(todo => {
+      return todo.id === todoEditId
+        ? { ...todo, title: todoEdit }
+        : todo;
+    }));
+
+    resetChange();
+  };
+
+  const handleChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (event.key) {
+      case 'Escape':
+        resetChange();
+
+        break;
+      case 'Enter':
+        if (!todoEdit) {
+          setTodos(todos.filter(todo => todo.id !== todoEditId));
+          resetChange();
+
+          return;
+        }
+
+        saveChange();
+
+        break;
+      default:
+        break;
+    }
+  };
+
+  const { id, title, completed } = getTodo;
+
+  return (
+    <li
+      className={cn(
+        { completed },
+        { editing: todoEditId === id },
+      )}
+    >
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          id={`toggle-view-${id}`}
+          onChange={() => handleCheckbox(id)}
+          checked={completed}
+        />
+
+        <label
+          onDoubleClick={() => handleDoubleClick(id, title)}
+        >
+          {title}
+        </label>
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={() => handleDelete(id)}
+        />
+      </div>
+
+      <input
+        type="text"
+        className="edit"
+        value={todoEdit}
+        onChange={(event) => setTodoEdit(event.target.value)}
+        onKeyUp={handleChange}
+        onBlur={saveChange}
+        ref={editRef}
+      />
+    </li>
+  );
+};
