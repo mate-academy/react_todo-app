@@ -27,11 +27,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(newTodoItems);
   }, [todos, setTodos]);
 
-  const deleteTodo = useCallback((todoId: number) => {
-    setTodos(todos
-      .filter(todoForDelete => todoForDelete.id !== todoId));
-  }, [todos, setTodos]);
-
   const setTodoCompleted = (completed: boolean) => {
     updateTodo({ ...todo, completed });
   };
@@ -39,6 +34,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleCheckboxChange = () => {
     setTodoCompleted(!todo.completed);
   };
+
+  const deleteTodo = useCallback((todoId: number) => {
+    setTodos(todos
+      .filter(todoForDelete => todoForDelete.id !== todoId));
+  }, [todos, setTodos]);
 
   const handleDeleteButtonClick = () => {
     deleteTodo(todo.id);
@@ -50,11 +50,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const finishEditing = () => {
     setSelectedTodo(null);
+    if (!editedTitle.trim()) {
+      deleteTodo(todo.id);
+
+      return;
+    }
+
     updateTodo({ ...todo, title: editedTitle });
   };
 
-  const handleEditChange = (newTitle: string) => {
-    setEditedTitle(newTitle);
+  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedTitle(event.target.value);
   };
 
   const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -81,7 +87,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       className={cn({
         editing: selectedTodo === todo,
         completed: todo.completed,
-        view: !todo.completed && selectedTodo === todo,
+        // view: !todo.completed && selectedTodo === todo,
       })}
       onDoubleClick={startEditing}
     >
@@ -107,7 +113,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         className="edit"
         value={editedTitle}
-        onChange={(e) => handleEditChange(e.target.value)}
+        onChange={handleEditChange}
         onBlur={finishEditing}
         onKeyDown={handleEnterPress}
         onKeyUp={handleEscapePress}

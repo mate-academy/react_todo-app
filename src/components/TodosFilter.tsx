@@ -4,7 +4,7 @@ import { TodosContext } from './TodosContext';
 
 type Props = {};
 
-export const TodoFilter: React.FC<Props> = () => {
+export const TodosFilter: React.FC<Props> = () => {
   const {
     selectedStatus, setSelectedStatus,
   } = useContext(TodosContext);
@@ -14,7 +14,7 @@ export const TodoFilter: React.FC<Props> = () => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"

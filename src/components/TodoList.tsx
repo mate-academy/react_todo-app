@@ -8,7 +8,7 @@ export const TodoList: React.FC<Props> = () => {
   const { visibleTodos } = useContext(TodosContext);
 
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {visibleTodos.map(todo => (
         <TodoItem
           todo={todo}

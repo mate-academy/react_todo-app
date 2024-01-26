@@ -2,7 +2,7 @@
 import React, { useCallback, useContext } from 'react';
 import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodosFilter } from './components/TodosFilter';
 import { TodosContext } from './components/TodosContext';
 
 export const TodoApp: React.FC = () => {
@@ -17,7 +17,7 @@ export const TodoApp: React.FC = () => {
 
   const handleToggleAllClick = () => {
     if (canToggleAll) {
-      const newAllCompleted = ![...todos].every((todo) => todo.completed);
+      const newAllCompleted = allTodosCompleted;
 
       setTodos(todos.map((todo) => (
         { ...todo, completed: newAllCompleted }
@@ -33,15 +33,19 @@ export const TodoApp: React.FC = () => {
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          checked={allTodosCompleted}
-          onChange={handleToggleAllClick}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {todos.length > 0 && (
+          <div>
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              checked={allTodosCompleted}
+              onChange={handleToggleAllClick}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+          </div>
+        )}
 
         <TodoList />
       </section>
@@ -52,7 +56,7 @@ export const TodoApp: React.FC = () => {
             {`${todos.filter(todo => !todo.completed).length} items left`}
           </span>
 
-          <TodoFilter />
+          <TodosFilter />
           {todos.filter(todo => todo.completed).length > 0 && (
             <button
               type="button"
