@@ -20,7 +20,7 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     if (todoProps.id === editing && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [editing]);
+  }, [editing, todoProps.id]);
 
   const handleDeleteTodo = (id: number) => {
     const newTodo = [...todos].filter((todo: Todo) => (
@@ -28,7 +28,6 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     ));
 
     setTodo([...newTodo]);
-    // setRenderTodo([...newTodo]);
   };
 
   const handleCheckboxClick = (id: number) => {
@@ -42,7 +41,6 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
         completed: !newTodos[todoIndex].completed,
       };
       setTodo(newTodos);
-      // setRenderTodo(newTodos);
     }
   };
 
@@ -67,10 +65,9 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     event.preventDefault();
 
     if (!onChange.trim()) {
-      const newTodo = todos.filter((todo: Todo) => todo.id !== editing);
+      const newTodos = todos.filter((todo: Todo) => todo.id !== editing);
 
-      setTodo([...newTodo]);
-      // setRenderTodo([...newTodo]);
+      setTodo([...newTodos]);
 
       setOnChange('');
       setEditing(null);
@@ -92,7 +89,6 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
     });
 
     setTodo([...newTodo]);
-    // setRenderTodo([...newTodo]);
 
     setOnChange('');
   };
@@ -112,7 +108,6 @@ export const TodoItem: React.FC<Props> = ({ todoProps }) => {
       });
 
       setTodo([...newTodo]);
-      // setRenderTodo([...newTodo]);
     }
   };
 

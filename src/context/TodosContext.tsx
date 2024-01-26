@@ -1,18 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import todosFromServer from '../api/todo';
 import { Todo } from '../types/Todo';
 import { useLocaleStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = React.createContext<{
   todos: Todo[];
-  setTodo: (todos: Todo[]) => void;
-  renderTodo: Todo[];
-  setRenderTodo: (renderTodo: Todo[]) => void;
+  setTodo: React.Dispatch<React.SetStateAction<Todo[]>>;
+  filter: string;
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  visibleTodos: Todo[];
 }>({
   todos: [],
   setTodo: () => { },
-  renderTodo: [],
-  setRenderTodo: () => { },
+  filter: 'all',
+  setFilter: () => { },
+  visibleTodos: [],
 });
 
 type Props = {
@@ -20,22 +22,35 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const localStore = useLocaleStorage('todos', [...todosFromServer]);
-  const [todos, setTodo] = localStore || [...todosFromServer];
-  const [renderTodo, setRenderTodo] = useState(todos);
+  const localStore = useLocaleStorage<Todo[]>('todos', [...todosFromServer]);
+  const [todos, setTodo] = useState<Todo[]>(localStore[0]);
+  const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    setRenderTodo([...todos]);
-  }, [todos]);
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filter) {
+        case 'active':
+          return !todo.completed;
+
+        case 'completed':
+          return todo.completed;
+
+        default: return true;
+      }
+    });
+  }, [todos, filter]);
 
   const value = useMemo(() => {
     return {
       todos,
       setTodo,
-      renderTodo,
-      setRenderTodo,
+      filter,
+      setFilter,
+      visibleTodos,
     };
-  }, [todos, setTodo, renderTodo, setRenderTodo]);
+  }, [
+    todos, setTodo, filter, setFilter, visibleTodos,
+  ]);
 
   return (
     <TodosContext.Provider value={value}>

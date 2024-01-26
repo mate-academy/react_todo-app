@@ -1,12 +1,12 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import classNames from 'classnames';
 
 import { TodosContext } from '../../context/TodosContext';
-import { Todo } from '../../types/Todo';
 
 export const TodosFilter = () => {
-  const { todos, setTodo, setRenderTodo } = useContext(TodosContext);
-  const [filterType, setFilterType] = useState('all');
+  const {
+    todos, setTodo, filter, setFilter,
+  } = useContext(TodosContext);
 
   const activeTodos = todos.filter(todo => todo.completed === false);
   const todosCounter = activeTodos.length;
@@ -14,25 +14,6 @@ export const TodosFilter = () => {
 
   const clearCompleted = () => {
     setTodo([...activeTodos]);
-    // setRenderTodo([...activeTodos]);
-  };
-
-  const handleFilterTodo = (select: string) => {
-    setFilterType(select);
-
-    const newTodo: Todo[] = [...todos].filter(todo => {
-      switch (select) {
-        case 'active':
-          return !todo.completed;
-
-        case 'completed':
-          return todo.completed;
-
-        default: return true;
-      }
-    });
-
-    setRenderTodo(newTodo);
   };
 
   return (
@@ -48,9 +29,9 @@ export const TodosFilter = () => {
               <a
                 href="#/"
                 className={classNames({
-                  selected: filterType === 'all',
+                  selected: filter === 'all',
                 })}
-                onClick={() => handleFilterTodo('all')}
+                onClick={() => setFilter('all')}
               >
                 All
               </a>
@@ -59,9 +40,9 @@ export const TodosFilter = () => {
             <li>
               <a
                 href="#/active"
-                onClick={() => handleFilterTodo('active')}
+                onClick={() => setFilter('active')}
                 className={classNames({
-                  selected: filterType === 'active',
+                  selected: filter === 'active',
                 })}
               >
                 Active
@@ -71,9 +52,9 @@ export const TodosFilter = () => {
             <li>
               <a
                 href="#/completed"
-                onClick={() => handleFilterTodo('completed')}
+                onClick={() => setFilter('completed')}
                 className={classNames({
-                  selected: filterType === 'completed',
+                  selected: filter === 'completed',
                 })}
               >
                 Completed

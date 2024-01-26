@@ -8,19 +8,18 @@ export const TodoList = () => {
   const {
     todos,
     setTodo,
-    renderTodo,
+    visibleTodos,
   } = useContext(TodosContext);
 
   const handleCheckboxClickAll = () => {
     const allCompleted = todos.every((todo) => todo.completed);
 
-    const newTodo: Todo[] = todos.map((todo) => ({
+    const newTodos: Todo[] = todos.map((todo) => ({
       ...todo,
       completed: !allCompleted,
     }));
 
-    setTodo([...newTodo]);
-    // setRenderTodo([...newTodo]);
+    setTodo([...newTodos]);
   };
 
   return (
@@ -35,7 +34,7 @@ export const TodoList = () => {
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todosList">
-        {renderTodo.map(todo => (
+        {visibleTodos.map(todo => (
           <TodoItem todoProps={todo} key={todo.id} />
         ))}
       </ul>

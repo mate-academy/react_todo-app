@@ -22,15 +22,14 @@ export const TodoApp = () => {
       return;
     }
 
-    const newTodo = [...todos, {
-      id: maxId + 1,
-      title: onChange,
-      completed: false,
-      editing: false,
-    }];
-
-    setTodo([...newTodo]);
-    // setRenderTodo([...newTodo]);
+    setTodo((prevState) => [
+      ...prevState, {
+        id: maxId + 1,
+        title: onChange,
+        completed: false,
+        editing: false,
+      },
+    ]);
 
     setOnChange('');
   };
