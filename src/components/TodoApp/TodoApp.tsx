@@ -1,20 +1,23 @@
 import { useContext, useEffect, useState } from 'react';
+import { Status } from '../../types/enums';
 import { TodoList } from '../TodoList';
 import { TodosContext } from '../TodosContext/TodosContext';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
 
 export const TodoApp: React.FC = () => {
-  const [itemTitle, setItemTitle] = useState('');
   const {
     todos,
     setTodos,
   } = useContext(TodosContext);
+  const [itemTitle, setItemTitle] = useState('');
   const [filteredTodos, setFilteredTodos] = useState(todos);
+  const [selected, setSelected] = useState(Status.All);
 
-  const footerActive = todos.length > 0;
+  const hasTodos = todos.length > 0;
+  const completedTodos = todos.some((todo) => todo.completed);
 
   const handleToggleAll = () => {
-    if (todos.every((todo) => todo.completed === true)) {
+    if (todos.every((todo) => todo.completed)) {
       setTodos(todos.map((todo) => {
         return { ...todo, completed: false };
       }));
@@ -23,12 +26,20 @@ export const TodoApp: React.FC = () => {
         return { ...todo, completed: true };
       }));
     }
-
-    setFilteredTodos(todos);
   };
 
+  useEffect(() => {
+    if (selected === Status.Active) {
+      setFilteredTodos(todos.filter((todo) => !todo.completed));
+    } else if (selected === Status.Completed) {
+      setFilteredTodos(todos.filter((todo) => todo.completed));
+    } else {
+      setFilteredTodos(todos);
+    }
+  }, [filteredTodos, selected, todos]);
+
   const handleClearCompleted = () => {
-    setTodos(todos.filter((todo) => todo.completed === false));
+    setTodos(todos.filter((todo) => !todo.completed));
   };
 
   const handleAddTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -38,7 +49,7 @@ export const TodoApp: React.FC = () => {
       completed: false,
     };
 
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && itemTitle.length) {
       e.preventDefault();
       setTodos([...todos, newItem]);
       setItemTitle('');
@@ -68,38 +79,44 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          onClick={handleToggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {hasTodos && (
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            onClick={handleToggleAll}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList items={filteredTodos} />
-      </section>
+          <TodoList items={filteredTodos} />
+        </section>
+      )}
 
-      {footerActive && (
+      {hasTodos && (
         <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {todos.filter((todo) => todo.completed === false).length}
+          <span className="todo-count" data-cy="todosCounter">
+            {todos.filter((todo) => !todo.completed).length}
           &nbsp;items left
-        </span>
+          </span>
 
-        <TodosFilter
-          setFilteredTodos={setFilteredTodos}
-        />
+          <TodosFilter
+            selected={selected}
+            setSelected={setSelected}
+            setFilteredTodos={setFilteredTodos}
+          />
 
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={handleClearCompleted}
-        >
-          Clear completed
-        </button>
-      </footer>
+          {completedTodos && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={handleClearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
       )}
     </div>
   );

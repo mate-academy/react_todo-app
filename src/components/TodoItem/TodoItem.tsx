@@ -60,6 +60,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
+  const handleOnBlur = () => {
+    if (titleValue.length === 0) {
+      handleDeleteTodo();
+    }
+
+    setEditing(false);
+  };
+
   const completedToggleClass
     = cn({ 'toggle-view': !completed },
       { 'toggle-completed': completed });
@@ -94,10 +102,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </div>
       {editing && (
         <input
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
           type="text"
           className="edit"
           value={titleValue}
-          onBlur={(() => setEditing(false))}
+          onBlur={handleOnBlur}
           onChange={handleOnChange}
           onKeyDown={handleSaveEdit}
           onKeyUp={handleCancelEditing}

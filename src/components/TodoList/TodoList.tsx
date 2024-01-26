@@ -7,7 +7,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ items }) => {
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {items.map((item) => {
         return (
           <TodoItem
