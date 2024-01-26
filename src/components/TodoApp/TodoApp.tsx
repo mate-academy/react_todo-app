@@ -33,7 +33,7 @@ export const TodoApp = () => {
       <Header />
 
       <section className="main">
-        {!todos.length || (
+        {!!todos.length && (
           <>
             <input
               checked={conuterOfCompletedTodos}
