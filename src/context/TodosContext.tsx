@@ -5,7 +5,7 @@ import { useLocaleStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = React.createContext<{
   todos: Todo[];
-  setTodo: React.Dispatch<React.SetStateAction<Todo[]>>;
+  setTodo: (todos: Todo[]) => void;
   filter: string;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   visibleTodos: Todo[];
@@ -22,8 +22,9 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const localStore = useLocaleStorage<Todo[]>('todos', [...todosFromServer]);
-  const [todos, setTodo] = useState<Todo[]>(localStore[0]);
+  const [todos, setTodo] = useLocaleStorage<Todo[]>(
+    'todos', [...todosFromServer],
+  );
   const [filter, setFilter] = useState('all');
 
   const visibleTodos = useMemo(() => {
