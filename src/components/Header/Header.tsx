@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 
 export const Header: React.FC = () => {
   const [value, setValue] = useState('');
 
-  const { addTodo } = useContext(TodoUpdateContext);
+  const { addTodo } = useContext(TodoContext);
 
   const newTodo = {
     id: +new Date(),

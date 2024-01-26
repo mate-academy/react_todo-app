@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { TodoFilter } from '../TodoFilter';
-import { TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 
 interface Props {
   itemsLeft: number;
@@ -11,7 +11,7 @@ export const Footer: React.FC<Props> = ({
   itemsLeft,
   isClearButtonVisible,
 }) => {
-  const { deleteCompleted } = useContext(TodoUpdateContext);
+  const { deleteCompleted } = useContext(TodoContext);
 
   return (
     <footer className="footer">

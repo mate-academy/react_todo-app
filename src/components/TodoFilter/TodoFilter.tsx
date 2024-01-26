@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import cn from 'classnames';
 import { Status } from '../../types/Status';
-import { FilterContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 
 export const TodoFilter: React.FC = () => {
-  const { status, changeStatus } = useContext(FilterContext);
+  const { status, changeStatus } = useContext(TodoContext);
 
   const handleClick = (selectedStatus: Status) => {
     changeStatus(selectedStatus);

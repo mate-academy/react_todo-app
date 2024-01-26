@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { TodoList } from '../TodoList';
-import { TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 
 export const Main: React.FC = () => {
-  const { completeAll } = useContext(TodoUpdateContext);
+  const { completeAll } = useContext(TodoContext);
 
   return (
     <section className="main">

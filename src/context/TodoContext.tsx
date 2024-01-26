@@ -4,25 +4,17 @@ import { Status } from '../types/Status';
 import { getFilteredTodos } from '../services/getFilteredTodos';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { TodoContextType } from '../types/TodoContext';
-import { TodoFilterContextType } from '../types/TodoFilter';
-import { TodoUpdateContextType } from '../types/TodoUpdateContext';
 
 export const TodoContext = React.createContext<TodoContextType>({
   todos: [],
   filteredTodos: [],
-});
-
-export const FilterContext = React.createContext<TodoFilterContextType>({
-  status: Status.All,
-  changeStatus: () => { },
-});
-
-export const TodoUpdateContext = React.createContext<TodoUpdateContextType>({
   addTodo: () => { },
   completeAll: () => { },
   deleteCompleted: () => { },
   deleteTodo: () => { },
   updateTodo: () => { },
+  status: Status.All,
+  changeStatus: () => { },
 });
 
 interface Props {
@@ -74,32 +66,28 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setStatus(newStatus);
   };
 
-  const todoMethods = useMemo(() => ({
+  const todosValue = useMemo(() => ({
+    todos,
+    filteredTodos,
     addTodo,
     completeAll,
     deleteCompleted,
     deleteTodo,
     updateTodo,
-  }), [addTodo, completeAll, deleteCompleted, deleteTodo, updateTodo]);
-
-  const todosValue = useMemo(() => ({
-    todos,
-    filteredTodos,
-  }), [todos, filteredTodos]);
-
-  const filterValue = useMemo(() => ({
     status,
     changeStatus,
-  }), [status]);
+  }), [todos,
+    filteredTodos,
+    addTodo,
+    completeAll,
+    deleteCompleted,
+    deleteTodo,
+    status,
+    updateTodo]);
 
   return (
-    <FilterContext.Provider value={filterValue}>
-      <TodoUpdateContext.Provider value={todoMethods}>
-        <TodoContext.Provider value={todosValue}>
-          {children}
-        </TodoContext.Provider>
-      </TodoUpdateContext.Provider>
-    </FilterContext.Provider>
-
+    <TodoContext.Provider value={todosValue}>
+      {children}
+    </TodoContext.Provider>
   );
 };

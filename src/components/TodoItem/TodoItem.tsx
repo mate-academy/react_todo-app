@@ -4,11 +4,11 @@ import React, {
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
-import { TodoUpdateContext } from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 
 interface Props {
   todo: Todo;
-  setScrollVisible: (arg: boolean) => void;
+  setScrollVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const TodoItem: React.FC<Props> = React.memo(({
@@ -19,7 +19,7 @@ export const TodoItem: React.FC<Props> = React.memo(({
   const [editing, setEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
-  const { deleteTodo, updateTodo } = useContext(TodoUpdateContext);
+  const { deleteTodo, updateTodo } = useContext(TodoContext);
 
   const editInput = useRef<HTMLInputElement>(null);
 
