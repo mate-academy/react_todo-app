@@ -38,10 +38,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     updateTodo(updatedTodo);
   };
 
-  const handleDoubleClick = (
-    e: React.MouseEvent<HTMLLIElement, MouseEvent>,
-  ) => {
-    e.preventDefault();
+  const handleDoubleClick = () => {
     setEditing(true);
   };
 

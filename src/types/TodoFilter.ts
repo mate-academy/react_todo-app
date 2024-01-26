@@ -1,6 +1,6 @@
 import { Status } from './Status';
 
-export type TodoFilterContextType = {
+export interface TodoFilterContextType {
   status: Status;
   changeStatus: (status: Status) => void;
-};
+}

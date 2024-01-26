@@ -1,6 +1,6 @@
 import { Todo } from './Todo';
 
-export type TodoContextType = {
+export interface TodoContextType {
   todos: Todo[];
   filteredTodos: Todo[],
-};
+}

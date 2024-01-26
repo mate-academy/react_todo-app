@@ -47,9 +47,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setTodos(prevTodos => prevTodos.map(todo => {
       const isCompleteAll = prevTodos.some(({ completed }) => !completed);
 
-      return isCompleteAll
-        ? { ...todo, completed: true }
-        : { ...todo, completed: false };
+      return { ...todo, completed: isCompleteAll };
     }));
   }, [setTodos]);
 
@@ -63,9 +61,13 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   }, [setTodos]);
 
   const updateTodo = useCallback((updTodo: Todo) => {
-    setTodos(prevTodos => prevTodos.map(prevTodo => (
-      updTodo.id !== prevTodo.id ? prevTodo : updTodo
-    )));
+    setTodos(prevTodos => prevTodos.map(prevTodo => {
+      if (updTodo.id !== prevTodo.id) {
+        return prevTodo;
+      }
+
+      return updTodo;
+    }));
   }, [setTodos]);
 
   const changeStatus = (newStatus: Status) => {
