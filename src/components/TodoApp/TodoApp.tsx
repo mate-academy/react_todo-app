@@ -6,9 +6,7 @@ import { TodoList } from '../TodoList/TodoList';
 import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 
-type Props = {};
-
-export const TodoApp: React.FC<Props> = () => {
+export const TodoApp: React.FC = () => {
   const {
     todos, setTodos, setNumberOfNotCompleted, filter,
   }

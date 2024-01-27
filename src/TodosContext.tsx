@@ -4,7 +4,16 @@ import { Status } from './types/Status';
 
 const initialTodos: Todo[] = [];
 
-export const TodosContext = React.createContext({
+type TodosContextType = {
+  todos: Todo[],
+  setTodos: (todos: Todo[]) => void,
+  numberOfNotCompleted: number,
+  setNumberOfNotCompleted: (numberOfNotCompleted: number) => void,
+  filter: Status,
+  setFilter: (filter: Status) => void,
+};
+
+export const TodosContext = React.createContext<TodosContextType>({
   todos: initialTodos,
   setTodos: () => {},
   numberOfNotCompleted: 0,
@@ -17,8 +26,8 @@ type Props = {
   children: React.ReactNode;
 };
 
-function useLocalStorage(key: string, startValue: Todo[]):
-[Todo[], (v: Todo[]) => void] {
+function useLocalStorage<T>(key: string, startValue: T):
+[T, (v: T) => void] {
   const [value, setValue] = useState(() => {
     const data = localStorage.getItem(key);
 
@@ -33,7 +42,7 @@ function useLocalStorage(key: string, startValue: Todo[]):
     }
   });
 
-  const save = (newValue: Todo[]) => {
+  const save = (newValue: T) => {
     localStorage.setItem(key, JSON.stringify(newValue));
     setValue(newValue);
   };
