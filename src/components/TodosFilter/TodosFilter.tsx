@@ -6,44 +6,27 @@ import { Status } from '../../types/Status';
 
 export const TodosFilter: React.FC = () => {
   const { filterTodos, setFilterTodos } = useContext(TodosContext);
+  const filtersStatus = [
+    Status.all,
+    Status.active,
+    Status.completed,
+  ];
 
   return (
     <ul className="filters" data-cy="todosFilter">
-      <li>
-        <a
-          href="#/"
-          className={classNames({
-            selected: filterTodos === Status.all,
-          })}
-          onClick={() => setFilterTodos(Status.all)}
-        >
-          {Status.all}
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/active"
-          className={classNames({
-            selected: filterTodos === Status.active,
-          })}
-          onClick={() => setFilterTodos(Status.active)}
-        >
-          {Status.active}
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="#/completed"
-          className={classNames({
-            selected: filterTodos === Status.completed,
-          })}
-          onClick={() => setFilterTodos(Status.completed)}
-        >
-          {Status.completed}
-        </a>
-      </li>
+      {filtersStatus.map((status) => (
+        <li>
+          <a
+            href="#/"
+            className={classNames({
+              selected: filterTodos === status,
+            })}
+            onClick={() => setFilterTodos(status)}
+          >
+            {status}
+          </a>
+        </li>
+      ))}
     </ul>
   );
 };
