@@ -1,20 +1,36 @@
+/* eslint-disable quote-props */
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useState } from 'react';
+import { Todo } from '../../types/Todo';
+/* import cn from 'classnames'; */
 
-import React from 'react';
+interface Props {
+  item: Todo;
+}
 
-export const TodoItem: React.FC = () => {
+export const TodoItem: React.FC<Props> = (props) => {
+  const { item: todo } = props;
+
+  const [editing/* setEditing */] = useState(false);
+
+  let todoStatus = !todo.completed ? 'view' : 'completed';
+
+  if (editing) {
+    todoStatus = 'editing';
+  }
+
   return (
-    <>
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view" />
-          <label htmlFor="toggle-view">asdfghj</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="completed">
+    <li>
+      <div className={todoStatus}>
+        <input type="checkbox" className="toggle" id={`"toggle-${todoStatus}`} />
+        <label htmlFor={`"toggle-${todoStatus}`}>{todo.title}</label>
+        <button type="button" className="destroy" data-cy="deleteTodo" />
+      </div>
+      <input type="text" className="edit" />
+    </li>
+  );
+};
+  /*  <li className="completed">
         <div className="view">
           <input type="checkbox" className="toggle" id="toggle-completed" />
           <label htmlFor="toggle-completed">qwertyuio</label>
@@ -40,6 +56,4 @@ export const TodoItem: React.FC = () => {
         </div>
         <input type="text" className="edit" />
       </li>
-    </>
-  );
-};
+ */

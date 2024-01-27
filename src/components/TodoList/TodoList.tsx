@@ -22,7 +22,9 @@ export const TodoList: React.FC<Props> = (props) => {
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todoList">
-        <TodoItem />
+        {items.map(
+          item => <TodoItem item={item} key={item.id} />,
+        )}
       </ul>
     </section>
   );
