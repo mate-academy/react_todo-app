@@ -13,11 +13,11 @@ export const TodoApp: React.FC = () => {
     <div className="todoapp">
       <Header />
 
-      {!todos.length || (
+      {!!todos.length && (
         <Main />
       )}
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <Footer />
       )}
     </div>

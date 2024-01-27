@@ -1,11 +1,10 @@
 import { useContext } from 'react';
-// import classNames from 'classnames';
 import './main.css';
 
 import { TodosContext } from '../../context/TodosContext';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../todoList';
-import { Status } from '../../types/Status';
+import { filteredTodos } from '../../services/filterTodos';
 
 export const Main: React.FC = () => {
   const { todos, setTodos, filterTodos } = useContext(TodosContext);
@@ -13,39 +12,29 @@ export const Main: React.FC = () => {
   const checked = todos.every((todo: Todo) => todo.completed);
 
   const completedTodos = (todosItems: Todo[]) => {
-    return todosItems.filter(item => !item.completed).length === 0;
+    return !todosItems.filter(item => !item.completed).length;
+  };
+
+  const checkTodos = (current: Todo[], isComplited: boolean) => {
+    return current.map((todo) => ({
+      ...todo,
+      completed: isComplited,
+    }));
   };
 
   const toogleTodosList = (currentTodos: Todo[]) => {
     if (completedTodos(todos)) {
-      return currentTodos.map((todo) => ({
-        ...todo,
-        completed: false,
-      }));
+      return checkTodos(currentTodos, false);
     }
 
-    return currentTodos.map((todo) => ({
-      ...todo,
-      completed: true,
-    }));
+    return checkTodos(currentTodos, true);
   };
 
   const handleOnChange = () => {
     setTodos(toogleTodosList(todos));
   };
 
-  const filteredTodos = todos.filter(todo => {
-    switch (filterTodos) {
-      case Status.active:
-        return !todo.completed;
-
-      case Status.completed:
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
+  const filteredItems = filteredTodos(todos, filterTodos);
 
   return (
     <section className="main">
@@ -59,7 +48,7 @@ export const Main: React.FC = () => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <TodoList items={filteredTodos} />
+      <TodoList items={filteredItems} />
     </section>
   );
 };

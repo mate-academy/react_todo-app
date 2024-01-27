@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useState } from 'react';
 import { TodoUpdateContext, TodosContext } from './TodosContext';
 import { Todo } from '../types/Todo';
