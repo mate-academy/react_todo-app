@@ -12,7 +12,7 @@ export const TodoList: React.FC = () => {
   }, [todos, status]);
 
   return (
-    <ul className="todo-list" data-cy="todoList">
+    <ul className="todo-list" data-cy="todosList">
       {visibleTodos.map(todo => (
         <TodoItem key={todo.id} items={todo} />
       ))}
