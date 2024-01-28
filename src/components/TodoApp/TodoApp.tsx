@@ -1,11 +1,28 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { TodoList } from '../TodoList';
 import { TodosContext } from '../../contexts/TodosProvider';
 import { TodoAction } from '../../types/TodoAction';
+import { Todo } from '../../types/Todo';
+import { FilterOptions } from '../../types/FilterOptions';
+
+function filterTodos(todos: Todo[], filterOpitons: FilterOptions) {
+  switch (filterOpitons) {
+    case FilterOptions.Active:
+      return todos.filter(({ completed }) => !completed);
+
+    case FilterOptions.Completed:
+      return todos.filter(({ completed }) => completed);
+
+    default:
+      return [...todos];
+  }
+}
 
 export const TodoApp = () => {
-  const { filteredTodos, todos, dispatch } = useContext(TodosContext);
+  const { filterOptions, todos, dispatch } = useContext(TodosContext);
   const [newTodoTitle, setNewTodoTitle] = useState('');
+  const filteredTodos = useMemo(() => filterTodos(todos, filterOptions),
+    [todos, filterOptions]);
 
   const isAllCompleted = todos.every(({ completed }) => completed);
 
@@ -29,7 +46,7 @@ export const TodoApp = () => {
 
   const handleToggleAllChanged = () => {
     // eslint-disable-next-line no-restricted-syntax
-    for (const todo of todos) {
+    todos.forEach(todo => {
       dispatch({
         action: TodoAction.Update,
         todo: {
@@ -37,7 +54,7 @@ export const TodoApp = () => {
           completed: !isAllCompleted,
         },
       });
-    }
+    });
   };
 
   return (
@@ -59,7 +76,7 @@ export const TodoApp = () => {
 
       <section className="main">
         {
-          todos.length !== 0
+          todos.length
           && (
             <>
               <input

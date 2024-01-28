@@ -6,28 +6,10 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../contexts/TodosProvider';
 import { TodoAction } from '../../types/TodoAction';
+import { useDebounce } from '../../hooks/useDebounce';
 
-type Props = {
+interface Props {
   todo: Todo,
-};
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-function customDebounce(callback: Function, delay: number) {
-  let timerId = 0;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (...args: any) => {
-    if (timerId) {
-      window.clearTimeout(timerId);
-      callback(...args);
-      timerId = 0;
-    }
-
-    timerId = window.setTimeout(() => {
-      window.clearTimeout(timerId);
-      timerId = 0;
-    }, delay);
-  };
 }
 
 export const TodoItem: React.FC<Props> = React.memo(
@@ -95,7 +77,7 @@ export const TodoItem: React.FC<Props> = React.memo(
       }
     };
 
-    const handleDblclick = customDebounce(onEditing, 300);
+    const handleDblclick = useDebounce(onEditing, 300);
 
     if (isEditing) {
       document.removeEventListener('keyup', keyboardListener);

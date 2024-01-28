@@ -2,9 +2,9 @@ import React from 'react';
 import { TodoItem } from '../TodoItem';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface Props {
   todos: Todo[]
-};
+}
 
 export const TodoList: React.FC<Props> = React.memo(
   ({ todos }) => {

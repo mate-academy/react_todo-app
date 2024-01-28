@@ -11,7 +11,7 @@ export const App: React.FC = () => {
     <>
       <TodoApp />
 
-      {todos.length > 0 && <TodosFilter />}
+      {!!todos.length && <TodosFilter />}
     </>
   );
 };
