@@ -1,40 +1,36 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { AddTodoForm } from './components/AddTodoForm/AddTodoForm';
 import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
+import { TodoContext } from './components/TodosProvider/TodosProvider';
+import { Filter } from './types/Filter';
+import { Footer } from './components/Footer/Footer';
 
-const sTodos: Todo[] = [
-  {
-    id: 1,
-    title: '1 todo',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: '2 todo',
-    completed: false,
-  },
-  {
-    id: 3,
-    title: '3 todo',
-    completed: false,
-  },
-  {
-    id: 4,
-    title: '4 todo',
-    completed: false,
-  },
-];
+function prepareTodos(todos: Todo[], filter: Filter): Todo[] {
+  let todosCopy = [...todos];
 
-function prepareTodos(todos: Todo[]): Todo[] {
-  const todosCopy = [...todos];
+  if (filter === Filter.Active) {
+    todosCopy = todosCopy.filter(todo => todo.completed === false);
+  }
+
+  if (filter === Filter.Completed) {
+    todosCopy = todosCopy.filter(todo => todo.completed === true);
+  }
 
   return todosCopy;
 }
 
 export const App: React.FC = () => {
-  const todos = prepareTodos(sTodos);
+  const todos = useContext(TodoContext);
+  const [filterType, setFilterType] = useState(Filter.All);
+
+  const showContent = todos.length > 0;
+
+  const preparedTodos = prepareTodos(todos, filterType);
+
+  const changeFilter = (newFilter: Filter) => {
+    setFilterType(newFilter);
+  };
 
   return (
     <div className="todoapp">
@@ -44,31 +40,13 @@ export const App: React.FC = () => {
         <AddTodoForm />
       </header>
 
-      <TodoList items={todos} />
+      {showContent && (
+        <>
+          <TodoList items={preparedTodos} />
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+          <Footer changeFilter={changeFilter} currentFilter={filterType} />
+        </>
+      )}
     </div>
   );
 };

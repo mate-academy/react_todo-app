@@ -1,7 +1,8 @@
 /* eslint-disable quote-props */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoUpdateContext } from '../TodosProvider/TodosProvider';
 /* import cn from 'classnames'; */
 
 interface Props {
@@ -11,6 +12,12 @@ interface Props {
 export const TodoItem: React.FC<Props> = (props) => {
   const { item: todo } = props;
 
+  const {
+    completeTodo,
+    uncompleteTodo,
+    deleteTodo,
+  } = useContext(TodoUpdateContext);
+
   const [editing/* setEditing */] = useState(false);
 
   let todoStatus = !todo.completed ? 'view' : 'completed';
@@ -19,12 +26,31 @@ export const TodoItem: React.FC<Props> = (props) => {
     todoStatus = 'editing';
   }
 
+  function handleCompleted(): void {
+    if (!todo.completed) {
+      completeTodo(todo.id);
+    } else {
+      uncompleteTodo(todo.id);
+    }
+  }
+
   return (
-    <li>
-      <div className={todoStatus}>
-        <input type="checkbox" className="toggle" id={`"toggle-${todoStatus}`} />
-        <label htmlFor={`"toggle-${todoStatus}`}>{todo.title}</label>
-        <button type="button" className="destroy" data-cy="deleteTodo" />
+    <li className={todoStatus}>
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          id={`toggle-${todoStatus}`}
+          onChange={handleCompleted}
+          checked={todo.completed}
+        />
+        <label htmlFor={`toggle-${todoStatus}`}>{todo.title}</label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={() => deleteTodo(todo.id)}
+        />
       </div>
       <input type="text" className="edit" />
     </li>
