@@ -18,7 +18,7 @@ export const Footer: React.FC<Props> = (props) => {
   const uncompletedTodos = todos.reduce((count, todo) => {
     return todo.completed ? count : count + 1;
   }, 0);
-  /* const hasCompleted = todos.some(todo => todo.completed); */
+  const hasCompleted = todos.some(todo => todo.completed);
 
   return (
     <footer className="footer">
@@ -31,13 +31,15 @@ export const Footer: React.FC<Props> = (props) => {
         currentFilter={currentFilter}
       />
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={() => removeAllCompleted()}
-      >
-        Clear completed
-      </button>
+      {hasCompleted && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={() => removeAllCompleted()}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

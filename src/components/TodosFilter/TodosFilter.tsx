@@ -12,7 +12,7 @@ export const TodosFilter: React.FC<Props> = (props) => {
   const { changeFilter, currentFilter } = props;
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"

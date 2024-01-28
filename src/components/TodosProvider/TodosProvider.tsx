@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { useLocalStorage } from '../../utils/LocalStorage';
 
 const sTodos: Todo[] = [
   {
@@ -34,6 +35,7 @@ export const TodoUpdateContext = React.createContext({
   completeTodo: (_todoId: number) => {},
   uncompleteTodo: (_todoId: number) => {},
   removeAllCompleted: () => {},
+  toogleAll: (_completed: boolean) => {},
 });
 
 interface Props {
@@ -41,7 +43,7 @@ interface Props {
 }
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState(sTodos);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
   function generateNewId(array: Todo[]): number {
     return +(String(array.length + 1) + 0 + Date.now());
@@ -84,6 +86,15 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       todosCopy.splice(prevTodoIndex, 1);
 
       return (todosCopy);
+    });
+  }
+
+  function toogleAll(completed: boolean):void {
+    setTodos(prevTodos => {
+      const copy = [...prevTodos];
+      const changedCopy = copy.map(todo => ({ ...todo, completed }));
+
+      return changedCopy;
     });
   }
 
@@ -140,6 +151,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         uncompleteTodo,
         deleteTodo,
         removeAllCompleted,
+        toogleAll,
       }}
     >
       <TodoContext.Provider value={todos}>

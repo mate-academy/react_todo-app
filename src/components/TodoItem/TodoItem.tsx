@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable quote-props */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useState } from 'react';
@@ -15,10 +17,12 @@ export const TodoItem: React.FC<Props> = (props) => {
   const {
     completeTodo,
     uncompleteTodo,
+    editTodo,
     deleteTodo,
   } = useContext(TodoUpdateContext);
 
-  const [editing/* setEditing */] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
 
   let todoStatus = !todo.completed ? 'view' : 'completed';
 
@@ -34,52 +38,64 @@ export const TodoItem: React.FC<Props> = (props) => {
     }
   }
 
+  const handleDoubleClick = (
+    event: React.MouseEvent<HTMLLabelElement, MouseEvent>,
+  ) => {
+    if (event.detail === 2) {
+      setEditing(true);
+    }
+  };
+
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const editedTodo: Todo = {
+      ...todo,
+      title: newTitle.trim(),
+    };
+
+    if (e.key === 'Enter') {
+      if (todo.title !== editedTodo.title) {
+        editTodo(editedTodo);
+      }
+
+      setEditing(false);
+    }
+
+    if (e.key === 'Escape') {
+      // editTodo(editedTodo);
+
+      setEditing(false);
+    }
+  };
+
   return (
     <li className={todoStatus}>
-      <div className="view">
+      {!editing && (
+        <div className="view">
+          <input
+            type="checkbox"
+            className="toggle"
+            id={`toggle-${todoStatus}`}
+            onChange={handleCompleted}
+            checked={todo.completed}
+          />
+          <label onClick={handleDoubleClick}>{todo.title}</label>
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={() => deleteTodo(todo.id)}
+          />
+        </div>
+      )}
+      {editing && (
         <input
-          type="checkbox"
-          className="toggle"
-          id={`toggle-${todoStatus}`}
-          onChange={handleCompleted}
-          checked={todo.completed}
+          type="text"
+          className="edit"
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+          onKeyDown={handleKey}
         />
-        <label htmlFor={`toggle-${todoStatus}`}>{todo.title}</label>
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={() => deleteTodo(todo.id)}
-        />
-      </div>
-      <input type="text" className="edit" />
+      )}
     </li>
   );
 };
-  /*  <li className="completed">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-completed" />
-          <label htmlFor="toggle-completed">qwertyuio</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-editing" />
-          <label htmlFor="toggle-editing">zxcvbnm</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view2" />
-          <label htmlFor="toggle-view2">1234567890</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
- */
