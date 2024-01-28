@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type SetValueAction<T> = T | ((prevValue: T) => T);
 
@@ -20,10 +20,9 @@ export function useLocalStorage<T>(
     }
   });
 
-  const save = (newValue: SetValueAction<T>) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
-    setValue(newValue);
-  };
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
 
-  return [value, save];
+  return [value, setValue];
 }
