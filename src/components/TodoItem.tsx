@@ -87,7 +87,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       className={cn({
         editing: selectedTodo === todo,
         completed: todo.completed,
-        // view: !todo.completed && selectedTodo === todo,
       })}
       onDoubleClick={startEditing}
     >
