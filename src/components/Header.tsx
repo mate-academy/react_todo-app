@@ -13,7 +13,7 @@ export const Header = () => {
       return;
     }
 
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && inputValue.trim() !== '') {
       event.preventDefault();
       dispatch({
         type: ActionType.Add,

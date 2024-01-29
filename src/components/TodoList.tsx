@@ -1,6 +1,6 @@
 /* eslint-disable default-case */
 import { useContext } from 'react';
-import { TodoInfo } from './TodoItem';
+import { TodoItem } from './TodoItem';
 import { DispatchContext, StateContext } from '../Store';
 import { ActionType, FilterForTodos } from '../utils/enums';
 
@@ -43,7 +43,7 @@ export const TodoList = () => {
       </label>
 
       <ul className="todo-list" data-cy="todosList">
-        {filteredTodos.map(todo => <TodoInfo key={todo.id} todo={todo} />)}
+        {filteredTodos.map(todo => <TodoItem key={todo.id} todo={todo} />)}
       </ul>
     </section>
   );

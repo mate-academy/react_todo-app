@@ -11,7 +11,7 @@ type Props = {
   todo: Todo
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -19,7 +19,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const [inputValue, setInputValue] = useState(todo.title);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && inputValue.trim() !== '') {
       event.preventDefault();
       dispatch({
         type: ActionType.Edit,
@@ -27,6 +27,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
       });
 
       setInputValue('');
+    } else if (event.key === 'Enter' && inputValue.trim() === '') {
+      dispatch({ type: ActionType.Delete, payload: todo.id });
     } else if (event.key === 'Escape') {
       setInputValue('');
       dispatch({ type: ActionType.CancelEdit });
@@ -75,7 +77,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               type="checkbox"
               className="toggle"
               id={todo.id.toString()}
-              onClick={handleCheck}
+              checked={todo.completed && true}
+              onChange={handleCheck}
             />
             <label htmlFor={todo.id.toString()}>{todo.title}</label>
             <button

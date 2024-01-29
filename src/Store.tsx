@@ -41,6 +41,7 @@ function reducer(state: State, action: Action): State {
     case ActionType.Delete: {
       return {
         ...state,
+        todoEdit: 0,
         todos: [...state.todos.filter((todo) => todo.id !== action.payload)],
       };
     }
