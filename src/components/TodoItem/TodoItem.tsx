@@ -73,10 +73,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
           onChange={handleChangeChecked}
         />
 
-        <label
-          htmlFor="toggle-view"
-          onDoubleClick={handleDoubleClick}
-        >
+        <label onDoubleClick={handleDoubleClick}>
           {title}
         </label>
 
