@@ -49,6 +49,7 @@ export const NewTodo: React.FC<Props> = () => {
       onSubmit={handleSubmit}
     >
       <input
+        style={{ outline: 'none' }}
         type="text"
         id="todoTitle"
         name="todoTitle"
