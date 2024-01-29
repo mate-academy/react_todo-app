@@ -62,7 +62,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   return (
     <li
-      className={classNames({ completed, isEditing })}
+      className={classNames({ completed, editing: isEditing })}
     >
       <div className="view">
         <input
