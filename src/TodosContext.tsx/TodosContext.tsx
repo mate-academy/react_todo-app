@@ -49,7 +49,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   function addTodo(todo: Todo, event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (todo.title.length) {
+    if (todo.title.trim().length) {
       setTodos(prevTodos => [
         ...prevTodos,
         todo,

@@ -6,7 +6,7 @@ export const Header: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const newTodo = {
     id: +new Date(),
-    title: todoTitle,
+    title: todoTitle.trim(),
     completed: false,
   };
 

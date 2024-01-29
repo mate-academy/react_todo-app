@@ -65,18 +65,18 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
       <input
         type="text"
         className="edit"
-        value={editingTitle}
+        value={editingTitle.trim()}
         onChange={(event) => setEditingTitle(event.currentTarget.value)}
         onBlur={() => {
           setIsEditing(false);
-          saveEditingTitle(todo.id, editingTitle);
+          saveEditingTitle(todo.id, editingTitle.trim());
         }}
         ref={titleFocus}
         onKeyUp={(event) => {
           if (event.key === 'Enter') {
             if (editingTitle.trim()) {
-              saveEditingTitle(todo.id, editingTitle);
-              setEditingTitle(editingTitle);
+              saveEditingTitle(todo.id, editingTitle.trim());
+              setEditingTitle(editingTitle.trim());
               setIsEditing(false);
             } else {
               deleteTodo(todo.id);
