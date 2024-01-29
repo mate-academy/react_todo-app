@@ -4,14 +4,24 @@ import React, {
 } from 'react';
 import { Status, TodoType } from '../types/todo';
 
-export const TodosContext = React.createContext({
-  todos: [] as TodoType[],
-  setTodos: {} as Dispatch<SetStateAction<TodoType[]>>,
+type TodosContextType = {
+  todos: TodoType[];
+  setTodos: Dispatch<SetStateAction<TodoType[]>>;
+  selectedStatus: Status;
+  setSelectedStatus: Dispatch<SetStateAction<Status>>;
+  title: string,
+  setTitle: Dispatch<SetStateAction<string>>,
+  visibleTodos: TodoType[],
+};
+
+export const TodosContext = React.createContext<TodosContextType>({
+  todos: [],
+  setTodos: () => {},
   selectedStatus: Status.all,
-  setSelectedStatus: {} as Dispatch<SetStateAction<Status>>,
-  title: '' as string,
-  setTitle: {} as Dispatch<SetStateAction<string>>,
-  visibleTodos: [] as TodoType[],
+  setSelectedStatus: () => {},
+  title: '',
+  setTitle: () => {},
+  visibleTodos: [],
 });
 
 type Props = {

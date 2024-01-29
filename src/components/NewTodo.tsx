@@ -3,9 +3,7 @@ import { useCallback, useContext } from 'react';
 import { TodosContext } from './TodosContext';
 import { TodoType } from '../types/todo';
 
-type Props = {};
-
-export const NewTodo: React.FC<Props> = () => {
+export const NewTodo: React.FC = () => {
   const {
     title, setTitle, todos, setTodos,
   } = useContext(TodosContext);

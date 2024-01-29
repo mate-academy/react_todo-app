@@ -1,10 +1,9 @@
 import { useContext } from 'react';
+import cn from 'classnames';
 import { Status } from '../types/todo';
 import { TodosContext } from './TodosContext';
 
-type Props = {};
-
-export const TodosFilter: React.FC<Props> = () => {
+export const TodosFilter: React.FC = () => {
   const {
     selectedStatus, setSelectedStatus,
   } = useContext(TodosContext);
@@ -18,7 +17,7 @@ export const TodosFilter: React.FC<Props> = () => {
       <li>
         <a
           href="#/"
-          className={`${selectedStatus === Status.all ? 'selected' : ''}`}
+          className={cn({ selected: selectedStatus === Status.all })}
           onClick={() => handleStatusClick(Status.all)}
         >
           All
@@ -28,7 +27,7 @@ export const TodosFilter: React.FC<Props> = () => {
       <li>
         <a
           href="#/active"
-          className={`${selectedStatus === Status.active ? 'selected' : ''}`}
+          className={cn({ selected: selectedStatus === Status.active })}
           onClick={() => handleStatusClick(Status.active)}
         >
           Active
@@ -38,7 +37,7 @@ export const TodosFilter: React.FC<Props> = () => {
       <li>
         <a
           href="#/completed"
-          className={`${selectedStatus === Status.completed ? 'selected' : ''}`}
+          className={cn({ selected: selectedStatus === Status.completed })}
           onClick={() => handleStatusClick(Status.completed)}
         >
           Completed
