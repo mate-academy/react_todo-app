@@ -1,10 +1,12 @@
 import { useContext, useState } from 'react';
 import { TodosContext } from './TodosContext';
 import { Todos } from '../types/todos';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const Header: React.FC
   = () => {
-    const { todos, setTodos } = useContext(TodosContext);
+    const { setTodos } = useContext(TodosContext);
+    const [storedTodos, setStoredTodos] = useLocalStorage<Todos[]>('todos', []);
     const [newTodo, setNewTodo] = useState<Todos>({
       id: +new Date(),
       title: '',
@@ -22,9 +24,11 @@ export const Header: React.FC
       event.preventDefault();
 
       if (newTodo.title.trim() !== '') {
-        if (todos) {
-          setTodos([...todos, newTodo]);
-        }
+        const updatedTodos = [...storedTodos, newTodo];
+
+        setStoredTodos(updatedTodos);
+
+        setTodos(updatedTodos);
 
         setNewTodo({
           id: +new Date(),

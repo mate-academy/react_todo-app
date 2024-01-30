@@ -1,4 +1,6 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, {
+  useCallback, useContext, useMemo, useState,
+} from 'react';
 import { Todos } from '../types/todos';
 import { TodosContext } from './TodosContext';
 
@@ -31,21 +33,31 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo }) => {
     className = 'completed';
   }
 
-  const updateTodoItem = (item: Todos) => {
-    if (item.id === todo.id) {
-      return { ...item, title: completedTitle };
-    }
+  const updateTodos = useCallback((updateTodo: Todos) => {
+    setTodos(currentTodos => {
+      const newTodos = [...currentTodos];
+      const index = newTodos.findIndex(todoInd => todoInd.id === updateTodo.id);
 
-    return item;
-  };
+      newTodos.splice(index, 1, updateTodo);
 
-  const handleKeyUp = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      setTodos((currentTodos) => currentTodos.map(updateTodoItem));
+      return newTodos;
+    });
+  }, [setTodos]);
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && completedTitle.length > 0) {
+      updateTodos({ ...todo, title: completedTitle });
+      setIsEditing(false);
     } else if (event.key === 'Escape') {
       setCompletedTitle(todo.title);
+      setIsEditing(false);
+    } else if (completedTitle.length === 0) {
+      destroy(todo.id);
     }
+  };
 
+  const handleBlur = () => {
+    updateTodos({ ...todo, title: completedTitle });
     setIsEditing(false);
   };
 
@@ -55,13 +67,13 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo }) => {
     >
       <div className="view">
         <input
-          value={todo.title}
           checked={todo.completed}
           type="checkbox"
           className="toggle"
           id={`toggle-${todo.id}`}
-          onKeyUp={handleKeyUp}
-          onChange={() => toggleTodo(todo.id)}
+          onChange={
+            () => toggleTodo(todo.id)
+          }
         />
         <label
           // htmlFor={`toggle-${todo.id}`}
@@ -77,7 +89,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo }) => {
           aria-label="Delete todo"
         />
       </div>
-      <input type="text" className="edit" />
+      <input
+        type="text"
+        className="edit"
+        value={completedTitle}
+        onKeyUp={handleKeyUp}
+        onBlur={handleBlur}
+        onChange={(e) => setCompletedTitle(e.target.value)}
+      />
     </li>
   );
 };

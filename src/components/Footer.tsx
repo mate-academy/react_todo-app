@@ -22,7 +22,7 @@ export const Footer: React.FC<Props> = ({ count, currentStatus, onChange }) => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${count} item${count !== 1 &&  count !== 0 ? 's' : ''} left`}
+        {`${count} item${count !== 1 && count !== 0 ? 's' : ''} left`}
       </span>
 
       <TodosFilter currentStatus={currentStatus} onChange={onChange} />
