@@ -76,7 +76,7 @@ export const TodoApp = () => {
 
       <section className="main">
         {
-          todos.length
+          !!todos.length
           && (
             <>
               <input

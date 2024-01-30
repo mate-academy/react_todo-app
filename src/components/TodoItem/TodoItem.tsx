@@ -6,7 +6,7 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../contexts/TodosProvider';
 import { TodoAction } from '../../types/TodoAction';
-import { useDebounce } from '../../hooks/useDebounce';
+import { customDebounce } from '../../utils/useDebounce';
 
 interface Props {
   todo: Todo,
@@ -77,7 +77,7 @@ export const TodoItem: React.FC<Props> = React.memo(
       }
     };
 
-    const handleDblclick = useDebounce(onEditing, 300);
+    const handleDblclick = customDebounce(onEditing, 300);
 
     if (isEditing) {
       document.removeEventListener('keyup', keyboardListener);

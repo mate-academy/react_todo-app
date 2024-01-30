@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function useDebounce(callback: Function, delay: number) {
+export function customDebounce(callback: Function, delay: number) {
   let timerId = 0;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
