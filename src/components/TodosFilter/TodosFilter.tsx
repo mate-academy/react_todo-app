@@ -11,20 +11,6 @@ export const TodosFilter: React.FC<Props> = ({
   selected,
   setSelected,
 }) => {
-
-  const handleFilter = (status: Status) => {
-    switch (status) {
-      case (Status.Active):
-        setSelected(Status.Active);
-        break;
-      case (Status.Completed):
-        setSelected(Status.Completed);
-        break;
-      default:
-        setSelected(Status.All);
-    }
-  };
-
   return (
     <ul
       className="filters"
@@ -36,7 +22,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={cn({
             selected: selected === Status.All,
           })}
-          onClick={() => handleFilter(Status.All)}
+          onClick={() => setSelected(Status.All)}
         >
           All
         </a>
@@ -48,7 +34,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={cn({
             selected: selected === Status.Active,
           })}
-          onClick={() => handleFilter(Status.Active)}
+          onClick={() => setSelected(Status.Active)}
         >
           Active
         </a>
@@ -60,7 +46,7 @@ export const TodosFilter: React.FC<Props> = ({
           className={cn({
             selected: selected === Status.Completed,
           })}
-          onClick={() => handleFilter(Status.Completed)}
+          onClick={() => setSelected(Status.Completed)}
         >
           Completed
         </a>

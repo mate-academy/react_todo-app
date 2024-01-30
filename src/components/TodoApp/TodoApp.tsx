@@ -24,7 +24,7 @@ export const TodoApp: React.FC = () => {
       default:
         return todos;
     }
-  }, [selected, todos])
+  }, [selected, todos]);
 
   const handleToggleAll = () => {
     if (todos.every((todo) => todo.completed)) {
@@ -56,6 +56,10 @@ export const TodoApp: React.FC = () => {
     }
   };
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setItemTitle(e.target.value.trimStart());
+  }
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -67,9 +71,7 @@ export const TodoApp: React.FC = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={itemTitle}
-            onChange={(e) => {
-              setItemTitle(e.target.value.trimStart());
-            }}
+            onChange={onChange}
             onKeyDown={handleAddTodo}
           />
         </form>
