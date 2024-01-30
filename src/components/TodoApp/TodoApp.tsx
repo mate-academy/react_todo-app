@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Status } from '../../types/enums';
 import { TodoList } from '../TodoList';
 import { TodosContext } from '../TodosContext/TodosContext';
@@ -10,11 +10,21 @@ export const TodoApp: React.FC = () => {
     setTodos,
   } = useContext(TodosContext);
   const [itemTitle, setItemTitle] = useState('');
-  const [filteredTodos, setFilteredTodos] = useState(todos);
   const [selected, setSelected] = useState(Status.All);
 
   const hasTodos = todos.length > 0;
   const completedTodos = todos.some((todo) => todo.completed);
+
+  const filteredTodos = useMemo(() => {
+    switch (selected) {
+      case Status.Active:
+        return todos.filter((todo) => !todo.completed);
+      case Status.Completed:
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  }, [selected, todos])
 
   const handleToggleAll = () => {
     if (todos.every((todo) => todo.completed)) {
@@ -28,16 +38,6 @@ export const TodoApp: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (selected === Status.Active) {
-      setFilteredTodos(todos.filter((todo) => !todo.completed));
-    } else if (selected === Status.Completed) {
-      setFilteredTodos(todos.filter((todo) => todo.completed));
-    } else {
-      setFilteredTodos(todos);
-    }
-  }, [filteredTodos, selected, todos]);
-
   const handleClearCompleted = () => {
     setTodos(todos.filter((todo) => !todo.completed));
   };
@@ -45,7 +45,7 @@ export const TodoApp: React.FC = () => {
   const handleAddTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const newItem = {
       id: +new Date(),
-      title: itemTitle,
+      title: itemTitle.trim(),
       completed: false,
     };
 
@@ -55,10 +55,6 @@ export const TodoApp: React.FC = () => {
       setItemTitle('');
     }
   };
-
-  useEffect(() => {
-    setFilteredTodos(todos);
-  }, [todos]);
 
   return (
     <div className="todoapp">
@@ -72,7 +68,7 @@ export const TodoApp: React.FC = () => {
             placeholder="What needs to be done?"
             value={itemTitle}
             onChange={(e) => {
-              setItemTitle(e.target.value);
+              setItemTitle(e.target.value.trimStart());
             }}
             onKeyDown={handleAddTodo}
           />
@@ -104,7 +100,6 @@ export const TodoApp: React.FC = () => {
           <TodosFilter
             selected={selected}
             setSelected={setSelected}
-            setFilteredTodos={setFilteredTodos}
           />
 
           {completedTodos && (

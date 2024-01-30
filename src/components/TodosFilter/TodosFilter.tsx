@@ -1,35 +1,27 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import cn from 'classnames';
-import { TodosContext } from '../TodosContext/TodosContext';
 import { Status } from '../../types/enums';
-import { Todo } from '../../types/todo';
 
 type Props = {
   selected: Status,
   setSelected: (status: Status) => void,
-  setFilteredTodos: (todos: Todo[]) => void,
 };
 
 export const TodosFilter: React.FC<Props> = ({
   selected,
   setSelected,
-  setFilteredTodos,
 }) => {
-  const { todos } = useContext(TodosContext);
 
   const handleFilter = (status: Status) => {
     switch (status) {
       case (Status.Active):
         setSelected(Status.Active);
-        setFilteredTodos(todos.filter((todo) => todo.completed === false));
         break;
       case (Status.Completed):
         setSelected(Status.Completed);
-        setFilteredTodos(todos.filter((todo) => todo.completed === true));
         break;
       default:
         setSelected(Status.All);
-        setFilteredTodos(todos);
     }
   };
 
