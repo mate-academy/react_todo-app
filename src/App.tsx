@@ -10,13 +10,12 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <Header />
-      {todos.length > 0
-  && (
-    <>
-      <TodoList />
-      <Footer />
-    </>
-  )}
+      {todos.length > 0 && (
+        <>
+          <TodoList />
+          <Footer />
+        </>
+      )}
     </div>
   );
 };

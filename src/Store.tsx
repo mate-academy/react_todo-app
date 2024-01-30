@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import React, { useEffect, useReducer } from 'react';
-import { ActionType, FilterForTodos } from './utils/enums';
+import { ActionType, TodoFilterType } from './utils/enums';
 import { State } from './utils/interfaces';
 import { Action, DispatchFunction, GlobalStateProps } from './utils/types';
 
@@ -102,7 +102,7 @@ function reducer(state: State, action: Action): State {
 const initialState: State = {
   todos: [],
   todoEdit: 0,
-  todofilter: FilterForTodos.All,
+  todofilter: TodoFilterType.All,
   todoToggleAll: false,
 };
 

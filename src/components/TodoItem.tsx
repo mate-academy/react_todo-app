@@ -55,10 +55,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li className={classNames('',
-      {
-        completed: todo.completed,
-        editing: state.todoEdit,
-      })}
+      { completed: todo.completed, editing: state.todoEdit })}
     >
       {state.todoEdit === todo.id
         ? (
@@ -72,15 +69,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           />
         )
         : (
-          <div className="view" onDoubleClick={handleOnEdit}>
+          <div className="view">
             <input
               type="checkbox"
               className="toggle"
               id={todo.id.toString()}
               checked={todo.completed && true}
-              onChange={handleCheck}
+              onClick={handleCheck}
             />
-            <label htmlFor={todo.id.toString()}>{todo.title}</label>
+            <label onDoubleClick={handleOnEdit}>
+              {todo.title}
+            </label>
             <button
               type="button"
               className="destroy"
@@ -89,7 +88,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             />
           </div>
         )}
-
     </li>
   );
 };

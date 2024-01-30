@@ -1,4 +1,4 @@
-import { ActionType, FilterForTodos } from './enums';
+import { ActionType, TodoFilterType } from './enums';
 import { Todo } from './interfaces';
 
 export type Action =
@@ -10,7 +10,7 @@ export type Action =
   | { type: ActionType.ClearCompleted }
   | { type: ActionType.ToggleAll }
   | { type: ActionType.CancelEdit }
-  | { type: ActionType.FilterBy; payload: FilterForTodos };
+  | { type: ActionType.FilterBy; payload: TodoFilterType };
 
 export type GlobalStateProps = {
   children: React.ReactNode

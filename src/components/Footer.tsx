@@ -7,20 +7,22 @@ export const Footer = () => {
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
 
-  const completedTodos = todos.filter(todo => todo.completed === true);
+  const completedTodos = todos.filter(todo => todo.completed);
 
   function handlerClearCompleted() {
     dispatch({ type: ActionType.ClearCompleted });
   }
 
+  const itemsInList = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${itemsInList} items left`}
       </span>
 
       <TodosFilter />
-      {completedTodos.length > 0 ? (
+      {completedTodos.length > 0 && (
         <button
           type="button"
           className="clear-completed"
@@ -28,7 +30,7 @@ export const Footer = () => {
         >
           Clear completed
         </button>
-      ) : null }
+      )}
 
     </footer>
   );

@@ -2,13 +2,13 @@
 import classNames from 'classnames';
 import { useContext } from 'react';
 import { DispatchContext, StateContext } from '../Store';
-import { ActionType, FilterForTodos } from '../utils/enums';
+import { ActionType, TodoFilterType } from '../utils/enums';
 
 export const TodosFilter = () => {
   const dispatch = useContext(DispatchContext);
   const { todofilter } = useContext(StateContext);
 
-  function handlerFilterBy(filter: FilterForTodos) {
+  function handlerFilterBy(filter: TodoFilterType) {
     dispatch({ type: ActionType.FilterBy, payload: filter });
   }
 
@@ -20,8 +20,8 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/"
-          className={classNames({ selected: todofilter === FilterForTodos.All })}
-          onClick={() => handlerFilterBy(FilterForTodos.All)}
+          className={classNames({ selected: todofilter === TodoFilterType.All })}
+          onClick={() => handlerFilterBy(TodoFilterType.All)}
         >
           All
         </a>
@@ -30,8 +30,8 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/active"
-          className={classNames({ selected: todofilter === FilterForTodos.Active })}
-          onClick={() => handlerFilterBy(FilterForTodos.Active)}
+          className={classNames({ selected: todofilter === TodoFilterType.Active })}
+          onClick={() => handlerFilterBy(TodoFilterType.Active)}
         >
           Active
         </a>
@@ -40,8 +40,8 @@ export const TodosFilter = () => {
       <li>
         <a
           href="#/completed"
-          className={classNames({ selected: todofilter === FilterForTodos.Completed })}
-          onClick={() => handlerFilterBy(FilterForTodos.Completed)}
+          className={classNames({ selected: todofilter === TodoFilterType.Completed })}
+          onClick={() => handlerFilterBy(TodoFilterType.Completed)}
         >
           Completed
         </a>

@@ -1,8 +1,7 @@
-/* eslint-disable default-case */
 import { useContext } from 'react';
 import { TodoItem } from './TodoItem';
 import { DispatchContext, StateContext } from '../Store';
-import { ActionType, FilterForTodos } from '../utils/enums';
+import { ActionType, TodoFilterType } from '../utils/enums';
 
 export const TodoList = () => {
   const dispatch = useContext(DispatchContext);
@@ -10,17 +9,18 @@ export const TodoList = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (todofilter) {
-      case FilterForTodos.Active:
+      case TodoFilterType.Active:
         return !todo.completed;
 
-      case FilterForTodos.Completed:
+      case TodoFilterType.Completed:
         return todo.completed;
 
-      case FilterForTodos.All:
+      case TodoFilterType.All:
+        return true;
+
+      default:
         return true;
     }
-
-    return true;
   });
 
   function handleToggleAll() {
