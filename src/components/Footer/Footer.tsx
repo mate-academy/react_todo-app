@@ -8,8 +8,8 @@ export const Footer: React.FC = () => {
     todos, deleteCompletedTodos, filterBy, setFilterBy,
   } = useContext(TodosContext);
 
-  const notCompletedTasksCount = todos.filter(todo => todo.completed === false);
-  const completedTasksCount = todos.filter(todo => todo.completed === true);
+  const notCompletedTasksCount = todos.filter(todo => !todo.completed);
+  const completedTasksCount = todos.filter(todo => todo.completed);
 
   const handleDeleteCompleted = () => {
     deleteCompletedTodos();

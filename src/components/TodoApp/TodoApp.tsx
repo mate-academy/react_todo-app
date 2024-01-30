@@ -13,14 +13,14 @@ export const TodoApp: React.FC = () => {
   const [id, setId] = useState(+new Date());
   const [title, setTitle] = useState('');
 
-  const [completeAll, setCompleteAll] = useState(true);
+  const [isAllCompleted, setIsAllCompleted] = useState(true);
 
   const { addTodo, setAllAsComplete } = useContext(TodosContext);
 
   const handleCompleteAll = () => {
-    setCompleteAll(!completeAll);
+    setIsAllCompleted(!isAllCompleted);
 
-    setAllAsComplete(completeAll);
+    setAllAsComplete(isAllCompleted);
   };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

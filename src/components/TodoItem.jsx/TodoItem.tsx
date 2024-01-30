@@ -42,15 +42,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleCheck = () => {
     setTodos((currentTodos) => (
-      currentTodos.map(el => {
-        if (el.id === id) {
+      currentTodos.map(currTodo => {
+        if (currTodo.id === id) {
           return {
-            ...el,
-            completed: !el.completed,
+            ...currTodo,
+            completed: !currTodo.completed,
           };
         }
 
-        return el;
+        return currTodo;
       })
     ));
   };
@@ -75,8 +75,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (event.key === 'Enter' && editValue) {
       editTodo(id, editValue);
 
-      console.log(editValue);
-
       setIsEdit(false);
     } else if (event.key === 'Enter' && editValue === '') {
       deleteTodo(id);
@@ -93,7 +91,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       editTodo(id, editValue);
 
       setIsEdit(false);
-    } else if (editValue === '') {
+    } else if (!editValue) {
       deleteTodo(id);
       setIsEdit(false);
     }
@@ -113,12 +111,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={completed}
           onClick={handleCheck}
         />
+
         <label
           htmlFor={`toggle-${type}`}
           onDoubleClick={handleDoubleClick}
         >
           {title}
         </label>
+
         <button
           type="button"
           className="destroy"
@@ -126,6 +126,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={handleDelete}
         />
       </div>
+
       <input
         type="text"
         className="edit"

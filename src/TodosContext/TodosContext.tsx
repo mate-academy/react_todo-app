@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
@@ -46,15 +47,15 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const editTodo = (id: number, editValue: string) => {
     setTodos((currentTodos) => {
       return (
-        currentTodos.map(el => {
-          if (el.id === id) {
+        currentTodos.map(todo => {
+          if (todo.id === id) {
             return {
-              ...el,
+              ...todo,
               title: editValue,
             };
           }
 
-          return el;
+          return todo;
         })
       );
     });
@@ -62,24 +63,22 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const deleteTodo = (id: number) => {
     setTodos((currentTodos) => {
-      return currentTodos.filter(el => el.id !== id);
+      return currentTodos.filter(todo => todo.id !== id);
     });
   };
 
   const setAllAsComplete = (completeAll: boolean) => {
     setTodos((currentTodos) => (
-      currentTodos.map((el) => {
-        return {
-          ...el,
-          completed: completeAll,
-        };
-      })
+      currentTodos.map((todo) => ({
+        ...todo,
+        completed: completeAll,
+      }))
     ));
   };
 
   const deleteCompletedTodos = () => {
     setTodos((currentTodos) => (
-      currentTodos.filter(el => !el.completed)
+      currentTodos.filter(todo => !todo.completed)
     ));
   };
 
@@ -97,12 +96,12 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   }), [todos,
     todosCount,
     filterBy,
-    // setTodos,
-    // addTodo,
-    // editTodo,
-    // deleteTodo,
-    // setAllAsComplete,
-    // deleteCompletedTodos,
+    setTodos,
+    addTodo,
+    editTodo,
+    deleteTodo,
+    setAllAsComplete,
+    deleteCompletedTodos,
   ]);
 
   return (
