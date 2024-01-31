@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 
-import { Todo } from '../types/Todo';
 import { TodosContext } from '../store/TodosContextProvider';
-import { TodosFilter } from './TododsFilter';
+import { TodosFilter } from './TodosFilter';
+import { Status } from '../types/Status';
 
 interface Props {
-  setVisibleTodos: (newTodos: Todo[]) => void;
+  handleFilteredTodos: (newStatus: Status) => void;
   handleClearCompleted: () => void;
 }
 
 export const Footer: React.FC<Props> = React.memo(({
-  setVisibleTodos,
+  handleFilteredTodos,
   handleClearCompleted,
 }) => {
   const todos = useContext(TodosContext);
@@ -21,7 +21,7 @@ export const Footer: React.FC<Props> = React.memo(({
         {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
-      <TodosFilter handleFilteredTodos={setVisibleTodos} />
+      <TodosFilter handleFilteredTodos={handleFilteredTodos} />
 
       {todos.some(todo => todo.completed) && (
         <button
