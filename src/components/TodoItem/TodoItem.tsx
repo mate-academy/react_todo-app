@@ -38,7 +38,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleSaveEdit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && titleValue.length === 0) {
+    if (e.key === 'Enter' && titleValue.trim().length === 0) {
       handleDeleteTodo();
     } else if (e.key === 'Enter') {
       setTodos(todos.map((item) => {

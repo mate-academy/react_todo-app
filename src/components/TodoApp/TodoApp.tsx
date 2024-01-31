@@ -58,7 +58,7 @@ export const TodoApp: React.FC = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItemTitle(e.target.value.trimStart());
-  }
+  };
 
   return (
     <div className="todoapp">
