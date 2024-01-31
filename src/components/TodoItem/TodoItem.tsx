@@ -34,7 +34,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitleValue(e.target.value);
+    setTitleValue(e.target.value.trimStart());
   };
 
   const handleSaveEdit = (e: React.KeyboardEvent<HTMLInputElement>) => {
