@@ -11,7 +11,6 @@ export const Main = () => {
 
   return (
     <section className="main">
-
       <input
         type="checkbox"
         id="toggle-all"

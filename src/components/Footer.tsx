@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { TodoContext } from '../contexts/TodoContext';
 import { Todos } from '../types/Todos';
-import { Status } from '../types/Status';
+import { FilterStatus } from '../types/Status';
 
 export const Footer: React.FC = () => {
   const {
@@ -24,8 +24,8 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/"
-            className={classNames({ selected: status === Status.All })}
-            onClick={() => setStatus(Status.All)}
+            className={classNames({ selected: status === FilterStatus.All })}
+            onClick={() => setStatus(FilterStatus.All)}
           >
             All
           </a>
@@ -34,8 +34,8 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/active"
-            className={classNames({ selected: status === Status.Active })}
-            onClick={() => setStatus(Status.Active)}
+            className={classNames({ selected: status === FilterStatus.Active })}
+            onClick={() => setStatus(FilterStatus.Active)}
           >
             Active
           </a>
@@ -44,8 +44,8 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/completed"
-            className={classNames({ selected: status === Status.Completed })}
-            onClick={() => setStatus(Status.Completed)}
+            className={classNames({ selected: status === FilterStatus.Completed })}
+            onClick={() => setStatus(FilterStatus.Completed)}
           >
             Completed
           </a>

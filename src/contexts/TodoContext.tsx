@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Todos } from '../types/Todos';
-import { Status } from '../types/Status';
+import { FilterStatus } from '../types/Status';
 import { filterTodoByStatus } from '../services/FilteringByStatus';
 import { ContextProps } from '../types/ContextProps';
 import { useLocalStorage } from '../hooks/LocalStorage';
@@ -12,19 +12,19 @@ export const TodoContext = React.createContext<ContextProps>({
   setTodos: () => { },
   filterTodoByStatus: () => [],
   setStatus: () => [],
-  status: Status.All,
+  status: FilterStatus.All,
   clearTodo: () => [],
   editTodo: () => [],
   toggleAll: () => {},
 });
 
-type Childer = {
+type Props = {
   children: React.ReactNode;
 };
 
-export const TodoProvider: React.FC<Childer> = ({ children }) => {
+export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todos[]>('todos', []);
-  const [status, setStatus] = useState(Status.All);
+  const [status, setStatus] = useState(FilterStatus.All);
 
   const addTodo = (todo: Todos) => {
     setTodos(prevTodo => [
