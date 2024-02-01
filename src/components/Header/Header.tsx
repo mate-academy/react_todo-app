@@ -6,30 +6,29 @@ export const Header: React.FC = () => {
     allTodos, setAllTodos, query, setQuery,
   } = useContext(TodosContext);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const trimedValue = e.currentTarget.value.trim();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
+    const trimedValue = query.trim();
+
+    if (trimedValue !== '') {
       const newTodo = {
         id: +new Date(),
         title: trimedValue,
         completed: false,
       };
 
-      if (trimedValue !== '') {
-        setAllTodos([...allTodos, newTodo]);
-      }
-
-      setQuery('');
+      setAllTodos([...allTodos, newTodo]);
     }
+
+    setQuery('');
   };
 
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           data-cy="createTodo"
@@ -37,7 +36,6 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
         />
       </form>
     </header>
