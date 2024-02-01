@@ -38,17 +38,18 @@ body {
 }
 
 .todoapp {
-  background: #fff;
+  background: rgba(175, 47, 47, 0.15);
+  border-radius: 10px;
   margin: 130px 0 40px;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-    0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px 0 rgba(216, 109, 10, 0.9),
+    0 25px 50px 0 rgba(218, 255, 8, 0.4);
 }
 
 .todoapp input::placeholder {
   font-style: italic;
   font-weight: 300;
-  color: #e6e6e6;
+  color: rgba(209, 152, 126, 0.9);
 }
 
 .todoapp h1 {
@@ -75,6 +76,7 @@ body {
   line-height: 1.4em;
   color: inherit;
   padding: 6px;
+  border-radius: 10px;
   border: 1px solid #999;
   box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
@@ -85,7 +87,7 @@ body {
 .new-todo {
   padding: 16px 16px 16px 60px;
   border: none;
-  background: rgba(0, 0, 0, 0.01);
+  background: rgba(122, 101, 83, 0.9);
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
 }
 
