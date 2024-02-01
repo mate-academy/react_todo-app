@@ -69,6 +69,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     clearTodo,
     editTodo,
     toggleAll,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [todos, status]);
 
   return (

@@ -1,5 +1,5 @@
-export type Todos = {
+export interface Todos {
   id: number;
   title: string;
   completed: boolean;
-};
+}

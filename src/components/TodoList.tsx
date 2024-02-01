@@ -9,6 +9,7 @@ export const TodoList: React.FC = () => {
 
   useEffect(() => {
     setVisibleTodos(filterTodoByStatus(todos, status));
+   //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todos, status]);
 
   return (

@@ -5,9 +5,9 @@ import classNames from 'classnames';
 import { Todos } from '../types/Todos';
 import { TodoContext } from '../contexts/TodoContext';
 
-type Props = {
+interface Props {
   items: Todos
-};
+}
 
 export const TodoItem: React.FC<Props> = ({ items }) => {
   const {
@@ -85,7 +85,7 @@ export const TodoItem: React.FC<Props> = ({ items }) => {
 
       </div>
 
-      {isVisibleEdit && (
+      {!!isVisibleEdit && (
         <input
           type="text"
           className="edit"

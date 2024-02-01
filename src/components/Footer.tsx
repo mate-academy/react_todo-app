@@ -34,7 +34,9 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/active"
-            className={classNames({ selected: status === FilterStatus.Active })}
+            className={classNames({
+              selected: status === FilterStatus.Active
+            })}
             onClick={() => setStatus(FilterStatus.Active)}
           >
             Active
@@ -44,7 +46,9 @@ export const Footer: React.FC = () => {
         <li>
           <a
             href="#/completed"
-            className={classNames({ selected: status === FilterStatus.Completed })}
+            className={classNames(
+              { selected: status === FilterStatus.Completed },
+            )}
             onClick={() => setStatus(FilterStatus.Completed)}
           >
             Completed
@@ -52,7 +56,7 @@ export const Footer: React.FC = () => {
         </li>
       </ul>
 
-      {visibleTodo && (
+      {!!visibleTodo && (
         <button
           type="button"
           className="clear-completed"
