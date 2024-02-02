@@ -18,7 +18,7 @@ export const TodoItem: React.FC<Props> = ({ title, id }) => {
   const { todos } = useContext(StateContext);
 
   const [newTitle, setNewTitle] = useState(title);
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   const indexTodo: number = todos.findIndex((todo) => todo.id === id);
 
