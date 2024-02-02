@@ -5,7 +5,6 @@
 import React, { useContext, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoUpdateContext } from '../TodosProvider/TodosProvider';
-/* import cn from 'classnames'; */
 
 interface Props {
   item: Todo;
@@ -61,8 +60,6 @@ export const TodoItem: React.FC<Props> = (props) => {
     }
 
     if (e.key === 'Escape') {
-      // editTodo(editedTodo);
-
       setEditing(false);
     }
   };

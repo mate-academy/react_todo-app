@@ -3,30 +3,7 @@ import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { useLocalStorage } from '../../utils/LocalStorage';
 
-const sTodos: Todo[] = [
-  {
-    id: 1,
-    title: '1 todo',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: '2 todo',
-    completed: false,
-  },
-  {
-    id: 3,
-    title: '3 todo',
-    completed: true,
-  },
-  {
-    id: 4,
-    title: '4 todo',
-    completed: false,
-  },
-];
-
-export const TodoContext = React.createContext(sTodos);
+export const TodoContext = React.createContext<Todo[]>([]);
 
 export const TodoUpdateContext = React.createContext({
   addTodo: (_title: string) => {},
@@ -129,17 +106,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   }
 
   function removeAllCompleted():void {
-    setTodos(prevTodos => {
-      const todosCopy = [...prevTodos];
-
-      while (todosCopy.some(todo => todo.completed === true)) {
-        const index = todosCopy.findIndex(todo => todo.completed === true);
-
-        todosCopy.splice(index, 1);
-      }
-
-      return todosCopy;
-    });
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   }
 
   return (

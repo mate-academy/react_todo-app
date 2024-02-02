@@ -1,24 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { AddTodoForm } from './components/AddTodoForm/AddTodoForm';
 import { TodoList } from './components/TodoList/TodoList';
-import { Todo } from './types/Todo';
 import { TodoContext } from './components/TodosProvider/TodosProvider';
 import { Filter } from './types/Filter';
 import { Footer } from './components/Footer/Footer';
-
-function prepareTodos(todos: Todo[], filter: Filter): Todo[] {
-  let todosCopy = [...todos];
-
-  if (filter === Filter.Active) {
-    todosCopy = todosCopy.filter(todo => todo.completed === false);
-  }
-
-  if (filter === Filter.Completed) {
-    todosCopy = todosCopy.filter(todo => todo.completed === true);
-  }
-
-  return todosCopy;
-}
+import { prepareTodos } from './utils/prepareTodos';
 
 export const App: React.FC = () => {
   const todos = useContext(TodoContext);
