@@ -80,6 +80,7 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  outline: none;
 }
 
 .new-todo {
@@ -127,6 +128,10 @@ body {
   color: #737373;
 }
 
+.toggle-all +:hover {
+  cursor: pointer;
+}
+
 .footer {
   color: #777;
   padding: 10px 15px;
@@ -169,6 +174,7 @@ body {
 
 .clear-completed:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .clear-completed:active {
@@ -180,3 +186,7 @@ body {
     height: 50px;
   }
 }
+
+/* .toggle +:hover {
+  cursor: pointer;
+} */
