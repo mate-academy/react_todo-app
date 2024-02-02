@@ -3,6 +3,8 @@
   margin: 0;
   padding: 0;
   list-style: none;
+  max-height: 70vh;
+  overflow: hidden auto;
 }
 
 .todo-list li {
@@ -21,7 +23,7 @@
 }
 
 .todo-list li.editing:last-child {
-  margin-bottom: -1px;
+  margin-bottom: 0;
 }
 
 .todo-list li .edit {
