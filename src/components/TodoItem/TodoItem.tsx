@@ -105,9 +105,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </div>
       {editing && (
         <Tooltip
-            title={'Todo will be deleted if the title is empty'} placement={'right'}
-            open={emptyTitleValue}
-          >
+          title="Todo will be deleted if the title is empty"
+          placement="right"
+          open={emptyTitleValue}
+        >
           <input
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
@@ -119,7 +120,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             onKeyDown={handleSaveEdit}
             onKeyUp={handleCancelEditing}
           />
-        </ Tooltip>
+        </Tooltip>
       )}
     </li>
   );
