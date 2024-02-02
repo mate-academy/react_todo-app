@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material';
 import cn from 'classnames';
 import React, { useContext, useState } from 'react';
 import { Todo } from '../../types/todo';
@@ -12,6 +13,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
   const [editing, setEditing] = useState(false);
   const [titleValue, setTitleValue] = useState(title);
+
+  const emptyTitleValue = titleValue.length === 0;
 
   const handleComplete = () => {
     const updatedTodos = todos.map((item) => {
@@ -101,17 +104,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </div>
       {editing && (
-        <input
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
-          type="text"
-          className="edit"
-          value={titleValue}
-          onBlur={handleOnBlur}
-          onChange={handleOnChange}
-          onKeyDown={handleSaveEdit}
-          onKeyUp={handleCancelEditing}
-        />
+        <Tooltip
+            title={'Todo will be deleted if the title is empty'} placement={'right'}
+            open={emptyTitleValue}
+          >
+          <input
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+            type="text"
+            className="edit"
+            value={titleValue}
+            onBlur={handleOnBlur}
+            onChange={handleOnChange}
+            onKeyDown={handleSaveEdit}
+            onKeyUp={handleCancelEditing}
+          />
+        </ Tooltip>
       )}
     </li>
   );
