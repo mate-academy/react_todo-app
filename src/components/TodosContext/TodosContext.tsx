@@ -14,7 +14,7 @@ const initialState: State = {
 
 const data = localStorage.getItem('todos');
 
-if (data) {
+if (data !== null) {
   initialState.todos = JSON.parse(data);
 }
 
@@ -67,7 +67,7 @@ function reducer(state: State, action: Action): State {
     }
 
     case ActionTypes.RemoveCompletedTodo: {
-      todos = todos.filter((todo: Todo) => todo.completed);
+      todos = todos.filter((todo: Todo) => !todo.completed);
 
       return ({ ...state, todos });
     }

@@ -2,9 +2,7 @@ import { useContext, useState } from 'react';
 import { DispatchContext } from '../TodosContext/TodosContext';
 import { ActionTypes } from '../../types/types';
 
-type Props = {};
-
-export const Header: React.FC<Props> = () => {
+export const Header: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const [newTodo, setNewTodo] = useState('');
 
