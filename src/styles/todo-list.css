@@ -64,7 +64,7 @@
 }
 
 .todo-list li.completed label {
-  color: #d9d9d9;
+  color: rgb(99, 73, 73);
   text-decoration: line-through;
 }
 
@@ -89,12 +89,14 @@
   margin: auto 0;
   font-size: 30px;
   color: #cc9a9a;
+  opacity: 0.2;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
 }
 
 .todo-list li .destroy:hover {
-  color: #af5b5e;
+  color: #925c5e;
+  opacity: 1;
 }
 
 .todo-list li .destroy::after {
