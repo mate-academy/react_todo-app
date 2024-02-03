@@ -1,17 +1,22 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { TodosContext } from './TodosContext';
 import { Todos } from '../types/todos';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const Header: React.FC
   = () => {
-    const { setTodos } = useContext(TodosContext);
-    const [storedTodos, setStoredTodos] = useLocalStorage<Todos[]>('todos', []);
+    const { todos, setTodos } = useContext(TodosContext);
     const [newTodo, setNewTodo] = useState<Todos>({
       id: +new Date(),
       title: '',
       completed: false,
     });
+
+  const titleField = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+      if (titleField.current) {
+        titleField.current.focus();
+      }
+  }, [newTodo.title]);
 
     const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
       setNewTodo({
@@ -24,9 +29,8 @@ export const Header: React.FC
       event.preventDefault();
 
       if (newTodo.title.trim() !== '') {
-        const updatedTodos = [...storedTodos, newTodo];
-
-        setStoredTodos(updatedTodos);
+        const updatedTodo = {...newTodo, id: +new Date()};
+        const updatedTodos=[...todos, updatedTodo];
 
         setTodos(updatedTodos);
 
@@ -47,6 +51,7 @@ export const Header: React.FC
           onSubmit={addTodo}
         >
           <input
+            ref={titleField}
             type="text"
             data-cy="createTodo"
             className="new-todo"

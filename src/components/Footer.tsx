@@ -19,6 +19,10 @@ export const Footer: React.FC<Props> = ({ count, currentStatus, onChange }) => {
     setTodos(activeTodos);
   };
 
+  if (todos.length === 0) {
+    return null;
+  }
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">

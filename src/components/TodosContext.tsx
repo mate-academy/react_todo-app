@@ -1,17 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Todos } from '../types/todos';
 
-// type Todos = {
-//   id: number;
-//   title: string;
-//   completed: boolean;
-// };
-
-// type TodosContextType = {
-//   todos: Todos[];
-//   setTodos: (todos: Todos[]) => void;
-// };
-
 export const TodosContext = React.createContext({
   todos: [] as Todos[],
   setTodos: (() => {}) as React.Dispatch<React.SetStateAction<Todos[]>>,

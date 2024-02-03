@@ -9,7 +9,6 @@ type Props = {
 
 export const Todolist: React.FC<Props> = ({ filteredTodos }) => {
   const { todos, setTodos } = useContext(TodosContext);
-
   const toggleTodo = (id: number) => {
     const updatedTodos = todos.map(todo => {
       return todo.id === id ? { ...todo, completed: !todo.completed } : todo;

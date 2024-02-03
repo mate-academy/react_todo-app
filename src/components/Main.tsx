@@ -9,7 +9,6 @@ type Props = {
 
 export const Main: React.FC<Props> = ({ filteredTodos }) => {
   const { todos, setTodos } = useContext(TodosContext);
-
   const areAllCompleted = todos.every(todo => todo.completed);
 
   const toggleAllTodos = () => {
