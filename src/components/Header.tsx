@@ -1,4 +1,6 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { TodosContext } from './TodosContext';
 import { Todos } from '../types/todos';
 
@@ -11,12 +13,13 @@ export const Header: React.FC
       completed: false,
     });
 
-  const titleField = useRef<HTMLInputElement>(null);
+    const titleField = useRef<HTMLInputElement>(null);
+
     useEffect(() => {
       if (titleField.current) {
         titleField.current.focus();
       }
-  }, [newTodo.title]);
+    }, [newTodo.title]);
 
     const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
       setNewTodo({
@@ -29,8 +32,8 @@ export const Header: React.FC
       event.preventDefault();
 
       if (newTodo.title.trim() !== '') {
-        const updatedTodo = {...newTodo, id: +new Date()};
-        const updatedTodos=[...todos, updatedTodo];
+        const updatedTodo = { ...newTodo, id: +new Date() };
+        const updatedTodos = [...todos, updatedTodo];
 
         setTodos(updatedTodos);
 

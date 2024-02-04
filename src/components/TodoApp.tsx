@@ -4,12 +4,9 @@ import { Main } from './Main';
 import { Footer } from './Footer';
 import { TodosContext } from './TodosContext';
 import { Status } from '../types/status';
-// import { useLocalStorage } from '../hooks/useLocalStorage';
-// import { Todos } from '../types/todos';
 
 export const TodoApp: React.FC = () => {
   const { todos } = useContext(TodosContext);
-  // const [ todos ] = useLocalStorage<Todos[]>('todos', []);
   const uncompletedTodosCount = todos.filter((todo) => !todo.completed).length;
   const [filterStatus, setFilterStatus] = useState(Status.All);
 

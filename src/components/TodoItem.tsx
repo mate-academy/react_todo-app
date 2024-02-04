@@ -1,9 +1,9 @@
 import React, {
   useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
+import classNames from 'classnames';
 import { Todos } from '../types/todos';
 import { TodosContext } from './TodosContext';
-import classNames from 'classnames';
 
 type TodoItemProps = {
   todo: Todos;
@@ -26,10 +26,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo }) => {
     };
   }, [setTodos]);
 
-  const className=classNames({
-    editing:isEditing,
-    completed:todo.completed,
-  })
+  const className = classNames({
+    editing: isEditing,
+    completed: todo.completed,
+  });
 
   const updateTodos = useCallback((updateTodo: Todos) => {
     setTodos(currentTodos => {
@@ -60,6 +60,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo }) => {
   };
 
   const titleField = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (isEditing && titleField.current) {
       titleField.current.focus();
