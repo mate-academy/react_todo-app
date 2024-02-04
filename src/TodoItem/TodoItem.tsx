@@ -87,7 +87,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={toggleComplete}
         />
         <label
-          htmlFor="toggle-view"
           onDoubleClick={() => setIsEditing(true)}
         >
           {title}

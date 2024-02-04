@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
 import cn from 'classnames';
 import { Status } from '../Types/Status';
 
 type Props = {
   handleFilterTodos: (newFilter: Status) => void;
+  filterBy: Status,
+  setFilterBy: (filter: Status) => void,
 };
 
-export const TodosFilter: React.FC<Props> = ({ handleFilterTodos }) => {
+export const TodosFilter: React.FC<Props> = ({
+  handleFilterTodos,
+  filterBy,
+  setFilterBy,
+}) => {
   const { all, active, completed } = Status;
-  const [filterBy, setFilterBy] = useState(Status.all);
 
   const handleFilterChange = (newFilter: Status) => {
     setFilterBy(newFilter);
