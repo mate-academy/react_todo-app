@@ -45,7 +45,6 @@ export const TodoApp = () => {
             handleFilterTodos={handleFilterTodos}
             clearCompleted={handleClearCompleted}
             filterBy={filterBy}
-            setFilterBy={setFilterBy}
           />
         </>
       )}

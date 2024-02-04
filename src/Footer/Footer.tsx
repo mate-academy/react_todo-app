@@ -8,7 +8,6 @@ type Props = {
   handleFilterTodos: (newFilter: Status) => void;
   clearCompleted: () => void;
   filterBy: Status,
-  setFilterBy: (filter: Status) => void;
 };
 
 const Footer: React.FC<Props> = ({
@@ -16,7 +15,6 @@ const Footer: React.FC<Props> = ({
   handleFilterTodos,
   clearCompleted,
   filterBy,
-  setFilterBy,
 }) => {
   const activeTodosLength = todos.filter(todo => !todo.completed).length;
   const completedTodos = todos.some(todo => todo.completed);
@@ -30,7 +28,6 @@ const Footer: React.FC<Props> = ({
       <TodosFilter
         handleFilterTodos={handleFilterTodos}
         filterBy={filterBy}
-        setFilterBy={setFilterBy}
       />
 
       {completedTodos && (

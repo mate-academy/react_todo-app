@@ -4,18 +4,15 @@ import { Status } from '../Types/Status';
 type Props = {
   handleFilterTodos: (newFilter: Status) => void;
   filterBy: Status,
-  setFilterBy: (filter: Status) => void,
 };
 
 export const TodosFilter: React.FC<Props> = ({
   handleFilterTodos,
   filterBy,
-  setFilterBy,
 }) => {
   const { all, active, completed } = Status;
 
   const handleFilterChange = (newFilter: Status) => {
-    setFilterBy(newFilter);
     handleFilterTodos(newFilter);
   };
 
