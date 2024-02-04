@@ -37,7 +37,7 @@ export const TodoApp = () => {
     <div className="todoapp">
       <Header />
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <Main todos={getTodos()} />
           <Footer

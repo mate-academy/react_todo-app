@@ -14,15 +14,18 @@ const Footer: React.FC<Props> = ({
   handleFilterTodos,
   clearCompleted,
 }) => {
+  const activeTodosLength = todos.filter(todo => !todo.completed).length;
+  const completedTodos = todos.some(todo => todo.completed);
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${activeTodosLength} items left`}
       </span>
 
       <TodosFilter handleFilterTodos={handleFilterTodos} />
 
-      {todos.some(todo => todo.completed) && (
+      {completedTodos && (
         <button
           type="button"
           className="clear-completed"
