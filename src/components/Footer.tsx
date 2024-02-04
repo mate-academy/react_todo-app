@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { TodosContext } from '../TodosContext.tsx/TodosContext';
+import { TodosContext } from '../variables/TodosContext.1';
 import { TodosFilter } from './TodosFilter';
 
 export const Footer: React.FC = () => {
@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
 
       <TodosFilter />
 
-      {completedTodos.length > 0 && (
+      {!!completedTodos.length && (
         <button
           type="button"
           className="clear-completed"

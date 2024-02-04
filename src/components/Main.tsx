@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 import { TodoList } from './TodoList';
-import { TodosContext } from '../TodosContext.tsx/TodosContext';
+import { TodosContext } from '../variables/TodosContext.1';
 
 export const Main: React.FC<{}> = () => {
   const {

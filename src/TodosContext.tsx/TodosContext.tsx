@@ -1,47 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-
-export interface Todo {
-  id: number,
-  title: string,
-  completed: boolean,
-}
-
-export enum Status {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
-}
-
-interface TodoContext {
-  todos: Todo[],
-  addTodo: (todo: Todo, event: React.FormEvent<HTMLFormElement>) => void,
-  setCompleted: (todoID: number) => void,
-  setAllCompletedOrRemoveCompleted: (todos: Todo[]) => void,
-  query: string,
-  setQuery: React.Dispatch<React.SetStateAction<string>>,
-  filteredTodosForList: Todo[],
-  deleteCompletedTodos: () => void,
-  deleteTodo: (id: number) => void,
-  saveEditingTitle: (todoId: number, todoNewTitle: string) => void,
-}
-
-export const TodosContext = React.createContext<TodoContext>({
-  todos: [],
-  addTodo: () => { },
-  setCompleted: () => { },
-  setAllCompletedOrRemoveCompleted: () => { },
-  query: '',
-  setQuery: () => { },
-  filteredTodosForList: [],
-  deleteCompletedTodos: () => { },
-  deleteTodo: () => { },
-  saveEditingTitle: () => { },
-});
-
-interface Props {
-  children: React.ReactNode;
-}
+import { Todo } from '../types/Todo';
+import { TodosContext } from '../variables/TodosContext.1';
+import { Props } from '../types/Props';
+import { chooseFilterForTodos } from '../services/chooseFilterForTodos';
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
@@ -67,22 +29,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(changeCompletedTodos);
   }
 
-  function chooseFilterForTodos(queryForFilter: string) {
-    return todos.filter(todo => {
-      switch (queryForFilter) {
-        case Status.Active:
-          return todo.completed === false;
-
-        case Status.Completed:
-          return todo.completed === true;
-
-        default:
-          return true;
-      }
-    });
-  }
-
-  const filteredTodosForList = chooseFilterForTodos(query);
+  const filteredTodosForList = chooseFilterForTodos(query, todos);
 
   function saveEditingTitle(todoID: number, changedTitle: string) {
     let changedTodos = [...todos];
@@ -132,6 +79,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     deleteCompletedTodos,
     deleteTodo,
     saveEditingTitle,
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [todos, filteredTodosForList, query]);
 
   return (

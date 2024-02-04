@@ -1,6 +1,6 @@
 import React from 'react';
 import { TodoItem } from './TodoItem';
-import { Todo } from '../TodosContext.tsx/TodosContext';
+import { Todo } from '../types/Todo';
 
 interface TodoListInterface {
   items: Todo[],

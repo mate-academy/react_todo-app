@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { Status, TodosContext } from '../TodosContext.tsx/TodosContext';
+import { TodosContext } from '../variables/TodosContext.1';
+import { Status } from '../types/Status';
 
 export const TodosFilter: React.FC = () => {
   const { setQuery, query } = useContext(TodosContext);

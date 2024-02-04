@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Main } from './Main';
-import { TodosContext } from '../TodosContext.tsx/TodosContext';
+import { TodosContext } from '../variables/TodosContext.1';
 
 export const TodoApp = () => {
   const { todos } = useContext(TodosContext);
@@ -12,7 +12,7 @@ export const TodoApp = () => {
       <Header />
 
       <Main />
-      {todos.length > 0 && (<Footer />)}
+      {!!todos.length && (<Footer />)}
     </div>
   );
 };

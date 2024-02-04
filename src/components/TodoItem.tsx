@@ -5,7 +5,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Todo, TodosContext } from '../TodosContext.tsx/TodosContext';
+import { TodosContext } from '../variables/TodosContext.1';
+import { Todo } from '../types/Todo';
 
 interface TodoItemProps {
   todo: Todo;
@@ -28,6 +29,28 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     }
   }, [isEdeting]);
 
+  const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (editingTitle.trim()) {
+        saveEditingTitle(todo.id, editingTitle.trim());
+        setEditingTitle(editingTitle.trim());
+        setIsEditing(false);
+      } else {
+        deleteTodo(todo.id);
+      }
+    }
+
+    if (event.key === 'Escape') {
+      if (!editingTitle.trim()) {
+        setIsEditing(false);
+        setEditingTitle(todo.title);
+      } else {
+        setIsEditing(false);
+        setEditingTitle(todo.title);
+      }
+    }
+  };
+
   return (
     <li
       key={todo.id}
@@ -48,7 +71,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
         <label onDoubleClick={() => {
           setIsEditing(true);
         }}
-
         >
           {todo.title}
         </label>
@@ -72,27 +94,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           saveEditingTitle(todo.id, editingTitle.trim());
         }}
         ref={titleFocus}
-        onKeyUp={(event) => {
-          if (event.key === 'Enter') {
-            if (editingTitle.trim()) {
-              saveEditingTitle(todo.id, editingTitle.trim());
-              setEditingTitle(editingTitle.trim());
-              setIsEditing(false);
-            } else {
-              deleteTodo(todo.id);
-            }
-          }
-
-          if (event.key === 'Escape') {
-            if (!editingTitle.trim()) {
-              setIsEditing(false);
-              setEditingTitle(todo.title);
-            } else {
-              setIsEditing(false);
-              setEditingTitle(todo.title);
-            }
-          }
-        }}
+        onKeyUp={(event) => handleOnKeyUp(event)}
       />
     </li>
   );

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { TodosContext } from '../TodosContext.tsx/TodosContext';
+import { TodosContext } from '../variables/TodosContext.1';
 
 export const Header: React.FC = () => {
   const { addTodo } = useContext(TodosContext);
