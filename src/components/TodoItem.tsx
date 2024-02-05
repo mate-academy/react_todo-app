@@ -11,7 +11,7 @@ type TodoItemProps = {
 };
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo }) => {
-  const { setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
   const [isEditing, setIsEditing] = useState(false);
   const [completedTitle, setCompletedTitle] = useState(todo.title);
 
@@ -21,26 +21,24 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo }) => {
 
   const destroy = useMemo(() => {
     return (id: number) => {
-      setTodos(currentTodo => currentTodo
+      setTodos(todos
         .filter((current) => current.id !== id));
     };
-  }, [setTodos]);
+  }, [setTodos, todos]);
 
   const className = classNames({
     editing: isEditing,
     completed: todo.completed,
   });
 
-  const updateTodos = useCallback((updateTodo: Todos) => {
-    setTodos(currentTodos => {
-      const newTodos = [...currentTodos];
-      const index = newTodos.findIndex(todoInd => todoInd.id === updateTodo.id);
+  const updateTodos = useCallback((updatedTodo: Todos) => {
+    const newTodos = todos
+      .map(currentTodo => (
+        currentTodo.id === updatedTodo.id ? updatedTodo : todo
+      ));
 
-      newTodos.splice(index, 1, updateTodo);
-
-      return newTodos;
-    });
-  }, [setTodos]);
+    setTodos(newTodos);
+  }, [setTodos, todo, todos]);
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && completedTitle.length > 0) {
