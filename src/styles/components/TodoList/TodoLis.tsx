@@ -23,10 +23,10 @@ export const TodoList: React.FC = () => {
   }
 
   return (
-    <>
+    <ul className="todo-list" data-cy="todosList">
       {filteredTodos.map(todo => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
-    </>
-  );
+    </ul>
+  )
 };
