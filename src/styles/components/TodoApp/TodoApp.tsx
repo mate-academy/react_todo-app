@@ -19,8 +19,11 @@ export const TodoApp: React.FC = () => {
 
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      addTodo(newTodo);
-      setNewTodo('');
+      event.preventDefault();
+      if (newTodo.trim() !== '') {
+        addTodo(newTodo);
+        setNewTodo('');
+      }
     }
   };
 
