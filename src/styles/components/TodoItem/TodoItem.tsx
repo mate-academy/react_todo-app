@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTodos } from '../../../Store';
 import { NewTodoItem } from '../../types/NewTodoItem';
+import classNames from 'classnames';
 
 type Props = {
   todo: NewTodoItem;
@@ -46,7 +47,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li
-      className={`${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}
+      className={classNames({
+        completed: todo.completed,
+        editing: isEditing
+      })}
     >
       <div className="view">
         <input
