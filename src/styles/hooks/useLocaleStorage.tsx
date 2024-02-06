@@ -1,21 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { NewTodoItem } from '../types/NewTodoItem';
 
 export function useLocaleStorage<T>(key: string, initialValue: T) {
-  const [storedValue, setStoredValue] = useState(() => {
+  const [data, setData] = useState(() => {
+    const localStorageData = localStorage.getItem(key);
+
+    if (!localStorageData) {
+      return initialValue;
+    }
+
     try {
-      const item = localStorage.getItem(key);
-
-      return item ? JSON.parse(item) : initialValue;
-    } catch (e) {
-      localStorage.removeItem(key);
-
+      return JSON.parse(localStorageData);
+    } catch {
       return initialValue;
     }
   });
 
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(storedValue));
-  }, [key, storedValue]);
+  const save = (newValue:NewTodoItem[]) => {
+    setData(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
+  };
 
-  return [storedValue, setStoredValue];
+  return [data, save];
 }

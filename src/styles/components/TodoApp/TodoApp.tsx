@@ -9,6 +9,7 @@ export const TodoApp: React.FC = () => {
     clearCompleted,
     toggleAll,
     remainingTodos,
+    todos,
   } = useTodos();
 
   const [newTodo, setNewTodo] = useState('');
@@ -26,6 +27,8 @@ export const TodoApp: React.FC = () => {
       }
     }
   };
+
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   return (
     <div className="todoapp">
@@ -59,8 +62,9 @@ export const TodoApp: React.FC = () => {
 
       </section>
 
-      <footer className="footer">
-        <span className="todo-count">
+      {remainingTodos > 0 && (
+        <footer className="footer">
+        <span className="todo-count" data-cy="todosCounter">
           {remainingTodos}
           {' '}
           items left
@@ -68,14 +72,17 @@ export const TodoApp: React.FC = () => {
 
         <TodosFilter />
 
-        <button
+        {hasCompletedTodos && (
+          <button
           type="button"
           className="clear-completed"
           onClick={clearCompleted}
         >
           Clear completed
         </button>
+        )}
       </footer>
+      )}
     </div>
   );
 };

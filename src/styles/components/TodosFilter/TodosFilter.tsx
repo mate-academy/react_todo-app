@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Status, useTodos } from '../../../Store';
 
 export const TodosFilter: React.FC = () => {
@@ -8,12 +9,12 @@ export const TodosFilter: React.FC = () => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       {Object.values(Status).map(status => (
         <li key={status}>
           <a
             href={status === Status.All ? '#/' : `#/${status.toLowerCase()}`}
-            className={status === filter ? 'selected' : ''}
+            className={classNames({selected: status === filter})}
             onClick={() => handleFilterChange(status)}
           >
             {status}
