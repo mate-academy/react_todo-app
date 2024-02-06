@@ -10,10 +10,12 @@ export const TodosFilter:React.FC<Props> = ({ filter, setFilter }) => {
     setFilter(statusVariant);
   };
 
+  const filterVariants = Object.keys(Status) as Array<keyof typeof Status>;
+
   return (
     <ul className="filters" data-cy="todosFilter">
       {
-        (Object.keys(Status) as Array<keyof typeof Status>).map((key) => {
+        filterVariants.map((key) => {
           return (
             <li key={key}>
               <a

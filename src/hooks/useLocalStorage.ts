@@ -7,7 +7,7 @@ export function useLocalStorage<Todo>(
   const [data, setData] = useState(() => {
     const localStorageData = localStorage.getItem(key);
 
-    if (localStorageData === null) {
+    if (!localStorageData) {
       return initialValue;
     }
 

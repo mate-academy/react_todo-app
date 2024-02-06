@@ -13,8 +13,10 @@ const filterTodos = (todos:Todo[], filter:string) => {
   switch (filter) {
     case Status.Active:
       return todos.filter(todo => !todo.completed);
+
     case Status.Completed:
       return todos.filter(todo => todo.completed);
+
     default:
       return todos;
   }
@@ -59,7 +61,7 @@ export const TodoApp = () => {
   return (
     <div className="todoapp">
       <header className="header">
-        <a href="/">
+        <a href="./">
           <h1>TODO</h1>
         </a>
 
@@ -75,7 +77,7 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <>
           <TodoList items={filteredTodos} />
           <TodoFooter
