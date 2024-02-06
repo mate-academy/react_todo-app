@@ -11,7 +11,7 @@ export const TodosFilter:React.FC<Props> = ({ filter, setFilter }) => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       {
         (Object.keys(Status) as Array<keyof typeof Status>).map((key) => {
           return (

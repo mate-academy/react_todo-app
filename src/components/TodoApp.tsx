@@ -50,7 +50,6 @@ export const TodoApp = () => {
   }, [filter, todos]);
 
   const removeCompletedTodos = () => {
-    // setTodos(prev => prev.filter(el => !el.completed));
     setTodos(todos.filter(el => !el.completed));
   };
 

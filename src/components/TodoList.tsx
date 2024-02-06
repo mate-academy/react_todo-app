@@ -32,14 +32,6 @@ export const TodoList: React.FC<Props> = ({ items }) => {
 
       return newTodo;
     }));
-    // setTodos(prev => prev.map(todo => {
-    //   const newTodo = todo;
-
-    //   newTodo.completed = !allIsCompleted;
-    //   setAllIsCompleted(!allIsCompleted);
-
-    //   return newTodo;
-    // }));
   };
 
   return (
@@ -54,7 +46,7 @@ export const TodoList: React.FC<Props> = ({ items }) => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 
-      <ul className="todo-list" data-cy="todoList">
+      <ul className="todo-list" data-cy="todosList">
         {items.map(todo => {
           return (
             <TodoItem todo={todo} key={todo.id} />
