@@ -28,5 +28,5 @@ export const TodoList: React.FC = () => {
         <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>
-  )
+  );
 };
