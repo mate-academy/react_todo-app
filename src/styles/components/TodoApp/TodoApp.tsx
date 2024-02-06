@@ -58,7 +58,9 @@ export const TodoApp: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList />
+        <ul className="todo-list" data-cy="todosList">
+          <TodoList />
+        </ul>
 
       </section>
 

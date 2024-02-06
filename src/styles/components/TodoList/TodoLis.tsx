@@ -1,22 +1,32 @@
 import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
-import { useTodos } from '../../../Store';
+import { Status, useTodos } from '../../../Store';
 
 export const TodoList: React.FC = () => {
-  const { todos } = useTodos();
+  const { todos, filter } = useTodos();
 
-  if (todos.length === 0) {
+  const filteredTodos = todos.filter(todo => {
+    switch (filter) {
+      case Status.All:
+        return true;
+      case Status.Active:
+        return !todo.completed;
+      case Status.Completed:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+
+  if (filteredTodos.length === 0) {
     return null;
   }
 
   return (
-    <ul
-      className="todo-list"
-      data-cy="todosList"
-    >
-      {todos.map(todo => (
+    <>
+      {filteredTodos.map(todo => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
-    </ul>
+    </>
   );
 };
