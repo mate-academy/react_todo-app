@@ -14,7 +14,7 @@ export const TodosFilter: React.FC = () => {
         <li key={status}>
           <a
             href={status === Status.All ? '#/' : `#/${status.toLowerCase()}`}
-            className={classNames({selected: status === filter})}
+            className={classNames({ selected: status === filter })}
             onClick={() => handleFilterChange(status)}
           >
             {status}

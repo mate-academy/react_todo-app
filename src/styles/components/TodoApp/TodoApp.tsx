@@ -64,24 +64,24 @@ export const TodoApp: React.FC = () => {
 
       {remainingTodos > 0 && (
         <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {remainingTodos}
-          {' '}
-          items left
-        </span>
+          <span className="todo-count" data-cy="todosCounter">
+            {remainingTodos}
+            {' '}
+            items left
+          </span>
 
-        <TodosFilter />
+          <TodosFilter />
 
-        {hasCompletedTodos && (
-          <button
-          type="button"
-          className="clear-completed"
-          onClick={clearCompleted}
-        >
-          Clear completed
-        </button>
-        )}
-      </footer>
+          {hasCompletedTodos && (
+            <button
+              type="button"
+              className="clear-completed"
+              onClick={clearCompleted}
+            >
+              Clear completed
+            </button>
+          )}
+        </footer>
       )}
     </div>
   );
