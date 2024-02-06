@@ -1,8 +1,24 @@
-import { useContext, useState, useEffect } from 'react';
+import {
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import { TodoList } from './TodoList';
 import { TodosContext } from '../store/TodosContext';
 import { Status } from '../types/Status';
 import { TodoFooter } from './TodoFooter';
+import { Todo } from '../types/Todo';
+
+const filterTodos = (todos:Todo[], filter:string) => {
+  switch (filter) {
+    case Status.Active:
+      return todos.filter(todo => !todo.completed);
+    case Status.Completed:
+      return todos.filter(todo => todo.completed);
+    default:
+      return todos;
+  }
+};
 
 export const TodoApp = () => {
   const { todos, setTodos } = useContext(TodosContext);
@@ -22,32 +38,19 @@ export const TodoApp = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newTodo = {
-      title: newTodoTitle,
-      id: +Date.now(),
-      completed: false,
-    };
+    if (newTodoTitle.trim() !== '') {
+      const newTodo = {
+        title: newTodoTitle.trim(),
+        id: +Date.now(),
+        completed: false,
+      };
 
-    setTodos([...todos, newTodo]);
-    setNewTodoTitle('');
+      setTodos([...todos, newTodo]);
+      setNewTodoTitle('');
+    }
   };
 
-  const [filteredTodos, setFilteredTodos] = useState(todos);
-
-  useEffect(() => {
-    const filterTodos = () => {
-      switch (filter) {
-        case Status.Active:
-          return todos.filter(todo => !todo.completed);
-        case Status.Completed:
-          return todos.filter(todo => todo.completed);
-        default:
-          return todos;
-      }
-    };
-
-    setFilteredTodos(filterTodos());
-  }, [filter, todos]);
+  const filteredTodos = filterTodos(todos, filter);
 
   const removeCompletedTodos = () => {
     setTodos(todos.filter(el => !el.completed));

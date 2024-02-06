@@ -48,11 +48,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       const newTodo = el;
 
       if (newTodo.id === todo.id) {
-        newTodo.title = newTodoTitle;
+        newTodo.title = newTodoTitle.trim();
       }
 
       return newTodo;
     }));
+    setNewTodoTitle(newTodoTitle.trim());
   };
 
   useEffect(() => {
@@ -61,14 +62,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [editMode]);
 
-  const newFunc = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const keys = ['Enter', 'Escape'];
 
     if (!keys.includes(e.key)) {
       return;
     }
 
-    if (e.key === 'Enter' && newTodoTitle === '') {
+    if (e.key === 'Enter' && newTodoTitle.trim() === '') {
       setTodos(todos.filter(oneTodo => oneTodo.id !== todo.id));
     } else if (e.key === 'Enter') {
       saveNewTodoTitle();
@@ -115,7 +116,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         value={newTodoTitle}
         ref={inputElement}
         onChange={e => changeNewTodoTitle(e)}
-        onKeyUp={e => newFunc(e)}
+        onKeyUp={e => onKeyUpHandler(e)}
       />
     </li>
   );

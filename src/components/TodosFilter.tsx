@@ -17,7 +17,7 @@ export const TodosFilter:React.FC<Props> = ({ filter, setFilter }) => {
           return (
             <li key={key}>
               <a
-                href={`/#/${Status[key]}`}
+                href={`./#/${Status[key]}`}
                 className={filter === Status[key] ? 'selected' : ''}
                 onClick={() => changeFilterByStatusHandler(Status[key])}
               >
