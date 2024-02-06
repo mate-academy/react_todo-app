@@ -19,7 +19,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editMode, setEditMode] = useState(false);
 
   const deleteTodoButtonHandler = (id: number) => {
-    setTodos(prev => prev.filter(oneTodo => oneTodo.id !== id));
+    // setTodos(prev => prev.filter(oneTodo => oneTodo.id !== id));
+    setTodos(todos.filter(oneTodo => oneTodo.id !== id));
   };
 
   const completedToggleHandler = (id: number) => {
@@ -44,7 +45,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   });
 
   const saveNewTodoTitle = () => {
-    setTodos(prev => prev.map(el => {
+    setTodos(todos.map(el => {
       const newTodo = el;
 
       if (newTodo.id === todo.id) {
@@ -53,6 +54,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       return newTodo;
     }));
+    // setTodos(prev => prev.map(el => {
+    //   const newTodo = el;
+
+    //   if (newTodo.id === todo.id) {
+    //     newTodo.title = newTodoTitle;
+    //   }
+
+    //   return newTodo;
+    // }));
   };
 
   useEffect(() => {
@@ -69,7 +79,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (e.key === 'Enter' && newTodoTitle === '') {
-      setTodos(prev => prev.filter(oneTodo => oneTodo.id !== todo.id));
+      // setTodos(prev => prev.filter(oneTodo => oneTodo.id !== todo.id));
+      setTodos(todos.filter(oneTodo => oneTodo.id !== todo.id));
     } else if (e.key === 'Enter') {
       saveNewTodoTitle();
     } else if (e.key === 'Escape') {

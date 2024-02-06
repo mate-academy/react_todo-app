@@ -1,9 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Todo } from '../types/Todo';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+
+type Props = {
+  children: React.ReactNode,
+};
 
 type TodoContextType = {
   todos: Todo[],
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
+  setTodos: (v:Todo[]) => void,
 };
 
 export const TodosContext = React.createContext<TodoContextType>({
@@ -11,39 +16,13 @@ export const TodosContext = React.createContext<TodoContextType>({
   setTodos: () => {},
 });
 
-type Props = {
-  children: React.ReactNode,
-};
-
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const initialState = [
-    {
-      id: 0,
-      title: 'Learn HTML',
-      completed: true,
-    },
-    {
-      id: 1,
-      title: 'Learn CSS',
-      completed: true,
-    },
-    {
-      id: 2,
-      title: 'Learn JS',
-      completed: false,
-    },
-    {
-      id: 3,
-      title: 'Learn React',
-      completed: false,
-    },
-  ];
-  const [todos, setTodos] = useState<Todo[]>(initialState);
+  const [todos, setTodos] = useLocalStorage<Todo>('todos', []);
 
   const value = useMemo(() => ({
     todos,
     setTodos,
-  }), [todos]);
+  }), [todos, setTodos]);
 
   return (
     <TodosContext.Provider value={value}>

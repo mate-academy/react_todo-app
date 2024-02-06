@@ -28,7 +28,7 @@ export const TodoApp = () => {
       completed: false,
     };
 
-    setTodos(prev => [...prev, newTodo]);
+    setTodos([...todos, newTodo]);
     setNewTodoTitle('');
   };
 
@@ -50,7 +50,8 @@ export const TodoApp = () => {
   }, [filter, todos]);
 
   const removeCompletedTodos = () => {
-    setTodos(prev => prev.filter(el => !el.completed));
+    // setTodos(prev => prev.filter(el => !el.completed));
+    setTodos(todos.filter(el => !el.completed));
   };
 
   return (

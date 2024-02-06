@@ -9,7 +9,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ items }) => {
   const [allIsCompleted, setAllIsCompleted] = useState(false);
-  const { setTodos } = useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   useEffect(() => {
     let isAllCompleted = true;
@@ -24,14 +24,22 @@ export const TodoList: React.FC<Props> = ({ items }) => {
   }, [items]);
 
   const toggleAllCompleted = () => {
-    setTodos(prev => prev.map(todo => {
-      const newTodo = todo;
+    setTodos(todos.map(oneTodo => {
+      const newTodo = oneTodo;
 
       newTodo.completed = !allIsCompleted;
       setAllIsCompleted(!allIsCompleted);
 
       return newTodo;
     }));
+    // setTodos(prev => prev.map(todo => {
+    //   const newTodo = todo;
+
+    //   newTodo.completed = !allIsCompleted;
+    //   setAllIsCompleted(!allIsCompleted);
+
+    //   return newTodo;
+    // }));
   };
 
   return (
