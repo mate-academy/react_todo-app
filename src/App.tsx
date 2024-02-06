@@ -26,7 +26,7 @@ export const App: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todoList">
+        <ul className="todo-list" data-cy="todosList">
           <li>
             <div className="view">
               <input type="checkbox" className="toggle" id="toggle-view" />
