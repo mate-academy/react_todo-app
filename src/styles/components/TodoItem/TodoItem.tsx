@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 import { useTodos } from '../../../Store';
 import { NewTodoItem } from '../../types/NewTodoItem';
-import classNames from 'classnames';
 
 type Props = {
   todo: NewTodoItem;
@@ -49,7 +49,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     <li
       className={classNames({
         completed: todo.completed,
-        editing: isEditing
+        editing: isEditing,
       })}
     >
       <div className="view">
