@@ -1,93 +1,76 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { DispatchContext, StateContext } from './components/TodosContext';
+import { Status } from './types/Status';
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodosFilter';
 
 export const App: React.FC = () => {
+  const state = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+  const [title, setTitle] = useState('');
+  const [filter, setFilter] = useState(Status.All);
+
+  const onAdd = () => {
+    if (title.trim()) {
+      dispatch({
+        type: 'add',
+        payload: {
+          title,
+          id: +new Date(),
+          completed: false,
+        },
+      });
+
+      setTitle('');
+    }
+  };
+
+  const handleFormOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onAdd();
+  };
+
+  const allAreCompleted = state.every(todo => todo.completed);
+  const hasTodos = state.length > 0;
+
   return (
     <div className="todoapp">
       <header className="header">
-        <h1>todos</h1>
+        <h1>ToDos</h1>
 
-        <form>
+        <form onSubmit={handleFormOnSubmit}>
           <input
+            value={title}
             type="text"
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            onChange={event => setTitle(event.target.value)}
+            onBlur={onAdd}
           />
         </form>
       </header>
 
       <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todosList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        {hasTodos && (
+          <>
+            <input
+              checked={allAreCompleted}
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              onChange={() => dispatch({ type: 'completeAll' })}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
+            <TodoList todos={state} filter={filter} />
+          </>
+        )}
       </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">All</a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {hasTodos && (
+        <TodoFilter filter={filter} onFilter={setFilter} />
+      )}
     </div>
   );
 };
