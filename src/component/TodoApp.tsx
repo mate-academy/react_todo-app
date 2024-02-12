@@ -4,7 +4,7 @@ import { TodoFilter } from './TodosFilter';
 import { TodosContext } from './TodosContext';
 
 export const TodoApp: React.FC = () => {
-  const { addTodo } = useContext(TodosContext);
+  const { addTodo, todos } = useContext(TodosContext);
   const [newTodo, setNewTodo] = useState('');
 
   const handleAddTodo = () => {
@@ -47,12 +47,18 @@ export const TodoApp: React.FC = () => {
             value={newTodo}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
           />
         </form>
       </header>
+      {todos.length !== 0 ? (
+        <TodoList />
+      ) : null}
 
-      <TodoList />
-      <TodoFilter />
+      {todos.length > 0 ? (
+        <TodoFilter />
+      ) : null}
     </div>
   );
 };

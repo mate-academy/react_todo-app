@@ -21,15 +21,32 @@
 }
 
 .filters li a:hover {
-  border-color: rgba(175, 47, 47, 0.1);
+  border-color: #d5797e;
 }
 
 .filters li a.selected {
-  border-color: rgba(175, 47, 47, 0.2);
+  border-color: #B83F45;
 }
 
 @media (max-width: 430px) {
   .filters {
     bottom: 10px;
   }
+}
+
+input:focus {
+  outline: 3px solid #B83F45;
+  opacity: 0.7;
+  color: #000;
+}
+
+.clear-completed {
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+
+.clear-completed:active{
+  border-color: #B83F45;
 }

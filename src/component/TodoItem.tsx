@@ -15,19 +15,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     todos, setTodos, removeTodo, editTodo,
   } = useContext(TodosContext);
 
-  const [editedTitle, setEditedTitle] = useState('');
+  const [editedTitle, setEditedTitle] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
-      inputRef.current.focus(); // фокусування на полі вводу при вході в режим редагування
+      inputRef.current.focus();
     }
   }, [isEditing]);
 
   const handleRemoveTodo = () => {
-    removeTodo(todo.id); // Викликаємо функцію removeTodo з ідентифікатором todo для видалення завдання
+    removeTodo(todo.id);
   };
 
   const handleToggleCompleted = () => {
@@ -47,17 +47,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleSave = () => {
-    if (editedTitle.trim() !== '' && editedTitle !== todo.title) { // Додано перевірку, чи текст був змінений
+    if (editedTitle.trim() !== '' && editedTitle !== todo.title) {
       editTodo(todo.id, editedTitle);
     } else {
-      setEditedTitle(todo.title); // Додано, щоб забезпечити коректне відображення тексту при збереженні без змін
+      setEditedTitle(todo.title);
     }
 
     setIsEditing(false);
   };
 
   const handleDoubleClick = () => {
-    setIsEditing(true); // ввійти в режим редагування при подвійному кліку
+    setIsEditing(true);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -71,14 +71,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <>
-      {/* <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view" />
-          <label htmlFor="toggle-view">{todo.title}</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li> */}
       <li
         className={`${isEditing ? 'editing' : ''} ${todo.completed ? 'completed' : ''}`}
       >
@@ -119,22 +111,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         </div>
 
       </li>
-      {/* <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-editing" />
-          <label htmlFor="toggle-editing">zxcvbnm</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view2" />
-          <label htmlFor="toggle-view2">1234567890</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li> */}
     </>
   );
 };
