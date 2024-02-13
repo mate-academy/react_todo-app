@@ -18,7 +18,7 @@ export const TodoList: React.FC = () => {
 
   return (
     <section className="main">
-      {todos.length > 0 ? (
+      {todos.length > 0 && (
         <>
           <input
             type="checkbox"
@@ -30,7 +30,7 @@ export const TodoList: React.FC = () => {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
         </>
-      ) : null}
+      )}
 
       <ul className="todo-list" data-cy="todosList">
         {filteredTodos.map(todo => (

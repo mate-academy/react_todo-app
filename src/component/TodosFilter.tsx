@@ -1,22 +1,22 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { TodosContext } from './TodosContext';
 import { Status } from '../types/todoTypes';
 
 export const TodoFilter: React.FC = () => {
   const {
+    status,
+    todos,
     setStatus,
     filteredTodos,
     setTodos,
   } = useContext(TodosContext);
-  const [filter, setFilter] = useState<Status>(Status.All);
 
-  const filterTodos = (status: Status) => {
-    setStatus(status);
-    setFilter(status);
+  const filterTodos = (s: Status) => {
+    setStatus(s);
   };
 
   const clearCompleted = () => {
-    const clear = filteredTodos.filter(todo => !todo.completed);
+    const clear = todos.filter(todo => !todo.completed);
 
     setTodos(clear);
   };
@@ -24,14 +24,14 @@ export const TodoFilter: React.FC = () => {
   return (
     <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {`${filteredTodos.filter(item => item.completed === false).length} items left`}
+        {`${todos.filter(item => !item.completed).length} items left`}
       </span>
 
       <ul className="filters">
         <li>
           <a
             href="#/"
-            className={filter === Status.All ? 'selected' : ''}
+            className={status === Status.All ? 'selected' : ''}
             onClick={() => filterTodos(Status.All)}
 
           >
@@ -42,7 +42,7 @@ export const TodoFilter: React.FC = () => {
         <li>
           <a
             href="#/active"
-            className={filter === Status.Active ? 'selected' : ''}
+            className={status === Status.Active ? 'selected' : ''}
             onClick={() => filterTodos(Status.Active)}
           >
             Active
@@ -52,7 +52,7 @@ export const TodoFilter: React.FC = () => {
         <li>
           <a
             href="#/completed"
-            className={filter === Status.Completed ? 'selected' : ''}
+            className={status === Status.Completed ? 'selected' : ''}
             onClick={() => filterTodos(Status.Completed)}
           >
             Completed
@@ -60,7 +60,7 @@ export const TodoFilter: React.FC = () => {
         </li>
       </ul>
 
-      {filteredTodos.filter(item => item.completed === true).length > 0 ? (
+      {filteredTodos.filter(item => item.completed === true).length > 0 && (
         <button
           type="button"
           className="clear-completed"
@@ -68,7 +68,7 @@ export const TodoFilter: React.FC = () => {
         >
           Clear completed
         </button>
-      ) : null}
+      )}
 
     </footer>
   );

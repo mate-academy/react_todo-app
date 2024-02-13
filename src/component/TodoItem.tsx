@@ -3,6 +3,7 @@
 import {
   useContext, useEffect, useRef, useState,
 } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/todoTypes';
 import { TodosContext } from './TodosContext';
 
@@ -47,6 +48,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleSave = () => {
+    if (editedTitle.trim().length === 0) {
+      removeTodo(todo.id);
+    }
+
     if (editedTitle.trim() !== '' && editedTitle !== todo.title) {
       editTodo(todo.id, editedTitle);
     } else {
@@ -71,8 +76,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <>
-      <li
-        className={`${isEditing ? 'editing' : ''} ${todo.completed ? 'completed' : ''}`}
+      <li className={
+        classNames({ editing: isEditing, completed: todo.completed })
+      }
       >
         <div>
           <input

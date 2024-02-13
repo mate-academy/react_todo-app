@@ -52,13 +52,13 @@ export const TodoApp: React.FC = () => {
           />
         </form>
       </header>
-      {todos.length !== 0 ? (
-        <TodoList />
-      ) : null}
+      {todos.length !== 0 && (
+        <>
+          <TodoList />
+          <TodoFilter />
+        </>
+      )}
 
-      {todos.length > 0 ? (
-        <TodoFilter />
-      ) : null}
     </div>
   );
 };
