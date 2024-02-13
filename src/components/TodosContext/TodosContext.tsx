@@ -15,29 +15,7 @@ type Action = { type: 'add', payload: Todo }
 | { type: 'clear' }
 | { type: 'edit', payload: { id: number, value: string } };
 
-const getCurrentTodos = (): State => {
-  const data = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-  if (data) {
-    try {
-      JSON.parse(data);
-    } catch (event) {
-      return [];
-    }
-  }
-
-  return [];
-};
-
-const relevantTodos = getCurrentTodos();
-
-export const StateContext = createContext(relevantTodos);
-export const DispatchContext = createContext((action: Action) => {
-  // eslint-disable-next-line no-console
-  console.debug(action);
-});
-
-const reducer = (state: State, action: Action): State => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'add':
       return [...state, action.payload];
@@ -72,6 +50,28 @@ const reducer = (state: State, action: Action): State => {
       return state;
   }
 };
+
+const getCurrentTodos = (): State => {
+  const todosFromServer = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+  if (todosFromServer) {
+    try {
+      return JSON.parse(todosFromServer);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  return [];
+};
+
+const relevantTodos = getCurrentTodos();
+
+export const StateContext = createContext(relevantTodos);
+export const DispatchContext = createContext((action: Action) => {
+  // eslint-disable-next-line no-console
+  console.debug(action);
+});
 
 export const TodosContext: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, relevantTodos);

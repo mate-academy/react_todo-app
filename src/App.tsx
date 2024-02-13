@@ -69,8 +69,13 @@ export const App: React.FC = () => {
       </section>
 
       {hasTodos && (
-        <TodoFilter filter={filter} onFilter={setFilter} />
+        <TodoFilter
+          todos={state}
+          filter={filter}
+          onFilter={setFilter}
+        />
       )}
+
     </div>
   );
 };

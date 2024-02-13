@@ -2,13 +2,16 @@ import cn from 'classnames';
 import React, { memo, useContext } from 'react';
 import { Status } from '../../types/Status';
 import { DispatchContext, StateContext } from '../TodosContext';
+import { Todo } from '../../types/Todo';
 
 type Props = {
+  todos: Todo[],
   filter: Status,
   onFilter: (newFilter: Status) => void,
 };
 
 export const TodoFilter: React.FC<Props> = memo(({
+  todos,
   filter,
   onFilter,
 }) => {
@@ -22,16 +25,14 @@ export const TodoFilter: React.FC<Props> = memo(({
     onFilter(current[current.length - 1] as Status);
   };
 
-  const uncompletedTodosCount = state.reduce((accumulator, todo) => {
-    return todo.completed ? 0 : accumulator + 1;
-  }, 0);
+  const activeTodosLength = todos.filter(todo => !todo.completed).length;
 
   const hasSomeCompleted = state.some(todo => todo.completed);
 
   return (
     <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {`${uncompletedTodosCount} items left`}
+        {`${activeTodosLength} items left`}
       </span>
 
       <ul className="filters">
