@@ -53,12 +53,13 @@ body {
 
 .todoapp h1 {
   position: absolute;
-  top: -155px;
+  top: -140px;
   width: 100%;
-  font-size: 100px;
+  font-size: 95px;
   font-weight: 100;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  color: rgba(243, 0, 0, 0.95);
+  text-shadow: 5px 5px #558ABB;;
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
