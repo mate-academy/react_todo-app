@@ -48,17 +48,27 @@ body {
 .todoapp input::placeholder {
   font-style: italic;
   font-weight: 300;
-  color: #e6e6e6;
+  color: #989898;
+}
+
+.todoapp input {
+  color: black;
+}
+
+.todoapp input:focus {
+  outline: 3px solid #B83F45;
+  opacity: 0.7;
+
 }
 
 .todoapp h1 {
   position: absolute;
   top: -155px;
   width: 100%;
-  font-size: 100px;
+  font-size: 86px;
   font-weight: 100;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  color: #B83F45;
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
