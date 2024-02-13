@@ -72,7 +72,9 @@ export const App: React.FC = () => {
 
         <ul className="filters">
           <li>
-            <a href="#/" className="selected">All</a>
+            <a href="#/" className="selected">
+              All
+            </a>
           </li>
 
           <li>
