@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { KeyUp } from '../../types/ItemKeyPress';
 import { DispatchContext } from '../TodosContext';
 
 interface Props {
@@ -60,12 +61,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleKeyClick = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
-      case 'Escape':
+      case KeyUp.Esc:
         setEditedTitle(todo.title);
         setIsEditing(false);
         break;
 
-      case 'Enter':
+      case KeyUp.Enter:
         onEdit();
         break;
 
@@ -74,11 +75,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
+  const { id, completed } = todo;
+
   return (
     <li
-      key={todo.id}
+      key={id}
       className={cn({
-        completed: todo.completed,
+        // eslint-disable-next-line object-shorthand
+        completed: completed,
         editing: isEditing,
       })}
     >
@@ -89,8 +93,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="toggle"
-          checked={todo.completed}
-          onChange={() => onComplete(todo.id)}
+          checked={completed}
+          onChange={() => onComplete(id)}
         />
         <label>{todo.title}</label>
         <button
@@ -98,7 +102,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => onDelete(todo.id)}
+          onClick={() => onDelete(id)}
         />
       </div>
       <input
