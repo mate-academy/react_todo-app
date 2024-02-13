@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import classNames from 'classnames';
 import { TodosContext } from './TodosContext';
 import { Status } from '../types/todoTypes';
 
@@ -21,17 +22,19 @@ export const TodoFilter: React.FC = () => {
     setTodos(clear);
   };
 
+  const itemsLeft = `${todos.filter(item => !item.completed).length} items left`;
+
   return (
     <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(item => !item.completed).length} items left`}
+        {itemsLeft}
       </span>
 
       <ul className="filters">
         <li>
           <a
             href="#/"
-            className={status === Status.All ? 'selected' : ''}
+            className={classNames({ selected: status === Status.All })}
             onClick={() => filterTodos(Status.All)}
 
           >
@@ -42,7 +45,7 @@ export const TodoFilter: React.FC = () => {
         <li>
           <a
             href="#/active"
-            className={status === Status.Active ? 'selected' : ''}
+            className={classNames({ selected: status === Status.Active })}
             onClick={() => filterTodos(Status.Active)}
           >
             Active
@@ -52,7 +55,7 @@ export const TodoFilter: React.FC = () => {
         <li>
           <a
             href="#/completed"
-            className={status === Status.Completed ? 'selected' : ''}
+            className={classNames({ selected: status === Status.Completed })}
             onClick={() => filterTodos(Status.Completed)}
           >
             Completed
@@ -60,7 +63,7 @@ export const TodoFilter: React.FC = () => {
         </li>
       </ul>
 
-      {filteredTodos.filter(item => item.completed === true).length > 0 && (
+      {filteredTodos.filter(item => item.completed).length > 0 && (
         <button
           type="button"
           className="clear-completed"

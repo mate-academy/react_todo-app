@@ -18,7 +18,7 @@ export const TodoList: React.FC = () => {
 
   return (
     <section className="main">
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <input
             type="checkbox"

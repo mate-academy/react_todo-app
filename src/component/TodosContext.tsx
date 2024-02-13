@@ -60,9 +60,11 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       case Status.Active:
         setFilteredTodos(todos.filter(todo => !todo.completed));
         break;
+
       case Status.Completed:
         setFilteredTodos(todos.filter(todo => todo.completed));
         break;
+
       default:
         setFilteredTodos(todos);
         break;
