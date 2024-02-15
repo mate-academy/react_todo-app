@@ -24,7 +24,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [isEditing]);
 
-  const handelCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodos = todos.map(el => {
       if (el.id === todo.id) {
         switch (e.target.checked) {
@@ -55,7 +55,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const save = () => {
     setIsEditing(false);
 
-    if (value.trim() === '') {
+    if (!value.trim()) {
       destroy();
 
       return;
@@ -72,17 +72,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(newTodos);
   };
 
-  const handelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
-  const handelEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsEditing(false);
     }
   };
 
-  const handelEscape = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEscape = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
       setValue(todo.title);
       setIsEditing(false);
@@ -91,7 +91,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li
-      className={classNames('', {
+      className={classNames({
         completed: todo.completed && !isEditing,
         editing: isEditing,
       })}
@@ -100,7 +100,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="toggle"
-          onChange={handelCheck}
+          onChange={handleCheck}
           checked={todo.completed}
         />
 
@@ -124,10 +124,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         className="edit"
         value={value}
-        onChange={handelChange}
+        onChange={handleChange}
         onBlur={save}
-        onKeyDown={handelEnter}
-        onKeyUp={handelEscape}
+        onKeyDown={handleEnter}
+        onKeyUp={handleEscape}
       />
     </li>
   );

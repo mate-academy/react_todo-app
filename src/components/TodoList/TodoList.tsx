@@ -6,7 +6,7 @@ export const TodoList: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const visibleTodos = useContext(VisibleTodosContext);
 
-  const handelCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodos = todos.map(el => {
       if (e.target.checked) {
         return { ...el, completed: true };
@@ -25,7 +25,7 @@ export const TodoList: React.FC = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        onChange={handelCheck}
+        onChange={handleCheck}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 

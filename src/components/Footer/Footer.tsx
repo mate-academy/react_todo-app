@@ -7,7 +7,7 @@ export const Footer: React.FC = () => {
 
   const countActive = todos.filter(el => !el.completed).length;
 
-  const handelClick = () => {
+  const handleClick = () => {
     const newTodos = todos.filter(el => !el.completed);
 
     setTodos(newTodos);
@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
         <button
           type="button"
           className="clear-completed"
-          onClick={handelClick}
+          onClick={handleClick}
         >
           Clear completed
         </button>

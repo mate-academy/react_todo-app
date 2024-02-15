@@ -34,13 +34,13 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     switch (location.hash) {
       case '#/active':
-        setVisibleTodos(todos.filter(todo => todo.completed === false));
+        setVisibleTodos(todos.filter(todo => !todo.completed));
         setSelected(Status.ACTIVE);
 
         return;
 
       case '#/completed':
-        setVisibleTodos(todos.filter(todo => todo.completed === true));
+        setVisibleTodos(todos.filter(todo => todo.completed));
         setSelected(Status.COMPLETED);
 
         return;

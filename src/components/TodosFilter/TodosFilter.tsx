@@ -14,7 +14,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/"
-          className={classNames('', {
+          className={classNames({
             selected: selected === Status.All,
           })}
         >
@@ -25,7 +25,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/active"
-          className={classNames('', {
+          className={classNames({
             selected: selected === Status.ACTIVE,
           })}
         >
@@ -36,7 +36,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          className={classNames('', {
+          className={classNames({
             selected: selected === Status.COMPLETED,
           })}
         >

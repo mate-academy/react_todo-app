@@ -7,14 +7,14 @@ export const TodoApp: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const [value, setValue] = useState('');
 
-  const handelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
-  const handelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (value.trim() === '') {
+    if (!value.trim()) {
       return;
     }
 
@@ -34,7 +34,7 @@ export const TodoApp: React.FC = () => {
         <h1>todos</h1>
 
         <form
-          onSubmit={handelSubmit}
+          onSubmit={handleSubmit}
         >
           <input
             type="text"
@@ -42,7 +42,7 @@ export const TodoApp: React.FC = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             value={value}
-            onChange={handelChange}
+            onChange={handleChange}
           />
         </form>
       </header>
