@@ -19,15 +19,15 @@ type Props = {
 
 export const TodosContext = React.createContext<TypeTodosContext>({
   todos: [],
+  visibleTodos: [],
   setTodos: () => { },
 });
 
-export const VisibleTodosContext = React.createContext<Todo[]>([]);
 export const SelectedContext = React.createContext(Status.All);
 
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [visibleTodos, setVisibleTodos] = useState(todos);
   const [selected, setSelected] = useState(Status.All);
   const location = useLocation();
 
@@ -51,15 +51,15 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
     }
   }, [location, todos]);
 
-  const value = useMemo(() => ({ todos, setTodos }), [todos]);
+  const value = useMemo(() => {
+    return { todos, setTodos, visibleTodos };
+  }, [todos, visibleTodos]);
 
   return (
     <TodosContext.Provider value={value}>
-      <VisibleTodosContext.Provider value={visibleTodos}>
-        <SelectedContext.Provider value={selected}>
-          {children}
-        </SelectedContext.Provider>
-      </VisibleTodosContext.Provider>
+      <SelectedContext.Provider value={selected}>
+        {children}
+      </SelectedContext.Provider>
     </TodosContext.Provider>
   );
 };

@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
 import { TodoItem } from '../TodoItem';
-import { TodosContext, VisibleTodosContext } from '../TodosContext';
+import { TodosContext } from '../TodosContext';
 
 export const TodoList: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
-  const visibleTodos = useContext(VisibleTodosContext);
+  const { todos, setTodos, visibleTodos } = useContext(TodosContext);
 
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodos = todos.map(el => {
