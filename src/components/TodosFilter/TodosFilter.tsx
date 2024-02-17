@@ -38,12 +38,12 @@ export const TodosFilter: React.FC = React.memo(
 
     const isCompletedTodo = todos.some(todo => todo.completed);
 
-    const items = itemsLeft(todos);
+    const nrOfItems = itemsLeft(todos);
 
     return (
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          {`${items} items left`}
+          {`${nrOfItems} items left`}
         </span>
 
         <ul className="filters" data-cy="todosFilter">

@@ -5,13 +5,15 @@ import { Todo } from '../../types/todo';
 
 const LOCALE_KEY = 'todos';
 
-export type Action = { type: 'Add', payload: Todo }
+type Action = { type: 'Add', payload: Todo }
   | { type: 'Delete', payload: number }
   | { type: 'Completed', payload: number }
   | { type: 'Editing', payload: { id: number, value: string } }
   | { type: 'ChangeStatus', payload: Status }
   | { type: 'CompletedAll' }
   | { type: 'CleardAll' };
+
+type DispatchType = (action: Action) => void;
 
 function completedAll(state: Todo[]) {
   const allAreCompleted = state.every(todo => todo.completed);
@@ -114,12 +116,7 @@ const initializer = (initialValue = initialState): State => {
 };
 
 export const StateContext = React.createContext(initialState);
-export const DispatchContext = React.createContext(
-  (action: Action) => {
-    // eslint-disable-next-line no-console
-    console.log(action);
-  },
-);
+export const DispatchContext = React.createContext<DispatchType>(() => { });
 
 type Props = {
   children: React.ReactNode;
