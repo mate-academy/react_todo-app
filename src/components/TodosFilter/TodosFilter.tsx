@@ -1,0 +1,66 @@
+import { useContext } from 'react';
+import cn from 'classnames';
+
+import { DispatchContext, StateContext } from '../../contexts/StateContext';
+import { ActionTypes } from '../../types/Actions';
+import { Status } from '../../types/Status';
+
+export const TodosFilter: React.FC = () => {
+  const dispatch = useContext(DispatchContext);
+  const { filter } = useContext(StateContext);
+
+  return (
+    <ul className="filters" data-cy="todosFilter">
+      <li>
+        <a
+          href="#/"
+          className={cn({
+            selected: filter === Status.All,
+          })}
+          onClick={
+            () => dispatch({
+              type: ActionTypes.SetTodosFilter,
+              payload: Status.All,
+            })
+          }
+        >
+          All
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/active"
+          className={cn({
+            selected: filter === Status.Active,
+          })}
+          onClick={
+            () => dispatch({
+              type: ActionTypes.SetTodosFilter,
+              payload: Status.Active,
+            })
+          }
+        >
+          Active
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="#/completed"
+          className={cn({
+            selected: filter === Status.Completed,
+          })}
+          onClick={
+            () => dispatch({
+              type: ActionTypes.SetTodosFilter,
+              payload: Status.Completed,
+            })
+          }
+        >
+          Completed
+        </a>
+      </li>
+    </ul>
+  );
+};
