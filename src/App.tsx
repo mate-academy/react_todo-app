@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const enteredSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title) {
+    if (title.trim()) {
       dispatch({
         type: 'Add',
         payload: {
