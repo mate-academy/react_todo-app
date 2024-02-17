@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { DispatchContext, StateContext } from '../TodoContext';
 import { Status } from '../../types/status';
@@ -31,46 +31,49 @@ const itemsLeft = (todoList: Todo[]) => {
     .length;
 };
 
-export const TodosFilter: React.FC = () => {
-  const dispatch = useContext(DispatchContext);
-  const { todos, select } = useContext(StateContext);
+export const TodosFilter: React.FC = React.memo(
+  () => {
+    const dispatch = useContext(DispatchContext);
+    const { todos, select } = useContext(StateContext);
 
-  const isCompletedTodo = todos.some(todo => todo.completed);
+    const isCompletedTodo = todos.some(todo => todo.completed);
 
-  const items = itemsLeft(todos);
+    const items = itemsLeft(todos);
 
-  return (
-    <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        {`${items} items left`}
-      </span>
+    console.log('Rendering TodosFilter');
 
-      <ul className="filters">
-        {filteres.map(page => (
-          <li key={page.id}>
-            <a
-              href={page.link}
-              className={classNames({ selected: select === page.title })}
-              // className="selected"
-              onClick={() => dispatch(
-                { type: 'ChangeStatus', payload: page.value },
-              )}
-            >
-              {page.title}
-            </a>
-          </li>
-        ))}
-      </ul>
-      {isCompletedTodo && (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={() => dispatch({ type: 'CleardAll' })}
-        >
-          Clear completed
-        </button>
-      )}
+    return (
+      <footer className="footer">
+        <span className="todo-count" data-cy="todosCounter">
+          {`${items} items left`}
+        </span>
 
-    </footer>
-  );
-};
+        <ul className="filters">
+          {filteres.map(page => (
+            <li key={page.id}>
+              <a
+                href={page.link}
+                className={classNames({ selected: select === page.title })}
+                onClick={() => dispatch(
+                  { type: 'ChangeStatus', payload: page.value },
+                )}
+              >
+                {page.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+        {isCompletedTodo && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={() => dispatch({ type: 'CleardAll' })}
+          >
+            Clear completed
+          </button>
+        )}
+
+      </footer>
+    );
+  },
+);

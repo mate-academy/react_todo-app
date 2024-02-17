@@ -3,10 +3,12 @@ import React, { useEffect, useReducer } from 'react';
 import { Status } from '../../types/status';
 import { Todo } from '../../types/todo';
 
+const LOCALE_KEY = 'todos';
+
 export type Action = { type: 'Add', payload: Todo }
   | { type: 'Delete', payload: number }
   | { type: 'Completed', payload: number }
-  | { type: 'Editing', payload: number }
+  | { type: 'Editing', payload: { id: number, value: string } }
   | { type: 'ChangeStatus', payload: Status }
   | { type: 'CompletedAll' }
   | { type: 'CleardAll' };
@@ -46,15 +48,15 @@ function reduser(state: State, action: Action) {
     case 'Completed':
       return {
         ...state,
-        todos: todos.map((item: Todo) => {
-          if (item.id === action.payload) {
+        todos: todos.map((todo: Todo) => {
+          if (todo.id === action.payload) {
             return {
-              ...item,
-              completed: !item.completed,
+              ...todo,
+              completed: !todo.completed,
             };
           }
 
-          return item;
+          return todo;
         }),
       };
     case 'CompletedAll': {
@@ -76,10 +78,20 @@ function reduser(state: State, action: Action) {
         select: action.payload,
       };
 
-    // case 'Editing': {
+    case 'Editing':
+      return {
+        ...state,
+        todos: todos.map(todo => {
+          if (todo.id === action.payload.id) {
+            return {
+              ...todo,
+              title: action.payload.value,
+            };
+          }
 
-    //   };
-    // }
+          return todo;
+        }),
+      };
 
     default:
       return state;
@@ -87,7 +99,7 @@ function reduser(state: State, action: Action) {
 }
 
 const initializer = (initialValue = initialState) => {
-  const data = localStorage.getItem('todos');
+  const data = localStorage.getItem(LOCALE_KEY);
 
   if (!data) {
     return initialValue;
@@ -112,7 +124,7 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reduser, initialState, initializer);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(state));
+    localStorage.setItem(LOCALE_KEY, JSON.stringify(state));
   }, [state]);
 
   return (

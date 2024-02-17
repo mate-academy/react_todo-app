@@ -21,7 +21,6 @@ export const App: React.FC = () => {
           id: +new Date(),
           title,
           completed: false,
-          isEdit: false,
         },
       });
     }
