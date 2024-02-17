@@ -7,7 +7,7 @@ import { TodosFilter } from './components/TodosFilter';
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
-  const [title, setTodo] = useState('');
+  const [title, setTitle] = useState('');
 
   const hasState = !!todos.length;
 
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
       });
     }
 
-    setTodo('');
+    setTitle('');
   };
 
   return (
@@ -36,7 +36,7 @@ export const App: React.FC = () => {
         <form onSubmit={enteredSubmit}>
           <input
             value={title}
-            onChange={(e) => setTodo(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
             type="text"
             data-cy="createTodo"
             className="new-todo"
