@@ -39,7 +39,7 @@ export const App: React.FC = () => {
               data-cy="toggleAll"
               checked={isEachTodoCompleted}
               defaultChecked={areTodosCompleted}
-              onClick={toggleTodosAll}
+              onChange={toggleTodosAll}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
 

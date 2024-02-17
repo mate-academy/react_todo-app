@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { State } from '../types/State';
 import { Action, ActionTypes } from '../types/Actions';
 import { Status } from '../types/Status';
+import { Todo } from '../types/Todo';
 
 const initialState: State = {
   todos: [],
@@ -11,7 +12,7 @@ const initialState: State = {
 const data = localStorage.getItem('todos');
 
 if (data !== null) {
-  initialState.todos = JSON.parse(data);
+  initialState.todos = JSON.parse(data) as Todo[];
 }
 
 function reducer(state: State, action: Action): State {

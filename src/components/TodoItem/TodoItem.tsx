@@ -36,11 +36,13 @@ export const TodoItem: React.FC<Props> = ({ data }) => {
   };
 
   const saveEdit = () => {
-    if (title.trim()) {
+    if (newTitle.trim() && title !== newTitle) {
       dispatch({
         type: ActionTypes.UpdateTodo,
         payload: { id, title: newTitle, completed },
       });
+    } else {
+      deleteTodo(id);
     }
 
     setIsEditingMode(false);
