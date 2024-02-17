@@ -44,9 +44,11 @@ export const App: React.FC = () => {
           />
         </form>
       </header>
-      <TodoList />
       {hasState && (
-        <TodosFilter />
+        <>
+          <TodoList />
+          <TodosFilter />
+        </>
       )}
 
     </div>

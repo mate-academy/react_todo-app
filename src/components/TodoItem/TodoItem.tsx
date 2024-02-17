@@ -18,7 +18,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
   const [isEditing, setIsEditing] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
-  console.log('Rendering TodoItem');
 
   const test = useRef<HTMLInputElement>(null);
 

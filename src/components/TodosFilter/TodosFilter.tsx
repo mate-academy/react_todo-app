@@ -40,15 +40,13 @@ export const TodosFilter: React.FC = React.memo(
 
     const items = itemsLeft(todos);
 
-    console.log('Rendering TodosFilter');
-
     return (
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
           {`${items} items left`}
         </span>
 
-        <ul className="filters">
+        <ul className="filters" data-cy="todosFilter">
           {filteres.map(page => (
             <li key={page.id}>
               <a

@@ -98,14 +98,19 @@ function reduser(state: State, action: Action) {
   }
 }
 
-const initializer = (initialValue = initialState) => {
+const initializer = (initialValue = initialState): State => {
   const data = localStorage.getItem(LOCALE_KEY);
 
   if (!data) {
     return initialValue;
   }
 
-  return JSON.parse(data) as State;
+  const todos = JSON.parse(data) as Todo[];
+
+  return {
+    todos,
+    select: initialState.select,
+  };
 };
 
 export const StateContext = React.createContext(initialState);
@@ -121,11 +126,14 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reduser, initialState, initializer);
+  const [
+    state,
+    dispatch,
+  ] = useReducer(reduser, initialState, initializer);
 
   useEffect(() => {
-    localStorage.setItem(LOCALE_KEY, JSON.stringify(state));
-  }, [state]);
+    localStorage.setItem(LOCALE_KEY, JSON.stringify(state.todos));
+  }, [state.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

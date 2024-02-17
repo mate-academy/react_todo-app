@@ -22,7 +22,6 @@ export const TodoList: React.FC = React.memo(() => {
   const { todos, select } = useContext(StateContext);
 
   const visibleTodos = getPreparedTodos(todos, select);
-  console.log('Rendering TodoList');
 
   return (
     <section className="main">
