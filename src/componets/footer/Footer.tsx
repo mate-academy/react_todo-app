@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { FilterTodo } from '../filterTodos/FilterTodos';
-import { DispatchContext, StateContext } from '../../managment/Contextes';
+import { DispatchContext, TodoContext } from '../../managment/Contextes';
 
 export const Footer: React.FC = () => {
-  const { todos } = useContext(StateContext);
+  const { todos } = useContext(TodoContext);
   const dispatch = useContext(DispatchContext);
 
   const handelClearComponent = () => {

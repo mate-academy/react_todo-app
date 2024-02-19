@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 import { TodoItems } from '../todoitems/TodoItems';
-import { StateContext } from '../../managment/Contextes';
+import { TodoContext } from '../../managment/Contextes';
 import { Filter } from '../../types/Filter';
 
 export const TodoList: React.FC = () => {
-  const { todos, filterTp } = useContext(StateContext);
+  const { todos, filterTp } = useContext(TodoContext);
 
   function filter() {
     switch (filterTp) {

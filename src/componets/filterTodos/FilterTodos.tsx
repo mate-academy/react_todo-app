@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { DispatchContext, StateContext } from '../../managment/Contextes';
+import { DispatchContext, TodoContext } from '../../managment/Contextes';
 import { Filter } from '../../types/Filter';
 
 export const FilterTodo: React.FC = () => {
   const dispatch = useContext(DispatchContext);
-  const { filterTp } = useContext(StateContext);
+  const { filterTp } = useContext(TodoContext);
 
   const [stateFilter, setStateFilter] = useState(filterTp);
 

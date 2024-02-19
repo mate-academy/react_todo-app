@@ -11,7 +11,7 @@ export type Action =
  | { type: 'removeTodo', id: number
  };
 
-export function reduser(action: Action, state: State) {
+export function reducer(action: Action, state: State) {
   switch (action.type) {
     case 'addTodo':
       return {

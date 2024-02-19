@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { TodoList } from '../todoLisy/TodoList';
-import { DispatchContext, StateContext } from '../../managment/Contextes';
+import { DispatchContext, TodoContext } from '../../managment/Contextes';
 
 export const Main: React.FC = () => {
-  const { todos } = useContext(StateContext);
+  const { todos } = useContext(TodoContext);
   const dispatch = useContext(DispatchContext);
 
   const allComplited = todos.every(todo => todo.completed);
