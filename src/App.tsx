@@ -33,7 +33,6 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
-
         <form onSubmit={handleFormSubmit}>
           <input
             value={title}
@@ -42,6 +41,7 @@ export const App: React.FC = () => {
             className="new-todo"
             placeholder="What needs to be done?"
             onChange={(e) => setTitle(e.target.value)}
+            onBlur={onAdd}
           />
         </form>
       </header>
