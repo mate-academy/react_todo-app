@@ -1,43 +1,42 @@
-// import React, { useContext } from 'react';
-// import classNames from 'classnames';
-// import { TodosContext, Todo } from '../../App';
+import React, { useContext } from 'react';
+import classNames from 'classnames';
+import { TodoContext } from '../TodoContext/TodoContext';
+import Todo from '../../types/Todo';
 
-// interface Props {
-//   item: Todo;
-//   // key: number;
-// }
+interface Props {
+  item: Todo;
+}
 
-//   const todos = useContext(TodosContext);
+export const TodoItem: React.FC<Props> = ({ item }) => {
+  const { deleteTodo, updateCompleteTodo } = useContext(TodoContext);
 
-// export const TodoItem: React.FC<Props> = ({ item }) => {
+  const handleCompleted = () => {
+    updateCompleteTodo(item.id);
+  };
 
+  const handleDeleteItem = () => {
+    deleteTodo(item.id);
+  };
 
-//   const handleCompleted = () => {
-//     todos?.updateCompleteTodo(item.id);
-//   };
-
-//   const handleDeleteItem = () => {
-//     todos?.deleteTodo(item.id);
-//   };
-
-//   return (
-//     <li className={classNames({ completed: item.completed })}>
-//       <div className="view">
-//         <input
-//           type="checkbox"
-//           className="toggle"
-//           id="toggle-view"
-//           onChange={handleCompleted}
-//         />
-//         <label htmlFor="toggle-view"> {item.title} </label>
-//         <button
-//           type="button"
-//           className="destroy"
-//           data-cy="deleteTodo"
-//           onClick={handleDeleteItem}
-//         />
-//       </div>
-//       <input type="text" className="edit" />
-//     </li>
-//   );
-// };
+  return (
+    <li className={classNames({ completed: item.completed })}>
+      <div className="view">
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <input
+          type="checkbox"
+          className="toggle"
+          id={`toggle-view-${item.id}`}
+          onChange={handleCompleted}
+        />
+        <label htmlFor={`toggle-view-${item.id}`}>{item.title}</label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={handleDeleteItem}
+        />
+      </div>
+      <input type="text" className="edit" />
+    </li>
+  );
+};

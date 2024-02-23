@@ -1,193 +1,168 @@
-// import React, { ChangeEvent, FormEvent, useMemo, useState } from 'react';
-// import classNames from 'classnames';
-// import { TodoList } from './components/TodoList/TodoList';
+import React, { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import classNames from 'classnames';
+import { TodoList } from './components/TodoList/TodoList';
+import Todo from './types/Todo';
+import {
+  TodoContext,
+  TodoProvider,
+} from './components/TodoContext/TodoContext';
 
-// export interface Todo {
-//   id: number;
-//   title: string;
-//   completed: boolean;
-// }
+enum Filtering {
+  All = 'all',
+  Active = 'active',
+  Complete = 'complete',
+  Clean = 'clear',
+  Add = 'add',
+}
 
-// enum filtering {
-//   all = 'all',
-//   active = 'active',
-//   complete = 'complete',
-//   clean = 'clear',
-// }
+export const App: React.FC = () => {
+  const { data, setData } = useContext(TodoContext);
 
-// interface Context {
-//   data: Todo[] | [];
-//   deleteTodo: (id: number) => void;
-//   updateCompleteTodo: (id: number) => void;
-// }
+  const [query, setQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<string>(Filtering.All); // Track active filter
+  const itemsLeft = `${data.length - data.filter((elem: Todo) => elem.completed).length} `;
 
-// export const TodosContext = React.createContext<Context | null>(null);
+  const filterData = (action?: string) => {
+    let filteredData: Todo[];
 
-// export const App: React.FC = () => {
-//   const [data, setData] = useState<Todo[] | []>([]);
-//   const [query, setQuery] = useState('');
-//   const [activeFilter, setActiveFilter] = useState<string>(filtering.all); // Track active filter
-//   const itemsLeft = `${data.length - data.filter(elem => elem.completed).length} `;
+    switch (action) {
+      case Filtering.Active:
+        filteredData = data.filter((elem: Todo) => elem.completed === false);
+        break;
+      case Filtering.Complete:
+        filteredData = data.filter((elem: Todo) => elem.completed === true);
+        break;
+      case Filtering.Clean:
+        filteredData = data.filter((elem: Todo) => elem.completed === false);
 
-//   // Function to update the data
-//   const deleteTodo = (id: number): void => {
-//     setData(cur => cur.filter(elem => elem.id !== id));
-//   };
+        return setData(filteredData);
+      case Filtering.All:
+        filteredData = data;
+        break;
+      default:
+        filteredData = data;
+        break;
+    }
 
-//   const filterData = (action?: string) => {
-//     switch (action) {
-//       case filtering.active:
-//         return data.filter(elem => elem.completed === false);
-//       case filtering.complete:
-//         return data.filter(elem => elem.completed === true);
-//       case filtering.clean:
-//         const filteredData = data.filter(elem => elem.completed === false);
+    return filteredData;
+  };
 
-//         setData(filteredData);
+  const addItem = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (query.trim() !== '') {
+      setData(cur => [
+        ...cur,
+        {
+          id: +new Date(),
+          title: query,
+          completed: false,
+        },
+      ]);
+      setQuery('');
+    }
+  };
 
-//         return;
-//       case filtering.all:
-//         return data;
-//       default:
-//         return data;
-//     }
-//   };
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
 
-//   const updateCompleteTodo = (id: number): void => {
-//     setData(prevData =>
-//       prevData.map(elem => {
-//         if (elem.id === id) {
-//           return { ...elem, completed: !elem.completed };
-//         }
+  const handleFilter = (action: string) => {
+    setActiveFilter(action);
+    filterData(action);
+  };
 
-//         return elem;
-//       }),
-//     );
-//   };
+  return (
+    <TodoProvider>
+      <>
+        <div className="todoapp">
+          <header className="header">
+            <h1>todos</h1>
 
-//   const addItem = (event: FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-//     if (query.trim() !== '') {
-//       setData(cur => [
-//         ...cur,
-//         {
-//           id: +new Date(),
-//           title: query,
-//           completed: false,
-//         },
-//       ]);
-//       setQuery('');
-//     }
-//   };
+            <form onSubmit={addItem}>
+              <input
+                type="text"
+                data-cy="createTodo"
+                className="new-todo"
+                placeholder="What needs to be done?"
+                value={query}
+                onChange={handleInput}
+              />
+            </form>
+          </header>
 
-//   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
-//     setQuery(event.target.value);
-//   };
+          {data.length > 0 && (
+            <section className="main">
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                data-cy="toggleAll"
+              />
+              <label htmlFor="toggle-all">Mark all as complete</label>
 
-//   const handleFilter = (action: string) => {
-//     setActiveFilter(action);
-//     filterData(action);
-//   };
+              {data.length > 0 && (
+                <TodoList data={filterData(activeFilter) || []} />
+              )}
+            </section>
+          )}
 
-//   const value = useMemo(() => {
-//     return {
-//       data,
-//       deleteTodo,
-//       updateCompleteTodo,
-//     };
-//   }, [data]);
+          {data.length > 0 && (
+            <footer className="footer">
+              <span className="todo-count" data-cy="todosCounter">
+                {itemsLeft}
+                item left
+              </span>
 
-//   // Provide data and updateData function as values to the context
-//   return (
-//     <TodosContext.Provider value={value}>
-//       <div className="todoapp">
-//         <header className="header">
-//           <h1>todos</h1>
+              <ul className="filters">
+                <li>
+                  <a
+                    href="#/"
+                    className={classNames({
+                      selected: activeFilter === Filtering.All,
+                    })}
+                    onClick={() => handleFilter(Filtering.All)}
+                  >
+                    All
+                  </a>
+                </li>
 
-//           <form onSubmit={addItem}>
-//             <input
-//               type="text"
-//               data-cy="createTodo"
-//               className="new-todo"
-//               placeholder="What needs to be done?"
-//               value={query}
-//               onChange={handleInput}
-//             />
-//           </form>
-//         </header>
+                <li>
+                  <a
+                    href="#/active"
+                    className={classNames({
+                      selected: activeFilter === Filtering.Active,
+                    })}
+                    onClick={() => handleFilter(Filtering.Active)}
+                  >
+                    Active
+                  </a>
+                </li>
 
-//         {data.length > 0 && (
-//           <section className="main">
-//             <input
-//               type="checkbox"
-//               id="toggle-all"
-//               className="toggle-all"
-//               data-cy="toggleAll"
-//             />
-//             <label htmlFor="toggle-all">Mark all as complete</label>
+                <li>
+                  <a
+                    href="#/completed"
+                    className={classNames({
+                      selected: activeFilter === Filtering.Complete,
+                    })}
+                    onClick={() => handleFilter(Filtering.Complete)}
+                  >
+                    Completed
+                  </a>
+                </li>
+              </ul>
 
-//             {data.length > 0 && (
-//               <TodoList data={filterData(activeFilter) || []} />
-//             )}
-//           </section>
-//         )}
-
-//         {data.length > 0 && (
-//           <footer className="footer">
-//             <span className="todo-count" data-cy="todosCounter">
-//               {itemsLeft}
-//               item left
-//             </span>
-
-//             <ul className="filters">
-//               <li>
-//                 <a
-//                   href="#/"
-//                   className={classNames({
-//                     selected: activeFilter === filtering.all,
-//                   })}
-//                   onClick={() => handleFilter(filtering.all)}
-//                 >
-//                   All
-//                 </a>
-//               </li>
-
-//               <li>
-//                 <a
-//                   href="#/active"
-//                   className={classNames({
-//                     selected: activeFilter === filtering.active,
-//                   })}
-//                   onClick={() => handleFilter(filtering.active)}
-//                 >
-//                   Active
-//                 </a>
-//               </li>
-
-//               <li>
-//                 <a
-//                   href="#/completed"
-//                   className={classNames({
-//                     selected: activeFilter === filtering.complete,
-//                   })}
-//                   onClick={() => handleFilter(filtering.complete)}
-//                 >
-//                   Completed
-//                 </a>
-//               </li>
-//             </ul>
-
-//             <button
-//               type="button"
-//               className="clear-completed"
-//               // style={}
-//               onClick={() => handleFilter(filtering.clean)}
-//             >
-//               Clear completed
-//             </button>
-//           </footer>
-//         )}
-//       </div>
-//     </TodosContext.Provider>
-//   );
-// };
+              <button
+                type="button"
+                className="clear-completed"
+                // style={}
+                onClick={() => handleFilter(Filtering.Clean)}
+              >
+                Clear completed
+              </button>
+            </footer>
+          )}
+        </div>
+      </>
+    </TodoProvider>
+  );
+};
