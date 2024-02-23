@@ -1,32 +1,40 @@
-import React, { useContext, useState } from 'react';
-import cn from 'classnames';
-import { TodosContext } from '../store';
-import { Todo } from '../types/Todo';
+import React, { useContext, useState } from "react";
+import cn from "classnames";
+import { TodosContext } from "../store";
+import { Todo } from "../types/Todo";
 
-interface Props { todo: Todo }
+interface Props {
+  todo: Todo;
+}
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos, removeTodo, editTodo } = useContext(TodosContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
 
-  const handleTodoCompleted = () => setTodos(todos.map(el => el.id === todo.id ? { ...el, completed: !el.completed } : el));
+  const handleTodoCompleted = () =>
+    setTodos(
+      todos.map((el) =>
+        el.id === todo.id ? { ...el, completed: !el.completed } : el,
+      ),
+    );
 
   const handleSave = () => {
     if (editTitle.trim().length === 0) {
-      removeTodo(todo.id)
-    } else if (editTitle.trim() !== '' && editTitle !== todo.title) {
-      editTodo(todo.id, editTitle)
+      removeTodo(todo.id);
+    } else if (editTitle.trim() !== "" && editTitle !== todo.title) {
+      editTodo(todo.id, editTitle);
     } else {
-      setEditTitle(todo.title)
+      setEditTitle(todo.title);
     }
-    setIsEditing(false)
+
+    setIsEditing(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSave();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       setEditTitle(todo.title);
       setIsEditing(false);
     }
@@ -34,15 +42,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <>
-      <li className={cn({
-        editing: isEditing,
-        completed: todo.completed,
-      })}
+      <li
+        className={cn({
+          editing: isEditing,
+          completed: todo.completed,
+        })}
       >
         <div>
-          <input type="checkbox"
+          <input
+            type="checkbox"
             className="toggle"
-            id="toggle-completed"
+            id="toggle-view"
+            name="toggle-view"
             checked={todo.completed}
             onChange={handleTodoCompleted}
           />
@@ -52,13 +63,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               type="text"
               className="edit"
               value={editTitle}
-              onChange={e => setEditTitle(e.target.value)}
+              onChange={(e) => setEditTitle(e.target.value)}
               onKeyDown={handleKeyDown}
               onBlur={handleSave}
             />
           ) : (
             <>
-              <label onDoubleClick={() => setIsEditing(true)}>
+              <label
+                htmlFor="toggle-view"
+                onDoubleClick={() => setIsEditing(true)}
+              >
                 {todo.title}
               </label>
               <button
@@ -66,6 +80,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
                 className="destroy"
                 data-cy="deleteTodo"
                 onClick={() => removeTodo(todo.id)}
+                aria-label="delete Todo"
               />
             </>
           )}

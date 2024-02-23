@@ -2,11 +2,8 @@ import React, { useContext, useState } from "react";
 import { nanoid } from "nanoid";
 import { TodosContext } from "../store";
 
-import { TodoFilter } from "./TodoFilter";
-import { TodoList } from "./TodoList";
-
-export const TodoApp = () => {
-  const { addTodo, todos } = useContext(TodosContext);
+export const TodoHeader = () => {
+  const { addTodo} = useContext(TodosContext);
   const [newTodo, setNewTodo] = useState("");
   const handleAddTodo = () => {
     if (newTodo.trim()) {
@@ -25,7 +22,6 @@ export const TodoApp = () => {
   };
 
   return (
-    <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
@@ -41,13 +37,5 @@ export const TodoApp = () => {
           />
         </form>
       </header>
-
-      {todos.length > 0 && (
-        <>
-          <TodoList />
-          <TodoFilter />
-        </>
-      )}
-    </div>
   );
 };
