@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Status } from "./types/Status";
 import { TodosContextType } from "./types/TodosContextType";
 import { useLocalStorage } from "./Hooks/useLocalStorage";
 import { Todo } from "./types/Todo";
+import { getVisibleTodos } from "./utils/getVisibleTodos";
 
 const initialTodos: TodosContextType = {
   todos: [],
@@ -24,7 +25,7 @@ interface Props {
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>("todos", []);
   const [status, setStatus] = useState(Status.All);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const filteredTodos = getVisibleTodos(todos, status);
 
   const addTodo = (newTodo: Todo) => setTodos([...todos, newTodo]);
 
@@ -39,22 +40,6 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
       }),
     );
   };
-
-  const filterTodos = useCallback(() => {
-    switch (status) {
-      case Status.Active:
-        setFilteredTodos(todos.filter((todo) => !todo.completed));
-        break;
-      case Status.Completed:
-        setFilteredTodos(todos.filter((todo) => todo.completed));
-        break;
-
-      default:
-        setFilteredTodos(todos);
-    }
-  }, [status, todos]);
-
-  useEffect(() => filterTodos(), [todos, status, filterTodos]);
 
   return (
     <TodosContext.Provider

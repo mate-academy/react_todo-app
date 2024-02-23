@@ -7,9 +7,10 @@ import { TodoList } from "./components/TodoList";
 import { TodoFilter } from "./components/TodoFilter";
 
 export const App: React.FC = () => {
-const { todos } = useContext(TodosContext);
+  const { todos } = useContext(TodosContext);
+
   return (
-     <div className="todoapp">
+    <div className="todoapp">
       <TodoHeader />
 
       {todos.length > 0 && (

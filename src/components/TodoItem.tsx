@@ -69,10 +69,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             />
           ) : (
             <>
-              <label
-                htmlFor="toggle-view"
-                onDoubleClick={() => setIsEditing(true)}
-              >
+              <label onDoubleClick={() => setIsEditing(true)}>
                 {todo.title}
               </label>
               <button

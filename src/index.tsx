@@ -1,16 +1,16 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+import "./styles/index.css";
+import "./styles/todo-list.css";
+import "./styles/filters.css";
 
-import { App } from './App';
-import { TodosContextProvider } from './store';
+import { App } from "./App";
+import { TodosContextProvider } from "./store";
 
-const container = document.getElementById('root') as HTMLDivElement;
+const container = document.getElementById("root") as HTMLDivElement;
 
 createRoot(container).render(
   <TodosContextProvider>
     <App />
-  </TodosContextProvider>
+  </TodosContextProvider>,
 );
