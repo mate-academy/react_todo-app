@@ -7,21 +7,22 @@ export type Action =
  | { type: 'editTitle', newTitle: string, id: number }
  | { type: 'marcToComplited', id: number }
  | { type: 'complited', payload: boolean }
- | { type: 'removeToComplited' }
+ | { type: 'deleteAllComplited' }
  | { type: 'removeTodo', id: number
  };
 
-export function reducer(action: Action, state: State) {
+export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'addTodo':
       return {
         ...state,
-        todos: {
-          ...state,
-          id: +new Date(),
-          title: action.title,
-          completed: false,
-        },
+        todos: [
+          ...state.todos,
+          {
+            id: +new Date(),
+            title: action.title,
+            completed: false,
+          }],
       };
     case 'filter':
       return {
@@ -36,7 +37,6 @@ export function reducer(action: Action, state: State) {
             return {
               ...todo,
               title: action.newTitle,
-              completed: false,
             };
           }
 
@@ -62,12 +62,13 @@ export function reducer(action: Action, state: State) {
           return todo;
         }),
       };
-    case 'removeToComplited':
+    case 'deleteAllComplited':
       return {
         ...state,
         todos: state.todos.filter(todo => !todo.completed),
       };
     case 'complited':
+
       return {
         ...state,
         todos: state.todos.map(todo => ({

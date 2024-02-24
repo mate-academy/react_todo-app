@@ -28,7 +28,7 @@ function useLocalStoreg(
   return [value, save];
 }
 
-export const TodoContext = React.createContext(initialState);
+export const TodoContext = createContext(initialState);
 export const DispatchContext = createContext((action: Action) => {
   // eslint-disable-next-line no-console
   console.debug(action);
@@ -42,16 +42,17 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [localTodos, setLocalTodos]
    = useLocalStoreg('todos', initialState.todos);
 
-  const [state, dispatch] = useReducer(reducer, localTodos);
+  const [state, dispatch]
+   = useReducer(reducer, { ...initialState, todos: localTodos });
 
   const { todos } = state;
 
   useEffect(() => {
     if (todos) {
       setLocalTodos(todos);
-      localStorage.setItem('todos', JSON.stringify(todos));
+      localStorage.setItem('todos', JSON.stringify(state.todos));
     }
-  }, [todos, setLocalTodos]);
+  }, [state.todos, setLocalTodos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

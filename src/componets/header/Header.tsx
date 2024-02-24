@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { DispatchContext } from '../../managment/Contextes';
+import { DispatchContext, TodoContext } from '../../managment/Contextes';
 
 export const Header: React.FC = () => {
+  const { todos } = useContext(TodoContext);
   const [title, setTitle] = useState('');
   const dispatch = useContext(DispatchContext);
 
@@ -14,11 +15,20 @@ export const Header: React.FC = () => {
     setTitle('');
   };
 
+  const allComplited = todos.every(todo => todo.completed);
+
+  const handlerCompletad = () => {
+    dispatch({
+      type: 'complited',
+      payload: allComplited,
+    });
+  };
+
   return (
     <header className="header">
       <h1>todos</h1>
 
-      <form>
+      <form onSubmit={handlerAdd}>
         <input
           type="text"
           data-cy="createTodo"
@@ -26,7 +36,7 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          onBlur={handlerAdd}
+          onClick={(handlerCompletad)}
         />
       </form>
     </header>

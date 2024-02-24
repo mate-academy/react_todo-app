@@ -1,31 +1,30 @@
+/* eslint-disable import/extensions */
 import React, { useContext } from 'react';
+import { TodoContext, DispatchContext } from '../../managment/Contextes';
 import { FilterTodo } from '../filterTodos/FilterTodos';
-import { DispatchContext, TodoContext } from '../../managment/Contextes';
+import { Todo } from '../../types/Todo';
 
 export const Footer: React.FC = () => {
   const { todos } = useContext(TodoContext);
   const dispatch = useContext(DispatchContext);
 
-  const handelClearComponent = () => {
-    dispatch({
-      type: 'removeToComplited',
-    });
+  const handleClearCompleted = () => {
+    dispatch({ type: 'deleteAllComplited' });
   };
 
-  const completedCount = todos.filter(todo => todo.completed).length;
+  const completedCount = todos.filter((todo: Todo) => todo.completed).length;
 
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length - completedCount} items left`}
+        {`${todos.length - completedCount} ${todos.length > 2 ? 'items' : 'item'} left`}
       </span>
       <FilterTodo />
-
       {completedCount > 0 && (
         <button
           type="button"
           className="clear-completed"
-          onClick={handelClearComponent}
+          onClick={handleClearCompleted}
         >
           Clear completed
         </button>

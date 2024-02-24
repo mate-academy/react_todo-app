@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext,
-  useEffect, useRef, useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
 import cn from 'classnames';
 import { DispatchContext } from '../../managment/Contextes';
@@ -15,7 +14,7 @@ export const TodoItems: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
   const { id, title, completed } = todo;
 
-  const [edietTitle, setEdietTitle] = useState(title);
+  const [editedTitle, setEditedTitle] = useState(title);
   const [isEdit, setIsEdit] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -26,25 +25,54 @@ export const TodoItems: React.FC<Props> = ({ todo }) => {
     }
   }, [isEdit]);
 
-  const handalChekTodo = () => {
+  const handleCheckTodo = () => {
     dispatch({
       type: 'marcToComplited',
       id,
     });
   };
 
-  const handelEditTodo = () => {
-    dispatch({
-      type: 'editTitle',
-      newTitle: edietTitle,
-      id,
-    });
+  const handleEditTodo = () => {
+    if (editedTitle.trim()) {
+      dispatch({
+        type: 'editTitle',
+        newTitle: editedTitle,
+        id,
+      });
+    } else {
+      dispatch({
+        type: 'removeTodo',
+        id,
+      });
+    }
+
     setIsEdit(false);
   };
 
-  const handelRemove = () => {
+  const handleDoubleClick = () => {
+    setIsEdit(true);
+  };
+
+  const handleKeyClick = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (event.key) {
+      case 'Escape':
+        setEditedTitle(title);
+        setIsEdit(false);
+        break;
+
+      case 'Enter':
+        handleEditTodo();
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const deleteTodo = () => {
     dispatch({
-      type: 'removeToComplited',
+      type: 'removeTodo',
+      id,
     });
   };
 
@@ -54,32 +82,32 @@ export const TodoItems: React.FC<Props> = ({ todo }) => {
       editing: isEdit,
     })}
     >
-      <div
-        className="view"
-        onDoubleClick={() => setIsEdit(false)}
-      >
+      <div className="view" onDoubleClick={handleDoubleClick}>
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={`toggle-${id}`}
           checked={completed}
-          onClick={handalChekTodo}
-          onChange={handelRemove}
+          onChange={handleCheckTodo}
         />
-        <label htmlFor="toggle-view">{title}</label>
+        <label htmlFor={`toggle-${id}`}>{title}</label>
         <button
           type="button"
           className="destroy"
-          data-cy="deleteTodo"
+          onClick={deleteTodo}
         />
       </div>
-      <input
-        type="text"
-        onChange={e => setEdietTitle(e.target.value)}
-        ref={titleRef}
-        className="edit"
-        onBlur={handelEditTodo}
-      />
+      {isEdit ? (
+        <input
+          type="text"
+          ref={titleRef}
+          className="edit"
+          value={editedTitle}
+          onChange={(e) => setEditedTitle(e.target.value)}
+          onBlur={handleEditTodo}
+          onKeyUp={handleKeyClick}
+        />
+      ) : null}
     </li>
   );
 };

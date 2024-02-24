@@ -11,7 +11,7 @@ export const Main: React.FC = () => {
   const handlerComplited = () => {
     dispatch({
       type: 'complited',
-      payload: allComplited,
+      payload: !allComplited,
     });
   };
 
@@ -22,6 +22,7 @@ export const Main: React.FC = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
+        checked={allComplited}
         onChange={handlerComplited}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
