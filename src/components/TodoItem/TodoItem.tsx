@@ -1,22 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { TodoContext } from '../TodoContext/TodoContext';
-import Todo from '../../types/Todo';
+import { Todo, useCustomReducer } from '../CustomReducer/useCustomReducer';
 
 interface Props {
   item: Todo;
 }
 
 export const TodoItem: React.FC<Props> = ({ item }) => {
-  const { deleteTodo, updateCompleteTodo } = useContext(TodoContext);
-
-  const handleCompleted = () => {
-    updateCompleteTodo(item.id);
-  };
-
-  const handleDeleteItem = () => {
-    deleteTodo(item.id);
-  };
+  const { addCompleted, remove } = useCustomReducer();
 
   return (
     <li className={classNames({ completed: item.completed })}>
@@ -25,7 +16,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           type="checkbox"
           className="toggle"
           id={`toggle-view-${item.id}`}
-          onChange={handleCompleted}
+          onChange={() => addCompleted(item.id)}
         />
         <label htmlFor={`toggle-view-${item.id}`}>{item.title}</label>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -33,7 +24,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleDeleteItem}
+          onClick={() => remove(item.id)}
         />
       </div>
       <input type="text" className="edit" />

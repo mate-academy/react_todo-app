@@ -1,6 +1,6 @@
 import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
-import Todo from '../../types/Todo';
+import { Todo } from '../CustomReducer/useCustomReducer';
 
 interface Props {
   data: Todo[];
