@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import { useContext, useState } from 'react';
-import { Todo } from '../../types/TodoApp';
+import { Status, Todo } from '../../types/TodoApp';
 import { TodoList } from '../TodoList';
 import { DispatchContext, StateContext } from '../../Context/TodosContext';
 import { TodosFilter } from '../TodosFilter';
@@ -13,17 +13,17 @@ export const TodoApp: React.FC = () => {
 
   const notCompletedTodos = todos.filter(item => !item.completed).length;
   const isToggleAllActive = todos.every(item => item.completed);
-  const isTodos = todos.length > 0;
+  const isTodos = !!todos.length;
   const showClearCompleted = todos.some(item => item.completed) && isTodos;
 
   let visibleTodos = todos;
 
   switch (status) {
-    case 'active':
+    case Status.Active:
       visibleTodos = todos.filter((item: Todo) => !item.completed);
       break;
 
-    case 'completed':
+    case Status.Completed:
       visibleTodos = todos.filter((item: Todo) => item.completed);
       break;
 
@@ -78,9 +78,9 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {todos.length > 0 && (
-        <section className="main">
-          <>
+      {isTodos && (
+        <>
+          <section className="main">
             <input
               type="checkbox"
               id="toggle-all"
@@ -90,30 +90,28 @@ export const TodoApp: React.FC = () => {
               onChange={handleToggleAll}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
-          </>
 
-          <TodoList items={visibleTodos} />
-        </section>
-      )}
+            <TodoList items={visibleTodos} />
+          </section>
 
-      {isTodos && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {notCompletedTodos} items left
-          </span>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {notCompletedTodos} items left
+            </span>
 
-          <TodosFilter />
+            <TodosFilter />
 
-          {showClearCompleted && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={handleClearCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            {showClearCompleted && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleClearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { StatusAction, Todo, TodoAction } from '../types/TodoApp';
+import { Status, StatusAction, Todo, TodoAction } from '../types/TodoApp';
 import { statusReducer, todoReducer } from './reducers';
 
 interface State {
@@ -21,7 +21,7 @@ try {
 
 const initialState: State = {
   todos: initialTodos,
-  status: 'all',
+  status: Status.All,
 };
 
 type ActionTypes = TodoAction | StatusAction;

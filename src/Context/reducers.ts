@@ -1,4 +1,4 @@
-import { StatusAction, Todo, TodoAction } from '../types/TodoApp';
+import { Status, StatusAction, Todo, TodoAction } from '../types/TodoApp';
 
 export const todoReducer = (state: Todo[], action: TodoAction) => {
   switch (action.type) {
@@ -7,7 +7,7 @@ export const todoReducer = (state: Todo[], action: TodoAction) => {
     }
 
     case 'deleteTodo':
-      return [...state.filter(todo => todo.id !== action.payload)];
+      return state.filter(todo => todo.id !== action.payload);
 
     case 'updateTodo':
       return state.map(todo => {
@@ -19,7 +19,7 @@ export const todoReducer = (state: Todo[], action: TodoAction) => {
       });
 
     case 'clearCompletedTodos':
-      return [...state.filter(todo => !todo.completed)];
+      return state.filter(todo => !todo.completed);
 
     case 'toggleStatus':
       return state.map(item => {
@@ -42,14 +42,14 @@ export const todoReducer = (state: Todo[], action: TodoAction) => {
 
 export const statusReducer = (state: string, action: StatusAction) => {
   switch (action.type) {
-    case 'active':
-      return 'active';
+    case Status.Active:
+      return Status.Active;
 
-    case 'completed':
-      return 'completed';
+    case Status.Completed:
+      return Status.Completed;
 
-    case 'all':
-      return 'all';
+    case Status.All:
+      return Status.All;
 
     default:
       return state;
