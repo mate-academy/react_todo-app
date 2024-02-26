@@ -12,7 +12,10 @@ export type TodoAction =
   | { type: 'toggleStatus'; payload: number }
   | { type: 'toggleStatusAll' };
 
-export type StatusAction =
-  | { type: 'all' }
-  | { type: 'active' }
-  | { type: 'completed' };
+export enum Status {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
+
+export type StatusAction = { type: Status };

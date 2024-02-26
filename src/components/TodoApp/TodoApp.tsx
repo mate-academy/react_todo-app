@@ -6,9 +6,7 @@ import { TodoList } from '../TodoList';
 import { DispatchContext, StateContext } from '../../Context/TodosContext';
 import { TodosFilter } from '../TodosFilter';
 
-type Props = {};
-
-export const TodoApp: React.FC<Props> = () => {
+export const TodoApp: React.FC = () => {
   const { todos, status } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
   const [newTodo, setNewTodo] = useState('');
@@ -22,11 +20,11 @@ export const TodoApp: React.FC<Props> = () => {
 
   switch (status) {
     case 'active':
-      visibleTodos = [...todos].filter((item: Todo) => !item.completed);
+      visibleTodos = todos.filter((item: Todo) => !item.completed);
       break;
 
     case 'completed':
-      visibleTodos = [...todos].filter((item: Todo) => item.completed);
+      visibleTodos = todos.filter((item: Todo) => item.completed);
       break;
 
     default:

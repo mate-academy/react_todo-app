@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import classNames from 'classnames';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/TodoApp';
 import { DispatchContext } from '../../Context/TodosContext';
 
@@ -16,6 +16,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const [updateTitle, setUpdateTitle] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
+  const editTodoInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editTodoInput.current && isEditing) {
+      editTodoInput.current?.focus();
+    }
+  }, [isEditing]);
 
   const handleCompleted = () => {
     dispatch({ type: 'toggleStatus', payload: id });
@@ -86,6 +93,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         className="edit"
         value={updateTitle}
+        ref={editTodoInput}
         onChange={handleUpdateTitle}
         onKeyUp={handleEdit}
         onBlur={handleEditBlur}

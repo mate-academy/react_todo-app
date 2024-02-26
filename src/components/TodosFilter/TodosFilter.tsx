@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useContext } from 'react';
 import { DispatchContext, StateContext } from '../../Context/TodosContext';
+import { Status } from '../../types/TodoApp';
 
 export const TodosFilter = () => {
   const { status } = useContext(StateContext);
@@ -12,9 +13,9 @@ export const TodosFilter = () => {
         <a
           href="#/"
           className={classNames({
-            selected: status === 'all',
+            selected: status === Status.All,
           })}
-          onClick={() => dispatch({ type: 'all' })}
+          onClick={() => dispatch({ type: Status.All })}
         >
           All
         </a>
@@ -24,9 +25,9 @@ export const TodosFilter = () => {
         <a
           href="#/active"
           className={classNames({
-            selected: status === 'active',
+            selected: status === Status.Active,
           })}
-          onClick={() => dispatch({ type: 'active' })}
+          onClick={() => dispatch({ type: Status.Active })}
         >
           Active
         </a>
@@ -36,9 +37,9 @@ export const TodosFilter = () => {
         <a
           href="#/completed"
           className={classNames({
-            selected: status === 'completed',
+            selected: status === Status.Completed,
           })}
-          onClick={() => dispatch({ type: 'completed' })}
+          onClick={() => dispatch({ type: Status.Completed })}
         >
           Completed
         </a>
