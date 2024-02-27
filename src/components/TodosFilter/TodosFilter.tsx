@@ -23,7 +23,7 @@ export const TodoFilter: React.FC<Props> = memo(({
     };
 
   const uncompletedTodosCount = state.reduce((acc, todo) => {
-    return todo.completed ? 0 : acc + 1;
+    return todo.completed ? acc : acc + 1;
   }, 0);
 
   const hasCompleted = state.some(todo => todo.completed);
