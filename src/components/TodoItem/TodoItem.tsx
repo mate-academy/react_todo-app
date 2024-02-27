@@ -1,13 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Todo, useCustomReducer } from '../CustomReducer/useCustomReducer';
+import { Todo } from '../CustomReducer/useCustomReducer';
+import { Values } from '../Types/Values';
 
 interface Props {
   item: Todo;
+  data: Values;
 }
 
-export const TodoItem: React.FC<Props> = ({ item }) => {
-  const { addCompleted, remove } = useCustomReducer();
+export const TodoItem: React.FC<Props> = ({ item, data }) => {
+  const { addCompleted, remove } = data;
 
   return (
     <li className={classNames({ completed: item.completed })}>

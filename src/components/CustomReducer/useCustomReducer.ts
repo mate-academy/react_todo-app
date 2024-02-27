@@ -12,9 +12,10 @@ export enum Filtering {
   All = 'all',
   Active = 'active',
   Complete = 'complete',
-  Clean = 'clear',
+  ClearCompleted = 'clearCompleted',
   Add = 'add',
   Remove = 'remove',
+  AllCompleted = 'allCompleted',
   AddComplete = 'addComplete',
 }
 
@@ -29,14 +30,28 @@ const reducer = (state: Todo[], action: Action) => {
     case Filtering.Add:
       return [...state, action.payload as Todo];
     case Filtering.AddComplete:
-      return state.map(todo =>
-        todo.id === (action.payload as number) // Assuming action.payload is a number
-          ? { ...todo, completed: !!todo.completed } // Toggle the completed status
-          : todo,
-      );
+      return state.map(todo => {
+        if (todo.id === action.payload) {
+          return { ...todo, completed: !todo.completed };
+        }
+
+        return todo;
+      });
     case Filtering.Remove:
       return state.filter(elem => {
         return elem.id !== action.payload;
+      });
+    case Filtering.ClearCompleted:
+      return state.filter(todo => !todo.completed);
+    case Filtering.AllCompleted:
+      if (state.some(todo => !todo.completed)) {
+        return state.map(todo => {
+          return { ...todo, completed: true };
+        });
+      }
+
+      return state.map(todo => {
+        return { ...todo, completed: false };
       });
     default:
       return state;
@@ -74,6 +89,22 @@ export const useCustomReducer = () => {
     dispatch({ type: Filtering.Remove, payload: id });
   };
 
+  const clearCompleted = () => {
+    dispatch({ type: Filtering.ClearCompleted });
+  };
+
+  const allCompleted = () => {
+    dispatch({ type: Filtering.AllCompleted });
+  };
+
   // Return state and filterItems function
-  return { state, filterItems, addTodo, addCompleted, remove };
+  return {
+    state,
+    filterItems,
+    addTodo,
+    addCompleted,
+    remove,
+    clearCompleted,
+    allCompleted,
+  };
 };
