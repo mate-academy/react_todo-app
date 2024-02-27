@@ -36,7 +36,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  const aditFunc = (str: string) => {
+  const updateTodoTitle = (str: string) => {
     const trimmedTitle = str.trim();
 
     if (!trimmedTitle) {
@@ -53,7 +53,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleOnBlur = () => {
-    aditFunc(addedTitle);
+    updateTodoTitle(addedTitle);
   };
 
   const handleOnKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -61,7 +61,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       return;
     }
 
-    aditFunc(addedTitle);
+    updateTodoTitle(addedTitle);
   };
 
   const handleToggleChange = () =>

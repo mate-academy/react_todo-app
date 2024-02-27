@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { Header } from '../Header';
 import { Footer } from '../Footer/Footer';
 import { TodoList } from '../TodoList/TodoList';
 import { TodoContext } from '../TodoContext';
 import { Status } from '../../types';
 
-export const TodoApp = () => {
+export const TodoApp = React.memo(() => {
   const { todos, setTodos, filterStatus } = useContext(TodoContext);
 
   const prepearedTodos = todos.filter(todo => {
@@ -48,4 +48,4 @@ export const TodoApp = () => {
       )}
     </div>
   );
-};
+});

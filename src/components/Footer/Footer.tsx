@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { TodoContext } from '../TodoContext';
 import { TodoFilter } from '../TodoFilter';
 
-export const Footer: React.FC = () => {
+export const Footer: React.FC = React.memo(() => {
   const { todos, setTodos } = useContext(TodoContext);
 
   const activeItems = todos.reduce((acc, todo) => acc + +!todo.completed, 0);
@@ -30,4 +30,4 @@ export const Footer: React.FC = () => {
       )}
     </footer>
   );
-};
+});
