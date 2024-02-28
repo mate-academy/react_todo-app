@@ -19,11 +19,11 @@ Implement a simple [TODO app](http://todomvc.com/examples/vanillajs/) working as
     - move a `li` tag inside the `TodoItem`;
     - add class `completed` if todo is completed;
 1. Add the ability to toggle the completed status of all the todos with the `toggleAll` checkbox.
-    - `toggleAll` checkbox is active only if all the todos are completed;
-    - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` checked;
-1. Create `TodosFilter` component to switch between `All`/`Active`/`Completed` todos (add it to the `App`)
-    - add the `Status` enum with the required values;
-    - href should be `#/`, `#/active` or `#/completed`
+       - `toggleAll` checkbox is active only if all the todos are completed;
+   - if you click the checkbox all the items should be marked as `completed`/`not completed` depending on `toggleAll` checked;
+1. Create `TodosFilter` with `data-cy="todosFilter"` component to switch between `All`/`Active`/`Completed` todos (add it to the `App`)
+   - add the `Status` enum with the required values;
+   - href should be `#/`, `#/active` or `#/completed`)
 1. Add ability to remove a todo using the `destroy` button (`X`).
 1. Add ability to clear completed todos - remove all completed items from the list. The button should contain text `Clear completed` in it.
     - It should be visible if there is at least 1 completed item in the list.
