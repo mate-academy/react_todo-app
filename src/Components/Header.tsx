@@ -7,6 +7,10 @@ export const Header: React.FC = () => {
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!todoTitle.trim()) {
+      return;
+    }
+
     const newTodos = [...todos, {
       id: +new Date(),
       title: todoTitle,
