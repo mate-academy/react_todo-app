@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
 import { TodosProvider } from './Contexts/TodosContext';
 import { TodoApp } from './Components/TodoApp';
 
