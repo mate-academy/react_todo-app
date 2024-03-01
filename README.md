@@ -4,6 +4,7 @@ Implement a simple [TODO app](https://todomvc.com/examples/javascript-es6/dist/)
 
 > If you are not sure about how a feature should work just open the real TodoApp and look how it works there
 
+
 ![todoapp](./description/todoapp.gif)
 
 1. Use `TodosContext` to store and update the todos.
