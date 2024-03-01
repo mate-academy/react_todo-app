@@ -27,7 +27,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleKeyPress = (event: React.KeyboardEvent, id: number) => {
     if (event.key === 'Enter') {
-      if (newValue.length === 0) {
+      if (newValue.trim().length === 0) {
         remove(todo.id);
 
         return;

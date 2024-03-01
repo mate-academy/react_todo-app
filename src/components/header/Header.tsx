@@ -23,7 +23,13 @@ export const Header: React.FC = () => {
 
   const dispatch = useContext(DispatchContext);
 
-  const add = () => dispatch(actionAdd);
+  const add = () => {
+    if (value.trim().length < 1) {
+      return;
+    }
+
+    dispatch(actionAdd);
+  };
 
   const onKeyDownHandle = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && value.length === 0) {
@@ -57,7 +63,7 @@ export const Header: React.FC = () => {
           className="new-todo"
           placeholder="What needs to be done?"
           onChange={event => setValue(event.target.value)}
-          onKeyDown={event => onKeyDownHandle(event)}
+          onKeyDown={onKeyDownHandle}
         />
       </form>
     </header>

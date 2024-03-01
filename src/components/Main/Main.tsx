@@ -16,7 +16,7 @@ export const Main: React.FC = () => {
     setToggle(!toggle);
   };
 
-  const preparedTodos = [...todos].filter(todo => {
+  const preparedTodos = todos.filter(todo => {
     switch (filter) {
       case Status.All:
         return todo;
