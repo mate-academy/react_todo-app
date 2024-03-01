@@ -25,6 +25,8 @@ export const Header: React.FC = () => {
 
   const add = () => {
     if (value.trim().length < 1) {
+      setValue('');
+
       return;
     }
 
