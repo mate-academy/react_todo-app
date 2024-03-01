@@ -16,7 +16,7 @@ export const Header: React.FC = () => {
     type: 'add',
     todo: {
       id: maxId + 1,
-      title: value,
+      title: value.trim(),
       completed: false,
     },
   };
@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
   const dispatch = useContext(DispatchContext);
 
   const add = () => {
-    if (value.trim().length < 1) {
+    if (value.trim().length === 0) {
       setValue('');
 
       return;
@@ -34,8 +34,9 @@ export const Header: React.FC = () => {
   };
 
   const onKeyDownHandle = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && value.length === 0) {
+    if (event.key === 'Enter' && value.trim().length === 0) {
       event.preventDefault();
+      setValue('');
 
       return;
     }
