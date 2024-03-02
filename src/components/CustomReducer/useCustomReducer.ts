@@ -1,13 +1,11 @@
 import { useReducer } from 'react';
 
-// Define Todo interface
 export interface Todo {
   id: number;
   title: string;
   completed: boolean;
 }
 
-// Define filtering options enum
 export enum Filtering {
   All = 'all',
   Active = 'active',
@@ -17,9 +15,9 @@ export enum Filtering {
   Remove = 'remove',
   AllCompleted = 'allCompleted',
   AddComplete = 'addComplete',
+  ChengeInput = 'changeInput',
 }
 
-// Define action interface
 interface Action {
   type: Filtering;
   payload?: number | Todo;
@@ -53,27 +51,42 @@ const reducer = (state: Todo[], action: Action) => {
       return state.map(todo => {
         return { ...todo, completed: false };
       });
+    case Filtering.ChengeInput:
+      return state.map(todo => {
+        if (todo.id === (action.payload as Todo).id) {
+          return { ...todo, title: (action.payload as Todo).title };
+        }
+
+        return todo;
+      });
     default:
       return state;
   }
 };
 
-// Define your useCustomReducer hook
 export const useCustomReducer = () => {
-  // Initializing state using useReducer hook with the reducer function
-  const [state, dispatch] = useReducer(reducer, []);
+  const todos = () => {
+    const Data = localStorage.getItem('todos');
 
-  // Define filterItems function to filter todos based on filterType
+    if (Data !== null) {
+      return JSON.parse(Data as string);
+    }
+
+    return [];
+  };
+
+  const [state, dispatch] = useReducer(reducer, todos());
+
   const filterItems = (filterType: Filtering) => {
     switch (filterType) {
       case Filtering.All:
-        return state; // Return the entire state array
+        return state;
       case Filtering.Active:
-        return state.filter(todo => !todo.completed); // Filter active todos
+        return state.filter(todo => !todo.completed);
       case Filtering.Complete:
-        return state.filter(todo => todo.completed); // Filter completed todos
+        return state.filter(todo => todo.completed);
       default:
-        return state; // Default case: return the entire state array
+        return state;
     }
   };
 
@@ -97,6 +110,10 @@ export const useCustomReducer = () => {
     dispatch({ type: Filtering.AllCompleted });
   };
 
+  const changeInput = (todo: Todo) => {
+    dispatch({ type: Filtering.ChengeInput, payload: todo });
+  };
+
   // Return state and filterItems function
   return {
     state,
@@ -106,5 +123,6 @@ export const useCustomReducer = () => {
     remove,
     clearCompleted,
     allCompleted,
+    changeInput,
   };
 };

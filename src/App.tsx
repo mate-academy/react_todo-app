@@ -1,10 +1,10 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import classNames from 'classnames';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { TodoList } from './components/TodoList/TodoList';
 import {
   Filtering,
   useCustomReducer,
 } from './components/CustomReducer/useCustomReducer';
+import { TodosFilter } from './components/Filter/TodosFilter';
 
 export interface Todo {
   id: number;
@@ -14,11 +14,17 @@ export interface Todo {
 
 export const App: React.FC = () => {
   const reducer = useCustomReducer();
-  const { state, filterItems, addTodo, clearCompleted,/*  allCompleted  */} = reducer;
+  const { state, filterItems, addTodo, clearCompleted, allCompleted } = reducer;
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<Filtering>(Filtering.All);
 
   const itemsLeft = `${state.length - state.filter((elem: Todo) => elem.completed).length} `;
+
+  useEffect(() => {
+    const todos = JSON.stringify(state);
+
+    localStorage.setItem('todos', todos);
+  }, [state]);
 
   const handleAddItem = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,11 +73,12 @@ export const App: React.FC = () => {
           className="toggle-all"
           data-cy="toggleAll"
         />
-        {/* {state.length > 0 && (
-          <label htmlFor="toggle-all" onClick={() => allCompleted()}>
+        {state.length > 0 && (
+          /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+          <label htmlFor="toggle-all" onMouseDown={() => allCompleted()}>
             Mark all as complete
           </label>
-        )} */}
+        )}
         <TodoList data={reducer} activeFilter={activeFilter} />
       </section>
       {state.length > 0 && (
@@ -81,43 +88,10 @@ export const App: React.FC = () => {
             item left
           </span>
 
-          <ul className="filters">
-            <li>
-              <a
-                href="#/"
-                className={classNames({
-                  selected: activeFilter === Filtering.All,
-                })}
-                onClick={() => handleFilter(Filtering.All)}
-              >
-                All
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/active"
-                className={classNames({
-                  selected: activeFilter === Filtering.Active,
-                })}
-                onClick={() => handleFilter(Filtering.Active)}
-              >
-                Active
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#/completed"
-                className={classNames({
-                  selected: activeFilter === Filtering.Complete,
-                })}
-                onClick={() => handleFilter(Filtering.Complete)}
-              >
-                Completed
-              </a>
-            </li>
-          </ul>
+          <TodosFilter
+            activeFilter={activeFilter}
+            handleFilter={handleFilter}
+          />
 
           {state.find(todo => todo.completed) && (
             <button

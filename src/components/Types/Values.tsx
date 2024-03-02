@@ -6,4 +6,5 @@ export interface Values {
   addTodo: (todo: Todo) => void;
   addCompleted: (id: number) => void;
   remove: (id: number) => void;
+  changeInput: (todo: Todo) => void;
 }
