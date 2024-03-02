@@ -47,34 +47,35 @@ export const TodoItem: React.FC<Props> = ({ item, data }) => {
 
   return (
     <li
-      className={classNames({ completed: item.completed, aditing: isActive })}
+      className={classNames({ completed: item.completed, editing: isActive })}
     >
       {/* eslint-disable jsx-a11y/control-has-associated-label */}
-      <div className="view">
-        <input
-          type="checkbox"
-          className="toggle"
-          onChange={() => addCompleted(item.id)}
-          checked={item.completed}
-        />
-        <label onDoubleClick={handleDoubleClick}>{mainTitle}</label>
-        <button
-          type="button"
-          className="destroy"
-          data-cy="deleteTodo"
-          onClick={() => remove(item.id)}
-        />
-        {isActive && (
+      {!isActive ? (
+        <div className="view">
           <input
-            type="text"
-            className="edit"
-            value={mainTitle}
-            onChange={handleChange}
-            onKeyUp={keyHandler}
-            onBlur={handleBlur}
+            type="checkbox"
+            className="toggle"
+            onChange={() => addCompleted(item.id)}
+            checked={item.completed}
           />
-        )}
-      </div>
+          <label onDoubleClick={handleDoubleClick}>{mainTitle}</label>
+          <button
+            type="button"
+            className="destroy"
+            data-cy="deleteTodo"
+            onClick={() => remove(item.id)}
+          />
+        </div>
+      ) : (
+        <input
+          type="text"
+          className="edit"
+          value={mainTitle}
+          onChange={handleChange}
+          onKeyUp={keyHandler}
+          onBlur={handleBlur}
+        />
+      )}
     </li>
   );
 };

@@ -74,12 +74,11 @@ export const App: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
+              onChange={allCompleted}
             />
             {state.length > 0 && (
               /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-              <label htmlFor="toggle-all" onMouseDown={() => allCompleted()}>
-                Mark all as complete
-              </label>
+              <label htmlFor="toggle-all">Mark all as complete</label>
             )}
             <TodoList data={reducer} activeFilter={activeFilter} />
           </section>
