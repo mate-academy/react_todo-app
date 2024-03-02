@@ -49,6 +49,7 @@ export const TodoItem: React.FC<Props> = ({ item, data }) => {
     <li
       className={classNames({ completed: item.completed, aditing: isActive })}
     >
+      {/* eslint-disable jsx-a11y/control-has-associated-label */}
       <div className="view">
         <input
           type="checkbox"
@@ -57,23 +58,23 @@ export const TodoItem: React.FC<Props> = ({ item, data }) => {
           checked={item.completed}
         />
         <label onDoubleClick={handleDoubleClick}>{mainTitle}</label>
-        {/* <button
+        <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
           onClick={() => remove(item.id)}
-        /> */}
-      </div>
-      {isActive && (
-        <input
-          type="text"
-          className="edit"
-          value={mainTitle}
-          onChange={handleChange}
-          onKeyUp={keyHandler}
-          onBlur={handleBlur}
         />
-      )}
+        {isActive && (
+          <input
+            type="text"
+            className="edit"
+            value={mainTitle}
+            onChange={handleChange}
+            onKeyUp={keyHandler}
+            onBlur={handleBlur}
+          />
+        )}
+      </div>
     </li>
   );
 };

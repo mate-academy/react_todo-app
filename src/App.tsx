@@ -66,44 +66,46 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        {state.length > 0 && (
-          /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-          <label htmlFor="toggle-all" onMouseDown={() => allCompleted()}>
-            Mark all as complete
-          </label>
-        )}
-        <TodoList data={reducer} activeFilter={activeFilter} />
-      </section>
       {state.length > 0 && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {itemsLeft}
-            item left
-          </span>
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+            />
+            {state.length > 0 && (
+              /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+              <label htmlFor="toggle-all" onMouseDown={() => allCompleted()}>
+                Mark all as complete
+              </label>
+            )}
+            <TodoList data={reducer} activeFilter={activeFilter} />
+          </section>
 
-          <TodosFilter
-            activeFilter={activeFilter}
-            handleFilter={handleFilter}
-          />
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {itemsLeft}
+              item left
+            </span>
 
-          {state.find(todo => todo.completed) && (
-            <button
-              type="button"
-              className="clear-completed"
-              // style={}
-              onClick={() => clearCompleted()}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            <TodosFilter
+              activeFilter={activeFilter}
+              handleFilter={handleFilter}
+            />
+
+            {state.find(todo => todo.completed) && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={() => clearCompleted()}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
       )}
     </div>
   );
