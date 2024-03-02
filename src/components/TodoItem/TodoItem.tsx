@@ -44,7 +44,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleOnBlur = (id: number) => {
-    if (newValue.length === 0) {
+    if (newValue.trim().length === 0) {
       remove(todo.id);
 
       return;

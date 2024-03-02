@@ -12,7 +12,7 @@ export const TodoFilter: React.FC = () => {
   };
 
   const uncomplete = useMemo(
-    () => todos.filter(todo => todo.completed === false).length,
+    () => todos.filter(todo => !todo.completed).length,
     [todos],
   );
 

@@ -20,10 +20,13 @@ export const Main: React.FC = () => {
     switch (filter) {
       case Status.All:
         return todo;
+
       case Status.Active:
-        return todo.completed === false;
+        return !todo.completed;
+
       case Status.Completed:
-        return todo.completed === true;
+        return todo.completed;
+
       default:
         return todo;
     }
@@ -36,7 +39,7 @@ export const Main: React.FC = () => {
         id="toggle-all"
         className="toggle-all"
         data-cy="toggleAll"
-        onClick={() => handleOnToggle()}
+        onClick={handleOnToggle}
       />
 
       <label htmlFor="toggle-all">Mark all as complete</label>
