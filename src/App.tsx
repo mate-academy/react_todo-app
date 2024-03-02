@@ -1,9 +1,11 @@
 import React, { createContext, useEffect, useReducer, useState } from 'react';
+// eslint-disable-next-line import/no-cycle
 import { TodoApp } from './Components/TodoApp';
 import { Todo } from './types/TodoType';
 import { Action } from './types/ActionType';
 // eslint-disable-next-line import/no-cycle
 import { TodoList } from './Components/TodoList';
+// eslint-disable-next-line import/no-cycle
 import { TodosFilter } from './Components/TodosFilter';
 import { TodoDispatch } from './types/DispatchType';
 

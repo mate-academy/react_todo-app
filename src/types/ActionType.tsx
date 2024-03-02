@@ -4,4 +4,4 @@ export type Action =
   | { type: 'delete-todo'; payload: { id: Date } }
   | { type: 'toggle-todo'; payload: { id: Date } }
   | { type: 'toggle-all-todo'; payload: { completed: boolean } }
-  | { type: 'clear-completed'};
+  | { type: 'clear-completed' };
