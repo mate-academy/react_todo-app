@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-// eslint-disable-next-line import/no-cycle
-import { TodosContext } from '../App';
+import { TodosContext } from '../Context/TodosProvider';
 
 interface Props {
   name: string;

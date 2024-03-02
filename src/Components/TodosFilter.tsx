@@ -1,7 +1,6 @@
-/* eslint-disable import/no-cycle */
 import React, { useContext } from 'react';
 import { Todo } from '../types/TodoType';
-import { TodosContext } from '../App';
+import { TodosContext } from '../Context/TodosProvider';
 
 interface Props {
   handleFiltering: React.Dispatch<React.SetStateAction<Todo[]>>;

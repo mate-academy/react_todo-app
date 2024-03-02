@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Todo } from '../types/TodoType';
 import TodoItem from './TodoItem';
-import { TodosContext } from '../App';
+import { TodosContext } from '../Context/TodosProvider';
 
 interface Props {
   todos: Todo[];
