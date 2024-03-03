@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { useContext, useEffect, useState } from 'react';
 import { Todo } from '../types/TodoType';
 import TodoItem from './TodoItem';
@@ -39,7 +38,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
 
           <ul className="todo-list" data-cy="todosList">
             {todos.map(todo => (
-              <TodoItem hasTodos={hasTodos} todo={todo} dispatch={dispatch} />
+              <TodoItem
+                key={todo.id.toString()}
+                hasTodos={hasTodos}
+                todo={todo}
+                dispatch={dispatch}
+              />
             ))}
           </ul>
         </>

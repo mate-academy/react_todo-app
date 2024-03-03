@@ -11,7 +11,7 @@ interface Props {
 export default function TodoItem({ todo, dispatch, hasTodos }: Props) {
   const [checked, setChecked] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
-  const [editedName, setEditedName] = useState<string>(todo.name);
+  const [editedName, setEditedName] = useState<string>(todo.title);
 
   const handleDoubleClick = () => {
     setEditing(true);
@@ -24,7 +24,7 @@ export default function TodoItem({ todo, dispatch, hasTodos }: Props) {
   const handleSubmit = () => {
     dispatch({
       type: 'edit-todo',
-      payload: { id: todo.id, name: editedName },
+      payload: { id: todo.id, title: editedName },
     });
     setEditing(false);
   };
@@ -63,7 +63,7 @@ export default function TodoItem({ todo, dispatch, hasTodos }: Props) {
             onDoubleClick={handleDoubleClick}
             className={checked ? 'completed' : ''}
           >
-            {todo.name}
+            {todo.title}
           </label>
         )}
         <button

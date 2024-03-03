@@ -1,24 +1,25 @@
-import { createContext, useReducer } from 'react';
+import React, { createContext, useReducer } from 'react';
 import { Todo } from '../types/TodoType';
 import { TodoDispatch } from '../types/DispatchType';
 import { Action } from '../types/ActionType';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
-const newTodo = (name: string): Todo => ({
+const newTodo = (title: string): Todo => ({
   id: new Date(),
-  name,
+  title,
   completed: false,
 });
 
 export default function reducer(filteredTodos: Todo[], action: Action) {
   switch (action.type) {
     case 'add-todo':
-      return [...filteredTodos, newTodo(action.payload.name)];
+      return [...filteredTodos, newTodo(action.payload.title)];
     case 'delete-todo':
       return filteredTodos.filter(todo => todo.id !== action.payload.id);
     case 'edit-todo':
       return filteredTodos.map(todo =>
         todo.id === action.payload.id
-          ? { ...todo, name: action.payload.name }
+          ? { ...todo, title: action.payload.title }
           : todo,
       );
     case 'toggle-todo':
@@ -49,7 +50,12 @@ interface TodosProviderProps {
   children: React.ReactNode;
 }
 export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
-  const [todos, dispatch] = useReducer(reducer, []);
+  const [storedTodos, setStoredTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [todos, dispatch] = useReducer(reducer, storedTodos);
+
+  React.useEffect(() => {
+    setStoredTodos(todos);
+  }, [todos, setStoredTodos]);
 
   return (
     <TodosContext.Provider value={{ todos, dispatch }}>
