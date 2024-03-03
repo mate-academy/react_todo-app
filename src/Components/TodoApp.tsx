@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { TodosContext } from '../Context/TodosProvider';
 
 interface Props {
@@ -7,6 +7,14 @@ interface Props {
 }
 
 export const TodoApp: React.FC<Props> = ({ title, setTitle }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
+
   const { dispatch } = useContext(TodosContext);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,6 +27,7 @@ export const TodoApp: React.FC<Props> = ({ title, setTitle }) => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          ref={inputRef}
           value={title}
           onChange={e => setTitle(e.target.value)}
           data-cy="createTodo"
