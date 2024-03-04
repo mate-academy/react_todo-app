@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { TodoDispatch } from '../types/DispatchType';
 import { Todo } from '../types/TodoType';
 import { TodosContext } from '../Context/TodosProvider';
@@ -12,10 +12,17 @@ export default function TodoItem({ todo, dispatch }: Props) {
   const { todos } = useContext(TodosContext);
   const [editing, setEditing] = useState<boolean>(false);
   const [editedName, setEditedName] = useState<string>(todo.title);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDoubleClick = () => {
     setEditing(true);
   };
+
+  useEffect(() => {
+    if (inputRef && editing) {
+      inputRef.current?.focus();
+    }
+  }, [editing]);
 
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditedName(e.target.value);
@@ -77,6 +84,7 @@ export default function TodoItem({ todo, dispatch }: Props) {
       </div>
       <input
         type="text"
+        ref={inputRef}
         className="edit"
         value={editedName}
         onChange={changeName}

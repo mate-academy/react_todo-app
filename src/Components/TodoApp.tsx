@@ -10,10 +10,10 @@ export const TodoApp: React.FC<Props> = ({ title, setTitle }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputRef.current && !title) {
       inputRef.current.focus();
     }
-  });
+  }, [title]);
 
   const { dispatch } = useContext(TodosContext);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
