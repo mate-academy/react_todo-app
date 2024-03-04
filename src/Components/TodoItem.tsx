@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { TodoDispatch } from '../types/DispatchType';
 import { Todo } from '../types/TodoType';
+import { TodosContext } from '../Context/TodosProvider';
 
 interface Props {
   todo: Todo;
-  hasTodos: boolean;
   dispatch: TodoDispatch;
 }
 
-export default function TodoItem({ todo, dispatch, hasTodos }: Props) {
-  const [checked, setChecked] = useState<boolean>(false);
+export default function TodoItem({ todo, dispatch }: Props) {
+  const { todos } = useContext(TodosContext);
   const [editing, setEditing] = useState<boolean>(false);
   const [editedName, setEditedName] = useState<string>(todo.title);
 
@@ -35,10 +35,6 @@ export default function TodoItem({ todo, dispatch, hasTodos }: Props) {
     }
   };
 
-  useEffect(() => {
-    setChecked(todo.completed);
-  }, [todo.completed]);
-
   const handleClick = () => {
     dispatch({
       type: 'toggle-todo',
@@ -57,11 +53,11 @@ export default function TodoItem({ todo, dispatch, hasTodos }: Props) {
           checked={todo.completed}
           onClick={handleClick}
         />
-        {hasTodos && (
+        {todos.length > 0 && (
           <label
             htmlFor={`toggle-view-${todo.id}`}
             onDoubleClick={handleDoubleClick}
-            className={checked ? 'completed' : ''}
+            className={todo.completed ? 'completed' : ''}
           >
             {todo.title}
           </label>

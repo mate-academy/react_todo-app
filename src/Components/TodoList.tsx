@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Todo } from '../types/TodoType';
 import TodoItem from './TodoItem';
 import { TodosContext } from '../Context/TodosProvider';
@@ -9,7 +9,6 @@ interface Props {
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
   const { dispatch } = useContext(TodosContext);
-  const [hasTodos, setHasTodos] = useState<boolean>(false);
   const handleToggleAll = () => {
     const allToggled = todos.every(todo => todo.completed);
 
@@ -19,13 +18,9 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
     });
   };
 
-  useEffect(() => {
-    setHasTodos(todos.length !== 0);
-  }, [todos]);
-
   return (
     <section className="main">
-      {hasTodos && (
+      {todos.length > 0 && (
         <>
           <input
             type="checkbox"
@@ -40,7 +35,6 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             {todos.map(todo => (
               <TodoItem
                 key={todo.id.toString()}
-                hasTodos={hasTodos}
                 todo={todo}
                 dispatch={dispatch}
               />

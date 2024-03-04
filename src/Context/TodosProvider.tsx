@@ -13,7 +13,11 @@ const newTodo = (title: string): Todo => ({
 export default function reducer(filteredTodos: Todo[], action: Action) {
   switch (action.type) {
     case 'add-todo':
-      return [...filteredTodos, newTodo(action.payload.title)];
+      if (action.payload.title.trim() !== '') {
+        return [...filteredTodos, newTodo(action.payload.title)];
+      }
+
+      return filteredTodos;
     case 'delete-todo':
       return filteredTodos.filter(todo => todo.id !== action.payload.id);
     case 'edit-todo':
