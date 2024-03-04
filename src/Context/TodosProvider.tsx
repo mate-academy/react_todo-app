@@ -32,11 +32,14 @@ export default function reducer(filteredTodos: Todo[], action: Action) {
           ? { ...todo, completed: !todo.completed }
           : todo,
       );
-    case 'toggle-all-todo':
+    case 'toggle-all-todo': {
+      const allCompleted = filteredTodos.every(todo => todo.completed);
+
       return filteredTodos.map(todo => ({
         ...todo,
-        completed: action.payload.completed,
+        completed: !allCompleted,
       }));
+    }
 
     case 'clear-completed':
       return filteredTodos.filter(todo => !todo.completed);
