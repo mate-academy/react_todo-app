@@ -4,6 +4,7 @@ import { TodoFilter } from '../TodoFilter/TodoFilter';
 import { TodosContext } from '../../Store';
 
 export const TodoApp: React.FC = () => {
+  // eslint-disable-next-line prettier/prettier
   const { addTodo, todos, removeCompletedTodos, remainingTodos, toggleAll } =
     useContext(TodosContext);
 
@@ -18,14 +19,12 @@ export const TodoApp: React.FC = () => {
   };
 
   const handleInputKeyUp = useMemo(() => {
-    return (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
+    return (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-        if (inputValue.trim().length !== 0) {
-          addTodo(inputValue);
-          reset();
-        }
+      if (inputValue.trim().length !== 0) {
+        addTodo(inputValue);
+        reset();
       }
     };
   }, [inputValue]);
@@ -37,12 +36,11 @@ export const TodoApp: React.FC = () => {
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={handleInputKeyUp}>
           <input
             type="text"
             value={inputValue}
             onChange={handleInputChange}
-            onKeyUp={handleInputKeyUp}
             data-cy="createTodo"
             className="new-todo"
             required
