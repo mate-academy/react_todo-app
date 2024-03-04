@@ -51,6 +51,11 @@ body {
   color: #e6e6e6;
 }
 
+.todoapp input:focus {
+  box-shadow: 0 0 2px 2px rgba(255, 74, 74, 0.99);
+  outline: 0;
+}
+
 .todoapp h1 {
   position: absolute;
   top: -155px;
@@ -58,7 +63,7 @@ body {
   font-size: 100px;
   font-weight: 100;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  color: rgba(255, 74, 74, 0.99);
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
