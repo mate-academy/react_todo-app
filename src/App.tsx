@@ -37,7 +37,7 @@ export const App: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList />
+        {!!todos.length && <TodoList />}
       </section>
 
       {!!todos.length && <Footer />}

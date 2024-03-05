@@ -58,14 +58,15 @@ const Footer = memo(() => {
         </li>
       </ul>
 
-      <button
-        type="button"
-        className="clear-completed"
-        onClick={clearCompleted}
-        style={{ display: (notCompletedTodosLength < todos.length) ? 'inline-block' : 'none'}}
-      >
-        Clear completed
-      </button>
+      {notCompletedTodosLength < todos.length && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={clearCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 });
