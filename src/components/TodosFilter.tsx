@@ -11,7 +11,8 @@ const TodosFilter = memo(() => {
   const { dispatch } = useDispatchContext();
   const location = useLocation();
   const activeFilter = location.pathname.slice(1);
-  const notCompletedTodos = todos.filter(todo => !todo.completed).length;
+  const notCompletedTodosLength = todos.filter(todo => !todo.completed).length;
+
 
   const clearCompleted = useCallback(() => {
     todos
@@ -22,7 +23,7 @@ const TodosFilter = memo(() => {
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {notCompletedTodos} items left
+        {notCompletedTodosLength} items left
       </span>
 
       <ul className="filters">
@@ -61,6 +62,7 @@ const TodosFilter = memo(() => {
         type="button"
         className="clear-completed"
         onClick={clearCompleted}
+        style={{ display: (notCompletedTodosLength < todos.length) ? 'inline-block' : 'none'}}
       >
         Clear completed
       </button>

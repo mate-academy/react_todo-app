@@ -8,7 +8,7 @@ const AddTodoForm = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { dispatch } = useDispatchContext();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.FocusEvent<HTMLInputElement, Element>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputRef.current && inputRef.current.value.trim()) {
       dispatch({
@@ -22,14 +22,13 @@ const AddTodoForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} onBlur={handleSubmit}>
       <input
         autoFocus
         ref={inputRef}
         type="text"
         data-cy="createTodo"
         className="new-todo"
-        onBlur={handleSubmit}
         placeholder="What needs to be done?"
       />
     </form>

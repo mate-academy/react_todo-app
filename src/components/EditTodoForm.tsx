@@ -14,7 +14,7 @@ const EditTodoForm = ({ name, id, onClose }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { dispatch } = useDispatchContext();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.FocusEvent<HTMLInputElement, Element>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputRef.current) {
       return;
@@ -54,14 +54,14 @@ const EditTodoForm = ({ name, id, onClose }: Props) => {
   });
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} onBlur={handleSubmit}>
       <input
         ref={inputRef}
         autoFocus
         defaultValue={name}
         type="text"
         className="edit"
-        onBlur={handleSubmit}
+
       />
     </form>
   );

@@ -42,7 +42,7 @@ const TodoItem = ({ todo }: Props) => {
           editing: isEditing,
         })}
       >
-        <div className="view" onDoubleClick={() => setIsEditing(true)}>
+        <div className="view">
           <input
             type="checkbox"
             className="toggle"
@@ -50,7 +50,7 @@ const TodoItem = ({ todo }: Props) => {
             checked={todo.completed}
             style={{ cursor: 'pointer' }}
           />
-          <label>{todo.title}</label>
+          <label onDoubleClick={() => setIsEditing(true)}>{todo.title}</label>
           <button
             type="button"
             className="destroy"
