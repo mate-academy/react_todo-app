@@ -10,7 +10,7 @@ export const reducer = (state: State, action: Actions) => {
         ...state,
         {
           id: +new Date(),
-          name: action.payload.name,
+          title: action.payload.title,
           completed: false,
         },
       ];
@@ -35,7 +35,7 @@ export const reducer = (state: State, action: Actions) => {
         if (todo.id === action.payload.id) {
           return {
             ...todo,
-            name: action.payload.newName,
+            title: action.payload.newName,
           };
         }
 

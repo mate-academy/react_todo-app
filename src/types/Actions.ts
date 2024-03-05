@@ -3,7 +3,7 @@ export type Actions = AddAction | RemoveAction | UpdateAction | ToggleAction;
 type AddAction = {
   type: 'add';
   payload: {
-    name: string;
+    title: string;
   };
 };
 

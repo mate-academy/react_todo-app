@@ -50,7 +50,7 @@ const TodoItem = ({ todo }: Props) => {
             checked={todo.completed}
             style={{ cursor: 'pointer' }}
           />
-          <label>{todo.name}</label>
+          <label>{todo.title}</label>
           <button
             type="button"
             className="destroy"
@@ -60,7 +60,7 @@ const TodoItem = ({ todo }: Props) => {
         </div>
         {isEditing && (
           <EditTodoForm
-            name={todo.name}
+            name={todo.title}
             id={todo.id}
             onClose={() => setIsEditing(false)}
           />

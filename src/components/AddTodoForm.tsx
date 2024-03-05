@@ -14,7 +14,7 @@ const AddTodoForm = () => {
       dispatch({
         type: 'add',
         payload: {
-          name: inputRef.current.value,
+          title: inputRef.current.value,
         },
       });
       inputRef.current.value = '';
