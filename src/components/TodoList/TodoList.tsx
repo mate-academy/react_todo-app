@@ -8,19 +8,16 @@ export const TodoList: React.FC = () => {
   const allCompleted = state.todos.every(todo => todo.completed);
 
   const filteredTodos = state.todos.filter(todo => {
-    if (state.filter === Status.All) {
-      return true;
+    switch (state.filter) {
+      case Status.All:
+        return true;
+      case Status.Active:
+        return !todo.completed;
+      case Status.Completed:
+        return todo.completed;
+      default:
+        return false;
     }
-
-    if (state.filter === Status.Active) {
-      return !todo.completed;
-    }
-
-    if (state.filter === Status.Completed) {
-      return todo.completed;
-    }
-
-    return false;
   });
 
   const handleToggleAll = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +39,9 @@ export const TodoList: React.FC = () => {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list" data-cy="todosList">
-            {filteredTodos.map(todo => {
-              return <TodoItem key={todo.id} todo={todo} />;
-            })}
+            {filteredTodos.map(todo => (
+              <TodoItem key={todo.id} todo={todo} />
+            ))}
           </ul>
         </>
       )}

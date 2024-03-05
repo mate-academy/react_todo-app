@@ -1,5 +1,4 @@
-import React, { createContext, useEffect, useReducer } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import React, { createContext, useEffect, useReducer, useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -33,24 +32,29 @@ const initialState = {
 };
 
 function reducer(state: State, action: Action): State {
+  let newState;
+
   switch (action.type) {
     case 'setFilter':
-      return { ...state, filter: action.payload };
+      newState = { ...state, filter: action.payload };
+      break;
     case 'add':
-      return {
+      newState = {
         ...state,
         todos: [
           { id: +new Date(), title: action.payload, completed: false },
           ...state.todos,
         ],
       };
+      break;
     case 'delete':
-      return {
+      newState = {
         ...state,
         todos: state.todos.filter(todo => todo.id !== action.payload),
       };
+      break;
     case 'toggleStatus':
-      return {
+      newState = {
         ...state,
         todos: state.todos.map(todo =>
           todo.id === action.payload
@@ -58,10 +62,15 @@ function reducer(state: State, action: Action): State {
             : todo,
         ),
       };
+      break;
     case 'clearCompleted':
-      return { ...state, todos: state.todos.filter(todo => !todo.completed) };
+      newState = {
+        ...state,
+        todos: state.todos.filter(todo => !todo.completed),
+      };
+      break;
     case 'update':
-      return {
+      newState = {
         ...state,
         todos: state.todos.map(todo =>
           todo.id === action.payload.id
@@ -69,19 +78,26 @@ function reducer(state: State, action: Action): State {
             : todo,
         ),
       };
+      break;
     case 'toggleAll':
-      return {
+      newState = {
         ...state,
         todos: state.todos.map(todo => ({
           ...todo,
           completed: action.payload,
         })),
       };
+      break;
     case 'init':
-      return { ...state, todos: action.payload };
+      newState = { ...state, todos: action.payload };
+      break;
     default:
       throw new Error();
   }
+
+  localStorage.setItem('todos', JSON.stringify(newState.todos));
+
+  return newState;
 }
 
 export const TodosContext = createContext<{
@@ -93,16 +109,21 @@ export const TodosContext = createContext<{
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [todos, setTodos] = useLocalStorage('todos', state.todos);
+  const storedTodos = useState<Todo[]>(() => {
+    const savedTodos = localStorage.getItem('todos');
+
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  })[0];
+
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    todos: storedTodos,
+  });
 
   useEffect(() => {
-    dispatch({ type: 'init', payload: todos });
+    dispatch({ type: 'init', payload: storedTodos });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    setTodos(state.todos);
-  }, [state.todos]);
 
   return (
     <TodosContext.Provider value={{ state, dispatch }}>

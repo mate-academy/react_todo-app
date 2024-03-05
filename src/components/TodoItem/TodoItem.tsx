@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../context/TodosContext';
 
@@ -48,38 +49,33 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   return (
-    <>
-      <li
-        key={id}
-        className={`${completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}
-      >
-        <div className="view" onDoubleClick={handleDoubleClick}>
-          <input
-            type="checkbox"
-            className="toggle"
-            id="toggle-view"
-            checked={completed}
-            onChange={() => dispatch({ type: 'toggleStatus', payload: id })}
-          />
-          <label>{title}</label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            aria-label="Delete todo"
-            onClick={() => dispatch({ type: 'delete', payload: id })}
-          />
-        </div>
+    <li key={id} className={cn({ completed, editing: isEditing })}>
+      <div className="view" onDoubleClick={handleDoubleClick}>
         <input
-          type="text"
-          className="edit"
-          ref={inputRef}
-          value={inputValue}
-          onKeyUp={handleKeyUp}
-          onBlur={handleBlur}
-          onChange={handleChange}
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={completed}
+          onChange={() => dispatch({ type: 'toggleStatus', payload: id })}
         />
-      </li>
-    </>
+        <label>{title}</label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          aria-label="Delete todo"
+          onClick={() => dispatch({ type: 'delete', payload: id })}
+        />
+      </div>
+      <input
+        type="text"
+        className="edit"
+        ref={inputRef}
+        value={inputValue}
+        onKeyUp={handleKeyUp}
+        onBlur={handleBlur}
+        onChange={handleChange}
+      />
+    </li>
   );
 };
