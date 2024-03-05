@@ -10,11 +10,11 @@ export const TodoFilter: React.FC = () => {
   };
 
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       {Object.values(Status).map(status => (
         <li key={status}>
           <a
-            href={status === Status.All ? '/#' : `#/${status.toLowerCase}`}
+            href={status === Status.All ? '#/' : `#/${status.toLowerCase()}`}
             className={cn({ selected: status === filter })}
             onClick={() => handleFilterChange(status)}
           >

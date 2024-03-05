@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../Types/Todo';
 import { TodosContext } from '../../Store';
@@ -13,6 +13,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const [title, setTitle] = useState(todo.title);
   const [isEdit, setIsEdit] = useState(false);
+
+  const inpuRef = useRef<HTMLInputElement>(null);
 
   const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -31,9 +33,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       if (title.trim().length !== 0) {
         setTitle(title);
         setIsEdit(false);
+      } else {
+        removeTodo(todo.id);
       }
     }
   };
+
+  useEffect(() => {
+    if (inpuRef.current && isEdit) {
+      inpuRef.current.focus();
+    }
+  }, [isEdit]);
 
   return (
     <li className={cn({ completed: todo.completed }, { editing: isEdit })}>
@@ -45,9 +55,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={handleToggleChange}
         />
-        <label htmlFor="toggle-view" onDoubleClick={handleDoubleClick}>
-          {title}{' '}
-        </label>
+        <label onDoubleClick={handleDoubleClick}>{title} </label>
         <button
           type="button"
           className="destroy"
@@ -59,8 +67,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         className="edit"
         value={title}
+        ref={inpuRef}
         onChange={handleChangeTitle}
         onKeyUp={handleKeyUp}
+        onBlur={() => setIsEdit(false)}
       />
     </li>
   );

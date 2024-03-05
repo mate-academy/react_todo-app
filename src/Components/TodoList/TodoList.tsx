@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
 import { Status, TodosContext } from '../../Store';
@@ -21,10 +20,6 @@ export const TodoList: React.FC = () => {
         return true;
     }
   });
-
-  if (filteredTodos.length === 0) {
-    return null;
-  }
 
   return (
     <ul className="todo-list" data-cy="todosList">

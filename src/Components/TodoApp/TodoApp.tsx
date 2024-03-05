@@ -60,26 +60,27 @@ export const TodoApp: React.FC = () => {
 
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList />
-
         {todos.length > 0 && (
-          <footer className="footer">
-            <span className="todo-count" data-cy="todosCounter">
-              {remainingTodos}
-            </span>
+          <>
+            <TodoList />
+            <footer className="footer">
+              <span className="todo-count" data-cy="todosCounter">
+                {`${remainingTodos} items left`}
+              </span>
 
-            <TodoFilter />
+              <TodoFilter />
 
-            {hasCompleatedTodos && (
-              <button
-                type="button"
-                className="clear-completed"
-                onClick={removeCompletedTodos}
-              >
-                Clear completed
-              </button>
-            )}
-          </footer>
+              {hasCompleatedTodos && (
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={removeCompletedTodos}
+                >
+                  Clear completed
+                </button>
+              )}
+            </footer>
+          </>
         )}
       </section>
     </div>
