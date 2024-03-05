@@ -1,10 +1,12 @@
 import React, { ChangeEvent, FormEvent, useContext, useEffect } from 'react';
 import { TodoList } from './components/TodoList/TodoList';
-import {
-  Filtering,
-} from './components/CustomReducer/useCustomReducer';
+import { Filtering } from './components/CustomReducer/useCustomReducer';
 import { TodosFilter } from './components/Filter/TodosFilter';
-import { MyContext, MyContextData, MyProvider } from './components/Provider/Provider';
+import {
+  MyContext,
+  MyContextData,
+  MyProvider,
+} from './components/Provider/Provider';
 
 export interface Todo {
   id: number;
@@ -13,10 +15,18 @@ export interface Todo {
 }
 
 export const App: React.FC = () => {
-  const contextValue = useContext(MyContext)
-  const { query, setQuery, activeFilter, setActiveFilter, reducer } = contextValue as MyContextData
+  const contextValue = useContext(MyContext);
+  const { query, setQuery, activeFilter, setActiveFilter, reducer } =
+    contextValue as MyContextData;
   // const reducer = useCustomReducer();
-  const { state, filterItems, addTodo, clearCompleted, allCompleted } = reducer;
+  const {
+    state,
+    filterItems,
+    addTodo,
+    clearCompleted,
+    allCompleted,
+    dispatch,
+  } = reducer;
   // const [query, setQuery] = useState('');
   // const [activeFilter, setActiveFilter] = useState<Filtering>(Filtering.All);
 
@@ -48,7 +58,7 @@ export const App: React.FC = () => {
 
   const handleFilter = (action: Filtering) => {
     setActiveFilter(action);
-    filterItems(action);
+    dispatch({ type: action });
   };
 
   return (
@@ -83,7 +93,9 @@ export const App: React.FC = () => {
                 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
                 <label htmlFor="toggle-all">Mark all as complete</label>
               )}
-              <TodoList data={reducer} activeFilter={activeFilter} />
+              <TodoList
+                data={filterItems(activeFilter)}
+              />
             </section>
 
             <footer className="footer">

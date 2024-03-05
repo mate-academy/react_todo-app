@@ -1,20 +1,16 @@
 import React from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
-import { Values } from '../Types/Values';
-import { Filtering } from '../CustomReducer/useCustomReducer';
+import { Todo } from '../CustomReducer/useCustomReducer';
 
 interface Props {
-  data: Values;
-  activeFilter: Filtering;
+  data: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ data, activeFilter }) => {
-  const { filterItems } = data;
-
+export const TodoList: React.FC<Props> = ({ data}) => {
   return (
     <ul className="todo-list" data-cy="todosList">
-      {filterItems(activeFilter).map(item => (
-        <TodoItem key={item.id} item={item} data={data} />
+      {data.map(item => (
+        <TodoItem key={item.id} item={item} />
       ))}
     </ul>
   );

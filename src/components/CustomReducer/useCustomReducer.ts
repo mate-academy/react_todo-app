@@ -18,7 +18,7 @@ export enum Filtering {
   ChengeInput = 'changeInput',
 }
 
-interface Action {
+export interface Action {
   type: Filtering;
   payload?: number | Todo;
 }
@@ -124,5 +124,6 @@ export const useCustomReducer = () => {
     clearCompleted,
     allCompleted,
     changeInput,
+    dispatch,
   };
 };

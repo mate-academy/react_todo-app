@@ -1,16 +1,25 @@
-import React, { ReactNode, SetStateAction, createContext, useState } from "react";
-import { Filtering, Todo, useCustomReducer } from "../CustomReducer/useCustomReducer";
+import React, {
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useState,
+} from 'react';
+import {
+  Action,
+  Filtering,
+  Todo,
+  useCustomReducer,
+} from '../CustomReducer/useCustomReducer';
 
 export interface MyContextData {
   query: string;
   setQuery: React.Dispatch<SetStateAction<string>>;
   activeFilter: Filtering;
   setActiveFilter: React.Dispatch<SetStateAction<Filtering>>;
-  reducer:Reducer,
-
+  reducer: Reducer;
 }
 
-interface Reducer{
+interface Reducer {
   state: Todo[];
   filterItems: (filterType: Filtering) => Todo[];
   addTodo: (todo: Todo) => void;
@@ -19,17 +28,17 @@ interface Reducer{
   clearCompleted: () => void;
   allCompleted: () => void;
   changeInput: (todo: Todo) => void;
-};
+  dispatch: React.Dispatch<Action>;
+}
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const MyContext = createContext<MyContextData | undefined>(undefined);
 
 const MyProvider: React.FC<Props> = ({ children }) => {
   const reducer = useCustomReducer();
-  // const { state, filterItems, addTodo, clearCompleted, allCompleted } = reducer;
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<Filtering>(Filtering.All);
 
@@ -39,12 +48,9 @@ const MyProvider: React.FC<Props> = ({ children }) => {
     setQuery,
     activeFilter,
     setActiveFilter,
-  }
-  return(
-    <MyContext.Provider value={ values }>
-      {children}
-    </MyContext.Provider>
-  );
-}
+  };
 
-export {MyContext ,MyProvider}
+  return <MyContext.Provider value={values}>{children}</MyContext.Provider>;
+};
+
+export { MyContext, MyProvider };
