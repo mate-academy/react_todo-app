@@ -6,7 +6,7 @@ import cn from 'classnames';
 import { useDispatchContext, useTodoContext } from '../context/GlobalContext';
 import { Filter } from '../types/Filter';
 
-const TodosFilter = memo(() => {
+const Footer = memo(() => {
   const { todos } = useTodoContext();
   const { dispatch } = useDispatchContext();
   const location = useLocation();
@@ -26,7 +26,7 @@ const TodosFilter = memo(() => {
         {notCompletedTodosLength} items left
       </span>
 
-      <ul className="filters">
+      <ul className="filters" data-cy="todosFilter">
         <li>
           <a
             href="#/"
@@ -70,4 +70,4 @@ const TodosFilter = memo(() => {
   );
 });
 
-export default TodosFilter;
+export default Footer;

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import AddTodoForm from './components/AddTodoForm';
 import TodoList from './components/TodoList';
-import TodosFilter from './components/TodosFilter';
+import Footer from './components/Footer';
 import { useDispatchContext, useTodoContext } from './context/GlobalContext';
 
 export const App: React.FC = () => {
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
         <TodoList />
       </section>
 
-      {!!todos.length && <TodosFilter data-cy="todosFilter" />}
+      {!!todos.length && <Footer />}
     </div>
   );
 };
