@@ -28,7 +28,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEdit(true);
   };
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEditTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (title.trim().length !== 0) {
         setTitle(title);
@@ -37,6 +37,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         removeTodo(todo.id);
       }
     }
+  };
+
+  const handleRemoveEmptyTodo = () => {
+    if (title.trim().length === 0) {
+      removeTodo(todo.id);
+    }
+
+    setIsEdit(false);
   };
 
   useEffect(() => {
@@ -69,8 +77,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         value={title}
         ref={inpuRef}
         onChange={handleChangeTitle}
-        onKeyUp={handleKeyUp}
-        onBlur={() => setIsEdit(false)}
+        onKeyUp={handleEditTodo}
+        onBlur={handleRemoveEmptyTodo}
       />
     </li>
   );
