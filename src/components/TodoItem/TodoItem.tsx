@@ -1,18 +1,22 @@
 import React, { KeyboardEvent, useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../CustomReducer/useCustomReducer';
-import { MyContext } from '../Provider/Provider';
+import { MyContext, MyContextData } from '../Provider/Provider';
 
 interface Props {
   item: Todo;
 }
 
 export const TodoItem: React.FC<Props> = ({ item }) => {
-  const { reducer } = useContext(MyContext)
+  const contextValue = useContext(MyContext);
+  const { reducer } = contextValue as MyContextData;
   const { addCompleted, remove, changeInput } = reducer;
+
   const [isActive, setIsActive] = useState(false);
   const [mainTitle, setMainTitle] = useState(item.title);
+
   const oldTitle = item.title;
+
   const handleDoubleClick = () => {
     setIsActive(true);
   };

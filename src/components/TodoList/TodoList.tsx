@@ -6,7 +6,7 @@ interface Props {
   data: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ data}) => {
+export const TodoList: React.FC<Props> = ({ data }) => {
   return (
     <ul className="todo-list" data-cy="todosList">
       {data.map(item => (

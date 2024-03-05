@@ -35,13 +35,12 @@ interface Props {
   children: ReactNode;
 }
 
-const MyContext = createContext<MyContextData | undefined>(undefined);
+export const MyContext = createContext<MyContextData | string>('default value');
 
-const MyProvider: React.FC<Props> = ({ children }) => {
+export const MyProvider: React.FC<Props> = ({ children }) => {
   const reducer = useCustomReducer();
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<Filtering>(Filtering.All);
-
   const values: MyContextData = {
     reducer,
     query,
@@ -50,7 +49,7 @@ const MyProvider: React.FC<Props> = ({ children }) => {
     setActiveFilter,
   };
 
-  return <MyContext.Provider value={values}>{children}</MyContext.Provider>;
+  return (
+    <MyContext.Provider value={values}>{children}</MyContext.Provider>
+  );
 };
-
-export { MyContext, MyProvider };
