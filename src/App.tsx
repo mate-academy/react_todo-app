@@ -1,10 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useEffect } from 'react';
 import { TodoList } from './components/TodoList/TodoList';
 import {
   Filtering,
-  useCustomReducer,
 } from './components/CustomReducer/useCustomReducer';
 import { TodosFilter } from './components/Filter/TodosFilter';
+import { MyContext, MyContextData, MyProvider } from './components/Provider/Provider';
 
 export interface Todo {
   id: number;
@@ -13,10 +13,12 @@ export interface Todo {
 }
 
 export const App: React.FC = () => {
-  const reducer = useCustomReducer();
+  const contextValue = useContext(MyContext)
+  const { query, setQuery, activeFilter, setActiveFilter, reducer } = contextValue as MyContextData
+  // const reducer = useCustomReducer();
   const { state, filterItems, addTodo, clearCompleted, allCompleted } = reducer;
-  const [query, setQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState<Filtering>(Filtering.All);
+  // const [query, setQuery] = useState('');
+  // const [activeFilter, setActiveFilter] = useState<Filtering>(Filtering.All);
 
   const itemsLeft = `${state.length - state.filter((elem: Todo) => elem.completed).length} `;
 
@@ -50,62 +52,64 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <MyProvider>
+      <div className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
 
-        <form onSubmit={handleAddItem}>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={query}
-            onChange={handleInput}
-          />
-        </form>
-      </header>
-
-      {state.length > 0 && (
-        <>
-          <section className="main">
+          <form onSubmit={handleAddItem}>
             <input
-              type="checkbox"
-              id="toggle-all"
-              className="toggle-all"
-              data-cy="toggleAll"
-              onChange={allCompleted}
+              type="text"
+              data-cy="createTodo"
+              className="new-todo"
+              placeholder="What needs to be done?"
+              value={query}
+              onChange={handleInput}
             />
-            {state.length > 0 && (
-              /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-              <label htmlFor="toggle-all">Mark all as complete</label>
-            )}
-            <TodoList data={reducer} activeFilter={activeFilter} />
-          </section>
+          </form>
+        </header>
 
-          <footer className="footer">
-            <span className="todo-count" data-cy="todosCounter">
-              {itemsLeft}
-              item left
-            </span>
+        {state.length > 0 && (
+          <>
+            <section className="main">
+              <input
+                type="checkbox"
+                id="toggle-all"
+                className="toggle-all"
+                data-cy="toggleAll"
+                onChange={allCompleted}
+              />
+              {state.length > 0 && (
+                /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+                <label htmlFor="toggle-all">Mark all as complete</label>
+              )}
+              <TodoList data={reducer} activeFilter={activeFilter} />
+            </section>
 
-            <TodosFilter
-              activeFilter={activeFilter}
-              handleFilter={handleFilter}
-            />
+            <footer className="footer">
+              <span className="todo-count" data-cy="todosCounter">
+                {itemsLeft}
+                item left
+              </span>
 
-            {state.find(todo => todo.completed) && (
-              <button
-                type="button"
-                className="clear-completed"
-                onClick={() => clearCompleted()}
-              >
-                Clear completed
-              </button>
-            )}
-          </footer>
-        </>
-      )}
-    </div>
+              <TodosFilter
+                activeFilter={activeFilter}
+                handleFilter={handleFilter}
+              />
+
+              {state.find(todo => todo.completed) && (
+                <button
+                  type="button"
+                  className="clear-completed"
+                  onClick={() => clearCompleted()}
+                >
+                  Clear completed
+                </button>
+              )}
+            </footer>
+          </>
+        )}
+      </div>
+    </MyProvider>
   );
 };
