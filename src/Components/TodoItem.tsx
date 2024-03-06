@@ -1,94 +1,84 @@
-import React, { useCallback, useContext, useRef, useReducer } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
 import { Todo } from '../Types/Todo';
 import { TodosContext } from '../Context/TodosContext';
 
 interface Props {
-  todo: Todo;
+  todo: Todo,
 }
-
-interface TodoItemState {
-  isEditing: boolean;
-  todoTitle: string;
-}
-
-type TodoItemAction =
-  | { type: 'SET_EDITING'; payload: boolean }
-  | { type: 'SET_TODO_TITLE'; payload: string };
-
-const todoItemReducer = (
-  state: TodoItemState,
-  action: TodoItemAction,
-): TodoItemState => {
-  switch (action.type) {
-    case 'SET_EDITING':
-      return { ...state, isEditing: action.payload };
-    case 'SET_TODO_TITLE':
-      return { ...state, todoTitle: action.payload };
-    default:
-      return state;
-  }
-};
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
-  const [{ isEditing, todoTitle }, dispatch] = useReducer(todoItemReducer, {
-    isEditing: false,
-    todoTitle: todo.title,
-  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [todoTitle, setTodoTitle] = useState(todo.title);
   const titleField = useRef<HTMLInputElement | null>(null);
 
-  const saveTitleChanges = useCallback(() => {
-    setTodos(
-      todos.map(prevTodo => {
-        if (prevTodo.id === todo.id) {
-          return { ...prevTodo, title: todoTitle };
-        }
+  useEffect(() => {
+    if (isEditing && titleField.current) {
+      titleField.current.focus();
+    }
+  }, [isEditing]);
 
-        return prevTodo;
-      }),
-    );
-    dispatch({ type: 'SET_EDITING', payload: false });
-  }, [setTodos, todos, todo, todoTitle, dispatch]);
+  const handleDeleteClick = useCallback((todoId: number) => {
+    setTodos(todos.filter((prevTodo) => prevTodo.id !== todoId));
+  }, [setTodos, todos]);
 
-  const deleteEmptyTodo = useCallback(() => {
-    setTodos(todos.filter(prevTodo => prevTodo.id !== todo.id));
-    dispatch({ type: 'SET_EDITING', payload: false });
-  }, [setTodos, todos, todo, dispatch]);
-
-  const handleDoubleClick = useCallback(() => {
-    dispatch({ type: 'SET_EDITING', payload: true });
-  }, [dispatch]);
-
-  const handleDeleteClick = useCallback(() => {
-    setTodos(todos.filter(prevTodo => prevTodo.id !== todo.id));
-  }, [setTodos, todos, todo]);
-
-  const handleCheckBoxChange = useCallback(() => {
-    const newTodos = todos.map(prevTodo => {
-      if (prevTodo.id === todo.id) {
-        return { ...prevTodo, completed: !prevTodo.completed };
+  const handleCheckBoxChange = useCallback((todoId: number) => {
+    const newTodos = todos.map((prevTodo) => {
+      if (prevTodo.id === todoId) {
+        return {
+          ...prevTodo,
+          completed: !prevTodo.completed,
+        };
       }
 
       return prevTodo;
     });
 
     setTodos(newTodos);
-  }, [setTodos, todos, todo]);
+  }, [setTodos, todos]);
 
-  const handleTitleFieldKeyUp = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        dispatch({ type: 'SET_EDITING', payload: false });
-        dispatch({ type: 'SET_TODO_TITLE', payload: todo.title });
-      } else if (event.key === 'Enter' && todoTitle.trim()) {
-        saveTitleChanges();
-      } else if (event.key === 'Enter' && !todoTitle.trim()) {
-        deleteEmptyTodo();
+  const handleTitleChange = useCallback((
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setTodoTitle(event.target.value);
+  }, [setTodoTitle]);
+
+  const saveTitleChanges = useCallback(() => {
+    setTodos((todos.map(prevTodo => {
+      if (prevTodo.id === todo.id) {
+        return {
+          ...prevTodo,
+          title: todoTitle,
+        };
       }
-    },
-    [todoTitle, deleteEmptyTodo, saveTitleChanges, dispatch, todo],
-  );
+
+      return prevTodo;
+    })));
+    setIsEditing(false);
+  }, [setTodos, todos, todoTitle, todo]);
+
+  const deleteEmptyTodo = useCallback(() => {
+    setTodos(todos.filter(prevTodo => prevTodo.id !== todo.id));
+    setIsEditing(false);
+  }, [setIsEditing, todos, setTodos, todo]);
+
+  const handleTitleFieldKeyUp = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setIsEditing(false);
+      setTodoTitle(todo.title);
+    } else if (event.key === 'Enter' && todoTitle.trim()) {
+      saveTitleChanges();
+    } else if (event.key === 'Enter' && !todoTitle.trim()) {
+      deleteEmptyTodo();
+    }
+  }, [setIsEditing, todoTitle, deleteEmptyTodo, saveTitleChanges, todo]);
 
   const handleTitleFieldBlur = useCallback(() => {
     if (todoTitle.trim()) {
@@ -100,7 +90,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li
-      onDoubleClick={handleDoubleClick}
+      onDoubleClick={() => setIsEditing(true)}
       className={cn({
         completed: todo.completed,
         editing: isEditing,
@@ -112,7 +102,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="toggle"
           id="toggle-view"
           checked={todo.completed}
-          onChange={handleCheckBoxChange}
+          onChange={() => handleCheckBoxChange(todo.id)}
         />
         <label>{todo.title}</label>
         <button
@@ -120,7 +110,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           aria-label="delete"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={handleDeleteClick}
+          onClick={() => handleDeleteClick(todo.id)}
         />
       </div>
       <input
@@ -128,9 +118,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         className="edit"
         ref={titleField}
         value={todoTitle}
-        onChange={e =>
-          dispatch({ type: 'SET_TODO_TITLE', payload: e.target.value })
-        }
+        onChange={handleTitleChange}
         onKeyUp={handleTitleFieldKeyUp}
         onBlur={handleTitleFieldBlur}
       />

@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
   }, [todos]);
 
   const removeCompletedTodos = useCallback(() => {
-    setTodos(todos.filter(prevTodo => !prevTodo.completed));
+    setTodos(todos.filter(todo => !todo.completed));
   }, [setTodos, todos]);
 
   return (

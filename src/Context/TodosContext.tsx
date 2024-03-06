@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Todo } from '../Types/Todo';
 import { Status } from '../Types/Status';
 
@@ -50,26 +50,15 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [statusQuery, setStatusQuery] = useState<Status>(Status.All);
 
-  const memoizedSetTodos = useCallback(
-    (newTodos: Todo[]) => {
-      setTodos(newTodos);
-    },
-    [setTodos],
-  );
+  const memoizedSetTodos = setTodos;
+  const memoizedSetStatusQuery = setStatusQuery;
 
-  const memoizedSetStatusQuery = useCallback(
-    (newQuery: Status) => {
-      setStatusQuery(newQuery);
-    },
-    [setStatusQuery],
-  );
-
-  const value = {
+  const value = useMemo(() => ({
     todos,
     setTodos: memoizedSetTodos,
     statusQuery,
     setStatusQuery: memoizedSetStatusQuery,
-  };
+  }), [todos, memoizedSetTodos, statusQuery, memoizedSetStatusQuery]);
 
   return (
     <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
