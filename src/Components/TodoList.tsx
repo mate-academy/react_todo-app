@@ -9,9 +9,11 @@ export const TodoList: React.FC = () => {
   const filteredTodos = todos.filter(todo => {
     switch (statusQuery) {
       case Status.Active:
-        return todo.completed !== true;
+        return !todo.completed;
+
       case Status.Completed:
-        return todo.completed === true;
+        return todo.completed;
+
       default:
         return true;
     }

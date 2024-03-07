@@ -31,7 +31,7 @@ export const TodoApp = () => {
   return (
     <div className="todoapp">
       <Header />
-      {todos.length > 0 && (
+      {!!todos.length && (
         <section className="main">
           <input
             type="checkbox"
@@ -45,7 +45,7 @@ export const TodoApp = () => {
           <TodoList />
         </section>
       )}
-      {todos.length > 0 && <Footer />}
+      {!!todos.length && <Footer />}
     </div>
   );
 };

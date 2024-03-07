@@ -53,14 +53,19 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const memoizedSetTodos = setTodos;
   const memoizedSetStatusQuery = setStatusQuery;
 
-  const value = useMemo(() => ({
-    todos,
-    setTodos: memoizedSetTodos,
-    statusQuery,
-    setStatusQuery: memoizedSetStatusQuery,
-  }), [todos, memoizedSetTodos, statusQuery, memoizedSetStatusQuery]);
+  const value = useMemo(
+    () => ({
+      todos,
+      setTodos: memoizedSetTodos,
+      statusQuery,
+      setStatusQuery: memoizedSetStatusQuery,
+    }),
+    [todos, memoizedSetTodos, statusQuery, memoizedSetStatusQuery],
+  );
 
   return (
-    <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
+    <TodosContext.Provider value={value}>
+      {children}
+    </TodosContext.Provider>
   );
 };

@@ -10,7 +10,7 @@ import { Todo } from '../Types/Todo';
 import { TodosContext } from '../Context/TodosContext';
 
 interface Props {
-  todo: Todo,
+  todo: Todo;
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
@@ -25,42 +25,51 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [isEditing]);
 
-  const handleDeleteClick = useCallback((todoId: number) => {
-    setTodos(todos.filter((prevTodo) => prevTodo.id !== todoId));
-  }, [setTodos, todos]);
+  const handleDeleteClick = useCallback(
+    (todoId: number) => {
+      setTodos(todos.filter(prevTodo => prevTodo.id !== todoId));
+    },
+    [setTodos, todos],
+  );
 
-  const handleCheckBoxChange = useCallback((todoId: number) => {
-    const newTodos = todos.map((prevTodo) => {
-      if (prevTodo.id === todoId) {
-        return {
-          ...prevTodo,
-          completed: !prevTodo.completed,
-        };
-      }
+  const handleCheckBoxChange = useCallback(
+    (todoId: number) => {
+      const newTodos = todos.map(prevTodo => {
+        if (prevTodo.id === todoId) {
+          return {
+            ...prevTodo,
+            completed: !prevTodo.completed,
+          };
+        }
 
-      return prevTodo;
-    });
+        return prevTodo;
+      });
 
-    setTodos(newTodos);
-  }, [setTodos, todos]);
+      setTodos(newTodos);
+    },
+    [setTodos, todos],
+  );
 
-  const handleTitleChange = useCallback((
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setTodoTitle(event.target.value);
-  }, [setTodoTitle]);
+  const handleTitleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setTodoTitle(event.target.value);
+    },
+    [setTodoTitle],
+  );
 
   const saveTitleChanges = useCallback(() => {
-    setTodos((todos.map(prevTodo => {
-      if (prevTodo.id === todo.id) {
-        return {
-          ...prevTodo,
-          title: todoTitle,
-        };
-      }
+    setTodos(
+      todos.map(prevTodo => {
+        if (prevTodo.id === todo.id) {
+          return {
+            ...prevTodo,
+            title: todoTitle,
+          };
+        }
 
-      return prevTodo;
-    })));
+        return prevTodo;
+      }),
+    );
     setIsEditing(false);
   }, [setTodos, todos, todoTitle, todo]);
 
@@ -69,16 +78,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEditing(false);
   }, [setIsEditing, todos, setTodos, todo]);
 
-  const handleTitleFieldKeyUp = useCallback((event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      setIsEditing(false);
-      setTodoTitle(todo.title);
-    } else if (event.key === 'Enter' && todoTitle.trim()) {
-      saveTitleChanges();
-    } else if (event.key === 'Enter' && !todoTitle.trim()) {
-      deleteEmptyTodo();
-    }
-  }, [setIsEditing, todoTitle, deleteEmptyTodo, saveTitleChanges, todo]);
+  const handleTitleFieldKeyUp = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsEditing(false);
+        setTodoTitle(todo.title);
+      } else if (event.key === 'Enter' && todoTitle.trim()) {
+        saveTitleChanges();
+      } else if (event.key === 'Enter' && !todoTitle.trim()) {
+        deleteEmptyTodo();
+      }
+    },
+    [setIsEditing, todoTitle, deleteEmptyTodo, saveTitleChanges, todo],
+  );
 
   const handleTitleFieldBlur = useCallback(() => {
     if (todoTitle.trim()) {
