@@ -46,7 +46,11 @@ export const TodoItem: React.FC<Props> = ({ item: todo }) => {
   };
 
   const handlerEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTitle(event.target.value);
+    if (event.target.value.trim() !== '') {
+      setNewTitle(event.target.value);
+    } else if (newTitle.trim() !== '') {
+      setNewTitle(event.target.value);
+    }
   };
 
   const handlerEditTodo = () => {

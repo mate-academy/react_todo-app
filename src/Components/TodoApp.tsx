@@ -10,12 +10,16 @@ export const TodoApp: React.FC = () => {
   const [filter, setFilter] = useState(Filter.ALL);
 
   const changeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
+    if (event.target.value.trim() !== '') {
+      setTitle(event.target.value);
+    } else if (title.trim() !== '') {
+      setTitle(event.target.value);
+    }
   };
 
   const handlerAddTodo = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (title !== '') {
+    if (title.trim() !== '') {
       const newTask = {
         id: +new Date(),
         title,
