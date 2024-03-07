@@ -79,8 +79,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  const checkboxId = `toggle-view-${todo.id}`;
-
   return (
     <li
       className={cn({
@@ -90,15 +88,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     >
       <div className="view">
         <input
+          name="toggle-view"
           type="checkbox"
           className="toggle"
-          id={checkboxId}
-          onChange={handleOnToggle}
+          id="toggle-view"
           checked={todo.completed}
+          onChange={handleOnToggle}
         />
-        <label htmlFor={checkboxId} onDoubleClick={() => setIsEditing(true)}>
-          {todo.title}
-        </label>
+        <label onDoubleClick={() => setIsEditing(true)}>{todo.title}</label>
         <button
           type="button"
           className="destroy"

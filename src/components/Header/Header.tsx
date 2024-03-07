@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { DispatchContext } from '../../TodosContext';
 import { Todo } from '../../types/Todo';
 
@@ -6,6 +12,8 @@ export const Header: React.FC = () => {
   const dispatch = useContext(DispatchContext);
 
   const [query, setQuery] = useState('');
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,10 +35,18 @@ export const Header: React.FC = () => {
 
         dispatch({ type: 'add', payload: newTodo });
         setQuery('');
+      } else {
+        setQuery('');
       }
     },
     [dispatch, query],
   );
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   return (
     <header className="header">
@@ -44,6 +60,7 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={query}
           onChange={handleInputChange}
+          ref={inputRef}
         />
       </form>
     </header>
