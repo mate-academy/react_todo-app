@@ -25,3 +25,6 @@ export function useLocalStorage<T>(
 
   return [value, save];
 }
+
+// при виклику функції save ми зберігаємо новий стан state в локальне
+// сховиже та оновлюємо value(викликаючи setValue(newValue))

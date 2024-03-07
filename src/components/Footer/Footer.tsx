@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
 
       <TodosFilter />
 
-      {completedTodos && (
+      {completedTodos > 0 && (
         <button
           type="button"
           className="clear-completed"
