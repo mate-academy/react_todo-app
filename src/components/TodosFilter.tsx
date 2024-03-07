@@ -32,10 +32,8 @@ export const TodosFilter: React.FC<Props> = ({ status, selectStatus }) => {
     setTodos(todos.filter(todoItem => !todoItem.completed));
   }, [todos, setTodos]);
 
-  return !todos.length ? (
-    <></>
-  ) : (
-    <footer className="footer">
+  return (
+    <footer data-cy="todosFilter" className="footer">
       <span className="todo-count" data-cy="todosCounter">
         {notCompletedTodosCount === 1
           ? '1 item left'

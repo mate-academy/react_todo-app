@@ -8,15 +8,19 @@ import React, {
 import { TodosContext } from '../services/TodosContext';
 import { TodoList } from './TodoList';
 import { Status } from '../types/Status';
+import { TodosFilter } from './TodosFilter';
 
-type Props = {
-  status: Status;
-};
-
-export const TodoApp: React.FC<Props> = ({ status }) => {
+export const TodoApp: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const [query, setQuery] = useState('');
   const newTodoField = useRef<HTMLInputElement | null>(null);
+
+  const [status, setStatus] = useState<Status>(Status.all);
+
+  const selectStatus = useCallback(
+    (newStatus: Status): void => setStatus(newStatus),
+    [],
+  );
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -76,7 +80,12 @@ export const TodoApp: React.FC<Props> = ({ status }) => {
         </form>
       </header>
 
-      {!!todos.length && <TodoList status={status} />}
+      {!!todos.length && (
+        <>
+          <TodoList status={status} />
+          <TodosFilter status={status} selectStatus={selectStatus} />
+        </>
+      )}
     </>
   );
 };
