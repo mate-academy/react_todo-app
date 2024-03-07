@@ -9,6 +9,7 @@ import {
   handledTabs,
   useLocalStorage,
 } from './utils/helpers';
+// eslint-disable-next-line import/no-cycle
 import { TodoList } from './components/TodoList/TodoList';
 
 export const MyTodos = React.createContext<ContextPropsMyTodos>({
@@ -61,8 +62,10 @@ export function App() {
       setFormKey(n => n + 1);
     } else {
       if (input.length >= 43) {
-        alert('The max allowed number of characters is 43');
+        // eslint-disable-next-line no-alert
+        alert('The max allowed number of characters is 43'); // make it prettier
       } else {
+        // eslint-disable-next-line no-alert
         alert('Please, write valid text');
       }
 
@@ -107,6 +110,7 @@ export function App() {
       >
         <body className="todo-app">
           <header className="todo-app__header">
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div className="todo-app__title" onClick={handleCrossAllOut}>
               Todos
             </div>
@@ -120,6 +124,7 @@ export function App() {
                 name="todo-app__input"
                 value={input}
                 placeholder="Got anything to do?"
+                // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus
                 onChange={handleInput}
               />
@@ -139,6 +144,7 @@ export function App() {
                     className="todo-list__clear-button"
                     onClick={handleDeleteCompleted}
                   >
+                    {/* eslint-disable-next-line react/no-unescaped-entities */}
                     Clear all that's done
                   </button>
                 )}
@@ -178,9 +184,12 @@ export function App() {
           {todos && todos.length > 0 && (
             <footer>
               <p className="footer__text">
-                Click on the
-                <span className="footer__highlighted">Title</span> to cross'em
-                all
+                {/* eslint-disable-next-line max-len */}
+                Click on the <span className="footer__highlighted">
+                  Title
+                </span>{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                to cross'em all
               </p>
               <p className="footer__text">Double click to edit</p>
             </footer>

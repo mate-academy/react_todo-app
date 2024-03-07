@@ -1,6 +1,7 @@
 import { useCallback, useContext, useState, useRef, useEffect } from 'react';
 import cn from 'classnames';
 import { TodoProps } from '../../utils/helpers';
+// eslint-disable-next-line import/no-cycle
 import { MyTodos } from '../../App';
 
 export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
@@ -80,6 +81,7 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
     // hide the edit field when clicked outside
     const handleClosingClick = (event: MouseEvent) => {
       if (
+        // eslint-disable-next-line operator-linebreak
         editField.current &&
         !editField.current.contains(event.target as Node)
       ) {
@@ -112,6 +114,7 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
 
   return (
     <li>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className="todo__view"
         onClick={event => handleClick(todo.id, event)}
@@ -142,6 +145,7 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
           onKeyDown={event => handleEdit(event, todo.id)}
         />
         <button
+          type="button"
           className={cn('todo__destroy', {
             'can-be-destroyed': canBeDestroyed,
           })}

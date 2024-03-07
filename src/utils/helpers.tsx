@@ -36,7 +36,9 @@ export interface ContextPropsCurrentTab {
 export function useLocalStorage<T>(key: string, initialValue: T[]) {
   const [value, setValue] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(key)!);
+      const storedValue = localStorage.getItem(key);
+
+      return storedValue !== null ? JSON.parse(storedValue) : initialValue;
     } catch (e) {
       return initialValue;
     }
