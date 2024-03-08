@@ -1,0 +1,53 @@
+.todo-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 100px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 200;
+    color: #8E7AB5;
+    cursor: pointer;
+    margin-bottom: 50px;
+  }
+
+  &__form {
+    margin-top: -30px;
+  }
+
+  &__input {
+    position: relative;
+    width: 60vw;
+    max-width: 550px;
+    height: 65px;
+    border-color: transparent;
+    border-bottom-color: #B784B7;
+    padding-left: 35px;
+    font-size: 24px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    outline: none;
+    box-shadow: 1px 1px 1px 1px #E493B3;
+    transition: all .3s;
+    cursor: pointer;
+
+    &::placeholder {
+      color: #554279;
+      opacity: .7;
+    }
+
+    &:focus {
+      box-shadow: 1px 1px 1px 1px #B784B7;
+    }
+
+    &:hover {
+      box-shadow: 0 5px #8E7AB5;
+    }
+  }
+}

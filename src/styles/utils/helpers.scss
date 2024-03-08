@@ -1,0 +1,23 @@
+.is-checked {
+  text-decoration: line-through;
+  text-shadow: 1px 1px 1px #E493B3;
+  color: #8E7AB5;
+}
+
+.is-toggled {
+  background-color: #8e7ab5a0;
+}
+
+//the delete button will be visible
+.can-be-destroyed {
+  display: block;
+}
+
+.is-tab-selected {
+  font-weight: 700;
+  transform: scale(1.1);
+}
+
+.is-edit-shown {
+  display: block;
+}
