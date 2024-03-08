@@ -48,6 +48,12 @@ export const Header: React.FC = () => {
     }
   }, []);
 
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setQuery('');
+    }
+  };
+
   return (
     <header className="header">
       <h1>todos</h1>
@@ -61,6 +67,7 @@ export const Header: React.FC = () => {
           value={query}
           onChange={handleInputChange}
           ref={inputRef}
+          onKeyUp={handleKeyUp}
         />
       </form>
     </header>
