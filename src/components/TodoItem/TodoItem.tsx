@@ -1,8 +1,7 @@
 import { useCallback, useContext, useState, useRef, useEffect } from 'react';
 import cn from 'classnames';
 import { TodoProps } from '../../utils/helpers';
-// eslint-disable-next-line import/no-cycle
-import { MyTodos } from '../../App';
+import { MyTodos } from '../../utils/GlobalContext';
 
 export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
   const { todos, setTodos } = useContext(MyTodos);
@@ -55,7 +54,7 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
                 return {
                   ...t,
                   title: editedValue,
-                  completed: false,
+                  completed: !t.completed,
                 };
               }
 
@@ -85,6 +84,7 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
         editField.current &&
         !editField.current.contains(event.target as Node)
       ) {
+        setEditedValue(todo.title);
         setCanBeEdited(false);
       }
     };
