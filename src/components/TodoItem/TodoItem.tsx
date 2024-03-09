@@ -1,7 +1,8 @@
-import cn from 'classnames';
 import React, { useEffect, useRef } from 'react';
-import { Todo } from '../../type/type';
+import cn from 'classnames';
+
 import { TodosContext } from '../../utils/TodosContext';
+import { State, Todo } from '../../type/type';
 
 interface Props {
   todo: Todo;
@@ -9,7 +10,7 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
-  const { todos, setTodos } = React.useContext(TodosContext);
+  const { todos, setTodos } = React.useContext<State>(TodosContext);
 
   const [inputValue, setInputValue] = React.useState(title);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -51,6 +52,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
           : prevTodo;
       }),
     );
+
     setIsEditing(false);
     setInputValue(inputValue.trim());
   };
@@ -85,7 +87,9 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={completed}
           onClick={handleCheckbox}
         />
+
         <label onDoubleClick={() => setIsEditing(true)}>{title}</label>
+
         <button
           id="delete-button"
           type="button"
@@ -95,6 +99,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={handleDeleteTodo}
         />
       </div>
+
       <input
         type="text"
         className="edit"

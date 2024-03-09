@@ -1,21 +1,8 @@
 import React from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { Todo } from '../type/type';
+import { Filter, State, Todo } from '../type/type';
 
 const initialTodos: Todo[] = [];
-
-export enum Filter {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
-}
-
-interface State {
-  todos: Todo[];
-  setTodos: (todos: Todo[]) => void;
-  filter: Filter;
-  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
-}
 
 export const TodosContext = React.createContext<State>({
   todos: initialTodos,

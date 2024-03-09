@@ -1,9 +1,12 @@
 import React from 'react';
-import { TodosContext } from '../../utils/TodosContext';
+
 import TodoFilter from '../TodoFilter/TodoFilter';
 
+import { TodosContext } from '../../utils/TodosContext';
+import { State } from '../../type/type';
+
 const Footer: React.FC = () => {
-  const { todos, setTodos, setFilter } = React.useContext(TodosContext);
+  const { todos, setTodos, setFilter } = React.useContext<State>(TodosContext);
 
   const isClearButtonVisible = todos.some(todo => todo.completed);
 

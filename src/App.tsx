@@ -1,13 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect } from 'react';
+
 import Footer from './components/Footer/Footer';
 import TodoList from './components/TodoList/TodoList';
+import { State } from './type/type';
+
 import { TodosContext } from './utils/TodosContext';
 
 export const App: React.FC = () => {
   const [inputValue, setInputValue] = React.useState('');
 
-  const { todos, setTodos } = React.useContext(TodosContext);
+  const { todos, setTodos } = React.useContext<State>(TodosContext);
 
   const inputField = React.useRef<HTMLInputElement>(null);
 
@@ -23,12 +26,12 @@ export const App: React.FC = () => {
 
   const handleAddTodo = () => {
     setTodos([
+      ...todos,
       {
         id: +new Date(),
-        title: inputValue,
+        title: inputValue.trim(),
         completed: false,
       },
-      ...todos,
     ]);
     setInputValue('');
   };

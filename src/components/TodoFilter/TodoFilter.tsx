@@ -1,5 +1,6 @@
 import React from 'react';
-import { Filter } from '../../utils/TodosContext';
+
+import { Filter } from '../../type/type';
 
 interface Props {
   setFilter: (filter: Filter) => void;

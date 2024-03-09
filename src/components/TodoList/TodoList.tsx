@@ -1,11 +1,14 @@
 import React from 'react';
-import { Filter, TodosContext } from '../../utils/TodosContext';
+
 import TodoItem from '../TodoItem/TodoItem';
+
+import { TodosContext } from '../../utils/TodosContext';
+import { Filter, State } from '../../type/type';
 
 const TodoList: React.FC = () => {
   const [isAllCompleted, setIsAllCompleted] = React.useState(false);
 
-  const { todos, setTodos, filter } = React.useContext(TodosContext);
+  const { todos, setTodos, filter } = React.useContext<State>(TodosContext);
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
@@ -32,6 +35,7 @@ const TodoList: React.FC = () => {
         data-cy="toggleAll"
         onClick={handleToggleAll}
       />
+
       <label htmlFor="toggle-all">Mark all as complete</label>
 
       <ul className="todo-list" data-cy="todosList">
