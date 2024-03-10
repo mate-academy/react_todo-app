@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Filter } from '../../utils/Types/Filter';
+import { Filter } from '../../utils/Types/Filter.ts';
 
 type Props = {
   currentFilter: string;
