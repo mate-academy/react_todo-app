@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../Types/Todo';
 import { useTodos } from '../../context/TodosContext';
@@ -14,16 +14,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const editInputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState('');
-  const [currentId, setCurrentId] = useState(0);
 
   const handleDoubleClick = () => {
     setEditValue(title);
-    setCurrentId(id);
     setIsEditing(true);
     setTimeout(() => editInputRef.current?.focus(), 0);
   };
 
-  const isEditingOrDeleting = (valueToEdit: string, todoId: number): void => {
+  const isEditingOrDeleting = (valueToEdit: string, todoId: string): void => {
     if (editValue) {
       handleEditTodo(todoId, valueToEdit);
     } else {
@@ -31,32 +29,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  const handleSaveChangesOnBlur = () => {
-    isEditingOrDeleting(editValue, currentId);
+  const handleSaveChangesOnBlur = (todoId: string) => {
+    isEditingOrDeleting(editValue, todoId);
   };
 
-  useEffect(() => {
-    const cancelEditing = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsEditing(false);
-      }
-    };
+  const cancelEditing = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setIsEditing(false);
+    }
+  };
 
-    const editTodo = (event: KeyboardEvent) => {
-      if (event.key === 'Enter' && isEditing) {
-        isEditingOrDeleting(editValue, currentId);
-        setIsEditing(false);
-      }
-    };
-
-    window.addEventListener('keyup', cancelEditing);
-    window.addEventListener('keypress', editTodo);
-
-    return () => {
-      window.removeEventListener('keyup', cancelEditing);
-      window.removeEventListener('keypress', editTodo);
-    };
-  }, [isEditing, currentId, editValue, handleEditTodo]);
+  const editTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && isEditing) {
+      isEditingOrDeleting(editValue, id);
+      setIsEditing(false);
+    }
+  };
 
   return (
     <li
@@ -85,8 +73,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <input
         ref={editInputRef}
         value={editValue}
+        onKeyDown={editTodo}
+        onKeyUp={cancelEditing}
         onChange={event => setEditValue(event.target.value)}
-        onBlur={handleSaveChangesOnBlur}
+        onBlur={() => handleSaveChangesOnBlur(id)}
         type="text"
         className="edit"
       />

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useReducer } from 'react';
 import { Todo } from '../Types/Todo';
-import { Status } from '../components/TodoFilter';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { Status } from '../Types/Status';
 
 type FilterStatus = keyof typeof Status;
 
@@ -9,12 +9,12 @@ type State = {
   todos: Todo[];
   filterStatus: FilterStatus;
   addTodo: (todo: Todo) => void;
-  toggleCompletedTodo: (id: number) => void;
+  toggleCompletedTodo: (id: string) => void;
   toggleAllTodo: () => void;
   handleFilterTodo: (status: FilterStatus) => void;
-  handleDeleteTodo: (id: number) => void;
+  handleDeleteTodo: (id: string) => void;
   handleDeleteCompletedTodo: () => void;
-  handleEditTodo: (id: number, title: string) => void;
+  handleEditTodo: (id: string, title: string) => void;
 };
 
 const initialState: State = {
@@ -33,12 +33,12 @@ const TodosContext = createContext(initialState);
 
 type Action =
   | { type: 'todo/addTodo'; payload: Todo }
-  | { type: 'todo/toggleComplete'; payload: number }
+  | { type: 'todo/toggleComplete'; payload: string }
   | { type: 'todo/toggleAll' }
   | { type: 'todo/setFilterStatus'; payload: FilterStatus }
-  | { type: 'todo/delete'; payload: number }
+  | { type: 'todo/delete'; payload: string }
   | { type: 'todo/deleteCompleted' }
-  | { type: 'todo/edit'; payload: { id: number; title: string } };
+  | { type: 'todo/edit'; payload: { id: string; title: string } };
 
 type Props = {
   children: React.ReactNode;
@@ -145,7 +145,7 @@ const TodosProvider: React.FC<Props> = ({ children }) => {
     dispatch({ type: 'todo/addTodo', payload: todo });
   };
 
-  const toggleCompletedTodo = (id: number) => {
+  const toggleCompletedTodo = (id: string) => {
     dispatch({ type: 'todo/toggleComplete', payload: id });
   };
 
@@ -157,7 +157,7 @@ const TodosProvider: React.FC<Props> = ({ children }) => {
     dispatch({ type: 'todo/setFilterStatus', payload: status });
   };
 
-  const handleDeleteTodo = (id: number) => {
+  const handleDeleteTodo = (id: string) => {
     dispatch({ type: 'todo/delete', payload: id });
   };
 
@@ -165,7 +165,7 @@ const TodosProvider: React.FC<Props> = ({ children }) => {
     dispatch({ type: 'todo/deleteCompleted' });
   };
 
-  const handleEditTodo = (id: number, title: string) => {
+  const handleEditTodo = (id: string, title: string) => {
     dispatch({ type: 'todo/edit', payload: { id, title } });
   };
 

@@ -5,7 +5,7 @@ export const Footer: React.FC = () => {
   const { todos, handleDeleteCompletedTodo } = useTodos();
 
   const uncompletedTodos = todos.filter(todo => !todo.completed).length;
-  const isCompletedTodo = todos.find(todo => todo.completed);
+  const isCompletedTodo = todos.some(todo => todo.completed);
 
   return (
     <>

@@ -1,10 +1,5 @@
+import { Status } from '../../Types/Status';
 import { useTodos } from '../../context/TodosContext';
-
-export enum Status {
-  All = '#/',
-  Active = '#/active',
-  Completed = '#/completed',
-}
 
 export const TodoFilter: React.FC = () => {
   const { handleFilterTodo } = useTodos();

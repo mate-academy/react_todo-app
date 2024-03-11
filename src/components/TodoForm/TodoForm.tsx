@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useTodos } from '../../context/TodosContext';
 import { Todo } from '../../Types/Todo';
 
@@ -6,13 +7,15 @@ export const TodoForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const { addTodo } = useTodos();
 
+  const isEmptyTodo = title.trim().length === 0;
+
   const handleOnSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title) {
+    if (title && !isEmptyTodo) {
       const newTodo: Todo = {
-        id: +new Date(),
-        title,
+        id: uuidv4(),
+        title: title.trim(),
         completed: false,
       };
 
