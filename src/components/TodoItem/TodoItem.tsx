@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import cn from 'classnames';
 
-import { TodosContext } from '../../utils/TodosContext';
-import { State, Todo } from '../../type/type';
+import { Todo } from '../../type/type';
+import { useTodos } from '../../hooks/useTodos';
 
 interface Props {
   todo: Todo;
@@ -10,9 +10,9 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
-  const { todos, setTodos } = React.useContext<State>(TodosContext);
+  const { todos, setTodos } = useTodos();
 
-  const [inputValue, setInputValue] = React.useState(title);
+  const [changedTodoTitle, setChangedTodoTitle] = React.useState(title);
   const [isEditing, setIsEditing] = React.useState(false);
 
   const inputField = useRef<HTMLInputElement>(null);
@@ -38,7 +38,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleAddNewTitle = () => {
-    if (inputValue === '') {
+    if (!changedTodoTitle) {
       handleDeleteTodo();
       setIsEditing(false);
 
@@ -48,13 +48,13 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(
       todos.map(prevTodo => {
         return prevTodo.id === todo.id
-          ? { ...prevTodo, title: inputValue.trim() }
+          ? { ...prevTodo, title: changedTodoTitle.trim() }
           : prevTodo;
       }),
     );
 
     setIsEditing(false);
-    setInputValue(inputValue.trim());
+    setChangedTodoTitle(changedTodoTitle.trim());
   };
 
   const handleInputButtons = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -63,13 +63,13 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (event.key === 'Escape') {
-      setInputValue(title);
+      setChangedTodoTitle(title);
       setIsEditing(false);
     }
   };
 
   const hadleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+    setChangedTodoTitle(event.target.value);
   };
 
   return (
@@ -103,7 +103,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
       <input
         type="text"
         className="edit"
-        value={inputValue}
+        value={changedTodoTitle}
         ref={inputField}
         onChange={hadleInputChange}
         onBlur={handleAddNewTitle}

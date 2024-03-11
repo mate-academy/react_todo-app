@@ -2,13 +2,13 @@ import React from 'react';
 
 import TodoItem from '../TodoItem/TodoItem';
 
-import { TodosContext } from '../../utils/TodosContext';
-import { Filter, State } from '../../type/type';
+import { Filter } from '../../type/type';
+import { useTodos } from '../../hooks/useTodos';
 
 const TodoList: React.FC = () => {
   const [isAllCompleted, setIsAllCompleted] = React.useState(false);
 
-  const { todos, setTodos, filter } = React.useContext<State>(TodosContext);
+  const { todos, setTodos, filter } = useTodos();
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {

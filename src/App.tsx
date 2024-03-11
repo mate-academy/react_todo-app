@@ -3,14 +3,12 @@ import React, { useEffect } from 'react';
 
 import Footer from './components/Footer/Footer';
 import TodoList from './components/TodoList/TodoList';
-import { State } from './type/type';
-
-import { TodosContext } from './utils/TodosContext';
+import { useTodos } from './hooks/useTodos';
 
 export const App: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState('');
+  const [newTodoTitle, setNewTodoTitle] = React.useState('');
 
-  const { todos, setTodos } = React.useContext<State>(TodosContext);
+  const { todos, setTodos } = useTodos();
 
   const inputField = React.useRef<HTMLInputElement>(null);
 
@@ -21,19 +19,23 @@ export const App: React.FC = () => {
   }, []);
 
   const hangleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+    setNewTodoTitle(event.target.value);
   };
 
   const handleAddTodo = () => {
+    if (!newTodoTitle.trim()) {
+      return;
+    }
+
     setTodos([
       ...todos,
       {
         id: +new Date(),
-        title: inputValue.trim(),
+        title: newTodoTitle.trim(),
         completed: false,
       },
     ]);
-    setInputValue('');
+    setNewTodoTitle('');
   };
 
   const handleEnterEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,7 +46,7 @@ export const App: React.FC = () => {
   };
 
   const handleBlurEvent = () => {
-    if (inputValue.trim()) {
+    if (newTodoTitle.trim()) {
       handleAddTodo();
     }
   };
@@ -56,7 +58,7 @@ export const App: React.FC = () => {
 
         <form>
           <input
-            value={inputValue}
+            value={newTodoTitle}
             ref={inputField}
             type="text"
             data-cy="createTodo"

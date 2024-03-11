@@ -2,11 +2,10 @@ import React from 'react';
 
 import TodoFilter from '../TodoFilter/TodoFilter';
 
-import { TodosContext } from '../../utils/TodosContext';
-import { State } from '../../type/type';
+import { useTodos } from '../../hooks/useTodos';
 
 const Footer: React.FC = () => {
-  const { todos, setTodos, setFilter } = React.useContext<State>(TodosContext);
+  const { todos, setTodos, filter, setFilter } = useTodos();
 
   const isClearButtonVisible = todos.some(todo => todo.completed);
 
@@ -22,7 +21,7 @@ const Footer: React.FC = () => {
         {amountItemsLeft} items left
       </span>
 
-      <TodoFilter setFilter={setFilter} />
+      <TodoFilter filter={filter} setFilter={setFilter} />
 
       {isClearButtonVisible && (
         <button
