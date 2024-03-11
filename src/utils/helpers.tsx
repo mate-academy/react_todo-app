@@ -5,32 +5,11 @@ export interface Todo {
   title: string;
   completed: boolean;
 }
-export interface TodoListProps {
-  filteredTodos: Todo[];
-}
 
-export interface TodoProps {
-  todo: Todo;
-}
-
-export enum Tabs {
+export enum Filters {
   All,
   Active,
   Completed,
-}
-
-export interface ContextPropsMyTodos {
-  todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}
-
-export interface ContextPropsFilteredTodos {
-  filteredTodos: Todo[];
-  setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}
-
-export interface ContextPropsCurrentTab {
-  currentTab: Tabs;
 }
 
 export function useLocalStorage<T>(key: string, initialValue: T[]) {
@@ -52,11 +31,11 @@ export function useLocalStorage<T>(key: string, initialValue: T[]) {
   return [value, save];
 }
 
-export function handledTabs(tabTitle: Tabs, arr: Todo[]) {
+export function handledTabs(tabTitle: Filters, arr: Todo[]) {
   switch (tabTitle) {
-    case Tabs.Active:
+    case Filters.Active:
       return [...arr].filter(t => !t.completed);
-    case Tabs.Completed:
+    case Filters.Completed:
       return [...arr].filter(t => t.completed);
     default:
       return arr;

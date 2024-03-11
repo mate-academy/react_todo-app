@@ -1,35 +1,20 @@
-import { useCallback, useContext, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import cn from 'classnames';
-import { TodoProps } from '../../utils/helpers';
-import { MyTodos } from '../../utils/GlobalContext';
+import { Todo } from '../../utils/helpers';
 
-export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
-  const { todos, setTodos } = useContext(MyTodos);
+interface Props {
+  todos: Todo[];
+  setTodos: (newValue: Todo[]) => {};
+  todo: Todo;
+}
+
+export const TodoItem: React.FC<Props> = ({ todos, setTodos, todo }) => {
   const [canBeDestroyed, setCanBeDestroyed] = useState(false);
   const [canBeEdited, setCanBeEdited] = useState(false);
   const [editedValue, setEditedValue] = useState(todo.title);
-  const [click, setClick] = useState(0);
   const editField = useRef<HTMLInputElement>(null);
 
-  const handleClick = (
-    todoId: number,
-    event: React.MouseEvent<HTMLDivElement>,
-  ) => {
-    event.stopPropagation();
-
-    const clickCount = click;
-
-    setTimeout(() => {
-      setClick(0);
-    }, 300);
-
-    if (clickCount === 1) {
-      if (todo.id === todoId) {
-        setCanBeEdited(true);
-        setEditedValue(todo.title);
-      }
-    }
-
+  const handleClick = (todoId: number) => {
     if (!canBeEdited) {
       setTodos(
         todos.map(t => {
@@ -43,8 +28,13 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
           return t;
         }),
       );
+    }
+  };
 
-      setClick(prev => prev + 1);
+  const handleDoubleClick = (todoId: number) => {
+    if (todo.id === todoId) {
+      setCanBeEdited(true);
+      setEditedValue(todo.title);
     }
   };
 
@@ -71,6 +61,7 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
           }),
         );
       } else {
+        // eslint-disable-next-line
         alert('No more than 32 characters, please');
         setCanBeEdited(false);
         setEditedValue(todo.title);
@@ -119,7 +110,8 @@ export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className="todo__view"
-        onClick={event => handleClick(todo.id, event)}
+        onClick={() => handleClick(todo.id)}
+        onDoubleClick={() => handleDoubleClick(todo.id)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
