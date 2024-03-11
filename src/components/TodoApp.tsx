@@ -1,9 +1,12 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { TodosContext } from '../TodosContext';
+import { TodoList } from './Todo-List/TodoList';
 
 export const TodoApp: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState<string>('');
   const { setTodos } = useContext(TodosContext);
+  const { handleCompleteAll, todos } = useContext(TodosContext);
+  const hasCompleted = todos.some(todo => todo.completed);
 
   const addTodo = useCallback(() => {
     if (todoTitle.trim() !== '') {
@@ -48,6 +51,18 @@ export const TodoApp: React.FC = () => {
           onChange={handleInput}
         />
       </form>
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+          checked={hasCompleted}
+          onClick={handleCompleteAll}
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
+        <TodoList />
+      </section>
     </header>
   );
 };

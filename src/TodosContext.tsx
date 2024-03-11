@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todos } from './types/types';
 
 type TodosContextType = {
@@ -6,6 +6,8 @@ type TodosContextType = {
   setTodos: React.Dispatch<React.SetStateAction<Todos[]>>;
   handleCompleted: (id: number) => void;
   handleCompleteAll: () => void;
+  filterActive: () => void;
+  filtredCompleted: () => void;
 };
 
 const initialTodosContextValue: TodosContextType = {
@@ -13,6 +15,8 @@ const initialTodosContextValue: TodosContextType = {
   setTodos: () => {},
   handleCompleted: () => {},
   handleCompleteAll: () => {},
+  filterActive: () => {},
+  filtredCompleted: () => {},
 };
 
 export const TodosContext = React.createContext<TodosContextType>(
@@ -25,6 +29,23 @@ type Props = {
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todos[]>([]);
+  const [filtredItem, setFiltredItem] = useState<Todos[]>([]);
+
+  useEffect(() => {
+    setFiltredItem(todos);
+  }, [todos]);
+
+  const filterActive = () => {
+    const filtredActive = filtredItem.filter(todo => !todo.completed);
+
+    setFiltredItem(filtredActive);
+  };
+
+  const filtredCompleted = () => {
+    const filtrCompleted = filtredItem.filter(todo => todo.completed);
+
+    setFiltredItem(filtrCompleted);
+  };
 
   const handleCompleted = (id: number) => {
     const newStateTodos = todos.map(todo => {
@@ -51,7 +72,14 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   return (
     <TodosContext.Provider
-      value={{ todos, setTodos, handleCompleted, handleCompleteAll }}
+      value={{
+        todos,
+        setTodos,
+        handleCompleted,
+        handleCompleteAll,
+        filterActive,
+        filtredCompleted,
+      }}
     >
       {children}
     </TodosContext.Provider>
