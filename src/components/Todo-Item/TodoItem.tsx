@@ -37,16 +37,22 @@ export const TodoItem: React.FC<PropsItem> = ({ todo }) => {
   };
 
   const handleEdit = () => {
-    const updatedTodos = todos.map(item => {
-      if (item.id === todo.id) {
-        return { ...item, title: editedText };
-      }
+    if (editedText.trim() !== '') {
+      const updatedTodos = todos.map(item => {
+        if (item.id === todo.id) {
+          return { ...item, title: editedText };
+        }
 
-      return item;
-    });
+        return item;
+      });
 
-    setTodos(updatedTodos);
-    setListInput(false);
+      setTodos(updatedTodos);
+      setListInput(false);
+    } else {
+      const updatedTodos = todos.filter(item => item.id !== todo.id);
+
+      setTodos(updatedTodos);
+    }
   };
 
   return (
