@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 import { Action, reducer } from './Reducer';
+// eslint-disable-line import/extensions
 import { Filter, State } from '../types/Types';
 
 const initialState: State = {

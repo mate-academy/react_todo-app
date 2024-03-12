@@ -39,8 +39,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (editedTitle.trim()) {
       dispatch({
         type: 'editTitle',
-        id,
-        newTitle: editedTitle,
+        payload: {
+          id,
+          newTitle: editedTitle,
+        },
       });
       setIsEdited(false);
     } else {

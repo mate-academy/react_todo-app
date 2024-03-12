@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
 
   const handleRemoveCompletedTodos = () => {
     dispatch({
-      type: 'removeComplTodos',
+      type: 'removeCompletedTodos',
     });
   };
 

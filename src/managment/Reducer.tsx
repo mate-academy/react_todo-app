@@ -1,12 +1,13 @@
+// eslint-disable-line import/extensions
 import { State, Filter } from '../types/Types';
 
 export type Action =
   | { type: 'addTodo'; title: string }
   | { type: 'removeTodo'; id: number }
-  | { type: 'editTitle'; id: number; newTitle: string }
+  | { type: 'editTitle'; payload: { id: number; newTitle: string } }
   | { type: 'markDone'; id: number }
   | { type: 'toggleDone'; payload: boolean }
-  | { type: 'removeComplTodos' }
+  | { type: 'removeCompletedTodos' }
   | { type: 'filter'; payload: Filter };
 
 export function reducer(state: State, action: Action) {
@@ -34,10 +35,13 @@ export function reducer(state: State, action: Action) {
       return {
         ...state,
         todos: state.todos.map(todo => {
-          if (todo.id === action.id && todo.title !== action.newTitle) {
+          if (
+            todo.id === action.payload.id &&
+            todo.title !== action.payload.newTitle
+          ) {
             return {
               ...todo,
-              title: action.newTitle,
+              title: action.payload.newTitle,
               completed: false,
             };
           }
@@ -70,7 +74,7 @@ export function reducer(state: State, action: Action) {
         })),
       };
 
-    case 'removeComplTodos':
+    case 'removeCompletedTodos':
       return {
         ...state,
         todos: state.todos.filter(todo => !todo.completed),

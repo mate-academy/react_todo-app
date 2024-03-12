@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-// eslint-disable-line import/extensions
 import React, { useContext } from 'react';
 import { StateContext } from './managment/TodoContext';
 import { Header } from './components/Header';
