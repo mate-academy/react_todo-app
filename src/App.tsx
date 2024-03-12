@@ -45,12 +45,6 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleBlurEvent = () => {
-    if (newTodoTitle.trim()) {
-      handleAddTodo();
-    }
-  };
-
   return (
     <div className="todoapp">
       <header className="header">
@@ -66,7 +60,6 @@ export const App: React.FC = () => {
             placeholder="What needs to be done?"
             onChange={hangleInputChange}
             onKeyDown={handleEnterEvent}
-            onBlur={handleBlurEvent}
           />
         </form>
       </header>
