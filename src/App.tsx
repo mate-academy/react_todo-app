@@ -1,13 +1,30 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { TodoList } from './components/Todo/TodoList';
+import { TodosContext } from './Store';
 
-export const App: React.FC = () => {
+export const TodoApp: React.FC = () => {
+  const { state, dispatch } = useContext(TodosContext);
+  const [newTodo, setNewTodo] = useState('');
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodo(event.target.value);
+  };
+
+  const handleAddTodo = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (newTodo.trim() !== '') {
+      dispatch({ type: 'ADD_TODO', payload: newTodo });
+      setNewTodo('');
+    }
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
         <h1>todos</h1>
 
-        <form>
+        <form onSubmit={handleAddTodo}>
           <input
             type="text"
             data-cy="createTodo"
@@ -23,46 +40,11 @@ export const App: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
+          onChange={handleInputChange}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <ul className="todo-list" data-cy="todosList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
+        <TodoList items={state.todos} />
       </section>
 
       <footer className="footer">
