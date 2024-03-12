@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Todos } from './types/types';
+import { useLocalStorage } from './components/local/local';
+import { filterTodo } from './services/filter';
+import { Status } from './services/type-Filter';
 
 type TodosContextType = {
   todos: Todos[];
   setTodos: React.Dispatch<React.SetStateAction<Todos[]>>;
   handleCompleted: (id: number) => void;
   handleCompleteAll: () => void;
-  filterActive: () => void;
-  filtredCompleted: () => void;
+  filteredTodo: Todos[];
+  setFilterType: React.Dispatch<React.SetStateAction<Status>>;
+  filterType: Status;
 };
 
 const initialTodosContextValue: TodosContextType = {
@@ -15,8 +19,9 @@ const initialTodosContextValue: TodosContextType = {
   setTodos: () => {},
   handleCompleted: () => {},
   handleCompleteAll: () => {},
-  filterActive: () => {},
-  filtredCompleted: () => {},
+  filteredTodo: [],
+  setFilterType: () => {},
+  filterType: Status.All,
 };
 
 export const TodosContext = React.createContext<TodosContextType>(
@@ -28,24 +33,10 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todos[]>([]);
-  const [filtredItem, setFiltredItem] = useState<Todos[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todos[]>('todos', []);
+  const [filterType, setFilterType] = useState<Status>(Status.All);
 
-  useEffect(() => {
-    setFiltredItem(todos);
-  }, [todos]);
-
-  const filterActive = () => {
-    const filtredActive = filtredItem.filter(todo => !todo.completed);
-
-    setFiltredItem(filtredActive);
-  };
-
-  const filtredCompleted = () => {
-    const filtrCompleted = filtredItem.filter(todo => todo.completed);
-
-    setFiltredItem(filtrCompleted);
-  };
+  const filteredTodo = filterTodo(todos, filterType);
 
   const handleCompleted = (id: number) => {
     const newStateTodos = todos.map(todo => {
@@ -77,8 +68,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         setTodos,
         handleCompleted,
         handleCompleteAll,
-        filterActive,
-        filtredCompleted,
+        filteredTodo,
+        setFilterType,
+        filterType,
       }}
     >
       {children}

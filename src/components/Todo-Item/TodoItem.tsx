@@ -9,25 +9,22 @@ type PropsItem = {
 
 export const TodoItem: React.FC<PropsItem> = ({ todo }) => {
   const [listInput, setListInput] = useState(false);
-  const [deleted, setDeleted] = useState(false);
-  const [editedText, setEditedText] = useState('');
-  const { handleCompleted } = useContext(TodosContext);
+  const [editedText, setEditedText] = useState(todo.title);
+  const { handleCompleted, todos, setTodos } = useContext(TodosContext);
 
-  const { id, title, completed } = todo;
+  const { id, completed } = todo;
 
   const handleClickInput = (event: React.MouseEvent<HTMLLabelElement>) => {
     event.preventDefault();
     setListInput(true);
-    setEditedText(title);
+    setEditedText(todo.title);
   };
 
   const handleDelete = () => {
-    setDeleted(true);
-  };
+    const updatedTodos = todos.filter(item => item.id !== todo.id);
 
-  if (deleted) {
-    return null;
-  }
+    setTodos(updatedTodos);
+  };
 
   const enterInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' || event.key === 'Escape') {
@@ -40,7 +37,15 @@ export const TodoItem: React.FC<PropsItem> = ({ todo }) => {
   };
 
   const handleEdit = () => {
-    setEditedText(title);
+    const updatedTodos = todos.map(item => {
+      if (item.id === todo.id) {
+        return { ...item, title: editedText };
+      }
+
+      return item;
+    });
+
+    setTodos(updatedTodos);
     setListInput(false);
   };
 
@@ -57,10 +62,10 @@ export const TodoItem: React.FC<PropsItem> = ({ todo }) => {
           className="toggle"
           id={id.toString()}
           checked={completed}
-          onClick={() => handleCompleted(id)}
+          onChange={() => handleCompleted(id)}
         />
         <label htmlFor="toggle-editing" onDoubleClick={handleClickInput}>
-          {title}
+          {editedText}
         </label>
         <button
           type="button"

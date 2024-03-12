@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { TodosContext } from '../TodosContext';
 import { TodoList } from './Todo-List/TodoList';
+import { Footer } from './Todo-Footer/Todo-Footer';
 
 export const TodoApp: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState<string>('');
@@ -38,31 +39,34 @@ export const TodoApp: React.FC = () => {
   );
 
   return (
-    <header className="header">
-      <h1>todos</h1>
+    <>
+      <header className="header">
+        <h1>todos</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          data-cy="createTodo"
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={todoTitle}
-          onChange={handleInput}
-        />
-      </form>
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          checked={hasCompleted}
-          onClick={handleCompleteAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-        <TodoList />
-      </section>
-    </header>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            data-cy="createTodo"
+            className="new-todo"
+            placeholder="What needs to be done?"
+            value={todoTitle}
+            onChange={handleInput}
+          />
+        </form>
+        <section className="main">
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            data-cy="toggleAll"
+            checked={hasCompleted}
+            onChange={handleCompleteAll}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+          <TodoList />
+        </section>
+      </header>
+      {todos.length > 0 && <Footer />}
+    </>
   );
 };
