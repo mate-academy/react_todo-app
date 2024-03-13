@@ -59,37 +59,41 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-          checked={allCompleted}
-          onChange={handleToggleAll}
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+      {filteredTodos.length !== 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              checked={allCompleted}
+              onChange={handleToggleAll}
+            />
+            <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList items={filteredTodos} />
-      </section>
+            <TodoList items={filteredTodos} />
+          </section>
 
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          {notCompletedTodos.length} items left
-        </span>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {notCompletedTodos.length} items left
+            </span>
 
-        <TodosFilter />
+            <TodosFilter />
 
-        {completedTodos.length !== 0 && (
-          <button
-            type="button"
-            className="clear-completed"
-            onClick={handleClearCompleted}
-          >
-            Clear completed
-          </button>
-        )}
-      </footer>
+            {completedTodos.length !== 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleClearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </div>
   );
 };
