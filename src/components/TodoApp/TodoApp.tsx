@@ -72,7 +72,7 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {todos.length > 0 && (
+      {!!todos.length && (
         <>
           <section className="main">
             <input
@@ -80,7 +80,7 @@ export const TodoApp: React.FC = () => {
               id="toggle-all"
               className="toggle-all"
               data-cy="toggleAll"
-              checked={activeTodos.length === 0}
+              checked={!activeTodos.length}
               onChange={toggleAllTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
@@ -101,7 +101,7 @@ export const TodoApp: React.FC = () => {
               status={filterStatus}
               onFilterChange={handleFilterChange}
             />
-            {completedTodos.length > 0 && (
+            {!!completedTodos.length && (
               <button
                 type="button"
                 className="clear-completed"
