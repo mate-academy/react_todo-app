@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../Store';
 
@@ -14,8 +15,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({ type: 'TOGGLE_TODO', payload: todo.id });
   };
 
+  const handleDeleteTodo = () => {
+    dispatch({ type: 'REMOVE_TODO', payload: todo.id });
+  };
+
   return (
-    <li>
+    <li className={classNames({ completed: todo.completed })}>
       <div className={todo.completed ? 'completed' : 'view'}>
         <input
           type="checkbox"
@@ -25,7 +30,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onChange={handleToggleTodoChange}
         />
         <label htmlFor={`toggle-${todo.id}`}>{todo.title}</label>
-        <button type="button" className="destroy" data-cy="deleteTodo" />
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          onClick={handleDeleteTodo}
+        />
       </div>
       <input type="text" className="edit" />
     </li>

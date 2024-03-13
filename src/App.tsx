@@ -2,10 +2,14 @@
 import React, { useContext, useState } from 'react';
 import { TodoList } from './components/Todo/TodoList';
 import { TodosContext } from './Store';
+import { Status } from './types/Status';
+import { TodosFilter } from './components/Todo/TodosFilter';
 
 export const TodoApp: React.FC = () => {
   const { state, dispatch } = useContext(TodosContext);
   const [newTodo, setNewTodo] = useState('');
+
+  const allCompleted = state.todos.every(todo => todo.completed);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(event.target.value);
@@ -19,6 +23,25 @@ export const TodoApp: React.FC = () => {
     }
   };
 
+  const handleClearCompleted = () => {
+    dispatch({ type: 'CLEAR_COMPLETED' });
+  };
+
+  const handleToggleAll = () => {
+    dispatch({ type: 'TOGGLE_ALL', payload: !allCompleted });
+  };
+
+  const notCompletedTodos = state.todos.filter(todo => !todo.completed);
+  const completedTodos = state.todos.filter(todo => todo.completed);
+
+  const filteredTodos = state.todos.filter(todo => {
+    if (state.filter === Status.All) {
+      return true;
+    }
+
+    return state.filter === Status.Completed ? todo.completed : !todo.completed;
+  });
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -30,6 +53,8 @@ export const TodoApp: React.FC = () => {
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            value={newTodo}
+            onChange={handleInputChange}
           />
         </form>
       </header>
@@ -40,37 +65,30 @@ export const TodoApp: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          onChange={handleInputChange}
+          checked={allCompleted}
+          onChange={handleToggleAll}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList items={state.todos} />
+        <TodoList items={filteredTodos} />
       </section>
 
       <footer className="footer">
         <span className="todo-count" data-cy="todosCounter">
-          3 items left
+          {notCompletedTodos.length} items left
         </span>
 
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">
-              All
-            </a>
-          </li>
+        <TodosFilter />
 
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
+        {completedTodos.length !== 0 && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleClearCompleted}
+          >
+            Clear completed
+          </button>
+        )}
       </footer>
     </div>
   );
