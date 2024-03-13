@@ -4,6 +4,7 @@ import { Todo } from './types/Todo';
 
 type Action =
   | { type: 'ADD_TODO'; payload: string }
+  | { type: 'UPDATE_TODO'; payload: { id: number; title: string } }
   | { type: 'REMOVE_TODO'; payload: number }
   | { type: 'TOGGLE_TODO'; payload: number }
   | { type: 'TOGGLE_ALL'; payload: boolean }
@@ -41,6 +42,15 @@ const reducer = (state: State, action: Action): State => {
             completed: false,
           },
         ],
+      };
+    case 'UPDATE_TODO':
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id
+            ? { ...todo, title: action.payload.title }
+            : todo,
+        ),
       };
     case 'REMOVE_TODO':
       return {

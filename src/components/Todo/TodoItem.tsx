@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../Store';
@@ -10,6 +10,8 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { dispatch } = useContext(TodosContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(todo.title);
 
   const handleToggleTodoChange = () => {
     dispatch({ type: 'TOGGLE_TODO', payload: todo.id });
@@ -19,8 +21,45 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({ type: 'REMOVE_TODO', payload: todo.id });
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditText(event.target.value);
+  };
+
+  const handleBlur = () => {
+    if (editText.trim() === '') {
+      dispatch({ type: 'REMOVE_TODO', payload: todo.id });
+    } else {
+      dispatch({
+        type: 'UPDATE_TODO',
+        payload: { id: todo.id, title: editText },
+      });
+    }
+
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (editText.trim() === '') {
+        dispatch({ type: 'REMOVE_TODO', payload: todo.id });
+      } else {
+        dispatch({
+          type: 'UPDATE_TODO',
+          payload: { id: todo.id, title: editText },
+        });
+      }
+
+      setIsEditing(false);
+    } else if (event.key === 'Escape') {
+      setEditText(todo.title);
+      setIsEditing(false);
+    }
+  };
+
   return (
-    <li className={classNames({ completed: todo.completed })}>
+    <li
+      className={classNames({ completed: todo.completed, editing: isEditing })}
+    >
       <div className={todo.completed ? 'completed' : 'view'}>
         <input
           type="checkbox"
@@ -29,7 +68,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={handleToggleTodoChange}
         />
-        <label htmlFor={`toggle-${todo.id}`}>{todo.title}</label>
+        <label
+          onDoubleClick={() => {
+            setIsEditing(true);
+          }}
+        >
+          {todo.title}
+        </label>
         <button
           type="button"
           className="destroy"
@@ -37,7 +82,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={handleDeleteTodo}
         />
       </div>
-      <input type="text" className="edit" />
+      {isEditing ? (
+        <input
+          type="text"
+          className="edit"
+          value={editText}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
+        />
+      ) : null}
     </li>
   );
 };
