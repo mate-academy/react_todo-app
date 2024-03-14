@@ -9,7 +9,8 @@ type Action =
   | { type: 'TOGGLE_TODO'; payload: number }
   | { type: 'TOGGLE_ALL'; payload: boolean }
   | { type: 'CLEAR_COMPLETED' }
-  | { type: 'SET_FILTER'; payload: Status };
+  | { type: 'SET_FILTER'; payload: Status }
+  | { type: 'SET_TODOS'; payload: Todo[] };
 
 type State = {
   todos: Todo[];
@@ -83,6 +84,11 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         filter: action.payload,
+      };
+    case 'SET_TODOS':
+      return {
+        ...state,
+        todos: action.payload,
       };
     default:
       return state;

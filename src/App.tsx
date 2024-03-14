@@ -4,12 +4,14 @@ import { TodoList } from './components/Todo/TodoList';
 import { TodosContext } from './Store';
 import { Status } from './types/Status';
 import { TodosFilter } from './components/Todo/TodosFilter';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 export const TodoApp: React.FC = () => {
   const { state, dispatch } = useContext(TodosContext);
   const [newTodo, setNewTodo] = useState('');
+  const todos = useLocalStorage('todos', state.todos);
 
-  const allCompleted = state.todos.every(todo => todo.completed);
+  const allCompleted = todos.every(todo => todo.completed);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(event.target.value);
@@ -31,10 +33,10 @@ export const TodoApp: React.FC = () => {
     dispatch({ type: 'TOGGLE_ALL', payload: !allCompleted });
   };
 
-  const notCompletedTodos = state.todos.filter(todo => !todo.completed);
-  const completedTodos = state.todos.filter(todo => todo.completed);
+  const notCompletedTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
 
-  const filteredTodos = state.todos.filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     if (state.filter === Status.All) {
       return true;
     }
