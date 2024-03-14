@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodosContext } from '../../Store';
+import { ActionType } from '../../types/ActionType';
 
 type Props = {
   todo: Todo;
@@ -14,11 +15,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editText, setEditText] = useState(todo.title);
 
   const handleToggleTodoChange = () => {
-    dispatch({ type: 'TOGGLE_TODO', payload: todo.id });
+    dispatch({ type: ActionType.Toggle, payload: todo.id });
   };
 
   const handleDeleteTodo = () => {
-    dispatch({ type: 'REMOVE_TODO', payload: todo.id });
+    dispatch({ type: ActionType.Remove, payload: todo.id });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,11 +27,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleBlur = () => {
-    if (editText.trim() === '') {
-      dispatch({ type: 'REMOVE_TODO', payload: todo.id });
+    if (editText.trim()) {
+      dispatch({ type: ActionType.Remove, payload: todo.id });
     } else {
       dispatch({
-        type: 'UPDATE_TODO',
+        type: ActionType.Update,
         payload: { id: todo.id, title: editText },
       });
     }
@@ -41,10 +42,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (editText.trim() === '') {
-        dispatch({ type: 'REMOVE_TODO', payload: todo.id });
+        dispatch({ type: ActionType.Remove, payload: todo.id });
       } else {
         dispatch({
-          type: 'UPDATE_TODO',
+          type: ActionType.Update,
           payload: { id: todo.id, title: editText },
         });
       }

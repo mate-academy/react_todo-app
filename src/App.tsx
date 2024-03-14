@@ -5,6 +5,7 @@ import { TodosContext } from './Store';
 import { Status } from './types/Status';
 import { TodosFilter } from './components/Todo/TodosFilter';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { ActionType } from './types/ActionType';
 
 export const TodoApp: React.FC = () => {
   const { state, dispatch } = useContext(TodosContext);
@@ -19,18 +20,18 @@ export const TodoApp: React.FC = () => {
 
   const handleAddTodo = (event: React.FormEvent) => {
     event.preventDefault();
-    if (newTodo.trim() !== '') {
-      dispatch({ type: 'ADD_TODO', payload: newTodo });
+    if (newTodo.trim()) {
+      dispatch({ type: ActionType.Add, payload: newTodo });
       setNewTodo('');
     }
   };
 
   const handleClearCompleted = () => {
-    dispatch({ type: 'CLEAR_COMPLETED' });
+    dispatch({ type: ActionType.Clear });
   };
 
   const handleToggleAll = () => {
-    dispatch({ type: 'TOGGLE_ALL', payload: !allCompleted });
+    dispatch({ type: ActionType.ToggleAll, payload: !allCompleted });
   };
 
   const notCompletedTodos = todos.filter(todo => !todo.completed);
@@ -61,7 +62,7 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {filteredTodos.length !== 0 && (
+      {!!todos.length && (
         <>
           <section className="main">
             <input
@@ -84,7 +85,7 @@ export const TodoApp: React.FC = () => {
 
             <TodosFilter />
 
-            {completedTodos.length !== 0 && (
+            {!!completedTodos.length && (
               <button
                 type="button"
                 className="clear-completed"

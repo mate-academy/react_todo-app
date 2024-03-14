@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { Status } from '../../types/Status';
 import { TodosContext } from '../../Store';
+import { ActionType } from '../../types/ActionType';
 
 export const TodosFilter: React.FC = () => {
   const { state, dispatch } = useContext(TodosContext);
 
   const handleFilterChange = (status: Status) => {
-    dispatch({ type: 'SET_FILTER', payload: status });
+    dispatch({ type: ActionType.SetFilter, payload: status });
   };
 
   return (

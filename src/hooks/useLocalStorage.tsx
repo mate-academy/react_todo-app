@@ -1,5 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { TodosContext } from '../Store';
+import { ActionType } from '../types/ActionType';
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const { state, dispatch } = useContext(TodosContext);
@@ -8,7 +9,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     const savedTodos = localStorage.getItem(key);
 
     if (savedTodos) {
-      dispatch({ type: 'SET_TODOS', payload: JSON.parse(savedTodos) });
+      dispatch({ type: ActionType.SetTodos, payload: JSON.parse(savedTodos) });
     }
   }, [key, dispatch]);
 

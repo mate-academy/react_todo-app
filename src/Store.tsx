@@ -1,16 +1,17 @@
 import React, { useReducer } from 'react';
 import { Status } from './types/Status';
 import { Todo } from './types/Todo';
+import { ActionType } from './types/ActionType';
 
 type Action =
-  | { type: 'ADD_TODO'; payload: string }
-  | { type: 'UPDATE_TODO'; payload: { id: number; title: string } }
-  | { type: 'REMOVE_TODO'; payload: number }
-  | { type: 'TOGGLE_TODO'; payload: number }
-  | { type: 'TOGGLE_ALL'; payload: boolean }
-  | { type: 'CLEAR_COMPLETED' }
-  | { type: 'SET_FILTER'; payload: Status }
-  | { type: 'SET_TODOS'; payload: Todo[] };
+  | { type: ActionType.Add; payload: string }
+  | { type: ActionType.Update; payload: { id: number; title: string } }
+  | { type: ActionType.Remove; payload: number }
+  | { type: ActionType.Toggle; payload: number }
+  | { type: ActionType.ToggleAll; payload: boolean }
+  | { type: ActionType.Clear }
+  | { type: ActionType.SetFilter; payload: Status }
+  | { type: ActionType.SetTodos; payload: Todo[] };
 
 type State = {
   todos: Todo[];
@@ -32,7 +33,7 @@ export const TodosContext = React.createContext<{
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'ADD_TODO':
+    case ActionType.Add:
       return {
         ...state,
         todos: [
@@ -44,7 +45,7 @@ const reducer = (state: State, action: Action): State => {
           },
         ],
       };
-    case 'UPDATE_TODO':
+    case ActionType.Update:
       return {
         ...state,
         todos: state.todos.map(todo =>
@@ -53,12 +54,12 @@ const reducer = (state: State, action: Action): State => {
             : todo,
         ),
       };
-    case 'REMOVE_TODO':
+    case ActionType.Remove:
       return {
         ...state,
         todos: state.todos.filter(todo => todo.id !== action.payload),
       };
-    case 'TOGGLE_TODO':
+    case ActionType.Toggle:
       return {
         ...state,
         todos: state.todos.map(todo =>
@@ -67,7 +68,7 @@ const reducer = (state: State, action: Action): State => {
             : todo,
         ),
       };
-    case 'TOGGLE_ALL':
+    case ActionType.ToggleAll:
       return {
         ...state,
         todos: state.todos.map(todo => ({
@@ -75,17 +76,17 @@ const reducer = (state: State, action: Action): State => {
           completed: action.payload,
         })),
       };
-    case 'CLEAR_COMPLETED':
+    case ActionType.Clear:
       return {
         ...state,
         todos: state.todos.filter(todo => !todo.completed),
       };
-    case 'SET_FILTER':
+    case ActionType.SetFilter:
       return {
         ...state,
         filter: action.payload,
       };
-    case 'SET_TODOS':
+    case ActionType.SetTodos:
       return {
         ...state,
         todos: action.payload,
