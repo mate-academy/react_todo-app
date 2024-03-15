@@ -13,11 +13,11 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   const [todoEditTitle, setTodoEditTitle] = useState(todo.title);
   const { dispatch } = useContext(TodosContext);
 
-  const editRef = useRef<HTMLInputElement>(null);
+  const editInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (todoEditId && editRef.current) {
-      editRef.current.focus();
+    if (todoEditId && editInputRef.current) {
+      editInputRef.current.focus();
     }
   }, [todoEditId]);
 
@@ -25,8 +25,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({
       type: 'update',
       payload: {
-        id: todo.id,
-        title: todo.title,
+        ...todo,
         completed: !todo.completed,
       },
     });
@@ -39,13 +38,12 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
     });
   };
 
-  const saveChanges = () => {
+  const saveTitleChange = () => {
     dispatch({
       type: 'update',
       payload: {
-        id: todo.id,
+        ...todo,
         title: todoEditTitle,
-        completed: todo.completed,
       },
     });
 
@@ -54,8 +52,8 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleTitleChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      if (todoEditTitle) {
-        saveChanges();
+      if (todoEditTitle.trim()) {
+        saveTitleChange();
       } else {
         dispatch({
           type: 'delete',
@@ -75,69 +73,40 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   return (
-    <>
-      <li
-        className={classNames({
-          completed: todo.completed,
-          editing: todo.id === todoEditId,
-        })}
-        onDoubleClick={() => setTodoEditId(todo.id)}
-      >
-        <div className="view">
-          <input
-            type="checkbox"
-            className="toggle"
-            id="toggle-view"
-            checked={todo.completed}
-            onChange={handleStatusChange}
-          />
-          <label>{todo.title}</label>
-          <button
-            type="button"
-            className="destroy"
-            data-cy="deleteTodo"
-            aria-label="Delete todo"
-            onClick={handleDelete}
-          />
-        </div>
+    <li
+      className={classNames({
+        completed: todo.completed,
+        editing: todo.id === todoEditId,
+      })}
+      onDoubleClick={() => setTodoEditId(todo.id)}
+    >
+      <div className="view">
         <input
-          type="text"
-          className="edit"
-          ref={editRef}
-          value={todoEditTitle}
-          onChange={event => setTodoEditTitle(event.target.value)}
-          onKeyUp={event => handleTitleChange(event)}
-          onBlur={saveChanges}
+          type="checkbox"
+          className="toggle"
+          id="toggle-view"
+          checked={todo.completed}
+          onChange={handleStatusChange}
         />
-      </li>
-
-      {/* <li className="completed">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-completed" />
-          <label htmlFor="toggle-completed">qwertyuio</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li className="editing">
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-editing" />
-          <label htmlFor="toggle-editing">zxcvbnm</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li>
-
-      <li>
-        <div className="view">
-          <input type="checkbox" className="toggle" id="toggle-view2" />
-          <label htmlFor="toggle-view2">1234567890</label>
-          <button type="button" className="destroy" data-cy="deleteTodo" />
-        </div>
-        <input type="text" className="edit" />
-      </li> */}
-    </>
+        <label>{todo.title}</label>
+        <button
+          type="button"
+          className="destroy"
+          data-cy="deleteTodo"
+          aria-label="Delete todo"
+          onClick={handleDelete}
+        />
+      </div>
+      <input
+        type="text"
+        className="edit"
+        ref={editInputRef}
+        value={todoEditTitle}
+        onChange={event => setTodoEditTitle(event.target.value)}
+        onKeyUp={handleTitleChange}
+        onBlur={saveTitleChange}
+      />
+    </li>
   );
 };
 

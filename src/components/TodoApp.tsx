@@ -2,43 +2,37 @@ import { useContext, useEffect, useState } from 'react';
 
 import { TodosContext } from '../TodosContext';
 import TodoList from './TodoList';
-import TodosFilter, { Status } from './TodosFilter';
+import TodosFilter from './TodosFilter';
 import { Todo } from '../types/Todo';
+import { Status } from '../enums/Status';
 
-const filteredTodos = (todos: Todo[], filter: Status) => {
-  return [...todos].filter(todo => {
-    switch (filter) {
-      case Status.All: {
-        return true;
-      }
-
-      case Status.Active: {
-        return todo.completed === false;
-      }
-
-      case Status.Completed: {
-        return todo.completed === true;
-      }
-
-      default:
-        return true;
-    }
-  });
+const filteredTodos = (todos: Todo[], filter: Status): Todo[] => {
+  switch (filter) {
+    case Status.Active:
+      return todos.filter(todo => !todo.completed);
+    case Status.Completed:
+      return todos.filter(todo => todo.completed);
+    default:
+      return todos;
+  }
 };
 
 const TodoApp: React.FC = () => {
   const { state, dispatch } = useContext(TodosContext);
-  const nonCompleted = state.filter(todo => !todo.completed).length;
-  const completed = state.length - nonCompleted;
 
   const [title, setTitle] = useState('');
-  const [nonCompletedCount, setNonCompletedCount] = useState(nonCompleted);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [notCompletedCount, setNotCompletedCount] = useState(0);
   const [isAllCompleted, setIsAllCompleted] = useState(false);
   const [filter, setFilter] = useState(Status.All);
 
   useEffect(() => {
-    setNonCompletedCount(nonCompleted);
-  }, [state, nonCompleted]);
+    const notCompleted = state.filter(todo => !todo.completed).length;
+    const completed = state.length - notCompleted;
+
+    setNotCompletedCount(notCompleted);
+    setCompletedCount(completed);
+  }, [state]);
 
   const todos = filteredTodos(state, filter);
 
@@ -55,29 +49,22 @@ const TodoApp: React.FC = () => {
     });
 
     setTitle('');
-    setNonCompletedCount(prev => prev + 1);
+    setNotCompletedCount(prev => prev + 1);
   };
 
-  const handleAllStatus = () => {
-    setIsAllCompleted(prev => !prev);
+  const toggleAllCompleted = () => {
+    const newStatus = !isAllCompleted;
 
-    const newTodos = state.map(todo => {
-      return {
-        ...todo,
-        completed: !isAllCompleted,
-      };
-    });
+    setIsAllCompleted(newStatus);
 
     dispatch({
       type: 'updateAll',
-      payload: newTodos,
+      payload: { newStatus },
     });
   };
 
   const handleDeleteCompleted = () => {
-    dispatch({
-      type: 'deleteCompleted',
-    });
+    dispatch({ type: 'deleteCompleted' });
   };
 
   return (
@@ -106,7 +93,7 @@ const TodoApp: React.FC = () => {
               className="toggle-all"
               data-cy="toggleAll"
               checked={isAllCompleted}
-              onChange={handleAllStatus}
+              onChange={toggleAllCompleted}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -115,15 +102,11 @@ const TodoApp: React.FC = () => {
 
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {`${nonCompletedCount} items left`}
+              {`${notCompletedCount} items left`}
             </span>
 
-            <TodosFilter
-              data-cy="todosFilter"
-              filter={filter}
-              setFilter={setFilter}
-            />
-            {completed > 0 && (
+            <TodosFilter filter={filter} setFilter={setFilter} />
+            {completedCount > 0 && (
               <button
                 type="button"
                 className="clear-completed"

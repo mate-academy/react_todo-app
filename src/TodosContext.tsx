@@ -1,11 +1,7 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { Todo } from './types/Todo';
-
-type Action =
-  | { type: 'create' | 'update'; payload: Todo }
-  | { type: 'updateAll'; payload: Todo[] }
-  | { type: 'delete'; payload: { id: number } }
-  | { type: 'deleteCompleted' };
+import { Action } from './types/Action';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 interface TodoContext {
   state: Todo[];
@@ -14,9 +10,7 @@ interface TodoContext {
 
 export const TodosContext = React.createContext<TodoContext>({} as TodoContext);
 
-const intialTodos: Todo[] = [];
-
-function reducer(state: Todo[], action: Action): Todo[] {
+const todosReducer: React.Reducer<Todo[], Action> = (state, action) => {
   switch (action.type) {
     case 'create': {
       const newTodo = {
@@ -35,7 +29,12 @@ function reducer(state: Todo[], action: Action): Todo[] {
     }
 
     case 'updateAll': {
-      return action.payload;
+      return state.map(todo => {
+        return {
+          ...todo,
+          completed: action.payload.newStatus,
+        };
+      });
     }
 
     case 'delete': {
@@ -49,14 +48,14 @@ function reducer(state: Todo[], action: Action): Todo[] {
     default:
       return state;
   }
-}
+};
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, intialTodos);
+  const [state, dispatch] = useLocalStorage(todosReducer, []);
 
   return (
     <TodosContext.Provider value={{ state, dispatch }}>
