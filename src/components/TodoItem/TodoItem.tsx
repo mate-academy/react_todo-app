@@ -122,7 +122,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
       <input
         type="text"
         className="edit"
-        value={item.title}
+        value={newTitle}
         ref={titleField}
         onChange={handleNewTitle}
         onKeyUp={handleKeyUpEvent}
