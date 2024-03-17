@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { TodosContext } from './TodosContext';
@@ -40,13 +40,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handlerEditTodo = () => {
     setNewTitle(todo.title);
     setIsEditing(true);
-
-    setTimeout(() => {
-      if (titleField.current !== null) {
-        titleField.current.focus();
-      }
-    }, 0);
   };
+
+  useEffect(() => {
+    if (titleField.current !== null) {
+      titleField.current.focus();
+    }
+  }, [isEditing]);
 
   const handlerEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTitle(event.target.value);

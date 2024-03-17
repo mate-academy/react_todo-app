@@ -1,16 +1,16 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Filter } from '../types/Filter';
+import { TodosContext } from './TodosContext';
 
-type Props = {
-  filter: string;
-  onChange?: (filter: string) => void;
-};
+// type Props = {
+//   filter: string;
+//   onChange?: (filter: string) => void;
+// };
 
-export const TodosFilter: React.FC<Props> = ({
-  filter,
-  onChange = () => {},
-}) => {
+export const TodosFilter: React.FC = () => {
+  const { filter, setFilter } = useContext(TodosContext);
+
   return (
     <ul className="filters" data-cy="todosFilter">
       <li>
@@ -20,7 +20,7 @@ export const TodosFilter: React.FC<Props> = ({
             selected: filter === Filter.ALL,
           })}
           onClick={() => {
-            onChange(Filter.ALL);
+            setFilter(Filter.ALL);
           }}
         >
           All
@@ -34,7 +34,7 @@ export const TodosFilter: React.FC<Props> = ({
             selected: filter === Filter.ACTIVE,
           })}
           onClick={() => {
-            onChange(Filter.ACTIVE);
+            setFilter(Filter.ACTIVE);
           }}
         >
           Active
@@ -48,7 +48,7 @@ export const TodosFilter: React.FC<Props> = ({
             selected: filter === Filter.COMPLETED,
           })}
           onClick={() => {
-            onChange(Filter.COMPLETED);
+            setFilter(Filter.COMPLETED);
           }}
         >
           Completed

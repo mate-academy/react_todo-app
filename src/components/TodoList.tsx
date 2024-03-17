@@ -1,15 +1,13 @@
-import React from 'react';
-import { Todo } from '../types/Todo';
+import React, { useContext } from 'react';
 import { TodoItem } from './TodoItem';
+import { TodosContext } from './TodosContext';
 
-type Props = {
-  todos: Todo[];
-};
+export const TodoList: React.FC = () => {
+  const { filteredTodos } = useContext(TodosContext);
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <ul className="todo-list" data-cy="todosList">
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
     </ul>

@@ -1,48 +1,26 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { TodosContext } from './TodosContext';
 import { TodoList } from './TodoList';
-import { Todo } from '../types/Todo';
-import { Filter } from '../types/Filter';
 import { TodosFilter } from './TodosFilter';
 
 export const TodoApp: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const context = useContext(TodosContext);
+  const { todos, toggleAll, addTodo, handleDeleteCompleted } = context;
   const [title, setTitle] = useState('');
-  const [filter, setFilter] = useState(Filter.ALL);
 
-  const todosUncompleteLength = todos.filter(todo => !todo.completed).length;
-  const todosCompletedAtLeastOne = todos.some(todo => todo.completed === true);
+  const todosUncompleteLength = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
+  const todosCompletedAtLeastOne = useMemo(() => {
+    return todos.some(todo => todo.completed === true);
+  }, [todos]);
 
-  const handleChangeFilter = (newFilter: string) => {
-    setFilter(newFilter);
-  };
-
-  const handleDeleteCompleted = () => {
-    setTodos(currentTodos =>
-      currentTodos.filter(todo => todo.completed === false),
-    );
-  };
-
-  const todosCompletedAll = todos.every(todo => todo.completed === true);
-
-  const filteredTodos = todos.filter(todo => {
-    if (filter === Filter.ALL) {
-      return true;
-    }
-
-    if (filter === Filter.ACTIVE) {
-      return !todo.completed;
-    }
-
-    return todo.completed;
-  });
+  const todosCompletedAll = useMemo(() => {
+    return todos.every(todo => todo.completed === true);
+  }, [todos]);
 
   const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-  };
-
-  const addTodo = (newTodo: Todo) => {
-    setTodos(currentTodos => [newTodo, ...currentTodos]);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,26 +33,6 @@ export const TodoApp: React.FC = () => {
         completed: false,
       });
       setTitle('');
-    }
-  };
-
-  const handleToggleAll = () => {
-    let updatesTodos = [...todos];
-
-    if (updatesTodos.some(todo => todo.completed === false)) {
-      updatesTodos = updatesTodos.map(todo => ({
-        ...todo,
-        completed: true,
-      }));
-
-      setTodos(updatesTodos);
-    } else {
-      updatesTodos = updatesTodos.map(todo => ({
-        ...todo,
-        completed: false,
-      }));
-
-      setTodos(updatesTodos);
     }
   };
 
@@ -102,12 +60,12 @@ export const TodoApp: React.FC = () => {
             id="toggle-all"
             className="toggle-all"
             data-cy="toggleAll"
-            onChange={handleToggleAll}
+            onChange={toggleAll}
             checked={todosCompletedAll}
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
 
-          <TodoList todos={filteredTodos} />
+          <TodoList />
         </section>
       )}
 
@@ -117,7 +75,7 @@ export const TodoApp: React.FC = () => {
             {todosUncompleteLength} items left
           </span>
 
-          <TodosFilter filter={filter} onChange={handleChangeFilter} />
+          <TodosFilter />
 
           {todosCompletedAtLeastOne && (
             <button
