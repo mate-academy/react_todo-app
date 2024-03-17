@@ -26,7 +26,7 @@ export const TodoApp = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!title) {
+    if (!title || title.trim().length === 0) {
       return;
     }
 
