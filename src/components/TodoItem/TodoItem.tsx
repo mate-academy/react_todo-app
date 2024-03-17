@@ -123,7 +123,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onChange={() => handleTodoDestroy(todo)}
+          onClick={() => handleTodoDestroy(todo)}
         />
       </div>
       {isDoubleClicked.id === todo.id ? (

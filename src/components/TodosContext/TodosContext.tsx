@@ -88,7 +88,7 @@ const reducer = (state: DispatchState, action: Action) => {
 
 export const StateContext = React.createContext(initialState);
 /* eslint-disable-next-line */
-export const DispatchContext = React.createContext((action: Action) => {});
+export const DispatchContext = React.createContext((_action: Action) => {});
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

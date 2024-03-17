@@ -1,11 +1,13 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { TodoItem } from '../TodoItem';
 import { StateContext } from '../TodosContext';
 import { filterTodos } from '../../services/filterTodos';
 
 export const TodoList = () => {
   const { todos, filter } = useContext(StateContext);
-  const filteredTodos = filterTodos(todos, filter);
+  const filteredTodos = useMemo(() => {
+    return filterTodos(todos, filter);
+  }, [todos]);
 
   return (
     <ul className="todo-list" data-cy="todosList">

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { TodoList } from '../TodoList';
 import { DispatchContext, StateContext } from '../TodosContext';
 import { TodosFilter } from '../TodosFilter';
@@ -10,12 +10,16 @@ import { Status } from '../../types/Status';
 const generateId = (elems: Todo[]) => {
   const values = elems.map(elem => elem.id);
 
-  return Math.max(...values) + 1;
+  return (Math.max(...values) + 1 | 0);
 };
 
 export const TodoApp = () => {
   const dispatch = useContext(DispatchContext);
-  const { todos, title, isSelectedAll } = useContext(StateContext);
+  const { todos, title } = useContext(StateContext);
+
+  const memorizedTodos = useMemo(() => {
+    return filterTodos(todos, Status.all);
+  }, [todos]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -45,7 +49,7 @@ export const TodoApp = () => {
     const toggledTodos = todos.map(todo => {
       return {
         ...todo,
-        completed: !isSelectedAll,
+        completed: !todo.completed,
       };
     });
 
@@ -77,38 +81,44 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all" onChange={handleToggleAll}>
-          Mark all as complete
-        </label>
+      {memorizedTodos && (
+        // {filterTodos(todos, Status.all).length > 0 && (
+        <>
+          <section className="main">
+            <input
+              type="checkbox"
+              id="toggle-all"
+              className="toggle-all"
+              data-cy="toggleAll"
+              checked={
+                filterTodos(todos, Status.completed).length === todos.length
+              }
+            />
+            {/* eslint-disable-next-line */}
+            <label htmlFor="toggle-all" onClick={handleToggleAll}>
+              Mark all as complete
+            </label>
 
-        <TodoList />
-      </section>
+            <TodoList />
+          </section>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${filterTodos(todos, Status.active).length} items left`}
+            </span>
 
-      {filterTodos(todos, Status.all).length > 0 && (
-        <footer className="footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${filterTodos(todos, Status.active).length} items left`}
-          </span>
+            <TodosFilter />
 
-          <TodosFilter />
-
-          {filterTodos(todos, Status.completed).length > 0 && (
-            <button
-              type="button"
-              className="clear-completed"
-              onClick={handleDeleteCompleted}
-            >
-              Clear completed
-            </button>
-          )}
-        </footer>
+            {filterTodos(todos, Status.completed).length > 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleDeleteCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
       )}
     </div>
   );
