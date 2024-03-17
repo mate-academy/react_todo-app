@@ -33,7 +33,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [filter, setFilter] = useState(Filter.ALL);
 
   const addTodo = (newTodo: Todo) => {
-    setTodos(currentTodos => [newTodo, ...currentTodos]);
+    setTodos(currentTodos => [...currentTodos, newTodo]);
   };
 
   const toggleAll = () => {
