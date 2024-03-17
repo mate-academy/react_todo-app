@@ -10,16 +10,15 @@ import { Status } from '../../types/Status';
 const generateId = (elems: Todo[]) => {
   const values = elems.map(elem => elem.id);
 
-  return (Math.max(...values) + 1 | 0);
+  /* eslint-disable-next-line */
+  return (Math.max(...values) + 1) | 0;
 };
 
 export const TodoApp = () => {
   const dispatch = useContext(DispatchContext);
-  const { todos, title } = useContext(StateContext);
+  const { todos, title, filter } = useContext(StateContext);
 
-  const memorizedTodos = useMemo(() => {
-    return filterTodos(todos, Status.all);
-  }, [todos]);
+  const memorizedTodos = useMemo(() => filterTodos(todos, filter), [todos, filter]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -81,8 +80,7 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      {memorizedTodos && (
-        // {filterTodos(todos, Status.all).length > 0 && (
+      {memorizedTodos.length > 0 && (
         <>
           <section className="main">
             <input
@@ -103,12 +101,12 @@ export const TodoApp = () => {
           </section>
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {`${filterTodos(todos, Status.active).length} items left`}
+              {`${memorizedTodos.reduce((prev, current) => prev + +!current.completed, 0)} items left`}
             </span>
 
             <TodosFilter />
 
-            {filterTodos(todos, Status.completed).length > 0 && (
+            {memorizedTodos.reduce((prev, current) => prev + +current.completed, 0) > 0 && (
               <button
                 type="button"
                 className="clear-completed"

@@ -11,6 +11,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
   const { todos, editedTitle, isDoubleClicked } = useContext(StateContext);
   const inputActive = useRef<HTMLInputElement>(null);
+  const currentTodo = todos.find(elem => elem.id === isDoubleClicked.id);
 
   const handleTodoChange = (currentTodo: Todo) => {
     const changeCompleted = todos.map(elem => {
@@ -39,10 +40,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   useEffect(() => {
-    const currentTodo = todos.find(elem => elem.id === isDoubleClicked.id);
-
     if (inputActive.current && currentTodo) {
-      inputActive.current.value = currentTodo.title;
       inputActive.current.focus();
     }
   }, [isDoubleClicked.id, todos]);
@@ -128,6 +126,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </div>
       {isDoubleClicked.id === todo.id ? (
         <input
+          defaultValue={currentTodo?.title}
           ref={inputActive}
           onBlur={e => handleBlur(e, todo)}
           type="text"

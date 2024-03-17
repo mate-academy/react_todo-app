@@ -5,9 +5,7 @@ import { filterTodos } from '../../services/filterTodos';
 
 export const TodoList = () => {
   const { todos, filter } = useContext(StateContext);
-  const filteredTodos = useMemo(() => {
-    return filterTodos(todos, filter);
-  }, [todos]);
+  const filteredTodos = useMemo(() => filterTodos(todos, filter), [todos, filter]);
 
   return (
     <ul className="todo-list" data-cy="todosList">
