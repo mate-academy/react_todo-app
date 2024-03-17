@@ -12,7 +12,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [newTitle, setNewTitle] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
-  const titleField = useRef<HTMLInputElement>(null);
+  const titleField = useRef<HTMLInputElement | null>(null);
 
   const handlerCompleteTodo = () => {
     const updatedTodos = [...todos];
@@ -43,7 +43,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   useEffect(() => {
-    if (titleField.current !== null) {
+    if (titleField.current && isEditing) {
       titleField.current.focus();
     }
   }, [isEditing]);
@@ -84,9 +84,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handlerKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape' && isEditing) {
+    if (event.key === 'Escape') {
+      setNewTitle(todo.title);
       setIsEditing(false);
-    } else if (event.key === 'Enter' && isEditing) {
+    } else if (event.key === 'Enter') {
       handlerEndEditTodoOnBlur();
     }
   };
@@ -98,6 +99,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         editing: isEditing,
       })}
       data-id={todo.id}
+      onDoubleClick={handlerEditTodo}
     >
       <div className="view">
         <input
@@ -106,7 +108,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={handlerCompleteTodo}
         />
-        <label onDoubleClick={handlerEditTodo}>{todo.title}</label>
+        <label>{todo.title}</label>
         <button
           type="button"
           className="destroy"
@@ -117,6 +119,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </div>
       {isEditing && (
         <input
+          type="text"
           ref={titleField}
           className="edit"
           value={newTitle}

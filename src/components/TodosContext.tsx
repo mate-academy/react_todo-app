@@ -60,6 +60,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(currentTodos =>
       currentTodos.filter(todo => todo.completed === false),
     );
+    setFilter(Filter.ALL);
   };
 
   const filteredTodos = todos.filter(todo => {

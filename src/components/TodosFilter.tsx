@@ -3,11 +3,6 @@ import React, { useContext } from 'react';
 import { Filter } from '../types/Filter';
 import { TodosContext } from './TodosContext';
 
-// type Props = {
-//   filter: string;
-//   onChange?: (filter: string) => void;
-// };
-
 export const TodosFilter: React.FC = () => {
   const { filter, setFilter } = useContext(TodosContext);
 
