@@ -13,12 +13,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const inputActive = useRef<HTMLInputElement>(null);
   const currentTodo = todos.find(elem => elem.id === isDoubleClicked.id);
 
-  const handleTodoChange = (currentTodo: Todo) => {
+  const handleTodoChange = (handleTodo: Todo) => {
     const changeCompleted = todos.map(elem => {
-      if (elem.id === currentTodo.id) {
+      if (elem.id === handleTodo.id) {
         return {
           ...elem,
-          completed: !currentTodo.completed,
+          completed: !handleTodo.completed,
         };
       }
 
@@ -43,21 +43,21 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (inputActive.current && currentTodo) {
       inputActive.current.focus();
     }
-  }, [isDoubleClicked.id, todos]);
+  }, [isDoubleClicked.id, todos, currentTodo]);
 
-  const handleTodoDestroy = (currentTodo: Todo) => {
+  const handleTodoDestroy = (handleTodo: Todo) => {
     dispatch({
       type: 'setTodos',
-      payload: todos.filter(elem => elem.id !== currentTodo.id),
+      payload: todos.filter(elem => elem.id !== handleTodo.id),
     });
   };
 
   const handleBlur = (
     e: React.ChangeEvent<HTMLInputElement>,
-    currentTodo: Todo,
+    handleTodo: Todo,
   ) => {
     const changedTitleOnBlur = todos.map(elem => {
-      if (elem.id === currentTodo.id && e.target.value.length > 0) {
+      if (elem.id === handleTodo.id && e.target.value.length > 0) {
         return {
           ...elem,
           title: e.target.value,
@@ -74,7 +74,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({ type: 'setTodos', payload: changedTitleOnBlur });
   };
 
-  const handleSaveEditing = (e: React.KeyboardEvent, currentTodo: Todo) => {
+  const handleSaveEditing = (e: React.KeyboardEvent, handleTodo: Todo) => {
     switch (e.key) {
       case 'Escape':
         dispatch({
@@ -84,7 +84,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         break;
       case 'Enter':
         if (editedTitle.length === 0) {
-          handleTodoDestroy(currentTodo);
+          handleTodoDestroy(handleTodo);
 
           return;
         }

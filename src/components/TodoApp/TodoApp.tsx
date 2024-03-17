@@ -18,7 +18,10 @@ export const TodoApp = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, title, filter } = useContext(StateContext);
 
-  const memorizedTodos = useMemo(() => filterTodos(todos, filter), [todos, filter]);
+  const memorizedTodos = useMemo(
+    () => filterTodos(todos, filter),
+    [todos, filter],
+  );
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -106,7 +109,10 @@ export const TodoApp = () => {
 
             <TodosFilter />
 
-            {memorizedTodos.reduce((prev, current) => prev + +current.completed, 0) > 0 && (
+            {memorizedTodos.reduce(
+              (prev, current) => prev + +current.completed,
+              0,
+            ) > 0 && (
               <button
                 type="button"
                 className="clear-completed"
