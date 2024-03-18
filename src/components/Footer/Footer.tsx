@@ -5,12 +5,12 @@ import { TodosFilter } from '../TodosFilter';
 export const Footer: React.FC = () => {
   const { items, setItems } = useContext(TodosContext);
 
-  const itemsNotCompleted = items.filter(el => el.completed === false);
+  const itemsNotCompleted = items.filter(item => item.completed === false);
 
-  const isCompleted = items.some(el => el.completed);
+  const isCompleted = items.some(item => item.completed);
 
   const handleClearCompletedClick = () => {
-    const newItems = items.filter(el => !el.completed);
+    const newItems = items.filter(item => !item.completed);
 
     setItems(newItems);
   };

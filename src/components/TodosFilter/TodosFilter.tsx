@@ -6,13 +6,17 @@ import { Status } from '../../types/status';
 export const TodosFilter: React.FC = () => {
   const { setQuery, query } = useContext(TodosContext);
 
+  const handleSetQuery = (status: Status) => {
+    setQuery(status);
+  };
+
   return (
     <ul className="filters" data-cy="todosFilter">
       <li>
         <a
           href="#/"
           className={cn({ selected: query === Status.All })}
-          onClick={() => setQuery(Status.All)}
+          onClick={() => handleSetQuery(Status.All)}
         >
           All
         </a>
@@ -22,7 +26,7 @@ export const TodosFilter: React.FC = () => {
         <a
           href="#/active"
           className={cn({ selected: query === Status.Active })}
-          onClick={() => setQuery(Status.Active)}
+          onClick={() => handleSetQuery(Status.Active)}
         >
           Active
         </a>
@@ -31,7 +35,7 @@ export const TodosFilter: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          onClick={() => setQuery(Status.Completed)}
+          onClick={() => handleSetQuery(Status.Completed)}
           className={cn({ selected: query === Status.Completed })}
         >
           Completed

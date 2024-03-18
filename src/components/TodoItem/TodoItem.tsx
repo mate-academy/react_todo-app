@@ -94,13 +94,17 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     }
   }, [isEdit]);
 
+  const handleDoubleClick = () => {
+    setIsEdit(true);
+  };
+
   return (
     <li
       className={cn({
         completed: item.completed,
         editing: isEdit,
       })}
-      onDoubleClick={() => setIsEdit(true)}
+      onDoubleClick={handleDoubleClick}
     >
       <div className="view">
         <input
