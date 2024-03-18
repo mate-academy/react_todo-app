@@ -16,7 +16,7 @@ export const Header = () => {
 
     const newTodos = { id: +Date.now(), title: trimmedValue, completed: false };
 
-    setTodos([newTodos, ...todos]);
+    setTodos([...todos, newTodos]);
     setInputValue('');
   };
 
