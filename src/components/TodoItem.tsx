@@ -87,7 +87,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={handleStatus}
         />
-        <label htmlFor="toggle-view">{todo.title}</label>
+        <label>{todo.title}</label>
         <button
           type="button"
           className="destroy"
