@@ -83,7 +83,7 @@ export const TodoApp = () => {
         </form>
       </header>
 
-      {memorizedTodos.length > 0 && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <input
