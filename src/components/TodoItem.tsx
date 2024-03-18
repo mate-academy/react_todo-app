@@ -9,16 +9,16 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { dispatch } = useContext(TodosContext);
-  const [editId, setEditId] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
 
   const editInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (editId && editInputRef.current) {
+    if (isEditing && editInputRef.current) {
       editInputRef.current.focus();
     }
-  }, [editId]);
+  }, [isEditing]);
 
   const handleStatus = () => {
     dispatch({
@@ -43,8 +43,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     const isEmpty = !editedTitle.trim();
 
     if (isEmpty) {
-      handleDestroy(editId);
-      setEditId(0);
+      handleDestroy(todo.id);
+      setIsEditing(false);
 
       return;
     }
@@ -57,7 +57,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       },
     });
 
-    setEditId(0);
+    setIsEditing(false);
   };
 
   const handleEditing = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -66,7 +66,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (event.key === 'Escape') {
-      setEditId(0);
+      setIsEditing(false);
       setEditedTitle(todo.title);
     }
   };
@@ -74,10 +74,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <li
       className={cn({
-        editing: todo.id === editId,
+        editing: isEditing,
         completed: todo.completed,
       })}
-      onDoubleClick={() => setEditId(todo.id)}
+      onDoubleClick={() => setIsEditing(true)}
     >
       <div className="view">
         <input

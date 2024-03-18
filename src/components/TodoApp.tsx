@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodosContext } from './TodosContext';
 import { TodoList } from './TodoList';
 import { TodosFilter } from './TodosFilter';
@@ -20,32 +20,21 @@ function filterTodos(todos: Todo[], filter: Status): Todo[] {
 
 export const TodoApp: React.FC = () => {
   const { todos, dispatch } = useContext(TodosContext);
-
   const [title, setTitle] = useState('');
-  const [totalIncomplete, setTotalIncomplete] = useState(0);
-  const [isToggleAll, setIsToggleAll] = useState(false);
-  const [isCompletedInTodos, setIsCompletedInTodos] = useState(false);
   const [filter, setFilter] = useState(Status.all);
 
   const visibleTodos = filterTodos(todos, filter);
-
-  useEffect(() => {
-    const notCompleted = todos.reduce(
-      (acc, curr) => (curr.completed === false ? acc + 1 : acc),
-      0,
-    );
-    const isAllCompleted = todos.every(todo => todo.completed === true);
-    const atLeastOneCompleted = todos.some(todo => todo.completed === true);
-
-    setTotalIncomplete(notCompleted);
-    setIsToggleAll(isAllCompleted);
-    setIsCompletedInTodos(atLeastOneCompleted);
-  }, [todos]);
+  const isToggleAll = todos.every(todo => todo.completed === true);
+  const isCompletedInTodos = todos.some(todo => todo.completed === true);
+  const totalIncomplete = todos.reduce(
+    (acc, curr) => (curr.completed === false ? acc + 1 : acc),
+    0,
+  );
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title.length === 0) {
+    if (title.trim().length === 0) {
       return;
     }
 
