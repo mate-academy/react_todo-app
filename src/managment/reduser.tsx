@@ -8,8 +8,7 @@ export type Action =
  | { type: 'marcToComplited', id: number }
  | { type: 'complited', payload: boolean }
  | { type: 'deleteAllComplited' }
- | { type: 'removeTodo', id: number
- };
+ | { type: 'removeTodo', id: number };
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {

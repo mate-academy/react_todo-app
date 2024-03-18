@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import React, { useContext } from 'react';
-import { TodoContext, DispatchContext } from '../../managment/Contextes';
+import { TodoContext, DispatchContext } from '../../managment/TodosContext';
 import { FilterTodo } from '../filterTodos/FilterTodos';
 import { Todo } from '../../types/Todo';
 

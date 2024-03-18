@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { DispatchContext, TodoContext } from '../../managment/Contextes';
+import { DispatchContext, TodoContext } from '../../managment/TodosContext';
 import { Filter } from '../../types/Filter';
 
 export const FilterTodo: React.FC = () => {

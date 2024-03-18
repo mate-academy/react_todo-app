@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { TodoList } from '../todoLisy/TodoList';
-import { DispatchContext, TodoContext } from '../../managment/Contextes';
+import { DispatchContext, TodoContext } from '../../managment/TodosContext';
 
 export const Main: React.FC = () => {
   const { todos } = useContext(TodoContext);

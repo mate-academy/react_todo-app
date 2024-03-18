@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 import { TodoItems } from '../todoitems/TodoItems';
-import { TodoContext } from '../../managment/Contextes';
+import { TodoContext } from '../../managment/TodosContext';
 import { Filter } from '../../types/Filter';
 
 export const TodoList: React.FC = () => {

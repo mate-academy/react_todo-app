@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Footer } from './componets/footer/Footer';
 import { Header } from './componets/header/Header';
 import { Main } from './componets/Main/Main';
-import { TodoContext } from './managment/Contextes';
+import { TodoContext } from './managment/TodosContext';
 
 export const App: React.FC = () => {
   const { todos } = useContext(TodoContext);

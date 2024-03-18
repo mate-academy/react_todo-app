@@ -3,7 +3,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import cn from 'classnames';
-import { DispatchContext } from '../../managment/Contextes';
+import { DispatchContext } from '../../managment/TodosContext';
 import { Todo } from '../../types/Todo';
 
 type Props = {
