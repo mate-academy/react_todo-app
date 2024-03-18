@@ -30,26 +30,34 @@ const TodoApp: React.FC = () => {
     const notCompleted = state.filter(todo => !todo.completed).length;
     const completed = state.length - notCompleted;
 
+    if (completed === state.length) {
+      setIsAllCompleted(true);
+    } else {
+      setIsAllCompleted(false);
+    }
+
     setNotCompletedCount(notCompleted);
     setCompletedCount(completed);
-  }, [state]);
+  }, [state, isAllCompleted]);
 
   const todos = filteredTodos(state, filter);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    dispatch({
-      type: 'create',
-      payload: {
-        id: +new Date(),
-        title,
-        completed: false,
-      },
-    });
+    if (title.trim()) {
+      dispatch({
+        type: 'create',
+        payload: {
+          id: +new Date(),
+          title,
+          completed: false,
+        },
+      });
 
-    setTitle('');
-    setNotCompletedCount(prev => prev + 1);
+      setTitle('');
+      setNotCompletedCount(prev => prev + 1);
+    }
   };
 
   const toggleAllCompleted = () => {
