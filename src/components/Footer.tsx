@@ -4,6 +4,7 @@ import { TodoFilter } from './TodoFilter';
 
 export const Footer = () => {
   const { todos, setTodos } = useContext(TodosContext);
+
   const clearCompletedTodos = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
@@ -12,6 +13,7 @@ export const Footer = () => {
     () => todos.filter(todo => todo.completed),
     [todos],
   );
+
   const leftTodos = useMemo(
     () => todos.filter(todo => !todo.completed).length,
     [todos],

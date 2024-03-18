@@ -6,6 +6,10 @@ export const Header = () => {
 
   const { todos, setTodos } = useContext(TodosContext);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmedValue = inputValue.trim();
@@ -14,7 +18,11 @@ export const Header = () => {
       return;
     }
 
-    const newTodos = { id: +Date.now(), title: trimmedValue, completed: false };
+    const newTodos = {
+      id: crypto.randomUUID(),
+      title: trimmedValue,
+      completed: false,
+    };
 
     setTodos([...todos, newTodos]);
     setInputValue('');
@@ -31,7 +39,7 @@ export const Header = () => {
           className="new-todo"
           placeholder="What needs to be done?"
           value={inputValue}
-          onChange={e => setInputValue(e.target.value)}
+          onChange={handleChange}
         />
       </form>
     </header>

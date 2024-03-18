@@ -5,39 +5,29 @@ import { TodosContext } from '../store/TodosContext';
 export const TodoFilter = () => {
   const { filter, setFilter } = useContext(TodosContext);
 
+  const filters = [
+    { status: Status.ALL, text: 'All', href: '#/' },
+    { status: Status.ACTIVE, text: 'Active', href: '#/active' },
+    { status: Status.COMPLETED, text: 'Completed', href: '#/completed' },
+  ];
+
   const handleFilterChange = (newFilter: Status) => {
     setFilter(newFilter);
   };
 
   return (
     <ul className="filters" data-cy="todosFilter">
-      <li>
-        <a
-          href="#/"
-          className={filter === Status.ALL ? 'selected' : ''}
-          onClick={() => handleFilterChange(Status.ALL)}
-        >
-          All
-        </a>
-      </li>
-      <li>
-        <a
-          href="#/active"
-          className={filter === Status.ACTIVE ? 'selected' : ''}
-          onClick={() => handleFilterChange(Status.ACTIVE)}
-        >
-          Active
-        </a>
-      </li>
-      <li>
-        <a
-          href="#/completed"
-          className={filter === Status.COMPLETED ? 'selected' : ''}
-          onClick={() => handleFilterChange(Status.COMPLETED)}
-        >
-          Completed
-        </a>
-      </li>
+      {filters.map(({ status, text, href }) => (
+        <li key={status}>
+          <a
+            className={filter === status ? 'selected' : ''}
+            href={href}
+            onClick={() => handleFilterChange(status)}
+          >
+            {text}
+          </a>
+        </li>
+      ))}
     </ul>
   );
 };
