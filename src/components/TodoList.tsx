@@ -8,9 +8,6 @@ export const TodoList: React.FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
-      case Status.ALL:
-        return true;
-
       case Status.ACTIVE:
         return !todo.completed;
 
