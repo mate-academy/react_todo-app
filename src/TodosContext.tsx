@@ -1,18 +1,19 @@
 import React from 'react';
 import { Todo } from './types/Todo';
-import { Action } from './types/Action';
+import { Actions } from './types/Actions';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { Action } from './enums/Action';
 
-interface TodoContext {
-  state: Todo[];
-  dispatch: React.Dispatch<Action>;
+export interface TodoContext {
+  todos: Todo[];
+  updateTodos: React.Dispatch<Actions>;
 }
 
 export const TodosContext = React.createContext<TodoContext>({} as TodoContext);
 
-const todosReducer: React.Reducer<Todo[], Action> = (state, action) => {
+const todosReducer: React.Reducer<Todo[], Actions> = (state, action) => {
   switch (action.type) {
-    case 'create': {
+    case Action.Create: {
       const newTodo = {
         id: action.payload.id,
         title: action.payload.title,
@@ -22,13 +23,13 @@ const todosReducer: React.Reducer<Todo[], Action> = (state, action) => {
       return [...state, newTodo];
     }
 
-    case 'update': {
+    case Action.Update: {
       return state.map(todo =>
         todo.id === action.payload.id ? { ...todo, ...action.payload } : todo,
       );
     }
 
-    case 'updateAll': {
+    case Action.UpdateAll: {
       return state.map(todo => {
         return {
           ...todo,
@@ -37,11 +38,11 @@ const todosReducer: React.Reducer<Todo[], Action> = (state, action) => {
       });
     }
 
-    case 'delete': {
+    case Action.Delete: {
       return state.filter(todo => todo.id !== action.payload.id);
     }
 
-    case 'deleteCompleted': {
+    case Action.DeleteCompleted: {
       return state.filter(todo => !todo.completed);
     }
 
@@ -55,10 +56,10 @@ type Props = {
 };
 
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useLocalStorage(todosReducer, []);
+  const [todos, updateTodos] = useLocalStorage(todosReducer, []);
 
   return (
-    <TodosContext.Provider value={{ state, dispatch }}>
+    <TodosContext.Provider value={{ todos, updateTodos }}>
       {children}
     </TodosContext.Provider>
   );

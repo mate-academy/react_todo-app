@@ -1,8 +1,9 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { Todo } from '../types/Todo';
-import { TodosContext } from '../TodosContext';
+import { Action } from '../enums/Action';
+import { useTodosContext } from '../hooks/useTodosContext';
 
 type Props = {
   todo: Todo;
@@ -11,7 +12,7 @@ type Props = {
 const TodoItem: React.FC<Props> = ({ todo }) => {
   const [todoEditId, setTodoEditId] = useState(0);
   const [todoEditTitle, setTodoEditTitle] = useState(todo.title);
-  const { dispatch } = useContext(TodosContext);
+  const { updateTodos } = useTodosContext();
 
   const editInputRef = useRef<HTMLInputElement>(null);
 
@@ -22,8 +23,8 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [todoEditId]);
 
   const handleStatusChange = () => {
-    dispatch({
-      type: 'update',
+    updateTodos({
+      type: Action.Update,
       payload: {
         ...todo,
         completed: !todo.completed,
@@ -32,15 +33,15 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleDelete = () => {
-    dispatch({
-      type: 'delete',
+    updateTodos({
+      type: Action.Delete,
       payload: { id: todo.id },
     });
   };
 
   const saveTitleChange = () => {
-    dispatch({
-      type: 'update',
+    updateTodos({
+      type: Action.Update,
       payload: {
         ...todo,
         title: todoEditTitle,
@@ -55,8 +56,8 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
       if (todoEditTitle.trim()) {
         saveTitleChange();
       } else {
-        dispatch({
-          type: 'delete',
+        updateTodos({
+          type: Action.Delete,
           payload: {
             id: todo.id,
           },

@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useReducer } from 'react';
 import { Todo } from '../types/Todo';
-import { Action } from '../types/Action';
+import { Actions } from '../types/Actions';
 
 const LOCAL_STORAGE_KEY = 'todos';
 
@@ -11,14 +11,14 @@ const intialTodos = () => {
 };
 
 export const useLocalStorage = (
-  reducer: React.Reducer<Todo[], Action>,
+  reducer: React.Reducer<Todo[], Actions>,
   intialState: Todo[],
-): [Todo[], Dispatch<Action>] => {
-  const [state, dispatch] = useReducer(reducer, intialState, intialTodos);
+): [Todo[], Dispatch<Actions>] => {
+  const [todos, updateTodos] = useReducer(reducer, intialState, intialTodos);
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-  }, [state]);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
 
-  return [state, dispatch];
+  return [todos, updateTodos];
 };

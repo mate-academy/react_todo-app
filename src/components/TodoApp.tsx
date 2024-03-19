@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { TodosContext } from '../TodosContext';
 import TodoList from './TodoList';
 import TodosFilter from './TodosFilter';
 import { Todo } from '../types/Todo';
 import { Status } from '../enums/Status';
+import { Action } from '../enums/Action';
+import { useTodosContext } from '../hooks/useTodosContext';
 
 const filteredTodos = (todos: Todo[], filter: Status): Todo[] => {
   switch (filter) {
@@ -18,36 +19,27 @@ const filteredTodos = (todos: Todo[], filter: Status): Todo[] => {
 };
 
 const TodoApp: React.FC = () => {
-  const { state, dispatch } = useContext(TodosContext);
+  const { todos, updateTodos } = useTodosContext();
 
   const [title, setTitle] = useState('');
-  const [completedCount, setCompletedCount] = useState(0);
-  const [notCompletedCount, setNotCompletedCount] = useState(0);
   const [isAllCompleted, setIsAllCompleted] = useState(false);
   const [filter, setFilter] = useState(Status.All);
 
+  const notCompletedCount = todos.filter(todo => !todo.completed).length;
+  const completedCount = todos.length - notCompletedCount;
+
   useEffect(() => {
-    const notCompleted = state.filter(todo => !todo.completed).length;
-    const completed = state.length - notCompleted;
+    setIsAllCompleted(completedCount === todos.length);
+  }, [todos, completedCount]);
 
-    if (completed === state.length) {
-      setIsAllCompleted(true);
-    } else {
-      setIsAllCompleted(false);
-    }
-
-    setNotCompletedCount(notCompleted);
-    setCompletedCount(completed);
-  }, [state, isAllCompleted]);
-
-  const todos = filteredTodos(state, filter);
+  const preparedTodos = filteredTodos(todos, filter);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     if (title.trim()) {
-      dispatch({
-        type: 'create',
+      updateTodos({
+        type: Action.Create,
         payload: {
           id: +new Date(),
           title,
@@ -56,7 +48,6 @@ const TodoApp: React.FC = () => {
       });
 
       setTitle('');
-      setNotCompletedCount(prev => prev + 1);
     }
   };
 
@@ -65,14 +56,14 @@ const TodoApp: React.FC = () => {
 
     setIsAllCompleted(newStatus);
 
-    dispatch({
-      type: 'updateAll',
+    updateTodos({
+      type: Action.UpdateAll,
       payload: { newStatus },
     });
   };
 
   const handleDeleteCompleted = () => {
-    dispatch({ type: 'deleteCompleted' });
+    updateTodos({ type: Action.DeleteCompleted });
   };
 
   return (
@@ -92,7 +83,7 @@ const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {state.length > 0 && (
+      {todos.length > 0 && (
         <>
           <section className="main">
             <input
@@ -105,7 +96,7 @@ const TodoApp: React.FC = () => {
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
 
-            <TodoList todos={todos} />
+            <TodoList todos={preparedTodos} />
           </section>
 
           <footer className="footer">
