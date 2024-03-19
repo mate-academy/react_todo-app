@@ -1,95 +1,158 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+} from 'react';
+import cn from 'classnames';
+import './styles/App.scss';
+import { Filters, Todo, handledTabs, useLocalStorage } from './utils/helpers';
+import { TodoList } from './components/TodoList/TodoList';
 
-export const App: React.FC = () => {
+export function App() {
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [input, setInput] = useState('');
+  const [currentFilter, setCurrentFilter] = useState(Filters.All);
+  const todoEditField: React.RefObject<HTMLInputElement> = useRef(null);
+
+  const todosLeft = todos.filter((t: Todo) => !t.completed).length;
+  const areThereCompletedTodos = todos.some((t: Todo) => t.completed);
+
+  const filteredTodos = useMemo(() => {
+    return handledTabs(currentFilter, todos);
+  }, [todos, currentFilter]);
+
+  const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  }, []);
+
+  const handleFormSubmission = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (input.trim() && input.length < 42) {
+      setTodos([
+        ...todos,
+        {
+          id: new Date().getTime(),
+          title: input,
+          completed: false,
+        },
+      ]);
+      setInput('');
+    } else {
+      if (input.length >= 42) {
+        // eslint-disable-next-line no-alert
+        alert('The max allowed number of characters is 42');
+      }
+
+      setInput('');
+    }
+  };
+
+  const handleCrossAllOut = () => {
+    if (todos.some((t: Todo) => !t.completed)) {
+      setTodos(todos.map((t: Todo) => ({ ...t, completed: true })));
+    } else {
+      setTodos(todos.map((t: Todo) => ({ ...t, completed: false })));
+    }
+  };
+
+  const handleTabs = (tabTitle: Filters) => {
+    setCurrentFilter(tabTitle);
+  };
+
+  const handleDeleteCompleted = () => {
+    setTodos(todos.filter((t: Todo) => !t.completed));
+  };
+
+  useEffect(() => {
+    if (todoEditField.current) {
+      todoEditField.current?.focus();
+    }
+  }, [todos]);
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-
-        <form>
+    <body className="todo-app">
+      <header className="todo-app__header">
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+        <div className="todo-app__title" onClick={handleCrossAllOut}>
+          Todos
+        </div>
+        <form className="todo-app__form" onSubmit={handleFormSubmission}>
           <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
+            className="todo-app__input"
+            name="todo-app__input"
+            value={input}
+            placeholder="Got anything to do?"
+            onChange={handleInput}
+            ref={todoEditField}
           />
         </form>
       </header>
-
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
+      <main>
+        <TodoList
+          todos={todos}
+          setTodos={setTodos}
+          filteredTodos={filteredTodos}
         />
-        <label htmlFor="toggle-all">Mark all as complete</label>
+        {!!todos?.length && (
+          <article className="todo-list__footer">
+            <div className="todo-list__completion">{todosLeft} left</div>
 
-        <ul className="todo-list" data-cy="todosList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
+            {areThereCompletedTodos && (
+              <button
+                type="button"
+                className="todo-list__clear-button"
+                onClick={handleDeleteCompleted}
+              >
+                Clear all that&apos;s done
+              </button>
+            )}
+
+            <div className="todo-list__tabs">
+              <a
+                className={cn('todo-list__tab', {
+                  'is-tab-selected': currentFilter === Filters.All,
+                })}
+                href="#/"
+                onClick={() => handleTabs(Filters.All)}
+              >
+                All
+              </a>
+              <a
+                className={cn('todo-list__tab', {
+                  'is-tab-selected': currentFilter === Filters.Active,
+                })}
+                href="#/active"
+                onClick={() => handleTabs(Filters.Active)}
+              >
+                Active
+              </a>
+              <a
+                className={cn('todo-list__tab', {
+                  'is-tab-selected': currentFilter === Filters.Completed,
+                })}
+                href="#/completed"
+                onClick={() => handleTabs(Filters.Completed)}
+              >
+                Completed
+              </a>
             </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">
-              All
-            </a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+          </article>
+        )}
+      </main>
+      {!!todos?.length && (
+        <footer>
+          <p className="footer__text">
+            Click on the <span className="footer__highlighted">Title</span> to
+            cross&apos;m all
+          </p>
+          <p className="footer__text">Double click to edit</p>
+        </footer>
+      )}
+    </body>
   );
-};
+}
+
+export default App;
