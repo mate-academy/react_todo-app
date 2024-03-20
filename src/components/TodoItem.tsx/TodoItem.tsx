@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
+import cn from 'classnames';
 import { useTodos } from '../../TodosContext';
 import { Todo } from '../../types/types';
 
@@ -41,9 +42,10 @@ export const TodoItem: React.FC<{
 
   return (
     <li
-      className={`${todo.completed ? 'completed' : ''} ${
-        editing ? 'editing' : ''
-      }`}
+      className={cn({
+        completed: todo.completed,
+        editing,
+      })}
     >
       <div className="view">
         <input

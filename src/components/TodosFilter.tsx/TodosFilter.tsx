@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { Status } from '../../types/types';
 
 export const TodosFilter: React.FC<{
@@ -6,12 +7,12 @@ export const TodosFilter: React.FC<{
   setFilterStatus: React.Dispatch<React.SetStateAction<Status>>;
 }> = ({ filterStatus, setFilterStatus }) => {
   return (
-    <ul className="filters" data-cy="todosFilter">
+    <ul className="filters">
       {Object.values(Status).map(status => (
-        <li key={status}>
+        <li key={status} data-cy="todosFilter">
           <a
             href={`#/${status}`}
-            className={status === filterStatus ? 'selected' : ''}
+            className={cn({ selected: status === filterStatus })}
             onClick={() => setFilterStatus(status as Status)}
           >
             {status.charAt(0).toUpperCase() + status.slice(1)}
