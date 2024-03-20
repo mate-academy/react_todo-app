@@ -6,7 +6,7 @@ export const TodosFilter: React.FC<{
   setFilterStatus: React.Dispatch<React.SetStateAction<Status>>;
 }> = ({ filterStatus, setFilterStatus }) => {
   return (
-    <ul className="filters">
+    <ul className="filters" data-cy="todosFilter">
       {Object.values(Status).map(status => (
         <li key={status}>
           <a

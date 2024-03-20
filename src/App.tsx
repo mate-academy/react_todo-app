@@ -28,8 +28,12 @@ export const App: React.FC = () => {
     >
       <div className="todoapp">
         <FormTodo />
-        <Main />
-        {todos.length > 0 && <Footer />}
+        {todos.length > 0 && (
+          <>
+            <Main />
+            <Footer />
+          </>
+        )}
       </div>
     </TodosContext.Provider>
   );
