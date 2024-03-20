@@ -71,13 +71,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={completed}
           onChange={handleCompleted}
         />
-        <label htmlFor={`todo-${todo.id}`} className="checkbox-label">
-          {title}
-        </label>
+        <label>{title}</label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
+          aria-label="delete"
           onClick={handleRemoveTodo}
         />
       </div>

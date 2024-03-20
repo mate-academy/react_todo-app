@@ -1,29 +1,38 @@
+import { useContext } from 'react';
+import { StateContext } from './TodoContext';
+import { TodoFilter } from './TodoFilter';
+
 export const Footer: React.FC = () => {
+  const { todos, setTodos } = useContext(StateContext);
+  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const completedTodos = todos.some(todo => todo.completed);
+  const handleRemoveCompletedTodos = () => {
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
   return (
     <footer className="footer">
-      <span className="todo-count" data-cy="todosCounter">
-        3 items left
-      </span>
+      {activeTodos === 1 ? (
+        <span className="todo-count" data-cy="todosCounter">
+          {`${activeTodos} item left`}
+        </span>
+      ) : (
+        <span className="todo-count" data-cy="todosCounter">
+          {`${activeTodos} items left`}
+        </span>
+      )}
 
-      <ul className="filters">
-        <li>
-          <a href="#/" className="selected">
-            All
-          </a>
-        </li>
+      <TodoFilter />
 
-        <li>
-          <a href="#/active">Active</a>
-        </li>
-
-        <li>
-          <a href="#/completed">Completed</a>
-        </li>
-      </ul>
-
-      <button type="button" className="clear-completed">
-        Clear completed
-      </button>
+      {completedTodos && (
+        <button
+          type="button"
+          className="clear-completed"
+          onClick={handleRemoveCompletedTodos}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
