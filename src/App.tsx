@@ -29,7 +29,7 @@ export const App: React.FC = () => {
       <div className="todoapp">
         <FormTodo />
         <Main />
-        <Footer />
+        {todos.length > 0 && <Footer />}
       </div>
     </TodosContext.Provider>
   );
