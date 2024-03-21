@@ -8,6 +8,8 @@ export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, status } = useContext(TodosContext);
   const titleField = useRef<HTMLInputElement>(null);
+  const completed = todos.filter((todo: Todo) => todo.completed);
+  const active = todos.filter((todo: Todo) => !todo.completed);
 
   useEffect(() => {
     if (titleField.current) {
@@ -49,10 +51,16 @@ export const App: React.FC = () => {
     });
   };
 
-  const filterTodos = (currentTodos: Todo[], filter: string) => {
-    const completed = currentTodos.filter((todo: Todo) => todo.completed);
-    const active = currentTodos.filter((todo: Todo) => !todo.completed);
+  const handleClearAllCompleted = () => {
+    completed.forEach((todo: Todo) => {
+      dispatch({
+        type: 'remove',
+        id: todo.id,
+      });
+    });
+  };
 
+  const filterTodos = (currentTodos: Todo[], filter: string) => {
     if (filter === 'active') {
       return active;
     } else if (filter === 'completed') {
@@ -82,9 +90,9 @@ export const App: React.FC = () => {
         </form>
       </header>
 
-      <section className="main">
-        {todos.length > 0 && (
-          <>
+      {todos.length > 0 && (
+        <>
+          <section className="main">
             <input
               checked={todos.every((todo: Todo) => todo.completed)}
               type="checkbox"
@@ -94,12 +102,28 @@ export const App: React.FC = () => {
               onChange={toggleAllTodos}
             />
             <label htmlFor="toggle-all">Mark all as complete</label>
-          </>
-        )}
-        <TodoList todos={filteredTodos} />
-      </section>
+            <TodoList todos={filteredTodos} />
+          </section>
 
-      {todos.length > 0 && <TodosFilter />}
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {active.length} items left
+            </span>
+
+            <TodosFilter />
+
+            {completed.length > 0 && (
+              <button
+                type="button"
+                className="clear-completed"
+                onClick={handleClearAllCompleted}
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        </>
+      )}
     </div>
   );
 };
