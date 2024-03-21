@@ -1,7 +1,50 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import Footer from './components/Footer/Footer';
+import TodoList from './components/TodoList/TodoList';
+import { useTodos } from './hooks/useTodos';
 
 export const App: React.FC = () => {
+  const [newTodoTitle, setNewTodoTitle] = React.useState('');
+
+  const { todos, setTodos } = useTodos();
+
+  const inputField = React.useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputField.current) {
+      inputField.current.focus();
+    }
+  }, []);
+
+  const hangleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodoTitle(event.target.value);
+  };
+
+  const handleAddTodo = () => {
+    if (!newTodoTitle.trim()) {
+      return;
+    }
+
+    setTodos([
+      ...todos,
+      {
+        id: +new Date(),
+        title: newTodoTitle.trim(),
+        completed: false,
+      },
+    ]);
+    setNewTodoTitle('');
+  };
+
+  const handleEnterEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleAddTodo();
+    }
+  };
+
   return (
     <div className="todoapp">
       <header className="header">
@@ -9,87 +52,24 @@ export const App: React.FC = () => {
 
         <form>
           <input
+            value={newTodoTitle}
+            ref={inputField}
             type="text"
             data-cy="createTodo"
             className="new-todo"
             placeholder="What needs to be done?"
+            onChange={hangleInputChange}
+            onKeyDown={handleEnterEvent}
           />
         </form>
       </header>
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todosList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">
-              All
-            </a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      {todos.length > 0 && (
+        <>
+          <TodoList />
+          <Footer />
+        </>
+      )}
     </div>
   );
 };
