@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { DispatchContext, Todo, TodosContext } from './store/Store';
+import { DispatchContext, Status, Todo, TodosContext } from './store/Store';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
@@ -57,6 +57,11 @@ export const App: React.FC = () => {
         type: 'remove',
         id: todo.id,
       });
+    });
+
+    dispatch({
+      type: 'setStatus',
+      payload: Status.All,
     });
   };
 
