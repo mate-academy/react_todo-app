@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react';
 import { TodosContext } from '../../TodosContext';
 
 export const Header: React.FC = () => {
-  const { addTodo } = useContext(TodosContext);
+  const { todos, addTodo, setTodos, setVisibleTodos } =
+    useContext(TodosContext);
+
   const [currentTitleValue, setCurrentTitlevalue] = useState('');
 
   return (
@@ -38,6 +40,23 @@ export const Header: React.FC = () => {
           }}
         />
       </form>
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+          onChange={event => {
+            const updateTodos = todos.map(todo => {
+              return { ...todo, completed: event.target.checked };
+            });
+
+            setTodos(updateTodos);
+            setVisibleTodos(updateTodos);
+          }}
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
+      </section>
     </header>
   );
 };
