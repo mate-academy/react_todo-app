@@ -1,22 +1,20 @@
 import { useContext, useState } from 'react';
-import { nanoid } from 'nanoid';
-import { StateContext } from './TodoContext';
+import { DispatchContext } from './TodoContext';
 
 export const Header: React.FC = () => {
-  const [newTodo, setNewTodo] = useState('');
-  const { addTodo } = useContext(StateContext);
+  const [title, setTitle] = useState('');
+  const dispatch = useContext(DispatchContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (newTodo.trim()) {
-      addTodo({
-        id: nanoid(),
-        title: newTodo,
-        completed: false,
-      });
+    if (title.trim()) {
+     dispatch({
+      type: 'addTodo',
+      title,
+     })
 
-      setNewTodo('');
+      setTitle('');
     }
   };
 
@@ -30,8 +28,8 @@ export const Header: React.FC = () => {
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
-          value={newTodo}
-          onChange={e => setNewTodo(e.target.value)}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
           onBlur={handleSubmit}
         />
       </form>

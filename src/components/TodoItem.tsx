@@ -22,7 +22,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEdited]);
 
   const handleRemoveTodo = () => {
-    setTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
+    ;
   };
 
   const handleSaveTodoTitle = () => {

@@ -1,18 +1,18 @@
 import { useContext } from 'react';
 import { TodoList } from './TodoList';
-import { StateContext } from './TodoContext';
+import { DispatchContext, StateContext } from './TodoContext';
 
 export const Main: React.FC = () => {
-  const { todos, setTodos } = useContext(StateContext);
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
 
   const allCompleted = todos.every(todo => todo.completed);
+  
   const handleToggleAll = () => {
-    setTodos(
-      todos.map(todo => ({
-        ...todo,
-        completed: !allCompleted,
-      })),
-    );
+    dispatch({
+      type: 'toggleCompleted',
+      payload: !allCompleted,
+    });
   };
 
   return (

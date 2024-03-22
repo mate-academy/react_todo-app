@@ -1,16 +1,18 @@
 import cn from 'classnames';
 import { useContext, useState } from 'react';
 import { Filter } from '../types/Filter';
-import { StateContext } from './TodoContext';
+import { DispatchContext, StateContext } from './TodoContext';
 
 export const TodoFilter: React.FC = () => {
   const { filterBy } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
   const [selectedFilter, setSelectedFilter] = useState(filterBy);
   const handleSelectedFilter = (filter: Filter) => {
-    setSelectedFilter(item => ({
-      ...item,
-      filterBy: filter,
-    }));
+    setSelectedFilter(filter);
+    dispatch({
+      type: 'filter',
+      payload: filter,
+    });
   };
 
   return (

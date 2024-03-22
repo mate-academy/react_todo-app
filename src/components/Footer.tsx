@@ -1,13 +1,18 @@
 import { useContext } from 'react';
-import { StateContext } from './TodoContext';
+import { DispatchContext, StateContext } from './TodoContext';
 import { TodoFilter } from './TodoFilter';
 
 export const Footer: React.FC = () => {
-  const { todos, setTodos } = useContext(StateContext);
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+
   const activeTodos = todos.filter(todo => !todo.completed).length;
   const completedTodos = todos.some(todo => todo.completed);
+
   const handleRemoveCompletedTodos = () => {
-    setTodos(todos.filter(todo => !todo.completed));
+    dispatch({
+      type: 'removeCompletedTodos',
+    });
   };
 
   return (
