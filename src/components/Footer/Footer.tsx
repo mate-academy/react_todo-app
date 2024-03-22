@@ -3,15 +3,12 @@ import { TodosFilter } from '../TodosFilter.tsx/TodosFilter';
 import { TodosContext } from '../../TodosContext';
 
 export const Footer: React.FC = () => {
-  // eslint-disable-next-line operator-linebreak
-  const { todos, setTodos, filterStatus, setFilterStatus } =
-    useContext(TodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
+
   const quantityTodos: number = todos.filter(todo => !todo.completed).length;
 
   const handleClearCompleted = () => {
-    const updatedTodos = todos.filter(todo => !todo.completed);
-
-    setTodos(updatedTodos);
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
   return (
@@ -20,10 +17,7 @@ export const Footer: React.FC = () => {
         {quantityTodos} items left
       </span>
 
-      <TodosFilter
-        filterStatus={filterStatus}
-        setFilterStatus={setFilterStatus}
-      />
+      <TodosFilter />
 
       {todos.some(todo => todo.completed) && (
         <button

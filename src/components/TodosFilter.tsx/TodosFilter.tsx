@@ -1,11 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
 import { Status } from '../../types/types';
+import { useTodos } from '../../TodosContext';
 
-export const TodosFilter: React.FC<{
-  filterStatus: Status;
-  setFilterStatus: React.Dispatch<React.SetStateAction<Status>>;
-}> = ({ filterStatus, setFilterStatus }) => {
+export const TodosFilter: React.FC = () => {
+  const { filterStatus, setFilterStatus } = useTodos();
+
   return (
     <ul className="filters">
       {Object.values(Status).map(status => (

@@ -18,17 +18,17 @@ export const TodoList: React.FC = () => {
   });
 
   const handleToggleTodo = (id: number) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-    );
+    setTodos(prevTodos => {
+      const updatedTodos = prevTodos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      );
 
-    setTodos(updatedTodos);
+      return updatedTodos;
+    });
   };
 
   const handleDeleteTodo = (id: number) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
-
-    setTodos(updatedTodos);
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
   return (

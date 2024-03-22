@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { useTodos } from '../../TodosContext';
@@ -23,18 +22,20 @@ export const TodoItem: React.FC<{
       onDelete();
     } else {
       setTodos(prevTodos =>
-        prevTodos.map(t =>
-          t.id === todo.id ? { ...t, title: editedTitle.trim() } : t,
+        prevTodos.map(title =>
+          title.id === todo.id
+            ? { ...title, title: editedTitle.trim() }
+            : title,
         ),
       );
       setEditing(false);
     }
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
       handleSave();
-    } else if (e.key === 'Escape') {
+    } else if (event.key === 'Escape') {
       setEditedTitle(todo.title);
       setEditing(false);
     }
@@ -60,6 +61,7 @@ export const TodoItem: React.FC<{
           className="destroy"
           data-cy="deleteTodo"
           onClick={onDelete}
+          aria-label="Delete"
         />
       </div>
 

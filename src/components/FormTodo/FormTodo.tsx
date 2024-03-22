@@ -3,13 +3,13 @@ import { Todo } from '../../types/types';
 import { TodosContext } from '../../TodosContext';
 
 export const FormTodo: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { setTodos } = useContext(TodosContext);
 
   const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim() === '') {
+    if (!inputValue.trim()) {
       return;
     }
 
@@ -19,7 +19,7 @@ export const FormTodo: React.FC = () => {
       completed: false,
     };
 
-    setTodos([newTodo, ...todos]);
+    setTodos(prevTodos => [newTodo, ...prevTodos]);
     setInputValue('');
   };
 

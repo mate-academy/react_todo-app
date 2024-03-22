@@ -8,13 +8,15 @@ export const Main: React.FC = () => {
   const remainingTodos = todos.filter(todo => !todo.completed).length;
 
   const handleToggleAll = () => {
-    const allCompleted = todos.every(todo => todo.completed);
-    const updatedTodos = todos.map(todo => ({
-      ...todo,
-      completed: !allCompleted,
-    }));
+    setTodos(prevTodos => {
+      const allCompleted = prevTodos.every(todo => todo.completed);
+      const updatedTodos = prevTodos.map(todo => ({
+        ...todo,
+        completed: !allCompleted,
+      }));
 
-    setTodos(updatedTodos);
+      return updatedTodos;
+    });
   };
 
   return (
