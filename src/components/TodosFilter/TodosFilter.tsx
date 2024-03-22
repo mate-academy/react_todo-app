@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { DispatchContext, Status, TodosContext } from '../../store';
+import { DispatchContext, Status, TodosContext, Type } from '../../store';
 import classNames from 'classnames';
 
 export const TodosFilter = () => {
@@ -8,7 +8,7 @@ export const TodosFilter = () => {
 
   const handleStatusChange = (newStatus: Status) => {
     dispatch({
-      type: 'setStatus',
+      type: Type.SetStatus,
       payload: newStatus,
     });
   };

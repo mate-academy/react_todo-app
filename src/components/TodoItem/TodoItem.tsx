@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { DispatchContext, Todo } from '../../store/Store';
+import { DispatchContext, Todo, Type } from '../../store/Store';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -20,14 +20,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleTodoDelete = (todoId: number) => {
     dispatch({
-      type: 'remove',
+      type: Type.Remove,
       id: todoId,
     });
   };
 
   const handleSetChecked = () => {
     dispatch({
-      type: 'toggle',
+      type: Type.Toggle,
       id: todo.id,
     });
   };
@@ -40,7 +40,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (editedTodo) {
       dispatch({
-        type: 'editing',
+        type: Type.Editing,
         id: editedTodo.id,
         newText: event.target.value,
       });
@@ -58,7 +58,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     } else if (event.key === 'Escape') {
       if (editedTodo) {
         dispatch({
-          type: 'editing',
+          type: Type.Editing,
           id: editedTodo.id,
           newText: editedTodo.title,
         });

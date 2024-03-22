@@ -6,6 +6,14 @@ export type Todo = {
   completed: boolean;
 };
 
+export enum Type {
+  Added = 'added',
+  Editing = 'editing',
+  Remove = 'remove',
+  Toggle = 'toggle',
+  SetStatus = 'setStatus',
+}
+
 export enum Status {
   All = '',
   Active = 'active',
@@ -13,11 +21,11 @@ export enum Status {
 }
 
 export type Action =
-  | { type: 'added'; id: number; title: string }
-  | { type: 'editing'; id: number; newText: string }
-  | { type: 'remove'; id: number }
-  | { type: 'toggle'; id: number }
-  | { type: 'setStatus'; payload: Status };
+  | { type: Type.Added; id: number; title: string }
+  | { type: Type.Editing; id: number; newText: string }
+  | { type: Type.Remove; id: number }
+  | { type: Type.Toggle; id: number }
+  | { type: Type.SetStatus; payload: Status };
 
 export type State = {
   todos: Todo[];
@@ -26,7 +34,7 @@ export type State = {
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'added':
+    case Type.Added:
       return {
         ...state,
         todos: [
@@ -39,7 +47,7 @@ export function reducer(state: State, action: Action): State {
         ],
       };
 
-    case 'editing':
+    case Type.Editing:
       return {
         ...state,
         todos: state.todos.map(todo =>
@@ -47,13 +55,13 @@ export function reducer(state: State, action: Action): State {
         ),
       };
 
-    case 'remove':
+    case Type.Remove:
       return {
         ...state,
         todos: state.todos.filter(t => t.id !== action.id),
       };
 
-    case 'toggle':
+    case Type.Toggle:
       return {
         ...state,
         todos: state.todos.map(todo =>
@@ -63,7 +71,7 @@ export function reducer(state: State, action: Action): State {
         ),
       };
 
-    case 'setStatus':
+    case Type.SetStatus:
       return {
         ...state,
         status: action.payload,

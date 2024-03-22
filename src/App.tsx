@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { DispatchContext, Status, Todo, TodosContext } from './store/Store';
+import {
+  DispatchContext,
+  Status,
+  Todo,
+  TodosContext,
+  Type,
+} from './store/Store';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 
@@ -27,7 +33,7 @@ export const App: React.FC = () => {
     }
 
     dispatch({
-      type: 'added',
+      type: Type.Added,
       id: +new Date(),
       title: title,
     });
@@ -44,7 +50,7 @@ export const App: React.FC = () => {
     todos.forEach((todo: Todo) => {
       if (todo.completed !== event.target.checked) {
         dispatch({
-          type: 'toggle',
+          type: Type.Toggle,
           id: todo.id,
         });
       }
@@ -54,13 +60,13 @@ export const App: React.FC = () => {
   const handleClearAllCompleted = () => {
     completed.forEach((todo: Todo) => {
       dispatch({
-        type: 'remove',
+        type: Type.Remove,
         id: todo.id,
       });
     });
 
     dispatch({
-      type: 'setStatus',
+      type: Type.SetStatus,
       payload: Status.All,
     });
   };
