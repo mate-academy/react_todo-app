@@ -18,7 +18,7 @@ export const TodoItem: React.FC<{
   };
 
   const handleSave = () => {
-    if (editedTitle.trim() === '') {
+    if (!editedTitle.trim()) {
       onDelete();
     } else {
       setTodos(prevTodos =>
