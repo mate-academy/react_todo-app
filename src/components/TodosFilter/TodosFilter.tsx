@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { TodosContext } from '../todosContext';
-import { Status } from '../../types/Status';
+import { Status } from '../../types/status';
 import cn from 'classnames';
 
 export const TodosFilter: React.FC = () => {

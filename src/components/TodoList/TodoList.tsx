@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { TodosContext } from '../todosContext';
 import { TodoItem } from '../TodoItem';
-import { Status } from '../../types/Status';
+import { Status } from '../../types/status';
 
 export const TodoList: React.FC = () => {
   const { items, query } = useContext(TodosContext);
