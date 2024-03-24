@@ -52,7 +52,7 @@ export const Main: React.FC = () => {
         className="toggle-all"
         data-cy="toggleAll"
         checked={isChecked}
-        onClick={handleToggleAllClick}
+        onChange={handleToggleAllClick}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
 

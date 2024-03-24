@@ -51,7 +51,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     if (editedTodoTitle.trim().length !== 0) {
       dispatch({
         type: 'edit',
-        payload: item,
+        payload: { ...item, title: editedTodoTitle },
       });
     } else {
       handleRemoveItem();
@@ -85,7 +85,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
             className="toggle"
             id="toggle-view"
             checked={item.completed}
-            onClick={handleCompletedClick}
+            onChange={handleCompletedClick}
           />
 
           <label onDoubleClick={handleDoubleClick}>{editedTodoTitle}</label>

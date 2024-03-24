@@ -46,10 +46,7 @@ export function todosReducer(state: Todo[], action: Action): Todo[] {
     case 'edit':
       currentState = state.map(todo => {
         if (todo.id === action.payload.id) {
-          return {
-            ...todo,
-            title: action.payload.title,
-          };
+          return { ...action.payload };
         }
 
         return { ...todo };
