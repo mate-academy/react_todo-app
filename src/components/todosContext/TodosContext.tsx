@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import { Todo } from '../../types/todo';
 import { Status } from '../../types/status';
-import useLocalStorage from '../../Hooks/hooks';
+import useLocalStorage from '../../Hooks/useLocalStorage';
 
 interface ContextType {
   items: Todo[];

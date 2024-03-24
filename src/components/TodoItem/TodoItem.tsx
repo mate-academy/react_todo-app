@@ -13,37 +13,28 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   const [newTitle, setNewTitle] = useState(item.title);
   const titleField = useRef<HTMLInputElement | null>(null);
 
-  const deleteItemClick = useCallback(
-    (itemId: number) => {
-      setItems(items.filter(el => el.id !== itemId));
-    },
-    [items, setItems],
-  );
+  const deleteItemClick = (itemId: number) => {
+    setItems(items.filter(el => el.id !== itemId));
+  };
 
-  const handleToggleCompleted = useCallback(
-    (todoId: number) => {
-      const newItems = items.map(el => {
-        if (el.id === todoId) {
-          return {
-            ...el,
-            completed: !el.completed,
-          };
-        }
+  const handleToggleCompleted = (todoId: number) => {
+    const newItems = items.map(el => {
+      if (el.id === todoId) {
+        return {
+          ...el,
+          completed: !el.completed,
+        };
+      }
 
-        return el;
-      });
+      return el;
+    });
 
-      setItems(newItems);
-    },
-    [items, setItems],
-  );
+    setItems(newItems);
+  };
 
-  const handleNewTitle = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setNewTitle(event.target.value);
-    },
-    [setNewTitle],
-  );
+  const handleNewTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(event.target.value);
+  };
 
   const handleNewTodos = useCallback(() => {
     setItems(
@@ -66,27 +57,24 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     setIsEdit(false);
   }, [item, items, setItems]);
 
-  const handleKeyUpEvent = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setNewTitle(item.title);
-        setIsEdit(false);
-      } else if (event.key === 'Enter' && newTitle.trim()) {
-        handleNewTodos();
-      } else if (event.key === 'Enter' && !newTitle.trim()) {
-        deleteEmptyItem();
-      }
-    },
-    [deleteEmptyItem, handleNewTodos, newTitle, item],
-  );
+  const handleKeyUpEvent = (event: React.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setNewTitle(item.title);
+      setIsEdit(false);
+    } else if (event.key === 'Enter' && newTitle.trim()) {
+      handleNewTodos();
+    } else if (event.key === 'Enter' && !newTitle.trim()) {
+      deleteEmptyItem();
+    }
+  };
 
-  const handleBlur = useCallback(() => {
+  const handleBlur = () => {
     if (newTitle.trim()) {
       handleNewTodos();
     } else {
       deleteEmptyItem();
     }
-  }, [deleteEmptyItem, handleNewTodos, newTitle]);
+  };
 
   useEffect(() => {
     if (titleField.current && isEdit) {
