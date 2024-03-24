@@ -8,41 +8,58 @@ type Props = {
 
 type ContextType = {
   todos: Todo[];
-  visibleTodos: Todo[];
-  setVisibleTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  selectedFilter: Selected;
+  setSelectedFilter: (value: Selected) => void;
+  showFilteredTodos: (value: Selected) => Todo[];
   setTodos: (prevTodos: Todo[]) => void;
   addTodo: (todo: Todo) => void;
 };
 
+enum Selected {
+  'all',
+  'active',
+  'completed',
+}
+
 export const TodosContext = React.createContext<ContextType>({
   todos: [],
-  visibleTodos: [],
-  setVisibleTodos: () => [],
+  selectedFilter: Selected.all,
+  setSelectedFilter: () => Selected.all,
+  showFilteredTodos: () => [],
   setTodos: () => [],
   addTodo: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [selectedFilter, setSelectedFilter] = useState<Selected>(Selected.all);
+
+  const showFilteredTodos = (value: Selected): Todo[] => {
+    switch (value) {
+      case Selected.active:
+        return todos.filter(item => item.completed === false);
+      case Selected.completed:
+        return todos.filter(item => item.completed === true);
+      default:
+        return todos;
+    }
+  };
 
   const addTodo = (todo: Todo) => {
     setTodos([todo, ...todos]);
-    setVisibleTodos(() => {
-      return [todo, ...todos];
-    });
   };
 
   const value = useMemo(
     () => ({
       todos,
-      visibleTodos,
-      setVisibleTodos,
+      selectedFilter,
+      setSelectedFilter,
+      showFilteredTodos,
       setTodos,
       addTodo,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [todos, visibleTodos],
+    [todos, selectedFilter],
   );
 
   return (

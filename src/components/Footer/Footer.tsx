@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { TodosContext } from '../../TodosContext';
-import { Todo } from '../../types/Todo';
 
 enum Selected {
   'all',
@@ -10,33 +9,16 @@ enum Selected {
 }
 
 export const Footer: React.FC = () => {
-  const { todos, setVisibleTodos, setTodos } = useContext(TodosContext);
-
-  const [selected, setSelected] = useState<Selected>(Selected.all);
-
-  const activeTodosFilter = () => {
-    return todos.filter((todo: Todo) => todo.completed === false);
-  };
-
-  const viewAllTodos = () => {
-    setVisibleTodos(todos);
-  };
-
-  const viewActiveTodos = () => {
-    setVisibleTodos(activeTodosFilter());
-  };
-
-  const viewCompletedTodo = () => {
-    const completedTodos = todos.filter(todo => todo.completed === true);
-
-    setVisibleTodos(completedTodos);
-  };
+  const {
+    todos,
+    setTodos,
+    setSelectedFilter,
+    showFilteredTodos,
+    selectedFilter,
+  } = useContext(TodosContext);
 
   const removeCompleted = () => {
-    const completedTodos = todos.filter(todo => todo.completed === false);
-
-    setTodos(completedTodos);
-    setVisibleTodos(completedTodos);
+    setTodos(todos.filter(todo => todo.completed === false));
   };
 
   return (
@@ -44,7 +26,7 @@ export const Footer: React.FC = () => {
       {todos.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {+activeTodosFilter().length} items left
+            {showFilteredTodos(Selected.active).length} items left
           </span>
 
           <ul className="filters">
@@ -52,11 +34,10 @@ export const Footer: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('', {
-                  selected: selected === Selected.all,
+                  selected: selectedFilter === Selected.all,
                 })}
                 onClick={() => {
-                  setSelected(Selected.all);
-                  viewAllTodos();
+                  setSelectedFilter(Selected.all);
                 }}
               >
                 All
@@ -67,11 +48,10 @@ export const Footer: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('', {
-                  selected: selected === Selected.active,
+                  selected: selectedFilter === Selected.active,
                 })}
                 onClick={() => {
-                  setSelected(Selected.active);
-                  viewActiveTodos();
+                  setSelectedFilter(Selected.active);
                 }}
               >
                 Active
@@ -82,11 +62,10 @@ export const Footer: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('', {
-                  selected: selected === Selected.completed,
+                  selected: selectedFilter === Selected.completed,
                 })}
                 onClick={() => {
-                  setSelected(Selected.completed);
-                  viewCompletedTodo();
+                  setSelectedFilter(Selected.completed);
                 }}
               >
                 Completed
