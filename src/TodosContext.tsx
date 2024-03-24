@@ -37,9 +37,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const showFilteredTodos = (value: Selected): Todo[] => {
     switch (value) {
       case Selected.active:
-        return todos.filter(item => item.completed === false);
+        return todos.filter(item => !item.completed);
       case Selected.completed:
-        return todos.filter(item => item.completed === true);
+        return todos.filter(item => item.completed);
       default:
         return todos;
     }
@@ -63,6 +63,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   );
 
   return (
-    <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
+    <TodosContext.Provider value={value}>
+      {children}
+    </TodosContext.Provider>
   );
 };

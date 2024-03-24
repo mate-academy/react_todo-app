@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
 
   return (
     <>
-      {todos.length > 0 && (
+      {!!todos.length && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
             {showFilteredTodos(Selected.active).length} items left
@@ -33,12 +33,10 @@ export const Footer: React.FC = () => {
             <li>
               <a
                 href="#/"
-                className={classNames('', {
+                className={classNames({
                   selected: selectedFilter === Selected.all,
                 })}
-                onClick={() => {
-                  setSelectedFilter(Selected.all);
-                }}
+                onClick={() => setSelectedFilter(Selected.all)}
               >
                 All
               </a>
@@ -47,12 +45,10 @@ export const Footer: React.FC = () => {
             <li>
               <a
                 href="#/active"
-                className={classNames('', {
+                className={classNames({
                   selected: selectedFilter === Selected.active,
                 })}
-                onClick={() => {
-                  setSelectedFilter(Selected.active);
-                }}
+                onClick={() => setSelectedFilter(Selected.active)}
               >
                 Active
               </a>
@@ -61,7 +57,7 @@ export const Footer: React.FC = () => {
             <li>
               <a
                 href="#/completed"
-                className={classNames('', {
+                className={classNames({
                   selected: selectedFilter === Selected.completed,
                 })}
                 onClick={() => {
@@ -77,9 +73,7 @@ export const Footer: React.FC = () => {
             type="button"
             className="clear-completed"
             data-cy="clearCompleted"
-            onClick={() => {
-              removeCompleted();
-            }}
+            onClick={removeCompleted}
           >
             Clear completed
           </button>
