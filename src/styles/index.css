@@ -64,6 +64,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.todoapp .title__focused {
+  color: rgba(175, 47, 47, 1);
+}
+
 .new-todo,
 .edit {
   position: relative;
@@ -179,4 +183,9 @@ body {
   .footer {
     height: 50px;
   }
+}
+
+.new-todo:focus {
+  box-shadow: 0 0 2px 2px #CF7D7D;
+  outline: 0;
 }
