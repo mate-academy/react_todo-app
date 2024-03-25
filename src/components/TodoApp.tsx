@@ -1,16 +1,21 @@
+import { useContext } from 'react';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Main } from './Main';
-import { TodoProvider } from './TodoContext';
+import { StateContext } from './TodoContext';
 
 export const TodoApp: React.FC = () => {
+  const { todos } = useContext(StateContext);
+
   return (
     <div className="todoapp">
-      <TodoProvider>
-        <Header />
-        <Main />
-        <Footer />
-      </TodoProvider>
+      <Header />
+      {todos.length > 0 && (
+        <>
+          <Main />
+          <Footer />
+        </>
+      )}
     </div>
   );
 };

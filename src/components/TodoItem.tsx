@@ -26,7 +26,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({
       type: 'removeTodo',
       id,
-    })
+    });
   };
 
   const handleSaveTodoTitle = () => {
@@ -46,7 +46,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({
       type: 'markCompleted',
       id,
-    })
+    });
   };
 
   const handlerKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
