@@ -11,17 +11,12 @@ const initialState: State = {
 };
 
 const getStoredTodos = () => {
-  try {
-    const data = localStorage.getItem('todos');
+  const data = localStorage.getItem('todos');
 
-    return {
-      ...initialState,
-      todos: data ? JSON.parse(data) : [],
-    };
-  } catch (error) {
-    console.error('Mistake', error);
-    return initialState;
-  }
+  return {
+    ...initialState,
+    todos: data ? JSON.parse(data) : [],
+  };
 };
 
 type Props = {
@@ -35,7 +30,6 @@ export const DispatchContext = React.createContext<React.Dispatch<Action>>(
 );
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  // const [todos, setTodos] = useState<Todo[]>([]);
   const [state, dispatch] = useReducer(reducer, initialState, getStoredTodos);
 
   const { todos } = state;
