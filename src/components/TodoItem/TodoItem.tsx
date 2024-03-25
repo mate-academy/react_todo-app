@@ -1,16 +1,17 @@
-import { useTodos } from '../../utils/TodoContext';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/types';
+import { useTodos } from '../../utils/TodoContext';
 
 interface Props {
-  key: number;
   todo: Todo;
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { setTodos, removeTodo } = useTodos();
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+  const [editedText, setEditedText] = useState<string>(todo.title);
+
   const toggleCompletedTodo = (id: number) => {
     setTodos(prevTodos =>
       prevTodos.map(prev =>
@@ -21,19 +22,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const toggleEditTodo = (id: number) => {
     setEditingTodoId(id);
+    setEditedText(todo.title);
   };
 
-  const handleEditInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    id: number,
-  ) => {
-    const newText = e.target.value;
-
-    setTodos(prevTodos =>
-      prevTodos.map(prev =>
-        prev.id === id ? { ...prev, title: newText } : prev,
-      ),
-    );
+  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedText(e.target.value);
   };
 
   const handleEditInputKeyUp = (
@@ -41,19 +34,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     id: number,
   ) => {
     if (e.key === 'Enter') {
-      const newText = e.currentTarget.value.trim();
+      const newText = editedText.trim();
 
-      setTodos(prevTodos =>
-        prevTodos.map(prev =>
-          prev.id === id ? { ...prev, title: newText } : prev,
-        ),
-      );
-
-      if (newText === '') {
+      if (!newText) {
         removeTodo(id);
       } else {
-        setEditingTodoId(null);
+        setTodos(prevTodos =>
+          prevTodos.map(prev =>
+            prev.id === id ? { ...prev, title: newText } : prev,
+          ),
+        );
       }
+
+      setEditingTodoId(null);
     } else if (e.key === 'Escape') {
       setEditingTodoId(null);
     }
@@ -86,8 +79,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <input
         type="text"
         className="edit"
-        value={todo.title}
-        onChange={e => handleEditInputChange(e, todo.id)}
+        value={editedText}
+        onChange={handleEditInputChange}
         onKeyUp={e => handleEditInputKeyUp(e, todo.id)}
         onBlur={() => setEditingTodoId(null)}
       />

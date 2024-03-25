@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { TodoList } from './components/TodoList';
 import { useTodos } from './utils/TodoContext';
 import { Footer } from './components/Footer';
+import { Header } from './components/Header';
 
 export const App: React.FC = () => {
-  const { todos, addTodo, setTodos } = useTodos();
-  const [query, setQuery] = useState<string>('');
-  const [completedAll, setCompletedAll] = useState(false);
+  const { todos, setTodos } = useTodos();
   const isTodos = todos.length > 0;
 
   useEffect(() => {
@@ -14,42 +13,18 @@ export const App: React.FC = () => {
   }, [todos]);
 
   const toggleCompletedAll = () => {
-    setTodos(prevTodos => {
-      const newCompletedAll = !completedAll;
+    const allCompleted = todos.every(todo => todo.completed);
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !allCompleted,
+    }));
 
-      return prevTodos.map(todo => ({
-        ...todo,
-        completed: newCompletedAll,
-      }));
-    });
-    setCompletedAll(prevCompletedAll => !prevCompletedAll);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (!query) {
-      return;
-    }
-
-    e.preventDefault();
-    addTodo({ id: Date.now(), title: query, completed: false });
-    setQuery('');
+    setTodos(updatedTodos);
   };
 
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-        <form name="todo-text" onSubmit={handleSubmit}>
-          <input
-            value={query}
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onChange={e => setQuery(e.target.value)}
-          />
-        </form>
-      </header>
+      <Header />
 
       <section className="main">
         {isTodos && (
