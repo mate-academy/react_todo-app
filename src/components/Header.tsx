@@ -9,10 +9,10 @@ export const Header: React.FC = () => {
     e.preventDefault();
 
     if (title.trim()) {
-     dispatch({
-      type: 'addTodo',
-      title,
-     })
+      dispatch({
+        type: 'addTodo',
+        title,
+      });
 
       setTitle('');
     }

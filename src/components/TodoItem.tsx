@@ -1,17 +1,18 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
-import { StateContext } from './TodoContext';
+import { DispatchContext } from './TodoContext';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { title, completed } = todo;
+  const dispatch = useContext(DispatchContext);
+
+  const { id, title, completed } = todo;
   const [editedTitle, setEditedTitle] = useState(title);
   const [isEdited, setIsEdited] = useState(false);
-  const { todos, setTodos } = useContext(StateContext);
 
   const titleRef = useRef<HTMLInputElement | null>(null);
 
@@ -22,14 +23,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEdited]);
 
   const handleRemoveTodo = () => {
-    ;
+    dispatch({
+      type: 'removeTodo',
+      id,
+    })
   };
 
   const handleSaveTodoTitle = () => {
     if (editedTitle.trim()) {
-      setTodos(
-        todos.map(t => (t.id === todo.id ? { ...t, title: editedTitle } : t)),
-      );
+      dispatch({
+        type: 'editTitle',
+        id,
+        newTitle: editedTitle,
+      });
       setIsEdited(false);
     } else {
       handleRemoveTodo();
@@ -37,11 +43,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleCompleted = () => {
-    setTodos(
-      todos.map(t =>
-        t.id === todo.id ? { ...t, completed: !t.completed } : t,
-      ),
-    );
+    dispatch({
+      type: 'markCompleted',
+      id,
+    })
   };
 
   const handlerKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -83,6 +88,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <input
         type="text"
         id={`todo-${todo.id}`}
+        ref={titleRef}
         className="edit"
         value={editedTitle}
         onChange={e => setEditedTitle(e.target.value)}

@@ -23,15 +23,12 @@ export const DispatchContext = React.createContext<React.Dispatch<Action>>(
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   // const [todos, setTodos] = useState<Todo[]>([]);
   const [state, dispatch] = useReducer(reducer, initialState);
-  
-  // const { todos } = state;
 
+  // const { todos } = state;
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
-        {children}
-      </StateContext.Provider>
+      <StateContext.Provider value={state}>{children}</StateContext.Provider>
     </DispatchContext.Provider>
   );
 };

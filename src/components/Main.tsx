@@ -7,7 +7,7 @@ export const Main: React.FC = () => {
   const dispatch = useContext(DispatchContext);
 
   const allCompleted = todos.every(todo => todo.completed);
-  
+
   const handleToggleAll = () => {
     dispatch({
       type: 'toggleCompleted',
