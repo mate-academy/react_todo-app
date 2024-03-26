@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { OrderItems, Status } from '../types/Type';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TodoContextType {
   orderItems: OrderItems[];
@@ -12,7 +12,7 @@ interface TodoContextType {
 export const TodoContext = React.createContext<TodoContextType>({
   orderItems: [],
   setOrderItems: () => {},
-  status: Status.ALL,
+  status: Status.All,
   setStatus: () => {},
 });
 
@@ -55,13 +55,13 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     'todos',
     [],
   );
-  const [status, setStatus] = useState<Status>(Status.ALL);
-  // console.log(orderItems);
+  const [status, setStatus] = useState<Status>(Status.All);
 
-  const value = useMemo(
-    () => ({ orderItems, setOrderItems, setStatus, status }),
-    [orderItems, status, setOrderItems],
-  );
+  const value = { orderItems, setOrderItems, setStatus, status };
+  // const value = useMemo(
+  //   () => ({ orderItems, setOrderItems, setStatus, status }),
+  //   [orderItems, status, setOrderItems],
+  // );
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };

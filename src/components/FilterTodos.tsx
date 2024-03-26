@@ -1,20 +1,28 @@
 import { Status, OrderItems } from '../types/Type';
 
-export function filterTodos(todos: OrderItems[], status: Status): OrderItems[] {
-  let visibleValues = [...todos];
+export function filterTodos(
+  orderItems: OrderItems[],
+  status: Status,
+): OrderItems[] {
+  // const visibleValues = [...orderItems];
 
-  if (status !== Status.ALL) {
+  // switch (status) {
+  //   case Status.Active:
+  //     return visibleValues.filter(a => !a.completed);
+  //   case Status.Completed:
+  //     return visibleValues.filter(a => a.completed);
+  //   default:
+  //     return visibleValues;
+  // }
+
+  return orderItems.filter(element => {
     switch (status) {
-      case Status.ACTIVE:
-        visibleValues = visibleValues.filter(a => !a.completed);
-        break;
-      case Status.COMLETED:
-        visibleValues = visibleValues.filter(a => a.completed);
-        break;
+      case Status.Active:
+        return !element.completed;
+      case Status.Completed:
+        return element.completed;
       default:
-        break;
+        return true;
     }
-  }
-
-  return visibleValues;
+  });
 }

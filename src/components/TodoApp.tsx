@@ -2,14 +2,14 @@ import React, { useCallback, useContext, useState } from 'react';
 import { TodoList } from './TodoList';
 import { TodoContext } from '../context/TodosContext';
 import { Filter } from './Filter';
-import { filterTodos } from './FilterTodos';
+// import { filterTodos } from './FilterTodos';
 // import { Status } from '../types/Type';
 
 export const TodoApp: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [activeCheckbox, secActiveCheckbox] = useState(false);
 
-  const { orderItems, setOrderItems, status } = useContext(TodoContext);
+  const { orderItems, setOrderItems } = useContext(TodoContext);
 
   // #region List
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,19 +52,21 @@ export const TodoApp: React.FC = () => {
   };
 
   const hendlerDestroyAll = () => {
-    const visibleTodos = [...orderItems];
+    const visibleTodos = orderItems;
 
     setOrderItems(visibleTodos.filter(todo => !todo.completed));
   };
-
-  const visibleItems = filterTodos(orderItems, status);
 
   // const visibleItemsCount =
   //   status === Status.ALL
   //     ? visibleItems.filter(item => !item.completed).length
   //     : visibleItems.length;
 
-  const isSomeCompleted = visibleItems.some(item => item.completed);
+  // const isSomeCompleted = visibleItems.some(item => item.completed);
+  // console.log(
+  //   orderItems.filter(item => !item.completed),
+  //   orderItems.filter(item => !item.completed).length,
+  // );
 
   return (
     <div className="todoapp">
@@ -83,8 +85,6 @@ export const TodoApp: React.FC = () => {
         </form>
       </header>
 
-      {/* {(visibleItems.length > 0 ||
-        !(visibleItems.filter(item => !item.completed).length > 0)) && ( */}
       <section className="main">
         <input
           type="checkbox"
@@ -95,20 +95,18 @@ export const TodoApp: React.FC = () => {
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <TodoList items={visibleItems} />
+        {orderItems.length > 0 && <TodoList />}
       </section>
-      {/* )} */}
 
-      {/* {(visibleItems.length > 0 ||
-        !(visibleItems.filter(item => !item.completed).length > 0)) && ( */}
-      {visibleItems.length > 0 && (
+      {orderItems.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {visibleItems.filter(item => !item.completed).length} items left
+            {orderItems.filter(item => !item.completed).length} items left
           </span>
 
           <Filter />
-          {isSomeCompleted && (
+
+          {orderItems.filter(item => item.completed).length > 0 && (
             <button
               type="button"
               className="clear-completed"
@@ -119,7 +117,6 @@ export const TodoApp: React.FC = () => {
           )}
         </footer>
       )}
-      {/* )} */}
     </div>
   );
 };

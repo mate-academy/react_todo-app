@@ -11,8 +11,8 @@ export const Filter: React.FC = () => {
       <li>
         <a
           href="#/"
-          className={classNames({ selected: status === Status.ALL })}
-          onClick={() => setStatus(Status.ALL)}
+          className={classNames({ selected: status === Status.All })}
+          onClick={() => setStatus(Status.All)}
         >
           All
         </a>
@@ -21,8 +21,8 @@ export const Filter: React.FC = () => {
       <li>
         <a
           href="#/active"
-          className={classNames({ selected: status === Status.ACTIVE })}
-          onClick={() => setStatus(Status.ACTIVE)}
+          className={classNames({ selected: status === Status.Active })}
+          onClick={() => setStatus(Status.Active)}
         >
           Active
         </a>
@@ -31,8 +31,8 @@ export const Filter: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          className={classNames({ selected: status === Status.COMLETED })}
-          onClick={() => setStatus(Status.COMLETED)}
+          className={classNames({ selected: status === Status.Completed })}
+          onClick={() => setStatus(Status.Completed)}
         >
           Completed
         </a>

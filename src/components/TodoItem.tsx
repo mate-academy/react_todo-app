@@ -10,6 +10,7 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { orderItems, setOrderItems } = useContext(TodoContext);
   const [query, setQuery] = useState(todo.title);
+  const [isEditing, setIsEditing] = useState(false);
 
   const hendlerDestroyOne = (ItemId: number) => {
     const visibleTodos = [...orderItems];
@@ -22,35 +23,38 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       setOrderItems(
         orderItems.map(prevItem => {
           setQuery(todo.title);
+          setIsEditing(false);
 
           return {
             ...prevItem,
-            editing: false,
           };
         }),
       );
     }
 
     if (event.key === 'Enter') {
-      if (query) {
+      if (query.trim()) {
         setOrderItems(
           orderItems.map(prevItem => {
             if (prevItem.id === ItemID) {
               return {
                 ...prevItem,
                 title: query,
-                editing: false,
               };
             }
 
             return prevItem;
           }),
         );
+        setIsEditing(false);
+        setQuery(query.trim());
       } else {
-        hendlerDestroyOne(ItemID);
+        setOrderItems(orderItems.filter(item => item.id !== ItemID));
+        setIsEditing(false);
       }
     }
   };
+  // console.log(orderItems);
 
   const handleChecker = (ItemID: number) => {
     setOrderItems(
@@ -73,35 +77,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setQuery(event.target.value);
   };
 
-  const handlerDoubleClick = (ItemId: number) => {
-    setOrderItems(
-      orderItems
-        .map(prevItem => {
-          setQuery(todo.title);
-
-          return {
-            ...prevItem,
-            editing: false,
-          };
-        })
-        .map(prevItem => {
-          if (prevItem.id === ItemId) {
-            return {
-              ...prevItem,
-              editing: true,
-            };
-          }
-
-          return prevItem;
-        }),
-    );
-  };
-
   return (
     <li
       className={classNames({
         completed: todo.completed,
-        editing: todo.editing,
+        editing: isEditing,
       })}
       onKeyUp={event => handleClickKeybord(event, todo.id)}
     >
@@ -113,10 +93,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={() => handleChecker(todo.id)}
         />
-        <label
-          htmlFor="toggle-view"
-          onDoubleClick={() => handlerDoubleClick(todo.id)}
-        >
+        <label htmlFor="toggle-view" onDoubleClick={() => setIsEditing(true)}>
           {todo.title}
         </label>
         <button
@@ -130,6 +107,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="text"
         className="edit"
         value={query}
+        onKeyUp={event => handleClickKeybord(event, todo.id)}
         onChange={handleQueryEditChange}
       />
     </li>

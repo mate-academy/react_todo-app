@@ -2,11 +2,11 @@ export interface OrderItems {
   id: number;
   title: string;
   completed: boolean;
-  editing?: boolean;
+  // editing?: boolean;
 }
 
 export enum Status {
-  ALL = 'ALL',
-  COMLETED = 'COMLETED',
-  ACTIVE = 'ACTIVE',
+  All = 'All',
+  Completed = 'Completed',
+  Active = 'Active',
 }
