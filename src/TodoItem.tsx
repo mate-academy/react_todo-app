@@ -32,6 +32,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleUpdate = () => {
+    if (editedTodo === '') {
+      handleDestroy(todo.id);
+      setIsEditable(false);
+
+      return;
+    }
+
     dispatch({
       type: 'update',
       playload: {
@@ -42,11 +49,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleEdit = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (editedTodo === '') {
-      setIsEditable(false);
-      handleDestroy(todo.id);
-    }
-
     if (event.key === 'Enter') {
       handleUpdate();
       setIsEditable(false);
