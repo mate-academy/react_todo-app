@@ -1,189 +1,92 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { Todo } from '../types/Todo';
+import React, { createContext, useState } from 'react';
+import { Todo } from '../type/Todo';
 
-enum Status {
-  all = '#/',
-  active = '#/active',
-  completed = '#/completed',
-  allCompleted = 'completed',
-  notCompleted = 'not completed',
-}
+type ContextTodos = {
+  clearCompleted: () => void;
+  makeToggleAll: (status: boolean) => void;
+  deleteTodo: (id: number) => void;
+  makeTodoCompleted: (id: number, status: boolean) => void;
+  todos: Todo[];
+  setTodos: (todos: Todo[]) => void;
+  addTodo: (title: string) => void;
+};
 
 type Props = {
   children: React.ReactNode;
 };
 
-type TodoContextType = {
-  todosCompleted: Todo[];
-  filteredTodos: Todo[];
-  todos: Todo[];
-  setTodos: (todos: Todo[]) => void;
-  addTodo: (title: string) => void;
-  setTodoComplete: (todo: Todo, isComplete: boolean) => void;
-  filterList: (action: string) => void;
-  clearTodos: () => void;
-  clearTodo: (id: number) => void;
-};
-
-export const TodosContext = createContext<TodoContextType>({
-  todosCompleted: [],
-  filteredTodos: [],
+export const TodosContext = createContext<ContextTodos>({
+  clearCompleted: () => {},
+  makeToggleAll: () => {},
+  deleteTodo: () => {},
+  makeTodoCompleted: () => {},
   todos: [],
   setTodos: () => {},
   addTodo: () => {},
-  setTodoComplete: () => {},
-  filterList: () => {},
-  clearTodos: () => {},
-  clearTodo: () => {},
 });
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const [filteredTodos, setFilter] = useState(todos);
-  const todosCompleted = filteredTodos.filter(todo => todo.completed);
-  const filterList = useCallback(
-    (sortBy: string): Todo[] | void => {
-      switch (sortBy) {
-        case Status.all: {
-          setFilter(todos);
-          break;
-        }
+  const addTodo = (title: string) => {
+    return setTodos(prevTodos => [
+      { id: Date.now(), title: title, completed: false },
+      ...prevTodos,
+    ]);
+  };
 
-        case Status.active: {
-          const active = [...todos].filter(todo => !todo.completed);
-
-          setFilter(active);
-
-          break;
-        }
-
-        case Status.completed: {
-          const completed = [...todos].filter(todo => todo.completed);
-
-          setFilter(completed);
-
-          break;
-        }
-
-        case Status.allCompleted: {
-          const onToggle = [...todos].map(todo => ({
-            ...todo,
-            completed: true,
-          }));
-
-          setTodos(onToggle);
-
-          break;
-        }
-
-        case Status.notCompleted: {
-          const onToggle = [...todos].map(todo => ({
-            ...todo,
-            completed: false,
-          }));
-
-          setTodos(onToggle);
-          break;
-        }
-
-        default:
-          return todos;
-      }
-    },
-    [todos],
-  );
-
-  const addTodo = useCallback(
-    (title: string) => {
-      const newTodo = {
-        id: Date.now(),
-        title: title,
-        completed: false,
-      };
-
-      setTodos([...todos, newTodo]);
-    },
-    [todos],
-  );
-
-  const clearTodos = useCallback(
-    () =>
-      setTodos(prevTodos => {
-        const filter = prevTodos.filter(todo => !todo.completed);
-
-        return filter;
-      }),
-    [],
-  );
-
-  const clearTodo = useCallback(
-    (todoId: number) => {
-      const index = todos.findIndex(todo => todo.id === todoId);
-
-      setTodos(prevTodos => {
-        const newTodosList = [...prevTodos];
-
-        newTodosList.splice(index, 1);
-
-        return newTodosList;
-      });
-    },
-    [todos],
-  );
-
-  const setTodoComplete = useCallback(
-    (todo: Todo, isComplete: boolean) => {
-      const newTodos = todos.map(t => {
-        if (t.id === todo.id) {
+  const makeTodoCompleted = (id: number, status: boolean) => {
+    setTodos(prevTodos => {
+      const newTodos = prevTodos.map(todo => {
+        if (todo.id === id) {
           return {
-            ...t,
-            completed: isComplete,
+            ...todo,
+            completed: status,
           };
         } else {
-          return t;
+          return todo;
         }
       });
 
-      setTodos(newTodos);
-    },
-    [todos],
-  );
+      return newTodos;
+    });
+  };
 
-  const todosTools = useMemo(
-    () => ({
-      todosCompleted,
-      filteredTodos,
-      todos,
-      setTodos,
-      addTodo,
-      setTodoComplete,
-      filterList,
-      clearTodos,
-      clearTodo,
-    }),
-    [
-      todosCompleted,
-      todos,
-      addTodo,
-      setTodoComplete,
-      filterList,
-      filteredTodos,
-      setTodos,
-      clearTodos,
-      clearTodo,
-    ],
-  );
+  const deleteTodo = (id: number) => {
+    return setTodos(prevTodos => {
+      const copyPrev = [...prevTodos];
+      const index = prevTodos.findIndex(todo => todo.id === id);
 
-  useEffect(() => {
-    setFilter([...todos]);
-  }, [todos]);
+      copyPrev.splice(index, 1);
+
+      return copyPrev;
+    });
+  };
+
+  const makeToggleAll = (status: boolean) => {
+    setTodos(prevTodos => {
+      return prevTodos.map(todo => ({ ...todo, completed: status }));
+    });
+  };
+
+  const clearCompleted = () => {
+    setTodos(prevTodos => {
+      return prevTodos.filter(todo => !todo.completed);
+    });
+  };
+
+  const itemsLeft = todos.filter(todo => !todo.completed);
+
+  const todosTools = {
+    clearCompleted,
+    makeToggleAll,
+    deleteTodo,
+    makeTodoCompleted,
+    todos,
+    setTodos,
+    addTodo,
+    itemsLeft,
+  };
 
   return (
     <TodosContext.Provider value={todosTools}>{children}</TodosContext.Provider>

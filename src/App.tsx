@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
-import { TodosContext } from './components/TodosContext';
+import { useLocation } from 'react-router-dom';
 import { AddNewTodo } from './components/AddNewTodo';
-import { TodoList } from './components/TodoList/TodoList';
-import { TodosFilter } from './components/TodoFilter';
-
+import { TodoList } from './components/TodoList';
+import { TodosContext } from './components/TodosContext';
+import { TodosFilter } from './components/TodosFilter';
 export const App: React.FC = () => {
-  const { filteredTodos, todos } = useContext(TodosContext);
-  const visibleFotter = filteredTodos.length < 1 && todos.length < 1;
+  const { todos } = useContext(TodosContext);
+  const itemsLeft = todos.filter(todo => !todo.completed);
+  const location = useLocation();
+  const filterBy = location.hash;
 
   return (
     <div className="todoapp">
@@ -14,14 +16,21 @@ export const App: React.FC = () => {
         <h1>todos</h1>
         <AddNewTodo />
       </header>
+      {todos.length !== 0 && (
+        <>
+          <section className="main">
+            <TodoList items={todos} filterBy={filterBy} />
+          </section>
 
-      <section className="main">
-        <TodoList items={filteredTodos} />
-      </section>
-      {!visibleFotter && (
-        <footer className="footer">
-          <TodosFilter />
-        </footer>
+          <footer className="footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {itemsLeft.length === 1
+                ? `${itemsLeft.length} item left`
+                : `${itemsLeft.length} items left`}
+            </span>
+            <TodosFilter data-cy="todosFilter" selectBy={filterBy} />
+          </footer>
+        </>
       )}
     </div>
   );
