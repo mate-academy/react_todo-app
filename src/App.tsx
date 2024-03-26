@@ -1,157 +1,102 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import { TodoApp } from './components/TodoApp';
+import { TodosContext } from './components/TodosContext';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { Filter } from './types/filter';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useLocalStorage('todos', []);
+  const [filterType, setFilterType] = useState(Filter.ALL);
+
   return (
     <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
+      <header className="header">
+        <h1>todos</h1>
 
-      <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
+        <form>
+          <input
+            type="text"
+            data-cy="createTodo"
+            className="new-todo"
+            placeholder="What needs to be done?"
           />
+        </form>
+      </header>
 
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+      <section className="main">
+        <input
+          type="checkbox"
+          id="toggle-all"
+          className="toggle-all"
+          data-cy="toggleAll"
+        />
+        <label htmlFor="toggle-all">Mark all as complete</label>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {/* This is a completed todo */}
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
+        <ul className="todo-list" data-cy="todosList">
+          <li>
+            <div className="view">
+              <input type="checkbox" className="toggle" id="toggle-view" />
+              <label htmlFor="toggle-view">asdfghj</label>
+              <button type="button" className="destroy" data-cy="deleteTodo" />
+            </div>
+            <input type="text" className="edit" />
+          </li>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
-            </span>
+          <li className="completed">
+            <div className="view">
+              <input type="checkbox" className="toggle" id="toggle-completed" />
+              <label htmlFor="toggle-completed">qwertyuio</label>
+              <button type="button" className="destroy" data-cy="deleteTodo" />
+            </div>
+            <input type="text" className="edit" />
+          </li>
 
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
+          <li className="editing">
+            <div className="view">
+              <input type="checkbox" className="toggle" id="toggle-editing" />
+              <label htmlFor="toggle-editing">zxcvbnm</label>
+              <button type="button" className="destroy" data-cy="deleteTodo" />
+            </div>
+            <input type="text" className="edit" />
+          </li>
 
-          {/* This todo is an active todo */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+          <li>
+            <div className="view">
+              <input type="checkbox" className="toggle" id="toggle-view2" />
+              <label htmlFor="toggle-view2">1234567890</label>
+              <button type="button" className="destroy" data-cy="deleteTodo" />
+            </div>
+            <input type="text" className="edit" />
+          </li>
+        </ul>
+      </section>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
+      <footer className="footer">
+        <span className="todo-count" data-cy="todosCounter">
+          3 items left
+        </span>
 
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-        </section>
-
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
-
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
-            >
+        <ul className="filters">
+          <li>
+            <a href="#/" className="selected">
               All
             </a>
+          </li>
 
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
+          <li>
+            <a href="#/active">Active</a>
+          </li>
 
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
+          <li>
+            <a href="#/completed">Completed</a>
+          </li>
+        </ul>
 
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
-      </div>
+        <button type="button" className="clear-completed">
+          Clear completed
+        </button>
+      </footer>
     </div>
   );
 };
