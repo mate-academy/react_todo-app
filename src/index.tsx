@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { createRoot } from 'react-dom/client';
 
 import './styles/index.css';

@@ -5,7 +5,7 @@ import { TodosFilter } from '../TodosFilter';
 export const Footer: React.FC = () => {
   const { items, setItems } = useContext(TodosContext);
 
-  const itemsNotCompleted = items.filter(item => item.completed === false);
+  const itemsNotCompleted = items.filter(item => !item.completed);
 
   const isCompleted = items.some(item => item.completed);
 
@@ -15,12 +15,15 @@ export const Footer: React.FC = () => {
     setItems(newItems);
   };
 
+  const itemsLeftText =
+    itemsNotCompleted.length === 1
+      ? '1 item left'
+      : `${itemsNotCompleted.length} items left`;
+
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {itemsNotCompleted.length === 1
-          ? '1 item left'
-          : `${itemsNotCompleted.length} items left`}
+        {itemsLeftText}
       </span>
 
       <TodosFilter />

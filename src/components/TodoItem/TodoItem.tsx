@@ -4,13 +4,13 @@ import { TodosContext } from '../todosContext';
 import cn from 'classnames';
 
 type Props = {
-  item: Todo;
+  todo: Todo;
 };
 
-export const TodoItem: React.FC<Props> = ({ item }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { items, setItems } = useContext(TodosContext);
   const [isEdit, setIsEdit] = useState(false);
-  const [newTitle, setNewTitle] = useState(item.title);
+  const [newTitle, setNewTitle] = useState(todo.title);
   const titleField = useRef<HTMLInputElement | null>(null);
 
   const deleteItemClick = (itemId: number) => {
@@ -39,7 +39,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   const handleNewTodos = useCallback(() => {
     setItems(
       items.map(prevItem => {
-        if (prevItem.id === item.id) {
+        if (prevItem.id === todo.id) {
           return {
             ...prevItem,
             title: newTitle,
@@ -50,16 +50,16 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
       }),
     );
     setIsEdit(false);
-  }, [item, items, newTitle, setItems]);
+  }, [todo, items, newTitle, setItems]);
 
   const deleteEmptyItem = useCallback(() => {
-    setItems(items.filter(prevItem => prevItem.id !== item.id));
+    setItems(items.filter(prevItem => prevItem.id !== todo.id));
     setIsEdit(false);
-  }, [item, items, setItems]);
+  }, [todo, items, setItems]);
 
   const handleKeyUpEvent = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
-      setNewTitle(item.title);
+      setNewTitle(todo.title);
       setIsEdit(false);
     } else if (event.key === 'Enter' && newTitle.trim()) {
       handleNewTodos();
@@ -89,7 +89,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   return (
     <li
       className={cn({
-        completed: item.completed,
+        completed: todo.completed,
         editing: isEdit,
       })}
       onDoubleClick={handleDoubleClick}
@@ -99,16 +99,16 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
           type="checkbox"
           className="toggle"
           id="toggle-view"
-          checked={item.completed}
-          onChange={() => handleToggleCompleted(item.id)}
+          {...{ checked: todo.completed }}
+          onChange={() => handleToggleCompleted(todo.id)}
         />
-        <label>{item.title}</label>
+        <label>{todo.title}</label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
           aria-label="delete"
-          onClick={() => deleteItemClick(item.id)}
+          onClick={() => deleteItemClick(todo.id)}
         />
       </div>
       <input

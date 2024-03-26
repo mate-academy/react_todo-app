@@ -31,7 +31,7 @@ export const TodoApp: React.FC = () => {
     <div className="todoapp">
       <Header />
 
-      {items.length > 0 && (
+      {!!items.length && (
         <section className="main">
           <input
             type="checkbox"

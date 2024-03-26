@@ -37,6 +37,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   );
 
   return (
-    <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
+    <TodosContext.Provider value={value}>
+      {children}
+    </TodosContext.Provider>
   );
 };
