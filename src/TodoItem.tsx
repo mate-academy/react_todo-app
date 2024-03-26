@@ -46,6 +46,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         title: editedTodo,
       },
     });
+
+    setIsEditable(false);
   };
 
   const handleEdit = (event: React.KeyboardEvent<HTMLInputElement>) => {
