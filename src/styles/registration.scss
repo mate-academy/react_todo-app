@@ -13,6 +13,10 @@
     border-radius: 6px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 
+    &--signIn {
+      background-color: #ddd7d7;
+    }  
+
     & h2 {
       text-align: center;
       position: relative;
@@ -46,7 +50,7 @@
     }
   
     & :hover {
-      background: #333;
+      background: #222;
     }
   }
 

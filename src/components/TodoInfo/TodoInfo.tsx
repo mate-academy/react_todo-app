@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { Context } from '../../context';
+import { TodosContext } from '../../context';
 import { Loader } from '../Loader/Loader';
 
 type Props = {
@@ -22,7 +22,7 @@ export const TodoInfo: React.FC<Props> = React.memo(
       onDelete,
       onTitleChange,
       onToggleStatus,
-    } = useContext(Context);
+    } = useContext(TodosContext);
     const { title, completed } = todo;
     const [todoTitle, setTodoTitle] = useState(title);
     const [isEditing, setIsEditing] = useState(false);

@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 import { User } from '../../types/User';
 import { Error } from '../Error/Error';
 import { createUser, getUser } from '../../api/users';
-import { errorObject } from '../../constants/constants';
+import { useAppDispatch } from '../../app/hooks/useAppDispatch';
+import { clearError, setError } from '../../app/features/error';
 
 type Props = {
   setCurrentUser: (newValue: User | null) => void,
-  setErrorType: React.Dispatch<React.SetStateAction<string | null>>,
-  errorType: string | null,
-  setError: (typeOfError: string | null) => void,
 };
 
 export const Registration: React.FC<Props> = React.memo(
   ({
     setCurrentUser,
-    setErrorType,
-    errorType,
-    setError,
   }) => {
     const [isRegistrated, setIsRegistrated] = useState(true);
+    const dispatch = useAppDispatch();
     const logIn = async (email: string) => {
       try {
         const usersFromServer = await getUser(email);
@@ -26,12 +23,16 @@ export const Registration: React.FC<Props> = React.memo(
 
         if (!usersFromServer.length) {
           setIsRegistrated(false);
-          setError(errorObject.LoginError);
+          dispatch(setError('User was not found! Please register!'));
         }
 
         setCurrentUser(foundUser);
       } catch (error) {
-        setError(errorObject.LoginError);
+        dispatch(setError('User was not found! Please register!'));
+      } finally {
+        setTimeout(() => {
+          dispatch(clearError());
+        }, 3000);
       }
     };
 
@@ -42,7 +43,11 @@ export const Registration: React.FC<Props> = React.memo(
         setCurrentUser(newUser);
       } catch (error) {
         setIsRegistrated(false);
-        setError(errorObject.SignInError);
+        dispatch(setError('Registration error'));
+      } finally {
+        setTimeout(() => {
+          dispatch(clearError());
+        }, 3000);
       }
     };
 
@@ -66,7 +71,10 @@ export const Registration: React.FC<Props> = React.memo(
     return (
       <>
         <div className="registration">
-          <div className="registration__wrapper">
+          <div className={classNames('registration__wrapper', {
+            'registration__wrapper--signIn': !isRegistrated,
+          })}
+          >
             <h2>{isRegistrated ? 'Please log in' : 'Please sign in'}</h2>
             <form onSubmit={onSubmit} className="form registration__form">
               <div className="form__input-box">
@@ -86,10 +94,7 @@ export const Registration: React.FC<Props> = React.memo(
             </form>
           </div>
         </div>
-        <Error
-          setErrorType={setErrorType}
-          errorMessage={errorType}
-        />
+        <Error />
       </>
     );
   },

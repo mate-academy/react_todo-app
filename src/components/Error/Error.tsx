@@ -1,32 +1,32 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import classNames from 'classnames';
+import { useAppSelector } from '../../app/hooks/useAppSelector';
+import { clearError } from '../../app/features/error';
+import { useAppDispatch } from '../../app/hooks/useAppDispatch';
 
-type Props = {
-  setErrorType: React.Dispatch<React.SetStateAction<string | null>>
-  errorMessage: string | null,
-};
+export const Error: React.FC = () => {
+  const { errorMessage } = useAppSelector(state => state.error);
+  const dispatch = useAppDispatch();
 
-export const Error: React.FC<Props> = ({
-  setErrorType,
-  errorMessage,
-}) => (
-  <>
-    {errorMessage && (
-      <div className={classNames(
-        'notification', 'is-danger', 'is-light', 'has-text-weight-normal', {
-          hidden: !errorMessage,
-        },
+  return (
+    <>
+      {errorMessage && (
+        <div className={classNames(
+          'notification', 'is-danger', 'is-light', 'has-text-weight-normal', {
+            hidden: !errorMessage,
+          },
+        )}
+        >
+          <button
+            type="button"
+            className="delete"
+            onClick={() => dispatch(clearError())}
+          />
+
+          {errorMessage}
+        </div>
       )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setErrorType(null)}
-        />
-
-        {errorMessage}
-      </div>
-    )}
-  </>
-);
+    </>
+  );
+};
