@@ -43,6 +43,10 @@ export const TodoApp: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (titleValue.trim() === '') {
+      return;
+    }
+
     dispatch({
       type: 'create',
       playload: {
@@ -56,9 +60,7 @@ export const TodoApp: React.FC = () => {
   };
 
   const handleTitleCreate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const trimTitle = event.target.value.trim();
-
-    setTitleValue(trimTitle);
+    setTitleValue(event.target.value);
   };
 
   return (
