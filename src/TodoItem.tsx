@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
 import { ContextTodos } from './TodoContext';
@@ -9,9 +9,16 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { dispatch } = useContext(ContextTodos);
-
   const [isEditable, setIsEditable] = useState(false);
   const [editedTodo, setEditedTodo] = useState(todo.title);
+  const editSelectedInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditable && editSelectedInput.current) {
+      editSelectedInput.current.focus();
+    }
+  }, [isEditable]);
+
   const handleChange = () => {
     dispatch({
       type: 'update',
@@ -89,6 +96,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="text"
           className="edit"
+          ref={editSelectedInput}
           value={editedTodo}
           onChange={event => setEditedTodo(event.target.value)}
           onKeyUp={handleEdit}
