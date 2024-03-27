@@ -21,8 +21,12 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
 
   const handleBlurElem = () => {
     if (!title.trim().length) {
-      return;
+      handleDelete();
     }
+
+    // if (!title.trim().length) {
+    //   return;
+    // }
 
     setFocus(false);
     dispatch({ type: 'BLUR', payload: { title: title, id: item.id } });
