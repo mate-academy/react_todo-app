@@ -17,7 +17,7 @@ export const useLocalStorage = (
   const [todos, dispatch] = useReducer(reducer, startValue, initialValue);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
   });
 
   return [todos, dispatch];

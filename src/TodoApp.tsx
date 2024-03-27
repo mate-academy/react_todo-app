@@ -8,9 +8,9 @@ import { TodosFilter } from './TodosFilter';
 const filterTodos = (todos: Todo[], filter: Status): Todo[] => {
   switch (filter) {
     case Status.active:
-      return todos.filter(todo => todo.completed === false);
+      return todos.filter(todo => !todo.completed);
     case Status.completed:
-      return todos.filter(todo => todo.completed === true);
+      return todos.filter(todo => todo.completed);
     default:
       return todos;
   }
@@ -50,9 +50,9 @@ export const TodoApp: React.FC = () => {
     dispatch({
       type: 'create',
       playload: {
-        completed: false,
         id: +new Date(),
         title: titleValue,
+        completed: false,
       },
     });
 

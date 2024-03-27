@@ -65,6 +65,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (event.key === 'Escape') {
       setIsEditable(false);
+      setEditedTodo(todo.title);
     }
   };
 
