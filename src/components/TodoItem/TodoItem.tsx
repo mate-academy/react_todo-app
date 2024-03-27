@@ -31,6 +31,9 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   const handleButtonChange = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleBlurElem();
+      if (!title.trim().length) {
+        handleDelete();
+      }
     }
 
     if (e.key === 'Escape') {
