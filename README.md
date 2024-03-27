@@ -31,12 +31,12 @@ Implement a simple [TODO app](https://todomvc.com/examples/javascript-es6/dist/)
 +. Hide everything except the input to add new todo if there are no todos. But not if todos are just filtered out.
 1. Make inline editing for the TODO item
    + double click on the TODO title makes it editable (just add a class `editing` to a `li`)
-   + DON'T add `htmlFor` to the label!!!
+   + DON'T add `htmlFor` to the label!!
    + `Enter` saves changes
    + `Ecs` cancels editing (use `onKeyup` and `event.key === 'Escape'`)
    + Todo title can't be empty! If a user presses `Enter` when the title is empty, this todo should be removed.
    + (\*) save changes `onBlur`
-1. Save state of the APP to the `localStorage` using the name `todos` for the key (Watch Custom Hooks lesson)
++. Save state of the APP to the `localStorage` using the name `todos` for the key (Watch Custom Hooks lesson)
    - use `JSON.stringify` before saving and `JSON.parse` on reading
 
 ![todoedit](./description/edittodo.gif)
