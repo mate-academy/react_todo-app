@@ -25,6 +25,9 @@ export const TodoItem: React.FC<ItemProps> = ({ item }) => {
   const { isActiveSelected } = useContext(ActiveContext);
   const { isCompletedSelected } = useContext(CompletedContext);
 
+  const todosCopy = [...todos];
+  const findIndex = todos.findIndex(element => element.id === item.id);
+
   const changePersonalComplete = () => {
     return todos.map(elem => {
       if (elem.id === item.id) {
@@ -45,10 +48,7 @@ export const TodoItem: React.FC<ItemProps> = ({ item }) => {
   }
 
   const handleDestroyButton = () => {
-    const destroyIndex = todos.findIndex(element => element.id === item.id);
-    const todosCopy = [...todos];
-
-    todosCopy.splice(destroyIndex, 1);
+    todosCopy.splice(findIndex, 1);
     setTodos(todosCopy);
     setDestroy(true);
   };
@@ -74,11 +74,13 @@ export const TodoItem: React.FC<ItemProps> = ({ item }) => {
   };
 
   const onSubmitChanges = () => {
-    if (eventLableValue !== '') {
+    if (eventLableValue.trim() !== '') {
       setEditing(false);
       setLableValue(eventLableValue);
     } else {
       setDestroy(true);
+      todosCopy.splice(findIndex, 1);
+      setTodos(todosCopy);
     }
   };
 
