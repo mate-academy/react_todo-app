@@ -2,6 +2,9 @@ import React, { createContext, useState } from 'react';
 import { Todo } from '../type/Todo';
 
 type ContextTodos = {
+  updateTodo: (editValue: string, selectedTodo: Todo) => void;
+  selectedPost: null | Todo;
+  setSelectedPost: (todo: Todo | null) => void;
   clearCompleted: () => void;
   makeToggleAll: (status: boolean) => void;
   deleteTodo: (id: number) => void;
@@ -16,6 +19,9 @@ type Props = {
 };
 
 export const TodosContext = createContext<ContextTodos>({
+  updateTodo: () => {},
+  selectedPost: null,
+  setSelectedPost: () => {},
   clearCompleted: () => {},
   makeToggleAll: () => {},
   deleteTodo: () => {},
@@ -27,6 +33,7 @@ export const TodosContext = createContext<ContextTodos>({
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedPost, setSelectedPost] = useState<null | Todo>(null);
 
   const addTodo = (title: string) => {
     return setTodos(prevTodos => [
@@ -77,7 +84,23 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const itemsLeft = todos.filter(todo => !todo.completed);
 
+  const updateTodo = (editValue: string, selectedTodo: Todo) => {
+    return setTodos(prevTodo => {
+      const newTodo = [...prevTodo];
+      const index = newTodo.findIndex(todo => todo.id === selectedTodo?.id);
+
+      if (selectedTodo) {
+        newTodo[index].title = editValue;
+      }
+
+      return newTodo;
+    });
+  };
+
   const todosTools = {
+    updateTodo,
+    selectedPost,
+    setSelectedPost,
     clearCompleted,
     makeToggleAll,
     deleteTodo,

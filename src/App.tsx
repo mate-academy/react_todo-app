@@ -4,6 +4,7 @@ import { AddNewTodo } from './components/AddNewTodo';
 import { TodoList } from './components/TodoList';
 import { TodosContext } from './components/TodosContext';
 import { TodosFilter } from './components/TodosFilter';
+
 export const App: React.FC = () => {
   const { todos } = useContext(TodosContext);
   const itemsLeft = todos.filter(todo => !todo.completed);
@@ -23,11 +24,13 @@ export const App: React.FC = () => {
           </section>
 
           <footer className="footer">
-            <span className="todo-count" data-cy="todosCounter">
-              {itemsLeft.length === 1
-                ? `${itemsLeft.length} item left`
-                : `${itemsLeft.length} items left`}
-            </span>
+            {itemsLeft.length > 0 && (
+              <span className="todo-count" data-cy="todosCounter">
+                {itemsLeft.length === 1
+                  ? `${itemsLeft.length} item left`
+                  : `${itemsLeft.length} items left`}
+              </span>
+            )}
             <TodosFilter data-cy="todosFilter" selectBy={filterBy} />
           </footer>
         </>
