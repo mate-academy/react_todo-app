@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { ActiveContext, AllContext, CompletedContext } from './filterContext';
 
-export const TodoFilter: React.FC = () => {
+export const TodosFilter: React.FC = () => {
   enum Status {
     All = 'All',
     Active = 'Active',

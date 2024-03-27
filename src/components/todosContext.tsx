@@ -48,7 +48,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     return [value, save];
   }
 
-  const [todos, setTodos] = useLocalStorage<Todo[]>('string', []);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
   const value = useMemo(
     () => ({

@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import { TodoItem } from './todoItem';
+import { TodosContext } from './todosContext';
 
 type Todo = {
   id: number;
@@ -11,11 +13,19 @@ interface Props {
 }
 
 export const TodoList: React.FC<Props> = ({ items }) => {
+  const { todos } = useContext(TodosContext);
+
+  const isListShown = () => {
+    return todos.length > 0;
+  };
+
   return (
-    <ul className="todo-list" data-cy="todosList">
-      {items.map(item => (
-        <TodoItem key={item.id} item={item} />
-      ))}
-    </ul>
+    isListShown() === true && (
+      <ul className="todo-list" data-cy="todosList">
+        {items.map(item => (
+          <TodoItem key={item.id} item={item} />
+        ))}
+      </ul>
+    )
   );
 };

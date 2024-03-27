@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useContext, useState } from 'react';
 import { TodoList } from './todoList';
 import { TodosContext } from './todosContext';
-import { TodoFilter } from './todosFilter';
+import { TodosFilter } from './todosFilter';
 import { ManageCheckboxContext } from './manageCheckboxContext';
 
 export const TodoApp: React.FC = () => {
@@ -72,9 +72,17 @@ export const TodoApp: React.FC = () => {
     setTodos(todosCopy);
   };
 
+  const isClearHiden = () => {
+    return todos.some(elem => elem.completed === true);
+  };
+
   if (todos.length === 0) {
     setIsChecked(false);
   }
+
+  const isFiltersShown = () => {
+    return todos.length > 0;
+  };
 
   return (
     <div className="todoapp">
@@ -115,16 +123,21 @@ export const TodoApp: React.FC = () => {
           {handleHowManyLeft()}
         </span>
 
-        <ul className="filters">
-          <TodoFilter data-cy="todosFilter" />
-        </ul>
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={handleClearCompleted}
-        >
-          Clear completed
-        </button>
+        {isFiltersShown() === true && (
+          <ul className="filters" data-cy="todosFilter">
+            <TodosFilter />
+          </ul>
+        )}
+
+        {isClearHiden() && (
+          <button
+            type="button"
+            className="clear-completed"
+            onClick={handleClearCompleted}
+          >
+            Clear completed
+          </button>
+        )}
       </footer>
     </div>
   );
