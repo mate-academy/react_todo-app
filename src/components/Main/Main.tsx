@@ -17,7 +17,7 @@ export const Main = () => {
 
   return (
     <section className="main">
-      {todos?.length ? (
+      {todos?.length > 0 && (
         <>
           <input
             checked={checkItemsHandler}
@@ -29,8 +29,6 @@ export const Main = () => {
           />
           <label htmlFor="toggle-all">Mark all as complete</label>
         </>
-      ) : (
-        ''
       )}
 
       <TodoList items={todos} />

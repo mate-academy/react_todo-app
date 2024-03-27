@@ -5,8 +5,8 @@ import { TodosFilter } from '../TodosFilter/TodosFilter';
 export const Footer = () => {
   const { todos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
-  const uncompletedTasks = todos?.filter(e => !e.completed);
-  const completedTasks = todos?.filter(e => e.completed);
+  const uncompletedTasks = todos?.filter(todo => !todo.completed);
+  const completedTasks = todos?.filter(todo => todo.completed);
   const removeCompletedHandler = () => {
     dispatch({ type: 'CLEAR_COMPLETED' });
   };
@@ -19,7 +19,7 @@ export const Footer = () => {
           : uncompletedTasks?.length + ' items left'}
       </span>
       <TodosFilter />
-      {completedTasks?.length ? (
+      {completedTasks?.length > 0 && (
         <button
           onClick={removeCompletedHandler}
           type="button"
@@ -27,8 +27,6 @@ export const Footer = () => {
         >
           Clear completed
         </button>
-      ) : (
-        ''
       )}
     </footer>
   );

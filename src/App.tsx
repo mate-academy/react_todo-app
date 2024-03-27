@@ -11,13 +11,11 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <Header />
-      {todos.length ? (
+      {todos.length > 0 && (
         <>
           <Main />
           <Footer />
         </>
-      ) : (
-        ''
       )}
     </div>
   );

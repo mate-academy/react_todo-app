@@ -24,10 +24,6 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
       handleDelete();
     }
 
-    // if (!title.trim().length) {
-    //   return;
-    // }
-
     setFocus(false);
     dispatch({ type: 'BLUR', payload: { title: title, id: item.id } });
   };
