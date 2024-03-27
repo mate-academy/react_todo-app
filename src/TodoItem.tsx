@@ -85,7 +85,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="toggle"
             id="toggle-view"
           />
-          <label htmlFor="toggle-view">{todo.title}</label>
+          <label>{todo.title}</label>
           <button
             type="button"
             onClick={() => handleDestroy(todo.id)}

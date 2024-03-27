@@ -13,9 +13,7 @@ export const TodosFilter: React.FC<Props> = ({ filter, setFilter }) => {
       {Object.values(Status).map(status => (
         <li key={status}>
           <a
-            href={
-              status === Status.all ? '#/' : `#/${status.toLocaleLowerCase()}`
-            }
+            href={status === Status.all ? '#/' : `#/${status.toLowerCase()}`}
             className={cn({
               selected: status === filter,
             })}
