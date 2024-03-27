@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { Todo } from '../type/Todo';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 type ContextTodos = {
   updateTodo: (editValue: string, selectedTodo: Todo) => void;
@@ -30,31 +31,6 @@ export const TodosContext = createContext<ContextTodos>({
   setTodos: () => {},
   addTodo: () => {},
 });
-
-function useLocalStorage<T>(todos: string, startValue: T): [T, (v: T) => void] {
-  const [value, setValue] = useState(() => {
-    const data = localStorage.getItem(todos);
-
-    if (data === null) {
-      return startValue;
-    }
-
-    try {
-      return JSON.parse(data);
-    } catch (e) {
-      localStorage.removeItem(todos);
-
-      return startValue;
-    }
-  });
-
-  const save = (newValue: T) => {
-    localStorage.setItem(todos, JSON.stringify(newValue));
-    setValue(newValue);
-  };
-
-  return [value, save];
-}
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);

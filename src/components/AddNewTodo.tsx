@@ -7,7 +7,7 @@ export const AddNewTodo: React.FC = () => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!title) {
+    if (!title.trim()) {
       return;
     }
 
