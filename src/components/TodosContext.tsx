@@ -31,14 +31,40 @@ export const TodosContext = createContext<ContextTodos>({
   addTodo: () => {},
 });
 
+function useLocalStorage<T>(todos: string, startValue: T): [T, (v: T) => void] {
+  const [value, setValue] = useState(() => {
+    const data = localStorage.getItem(todos);
+
+    if (data === null) {
+      return startValue;
+    }
+
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.error('Error parsing localStorage data:', e);
+      localStorage.removeItem(todos);
+
+      return startValue;
+    }
+  });
+
+  const save = (newValue: T) => {
+    localStorage.setItem(todos, JSON.stringify(newValue));
+    setValue(newValue);
+  };
+
+  return [value, save];
+}
+
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [selectedPost, setSelectedPost] = useState<null | Todo>(null);
 
   const addTodo = (title: string) => {
     return setTodos(prevTodos => [
-      { id: Date.now(), title: title, completed: false },
       ...prevTodos,
+      { id: Date.now(), title: title, completed: false },
     ]);
   };
 
