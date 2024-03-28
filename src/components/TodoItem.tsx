@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TodosContext } from './TodosContext';
 import { Todo } from '../type/Todo';
 import cn from 'classnames';
@@ -7,14 +7,18 @@ type Props = {
   item: Todo;
 };
 export const TodoItem: React.FC<Props> = ({ item }) => {
+  const focusOnEdit = useRef<HTMLInputElement>(null);
+  const [idEditing, setIsEditing] = useState<null | Todo>(null);
   const [editValue, setEditValue] = useState(item.title);
-  const {
-    makeTodoCompleted,
-    deleteTodo,
-    setSelectedPost,
-    selectedPost,
-    updateTodo,
-  } = useContext(TodosContext);
+
+  useEffect(() => {
+    if (focusOnEdit.current) {
+      focusOnEdit.current.focus();
+    }
+  }, [focusOnEdit, idEditing]);
+
+  const { makeTodoCompleted, deleteTodo, updateTodo } =
+    useContext(TodosContext);
 
   const handleCompleted = () => {
     makeTodoCompleted(item.id, !item.completed);
@@ -23,11 +27,11 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       updateTodo(editValue, item);
-      setSelectedPost(null);
+      setIsEditing(null);
     }
 
     if (e.key === 'Escape') {
-      setSelectedPost(null);
+      setIsEditing(null);
     }
   };
 
@@ -35,18 +39,19 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     <li
       className={cn({
         completed: item.completed,
-        editing: selectedPost?.id === item.id,
+        editing: idEditing?.id === item.id,
       })}
     >
       <div className="view">
         <input
+          key={item.id}
           type="checkbox"
           className="toggle"
           id="toggle-view"
           onChange={handleCompleted}
           checked={item.completed}
         />
-        <label onDoubleClick={() => setSelectedPost(item)}>{item.title}</label>
+        <label onDoubleClick={() => setIsEditing(item)}>{item.title}</label>
         <button
           type="button"
           className="destroy"
@@ -55,14 +60,17 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         />
       </div>
       <input
+        name={item.title}
+        ref={focusOnEdit}
         type="text"
+        key={item.id}
         value={editValue}
         onChange={e => setEditValue(e.target.value)}
         className="edit"
         onKeyUp={onKeyUp}
         onBlur={() => {
           updateTodo(editValue, item);
-          setSelectedPost(null);
+          setIsEditing(null);
         }}
       />
     </li>

@@ -1,11 +1,9 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext } from 'react';
 import { Todo } from '../type/Todo';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
 type ContextTodos = {
   updateTodo: (editValue: string, selectedTodo: Todo) => void;
-  selectedPost: null | Todo;
-  setSelectedPost: (todo: Todo | null) => void;
   clearCompleted: () => void;
   makeToggleAll: (status: boolean) => void;
   deleteTodo: (id: number) => void;
@@ -21,8 +19,6 @@ type Props = {
 
 export const TodosContext = createContext<ContextTodos>({
   updateTodo: () => {},
-  selectedPost: null,
-  setSelectedPost: () => {},
   clearCompleted: () => {},
   makeToggleAll: () => {},
   deleteTodo: () => {},
@@ -34,7 +30,6 @@ export const TodosContext = createContext<ContextTodos>({
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-  const [selectedPost, setSelectedPost] = useState<null | Todo>(null);
 
   function addTodo(title: string) {
     setTodos([...todos, { id: Date.now(), title: title, completed: false }]);
@@ -86,8 +81,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const todosTools = {
     updateTodo,
-    selectedPost,
-    setSelectedPost,
     clearCompleted,
     makeToggleAll,
     deleteTodo,
