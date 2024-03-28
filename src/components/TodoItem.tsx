@@ -8,14 +8,14 @@ type Props = {
 };
 export const TodoItem: React.FC<Props> = ({ item }) => {
   const focusOnEdit = useRef<HTMLInputElement>(null);
-  const [idEditing, setIsEditing] = useState<null | Todo>(null);
+  const [isEditing, setIsEditing] = useState<null | Todo>(null);
   const [editValue, setEditValue] = useState(item.title);
 
   useEffect(() => {
     if (focusOnEdit.current) {
       focusOnEdit.current.focus();
     }
-  }, [focusOnEdit, idEditing]);
+  }, [focusOnEdit, isEditing]);
 
   const { makeTodoCompleted, deleteTodo, updateTodo } =
     useContext(TodosContext);
@@ -26,11 +26,23 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
 
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      updateTodo(editValue, item);
-      setIsEditing(null);
+      if (!editValue.length) {
+        deleteTodo(item.id);
+      } else {
+        updateTodo(editValue, item);
+      }
     }
 
     if (e.key === 'Escape') {
+      setIsEditing(null);
+    }
+  };
+
+  const onBlur = () => {
+    if (!editValue.length) {
+      deleteTodo(item.id);
+    } else {
+      updateTodo(editValue, item);
       setIsEditing(null);
     }
   };
@@ -39,7 +51,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
     <li
       className={cn({
         completed: item.completed,
-        editing: idEditing?.id === item.id,
+        editing: isEditing?.id === item.id,
       })}
     >
       <div className="view">
@@ -68,10 +80,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         onChange={e => setEditValue(e.target.value)}
         className="edit"
         onKeyUp={onKeyUp}
-        onBlur={() => {
-          updateTodo(editValue, item);
-          setIsEditing(null);
-        }}
+        onBlur={onBlur}
       />
     </li>
   );
