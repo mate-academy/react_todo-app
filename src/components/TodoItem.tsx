@@ -29,6 +29,7 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
       if (!editValue.length) {
         deleteTodo(item.id);
       } else {
+        setIsEditing(null);
         updateTodo(editValue, item);
       }
     }
