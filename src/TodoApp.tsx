@@ -18,7 +18,9 @@ const filterTodos = (todos: Todo[], filter: Status): Todo[] => {
 
 export const TodoApp: React.FC = () => {
   const { todos, dispatch } = useContext(ContextTodos);
-  const incompleteTodos = todos.filter(todo => todo.completed === false).length;
+  const incompleteTodosLength = todos.filter(
+    todo => todo.completed === false,
+  ).length;
   const isAllTodosCompleted = todos.every(todo => todo.completed === true);
   const isAnyTodoCompleted = todos.some(todo => todo.completed === true);
   const [filter, setFilter] = useState(Status.all);
@@ -96,7 +98,7 @@ export const TodoApp: React.FC = () => {
           </section>
           <footer className="footer">
             <span className="todo-count" data-cy="todosCounter">
-              {incompleteTodos} items left
+              {incompleteTodosLength} items left
             </span>
             <TodosFilter filter={filter} setFilter={setFilter} />
 
