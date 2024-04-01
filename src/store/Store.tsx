@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import useLocalStorage from './useLocalStorage';
 import { FilterBy } from '../types/FilterBy';
 
@@ -31,17 +37,20 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filter, setFilter] = useState(FilterBy.ALL);
 
-  const addTodo = (title: string) => {
-    const newTodo: Todo = {
-      id: todos.length + 1,
-      title,
-      completed: false,
-    };
+  const addTodo = useCallback(
+    (title: string) => {
+      const newTodo: Todo = {
+        id: todos.length + 1,
+        title,
+        completed: false,
+      };
 
-    setTodos([...todos, newTodo]);
-  };
+      setTodos([...todos, newTodo]);
+    },
+    [setTodos, todos],
+  );
 
-  const toggleAll = () => {
+  const toggleAll = useCallback(() => {
     const allCompleted = todos.every(todo => todo.completed);
 
     const updateTodos = todos.map(todo => ({
@@ -50,39 +59,48 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }));
 
     setTodos(updateTodos);
-  };
+  }, [setTodos, todos]);
 
-  const toggleTodo = (id: number) => {
-    const newTodos = todos.map(todo => {
-      if (todo.id === id) {
-        return { ...todo, completed: !todo.completed };
-      }
+  const toggleTodo = useCallback(
+    (id: number) => {
+      const newTodos = todos.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, completed: !todo.completed };
+        }
 
-      return todo;
-    });
+        return todo;
+      });
 
-    setTodos(newTodos);
-  };
+      setTodos(newTodos);
+    },
+    [setTodos, todos],
+  );
 
-  const deleteTodo = (id: number) => {
-    const newTodos = todos.filter(todo => todo.id !== id);
+  const deleteTodo = useCallback(
+    (id: number) => {
+      const newTodos = todos.filter(todo => todo.id !== id);
 
-    setTodos(newTodos);
-  };
+      setTodos(newTodos);
+    },
+    [setTodos, todos],
+  );
 
-  const clearCompleted = () => {
+  const clearCompleted = useCallback(() => {
     const updateTodos = todos.filter(todo => !todo.completed);
 
     setTodos(updateTodos);
-  };
+  }, [setTodos, todos]);
 
-  const updateTitleTodo = (title: string, id: number) => {
-    const updateTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, title } : todo,
-    );
+  const updateTitleTodo = useCallback(
+    (title: string, id: number) => {
+      const updateTodos = todos.map(todo =>
+        todo.id === id ? { ...todo, title } : todo,
+      );
 
-    setTodos(updateTodos);
-  };
+      setTodos(updateTodos);
+    },
+    [setTodos, todos],
+  );
 
   const filteredTodos = useMemo(() => {
     switch (filter) {
@@ -97,23 +115,35 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   }, [filter, todos]);
 
+  const contextValue = useMemo(
+    () => ({
+      filteredTodos,
+      addTodo,
+      toggleTodo,
+      deleteTodo,
+      toggleAll,
+      clearCompleted,
+      setFilter,
+      filter,
+      updateTitleTodo,
+      todos,
+    }),
+    [
+      filteredTodos,
+      addTodo,
+      toggleTodo,
+      deleteTodo,
+      toggleAll,
+      clearCompleted,
+      setFilter,
+      filter,
+      updateTitleTodo,
+      todos,
+    ],
+  );
+
   return (
-    <TodoContext.Provider
-      value={{
-        filteredTodos,
-        addTodo,
-        toggleTodo,
-        deleteTodo,
-        toggleAll,
-        clearCompleted,
-        setFilter,
-        filter,
-        updateTitleTodo,
-        todos,
-      }}
-    >
-      {children}
-    </TodoContext.Provider>
+    <TodoContext.Provider value={contextValue}>{children}</TodoContext.Provider>
   );
 };
 
