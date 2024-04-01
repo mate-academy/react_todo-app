@@ -17,6 +17,8 @@ type TodoContextType = {
   clearCompleted: () => void;
   setFilter: (filter: FilterBy) => void;
   filter: FilterBy;
+  updateTitleTodo: (title: string, id: number) => void;
+  todos: Todo[];
 };
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -74,6 +76,14 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(updateTodos);
   };
 
+  const updateTitleTodo = (title: string, id: number) => {
+    const updateTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, title } : todo,
+    );
+
+    setTodos(updateTodos);
+  };
+
   const filteredTodos = useMemo(() => {
     switch (filter) {
       case FilterBy.ACTIVE:
@@ -98,6 +108,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         clearCompleted,
         setFilter,
         filter,
+        updateTitleTodo,
+        todos,
       }}
     >
       {children}

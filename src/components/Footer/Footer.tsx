@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
 
       <TodoFilter />
 
-      {completedLeft.length && (
+      {completedLeft.length > 0 && (
         <button
           type="button"
           className="clear-completed"
