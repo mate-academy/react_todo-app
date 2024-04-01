@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import { Todo } from '../../types/Todo';
@@ -16,6 +16,12 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   const [editedTitle, setEditedTitle] = useState(title);
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   const handleDoubleClick = () => setIsEditing(!isEditing);
 
