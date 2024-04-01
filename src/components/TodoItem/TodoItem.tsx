@@ -33,6 +33,10 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      if (editedTitle.trim() === '') {
+        deleteTodo(id);
+      }
+
       handleChanges();
     } else if (event.key === 'Escape') {
       setIsEditing(false);

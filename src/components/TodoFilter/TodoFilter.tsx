@@ -7,7 +7,7 @@ import { useTodos } from '../../store/Store';
 const TodoFilter: React.FC = () => {
   const { filter, setFilter } = useTodos();
 
-  const handleClick = (filters: FilterBy) => {
+  const handleClick = (filters: FilterBy) => () => {
     setFilter(filters);
   };
 
@@ -16,7 +16,7 @@ const TodoFilter: React.FC = () => {
       <li>
         <a
           href="#/"
-          onClick={() => handleClick(FilterBy.ALL)}
+          onClick={handleClick(FilterBy.ALL)}
           className={cn({
             selected: filter === FilterBy.ALL,
           })}
@@ -28,7 +28,7 @@ const TodoFilter: React.FC = () => {
       <li>
         <a
           href="#/active"
-          onClick={() => handleClick(FilterBy.ACTIVE)}
+          onClick={handleClick(FilterBy.ACTIVE)}
           className={cn({
             selected: filter === FilterBy.ACTIVE,
           })}
@@ -40,7 +40,7 @@ const TodoFilter: React.FC = () => {
       <li>
         <a
           href="#/completed"
-          onClick={() => handleClick(FilterBy.COMPLETED)}
+          onClick={handleClick(FilterBy.COMPLETED)}
           className={cn({
             selected: filter === FilterBy.COMPLETED,
           })}
