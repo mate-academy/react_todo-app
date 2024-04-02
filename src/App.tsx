@@ -1,95 +1,109 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import '@fortawesome/fontawesome-free/css/all.css';
+import 'bulma';
+import { NavBar } from './components/NavBar';
+import { TodoItem } from './components/TodoItem';
+
+export type Todos = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
 
 export const App: React.FC = () => {
+  const initialTodos: Todos[] = [
+    { id: 1, title: 'first todo', completed: false },
+    { id: 2, title: 'second todo', completed: false },
+    { id: 3, title: 'third todo', completed: false },
+    { id: 4, title: 'something else', completed: false },
+    { id: 5, title: 'one more thing', completed: false },
+  ];
+
+  const [todos, setTodos] = useState(initialTodos);
+
+  // const [sortTodos, setSortTodos] = useState(todos);
+
+  const [todoTitle, setTodoTitle] = useState('');
+
+  const biggestId = () => {
+    if (todos.length === 0) {
+      return 1;
+    }
+
+    const justId = todos.map(todo => todo.id);
+
+    return Math.max(...justId) + 1;
+  };
+
+  const [incompleteCount, setIncompleteCount] = useState(
+    todos.filter(todo => !todo.completed).length,
+  );
+
+  useEffect(() => {
+    const newIncompleteCount = todos.filter(todo => !todo.completed).length;
+
+    setIncompleteCount(newIncompleteCount);
+  }, [todos]);
+
+  const AddNewTodo = () => {
+    if (!todoTitle.trim()) {
+      return;
+    }
+
+    return setTodos([
+      {
+        id: biggestId(),
+        title: todoTitle,
+        completed: false,
+      },
+      ...todos,
+    ]);
+  };
+
+  const handleSubmit = (event: React.FocusEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    AddNewTodo();
+
+    setTodoTitle('');
+  };
+
   return (
-    <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+    <nav className="panel is-primary">
+      <p className="panel-heading">todos list</p>
+      <div className="panel-block">
+        <p className="control has-icons-left">
+          <form onSubmit={handleSubmit}>
+            <input
+              value={todoTitle}
+              className="input is-primary"
+              type="text"
+              placeholder="What needs to be done?"
+              onChange={event => setTodoTitle(event.target.value)}
+            />
+          </form>
+          <a className="icon is-left">
+            <i className="fas fa-pen-clip"></i>
+          </a>
+        </p>
+      </div>
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <NavBar
+        todos={todos}
+        setTodos={setTodos}
+        // sortTodos={sortTodos}
+        // setSortTodos={setSortTodos}
+        incompleteCount={incompleteCount}
+      />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todosList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">
-              All
-            </a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
-    </div>
+      <TodoItem
+        todos={todos}
+        setTodos={setTodos}
+        // sortTodos={sortTodos}
+        // setSortTodos={setSortTodos}
+        incompleteCount={incompleteCount}
+      />
+    </nav>
   );
 };
