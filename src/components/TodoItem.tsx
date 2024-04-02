@@ -1,22 +1,11 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
-import { Todos } from '../App';
+import React, { useContext, useState } from 'react';
+import { TodosContext, filterTodos } from './TodosContext';
 
-type Props = {
-  // sortTodos: Todos[];
-  // setSortTodos: (todos: Todos[]) => void;
-  todos: Todos[];
-  setTodos: (todos: Todos[]) => void;
-  incompleteCount: number;
-};
+export const TodoItem: React.FC = () => {
+  const { todos, setTodos, filter } = useContext(TodosContext);
+  const { incompleteCount } = useContext(TodosContext);
 
-export const TodoItem: React.FC<Props> = ({
-  // setSortTodos,
-  // sortTodos,
-  todos,
-  setTodos,
-  incompleteCount,
-}) => {
   const [hoveredTodo, setHoveredTodo] = useState<number | null>(null);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [newTodoTitle, setNewTodoTitle] = useState('');
@@ -59,7 +48,6 @@ export const TodoItem: React.FC<Props> = ({
     const updatedTodos = todos.filter(todo => todo.id !== todoId);
 
     setTodos(updatedTodos);
-    // setSortTodos(updatedTodos);
   };
 
   const handleComplitedTodo = (todoId: number) => {
@@ -72,21 +60,18 @@ export const TodoItem: React.FC<Props> = ({
     });
 
     setTodos(updatedTodos);
-    // setSortTodos(updatedTodos);
   };
 
   const handleClearCompleted = () => {
     const justIncomplete = todos.filter(todo => !todo.completed);
 
     setTodos(justIncomplete);
-    // setSortTodos(justIncomplete);
   };
 
   return (
     <>
       <ul>
-        {/* {sortTodos.map(todo => ( */}
-        {todos.map(todo => (
+        {filterTodos(todos, filter).map(todo => (
           <li
             key={todo.id}
             className={classNames('panel-block for-test', {

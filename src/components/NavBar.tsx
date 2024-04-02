@@ -1,28 +1,11 @@
-import React, { useState } from 'react';
-import { Todos } from '../App';
+import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
+import { Status, TodosContext } from './TodosContext';
 
-enum Status {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+export const NavBar: React.FC = () => {
+  const { todos, setTodos, incompleteCount, setFilter } =
+    useContext(TodosContext);
 
-type Props = {
-  // sortTodos: Todos[];
-  // setSortTodos: (todos: Todos[]) => void;
-  todos: Todos[];
-  setTodos: (todos: Todos[]) => void;
-  incompleteCount: number;
-};
-
-export const NavBar: React.FC<Props> = ({
-  // setSortTodos,
-  // sortTodos,
-  todos,
-  setTodos,
-  incompleteCount,
-}) => {
   const [navClicked, setNavClicked] = useState({
     all: true,
     active: false,
@@ -41,32 +24,22 @@ export const NavBar: React.FC<Props> = ({
     });
 
     setTodos(allComplited);
-    // setSortTodos(allComplited);
   };
 
   const handleVisible = (status: Status) => {
-    // const [allTodos] = useState(todos);
-    // const [activeTodos] = useState(todos.filter(todo => !todo.completed));
-    // const [completedTodos] = useState(todos.filter(todo => todo.completed));
-    // // const allTodos = todos;
-
-    // const activeTodos = todos.filter(todo => !todo.completed);
-
-    // const completedTodos = todos.filter(todo => todo.completed);
-
     switch (status) {
       case Status.Active:
-        setTodos(todos);
+        setFilter(Status.Active);
         setNavClicked({ all: false, active: true, compleated: false });
         break;
 
       case Status.Completed:
-        setTodos(todos);
+        setFilter(Status.Completed);
         setNavClicked({ all: false, active: false, compleated: true });
         break;
 
       case Status.All:
-        setTodos(todos);
+        setFilter(Status.All);
         setNavClicked({ all: true, active: false, compleated: false });
         break;
 
