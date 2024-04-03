@@ -34,6 +34,7 @@ export const TodoHeader: React.FC = () => {
           className="new-todo"
           placeholder="What needs to be done?"
           value={title}
+          checked
           onChange={e => setTitle(e.target.value)}
           autoFocus
         />

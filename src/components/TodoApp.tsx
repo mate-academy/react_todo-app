@@ -11,7 +11,7 @@ export const TodoApp = () => {
     <>
       <TodoHeader />
 
-      <TodoList />
+      {!!todos.length && <TodoList />}
 
       {!!todos.length && <TodoFooter />}
     </>

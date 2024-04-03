@@ -7,7 +7,7 @@ import { Filter } from './types/filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage('todos', []);
-  const [filterType, setFilterType] = useState(Filter.ALL);
+  const [filterType, setFilterType] = useState<Filter>(Filter.ALL);
 
   return (
     <div className="todoapp">

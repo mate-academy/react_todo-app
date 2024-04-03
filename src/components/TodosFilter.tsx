@@ -1,15 +1,15 @@
 import classNames from 'classnames';
 import { TodosContext } from './TodosContext';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { Filter } from '../types/filter';
 
-export const TodosFilter = () => {
+export const TodosFilter: React.FC = () => {
   const { filterType, setFilterType } = useContext(TodosContext);
 
   const handleSetFilterType = (type: Filter) => () => setFilterType(type);
 
   return (
-    <ul className="filters" data-cy="todosFilter">
+    <ul className="filters">
       <li>
         <a
           href="#/"

@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { TodoItem } from './TodoItem';
 import { TodosContext } from './TodosContext';
 import classNames from 'classnames';
 import { Filter } from '../types/filter';
 import { Todo } from '../types/Todo';
 
-export const TodoList = () => {
+export const TodoList: React.FC = () => {
   const { todos, setTodos, filterType } = useContext(TodosContext);
 
   const handleClickToggleTodos = () => {
@@ -47,7 +47,7 @@ export const TodoList = () => {
     }
   };
 
-  const filterTodos = filter(filterType, todos);
+  const filterTodos = filter(filterType, todos) || [];
 
   return (
     <section className="main">

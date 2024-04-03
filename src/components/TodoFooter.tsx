@@ -1,8 +1,8 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { TodosFilter } from './TodosFilter';
 import { TodosContext } from './TodosContext';
 
-export const TodoFooter = () => {
+export const TodoFooter: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const handleClickCompleted = () => {
@@ -12,7 +12,7 @@ export const TodoFooter = () => {
   };
 
   return (
-    <footer className="footer">
+    <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
         {`${todos.filter(item => !item.completed).length} items left`}
       </span>

@@ -102,6 +102,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
             if (e.key === 'Escape') {
               setEditingTodoId(null);
+              setNewTitle(todo.title);
             }
           }}
           autoFocus
