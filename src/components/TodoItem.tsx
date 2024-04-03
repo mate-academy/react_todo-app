@@ -63,6 +63,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(newTodos);
   };
 
+  const handleDoubleClickEdit = () => {
+    setEditingTodoId(todo.id);
+    setNewTitle(todo.title);
+  }
+
   return (
     <li
       data-id={todo.id}
@@ -70,7 +75,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         completed: todo.completed,
         editing: todo.id === editingTodoId,
       })}
-      onDoubleClick={() => setEditingTodoId(todo.id)}
+      onDoubleClick={handleDoubleClickEdit}
     >
       <div className="view">
         <input
@@ -88,7 +93,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={() => handleClickDeleteTodo(todo.id)}
         />
       </div>
-      {todo.id === editingTodoId && (
+      {editingTodoId && (
         <input
           type="text"
           className="edit"
