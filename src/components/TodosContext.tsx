@@ -1,27 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-
-export enum Status {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-export const filterTodos = (t: Todos[], filter: string) => {
-  switch (filter) {
-    case Status.Active:
-      return t.filter(todo => !todo.completed);
-    case Status.Completed:
-      return t.filter(todo => todo.completed);
-    default:
-      return t;
-  }
-};
-
-export type Todos = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { Status, Todos, useLocalStorage } from './store';
 
 type PropsContext = {
   todos: Todos[];
@@ -44,17 +22,13 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todos[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todos[]>('todos', []);
   const [filter, setFilter] = useState(Status.All);
 
-  const [incompleteCount, setIncompleteCount] = useState(
-    todos.filter(todo => !todo.completed).length,
-  );
+  let incompleteCount = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
-    const newIncompleteCount = todos.filter(todo => !todo.completed).length;
-
-    setIncompleteCount(newIncompleteCount);
+    incompleteCount = todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
   const valueTodos = useMemo(

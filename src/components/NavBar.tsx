@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
-import { Status, TodosContext } from './TodosContext';
+import { TodosContext } from './TodosContext';
+import { Status } from './store';
 
 export const NavBar: React.FC = () => {
   const { todos, setTodos, incompleteCount, setFilter } =
@@ -117,7 +118,7 @@ export const NavBar: React.FC = () => {
                     'has-text-success': navClicked.compleated,
                   })}
                 >
-                  Complited
+                  Completed
                 </span>
               </a>
             </li>

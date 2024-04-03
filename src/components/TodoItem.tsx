@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { useContext, useState } from 'react';
-import { TodosContext, filterTodos } from './TodosContext';
+import { TodosContext } from './TodosContext';
+import { filterTodos } from './store';
 
 export const TodoItem: React.FC = () => {
   const { todos, setTodos, filter } = useContext(TodosContext);
@@ -19,7 +20,20 @@ export const TodoItem: React.FC = () => {
     setNewTodoTitle(event.target.value);
   };
 
+  const handleRemoveTodo = (todoId: number) => {
+    const updatedTodos = todos.filter(todo => todo.id !== todoId);
+
+    setTodos(updatedTodos);
+  };
+
   const handleSaveChanges = (todoId: number) => {
+    if (!newTodoTitle.trim()) {
+      handleRemoveTodo(todoId);
+      setNewTodoTitle('');
+
+      return;
+    }
+
     const updatedTodos = todos.map(todo =>
       todo.id === todoId ? { ...todo, title: newTodoTitle } : todo,
     );
@@ -37,17 +51,11 @@ export const TodoItem: React.FC = () => {
     event: React.KeyboardEvent<HTMLInputElement>,
     todoId: number,
   ) => {
-    if (event.key === 'Enter' && newTodoTitle.trim() !== '') {
+    if (event.key === 'Enter') {
       handleSaveChanges(todoId);
     } else if (event.key === 'Escape') {
       handleCancelEditing();
     }
-  };
-
-  const handleRemoveTodo = (todoId: number) => {
-    const updatedTodos = todos.filter(todo => todo.id !== todoId);
-
-    setTodos(updatedTodos);
   };
 
   const handleComplitedTodo = (todoId: number) => {
@@ -103,6 +111,7 @@ export const TodoItem: React.FC = () => {
                 onChange={handleInputChange}
                 onKeyUp={event => handleKeyUp(event, todo.id)}
                 autoFocus
+                onBlur={() => handleSaveChanges(todo.id)}
               />
             ) : (
               <>
