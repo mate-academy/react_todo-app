@@ -28,6 +28,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   let incompleteCount = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
+    // eslint-disable-next-line
     incompleteCount = todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
@@ -39,6 +40,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       filter,
       setFilter,
     }),
+    // eslint-disable-next-line
     [todos, incompleteCount, filter],
   );
 

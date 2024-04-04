@@ -2,10 +2,23 @@ iframe {
   display: none;
 }
 
+@media only screen and (max-width: 450px) {
+  .panel {
+    margin-left: 0;
+    margin-top: 0;
+  }
+}
+
+@media only screen and (min-width: 450px) {
+  .panel {
+    margin-left: 30vw;
+  margin-top: 50px;
+  }
+}
+
 .panel {
   width: 40vw;
-  margin-left: 30vw;
-  margin-top: 50px;
+
   min-width: 417px;
 }
 
