@@ -58,10 +58,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [status, setStatus] = useState<Status>(Status.All);
 
   const value = { orderItems, setOrderItems, setStatus, status };
-  // const value = useMemo(
-  //   () => ({ orderItems, setOrderItems, setStatus, status }),
-  //   [orderItems, status, setOrderItems],
-  // );
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };

@@ -9,7 +9,20 @@ export const Filter: React.FC = () => {
   return (
     <ul className="filters" data-cy="todosFilter">
       <li>
-        <a
+        {Object.values(Status).map(value => (
+          <a
+            key={value}
+            href={`#${value}`}
+            className={classNames('filter__link', {
+              selected: status === value,
+            })}
+            onClick={() => setStatus(value)}
+            data-cy={`FilterLink${value}`}
+          >
+            {value}
+          </a>
+        ))}
+        {/* <a
           href="#/"
           className={classNames({ selected: status === Status.All })}
           onClick={() => setStatus(Status.All)}
@@ -35,7 +48,7 @@ export const Filter: React.FC = () => {
           onClick={() => setStatus(Status.Completed)}
         >
           Completed
-        </a>
+        </a> */}
       </li>
     </ul>
   );

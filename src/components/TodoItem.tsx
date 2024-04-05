@@ -54,7 +54,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       }
     }
   };
-  // console.log(orderItems);
 
   const handleChecker = (ItemID: number) => {
     setOrderItems(
@@ -83,6 +82,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         completed: todo.completed,
         editing: isEditing,
       })}
+      onDoubleClick={() => setIsEditing(true)}
       onKeyUp={event => handleClickKeybord(event, todo.id)}
     >
       <div className="view">
@@ -93,9 +93,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           checked={todo.completed}
           onChange={() => handleChecker(todo.id)}
         />
-        <label htmlFor="toggle-view" onDoubleClick={() => setIsEditing(true)}>
-          {todo.title}
-        </label>
+        <label htmlFor="toggle-view">{todo.title}</label>
         <button
           type="button"
           className="destroy"
