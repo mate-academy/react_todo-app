@@ -355,43 +355,43 @@ describe('', () => {
     });
 
     it('should add an active todo', () => {
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
 
       todos.assertCount(6);
-      todos.assertTitle(5, 'Test Todo');
+      todos.assertTitle(5, 'Test TodoItem');
       todos.assertNotCompleted(5);
     });
 
     it('should save updated todos to localStorage', () => {
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
 
       page.data().then((todos) => {
         expect(todos).to.have.length(6);
-        expect(todos[5].title).to.equal('Test Todo');
+        expect(todos[5].title).to.equal('Test TodoItem');
         expect(todos[5].completed).to.be.false;
       });
     });
 
     it('should update active counter', () => {
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
 
       page.todosCounter().should('have.text', '3 items left');
     });
 
     it('should clear text field', () => {
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
 
       page.newTodoField().should('have.value', '');
     });
 
     it('should focus text field', () => {
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
 
       page.newTodoField().should('be.focused');
     });
 
     it('should allow to add one more todo', () => {
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
       page.newTodoField().type('Hello world{enter}');
 
       todos.assertCount(7);
@@ -401,7 +401,7 @@ describe('', () => {
     });
 
     it('should save all added todos to localStorage', () => {
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
       page.newTodoField().type('Hello world{enter}');
 
       page.data().then((todos) => {
@@ -419,13 +419,13 @@ describe('', () => {
 
     it('should keep current filter', () => {
       filter.link('active').click();
-      page.newTodoField().type('Test Todo{enter}');
+      page.newTodoField().type('Test TodoItem{enter}');
 
       filter.assertSelected('active');
     });
   });
 
-  describe('Individual Todo Deletion', () => {
+  describe('Individual TodoItem Deletion', () => {
     describe('in the list with many todos', () => {
       beforeEach(() => {
         cy.fixture('todos').then(page.visit);
@@ -572,7 +572,7 @@ describe('', () => {
     });
   });
 
-  describe('Todo Toggler', () => {
+  describe('TodoItem Toggler', () => {
     beforeEach(() => {
       cy.fixture('todos').then(page.visit);
     });
