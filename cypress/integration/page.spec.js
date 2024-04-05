@@ -149,7 +149,7 @@ describe('Page', () => {
       .type('{enter}');
 
     cy.get('@todos')
-      .contains('book a doctor`s appointment')
+      .contains('buy some cheese!')
       .should('not.exist');
   });
 });

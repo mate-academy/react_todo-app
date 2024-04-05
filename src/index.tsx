@@ -5,14 +5,14 @@ import './styles/todo-list.css';
 import './styles/filters.css';
 
 import { App } from './App';
-import { TodosProvider } from './components/TodosContext';
+import { TodoProvider } from './TodoProvider';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
 createRoot(container).render(
   <BrowserRouter>
-    <TodosProvider>
+    <TodoProvider>
       <App />
-    </TodosProvider>
+    </TodoProvider>
   </BrowserRouter>,
 );
