@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { FilterTodos } from '../FilterTodos/FilterTodos';
+import { FilterTodos } from '../FilterTodos';
 import { DispatchContext, StateContext } from '../../Store';
 import { Todo } from '../../type';
 

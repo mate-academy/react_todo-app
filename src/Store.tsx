@@ -82,7 +82,7 @@ const initialState: State = {
 
 export const StateContext = React.createContext(initialState);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const DispatchContext = React.createContext((action: Action) => {});
+export const DispatchContext = React.createContext((_action: Action) => {});
 
 type Props = {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Todo } from '../Todo/Todo';
+import { Todo } from '../Todo';
 import { Todo as TodoType } from '../../type';
 import { StateContext } from '../../Store';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListTodos } from './components/ListTodos/ListTodos';
-import { Header } from './components/Header/Header';
-import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
   return (
