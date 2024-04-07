@@ -1,5 +1,7 @@
+import { getTodosFromLocalStorage } from './getTodosFromLocalStorage';
+import { Todo } from '../types/Todo';
+
 export const initialTodo = {
-  name: '',
-  isCompleted: false,
-  id: Number(new Date()),
+  newInputName: '',
+  visibleTodos: getTodosFromLocalStorage() as Todo[],
 };

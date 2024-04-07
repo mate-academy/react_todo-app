@@ -8,4 +8,6 @@ export const getTodosFromLocalStorage = () => {
       return [];
     }
   }
+
+  return [];
 };

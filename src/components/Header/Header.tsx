@@ -1,40 +1,51 @@
-import React, { useContext } from 'react';
-import { TodoContext, TodosContext } from '../../contexts/TodoContext';
-import { initialTodo } from '../../utils/initialTodo';
+import React, { useCallback, useContext } from 'react';
+import { TodosContext } from '../../contexts/TodoContext';
+import { Action } from '../../enums/Action';
+import classNames from 'classnames';
+import { isHaveNotCompletedTodo } from '../../utils/isHaveNotCompletedTodo';
+import { getTodosFromLocalStorage } from '../../utils/getTodosFromLocalStorage';
 
 export const Header: React.FC = () => {
-  const { todos, setTodos } = useContext(TodosContext);
-  const { todoToAdd, setTodoToAdd } = useContext(TodoContext);
+  const {
+    data: { newInputName, visibleTodos },
+    dispatch,
+  } = useContext(TodosContext);
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      dispatch({ type: Action.addNewTodo });
+    },
+    [],
+  );
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {getTodosFromLocalStorage().length ? (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: !isHaveNotCompletedTodo(visibleTodos),
+          })}
+          data-cy="ToggleAllButton"
+          onClick={() => dispatch({ type: Action.toggleCompleted })}
+        />
+      ) : null}
 
-      {/* Add a todo on form submit */}
-      <form
-        onSubmit={event => {
-          event.preventDefault();
-          setTodos([...todos, todoToAdd]);
-          setTodoToAdd({ ...initialTodo, id: Number(new Date()) });
-        }}
-      >
+      <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          value={todoToAdd.name}
+          value={newInputName}
           onChange={event =>
-            setTodoToAdd({
-              ...todoToAdd,
-              name: event.target.value,
+            dispatch({
+              type: Action.updateNewTodoName,
+              newInputName: event.target.value,
             })
           }
+          autoFocus
         />
       </form>
     </header>
