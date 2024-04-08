@@ -12,15 +12,15 @@ interface TodoContextType extends State {
   setTodos: (newTodos: Todo[]) => void;
   addTodo: (title: string) => void;
   removeTodo: (index: number) => void;
-  changeTodo: (newTodo: Todo, index: number) => void;
+  changeTodo: (newTodo: Todo, todoId: number) => void;
 }
 
 type Action =
   | { type: 'setSortType'; newSortType: SortType }
   | { type: 'setTodos'; newTodos: Todo[] }
   | { type: 'addTodo'; title: string }
-  | { type: 'removeTodo'; index: number }
-  | { type: 'changeTodo'; newTodo: Todo; index: number };
+  | { type: 'removeTodo'; todoId: number }
+  | { type: 'changeTodo'; newTodo: Todo; todoId: number };
 
 export const TodoContext = React.createContext<TodoContextType>({
   todos: [],
@@ -59,7 +59,6 @@ function reducer(state: State, action: Action): State {
             id: +new Date(),
             title: action.title.trim(),
             completed: false,
-            beingEdited: false,
           },
         ],
       };
@@ -67,20 +66,15 @@ function reducer(state: State, action: Action): State {
     case 'removeTodo':
       return {
         ...state,
-        todos: [
-          ...state.todos.slice(0, action.index),
-          ...state.todos.slice(action.index + 1),
-        ],
+        todos: state.todos.filter(todo => todo.id !== action.todoId),
       };
 
     case 'changeTodo':
       return {
         ...state,
-        todos: [
-          ...state.todos.slice(0, action.index),
-          action.newTodo,
-          ...state.todos.slice(action.index + 1),
-        ],
+        todos: state.todos.map(todo =>
+          todo.id === action.todoId ? action.newTodo : todo,
+        ),
       };
 
     default:
@@ -96,14 +90,24 @@ const initialState: State = {
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [{ todos, sortType }, dispatch] = useReducer(reducer, initialState);
 
-  const setSortType = (newSortType: SortType) =>
+  const setSortType = (newSortType: SortType) => {
     dispatch({ type: 'setSortType', newSortType });
-  const setTodos = (newTodos: Todo[]) =>
+  };
+
+  const setTodos = (newTodos: Todo[]) => {
     dispatch({ type: 'setTodos', newTodos });
-  const addTodo = (title: string) => dispatch({ type: 'addTodo', title });
-  const removeTodo = (index: number) => dispatch({ type: 'removeTodo', index });
-  const changeTodo = (newTodo: Todo, index: number) => {
-    dispatch({ type: 'changeTodo', newTodo, index });
+  };
+
+  const addTodo = (title: string) => {
+    dispatch({ type: 'addTodo', title });
+  };
+
+  const removeTodo = (todoId: number) => {
+    dispatch({ type: 'removeTodo', todoId });
+  };
+
+  const changeTodo = (newTodo: Todo, todoId: number) => {
+    dispatch({ type: 'changeTodo', newTodo, todoId });
   };
 
   const value = useMemo(

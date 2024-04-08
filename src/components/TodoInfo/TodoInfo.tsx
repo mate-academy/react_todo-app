@@ -1,26 +1,35 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoContext } from '../../TodoContext';
 
 type Props = {
   todo: Todo;
-  onRemove: () => void;
-  onChange: (newValues: {
-    [key in keyof Todo]?: boolean | string | number;
-  }) => void;
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo, onRemove, onChange }) => {
+export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  const { removeTodo, changeTodo } = useContext(TodoContext);
+
   const [title, setTitle] = useState(todo.title);
+  const [beingEdited, setBeingEdited] = useState(false);
+
+  const setCompleted = (value: boolean) => {
+    changeTodo({ ...todo, completed: value } as Todo, todo.id);
+  };
+
+  const updateTitle = (value: string) => {
+    changeTodo({ ...todo, title: value } as Todo, todo.id);
+  };
 
   const saveTitle = (newTitle: string) => {
     if (title.trim() === '') {
-      onRemove();
+      removeTodo(todo.id);
 
       return;
     }
 
-    onChange({ title: newTitle.trim(), beingEdited: false });
+    updateTitle(newTitle.trim());
+    setBeingEdited(false);
   };
 
   const handleTitleSubmit = (event: React.FormEvent<HTMLFormElement>) =>
@@ -29,9 +38,9 @@ export const TodoInfo: React.FC<Props> = ({ todo, onRemove, onChange }) => {
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(event.target.value);
 
-  const handleCheckbox = () => onChange({ completed: !todo.completed });
+  const handleCheckbox = () => setCompleted(!todo.completed);
 
-  const handleDoubleClick = () => onChange({ beingEdited: true });
+  const handleDoubleClick = () => setBeingEdited(true);
 
   const handleTitleBlur = () => {
     saveTitle(title);
@@ -39,7 +48,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onRemove, onChange }) => {
 
   const handleKeyup = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      onChange({ beingEdited: false });
+      setBeingEdited(false);
       setTitle(todo.title);
     } else if (event.key === 'Enter') {
       saveTitle(title);
@@ -47,7 +56,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onRemove, onChange }) => {
   };
 
   useEffect(() => {
-    if (todo.beingEdited) {
+    if (beingEdited) {
       document.addEventListener('keyup', handleKeyup);
 
       return () => {
@@ -73,7 +82,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onRemove, onChange }) => {
           onChange={handleCheckbox}
         />
       </label>
-      {todo.beingEdited ? (
+      {beingEdited ? (
         <form onSubmit={handleTitleSubmit}>
           <input
             data-cy="TodoTitleField"
@@ -96,7 +105,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onRemove, onChange }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={onRemove}
+            onClick={() => removeTodo(todo.id)}
           >
             ×
           </button>

@@ -19,10 +19,6 @@ export const Header: React.FC<Props> = () => {
     }
   };
 
-  useEffect(() => {
-    focusInput();
-  }, [todos.length]);
-
   const handleCompleteAll = () => {
     if (allCompleted) {
       setTodos(todos.map(todo => ({ ...todo, completed: false })));
@@ -32,6 +28,10 @@ export const Header: React.FC<Props> = () => {
 
     setTodos(todos.map(todo => ({ ...todo, completed: true })));
   };
+
+  useEffect(() => {
+    focusInput();
+  }, [todos.length]);
 
   return (
     <header className="todoapp__header">
