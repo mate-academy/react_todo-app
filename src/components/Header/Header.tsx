@@ -19,6 +19,17 @@ export const Header: React.FC<Props> = () => {
     }
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (title.trim() === '') {
+      return;
+    }
+
+    addTodo(title);
+    setTitle('');
+  };
+
   const handleCompleteAll = () => {
     if (allCompleted) {
       setTodos(todos.map(todo => ({ ...todo, completed: false })));
@@ -46,18 +57,7 @@ export const Header: React.FC<Props> = () => {
         />
       )}
 
-      <form
-        onSubmit={event => {
-          event.preventDefault();
-
-          if (title.trim() === '') {
-            return;
-          }
-
-          addTodo(title);
-          setTitle('');
-        }}
-      >
+      <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
