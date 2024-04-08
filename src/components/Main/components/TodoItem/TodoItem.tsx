@@ -6,17 +6,11 @@ import { updatedTodos } from '../../../../utils/utils';
 import { input } from '../../../../utils/input';
 type Props = {
   todo: Todo;
-  selectedTodo: Todo | null;
-  setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  selectedTodo,
-  setSelectedTodo,
-}) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
-  const { todos } = useContext(TodosContext);
+  const { todos, selectedTodo } = useContext(TodosContext);
   const [title, setTitle] = useState(todo.title);
 
   const titleField = useRef<HTMLInputElement>(null);
@@ -46,7 +40,12 @@ export const TodoItem: React.FC<Props> = ({
         editing: selectedTodo?.id === todo.id,
         completed: todo.completed,
       })}
-      onDoubleClick={() => setSelectedTodo(todo)}
+      onDoubleClick={() => {
+        dispatch({
+          type: 'selectedTodo',
+          payload: todo,
+        });
+      }}
     >
       <div className="view">
         <input
@@ -74,11 +73,14 @@ export const TodoItem: React.FC<Props> = ({
         className="edit"
         onChange={e => setTitle(e.target.value)}
         onKeyUp={e => {
-          input.handleKey(e, todo, changeTitle, setSelectedTodo, setTitle);
+          input.handleKey(e, todo, dispatch, changeTitle, setTitle);
         }}
         onBlur={() => {
           changeTitle(todo);
-          setSelectedTodo(null);
+          dispatch({
+            type: 'selectedTodo',
+            payload: null,
+          });
         }}
       />
     </li>

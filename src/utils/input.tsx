@@ -1,22 +1,28 @@
-import { Action } from '../store/Store';
+import { Action } from '../types/Action';
 import { Todo } from '../types/Todo';
 
 export const input = {
   handleKey(
     e: React.KeyboardEvent<HTMLInputElement>,
     todo: Todo,
+    dispatch: (action: Action) => void,
     changeTitle: (todoItem: Todo) => void,
-    setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>,
     setTitle: React.Dispatch<React.SetStateAction<string>>,
   ) {
     if (e.key === 'Enter') {
       changeTitle(todo);
-      setSelectedTodo(null);
+      dispatch({
+        type: 'selectedTodo',
+        payload: null,
+      });
     }
 
     if (e.key === 'Escape') {
-      setSelectedTodo(null);
       setTitle(todo.title);
+      dispatch({
+        type: 'selectedTodo',
+        payload: null,
+      });
     }
   },
 

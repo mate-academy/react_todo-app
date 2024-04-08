@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import { Action } from '../store/Store';
+import { Action } from '../types/Action';
 import { State } from '../types/State';
 
 function reducer(state: State, action: Action): State {
@@ -16,6 +16,12 @@ function reducer(state: State, action: Action): State {
         filter: action.payload,
       };
 
+    case 'selectedTodo':
+      return {
+        ...state,
+        selectedTodo: action.payload,
+      };
+
     default:
       return state;
   }
@@ -27,6 +33,7 @@ export function useLocalStorage(
   const checkLocalStorage = (value: State): State => {
     const todos = localStorage.getItem('todos');
     const filter = localStorage.getItem('filter');
+    const selectedTodo = localStorage.getItem('selectedTodo');
 
     if (todos === null && filter === null) {
       return value;
@@ -35,6 +42,7 @@ export function useLocalStorage(
         return {
           todos: JSON.parse(todos || '[]'),
           filter: JSON.parse(filter || 'Status.all'),
+          selectedTodo: JSON.parse(selectedTodo || 'null'),
         };
       } catch (e) {
         return value;

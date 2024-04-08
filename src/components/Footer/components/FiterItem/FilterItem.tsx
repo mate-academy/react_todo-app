@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { Status } from '../../types/Status';
+import { Status } from '../../../../types/Status';
 import { useContext } from 'react';
-import { DispatchContext, TodosContext } from '../../store/Store';
+import { DispatchContext, TodosContext } from '../../../../store/Store';
 
 type Props = {
   currentFilter: Status;

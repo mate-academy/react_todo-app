@@ -1,20 +1,13 @@
 import React from 'react';
-import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-
-export type Action =
-  | { type: 'todos'; payload: Todo[] }
-  | { type: 'filter'; payload: Status };
-
-interface State {
-  todos: Todo[];
-  filter: Status;
-}
+import { Action } from '../types/Action';
+import { State } from '../types/State';
 
 const initialState: State = {
   todos: [],
   filter: Status.all,
+  selectedTodo: null,
 };
 
 type InitialDispatch = (action: Action) => void;

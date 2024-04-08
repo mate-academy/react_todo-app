@@ -1,4 +1,4 @@
-import { Action } from '../store/Store';
+import { Action } from '../types/Action';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
@@ -16,7 +16,7 @@ export const filterTodos = (filter: Status, todos: Todo[]) => {
     }
   });
 
-  displayedTodos = displayedTodos.sort((todo1, todo2) => todo2.id - todo1.id);
+  // displayedTodos = displayedTodos.sort((todo1, todo2) => todo2.id - todo1.id);
 
   localStorage.setItem('todos', JSON.stringify(displayedTodos));
 

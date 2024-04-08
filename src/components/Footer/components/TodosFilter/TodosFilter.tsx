@@ -1,6 +1,6 @@
 //import { useContext, useState } from "react"
 import { Status } from '../../../../types/Status';
-import { FilterItem } from '../../FilterItem';
+import { FilterItem } from '../FiterItem/FilterItem';
 
 export const TodosFilter = () => {
   return (
