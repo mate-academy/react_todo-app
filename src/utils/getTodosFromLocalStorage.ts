@@ -1,5 +1,7 @@
+import { LocalStorageKeys } from '../enums/LocalStorageKeys';
+
 export const getTodosFromLocalStorage = () => {
-  const data = localStorage.getItem('todos');
+  const data = localStorage.getItem(LocalStorageKeys.todos);
 
   if (data) {
     try {

@@ -4,6 +4,7 @@ import { ActionType } from '../types/ActionType';
 import { getTodosFromLocalStorage } from './getTodosFromLocalStorage';
 import { isHaveNotCompletedTodo } from './isHaveNotCompletedTodo';
 import { Todos } from '../types/Todos';
+import { LocalStorageKeys } from '../enums/LocalStorageKeys';
 
 export const reducer = (todos: Todos, action: ActionType) => {
   const removeTodo = (index: number) => {
@@ -12,7 +13,10 @@ export const reducer = (todos: Todos, action: ActionType) => {
       ...todos.visibleTodos.slice(index + 1),
     ];
 
-    localStorage.setItem('todos', JSON.stringify(newTodosWithRemoved));
+    localStorage.setItem(
+      LocalStorageKeys.todos,
+      JSON.stringify(newTodosWithRemoved),
+    );
 
     return {
       ...todos,
@@ -34,7 +38,7 @@ export const reducer = (todos: Todos, action: ActionType) => {
       const newTodosWithAdded = [...todos.visibleTodos, newTodo];
 
       localStorage.setItem(
-        'todos',
+        LocalStorageKeys.todos,
         JSON.stringify([...getTodosFromLocalStorage(), newTodo]),
       );
 
@@ -61,7 +65,7 @@ export const reducer = (todos: Todos, action: ActionType) => {
         ...todos.visibleTodos.slice(action.index + 1),
       ];
 
-      localStorage.setItem('todos', JSON.stringify(newTodos));
+      localStorage.setItem(LocalStorageKeys.todos, JSON.stringify(newTodos));
 
       return {
         ...todos,
@@ -80,7 +84,10 @@ export const reducer = (todos: Todos, action: ActionType) => {
 
       newEditedTodos[action.index].name = action.newName;
 
-      localStorage.setItem('todos', JSON.stringify(newEditedTodos));
+      localStorage.setItem(
+        LocalStorageKeys.todos,
+        JSON.stringify(newEditedTodos),
+      );
 
       return {
         ...todos,
@@ -93,7 +100,10 @@ export const reducer = (todos: Todos, action: ActionType) => {
           isCompleted: true,
         }));
 
-        localStorage.setItem('todos', JSON.stringify(changedTodos));
+        localStorage.setItem(
+          LocalStorageKeys.todos,
+          JSON.stringify(changedTodos),
+        );
 
         return {
           ...todos,
@@ -113,7 +123,7 @@ export const reducer = (todos: Todos, action: ActionType) => {
 
     case Action.clearAllCompleted:
       localStorage.setItem(
-        'todos',
+        LocalStorageKeys.todos,
         JSON.stringify(
           getTodosFromLocalStorage().filter((todo: Todo) => !todo.isCompleted),
         ),
