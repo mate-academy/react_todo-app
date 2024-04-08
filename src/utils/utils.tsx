@@ -3,7 +3,7 @@ import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
 export const filterTodos = (filter: Status, todos: Todo[]) => {
-  const displayedTodos = todos.filter((todo: Todo) => {
+  let displayedTodos = todos.filter((todo: Todo) => {
     switch (filter) {
       case Status.active:
         return todo.completed === false;
@@ -16,7 +16,11 @@ export const filterTodos = (filter: Status, todos: Todo[]) => {
     }
   });
 
-  return displayedTodos.sort((todo1, todo2) => todo2.id - todo1.id);
+  displayedTodos = displayedTodos.sort((todo1, todo2) => todo2.id - todo1.id);
+
+  localStorage.setItem('todos', JSON.stringify(displayedTodos));
+
+  return displayedTodos;
 };
 
 export function countPreparedItems(todos: Todo[]) {

@@ -11,12 +11,12 @@ export const Footer = () => {
   const displayButton = todos.some(todo => todo.completed === true);
 
   return (
-    <footer className="footer" data-cy="todosFilter">
+    <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
         {countActiveTodos} items left
       </span>
 
-      <TodosFilter />
+      <TodosFilter data-cy="todosFilter" />
       {displayButton && (
         <button
           type="button"

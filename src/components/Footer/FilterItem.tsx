@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { Status } from '../../../../types/Status';
+import { Status } from '../../types/Status';
 import { useContext } from 'react';
-import { DispatchContext, TodosContext } from '../../../../store/Store';
+import { DispatchContext, TodosContext } from '../../store/Store';
 
 type Props = {
   currentFilter: Status;
@@ -10,14 +10,14 @@ type Props = {
 export const FilterItem: React.FC<Props> = ({ currentFilter }) => {
   const { filter } = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
-  let link = filter.toLowerCase();
+  let link = currentFilter.toLowerCase();
 
   if (filter === Status.all) {
     link = '';
   }
 
   return (
-    <li>
+    <li key={currentFilter}>
       <a
         href={`#/${link}`}
         className={classNames({ selected: filter === currentFilter })}
