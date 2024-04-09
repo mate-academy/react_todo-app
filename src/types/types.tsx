@@ -3,4 +3,5 @@ export interface Todo {
   id: number;
   complate: boolean;
   edit: boolean;
+  editTitle: string;
 }
