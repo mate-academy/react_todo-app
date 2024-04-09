@@ -17,7 +17,6 @@ export const TodoApp = () => {
           <TodoFooter />
         </>
       )}
-
     </>
   );
 };

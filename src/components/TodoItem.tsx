@@ -64,7 +64,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleDoubleClickEdit = () => {
-    console.log(todo.id)
     setEditingTodoId(todo.id);
     setNewTitle(todo.title);
   };
