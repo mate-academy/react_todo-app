@@ -34,8 +34,6 @@ export const filterTodos = (filter: Status, todos: Todo[]) => {
     }
   });
 
-  localStorage.setItem('todos', JSON.stringify(displayedTodos));
-
   return displayedTodos;
 };
 
