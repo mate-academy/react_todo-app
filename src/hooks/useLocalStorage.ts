@@ -55,9 +55,7 @@ export function useLocalStorage(
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const save = (action: Action): void => {
-    if (action.type === 'todos' && action.payload.length > 0) {
-      localStorage.setItem(action.type, JSON.stringify(action.payload));
-    }
+    localStorage.setItem(action.type, JSON.stringify(action.payload));
 
     dispatch(action);
   };
