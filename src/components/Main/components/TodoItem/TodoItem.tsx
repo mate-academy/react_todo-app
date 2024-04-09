@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../../../types/Todo';
 import { DispatchContext, TodosContext } from '../../../../store/Store';
-import { updatedTodos } from '../../../../utils/utils';
+import { handleEditing, updatedTodos } from '../../../../utils/utils';
 import { input } from '../../../../utils/input';
 import classNames from 'classnames';
 type Props = {
@@ -22,16 +22,21 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [selectedTodo]);
 
-  const changeTitle = (todoItem: Todo) => {
-    if (input.checkInput(title)) {
-      input.deleteTodo(todo.id, todos, dispatch);
-    } else {
-      updatedTodos(dispatch, todos, todoItem, false, title);
-    }
+  const handleEdit = (todoItem: Todo) => {
+    handleEditing(todoItem, title, todos, dispatch);
+    dispatch({
+      type: 'selectedTodo',
+      payload: null,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleEdit(todo);
   };
 
   const changeCompleted = (todoItem: Todo) => {
-    updatedTodos(dispatch, todos, todoItem, true);
+    updatedTodos(dispatch, todos, todoItem, true, todo.title);
   };
 
   return (
@@ -53,23 +58,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
-          onChange={() => {
-            changeCompleted(todo);
-          }}
+          onChange={() => changeCompleted(todo)}
         />
       </label>
 
       {isSelected ? (
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            updatedTodos(dispatch, todos, todo, false, title);
-            dispatch({
-              type: 'selectedTodo',
-              payload: null,
-            });
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <input
             ref={titleField}
             data-cy="TodoTitleField"
@@ -81,13 +75,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             onKeyUp={e => {
               input.handleKey(e, todo, dispatch, setTitle);
             }}
-            onBlur={() => {
-              changeTitle(todo);
-              dispatch({
-                type: 'selectedTodo',
-                payload: null,
-              });
-            }}
+            onBlur={() => handleEdit(todo)}
           />
         </form>
       ) : (
@@ -96,7 +84,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             {todo.title}
           </span>
 
-          {/* Remove button appears only on hover */}
           <button
             type="button"
             className="todo__remove"

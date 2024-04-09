@@ -11,11 +11,7 @@ type Props = {
 export const FilterItem: React.FC<Props> = ({ currentFilter, check }) => {
   const { filter } = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
-  let link = currentFilter.toLowerCase();
-
-  if (filter === Status.all) {
-    link = '';
-  }
+  const link = filter === Status.all ? '' : currentFilter.toLowerCase();
 
   return (
     <a

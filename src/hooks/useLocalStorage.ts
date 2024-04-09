@@ -1,8 +1,6 @@
 import { useReducer } from 'react';
 import { Action } from '../types/Action';
 import { State } from '../types/State';
-import { Todo } from '../types/Todo';
-import { Status } from '../types/Status';
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -30,32 +28,36 @@ function reducer(state: State, action: Action): State {
 }
 
 export function useLocalStorage(
-  startValue: Todo[],
+  startValue: State,
 ): [State, (action: Action) => void] {
-  const checkLocalStorage = (value: Todo[]): Todo[] => {
-    const todos = localStorage.getItem('todos');
+  function checkLocalStorage<T>(key: string, defaultValue: T): T {
+    const value = localStorage.getItem(key);
 
-    if (todos === null) {
-      return value;
+    if (value === null) {
+      localStorage.setItem('todos', JSON.stringify(defaultValue));
+
+      return defaultValue;
     } else {
       try {
-        return JSON.parse(todos);
+        return JSON.parse(value);
       } catch (e) {
-        return value;
+        return defaultValue;
       }
     }
-  };
+  }
 
   const initialState: State = {
-    todos: checkLocalStorage(startValue),
-    filter: Status.all,
-    selectedTodo: null,
+    todos: checkLocalStorage('todos', startValue.todos),
+    filter: startValue.filter,
+    selectedTodo: startValue.selectedTodo,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const save = (action: Action): void => {
-    localStorage.setItem(action.type, JSON.stringify(action.payload));
+    if (action.type === 'todos') {
+      localStorage.setItem(action.type, JSON.stringify(action.payload));
+    }
 
     dispatch(action);
   };

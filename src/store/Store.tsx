@@ -20,7 +20,7 @@ type Props = {
 };
 
 export const GlobalTodosProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useLocalStorage([]);
+  const [state, dispatch] = useLocalStorage(initialState);
 
   return (
     <DispatchContext.Provider value={dispatch}>

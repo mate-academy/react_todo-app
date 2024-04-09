@@ -1,6 +1,7 @@
 import { Action } from '../types/Action';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
+import { input } from './input';
 
 export const changeTodosStatuses = (
   changeStatus: boolean,
@@ -48,7 +49,7 @@ export const updatedTodos = (
   todos: Todo[],
   todo: Todo,
   changeCompleted: boolean,
-  title = '',
+  title: string,
 ) => {
   const index = todos.findIndex(anyTodo => anyTodo.id === todo.id);
   const currentTodo = todos[index];
@@ -62,7 +63,7 @@ export const updatedTodos = (
 
     const updatedTodo: Todo = {
       ...todos[index],
-      title: newTitle,
+      title: newTitle.trim(),
       completed: newCompleted,
     };
 
@@ -85,4 +86,40 @@ export const clearCompletedTodos = (
     type: 'todos',
     payload: newTodos,
   });
+};
+
+export const handleSubmit = (
+  e: React.FormEvent<HTMLFormElement>,
+  title: string,
+  todos: Todo[],
+  dispatch: (action: Action) => void,
+) => {
+  e.preventDefault();
+
+  if (!input.checkInput(title)) {
+    dispatch({
+      type: 'todos',
+      payload: [
+        ...todos,
+        {
+          id: +new Date(),
+          title: title.trim(),
+          completed: false,
+        },
+      ],
+    });
+  }
+};
+
+export const handleEditing = (
+  todo: Todo,
+  title: string,
+  todos: Todo[],
+  dispatch: (action: Action) => void,
+) => {
+  if (input.checkInput(title)) {
+    input.deleteTodo(todo.id, todos, dispatch);
+  } else {
+    updatedTodos(dispatch, todos, todo, false, title);
+  }
 };

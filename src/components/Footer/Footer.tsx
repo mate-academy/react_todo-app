@@ -15,12 +15,7 @@ export const Footer = () => {
       <span className="todo-count" data-cy="TodosCounter">
         {numberOfActiveTodos} items left
       </span>
-
-      {/* Active link should have the 'selected' class */}
       <TodosFilter />
-
-      {/* this button should be disabled if there are no completed todos */}
-
       <button
         type="button"
         className="todoapp__clear-completed"
