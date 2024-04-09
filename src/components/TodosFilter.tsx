@@ -5,7 +5,7 @@ import { Filter } from '../types/filter';
 
 export const TodosFilter: React.FC = () => {
   const { filterType, setFilterType } = useContext(TodosContext);
-
+  
   const handleSetFilterType = (type: Filter) => () => setFilterType(type);
 
   return (

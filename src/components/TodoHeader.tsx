@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { TodosContext } from './TodosContext';
 
 export const TodoHeader: React.FC = () => {
@@ -18,6 +18,14 @@ export const TodoHeader: React.FC = () => {
     }
   }
 
+  const todoField = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (todoField.current) {
+      todoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="header">
       <h1>todos</h1>
@@ -29,14 +37,14 @@ export const TodoHeader: React.FC = () => {
         }}
       >
         <input
+          ref={todoField}
           type="text"
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"
           value={title}
-          checked
           onChange={e => setTitle(e.target.value)}
-          autoFocus
+          // autoFocus
         />
       </form>
     </header>

@@ -64,9 +64,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleDoubleClickEdit = () => {
+    console.log(todo.id)
     setEditingTodoId(todo.id);
     setNewTitle(todo.title);
-  }
+  };
 
   return (
     <li
@@ -93,7 +94,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onClick={() => handleClickDeleteTodo(todo.id)}
         />
       </div>
-      {editingTodoId && (
+      {todo.id === editingTodoId && (
         <input
           type="text"
           className="edit"

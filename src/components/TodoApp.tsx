@@ -11,9 +11,13 @@ export const TodoApp = () => {
     <>
       <TodoHeader />
 
-      {!!todos.length && <TodoList />}
+      {!!todos.length && (
+        <>
+          <TodoList />
+          <TodoFooter />
+        </>
+      )}
 
-      {!!todos.length && <TodoFooter />}
     </>
   );
 };

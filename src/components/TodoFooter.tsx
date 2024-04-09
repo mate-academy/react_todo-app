@@ -11,15 +11,19 @@ export const TodoFooter: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const notCompletedTodos = todos.filter(item => !item.completed);
+
+  const completedTodos = todos.some(item => item.completed);
+
   return (
     <footer className="footer" data-cy="todosFilter">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter(item => !item.completed).length} items left`}
+        {`${notCompletedTodos.length} item${notCompletedTodos.length !== 1 ? 's' : ''} left`}
       </span>
 
       <TodosFilter />
 
-      {todos.some(item => item.completed) && (
+      {completedTodos && (
         <button
           type="button"
           className="clear-completed"
