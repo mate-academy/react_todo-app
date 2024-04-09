@@ -136,7 +136,9 @@ function reducer(state: State, action: Action): State {
         ...state,
         todos: updatedTodos,
         allComplate: allTodosComplete,
-        filterTodos: updatedTodos.filter(todo => !todo.complate),
+        filterTodos: state.active
+          ? updatedTodos.filter(todo => !todo.complate)
+          : updatedTodos.filter(todo => todo.complate),
         currentId: action.currentId,
       };
 
@@ -227,6 +229,7 @@ function reducer(state: State, action: Action): State {
         filterTodos: state.active
           ? deleteComplate.filter(todo => !todo.complate)
           : deleteComplate.filter(todo => todo.complate),
+        focusTodo: true,
       };
 
     case 'inputHeaderFocus':
