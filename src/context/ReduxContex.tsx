@@ -73,7 +73,7 @@ function reducer(state: State, action: Action): State {
       }
 
       const newTodo: Todo = {
-        text: state.query,
+        text: state.query.trim(),
         id: +new Date(),
         complate: false,
         edit: false,
@@ -90,7 +90,7 @@ function reducer(state: State, action: Action): State {
           ? addTodo.filter(todo => !todo.complate)
           : addTodo.filter(todo => todo.complate),
         allComplate: addTodo.every(todo => todo.complate),
-        prevTitle: state.query,
+        prevTitle: state.query.trim(),
       };
 
     case 'editSubmit':
