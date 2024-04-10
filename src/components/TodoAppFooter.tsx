@@ -13,7 +13,6 @@ export const TodoAppFooter: React.FC = () => {
         {`${itemLeft.length} items left`}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           onClick={() => dispatch({ type: 'filterAll' })}
@@ -43,7 +42,6 @@ export const TodoAppFooter: React.FC = () => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         onClick={() => dispatch({ type: 'clearComplate' })}
         type="button"

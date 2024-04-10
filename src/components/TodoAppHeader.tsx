@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { DispatchContext, StateContext } from '../context/ReduxContex';
 
 export const TodoAppHeader: React.FC = () => {
-  const { allComplate, todos, query, focusTodo } = useContext(StateContext);
+  const { allComplete, todos, query, focusTodo } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const headerField = useRef<HTMLInputElement | null>(null);
@@ -16,17 +16,15 @@ export const TodoAppHeader: React.FC = () => {
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       {todos.length !== 0 && (
         <button
           onClick={() => dispatch({ type: 'allComplate' })}
           type="button"
-          className={cn('todoapp__toggle-all', { active: allComplate })}
+          className={cn('todoapp__toggle-all', { active: allComplete })}
           data-cy="ToggleAllButton"
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form onSubmit={event => dispatch({ type: 'onSubmit', event: event })}>
         <input
           onChange={event =>

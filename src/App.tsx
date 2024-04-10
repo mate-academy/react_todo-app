@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
-import { TodoAppHeader } from './component/TodoAppHeader';
-import { TodoAppMain } from './component/TodoAppMain';
-import { TodoAppFooter } from './component/TodoAppFooter';
+import { TodoAppHeader } from './components/TodoAppHeader';
+import { TodoAppMain } from './components/TodoAppList';
+import { TodoAppFooter } from './components/TodoAppFooter';
 import { StateContext } from './context/ReduxContex';
 
 export const App: React.FC = () => {

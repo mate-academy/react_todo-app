@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FormEvent, useReducer } from 'react';
+import React, { FormEvent } from 'react';
 import { Todo } from '../types/types';
+import useLocalStorageReducer from '../customHook/useLocalStorageState';
 
-type Action =
+export type Action =
   | { type: 'allComplate' }
   | { type: 'onSubmit'; event: FormEvent<HTMLFormElement> }
   | { type: 'setQuery'; value: string }
@@ -20,10 +21,10 @@ type Action =
   | { type: 'inputHeaderFocus'}
   | { type: 'escape' , key: string; currentId: number };
 
-interface State {
+export interface State {
   todos: Todo[];
-  filterTodos: Todo[];
-  allComplate: boolean;
+  filteredTodos: Todo[];
+  allComplete: boolean;
   query: string;
   checked: boolean;
   currentId: number;
@@ -34,7 +35,7 @@ interface State {
   prevTitle: string;
 }
 
-function reducer(state: State, action: Action): State {
+export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'allComplate':
       const complateTodos = state.todos.map(todo => ({
@@ -47,16 +48,16 @@ function reducer(state: State, action: Action): State {
         complate: false,
       }));
 
-      const hasComplate = state.allComplate ? false : true;
+      const hasComplate = state.allComplete ? false : true;
       const hasAllComplate = hasComplate ? complateTodos : unComplateTodos;
 
       return {
         ...state,
         todos: hasAllComplate,
-        filterTodos: state.active
+        filteredTodos: state.active
           ? hasAllComplate.filter(todo => !todo.complate)
           : hasAllComplate.filter(todo => todo.complate),
-        allComplate: hasAllComplate.every(todo => todo.complate),
+        allComplete: hasAllComplate.every(todo => todo.complate),
       };
 
     case 'setQuery':
@@ -86,10 +87,10 @@ function reducer(state: State, action: Action): State {
         ...state,
         query: '',
         todos: addTodo,
-        filterTodos: state.active
+        filteredTodos: state.active
           ? addTodo.filter(todo => !todo.complate)
           : addTodo.filter(todo => todo.complate),
-        allComplate: addTodo.every(todo => todo.complate),
+        allComplete: addTodo.every(todo => todo.complate),
         prevTitle: state.query.trim(),
       };
 
@@ -111,7 +112,7 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         todos: emptyFilter,
-        filterTodos: state.active
+        filteredTodos: state.active
           ? emptyFilter.filter(todo => !todo.complate)
           : emptyFilter.filter(todo => todo.complate),
         currentId: action.currentId,
@@ -135,8 +136,8 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         todos: updatedTodos,
-        allComplate: allTodosComplete,
-        filterTodos: state.active
+        allComplete: allTodosComplete,
+        filteredTodos: state.active
           ? updatedTodos.filter(todo => !todo.complate)
           : updatedTodos.filter(todo => todo.complate),
         currentId: action.currentId,
@@ -154,7 +155,7 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         todos: editTodos,
-        filterTodos: state.active
+        filteredTodos: state.active
           ? editTodos.filter(todo => !todo.complate)
           : editTodos.filter(todo => todo.complate),
         currentId: action.currentId,
@@ -182,11 +183,11 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         todos: deleteTodo,
-        filterTodos: state.active
+        filteredTodos: state.active
           ? deleteTodo.filter(todo => !todo.complate)
           : deleteTodo.filter(todo => todo.complate),
         currentId: action.currentId,
-        allComplate: deleteTodo.every(todo => todo.complate),
+        allComplete: deleteTodo.every(todo => todo.complate),
       };
 
     case 'filterAll':
@@ -205,7 +206,7 @@ function reducer(state: State, action: Action): State {
         active: true,
         all: false,
         complate: false,
-        filterTodos: filterActive,
+        filteredTodos: filterActive,
       };
 
     case 'filterComplate':
@@ -216,7 +217,7 @@ function reducer(state: State, action: Action): State {
         complate: true,
         active: false,
         all: false,
-        filterTodos: filterComplate,
+        filteredTodos: filterComplate,
       };
 
     case 'clearComplate':
@@ -224,9 +225,9 @@ function reducer(state: State, action: Action): State {
 
       return {
         ...state,
-        allComplate: false,
+        allComplete: false,
         todos: deleteComplate,
-        filterTodos: state.active
+        filteredTodos: state.active
           ? deleteComplate.filter(todo => !todo.complate)
           : deleteComplate.filter(todo => todo.complate),
         focusTodo: true,
@@ -251,7 +252,7 @@ function reducer(state: State, action: Action): State {
         return {
           ...state,
           todos: disable,
-          filterTodos: state.active
+          filteredTodos: state.active
             ? disable.filter(todo => !todo.complate)
             : disable.filter(todo => todo.complate),
           currentId: action.currentId,
@@ -260,13 +261,16 @@ function reducer(state: State, action: Action): State {
       }
 
       return state;
+
+    default:
+      return state;
   }
 }
 
-const initialState: State = {
+export const initialState: State = {
   todos: [],
-  filterTodos: [],
-  allComplate: false,
+  filteredTodos: [],
+  allComplete: false,
   query: '',
   checked: false,
   currentId: 0,
@@ -285,7 +289,7 @@ type Props = {
 };
 
 export const GlobelStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useLocalStorageReducer('todosState', reducer, initialState);
 
   return (
     <DispatchContext.Provider value={dispatch}>
