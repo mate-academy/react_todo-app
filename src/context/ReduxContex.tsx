@@ -68,7 +68,7 @@ function reducer(state: State, action: Action): State {
     case 'onSubmit':
       action.event.preventDefault();
 
-      if (!state.query) {
+      if (!state.query.trim()) {
         return state;
       }
 
