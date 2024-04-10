@@ -18,6 +18,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
     }
   });
 
+  let value = '';
+
   return (
     <div
       key={todo.id}
@@ -52,17 +54,20 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               type: 'editSubmit',
               event: event,
               currentId: todo.id,
+              value: value,
             })
           }
         >
           <input
-            onChange={event =>
+            onChange={event => {
+              value = event.target.value;
+
               dispatch({
                 type: 'setNewTitle',
                 value: event.target.value,
                 currentId: todo.id,
-              })
-            }
+              });
+            }}
             ref={titleField}
             data-cy="TodoTitleField"
             type="text"
@@ -73,6 +78,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               dispatch({
                 type: 'editSubmit',
                 currentId: todo.id,
+                value: value,
               })
             }
             onKeyUp={event =>

@@ -9,8 +9,10 @@ function useLocalStorageReducer(
   initialState: State,
 ): [State, React.Dispatch<Action>] {
   // Get the stored value from localStorage (if it exists)
+
   const storedValue = localStorage.getItem(key);
   // Parse the stored value as JSON or use the default value
+
   const initial = storedValue ? JSON.parse(storedValue) : initialState;
 
   // Define the reducer function

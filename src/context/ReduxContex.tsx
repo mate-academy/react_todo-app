@@ -12,7 +12,7 @@ export type Action =
   | { type: 'checked'; currentId: number }
   | { type: 'edit'; currentId: number }
   | { type: 'setNewTitle'; value: string; currentId: number }
-  | { type: 'editSubmit'; event?: FormEvent<HTMLFormElement>; currentId: number }
+  | { type: 'editSubmit'; event?: FormEvent<HTMLFormElement>; currentId: number; value: string}
   | { type: 'delete'; currentId: number }
   | { type: 'filterAll' }
   | { type: 'filterActive' }
@@ -32,7 +32,6 @@ export interface State {
   complate: boolean;
   active: boolean;
   focusTodo: boolean;
-  prevTitle: string;
 }
 
 export function reducer(state: State, action: Action): State {
@@ -78,7 +77,7 @@ export function reducer(state: State, action: Action): State {
         id: +new Date(),
         complate: false,
         edit: false,
-        editTitle: 'newTitle',
+        prevText: state.query.trim(),
       };
 
       const addTodo = [...state.todos, newTodo];
@@ -91,19 +90,16 @@ export function reducer(state: State, action: Action): State {
           ? addTodo.filter(todo => !todo.complate)
           : addTodo.filter(todo => todo.complate),
         allComplete: addTodo.every(todo => todo.complate),
-        prevTitle: state.query.trim(),
       };
 
     case 'editSubmit':
-      let prevText = '';
 
       const editTitle = state.todos.map(todo => {
         if (todo.id === action.currentId) {
-          return { ...todo, edit: false };
+
+          return { ...todo, edit: false, prevText: todo.text};
         }
-
-        prevText = todo.text;
-
+      
         return todo;
       });
 
@@ -117,7 +113,6 @@ export function reducer(state: State, action: Action): State {
           : emptyFilter.filter(todo => todo.complate),
         currentId: action.currentId,
         focusTodo: true,
-        prevTitle: prevText,
       };
 
     case 'checked':
@@ -243,7 +238,7 @@ export function reducer(state: State, action: Action): State {
       if (action.key === 'Escape') {
         const disable = state.todos.map(todo => {
           if (todo.id === action.currentId) {
-            return { ...todo, text: state.prevTitle, edit: false };
+            return { ...todo, text: todo.prevText, edit: false };
           }
 
           return todo;
@@ -278,7 +273,6 @@ export const initialState: State = {
   complate: false,
   active: false,
   focusTodo: true,
-  prevTitle: '',
 };
 
 export const StateContext = React.createContext(initialState);
