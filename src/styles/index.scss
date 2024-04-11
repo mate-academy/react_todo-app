@@ -20,6 +20,10 @@ body {
   pointer-events: none;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 @import './todoapp';
 @import './todo';
 @import './filter';
