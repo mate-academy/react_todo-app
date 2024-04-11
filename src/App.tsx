@@ -7,7 +7,6 @@ import { Filter, Todo } from './types/types';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [isVisible, setIsVisible] = useState(true);
@@ -19,6 +18,7 @@ export const App: React.FC = () => {
         id: todos.length + 1,
         title,
         isEditing: false,
+        isCompleted: false,
       } as Todo;
     },
     [todos],
@@ -51,16 +51,18 @@ export const App: React.FC = () => {
     setEditedValue('');
   };
 
+  const completedTodos = todos.filter(({ isCompleted }) => isCompleted);
+
   const visibleTodos: Todo[] = useMemo(() => {
     switch (filter) {
       case Filter.Active:
-        return [...todos.filter(todo => !completedTodos.includes(todo))];
+        return todos.filter(todo => !completedTodos.includes(todo));
 
       case Filter.Completed:
         return [...completedTodos];
 
       default:
-        return [...todos];
+        return todos;
     }
   }, [todos, filter, completedTodos]);
 
@@ -88,7 +90,6 @@ export const App: React.FC = () => {
             editHandler={editHandler}
             visibleTodos={visibleTodos}
             completedTodos={completedTodos}
-            setCompletedTodos={setCompletedTodos}
           />
         )}
 
@@ -99,7 +100,6 @@ export const App: React.FC = () => {
             filter={filter}
             setFilter={setFilter}
             completedTodos={completedTodos}
-            setCompletedTodos={setCompletedTodos}
           />
         )}
       </div>

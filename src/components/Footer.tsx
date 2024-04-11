@@ -5,7 +5,6 @@ type Props = {
   todos: Todo[];
   setTodos: (prop: Todo[]) => void;
   completedTodos: Todo[];
-  setCompletedTodos: (prop: Todo[]) => void;
   filter: Filter;
   setFilter: (prop: Filter) => void;
 };
@@ -14,7 +13,6 @@ export const Footer: React.FC<Props> = ({
   todos,
   setTodos,
   completedTodos,
-  setCompletedTodos,
   filter,
   setFilter,
 }) => {
@@ -67,7 +65,7 @@ export const Footer: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         onClick={() => {
           setTodos(todos.filter(todo => !completedTodos.includes(todo)));
-          setCompletedTodos([]);
+          completedTodos.filter(() => false);
         }}
       >
         Clear completed

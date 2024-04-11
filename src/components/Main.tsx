@@ -6,7 +6,6 @@ type Props = {
   completedTodos: Todo[];
   todos: Todo[];
   setTodos: (prop: Todo[]) => void;
-  setCompletedTodos: (prop: Todo[]) => void;
   editedValue: string;
   setEditedValue: (prop: string) => void;
   editHandler: (event: React.FormEvent, todo: Todo) => void;
@@ -18,7 +17,6 @@ export const Main: React.FC<Props> = ({
   completedTodos,
   todos,
   setTodos,
-  setCompletedTodos,
   editedValue,
   setEditedValue,
   exitEditorHandler,
@@ -60,7 +58,11 @@ export const Main: React.FC<Props> = ({
               <label
                 onClick={() => {
                   if (!completedTodos.includes(todo)) {
-                    setCompletedTodos([...completedTodos, todo]);
+                    const clearTodos = todos.filter(
+                      currentTodo => currentTodo.id !== todo.id,
+                    );
+
+                    setTodos([{ ...todo, isCompleted: true }, ...clearTodos]);
                   }
                 }}
                 htmlFor="#form-input"
@@ -77,8 +79,11 @@ export const Main: React.FC<Props> = ({
               <span
                 onDoubleClick={() => {
                   if (!completedTodos.includes(todo)) {
-                    // eslint-disable-next-line no-param-reassign
-                    todo.isEditing = true;
+                    const clearTodos = todos.filter(
+                      currentTodo => currentTodo.id !== todo.id,
+                    );
+
+                    setTodos([...clearTodos, { ...todo, isEditing: true }]);
                     setEditedValue(todo.title);
                   }
                 }}
@@ -95,10 +100,8 @@ export const Main: React.FC<Props> = ({
                   setTodos(
                     todos.filter(currentTodo => currentTodo.id !== todo.id),
                   );
-                  setCompletedTodos(
-                    completedTodos.filter(
-                      currentTodo => currentTodo.id !== todo.id,
-                    ),
+                  completedTodos.filter(
+                    currentTodo => currentTodo.id !== todo.id,
                   );
                 }}
               >
