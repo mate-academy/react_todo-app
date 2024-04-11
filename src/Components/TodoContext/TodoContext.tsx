@@ -1,8 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { Todo } from '../../types/Todo';
 
-type FilterSettings = string;
+export enum FilterSettings {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 type Props = {
   children: React.ReactNode;
 };
@@ -13,37 +17,46 @@ type TodoContextType = {
   newTodo: Todo;
   setNewTodo: (v: { title: string; id: number; completed: boolean }) => void;
   filterSettings: FilterSettings;
-  setFilterSettings: (v: string) => void;
+  setFilterSettings: (v: FilterSettings) => void;
 };
 
 export const todoPattern = {
   title: '',
-  id: 1,
+  id: +new Date(),
   completed: false,
 };
 
-const initialTodosList: Todo[] = [];
+const initialTodosList = () => {
+  const ourList = localStorage.getItem('todosList');
+
+  if (ourList === null) {
+    return [];
+  }
+
+  return JSON.parse(ourList);
+};
 
 export const TodoContext = React.createContext<TodoContextType>({
   todosList: [],
   setTodosList: () => {},
   newTodo: todoPattern,
   setNewTodo: () => {},
-  filterSettings: 'all',
+  filterSettings: FilterSettings.all,
   setFilterSettings: () => {},
 });
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [newTodo, setNewTodo] = useState(todoPattern);
-  const [todosList, setTodosList] = useLocalStorage(
-    'todosList',
-    initialTodosList,
-  );
-  const [filterSettings, setFilterSettings] = useState('all');
+
+  const [todosList, setTodosList] = useState(initialTodosList());
+
+  const [filterSettings, setFilterSettings] = useState(FilterSettings.all);
 
   useEffect(() => {
     if (todosList.length === 0) {
       localStorage.removeItem('todosList');
+    } else {
+      localStorage.setItem('todosList', JSON.stringify(todosList));
     }
   }, [todosList]);
 

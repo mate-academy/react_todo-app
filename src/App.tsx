@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { TodoProvider } from './Components/TodoContext/TodoContext';
-import { ListOfTodo } from './Components/TodoContext/TodoList/TodoList';
+import { TodoList } from './Components/TodoList/TodoList';
 import { Header } from './Components/Header/Header';
 import { Footer } from './Components/Footer/Footer';
 
@@ -12,7 +12,7 @@ export const App: React.FC = () => {
 
         <div className="todoapp__content">
           <Header />
-          <ListOfTodo />
+          <TodoList />
           <Footer />
         </div>
       </div>

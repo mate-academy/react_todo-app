@@ -1,14 +1,17 @@
 import { useContext, useEffect, useRef } from 'react';
 import { TodoContext } from '../TodoContext/TodoContext';
 import { todoPattern } from '../TodoContext/TodoContext';
-import { useState } from 'react';
 import classNames from 'classnames';
 
 export const Header = () => {
   const { todosList, setTodosList, newTodo, setNewTodo } =
     useContext(TodoContext);
-  const [idCount, setIdCount] = useState(2);
+
   const headerInput = useRef<HTMLInputElement>(null);
+
+  const isAllComplete =
+    todosList.length ===
+    todosList.filter(todo => todo.completed === true).length;
 
   useEffect(() => {
     if (headerInput.current) {
@@ -16,13 +19,7 @@ export const Header = () => {
     }
   }, [todosList]);
 
-  const getId = () => {
-    setIdCount(idCount + 1);
-
-    return idCount;
-  };
-
-  const editingNewTodo = (event: React.FocusEvent<HTMLInputElement>) => {
+  const editNewTodo = (event: React.FocusEvent<HTMLInputElement>) => {
     setNewTodo({
       ...newTodo,
       title: event.currentTarget.value,
@@ -32,7 +29,7 @@ export const Header = () => {
   const resetNewTodo = () => {
     setNewTodo({
       ...todoPattern,
-      id: getId(),
+      id: +new Date(),
     });
   };
 
@@ -54,42 +51,29 @@ export const Header = () => {
 
   const allCompleteCheck = () => {
     if (todosList.length === 0) {
-      return;
+      return false;
     }
 
-    return (
-      todosList.length ===
-      todosList.filter(todo => todo.completed === true).length
-    );
+    return isAllComplete;
   };
 
-  const checkAll = () => {
+  function toggleAll(condition: boolean) {
     todosList.map(todo => {
       const targetTodo = todosList.find(item => item.id === todo.id);
 
       if (targetTodo) {
-        targetTodo.completed = true;
+        targetTodo.completed = condition;
       }
     });
-  };
+  }
 
-  const unCheckAll = () => {
-    todosList.map(todo => {
-      const targetTodo = todosList.find(item => item.id === todo.id);
-
-      if (targetTodo) {
-        targetTodo.completed = false;
-      }
-    });
-  };
-
-  const handleAllChecked = () => {
+  const handletoggleAll = () => {
     if (!allCompleteCheck()) {
-      checkAll();
+      toggleAll(true);
 
       setTodosList([...todosList]);
     } else {
-      unCheckAll();
+      toggleAll(false);
 
       setTodosList([...todosList]);
     }
@@ -104,7 +88,7 @@ export const Header = () => {
             active: allCompleteCheck(),
           })}
           data-cy="ToggleAllButton"
-          onClick={handleAllChecked}
+          onClick={handletoggleAll}
         />
       )}
 
@@ -116,7 +100,7 @@ export const Header = () => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={newTodo.title}
-          onChange={editingNewTodo}
+          onChange={editNewTodo}
           onKeyDown={handleSubmitOfNewTodo}
         />
       </form>

@@ -10,9 +10,13 @@ type Props = {
 
 export const TodoListItem: React.FC<Props> = ({ todo }) => {
   const { todosList, setTodosList } = useContext(TodoContext);
+
   const { id, title, completed } = todo;
+
   const [editable, setEditable] = useState(false);
+
   const [newTitle, setNewTitle] = useState(title);
+
   const [trimmedTitle, setTrimmedTitle] = useState(newTitle.trim());
 
   const removeTodo = () => {
@@ -97,21 +101,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {!editable ? (
-        <>
-          <span data-cy="TodoTitle" className="todo__title">
-            {title}
-          </span>
-          <button
-            type="button"
-            className="todo__remove"
-            data-cy="TodoDelete"
-            onClick={removeTodo}
-          >
-            ×
-          </button>
-        </>
-      ) : (
+      {editable ? (
         <form>
           <input
             data-cy="TodoTitleField"
@@ -126,6 +116,20 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
             autoFocus
           />
         </form>
+      ) : (
+        <>
+          <span data-cy="TodoTitle" className="todo__title">
+            {title}
+          </span>
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={removeTodo}
+          >
+            ×
+          </button>
+        </>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { TodoContext } from '../TodoContext/TodoContext';
 import classNames from 'classnames';
+import { FilterSettings } from '../TodoContext/TodoContext';
 
 export const Footer = () => {
   const { todosList, setTodosList, filterSettings, setFilterSettings } =
@@ -9,7 +10,7 @@ export const Footer = () => {
   const completedTodos = todosList.filter(todo => todo.completed === true);
   const unCompletedTodos = todosList.filter(todo => todo.completed !== true);
 
-  const handleFiltering = (value: string) => {
+  const handleFiltering = (value: FilterSettings) => {
     setFilterSettings(value);
   };
 
@@ -31,7 +32,7 @@ export const Footer = () => {
               selected: filterSettings === 'all',
             })}
             data-cy="FilterLinkAll"
-            onClick={() => handleFiltering('all')}
+            onClick={() => handleFiltering(FilterSettings.all)}
           >
             All
           </a>
@@ -42,7 +43,7 @@ export const Footer = () => {
               selected: filterSettings === 'active',
             })}
             data-cy="FilterLinkActive"
-            onClick={() => handleFiltering('active')}
+            onClick={() => handleFiltering(FilterSettings.active)}
           >
             Active
           </a>
@@ -53,7 +54,7 @@ export const Footer = () => {
               selected: filterSettings === 'completed',
             })}
             data-cy="FilterLinkCompleted"
-            onClick={() => handleFiltering('completed')}
+            onClick={() => handleFiltering(FilterSettings.completed)}
           >
             Completed
           </a>
