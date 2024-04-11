@@ -39,10 +39,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     'todosList',
     initialTodosList,
   );
-  const [filterSettings, setFilterSettings] = useLocalStorage(
-    'filterSettings',
-    'all',
-  );
+  const [filterSettings, setFilterSettings] = useState('all');
 
   useEffect(() => {
     if (todosList.length === 0) {
