@@ -72,7 +72,9 @@
 
   &__title-field {
     width: 100%;
+    box-sizing: border-box;
     padding: 11px 14px;
+    outline: none;
 
     font-size: inherit;
     line-height: inherit;
