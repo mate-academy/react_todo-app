@@ -6,7 +6,7 @@ import { Todo } from '../../types/Todo';
 type FilterSettings = string;
 
 function filterList(list: Todo[], settings: FilterSettings): Todo[] {
-  return [...list].filter(item => {
+  return list.filter(item => {
     switch (settings) {
       case 'active':
         return item.completed === false;
