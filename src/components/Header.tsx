@@ -1,7 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { StateContext, DispatchContext } from './GlobalStateProvider';
+import {
+  StateContext,
+  DispatchContext,
+  FocusContext,
+} from './GlobalStateProvider';
 
 import { toggleAllTodosCompleted } from '../services/ToggleAllTodos';
 import { addTodo } from '../services/AddTodo';
@@ -14,12 +18,15 @@ const Header: React.FC<Props> = ({ title, onChange }) => {
   const { todos } = React.useContext(StateContext);
   const dispatch = React.useContext(DispatchContext);
 
+  const { setFocus, inputRef } = React.useContext(FocusContext);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && title.trim() !== '') {
+    if (e.key === 'Enter' && !!title.trim()) {
       e.preventDefault();
 
       addTodo(title, dispatch);
       onChange('');
+      setFocus();
     }
   };
 
@@ -40,6 +47,7 @@ const Header: React.FC<Props> = ({ title, onChange }) => {
 
       <form className="todoapp__new-todo-form">
         <input
+          ref={inputRef}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
@@ -47,7 +55,6 @@ const Header: React.FC<Props> = ({ title, onChange }) => {
           value={title}
           onChange={e => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          autoFocus
         />
       </form>
     </header>

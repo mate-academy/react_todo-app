@@ -6,14 +6,21 @@ import { StateContext, DispatchContext } from './GlobalStateProvider';
 import { setFilter } from '../services/SetFilter';
 import { handeClearCompletedTodos } from '../services/ClearTodos';
 
-import { Filter } from '../types/Filter';
 import { Href } from '../types/Href';
 
-const filterHrefs: { [key in Filter]: Href } = {
+const filterHrefs: { [key in Filters]: Href } = {
   all: '#/',
   active: '#/active',
   completed: '#/completed',
 };
+
+enum Filters {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
+const filters = Object.values(Filters) as Filters[];
 
 export const Footer: React.FC = () => {
   const { todos, filter } = React.useContext(StateContext);
@@ -25,24 +32,24 @@ export const Footer: React.FC = () => {
 
   return (
     <>
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
             {todos.filter(todo => !todo.completed).length} items left
           </span>
 
           <nav className="filter" data-cy="Filter">
-            {(['all', 'active', 'completed'] as Filter[]).map(f => (
+            {filters.map(currFilter => (
               <a
-                key={f}
-                href={filterHrefs[f]}
+                key={currFilter}
+                href={filterHrefs[currFilter]}
                 className={cn('filter__link', {
-                  selected: filter === f,
+                  selected: filter === currFilter,
                 })}
-                data-cy={`FilterLink${f.charAt(0).toUpperCase() + f.slice(1)}`}
-                onClick={() => setFilter(f, dispatch)}
+                data-cy={`FilterLink${currFilter.charAt(0).toUpperCase() + currFilter.slice(1)}`}
+                onClick={() => setFilter(filter, dispatch)}
               >
-                {f}
+                {currFilter}
               </a>
             ))}
           </nav>

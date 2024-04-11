@@ -1,7 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { StateContext, DispatchContext } from './GlobalStateProvider';
+import {
+  StateContext,
+  DispatchContext,
+  FocusContext,
+} from './GlobalStateProvider';
 
 import { toggleTodoCompleted } from '../services/ToggleTodo';
 import { removeTodo } from '../services/RemoveTodo';
@@ -16,11 +20,22 @@ type Props = {
 const Section: React.FC<Props> = ({ editTitle, onChange }) => {
   const { todos, filter, editingTodo } = React.useContext(StateContext);
   const dispatch = React.useContext(DispatchContext);
-  const editTodo = () => {
-    dispatch({
-      type: actions.EDIT_TODO,
-      payload: editTitle.trim(),
-    });
+
+  const { setFocus } = React.useContext(FocusContext);
+  const editTodo = (id: number) => {
+    if (editTitle.trim().length === 0) {
+      dispatch({
+        type: actions.REMOVE_TODO,
+        payload: id,
+      });
+
+      setFocus();
+    } else {
+      dispatch({
+        type: actions.EDIT_TODO,
+        payload: editTitle.trim(),
+      });
+    }
 
     onChange('');
   };
@@ -39,10 +54,14 @@ const Section: React.FC<Props> = ({ editTitle, onChange }) => {
     });
   };
 
-  const handleNewTodoKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleNewTodoKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    id: number,
+  ) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      editTodo();
+
+      editTodo(id);
     } else if (e.key === 'Escape') {
       e.preventDefault();
       stopEditingTodo();
@@ -89,9 +108,9 @@ const Section: React.FC<Props> = ({ editTitle, onChange }) => {
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
                 value={editTitle}
-                onKeyDown={handleNewTodoKeyDown}
+                onKeyDown={e => handleNewTodoKeyDown(e, todo.id)}
                 onChange={e => onChange(e.target.value)}
-                onBlur={editTodo}
+                onBlur={() => editTodo(todo.id)}
                 autoFocus
               />
             </form>

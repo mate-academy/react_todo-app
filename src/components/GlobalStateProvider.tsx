@@ -1,6 +1,7 @@
 import React from 'react';
 import { State } from '../types/State';
 import { Action } from '../types/Action';
+import { FocusContextType } from '../types/FocusCotext';
 
 import { actions } from '../vars/ActionsTypes';
 
@@ -90,8 +91,13 @@ const reducer = (state: State, { type, payload }: Action): State => {
 };
 
 export const StateContext = React.createContext(initState);
-// eslint-disable-next-line
+//eslint-disable-next-line 
 export const DispatchContext = React.createContext((_action: Action) => {});
+
+export const FocusContext = React.createContext<FocusContextType>({
+  setFocus: () => {},
+  inputRef: React.createRef(),
+});
 
 type Props = {
   children: React.ReactNode;
@@ -99,10 +105,21 @@ type Props = {
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initState);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const setFocus = React.useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>{children}</StateContext.Provider>
+      <StateContext.Provider value={state}>
+        <FocusContext.Provider value={{ setFocus, inputRef }}>
+          {children}
+        </FocusContext.Provider>
+      </StateContext.Provider>
     </DispatchContext.Provider>
   );
 };
