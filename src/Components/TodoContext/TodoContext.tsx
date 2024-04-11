@@ -47,7 +47,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     if (todosList.length === 0) {
       localStorage.removeItem('todosList');
-      localStorage.removeItem('newTodo');
     }
   }, [todosList]);
 
