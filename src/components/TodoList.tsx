@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TodoItem } from './TodoItem';
 import { FilterTodos } from './FilterTodos';
-import { TodoContext } from '../context/TodosContext';
+import { useTodoContext } from '../context/TodosContext';
 
 export const TodoList: React.FC = () => {
-  const { orderItems, status } = useContext(TodoContext);
+  const { orderItems, status } = useTodoContext();
   const visibleItems = FilterTodos(orderItems, status);
 
   return (

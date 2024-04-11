@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { OrderItems } from '../types/Type';
-import { TodoContext } from '../context/TodosContext';
+import { useTodoContext } from '../context/TodosContext';
 
 interface Props {
   todo: OrderItems;
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { orderItems, setOrderItems } = useContext(TodoContext);
+  const { orderItems, setOrderItems } = useTodoContext();
   const [query, setQuery] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
 

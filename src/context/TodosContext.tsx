@@ -1,6 +1,5 @@
-/* eslint-disable prettier/prettier */
 import { OrderItems, Status } from '../types/Type';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 interface TodoContextType {
   orderItems: OrderItems[];
@@ -20,15 +19,6 @@ type Props = {
   children: React.ReactNode;
 };
 
-// export const useTodos = () => {
-//   const cont = useContext(TodoContext);
-
-//   if (!cont) {
-//     throw new Error('Context not workong');
-//   }
-
-//   return cont;
-// };
 export function useLocalStorage<T>(
   key: string,
   startValue: T,
@@ -61,3 +51,5 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
+
+export const useTodoContext = () => useContext(TodoContext);

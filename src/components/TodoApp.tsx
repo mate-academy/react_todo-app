@@ -1,17 +1,14 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { TodoList } from './TodoList';
-import { TodoContext } from '../context/TodosContext';
+import { useTodoContext } from '../context/TodosContext';
 import { Filter } from './Filter';
-// import { filterTodos } from './FilterTodos';
-// import { Status } from '../types/Type';
 
 export const TodoApp: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [activeCheckbox, secActiveCheckbox] = useState(false);
 
-  const { orderItems, setOrderItems } = useContext(TodoContext);
+  const { orderItems, setOrderItems } = useTodoContext();
 
-  // #region List
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
@@ -39,9 +36,8 @@ export const TodoApp: React.FC = () => {
     },
     [query, setOrderItems, setQuery],
   );
-  // #endregion
 
-  const hanledActiveAllCheckbox = () => {
+  const handleActiveAllCheckbox = () => {
     secActiveCheckbox(!activeCheckbox);
     setOrderItems(prevOrderItems =>
       prevOrderItems.map(todo => ({
@@ -51,22 +47,11 @@ export const TodoApp: React.FC = () => {
     );
   };
 
-  const hendlerDestroyAll = () => {
+  const hendleRemoveAllTodos = () => {
     const visibleTodos = orderItems;
 
     setOrderItems(visibleTodos.filter(todo => !todo.completed));
   };
-
-  // const visibleItemsCount =
-  //   status === Status.ALL
-  //     ? visibleItems.filter(item => !item.completed).length
-  //     : visibleItems.length;
-
-  // const isSomeCompleted = visibleItems.some(item => item.completed);
-  // console.log(
-  //   orderItems.filter(item => !item.completed),
-  //   orderItems.filter(item => !item.completed).length,
-  // );
 
   return (
     <div className="todoapp">
@@ -91,7 +76,7 @@ export const TodoApp: React.FC = () => {
           id="toggle-all"
           className="toggle-all"
           data-cy="toggleAll"
-          onClick={hanledActiveAllCheckbox}
+          onClick={handleActiveAllCheckbox}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
 
@@ -110,7 +95,7 @@ export const TodoApp: React.FC = () => {
             <button
               type="button"
               className="clear-completed"
-              onClick={hendlerDestroyAll}
+              onClick={hendleRemoveAllTodos}
             >
               Clear completed
             </button>
