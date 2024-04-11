@@ -26,16 +26,6 @@ export const todoPattern = {
   completed: false,
 };
 
-const initialTodosList = () => {
-  const ourList = localStorage.getItem('todosList');
-
-  if (ourList === null) {
-    return [];
-  }
-
-  return JSON.parse(ourList);
-};
-
 export const TodoContext = React.createContext<TodoContextType>({
   todosList: [],
   setTodosList: () => {},
@@ -44,6 +34,18 @@ export const TodoContext = React.createContext<TodoContextType>({
   filterSettings: FilterSettings.all,
   setFilterSettings: () => {},
 });
+
+const initialTodosList = () => {
+  const ourList = localStorage.getItem('todos');
+
+  if (ourList === null) {
+    localStorage.setItem('todos', JSON.stringify([]));
+
+    return [];
+  }
+
+  return JSON.parse(ourList);
+};
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [newTodo, setNewTodo] = useState(todoPattern);
@@ -54,11 +56,15 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (todosList.length === 0) {
-      localStorage.removeItem('todosList');
+      localStorage.removeItem('todos');
     } else {
-      localStorage.setItem('todosList', JSON.stringify(todosList));
+      localStorage.setItem('todos', JSON.stringify(todosList));
     }
   }, [todosList]);
+
+  useEffect(() => {
+    initialTodosList();
+  }, []);
 
   const value = useMemo<TodoContextType>(
     () => ({
