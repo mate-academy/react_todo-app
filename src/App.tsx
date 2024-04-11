@@ -56,13 +56,15 @@ export const App: React.FC = () => {
   const visibleTodos: Todo[] = useMemo(() => {
     switch (filter) {
       case Filter.Active:
-        return todos.filter(todo => !completedTodos.includes(todo));
+        return todos
+          .filter(todo => !completedTodos.includes(todo))
+          .sort((a, b) => a.id - b.id);
 
       case Filter.Completed:
-        return [...completedTodos];
+        return completedTodos.sort((a, b) => a.id - b.id);
 
       default:
-        return todos;
+        return todos.sort((a, b) => a.id - b.id);
     }
   }, [todos, filter, completedTodos]);
 
