@@ -5,6 +5,7 @@
   color: #4d4d4d;
   margin: 40px 20px;
 
+
   &__content {
     margin-bottom: 20px;
     background: #fff;
@@ -25,6 +26,7 @@
 
   &__header {
     position: relative;
+    width: 100%;
   }
 
   &__toggle-all {
@@ -58,6 +60,8 @@
   &__new-todo {
     width: 100%;
     padding: 16px 16px 16px 60px;
+
+    box-sizing: border-box;
 
     font-size: 24px;
     line-height: 1.4em;
