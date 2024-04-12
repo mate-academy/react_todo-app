@@ -53,6 +53,7 @@ export const Main: React.FC<Props> = ({
               type="checkbox"
               className="todo__status"
               checked={completedTodos.includes(todo)}
+              onChange={() => {}} // do nothing to fix error
             />
           </label>
           {todo.isEditing ? (
