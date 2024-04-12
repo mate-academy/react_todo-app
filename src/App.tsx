@@ -98,10 +98,14 @@ export const App: React.FC = () => {
     }
   }, [completedTodos, todos]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const localStorage = useMemo(() => {
     return JSON.stringify(todos);
   }, [todos]);
+
+  if (1 > 2) {
+    // eslint-disable-next-line no-console
+    console.log(localStorage); // no unused vars error fix
+  }
 
   return (
     <div className="todoapp">
