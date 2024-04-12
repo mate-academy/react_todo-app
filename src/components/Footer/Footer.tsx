@@ -23,8 +23,6 @@ export const Footer: FC = () => {
       <span className="todo-count" data-cy="TodosCounter">
         {activeTodosCount} items left
       </span>
-
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -51,16 +49,14 @@ export const Footer: FC = () => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: showMode === 'comleted',
+            selected: showMode === 'completed',
           })}
           data-cy="FilterLinkCompleted"
-          onClick={handleSetShowMode('comleted')}
+          onClick={handleSetShowMode('completed')}
         >
           Completed
         </a>
       </nav>
-
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

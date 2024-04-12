@@ -120,7 +120,7 @@ function todosReducer(todos: Todo[], action: Action): Todo[] {
   }
 }
 
-export type ShowMode = 'all' | 'comleted' | 'active';
+export type ShowMode = 'all' | 'completed' | 'active';
 
 interface Context {
   todos: Todo[];
@@ -149,7 +149,7 @@ export const TodosProvider: FC<Props> = ({ children }) => {
       case 'active':
         result = todos.filter(t => !t.completed);
         break;
-      case 'comleted':
+      case 'completed':
         result = todos.filter(t => t.completed);
         break;
       case 'all':
