@@ -6,7 +6,9 @@ import { Footer } from './components/Footer';
 import { Filter, Todo } from './types/types';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(
+    JSON.parse(localStorage.getItem('data') || ''),
+  );
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [isAllCompleted, setIsAllCompleted] = useState(true);
@@ -98,14 +100,13 @@ export const App: React.FC = () => {
     }
   }, [completedTodos, todos]);
 
-  const localStorage = useMemo(() => {
+  const savedData = useMemo(() => {
     return JSON.stringify(todos);
   }, [todos]);
 
-  if (1 > 2) {
-    // eslint-disable-next-line no-console
-    console.log(localStorage); // no unused vars error fix
-  }
+  useEffect(() => {
+    localStorage.setItem('data', savedData);
+  }, [savedData]);
 
   return (
     <div className="todoapp">
