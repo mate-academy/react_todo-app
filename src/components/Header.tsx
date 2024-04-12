@@ -5,8 +5,8 @@ type Props = {
   todos: Todo[];
   inputValue: string;
   setInputValue: (prop: string) => void;
-  isVisible: boolean;
-  setIsVisible: (prop: boolean) => void;
+  isAllCompleted: boolean;
+  completeAllHandler: () => void;
   formSubmitHandler: (event: React.FormEvent) => void;
 };
 
@@ -14,8 +14,8 @@ export const Header: React.FC<Props> = ({
   todos,
   inputValue,
   setInputValue,
-  isVisible,
-  setIsVisible,
+  isAllCompleted,
+  completeAllHandler,
   formSubmitHandler,
 }) => {
   return (
@@ -24,10 +24,10 @@ export const Header: React.FC<Props> = ({
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active: !isVisible,
+            active: isAllCompleted,
           })}
           data-cy="ToggleAllButton"
-          onClick={() => setIsVisible(!isVisible)}
+          onClick={completeAllHandler}
         />
       )}
 

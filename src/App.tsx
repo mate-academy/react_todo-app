@@ -1,15 +1,16 @@
 /* eslint-disable no-param-reassign */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { Filter, Todo } from './types/types';
+import todosFromStorage from './localStorage/todos.json';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isAllCompleted, setIsAllCompleted] = useState(true);
   const [editedValue, setEditedValue] = useState('');
 
   const createTodo = useCallback(
@@ -38,8 +39,10 @@ export const App: React.FC = () => {
     }
   };
 
-  const editHandler = (event: React.FormEvent, todo: Todo) => {
-    event.preventDefault();
+  const editHandler = (todo: Todo, event?: React.FormEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
 
     if (!editedValue.trim()) {
       setTodos(todos.filter(currentTodo => currentTodo.id !== todo.id));
@@ -49,6 +52,26 @@ export const App: React.FC = () => {
     }
 
     setEditedValue('');
+  };
+
+  const completeAllHandler = () => {
+    if (isAllCompleted) {
+      setTodos(
+        todos.map(todo => {
+          const newTodo = { ...todo, isCompleted: false };
+
+          return newTodo;
+        }),
+      );
+    } else {
+      setTodos(
+        todos.map(todo => {
+          const newTodo = { ...todo, isCompleted: true };
+
+          return newTodo;
+        }),
+      );
+    }
   };
 
   const completedTodos = todos.filter(({ isCompleted }) => isCompleted);
@@ -68,6 +91,14 @@ export const App: React.FC = () => {
     }
   }, [todos, filter, completedTodos]);
 
+  useEffect(() => {
+    if (completedTodos.length === todos.length) {
+      setIsAllCompleted(true);
+    } else {
+      setIsAllCompleted(false);
+    }
+  }, [completedTodos, todos]);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -77,25 +108,23 @@ export const App: React.FC = () => {
           todos={todos}
           inputValue={inputValue}
           setInputValue={setInputValue}
-          isVisible={isVisible}
-          setIsVisible={setIsVisible}
           formSubmitHandler={formSubmitHandler}
+          isAllCompleted={isAllCompleted}
+          completeAllHandler={completeAllHandler}
         />
 
-        {isVisible && (
-          <Main
-            todos={todos}
-            setTodos={setTodos}
-            editedValue={editedValue}
-            setEditedValue={setEditedValue}
-            exitEditorHandler={exitEditorHandler}
-            editHandler={editHandler}
-            visibleTodos={visibleTodos}
-            completedTodos={completedTodos}
-          />
-        )}
+        <Main
+          todos={todos}
+          setTodos={setTodos}
+          editedValue={editedValue}
+          setEditedValue={setEditedValue}
+          exitEditorHandler={exitEditorHandler}
+          editHandler={editHandler}
+          visibleTodos={visibleTodos}
+          completedTodos={completedTodos}
+        />
 
-        {todos.length > 0 && isVisible && (
+        {todos.length > 0 && (
           <Footer
             todos={todos}
             setTodos={setTodos}

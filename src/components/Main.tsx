@@ -8,7 +8,7 @@ type Props = {
   setTodos: (prop: Todo[]) => void;
   editedValue: string;
   setEditedValue: (prop: string) => void;
-  editHandler: (event: React.FormEvent, todo: Todo) => void;
+  editHandler: (todo: Todo, event?: React.FormEvent) => void;
   exitEditorHandler: (todo: Todo) => void;
 };
 
@@ -32,13 +32,36 @@ export const Main: React.FC<Props> = ({
             completed: completedTodos.includes(todo),
           })}
         >
+          <label
+            onClick={() => {
+              const clearTodos = todos.filter(
+                currentTodo => currentTodo.id !== todo.id,
+              );
+
+              if (!todo.isCompleted) {
+                setTodos([{ ...todo, isCompleted: true }, ...clearTodos]);
+              } else {
+                setTodos([{ ...todo, isCompleted: false }, ...clearTodos]);
+              }
+            }}
+            htmlFor="#form-input"
+            className="todo__status-label"
+          >
+            <input
+              id="form-input"
+              data-cy="TodoStatus"
+              type="checkbox"
+              className="todo__status"
+              checked={completedTodos.includes(todo)}
+            />
+          </label>
           {todo.isEditing ? (
             <form
               className="todo__edit-form"
-              onSubmit={event => editHandler(event, todo)}
+              onSubmit={event => editHandler(todo, event)}
             >
               <input
-                onBlur={() => exitEditorHandler(todo)}
+                onBlur={() => editHandler(todo)}
                 onKeyDown={event => {
                   if (event.key === 'ArrowUp' || event.key === 'Escape') {
                     exitEditorHandler(todo);
@@ -55,27 +78,6 @@ export const Main: React.FC<Props> = ({
             </form>
           ) : (
             <>
-              <label
-                onClick={() => {
-                  if (!completedTodos.includes(todo)) {
-                    const clearTodos = todos.filter(
-                      currentTodo => currentTodo.id !== todo.id,
-                    );
-
-                    setTodos([{ ...todo, isCompleted: true }, ...clearTodos]);
-                  }
-                }}
-                htmlFor="#form-input"
-                className="todo__status-label"
-              >
-                <input
-                  id="form-input"
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={completedTodos.includes(todo)}
-                />
-              </label>
               <span
                 onDoubleClick={() => {
                   if (!completedTodos.includes(todo)) {
