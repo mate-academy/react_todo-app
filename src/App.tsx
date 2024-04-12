@@ -4,7 +4,7 @@ import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { Filter, Todo } from './types/types';
-import todosFromStorage from './localStorage/todos.json';
+// import todosFromStorage from './localStorage/todos.json';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
