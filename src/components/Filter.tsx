@@ -8,10 +8,9 @@ export const Filter: React.FC = () => {
 
   return (
     <ul className="filters" data-cy="todosFilter">
-      <li>
-        {Object.values(Status).map(value => (
+      {Object.values(Status).map(value => (
+        <li key={value}>
           <a
-            key={value}
             href={`#${value}`}
             className={classNames('filter__link', {
               selected: status === value,
@@ -21,8 +20,8 @@ export const Filter: React.FC = () => {
           >
             {value}
           </a>
-        ))}
-      </li>
+        </li>
+      ))}
     </ul>
   );
 };

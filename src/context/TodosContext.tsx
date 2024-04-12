@@ -1,5 +1,6 @@
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { OrderItems, Status } from '../types/Type';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 interface TodoContextType {
   orderItems: OrderItems[];
@@ -18,27 +19,6 @@ export const TodoContext = React.createContext<TodoContextType>({
 type Props = {
   children: React.ReactNode;
 };
-
-export function useLocalStorage<T>(
-  key: string,
-  startValue: T,
-): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [value, setValue] = useState<T>(() => {
-    const data = localStorage.getItem(key);
-
-    if (data === null) {
-      return startValue;
-    }
-
-    return JSON.parse(data);
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
-
-  return [value, setValue];
-}
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [orderItems, setOrderItems] = useLocalStorage<OrderItems[]>(

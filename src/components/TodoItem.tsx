@@ -12,13 +12,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [query, setQuery] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
 
-  const hendlerDestroyOne = (ItemId: number) => {
-    const visibleTodos = [...orderItems];
-
-    setOrderItems(visibleTodos.filter(values => values.id !== ItemId));
+  const hendleRemoveOne = (ItemId: number) => {
+    setOrderItems(prevOrderItems =>
+      prevOrderItems.filter(values => values.id !== ItemId),
+    );
   };
 
-  const handleClickKeybord = (event: React.KeyboardEvent, ItemID: number) => {
+  const handleClickKeybord = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       setOrderItems(
         orderItems.map(prevItem => {
@@ -36,7 +36,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       if (query.trim()) {
         setOrderItems(
           orderItems.map(prevItem => {
-            if (prevItem.id === ItemID) {
+            if (prevItem.id === todo.id) {
               return {
                 ...prevItem,
                 title: query,
@@ -49,7 +49,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         setIsEditing(false);
         setQuery(query.trim());
       } else {
-        setOrderItems(orderItems.filter(item => item.id !== ItemID));
+        setOrderItems(orderItems.filter(item => item.id !== todo.id));
         setIsEditing(false);
       }
     }
@@ -82,30 +82,32 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         completed: todo.completed,
         editing: isEditing,
       })}
-      onDoubleClick={() => setIsEditing(true)}
-      onKeyUp={event => handleClickKeybord(event, todo.id)}
+      onDoubleClick={() => {
+        setIsEditing(true);
+      }}
+      onKeyUp={event => handleClickKeybord(event)}
     >
       <div className="view">
         <input
           type="checkbox"
           className="toggle"
-          id="toggle-view"
+          id={todo.id.toString()}
           checked={todo.completed}
           onChange={() => handleChecker(todo.id)}
         />
-        <label htmlFor="toggle-view">{todo.title}</label>
+        <label htmlFor={todo.id.toString()}>{todo.title}</label>
         <button
           type="button"
           className="destroy"
           data-cy="deleteTodo"
-          onClick={() => hendlerDestroyOne(todo.id)}
+          onClick={() => hendleRemoveOne(todo.id)}
         />
       </div>
       <input
         type="text"
         className="edit"
         value={query}
-        onKeyUp={event => handleClickKeybord(event, todo.id)}
+        onKeyUp={event => handleClickKeybord(event)}
         onChange={handleQueryEditChange}
       />
     </li>

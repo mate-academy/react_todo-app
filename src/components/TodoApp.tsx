@@ -6,8 +6,9 @@ import { Filter } from './Filter';
 export const TodoApp: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [activeCheckbox, secActiveCheckbox] = useState(false);
-
   const { orderItems, setOrderItems } = useTodoContext();
+  const isNotCompletedTodos = orderItems.filter(item => !item.completed).length;
+  const isCompletedTodos = orderItems.filter(item => item.completed).length;
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -48,10 +49,12 @@ export const TodoApp: React.FC = () => {
   };
 
   const hendleRemoveAllTodos = () => {
-    const visibleTodos = orderItems;
-
-    setOrderItems(visibleTodos.filter(todo => !todo.completed));
+    setOrderItems(prevOrderItems =>
+      prevOrderItems.filter(todo => !todo.completed),
+    );
   };
+
+  const hasAllCompletedTodos = orderItems.every(todo => todo.completed);
 
   return (
     <div className="todoapp">
@@ -75,6 +78,7 @@ export const TodoApp: React.FC = () => {
           type="checkbox"
           id="toggle-all"
           className="toggle-all"
+          checked={hasAllCompletedTodos}
           data-cy="toggleAll"
           onClick={handleActiveAllCheckbox}
         />
@@ -86,12 +90,12 @@ export const TodoApp: React.FC = () => {
       {orderItems.length > 0 && (
         <footer className="footer">
           <span className="todo-count" data-cy="todosCounter">
-            {orderItems.filter(item => !item.completed).length} items left
+            {isNotCompletedTodos} items left
           </span>
 
           <Filter />
 
-          {orderItems.filter(item => item.completed).length > 0 && (
+          {isCompletedTodos > 0 && (
             <button
               type="button"
               className="clear-completed"
