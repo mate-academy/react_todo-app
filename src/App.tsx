@@ -4,7 +4,6 @@ import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { Filter, Todo } from './types/types';
-// import todosFromStorage from './localStorage/todos.json';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -98,6 +97,11 @@ export const App: React.FC = () => {
       setIsAllCompleted(false);
     }
   }, [completedTodos, todos]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const localStorage = useMemo(() => {
+    return JSON.stringify(todos);
+  }, [todos]);
 
   return (
     <div className="todoapp">
