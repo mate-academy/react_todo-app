@@ -4,6 +4,7 @@ Implement a simple [TODO app](https://mate-academy.github.io/react_todo-app/) th
 
 > If you are unsure about how a feature should work, open the real TodoApp and observe its behavior.
 
+
 ![todoapp](./description/todoapp.gif)
 
 1. Learn the markup in `App.tsx`.
