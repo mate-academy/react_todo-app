@@ -72,7 +72,9 @@
 
   &__title-field {
     width: 100%;
+    box-sizing: border-box;
     padding: 11px 14px;
+    outline: none;
 
     font-size: inherit;
     line-height: inherit;
@@ -88,6 +90,10 @@
       font-weight: 300;
       color: #e6e6e6;
     }
+  }
+
+  &__edit-form{
+    grid-column: 2 / 3;
   }
 
   .overlay {

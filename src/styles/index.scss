@@ -8,6 +8,10 @@ body {
   margin: 0 auto;
 }
 
+.hidden{
+  visibility: hidden;
+}
+
 .notification {
   transition-property: opacity, min-height;
   transition-duration: 1s;
