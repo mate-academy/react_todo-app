@@ -5,10 +5,10 @@ import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { Filter, Todo } from './types/types';
 
+const dataFromServer = localStorage.getItem('data') || '';
+
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>(
-    JSON.parse(localStorage.getItem('data') || ''),
-  );
+  const [todos, setTodos] = useState<Todo[]>(JSON.parse(dataFromServer));
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [isAllCompleted, setIsAllCompleted] = useState(true);
