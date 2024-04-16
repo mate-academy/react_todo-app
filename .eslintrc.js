@@ -5,5 +5,9 @@ module.exports = {
   ],
   rules: {
     'jsx-a11y/label-has-associated-control': 'off',
+    "prettier/prettier": [
+      "error",
+      { endOfLine: "auto" }
+    ],
   },
 };
