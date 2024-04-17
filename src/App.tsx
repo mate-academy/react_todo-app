@@ -11,12 +11,9 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<string>('');
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editedTodoTitle, setEditedTodoTitle] = useState<string>('');
-  console.log('render');
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
-
-    setTodosAreCompleted(false);
 
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
@@ -25,7 +22,19 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  }, [todos, todosAreCompleted]);
+
+  useEffect(() => {
+    const newTodoInput = document.querySelector(
+      '.todoapp__new-todo',
+    ) as HTMLInputElement;
+
+    newTodoInput.focus();
+    const lalal =
+      todos.filter(td => td.completed === true).length === todos.length;
+
+    setTodosAreCompleted(lalal);
+  }, [todos, todosAreCompleted]);
 
   const addNewTodo = () => {
     const newTodo: Todo = {
@@ -81,12 +90,6 @@ export const App: React.FC = () => {
     }
   };
 
-  const clearCompleted = () => {
-    const remainingTodos = todos.filter(todo => todo.completed === false);
-
-    setTodos(remainingTodos);
-  };
-
   const handleDoubleClick = (id: number, title: string) => {
     setEditingTodoId(id);
     setEditedTodoTitle(title);
@@ -140,11 +143,7 @@ export const App: React.FC = () => {
             <button
               type="button"
               onClick={handdleClick}
-              className={
-                todosAreCompleted
-                  ? 'todoapp__toggle-all active'
-                  : 'todoapp__toggle-all'
-              }
+              className={`todoapp__toggle-all ${todosAreCompleted ? 'active' : ''}`}
               data-cy="ToggleAllButton"
             />
           )}
@@ -261,7 +260,8 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              onClick={clearCompleted}
+              onClick={() => setTodos(todos.filter(todo => !todo.completed))}
+              disabled={todos.filter(todo => todo.completed).length === 0}
             >
               Clear completed
             </button>
