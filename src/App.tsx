@@ -1,16 +1,18 @@
 import { Todo } from './Todo';
-import React, { useState, useEffect, FormEvent, useMemo } from 'react';
+import React, { useState, useEffect, FormEvent, useMemo, useRef } from 'react';
 import './styles/todoapp.scss';
 import './styles/todo.scss';
 import './styles/filter.scss';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosAreCompleted, setTodosAreCompleted] = useState(false);
+  const todosAreCompleted =
+    todos.filter(td => td.completed).length === todos.length;
   const [todoTitle, setTodoTitle] = useState('');
   const [filter, setFilter] = useState<string>('');
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editedTodoTitle, setEditedTodoTitle] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
@@ -25,14 +27,9 @@ export const App: React.FC = () => {
   }, [todos, todosAreCompleted]);
 
   useEffect(() => {
-    const newTodoInput = document.querySelector(
-      '.todoapp__new-todo',
-    ) as HTMLInputElement;
-
-    newTodoInput.focus();
-    setTodosAreCompleted(
-      todos.filter(td => td.completed).length === todos.length,
-    );
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [todos, todosAreCompleted]);
 
   const addNewTodo = () => {
@@ -102,6 +99,13 @@ export const App: React.FC = () => {
     setEditedTodoTitle(event.target.value);
   };
 
+  const handleChange = (todo: Todo) => {
+    const updatedTodo = { ...todo, completed: !todo.completed };
+    const updatedTodos = todos.map(t => (t.id === todo.id ? updatedTodo : t));
+
+    setTodos(updatedTodos);
+  };
+
   const saveEditedTodoTitle = (id: number) => {
     const trimmedTitle = editedTodoTitle.trim();
 
@@ -153,6 +157,7 @@ export const App: React.FC = () => {
 
           <form onSubmit={handleSubmit}>
             <input
+              ref={inputRef}
               data-cy="NewTodoField"
               type="text"
               value={todoTitle}
@@ -177,14 +182,7 @@ export const App: React.FC = () => {
                   type="checkbox"
                   className="todo__status"
                   checked={todo.completed}
-                  onChange={() => {
-                    const updatedTodo = { ...todo, completed: !todo.completed };
-                    const updatedTodos = todos.map(t =>
-                      t.id === todo.id ? updatedTodo : t,
-                    );
-
-                    setTodos(updatedTodos);
-                  }}
+                  onChange={() => handleChange(todo)}
                 />
               </label>
               {editingTodoId === todo.id ? (
