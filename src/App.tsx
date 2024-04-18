@@ -30,22 +30,25 @@ export const App: React.FC = () => {
     ) as HTMLInputElement;
 
     newTodoInput.focus();
-    const lalal =
-      todos.filter(td => td.completed === true).length === todos.length;
-
-    setTodosAreCompleted(lalal);
+    setTodosAreCompleted(
+      todos.filter(td => td.completed).length === todos.length,
+    );
   }, [todos, todosAreCompleted]);
 
   const addNewTodo = () => {
-    const newTodo: Todo = {
-      id: +new Date(),
-      title: todoTitle.trim(),
-      completed: false,
-    };
+    const trimmedTitle = todoTitle.trim();
 
-    setTodos([...todos, newTodo]);
+    if (trimmedTitle !== '') {
+      const newTodo: Todo = {
+        id: +new Date(),
+        title: trimmedTitle,
+        completed: false,
+      };
 
-    setTodoTitle('');
+      setTodos([...todos, newTodo]);
+
+      setTodoTitle('');
+    }
   };
 
   const deleteTodoById = (id: number) => {
@@ -102,7 +105,7 @@ export const App: React.FC = () => {
   const saveEditedTodoTitle = (id: number) => {
     const trimmedTitle = editedTodoTitle.trim();
 
-    if (trimmedTitle === '') {
+    if (!trimmedTitle) {
       deleteTodoById(id);
     } else {
       editTodoById(id, trimmedTitle);
@@ -230,7 +233,7 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={`filter__link ${filter === '' ? 'selected' : ''}`}
+                className={`filter__link ${!filter ? 'selected' : ''}`}
                 data-cy="FilterLinkAll"
                 onClick={() => setFilter('')}
               >
@@ -261,7 +264,7 @@ export const App: React.FC = () => {
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
               onClick={() => setTodos(todos.filter(todo => !todo.completed))}
-              disabled={todos.filter(todo => todo.completed).length === 0}
+              disabled={!todos.filter(todo => todo.completed).length}
             >
               Clear completed
             </button>
