@@ -1,6 +1,5 @@
 import { useReducer, createContext, useEffect } from 'react';
 import { ToDo, ToDoEnum } from '../types/ToDo';
-import { todos } from '../data/todo';
 
 type Action =
   | { type: 'changeStatus'; id: number }
@@ -12,12 +11,15 @@ type Action =
   | { type: 'filterAll'; filterType: ToDoEnum }
   | { type: 'filterActive'; filterType: ToDoEnum }
   | { type: 'filterCompleted'; filterType: ToDoEnum }
-  | { type: 'setIsEditing' };
+  | { type: 'setIsEditing' }
+  | { type: 'inputFocusTrue' }
+  | { type: 'inputFocusFalse' };
 
 interface State {
   todos: ToDo[];
   filterType: ToDoEnum;
   isEditing: boolean;
+  inputFocus: boolean;
 }
 
 function reducer(state: State, action: Action): State {
@@ -29,16 +31,19 @@ function reducer(state: State, action: Action): State {
           item.id === action.id ? { ...item, completed: !item.completed } : item
         ),
       };
+
     case 'toggleStatus':
       return {
         ...state,
         todos: state.todos.map((item) => ({ ...item, completed: false })),
       };
+
     case 'createNew':
       return {
         ...state,
         todos: [...state.todos, action.newTodo],
       };
+
     case 'changeTitle':
       return {
         ...state,
@@ -48,35 +53,54 @@ function reducer(state: State, action: Action): State {
             : item
         ),
       };
+
     case 'removeToDo':
       return {
         ...state,
+        inputFocus: true,
         todos: state.todos.filter((item) => item.id !== action.id),
       };
+
     case 'removeCompleted':
       return {
         ...state,
         todos: state.todos.filter((item) => !item.completed),
       };
+
     case 'filterAll':
       return {
         ...state,
         filterType: action.filterType,
       };
+
     case 'filterActive':
       return {
         ...state,
         filterType: action.filterType,
       };
+
     case 'filterCompleted':
       return {
         ...state,
         filterType: action.filterType,
       };
+
     case 'setIsEditing':
       return {
         ...state,
         isEditing: !state.isEditing
+      };
+
+    case 'inputFocusTrue':
+      return {
+        ...state,
+        inputFocus: true,
+      };
+
+    case 'inputFocusFalse':
+      return {
+        ...state,
+        inputFocus: false,
       };
     default:
       return state;
@@ -84,12 +108,13 @@ function reducer(state: State, action: Action): State {
 }
 
 const storedToDo = localStorage.getItem('todos');
-const initialTodo = storedToDo ? JSON.parse(storedToDo) : todos;
+const initialTodo = storedToDo ? JSON.parse(storedToDo) : [];
 
 const initialState: State = {
   todos: initialTodo,
   filterType: ToDoEnum.All,
   isEditing: false,
+  inputFocus: true,
 };
 
 export const StateContext = createContext<State>(initialState);
@@ -101,7 +126,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const GlobalToDoProvider: React.FC<Props> = ({ children }) => {
+export const GlobalTodoProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {

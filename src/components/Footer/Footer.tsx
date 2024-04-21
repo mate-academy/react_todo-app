@@ -6,17 +6,10 @@ export const Footer: React.FC = () => {
   const [toFilter, setToFilter] = useState(ToDoEnum.All);
   const { todos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+  const filterTypes = Object.values(ToDoEnum);
 
   const handleItems = () => {
-    let count = 0;
-
-    for (const plan of todos) {
-      if (!plan.completed) {
-        count++;
-      }
-    }
-
-    return count;
+    return todos.filter(plan => !plan.completed).length;
   };
 
   const handleFilter = (filter: ToDoEnum) => {
@@ -29,7 +22,7 @@ export const Footer: React.FC = () => {
       dispatch({ type: 'filterActive', filterType: ToDoEnum.Active });
       setToFilter(ToDoEnum.Active);
     }
-    
+
     if (filter === ToDoEnum.Completed) {
       dispatch({ type: 'filterCompleted', filterType: ToDoEnum.Completed });
       setToFilter(ToDoEnum.Completed);
@@ -38,6 +31,7 @@ export const Footer: React.FC = () => {
 
   const handleRemoveCompleted = () => {
     dispatch({ type: 'removeCompleted' });
+    dispatch({ type: 'inputFocusTrue' });
   };
 
   return (
@@ -49,7 +43,7 @@ export const Footer: React.FC = () => {
           </span>
 
           <nav className="filter" data-cy="Filter">
-            {Object.values(ToDoEnum).map(filter => (
+            {filterTypes.map(filter => (
               <a
                 key={filter}
                 href={`#/${filter.toLowerCase()}`}

@@ -18,6 +18,7 @@ export const Todo: React.FC<Props> = ({ plan }) => {
 
   const handleRemoveToDo = () => {
     dispatch({ type: 'removeToDo', id: plan.id });
+    dispatch({ type: 'inputFocusTrue' });
   };
 
   const handleChangeTitle = () => {
@@ -25,10 +26,11 @@ export const Todo: React.FC<Props> = ({ plan }) => {
       dispatch({
         type: 'changeTitle',
         id: plan.id,
-        newTitle: newTitle,
+        newTitle: newTitle.trim(),
       });
     } else {
       handleRemoveToDo();
+      dispatch({ type: 'inputFocusTrue' });
     }
   };
 
@@ -50,6 +52,10 @@ export const Todo: React.FC<Props> = ({ plan }) => {
     event.preventDefault();
     handleChangeTitle();
     setCanEdit(false);
+  };
+
+  const handleValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(event.target.value);
   };
 
   return (
@@ -78,7 +84,7 @@ export const Todo: React.FC<Props> = ({ plan }) => {
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             value={newTitle}
-            onChange={(event) => setNewTitle(event.target.value.trim())}
+            onChange={handleValue}
             onKeyDown={handleKeyPress}
             onBlur={handleBlur}
           />

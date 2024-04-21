@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import { DispatchContext, StateContext } from '../../context/ToDoContext';
 import classNames from 'classnames';
 
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
-  const { todos } = useContext(StateContext);
+  const { todos, inputFocus } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const handleCreateNew = () => {
@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
       type: 'createNew',
       newTodo: {
         id: +new Date(),
-        title: title,
+        title: title.trim(),
         completed: false,
       }
     });
@@ -28,6 +28,24 @@ export const Header: React.FC = () => {
       event.preventDefault();
       handleCreateNew();
     }
+  };
+
+  // Set inputFocus to false when the input field is focused
+  const handleInputFocus = () => {
+    dispatch({ type: 'inputFocusTrue' });
+  };
+
+  // Set inputFocus to false when the input field is focused
+  const handleInputBlur = () => {
+    dispatch({ type: 'inputFocusFalse' });
+  };
+
+  const handlePreventSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
+  const handleValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
   };
 
   const handleToggle = () => {
@@ -48,16 +66,18 @@ export const Header: React.FC = () => {
         />
       )}
 
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handlePreventSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={title}
-          onChange={(event) => setTitle(event.target.value.trim())}
+          onChange={handleValue}
           onKeyDown={handleKeyPress}
-          autoFocus
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur} // Add onBlur event handler
+          autoFocus={inputFocus}
         />
       </form>
     </header>

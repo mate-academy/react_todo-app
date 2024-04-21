@@ -6,12 +6,12 @@ import './styles/todo.scss';
 import './styles/index.scss';
 
 import { App } from './App';
-import { GlobalToDoProvider } from './context/ToDoContext';
+import { GlobalTodoProvider } from './context/ToDoContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
 createRoot(container).render(
-  <GlobalToDoProvider>
+  <GlobalTodoProvider>
     <App />
-  </GlobalToDoProvider>
+  </GlobalTodoProvider>
 );
