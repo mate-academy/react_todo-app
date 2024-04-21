@@ -9,7 +9,7 @@ interface Props {
 
 export const Todo: React.FC<Props> = ({ plan }) => {
   const [newTitle, setNewTitle] = useState(plan.title);
-  const [isEditing, setIsEditing] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
   const dispatch = useContext(DispatchContext);
 
   const handleStatus = () => {
@@ -25,7 +25,7 @@ export const Todo: React.FC<Props> = ({ plan }) => {
       dispatch({
         type: 'changeTitle',
         id: plan.id,
-        newTitle: newTitle.trim(),
+        newTitle: newTitle,
       });
     } else {
       handleRemoveToDo();
@@ -36,20 +36,20 @@ export const Todo: React.FC<Props> = ({ plan }) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleChangeTitle();
-      setIsEditing(false);
+      setCanEdit(false);
     }
 
     if (event.key === 'Escape') {
       event.preventDefault();
-      setNewTitle(plan.title.trim());
-      setIsEditing(false);
+      setNewTitle(plan.title);
+      setCanEdit(false);
     }
   };
 
   const handleBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     handleChangeTitle();
-    setIsEditing(false);
+    setCanEdit(false);
   };
 
   return (
@@ -70,7 +70,7 @@ export const Todo: React.FC<Props> = ({ plan }) => {
         />
       </label>
 
-      {isEditing ? (
+      {canEdit ? (
         <form onSubmit={(e) => e.preventDefault()}>
           <input
             data-cy="TodoTitleField"
@@ -87,7 +87,7 @@ export const Todo: React.FC<Props> = ({ plan }) => {
         <span
           data-cy="TodoTitle"
           className="todo__title"
-          onDoubleClick={() => setIsEditing(true)}
+          onDoubleClick={() => setCanEdit(true)}
         >
           {plan.title}
         </span>

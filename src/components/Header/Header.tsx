@@ -20,6 +20,10 @@ export const Header: React.FC = () => {
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!title) {
+      return;
+    }
+
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCreateNew();
@@ -51,7 +55,7 @@ export const Header: React.FC = () => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          onChange={(event) => setTitle(event.target.value.trim())}
           onKeyDown={handleKeyPress}
           autoFocus
         />

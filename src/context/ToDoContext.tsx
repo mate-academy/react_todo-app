@@ -11,11 +11,13 @@ type Action =
   | { type: 'removeCompleted' }
   | { type: 'filterAll'; filterType: ToDoEnum }
   | { type: 'filterActive'; filterType: ToDoEnum }
-  | { type: 'filterCompleted'; filterType: ToDoEnum };
+  | { type: 'filterCompleted'; filterType: ToDoEnum }
+  | { type: 'setIsEditing' };
 
 interface State {
   todos: ToDo[];
   filterType: ToDoEnum;
+  isEditing: boolean;
 }
 
 function reducer(state: State, action: Action): State {
@@ -42,7 +44,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         todos: state.todos.map((item) =>
           item.id === action.id
-            ? { ...item, title: action.newTitle.trim() }
+            ? { ...item, title: action.newTitle }
             : item
         ),
       };
@@ -71,6 +73,11 @@ function reducer(state: State, action: Action): State {
         ...state,
         filterType: action.filterType,
       };
+    case 'setIsEditing':
+      return {
+        ...state,
+        isEditing: !state.isEditing
+      };
     default:
       return state;
   }
@@ -82,6 +89,7 @@ const initialTodo = storedToDo ? JSON.parse(storedToDo) : todos;
 const initialState: State = {
   todos: initialTodo,
   filterType: ToDoEnum.All,
+  isEditing: false,
 };
 
 export const StateContext = createContext<State>(initialState);
