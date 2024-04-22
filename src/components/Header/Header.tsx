@@ -18,7 +18,7 @@ export const Header: React.FC = () => {
   }, [inputFocus]);
 
   const handleCreateNew = () => {
-    if (title.trim().length === 0) {
+    if (!title.trim().length) {
       return;
     }
 
@@ -61,12 +61,17 @@ export const Header: React.FC = () => {
   };
 
   const handleToggle = () => {
-    dispatch({type: 'toggleStatus'});
+    const incompleteTodosExist = todos.some(todo => !todo.completed);
+
+    dispatch({
+      type: 'toggleStatus',
+      completed: incompleteTodosExist ? true : false
+    });
   };
 
   return (
     <header className="todoapp__header">
-      {todos.length !== 0 && (
+      {todos.length > 0 && (
         <button
           type="button"
           className={classNames(

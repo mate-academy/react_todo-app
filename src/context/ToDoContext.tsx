@@ -3,7 +3,7 @@ import { ToDo, ToDoEnum } from '../types/ToDo';
 
 type Action =
   | { type: 'changeStatus'; id: number }
-  | { type: 'toggleStatus' }
+  | { type: 'toggleStatus'; completed: boolean }
   | { type: 'createNew'; newTodo: ToDo }
   | { type: 'changeTitle'; id: number; newTitle: string }
   | { type: 'removeToDo'; id: number }
@@ -34,7 +34,7 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         todos: state.todos.map((item) => (
-          { ...item, completed: !item.completed }
+          { ...item, completed: action.completed }
         )),
       };
 
@@ -64,7 +64,7 @@ function reducer(state: State, action: Action): State {
     case 'removeCompleted':
       return {
         ...state,
-        todos: state.todos.filter((item) => !item.completed),
+        todos: state.todos.filter((item) => item.completed),
       };
 
     case 'changeFilterValue':

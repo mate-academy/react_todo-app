@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
 
   return (
     <>
-      {todos.length !== 0 && (
+      {todos.length > 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
             {handleItems()} items left
