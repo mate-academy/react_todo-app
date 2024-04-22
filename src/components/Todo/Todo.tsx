@@ -1,0 +1,121 @@
+import React, { useContext, useState, useRef } from 'react';
+import classNames from 'classnames';
+import { ToDo } from '../../types/ToDo';
+import { DispatchContext } from '../../context/ToDoContext';
+
+interface Props {
+  plan: ToDo;
+}
+
+export const Todo: React.FC<Props> = ({ plan }) => {
+  const [newTitle, setNewTitle] = useState(plan.title);
+  const [canEdit, setCanEdit] = useState(false);
+  const dispatch = useContext(DispatchContext);
+  const editRef = useRef<number | null>(null); // Ref to keep track of the edited todo ID
+
+  const handleStatus = () => {
+    dispatch({ type: 'changeStatus', id: plan.id });
+  };
+
+  const handleRemoveToDo = () => {
+    dispatch({ type: 'removeToDo', id: plan.id });
+    dispatch({ type: 'inputFocusTrue' });
+  };
+
+  const handleChangeTitle = () => {
+    if (newTitle) {
+      dispatch({
+        type: 'changeTitle',
+        id: plan.id,
+        newTitle: newTitle.trim(),
+      });
+    } else {
+      handleRemoveToDo();
+      dispatch({ type: 'inputFocusTrue' });
+    }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleChangeTitle();
+      setCanEdit(false);
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      setNewTitle(plan.title);
+      setCanEdit(false);
+    }
+  };
+
+  const handleBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    handleChangeTitle();
+    setCanEdit(false);
+  };
+
+  const handleValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(event.target.value);
+  };
+
+  const handleDoubleClick = () => {
+    if (!canEdit) {
+      setCanEdit(true);
+      editRef.current = plan.id;
+    }
+  };
+
+  return (
+    <div
+      data-cy="Todo"
+      className={classNames(
+        'todo',
+        { 'completed': plan.completed },
+      )}
+    >
+      <label className="todo__status-label">
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked={plan.completed}
+          onChange={handleStatus}
+        />
+      </label>
+
+      {canEdit && editRef.current === plan.id ? (
+        <form onSubmit={(e) => e.preventDefault()}>
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value={newTitle}
+            onChange={handleValue}
+            onKeyDown={handleKeyPress}
+            onBlur={handleBlur}
+            autoFocus
+          />
+        </form>
+      ) : (
+        <span
+          data-cy="TodoTitle"
+          className="todo__title"
+          onDoubleClick={handleDoubleClick}
+        >
+          {plan.title}
+        </span>
+      )}
+
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={handleRemoveToDo}
+      >
+        ×
+      </button>
+    </div>
+  );
+};
