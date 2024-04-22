@@ -8,22 +8,20 @@ import { Todo } from './types/Todo';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('ids', []);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
   const addTodo = useCallback((updatedTodo: Todo) => {
-    setTodos(curentTodos => {
-      let newTodos = [...curentTodos];
+      let newTodos = [...todos];
       const index = newTodos.findIndex(todo => todo.id === updatedTodo.id);
 
       if (index >= 0) {
-        newTodos.splice(index, 1, updatedTodo);
+        setTodos(newTodos.splice(index, 1, updatedTodo));
       } else {
-        newTodos = [...curentTodos, updatedTodo];
+        setTodos([...todos, updatedTodo]);
       }
-
-      return newTodos;
-    });
-  }, []);
+    },
+    [setTodos, todos],
+  );
 
   const isEmpty = todos.length <= 0;
 
