@@ -8,9 +8,7 @@ type Action =
   | { type: 'changeTitle'; id: number; newTitle: string }
   | { type: 'removeToDo'; id: number }
   | { type: 'removeCompleted' }
-  | { type: 'filterAll'; filterType: ToDoEnum }
-  | { type: 'filterActive'; filterType: ToDoEnum }
-  | { type: 'filterCompleted'; filterType: ToDoEnum }
+  | { type: 'changeFilterValue'; filterType: ToDoEnum }
   | { type: 'setIsEditing' }
   | { type: 'inputFocusTrue' }
   | { type: 'inputFocusFalse' };
@@ -35,7 +33,9 @@ function reducer(state: State, action: Action): State {
     case 'toggleStatus':
       return {
         ...state,
-        todos: state.todos.map((item) => ({ ...item, completed: false })),
+        todos: state.todos.map((item) => (
+          { ...item, completed: !item.completed }
+        )),
       };
 
     case 'createNew':
@@ -67,19 +67,7 @@ function reducer(state: State, action: Action): State {
         todos: state.todos.filter((item) => !item.completed),
       };
 
-    case 'filterAll':
-      return {
-        ...state,
-        filterType: action.filterType,
-      };
-
-    case 'filterActive':
-      return {
-        ...state,
-        filterType: action.filterType,
-      };
-
-    case 'filterCompleted':
+    case 'changeFilterValue':
       return {
         ...state,
         filterType: action.filterType,

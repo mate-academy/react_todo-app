@@ -1,32 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { DispatchContext, StateContext } from '../../context/ToDoContext';
 import { ToDoEnum } from '../../types/ToDo';
 
 export const Footer: React.FC = () => {
-  const [toFilter, setToFilter] = useState(ToDoEnum.All);
-  const { todos } = useContext(StateContext);
+  const { todos, filterType } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
   const filterTypes = Object.values(ToDoEnum);
+  const disabledCondition = todos.every(plan => !plan.completed);
 
   const handleItems = () => {
     return todos.filter(plan => !plan.completed).length;
   };
 
   const handleFilter = (filter: ToDoEnum) => {
-    if (filter === ToDoEnum.All) {
-      dispatch({ type: 'filterAll', filterType: ToDoEnum.All });
-      setToFilter(ToDoEnum.All);
-    }
-
-    if (filter === ToDoEnum.Active) {
-      dispatch({ type: 'filterActive', filterType: ToDoEnum.Active });
-      setToFilter(ToDoEnum.Active);
-    }
-
-    if (filter === ToDoEnum.Completed) {
-      dispatch({ type: 'filterCompleted', filterType: ToDoEnum.Completed });
-      setToFilter(ToDoEnum.Completed);
-    }
+    dispatch({ type: 'changeFilterValue', filterType: filter});
   };
 
   const handleRemoveCompleted = () => {
@@ -48,7 +35,7 @@ export const Footer: React.FC = () => {
                 key={filter}
                 href={`#/${filter.toLowerCase()}`}
                 className={`filter__link ${
-                  filter === toFilter ? 'selected' : ''
+                  filter === filterType ? 'selected' : ''
                 }`}
                 data-cy={`FilterLink${filter}`}
                 onClick={() => handleFilter(filter)}
@@ -63,7 +50,7 @@ export const Footer: React.FC = () => {
             className="todoapp__clear-completed"
             data-cy="ClearCompletedButton"
             onClick={handleRemoveCompleted}
-            disabled={todos.every(plan => !plan.completed)}
+            disabled={disabledCondition}
           >
             Clear completed
           </button>
