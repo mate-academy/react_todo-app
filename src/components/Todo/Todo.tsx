@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import classNames from 'classnames';
 import { ToDo } from '../../types/ToDo';
 import { DispatchContext } from '../../context/ToDoContext';
@@ -11,6 +11,7 @@ export const Todo: React.FC<Props> = ({ plan }) => {
   const [newTitle, setNewTitle] = useState(plan.title);
   const [canEdit, setCanEdit] = useState(false);
   const dispatch = useContext(DispatchContext);
+  const editRef = useRef<number | null>(null); // Ref to keep track of the edited todo ID
 
   const handleStatus = () => {
     dispatch({ type: 'changeStatus', id: plan.id });
@@ -58,6 +59,13 @@ export const Todo: React.FC<Props> = ({ plan }) => {
     setNewTitle(event.target.value);
   };
 
+  const handleDoubleClick = () => {
+    if (!canEdit) {
+      setCanEdit(true);
+      editRef.current = plan.id;
+    }
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -76,7 +84,7 @@ export const Todo: React.FC<Props> = ({ plan }) => {
         />
       </label>
 
-      {canEdit ? (
+      {canEdit && editRef.current === plan.id ? (
         <form onSubmit={(e) => e.preventDefault()}>
           <input
             data-cy="TodoTitleField"
@@ -87,13 +95,14 @@ export const Todo: React.FC<Props> = ({ plan }) => {
             onChange={handleValue}
             onKeyDown={handleKeyPress}
             onBlur={handleBlur}
+            autoFocus
           />
         </form>
       ) : (
         <span
           data-cy="TodoTitle"
           className="todo__title"
-          onDoubleClick={() => setCanEdit(true)}
+          onDoubleClick={handleDoubleClick}
         >
           {plan.title}
         </span>
