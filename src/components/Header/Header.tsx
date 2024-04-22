@@ -10,6 +10,7 @@ export const Header: React.FC = () => {
   const { todos, inputFocus } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
   const inputRef = useRef<HTMLInputElement>(null);
+  const activeCondition = todos.every(plan => plan.completed);
 
   useEffect(() => {
     if (inputFocus && inputRef.current) {
@@ -76,7 +77,7 @@ export const Header: React.FC = () => {
           type="button"
           className={classNames(
             "todoapp__toggle-all",
-            {'active': todos.every(plan => plan.completed)},
+            { 'active': activeCondition },
           )}
           onClick={handleToggle}
           data-cy="ToggleAllButton"
