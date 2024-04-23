@@ -56,7 +56,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
             data-cy="TodoTitleField"
             type="text"
             ref={fieldRef}
-            className="todoapp__new-todo"
+            className="todoapp__new-todo todoapp__new-todo--rename"
             placeholder="What needs to be done?"
             defaultValue={todo.title}
             onBlur={saveChange}
