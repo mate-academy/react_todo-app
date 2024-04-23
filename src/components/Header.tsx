@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
     event.preventDefault();
 
     if (title.trim() === '') {
-      return '';
+      return;
     }
 
     addTodo(title);
