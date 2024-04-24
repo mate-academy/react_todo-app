@@ -1,37 +1,78 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppContext } from '../context/Context';
+import cn from 'classnames';
 
 export const Header: React.FC = () => {
   const [inputText, setInputText] = useState('');
-  const { dispatch } = useAppContext();
+  const {
+    state: { todos },
+    dispatch,
+  } = useAppContext();
+
+  const mainInputRef = useRef<HTMLInputElement>(null);
+
+  const allCompleted = todos.every(todo => todo.completed);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const title = inputText.trim();
 
-    if (inputText.trim().length) {
+    if (title) {
       dispatch({
         type: 'addTodo',
         payload: {
           id: +new Date(),
-          title: inputText.trim(),
+          title,
           completed: false,
         },
       });
+
+      setInputText('');
     }
   };
 
+  const handleToggleAllClick = () => {
+    if (allCompleted) {
+      dispatch({
+        type: 'changeTodos',
+        payload: todos.map(todo => ({
+          ...todo,
+          completed: false,
+        })),
+      });
+
+      return;
+    }
+
+    dispatch({
+      type: 'changeTodos',
+      payload: todos.map(todo => ({
+        ...todo,
+        completed: true,
+      })),
+    });
+  };
+
+  useEffect(() => {
+    if (mainInputRef.current) {
+      mainInputRef.current.focus();
+    }
+  }, [todos.length]);
+
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {!!todos.length && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', { active: allCompleted })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggleAllClick}
+        />
+      )}
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
         <input
+          ref={mainInputRef}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"

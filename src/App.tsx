@@ -12,7 +12,6 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <Main />
-        {/* Hide the footer if there are no todos */}
         <Footer />
       </div>
     </div>

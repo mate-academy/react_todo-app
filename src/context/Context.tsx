@@ -1,11 +1,13 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { State } from '../types/State';
 import { Action } from '../types/Action';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
+const savedData = localStorage.getItem('todos');
+
 const initialState: State = {
-  todos: [],
+  todos: savedData ? JSON.parse(savedData) : [],
   filter: Filter.All,
 };
 
@@ -20,7 +22,7 @@ const reducer = (state: State, action: Action): State => {
     case 'changeTodo':
       return {
         ...state,
-        todos: state.todos.map((todo: Todo) =>
+        todos: state.todos.map(todo =>
           todo.id === action.payload.id ? action.payload : todo,
         ),
       };
@@ -31,7 +33,7 @@ const reducer = (state: State, action: Action): State => {
         todos: state.todos.filter((todo: Todo) => todo.id !== action.payload),
       };
 
-    case 'setTodos':
+    case 'changeTodos':
       return {
         ...state,
         todos: action.payload,
@@ -48,10 +50,12 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const AppContext = createContext<{
+interface ContextData {
   state: State;
   dispatch: React.Dispatch<Action>;
-}>({
+}
+
+const AppContext = createContext<ContextData>({
   state: initialState,
   dispatch: () => {},
 });
@@ -62,6 +66,10 @@ interface Props {
 
 export const AppContextProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(state.todos));
+  }, [state]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

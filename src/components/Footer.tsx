@@ -1,40 +1,79 @@
 import React from 'react';
-// import { AppContext } from '../context/Context';
+import cn from 'classnames';
+import { useAppContext } from '../context/Context';
+import { Filter } from '../types/Filter';
 
 export const Footer: React.FC = () => {
+  const {
+    state: { todos, filter },
+    dispatch,
+  } = useAppContext();
+
+  const completed = todos.filter(todo => todo.completed);
+  const notComleted = todos.filter(todo => !todo.completed);
+
   return (
-    <footer className="todoapp__footer" data-cy="Footer">
-      <span className="todo-count" data-cy="TodosCounter">
-        3 items left
-      </span>
+    <>
+      {!!todos.length && (
+        <footer className="todoapp__footer" data-cy="Footer">
+          <span className="todo-count" data-cy="TodosCounter">
+            {notComleted.length} items left
+          </span>
 
-      {/* Active link should have the 'selected' class */}
-      <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
-          All
-        </a>
+          <nav className="filter" data-cy="Filter">
+            <a
+              href="#/"
+              className={cn('filter__link', {
+                selected: filter === Filter.All,
+              })}
+              data-cy="FilterLinkAll"
+              onClick={() =>
+                dispatch({ type: 'setFilter', payload: Filter.All })
+              }
+            >
+              All
+            </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
-          Active
-        </a>
+            <a
+              href="#/active"
+              className={cn('filter__link', {
+                selected: filter === Filter.Active,
+              })}
+              data-cy="FilterLinkActive"
+              onClick={() =>
+                dispatch({ type: 'setFilter', payload: Filter.Active })
+              }
+            >
+              Active
+            </a>
 
-        <a
-          href="#/completed"
-          className="filter__link"
-          data-cy="FilterLinkCompleted"
-        >
-          Completed
-        </a>
-      </nav>
+            <a
+              href="#/completed"
+              className={cn('filter__link', {
+                selected: filter === Filter.Completed,
+              })}
+              data-cy="FilterLinkCompleted"
+              onClick={() =>
+                dispatch({ type: 'setFilter', payload: Filter.Completed })
+              }
+            >
+              Completed
+            </a>
+          </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-      >
-        Clear completed
-      </button>
-    </footer>
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+            data-cy="ClearCompletedButton"
+            onClick={() =>
+              dispatch({ type: 'changeTodos', payload: notComleted })
+            }
+            disabled={completed.length === 0}
+          >
+            Clear completed
+          </button>
+        </footer>
+      )}
+    </>
   );
 };
