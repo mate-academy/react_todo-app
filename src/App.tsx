@@ -87,12 +87,31 @@ export const App: React.FC = () => {
   const toggleAll = useCallback(() => {
     const newTodos = [...todos];
 
-    const changeTodos = newTodos.map(todo => ({
-      ...todo,
-      completed: !todo.completed,
-    }));
+    const result = newTodos.every(todo => {
+      if (todo.completed === true) {
+        return true;
+      } else {
+        return false;
+      }
+    });
 
-    setTodos(changeTodos);
+    if (result) {
+      const changeTodos = newTodos.map(todo => {
+        return { ...todo, completed: !todo.completed };
+      });
+
+      setTodos(changeTodos);
+    } else {
+      const changeTodos = newTodos.map(todo => {
+        if (todo.completed === false) {
+          return { ...todo, completed: !todo.completed };
+        } else {
+          return todo;
+        }
+      });
+
+      setTodos(changeTodos);
+    }
   }, [setTodos, todos]);
 
   const isEmpty = todos.length <= 0;
