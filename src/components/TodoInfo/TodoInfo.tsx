@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 type Props = {
   todo: Todo;
@@ -9,11 +8,7 @@ type Props = {
 };
 
 export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
-  const [togl, setTogl] = useLocalStorage(todo.title, false);
-
   function togelStatement() {
-    setTogl(!togl);
-
     const newTodo = { ...todo, completed: !todo.completed };
 
     onUpdate(newTodo);
@@ -23,7 +18,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
     <div
       data-cy="Todo"
       className={classNames('todo', {
-        completed: togl,
+        completed: todo.completed,
       })}
     >
       <label className="todo__status-label">
