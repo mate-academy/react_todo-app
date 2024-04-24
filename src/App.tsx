@@ -91,7 +91,9 @@ export const App: React.FC = () => {
       ...todo,
       completed: !todo.completed,
     }));
-  }, []);
+
+    setTodos(changeTodos);
+  }, [setTodos, todos]);
 
   const isEmpty = todos.length <= 0;
 
