@@ -4,13 +4,17 @@ import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Todo } from './interfaces/Todo';
 
-export type Filters = 'All' | 'Active' | 'Completed';
+export enum Filters {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(
     JSON.parse(localStorage.getItem('todos') || '[]'),
   );
-  const [filterType, setFilterType] = useState<Filters>('All');
+  const [filterType, setFilterType] = useState<Filters>(Filters.All);
   const [query, setQuery] = useState('');
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -26,8 +30,8 @@ export const App: React.FC = () => {
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
 
-    setTodos([
-      ...todos,
+    setTodos(prevTodos => [
+      ...prevTodos,
       {
         id: Date.now(),
         title: query.trim(),
@@ -43,8 +47,8 @@ export const App: React.FC = () => {
   };
 
   const editTodo = (id: number, newTitle: string) => {
-    setTodos(
-      todos.map(todo =>
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
         todo.id === id
           ? { ...todo, title: newTitle.trim(), isEditing: false }
           : todo,
@@ -57,8 +61,8 @@ export const App: React.FC = () => {
   };
 
   const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map(todo =>
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       ),
     );
@@ -67,12 +71,17 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     let filtered = todos;
 
-    if (filterType === 'Active') {
-      filtered = todos.filter(todo => !todo.completed);
-    }
+    switch (filterType) {
+      case Filters.Active:
+        filtered = todos.filter(todo => !todo.completed);
+        break;
 
-    if (filterType === 'Completed') {
-      filtered = todos.filter(todo => todo.completed);
+      case Filters.Completed:
+        filtered = todos.filter(todo => todo.completed);
+        break;
+
+      default:
+        return todos;
     }
 
     return filtered;
@@ -98,16 +107,16 @@ export const App: React.FC = () => {
 
   const toggleAll = () => {
     if (allCompleted || allActive) {
-      setTodos(
-        todos.map(todo => ({
+      setTodos(prevTodos =>
+        prevTodos.map(todo => ({
           ...todo,
           completed: !todo.completed,
         })),
       );
     } else {
       {
-        setTodos(
-          todos.map(todo =>
+        setTodos(prevTodos =>
+          prevTodos.map(todo =>
             !todo.completed ? { ...todo, completed: true } : todo,
           ),
         );
