@@ -3,14 +3,20 @@ import { TodoInfo } from '../TodoInfo/TodoInfo';
 
 type Props = {
   todos: Todo[];
-  onAdd: (todo: Todo) => void;
+  onUpdate: (newTodo: Todo) => void;
+  deleteTodo: (deletedTodo: Todo) => void;
 };
 
-export const Main: React.FC<Props> = ({ todos, onAdd }) => {
+export const Main: React.FC<Props> = ({ todos, onUpdate, deleteTodo }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => (
-        <TodoInfo todo={todo} onAdd={onAdd} key={todo.id} />
+        <TodoInfo
+          todo={todo}
+          onUpdate={onUpdate}
+          key={todo.id}
+          deleteTodo={deleteTodo}
+        />
       ))}
     </section>
   );

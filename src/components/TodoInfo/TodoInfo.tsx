@@ -1,21 +1,22 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { useState } from 'react';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 type Props = {
   todo: Todo;
-  onAdd: (todo: Todo) => void;
+  onUpdate: (newTodo: Todo) => void;
+  deleteTodo: (deletedTodo: Todo) => void;
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo, onAdd }) => {
-  const [togl, setTogl] = useState(false);
+export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
+  const [togl, setTogl] = useLocalStorage(todo.title, false);
 
   function togelStatement() {
     setTogl(!togl);
 
     const newTodo = { ...todo, completed: !todo.completed };
 
-    onAdd(newTodo);
+    onUpdate(newTodo);
   }
 
   return (
@@ -38,7 +39,12 @@ export const TodoInfo: React.FC<Props> = ({ todo, onAdd }) => {
         {todo.title}
       </span>
 
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={() => deleteTodo(todo)}
+      >
         ×
       </button>
     </div>

@@ -1,43 +1,25 @@
-import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
+  filterField: FilerType;
+  setFilterField: React.Dispatch<React.SetStateAction<FilerType>>;
+  clearCompleted: () => void;
 };
 
-enum filerType {
+enum FilerType {
   FILTER_TODO_ALL = 'all',
   FILTER_TODO_ACTIVE = 'active',
   FILTER_TODO_COMPLETED = 'completed',
 }
 
-function getPrepareTodos(filterField: filerType, todos: Todo[]) {
-  const prepearedTodos = [...todos];
-
-  if (filterField) {
-    prepearedTodos.filter(todo => {
-      switch (filterField) {
-        case filerType.FILTER_TODO_ALL:
-          return todo;
-        case filerType.FILTER_TODO_ACTIVE:
-          return todo.completed === true;
-        case filerType.FILTER_TODO_COMPLETED:
-          return todo.completed !== true;
-        default:
-          return 0;
-      }
-    });
-  }
-
-  return prepearedTodos;
-}
-
-export const Footer: React.FC<Props> = ({ todos }) => {
-  const [filterField, setFilterField] = useState(filerType.FILTER_TODO_ALL);
-
-  const visibleTodos = getPrepareTodos(filterField, todos);
-
+export const Footer: React.FC<Props> = ({
+  todos,
+  filterField,
+  setFilterField,
+  clearCompleted,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -49,10 +31,10 @@ export const Footer: React.FC<Props> = ({ todos }) => {
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: filterField === filerType.FILTER_TODO_ALL,
+            selected: filterField === FilerType.FILTER_TODO_ALL,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setFilterField(filerType.FILTER_TODO_ALL)}
+          onClick={() => setFilterField(FilerType.FILTER_TODO_ALL)}
         >
           All
         </a>
@@ -60,10 +42,10 @@ export const Footer: React.FC<Props> = ({ todos }) => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: filterField === filerType.FILTER_TODO_ACTIVE,
+            selected: filterField === FilerType.FILTER_TODO_ACTIVE,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setFilterField(filerType.FILTER_TODO_ACTIVE)}
+          onClick={() => setFilterField(FilerType.FILTER_TODO_ACTIVE)}
         >
           Active
         </a>
@@ -71,10 +53,10 @@ export const Footer: React.FC<Props> = ({ todos }) => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: filterField === filerType.FILTER_TODO_COMPLETED,
+            selected: filterField === FilerType.FILTER_TODO_COMPLETED,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilterField(filerType.FILTER_TODO_COMPLETED)}
+          onClick={() => setFilterField(FilerType.FILTER_TODO_COMPLETED)}
         >
           Completed
         </a>
@@ -85,6 +67,7 @@ export const Footer: React.FC<Props> = ({ todos }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={clearCompleted}
       >
         Clear completed
       </button>

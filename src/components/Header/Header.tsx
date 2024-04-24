@@ -4,10 +4,11 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   isEmpty: boolean;
-  onAdd: (todo: Todo) => void;
+  onAdd: (newTodo: Todo) => void;
+  toggleAll: () => void;
 };
 
-export const Header: React.FC<Props> = ({ isEmpty, onAdd }) => {
+export const Header: React.FC<Props> = ({ isEmpty, onAdd, toggleAll }) => {
   const [activeToggle, setActiveToggle] = useState(false);
   const [value, setValue] = useState('');
 
@@ -33,6 +34,10 @@ export const Header: React.FC<Props> = ({ isEmpty, onAdd }) => {
             active: activeToggle,
           })}
           data-cy="ToggleAllButton"
+          onClick={() => {
+            setActiveToggle(!activeToggle);
+            toggleAll();
+          }}
         />
       )}
 

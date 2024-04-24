@@ -16,7 +16,7 @@ export function useLocalStorage<T>(
     } catch (e) {
       localStorage.removeItem(key);
 
-      return setValue;
+      return startValue;
     }
   });
 
