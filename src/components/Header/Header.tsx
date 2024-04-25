@@ -9,7 +9,12 @@ type Props = {
   isAllTodoCompleted: boolean;
 };
 
-export const Header: React.FC<Props> = ({ isEmpty, onAdd, toggleAll, isAllTodoCompleted }) => {
+export const Header: React.FC<Props> = ({
+  isEmpty,
+  onAdd,
+  toggleAll,
+  isAllTodoCompleted,
+}) => {
   const [activeToggle, setActiveToggle] = useState(false);
   const [value, setValue] = useState('');
 

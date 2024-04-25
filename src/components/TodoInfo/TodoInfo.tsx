@@ -56,6 +56,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
             data-cy="EditingTodo"
             type="text"
             className="todo__title-field"
+            defaultValue={todo.title}
             value={value}
             onChange={event => setValue(event.target.value)}
             onBlur={() => setEditing(false)}
