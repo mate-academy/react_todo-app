@@ -68,7 +68,7 @@ export const Footer: React.FC = () => {
             onClick={() =>
               dispatch({ type: 'changeTodos', payload: notComleted })
             }
-            disabled={completed.length === 0}
+            disabled={!completed.length}
           >
             Clear completed
           </button>
