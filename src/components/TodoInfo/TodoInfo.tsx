@@ -53,6 +53,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
       ) : (
         <form>
           <input
+            autoFocus
             data-cy="EditingTodo"
             type="text"
             className="todo__title-field"

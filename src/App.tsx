@@ -31,6 +31,8 @@ function getPrepareTodos(filterField: FilerType, todos: Todo[]) {
     });
 
     return result;
+  } else {
+    return todos;
   }
 }
 
