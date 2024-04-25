@@ -3,7 +3,11 @@ import { ReactContext } from '../../ReactContext';
 import { Task } from '../../types/Task';
 import cn from 'classnames';
 
-export const Header = () => {
+type Props = {
+  active: React.RefObject<HTMLInputElement>;
+};
+
+export const Header = ({ active }: Props) => {
   const Context = useContext(ReactContext);
   const [inputChange, setInputChange] = useState('');
 
@@ -71,6 +75,7 @@ export const Header = () => {
           value={inputChange}
           onChange={event => setInputChange(event.target.value)}
           onKeyDown={cheakKey}
+          ref={active}
         />
       </form>
     </header>

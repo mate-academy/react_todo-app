@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Header } from './components/Header/Header';
 import { Main } from './components/Main/Main';
 import { Footer } from './components/Footer/Footer';
@@ -10,6 +10,13 @@ export const App: React.FC = () => {
   const [firstTask, setFirstTask] = useState(false);
   const [todoses, setTodoses] = useState(todos);
   const [filter, setFilter] = useState('All');
+  const active = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (active.current) {
+      active.current.focus();
+    }
+  }, []);
 
   return (
     <div className="todoapp">
@@ -26,7 +33,7 @@ export const App: React.FC = () => {
             setFilter: setFilter,
           }}
         >
-          <Header />
+          <Header active={active} />
           {firstTask && <Main />}
           {firstTask && <Footer />}
         </ReactContext.Provider>
