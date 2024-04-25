@@ -10,7 +10,7 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
   const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(todo.title);
 
   function togelStatement() {
     const newTodo = { ...todo, completed: !todo.completed };
@@ -51,11 +51,11 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
           {todo.title}
         </span>
       ) : (
-        <form>
+        <form className="todo__title">
           <input
             data-cy="EditingTodo"
             type="text"
-            className="todoapp__new-todo"
+            className="todo__title-field"
             value={value}
             onChange={event => setValue(event.target.value)}
             onBlur={() => setEditing(false)}
@@ -63,14 +63,16 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
         </form>
       )}
 
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={() => deleteTodo(todo)}
-      >
-        ×
-      </button>
+      {!editing && (
+        <button
+          type="button"
+          className="todo__remove"
+          data-cy="TodoDelete"
+          onClick={() => deleteTodo(todo)}
+        >
+          ×
+        </button>
+      )}
     </div>
   );
 };
