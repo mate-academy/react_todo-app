@@ -39,8 +39,6 @@ export const App: React.FC = () => {
 
   const [filterField, setFilterField] = useState(FilerType.FILTER_TODO_ALL);
 
-  // const [deleteTodo, setDeleteTodo] = useLocalStorage('todos', null);
-
   const addTodo = useCallback(
     (newTodo: Todo) => {
       setTodos([...todos, newTodo]);
@@ -87,13 +85,7 @@ export const App: React.FC = () => {
   const toggleAll = useCallback(() => {
     const newTodos = [...todos];
 
-    const result = newTodos.every(todo => {
-      if (todo.completed === true) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    const result = newTodos.every(todo => todo.completed);
 
     if (result) {
       const changeTodos = newTodos.map(todo => {
@@ -123,7 +115,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header isEmpty={isEmpty} onAdd={addTodo} toggleAll={toggleAll} />
+        <Header
+          isEmpty={isEmpty}
+          onAdd={addTodo}
+          toggleAll={toggleAll}
+          isAllTodoCompleted={todos.every(todo => todo.completed)}
+        />
 
         {!isEmpty && (
           <Main

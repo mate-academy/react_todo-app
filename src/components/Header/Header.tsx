@@ -6,9 +6,10 @@ type Props = {
   isEmpty: boolean;
   onAdd: (newTodo: Todo) => void;
   toggleAll: () => void;
+  isAllTodoCompleted: boolean;
 };
 
-export const Header: React.FC<Props> = ({ isEmpty, onAdd, toggleAll }) => {
+export const Header: React.FC<Props> = ({ isEmpty, onAdd, toggleAll, isAllTodoCompleted }) => {
   const [activeToggle, setActiveToggle] = useState(false);
   const [value, setValue] = useState('');
 
@@ -31,7 +32,7 @@ export const Header: React.FC<Props> = ({ isEmpty, onAdd, toggleAll }) => {
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active: activeToggle,
+            active: isAllTodoCompleted,
           })}
           data-cy="ToggleAllButton"
           onClick={() => {
