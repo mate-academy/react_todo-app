@@ -51,7 +51,7 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
           {todo.title}
         </span>
       ) : (
-        <form className="todo__title">
+        <form>
           <input
             data-cy="EditingTodo"
             type="text"
