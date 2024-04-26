@@ -23,7 +23,7 @@ export const Header: React.FC<Props> = ({
 
     onAdd({
       id: +new Date(),
-      title: value,
+      title: value.trim(),
       completed: false,
     });
 
@@ -48,7 +48,7 @@ export const Header: React.FC<Props> = ({
       )}
 
       {/* Add a todo on form submit */}
-      <form onSubmit={handleSubmit}>
+      <form method="POST" action="/api/posts" onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
@@ -56,6 +56,7 @@ export const Header: React.FC<Props> = ({
           placeholder="What needs to be done?"
           value={value}
           onChange={event => setValue(event.target.value)}
+          id="NewTodoField"
         />
       </form>
     </header>

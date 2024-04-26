@@ -62,12 +62,7 @@ export const App: React.FC = () => {
 
   const deleteTodo = useCallback(
     (deletedTodo: Todo) => {
-      const newTodos = [...todos];
-      const index = newTodos.findIndex(todo => todo.id === deletedTodo.id);
-
-      localStorage.removeItem(deletedTodo.title);
-
-      newTodos.splice(index, 1);
+      const newTodos = todos.filter(todo => todo.id !== deletedTodo.id);
 
       setTodos(newTodos);
     },

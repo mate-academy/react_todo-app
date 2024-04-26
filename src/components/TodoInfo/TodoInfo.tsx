@@ -12,6 +12,8 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(todo.title);
 
+  const inputElement = document.getElementById('NewTodoField');
+
   function togelStatement() {
     const newTodo = { ...todo, completed: !todo.completed };
 
@@ -19,11 +21,16 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
   }
 
   function editingTodo() {
-    setEditing(true);
+    const trimTitle = value.trim();
 
-    const newTodo = { ...todo, title: value };
+    if (trimTitle) {
+      onUpdate({ ...todo, title: value.trim() });
+    } else {
+      deleteTodo(todo);
+    }
 
-    onUpdate(newTodo);
+    setEditing(false);
+    inputElement?.focus();
   }
 
   return (
@@ -46,21 +53,26 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
         <span
           data-cy="TodoTitle"
           className="todo__title"
-          onDoubleClick={editingTodo}
+          onDoubleClick={() => setEditing(true)}
         >
           {todo.title}
         </span>
       ) : (
-        <form>
+        <form onSubmit={editingTodo}>
           <input
             autoFocus
             data-cy="EditingTodo"
             type="text"
             className="todo__title-field"
+            placeholder="Empty todo will be deleted"
             defaultValue={todo.title}
-            value={value}
             onChange={event => setValue(event.target.value)}
-            onBlur={() => setEditing(false)}
+            onBlur={editingTodo}
+            onKeyDown={event => {
+              if (event.key === 'Escape') {
+                setEditing(false);
+              }
+            }}
           />
         </form>
       )}
