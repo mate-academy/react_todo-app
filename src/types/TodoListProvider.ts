@@ -1,4 +1,3 @@
-
 export type TodoListProviderType = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
