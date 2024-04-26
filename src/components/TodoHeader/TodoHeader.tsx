@@ -18,10 +18,8 @@ export const TodoHeader: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
+    newTodoField?.current?.focus();
+  }, [todoList]);
 
   const handlerOnChangeTodo = (e: ChangeEvent<HTMLInputElement>) => {
     setTodo(e.target.value);
