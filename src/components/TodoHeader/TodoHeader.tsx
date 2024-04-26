@@ -12,12 +12,8 @@ import cn from 'classnames';
 
 export const TodoHeader: React.FC = () => {
   const [todo, setTodo] = useState<string>('');
-  const {
-    addTask,
-    completeAllTasks,
-    allCompletedTasks,
-    todoList,
-  } = useContext(TodoListContext);
+  const { addTask, completeAllTasks, allCompletedTasks, todoList } =
+    useContext(TodoListContext);
 
   const newTodoField = useRef<HTMLInputElement>(null);
 

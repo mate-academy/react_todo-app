@@ -4,7 +4,7 @@ import { ReducerAction } from '../types/ReducerAction';
 
 export function getLocalStorage<T>(key: string, initialValue: T): T {
   try {
-    return JSON.parse(String(localStorage.getItem(key)));
+    return JSON.parse(String(localStorage.getItem(key))) || [];
   } catch {
     return initialValue;
   }
