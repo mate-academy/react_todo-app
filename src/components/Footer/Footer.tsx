@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { useContext } from 'react';
 import { DispatchContext, StateContext } from '../../Store';
 import cn from 'classnames';
@@ -12,6 +13,11 @@ export const Footer = () => {
   };
 
   const notCompleted = state.todos.filter(todo => todo.completed === false);
+  const completed = state.todos.filter(todo => todo.completed === true);
+
+  if (state.todos.length === 0) {
+    return null;
+  }
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -19,7 +25,6 @@ export const Footer = () => {
         {notCompleted.length} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -51,10 +56,11 @@ export const Footer = () => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
-        className="todoapp__clear-completed"
+        className={cn('todoapp__clear-completed', {
+          disabled: completed.length > 0,
+        })}
         data-cy="ClearCompletedButton"
         onClick={handleClearCompleted}
       >

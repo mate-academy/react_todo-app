@@ -2,6 +2,8 @@ import { createContext, useReducer } from 'react';
 import React from 'react';
 import { Todo } from './types/TodoList';
 
+const LOCAL_STORAGE_KEY = 'todos';
+
 export type Action =
   | { type: 'setTodos'; payload: Todo[] }
   | { type: 'addTodo'; payload: Todo }
@@ -9,39 +11,53 @@ export type Action =
   | { type: 'completed'; payload: { id: number } }
   | { type: 'allCompleted' }
   | { type: 'deleteAllCompleted' }
-  | { type: 'filterTodos'; name: 'All' | 'Active' | 'Completed' };
+  | { type: 'filterTodos'; name: 'All' | 'Active' | 'Completed' }
+  | { type: 'editTodo'; payload: { id: number; title: string } };
 
 export type State = {
   todos: Todo[];
   filterTodos: 'All' | 'Active' | 'Completed';
 };
 
-const initialState: State = {
+const emptyInitialState: State = {
   todos: [],
   filterTodos: 'All',
 };
 
+const localStrageInitialState: State = localStorage.getItem(LOCAL_STORAGE_KEY)
+  ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)!) // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  : undefined;
+
+const initialState: State = localStrageInitialState
+  ? localStrageInitialState
+  : emptyInitialState;
+
 type InitialDispatch = (action: Action) => void;
 
 const reducer = (state: State, action: Action): State => {
+  let newState: State = state;
+
   switch (action.type) {
     case 'setTodos':
-      return {
+      newState = {
         ...state,
         todos: action.payload,
       };
+      break;
     case 'addTodo':
-      return {
+      newState = {
         ...state,
         todos: [...state.todos, action.payload],
       };
+      break;
     case 'deleteTodo':
-      return {
+      newState = {
         ...state,
         todos: state.todos.filter(todo => todo.id !== action.payload.id),
       };
+      break;
     case 'completed':
-      return {
+      newState = {
         ...state,
         todos: state.todos.map(todo => {
           if (todo.id === action.payload.id) {
@@ -54,8 +70,9 @@ const reducer = (state: State, action: Action): State => {
           return todo;
         }),
       };
+      break;
     case 'allCompleted':
-      return {
+      newState = {
         ...state,
         todos: state.todos.map(todo => {
           if (todo.completed === false) {
@@ -75,25 +92,44 @@ const reducer = (state: State, action: Action): State => {
           return todo;
         }),
       };
+      break;
     case 'deleteAllCompleted':
-      return {
+      newState = {
         ...state,
         todos: state.todos.filter(todo => todo.completed === false),
       };
+      break;
     case 'filterTodos':
-      return {
+      newState = {
         ...state,
         filterTodos: action.name,
       };
-
+      break;
+    case 'editTodo':
+      newState = {
+        ...state,
+        todos: state.todos.map(item => {
+          if (item.id === action.payload.id) {
+            return {
+              ...item,
+              title: action.payload.title,
+            };
+          } else {
+            return item;
+          }
+        }),
+      };
+      break;
     default:
-      return state;
+      newState = state;
   }
+
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newState));
+
+  return newState;
 };
 
-// телефон директора для отримання інформації
 export const StateContext = createContext(initialState);
-// телефон директора для керування інафомацією
 export const DispatchContext = createContext<InitialDispatch>(() => {});
 
 type Props = {
