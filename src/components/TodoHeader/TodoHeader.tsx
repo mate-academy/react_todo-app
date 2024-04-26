@@ -13,7 +13,7 @@ import cn from 'classnames';
 export const TodoHeader: React.FC = () => {
   const [todo, setTodo] = useState<string>('');
   const {
-    addTask: handlerAddTask,
+    addTask,
     completeAllTasks,
     allCompletedTasks,
     todoList,
@@ -39,7 +39,7 @@ export const TodoHeader: React.FC = () => {
     e.preventDefault();
 
     if (todo.trim()) {
-      handlerAddTask(todo);
+      addTask(todo);
     }
 
     reset();
