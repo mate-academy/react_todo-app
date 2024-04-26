@@ -24,13 +24,14 @@ const emptyInitialState: State = {
   filterTodos: 'All',
 };
 
-const localStrageInitialState: State = localStorage.getItem(LOCAL_STORAGE_KEY)
-  ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)!) // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  : undefined;
+if (!localStorage.getItem(LOCAL_STORAGE_KEY)) {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(emptyInitialState));
+}
 
-const initialState: State = localStrageInitialState
-  ? localStrageInitialState
-  : emptyInitialState;
+const initialState: State = JSON.parse(
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  localStorage.getItem(LOCAL_STORAGE_KEY)!,
+);
 
 type InitialDispatch = (action: Action) => void;
 
