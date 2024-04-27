@@ -1,16 +1,47 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
-export const PropsContext = React.createContext();
+enum FilerType {
+  FILTER_TODO_ALL = 'all',
+  FILTER_TODO_ACTIVE = 'active',
+  FILTER_TODO_COMPLETED = 'completed',
+}
+
+type TodosContextType = {
+  todos: Todo[];
+  setTodos: (v: Todo[]) => void;
+  toggleAll: () => void;
+  addTodo: (newTodo: Todo) => void;
+  isAllTodoCompleted: boolean;
+  updateTodo: (newTodo: Todo) => void;
+  deleteTodo: (deletedTodo: Todo) => void;
+  clearCompleted: () => void;
+  filterField: FilerType;
+  setFilterField: React.Dispatch<React.SetStateAction<FilerType>>;
+  visibleTodos: Todo[];
+};
+
+export const TodosContext = React.createContext<TodosContextType>({
+  todos: [],
+  setTodos: () => {},
+  toggleAll: () => {},
+  addTodo: () => {},
+  isAllTodoCompleted: false,
+  updateTodo: () => {},
+  deleteTodo: () => {},
+  clearCompleted: () => {},
+  filterField: FilerType.FILTER_TODO_ALL,
+  setFilterField: () => {},
+  visibleTodos: [],
+});
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const PropsProvider: React.FC<Props> = ({ children }) => {
+export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
-
   const [filterField, setFilterField] = useState(FilerType.FILTER_TODO_ALL);
 
   const addTodo = useCallback(
@@ -71,12 +102,62 @@ export const PropsProvider: React.FC<Props> = ({ children }) => {
     }
   }, [setTodos, todos]);
 
-  const value = useMemo(() => {
-    todos,
-    setTodos,
-  }, []);
+  const isAllTodoCompleted = todos.every(todo => todo.completed);
+
+  function getPrepareTodos(filter: FilerType, todos1: Todo[]) {
+    const prepearedTodos = [...todos1];
+
+    if (filter) {
+      const result = prepearedTodos.filter(todo => {
+        switch (filter) {
+          case FilerType.FILTER_TODO_ALL:
+            return todo;
+          case FilerType.FILTER_TODO_ACTIVE:
+            return todo.completed === true;
+          case FilerType.FILTER_TODO_COMPLETED:
+            return todo.completed !== true;
+          default:
+            return todo;
+        }
+      });
+
+      return result;
+    } else {
+      return todos;
+    }
+  }
+
+  const visibleTodos = getPrepareTodos(filterField, todos);
+
+  const value = useMemo(
+    () => ({
+      todos,
+      setTodos,
+      toggleAll,
+      addTodo,
+      isAllTodoCompleted,
+      updateTodo,
+      deleteTodo,
+      clearCompleted,
+      filterField,
+      setFilterField,
+      visibleTodos,
+    }),
+    [
+      addTodo,
+      clearCompleted,
+      deleteTodo,
+      filterField,
+      isAllTodoCompleted,
+      setTodos,
+      todos,
+      toggleAll,
+      updateTodo,
+      visibleTodos,
+    ],
+  );
 
   return (
-    <PropsContext.Provider value={value}>{children}</PropsContext.Provider>
+    <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
   );
 };

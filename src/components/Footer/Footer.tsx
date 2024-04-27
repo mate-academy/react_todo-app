@@ -1,12 +1,8 @@
-import { Todo } from '../../types/Todo';
+import { useContext } from 'react';
+import { TodosContext } from '../../stor/Context';
 import classNames from 'classnames';
 
-type Props = {
-  todos: Todo[];
-  filterField: FilerType;
-  setFilterField: React.Dispatch<React.SetStateAction<FilerType>>;
-  clearCompleted: () => void;
-};
+type Props = {};
 
 enum FilerType {
   FILTER_TODO_ALL = 'all',
@@ -14,12 +10,10 @@ enum FilerType {
   FILTER_TODO_COMPLETED = 'completed',
 }
 
-export const Footer: React.FC<Props> = ({
-  todos,
-  filterField,
-  setFilterField,
-  clearCompleted,
-}) => {
+export const Footer: React.FC<Props> = () => {
+  const { todos, filterField, setFilterField, clearCompleted } =
+    useContext(TodosContext);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">

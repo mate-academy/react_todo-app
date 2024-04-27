@@ -1,27 +1,21 @@
 import classNames from 'classnames';
-import { useState } from 'react';
-import { Todo } from '../../types/Todo';
+import { useContext, useState } from 'react';
+import { TodosContext } from '../../stor/Context';
 
 type Props = {
   isEmpty: boolean;
-  onAdd: (newTodo: Todo) => void;
-  toggleAll: () => void;
-  isAllTodoCompleted: boolean;
 };
 
-export const Header: React.FC<Props> = ({
-  isEmpty,
-  onAdd,
-  toggleAll,
-  isAllTodoCompleted,
-}) => {
+export const Header: React.FC<Props> = ({ isEmpty }) => {
+  const { addTodo, toggleAll, isAllTodoCompleted } = useContext(TodosContext);
+
   const [activeToggle, setActiveToggle] = useState(false);
   const [value, setValue] = useState('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    onAdd({
+    addTodo({
       id: +new Date(),
       title: value.trim(),
       completed: false,
@@ -29,6 +23,8 @@ export const Header: React.FC<Props> = ({
 
     setValue('');
   };
+
+  // const ref = useRef(null);
 
   return (
     <header className="todoapp__header">
@@ -48,7 +44,7 @@ export const Header: React.FC<Props> = ({
       )}
 
       {/* Add a todo on form submit */}
-      <form method="POST" action="/api/posts" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"

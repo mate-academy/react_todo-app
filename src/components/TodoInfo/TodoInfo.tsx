@@ -1,14 +1,15 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { TodosContext } from '../../stor/Context';
 
 type Props = {
   todo: Todo;
-  onUpdate: (newTodo: Todo) => void;
-  deleteTodo: (deletedTodo: Todo) => void;
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
+export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  const { updateTodo, deleteTodo } = useContext(TodosContext);
+
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(todo.title);
 
@@ -17,14 +18,16 @@ export const TodoInfo: React.FC<Props> = ({ todo, onUpdate, deleteTodo }) => {
   function togelStatement() {
     const newTodo = { ...todo, completed: !todo.completed };
 
-    onUpdate(newTodo);
+    updateTodo(newTodo);
   }
 
-  function editingTodo() {
+  function editingTodo(event: React.FormEvent) {
+    event.preventDefault();
+
     const trimTitle = value.trim();
 
     if (trimTitle) {
-      onUpdate({ ...todo, title: value.trim() });
+      updateTodo({ ...todo, title: value.trim() });
     } else {
       deleteTodo(todo);
     }
