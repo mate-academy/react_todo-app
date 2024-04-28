@@ -3,9 +3,8 @@ import { TodoContext } from './TodoContext';
 import classNames from 'classnames';
 import { Todo } from '../type/Todo';
 
-type Props = {};
 
-export const Header: React.FC<Props> = () => {
+export const Header: React.FC = () => {
   const { newTodo, setNewTodo, todos, setTodos } = useContext(TodoContext);
 
   const addTodo = () => {

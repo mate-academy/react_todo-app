@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { Todo } from '../type/Todo';
+import { FilterType } from '../type/FilterType';
 
-type FilterType = 'All' | 'Active' | 'Completed';
 
 export type TodoContextType = {
   todos: Todo[];
@@ -15,7 +15,7 @@ export type TodoContextType = {
 const initialTodoContext: TodoContextType = {
   todos: [],
   newTodo: '',
-  filter: 'All',
+  filter: FilterType.All,
   setTodos: () => {},
   setNewTodo: () => {},
   setFilter: () => {},
@@ -30,7 +30,7 @@ type Props = {
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState<string>('');
-  const [filter, setFilter] = useState<FilterType>('All');
+  const [filter, setFilter] = useState<FilterType>(FilterType.All);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
