@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect } from 'react';
 import { Todo } from '../type/Todo';
 import { FilterType } from '../type/FilterType';
 
-
 export type TodoContextType = {
   todos: Todo[];
   newTodo: string;

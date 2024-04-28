@@ -3,7 +3,6 @@ import { TodoContext } from './TodoContext';
 import classNames from 'classnames';
 import { Todo } from '../type/Todo';
 
-
 export const Header: React.FC = () => {
   const { newTodo, setNewTodo, todos, setTodos } = useContext(TodoContext);
 

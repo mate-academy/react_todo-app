@@ -17,6 +17,8 @@ export const Footer: React.FC = () => {
     setTodos(updatedTodos);
   };
 
+  const remainingTodosMessage = remainingTodosCount === 1 ? 'item' : 'items';
+
   if (!todos.length) {
     return null;
   }
@@ -24,15 +26,13 @@ export const Footer: React.FC = () => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${remainingTodosCount} ${
-          remainingTodosCount === 1 ? 'item' : 'items'
-        } left`}
+        {`${remainingTodosCount} ${remainingTodosMessage} left`}
       </span>
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: filter === 'All',
+            selected: filter === FilterType.All,
           })}
           data-cy="FilterLinkAll"
           onClick={() => setFilter(FilterType.All)}
@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: filter === 'Active',
+            selected: filter === FilterType.Active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => setFilter(FilterType.Active)}
@@ -54,7 +54,7 @@ export const Footer: React.FC = () => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: filter === 'Completed',
+            selected: filter === FilterType.Completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => setFilter(FilterType.Completed)}
