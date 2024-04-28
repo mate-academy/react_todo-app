@@ -9,7 +9,7 @@
     margin-bottom: 20px;
     background: #fff;
     box-shadow:
-      0 2px 4px 0 rgba(0, 0, 0, 0.2),
+      0 15px 10px 0 rgba(0, 0, 0, 0.2),
       0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
 
@@ -17,7 +17,7 @@
     font-size: 100px;
     font-weight: 100;
     text-align: center;
-    color: rgba(175, 47, 47, 0.15);
+    color: rgba(17, 0, 255, 0.27);
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -44,7 +44,8 @@
     background-color: transparent;
     cursor: pointer;
 
-    &.active {
+    &.active,
+    &:hover {
       color: #737373;
     }
 
@@ -56,7 +57,7 @@
   }
 
   &__new-todo {
-    width: 100%;
+    width: calc(100% - 77px);
     padding: 16px 16px 16px 60px;
 
     font-size: 24px;
@@ -80,6 +81,8 @@
 
   &__main {
     border-top: 1px solid #e6e6e6;
+    overflow: auto;
+    max-height: 51vh;
   }
 
   &__footer {
