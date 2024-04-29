@@ -1,8 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-
-import { TodoApp } from './components/TodoApp/TodoApp';
+import { TodoContent } from './components/TodoContent/TodoContent';
+import { TodoProvider } from './Context/TodoContext';
 
 export const App: React.FC = () => {
-  return <TodoApp />;
+  return (
+    <div className="todoapp">
+      <h1 className="todoapp__title">ToDos</h1>
+      <TodoProvider>
+        <TodoContent />
+      </TodoProvider>
+    </div>
+  );
 };

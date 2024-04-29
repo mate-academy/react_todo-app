@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useRef } from 'react';
+import { TodoContext } from '../../Context/TodoContext';
 
 interface IProps {
   id: string;
   title: string;
-  editTask: (id: string, newName: string) => void;
   handleSubmit: (e: React.FormEvent | MouseEvent, id: string) => void;
   onCancel: (id: string) => void;
 }
@@ -11,11 +11,11 @@ interface IProps {
 export const MainEditForm: FC<IProps> = ({
   id,
   title,
-  editTask,
   handleSubmit,
   onCancel,
 }) => {
   const editFormRef = useRef<HTMLFormElement>(null);
+  const { editTask } = useContext(TodoContext);
 
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {

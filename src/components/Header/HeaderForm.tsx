@@ -1,12 +1,11 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { TodoContext } from '../../Context/TodoContext';
 
-interface IProps {
-  addTodo: (newTodo: string) => void;
-}
-
-export const HeaderForm: FC<IProps> = ({ addTodo }) => {
+export const HeaderForm: FC = () => {
   const [newTodo, setNewTodo] = useState('');
   const textInput = useRef<HTMLInputElement | null>(null);
+
+  const { addTodo } = useContext(TodoContext);
 
   useEffect(() => {
     textInput.current?.focus();
@@ -43,7 +42,6 @@ export const HeaderForm: FC<IProps> = ({ addTodo }) => {
           ref={textInput}
         />
       </label>
-      <button type="submit" style={{ display: 'none' }}></button>
     </form>
   );
 };

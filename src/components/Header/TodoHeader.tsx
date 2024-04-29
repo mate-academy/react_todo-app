@@ -1,22 +1,12 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import classNames from 'classnames';
 
-import { Todo } from '../../types/types';
 import { HeaderForm } from './HeaderForm';
+import { TodoContext } from '../../Context/TodoContext';
 
-interface IProps {
-  todos: Todo[];
-  addTodo: (newTodo: string) => void;
-  toggleAll: (event: React.FormEvent) => void;
-  allCompleted: boolean;
-}
+export const TodoHeader: FC = () => {
+  const { todos, toggleAll, allCompleted } = useContext(TodoContext);
 
-export const TodoHeader: FC<IProps> = ({
-  todos,
-  addTodo,
-  toggleAll,
-  allCompleted,
-}) => {
   return (
     <header className="todoapp__header">
       {todos.length > 0 && (
@@ -30,7 +20,7 @@ export const TodoHeader: FC<IProps> = ({
         />
       )}
 
-      <HeaderForm addTodo={addTodo} />
+      <HeaderForm />
     </header>
   );
 };

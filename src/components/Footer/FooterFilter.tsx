@@ -4,36 +4,15 @@ import classNames from 'classnames';
 
 interface IProps {
   items: FilterLink[];
-  getAllTodos: () => void;
-  getActiveTodos: () => void;
-  getCompletedTodos: () => void;
+  onFilter?: (filter: string) => void;
 }
 
-export const FooterFilter: FC<IProps> = ({
-  items,
-  getAllTodos = () => {},
-  getActiveTodos = () => {},
-  getCompletedTodos = () => {},
-}) => {
+export const FooterFilter: FC<IProps> = ({ items, onFilter = () => {} }) => {
   const [selectedItem, setSelectedItem] = useState<string>('All');
 
   const handleFilter = (filter: string) => {
-    switch (filter) {
-      case 'All':
-        getAllTodos();
-        setSelectedItem(filter);
-        break;
-      case 'Active':
-        getActiveTodos();
-        setSelectedItem(filter);
-        break;
-      case 'Completed':
-        getCompletedTodos();
-        setSelectedItem(filter);
-        break;
-      default:
-        break;
-    }
+    setSelectedItem(filter);
+    onFilter(filter);
   };
 
   return (

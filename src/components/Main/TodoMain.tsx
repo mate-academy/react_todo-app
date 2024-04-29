@@ -1,30 +1,16 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import classNames from 'classnames';
 
-import { Todo } from '../../types/types';
 import { MainButton } from './MainButton';
 import { MainEditForm } from './MainEditForm';
+import { TodoContext } from '../../Context/TodoContext';
 
-interface IProps {
-  todos: Todo[];
-  toggleTodo: (id: string, completed: boolean) => void;
-  deleteTodo: (id: string) => void;
-  editTask: (id: string, editedText: string) => void;
-}
-
-export const TodoMain: FC<IProps> = ({
-  todos,
-  toggleTodo,
-  deleteTodo,
-  editTask,
-}) => {
+export const TodoMain: FC = () => {
   const [editableTodoId, setEditableTodoId] = useState<string | null>(null);
+  const { todos, toggleTodo } = useContext(TodoContext);
 
-  const handleSubmit = (e: React.FormEvent | MouseEvent, id: string) => {
+  const handleSubmit = (e: React.FormEvent | MouseEvent) => {
     e.preventDefault();
-    if (id && !todos.find(todo => todo.id === id)?.title.trim()) {
-      deleteTodo(id);
-    }
 
     setEditableTodoId(null);
   };
@@ -33,12 +19,8 @@ export const TodoMain: FC<IProps> = ({
     setEditableTodoId(id);
   };
 
-  const handleCancelEdit = (id: string) => {
+  const handleCancelEdit = () => {
     setEditableTodoId(null);
-
-    if (id && !todos.find(todo => todo.id === id)?.title.trim()) {
-      deleteTodo(id);
-    }
   };
 
   return (
@@ -67,7 +49,6 @@ export const TodoMain: FC<IProps> = ({
               <MainEditForm
                 id={id}
                 title={title}
-                editTask={editTask}
                 handleSubmit={handleSubmit}
                 onCancel={handleCancelEdit}
               />
@@ -80,7 +61,7 @@ export const TodoMain: FC<IProps> = ({
                 >
                   {title}
                 </span>
-                <MainButton deleteTodo={deleteTodo} id={id} />
+                <MainButton id={id} />
               </>
             )}
           </div>

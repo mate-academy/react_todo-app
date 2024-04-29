@@ -1,46 +1,54 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 
 import { FooterFilter } from './FooterFilter';
 import { filterLink } from '../../utils/constants';
 import { FooterButton } from './FooterButton';
+import { TodoContext } from '../../Context/TodoContext';
 
-interface IProps {
-  numberNotComplete: number;
-  numberComplete: number;
-  numberTotal?: number;
-  deleteCompletedTodos: () => void;
-  getAllTodos: () => void;
-  getActiveTodos: () => void;
-  getCompletedTodos: () => void;
-}
+export const TodoFooter: FC = () => {
+  // const pluralText = numberNotComplete > 1 ? 'items' : 'item';
 
-export const TodoFooter: FC<IProps> = ({
-  numberNotComplete,
-  numberComplete,
-  deleteCompletedTodos = () => {},
-  getActiveTodos = () => {},
-  getCompletedTodos = () => {},
-  getAllTodos = () => {},
-}) => {
-  // const plural = numberNotComplete > 1 ? 'items' : 'item';
+  const {
+    numberNotComplete,
+    // setTodos,
+    // getAllTodos,
+    // getActiveTodos,
+    // getCompletedTodos,
+  } = useContext(TodoContext);
+
+  // const onFilter = (filter: string) => {
+  //   switch (filter) {
+  //     case 'All':
+  //       const allTodos = getAllTodos();
+
+  //       setTodos(allTodos);
+  //       break;
+  //     case 'Active':
+  //       const activeTodos = getActiveTodos();
+
+  //       setTodos(activeTodos);
+
+  //       break;
+  //     case 'Completed':
+  //       const completedTodos = getCompletedTodos();
+
+  //       setTodos(completedTodos);
+
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${numberNotComplete} items left`}
+        {numberNotComplete} items left
       </span>
 
-      <FooterFilter
-        items={filterLink}
-        getAllTodos={getAllTodos}
-        getActiveTodos={getActiveTodos}
-        getCompletedTodos={getCompletedTodos}
-      />
+      <FooterFilter items={filterLink} />
 
-      <FooterButton
-        numberComplete={numberComplete}
-        deleteCompletedTodos={deleteCompletedTodos}
-      />
+      <FooterButton />
     </footer>
   );
 };

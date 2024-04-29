@@ -1,14 +1,9 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { TodoContext } from '../../Context/TodoContext';
 
-interface IProps {
-  deleteCompletedTodos: () => void;
-  numberComplete: number;
-}
+export const FooterButton: FC = () => {
+  const { numberComplete, deleteCompletedTodos } = useContext(TodoContext);
 
-export const FooterButton: FC<IProps> = ({
-  numberComplete,
-  deleteCompletedTodos = () => {},
-}) => {
   return (
     <button
       type="button"

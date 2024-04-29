@@ -1,11 +1,13 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { TodoContext } from '../../Context/TodoContext';
 
 interface IProps {
   id: string;
-  deleteTodo: (id: string) => void;
 }
 
-export const MainButton: FC<IProps> = ({ id, deleteTodo }) => {
+export const MainButton: FC<IProps> = ({ id }) => {
+  const { deleteTodo } = useContext(TodoContext);
+
   const handleDeleteClick = () => {
     deleteTodo(id);
   };
