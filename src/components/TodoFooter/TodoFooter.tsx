@@ -23,7 +23,6 @@ export const TodoFooter: React.FC = () => {
     String(localStorage.getItem(KEY_LOCALSTORAGE)),
   );
 
-
   return (
     <>
       {!!globalTodoList?.length && (
