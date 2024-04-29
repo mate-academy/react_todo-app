@@ -12,6 +12,7 @@ export const TodoFooter: React.FC = () => {
   const [currentFilter, setCurrentFilter] = useState<Filters>(Filters.All);
 
   const completedTasks = completedCount > 0;
+  const todoCount = `${uncompletedCount} ${uncompletedCount > 1 ? 'items' : 'item'}`;
 
   const handlerCurrentFilter = (item: Filters) => {
     setCurrentFilter(item);
@@ -22,12 +23,13 @@ export const TodoFooter: React.FC = () => {
     String(localStorage.getItem(KEY_LOCALSTORAGE)),
   );
 
+
   return (
     <>
       {!!globalTodoList?.length && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            {uncompletedCount} items left
+            {todoCount}
           </span>
 
           {/* Active link should have the 'selected' class */}
