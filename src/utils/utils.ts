@@ -60,9 +60,15 @@ export function tasksReducer(tasks: Array<Todo>, action: ReducerAction) {
     }
 
     case ACTION_TYPES.CompleteAllTasks: {
+      const isAllCompleted = tasks.every((item: Todo) => item.completed);
+
       const newState = [
-        ...tasks.map((item: Todo) => {
-          return { ...item, completed: !item.completed };
+        ...tasks.map(item => {
+          if (!item.completed || isAllCompleted) {
+            return { ...item, completed: !item.completed };
+          }
+
+          return item;
         }),
       ];
 
