@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodosContext } from '../../stor/Context';
 
 type Props = {
@@ -7,10 +7,15 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ isEmpty }) => {
-  const { addTodo, toggleAll, isAllTodoCompleted } = useContext(TodosContext);
+  const { addTodo, toggleAll, isAllTodoCompleted, todos, ref } =
+    useContext(TodosContext);
 
   const [activeToggle, setActiveToggle] = useState(false);
   const [value, setValue] = useState('');
+
+  React.useEffect(() => {
+    ref.current?.focus();
+  }, [ref, todos]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -22,9 +27,9 @@ export const Header: React.FC<Props> = ({ isEmpty }) => {
     });
 
     setValue('');
-  };
 
-  // const ref = useRef(null);
+    ref.current?.focus();
+  };
 
   return (
     <header className="todoapp__header">
@@ -53,6 +58,7 @@ export const Header: React.FC<Props> = ({ isEmpty }) => {
           value={value}
           onChange={event => setValue(event.target.value)}
           id="NewTodoField"
+          ref={ref}
         />
       </form>
     </header>

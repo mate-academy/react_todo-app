@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  createRef,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
@@ -20,6 +26,7 @@ type TodosContextType = {
   filterField: FilerType;
   setFilterField: React.Dispatch<React.SetStateAction<FilerType>>;
   visibleTodos: Todo[];
+  ref: React.RefObject<HTMLInputElement>;
 };
 
 export const TodosContext = React.createContext<TodosContextType>({
@@ -34,6 +41,7 @@ export const TodosContext = React.createContext<TodosContextType>({
   filterField: FilerType.FILTER_TODO_ALL,
   setFilterField: () => {},
   visibleTodos: [],
+  ref: createRef(),
 });
 
 type Props = {
@@ -43,6 +51,8 @@ type Props = {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filterField, setFilterField] = useState(FilerType.FILTER_TODO_ALL);
+
+  const ref = useRef<HTMLInputElement>(null);
 
   const addTodo = useCallback(
     (newTodo: Todo) => {
@@ -142,6 +152,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       filterField,
       setFilterField,
       visibleTodos,
+      ref,
     }),
     [
       addTodo,
@@ -154,6 +165,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       toggleAll,
       updateTodo,
       visibleTodos,
+      ref,
     ],
   );
 
