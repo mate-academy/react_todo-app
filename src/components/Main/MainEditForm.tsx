@@ -1,21 +1,46 @@
-import React, { FC, useCallback, useContext, useEffect, useRef } from 'react';
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { TodoContext } from '../../Context/TodoContext';
 
 interface IProps {
   id: string;
   title: string;
-  handleSubmit: (e: React.FormEvent | MouseEvent, id: string) => void;
-  onCancel: (id: string) => void;
+  setEditableTodoId: () => void;
 }
 
-export const MainEditForm: FC<IProps> = ({
-  id,
-  title,
-  handleSubmit,
-  onCancel,
-}) => {
+export const MainEditForm: FC<IProps> = ({ id, title, setEditableTodoId }) => {
+  const { dispatch, textToEdit } = useContext(TodoContext);
+  const [editText, setEditText] = useState(title);
+
   const editFormRef = useRef<HTMLFormElement>(null);
-  const { editTask } = useContext(TodoContext);
+
+  const cancelEdit = useCallback(() => {
+    dispatch({ type: 'CANCEL_TODO' });
+  }, [dispatch]);
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent | MouseEvent) => {
+      e.preventDefault();
+
+      if (!editText.trim()) {
+        if (id) {
+          dispatch({ type: 'DELETE_TODO', payload: id });
+        }
+      } else {
+        dispatch({ type: 'EDIT_TODO', payload: editText });
+        cancelEdit();
+      }
+
+      setEditableTodoId();
+    },
+    [id, editText, dispatch, setEditableTodoId, cancelEdit],
+  );
 
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
@@ -23,15 +48,15 @@ export const MainEditForm: FC<IProps> = ({
         editFormRef.current &&
         !editFormRef.current.contains(e.target as Node)
       ) {
-        handleSubmit(e, id);
+        handleSubmit(e);
       }
     },
-    [handleSubmit, id],
+    [handleSubmit],
   );
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
-      onCancel(id);
+      setEditableTodoId();
     }
   };
 
@@ -45,18 +70,22 @@ export const MainEditForm: FC<IProps> = ({
     };
   }, [handleClickOutside]);
 
+  useEffect(() => {
+    setEditText(textToEdit);
+  }, [textToEdit]);
+
   return (
-    <form ref={editFormRef} onSubmit={e => handleSubmit(e, id)}>
+    <form ref={editFormRef} onSubmit={e => handleSubmit(e)}>
       <label htmlFor="TodoTitleField">
         <input
-          onKeyDown={handleKeyUp}
           id="TodoTitleField"
           data-cy="TodoTitleField"
           type="text"
           className="todo__title-field"
           placeholder="Empty todo will be deleted"
-          value={title}
-          onChange={e => editTask(id, e.target.value)}
+          value={editText}
+          onChange={e => setEditText(e.target.value)}
+          onKeyDown={handleKeyUp}
           autoFocus
         />
       </label>

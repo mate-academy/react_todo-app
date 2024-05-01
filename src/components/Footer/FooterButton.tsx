@@ -2,7 +2,11 @@ import { FC, useContext } from 'react';
 import { TodoContext } from '../../Context/TodoContext';
 
 export const FooterButton: FC = () => {
-  const { numberComplete, deleteCompletedTodos } = useContext(TodoContext);
+  const { numberComplete, dispatch } = useContext(TodoContext);
+
+  const clearCompleted = () => {
+    dispatch({ type: 'DELETE_COMPLETED_TODO' });
+  };
 
   return (
     <button
@@ -10,7 +14,7 @@ export const FooterButton: FC = () => {
       className="todoapp__clear-completed"
       data-cy="ClearCompletedButton"
       disabled={numberComplete === 0}
-      onClick={deleteCompletedTodos}
+      onClick={clearCompleted}
     >
       Clear completed
     </button>

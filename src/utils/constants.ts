@@ -1,6 +1,6 @@
 import { FilterLink } from '../types/types';
 
-export const filterLink: FilterLink[] = [
+export const FILTER_LINKS: FilterLink[] = [
   {
     href: '#/',
     dataCy: 'FilterLinkAll',

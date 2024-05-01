@@ -1,44 +1,12 @@
 import { FC, useContext } from 'react';
 
 import { FooterFilter } from './FooterFilter';
-import { filterLink } from '../../utils/constants';
+import { FILTER_LINKS } from '../../utils/constants';
 import { FooterButton } from './FooterButton';
 import { TodoContext } from '../../Context/TodoContext';
 
 export const TodoFooter: FC = () => {
-  // const pluralText = numberNotComplete > 1 ? 'items' : 'item';
-
-  const {
-    numberNotComplete,
-    // setTodos,
-    // getAllTodos,
-    // getActiveTodos,
-    // getCompletedTodos,
-  } = useContext(TodoContext);
-
-  // const onFilter = (filter: string) => {
-  //   switch (filter) {
-  //     case 'All':
-  //       const allTodos = getAllTodos();
-
-  //       setTodos(allTodos);
-  //       break;
-  //     case 'Active':
-  //       const activeTodos = getActiveTodos();
-
-  //       setTodos(activeTodos);
-
-  //       break;
-  //     case 'Completed':
-  //       const completedTodos = getCompletedTodos();
-
-  //       setTodos(completedTodos);
-
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
+  const { numberNotComplete } = useContext(TodoContext);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -46,7 +14,7 @@ export const TodoFooter: FC = () => {
         {numberNotComplete} items left
       </span>
 
-      <FooterFilter items={filterLink} />
+      <FooterFilter items={FILTER_LINKS} />
 
       <FooterButton />
     </footer>

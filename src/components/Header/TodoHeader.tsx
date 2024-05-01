@@ -5,7 +5,11 @@ import { HeaderForm } from './HeaderForm';
 import { TodoContext } from '../../Context/TodoContext';
 
 export const TodoHeader: FC = () => {
-  const { todos, toggleAll, allCompleted } = useContext(TodoContext);
+  const { todos, dispatch, allCompleted } = useContext(TodoContext);
+
+  const handleToggleAll = () => {
+    dispatch({ type: 'CHECK_ALL_TODO' });
+  };
 
   return (
     <header className="todoapp__header">
@@ -16,7 +20,7 @@ export const TodoHeader: FC = () => {
             active: allCompleted,
           })}
           data-cy="ToggleAllButton"
-          onClick={toggleAll}
+          onClick={handleToggleAll}
         />
       )}
 

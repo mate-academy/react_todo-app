@@ -1,18 +1,27 @@
-import { FC, useState } from 'react';
+import { FC, useContext } from 'react';
 import { FilterLink } from '../../types/types';
 import classNames from 'classnames';
+import { FilterContext } from '../../Context/FilterContext';
 
 interface IProps {
   items: FilterLink[];
-  onFilter?: (filter: string) => void;
 }
 
-export const FooterFilter: FC<IProps> = ({ items, onFilter = () => {} }) => {
-  const [selectedItem, setSelectedItem] = useState<string>('All');
+export const FooterFilter: FC<IProps> = ({ items }) => {
+  const { filterType, showAllTodos, showActiveTodos, showCompletedTodos } =
+    useContext(FilterContext);
 
-  const handleFilter = (filter: string) => {
-    setSelectedItem(filter);
-    onFilter(filter);
+  const handleFilter = (title: string) => {
+    switch (title) {
+      case 'Completed':
+        showCompletedTodos();
+        break;
+      case 'Active':
+        showActiveTodos();
+        break;
+      default:
+        showAllTodos();
+    }
   };
 
   return (
@@ -22,7 +31,7 @@ export const FooterFilter: FC<IProps> = ({ items, onFilter = () => {} }) => {
           key={item.dataCy}
           href={item.href}
           className={classNames('filter__link', {
-            selected: selectedItem === item.title,
+            selected: filterType === item.title,
           })}
           data-cy={item.dataCy}
           onClick={() => {

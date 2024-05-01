@@ -4,28 +4,25 @@ import classNames from 'classnames';
 import { MainButton } from './MainButton';
 import { MainEditForm } from './MainEditForm';
 import { TodoContext } from '../../Context/TodoContext';
+import { FilterContext } from '../../Context/FilterContext';
 
 export const TodoMain: FC = () => {
   const [editableTodoId, setEditableTodoId] = useState<string | null>(null);
-  const { todos, toggleTodo } = useContext(TodoContext);
+  const { dispatch } = useContext(TodoContext);
+  const { filteredTodos } = useContext(FilterContext);
 
-  const handleSubmit = (e: React.FormEvent | MouseEvent) => {
-    e.preventDefault();
-
-    setEditableTodoId(null);
-  };
-
-  const handleDoubleClick = (id: string) => {
+  const handleDoubleClick = (id: string, title: string) => {
     setEditableTodoId(id);
+    dispatch({ type: 'EDIT_CONFIG_TODO', payload: { title, id } });
   };
 
-  const handleCancelEdit = () => {
-    setEditableTodoId(null);
+  const checkTodo = (id: string) => {
+    dispatch({ type: 'CHECK_TODO', payload: id });
   };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => {
+      {filteredTodos.map(todo => {
         const { title, completed, id } = todo;
         const isEditable = editableTodoId === id;
 
@@ -42,22 +39,21 @@ export const TodoMain: FC = () => {
                 type="checkbox"
                 className="todo__status"
                 checked={completed}
-                onChange={e => toggleTodo(id, e.target.checked)}
+                onChange={() => checkTodo(id)}
               />
             </label>
             {isEditable ? (
               <MainEditForm
                 id={id}
                 title={title}
-                handleSubmit={handleSubmit}
-                onCancel={handleCancelEdit}
+                setEditableTodoId={() => setEditableTodoId(null)}
               />
             ) : (
               <>
                 <span
                   data-cy="TodoTitle"
                   className="todo__title"
-                  onDoubleClick={() => handleDoubleClick(id)}
+                  onDoubleClick={() => handleDoubleClick(id, title)}
                 >
                   {title}
                 </span>

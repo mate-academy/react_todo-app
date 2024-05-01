@@ -1,168 +1,98 @@
-import {
+import React, {
+  Dispatch,
   FC,
   createContext,
-  useCallback,
   useEffect,
   useMemo,
-  useState,
+  useReducer,
+  useRef,
 } from 'react';
 
 import { Todo } from '../types/types';
+import { TodoReducer } from './TodoReducer';
 
 export interface TodoContextType {
   todos: Todo[];
+  textInput: typeof React.createRef<HTMLInputElement> | null;
+  dispatch: React.Dispatch<Action>;
+  editFlag: boolean;
+  editID: string;
+  textToEdit: string;
   allCompleted: boolean;
   numberNotComplete: number;
   numberComplete: number;
-
-  setTodos: (todos: Todo[]) => void;
-  addTodo: (newTodo: string) => void;
-  toggleTodo: (id: string, completed: boolean) => void;
-  deleteTodo: (id: string) => void;
-  editTask: (id: string, newName: string) => void;
-  toggleAll: () => void;
-  deleteCompletedTodos: () => void;
-
-  getAllTodos: () => void;
-  getActiveTodos: () => void;
-  getCompletedTodos: () => void;
 }
 
-export const TodoContext = createContext<TodoContextType>({
-  todos: [],
-  allCompleted: false,
-  numberNotComplete: 0,
-  numberComplete: 0,
-
-  setTodos: () => {},
-  addTodo: () => {},
-  toggleTodo: () => {},
-  deleteTodo: () => {},
-  editTask: () => {},
-  toggleAll: () => {},
-  deleteCompletedTodos: () => {},
-
-  getAllTodos: () => {},
-  getActiveTodos: () => {},
-  getCompletedTodos: () => {},
-});
+export type Action = { type: string; payload?: string | Todo };
 
 type TProps = {
   children: React.ReactNode;
 };
 
+const defaultDispatch: Dispatch<Action> = () => {
+  throw new Error('Dispatch function not provided');
+};
+
+const initialState: TodoContextType = {
+  todos: [],
+  textInput: null,
+  dispatch: defaultDispatch,
+  editFlag: false,
+  editID: '',
+  textToEdit: '',
+  allCompleted: false,
+  numberNotComplete: 0,
+  numberComplete: 0,
+};
+
+export const TodoDispatch = createContext<React.Dispatch<Action>>(() => {});
+export const TodoContext = createContext<TodoContextType>(initialState);
+
 export const TodoProvider: FC<TProps> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>(() => {
+  const [state, dispatch] = useReducer(TodoReducer, initialState, () => {
     const localValue = localStorage.getItem('todos');
 
-    return localValue ? JSON.parse(localValue) : [];
+    return {
+      ...initialState,
+      todos: localValue ? JSON.parse(localValue) : initialState.todos,
+    };
   });
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+    localStorage.setItem('todos', JSON.stringify(state.todos));
+  }, [state.todos]);
 
-  // #region constant
-  const allCompleted = todos.every(todo => todo.completed);
-  const numberNotComplete = todos.filter(todo => !todo.completed).length;
-  const numberComplete = todos.filter(todo => todo.completed).length;
+  const textInput = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    textInput.current?.focus();
+  }, []);
+
+  // #region const
+  const allCompleted: boolean = state.todos.every(todo => todo.completed);
+  const numberNotComplete: number = state.todos.filter(
+    todo => !todo.completed,
+  ).length;
+  const numberComplete: number = state.todos.filter(
+    todo => todo.completed,
+  ).length;
   // #endregion
-
-  const addTodo = (newTodo: string) => {
-    if (newTodo.trim() !== '') {
-      setTodos(currentTodos => [
-        ...currentTodos,
-        { id: crypto.randomUUID(), title: newTodo, completed: false },
-      ]);
-    }
-  };
-
-  const toggleTodo = (id: string, completed: boolean) => {
-    setTodos(currentTodos => {
-      return currentTodos.map(todo => {
-        if (todo.id === id) {
-          return { ...todo, completed };
-        }
-
-        return todo;
-      });
-    });
-  };
-
-  const deleteTodo = (id: string) => {
-    setTodos(currentTodos => {
-      return currentTodos.filter(todo => todo.id !== id);
-    });
-  };
-
-  const editTask = (id: string, newName: string) => {
-    setTodos(currentTodos => {
-      return currentTodos.map(todo => {
-        if (todo.id === id) {
-          return { ...todo, title: newName };
-        }
-
-        return todo;
-      });
-    });
-  };
-
-  const deleteCompletedTodos = useCallback(() => {
-    const deleteTodos = todos.filter(todo => !todo.completed);
-
-    setTodos(deleteTodos);
-  }, [todos]);
-
-  const toggleAll = useCallback(() => {
-    const updatedTodos = todos.map(todo => ({
-      ...todo,
-      completed: !allCompleted,
-    }));
-
-    setTodos(updatedTodos);
-  }, [todos, allCompleted]);
-
-  const getAllTodos = useCallback(() => {
-    return todos;
-  }, [todos]);
-
-  const getActiveTodos = useCallback(() => {
-    return todos.filter(todo => !todo.completed);
-  }, [todos]);
-
-  const getCompletedTodos = useCallback(() => {
-    return todos.filter(todo => todo.completed);
-  }, [todos]);
 
   const value = useMemo(
     () => ({
-      todos,
+      ...state,
       allCompleted,
       numberNotComplete,
       numberComplete,
-      setTodos,
-      addTodo,
-      toggleTodo,
-      deleteTodo,
-      editTask,
-      toggleAll,
-      deleteCompletedTodos,
-      getAllTodos,
-      getActiveTodos,
-      getCompletedTodos,
+      textInput,
+      dispatch,
     }),
-    [
-      todos,
-      allCompleted,
-      numberNotComplete,
-      numberComplete,
-      toggleAll,
-      deleteCompletedTodos,
-      getAllTodos,
-      getActiveTodos,
-      getCompletedTodos,
-    ],
+    [state, allCompleted, numberNotComplete, numberComplete, dispatch],
   );
 
-  return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
+  return (
+    <TodoDispatch.Provider value={dispatch}>
+      <TodoContext.Provider value={value}>{children}</TodoContext.Provider>
+    </TodoDispatch.Provider>
+  );
 };

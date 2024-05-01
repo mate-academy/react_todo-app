@@ -1,30 +1,26 @@
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { TodoContext } from '../../Context/TodoContext';
 
 export const HeaderForm: FC = () => {
-  const [newTodo, setNewTodo] = useState('');
-  const textInput = useRef<HTMLInputElement | null>(null);
-
-  const { addTodo } = useContext(TodoContext);
-
-  useEffect(() => {
-    textInput.current?.focus();
-  }, []);
+  const [text, setNewTodo] = useState('');
+  const { textInput, dispatch } = useContext(TodoContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const trimmedTodo = newTodo.trim();
+    const trimmedTodo = text.trim();
 
     if (trimmedTodo !== '') {
-      addTodo(trimmedTodo);
+      const newTodo = {
+        id: crypto.randomUUID(),
+        title: text.trim(),
+        completed: false,
+      };
+
+      dispatch({ type: 'ADD_TODO', payload: newTodo });
     }
 
     setNewTodo('');
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTodo(e.target.value);
   };
 
   return (
@@ -37,9 +33,9 @@ export const HeaderForm: FC = () => {
           title="Write new todo"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          value={newTodo}
-          onChange={handleChange}
           ref={textInput}
+          value={text}
+          onChange={e => setNewTodo(e.target.value)}
         />
       </label>
     </form>
