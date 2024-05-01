@@ -2,7 +2,7 @@ import { TodoListProviderType } from '../types/TodoListProvider';
 import { Todo } from '../types/Todo';
 
 import { TodoListContext } from './TodoListContext';
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
 import { getLocalStorage, tasksReducer } from '../utils';
 import { Filters } from '../types/Filters';
@@ -14,6 +14,8 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
   const [todoList, dispatch] = useReducer(tasksReducer, [], () =>
     getLocalStorage<[]>(KEY_LOCALSTORAGE, []),
   );
+  const [currentFilter, setCurrentFilter] = useState<Filters>(Filters.All);
+
 
   const uncompletedCount = todoList.filter(
     (todo: Todo) => !todo.completed,
@@ -83,6 +85,8 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
       uncompletedCount,
       completedCount,
       allCompletedTasks,
+      currentFilter,
+      setCurrentFilter
     };
   };
 

@@ -13,5 +13,7 @@ export type TodoListContextType = {
   completeAllTasks: () => void;
   uncompletedCount: number;
   completedCount: number;
+  currentFilter: Filters;
+  setCurrentFilter: (value: Filters) => void;
   allCompletedTasks: boolean;
 };

@@ -1,3 +1,5 @@
+
+import { Filters } from '../types/Filters';
 import { TodoListContextType } from '../types/TodoListContext';
 import React from 'react';
 
@@ -13,5 +15,7 @@ export const TodoListContext = React.createContext<TodoListContextType>({
   completeAllTasks: () => {},
   uncompletedCount: 0,
   completedCount: 0,
+  currentFilter: Filters.All,
+  setCurrentFilter: () => {},
   allCompletedTasks: false,
 });

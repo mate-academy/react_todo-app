@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 
 import { TodoListContext } from '../../context/TodoListContext';
 import { Filters } from '../../types/Filters';
@@ -7,9 +7,14 @@ import { KEY_LOCALSTORAGE } from '../../constants/index';
 import cn from 'classnames';
 
 export const TodoFooter: React.FC = () => {
-  const { uncompletedCount, completedCount, getFilter, clearCompletedTasks } =
-    useContext(TodoListContext);
-  const [currentFilter, setCurrentFilter] = useState<Filters>(Filters.All);
+  const {
+    uncompletedCount,
+    completedCount,
+    getFilter,
+    clearCompletedTasks,
+    setCurrentFilter,
+    currentFilter,
+  } = useContext(TodoListContext);
 
   const completedTasks = completedCount > 0;
   const todoCount = `${uncompletedCount} ${uncompletedCount > 1 ? 'items' : 'item'}`;
