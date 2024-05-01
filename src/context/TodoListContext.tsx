@@ -1,4 +1,3 @@
-
 import { Filters } from '../types/Filters';
 import { TodoListContextType } from '../types/TodoListContext';
 import React from 'react';

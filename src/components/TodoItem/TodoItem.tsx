@@ -10,7 +10,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   currentTodoId,
 }) => {
   const { id, title, completed } = item;
-  const { deleteTask, editTask, completeTask, getFilter, currentFilter } = useContext(TodoListContext);
+  const { deleteTask, editTask, completeTask, getFilter, currentFilter } =
+    useContext(TodoListContext);
   const [newTodo, setNewTodo] = useState(title);
 
   const handlerNewTodo = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,9 +54,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       <label className="todo__status-label">
         <input
           onClick={() => {
-            completeTask(id)
+            completeTask(id);
             getFilter(currentFilter);
-
           }}
           data-cy="TodoStatus"
           type="checkbox"

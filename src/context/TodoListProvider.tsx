@@ -16,7 +16,6 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
   );
   const [currentFilter, setCurrentFilter] = useState<Filters>(Filters.All);
 
-
   const uncompletedCount = todoList.filter(
     (todo: Todo) => !todo.completed,
   ).length;
@@ -86,7 +85,7 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
       completedCount,
       allCompletedTasks,
       currentFilter,
-      setCurrentFilter
+      setCurrentFilter,
     };
   };
 
