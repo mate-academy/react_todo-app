@@ -35,7 +35,7 @@ export const TodoReducer = (state: Todo[], action: Action) => {
         ...state,
         todos: state.todos.map(todo => {
           if (todo.id === state.editID) {
-            return { ...todo, title: action.payload };
+            return { ...todo, title: action.payload.trim() };
           }
 
           return todo;
@@ -53,11 +53,15 @@ export const TodoReducer = (state: Todo[], action: Action) => {
         todos: state.todos.filter(todo => !todo.completed),
       };
     case 'CHECK_ALL_TODO':
+      const allCompleted = state.todos.every(todo => todo.completed);
+      const updatedTodos = state.todos.map(todo => ({
+        ...todo,
+        completed: !allCompleted,
+      }));
+
       return {
         ...state,
-        todos: state.todos.map(todo => {
-          return { ...todo, completed: !todo.completed };
-        }),
+        todos: updatedTodos,
       };
     default:
       return state;

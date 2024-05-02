@@ -3,7 +3,7 @@ import { TodoContext } from '../../Context/TodoContext';
 
 export const HeaderForm: FC = () => {
   const [text, setNewTodo] = useState('');
-  const { textInput, dispatch } = useContext(TodoContext);
+  const { inputRef, dispatch } = useContext(TodoContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ export const HeaderForm: FC = () => {
           title="Write new todo"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          ref={textInput}
+          ref={inputRef}
           value={text}
           onChange={e => setNewTodo(e.target.value)}
         />

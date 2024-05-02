@@ -1,9 +1,10 @@
 import { FC, createContext, useContext, useMemo, useState } from 'react';
 import { TodoContext } from './TodoContext';
+import { FilterType, Todo } from '../types/types';
 
 export interface IFilterContext {
   filterType: string;
-  filteredTodos: [];
+  filteredTodos: Todo[];
   showAllTodos: () => void;
   showCompletedTodos: () => void;
   showActiveTodos: () => void;
@@ -26,15 +27,17 @@ type TProps = {
 export const FilterProvider: FC<TProps> = ({ children }) => {
   const { todos } = useContext(TodoContext);
 
-  const [filterType, setFilterType] = useState<string>('All');
+  const [filterType, setFilterType] = useState<string>(FilterType.All);
 
   const filteredTodos = useMemo(() => {
-    if (filterType === 'Completed') {
-      return todos.filter(todo => todo.completed);
-    } else if (filterType === 'Active') {
-      return todos.filter(todo => !todo.completed);
-    } else {
-      return todos;
+    switch (filterType) {
+      case FilterType.Completed:
+        return todos.filter(todo => todo.completed);
+      case FilterType.Active:
+        return todos.filter(todo => !todo.completed);
+
+      default:
+        return todos;
     }
   }, [filterType, todos]);
 
@@ -42,9 +45,9 @@ export const FilterProvider: FC<TProps> = ({ children }) => {
     () => ({
       filterType,
       filteredTodos,
-      showAllTodos: () => setFilterType('All'),
-      showCompletedTodos: () => setFilterType('Completed'),
-      showActiveTodos: () => setFilterType('Active'),
+      showAllTodos: () => setFilterType(FilterType.All),
+      showCompletedTodos: () => setFilterType(FilterType.Completed),
+      showActiveTodos: () => setFilterType(FilterType.Active),
     }),
     [filterType, filteredTodos],
   );

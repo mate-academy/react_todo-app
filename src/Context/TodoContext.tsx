@@ -13,8 +13,9 @@ import { TodoReducer } from './TodoReducer';
 
 export interface TodoContextType {
   todos: Todo[];
-  textInput: typeof React.createRef<HTMLInputElement> | null;
+  inputRef: typeof React.createRef<HTMLInputElement> | null;
   dispatch: React.Dispatch<Action>;
+  handleFocusInput: () => void;
   editFlag: boolean;
   editID: string;
   textToEdit: string;
@@ -35,14 +36,15 @@ const defaultDispatch: Dispatch<Action> = () => {
 
 const initialState: TodoContextType = {
   todos: [],
-  textInput: null,
-  dispatch: defaultDispatch,
+  inputRef: null,
   editFlag: false,
   editID: '',
   textToEdit: '',
   allCompleted: false,
   numberNotComplete: 0,
   numberComplete: 0,
+  dispatch: defaultDispatch,
+  handleFocusInput: () => {},
 };
 
 export const TodoDispatch = createContext<React.Dispatch<Action>>(() => {});
@@ -62,11 +64,15 @@ export const TodoProvider: FC<TProps> = ({ children }) => {
     localStorage.setItem('todos', JSON.stringify(state.todos));
   }, [state.todos]);
 
-  const textInput = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFocusInput = () => {
+    inputRef.current?.focus();
+  };
 
   useEffect(() => {
-    textInput.current?.focus();
-  }, []);
+    inputRef.current?.focus();
+  }, [inputRef]);
 
   // #region const
   const allCompleted: boolean = state.todos.every(todo => todo.completed);
@@ -84,8 +90,9 @@ export const TodoProvider: FC<TProps> = ({ children }) => {
       allCompleted,
       numberNotComplete,
       numberComplete,
-      textInput,
+      inputRef,
       dispatch,
+      handleFocusInput,
     }),
     [state, allCompleted, numberNotComplete, numberComplete, dispatch],
   );

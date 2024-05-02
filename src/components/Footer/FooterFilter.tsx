@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react';
-import { FilterLink } from '../../types/types';
+import { FilterLink, FilterType } from '../../types/types';
 import classNames from 'classnames';
 import { FilterContext } from '../../Context/FilterContext';
 
@@ -13,10 +13,10 @@ export const FooterFilter: FC<IProps> = ({ items }) => {
 
   const handleFilter = (title: string) => {
     switch (title) {
-      case 'Completed':
+      case FilterType.Completed:
         showCompletedTodos();
         break;
-      case 'Active':
+      case FilterType.Active:
         showActiveTodos();
         break;
       default:

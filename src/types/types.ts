@@ -9,3 +9,9 @@ export type FilterLink = {
   dataCy: string;
   title: string;
 };
+
+export enum FilterType {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}

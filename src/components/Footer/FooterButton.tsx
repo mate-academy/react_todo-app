@@ -2,10 +2,12 @@ import { FC, useContext } from 'react';
 import { TodoContext } from '../../Context/TodoContext';
 
 export const FooterButton: FC = () => {
-  const { numberComplete, dispatch } = useContext(TodoContext);
+  const { numberComplete, handleFocusInput, dispatch } =
+    useContext(TodoContext);
 
   const clearCompleted = () => {
     dispatch({ type: 'DELETE_COMPLETED_TODO' });
+    handleFocusInput();
   };
 
   return (

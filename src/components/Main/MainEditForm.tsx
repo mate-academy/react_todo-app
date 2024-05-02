@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const MainEditForm: FC<IProps> = ({ id, title, setEditableTodoId }) => {
-  const { dispatch, textToEdit } = useContext(TodoContext);
+  const { dispatch, handleFocusInput } = useContext(TodoContext);
   const [editText, setEditText] = useState(title);
 
   const editFormRef = useRef<HTMLFormElement>(null);
@@ -31,15 +31,17 @@ export const MainEditForm: FC<IProps> = ({ id, title, setEditableTodoId }) => {
       if (!editText.trim()) {
         if (id) {
           dispatch({ type: 'DELETE_TODO', payload: id });
+          handleFocusInput();
         }
       } else {
         dispatch({ type: 'EDIT_TODO', payload: editText });
         cancelEdit();
+        handleFocusInput();
       }
 
       setEditableTodoId();
     },
-    [id, editText, dispatch, setEditableTodoId, cancelEdit],
+    [id, editText, dispatch, setEditableTodoId, cancelEdit, handleFocusInput],
   );
 
   const handleClickOutside = useCallback(
@@ -70,10 +72,6 @@ export const MainEditForm: FC<IProps> = ({ id, title, setEditableTodoId }) => {
     };
   }, [handleClickOutside]);
 
-  useEffect(() => {
-    setEditText(textToEdit);
-  }, [textToEdit]);
-
   return (
     <form ref={editFormRef} onSubmit={e => handleSubmit(e)}>
       <label htmlFor="TodoTitleField">
@@ -86,6 +84,7 @@ export const MainEditForm: FC<IProps> = ({ id, title, setEditableTodoId }) => {
           value={editText}
           onChange={e => setEditText(e.target.value)}
           onKeyDown={handleKeyUp}
+          onBlur={handleSubmit}
           autoFocus
         />
       </label>
