@@ -1,19 +1,40 @@
 import { Todo } from '../types/Todo';
-import { ACTION_TYPES, KEY_LOCALSTORAGE } from '../constants/index';
+import { ACTION_TYPES } from '../constants/index';
 import { ReducerAction } from '../types/ReducerAction';
 
-export function getLocalStorage<T>(key: string, initialValue: T): T {
+export const getLocalStorage = <T>(key: string, initialValue: T): T => {
   try {
     return JSON.parse(String(localStorage.getItem(key))) || [];
   } catch {
     return initialValue;
   }
-}
+};
 
-export function tasksReducer(tasks: Array<Todo>, action: ReducerAction) {
+export const getFilteredTodos = (
+  initialTodos: Todo[],
+  status: string,
+): Todo[] => {
+  switch (status) {
+    case ACTION_TYPES.All: {
+      return initialTodos;
+    }
+
+    case ACTION_TYPES.Active: {
+      return initialTodos.filter((item: Todo) => !item.completed);
+    }
+
+    case ACTION_TYPES.Completed: {
+      return initialTodos.filter((item: Todo) => item.completed);
+    }
+  }
+
+  return initialTodos;
+};
+
+export const tasksReducer = (tasks: Todo[], action: ReducerAction): any => {
   switch (action.type) {
     case ACTION_TYPES.Add: {
-      const newState = [
+      return [
         ...tasks,
         {
           id: action.id,
@@ -21,22 +42,14 @@ export function tasksReducer(tasks: Array<Todo>, action: ReducerAction) {
           completed: false,
         },
       ];
-
-      localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(newState));
-
-      return newState;
     }
 
     case ACTION_TYPES.Delete: {
-      const newState = tasks.filter((todo: Todo) => todo.id !== action.id);
-
-      localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(newState));
-
-      return newState;
+      return tasks.filter((todo: Todo) => todo.id !== action.id);
     }
 
     case ACTION_TYPES.CompleteTask: {
-      const newState = [
+      return [
         ...tasks.map((item: Todo) => {
           if (item.id === action.id) {
             return { ...item, completed: !item.completed };
@@ -45,24 +58,16 @@ export function tasksReducer(tasks: Array<Todo>, action: ReducerAction) {
           return item;
         }),
       ];
-
-      localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(newState));
-
-      return newState;
     }
 
     case ACTION_TYPES.ClearCompletedTasks: {
-      const newState = tasks.filter((item: Todo) => !item.completed);
-
-      localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(newState));
-
-      return newState;
+      return tasks.filter((item: Todo) => !item.completed);
     }
 
     case ACTION_TYPES.CompleteAllTasks: {
       const isAllCompleted = tasks.every((item: Todo) => item.completed);
 
-      const newState = [
+      return [
         ...tasks.map(item => {
           if (!item.completed || isAllCompleted) {
             return { ...item, completed: !item.completed };
@@ -71,32 +76,10 @@ export function tasksReducer(tasks: Array<Todo>, action: ReducerAction) {
           return item;
         }),
       ];
-
-      localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(newState));
-
-      return newState;
-    }
-
-    case ACTION_TYPES.Active: {
-      const items = JSON.parse(String(localStorage.getItem(KEY_LOCALSTORAGE)));
-
-      return items.filter((item: Todo) => !item.completed);
-    }
-
-    case ACTION_TYPES.Completed: {
-      const items = JSON.parse(String(localStorage.getItem(KEY_LOCALSTORAGE)));
-
-      return items.filter((item: Todo) => item.completed);
-    }
-
-    case ACTION_TYPES.All: {
-      const items = JSON.parse(String(localStorage.getItem(KEY_LOCALSTORAGE)));
-
-      return items;
     }
 
     case ACTION_TYPES.Edit: {
-      const newState = [
+      return [
         ...tasks.map((item: Todo) => {
           if (item.id === action.id) {
             return { ...item, title: action.newTodo };
@@ -105,13 +88,9 @@ export function tasksReducer(tasks: Array<Todo>, action: ReducerAction) {
           return item;
         }),
       ];
-
-      localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(newState));
-
-      return newState;
     }
 
     default:
-      break;
+      return tasks;
   }
-}
+};

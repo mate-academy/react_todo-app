@@ -2,9 +2,9 @@ import { TodoListProviderType } from '../types/TodoListProvider';
 import { Todo } from '../types/Todo';
 
 import { TodoListContext } from './TodoListContext';
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
-import { getLocalStorage, tasksReducer } from '../utils';
+import { getFilteredTodos, getLocalStorage, tasksReducer } from '../utils';
 import { Filters } from '../types/Filters';
 import { ACTION_TYPES, KEY_LOCALSTORAGE } from '../constants/index';
 
@@ -14,7 +14,10 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
   const [todoList, dispatch] = useReducer(tasksReducer, [], () =>
     getLocalStorage<[]>(KEY_LOCALSTORAGE, []),
   );
-  const [currentFilter, setCurrentFilter] = useState<Filters>(Filters.All);
+  const [globalTodoList, setGlobalTodoList] = useState([]);
+
+  const [currentFilter, setCurrentFilter] = useState<string>(Filters.All);
+  const filteredTodos = getFilteredTodos(todoList, currentFilter);
 
   const uncompletedCount = todoList.filter(
     (todo: Todo) => !todo.completed,
@@ -22,6 +25,14 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
   const completedCount = todoList.filter((todo: Todo) => todo.completed).length;
   const allCompletedTasks =
     todoList.filter((todo: Todo) => todo.completed).length === todoList.length;
+
+  useEffect(() => {
+    localStorage.setItem(KEY_LOCALSTORAGE, JSON.stringify(todoList));
+
+    setGlobalTodoList(
+      JSON.parse(String(localStorage.getItem(KEY_LOCALSTORAGE))),
+    );
+  }, [todoList]);
 
   const addTask = (todo: string) => {
     dispatch({
@@ -42,12 +53,6 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
     dispatch({
       type: ACTION_TYPES.CompleteTask,
       id,
-    });
-  };
-
-  const getFilter = (filter: Filters) => {
-    dispatch({
-      type: filter,
     });
   };
 
@@ -73,11 +78,10 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
 
   const getValue = () => {
     return {
-      todoList,
+      todoList: filteredTodos,
       addTask,
       deleteTask,
       completeTask,
-      getFilter,
       clearCompletedTasks,
       editTask,
       completeAllTasks,
@@ -86,6 +90,7 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
       allCompletedTasks,
       currentFilter,
       setCurrentFilter,
+      globalTodoList,
     };
   };
 

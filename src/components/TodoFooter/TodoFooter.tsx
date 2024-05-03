@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 
 import { TodoListContext } from '../../context/TodoListContext';
 import { Filters } from '../../types/Filters';
-import { KEY_LOCALSTORAGE } from '../../constants/index';
 
 import cn from 'classnames';
 
@@ -10,10 +9,10 @@ export const TodoFooter: React.FC = () => {
   const {
     uncompletedCount,
     completedCount,
-    getFilter,
     clearCompletedTasks,
-    setCurrentFilter,
     currentFilter,
+    setCurrentFilter,
+    globalTodoList,
   } = useContext(TodoListContext);
 
   const completedTasks = completedCount > 0;
@@ -21,12 +20,7 @@ export const TodoFooter: React.FC = () => {
 
   const handlerCurrentFilter = (item: Filters) => {
     setCurrentFilter(item);
-    getFilter(item);
   };
-
-  const globalTodoList = JSON.parse(
-    String(localStorage.getItem(KEY_LOCALSTORAGE)),
-  );
 
   return (
     <>
