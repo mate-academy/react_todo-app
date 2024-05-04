@@ -31,14 +31,14 @@ export const getFilteredTodos = (
   return initialTodos;
 };
 
-export const tasksReducer = (tasks: Todo[], action: ReducerAction): any => {
+export const tasksReducer = (tasks: Todo[], action: ReducerAction): Todo[] => {
   switch (action.type) {
     case ACTION_TYPES.Add: {
       return [
         ...tasks,
         {
-          id: action.id,
-          title: action.newTodo,
+          id: Number(action.id),
+          title: action.newTodo || '',
           completed: false,
         },
       ];
@@ -81,8 +81,8 @@ export const tasksReducer = (tasks: Todo[], action: ReducerAction): any => {
     case ACTION_TYPES.Edit: {
       return [
         ...tasks.map((item: Todo) => {
-          if (item.id === action.id) {
-            return { ...item, title: action.newTodo };
+          if (item.id === Number(action.id)) {
+            return { ...item, title: String(action.newTodo) };
           }
 
           return item;
