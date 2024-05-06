@@ -1,6 +1,7 @@
 import React, { FormEventHandler, useContext, useEffect, useRef } from 'react';
 import '../styles/todoapp.scss';
 import { CreatedContext } from './ToDoContext';
+import classNames from 'classnames';
 
 export const Header: React.FC = () => {
   const { todos, setTodos, toDoTitle, setToDoTitle } =
@@ -51,7 +52,9 @@ export const Header: React.FC = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className="todoapp__toggle-all active"
+          className={classNames('todoapp__toggle-all', {
+            active: completedTodosLength,
+          })}
           data-cy="ToggleAllButton"
           onClick={handleToggle}
         />
