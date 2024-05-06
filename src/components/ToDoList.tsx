@@ -113,6 +113,7 @@ export const ToDoList: React.FC = () => {
                 onChange={event => setEdittedToDoTitle(event.target.value)}
                 onBlur={() => saveEdittedTitle(todo.id)}
                 onKeyUp={event => handleKeyPress(event, todo.id)}
+                autoFocus
               />
             ) : (
               <>
