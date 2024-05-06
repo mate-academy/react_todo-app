@@ -7,7 +7,8 @@ import '../styles/filter.scss';
 import classNames from 'classnames';
 
 export const Footer: React.FC = () => {
-  const { todos, setFilterButton, setTodos } = useContext(CreatedContext);
+  const { todos, setFilterButton, setTodos, filterButton } =
+    useContext(CreatedContext);
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
   const handleCounter = `${activeTodos.length} items left`;
@@ -30,7 +31,9 @@ export const Footer: React.FC = () => {
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
-              className="filter__link selected"
+              className={classNames('filter__link', {
+                selected: filterButton === FilterButtons.All,
+              })}
               data-cy="FilterLinkAll"
               onClick={() => setFilterButton(FilterButtons.All)}
             >
@@ -39,7 +42,9 @@ export const Footer: React.FC = () => {
 
             <a
               href="#/active"
-              className="filter__link"
+              className={classNames('filter__link', {
+                selected: filterButton === FilterButtons.Active,
+              })}
               data-cy="FilterLinkActive"
               onClick={() => setFilterButton(FilterButtons.Active)}
             >
@@ -48,7 +53,9 @@ export const Footer: React.FC = () => {
 
             <a
               href="#/completed"
-              className="filter__link"
+              className={classNames('filter__link', {
+                selected: filterButton === FilterButtons.Completed,
+              })}
               data-cy="FilterLinkCompleted"
               onClick={() => setFilterButton(FilterButtons.Completed)}
             >
@@ -62,6 +69,7 @@ export const Footer: React.FC = () => {
             })}
             data-cy="ClearCompletedButton"
             onClick={() => handleClearButton()}
+            disabled={todos.some(todo => todo.completed)}
           >
             Clear completed
           </button>
