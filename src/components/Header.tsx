@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
     event.preventDefault();
     const newTodo = {
       id: Date.now(),
-      title: toDoTitle,
+      title: toDoTitle.trim(),
       completed: false,
     };
 
