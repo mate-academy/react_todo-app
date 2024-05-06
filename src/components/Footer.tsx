@@ -69,7 +69,7 @@ export const Footer: React.FC = () => {
             })}
             data-cy="ClearCompletedButton"
             onClick={() => handleClearButton()}
-            disabled={todos.some(todo => todo.completed)}
+            disabled={!todos.some(todo => todo.completed)}
           >
             Clear completed
           </button>
