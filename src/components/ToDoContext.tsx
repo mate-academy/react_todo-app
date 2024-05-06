@@ -35,16 +35,19 @@ export const ToDoProvider: React.FC<Props> = ({ children }) => {
   );
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
-  useEffect(() => {
     const storedItems = localStorage.getItem('todos');
 
     if (storedItems) {
       setTodos(JSON.parse(storedItems));
     }
   }, []);
+
+  const allTodosCompleted =
+    todos.filter(todo => todo.completed).length === todos.length;
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos, allTodosCompleted]);
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem('todos') as string);
