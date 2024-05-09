@@ -11,6 +11,8 @@ interface Props {
 interface State {
   todos: Todo[];
   status: Status;
+  selectedTodo: Todo | null;
+  isFocus: boolean;
 }
 
 const reducer = (state: State, action: Action) => {
@@ -26,8 +28,6 @@ const reducer = (state: State, action: Action) => {
         ...state,
         todos: state.todos.map(todo => {
           if (todo.id === action.payload) {
-            // console.log('click');
-
             return {
               ...todo,
               completed: !todo.completed,
@@ -42,12 +42,14 @@ const reducer = (state: State, action: Action) => {
       return {
         ...state,
         todos: state.todos.filter(todo => todo.id !== action.payload),
+        isFocus: true,
       };
 
     case 'clear-completed':
       return {
         ...state,
         todos: state.todos.filter(todo => todo.completed === false),
+        isFocus: true,
       };
 
     case 'toggle-all':
@@ -57,6 +59,32 @@ const reducer = (state: State, action: Action) => {
         ...state,
         todos: state.todos.map(todo => ({ ...todo, completed: !allCompleted })),
       };
+
+    case 'select-todo': {
+      return {
+        ...state,
+        selectedTodo: action.payload,
+      };
+    }
+
+    case 'load-todos':
+      return {
+        ...state,
+        todos: action.payload,
+      };
+
+    case 'update-todo': {
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload?.id
+            ? { ...todo, title: action.payload.title }
+            : todo,
+        ),
+        selectedTodo: null,
+        isFocus: true,
+      };
+    }
 
     case Status.All: {
       return {
@@ -87,6 +115,8 @@ const reducer = (state: State, action: Action) => {
 const initialState: State = {
   todos: [],
   status: Status.All,
+  selectedTodo: null,
+  isFocus: false,
 };
 
 export const StateContext = React.createContext(initialState);

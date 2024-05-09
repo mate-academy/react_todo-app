@@ -8,13 +8,19 @@ const Footer = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, status } = useContext(StateContext);
 
+  const completedTodosCount = todos.filter(todo => todo.completed).length;
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+
+  const handleClearCompleted = () => {
+    dispatch({ type: 'clear-completed' });
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todos.length} items left
+        {activeTodosCount} {activeTodosCount === 1 ? 'item' : 'items'} left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -50,12 +56,12 @@ const Footer = () => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => dispatch({ type: 'clear-completed' })}
+        onClick={handleClearCompleted}
+        disabled={!completedTodosCount}
       >
         Clear completed
       </button>

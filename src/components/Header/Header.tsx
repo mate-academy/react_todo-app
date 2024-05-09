@@ -1,4 +1,10 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 
 import cn from 'classnames';
@@ -6,7 +12,7 @@ import { Todo } from '../../Types/Todo';
 
 const Header = () => {
   const [title, setTitle] = useState('');
-  const { todos } = useContext(StateContext);
+  const { isFocus, todos, selectedTodo } = useContext(StateContext);
 
   const dispatch = useContext(DispatchContext);
 
@@ -16,7 +22,29 @@ const Header = () => {
 
   useEffect(() => {
     input.current?.focus();
-  }, []);
+
+    if (!selectedTodo) {
+      input.current?.focus();
+    }
+  }, [selectedTodo]);
+
+  useLayoutEffect(() => {
+    if (isFocus) {
+      input.current?.focus();
+    }
+  }, [isFocus]);
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+
+    if (storedTodos) {
+      dispatch({ type: 'load-todos', payload: JSON.parse(storedTodos) });
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,12 +60,12 @@ const Header = () => {
     };
 
     dispatch({ type: 'add-todo', payload: newTodo });
+
     setTitle('');
   };
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       {todos.length !== 0 && (
         <button
           type="button"

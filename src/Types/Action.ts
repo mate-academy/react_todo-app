@@ -9,4 +9,7 @@ export type Action =
   | { type: Status.Completed }
   | { type: 'delete'; payload: number }
   | { type: 'clear-completed' }
-  | { type: 'toggle-all' };
+  | { type: 'toggle-all' }
+  | { type: 'load-todos'; payload: Todo[] }
+  | { type: 'select-todo'; payload: Todo | null }
+  | { type: 'update-todo'; payload: { id: number; title: string } };

@@ -3,9 +3,9 @@ import './styles/index.scss';
 import './styles/todo.scss';
 import './styles/todoapp.scss';
 
+import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import GlobalStateProvider from './store/store';
-import { createRoot } from 'react-dom/client';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
