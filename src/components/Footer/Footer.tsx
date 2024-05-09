@@ -1,38 +1,40 @@
 import React, { useContext } from 'react';
-import { TodoContext } from '../TodoContext/TodoContext';
-
-enum FILTER {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
+import { FILTER } from '../../types/Filter';
+import { DispatchContext, StateContext } from '../GlobalContext/GlobalContext';
+import { Action } from '../../types/Actions';
+import { Todo } from '../../types/Todo';
 
 export const Footer: React.FC = () => {
-  const { todos, setClear, setFilter } = useContext(TodoContext);
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
 
   const handleFilteredAll = () => {
-    setFilter(FILTER.ALL);
+    dispatch({ type: Action.filterTodo, payload: FILTER.ALL });
   };
 
   const handleFilteredActive = () => {
-    setFilter(FILTER.ACTIVE);
+    dispatch({ type: Action.filterTodo, payload: FILTER.ACTIVE });
   };
 
   const handleFilteredCompleted = () => {
-    setFilter(FILTER.COMPLETED);
+    dispatch({ type: Action.filterTodo, payload: FILTER.COMPLETED });
   };
 
   const handleClearCompleted = () => {
-    setClear();
+    todos.forEach(todo =>
+      todo.completed === true
+        ? dispatch({ type: Action.clearTodo, payload: todo.id })
+        : todo,
+    );
   };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todos.filter(todo => todo.completed === false).length} items left
+        {`${todos.filter((todo: Todo) => todo.completed === false).length}
+        items left`}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -62,7 +64,6 @@ export const Footer: React.FC = () => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

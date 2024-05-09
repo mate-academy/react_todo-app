@@ -8,6 +8,7 @@
   font-size: 24px;
   line-height: 1.4em;
   border-bottom: 1px solid #ededed;
+  cursor: pointer;
 
   &:last-child {
     border-bottom: 0;
@@ -18,6 +19,10 @@
     background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
     background-repeat: no-repeat;
     background-position: center left;
+
+    &:hover {
+      background-color: #f6f6f6;
+    }
   }
 
   &.completed &__status-label {
@@ -30,13 +35,18 @@
 
   &__title {
     padding: 12px 15px;
-
+    color: #220f8d;
     word-break: break-all;
-    transition: color 0.4s;
+    transition: all 0.4s;
+
+    &:hover {
+      font-size: 24.2px;
+      color: #2a08e8;
+    }
   }
 
   &.completed &__title {
-    color: #d9d9d9;
+    color: rgba(14, 237, 10, 0.4);
     text-decoration: line-through;
   }
 
@@ -72,6 +82,7 @@
 
   &__title-field {
     width: 100%;
+
     padding: 11px 14px;
 
     font-size: inherit;
@@ -82,6 +93,7 @@
 
     border: 1px solid #999;
     box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
 
     &::placeholder {
       font-style: italic;
