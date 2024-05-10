@@ -34,10 +34,13 @@
   }
 
   &__title {
+    display: block;
+    margin-right: 40px;
     padding: 12px 15px;
     color: rgb(34, 15, 141);
-    word-break: break-all;
+    word-break: keep-all;
     transition: all 0.4s;
+
 
     &:hover {
       font-size: 24.2px;

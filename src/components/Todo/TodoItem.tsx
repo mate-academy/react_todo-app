@@ -114,17 +114,18 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
             {todoItem.title}
           </span>
         )}
-
-        {!isCahnge && (
-          <button
-            type="button"
-            className="todo__remove"
-            data-cy="TodoDelete"
-            onClick={() => handleDeleteTodo(todoItem.id)}
-          >
-            ×
-          </button>
-        )}
+        <label>
+          {!isCahnge && (
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDelete"
+              onClick={() => handleDeleteTodo(todoItem.id)}
+            >
+              ×
+            </button>
+          )}
+        </label>
       </div>
     </div>
   );
