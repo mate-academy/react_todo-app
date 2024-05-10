@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
-import { Task } from '../Todo/Todo';
 import { StateContext } from '../GlobalContext/GlobalContext';
 import { FILTER } from '../../types/Filter';
+import { TodoItem } from '../Todo/TodoItem';
 
 export const Main = () => {
   const { todos, filterTodo } = useContext(StateContext);
@@ -19,17 +19,23 @@ export const Main = () => {
   };
 
   useEffect(() => {
+    const localTodos = localStorage.getItem('todos');
+
     if (todos.length === 0) {
       localStorage.clear();
-    } else {
+    }
+
+    if (!localTodos) {
       localStorage.setItem('todos', JSON.stringify(todos));
     }
+
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {filteredTodo().map(todo => (
-        <Task task={todo} key={todo.id} />
+        <TodoItem todoItem={todo} key={todo.id} />
       ))}
     </section>
   );

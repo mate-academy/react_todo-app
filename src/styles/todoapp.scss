@@ -81,6 +81,7 @@
 
     border: none;
     background: rgba(0, 0, 0, 0.01);
+    color:rgb(34, 15, 141);;
     box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
     box-sizing: border-box;
 
@@ -110,7 +111,7 @@
 
     font-size: 14px;
 
-    color: #3523a8;
+    color: rgb(53, 35, 168);
     text-align: center;
     border-top: 1px solid #e6e6e6;
 
@@ -139,6 +140,12 @@
     appearance: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    &.disabled {
+      cursor: not-allowed;
+      opacity: 0;
+      pointer-events: none;
+    }
 
     &:hover {
       text-decoration: underline;

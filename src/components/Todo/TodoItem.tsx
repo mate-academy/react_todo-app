@@ -5,15 +5,16 @@ import { DispatchContext, StateContext } from '../GlobalContext/GlobalContext';
 import { Action } from '../../types/Actions';
 
 type Props = {
-  task: Todo;
+  todoItem: Todo;
 };
 
-export const Task: React.FC<Props> = ({ task }) => {
+export const TodoItem: React.FC<Props> = ({ todoItem }) => {
   const [isCahnge, setIsChange] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
+  const { completed } = todoItem;
 
   const handleCheckedTodo = (id: number, updated: boolean) => {
     dispatch({
@@ -74,23 +75,24 @@ export const Task: React.FC<Props> = ({ task }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: task.completed })}
-      key={task.id}
+      className={classNames('todo', { completed: completed })}
+      key={todoItem.id}
     >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          onClick={() => handleCheckedTodo(task.id, task.completed)}
+          checked={completed}
+          onClick={() => handleCheckedTodo(todoItem.id, todoItem.completed)}
         />
       </label>
 
-      <div onDoubleClick={() => handleEdit(task.id)}>
-        {isCahnge && editingId === task.id ? (
+      <div onDoubleClick={() => handleEdit(todoItem.id)}>
+        {isCahnge && editingId === todoItem.id ? (
           <form
             onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-              handleSubmitEnter(task.id, e)
+              handleSubmitEnter(todoItem.id, e)
             }
           >
             <input
@@ -101,15 +103,15 @@ export const Task: React.FC<Props> = ({ task }) => {
               value={editedTitle}
               onChange={handleChangeTodo}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-                handleCancel(e, task.id)
+                handleCancel(e, todoItem.id)
               }
-              onBlur={() => handleSubmit(task.id)}
+              onBlur={() => handleSubmit(todoItem.id)}
               autoFocus
             />
           </form>
         ) : (
           <span data-cy="TodoTitle" className="todo__title">
-            {task.title}
+            {todoItem.title}
           </span>
         )}
 
@@ -118,7 +120,7 @@ export const Task: React.FC<Props> = ({ task }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => handleDeleteTodo(task.id)}
+            onClick={() => handleDeleteTodo(todoItem.id)}
           >
             ×
           </button>

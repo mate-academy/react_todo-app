@@ -35,13 +35,13 @@
 
   &__title {
     padding: 12px 15px;
-    color: #220f8d;
+    color: rgb(34, 15, 141);
     word-break: break-all;
     transition: all 0.4s;
 
     &:hover {
       font-size: 24.2px;
-      color: #2a08e8;
+      color: rgb(42, 8, 232);
     }
   }
 
@@ -94,6 +94,10 @@
     border: 1px solid #999;
     box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+    }
 
     &::placeholder {
       font-style: italic;

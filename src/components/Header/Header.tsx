@@ -15,7 +15,7 @@ export const Header = () => {
     if (focusOnAddTodo.current) {
       focusOnAddTodo.current.focus();
     }
-  }, []);
+  }, [todos]);
 
   const handleWriteTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask(e.target.value);
@@ -36,6 +36,7 @@ export const Header = () => {
     if (task.trim() !== '') {
       dispatch({ type: Action.saveTodo, payload: newTodo });
       setTask('');
+
       localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
     }
   };
