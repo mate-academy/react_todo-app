@@ -64,6 +64,7 @@ const reducer = (state: State, action: Action) => {
       return {
         ...state,
         selectedTodo: action.payload,
+        isFocus: true,
       };
     }
 

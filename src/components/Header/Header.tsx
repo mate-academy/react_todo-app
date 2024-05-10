@@ -1,10 +1,4 @@
-import {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 
 import cn from 'classnames';
@@ -21,18 +15,10 @@ const Header = () => {
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    input.current?.focus();
-
-    if (!selectedTodo) {
+    if (isFocus || !selectedTodo) {
       input.current?.focus();
     }
-  }, [selectedTodo]);
-
-  useLayoutEffect(() => {
-    if (isFocus) {
-      input.current?.focus();
-    }
-  }, [isFocus]);
+  }, [isFocus, selectedTodo]);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
