@@ -5,9 +5,16 @@ import { useState } from 'react';
 type Props = {
   todo: Todo;
   updateTodoStatus: (id: number, newStatus: boolean) => void;
+  onDeleteTodo: (id: number) => void;
+  todoId: number;
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo, updateTodoStatus }) => {
+export const TodoInfo: React.FC<Props> = ({
+  todo,
+  updateTodoStatus,
+  onDeleteTodo,
+  todoId,
+}) => {
   const [checked, setChecked] = useState(todo.status);
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +42,12 @@ export const TodoInfo: React.FC<Props> = ({ todo, updateTodoStatus }) => {
       </span>
 
       {/* Remove button appears only on hover */}
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={() => onDeleteTodo(todoId)}
+      >
         ×
       </button>
     </div>

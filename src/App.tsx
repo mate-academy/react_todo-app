@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Header } from './Components/Header';
 import { Todo } from './Types/Todo';
 import { TodoList } from './Components/TodoList';
+import { Footer } from './Components/Footer';
+import { SortingTodos } from './enums/Sortings';
 
 // function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
 //   const [value, setValue] = useState<T>(() => {
@@ -28,6 +30,7 @@ import { TodoList } from './Components/TodoList';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [activeTab, setActiveTab] = useState(SortingTodos.all);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
@@ -61,6 +64,24 @@ export const App: React.FC = () => {
     );
   };
 
+  const deleteTodoItem = (id: number) => {
+    setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
+  };
+
+  const ActiveTabHandle = (tab: SortingTodos) => {
+    setActiveTab(tab);
+  };
+
+  const prepareTodos = (tab: SortingTodos): Todo[] => {
+    if (tab === SortingTodos.completed) {
+      return todos.filter(todo => todo.status === true);
+    } else if (tab === SortingTodos.active) {
+      return todos.filter(todo => todo.status === false);
+    } else {
+      return todos;
+    }
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -68,51 +89,17 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <section className="todoapp__main" data-cy="TodoList">
-          <TodoList todos={todos} updateTodoStatus={updateTodoStatus} />
+          <TodoList
+            todos={prepareTodos(activeTab)}
+            updateTodoStatus={updateTodoStatus}
+            onDeleteTodo={deleteTodoItem}
+          />
         </section>
 
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
-
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+        <Footer
+          todos={prepareTodos(activeTab)}
+          setActiveTab={ActiveTabHandle}
+        />
       </div>
     </div>
   );

@@ -5,9 +5,14 @@ import { TodoInfo } from './TodoInfo';
 type Props = {
   todos: Todo[];
   updateTodoStatus: (id: number, newStatus: boolean) => void;
+  onDeleteTodo: (id: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, updateTodoStatus }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  updateTodoStatus,
+  onDeleteTodo,
+}) => {
   return (
     <>
       {todos.map(todo => (
@@ -15,6 +20,8 @@ export const TodoList: React.FC<Props> = ({ todos, updateTodoStatus }) => {
           todo={todo}
           key={todo.id}
           updateTodoStatus={updateTodoStatus}
+          onDeleteTodo={onDeleteTodo}
+          todoId={todo.id}
         />
       ))}
     </>
