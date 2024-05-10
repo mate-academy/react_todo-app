@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { FILTER } from '../../types/Filter';
 import { DispatchContext, StateContext } from '../GlobalContext/GlobalContext';
 import { Action } from '../../types/Actions';
@@ -13,21 +13,21 @@ export const Footer: React.FC = () => {
     (todo: Todo) => todo.completed === false,
   ).length;
   const isDisabled = todos.some(todo => todo.completed);
-  let activeFilterLink: string;
+  const [activeFilterLink, setactiveFilterLink] = useState('#/');
 
   const handleFiltered = (filter: FILTER) => {
     switch (filter) {
       case FILTER.ACTIVE:
         dispatch({ type: Action.filterTodo, payload: FILTER.ACTIVE });
-        activeFilterLink = '#/';
+        setactiveFilterLink(`#/${FILTER.ACTIVE}`);
         break;
       case FILTER.COMPLETED:
         dispatch({ type: Action.filterTodo, payload: FILTER.COMPLETED });
-        activeFilterLink = '#/active';
+        setactiveFilterLink(`#/${FILTER.COMPLETED}`);
         break;
       default:
         dispatch({ type: Action.filterTodo, payload: FILTER.ALL });
-        activeFilterLink = '#/completed';
+        setactiveFilterLink('#/');
         break;
     }
   };
