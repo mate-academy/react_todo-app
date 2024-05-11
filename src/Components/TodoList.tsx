@@ -6,12 +6,14 @@ type Props = {
   todos: Todo[];
   updateTodoStatus: (id: number, newStatus: boolean) => void;
   onDeleteTodo: (id: number) => void;
+  updateTodoTitle: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   updateTodoStatus,
   onDeleteTodo,
+  updateTodoTitle,
 }) => {
   return (
     <>
@@ -22,6 +24,7 @@ export const TodoList: React.FC<Props> = ({
           updateTodoStatus={updateTodoStatus}
           onDeleteTodo={onDeleteTodo}
           todoId={todo.id}
+          updateTodoTitle={updateTodoTitle}
         />
       ))}
     </>

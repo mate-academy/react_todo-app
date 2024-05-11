@@ -1,32 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Header } from './Components/Header';
 import { Todo } from './Types/Todo';
 import { TodoList } from './Components/TodoList';
 import { Footer } from './Components/Footer';
 import { SortingTodos } from './enums/Sortings';
-
-// function useLocalStorage<T>(key: string, startValue: T): [T, (v: T) => void] {
-//   const [value, setValue] = useState<T>(() => {
-//     const data = localStorage.getItem(key);
-//
-//     if (data === null) {
-//       return startValue;
-//     }
-//
-//     try {
-//       return JSON.parse(data);
-//     } catch (e) {
-//       return startValue;
-//     }
-//   });
-//
-//   const save = (newValue: T) => {
-//     localStorage.setItem(key, JSON.stringify(newValue));
-//     setValue(newValue);
-//   };
-//
-//   return [value, save];
-// }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -44,25 +21,36 @@ export const App: React.FC = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const addPost = ({ ...data }: { title: string; status: boolean }) => {
-    setTodos((currentTodo: Todo[]) => {
-      const newTodo = {
-        id: +new Date(),
-        title: data.title,
-        status: data.status,
-      };
+  const addPost = useCallback(
+    ({ ...data }: { title: string; status: boolean }) => {
+      setTodos((currentTodo: Todo[]) => {
+        const newTodo = {
+          id: +new Date(),
+          title: data.title,
+          status: data.status,
+        };
 
-      return [newTodo, ...currentTodo];
-    });
-  };
+        return [newTodo, ...currentTodo];
+      });
+    },
+    [],
+  );
 
-  const updateTodoStatus = (id: number, newStatus: boolean) => {
+  const updateTodoStatus = useCallback((id: number, newStatus: boolean) => {
     setTodos(currentTodos =>
       currentTodos.map(todo =>
         todo.id === id ? { ...todo, status: newStatus } : todo,
       ),
     );
-  };
+  }, []);
+
+  const updateTodoTitle = useCallback((updatedTodo: Todo) => {
+    setTodos(currentTodos =>
+      currentTodos.map(todo =>
+        todo.id === updatedTodo.id ? updatedTodo : todo,
+      ),
+    );
+  }, []);
 
   const deleteTodoItem = (id: number) => {
     setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
@@ -72,10 +60,10 @@ export const App: React.FC = () => {
     setActiveTab(tab);
   };
 
-  const prepareTodos = (tab: SortingTodos): Todo[] => {
-    if (tab === SortingTodos.completed) {
+  const prepareTodos = (): Todo[] => {
+    if (activeTab === SortingTodos.completed) {
       return todos.filter(todo => todo.status === true);
-    } else if (tab === SortingTodos.active) {
+    } else if (activeTab === SortingTodos.active) {
       return todos.filter(todo => todo.status === false);
     } else {
       return todos;
@@ -90,16 +78,14 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList
-            todos={prepareTodos(activeTab)}
+            todos={prepareTodos()}
             updateTodoStatus={updateTodoStatus}
             onDeleteTodo={deleteTodoItem}
+            updateTodoTitle={updateTodoTitle}
           />
         </section>
 
-        <Footer
-          todos={prepareTodos(activeTab)}
-          setActiveTab={ActiveTabHandle}
-        />
+        <Footer todos={prepareTodos()} setActiveTab={ActiveTabHandle} />
       </div>
     </div>
   );
