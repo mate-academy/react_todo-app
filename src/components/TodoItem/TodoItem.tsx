@@ -35,10 +35,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handlerOnKeyUpEsc = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Escape') {
-      dispatch({
-        type: 'set-title',
-        payload: { id, title: todo.title },
-      });
+      setValue(todo.title);
       setIsEdit(false);
     }
   };
