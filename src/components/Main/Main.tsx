@@ -1,7 +1,8 @@
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 
 import classNames from 'classnames';
+import useFocusInput from '../../hooks/useFocusInput';
 
 const Main: FC = () => {
   const { todos, selectedTodo, status } = useContext(StateContext);
@@ -9,14 +10,14 @@ const Main: FC = () => {
 
   const [title, setTitle] = useState<string>(selectedTodo?.title ?? '');
 
-  const titleInputRef = useRef<HTMLInputElement>(null);
+  const titleInputRef = useFocusInput();
 
   useEffect(() => {
     setTitle(selectedTodo?.title ?? '');
     if (titleInputRef.current) {
       titleInputRef.current.focus();
     }
-  }, [selectedTodo]);
+  }, [selectedTodo?.title, titleInputRef]);
 
   const handleToggleComplete = (id: number) => {
     dispatch({ type: 'toggle-completed', payload: id });

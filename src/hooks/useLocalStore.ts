@@ -1,22 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-type SetValue<T> = React.Dispatch<React.SetStateAction<T>>;
+function useLocalStorage<T>(key: string, defaultValue: T) {
+  const [value, setValue] = useState(() => {
+    const savedValue = localStorage.getItem(key);
 
-const useLocalStorage = <T>(
-  storageKey: string,
-  fallbackState?: T,
-): [T, SetValue<T>] => {
-  const [value, setValue] = useState<T>(() => {
-    const storedValue = localStorage.getItem(storageKey);
-
-    return storedValue ? JSON.parse(storedValue) : fallbackState;
+    return savedValue === null ? defaultValue : JSON.parse(savedValue);
   });
 
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(value));
-  }, [value, storageKey]);
+  function save(newValue: T) {
+    setValue(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
+  }
 
-  return [value, setValue];
-};
+  return [value, save] as const;
+}
 
 export default useLocalStorage;

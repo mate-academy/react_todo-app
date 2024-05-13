@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 
 import Footer from './components/Footer/Footer';

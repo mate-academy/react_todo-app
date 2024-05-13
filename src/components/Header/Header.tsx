@@ -1,36 +1,38 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 
 import cn from 'classnames';
 import { Todo } from '../../Types/Todo';
+import useFocusInput from '../../hooks/useFocusInput';
+import useLocalStorage from '../../hooks/useLocalStore';
 
 const Header = () => {
   const [title, setTitle] = useState('');
   const { isFocus, todos, selectedTodo } = useContext(StateContext);
 
+  const [localTodo, setLocalTodo] = useLocalStorage<Todo[]>('todos', []);
+
   const dispatch = useContext(DispatchContext);
 
   const allCompleted = todos.every(todo => todo.completed);
 
-  const input = useRef<HTMLInputElement>(null);
+  const inputRef = useFocusInput();
 
   useEffect(() => {
     if (isFocus || !selectedTodo) {
-      input.current?.focus();
+      inputRef.current?.focus();
     }
-  }, [isFocus, selectedTodo]);
+  }, [inputRef, isFocus, selectedTodo]);
 
   useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-
-    if (storedTodos) {
-      dispatch({ type: 'load-todos', payload: JSON.parse(storedTodos) });
+    if (localTodo) {
+      dispatch({ type: 'load-todos', payload: localTodo });
     }
   }, [dispatch]);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+    setLocalTodo(todos);
+  }, [setLocalTodo, todos]);
 
   const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,7 +67,7 @@ const Header = () => {
 
       <form onSubmit={handleAddTodo}>
         <input
-          ref={input}
+          ref={inputRef}
           value={title}
           onChange={e => setTitle(e.target.value)}
           data-cy="NewTodoField"
