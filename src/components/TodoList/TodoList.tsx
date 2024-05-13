@@ -1,96 +1,109 @@
+import { ChangeEvent, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
   toggleTodo: (id: number) => void;
+  removeTodo: (id: number) => void;
+  updateTodo: (id: number, title: string) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, toggleTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  toggleTodo,
+  removeTodo = () => {},
+  updateTodo = () => {},
+}) => {
+  const [isEdit, setIsEdit] = useState({ id: 0, title: '' });
+
+  const handleDoubleClick = (todo: Todo) => {
+    setIsEdit({ id: todo.id, title: todo.title });
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsEdit({ ...isEdit, title: event.target.value });
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const trimmedTitle = isEdit.title.trim();
+
+      if (trimmedTitle) {
+        updateTodo(isEdit.id, trimmedTitle);
+      } else {
+        removeTodo(isEdit.id);
+      }
+
+      setIsEdit({ id: 0, title: '' });
+    }
+  };
+
+  const handleBlur = () => {
+    const trimmedTitle = isEdit.title.trim();
+
+    if (trimmedTitle) {
+      updateTodo(isEdit.id, trimmedTitle);
+    } else {
+      removeTodo(isEdit.id);
+    }
+
+    setIsEdit({ id: 0, title: '' });
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {/* This is a completed todo */}
       {todos.map(todo => (
-        <div data-cy="Todo" className="todo completed" key={todo.id}>
-          <label className="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-              checked={todo.completed}
-              onChange={() => toggleTodo(todo.id)}
-            />
-          </label>
-          <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
-          </span>
-
-          {/* Remove button appears only on hover */}
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
-            x
-          </button>
+        <div
+          key={todo.id}
+          data-cy="Todo"
+          className={cn('todo', { completed: todo.completed })}
+        >
+          {isEdit.id === todo.id ? (
+            <form>
+              <input
+                data-cy="TodoTitleField"
+                type="text"
+                className="todo__title-field"
+                placeholder="Empty todo will be deleted"
+                value={isEdit.title}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
+                autoFocus
+              />
+            </form>
+          ) : (
+            <>
+              <label className="todo__status-label">
+                <input
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                  checked={todo.completed}
+                  onChange={() => toggleTodo(todo.id)}
+                />
+              </label>
+              <span
+                data-cy="TodoTitle"
+                className="todo__title"
+                onDoubleClick={() => handleDoubleClick(todo)}
+              >
+                {todo.title}
+              </span>
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDelete"
+                onClick={() => removeTodo(todo.id)}
+              >
+                x
+              </button>
+            </>
+          )}
         </div>
       ))}
-
-      {/* This todo is in loadind state */}
-      <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          Todo is being saved now
-        </span>
-
-        <button type="button" className="todo__remove" data-cy="TodoDelete">
-          x
-        </button>
-      </div>
     </section>
   );
 };
-
-//This todo is an active todo */
-/* <div data-cy="Todo" className="todo">
-<label className="todo__status-label">
-  <input
-    data-cy="TodoStatus"
-    type="checkbox"
-    className="todo__status"
-  />
-</label>
-
-<span data-cy="TodoTitle" className="todo__title">
-  Not Completed Todo
-</span>
-
-<button type="button" className="todo__remove" data-cy="TodoDelete">
-  x
-</button>
-</div> */
-//}
-
-// This todo is being edited
-// <div data-cy="Todo" className="todo">
-// <label className="todo__status-label">
-//   <input
-//     data-cy="TodoStatus"
-//     type="checkbox"
-//     className="todo__status"
-//   />
-// </label>
-
-// {/* This form is shown instead of the title and remove button */}
-// <form>
-//   <input
-//     data-cy="TodoTitleField"
-//     type="text"
-//     className="todo__title-field"
-//     placeholder="Empty todo will be deleted"
-//     value="Todo is being edited now"
-//   />
-// </form>
-// </div>
