@@ -11,7 +11,7 @@ export const Header: React.FC = () => {
   const addTodo = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (title.length >= 1) {
+    if (title.trim().length >= 1) {
       dispatch({ type: 'addTodo', id: +new Date(), title: title });
       setTitle('');
     }
@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
     <>
       <header className="todoapp__header">
         {/* this button should have `active` class only if all todos are completed */}
-        {todos.length > 0 && (
+        {!!todos.length && (
           <button
             type="button"
             className={cn('todoapp__toggle-all', {

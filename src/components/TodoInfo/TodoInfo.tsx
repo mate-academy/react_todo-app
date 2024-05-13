@@ -22,7 +22,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   };
 
   const changeTodo = () => {
-    if (title.length >= 1) {
+    if (title.trim().length >= 1) {
       dispatch({ type: 'changeTodo', id: todo.id, title: title.trim() });
     } else {
       removeTodo();
