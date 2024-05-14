@@ -6,9 +6,14 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   setActiveTab: (todo: SortingTodos) => void;
+  onClearAllTodos?: () => void;
 };
 
-export const Footer: React.FC<Props> = ({ todos, setActiveTab }) => {
+export const Footer: React.FC<Props> = ({
+  todos,
+  setActiveTab,
+  onClearAllTodos,
+}) => {
   const todosNotCompleted = todos.filter(todo => todo.status !== true);
   const [tab, setTab] = useState(SortingTodos.all);
 
@@ -68,6 +73,7 @@ export const Footer: React.FC<Props> = ({ todos, setActiveTab }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={onClearAllTodos}
       >
         Clear completed
       </button>

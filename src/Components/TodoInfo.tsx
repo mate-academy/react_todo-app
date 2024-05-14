@@ -57,11 +57,14 @@ export const TodoInfo: React.FC<Props> = ({
       data-cy="Todo"
       className={classNames('todo', { completed: todo.status === true })}
     >
-      <label className="todo__status-label">
+      <label
+        className="todo__status-label"
+        style={{ opacity: isEditing ? 0 : 1 }}
+      >
         <input
           data-cy="TodoStatus"
           type="checkbox"
-          className="todo__status"
+          className={classNames({ todo__status: !isEditing })}
           checked={checked}
           onChange={handleCheckBoxChange}
         />
@@ -70,6 +73,7 @@ export const TodoInfo: React.FC<Props> = ({
       {isEditing ? (
         <input
           type="text"
+          className="todo__title todo__title-field"
           value={editedTitle}
           onChange={e => setEditedTitle(e.target.value)}
           autoFocus
@@ -91,14 +95,16 @@ export const TodoInfo: React.FC<Props> = ({
       )}
 
       {/* Remove button appears only on hover */}
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={() => onDeleteTodo(todoId)}
-      >
-        ×
-      </button>
+      {!isEditing && (
+        <button
+          type="button"
+          className="todo__remove"
+          data-cy="TodoDelete"
+          onClick={() => onDeleteTodo(todoId)}
+        >
+          ×
+        </button>
+      )}
     </div>
   );
 };

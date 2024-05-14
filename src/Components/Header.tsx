@@ -3,9 +3,13 @@ import { Todo } from '../Types/Todo';
 
 type Props = {
   onSubmit: (todo: Todo) => void;
+  onClickToggle?: () => void;
 };
 
-export const Header: React.FC<Props> = ({ onSubmit }) => {
+export const Header: React.FC<Props> = ({
+  onSubmit,
+  onClickToggle = () => {},
+}) => {
   const [title, setTitle] = useState('');
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -28,6 +32,7 @@ export const Header: React.FC<Props> = ({ onSubmit }) => {
           type="button"
           className="todoapp__toggle-all active"
           data-cy="ToggleAllButton"
+          onClick={onClickToggle}
         />
         {/* Add a todo on form submit */}
         <form onSubmit={handleSubmit}>

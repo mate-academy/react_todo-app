@@ -8,6 +8,7 @@ import { SortingTodos } from './enums/Sortings';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [activeTab, setActiveTab] = useState(SortingTodos.all);
+  const [toggleAllChecked, setToggleAllChecked] = useState(false);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
@@ -16,6 +17,14 @@ export const App: React.FC = () => {
       setTodos(JSON.parse(storedTodos));
     }
   }, []);
+
+  // handle toggle all
+  useEffect(() => {
+    const allCompleted =
+      todos.length > 0 && todos.every(todo => todo.status === true);
+
+    setToggleAllChecked(allCompleted);
+  }, [todos]);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -70,12 +79,28 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleToggleAll = () => {
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      status: !toggleAllChecked,
+    }));
+
+    setTodos(updatedTodos);
+    setToggleAllChecked(!toggleAllChecked);
+  };
+
+  const handleClearCompleted = () => {
+    setTodos(currentTodos => {
+      return currentTodos.filter(todo => todo.status !== true);
+    });
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-      <Header onSubmit={addPost} />
 
       <div className="todoapp__content">
+        <Header onSubmit={addPost} onClickToggle={handleToggleAll} />
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList
             todos={prepareTodos()}
@@ -85,7 +110,13 @@ export const App: React.FC = () => {
           />
         </section>
 
-        <Footer todos={prepareTodos()} setActiveTab={ActiveTabHandle} />
+        {todos.length > 0 && (
+          <Footer
+            todos={prepareTodos()}
+            setActiveTab={ActiveTabHandle}
+            onClearAllTodos={handleClearCompleted}
+          />
+        )}
       </div>
     </div>
   );
