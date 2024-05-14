@@ -1,40 +1,15 @@
-import React, { useContext } from 'react';
-import { ToDo } from '../../types/ToDo';
-import { ToDoItem } from '../ToDoItem/ToDoItem';
-import { ToDoContext } from '../../context/ToDoProvider';
+import React from 'react';
+import { Todo } from '../../components/ToDo/ToDo';
+import { TodoType } from '../../types/types';
 
 type Props = {
-  todos: ToDo[];
+  visibleTodos: TodoType[];
 };
 
-export const ToDoList: React.FC<Props> = ({ todos }) => {
-  const { dispatch } = useContext(ToDoContext);
-
-  const toggleAll = todos.every(todo => todo.completed);
-
-  const handleToggleAll = () => {
-    dispatch({ type: 'TOGGLE_ALL', payload: !toggleAll });
-  };
-
-  return (
-    <>
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        data-cy="toggleAll"
-        checked={toggleAll}
-        onChange={handleToggleAll}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
-
-      <ul className="todo-list" data-cy="todosList">
-        {todos.map(item => (
-          <ToDoItem key={item.id} item={item} />
-        ))}
-      </ul>
-    </>
-  );
-};
-
-export default ToDoList;
+export const TodoList: React.FC<Props> = ({ visibleTodos }) => (
+  <section className="todoapp__main" data-cy="TodoList">
+    {visibleTodos.map((todo: TodoType) => (
+      <Todo key={todo.id} todo={todo} />
+    ))}
+  </section>
+);

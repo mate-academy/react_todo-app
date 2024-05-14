@@ -1,18 +1,13 @@
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import './styles/index.scss';
-import './styles/todo-list.scss';
-import './styles/filters.scss';
-
+import { TodosProvider } from './context/ToDosContext';
 import { App } from './App';
-import { ToDoProvider } from './context/ToDoProvider';
+
+import './styles/index.scss';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
 createRoot(container).render(
-  <BrowserRouter>
-    <ToDoProvider>
-      <App />
-    </ToDoProvider>
-  </BrowserRouter>,
+  <TodosProvider>
+    <App />
+  </TodosProvider>,
 );
