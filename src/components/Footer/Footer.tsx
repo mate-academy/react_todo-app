@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react';
 import { DispatchContext, StateContext } from '../../store/TodoContext';
 import { ActionTypes, FilterFields } from '../../store/types';
 
-export function Footer() {
+export const Footer: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, filter } = useContext(StateContext);
 

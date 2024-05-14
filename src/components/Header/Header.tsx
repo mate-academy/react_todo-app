@@ -3,7 +3,7 @@ import { DispatchContext, StateContext } from '../../store/TodoContext';
 import { ActionTypes } from '../../store/types';
 import { TodoForm } from '../TodoForm/TodoForm';
 
-export function Header() {
+export const Header: React.FC = () => {
   const { todos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
   const completedTodos = todos.length && todos.every(todo => todo.completed);
@@ -22,4 +22,4 @@ export function Header() {
       <TodoForm />
     </header>
   );
-}
+};

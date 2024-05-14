@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DispatchContext, StateContext } from '../../store/TodoContext';
 import { ActionTypes, Todo } from '../../store/types';
 
-export function TodoForm() {
+export const TodoForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
@@ -43,4 +43,4 @@ export function TodoForm() {
       />
     </form>
   );
-}
+};

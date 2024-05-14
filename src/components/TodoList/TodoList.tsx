@@ -3,7 +3,7 @@ import { StateContext } from '../../store/TodoContext';
 import { FilterFields } from '../../store/types';
 import { TodoItem } from '../TodoItem/TodoItem';
 
-export function TodoList() {
+export const TodoList: React.FC = () => {
   const { todos, filter } = useContext(StateContext);
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
@@ -23,4 +23,4 @@ export function TodoList() {
       {filteredTodos?.map(todo => <TodoItem todo={todo} key={todo.id} />)}
     </section>
   );
-}
+};
