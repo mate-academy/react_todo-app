@@ -6,7 +6,6 @@ export const initialState: TodoState = {
 };
 
 export const reducer = (state: TodoState, action: Action) => {
-  //console.log(state);
   switch (action.type) {
     case ActionTypes.ADD_TODO:
       return {

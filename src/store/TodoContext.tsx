@@ -18,8 +18,6 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
       try {
         return { ...initialState, todos: JSON.parse(localData) };
       } catch (e) {
-        //console.log(e + 'error');
-
         return initialState;
       }
     }
