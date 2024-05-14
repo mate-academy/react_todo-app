@@ -5,7 +5,8 @@ import { TodoContext } from '../../Context/TodoContext';
 
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
-  const { todos, addTodo, setTodos, headerInputRef } = useContext(TodoContext);
+  const { todos, addTodo, setTodos, headerInputRef, focusInput } =
+    useContext(TodoContext);
 
   const hasAllTodoCompleted = todos.every(todo => todo.completed);
 
@@ -13,10 +14,10 @@ export const Header: React.FC = () => {
     if (e.key === 'Enter') {
       e.preventDefault();
 
-      const isValidTitle = title.trim();
+      const validTitle = title.trim();
 
-      if (isValidTitle) {
-        addTodo(title.trim());
+      if (validTitle) {
+        addTodo(validTitle);
 
         setTitle('');
       }
@@ -24,21 +25,17 @@ export const Header: React.FC = () => {
   };
 
   const handleChangeAllStatus = () => {
-    const isAllCompleted = todos.every(todo => todo.completed);
-
     setTodos(
       todos.map(todo => ({
         ...todo,
-        completed: !isAllCompleted,
+        completed: !hasAllTodoCompleted,
       })),
     );
   };
 
   useEffect(() => {
-    if (headerInputRef.current) {
-      headerInputRef.current.focus();
-    }
-  }, [headerInputRef]);
+    focusInput();
+  }, [focusInput]);
 
   return (
     <header className="todoapp__header">

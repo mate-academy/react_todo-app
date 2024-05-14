@@ -13,6 +13,7 @@ type TodoContextType = {
   setFilterBy: React.Dispatch<React.SetStateAction<string>>;
   deleteCompletedTodos: () => void;
   headerInputRef: React.RefObject<HTMLInputElement>;
+  focusInput: () => void;
 };
 
 export const TodoContext = createContext<TodoContextType>({
@@ -26,6 +27,7 @@ export const TodoContext = createContext<TodoContextType>({
   setFilterBy: () => {},
   deleteCompletedTodos: () => {},
   headerInputRef: { current: null },
+  focusInput: () => {},
 });
 
 type TodoProviderProps = {
@@ -37,6 +39,12 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState('all');
   const headerInputRef = useRef<HTMLInputElement>(null);
+
+  const focusInput = () => {
+    if (headerInputRef.current) {
+      headerInputRef.current.focus();
+    }
+  };
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -51,9 +59,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
   const deleteTodo = (id: string) => {
     setTodos(todos.filter((todo: Todo) => todo.id !== id));
 
-    if (headerInputRef.current) {
-      headerInputRef.current.focus();
-    }
+    focusInput();
   };
 
   const updateTodo = (id: string, title: string) => {
@@ -65,9 +71,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
   const deleteCompletedTodos = () => {
     setTodos(todos.filter((todo: Todo) => !todo.completed));
 
-    if (headerInputRef.current) {
-      headerInputRef.current.focus();
-    }
+    focusInput();
   };
 
   useEffect(() => {
@@ -100,6 +104,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
         filterBy,
         deleteCompletedTodos,
         headerInputRef,
+        focusInput,
       }}
     >
       {children}

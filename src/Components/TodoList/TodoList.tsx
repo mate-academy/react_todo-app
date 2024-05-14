@@ -2,14 +2,8 @@ import { useContext, useState } from 'react';
 import { TodoContext } from '../../Context/TodoContext';
 
 export const TodoList: React.FC = () => {
-  const {
-    todos,
-    setTodos,
-    deleteTodo,
-    updateTodo,
-    filteredTodos,
-    headerInputRef,
-  } = useContext(TodoContext);
+  const { todos, setTodos, deleteTodo, updateTodo, filteredTodos, focusInput } =
+    useContext(TodoContext);
 
   const [editTodoId, setEditTodoId] = useState<string>('');
   const [editTitle, setEditTitle] = useState<string>('');
@@ -46,17 +40,16 @@ export const TodoList: React.FC = () => {
     }
 
     setEditTodoId('');
-
-    if (headerInputRef.current) {
-      headerInputRef.current.focus();
-    }
+    focusInput();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleBlur();
-    } else if (e.key === 'Escape') {
+    }
+
+    if (e.key === 'Escape') {
       setEditTodoId('');
     }
   };
