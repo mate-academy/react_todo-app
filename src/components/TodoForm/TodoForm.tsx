@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { DispatchContext } from '../../store/TodoContext';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { DispatchContext, StateContext } from '../../store/TodoContext';
 import { ActionTypes, Todo } from '../../store/types';
 
 export function TodoForm() {
   const [title, setTitle] = useState('');
   const dispatch = useContext(DispatchContext);
+  const { todos } = useContext(StateContext);
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (!title.trim()) {
@@ -12,7 +13,7 @@ export function TodoForm() {
     }
 
     const todo: Todo = {
-      title,
+      title: title.trim(),
       id: +new Date(),
       completed: false,
     };
@@ -21,9 +22,18 @@ export function TodoForm() {
     setTitle('');
   };
 
+  const todoField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (todoField.current) {
+      todoField.current.focus();
+    }
+  }, [todos]);
+
   return (
     <form onSubmit={onSubmit}>
       <input
+        ref={todoField}
         data-cy="NewTodoField"
         type="text"
         className="todoapp__new-todo"

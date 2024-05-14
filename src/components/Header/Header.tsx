@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DispatchContext, StateContext } from '../../store/TodoContext';
+import { ActionTypes } from '../../store/types';
 import { TodoForm } from '../TodoForm/TodoForm';
 
 export function Header() {
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+  const completedTodos = todos.length && todos.every(todo => todo.completed);
+
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {todos.length > 0 && (
+        <button
+          onClick={() => dispatch({ type: ActionTypes.TOGGLE_ALL_TODOS })}
+          type="button"
+          className={`todoapp__toggle-all ${completedTodos ? 'active' : ''}`}
+          data-cy="ToggleAllButton"
+        />
+      )}
 
-      {/* Add a todo on form submit */}
       <TodoForm />
     </header>
   );

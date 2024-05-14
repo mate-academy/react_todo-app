@@ -21,6 +21,8 @@ export enum ActionTypes {
   TOGGLE_TODO = 'TOGGLE_TODO',
   DELETE_TODO = 'DELETE_TODO',
   SET_FILTER = 'SET_FILTER ',
+  CLEAR_COMPLETED = 'CLEAR_COMPLETED',
+  TOGGLE_ALL_TODOS = 'TOGGLE_ALL_TODOS',
 }
 
 export type Action =
@@ -28,4 +30,6 @@ export type Action =
   | { type: ActionTypes.EDIT_TODO; payload: { id: number; title: string } }
   | { type: ActionTypes.TOGGLE_TODO; payload: number }
   | { type: ActionTypes.DELETE_TODO; payload: number }
-  | { type: ActionTypes.SET_FILTER; payload: FilterFields };
+  | { type: ActionTypes.SET_FILTER; payload: FilterFields }
+  | { type: ActionTypes.CLEAR_COMPLETED }
+  | { type: ActionTypes.TOGGLE_ALL_TODOS };

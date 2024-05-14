@@ -41,6 +41,21 @@ export const reducer = (state: TodoState, action: Action) => {
         ...state,
         filter: action.payload,
       };
+    case ActionTypes.TOGGLE_ALL_TODOS:
+      const allCompleted = state.todos.every(todo => todo.completed);
+
+      return {
+        ...state,
+        todos: state.todos.map(todo => ({
+          ...todo,
+          completed: !allCompleted,
+        })),
+      };
+    case ActionTypes.CLEAR_COMPLETED:
+      return {
+        ...state,
+        todos: state.todos.filter(todo => !todo.completed),
+      };
     default:
       return state;
   }

@@ -1,9 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
 import { initialState, reducer } from './todoReducer';
-//import { Action } from './types';
+import { Action } from './types';
 
 export const StateContext = React.createContext(initialState);
-export const DispatchContext = React.createContext(() => {});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const DispatchContext = React.createContext((_action: Action) => {});
 
 type Props = {
   children: React.ReactNode;
@@ -25,8 +26,6 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
 
     return initialState;
   });
-
-  //console.log(state);
 
   useEffect(() => {
     if (state.todos) {

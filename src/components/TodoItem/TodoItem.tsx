@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DispatchContext } from '../../store/TodoContext';
 import { ActionTypes, Todo } from '../../store/types';
 
@@ -16,11 +16,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const onBlur = () => {
-    //console.log('on blur');
     if (title.trim()) {
       dispatch({
         type: ActionTypes.EDIT_TODO,
-        payload: { id: todo.id, title },
+        payload: { id: todo.id, title: title.trim() },
       });
     } else {
       dispatch({ type: ActionTypes.DELETE_TODO, payload: todo.id });
@@ -38,7 +37,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  //console.log(editMode);
+  const renameField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (renameField.current && editMode) {
+      renameField.current.focus();
+    }
+  }, [editMode]);
+
   return (
     <div data-cy="Todo" className={todo?.completed ? 'todo completed' : 'todo'}>
       <label className="todo__status-label">
@@ -62,6 +68,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             value={title}
             onChange={event => setTitle(event.target.value)}
             onBlur={onBlur}
+            ref={renameField}
           />
         </form>
       ) : (
