@@ -1,15 +1,12 @@
 import React, { useContext } from 'react';
-import { Todo } from '../Types/Todo';
 import { SortingTodos } from '../enums/Sortings';
 import classNames from 'classnames';
 import { DispatchContext, TodoContext } from './TodoContext';
 
-type Props = {
-  todos: Todo[];
-};
+export const Footer: React.FC = () => {
+  const { todos } = useContext(TodoContext);
 
-export const Footer: React.FC<Props> = ({ todos }) => {
-  const todosCounter = todos.filter(todo => todo.status !== true);
+  const todosCounter = todos.filter(todo => todo.completed !== true);
   const dispatch = useContext(DispatchContext);
   const { tab } = useContext(TodoContext);
 
@@ -72,12 +69,12 @@ export const Footer: React.FC<Props> = ({ todos }) => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         onClick={handleClearTodos}
+        disabled={todos.filter(todo => todo.completed).length === 0}
       >
         Clear completed
       </button>

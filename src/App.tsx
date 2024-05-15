@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Header } from './Components/Header';
 import { TodoList } from './Components/TodoList';
 import { Footer } from './Components/Footer';
@@ -7,18 +7,18 @@ import { SortingTodos } from './enums/Sortings';
 import { Todo } from './Types/Todo';
 
 export const App: React.FC = () => {
-  const { todo, tab } = useContext(TodoContext);
+  const { todos, tab } = useContext(TodoContext);
 
-  const filteredTodos = (): Todo[] => {
+  const filteredTodos = useMemo((): Todo[] => {
     switch (tab) {
       case SortingTodos.completed:
-        return todo.filter(t => t.status === true);
+        return todos.filter(t => t.completed === true);
       case SortingTodos.active:
-        return todo.filter(t => t.status === false);
+        return todos.filter(t => t.completed === false);
       default:
-        return todo;
+        return todos;
     }
-  };
+  }, [todos, tab]);
 
   return (
     <div className="todoapp">
@@ -26,10 +26,10 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <section className="todoapp__main" data-cy="TodoList">
-          <TodoList todos={filteredTodos()} />
+          <TodoList todos={filteredTodos} />
         </section>
 
-        {todo.length > 0 && <Footer todos={todo} />}
+        {todos.length > 0 && <Footer />}
       </div>
     </div>
   );

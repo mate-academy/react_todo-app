@@ -6,10 +6,10 @@ type Action =
   | { type: 'updateTodoStatus'; payload: { id: number; newStatus: boolean } }
   | { type: 'deleteTodo'; payload: { id: number } }
   | { type: 'updateTodoTitle'; payload: { updatedTodo: Todo } }
-  | { type: 'addTodo'; payload: { title: string; status: boolean } }
+  | { type: 'addTodo'; payload: { title: string; completed: boolean } }
   | { type: 'clearCompleted' }
   | { type: 'activeTab'; payload: { tab: SortingTodos } }
-  | { type: 'initializeTodosFromStorage'; payload: { todo: Todo[] } }
+  | { type: 'initializeTodosFromStorage'; payload: { todos: Todo[] } }
   | { type: 'toggleAll'; payload: { todo: Todo[] } };
 
 type Props = {
@@ -17,12 +17,12 @@ type Props = {
 };
 
 interface State {
-  todo: Todo[];
+  todos: Todo[];
   tab: SortingTodos;
 }
 
 const initialState: State = {
-  todo: [],
+  todos: [],
   tab: SortingTodos.all,
 };
 
@@ -32,38 +32,42 @@ const updatedTodoStatus = (
   newStatus: boolean,
 ): State => ({
   ...state,
-  todo: state.todo.map(todo =>
-    todo.id === id ? { ...todo, status: newStatus } : todo,
+  todos: state.todos.map(todo =>
+    todo.id === id ? { ...todo, completed: newStatus } : todo,
   ),
 });
 
-const updateTodoTitle = (state: State, updatedTodo: Todo): State => ({
-  ...state,
-  todo: state.todo.map(todo =>
-    todo.id === updatedTodo.id ? updatedTodo : todo,
-  ),
-});
+const updateTodoTitle = (state: State, updatedTodo: Todo): State => {
+  const newState = {
+    ...state,
+    todos: state.todos.map(todo =>
+      todo.id === updatedTodo.id ? updatedTodo : todo,
+    ),
+  };
+
+  return newState;
+};
 
 const deleteTodoItem = (state: State, id: number): State => ({
   ...state,
-  todo: state.todo.filter(todo => todo.id !== id),
+  todos: state.todos.filter(todo => todo.id !== id),
 });
 
 const ClearCompleted = (state: State) => ({
   ...state,
-  todo: state.todo.filter(todo => todo.status !== true),
+  todos: state.todos.filter(todo => !todo.completed),
 });
 
-const addTodo = (state: State, title: string, status: boolean): State => {
+const addTodo = (state: State, title: string, completed: boolean): State => {
   const newTodo = {
     id: +new Date(),
     title,
-    status,
+    completed,
   };
 
   return {
     ...state,
-    todo: [newTodo, ...state.todo],
+    todos: [newTodo, ...state.todos],
   };
 };
 
@@ -83,7 +87,7 @@ function reducer(state: State, action: Action) {
         action.payload.newStatus,
       );
     case 'addTodo':
-      return addTodo(state, action.payload.title, action.payload.status);
+      return addTodo(state, action.payload.title, action.payload.completed);
     case 'updateTodoTitle':
       return updateTodoTitle(state, action.payload.updatedTodo);
     case 'deleteTodo':
@@ -96,14 +100,18 @@ function reducer(state: State, action: Action) {
     case 'initializeTodosFromStorage':
       return {
         ...state,
-        todo: action.payload.todo,
+        todos: action.payload.todos,
       };
+
     case 'toggleAll':
-      const areAllCompleted = state.todo.every(t => t.status);
+      const areAllCompleted = state.todos.every(t => t.completed);
 
       return {
         ...state,
-        todo: state.todo.map(todo => ({ ...todo, status: !areAllCompleted })),
+        todos: state.todos.map(todo => ({
+          ...todo,
+          completed: !areAllCompleted,
+        })),
       };
 
     default:
@@ -125,15 +133,14 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
     if (storedTodos) {
       dispatch({
         type: 'initializeTodosFromStorage',
-        payload: { todo: JSON.parse(storedTodos) },
+        payload: { todos: JSON.parse(storedTodos) },
       });
     }
-  }, [dispatch]);
+  }, []);
 
-  // Effect for storing to local storage
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(state.todo));
-  }, [state.todo]);
+    localStorage.setItem('todos', JSON.stringify(state.todos));
+  }, [state.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

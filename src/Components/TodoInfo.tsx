@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Todo } from '../Types/Todo';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { DispatchContext } from './TodoContext';
 
 type Props = {
@@ -13,31 +13,28 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
-    setEditedTitle(todo.title);
-  }, [todo.title]);
+    if (!isEditing) {
+      setEditedTitle(todo.title);
+    }
+  }, [todo.title, isEditing]);
 
-  const saveChanges = () => {
+  const saveChanges = useCallback(() => {
     const trimmedTitle = editedTitle.trim();
 
-    if (trimmedTitle !== '') {
-      const updatedTodo = { ...todo, title: trimmedTitle };
-      const todoFromStorage = JSON.parse(localStorage.getItem('todos') || '[]');
-      const updatedTodos = todoFromStorage.map((t: Todo) =>
-        t.id === todo.id ? updatedTodo : t,
-      );
-
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
+    if (trimmedTitle) {
       dispatch({
         type: 'updateTodoTitle',
-        payload: { updatedTodo: updatedTodo },
+        payload: { updatedTodo: { ...todo, title: trimmedTitle } },
       });
     } else {
-      setEditedTitle(todo.title.trim());
+      dispatch({
+        type: 'deleteTodo',
+        payload: { id: todo.id },
+      });
     }
 
     setIsEditing(false);
-  };
+  }, [dispatch, editedTitle, todo]);
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
@@ -54,10 +51,29 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
     dispatch({ type: 'deleteTodo', payload: { id: todo.id } });
   };
 
+  const handleKeyUp = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        saveChanges();
+      }
+
+      if (e.key === 'Escape') {
+        setIsEditing(false);
+        setEditedTitle(todo.title);
+      }
+    },
+    [saveChanges, todo.title],
+  );
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    saveChanges();
+  };
+
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.status })}
+      className={classNames('todo', { completed: todo.completed })}
     >
       <label
         className="todo__status-label"
@@ -67,46 +83,43 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className={classNames({ todo__status: !isEditing })}
-          checked={todo.status}
+          checked={todo.completed}
           onChange={handleCheckBoxChange}
         />
       </label>
 
       {isEditing ? (
-        <input
-          data-cy="TodoTitleField"
-          type="text"
-          className="todo__title todo__title-field"
-          value={editedTitle}
-          onChange={e => setEditedTitle(e.target.value)}
-          onBlur={saveChanges}
-          autoFocus
-          onKeyUp={e => {
-            if (e.key === 'Enter') {
-              saveChanges();
-            }
-          }}
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            value={editedTitle}
+            onChange={e => setEditedTitle(e.target.value)}
+            onBlur={saveChanges}
+            autoFocus
+            onKeyUp={handleKeyUp}
+          />
+        </form>
       ) : (
-        <span
-          data-cy="TodoTitle"
-          className="todo__title"
-          onDoubleClick={handleDoubleClick}
-        >
-          {editedTitle ? editedTitle : todo.title}
-        </span>
-      )}
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={handleDoubleClick}
+          >
+            {todo.title}
+          </span>
 
-      {/* Remove button appears only on hover */}
-      {!isEditing && (
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-          onClick={handleClick}
-        >
-          ×
-        </button>
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={handleClick}
+          >
+            ×
+          </button>
+        </>
       )}
     </div>
   );
