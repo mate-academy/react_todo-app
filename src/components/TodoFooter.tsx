@@ -1,18 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { TodoContext } from './TodoContext';
 import classNames from 'classnames';
 import { Query } from '../types/Query';
 
 type Props = {
   setQuery: React.Dispatch<React.SetStateAction<Query>>;
+  filter: Query;
 };
 
-export const TodoFooter: React.FC<Props> = ({ setQuery }) => {
+export const TodoFooter: React.FC<Props> = ({ setQuery, filter }) => {
   const { todos, setTodos } = useContext(TodoContext);
   const todosLeft = todos.filter(todo => !todo.completed).length;
-  const [isSelectedAll, setIsSelectedAll] = useState(true);
-  const [isSelectedCompleted, setIsSelectedCompleted] = useState(false);
-  const [isSelectedActive, setIsSelectedActive] = useState(false);
 
   const handleShowCompleted = () => {
     setQuery(Query.Completed);
@@ -40,22 +38,13 @@ export const TodoFooter: React.FC<Props> = ({ setQuery }) => {
 
   const handleAllButtonClick = () => {
     handleShowAll();
-    setIsSelectedAll(true);
-    setIsSelectedActive(false);
-    setIsSelectedCompleted(false);
   };
 
   const handleActiveButtonClick = () => {
-    setIsSelectedActive(true);
-    setIsSelectedAll(false);
-    setIsSelectedCompleted(false);
     handleShowActive();
   };
 
   const handleCompletedButtonClick = () => {
-    setIsSelectedCompleted(true);
-    setIsSelectedAll(false);
-    setIsSelectedActive(false);
     handleShowCompleted();
   };
 
@@ -71,7 +60,9 @@ export const TodoFooter: React.FC<Props> = ({ setQuery }) => {
           <a
             href="#/"
             onClick={handleAllButtonClick}
-            className={classNames('filter__link', { selected: isSelectedAll })}
+            className={classNames('filter__link', {
+              selected: filter === Query.All,
+            })}
             data-cy="FilterLinkAll"
           >
             All
@@ -81,7 +72,7 @@ export const TodoFooter: React.FC<Props> = ({ setQuery }) => {
             href="#/active"
             onClick={handleActiveButtonClick}
             className={classNames('filter__link', {
-              selected: isSelectedActive,
+              selected: filter === Query.Active,
             })}
             data-cy="FilterLinkActive"
           >
@@ -92,7 +83,7 @@ export const TodoFooter: React.FC<Props> = ({ setQuery }) => {
             href="#/completed"
             onClick={handleCompletedButtonClick}
             className={classNames('filter__link', {
-              selected: isSelectedCompleted,
+              selected: filter === Query.Completed,
             })}
             data-cy="FilterLinkCompleted"
           >

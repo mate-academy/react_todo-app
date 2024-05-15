@@ -3,8 +3,6 @@ import { TodoContext } from './TodoContext';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
-type Props = {};
-
 function getNewId(todos: Todo[]) {
   if (todos.length === 0) {
     return 1;
@@ -21,41 +19,31 @@ function getNewId(todos: Todo[]) {
   return maxId + 1;
 }
 
-export const TodoInput: React.FC<Props> = () => {
+export const TodoInput: React.FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const [title, setTitle] = useState('');
-  const [isFocused, setIsFocused] = useState(true);
 
   const handleCompletedAll = () => {
     const isCompleted = todos.every(todo => todo.completed);
 
-    if (!isCompleted) {
-      const newTodos = todos.map(todo => ({
-        ...todo,
-        completed: true,
-      }));
+    const newTodos = todos.map(todo => ({
+      ...todo,
+      completed: !isCompleted,
+    }));
 
-      setTodos(newTodos);
-    } else {
-      const newTodos = todos.map(todo => ({
-        ...todo,
-        completed: false,
-      }));
-
-      setTodos(newTodos);
-    }
+    setTodos(newTodos);
   };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const eventListener = (event: KeyboardEvent) => {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && title.trim() !== '') {
       const newTodo = {
         completed: false,
         id: getNewId(todos),
-        title: title,
+        title: title.trim(),
       };
 
       setTitle('');
@@ -63,12 +51,6 @@ export const TodoInput: React.FC<Props> = () => {
       setTodos([...todos, newTodo]);
     }
   };
-
-  if (isFocused) {
-    document.addEventListener('keyup', eventListener);
-  } else {
-    document.removeEventListener('keyup', eventListener);
-  }
 
   return (
     <header className="todoapp__header">
@@ -84,8 +66,7 @@ export const TodoInput: React.FC<Props> = () => {
       )}
       <form onSubmit={event => event.preventDefault()}>
         <input
-          onBlur={() => setIsFocused(false)}
-          onFocus={() => setIsFocused(true)}
+          onKeyUp={event => handleKeyUp(event)}
           autoFocus
           data-cy="NewTodoField"
           type="text"

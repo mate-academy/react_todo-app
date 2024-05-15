@@ -6,7 +6,7 @@ import { TodoFooter } from './components/TodoFooter';
 import { Query } from './types/Query';
 
 export const App: React.FC = () => {
-  const [query, setQuery] = useState(Query.All);
+  const [filter, setFilter] = useState(Query.All);
 
   return (
     <div className="todoapp">
@@ -16,9 +16,9 @@ export const App: React.FC = () => {
         <div className="todoapp__content">
           <TodoInput />
 
-          <TodoList query={query} />
+          <TodoList query={filter} />
 
-          <TodoFooter setQuery={setQuery} />
+          <TodoFooter setQuery={setFilter} filter={filter} />
         </div>
       </TodoProvider>
     </div>

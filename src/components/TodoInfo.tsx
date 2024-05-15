@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoContext } from './TodoContext';
 import classNames from 'classnames';
@@ -12,10 +12,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodoContext);
   const [isEditing, setIsEditing] = useState(false);
   const [changedTitle, setChangedTitle] = useState(title);
-
-  useEffect(() => {
-    setChangedTitle(title);
-  }, [title]);
 
   const replaceChangedTodo = (newTodo: Todo) => {
     const index = todos.indexOf(todo);
@@ -31,15 +27,9 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   };
 
   const handleDelete = () => {
-    const index = todos.findIndex(t => t.id === todo.id);
+    const copyOfTodos = todos.filter(t => t.id !== todo.id);
 
-    if (index !== -1) {
-      const copyOfTodos = [...todos];
-
-      copyOfTodos.splice(index, 1);
-
-      setTodos(copyOfTodos);
-    }
+    setTodos(copyOfTodos);
   };
 
   const handleChangeSubmit = () => {
@@ -74,12 +64,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
     replaceChangedTodo(newTodo);
   };
-
-  if (isEditing) {
-    document.addEventListener('keyup', eventListenerKeyboard);
-  } else {
-    document.removeEventListener('keyup', eventListenerKeyboard);
-  }
 
   return (
     <div
@@ -130,6 +114,9 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               handleChangeSubmit();
               setIsEditing(false);
             }}
+            onKeyUp={() =>
+              document.addEventListener('keyup', eventListenerKeyboard)
+            }
           />
         </form>
       )}

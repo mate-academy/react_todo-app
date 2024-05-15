@@ -9,19 +9,19 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ query }) => {
   const { todos } = useContext(TodoContext);
-  let todosToRender = [...todos];
+  let todosToRender = todos;
 
   switch (query) {
     case Query.All:
-      todosToRender = [...todos];
+      todosToRender = todos;
 
       break;
     case Query.Active:
-      todosToRender = [...todos].filter(todo => !todo.completed);
+      todosToRender = todos.filter(todo => !todo.completed);
 
       break;
     case Query.Completed:
-      todosToRender = [...todos].filter(todo => todo.completed);
+      todosToRender = todos.filter(todo => todo.completed);
   }
 
   return (
