@@ -12,18 +12,6 @@ export const TodoFooter: React.FC<Props> = ({ setQuery, filter }) => {
   const { todos, setTodos } = useContext(TodoContext);
   const todosLeft = todos.filter(todo => !todo.completed).length;
 
-  const handleShowCompleted = () => {
-    setQuery(Query.Completed);
-  };
-
-  const handleShowActive = () => {
-    setQuery(Query.Active);
-  };
-
-  const handleShowAll = () => {
-    setQuery(Query.All);
-  };
-
   const handeClearCompleted = () => {
     const newTodos = [];
 
@@ -34,18 +22,6 @@ export const TodoFooter: React.FC<Props> = ({ setQuery, filter }) => {
     }
 
     setTodos(newTodos);
-  };
-
-  const handleAllButtonClick = () => {
-    handleShowAll();
-  };
-
-  const handleActiveButtonClick = () => {
-    handleShowActive();
-  };
-
-  const handleCompletedButtonClick = () => {
-    handleShowCompleted();
   };
 
   const returnValue =
@@ -59,7 +35,7 @@ export const TodoFooter: React.FC<Props> = ({ setQuery, filter }) => {
         <nav className="filter" data-cy="Filter">
           <a
             href="#/"
-            onClick={handleAllButtonClick}
+            onClick={() => setQuery(Query.All)}
             className={classNames('filter__link', {
               selected: filter === Query.All,
             })}
@@ -70,7 +46,7 @@ export const TodoFooter: React.FC<Props> = ({ setQuery, filter }) => {
 
           <a
             href="#/active"
-            onClick={handleActiveButtonClick}
+            onClick={() => setQuery(Query.Active)}
             className={classNames('filter__link', {
               selected: filter === Query.Active,
             })}
@@ -81,7 +57,7 @@ export const TodoFooter: React.FC<Props> = ({ setQuery, filter }) => {
 
           <a
             href="#/completed"
-            onClick={handleCompletedButtonClick}
+            onClick={() => setQuery(Query.Completed)}
             className={classNames('filter__link', {
               selected: filter === Query.Completed,
             })}
