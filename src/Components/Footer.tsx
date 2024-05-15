@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ todos }) => {
-  const todosNotCompleted = todos.filter(todo => todo.status !== true);
+  const todosCounter = todos.filter(todo => todo.status !== true);
   const dispatch = useContext(DispatchContext);
   const { tab } = useContext(TodoContext);
 
@@ -27,7 +27,7 @@ export const Footer: React.FC<Props> = ({ todos }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todosNotCompleted.length} items left
+        {todosCounter.length} items left
       </span>
 
       {/* Active link should have the 'selected' class */}

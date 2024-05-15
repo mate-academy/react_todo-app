@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DispatchContext, TodoContext } from './TodoContext';
 import classNames from 'classnames';
 
@@ -19,6 +19,14 @@ export const Header: React.FC = () => {
     dispatch({ type: 'toggleAll', payload: { todo: state.todo } });
   };
 
+  const inputField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputField.current) {
+      inputField.current.focus();
+    }
+  }, [state]);
+
   return (
     <header className="todoapp__header">
       <>
@@ -33,10 +41,10 @@ export const Header: React.FC = () => {
             onClick={handleToggleAll}
           />
         )}
-        {/* Add a todo on form submit */}
+
         <form onSubmit={handleSubmit}>
           <input
-            autoFocus
+            ref={inputField}
             data-cy="NewTodoField"
             type="text"
             value={title}

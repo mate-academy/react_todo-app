@@ -82,7 +82,6 @@ function reducer(state: State, action: Action) {
         action.payload.id,
         action.payload.newStatus,
       );
-
     case 'addTodo':
       return addTodo(state, action.payload.title, action.payload.status);
     case 'updateTodoTitle':
@@ -119,7 +118,6 @@ export const DispatchContext = React.createContext<React.Dispatch<Action>>(
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // Effect for initializing from local storage
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');

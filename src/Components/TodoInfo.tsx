@@ -8,7 +8,6 @@ type Props = {
 };
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
-  // const [checked, setChecked] = useState(todo.status);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
   const dispatch = useContext(DispatchContext);
@@ -18,8 +17,10 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   }, [todo.title]);
 
   const saveChanges = () => {
-    if (editedTitle.trim() !== '') {
-      const updatedTodo = { ...todo, title: editedTitle };
+    const trimmedTitle = editedTitle.trim();
+
+    if (trimmedTitle !== '') {
+      const updatedTodo = { ...todo, title: trimmedTitle };
       const todoFromStorage = JSON.parse(localStorage.getItem('todos') || '[]');
       const updatedTodos = todoFromStorage.map((t: Todo) =>
         t.id === todo.id ? updatedTodo : t,
@@ -32,7 +33,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         payload: { updatedTodo: updatedTodo },
       });
     } else {
-      setEditedTitle(todo.title);
+      setEditedTitle(todo.title.trim());
     }
 
     setIsEditing(false);
@@ -56,7 +57,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.status === true })}
+      className={classNames('todo', { completed: todo.status })}
     >
       <label
         className="todo__status-label"
@@ -73,12 +74,13 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
       {isEditing ? (
         <input
+          data-cy="TodoTitleField"
           type="text"
           className="todo__title todo__title-field"
           value={editedTitle}
           onChange={e => setEditedTitle(e.target.value)}
-          autoFocus
           onBlur={saveChanges}
+          autoFocus
           onKeyUp={e => {
             if (e.key === 'Enter') {
               saveChanges();
