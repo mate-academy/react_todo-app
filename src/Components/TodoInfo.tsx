@@ -1,25 +1,17 @@
 import classNames from 'classnames';
 import { Todo } from '../Types/Todo';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { DispatchContext } from './TodoContext';
 
 type Props = {
   todo: Todo;
-  updateTodoStatus: (id: number, newStatus: boolean) => void;
-  onDeleteTodo: (id: number) => void;
-  todoId: number;
-  updateTodoTitle: (todo: Todo) => void;
 };
 
-export const TodoInfo: React.FC<Props> = ({
-  todo,
-  updateTodoStatus,
-  onDeleteTodo,
-  todoId,
-  updateTodoTitle = () => {},
-}) => {
-  const [checked, setChecked] = useState(todo.status);
+export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  // const [checked, setChecked] = useState(todo.status);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
+  const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
     setEditedTitle(todo.title);
@@ -35,7 +27,10 @@ export const TodoInfo: React.FC<Props> = ({
 
       localStorage.setItem('todos', JSON.stringify(updatedTodos));
 
-      updateTodoTitle(updatedTodo);
+      dispatch({
+        type: 'updateTodoTitle',
+        payload: { updatedTodo: updatedTodo },
+      });
     } else {
       setEditedTitle(todo.title);
     }
@@ -44,12 +39,18 @@ export const TodoInfo: React.FC<Props> = ({
   };
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked);
-    updateTodoStatus(todo.id, e.target.checked);
+    dispatch({
+      type: 'updateTodoStatus',
+      payload: { id: todo.id, newStatus: e.target.checked },
+    });
   };
 
   const handleDoubleClick = () => {
     setIsEditing(true);
+  };
+
+  const handleClick = () => {
+    dispatch({ type: 'deleteTodo', payload: { id: todo.id } });
   };
 
   return (
@@ -65,7 +66,7 @@ export const TodoInfo: React.FC<Props> = ({
           data-cy="TodoStatus"
           type="checkbox"
           className={classNames({ todo__status: !isEditing })}
-          checked={checked}
+          checked={todo.status}
           onChange={handleCheckBoxChange}
         />
       </label>
@@ -100,7 +101,7 @@ export const TodoInfo: React.FC<Props> = ({
           type="button"
           className="todo__remove"
           data-cy="TodoDelete"
-          onClick={() => onDeleteTodo(todoId)}
+          onClick={handleClick}
         >
           ×
         </button>

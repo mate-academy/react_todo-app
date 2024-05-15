@@ -6,7 +6,12 @@ import './styles/todo.scss';
 import './styles/todoapp.scss';
 
 import { App } from './App';
+import { GlobalStateProvider } from './Components/TodoContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <GlobalStateProvider>
+    <App />
+  </GlobalStateProvider>,
+);

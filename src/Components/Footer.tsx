@@ -1,21 +1,28 @@
-import { useState } from 'react';
+import React, { useContext } from 'react';
 import { Todo } from '../Types/Todo';
 import { SortingTodos } from '../enums/Sortings';
 import classNames from 'classnames';
+import { DispatchContext, TodoContext } from './TodoContext';
 
 type Props = {
   todos: Todo[];
-  setActiveTab: (todo: SortingTodos) => void;
-  onClearAllTodos?: () => void;
 };
 
-export const Footer: React.FC<Props> = ({
-  todos,
-  setActiveTab,
-  onClearAllTodos,
-}) => {
+export const Footer: React.FC<Props> = ({ todos }) => {
   const todosNotCompleted = todos.filter(todo => todo.status !== true);
-  const [tab, setTab] = useState(SortingTodos.all);
+  const dispatch = useContext(DispatchContext);
+  const { tab } = useContext(TodoContext);
+
+  const handleClearTodos = () => {
+    dispatch({ type: 'clearCompleted' });
+  };
+
+  const handleActiveTab = (activeTab: SortingTodos) => {
+    dispatch({
+      type: 'activeTab',
+      payload: { tab: activeTab },
+    });
+  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -32,8 +39,7 @@ export const Footer: React.FC<Props> = ({
           })}
           data-cy="FilterLinkAll"
           onClick={() => {
-            setActiveTab(SortingTodos.all);
-            setTab(SortingTodos.all);
+            handleActiveTab(SortingTodos.all);
           }}
         >
           All
@@ -46,8 +52,7 @@ export const Footer: React.FC<Props> = ({
           })}
           data-cy="FilterLinkActive"
           onClick={() => {
-            setActiveTab(SortingTodos.active);
-            setTab(SortingTodos.active);
+            handleActiveTab(SortingTodos.active);
           }}
         >
           Active
@@ -60,8 +65,7 @@ export const Footer: React.FC<Props> = ({
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => {
-            setActiveTab(SortingTodos.completed);
-            setTab(SortingTodos.completed);
+            handleActiveTab(SortingTodos.completed);
           }}
         >
           Completed
@@ -73,7 +77,7 @@ export const Footer: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={onClearAllTodos}
+        onClick={handleClearTodos}
       >
         Clear completed
       </button>
