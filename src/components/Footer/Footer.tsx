@@ -8,7 +8,6 @@ export const Footer = () => {
     useContext(TodosContext);
 
   const activeTodos = todos.filter(todo => !todo.completed);
-  const completedTodosLenght = todos.filter(todo => todo.completed);
   const lengthOfActiveTodos = `${activeTodos.length} items left`;
 
   const handleClearButton = () => {
@@ -62,10 +61,8 @@ export const Footer = () => {
 
           <button
             type="button"
-            className={classNames('todoapp__clear-completed', {
-              'todoapp__clear-completed--hidden':
-                completedTodosLenght.length === 0,
-            })}
+            className="todoapp__clear-completed"
+            disabled={todos.every(todo => !todo.completed)}
             data-cy="ClearCompletedButton"
             onClick={handleClearButton}
           >

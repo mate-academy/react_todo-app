@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { TodosContext } from '../../context/TodosContext';
 import { FilterParams } from '../../types/FilterParams';
 import classNames from 'classnames';
@@ -88,6 +88,14 @@ export const TodoItem = () => {
     }
   }, [todos, filterButton]);
 
+  const editField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editField.current) {
+      editField.current.focus();
+    }
+  }, [editedTodoTitle, editField]);
+
   return (
     <>
       {filterTodos.map(todo => (
@@ -113,6 +121,7 @@ export const TodoItem = () => {
               className="todo__title-field"
               placeholder="Empty todo will be deleted"
               value={editedTodoTitle}
+              ref={editField}
               onChange={event => setEditedTodoTitle(event.target.value)}
               onBlur={() => saveEditedTitle(todo.id)}
               onKeyUp={event => handleKeyPress(event, todo.id)}

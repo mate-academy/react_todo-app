@@ -27,7 +27,9 @@ type Props = {
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(
+    JSON.parse(localStorage.getItem('todos') || '[]'),
+  );
   const [title, setTitle] = useState<string>('');
   const [filterButton, setFilterButton] = useState<FilterParams>(
     FilterParams.ALL,
@@ -35,20 +37,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
-  useEffect(() => {
-    const storedItems = localStorage.getItem('todos');
-
-    if (storedItems) {
-      setTodos(JSON.parse(storedItems));
-    }
-  }, []);
-
-  useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem('todos') as string);
-
-    localStorage.setItem('todos', JSON.stringify(storedTodos));
   }, [todos]);
 
   const value = useMemo(

@@ -41,7 +41,7 @@ export const Header = () => {
     if (titleRef.current) {
       titleRef.current.focus();
     }
-  }, []);
+  }, [todos]);
 
   return (
     <header className="todoapp__header">
