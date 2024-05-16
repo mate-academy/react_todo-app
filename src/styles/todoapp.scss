@@ -130,5 +130,9 @@
     &:active {
       text-decoration: none;
     }
+
+    &--hidden {
+      visibility: hidden;
+    }
   }
 }
