@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from 'react'; // Import useCallback
 import cn from 'classnames';
 import { TodoMethod } from '../../context/ToDosContext';
 import { TodoType } from '../../types/types';
@@ -14,7 +20,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
 
   const fieldRef = useRef<HTMLInputElement>(null);
 
-  const saveChange = () => {
+  const saveChange = useCallback(() => {
     const trimmed = title.trim();
 
     if (trimmed) {
@@ -24,7 +30,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
     }
 
     setChanger(false);
-  };
+  }, [title, todo.id, methods]);
 
   useEffect(() => {
     if (changer) {
@@ -33,10 +39,13 @@ export const Todo: React.FC<Props> = ({ todo }) => {
     }
   }, [changer, todo.title]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    saveChange();
-  };
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      saveChange();
+    },
+    [saveChange],
+  );
 
   return (
     <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>

@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { TodoMethod, TodosContext } from '../../context/ToDosContext';
 import cn from 'classnames';
 
@@ -11,17 +17,20 @@ export const Header: React.FC = () => {
   const field = useRef<HTMLInputElement>(null);
   const activeTodos = todos.filter(todo => !todo.completed);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    const trimmedTitle = title.trim();
+      const trimmedTitle = title.trim();
 
-    if (trimmedTitle) {
-      methods.addTodo(trimmedTitle);
-      setTitle('');
-      field.current?.focus();
-    }
-  };
+      if (trimmedTitle) {
+        methods.addTodo(trimmedTitle);
+        setTitle('');
+        field.current?.focus();
+      }
+    },
+    [methods, title],
+  );
 
   useEffect(() => {
     field.current?.focus();

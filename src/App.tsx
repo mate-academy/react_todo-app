@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { TodosContext } from './context/ToDosContext';
 import { SortType } from './types/types';
 import { Footer } from './components/Footer/Footer';
@@ -8,7 +8,7 @@ import { Header } from './components/Header/Header';
 export const App: React.FC = () => {
   const { todos, sorted } = useContext(TodosContext);
 
-  const visibleTodos = (() => {
+  const visibleTodos = useMemo(() => {
     switch (sorted) {
       case SortType.Active:
         return todos.filter(todo => !todo.completed);
@@ -17,7 +17,7 @@ export const App: React.FC = () => {
       default:
         return todos;
     }
-  })();
+  }, [todos, sorted]);
 
   return (
     <div className="todoapp">

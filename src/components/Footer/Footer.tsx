@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import cn from 'classnames';
 import { TodoMethod, TodosContext } from '../../context/ToDosContext';
 import { SortType } from '../../types/types';
@@ -7,7 +7,10 @@ export const Footer: React.FC = () => {
   const methods = useContext(TodoMethod);
   const { todos, sorted, setSorted } = useContext(TodosContext);
 
-  const activeTodos = todos.filter(todo => !todo.completed);
+  const activeTodos = useMemo(
+    () => todos.filter(todo => !todo.completed),
+    [todos],
+  );
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
