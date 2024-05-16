@@ -53,7 +53,7 @@ const deleteTodoItem = (state: State, id: number): State => ({
   todos: state.todos.filter(todo => todo.id !== id),
 });
 
-const ClearCompleted = (state: State) => ({
+const clearCompleted = (state: State) => ({
   ...state,
   todos: state.todos.filter(todo => !todo.completed),
 });
@@ -93,7 +93,7 @@ function reducer(state: State, action: Action) {
     case 'deleteTodo':
       return deleteTodoItem(state, action.payload.id);
     case 'clearCompleted':
-      return ClearCompleted(state);
+      return clearCompleted(state);
     case 'activeTab':
       return activeTab(state, action.payload.tab);
 
