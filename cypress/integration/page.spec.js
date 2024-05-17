@@ -643,7 +643,8 @@ describe('', () => {
       });
 
       it('should make all todos active on click', () => {
-        page.toggleAllButton().click();
+        page.toggleAllButton().click().click();
+
 
         todos.assertNotCompleted(0);
         todos.assertNotCompleted(1);
@@ -653,7 +654,7 @@ describe('', () => {
       });
 
       it('should save changes to localStorage', () => {
-        page.toggleAllButton().click();
+        page.toggleAllButton().click().click();
 
         page.data().then((todos) => {
           expect(todos).to.have.length(5);
@@ -666,7 +667,7 @@ describe('', () => {
       });
 
       it('should become not active on click', () => {
-        page.toggleAllButton().click();
+        page.toggleAllButton().click().click();
 
         page.toggleAllButton().should('not.have.class', 'active');
       });
