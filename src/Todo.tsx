@@ -9,13 +9,13 @@ import {
 } from 'react';
 import { useTodos } from './hooks/useTodos';
 import { useInput } from './hooks/useInput';
-import { Todo } from './types/Todo';
+import { Todo as Task } from './types/Todo';
 
 interface TodoProps {
-  todo: Todo;
+  todo: Task;
 }
 
-export const Task: React.FC<TodoProps> = memo(({ todo }) => {
+export const Todo: React.FC<TodoProps> = memo(({ todo }) => {
   const { changeTodoStatus, deleteTodo, updateTodoTitle } = useTodos();
   const { value, handleChange, reset } = useInput(todo.title);
 
@@ -116,4 +116,4 @@ export const Task: React.FC<TodoProps> = memo(({ todo }) => {
   );
 });
 
-Task.displayName = 'Task';
+Todo.displayName = 'Todo';

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Task } from './Todo';
+import { Todo } from './Todo';
 import { useTodos } from './hooks/useTodos';
 
 export const TodosMain: React.FC = memo(() => {
@@ -8,7 +8,7 @@ export const TodosMain: React.FC = memo(() => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => (
-        <Task todo={todo} key={todo.id} />
+        <Todo todo={todo} key={todo.id} />
       ))}
     </section>
   );
