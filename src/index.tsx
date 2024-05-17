@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
 
-import './styles/index.css';
-import './styles/todo-list.css';
-import './styles/filters.css';
+// import './styles/filter.scss';
+// import './styles/todoapp.scss';
+// import './styles/todo.scss';
+import './styles/index.scss';
 
 import { App } from './App';
 
