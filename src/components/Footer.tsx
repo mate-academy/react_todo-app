@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
   const counter = todos.filter(todo => !todo.completed).length;
 
   return (
-    todos.length > 0 && (
+    !!todos.length && (
       <footer className="todoapp__footer" data-cy="Footer">
         <span className="todo-count" data-cy="TodosCounter">
           {counter} items left

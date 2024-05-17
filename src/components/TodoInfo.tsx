@@ -14,6 +14,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const { deleteTodo, toggleTodo, changeTodo, editRef } =
     useContext(TodoContext);
 
+  const { completed } = todo;
+
   useEffect(() => {
     if (editRef?.current) {
       editRef.current.focus();
@@ -59,7 +61,9 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames(`todo ${todo.completed ? 'completed' : ''}`)}
+      className={classNames('todo', {
+        completed: todo.completed,
+      })}
       key={todo.id}
     >
       <label className="todo__status-label">
@@ -68,7 +72,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           ref={editRef}
-          checked={todo.completed}
+          checked={completed}
           onClick={() => toggleTodo(todo.id)}
         />
       </label>
