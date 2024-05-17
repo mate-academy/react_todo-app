@@ -1,39 +1,56 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 interface HeaderProps {
   addTodo: (text: string) => void;
+  todos: Todo[];
+  inputRef: React.RefObject<HTMLInputElement>;
+  setTodos: (todos: Todo[]) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ addTodo }) => {
+export const Header: React.FC<HeaderProps> = ({
+  addTodo,
+  todos,
+  inputRef,
+  setTodos,
+}) => {
   const [title, setTitle] = useState('');
-  const titleField = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (titleField.current) {
-      titleField.current.focus();
-    }
-  }, []);
+  const allCompleted = todos.every(todo => todo.completed);
 
   const handleAddTodo = (event: React.FormEvent) => {
     event.preventDefault();
-    if (title.trim()) {
-      addTodo(title);
+    if (title) {
+      addTodo(title.trim());
       setTitle('');
     }
 
-    if (titleField.current) {
-      titleField.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
+  };
+
+  const handleToggleAll = () => {
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !allCompleted,
+    }));
+
+    setTodos(updatedTodos);
   };
 
   return (
     <header className="todoapp__header">
+      {todos.length && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', { active: allCompleted })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggleAll}
+        />
+      )}
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleAddTodo}>
@@ -44,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({ addTodo }) => {
           placeholder="What needs to be done?"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          ref={titleField}
+          ref={inputRef}
         />
       </form>
     </header>

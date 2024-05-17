@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface TodoItemProps {
@@ -16,12 +16,18 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
+  const editFieldRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
-    updateTodo({
-      ...todo,
-      title: newTitle,
-    });
+    if (newTitle.trim() === '') {
+      deleteTodo(todo.id);
+    } else {
+      updateTodo({
+        ...todo,
+        title: newTitle.trim(),
+      });
+    }
+
     setIsEditing(false);
   };
 
@@ -34,6 +40,12 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       setIsEditing(false);
     }
   };
+
+  useEffect(() => {
+    if (isEditing && editFieldRef.current) {
+      editFieldRef.current.focus();
+    }
+  }, [isEditing]);
 
   return (
     <div
@@ -60,6 +72,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             onChange={e => setNewTitle(e.target.value)}
             onBlur={handleSave}
             onKeyDown={handlePressedKey}
+            ref={editFieldRef}
           />
         </form>
       ) : (
