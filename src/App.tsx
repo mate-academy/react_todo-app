@@ -14,7 +14,7 @@ export const App: React.FC = () => {
 
   const addTodo = (title: string) => {
     const newTodo = {
-      id: +Date.now(),
+      id: Date.now(),
       title,
       completed: false,
     };
