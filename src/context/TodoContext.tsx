@@ -84,7 +84,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const addTodo = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!title) {
+    if (title.trim() === '') {
       return;
     }
 
