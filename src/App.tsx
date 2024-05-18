@@ -73,7 +73,7 @@ export const App: React.FC = () => {
     const index = tasks.findIndex(x => x.id === id);
     const task = tasks.filter(x => x.id === id)[0];
 
-    if (editedText?.editText === '') {
+    if (editedText?.editText.trim() === '') {
       removeItem(id);
 
       return;
