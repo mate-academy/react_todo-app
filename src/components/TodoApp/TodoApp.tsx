@@ -4,36 +4,44 @@ import classNames from 'classnames';
 import './TodoApp.scss';
 import { Filter } from '../Filter';
 import { TodoList } from '../TodoList';
-import { useTodos } from '../../providers/TodosProvider/hooks/useTodos';
+import { useTodos } from '../../TodosProvider/hooks/useTodos';
 import { FilterType } from '../../types/FilterType';
 import { ActionType } from '../../types/ActionType';
 import { filterTodos } from './services/filterTodos';
 import { createTodo } from './services/createTodo';
-import { useTodoForm } from './useTodoForm';
 
 export const TodoApp: React.FC = () => {
   const { todos, setTodos } = useTodos();
-  const { title, setTitle, handleSubmit } = useTodoForm(normalizedTitle =>
-    setTodos({
-      type: ActionType.AddTodo,
-      payload: createTodo(normalizedTitle),
-    }),
-  );
   const [filter, setFilter] = useState(FilterType.All);
+  const [title, setTitle] = useState('');
 
-  let focusedEl: React.RefObject<HTMLInputElement> | null =
-    useRef<HTMLInputElement>(null);
+  let focusedEl: React.RefObject<HTMLInputElement> | null = useRef(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => focusedEl?.current?.focus(), [todos]);
 
   const areAllCompleted = todos.every(({ completed }) => completed);
   const uncompletedTodos = todos.filter(({ completed }) => !completed);
-
   const filteredTodos = useMemo(
     () => filterTodos(todos, filter),
     [todos, filter],
   );
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const normalizedTitle = title.trim();
+
+    if (!normalizedTitle) {
+      return;
+    }
+
+    setTodos({
+      type: ActionType.AddTodo,
+      payload: createTodo(normalizedTitle),
+    });
+    setTitle('');
+  };
 
   return (
     <div className="todoapp">

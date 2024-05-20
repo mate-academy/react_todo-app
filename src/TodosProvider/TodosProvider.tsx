@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Props } from '../Props';
+import { Props } from './types/Props';
 import { TodosContext } from './TodosContext';
 import { useTodosReducer } from './hooks/useTodoReducer';
 

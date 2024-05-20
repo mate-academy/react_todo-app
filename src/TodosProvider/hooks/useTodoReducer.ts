@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from 'react';
 
 import { reducer } from '../todosReducer';
-import { Todo } from '../../../types/Todo';
+import { Todo } from '../../types/Todo';
 import { TodosContextType } from '../types/TodosContextType';
 
 export const useTodosReducer = (): TodosContextType => {

@@ -1,5 +1,5 @@
-import { ActionType } from '../../types/ActionType';
-import { Todo } from '../../types/Todo';
+import { ActionType } from '../types/ActionType';
+import { Todo } from '../types/Todo';
 import { Action } from './types/Action';
 
 export const reducer = (todos: Todo[], action: Action): Todo[] => {

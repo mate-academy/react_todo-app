@@ -1,5 +1,5 @@
-import { Todo } from '../../../types/Todo';
-import { ActionType } from '../../../types/ActionType';
+import { Todo } from '../../types/Todo';
+import { ActionType } from '../../types/ActionType';
 
 export type Action =
   | { type: ActionType.AddTodo; payload: Todo }

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { FilterType } from '../../types/FilterType';
 
 export interface Props {
