@@ -6,7 +6,7 @@ import { Status } from '../../types/Status';
 
 interface TodoListProps {
   todos: Todo[];
-  filterTodo: Status;
+  todoFilter: Status;
   toggleTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
   updateTodo: (todo: Todo) => void;
@@ -14,12 +14,12 @@ interface TodoListProps {
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
-  filterTodo,
+  todoFilter,
   toggleTodo,
   deleteTodo,
   updateTodo,
 }) => {
-  const filteredTodos = FilteredTodos(todos, filterTodo);
+  const filteredTodos = FilteredTodos(todos, todoFilter);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

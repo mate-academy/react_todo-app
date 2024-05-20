@@ -1,28 +1,20 @@
-import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 
 interface FooterProps {
-  todos: Todo[];
-  filterTodo: Status;
-  setFilter: (todos: Status) => void;
-  setTodos: (todos: Todo[]) => void;
+  todoFilter: Status;
+  setTodoFilter: (todos: Status) => void;
+  activeTodosCount: number;
+  hasCompletedTodos: boolean;
+  clearCompleted: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
-  todos,
-  filterTodo,
-  setFilter,
-  setTodos,
+  todoFilter,
+  setTodoFilter,
+  activeTodosCount,
+  hasCompletedTodos,
+  clearCompleted,
 }) => {
-  const activeTodosCount = todos.filter(todo => !todo.completed).length;
-  const hasCompletedTodos = todos.some(todo => todo.completed);
-
-  const clearCompleted = () => {
-    const activeTodos = todos.filter(todo => !todo.completed);
-
-    setTodos(activeTodos);
-  };
-
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -32,27 +24,27 @@ export const Footer: React.FC<FooterProps> = ({
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${filterTodo === Status.All ? 'selected' : ''}`}
+          className={`filter__link ${todoFilter === Status.All ? 'selected' : ''}`}
           data-cy="FilterLinkAll"
-          onClick={() => setFilter(Status.All)}
+          onClick={() => setTodoFilter(Status.All)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={`filter__link ${filterTodo === Status.Active ? 'selected' : ''}`}
+          className={`filter__link ${todoFilter === Status.Active ? 'selected' : ''}`}
           data-cy="FilterLinkActive"
-          onClick={() => setFilter(Status.Active)}
+          onClick={() => setTodoFilter(Status.Active)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={`filter__link ${filterTodo === Status.Completed ? 'selected' : ''}`}
+          className={`filter__link ${todoFilter === Status.Completed ? 'selected' : ''}`}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilter(Status.Completed)}
+          onClick={() => setTodoFilter(Status.Completed)}
         >
           Completed
         </a>

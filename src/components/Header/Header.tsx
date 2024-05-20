@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 interface HeaderProps {
   addTodo: (text: string) => void;
   todos: Todo[];
-  inputRef: React.RefObject<HTMLInputElement>;
   setTodos: (todos: Todo[]) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  addTodo,
-  todos,
-  inputRef,
-  setTodos,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ addTodo, todos, setTodos }) => {
+  const titleFieldRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (titleFieldRef.current) {
+      titleFieldRef.current.focus();
+    }
+  }, [todos]);
   const [title, setTitle] = useState('');
 
   const allCompleted = todos.every(todo => todo.completed);
@@ -26,8 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
       setTitle('');
     }
 
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if (titleFieldRef.current) {
+      titleFieldRef.current.focus();
     }
   };
 
@@ -59,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
           placeholder="What needs to be done?"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          ref={inputRef}
+          ref={titleFieldRef}
         />
       </form>
     </header>
