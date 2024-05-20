@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import './Filter.scss';
 import { FilterType } from '../../types/FilterType';
-import { Props } from './types/Props';
+import { Props } from './Props';
 
 export const Filter: React.FC<Props> = ({ filter, onChange }) => (
   <nav className="filter" data-cy="Filter">

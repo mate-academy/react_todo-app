@@ -1,6 +1,6 @@
-import { ActionType } from '../../../types/ActionType';
-import { Todo } from '../../../types/Todo';
-import { Action } from '../types/Action';
+import { ActionType } from '../../types/ActionType';
+import { Todo } from '../../types/Todo';
+import { Action } from './types/Action';
 
 export const reducer = (todos: Todo[], action: Action): Todo[] => {
   switch (action.type) {
@@ -16,13 +16,14 @@ export const reducer = (todos: Todo[], action: Action): Todo[] => {
       );
     case ActionType.ChangeName:
       const { id, title } = action.payload;
+      const normalizedTitle = title.trim();
 
-      if (title.trim() === '') {
+      if (normalizedTitle === '') {
         return todos.filter(todo => todo.id !== id);
       }
 
       return todos.map(todo =>
-        todo.id === id ? { ...todo, title: title.trim() } : todo,
+        todo.id === id ? { ...todo, title: normalizedTitle } : todo,
       );
     case ActionType.LeadToOneStatus:
       return todos.map(todo => ({ ...todo, completed: action.payload }));

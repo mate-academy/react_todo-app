@@ -1,35 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 import './TodoItem.scss';
-import { Todo } from '../../types/Todo';
 import { ActionType } from '../../types/ActionType';
-import { useTodos } from '../../providers/TodosProvider/hooks/useTodos';
-import { Props } from './types/Props';
+import { Props } from './Props';
+import { useEditTodo } from './useEditTodo';
 
-export const TodoItem: React.FC<Props> = ({ todo, active }) => {
-  const { setTodos } = useTodos();
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(todo.title);
-
-  const handleSubmit = (editableTodo: Todo) => {
-    setNewTitle(newTitle.trim());
-    setIsEditing(false);
-    setTodos({
-      type: ActionType.ChangeName,
-      payload: { id: editableTodo.id, title: newTitle },
-    });
-  };
-
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape') {
-      setIsEditing(false);
-    }
-  };
-
-  useEffect(() => {
-    active.current?.focus();
-  });
+// eslint-disable-next-line react/display-name
+export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
+  const {
+    isEditing,
+    setIsEditing,
+    newTitle,
+    setNewTitle,
+    handleSubmit,
+    setTodos,
+  } = useEditTodo(todo);
 
   return (
     <div
@@ -83,11 +69,16 @@ export const TodoItem: React.FC<Props> = ({ todo, active }) => {
             placeholder="Empty todo will be deleted"
             value={newTitle}
             onChange={event => setNewTitle(event.target.value)}
-            onKeyUp={handleKeyUp}
-            ref={active}
+            onKeyUp={event => {
+              if (event.key === 'Escape') {
+                setIsEditing(false);
+                setNewTitle(todo.title);
+              }
+            }}
+            autoFocus
           />
         </form>
       )}
     </div>
   );
-};
+});

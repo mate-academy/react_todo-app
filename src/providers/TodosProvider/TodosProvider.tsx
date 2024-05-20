@@ -1,24 +1,13 @@
-import React, { useEffect, useReducer } from 'react';
+import React from 'react';
 
-import { Props } from './types/Props';
-import { reducer } from './services/todosReducer';
-import { TodosContext } from './contexts/TodosContext';
-import { Todo } from '../../types/Todo';
+import { Props } from '../Props';
+import { TodosContext } from './TodosContext';
+import { useTodosReducer } from './hooks/useTodoReducer';
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useReducer(reducer, [], (initialState: Todo[]) => {
-    const savedTodos = localStorage.getItem('todos');
-
-    return savedTodos ? JSON.parse(savedTodos) : initialState;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  const todos = useTodosReducer();
 
   return (
-    <TodosContext.Provider value={{ todos, setTodos }}>
-      {children}
-    </TodosContext.Provider>
+    <TodosContext.Provider value={todos}>{children}</TodosContext.Provider>
   );
 };
