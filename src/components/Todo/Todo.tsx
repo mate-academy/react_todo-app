@@ -1,10 +1,4 @@
-import React, {
-  RefObject,
-  useCallback,
-  useEffect,
-  useState,
-  useMemo,
-} from 'react';
+import React, { RefObject, useState } from 'react';
 import './Todo.scss';
 import { ActionInTodoContextReducer, TodoInterface } from '../../utils';
 
@@ -15,80 +9,65 @@ interface Props {
 }
 
 export const Todo = React.memo<Props>(({ todos, updateTodo, mainInput }) => {
-  const allData = useMemo(
-    () =>
-      todos.map(e => {
-        return { ...e };
-      }),
-    [todos],
-  );
-  const [listClickedsOrNot, setListClickedsOrNot] = useState(
-    allData.map(() => false),
-  );
-  const [, forceRender] = useState({});
+  const [todoClickToEdit, setTodoClickToEdit] = useState(0);
+  const [valueInInputForEditTodo, setValueInInputForEditTodo] = useState('');
 
-  useEffect(() => {
-    setListClickedsOrNot(allData.map(() => false));
-  }, [allData]);
-
-  const handleClickedOrNot = (idx: number) => {
+  const saveData = (idx: number) => {
     return () => {
-      const newList = [...listClickedsOrNot];
-
-      mainInput.current!.focus();
-      newList[idx] = !newList[idx];
-      setListClickedsOrNot(newList);
-    };
-  };
-
-  const handleOnSubmitEditFormTodo = (idx: number) => {
-    handleClickedOrNot(idx);
-
-    return (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      mainInput.current!.focus();
-    };
-  };
-
-  const handleClickCompletedTodo = useCallback((idx: number) => {
-    return () => updateTodo({ type: 'UPDATESTATUS', payload: { idx: idx } });
-  }, []);
-
-  const handleOnDeleteButton = useCallback((idx: number) => {
-    return () => updateTodo({ type: 'DELETE', payload: { idx: idx } });
-  }, []);
-
-  const handleOnBlurFormEditTodo = (idx: number) => {
-    return () => {
-      if (allData[idx].title === '') {
+      setTodoClickToEdit(0);
+      if (valueInInputForEditTodo === '') {
         updateTodo({ type: 'DELETE', payload: { idx: idx } });
       } else {
         updateTodo({
           type: 'UPDATETITLE',
-          payload: { idx: idx, content: allData[idx].title },
+          payload: { idx: idx, content: valueInInputForEditTodo },
         });
       }
     };
   };
 
-  const handleEscapeKeyInFormEditTodo = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    if (event.key === 'Escape') {
-      updateTodo({ type: 'DEFAULT' });
-    }
+  const handleClickToEdit = (idx: number) => {
+    return () => {
+      setTodoClickToEdit(todos[idx].id);
+      setValueInInputForEditTodo(todos[idx].title);
+    };
   };
 
-  const handleOnChangeFormTodo = (idx: number) => {
+  const handleOnSubmitEditFormTodo = (idx: number) => {
+    return (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      mainInput.current!.focus();
+      setValueInInputForEditTodo('');
+      saveData(idx);
+    };
+  };
+
+  const handleClickCompletedTodo = (idx: number) => {
+    return () => updateTodo({ type: 'UPDATESTATUS', payload: { idx: idx } });
+  };
+
+  const handleOnDeleteButton = (idx: number) => {
+    return () => updateTodo({ type: 'DELETE', payload: { idx: idx } });
+  };
+
+  const handleEscapeKeyInFormEditTodo = (idx: number) => {
+    return (event: React.KeyboardEvent<HTMLInputElement>) => {
+      setValueInInputForEditTodo(todos[idx].title);
+      if (event.key === 'Escape') {
+        updateTodo({ type: 'DEFAULT' });
+      }
+    };
+  };
+
+  const handleOnChangeFormTodo = () => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
-      allData[idx].title = event?.currentTarget.value;
-      forceRender({}); // Evita colocar
+      setValueInInputForEditTodo(event.target.value);
     };
   };
 
   return (
     <>
-      {allData.map(({ id, title, completed }, idx) => {
+      {todos.map(({ id, title, completed }, idx) => {
         return (
           <div
             data-cy="Todo"
@@ -105,7 +84,7 @@ export const Todo = React.memo<Props>(({ todos, updateTodo, mainInput }) => {
               />
             </label>
 
-            {listClickedsOrNot[idx] ? (
+            {todoClickToEdit === id ? (
               <form onSubmit={handleOnSubmitEditFormTodo(idx)}>
                 <input
                   data-cy="TodoTitleField"
@@ -113,10 +92,10 @@ export const Todo = React.memo<Props>(({ todos, updateTodo, mainInput }) => {
                   className="todo__title-field"
                   placeholder="Empty todo will be deleted"
                   autoFocus={true}
-                  onChange={handleOnChangeFormTodo(idx)}
-                  onBlur={handleOnBlurFormEditTodo(idx)}
-                  onKeyDown={handleEscapeKeyInFormEditTodo}
-                  value={allData[idx].title}
+                  onChange={handleOnChangeFormTodo()}
+                  onBlur={saveData(idx)}
+                  onKeyDown={handleEscapeKeyInFormEditTodo(idx)}
+                  value={valueInInputForEditTodo}
                 />
               </form>
             ) : (
@@ -124,7 +103,7 @@ export const Todo = React.memo<Props>(({ todos, updateTodo, mainInput }) => {
                 <span
                   data-cy="TodoTitle"
                   className="todo__title"
-                  onDoubleClick={handleClickedOrNot(idx)}
+                  onDoubleClick={handleClickToEdit(idx)}
                 >
                   {title}
                 </span>
