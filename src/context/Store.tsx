@@ -7,6 +7,7 @@ type Action =
   | { type: 'setFilter'; payload: 'all' | 'active' | 'completed' }
   | { type: 'clearCompleted' }
   | { type: 'restoreTodo'; payload: Todo[] }
+  | { type: 'editTodo'; payload: { id: number; title: string } }
   | { type: 'toggleAll' };
 
 interface Todo {
@@ -76,6 +77,16 @@ function reducer(state: State, action: Action): State {
         ...state,
         todos: todosUpdStatus,
       };
+
+    case 'editTodo':
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id
+            ? { ...todo, title: action.payload.title }
+            : todo,
+        ),
+      };
     default:
       return state;
   }
@@ -86,7 +97,7 @@ const initialState: State = { todos: [], filter: 'all' };
 export const StateContext = createContext<State>(initialState);
 export const DispatchContext = createContext<React.Dispatch<Action>>(
   // eslint-disable-next-line prettier/prettier
-  () => { },
+  () => {},
 );
 
 type Props = {
