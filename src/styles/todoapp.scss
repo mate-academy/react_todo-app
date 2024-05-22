@@ -1,5 +1,9 @@
+* {
+  box-sizing: border-box;
+}
+
 .todoapp {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 24px;
   font-weight: 300;
   color: #4d4d4d;
@@ -49,7 +53,7 @@
     }
 
     &::before {
-      content: '❯';
+      content: "❯";
       transform: translateY(2px) rotate(90deg);
       line-height: 0;
     }
