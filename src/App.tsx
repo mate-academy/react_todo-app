@@ -1,7 +1,7 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { ToDoProvider } from './store/AppContext';
 import { ToDoAppContent } from './components/ToDoAppContent';
+import './styles/todo.scss';
 
 export const App: React.FC = () => {
   return (

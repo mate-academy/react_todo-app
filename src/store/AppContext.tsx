@@ -95,7 +95,7 @@ export const ToDoContext = createContext({} as ContextProps);
 export const ToDoProvider: React.FC<ToDoContextProps> = ({ children }) => {
   const [localStorageState, setLocalStorageState] = useLocalStorage(
     'todos',
-    initialState,
+    initialState.todoList,
   );
   const [storedState, dispatch] = useReducer(toDoReducer, localStorageState);
 

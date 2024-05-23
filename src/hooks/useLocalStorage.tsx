@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { useState } from 'react';
-import { State } from '../types/types';
+import { ToDo } from '../types/types';
 
 export const useLocalStorage = (key: string, initialValue: unknown) => {
-  const [storedValue, setStoredValue] = useState(() => {
+  const [storedToDos, setstoredToDos] = useState(() => {
     try {
       const item = window.localStorage.getItem(key);
 
@@ -15,14 +15,14 @@ export const useLocalStorage = (key: string, initialValue: unknown) => {
     }
   });
 
-  const setValue = (value: State) => {
+  const setValue = (value: ToDo[]) => {
     try {
-      setStoredValue(value);
+      setstoredToDos(value);
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       console.error(error);
     }
   };
 
-  return [storedValue, setValue];
+  return [storedToDos, setValue];
 };

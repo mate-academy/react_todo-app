@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { ToDoContext } from '../store/AppContext';
+import cn from 'classnames';
 
 export const Navigation: React.FC = () => {
   const { dispatch, state } = useContext(ToDoContext);
@@ -27,12 +28,10 @@ export const Navigation: React.FC = () => {
       <span className="todo-count" data-cy="TodosCounter">
         {`${toDosLeft.length} items left`}
       </span>
-
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${state.filter === 'All' ? 'selected' : ''}`}
+          className={cn('filter__link', { selected: state.filter === 'All' })}
           data-cy="FilterLinkAll"
           onClick={handleFilterAll}
         >
@@ -41,7 +40,9 @@ export const Navigation: React.FC = () => {
 
         <a
           href="#/active"
-          className={`filter__link ${state.filter === 'Active' ? 'selected' : ''}`}
+          className={cn('filter__link', {
+            selected: state.filter === 'Active',
+          })}
           data-cy="FilterLinkActive"
           onClick={handleFilterActive}
         >
@@ -50,7 +51,9 @@ export const Navigation: React.FC = () => {
 
         <a
           href="#/completed"
-          className={`filter__link ${state.filter === 'Completed' ? 'selected' : ''}`}
+          className={cn('filter__link', {
+            selected: state.filter === 'Completed',
+          })}
           data-cy="FilterLinkCompleted"
           onClick={handleFilterCompleted}
         >

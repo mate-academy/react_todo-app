@@ -1,4 +1,4 @@
-import { useContext, useMemo, useRef } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { ToDo } from '../types/types';
 import { ToDoContext } from '../store/AppContext';
 import cn from 'classnames';
@@ -6,33 +6,35 @@ import { createUniqueId } from '../helpers/createUniqueId';
 
 export const Header: React.FC = () => {
   const dispatch = useContext(ToDoContext).dispatch;
-  const state = useContext(ToDoContext).state;
+  const { todoList } = useContext(ToDoContext).state;
+  const initialTodo = {
+    id: createUniqueId(),
+    title: '',
+    completed: false,
+    isEditing: false,
+  };
+  const [newTodo, setNewTodo] = useState(initialTodo);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodo({
+      ...newTodo,
+      title: e.target.value,
+    });
+  };
 
   const handleNewTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const newTodoField = inputRef.current;
-
-    if (!newTodoField || !newTodoField.value.trim()) {
+    if (!newTodo.title.trim()) {
       return;
+    } else {
+      dispatch({ type: 'ADD_TODO', payload: newTodo });
+      setNewTodo(initialTodo);
     }
-
-    const newTodo: ToDo = {
-      id: createUniqueId(),
-      title: newTodoField.value,
-      completed: false,
-      isEditing: false,
-    };
-
-    dispatch({ type: 'ADD_TODO', payload: newTodo });
-    newTodoField.value = '';
   };
 
   const allToDosCompleted = useMemo(
-    () => state.todoList.every((todo: ToDo) => todo.completed),
-    [state.todoList],
+    () => todoList.every((todo: ToDo) => todo.completed),
+    [todoList],
   );
 
   return (
@@ -46,12 +48,12 @@ export const Header: React.FC = () => {
 
       <form onSubmit={handleNewTodo}>
         <input
-          ref={inputRef}
-          name="newTodoField"
+          autoFocus
+          onChange={handleInputChange}
           data-cy="NewTodoField"
+          defaultValue={newTodo.title}
           type="text"
           className="todoapp__new-todo"
-          autoFocus
           placeholder="What needs to be done?"
         />
       </form>

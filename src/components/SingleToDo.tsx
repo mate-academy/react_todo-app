@@ -74,8 +74,6 @@ export const SingleToDo: React.FC<TodoProps> = ({ todo }) => {
             />
           </form>
         )}
-
-        {/* Remove button appears only on hover */}
         <button
           type="button"
           className="todo__remove"
