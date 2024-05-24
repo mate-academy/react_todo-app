@@ -14,7 +14,7 @@ const initialState: State = {
   isToggled: false,
 };
 
-function reducer(state: State, action: Action) {
+function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'submit':
       return {
@@ -23,9 +23,9 @@ function reducer(state: State, action: Action) {
         allTodos: [
           ...state.allTodos,
           {
-            todoId: findMaxId(state.allTodos),
-            todoName: action.payload,
-            isCompleted: false,
+            id: findMaxId(state.allTodos),
+            title: action.payload,
+            completed: false,
           },
         ],
       };
@@ -40,8 +40,8 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         allTodos: state.allTodos.map(todo => {
-          if (todo.todoId === action.payload) {
-            return { ...todo, isCompleted: !todo.isCompleted };
+          if (todo.id === action.payload) {
+            return { ...todo, isCompleted: !todo.completed };
           }
 
           return todo;
@@ -52,7 +52,7 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         allTodos: state.allTodos.filter(todo => {
-          return todo.todoId !== action.payload;
+          return todo.id !== action.payload;
         }),
       };
 
@@ -72,7 +72,7 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         allTodos: state.allTodos.filter(todo => {
-          return !todo.isCompleted;
+          return !todo.completed;
         }),
       };
 
@@ -92,7 +92,7 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         allTodos: state.allTodos.map(todo =>
-          todo.todoId === action.payload.todoId
+          todo.id === action.payload.todoId
             ? { ...todo, todoName: action.payload.newTodoName }
             : todo,
         ),
@@ -103,7 +103,7 @@ function reducer(state: State, action: Action) {
   }
 }
 
-export const StateContext = React.createContext(initialState);
+export const StateContext = React.createContext<State>(initialState);
 export const DispatchContext = React.createContext<React.Dispatch<Action>>(
   () => {},
 );

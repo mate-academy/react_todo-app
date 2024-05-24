@@ -48,11 +48,11 @@ export const App: React.FC = () => {
   };
 
   const activeTodos = allTodos.filter(todo => {
-    return todo.isCompleted === false;
+    return todo.completed === false;
   });
 
   const completedTodos = allTodos.filter(todo => {
-    return todo.isCompleted === true;
+    return todo.completed === true;
   });
 
   let arrayToDisplay;
@@ -111,9 +111,9 @@ export const App: React.FC = () => {
               <div
                 data-cy="Todo"
                 className={cn('todo', {
-                  completed: todo.isCompleted === true,
+                  completed: todo.completed,
                 })}
-                key={todo.todoId}
+                key={todo.id}
               >
                 <label className="todo__status-label">
                   <input
@@ -123,17 +123,17 @@ export const App: React.FC = () => {
                     onChange={() => {
                       dispatch({
                         type: 'onCheckboxChange',
-                        payload: +`${todo.todoId}`,
+                        payload: +`${todo.id}`,
                       });
                     }}
-                    checked={todo.isCompleted}
+                    checked={todo.completed}
                   />
                 </label>
-                {editingTodoId === todo.todoId ? (
+                {editingTodoId === todo.id ? (
                   <form
                     onSubmit={event => {
                       event.preventDefault();
-                      handleEditSubmit(todo.todoId);
+                      handleEditSubmit(todo.id);
                     }}
                   >
                     <input
@@ -144,7 +144,7 @@ export const App: React.FC = () => {
                       placeholder="Empty todo will be deleted"
                       value={editValue}
                       onChange={e => setEditValue(e.target.value)}
-                      onBlur={() => handleEditSubmit(todo.todoId)}
+                      onBlur={() => handleEditSubmit(todo.id)}
                       onKeyUp={e => {
                         if (e.key === 'Escape') {
                           setEditingTodoId(null);
@@ -157,9 +157,9 @@ export const App: React.FC = () => {
                   <span
                     data-cy="TodoTitle"
                     className="todo__title"
-                    onDoubleClick={() => handleEdit(todo.todoId, todo.todoName)}
+                    onDoubleClick={() => handleEdit(todo.id, todo.title)}
                   >
-                    {todo.todoName}
+                    {todo.title}
                   </span>
                 )}
                 <button
@@ -169,7 +169,7 @@ export const App: React.FC = () => {
                   onClick={() => {
                     dispatch({
                       type: 'onTodoDelete',
-                      payload: todo.todoId,
+                      payload: todo.id,
                     });
                   }}
                 >
@@ -186,7 +186,6 @@ export const App: React.FC = () => {
               {`${activeTodos.length} items left`}
             </span>
 
-            {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"

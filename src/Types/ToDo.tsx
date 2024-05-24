@@ -1,5 +1,5 @@
 export type ToDo = {
-  todoId: number;
-  todoName: string;
-  isCompleted: boolean;
+  id: number;
+  title: string;
+  completed: boolean;
 };

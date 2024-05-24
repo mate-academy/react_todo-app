@@ -5,5 +5,5 @@ export function findMaxId(array: ToDo[] | []) {
     return 1;
   }
 
-  return Math.max(...array.map((todo: ToDo) => todo.todoId)) + 1;
+  return Math.max(...array.map((todo: ToDo) => todo.id)) + 1;
 }
