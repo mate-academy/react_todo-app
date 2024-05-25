@@ -1,4 +1,4 @@
-import React, { RefObject, useState } from 'react';
+import React, { RefObject, useCallback, useState } from 'react';
 import './Todo.scss';
 import { ActionInTodoContextReducer, TodoInterface } from '../../utils';
 
@@ -33,22 +33,22 @@ export const Todo = React.memo<Props>(({ todos, updateTodo, mainInput }) => {
     };
   };
 
-  const handleOnSubmitEditFormTodo = (idx: number) => {
+  const handleOnSubmitEditFormTodo = useCallback((idx: number) => {
     return (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       mainInput.current!.focus();
       setValueInInputForEditTodo('');
       saveData(idx);
     };
-  };
+  }, []);
 
-  const handleClickCompletedTodo = (idx: number) => {
+  const handleClickCompletedTodo = useCallback((idx: number) => {
     return () => updateTodo({ type: 'UPDATESTATUS', payload: { idx: idx } });
-  };
+  }, []);
 
-  const handleOnDeleteButton = (idx: number) => {
+  const handleOnDeleteButton = useCallback((idx: number) => {
     return () => updateTodo({ type: 'DELETE', payload: { idx: idx } });
-  };
+  }, []);
 
   const handleEscapeKeyInFormEditTodo = (idx: number) => {
     return (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -59,11 +59,11 @@ export const Todo = React.memo<Props>(({ todos, updateTodo, mainInput }) => {
     };
   };
 
-  const handleOnChangeFormTodo = () => {
+  const handleOnChangeFormTodo = useCallback(() => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       setValueInInputForEditTodo(event.target.value);
     };
-  };
+  }, []);
 
   return (
     <>

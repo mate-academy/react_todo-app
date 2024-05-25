@@ -1,7 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { Filter, FilterContext } from '../Filter/Filter';
 import { Todo } from '../Todo';
-import { ReactNode, useState, useContext, useRef, useEffect } from 'react';
+import {
+  ReactNode,
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+  useCallback,
+} from 'react';
 import './TodoApp.scss';
 import { TodoContext } from '../../Contexts';
 import { ACTIONSINFILTERCONTEXT } from '../../utils';
@@ -49,15 +56,16 @@ const TodoApp: React.FC = (): ReactNode => {
     }
   };
 
-  const handleInputTodoContent = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setInputTodoContent(event.target.value);
-  };
+  const handleInputTodoContent = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInputTodoContent(event.target.value);
+    },
+    [],
+  );
 
-  const handleClickOnToggleAllButton = () => {
+  const handleClickOnToggleAllButton = useCallback(() => {
     updateTodo({ type: 'COMPLETETODOS' });
-  };
+  }, []);
 
   return (
     <div className="todoapp">
