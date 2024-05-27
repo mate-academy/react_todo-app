@@ -51,18 +51,21 @@ export const TodoHeader: React.FC<Props> = ({
     setTitle('');
   };
 
+  const toggleAllClass = cn('todoapp__toggle-all', {
+    active: todos.every(todo => todo.completed === true),
+  });
+
   return (
     <header className="todoapp__header">
       {todos.length > 0 && (
         <button
           type="button"
-          className={cn('todoapp__toggle-all', {
-            active: todos.every(todo => todo.completed === true),
-          })}
+          className={toggleAllClass}
           data-cy="ToggleAllButton"
-          onClick={() => handleBtnToggleAll()}
+          onClick={handleBtnToggleAll}
         />
       )}
+
       <form onSubmit={handleAddTodo}>
         <input
           value={title}

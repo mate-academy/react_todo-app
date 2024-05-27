@@ -26,39 +26,21 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={cn('filter__link', {
-            selected: filter === FilterStatus.ALL,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => changeStatusOfTodos(FilterStatus.ALL)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={cn('filter__link', {
-            selected: filter === FilterStatus.ACTIVE,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => changeStatusOfTodos(FilterStatus.ACTIVE)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link', {
-            selected: filter === FilterStatus.COMPLETED,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => changeStatusOfTodos(FilterStatus.COMPLETED)}
-        >
-          Completed
-        </a>
+        {Object.values(FilterStatus).map(filterItem => (
+          <a
+            key={filterItem}
+            href={`#/${filterItem}`}
+            className={cn('filter__link', {
+              selected: filter === filterItem,
+            })}
+            data-cy="FilterLinkCompleted"
+            onClick={() => changeStatusOfTodos(filterItem)}
+          >
+            {filterItem}
+          </a>
+        ))}
       </nav>
+
       <button
         type="button"
         className="todoapp__clear-completed"

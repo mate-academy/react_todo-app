@@ -15,6 +15,8 @@ export const TodoItem: React.FC<Props> = ({
   removeTodo = () => {},
   updateTodo = () => {},
 }) => {
+  const { id, title, completed } = todo;
+
   const [isEdit, setIsEdit] = useState({ id: 0, title: '' });
 
   const handleDoubleClick = (task: Todo) => {
@@ -61,20 +63,20 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <>
       <div
-        key={todo.id}
+        key={id}
         data-cy="Todo"
-        className={cn('todo', { completed: todo.completed })}
+        className={cn('todo', { completed: completed })}
       >
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
             type="checkbox"
             className="todo__status"
-            checked={todo.completed}
-            onChange={() => toggleTodo(todo.id)}
+            checked={completed}
+            onChange={() => toggleTodo(id)}
           />
         </label>
-        {isEdit.id === todo.id ? (
+        {isEdit.id === id ? (
           <form>
             <input
               data-cy="TodoTitleField"
@@ -96,13 +98,13 @@ export const TodoItem: React.FC<Props> = ({
               className="todo__title"
               onDoubleClick={() => handleDoubleClick(todo)}
             >
-              {todo.title}
+              {title}
             </span>
             <button
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={() => removeTodo(todo.id)}
+              onClick={() => removeTodo(id)}
             >
               x
             </button>
