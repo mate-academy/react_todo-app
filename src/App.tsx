@@ -67,7 +67,7 @@ export const App: React.FC = () => {
           handleBtnToggleAll={handleBtnToggleAll}
         />
         <TodoList filteredTodo={filteredTodo} />
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             filter={filter}
             changeStatusOfTodos={changeStatusOfTodos}
