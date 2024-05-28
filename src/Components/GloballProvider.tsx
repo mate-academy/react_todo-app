@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { findMaxId } from '../utils/functions';
+import { findMaxId, getStoredArray } from '../utils/functions';
 import { Action } from '../Types/Actions';
 import { State } from '../Types/State';
 
@@ -9,26 +9,29 @@ type Props = {
 
 const initialState: State = {
   inputValue: '',
-  allTodos: [],
+  allTodos: getStoredArray(),
   activeButton: 'all',
-  isToggled: false,
 };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'submit':
-      return {
-        ...state,
-        inputValue: '',
-        allTodos: [
-          ...state.allTodos,
-          {
-            id: findMaxId(state.allTodos),
-            title: action.payload,
-            completed: false,
-          },
-        ],
-      };
+      if (action.payload.trim()) {
+        return {
+          ...state,
+          inputValue: '',
+          allTodos: [
+            ...getStoredArray(),
+            {
+              id: findMaxId(state.allTodos),
+              title: action.payload.trim(),
+              completed: false,
+            },
+          ],
+        };
+      } else {
+        return { ...state };
+      }
 
     case 'onInputChange':
       return {
@@ -41,7 +44,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         allTodos: state.allTodos.map(todo => {
           if (todo.id === action.payload) {
-            return { ...todo, isCompleted: !todo.completed };
+            return { ...todo, completed: !todo.completed };
           }
 
           return todo;
@@ -79,11 +82,10 @@ function reducer(state: State, action: Action): State {
     case 'onToggle':
       return {
         ...state,
-        isToggled: !state.isToggled,
         allTodos: state.allTodos.map(todo => {
           return {
             ...todo,
-            isCompleted: !state.isToggled,
+            completed: action.payload,
           };
         }),
       };
@@ -93,7 +95,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         allTodos: state.allTodos.map(todo =>
           todo.id === action.payload.todoId
-            ? { ...todo, todoName: action.payload.newTodoName }
+            ? { ...todo, title: action.payload.newTodoName }
             : todo,
         ),
       };

@@ -4,5 +4,4 @@ export type State = {
   inputValue: string;
   allTodos: ToDo[] | [];
   activeButton: string;
-  isToggled: boolean;
 };

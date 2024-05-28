@@ -6,5 +6,5 @@ export type Action =
   | { type: 'showFiltered'; payload: string }
   | { type: 'showAll' }
   | { type: 'clearCompleted' }
-  | { type: 'onToggle' }
+  | { type: 'onToggle'; payload: boolean }
   | { type: 'editTodoName'; payload: { todoId: number; newTodoName: string } };

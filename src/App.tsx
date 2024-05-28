@@ -6,8 +6,7 @@ import { ToDo } from './Types/ToDo';
 
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
-  const { allTodos, inputValue, activeButton, isToggled } =
-    useContext(StateContext);
+  const { allTodos, inputValue, activeButton } = useContext(StateContext);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editValue, setEditValue] = useState<string>('');
 
@@ -47,6 +46,16 @@ export const App: React.FC = () => {
     setEditValue('');
   };
 
+  const handleTodoDelete = (todoId: number) => {
+    dispatch({
+      type: 'onTodoDelete',
+      payload: todoId,
+    });
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   const activeTodos = allTodos.filter(todo => {
     return todo.completed === false;
   });
@@ -75,10 +84,16 @@ export const App: React.FC = () => {
             <button
               type="button"
               className={cn('todoapp__toggle-all', {
-                active: allTodos.length === completedTodos.length || isToggled,
+                active: allTodos.length === completedTodos.length,
               })}
               data-cy="ToggleAllButton"
-              onClick={() => dispatch({ type: 'onToggle' })}
+              onClick={() => {
+                if (allTodos.length !== completedTodos.length) {
+                  dispatch({ type: 'onToggle', payload: true });
+                } else {
+                  dispatch({ type: 'onToggle', payload: false });
+                }
+              }}
             />
           )}
 
@@ -154,27 +169,24 @@ export const App: React.FC = () => {
                     />
                   </form>
                 ) : (
-                  <span
-                    data-cy="TodoTitle"
-                    className="todo__title"
-                    onDoubleClick={() => handleEdit(todo.id, todo.title)}
-                  >
-                    {todo.title}
-                  </span>
+                  <>
+                    <span
+                      data-cy="TodoTitle"
+                      className="todo__title"
+                      onDoubleClick={() => handleEdit(todo.id, todo.title)}
+                    >
+                      {todo.title}
+                    </span>
+                    <button
+                      type="button"
+                      className="todo__remove"
+                      data-cy="TodoDelete"
+                      onClick={() => handleTodoDelete(todo.id)}
+                    >
+                      ×
+                    </button>
+                  </>
                 )}
-                <button
-                  type="button"
-                  className="todo__remove"
-                  data-cy="TodoDelete"
-                  onClick={() => {
-                    dispatch({
-                      type: 'onTodoDelete',
-                      payload: todo.id,
-                    });
-                  }}
-                >
-                  ×
-                </button>
               </div>
             );
           })}
@@ -233,7 +245,11 @@ export const App: React.FC = () => {
               data-cy="ClearCompletedButton"
               onClick={() => {
                 dispatch({ type: 'clearCompleted' });
+                if (inputRef.current) {
+                  inputRef.current.focus();
+                }
               }}
+              disabled={completedTodos.length === 0}
             >
               Clear completed
             </button>

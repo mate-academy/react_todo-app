@@ -7,3 +7,9 @@ export function findMaxId(array: ToDo[] | []) {
 
   return Math.max(...array.map((todo: ToDo) => todo.id)) + 1;
 }
+
+export function getStoredArray() {
+  const stored = localStorage.getItem('todos');
+
+  return stored ? JSON.parse(stored) : [];
+}
