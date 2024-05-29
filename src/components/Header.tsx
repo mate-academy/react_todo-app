@@ -1,12 +1,20 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState, useRef, useEffect } from 'react';
 import { ToDo } from '../types/types';
 import { ToDoContext } from '../store/AppContext';
 import cn from 'classnames';
 import { createUniqueId } from '../helpers/createUniqueId';
 
 export const Header: React.FC = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useContext(ToDoContext).dispatch;
-  const { todoList } = useContext(ToDoContext).state;
+  const { todoList, focusInputHeader } = useContext(ToDoContext).state;
+
+  useEffect(() => {
+    if (inputRef.current && focusInputHeader) {
+      inputRef.current.focus();
+    }
+  }, [focusInputHeader, todoList]);
+
   const initialTodo = {
     id: createUniqueId(),
     title: '',
@@ -39,19 +47,22 @@ export const Header: React.FC = () => {
 
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        onClick={() => dispatch({ type: 'TOGGLE_ALL' })}
-        className={cn('todoapp__toggle-all', { active: allToDosCompleted })}
-        data-cy="ToggleAllButton"
-      />
+      {todoList.length !== 0 && (
+        <button
+          type="button"
+          onClick={() => dispatch({ type: 'TOGGLE_ALL' })}
+          className={cn('todoapp__toggle-all', { active: allToDosCompleted })}
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       <form onSubmit={handleNewTodo}>
         <input
           autoFocus
+          ref={inputRef}
           onChange={handleInputChange}
           data-cy="NewTodoField"
-          defaultValue={newTodo.title}
+          value={newTodo.title}
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"

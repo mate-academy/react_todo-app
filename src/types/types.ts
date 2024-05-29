@@ -8,6 +8,7 @@ export type ToDo = {
 export interface State {
   todoList: ToDo[];
   filter: 'All' | 'Active' | 'Completed';
+  focusInputHeader: boolean;
 }
 
 export type Action =
@@ -15,10 +16,9 @@ export type Action =
   | { type: 'DELETE_TODO'; payload: string }
   | { type: 'COMPLETE_TODO'; payload: string }
   | { type: 'EDIT_TODO'; payload: { id: string; title: string } }
-  | { type: 'FILTER_All' }
-  | { type: 'FILTER_ACTIVE' }
+  | { type: 'CANCEL_EDITING'; payload: string }
+  | { type: 'CHANGE_FILTER'; payload: 'All' | 'Active' | 'Completed' }
   | { type: 'TOGGLE_ALL' }
-  | { type: 'FILTER_COMPLETED' }
   | { type: 'START_EDITING'; payload: string }
   | { type: 'CLEAR_COMPLETED' };
 

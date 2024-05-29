@@ -5,16 +5,8 @@ import cn from 'classnames';
 export const Navigation: React.FC = () => {
   const { dispatch, state } = useContext(ToDoContext);
 
-  const handleFilterAll = () => {
-    dispatch({ type: 'FILTER_All' });
-  };
-
-  const handleFilterCompleted = () => {
-    dispatch({ type: 'FILTER_COMPLETED' });
-  };
-
-  const handleFilterActive = () => {
-    dispatch({ type: 'FILTER_ACTIVE' });
+  const handleFilterValue = (filterValue: 'All' | 'Active' | 'Completed') => {
+    dispatch({ type: 'CHANGE_FILTER', payload: filterValue });
   };
 
   const handleClearCompleted = () => {
@@ -33,7 +25,7 @@ export const Navigation: React.FC = () => {
           href="#/"
           className={cn('filter__link', { selected: state.filter === 'All' })}
           data-cy="FilterLinkAll"
-          onClick={handleFilterAll}
+          onClick={() => handleFilterValue('All')}
         >
           All
         </a>
@@ -44,7 +36,7 @@ export const Navigation: React.FC = () => {
             selected: state.filter === 'Active',
           })}
           data-cy="FilterLinkActive"
-          onClick={handleFilterActive}
+          onClick={() => handleFilterValue('Active')}
         >
           Active
         </a>
@@ -55,7 +47,7 @@ export const Navigation: React.FC = () => {
             selected: state.filter === 'Completed',
           })}
           data-cy="FilterLinkCompleted"
-          onClick={handleFilterCompleted}
+          onClick={() => handleFilterValue('Completed')}
         >
           Completed
         </a>

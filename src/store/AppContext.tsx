@@ -24,6 +24,7 @@ function toDoReducer(state: State, action: Action): State {
         todoList: state.todoList.map((todo: ToDo) =>
           todo.id === action.payload ? { ...todo, isEditing: true } : todo,
         ),
+        focusInputHeader: false,
       };
 
     case 'EDIT_TODO':
@@ -34,6 +35,16 @@ function toDoReducer(state: State, action: Action): State {
             ? { ...todo, title: action.payload.title, isEditing: false }
             : todo,
         ),
+        focusInputHeader: true,
+      };
+
+    case 'CANCEL_EDITING':
+      return {
+        ...state,
+        todoList: state.todoList.map((todo: ToDo) =>
+          todo.id === action.payload ? { ...todo, isEditing: false } : todo,
+        ),
+        focusInputHeader: true,
       };
 
     case 'COMPLETE_TODO':
@@ -57,20 +68,10 @@ function toDoReducer(state: State, action: Action): State {
         })),
       };
 
-    case 'FILTER_All':
+    case 'CHANGE_FILTER':
       return {
         ...state,
-        filter: 'All',
-      };
-    case 'FILTER_ACTIVE':
-      return {
-        ...state,
-        filter: 'Active',
-      };
-    case 'FILTER_COMPLETED':
-      return {
-        ...state,
-        filter: 'Completed',
+        filter: action.payload,
       };
 
     case 'CLEAR_COMPLETED':
@@ -85,22 +86,26 @@ function toDoReducer(state: State, action: Action): State {
   }
 }
 
-const initialState: State = {
-  todoList: [],
-  filter: 'All',
-};
+const initiaToDos: ToDo[] = [];
 
 export const ToDoContext = createContext({} as ContextProps);
 
 export const ToDoProvider: React.FC<ToDoContextProps> = ({ children }) => {
   const [localStorageState, setLocalStorageState] = useLocalStorage(
     'todos',
-    initialState.todoList,
+    initiaToDos,
   );
-  const [storedState, dispatch] = useReducer(toDoReducer, localStorageState);
+
+  const initialState: State = {
+    todoList: localStorageState,
+    filter: 'All',
+    focusInputHeader: true,
+  };
+
+  const [storedState, dispatch] = useReducer(toDoReducer, initialState);
 
   useEffect(() => {
-    setLocalStorageState(storedState);
+    setLocalStorageState(storedState.todoList);
   }, [storedState, setLocalStorageState]);
 
   return (

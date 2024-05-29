@@ -8,19 +8,16 @@ export const TodoList: React.FC = () => {
   const { todoList } = state;
 
   const visibleToDos = todoList.filter((todo: ToDo) => {
-    if (state.filter === 'All') {
-      return todo;
+    switch (state.filter) {
+      case 'All':
+        return todo;
+      case 'Active':
+        return !todo.completed;
+      case 'Completed':
+        return todo.completed;
+      default:
+        return todo;
     }
-
-    if (state.filter === 'Active') {
-      return !todo.completed;
-    }
-
-    if (state.filter === 'Completed') {
-      return todo.completed;
-    }
-
-    return todo;
   });
 
   return (
