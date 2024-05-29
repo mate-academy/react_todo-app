@@ -13,3 +13,18 @@ export function getStoredArray() {
 
   return stored ? JSON.parse(stored) : [];
 }
+
+export const chooseActiveArray = (
+  button: string,
+  arrayAll: ToDo[],
+  arrayCompleted: ToDo[],
+  arrayActive: ToDo[],
+) => {
+  if (button === 'all') {
+    return arrayAll;
+  } else if (button === 'active') {
+    return arrayActive;
+  } else {
+    return arrayCompleted;
+  }
+};
