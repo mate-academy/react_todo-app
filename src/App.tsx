@@ -79,27 +79,29 @@ export const App: React.FC = () => {
     setFormText(e.target.value);
   };
 
+  const clickTodo = () => {
+    setTodos(
+      todos.map(todoItem => ({
+        ...todoItem,
+        completed: !todos.every(todo => todo.completed),
+      })),
+    );
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {todos.length > 0 && (
+          {!!todos.length && (
             <button
               type="button"
               className={classNames('todoapp__toggle-all', {
                 active: !todos.some(x => !x.completed),
               })}
               data-cy="ToggleAllButton"
-              onClick={() =>
-                setTodos(
-                  todos.map(todoItem => ({
-                    ...todoItem,
-                    completed: !todos.every(todo => todo.completed),
-                  })),
-                )
-              }
+              onClick={clickTodo}
             />
           )}
 
@@ -180,7 +182,7 @@ export const App: React.FC = () => {
             ))}
         </section>
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {todos.filter(todo => !todo.completed).length} items left
