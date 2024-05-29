@@ -79,7 +79,7 @@ export const App: React.FC = () => {
             />
           )}
 
-          <form onSubmit={() => handleOnSubmit}>
+          <form onSubmit={handleOnSubmit}>
             <input
               data-cy="NewTodoField"
               ref={inputRef}
