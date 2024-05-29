@@ -32,7 +32,7 @@
     "mochawesome-report-generator": "^6.2.0",
     "postcss": "^8.4.12",
     "prettier": "^3.2.5",
-    "sass": "^1.72.0",
+    "sass": "^1.77.2",
     "stylelint": "^15.11.0",
     "typescript": "5.1.6"
   },
