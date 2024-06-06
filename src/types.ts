@@ -11,6 +11,7 @@ export type PropsHeader = {
 
 export type PropsMain = {
   todos: Todo[];
+  filteredTodos: Todo[];
   setTodos: (arg: Todo[]) => void;
 };
 

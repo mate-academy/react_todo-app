@@ -7,25 +7,17 @@ import { Footer } from './components/Footer';
 import { Todo } from './types';
 //import { TodoStateContext } from './StoreContext';
 
-function useLolcalStorage(key: string, defaultValue) {
+function useLolcalStorage(key: string, defaultValue: Todo[]) {
   const [todos, setTodos] = useState(() => {
     const savedTodos = localStorage.getItem(key);
 
     if (savedTodos === null) {
-      localStorage.setItem('todos', '[]');
+      localStorage.setItem('todos', JSON.stringify(defaultValue));
 
       return JSON.parse(localStorage.getItem('todos') as string);
     } else {
       return JSON.parse(savedTodos);
     }
-
-    // try {
-    //   return JSON.parse(savedTodos);
-    // } catch (error) {
-    //   localStorage.removeItem('todos');
-
-    //   return JSON.parse(defaultValue);
-    // }
   });
 
   function saveTodos(newTodos: Todo[]) {
@@ -39,7 +31,7 @@ function useLolcalStorage(key: string, defaultValue) {
 
 export const App: React.FC = () => {
   // const { todos, setTodos } = useContext(TodoStateContext);
-  const [todos, setTodos] = useLolcalStorage('todos', JSON.stringify([]));
+  const [todos, setTodos] = useLolcalStorage('todos', []);
   const [isActive, setIsActiveTab] = useState({
     all: true,
     active: false,
@@ -65,7 +57,13 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header todos={todos} setTodos={setTodos} />
 
-        {todos.length > 0 && <Main todos={filteredTodos} setTodos={setTodos} />}
+        {todos.length > 0 && (
+          <Main
+            todos={todos}
+            filteredTodos={filteredTodos}
+            setTodos={setTodos}
+          />
+        )}
 
         {todos.length > 0 && (
           <Footer

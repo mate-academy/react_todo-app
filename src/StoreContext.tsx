@@ -46,7 +46,7 @@ type Props = {
 export const StorageContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage('list', []);
 
-  const todosValue = useMemo(() => [todos, setTodos], [todos]);
+  const todosValue = useMemo(() => [todos, setTodos], [todos, setTodos]);
 
   const obj = {
     todos: todosValue[0],

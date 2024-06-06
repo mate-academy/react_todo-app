@@ -25,11 +25,7 @@ export const TodoItem: React.FC<PropsTodo> = ({
 
     if (action === Actions.updateToDone) {
       const newTodos = todos.map(item => {
-        if (item.id === id) {
-          return { ...item, completed: true };
-        }
-
-        return item;
+        return item.id === id ? { ...item, completed: true } : item;
       });
 
       setTodos(newTodos);
@@ -37,11 +33,7 @@ export const TodoItem: React.FC<PropsTodo> = ({
 
     if (action === Actions.updateToNotDone) {
       const newTodos = todos.map(item => {
-        if (item.id === id) {
-          return { ...item, completed: false };
-        }
-
-        return item;
+        return item.id === id ? { ...item, completed: false } : item;
       });
 
       setTodos(newTodos);

@@ -1,10 +1,14 @@
 import { PropsMain } from '../types';
 import { TodoItem } from './todo';
 
-export const Main: React.FC<PropsMain> = ({ todos, setTodos }) => {
+export const Main: React.FC<PropsMain> = ({
+  todos,
+  filteredTodos,
+  setTodos,
+}) => {
   return (
     <section data-cy="TodoList" className="todoapp__main">
-      {todos.map(item => (
+      {filteredTodos.map(item => (
         <TodoItem
           key={item.id}
           id={item.id}
