@@ -356,7 +356,6 @@ describe('', () => {
 
     it('should add an active todo', () => {
       page.newTodoField().type('Test Todo{enter}');
-
       todos.assertCount(6);
       todos.assertTitle(5, 'Test Todo');
       todos.assertNotCompleted(5);
