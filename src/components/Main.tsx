@@ -1,11 +1,7 @@
 import { PropsMain } from '../types';
 import { TodoItem } from './todo';
 
-export const Main: React.FC<PropsMain> = ({
-  todos,
-  filteredTodos,
-  setTodos,
-}) => {
+export const Main: React.FC<PropsMain> = ({ filteredTodos }) => {
   return (
     <section data-cy="TodoList" className="todoapp__main">
       {filteredTodos.map(item => (
@@ -14,8 +10,6 @@ export const Main: React.FC<PropsMain> = ({
           id={item.id}
           title={item.title}
           status={item.completed}
-          todos={todos}
-          setTodos={setTodos}
         />
       ))}
     </section>

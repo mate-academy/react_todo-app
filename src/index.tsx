@@ -4,10 +4,14 @@ import './styles/index.scss';
 import './styles/todo.scss';
 import './styles/filter.scss';
 import './styles/todoapp.scss';
-//import { StorageContextProvider } from './StoreContext';
+import { TodosProvider } from './Store';
 
 import { App } from './App';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <TodosProvider>
+    <App />
+  </TodosProvider>,
+);

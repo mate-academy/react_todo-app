@@ -1,21 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { PropsFooter } from '../types';
+import { PropsFooter, Todo } from '../types';
+import { TodosContext } from '../Store';
 
-export const Footer: React.FC<PropsFooter> = ({
-  todos,
-  isActive,
-  setIsActiveTab,
-  setTodos,
-}) => {
+export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
+  const { todos, setTodos } = useContext(TodosContext);
+
   function handleClearCompleted() {
-    const newList = todos.filter(todo => todo.completed === false);
+    const newList = todos.filter((todo: Todo) => todo.completed === false);
 
     setTodos(newList);
   }
 
-  const activeTodos = todos.filter(todo => todo.completed === false);
-  const completedTodos = todos.some(todo => todo.completed === true);
+  const activeTodos = todos.filter((todo: Todo) => todo.completed === false);
+  const completedTodos = todos.some((todo: Todo) => todo.completed === true);
 
   return (
     // {/* Hide the footer if there are no todos */}

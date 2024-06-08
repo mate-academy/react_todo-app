@@ -1,30 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
-import { PropsTodo, Actions } from '../types';
+import { PropsTodo, Actions, Todo } from '../types';
+import { TodosContext } from '../Store';
 
 type Event =
   | React.FormEvent<HTMLFormElement>
   | React.FocusEvent<HTMLInputElement, Element>;
 
-export const TodoItem: React.FC<PropsTodo> = ({
-  id,
-  title,
-  status,
-  todos,
-  setTodos,
-}) => {
+export const TodoItem: React.FC<PropsTodo> = ({ id, title, status }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState(title);
+  const { todos, setTodos } = useContext(TodosContext);
 
   function handleClick(action: string) {
     if (action === Actions.delete) {
-      const newTodos = todos.filter(item => item.id !== id);
+      const newTodos = todos.filter((item: Todo) => item.id !== id);
 
       setTodos(newTodos);
     }
 
     if (action === Actions.updateToDone) {
-      const newTodos = todos.map(item => {
+      const newTodos = todos.map((item: Todo) => {
         return item.id === id ? { ...item, completed: true } : item;
       });
 
@@ -32,7 +28,7 @@ export const TodoItem: React.FC<PropsTodo> = ({
     }
 
     if (action === Actions.updateToNotDone) {
-      const newTodos = todos.map(item => {
+      const newTodos = todos.map((item: Todo) => {
         return item.id === id ? { ...item, completed: false } : item;
       });
 
@@ -44,7 +40,7 @@ export const TodoItem: React.FC<PropsTodo> = ({
     event.preventDefault();
 
     if (query) {
-      const newList = todos.map(todo => {
+      const newList = todos.map((todo: Todo) => {
         return todo.id === id ? { ...todo, title: query.trim() } : todo;
       });
 
@@ -52,7 +48,7 @@ export const TodoItem: React.FC<PropsTodo> = ({
       setIsFocused(false);
       setQuery(query);
     } else {
-      const newList = todos.filter(todo => {
+      const newList = todos.filter((todo: Todo) => {
         return todo.id !== id;
       });
 
@@ -133,42 +129,3 @@ export const TodoItem: React.FC<PropsTodo> = ({
     </div>
   );
 };
-
-// {
-//   /* This todo is being edited */
-// }
-// <div data-cy="Todo" className="todo">
-//   <label className="todo__status-label">
-//     <input data-cy="TodoStatus" type="checkbox" className="todo__status" />
-//   </label>
-
-//   {/* This form is shown instead of the title and remove button */}
-{
-  /* <form>
-  <input
-    data-cy="TodoTitleField"
-    type="text"
-    className="todo__title-field"
-    placeholder="Empty todo will be deleted"
-    value="Todo is being edited now"
-  />
-</form>; */
-}
-// </div>;
-
-// {
-//   /* This todo is in loading state */
-// }
-// <div data-cy="Todo" className="todo">
-//   <label className="todo__status-label">
-//     <input data-cy="TodoStatus" type="checkbox" className="todo__status" />
-//   </label>
-
-//   <span data-cy="TodoTitle" className="todo__title">
-//     Todo is being saved now
-//   </span>
-
-//   <button type="button" className="todo__remove" data-cy="TodoDelete">
-//     ×
-//   </button>
-// </div>;

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { PropsHeader, Todo } from '../types';
+import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
+import { Todo } from '../types';
+import { TodosContext } from '../Store';
 
-export const Header: React.FC<PropsHeader> = ({ todos, setTodos }) => {
+export const Header: React.FC = () => {
   const [query, setQuery] = useState('');
+  const { todos, setTodos } = useContext(TodosContext);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -23,14 +25,14 @@ export const Header: React.FC<PropsHeader> = ({ todos, setTodos }) => {
   function handleToggle(completed: boolean) {
     switch (completed) {
       case true:
-        const newList = todos.map(todo => {
+        const newList = todos.map((todo: Todo) => {
           return { ...todo, completed: false };
         });
 
         setTodos(newList);
         break;
       case false:
-        const newTodos = todos.map(todo => {
+        const newTodos = todos.map((todo: Todo) => {
           return { ...todo, completed: true };
         });
 
