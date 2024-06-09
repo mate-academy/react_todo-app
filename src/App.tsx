@@ -7,7 +7,7 @@ import { Footer } from './components/Footer';
 import { Todo, IsActiveTab } from './types';
 import { TodosContext } from './Store';
 
-function filterTodos(todos: Todo[], activeTab: string) {
+function filterTodos(todos: Todo[], activeTab: IsActiveTab) {
   return todos.filter((todo: Todo) => {
     if (activeTab === IsActiveTab.Active) {
       return !todo.completed;
