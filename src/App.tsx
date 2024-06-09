@@ -4,17 +4,17 @@ import React, { useContext, useMemo, useState } from 'react';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
-import { Todo } from './types';
+import { Todo, IsActiveTab } from './types';
 import { TodosContext } from './Store';
 
-function filterTodos(todos: Todo[], tabActive: boolean, tabCompleted: boolean) {
+function filterTodos(todos: Todo[], activeTab: string) {
   return todos.filter((todo: Todo) => {
-    if (tabActive) {
-      return todo.completed === false;
+    if (activeTab === IsActiveTab.Active) {
+      return !todo.completed;
     }
 
-    if (tabCompleted) {
-      return todo.completed === true;
+    if (activeTab === IsActiveTab.Completed) {
+      return todo.completed;
     }
 
     return todo;
@@ -23,15 +23,11 @@ function filterTodos(todos: Todo[], tabActive: boolean, tabCompleted: boolean) {
 
 export const App: React.FC = () => {
   const { todos } = useContext(TodosContext);
-  const [isActive, setIsActiveTab] = useState({
-    all: true,
-    active: false,
-    completed: false,
-  });
+  const [isActive, setIsActiveTab] = useState(IsActiveTab.All);
 
   const visibleTodos = useMemo(
-    () => filterTodos(todos, isActive.active, isActive.completed),
-    [todos, isActive.active, isActive.completed],
+    () => filterTodos(todos, isActive),
+    [todos, isActive],
   );
 
   return (

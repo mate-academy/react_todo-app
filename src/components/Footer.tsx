@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { PropsFooter, Todo } from '../types';
+import { PropsFooter, Todo, IsActiveTab } from '../types';
 import { TodosContext } from '../Store';
 
 export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
   const { todos, setTodos } = useContext(TodosContext);
 
   function handleClearCompleted() {
-    const newList = todos.filter((todo: Todo) => todo.completed === false);
+    const newList = todos.filter((todo: Todo) => !todo.completed);
 
     setTodos(newList);
   }
 
-  const activeTodos = todos.filter((todo: Todo) => todo.completed === false);
-  const completedTodos = todos.some((todo: Todo) => todo.completed === true);
+  const activeTodos = todos.filter((todo: Todo) => !todo.completed);
+  const completedTodos = todos.some((todo: Todo) => todo.completed);
 
   return (
     // {/* Hide the footer if there are no todos */}
@@ -27,15 +27,11 @@ export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: isActive.all === true,
+            selected: isActive === IsActiveTab.All,
           })}
           data-cy="FilterLinkAll"
           onClick={() => {
-            setIsActiveTab({
-              all: true,
-              active: false,
-              completed: false,
-            });
+            setIsActiveTab(IsActiveTab.All);
           }}
         >
           All
@@ -44,15 +40,11 @@ export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: isActive.active === true,
+            selected: isActive === IsActiveTab.Active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => {
-            setIsActiveTab({
-              all: false,
-              active: true,
-              completed: false,
-            });
+            setIsActiveTab(IsActiveTab.Active);
           }}
         >
           Active
@@ -61,15 +53,11 @@ export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: isActive.completed === true,
+            selected: isActive === IsActiveTab.Completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => {
-            setIsActiveTab({
-              all: false,
-              active: false,
-              completed: true,
-            });
+            setIsActiveTab(IsActiveTab.Completed);
           }}
         >
           Completed
@@ -78,7 +66,7 @@ export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
 
       {/* this button should be disabled if there are no completed todos */}
       <button
-        disabled={completedTodos === true ? false : true}
+        disabled={completedTodos ? false : true}
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"

@@ -46,10 +46,10 @@ export const Header: React.FC = () => {
       {/* this button should have `active` class only if all todos are completed */}
       {todos.length > 0 && (
         <button
-          defaultChecked={isAllCompleted === true ? true : false}
+          defaultChecked={isAllCompleted ? true : false}
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active: isAllCompleted === true,
+            active: isAllCompleted,
           })}
           data-cy="ToggleAllButton"
           onClick={() => handleToggle(isAllCompleted)}
