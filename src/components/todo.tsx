@@ -13,49 +13,47 @@ export const TodoItem: React.FC<PropsTodo> = ({ id, title, status }) => {
   const { todos, setTodos } = useContext(TodosContext);
 
   function handleClick(action: string) {
-    if (action === Actions.delete) {
-      const newTodos = todos.filter((item: Todo) => item.id !== id);
+    let newTodos: Todo[] = [...todos];
 
-      setTodos(newTodos);
+    switch (action) {
+      case Actions.delete:
+        newTodos = todos.filter((item: Todo) => item.id !== id);
+        break;
+      case Actions.updateToDone:
+        newTodos = todos.map((item: Todo) => {
+          return item.id === id ? { ...item, completed: true } : item;
+        });
+        break;
+      case Actions.updateToNotDone:
+        newTodos = todos.map((item: Todo) => {
+          return item.id === id ? { ...item, completed: false } : item;
+        });
+        break;
     }
 
-    if (action === Actions.updateToDone) {
-      const newTodos = todos.map((item: Todo) => {
-        return item.id === id ? { ...item, completed: true } : item;
-      });
-
-      setTodos(newTodos);
-    }
-
-    if (action === Actions.updateToNotDone) {
-      const newTodos = todos.map((item: Todo) => {
-        return item.id === id ? { ...item, completed: false } : item;
-      });
-
-      setTodos(newTodos);
-    }
+    setTodos(newTodos);
   }
 
   function handleSubmit(event: Event) {
     event.preventDefault();
 
+    let newList: Todo[] = [...todos];
+
     if (query) {
-      const newList = todos.map((todo: Todo) => {
+      newList = todos.map((todo: Todo) => {
         return todo.id === id ? { ...todo, title: query.trim() } : todo;
       });
-
-      setTodos(newList);
-      setIsFocused(false);
       setQuery(query);
     } else {
-      const newList = todos.filter((todo: Todo) => {
+      newList = todos.filter((todo: Todo) => {
         return todo.id !== id;
       });
 
-      setTodos(newList);
-      setIsFocused(false);
       setQuery(title);
     }
+
+    setTodos(newList);
+    setIsFocused(false);
   }
 
   function preventSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -73,16 +71,16 @@ export const TodoItem: React.FC<PropsTodo> = ({ id, title, status }) => {
           type="checkbox"
           className="todo__status"
           defaultChecked={status === true ? true : false}
-          onClick={() => {
-            return !status
-              ? handleClick(Actions.updateToDone)
-              : handleClick(Actions.updateToNotDone);
-          }}
+          onClick={() =>
+            handleClick(
+              !status ? Actions.updateToDone : Actions.updateToNotDone,
+            )
+          }
         />
       </label>
 
       {!isFocused && (
-        <React.Fragment>
+        <>
           <span
             data-cy="TodoTitle"
             className="todo__title"
@@ -99,29 +97,27 @@ export const TodoItem: React.FC<PropsTodo> = ({ id, title, status }) => {
           >
             ×
           </button>
-        </React.Fragment>
+        </>
       )}
 
       {isFocused && (
-        <React.Fragment>
-          <form onSubmit={event => handleSubmit(event)}>
-            <input
-              data-cy="TodoTitleField"
-              type="text"
-              className="todo__title-field"
-              placeholder="Empty todo will be deleted"
-              value={query}
-              autoFocus
-              onKeyUp={event => {
-                preventSubmit(event);
-              }}
-              onChange={event => {
-                setQuery(event.target.value.trimStart());
-              }}
-              onBlur={event => handleSubmit(event)}
-            />
-          </form>
-        </React.Fragment>
+        <form onSubmit={event => handleSubmit(event)}>
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value={query}
+            autoFocus
+            onKeyUp={event => {
+              preventSubmit(event);
+            }}
+            onChange={event => {
+              setQuery(event.target.value.trimStart());
+            }}
+            onBlur={event => handleSubmit(event)}
+          />
+        </form>
       )}
     </div>
   );

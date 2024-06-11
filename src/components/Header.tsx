@@ -23,22 +23,11 @@ export const Header: React.FC = () => {
   const isAllCompleted = todos.every((todo: Todo) => todo.completed === true);
 
   function handleToggle(completed: boolean) {
-    switch (completed) {
-      case true:
-        const newList = todos.map((todo: Todo) => {
-          return { ...todo, completed: false };
-        });
+    const newList = todos.map((todo: Todo) => {
+      return { ...todo, completed: !completed };
+    });
 
-        setTodos(newList);
-        break;
-      case false:
-        const newTodos = todos.map((todo: Todo) => {
-          return { ...todo, completed: true };
-        });
-
-        setTodos(newTodos);
-        break;
-    }
+    setTodos(newList);
   }
 
   return (
