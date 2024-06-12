@@ -1,5 +1,5 @@
 import { PropsMain } from '../types';
-import { TodoItem } from './todo';
+import { TodoItem } from './TodoItem';
 
 export const Main: React.FC<PropsMain> = ({ filteredTodos }) => {
   return (

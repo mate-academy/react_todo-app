@@ -8,12 +8,6 @@ export type PropsMain = {
   filteredTodos: Todo[];
 };
 
-// export type IsActiveType = {
-//   all: boolean;
-//   active: boolean;
-//   completed: boolean;
-// };
-
 export enum IsActiveTab {
   All = 'All',
   Active = 'Active',

@@ -4,22 +4,9 @@ import React, { useContext, useMemo, useState } from 'react';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
-import { Todo, IsActiveTab } from './types';
+import { IsActiveTab } from './types';
 import { TodosContext } from './Store';
-
-function filterTodos(todos: Todo[], activeTab: IsActiveTab) {
-  return todos.filter((todo: Todo) => {
-    if (activeTab === IsActiveTab.Active) {
-      return !todo.completed;
-    }
-
-    if (activeTab === IsActiveTab.Completed) {
-      return todo.completed;
-    }
-
-    return todo;
-  });
-}
+import { filterTodos } from './utils';
 
 export const App: React.FC = () => {
   const { todos } = useContext(TodosContext);
