@@ -8,32 +8,34 @@ interface Props {
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { title, id, completed } = todo;
+
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(todo.title);
+  const [editedTitle, setEditedTitle] = useState(title);
 
-  const deleteTodo = (id: number) => {
-    dispatch({ type: 'deleteTodo', payload: id });
+  const deleteTodo = (todoId: number) => {
+    dispatch({ type: 'deleteTodo', payload: todoId });
   };
 
   const toggleTodo = () => {
     dispatch({
       type: 'changeTodo',
-      payload: { ...todo, completed: !todo.completed },
+      payload: { ...todo, completed: !completed },
     });
   };
 
   const handleSubmit = (event: FormEvent) => {
     event?.preventDefault();
 
-    if (editedTitle === todo.title) {
+    if (editedTitle === title) {
       setIsEditing(false);
 
       return;
     }
 
     if (!editedTitle.trim()) {
-      deleteTodo(todo.id);
+      deleteTodo(id);
 
       return;
     }
@@ -47,13 +49,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   return (
-    <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
+    <div data-cy="Todo" className={cn('todo', { completed: completed })}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
           onClick={() => toggleTodo()}
         />
       </label>
@@ -65,7 +67,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           onKeyUp={event => {
             if (event.key === 'Escape') {
               setIsEditing(false);
-              setEditedTitle(todo.title);
+              setEditedTitle(title);
             }
           }}
         >
@@ -86,13 +88,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={() => setIsEditing(true)}
           >
-            {todo.title}
+            {title}
           </span>
 
           <button
             type="button"
             className="todo__remove"
-            onClick={() => deleteTodo(todo.id)}
+            onClick={() => deleteTodo(id)}
             data-cy="TodoDelete"
           >
             ×

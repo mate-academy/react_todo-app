@@ -10,8 +10,10 @@ export const TodoList: React.FC = () => {
     switch (newFilter) {
       case Filter.Active:
         return newTodos.filter(todo => !todo.completed);
+
       case Filter.Completed:
         return newTodos.filter(todo => todo.completed);
+
       default:
         return newTodos;
     }

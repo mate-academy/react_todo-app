@@ -15,7 +15,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList />
-        {todos.length ? <Footer /> : null}
+        {!!todos.length && <Footer />}
       </div>
     </div>
   );
