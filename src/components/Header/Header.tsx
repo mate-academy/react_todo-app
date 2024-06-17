@@ -54,6 +54,7 @@ export const Header: React.FC = () => {
           placeholder="What needs to be done?"
           value={todoTitle}
           onChange={e => setTodoTitle(e.target.value)}
+          autoFocus
         />
       </form>
     </header>
