@@ -1,8 +1,6 @@
 import { createRoot } from 'react-dom/client';
 
 import './styles/index.scss';
-// import './styles/todo.scss';
-// import './styles/filter.scss';
 
 import { App } from './App';
 

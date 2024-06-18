@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
@@ -17,6 +17,7 @@ export const TodoItem: React.FC<Props> = ({
 }) => {
   const [value, setValue] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -49,6 +50,12 @@ export const TodoItem: React.FC<Props> = ({
       setValue(todo.title);
     }
   };
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   const { title, completed } = todo;
 
@@ -99,6 +106,7 @@ export const TodoItem: React.FC<Props> = ({
               onChange={handleChange}
               onBlur={handleBlur}
               onKeyUp={handleKeyUp}
+              ref={inputRef}
             />
           </form>
         )}

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoContext } from '../../Contexts/TodoContext';
+import classNames from 'classnames';
 
 export const Header: React.FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
@@ -40,7 +41,9 @@ export const Header: React.FC = () => {
       {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
-        className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+        className={classNames('todoapp__toggle-all', {
+          active: allCompleted,
+        })}
         data-cy="ToggleAllButton"
         onClick={toggleAllTodos}
       />
