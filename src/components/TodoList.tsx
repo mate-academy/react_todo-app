@@ -1,10 +1,15 @@
 import { useContext } from 'react';
-import { LOCAL_STOR_KEY, TodosContext, storedTodosArray } from '../store';
+import { LOCAL_STOR_KEY, SelectedContext, TodosContext } from '../store';
 import cn from 'classnames';
 import { Todo } from '../types/todo';
 
 export const TodoList: React.FC = () => {
   const { todos, dispatch } = useContext(TodosContext);
+  const { selected } = useContext(SelectedContext);
+  const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
+  const storedTodosArray: Todo[] = storedTodos
+    ? JSON.parse(storedTodos)
+    : [];
 
   const removeTodo = (todo: Todo) => {
     dispatch({ type: 'REMOVE_TODO', payload: todo });
@@ -22,7 +27,8 @@ export const TodoList: React.FC = () => {
 
   const isDone = (todo: Todo) => {
     dispatch({ type: 'TOGGLE_TODO', payload: todo });
-    const updatedTodos = [...todos].map(el => {
+    dispatch({ type: selected.toUpperCase() });
+    const updatedTodos = storedTodosArray.map(el => {
       if (el.id === todo.id) {
         return { ...el, completed: !el.completed };
       }
