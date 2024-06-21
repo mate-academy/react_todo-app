@@ -43,22 +43,48 @@ export const TodoList: React.FC = () => {
     setEditingTitle(e.target.value);
   };
 
+  const deletTodoWithEmptyText = () => {
+    const updatedTodos = storedTodosArray.filter(t => t.id !== editingTodoId);
+
+    localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify(updatedTodos));
+    dispatch({ type: 'SET_TODOS', payload: updatedTodos });
+    dispatch({ type: selected.toUpperCase() });
+  };
+
+  const addTodoAfterOnBlur = () => {
+    const updatedTodos = storedTodosArray.map(t =>
+      t.id === editingTodoId ? { ...t, title: editingTitle.trim() } : t,
+    );
+
+    localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify(updatedTodos));
+    dispatch({ type: 'SET_TODOS', payload: updatedTodos });
+    dispatch({ type: selected.toUpperCase() });
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && editingTitle.trim()) {
       e.preventDefault();
-      const updatedTodos = storedTodosArray.map(t =>
-        t.id === editingTodoId ? { ...t, title: editingTitle } : t,
-      );
-
-      localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify(updatedTodos));
-      dispatch({ type: 'SET_TODOS', payload: updatedTodos });
-      dispatch({ type: selected.toUpperCase() });
+      addTodoAfterOnBlur();
+      setEditingTodoId(null);
+      setEditingTitle('');
+    } else if (e.key === 'Enter' && !editingTitle.trim()) {
+      e.preventDefault();
+      deletTodoWithEmptyText();
+      setEditingTodoId(null);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
       setEditingTodoId(null);
       setEditingTitle('');
     }
   };
 
   const handleBlur = () => {
+    if (editingTitle) {
+      addTodoAfterOnBlur();
+    } else if (!editingTitle) {
+      deletTodoWithEmptyText();
+    }
+
     setEditingTodoId(null);
     setEditingTitle('');
   };
@@ -81,15 +107,17 @@ export const TodoList: React.FC = () => {
               type="checkbox"
               className="todo__status"
               onClick={() => isDone(todo)}
+              checked={todo.completed}
             />
           </label>
 
           {editingTodoId === todo.id ? (
             <input
+              data-cy="TodoTitleField"
               type="text"
               value={editingTitle}
               onChange={handleTitleChange}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               onBlur={handleBlur}
               className="todoapp__new-todo--edit"
               autoFocus

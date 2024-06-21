@@ -1,6 +1,7 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { LOCAL_STOR_KEY, SelectedContext, TodosContext } from '../store';
 import { Todo } from '../types/type';
+import cn from 'classnames';
 
 export const TodoHeader: React.FC = () => {
   const { todos, dispatch } = useContext(TodosContext);
@@ -9,6 +10,7 @@ export const TodoHeader: React.FC = () => {
   const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
   const storedTodosArray: Todo[] = storedTodos ? JSON.parse(storedTodos) : [];
   const inputRef = useRef<HTMLInputElement>(null);
+  const isTodosActive = storedTodosArray.every(todo => todo.completed);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -50,12 +52,14 @@ export const TodoHeader: React.FC = () => {
 
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-        onClick={toggleAllButton}
-      />
+      {storedTodosArray.length > 0 && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', { active: isTodosActive })}
+          data-cy="ToggleAllButton"
+          onClick={toggleAllButton}
+        />
+      )}
 
       <form>
         <input
