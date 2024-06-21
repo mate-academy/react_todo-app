@@ -1,9 +1,9 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { LOCAL_STOR_KEY, SelectedContext, TodosContext } from '../store';
-import { Todo } from '../types/todo';
+import { Todo } from '../types/type';
 
 export const TodoHeader: React.FC = () => {
-  const { dispatch } = useContext(TodosContext);
+  const { todos, dispatch } = useContext(TodosContext);
   const { selected } = useContext(SelectedContext);
   const [text, setText] = useState('');
   const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
@@ -14,7 +14,7 @@ export const TodoHeader: React.FC = () => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []);
+  }, [todos]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const newTodo: Todo = {

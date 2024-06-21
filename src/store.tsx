@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useMemo, useState } from 'react';
-import { Todo } from './types/todo';
+import { Todo } from './types/type';
 
 export const LOCAL_STOR_KEY = 'todos';
 export const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
@@ -26,12 +26,12 @@ const initialTodos: Todo[] = storedTodosArray;
 
 export const TodosContext = React.createContext<TodosContextProps>({
   todos: initialTodos,
-  dispatch: () => { },
+  dispatch: () => {},
 });
 
 export const SelectedContext = React.createContext<SelectedProps>({
-  selected: 'all',
-  setSelected: () => { },
+  selected: 'All',
+  setSelected: () => {},
 });
 
 type Props = {
@@ -48,6 +48,8 @@ export const todoReducer = (
     : null;
 
   switch (action.type) {
+    case 'SET_TODOS':
+      return action.payload;
     case 'ADD_TODO':
       return [...state, action.payload];
     case 'REMOVE_TODO':
@@ -79,7 +81,7 @@ export const todoReducer = (
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, dispatch] = useReducer(todoReducer, initialTodos);
-  const [selected, setSelected] = useState('all');
+  const [selected, setSelected] = useState('All');
 
   useEffect(() => {
     const handleStorageChange = () => {

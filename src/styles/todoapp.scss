@@ -77,6 +77,12 @@
       font-weight: 300;
       color: #e6e6e6;
     }
+
+    &--edit {
+      @extend %todoapp__new-todo;
+
+      padding: 16px;
+    }
   }
 
   &__main {

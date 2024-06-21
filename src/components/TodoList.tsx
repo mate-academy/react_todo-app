@@ -1,11 +1,14 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { LOCAL_STOR_KEY, SelectedContext, TodosContext } from '../store';
 import cn from 'classnames';
-import { Todo } from '../types/todo';
+import { Todo } from '../types/type';
 
 export const TodoList: React.FC = () => {
   const { todos, dispatch } = useContext(TodosContext);
   const { selected } = useContext(SelectedContext);
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+  const [editingTitle, setEditingTitle] = useState<string>('');
+
   const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
   const storedTodosArray: Todo[] = storedTodos ? JSON.parse(storedTodos) : [];
 
@@ -31,6 +34,35 @@ export const TodoList: React.FC = () => {
     localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify(updatedTodos));
   };
 
+  const handleDoubleClick = (todo: Todo) => {
+    setEditingTodoId(todo.id);
+    setEditingTitle(todo.title);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingTitle(e.target.value);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && editingTitle.trim()) {
+      e.preventDefault();
+      const updatedTodos = storedTodosArray.map(t =>
+        t.id === editingTodoId ? { ...t, title: editingTitle } : t,
+      );
+
+      localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify(updatedTodos));
+      dispatch({ type: 'SET_TODOS', payload: updatedTodos });
+      dispatch({ type: selected.toUpperCase() });
+      setEditingTodoId(null);
+      setEditingTitle('');
+    }
+  };
+
+  const handleBlur = () => {
+    setEditingTodoId(null);
+    setEditingTitle('');
+  };
+
   if (!storedTodosArray) {
     return null;
   }
@@ -52,18 +84,36 @@ export const TodoList: React.FC = () => {
             />
           </label>
 
-          <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
-          </span>
+          {editingTodoId === todo.id ? (
+            <input
+              type="text"
+              value={editingTitle}
+              onChange={handleTitleChange}
+              onKeyPress={handleKeyPress}
+              onBlur={handleBlur}
+              className="todoapp__new-todo--edit"
+              autoFocus
+            />
+          ) : (
+            <span
+              data-cy="TodoTitle"
+              className="todo__title"
+              onDoubleClick={() => handleDoubleClick(todo)}
+            >
+              {todo.title}
+            </span>
+          )}
 
-          <button
-            type="button"
-            className="todo__remove"
-            data-cy="TodoDelete"
-            onClick={() => removeTodo(todo)}
-          >
-            ×
-          </button>
+          {todo.id !== editingTodoId && (
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDelete"
+              onClick={() => removeTodo(todo)}
+            >
+              ×
+            </button>
+          )}
         </div>
       ))}
     </section>

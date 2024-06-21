@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { LOCAL_STOR_KEY, SelectedContext, TodosContext } from '../store';
 import cn from 'classnames';
-import { Todo } from '../types/todo';
+import { Filter, Todo, filteredOptions } from '../types/type';
 
 export const TodoFooter: React.FC = () => {
   const { dispatch } = useContext(TodosContext);
@@ -9,64 +9,52 @@ export const TodoFooter: React.FC = () => {
   const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
   const storedTodosArray: Todo[] = storedTodos ? JSON.parse(storedTodos) : [];
   const hasCompletedTodos = storedTodosArray.some(todo => todo.completed);
+  const numberOfItems = storedTodosArray.filter(todo => !todo.completed).length;
 
   const showAllTodos = () => {
-    dispatch({ type: 'ALL' });
-    setSelected('all');
+    dispatch({ type: Filter.All.toUpperCase() });
+    setSelected(Filter.All);
   };
 
-  if (!storedTodosArray.length) {
-    return null;
-  }
-
   const activeTodos = () => {
-    dispatch({ type: 'ACTIVE' });
-    setSelected('active');
+    dispatch({ type: Filter.Active.toUpperCase() });
+    setSelected(Filter.Active);
   };
 
   const competedTodos = () => {
-    dispatch({ type: 'COMPLETED' });
-    setSelected('completed');
+    dispatch({ type: Filter.Completed.toUpperCase() });
+    setSelected(Filter.Completed);
   };
 
   const clearCompetedTodos = () => {
     dispatch({ type: 'CLEAR_COMPLETED' });
   };
 
+  const arrOfFilteredFunc = [showAllTodos, activeTodos, competedTodos];
+
+  if (!storedTodosArray.length) {
+    return null;
+  }
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${storedTodosArray.filter(todo => !todo.completed).length} items left`}
+        {`${numberOfItems} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={cn('filter__link', { selected: selected === 'all' })}
-          data-cy="FilterLinkAll"
-          role="button"
-          onClick={showAllTodos}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={cn('filter__link', { selected: selected === 'active' })}
-          data-cy="FilterLinkActive"
-          onClick={activeTodos}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link', { selected: selected === 'completed' })}
-          data-cy="FilterLinkCompleted"
-          onClick={competedTodos}
-        >
-          Completed
-        </a>
+        {filteredOptions.map((el, index) => (
+          <a
+            key={el.title}
+            href={el.href}
+            className={cn('filter__link', { selected: selected === el.title })}
+            data-cy={el['data-cy']}
+            role="button"
+            onClick={arrOfFilteredFunc[index]}
+          >
+            {el.title}
+          </a>
+        ))}
       </nav>
 
       <button
