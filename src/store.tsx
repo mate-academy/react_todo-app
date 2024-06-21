@@ -3,6 +3,11 @@ import { Todo } from './types/todo';
 
 export const LOCAL_STOR_KEY = 'todos';
 export const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
+
+if (!storedTodos) {
+  localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify([]));
+}
+
 export const storedTodosArray: Todo[] = storedTodos
   ? JSON.parse(storedTodos)
   : [];
@@ -21,12 +26,12 @@ const initialTodos: Todo[] = storedTodosArray;
 
 export const TodosContext = React.createContext<TodosContextProps>({
   todos: initialTodos,
-  dispatch: () => {},
+  dispatch: () => { },
 });
 
 export const SelectedContext = React.createContext<SelectedProps>({
   selected: 'all',
-  setSelected: () => {},
+  setSelected: () => { },
 });
 
 type Props = {
@@ -63,12 +68,6 @@ export const todoReducer = (
       return arrayTodosFromStor.filter(todo => !todo.completed);
     case 'CLEAR_COMPLETED':
       const updStore = arrayTodosFromStor.filter(todo => !todo.completed);
-
-      if (!updStore.length) {
-        localStorage.removeItem(LOCAL_STOR_KEY);
-
-        return [];
-      }
 
       localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify(updStore));
 

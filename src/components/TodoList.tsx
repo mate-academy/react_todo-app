@@ -7,20 +7,12 @@ export const TodoList: React.FC = () => {
   const { todos, dispatch } = useContext(TodosContext);
   const { selected } = useContext(SelectedContext);
   const storedTodos = localStorage.getItem(LOCAL_STOR_KEY);
-  const storedTodosArray: Todo[] = storedTodos
-    ? JSON.parse(storedTodos)
-    : [];
+  const storedTodosArray: Todo[] = storedTodos ? JSON.parse(storedTodos) : [];
 
   const removeTodo = (todo: Todo) => {
     dispatch({ type: 'REMOVE_TODO', payload: todo });
 
     const newTodos = todos.filter(t => t.id !== todo.id);
-
-    if (!newTodos.length) {
-      localStorage.removeItem(LOCAL_STOR_KEY);
-
-      return;
-    }
 
     localStorage.setItem(LOCAL_STOR_KEY, JSON.stringify(newTodos));
   };
