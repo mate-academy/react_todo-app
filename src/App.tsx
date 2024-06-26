@@ -20,7 +20,6 @@ export const App: React.FC = () => {
           <Header />
           <ToDoList />
           <Footer />
-          {/* Hide the footer if there are no todos */}
         </ToDoProvider>
       </div>
     </div>

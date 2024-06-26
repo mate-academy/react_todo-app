@@ -1,89 +1,27 @@
 import classNames from 'classnames';
-import React, { useContext, useMemo, useState } from 'react';
-import { Todo } from '../types/Todo';
+import React, { useContext } from 'react';
 import '../styles/todo.scss';
 import '../styles/todoapp.scss';
-import { CreatedContext } from './ToDoContext';
+import { Dispatch, StateContext } from './ToDoContext';
+import { FilterButtons } from '../types/FilterType';
 
 export const ToDoList: React.FC = () => {
-  const { todos, setTodos, filterButton } = useContext(CreatedContext);
-  const [edittedToDoTitle, setEdittedToDoTitle] = useState<string>('');
-  const [saveEdittedId, setSaveEdittedId] = useState<number | null>(null);
+  const { filterButton } = useContext(StateContext);
 
-  const changeTodoStatus = (todo: Todo) => {
-    const newTodoStatus = { ...todo, completed: !todo.completed };
+  const dispatch = useContext(Dispatch);
+  const { todos } = useContext(StateContext);
 
-    const changedTodos = todos.map(currentTodo =>
-      currentTodo.id === todo.id ? newTodoStatus : currentTodo,
-    );
-
-    setTodos(changedTodos);
-  };
-
-  const deleteTodo = (idNumber: number) => {
-    const updatedTodos = todos.filter(todo => todo.id !== idNumber);
-
-    setTodos(updatedTodos);
-  };
-
-  const editTodo = (idNumber: number, edittedTitle: string) => {
-    const updateTodos = todos.map(todo => {
-      if (todo.id === idNumber) {
-        return { ...todo, title: edittedTitle };
-      }
-
-      return todo;
-    });
-
-    setTodos(updateTodos);
-  };
-
-  const saveEdittedTitle = (idNumber: number) => {
-    const trimmedTitle = edittedToDoTitle.trim();
-
-    if (!trimmedTitle) {
-      deleteTodo(idNumber);
-    } else {
-      editTodo(idNumber, trimmedTitle);
+  const filteredTodos = todos.filter(todo => {
+    if (filterButton === FilterButtons.Completed) {
+      return todo.completed;
     }
 
-    setSaveEdittedId(null);
-  };
-
-  const handleRemoveButton = (removedId: number) => {
-    const removeTodo = todos.filter(todo => todo.id !== removedId);
-
-    setTodos([...removeTodo]);
-  };
-
-  const handleDoubleClick = (newId: number, newTitle: string) => {
-    setEdittedToDoTitle(newTitle);
-    setSaveEdittedId(newId);
-  };
-
-  const handleKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-    idNumber: number,
-  ) => {
-    if (event.key === 'Enter') {
-      saveEdittedTitle(idNumber);
-    } else if (event.key === 'Escape') {
-      setSaveEdittedId(null);
+    if (filterButton === FilterButtons.Active) {
+      return !todo.completed;
     }
-  };
 
-  const filteredTodos = useMemo(() => {
-    switch (filterButton) {
-      case 'All':
-        return todos;
-      case 'Completed':
-        return todos.filter(todo => todo.completed);
-      case 'Active':
-        return todos.filter(todo => !todo.completed);
-      default:
-        return todos;
-    }
-  }, [todos, filterButton]);
+    return true;
+  });
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -100,27 +38,68 @@ export const ToDoList: React.FC = () => {
                 type="checkbox"
                 className="todo__status"
                 checked={todo.completed}
-                onChange={() => changeTodoStatus(todo)}
+                disabled={todo.editted}
+                onClick={() => {
+                  dispatch({
+                    type: 'CHANGE TODO STATUS',
+                    idNumber: todo.id,
+                  });
+                }}
               />
             </label>
-            {saveEdittedId !== null && saveEdittedId === todo.id ? (
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value={edittedToDoTitle}
-                onChange={event => setEdittedToDoTitle(event.target.value)}
-                onBlur={() => saveEdittedTitle(todo.id)}
-                onKeyUp={event => handleKeyPress(event, todo.id)}
-                autoFocus
-              />
+            {todo.editted ? (
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  dispatch({
+                    type: 'EDIT TODO',
+                    idNumber: todo.id,
+                  });
+                }}
+              >
+                <input
+                  data-cy="TodoTitleField"
+                  type="text"
+                  className="todo__title-field"
+                  placeholder="Empty todo will be deleted"
+                  value={todo.title}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    dispatch({
+                      type: 'UPDATE TITLE',
+                      idNumber: todo.id,
+                      edittedTitle: event.target.value.toString(),
+                    });
+                  }}
+                  onBlur={() => {
+                    dispatch({
+                      type: 'EDIT TODO',
+                      idNumber: todo.id,
+                    });
+                  }}
+                  onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (event.key === 'Escape') {
+                      return {
+                        ...todo,
+                        completed: !todo.completed,
+                      };
+                    }
+
+                    return todo;
+                  }}
+                  autoFocus
+                />
+              </form>
             ) : (
               <>
                 <span
                   data-cy="TodoTitle"
                   className="todo__title"
-                  onDoubleClick={() => handleDoubleClick(todo.id, todo.title)}
+                  onDoubleClick={() => {
+                    dispatch({
+                      type: 'EDIT TODO',
+                      idNumber: todo.id,
+                    });
+                  }}
                 >
                   {todo.title}
                 </span>
@@ -128,7 +107,12 @@ export const ToDoList: React.FC = () => {
                   type="button"
                   className="todo__remove"
                   data-cy="TodoDelete"
-                  onClick={() => handleRemoveButton(todo.id)}
+                  onClick={() => {
+                    dispatch({
+                      type: 'DELETE TODO',
+                      idNumber: todo.id,
+                    });
+                  }}
                 >
                   ×
                 </button>

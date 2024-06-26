@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CreatedContext } from './ToDoContext';
+import { Dispatch, StateContext } from './ToDoContext';
 import { FilterButtons } from '../types/FilterType';
 import '../styles/todo.scss';
 import '../styles/todoapp.scss';
@@ -7,17 +7,11 @@ import '../styles/filter.scss';
 import classNames from 'classnames';
 
 export const Footer: React.FC = () => {
-  const { todos, setFilterButton, setTodos, filterButton } =
-    useContext(CreatedContext);
+  const { todos, filterButton } = useContext(StateContext);
+  const dispatch = useContext(Dispatch);
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
   const handleCounter = `${activeTodos.length} items left`;
-
-  const handleClearButton = () => {
-    const updateTodos = todos.filter(todo => !todo.completed);
-
-    setTodos(updateTodos);
-  };
 
   return (
     <>
@@ -35,7 +29,12 @@ export const Footer: React.FC = () => {
                 selected: filterButton === FilterButtons.All,
               })}
               data-cy="FilterLinkAll"
-              onClick={() => setFilterButton(FilterButtons.All)}
+              onClick={() => {
+                dispatch({
+                  type: 'SET FILTER',
+                  filter: FilterButtons.All,
+                });
+              }}
             >
               All
             </a>
@@ -46,7 +45,12 @@ export const Footer: React.FC = () => {
                 selected: filterButton === FilterButtons.Active,
               })}
               data-cy="FilterLinkActive"
-              onClick={() => setFilterButton(FilterButtons.Active)}
+              onClick={() => {
+                dispatch({
+                  type: 'SET FILTER',
+                  filter: FilterButtons.Active,
+                });
+              }}
             >
               Active
             </a>
@@ -57,7 +61,12 @@ export const Footer: React.FC = () => {
                 selected: filterButton === FilterButtons.Completed,
               })}
               data-cy="FilterLinkCompleted"
-              onClick={() => setFilterButton(FilterButtons.Completed)}
+              onClick={() => {
+                dispatch({
+                  type: 'SET FILTER',
+                  filter: FilterButtons.Completed,
+                });
+              }}
             >
               Completed
             </a>
@@ -68,7 +77,11 @@ export const Footer: React.FC = () => {
               'todoapp__clear-completed--hidden': completedTodos.length === 0,
             })}
             data-cy="ClearCompletedButton"
-            onClick={() => handleClearButton()}
+            onClick={() => {
+              dispatch({
+                type: 'CLEAR COMPLETED',
+              });
+            }}
             disabled={!todos.some(todo => todo.completed)}
           >
             Clear completed

@@ -1,51 +1,33 @@
-import React, { FormEventHandler, useContext, useEffect, useRef } from 'react';
+import React, { FormEventHandler, useContext, useRef } from 'react';
 import '../styles/todoapp.scss';
-import { CreatedContext } from './ToDoContext';
+import { Dispatch, StateContext } from './ToDoContext';
 import classNames from 'classnames';
 
 export const Header: React.FC = () => {
-  const { todos, setTodos, toDoTitle, setToDoTitle } =
-    useContext(CreatedContext);
+  // eslint-disable-next-line prettier/prettier
+  const {toDoTitle, todos, focusOnTodo
+  } = useContext(StateContext);
+  const dispatch = useContext(Dispatch);
+
   const handleInputSubmit: FormEventHandler = event => {
     event.preventDefault();
-    const newTodo = {
-      id: Date.now(),
-      title: toDoTitle.trim(),
-      completed: false,
-    };
 
-    if (!toDoTitle.trim()) {
-      return;
+    if (toDoTitle.trim()) {
+      dispatch({ type: 'ADD TODO' });
+      dispatch({ type: 'ADD NEW TITLE', newTitle: '' });
     }
-
-    setTodos([...todos, newTodo]);
-    setToDoTitle('');
   };
 
   const allTodosCompleted = todos.filter(todo => todo.completed);
   const completedTodosLength = todos.length === allTodosCompleted.length;
 
-  const handleToggle = () => {
-    if (completedTodosLength) {
-      setTodos(todos.map(todo => ({ ...todo, completed: false })));
-
-      return;
-    }
-
-    setTodos(todos.map(todo => ({ ...todo, completed: true })));
-  };
-
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const focusOnIput = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-  useEffect(() => {
-    focusOnIput();
-  }, [todos.length]);
+  if (focusOnTodo) {
+    inputRef.current?.focus();
+  } else {
+    inputRef.current?.blur();
+  }
 
   return (
     <header className="todoapp__header">
@@ -56,7 +38,11 @@ export const Header: React.FC = () => {
             active: completedTodosLength,
           })}
           data-cy="ToggleAllButton"
-          onClick={handleToggle}
+          onClick={() => {
+            dispatch({
+              type: 'TOGGLE TODOS',
+            });
+          }}
         />
       )}
 
@@ -67,8 +53,23 @@ export const Header: React.FC = () => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={toDoTitle}
-          onChange={e => setToDoTitle(e.target.value)}
           ref={inputRef}
+          onClick={() => {
+            dispatch({
+              type: 'FOCUS NEW TODO',
+            });
+          }}
+          onBlur={() => {
+            dispatch({
+              type: 'FOCUS NEW TODO',
+            });
+          }}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            dispatch({
+              type: 'ADD NEW TITLE',
+              newTitle: event.target.value.toString(),
+            });
+          }}
         />
       </form>
     </header>
