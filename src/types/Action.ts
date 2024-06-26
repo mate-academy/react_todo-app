@@ -1,4 +1,5 @@
 import { FilterButtons } from './FilterType';
+import { Todo } from './Todo';
 
 export type Action =
   | { type: 'ADD TODO' }
@@ -10,4 +11,5 @@ export type Action =
   | { type: 'TOGGLE TODOS' }
   | { type: 'CLEAR COMPLETED' }
   | { type: 'EDIT TODO'; idNumber: number }
-  | { type: 'UPDATE TITLE'; idNumber: number; edittedTitle: string };
+  | { type: 'UPDATE TITLE'; idNumber: number; edittedTitle: string }
+  | { type: 'GET TODOS FROM STORAGE'; todos: Todo[] };

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import '../styles/todo.scss';
 import '../styles/todoapp.scss';
 import { Dispatch, StateContext } from './ToDoContext';
@@ -22,6 +22,14 @@ export const ToDoList: React.FC = () => {
 
     return true;
   });
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -62,6 +70,7 @@ export const ToDoList: React.FC = () => {
                   type="text"
                   className="todo__title-field"
                   placeholder="Empty todo will be deleted"
+                  ref={todo.editted && inputRef}
                   value={todo.title}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     dispatch({

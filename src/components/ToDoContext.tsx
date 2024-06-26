@@ -20,6 +20,11 @@ type Props = {
 
 const reducer = (state: ContextType, action: Action): ContextType => {
   switch (action.type) {
+    case 'GET TODOS FROM STORAGE':
+      return {
+        ...state,
+        todos: [...action.todos],
+      };
     case 'ADD TODO':
       return {
         ...state,

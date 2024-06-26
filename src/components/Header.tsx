@@ -70,6 +70,7 @@ export const Header: React.FC = () => {
               newTitle: event.target.value.toString(),
             });
           }}
+          autoFocus
         />
       </form>
     </header>
