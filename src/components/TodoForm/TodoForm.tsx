@@ -1,14 +1,14 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   addTodo: (todo: Todo) => void;
+  setTitle: (v: string) => void;
+  title: string;
   // todo: Todo;
 };
 
-export const TodoForm: React.FC<Props> = ({ addTodo }) => {
-  const [title, setTitle] = useState('');
-
+export const TodoForm: React.FC<Props> = ({ addTodo, setTitle, title }) => {
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 

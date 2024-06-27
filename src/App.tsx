@@ -10,6 +10,7 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 export const App: React.FC = () => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [status, setStatus] = useState<Status>(Status.all);
+  const [title, setTitle] = useState('');
 
   const addTodo = (newTodo: Todo) => {
     setTodos([...todos, newTodo]);
@@ -25,17 +26,37 @@ export const App: React.FC = () => {
     setTodos(todos.map(todo => ({ ...todo, completed: !allChecked })));
   };
 
-  const updateTodo = (newTodo: Todo) => {
-    const index = todos.findIndex(todo => todo.id === newTodo.id);
+  const updateTodoCheckStatus = (updatedTodo: Todo) => {
+    const index = todos.findIndex(todo => todo.id === updatedTodo.id);
     const updatedTodos = [...todos];
 
-    updatedTodos[index] = newTodo;
+    updatedTodos[index] = updatedTodo;
 
     setTodos(updatedTodos);
   };
 
+  const updateTodo = (updatedTodo: Todo) => {
+    if (updatedTodo.title) {
+      setTodos(
+        todos.map(todo =>
+          todo.id === updatedTodo.id
+            ? { ...todo, title: updatedTodo.title }
+            : todo,
+        ),
+      );
+    } else {
+      deleteTodo(updatedTodo);
+    }
+  };
+
+  // const editTodo = (id: number) => {
+  //   setTodos(
+  //     todos.map(todo => (todo.id === id ? { ...todo, isEditing: true } : todo)),
+  //   );
+  // };
+
   const clearCompleted = () => {
-    setTodos(todos.filter(currentTodo => !currentTodo.completed));
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   const getList = (sortType: Status): Todo[] => {
@@ -59,11 +80,14 @@ export const App: React.FC = () => {
           addTodo={addTodo}
           toggleAllChecked={toggleAllChecked}
           allChecked={todos.every(todo => todo.completed)}
+          title={title}
+          setTitle={setTitle}
         />
 
         <TodoList
           todos={getList(status)}
           deleteTodo={deleteTodo}
+          updateTodoCheckStatus={updateTodoCheckStatus}
           updateTodo={updateTodo}
         />
 

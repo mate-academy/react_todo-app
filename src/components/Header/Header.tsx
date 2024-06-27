@@ -8,6 +8,8 @@ type Props = {
   // todo: Todo;
   toggleAllChecked: () => void;
   allChecked: boolean;
+  setTitle: (v: string) => void;
+  title: string;
 };
 
 export const Header: React.FC<Props> = ({
@@ -16,6 +18,8 @@ export const Header: React.FC<Props> = ({
   // toggleAll,
   toggleAllChecked,
   allChecked,
+  title,
+  setTitle,
 }) => {
   return (
     <header className="todoapp__header">
@@ -28,7 +32,7 @@ export const Header: React.FC<Props> = ({
       />
 
       {/* Add a todo on form submit */}
-      <TodoForm addTodo={addTodo} />
+      <TodoForm addTodo={addTodo} setTitle={setTitle} title={title} />
     </header>
   );
 };
