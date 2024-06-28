@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type Props = {
-  addTodo: (title: string) => void,
+  addTodo: (title: string) => void;
 };
 
-export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
+export const AddTodoForm = ({ addTodo }: Props) => {
   const [newTitle, setNewTitle] = useState('');
 
   return (

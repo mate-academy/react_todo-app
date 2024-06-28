@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
+import { Todo } from '../types/Todo';
 
 type Props = {
   todo: Todo;
-  onDelete: (todoId: string) => void,
-  onUpdate: (todo: Todo) => void,
+  onDelete: (todoId: string) => void;
+  onUpdate: (todo: Todo) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo, onDelete, onUpdate }) => {
@@ -76,15 +77,9 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete, onUpdate }) => {
           onChange={toggle}
         />
 
-        <label onDoubleClick={startEditing}>
-          {todo.title}
-        </label>
+        <label onDoubleClick={startEditing}>{todo.title}</label>
 
-        <button
-          type="button"
-          className="destroy"
-          onClick={remove}
-        />
+        <button type="button" className="destroy" onClick={remove} />
       </div>
 
       <input

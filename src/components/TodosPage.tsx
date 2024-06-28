@@ -28,7 +28,7 @@ export function TodosPage() {
     navigate(`/${Filter.all}`);
   };
 
-  return ( // --------- Template ------------
+  return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>

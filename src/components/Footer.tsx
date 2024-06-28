@@ -5,8 +5,8 @@ import { Link, useParams } from 'react-router-dom';
 import { Filter } from '../types/Filter';
 
 type Props = {
-  itemsLeft: number,
-  clearCompleted: () => void,
+  itemsLeft: number;
+  clearCompleted: () => void;
 };
 
 export const Footer: React.FC<Props> = ({ itemsLeft, clearCompleted }) => {
@@ -14,11 +14,7 @@ export const Footer: React.FC<Props> = ({ itemsLeft, clearCompleted }) => {
 
   return (
     <footer className="footer">
-      <span className="todo-count">
-        {itemsLeft}
-        {' '}
-        items left
-      </span>
+      <span className="todo-count">{itemsLeft} items left</span>
 
       <ul className="filters">
         <li>
