@@ -11,7 +11,7 @@ type TodosContextType = {
   clearCompleted: () => void;
 };
 
-export const TodosContext = React.createContext<TodosContextType>({
+const TodosContext = React.createContext<TodosContextType>({
   getAll: () => [],
   add: () => {},
   remove: () => {},
@@ -86,4 +86,8 @@ export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
   );
+};
+
+export const useTodos = () => {
+  return React.useContext(TodosContext);
 };
