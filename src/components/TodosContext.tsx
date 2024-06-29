@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
+import * as api from '../api';
 
 type TodosContextType = {
   getAll: (type?: Filter) => Todo[];
@@ -21,49 +22,35 @@ const TodosContext = React.createContext<TodosContextType>({
 });
 
 export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const data = window.localStorage.getItem('todos');
-
-    return data ? JSON.parse(data) : [];
-  });
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    window.localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+    api.getTodos().then(setTodos);
+  }, []);
 
   const getAll = (type = Filter.all) => {
-    switch (type) {
-      case Filter.active:
-        return todos.filter(todo => !todo.completed);
+    if (type === Filter.active) return todos.filter(todo => !todo.completed);
+    if (type === Filter.completed) return todos.filter(todo => todo.completed);
 
-      case Filter.completed:
-        return todos.filter(todo => todo.completed);
-
-      default:
-        return todos;
-    }
+    return todos;
   };
 
-  const add = (title: string) => {
-    const newTodo: Todo = {
-      id: `${Date.now()}`,
-      title,
-      completed: false,
-    };
+  const add = async (title: string) => {
+    const newTodo = await api.addTodo(title);
 
     setTodos([...todos, newTodo]);
   };
 
-  const remove = (todoId: string) => {
+  const remove = async (todoId: string) => {
+    await api.removeTodo(todoId);
     setTodos(todos.filter(todo => todo.id !== todoId));
   };
 
-  const update = (todoData: Todo) => {
-    setTodos(
-      todos.map(todo => {
-        return todo.id === todoData.id ? todoData : todo;
-      }),
-    );
+  const update = async ({ id, title, completed }: Todo) => {
+    const updatedTodo = await api.updateTodo({ id, title, completed });
+    const newTodos = todos.map(todo => (todo.id === id ? updatedTodo : todo));
+
+    setTodos(newTodos);
   };
 
   const toggleAll = (completed: boolean) => {
