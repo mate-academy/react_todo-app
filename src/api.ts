@@ -21,3 +21,12 @@ export const updateTodo = async (todo: Todo) => {
   const response = await axios.put<Todo>(`/todos/${todo.id}`, todo);
   return response.data;
 };
+
+
+export const removeTodos = async (ids: string[]) => {
+  await axios.patch('/todos?action=delete', ids);
+};
+
+export const updateTodos = async (todos: Todo[]) => {
+  await axios.patch('/todos?action=update', todos);
+};

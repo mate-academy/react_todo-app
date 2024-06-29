@@ -39,16 +39,19 @@ export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
     return todos;
   };
 
-  const toggleAll = (completed: boolean) => {
-    setTodos(
-      todos.map(todo => {
-        return todo.completed === completed ? todo : { ...todo, completed };
-      }),
-    );
+  const clearCompleted = () => {
+    const toDelete = todos.filter(todo => todo.completed);
+    const ids = toDelete.map(todo => todo.id);
+
+    return api.removeTodos(ids).then(reload);
   };
 
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed));
+  const toggleAll = async (completed: boolean) => {
+    const toUpdate = todos
+      .filter(todo => todo.completed !== completed)
+      .map(todo => ({ ...todo, completed }));
+
+    return api.updateTodos(toUpdate).then(reload);
   };
 
   return (
