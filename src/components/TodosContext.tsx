@@ -24,33 +24,19 @@ const TodosContext = React.createContext<TodosContextType>({
 export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  useEffect(() => {
-    api.getTodos().then(setTodos);
-  }, []);
+  const reload = () => api.getTodos().then(setTodos);
+
+  useEffect(() => void reload(), []);
+
+  const add = (title: string) => api.addTodo(title).then(reload);
+  const remove = (id: string) => api.removeTodo(id).then(reload);
+  const update = (todo: Todo) => api.updateTodo(todo).then(reload);
 
   const getAll = (type = Filter.all) => {
     if (type === Filter.active) return todos.filter(todo => !todo.completed);
     if (type === Filter.completed) return todos.filter(todo => todo.completed);
 
     return todos;
-  };
-
-  const add = async (title: string) => {
-    const newTodo = await api.addTodo(title);
-
-    setTodos([...todos, newTodo]);
-  };
-
-  const remove = async (todoId: string) => {
-    await api.removeTodo(todoId);
-    setTodos(todos.filter(todo => todo.id !== todoId));
-  };
-
-  const update = async ({ id, title, completed }: Todo) => {
-    const updatedTodo = await api.updateTodo({ id, title, completed });
-    const newTodos = todos.map(todo => (todo.id === id ? updatedTodo : todo));
-
-    setTodos(newTodos);
   };
 
   const toggleAll = (completed: boolean) => {
