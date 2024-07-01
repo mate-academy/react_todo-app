@@ -46,7 +46,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       editingId,
       setEditingId,
     }),
-    [todos, status, editingId],
+    [todos, setTodos, status, editingId],
   );
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
