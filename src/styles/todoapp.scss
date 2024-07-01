@@ -25,6 +25,7 @@
 
   &__header {
     position: relative;
+    box-sizing: border-box;
   }
 
   &__toggle-all {
@@ -56,8 +57,10 @@
   }
 
   &__new-todo {
-    width: 100%;
-    padding: 16px 16px 16px 60px;
+    width: 88%;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 60px;
 
     font-size: 24px;
     line-height: 1.4em;
