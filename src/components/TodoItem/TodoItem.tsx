@@ -1,26 +1,44 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoContext } from '../../context';
 
 type Props = {
   todo: Todo;
-  deleteTodo: (todo: Todo) => void;
-  updateTodoCheckStatus: (todo: Todo) => void;
-  updateTodo: (todo: Todo) => void;
-  setEditingId: (arg: number | undefined) => void;
-  isEditing: boolean;
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  deleteTodo,
-  updateTodoCheckStatus,
-  updateTodo,
-  setEditingId,
-  isEditing,
-}) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [hover, setHover] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
-  // let isEditing = todo.id === editingId;
+  const { todos, setTodos, setEditingId, editingId } = useContext(TodoContext);
+
+  const isEditing = todo.id === editingId;
+
+  const deleteTodo = (item: Todo) => {
+    setTodos(todos.filter(currentTodo => currentTodo.id !== item.id));
+  };
+
+  const updateTodo = (updatedTodo: Todo) => {
+    if (updatedTodo.title) {
+      setTodos(
+        todos.map(item =>
+          item.id === updatedTodo.id
+            ? { ...item, title: updatedTodo.title }
+            : item,
+        ),
+      );
+    } else {
+      deleteTodo(updatedTodo);
+    }
+  };
+
+  const updateTodoCheckStatus = (updatedTodo: Todo) => {
+    const index = todos.findIndex(item => item.id === updatedTodo.id);
+    const updatedTodos = [...todos];
+
+    updatedTodos[index] = updatedTodo;
+
+    setTodos(updatedTodos);
+  };
 
   const handleDoubleClick = (editedTodo: Todo) => {
     setEditingId(editedTodo.id);

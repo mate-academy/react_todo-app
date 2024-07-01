@@ -1,14 +1,16 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useContext } from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoContext } from '../../context';
 
-type Props = {
-  addTodo: (todo: Todo) => void;
-  setTitle: (v: string) => void;
-  title: string;
-  // todo: Todo;
-};
+type Props = {};
 
-export const TodoForm: React.FC<Props> = ({ addTodo, setTitle, title }) => {
+export const TodoForm: React.FC<Props> = () => {
+  const { title, setTitle, setTodos, todos } = useContext(TodoContext);
+
+  const addTodo = (newTodo: Todo) => {
+    setTodos([...todos, newTodo]);
+  };
+
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 

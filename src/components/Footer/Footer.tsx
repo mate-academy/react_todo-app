@@ -1,34 +1,25 @@
-// import { useContext } from 'react';
-// import { TodoContext } from '../../context';
-// import { Todo } from '../../types/Todo';
-
+import { TodoContext } from '../../context';
+import { useContext } from 'react';
 import { Status } from '../../types/Status';
-import { Todo } from '../../types/Todo';
 
-type Props = {
-  todos: Todo[];
-  setStatus: (sortType: Status) => void;
-  status: Status;
-  clearCompleted: () => void;
-};
+type Props = {};
 
-export const Footer: React.FC<Props> = ({
-  todos,
-  setStatus,
-  status,
-  clearCompleted,
-}) => {
-  // const { todos, setTodos } = useContext<Todo[]>(TodoContext);
+export const Footer: React.FC<Props> = () => {
+  const { todos, setTodos, status, setStatus } = useContext(TodoContext);
+
+  const clearCompleted = () => {
+    setTodos(todos.filter(todo => !todo.completed));
+  };
+
   const activeList = todos.filter(todo => !todo.completed);
   const completedList = todos.filter(todo => todo.completed);
 
-  return (
+  return todos.length > 0 ? (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {activeList.length} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -64,7 +55,6 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
@@ -75,5 +65,7 @@ export const Footer: React.FC<Props> = ({
         Clear completed
       </button>
     </footer>
+  ) : (
+    <></>
   );
 };

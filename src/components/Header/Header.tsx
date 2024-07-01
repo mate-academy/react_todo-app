@@ -1,29 +1,20 @@
-import { Todo } from '../../types/Todo';
+import { useContext } from 'react';
 import { TodoForm } from '../TodoForm/TodoForm';
+import { TodoContext } from '../../context';
 
-type Props = {
-  addTodo: (todo: Todo) => void;
-  // handleToggleAll: () => void;
-  // toggleAll: boolean;
-  // todo: Todo;
-  toggleAllChecked: () => void;
-  allChecked: boolean;
-  setTitle: (v: string) => void;
-  title: string;
-};
+type Props = {};
 
-export const Header: React.FC<Props> = ({
-  addTodo,
-  // handleToggleAll,
-  // toggleAll,
-  toggleAllChecked,
-  allChecked,
-  title,
-  setTitle,
-}) => {
+export const Header: React.FC<Props> = () => {
+  const { todos, setTodos } = useContext(TodoContext);
+
+  const allChecked = todos.every(todo => todo.completed);
+
+  const toggleAllChecked = () => {
+    setTodos(todos.map(todo => ({ ...todo, completed: !allChecked })));
+  };
+
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
         className={'todoapp__toggle-all ' + (allChecked ? 'active' : '')}
@@ -31,8 +22,7 @@ export const Header: React.FC<Props> = ({
         onClick={toggleAllChecked}
       />
 
-      {/* Add a todo on form submit */}
-      <TodoForm addTodo={addTodo} setTitle={setTitle} title={title} />
+      <TodoForm />
     </header>
   );
 };
