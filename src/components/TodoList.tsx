@@ -5,9 +5,15 @@ type Props = {
   todos: Todo[];
   onCheck: (t: Todo) => void;
   onDelete: (id: number) => void;
+  onUpdate: (updTodo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onCheck, onDelete }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onCheck,
+  onDelete,
+  onUpdate,
+}) => {
   return (
     <>
       <section className="todoapp__main" data-cy="TodoList">
@@ -16,6 +22,7 @@ export const TodoList: React.FC<Props> = ({ todos, onCheck, onDelete }) => {
             todo={todo}
             onCheckedChange={onCheck}
             onDeleteTodo={onDelete}
+            onTextUpdate={onUpdate}
             key={todo.id}
           />
         ))}

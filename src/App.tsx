@@ -1,40 +1,82 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useReducer } from 'react';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { AddTodo } from './components/AddTodo';
 import { Todo } from './types/Todo';
-import { useLocalStorage } from './services/useLocalStorage';
 import classNames from 'classnames';
+import { getLocalStorageData } from './services/getLocalStorageData';
+import { Filter } from './types/Filterr';
+
+type Action =
+  | { type: 'add'; payload: string }
+  | { type: 'delete'; payload: number }
+  | { type: 'update'; payload: Todo }
+  | { type: Filter };
+
+function reducer(todos: Todo[], action: Action) {
+  let newTodos: Todo[] = [];
+
+  switch (action.type) {
+    case 'add':
+      newTodos = [
+        ...todos,
+        { id: +new Date(), title: action.payload.trim(), completed: false },
+      ];
+      break;
+
+    case 'delete':
+      newTodos = todos.filter(t => t.id !== action.payload);
+      break;
+
+    case 'update':
+      newTodos = todos.map(t =>
+        t.id === action.payload.id ? action.payload : t,
+      );
+      break;
+
+    case 'filterAll':
+      newTodos = [...todos];
+      break;
+
+    case 'filterActive':
+      newTodos = todos.filter(t => !t.completed);
+      break;
+
+    case 'filterCompleted':
+      newTodos = todos.filter(t => t.completed);
+      break;
+
+    default:
+      return todos;
+  }
+
+  localStorage.setItem('todos', JSON.stringify(newTodos));
+
+  return newTodos;
+}
 
 export const App: React.FC = () => {
-  const initialTodos: Todo[] = [];
-
-  const [todos, setTodos] = useLocalStorage('todos', initialTodos);
+  const initialTodos: Todo[] = getLocalStorageData('todos', []);
+  const [todos, dispatch] = useReducer(reducer, initialTodos);
 
   const handleAddTodo = (text: string) => {
-    setTodos([...todos, { id: +new Date(), title: text, completed: false }]);
-  };
-
-  const handleCheckbox = (updatedTodo: Todo) => {
-    const idx = todos.findIndex(t => t.id === updatedTodo.id);
-    const newTodos = [...todos];
-
-    newTodos.splice(idx, 1, updatedTodo);
-
-    setTodos([...newTodos]);
+    dispatch({ type: 'add', payload: text });
   };
 
   const handleDeleteTodo = (todoId: number) => {
-    const deletedIdx = todos.findIndex(t => t.id === todoId);
-    const updatedTodos = [...todos];
+    dispatch({ type: 'delete', payload: todoId });
+  };
 
-    updatedTodos.splice(deletedIdx, 1);
-
-    setTodos([...updatedTodos]);
+  const handleUpdateTodo = (updTextTodo: Todo) => {
+    dispatch({ type: 'update', payload: updTextTodo });
   };
 
   const isAllCompleted = todos.every(t => t.completed === true);
+
+  const handleFilter = (filter: Filter) => {
+    dispatch({ type: filter });
+  };
 
   return (
     <div className="todoapp">
@@ -57,11 +99,14 @@ export const App: React.FC = () => {
 
         <TodoList
           todos={todos}
-          onCheck={handleCheckbox}
+          onCheck={handleUpdateTodo}
           onDelete={handleDeleteTodo}
+          onUpdate={handleUpdateTodo}
         />
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && <Footer />}
+        {todos.length > 0 && (
+          <Footer todos={todos} onFilterTodos={handleFilter} />
+        )}
       </div>
     </div>
   );

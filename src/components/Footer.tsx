@@ -1,33 +1,66 @@
-export const Footer = () => {
+import { useState } from 'react';
+import { Todo } from '../types/Todo';
+import classNames from 'classnames';
+import { Filter } from '../types/Filterr';
+
+type Props = {
+  todos: Todo[];
+  onFilterTodos: (filter: Filter) => void;
+};
+
+export const Footer: React.FC<Props> = ({ todos, onFilterTodos }) => {
+  const filterCompleted = todos.filter(t => t.completed);
+  const [activeFilter, setActiveFilter] = useState<Filter>(Filter.Completed);
+
   return (
     <>
       <footer className="todoapp__footer" data-cy="Footer">
         <span className="todo-count" data-cy="TodosCounter">
-          3 items left
+          {filterCompleted.length > 1
+            ? `${filterCompleted.length} items left`
+            : `${filterCompleted.length} item left`}
         </span>
 
         {/* Active link should have the 'selected' class */}
         <nav className="filter" data-cy="Filter">
           <a
             href="#/"
-            className="filter__link selected"
+            className={classNames('filter__link', {
+              ['selected']: activeFilter === 'filterAll',
+            })}
             data-cy="FilterLinkAll"
+            onClick={() => {
+              setActiveFilter(Filter.All);
+              onFilterTodos(activeFilter);
+            }}
           >
             All
           </a>
 
           <a
             href="#/active"
-            className="filter__link"
+            className={classNames('filter__link', {
+              ['selected']: activeFilter === 'filterActive',
+            })}
             data-cy="FilterLinkActive"
+            onClick={() => {
+              setActiveFilter(Filter.Active);
+              onFilterTodos(activeFilter);
+            }}
           >
             Active
           </a>
 
           <a
             href="#/completed"
-            className="filter__link"
+            className={classNames('filter__link', {
+              ['selected']: activeFilter === 'filterCompleted',
+            })}
             data-cy="FilterLinkCompleted"
+            onClick={() => {
+              setActiveFilter(Filter.Completed);
+              onFilterTodos(activeFilter);
+            }}
           >
             Completed
           </a>
