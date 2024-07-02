@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { StateContext, DispatchContext } from '../store';
 import cn from 'classnames';
+import { SortTodos } from '../types/type';
 
-export const TodoFooter = () => {
+export const TodoFooter: React.FC = () => {
   const { todos, sortTodos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
   const todosLeft = todos.filter(todo => !todo.completed).length;
@@ -18,9 +19,9 @@ export const TodoFooter = () => {
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
-              className={cn('filter__link', { selected: sortTodos === 'All' })}
+              className={cn('filter__link', { selected: sortTodos === SortTodos.All })}
               data-cy="FilterLinkAll"
-              onClick={() => dispatch({ type: 'setSortTodos', name: 'All' })}
+              onClick={() => dispatch({ type: 'setSortTodos', name: SortTodos.All })}
             >
               All
             </a>
@@ -28,10 +29,10 @@ export const TodoFooter = () => {
             <a
               href="#/active"
               className={cn('filter__link', {
-                selected: sortTodos === 'Active',
+                selected: sortTodos === SortTodos.Active,
               })}
               data-cy="FilterLinkActive"
-              onClick={() => dispatch({ type: 'setSortTodos', name: 'Active' })}
+              onClick={() => dispatch({ type: 'setSortTodos', name: SortTodos.Active, })}
             >
               Active
             </a>
@@ -39,11 +40,11 @@ export const TodoFooter = () => {
             <a
               href="#/completed"
               className={cn('filter__link', {
-                selected: sortTodos === 'Completed',
+                selected: sortTodos === SortTodos.Completed,
               })}
               data-cy="FilterLinkCompleted"
               onClick={() =>
-                dispatch({ type: 'setSortTodos', name: 'Completed' })
+                dispatch({ type: 'setSortTodos', name: SortTodos.Completed, })
               }
             >
               Completed

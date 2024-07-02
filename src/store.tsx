@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
-import { Todo } from './types/type';
+import { Todo, SortTodos } from './types/type';
 
 interface State {
   todos: Todo[];
   newTodo: string;
   focusTodo: boolean;
-  sortTodos: 'All' | 'Active' | 'Completed';
+  sortTodos: SortTodos;
   changeTodo: string;
 }
 
@@ -16,7 +16,7 @@ type Action =
   | { type: 'setChanged'; id: number }
   | { type: 'checked'; id: number }
   | { type: 'setAllCompleted'; use: boolean }
-  | { type: 'setSortTodos'; name: 'All' | 'Active' | 'Completed' }
+  | { type: 'setSortTodos'; name: SortTodos }
   | { type: 'setTodos'; todo: Todo[] }
   | { type: 'setFocusedTodo' }
   | { type: 'cancelChangingTodo'; id: number }
@@ -27,7 +27,7 @@ const initialState: State = {
   todos: [],
   newTodo: '',
   focusTodo: true,
-  sortTodos: 'All',
+  sortTodos: SortTodos.All,
   changeTodo: '',
 };
 
@@ -56,38 +56,32 @@ const reducer = (state: State, action: Action): State => {
     case 'changed':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            if (todo.id === action.id) {
-              return {
-                ...todo,
-                title: action.title,
-              };
-            } else {
-              return todo;
-            }
-          }),
-        ],
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              title: action.title,
+            };
+          }
+          return todo;
+        }),
       };
 
     case 'setChanged':
       return {
         ...state,
-        todos: [
-          ...state.todos
-            .map(todo => {
-              if (todo.id === action.id) {
-                return {
-                  ...todo,
-                  changed: !todo.changed,
-                  title: todo.title.trim(),
-                };
-              } else {
-                return todo;
-              }
-            })
-            .filter(todo => todo.title),
-        ],
+        todos: state.todos
+          .map(todo => {
+            if (todo.id === action.id) {
+              return {
+                ...todo,
+                changed: !todo.changed,
+                title: todo.title.trim(),
+              };
+            }
+            return todo;
+          })
+          .filter(todo => todo.title),
         changeTodo:
           state.todos.find(todo => todo.id === action.id)?.title || '',
       };
@@ -95,31 +89,24 @@ const reducer = (state: State, action: Action): State => {
     case 'checked':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            if (todo.id === action.id) {
-              return {
-                ...todo,
-                completed: !todo.completed,
-              };
-            } else {
-              return todo;
-            }
-          }),
-        ],
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              completed: !todo.completed,
+            };
+          }
+          return todo;
+        }),
       };
 
     case 'setAllCompleted':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            return {
-              ...todo,
-              completed: !action.use,
-            };
-          }),
-        ],
+        todos: state.todos.map(todo => ({
+          ...todo,
+          completed: !action.use,
+        })),
       };
 
     case 'setSortTodos':
@@ -131,7 +118,7 @@ const reducer = (state: State, action: Action): State => {
     case 'setTodos':
       return {
         ...state,
-        todos: [...action.todo],
+        todos: action.todo,
       };
 
     case 'setFocusedTodo':
@@ -143,35 +130,28 @@ const reducer = (state: State, action: Action): State => {
     case 'cancelChangingTodo':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            if (todo.id === action.id) {
-              return {
-                ...todo,
-                title: state.changeTodo,
-              };
-            } else {
-              return todo;
-            }
-          }),
-        ],
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              title: state.changeTodo,
+            };
+          }
+          return todo;
+        }),
       };
 
     case 'remove':
       return {
         ...state,
-        todos: [...state.todos.filter(todo => todo.id !== action.id)],
+        todos: state.todos.filter(todo => todo.id !== action.id),
         focusTodo: !state.focusTodo,
       };
 
     case 'clearAll':
       return {
         ...state,
-        todos: [
-          ...state.todos.filter(todo => {
-            return !todo.completed;
-          }),
-        ],
+        todos: state.todos.filter(todo => !todo.completed),
         focusTodo: !state.focusTodo,
       };
 
