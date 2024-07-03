@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './styles/index.scss';
 
 import { App } from './App';
-import { GlobalStateProvider } from './context/store';
+import { GlobalStateProvider } from './context/Store';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
