@@ -4,7 +4,7 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { AddTodo } from './components/AddTodo';
 import classNames from 'classnames';
-import { DispatchContext, TodosContext } from './context/store';
+import { DispatchContext, TodosContext } from './context/Store';
 
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);

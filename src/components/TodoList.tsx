@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
-import { TodosContext } from '../context/store';
+import { TodosContext } from '../context/Store';
 
 type Props = {};
 

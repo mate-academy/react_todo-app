@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Filter } from '../types/Filter';
-import { DispatchContext, TodosContext } from '../context/store';
+import { DispatchContext, TodosContext } from '../context/Store';
 
 type Props = {};
 

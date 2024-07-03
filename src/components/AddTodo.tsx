@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { DispatchContext } from '../context/store';
+import { DispatchContext } from '../context/Store';
 
 type Props = {};
 
