@@ -1,13 +1,12 @@
+import { useContext } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
+import { TodosContext } from '../context/store';
 
-type Props = {
-  todos: Todo[];
-  onDelete: (id: number) => void;
-  onUpdate: (updatedTodo: Todo) => void;
-};
+type Props = {};
 
-export const TodoList: React.FC<Props> = ({ todos, onDelete, onUpdate }) => {
+export const TodoList: React.FC<Props> = ({}) => {
+  const todos = useContext(TodosContext);
   const filteredTodos: Todo[] = todos.filter(t => {
     switch (t.filter) {
       case 'filterActive':
@@ -25,13 +24,7 @@ export const TodoList: React.FC<Props> = ({ todos, onDelete, onUpdate }) => {
     <>
       <section className="todoapp__main" data-cy="TodoList">
         {filteredTodos.map((todo: Todo) => (
-          <TodoItem
-            todo={todo}
-            onCheckedChange={onUpdate}
-            onDeleteTodo={onDelete}
-            onTextUpdate={onUpdate}
-            key={todo.id}
-          />
+          <TodoItem todo={todo} key={todo.id} />
         ))}
       </section>
     </>

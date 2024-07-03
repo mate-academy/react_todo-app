@@ -1,29 +1,26 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { DispatchContext } from '../context/store';
 
 type Props = {
   todo: Todo;
-  onCheckedChange: (t: Todo) => void;
-  onDeleteTodo: (id: number) => void;
-  onTextUpdate: (updTodo: Todo) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  onCheckedChange,
-  onDeleteTodo,
-  onTextUpdate,
-}) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const dispatch = useContext(DispatchContext);
   const [isEditing, setIsEditing] = useState(false);
   const [textUpdate, setTextUpdate] = useState(todo.title);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onCheckedChange({ ...todo, completed: event.target.checked });
+    dispatch({
+      type: 'update',
+      payload: { ...todo, completed: event.target.checked },
+    });
   };
 
   const handleButtonClick = () => {
-    onDeleteTodo(todo.id);
+    dispatch({ type: 'delete', payload: todo.id });
   };
 
   const handleTextUpdate = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -83,7 +80,10 @@ export const TodoItem: React.FC<Props> = ({
         <form
           onSubmit={(event: React.FormEvent) => {
             event.preventDefault();
-            onTextUpdate({ ...todo, title: textUpdate });
+            dispatch({
+              type: 'update',
+              payload: { ...todo, title: textUpdate },
+            });
             setIsEditing(false);
           }}
         >

@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { DispatchContext } from '../context/store';
 
-type Props = {
-  onAddTodo: (text: string) => void;
-};
+type Props = {};
 
-export const AddTodo: React.FC<Props> = ({ onAddTodo }) => {
+export const AddTodo: React.FC<Props> = ({}) => {
+  const dispatch = useContext(DispatchContext);
   const [text, setText] = useState('');
 
   const handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -14,7 +14,7 @@ export const AddTodo: React.FC<Props> = ({ onAddTodo }) => {
     event.preventDefault();
     setText('');
     if (text.trim() !== '') {
-      onAddTodo(text);
+      dispatch({ type: 'add', payload: text });
     }
   };
 

@@ -1,19 +1,13 @@
-import { useState } from 'react';
-import { Todo } from '../types/Todo';
+import { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { Filter } from '../types/Filter';
+import { DispatchContext, TodosContext } from '../context/store';
 
-type Props = {
-  todos: Todo[];
-  onFilterTodos: (filter: Filter) => void;
-  onClearCompleted: (type: 'clearAll') => void;
-};
+type Props = {};
 
-export const Footer: React.FC<Props> = ({
-  todos,
-  onFilterTodos,
-  onClearCompleted,
-}) => {
+export const Footer: React.FC<Props> = ({}) => {
+  const todos = useContext(TodosContext);
+  const dispatch = useContext(DispatchContext);
   const itemLeft = todos.filter(t => !t.completed);
   const [activeFilter, setActiveFilter] = useState<Filter>(Filter.All);
 
@@ -34,7 +28,7 @@ export const Footer: React.FC<Props> = ({
             data-cy="FilterLinkAll"
             onClick={() => {
               setActiveFilter(Filter.All);
-              onFilterTodos(Filter.All);
+              dispatch({ type: 'filterList', payload: Filter.All });
             }}
           >
             All
@@ -48,7 +42,7 @@ export const Footer: React.FC<Props> = ({
             data-cy="FilterLinkActive"
             onClick={() => {
               setActiveFilter(Filter.Active);
-              onFilterTodos(Filter.Active);
+              dispatch({ type: 'filterList', payload: Filter.Active });
             }}
           >
             Active
@@ -62,7 +56,7 @@ export const Footer: React.FC<Props> = ({
             data-cy="FilterLinkCompleted"
             onClick={() => {
               setActiveFilter(Filter.Completed);
-              onFilterTodos(Filter.Completed);
+              dispatch({ type: 'filterList', payload: Filter.Completed });
             }}
           >
             Completed
@@ -75,7 +69,7 @@ export const Footer: React.FC<Props> = ({
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
           onClick={() => {
-            onClearCompleted('clearAll');
+            dispatch({ type: 'clearAll' });
           }}
         >
           Clear completed
