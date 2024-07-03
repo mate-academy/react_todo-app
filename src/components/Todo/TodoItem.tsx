@@ -21,7 +21,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (editValue !== null) {
       const trimmedTitle = editValue.trim();
 
-      if (!trimmedTitle.length) {
+      if (!trimmedTitle) {
         handleTodoRemove(id);
       } else if (title !== trimmedTitle) {
         handleTitleChange(id, trimmedTitle);

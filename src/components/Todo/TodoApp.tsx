@@ -1,5 +1,5 @@
 import { FilterOption } from '../../types/types';
-import { useTodoTodos, useTodoApi } from './Context';
+import { useTodos, useTodoApi } from './Context';
 import { Filter } from './Filter';
 import { NewTodo } from './NewTodo';
 import { TodoList } from './TodoList';
@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import React, { useMemo, useState } from 'react';
 
 export const TodoApp: React.FC = () => {
-  const todos = useTodoTodos();
+  const todos = useTodos();
   const { handleCompletedChange, handleTodoRemove } = useTodoApi();
   const [filter, setFilter] = useState<FilterOption>(FilterOption.All);
 
@@ -17,12 +17,12 @@ export const TodoApp: React.FC = () => {
     [todos],
   );
 
-  const isEveryTodoCompleted = useMemo(
+  const areTodosCompleted = useMemo(
     () => todos.every(todo => todo.completed),
     [todos],
   );
 
-  const isEveryTodoNotCompleted = useMemo(
+  const areTodosActive = useMemo(
     () => todos.every(todo => !todo.completed),
     [todos],
   );
@@ -32,8 +32,8 @@ export const TodoApp: React.FC = () => {
   const handleEveryCompletedChange = () =>
     todos.forEach(
       todo =>
-        todo.completed === isEveryTodoCompleted &&
-        handleCompletedChange(todo.id, !isEveryTodoCompleted),
+        todo.completed === areTodosCompleted &&
+        handleCompletedChange(todo.id, !areTodosCompleted),
     );
 
   const handleCompletedTodosRemove = () =>
@@ -49,7 +49,7 @@ export const TodoApp: React.FC = () => {
             <button
               type="button"
               className={classNames('todoapp__toggle-all', {
-                active: isEveryTodoCompleted,
+                active: areTodosCompleted,
               })}
               data-cy="ToggleAllButton"
               onClick={handleEveryCompletedChange}
@@ -74,7 +74,7 @@ export const TodoApp: React.FC = () => {
                 type="button"
                 className="todoapp__clear-completed"
                 data-cy="ClearCompletedButton"
-                disabled={isEveryTodoNotCompleted}
+                disabled={areTodosActive}
                 onClick={handleCompletedTodosRemove}
               >
                 Clear completed

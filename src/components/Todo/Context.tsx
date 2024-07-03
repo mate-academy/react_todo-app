@@ -53,7 +53,7 @@ export const TodoProvider = ({ children }: Props) => {
     (title: string): boolean => {
       const trimmedTitle = title.trim();
 
-      if (trimmedTitle.length) {
+      if (trimmedTitle) {
         setTodos(prevTodos => [
           ...prevTodos,
           {
@@ -94,7 +94,7 @@ export const TodoProvider = ({ children }: Props) => {
   );
 };
 
-export const useTodoTodos = () => {
+export const useTodos = () => {
   const value = useContext(TodosContext);
 
   if (!value) {

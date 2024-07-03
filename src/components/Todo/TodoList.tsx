@@ -1,7 +1,7 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { FilterOption } from '../../types/types';
-import { useTodoTodos } from './Context';
+import { useTodos } from './Context';
 import { TodoItem } from './TodoItem';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const TodoList = React.memo(({ filter }: Props) => {
-  const todos = useTodoTodos();
+  const todos = useTodos();
 
   let filterCallback;
 

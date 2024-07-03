@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTodoApi, useTodoTodos } from './Context';
+import { useTodoApi, useTodos } from './Context';
 
 export const NewTodo: React.FC = () => {
   const { handleTodoAdd } = useTodoApi();
-  const todos = useTodoTodos();
+  const todos = useTodos();
   const [newTodoInput, setNewTodoInput] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
