@@ -3,24 +3,31 @@ import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[];
-  onCheck: (t: Todo) => void;
   onDelete: (id: number) => void;
-  onUpdate: (updTodo: Todo) => void;
+  onUpdate: (updatedTodo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  onCheck,
-  onDelete,
-  onUpdate,
-}) => {
+export const TodoList: React.FC<Props> = ({ todos, onDelete, onUpdate }) => {
+  const filteredTodos: Todo[] = todos.filter(t => {
+    switch (t.filter) {
+      case 'filterActive':
+        return !t.completed;
+      case 'filterCompleted':
+        return t.completed;
+      case 'filterAll':
+        return t;
+      default:
+        return t;
+    }
+  });
+
   return (
     <>
       <section className="todoapp__main" data-cy="TodoList">
-        {todos.map((todo: Todo) => (
+        {filteredTodos.map((todo: Todo) => (
           <TodoItem
             todo={todo}
-            onCheckedChange={onCheck}
+            onCheckedChange={onUpdate}
             onDeleteTodo={onDelete}
             onTextUpdate={onUpdate}
             key={todo.id}

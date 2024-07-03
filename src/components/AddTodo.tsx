@@ -10,14 +10,16 @@ export const AddTodo: React.FC<Props> = ({ onAddTodo }) => {
   const handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) =>
     setText(event.target.value);
 
+  const handleOnSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setText('');
+    if (text.trim() !== '') {
+      onAddTodo(text);
+    }
+  };
+
   return (
-    <form
-      onSubmit={(event: React.FormEvent) => {
-        event.preventDefault();
-        setText('');
-        onAddTodo(text);
-      }}
-    >
+    <form onSubmit={handleOnSubmit}>
       <input
         data-cy="NewTodoField"
         type="text"

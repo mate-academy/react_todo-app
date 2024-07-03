@@ -6,13 +6,15 @@ import { AddTodo } from './components/AddTodo';
 import { Todo } from './types/Todo';
 import classNames from 'classnames';
 import { getLocalStorageData } from './services/getLocalStorageData';
-import { Filter } from './types/Filterr';
+import { Filter } from './types/Filter';
 
 type Action =
   | { type: 'add'; payload: string }
   | { type: 'delete'; payload: number }
   | { type: 'update'; payload: Todo }
-  | { type: Filter };
+  | { type: 'filterList'; payload: Filter }
+  | { type: 'setAllComplete'; payload: boolean }
+  | { type: 'clearAll' };
 
 function reducer(todos: Todo[], action: Action) {
   let newTodos: Todo[] = [];
@@ -35,16 +37,16 @@ function reducer(todos: Todo[], action: Action) {
       );
       break;
 
-    case 'filterAll':
-      newTodos = [...todos];
+    case 'filterList':
+      newTodos = todos.map(t => ({ ...t, filter: action.payload }));
       break;
 
-    case 'filterActive':
+    case 'setAllComplete':
+      newTodos = todos.map(t => ({ ...t, completed: action.payload }));
+      break;
+
+    case 'clearAll':
       newTodos = todos.filter(t => !t.completed);
-      break;
-
-    case 'filterCompleted':
-      newTodos = todos.filter(t => t.completed);
       break;
 
     default:
@@ -68,14 +70,22 @@ export const App: React.FC = () => {
     dispatch({ type: 'delete', payload: todoId });
   };
 
-  const handleUpdateTodo = (updTextTodo: Todo) => {
-    dispatch({ type: 'update', payload: updTextTodo });
+  const handleUpdateTodo = (updatedTodo: Todo) => {
+    dispatch({ type: 'update', payload: updatedTodo });
   };
 
   const isAllCompleted = todos.every(t => t.completed === true);
 
+  const handleToggleAll = () => {
+    dispatch({ type: 'setAllComplete', payload: !isAllCompleted });
+  };
+
   const handleFilter = (filter: Filter) => {
-    dispatch({ type: filter });
+    dispatch({ type: 'filterList', payload: filter });
+  };
+
+  const handleClearCompleted = (type: string) => {
+    dispatch({ type: type });
   };
 
   return (
@@ -91,6 +101,7 @@ export const App: React.FC = () => {
               ['active']: isAllCompleted,
             })}
             data-cy="ToggleAllButton"
+            onClick={handleToggleAll}
           />
 
           {/* Add a todo on form submit */}
@@ -99,13 +110,16 @@ export const App: React.FC = () => {
 
         <TodoList
           todos={todos}
-          onCheck={handleUpdateTodo}
           onDelete={handleDeleteTodo}
           onUpdate={handleUpdateTodo}
         />
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
-          <Footer todos={todos} onFilterTodos={handleFilter} />
+          <Footer
+            todos={todos}
+            onFilterTodos={handleFilter}
+            onClearCompleted={handleClearCompleted}
+          />
         )}
       </div>
     </div>
