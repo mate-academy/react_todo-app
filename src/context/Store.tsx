@@ -56,6 +56,7 @@ function reducer(todos: Todo[], action: Action) {
 const initialTodos: Todo[] = getLocalStorageData('todos', []);
 
 export const TodosContext = createContext(initialTodos);
+// eslint-disable-next-line
 export const DispatchContext = createContext((action: Action) => {});
 
 type Props = {
