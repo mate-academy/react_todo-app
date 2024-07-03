@@ -6,7 +6,7 @@ import { Filter } from '../types/Filter';
 type Props = {
   todos: Todo[];
   onFilterTodos: (filter: Filter) => void;
-  onClearCompleted: (type: string) => void;
+  onClearCompleted: (type: 'clearAll') => void;
 };
 
 export const Footer: React.FC<Props> = ({
