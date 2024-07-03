@@ -28,6 +28,17 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const updateTodo = () => {
+    if (textUpdate.trim().length === 0) {
+      dispatch({ type: 'delete', payload: todo.id });
+    } else {
+      dispatch({
+        type: 'update',
+        payload: { ...todo, title: textUpdate.trim() },
+      });
+    }
+  };
+
   useEffect(() => {
     if (isEditing) {
       if (inputRef.current) {
@@ -66,7 +77,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             {todo.title}
           </span>
 
-          {/* Remove button appears only on hover */}
           <button
             type="button"
             className="todo__remove"
@@ -80,10 +90,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <form
           onSubmit={(event: React.FormEvent) => {
             event.preventDefault();
-            dispatch({
-              type: 'update',
-              payload: { ...todo, title: textUpdate },
-            });
+            updateTodo();
             setIsEditing(false);
           }}
         >
@@ -94,9 +101,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title-field"
             value={textUpdate}
             onChange={handleTextUpdate}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Escape') {
+                setTextUpdate(todo.title);
+                setIsEditing(false);
+              }
+            }}
             onBlur={() => {
+              updateTodo();
               setIsEditing(false);
-              setTextUpdate(todo.title);
             }}
           />
         </form>

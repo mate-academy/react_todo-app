@@ -22,22 +22,21 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className={classNames('todoapp__toggle-all', {
-              ['active']: isAllCompleted,
-            })}
-            data-cy="ToggleAllButton"
-            onClick={handleToggleAll}
-          />
+          {todos.length !== 0 && (
+            <button
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                ['active']: isAllCompleted,
+              })}
+              data-cy="ToggleAllButton"
+              onClick={handleToggleAll}
+            />
+          )}
 
-          {/* Add a todo on form submit */}
           <AddTodo />
         </header>
 
         <TodoList />
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && <Footer />}
       </div>
     </div>

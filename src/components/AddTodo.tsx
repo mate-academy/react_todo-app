@@ -1,9 +1,10 @@
-import { useContext, useState } from 'react';
-import { DispatchContext } from '../context/Store';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { DispatchContext, TodosContext } from '../context/Store';
 
 type Props = {};
 
 export const AddTodo: React.FC<Props> = ({}) => {
+  const todos = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
   const [text, setText] = useState('');
 
@@ -12,11 +13,26 @@ export const AddTodo: React.FC<Props> = ({}) => {
 
   const handleOnSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setText('');
-    if (text.trim() !== '') {
-      dispatch({ type: 'add', payload: text });
+    if (text !== '') {
+      dispatch({ type: 'add', payload: text.trim() });
     }
+
+    setText('');
   };
+
+  const inputRefEmpty = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRefEmpty.current) {
+      inputRefEmpty.current.focus();
+    }
+
+    if (todos.length === 0) {
+      if (inputRefEmpty.current) {
+        inputRefEmpty.current.focus();
+      }
+    }
+  }, [todos.length]);
 
   return (
     <form onSubmit={handleOnSubmit}>
@@ -27,6 +43,7 @@ export const AddTodo: React.FC<Props> = ({}) => {
         placeholder="What needs to be done?"
         value={text}
         onChange={handleChangeText}
+        ref={inputRefEmpty}
       />
     </form>
   );
