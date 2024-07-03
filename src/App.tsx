@@ -84,7 +84,7 @@ export const App: React.FC = () => {
     dispatch({ type: 'filterList', payload: filter });
   };
 
-  const handleClearCompleted = (type: string) => {
+  const handleClearCompleted = (type: 'clearAll') => {
     dispatch({ type: type });
   };
 
