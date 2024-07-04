@@ -9,68 +9,53 @@ export const Footer: React.FC = () => {
   const activeList = todos.filter(todo => !todo.completed);
   const completedList = todos.filter(todo => todo.completed);
 
+  const shouldDisable = completedList.length ? false : true;
+
   const clearCompleted = () => {
     dispatch({ type: Type.ClearCompleted });
   };
 
-  return todos.length > 0 ? (
+  if (!todos.length) {
+    return null;
+  }
+
+  return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {activeList.length} items left
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={
-            'filter__link ' + (status === Status.all ? 'selected' : '')
-          }
-          data-cy="FilterLinkAll"
-          onClick={() =>
-            dispatch({ type: Type.setStatus, payload: Status.all })
-          }
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={
-            'filter__link ' + (status === Status.active ? 'selected' : '')
-          }
-          data-cy="FilterLinkActive"
-          onClick={() =>
-            dispatch({ type: Type.setStatus, payload: Status.active })
-          }
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={
-            'filter__link ' + (status === Status.completed ? 'selected' : '')
-          }
-          data-cy="FilterLinkCompleted"
-          onClick={() =>
-            dispatch({ type: Type.setStatus, payload: Status.completed })
-          }
-        >
-          Completed
-        </a>
+        {Object.values(Status).map(statusValue => (
+          <a
+            key={statusValue}
+            href="#/"
+            className={
+              'filter__link ' + (status === statusValue ? 'selected' : '')
+            }
+            data-cy={
+              'FilterLink' +
+              statusValue.charAt(0).toUpperCase() +
+              statusValue.slice(1)
+            }
+            onClick={() =>
+              dispatch({ type: Type.setStatus, payload: statusValue })
+            }
+          >
+            {statusValue}
+          </a>
+        ))}
       </nav>
 
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={!completedList.length}
+        disabled={shouldDisable}
         onClick={clearCompleted}
       >
         Clear completed
       </button>
     </footer>
-  ) : (
-    <></>
   );
 };

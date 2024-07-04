@@ -137,4 +137,10 @@ iframe {
       text-decoration: none;
     }
   }
+
+  .filter {
+    a::first-letter {
+      text-transform: capitalize;
+  }
+}
 }

@@ -11,8 +11,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [newTitle, setNewTitle] = useState(todo.title);
   const { editingId } = useGlobalState();
   const dispatch = useDispatch();
+  const { id, completed, title } = todo;
 
-  const isEditing = todo.id === editingId;
+  const isEditing = id === editingId;
 
   const deleteTodo = (item: Todo) => {
     dispatch({ type: Type.DeleteTodo, payload: item });
@@ -53,25 +54,31 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (isEsc) {
       dispatch({ type: Type.setEditingId, payload: undefined });
-      setNewTitle(todo.title);
+      setNewTitle(title);
     }
+  };
+
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateTodoCheckStatus({ ...todo, completed: e.target.checked });
+  };
+
+  const handleNewTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(e.target.value);
   };
 
   return (
     <div
       data-cy="Todo"
-      className={'todo ' + (todo.completed ? 'completed' : '')}
-      key={todo.id}
+      className={'todo ' + (completed ? 'completed' : '')}
+      key={id}
     >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          onChange={e =>
-            updateTodoCheckStatus({ ...todo, completed: e.target.checked })
-          }
+          checked={completed}
+          onChange={e => handleCheck(e)}
         />
       </label>
 
@@ -83,7 +90,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             value={newTitle}
-            onChange={e => setNewTitle(e.target.value)}
+            onChange={e => handleNewTitle(e)}
             onKeyUp={checkEsc}
             onBlur={updateTitle}
             autoFocus
@@ -96,7 +103,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={() => handleDoubleClick(todo)}
           >
-            {todo.title}
+            {title}
           </span>
 
           <button
