@@ -1,12 +1,12 @@
-import { createRoot } from 'react-dom/client';
-
 import './styles/index.scss';
-import './components/TodoItem/todo.scss';
-import './components/TodoList/filter.scss';
-import './styles/todoapp.scss';
-
+import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { GlobalStateProvider } from './GlobalStateProvider';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <GlobalStateProvider>
+    <App />
+  </GlobalStateProvider>,
+);

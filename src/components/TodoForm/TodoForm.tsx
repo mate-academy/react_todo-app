@@ -1,34 +1,46 @@
-import { ChangeEvent, useContext } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoContext } from '../../context';
+import { useDispatch, useGlobalState } from '../../GlobalStateProvider';
+import { Type } from '../../types/Action';
 
-type Props = {};
-
-export const TodoForm: React.FC<Props> = () => {
-  const { title, setTitle, setTodos, todos } = useContext(TodoContext);
+export const TodoForm: React.FC = () => {
+  const { title, todos } = useGlobalState();
+  const dispatch = useDispatch();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const addTodo = (newTodo: Todo) => {
-    setTodos([...todos, newTodo]);
+    dispatch({ type: Type.AddTodo, payload: newTodo });
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [todos]);
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle) {
+      dispatch({ type: Type.setTitle, payload: '' });
+
+      return;
+    }
 
     const newTodo: Todo = {
       id: +new Date(),
-      title: title.trim(),
+      title: trimmedTitle,
       completed: false,
     };
 
-    if (newTodo) {
-      addTodo(newTodo);
-      setTitle('');
-    }
+    addTodo(newTodo);
+    dispatch({ type: Type.setTitle, payload: '' });
   };
 
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>): void => {
     event.preventDefault();
-    setTitle(event.target.value);
+    dispatch({ type: Type.setTitle, payload: event.target.value });
   };
 
   return (
@@ -40,6 +52,7 @@ export const TodoForm: React.FC<Props> = () => {
         placeholder="What needs to be done?"
         value={title}
         onChange={handleQueryChange}
+        ref={inputRef}
       />
     </form>
   );

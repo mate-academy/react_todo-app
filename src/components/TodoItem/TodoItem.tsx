@@ -1,47 +1,37 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoContext } from '../../context';
+import { useDispatch, useGlobalState } from '../../GlobalStateProvider';
+import { Type } from '../../types/Action';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [hover, setHover] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
-  const { todos, setTodos, setEditingId, editingId } = useContext(TodoContext);
+  const { editingId } = useGlobalState();
+  const dispatch = useDispatch();
 
   const isEditing = todo.id === editingId;
 
   const deleteTodo = (item: Todo) => {
-    setTodos(todos.filter(currentTodo => currentTodo.id !== item.id));
+    dispatch({ type: Type.DeleteTodo, payload: item });
   };
 
   const updateTodo = (updatedTodo: Todo) => {
     if (updatedTodo.title) {
-      setTodos(
-        todos.map(item =>
-          item.id === updatedTodo.id
-            ? { ...item, title: updatedTodo.title }
-            : item,
-        ),
-      );
+      dispatch({ type: Type.UpdateTodo, payload: updatedTodo });
     } else {
       deleteTodo(updatedTodo);
     }
   };
 
   const updateTodoCheckStatus = (updatedTodo: Todo) => {
-    const index = todos.findIndex(item => item.id === updatedTodo.id);
-    const updatedTodos = [...todos];
-
-    updatedTodos[index] = updatedTodo;
-
-    setTodos(updatedTodos);
+    dispatch({ type: Type.UpdateTodoCheckStatus, payload: updatedTodo });
   };
 
   const handleDoubleClick = (editedTodo: Todo) => {
-    setEditingId(editedTodo.id);
+    dispatch({ type: Type.setEditingId, payload: editedTodo.id });
   };
 
   const updateTitle = () => {
@@ -50,7 +40,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setNewTitle(trimmedTitle);
 
     updateTodo({ ...todo, title: trimmedTitle });
-    setEditingId(undefined);
+    dispatch({ type: Type.setEditingId, payload: undefined });
   };
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,24 +52,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     const isEsc = e.key === 'Escape' ? true : false;
 
     if (isEsc) {
-      setEditingId(undefined);
+      dispatch({ type: Type.setEditingId, payload: undefined });
       setNewTitle(todo.title);
     }
   };
 
   return (
-    // <>
-    // {/* This is a completed todo */}
     <div
       data-cy="Todo"
       className={'todo ' + (todo.completed ? 'completed' : '')}
       key={todo.id}
-      onMouseEnter={() => {
-        setHover(true);
-      }}
-      onMouseLeave={() => {
-        setHover(false);
-      }}
     >
       <label className="todo__status-label">
         <input
@@ -117,82 +99,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             {todo.title}
           </span>
 
-          {hover && (
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDelete"
-              onClick={() => deleteTodo(todo)}
-            >
-              ×
-            </button>
-          )}
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => deleteTodo(todo)}
+          >
+            ×
+          </button>
         </>
       )}
-
-      {/* Remove button appears only on hover
-        
-
-      This todo is an active todo
-      <div data-cy="Todo" className="todo" key={todo.id}>
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          Not Completed Todo
-        </span>
-
-        <button type="button" className="todo__remove" data-cy="TodoDelete">
-          ×
-        </button>
-      </div>
-
-      {/* This todo is being edited */}
-      {/* <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        {/* This form is shown instead of the title and remove button */}
-      {/* <form>
-          <input
-            data-cy="TodoTitleField"
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
-          />
-        </form>
-      </div>  */}
-
-      {/* This todo is in loadind state
-      <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          Todo is being saved now
-        </span>
-
-        <button type="button" className="todo__remove" data-cy="TodoDelete">
-          ×
-        </button>
-      </div> 
-    {/* </> */}
     </div>
   );
 };
