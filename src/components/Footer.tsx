@@ -22,7 +22,7 @@ export const Footer: React.FC<Props> = ({}) => {
           <a
             href="#/"
             className={classNames('filter__link', {
-              ['selected']: activeFilter === 'filterAll',
+              ['selected']: activeFilter === Filter.All,
             })}
             data-cy="FilterLinkAll"
             onClick={() => {
@@ -36,7 +36,7 @@ export const Footer: React.FC<Props> = ({}) => {
           <a
             href="#/active"
             className={classNames('filter__link', {
-              ['selected']: activeFilter === 'filterActive',
+              ['selected']: activeFilter === Filter.Active,
             })}
             data-cy="FilterLinkActive"
             onClick={() => {
@@ -50,7 +50,7 @@ export const Footer: React.FC<Props> = ({}) => {
           <a
             href="#/completed"
             className={classNames('filter__link', {
-              ['selected']: activeFilter === 'filterCompleted',
+              ['selected']: activeFilter === Filter.Completed,
             })}
             data-cy="FilterLinkCompleted"
             onClick={() => {

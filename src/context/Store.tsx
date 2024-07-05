@@ -11,6 +11,10 @@ type Action =
   | { type: 'setAllComplete'; payload: boolean }
   | { type: 'clearAll' };
 
+type DispatchContextType = {
+  (action: Action): void;
+};
+
 function reducer(todos: Todo[], action: Action) {
   let newTodos: Todo[] = [];
 
@@ -56,8 +60,7 @@ function reducer(todos: Todo[], action: Action) {
 const initialTodos: Todo[] = getLocalStorageData('todos', []);
 
 export const TodosContext = createContext(initialTodos);
-// eslint-disable-next-line
-export const DispatchContext = createContext((action: Action) => {action});
+export const DispatchContext = createContext<DispatchContextType>(() => {});
 
 type Props = {
   children: React.ReactNode;
