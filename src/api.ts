@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Todo } from './types/Todo';
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'https://mate-nodejs-recording.onrender.com/';
 
 export const getTodos = async () => {
   const response = await axios.get<Todo[]>('/todos');
