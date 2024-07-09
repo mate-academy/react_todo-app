@@ -1,25 +1,41 @@
 import { SelectedFilter } from '../types/SelectedFilter';
-import { SetStateAction } from 'react';
-import { FilteredOptions } from '../types/FilteredOptions';
 import { FilterOptions } from './FilterOption';
+import { useGlobalDispatch, useGlobalState } from '../Store';
 
-type Props = {
-  itemsLeft: () => string;
-  filteredOptions: FilteredOptions[];
-  filter: SelectedFilter;
-  handleMassDeleteTodo: (ids: number[]) => void;
-  completedTodosIds: number[];
-  setFilter: React.Dispatch<SetStateAction<SelectedFilter>>;
-};
+export const Footer = () => {
+  const { todos } = useGlobalState();
+  const dispatch = useGlobalDispatch();
 
-export const Footer: React.FC<Props> = ({
-  itemsLeft,
-  filteredOptions,
-  filter,
-  handleMassDeleteTodo,
-  completedTodosIds,
-  setFilter,
-}) => {
+  const filteredOptions = [
+    { type: SelectedFilter.ALL, href: '#/', data: 'FilterLinkAll' },
+
+    { type: SelectedFilter.ACTIVE, href: '#/active', data: 'FilterLinkActive' },
+
+    {
+      type: SelectedFilter.COMPLETED,
+      href: '#/completed',
+      data: 'FilterLinkCompleted',
+    },
+  ];
+
+  const handleMassDeleteTodo = (ids: number[]) => {
+    dispatch({ type: 'massDelete', payload: ids });
+  };
+
+  const itemsLeft = () => {
+    const uncompletedTodos = todos.filter(todo => !todo.completed).length;
+
+    if (uncompletedTodos === 1) {
+      return `${uncompletedTodos} item left`;
+    }
+
+    return `${uncompletedTodos} items left`;
+  };
+
+  const completedTodosIds = todos
+    .filter(todo => todo.completed)
+    .map(todo => todo.id);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -28,12 +44,7 @@ export const Footer: React.FC<Props> = ({
 
       <nav className="filter" data-cy="Filter">
         {filteredOptions.map(option => (
-          <FilterOptions
-            key={option.type}
-            option={option}
-            filter={filter}
-            setFilter={setFilter}
-          />
+          <FilterOptions key={option.type} option={option} />
         ))}
       </nav>
 
@@ -42,6 +53,7 @@ export const Footer: React.FC<Props> = ({
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         onClick={() => handleMassDeleteTodo(completedTodosIds)}
+        disabled={!completedTodosIds.length}
         style={{
           visibility: !completedTodosIds.length ? 'hidden' : 'visible',
         }}

@@ -1,44 +1,33 @@
 import cn from 'classnames';
-import { Todo } from '../types/Todo';
-import { SetStateAction } from 'react';
 import { MainInput } from './MainInput';
+import { useGlobalDispatch, useGlobalState } from '../Store';
 
-type Props = {
-  completedTodosIds: number[];
-  todos: Todo[];
-  handleToogleButton: () => void;
-  handleSubmit: (event: React.FormEvent) => void;
-  query: string;
-  setQuery: React.Dispatch<SetStateAction<string>>;
-  mainInputRef: React.RefObject<HTMLInputElement>;
-};
+export const Header = () => {
+  const { todos } = useGlobalState();
+  const dispatch = useGlobalDispatch();
 
-export const Header: React.FC<Props> = ({
-  completedTodosIds,
-  todos,
-  handleToogleButton,
-  handleSubmit,
-  query,
-  setQuery,
-  mainInputRef,
-}) => {
+  const completedTodosIds = todos
+    .filter(todo => todo.completed)
+    .map(todo => todo.id);
+
+  const toogleAllChecked = () => {
+    dispatch({ type: 'toogleAllChecked' });
+  };
+
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className={cn('todoapp__toggle-all', {
-          active: completedTodosIds.length === todos.length,
-        })}
-        data-cy="ToggleAllButton"
-        onClick={handleToogleButton}
-      />
+      {!!todos.length && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', {
+            active: completedTodosIds.length === todos.length,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={toogleAllChecked}
+        />
+      )}
 
-      <MainInput
-        handleSubmit={handleSubmit}
-        query={query}
-        setQuery={setQuery}
-        mainInputRef={mainInputRef}
-      />
+      <MainInput />
     </header>
   );
 };

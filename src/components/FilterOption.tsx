@@ -1,19 +1,17 @@
 import cn from 'classnames';
 import { FilteredOptions } from '../types/FilteredOptions';
-import { SelectedFilter } from '../types/SelectedFilter';
-import { SetStateAction } from 'react';
+import { useGlobalDispatch, useGlobalState } from '../Store';
 
 type Props = {
   option: FilteredOptions;
-  filter: SelectedFilter;
-  setFilter: React.Dispatch<SetStateAction<SelectedFilter>>;
 };
 
 export const FilterOptions: React.FC<Props> = ({
   option: { type, href, data },
-  filter,
-  setFilter,
 }) => {
+  const { filter } = useGlobalState();
+  const dispatch = useGlobalDispatch();
+
   return (
     <a
       href={href}
@@ -22,7 +20,7 @@ export const FilterOptions: React.FC<Props> = ({
       })}
       data-cy={data}
       key={type}
-      onClick={() => setFilter(type)}
+      onClick={() => dispatch({ type: 'setFilter', payload: type })}
     >
       {type}
     </a>

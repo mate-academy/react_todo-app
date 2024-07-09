@@ -1,34 +1,34 @@
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { EditForm } from './EditForm';
+import { useGlobalDispatch, useGlobalState } from '../Store';
+// import { deleteFromLocalStorage } from '../utils/LocaleStorage';
 
 type Props = {
   todo: Todo;
-  handleChangeCheckbox: (id: number) => void;
-  isEdited: boolean;
-  editingTodoId: number | null;
-  handleUpdateSubmit: (event: React.FormEvent, newTodo: Todo) => void;
-  editRef: React.RefObject<HTMLInputElement>;
-  currentTitle: string;
-  handleUpdate: (newTodo: Todo) => void;
-  setCurrentTitle: React.Dispatch<React.SetStateAction<string>>;
-  handleDoubleClick: (id: number, title: string) => void;
-  handleDeleteTodo: (id: number) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo: { id, title, completed },
-  handleChangeCheckbox,
-  isEdited,
-  editingTodoId,
-  handleUpdateSubmit,
-  editRef,
-  currentTitle,
-  handleUpdate,
-  setCurrentTitle,
-  handleDoubleClick,
-  handleDeleteTodo,
 }) => {
+  const { editingTodoId } = useGlobalState();
+  const dispatch = useGlobalDispatch();
+
+  const handleDeleteTodo = (index: number) => {
+    // deleteFromLocalStorage(id);
+
+    dispatch({ type: 'deleteTodo', payload: index });
+  };
+
+  const handleChangeCheckbox = (index: number) => {
+    dispatch({ type: 'changeCheckbox', payload: index });
+  };
+
+  const handleDoubleClick = (editId: number, editTitle: string) => {
+    dispatch({ type: 'setCurrentTitle', payload: editTitle });
+    dispatch({ type: 'setEditingTodoId', payload: editId });
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -46,33 +46,28 @@ export const TodoItem: React.FC<Props> = ({
         />
       </label>
 
-      {isEdited && editingTodoId === id ? (
-        <EditForm
-          handleUpdateSubmit={handleUpdateSubmit}
-          newTodo={{ id, title, completed }}
-          editRef={editRef}
-          currentTitle={currentTitle}
-          handleUpdate={handleUpdate}
-          setCurrentTitle={setCurrentTitle}
-        />
+      {editingTodoId === id ? (
+        <EditForm newTodo={{ id, title, completed }} />
       ) : (
-        <span
-          data-cy="TodoTitle"
-          className="todo__title"
-          onDoubleClick={() => handleDoubleClick(id, title)}
-        >
-          {title}
-        </span>
-      )}
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={() => handleDoubleClick(id, title)}
+          >
+            {title}
+          </span>
 
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={() => handleDeleteTodo(id)}
-      >
-        ×
-      </button>
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => handleDeleteTodo(id)}
+          >
+            ×
+          </button>
+        </>
+      )}
     </div>
   );
 };
