@@ -4,70 +4,19 @@ import {
   LOCAL_STORAGE_TODOS_KEY,
   TodosStateContext,
 } from '../lib/TodosContext';
-import { ITodosAction, ITodosState } from '../lib/types';
+import { ITodosState } from '../lib/types';
+import { TodoStatus } from '../../../types/Todo';
+import { reducer } from '../lib/reducer';
+
+if (!localStorage.getItem(LOCAL_STORAGE_TODOS_KEY)) {
+  localStorage.setItem(LOCAL_STORAGE_TODOS_KEY, JSON.stringify([]));
+}
 
 const initialState: ITodosState = {
-  todos: !!localStorage.getItem(LOCAL_STORAGE_TODOS_KEY)
-    ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_TODOS_KEY) as string)
-    : [],
+  todos:
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_TODOS_KEY) as string) || [],
+  filterByStatus: TodoStatus.All,
 };
-
-function reducer(state: ITodosState, action: ITodosAction): ITodosState {
-  let updatedTodos;
-
-  switch (action.type) {
-    case 'add':
-      updatedTodos = [
-        ...state.todos,
-        {
-          id: +Date.now(),
-          completed: false,
-          title: action.payload,
-        },
-      ];
-
-      localStorage.setItem(
-        LOCAL_STORAGE_TODOS_KEY,
-        JSON.stringify(updatedTodos),
-      );
-
-      return {
-        ...state,
-        todos: updatedTodos,
-      };
-
-    case 'update':
-      updatedTodos = state.todos.map(todo =>
-        todo.id === action.payload.id ? { ...todo, ...action.payload } : todo,
-      );
-
-      localStorage.setItem(
-        LOCAL_STORAGE_TODOS_KEY,
-        JSON.stringify(updatedTodos),
-      );
-
-      return {
-        ...state,
-        todos: updatedTodos,
-      };
-
-    case 'remove':
-      updatedTodos = state.todos.filter(todo => todo.id !== action.payload);
-
-      localStorage.setItem(
-        LOCAL_STORAGE_TODOS_KEY,
-        JSON.stringify(updatedTodos),
-      );
-
-      return {
-        ...state,
-        todos: updatedTodos,
-      };
-
-    default:
-      return state;
-  }
-}
 
 interface Props {
   children: ReactNode;

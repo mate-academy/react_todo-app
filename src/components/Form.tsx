@@ -1,29 +1,46 @@
-import React, { FC, FormEvent, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  FormEvent,
+  KeyboardEvent,
+  RefObject,
+} from 'react';
 
 interface Props {
   className: string;
-  onSubmit?: (value: string) => void;
+  value: string;
+  inputRef?: RefObject<HTMLInputElement>;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onBlur?: () => void;
+  onCancel?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  dataCy?: string;
 }
 
 export const Form: FC<Props> = props => {
-  const { className, onSubmit } = props;
-  const [value, setValue] = useState<string>('');
-
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit?.(value);
-    setValue('');
-  };
+  const {
+    className,
+    value,
+    onChange,
+    onSubmit,
+    onBlur,
+    inputRef,
+    onCancel,
+    dataCy = 'NewTodoField',
+  } = props;
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={onSubmit} onBlur={onBlur}>
       <input
-        data-cy="NewTodoField"
+        data-cy={dataCy}
         type="text"
         className={className}
         placeholder="What needs to be done?"
         value={value}
-        onChange={e => setValue(e.target.value)}
+        onChange={onChange}
+        ref={inputRef}
+        onKeyUp={onCancel}
+        autoFocus
       />
     </form>
   );
