@@ -2,7 +2,6 @@ import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { EditForm } from './EditForm';
 import { useGlobalDispatch, useGlobalState } from '../Store';
-// import { deleteFromLocalStorage } from '../utils/LocaleStorage';
 
 type Props = {
   todo: Todo;
@@ -15,8 +14,6 @@ export const TodoItem: React.FC<Props> = ({
   const dispatch = useGlobalDispatch();
 
   const handleDeleteTodo = (index: number) => {
-    // deleteFromLocalStorage(id);
-
     dispatch({ type: 'deleteTodo', payload: index });
   };
 

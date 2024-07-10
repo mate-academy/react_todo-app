@@ -1,37 +1,16 @@
 import React, { useEffect, useReducer } from 'react';
 import { SelectedFilter } from './types/SelectedFilter';
-import { Todo } from './types/Todo';
+import { State } from './types/State';
+import { Action } from './types/Action';
 import { loadFromLocalStorage } from './utils/LocaleStorage';
 
-const data = loadFromLocalStorage();
-
-type State = {
-  todos: Todo[];
-  query: string;
-  filter: SelectedFilter;
-  editingTodoId: number | null;
-  currentTitle: string;
-};
-
 const initialState: State = {
-  todos: data,
+  todos: [],
   query: '',
   filter: SelectedFilter.ALL,
   editingTodoId: null,
   currentTitle: '',
 };
-
-type Action =
-  | { type: 'toogleAllChecked' }
-  | { type: 'addTodo'; payload: Todo }
-  | { type: 'setQuery'; payload: string }
-  | { type: 'deleteTodo'; payload: number }
-  | { type: 'massDelete'; payload: number[] }
-  | { type: 'changeCheckbox'; payload: number }
-  | { type: 'updateTodo'; payload: Todo }
-  | { type: 'setCurrentTitle'; payload: string }
-  | { type: 'setEditingTodoId'; payload: number | null }
-  | { type: 'setFilter'; payload: SelectedFilter };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -123,7 +102,13 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, () => ({
+    todos: loadFromLocalStorage('todos'),
+    query: '',
+    filter: SelectedFilter.ALL,
+    editingTodoId: null,
+    currentTitle: '',
+  }));
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(state.todos));
