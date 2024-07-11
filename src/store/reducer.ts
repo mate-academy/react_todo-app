@@ -44,7 +44,7 @@ export const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case INIT: {
       const todos = LocalStorage.getItem<TodoModel[]>('todos') || [];
-      const filter = (window.location.hash.split('#')[1].replace('/', '') ||
+      const filter = (window.location.hash.split('#')[1]?.replace('/', '') ||
         'all') as Filter;
 
       return {
