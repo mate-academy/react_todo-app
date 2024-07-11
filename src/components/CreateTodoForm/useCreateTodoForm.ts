@@ -14,8 +14,11 @@ export const useCreateTodoForm = () => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const trimmedTitle = inputValue.trim();
 
-    dispatch({ type: CREATE_TODO, payload: { title: inputValue } });
+    if (trimmedTitle) {
+      dispatch({ type: CREATE_TODO, payload: { title: trimmedTitle } });
+    }
 
     setInputValue('');
   };

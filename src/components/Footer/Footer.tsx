@@ -76,16 +76,15 @@ export const Footer = () => {
         </a>
       </nav>
 
-      {!!completedTodosQty && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-          onClick={onDeleteCompletedTodos}
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        onClick={onDeleteCompletedTodos}
+        disabled={!completedTodosQty}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };

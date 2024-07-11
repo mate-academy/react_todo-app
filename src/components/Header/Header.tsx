@@ -25,14 +25,16 @@ export const Header = () => {
 
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className={cn('todoapp__toggle-all', {
-          active: isAllCompleted,
-        })}
-        data-cy="ToggleAllButton"
-        onClick={handleToggleCompleted}
-      />
+      {!!todos.length && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', {
+            active: isAllCompleted,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggleCompleted}
+        />
+      )}
 
       <CreateTodoForm />
     </header>
