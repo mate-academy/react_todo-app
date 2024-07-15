@@ -40,11 +40,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     }
   };
 
-  const handleChangeTodo = (todoId: number, newTodoProp: string) => {
+  const handleChangeTodo = (todoId: number, newTodoProp: keyof Todo) => {
     const updatedTodo: Todo = {
       id: todoId,
       title: newTitle?.trim() || todo.title,
-      completed: newTodoProp === 'status' ? !todoStatus : todoStatus,
+      completed: newTodoProp === 'completed' ? !todoStatus : todoStatus,
     };
 
     setTodos(prevTodos =>
@@ -55,7 +55,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
       ),
     );
 
-    if (newTodoProp === 'status') {
+    if (newTodoProp === 'completed') {
       setTodoStatus(!todoStatus);
     } else if (newTodoProp === 'title' && newTitle) {
       setNewTitle(newTitle.trim());
@@ -106,7 +106,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
-          onChange={() => handleChangeTodo(todo.id, 'status')}
+          onChange={() => handleChangeTodo(todo.id, 'completed')}
         />
       </label>
 

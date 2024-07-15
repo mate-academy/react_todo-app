@@ -1,5 +1,6 @@
 import {
   Dispatch,
+  PropsWithChildren,
   SetStateAction,
   createContext,
   useEffect,
@@ -8,26 +9,17 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 
-const todosTemp: Todo[] = [
-  { id: 23, title: '123', completed: false },
-  { id: 24, title: '567', completed: true },
-];
-
 interface TodoContextType {
   todos: Todo[];
   setTodos: Dispatch<SetStateAction<Todo[]>>;
 }
 
 export const TodoContext = createContext<TodoContextType>({
-  todos: todosTemp,
+  todos: [],
   setTodos: () => {},
 });
 
-type TodoProviderProps = {
-  children: React.ReactNode;
-};
-
-export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
+export const TodoProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const prevTodos = localStorage.getItem('todos');
 
