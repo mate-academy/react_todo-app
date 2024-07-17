@@ -63,7 +63,7 @@ export const ToDoList = () => {
                   dispatch({
                     type: 'CHANGE_TITLE',
                     id: todo.id,
-                    changedTitle: e.target.value.trim(),
+                    changedTitle: e.target.value.toString(),
                   });
                 }}
                 onKeyUp={event => {
@@ -82,6 +82,9 @@ export const ToDoList = () => {
                   dispatch({
                     type: 'EDIT_TODO',
                     id: todo.id,
+                  });
+                  dispatch({
+                    type: 'FOCUS_ON_TODO',
                   });
                 }}
                 autoFocus

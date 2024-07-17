@@ -55,6 +55,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
       return {
         ...state,
         todos: [...state.todos.filter(todo => todo.id !== action.id)],
+        focusOnTodo: !state.focusOnTodo,
       };
     case 'FILTER_TODOS':
       return {
@@ -65,6 +66,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
       return {
         ...state,
         todos: [...state.todos.filter(todo => !todo.completed)],
+        focusOnTodo: !state.focusOnTodo,
       };
     case 'TOGGLE_ALL_TODOS':
       const allTodosAreCompleted =
@@ -90,6 +92,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
             return todo;
           }),
         ],
+        focusOnTodo: !state.focusOnTodo,
       };
     case 'EDIT_TODO':
       return {
@@ -106,7 +109,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
 
             return todo;
           }),
-        ],
+        ].filter(todo => todo.title),
         edittedTitle:
           state.todos.find(todo => todo.id === action.id)?.title || '',
       };

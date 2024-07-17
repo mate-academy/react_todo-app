@@ -38,21 +38,23 @@ export const ToDoHeader = () => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className={classNames('todoapp__toggle-all', {
-          active: allTodosAreCompleted,
-        })}
-        data-cy="ToggleAllButton"
-        onClick={() => {
-          dispatch({
-            type: 'TOGGLE_ALL_TODOS',
-          });
-        }}
-      />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: allTodosAreCompleted,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={() => {
+            dispatch({
+              type: 'TOGGLE_ALL_TODOS',
+            });
+          }}
+        />
+      )}
 
       {/* Add a todo on form submit */}
-      <form onSubmit={handleSubmit} onBlur={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
@@ -63,7 +65,7 @@ export const ToDoHeader = () => {
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             dispatch({
               type: 'WRITE_NEW_TITLE',
-              newTitle: event.target.value.trim(),
+              newTitle: event.target.value.toString(),
             });
           }}
           onClick={() => {
@@ -76,6 +78,7 @@ export const ToDoHeader = () => {
               type: 'FOCUS_ON_TODO',
             });
           }}
+          autoFocus={focusOnTodo}
         />
       </form>
     </header>
