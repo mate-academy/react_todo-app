@@ -1,10 +1,12 @@
-import React, { FormEvent, useContext } from 'react';
+import React, { FormEvent, useContext, useRef } from 'react';
 import { DispatchContext, StateContext } from './StateContext';
 import classNames from 'classnames';
 
 export const ToDoHeader = () => {
-  const { toDoTitle, todos } = useContext(StateContext);
+  const { toDoTitle, todos, focusOnTodo } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,6 +25,12 @@ export const ToDoHeader = () => {
       });
     }
   };
+
+  if (focusOnTodo) {
+    inputRef.current?.focus();
+  } else {
+    inputRef.current?.blur();
+  }
 
   const allTodosAreCompleted =
     todos.filter(todo => todo.completed).length === todos.length;
@@ -50,11 +58,22 @@ export const ToDoHeader = () => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          ref={inputRef}
           value={toDoTitle}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             dispatch({
               type: 'WRITE_NEW_TITLE',
               newTitle: event.target.value.trim(),
+            });
+          }}
+          onClick={() => {
+            dispatch({
+              type: 'FOCUS_ON_TODO',
+            });
+          }}
+          onBlur={() => {
+            dispatch({
+              type: 'FOCUS_ON_TODO',
             });
           }}
         />

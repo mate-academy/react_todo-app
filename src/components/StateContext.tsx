@@ -8,10 +8,16 @@ type StateContextType = {
   toDoTitle: string;
   filter: FilterType;
   edittedTitle: string;
+  focusOnTodo: boolean;
 };
 
 const reducer = (state: StateContextType, action: Action): StateContextType => {
   switch (action.type) {
+    case 'FOCUS_ON_TODO':
+      return {
+        ...state,
+        focusOnTodo: !state.focusOnTodo,
+      };
     case 'ADD_TODO':
       const newTodo: Todo = {
         id: Date.now(),
@@ -161,6 +167,7 @@ const InitialState: StateContextType = {
   toDoTitle: '',
   filter: FilterType.ALL,
   edittedTitle: '',
+  focusOnTodo: true,
 };
 
 export const StateContext = createContext(InitialState);
