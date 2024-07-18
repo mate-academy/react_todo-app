@@ -11,20 +11,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
 
   const dispatch = useContext(DispatchContext);
-  const [isReNaming, setIsReNaming] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 
   useEffect(() => {
-    setIsReNaming(false);
+    setIsRenaming(false);
   }, [todo]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isReNaming && inputRef.current) {
+    if (isRenaming && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isReNaming]);
+  }, [isRenaming]);
 
   const handelDeleteTodo = (todoId: number) => {
     dispatch({ type: 'deleteTodo', payload: todoId });
@@ -34,7 +34,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     const normalizedNewTitle = newTitle.trim();
 
     if (normalizedNewTitle === title) {
-      setIsReNaming(false);
+      setIsRenaming(false);
 
       return;
     }
@@ -79,13 +79,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {isReNaming ? (
+      {isRenaming ? (
         <form
           onSubmit={handleSubmit}
           onBlur={handleSubmit}
           onKeyUp={event => {
             if (event.key === 'Escape') {
-              setIsReNaming(false);
+              setIsRenaming(false);
             }
           }}
         >
@@ -105,7 +105,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             data-cy="TodoTitle"
             className="todo__title"
             onDoubleClick={() => {
-              setIsReNaming(true);
+              setIsRenaming(true);
               setNewTitle(title);
             }}
           >
