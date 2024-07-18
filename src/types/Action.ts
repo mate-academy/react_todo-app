@@ -1,5 +1,5 @@
-import { ActionTypes } from "./ActionTypes";
-import { Todo } from "./Todo";
+import { ActionTypes } from './ActionTypes';
+import { Todo } from './Todo';
 
 export type Action =
   | { type: ActionTypes.onAdd; payload: Todo }

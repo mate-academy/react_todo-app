@@ -36,9 +36,9 @@ export const Todo: React.FC<Props> = ({ todo, fieldTitle }) => {
     };
   }, [[]]);
 
-  const onDelete = (todo: TodoType) => {
-    dispatch({ type: ActionTypes.onDelete, payload: todo });
-    deleteTodo(todo.id);
+  const onDelete = (task: TodoType) => {
+    dispatch({ type: ActionTypes.onDelete, payload: task });
+    deleteTodo(task.id);
     fieldTitle.current?.focus();
   };
 

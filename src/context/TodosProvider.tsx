@@ -6,7 +6,6 @@ import { todosContext } from './todosContext';
 
 import { ActionTypes } from '../types/ActionTypes';
 
-
 type Props = { children: React.ReactNode };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
@@ -16,6 +15,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     if (!localStorage[KEY]) {
       localStorage.setItem(KEY, '[]');
     }
+
     dispatch({ type: ActionTypes.onGet });
   }, []);
 

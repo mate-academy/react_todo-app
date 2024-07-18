@@ -14,6 +14,7 @@ export function reducer(todos: Todo[], action: Action) {
         if (action.payload.id === todo.id) {
           return action.payload;
         }
+
         return todo;
       });
     case ActionTypes.onDelete:

@@ -8,6 +8,7 @@ export const getTodos = (): Todo[] => {
 
 export const createTodo = (todo: Todo) => {
   let todos = getTodos();
+
   todos = [...todos, todo];
   localStorage.removeItem(KEY);
   localStorage.setItem(KEY, JSON.stringify(todos));
@@ -15,16 +16,15 @@ export const createTodo = (todo: Todo) => {
 
 export const deleteTodo = (id: number) => {
   let todos = getTodos();
-  todos = todos.filter(todo => todo.id !== id)
+
+  todos = todos.filter(todo => todo.id !== id);
   localStorage.setItem(KEY, JSON.stringify(todos));
 };
 
-export const updateTodo = ( updatedTodo : Todo) => {
+export const updateTodo = (updatedTodo: Todo) => {
   let todos = getTodos();
-  todos = todos.map(todo =>
-    todo.id === updatedTodo.id ? updatedTodo : todo
-  );
+
+  todos = todos.map(todo => (todo.id === updatedTodo.id ? updatedTodo : todo));
   localStorage.removeItem(KEY);
   localStorage.setItem(KEY, JSON.stringify(todos));
-  };
-
+};

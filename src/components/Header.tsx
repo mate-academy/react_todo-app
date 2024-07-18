@@ -30,6 +30,7 @@ export const Header: React.FC<Props> = ({ fieldTitle }) => {
         ...todo,
         completed: !isAllTodosCompleted,
       };
+
       dispatch({
         type: ActionTypes.onUpdate,
         payload: updatedTodo,
@@ -51,6 +52,7 @@ export const Header: React.FC<Props> = ({ fieldTitle }) => {
         completed: false,
         id: +new Date(),
       };
+
       dispatch({ type: ActionTypes.onAdd, payload: newTodo });
       createTodo(newTodo);
       setNewTitle('');
