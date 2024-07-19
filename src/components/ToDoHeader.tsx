@@ -3,7 +3,7 @@ import { DispatchContext, StateContext } from './StateContext';
 import classNames from 'classnames';
 
 export const ToDoHeader = () => {
-  const { toDoTitle, todos, focusOnTodo } = useContext(StateContext);
+  const { toDoTitle, todos, focusOnInput } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -19,14 +19,10 @@ export const ToDoHeader = () => {
       dispatch({
         type: 'ADD_TODO',
       });
-      dispatch({
-        type: 'WRITE_NEW_TITLE',
-        newTitle: '',
-      });
     }
   };
 
-  if (focusOnTodo) {
+  if (focusOnInput) {
     inputRef.current?.focus();
   } else {
     inputRef.current?.blur();
@@ -37,7 +33,6 @@ export const ToDoHeader = () => {
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       {todos.length > 0 && (
         <button
           type="button"
@@ -53,7 +48,6 @@ export const ToDoHeader = () => {
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
@@ -70,15 +64,14 @@ export const ToDoHeader = () => {
           }}
           onClick={() => {
             dispatch({
-              type: 'FOCUS_ON_TODO',
+              type: 'FOCUS_ON_INPUT',
             });
           }}
           onBlur={() => {
             dispatch({
-              type: 'FOCUS_ON_TODO',
+              type: 'FOCUS_ON_INPUT',
             });
           }}
-          autoFocus={focusOnTodo}
         />
       </form>
     </header>

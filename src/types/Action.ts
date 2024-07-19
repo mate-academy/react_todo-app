@@ -11,4 +11,4 @@ export type Action =
   | { type: 'EDIT_TODO'; id: number }
   | { type: 'HANDLE_ESCAPE'; id: number }
   | { type: 'CHANGE_TITLE'; id: number; changedTitle: string }
-  | { type: 'FOCUS_ON_TODO' };
+  | { type: 'FOCUS_ON_INPUT' };

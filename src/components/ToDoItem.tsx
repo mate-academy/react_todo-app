@@ -68,7 +68,7 @@ export const ToDoItem = ({ useFilteredTodos }: Props) => {
                     id: todo.id,
                   });
                   dispatch({
-                    type: 'FOCUS_ON_TODO',
+                    type: 'FOCUS_ON_INPUT',
                   });
                 }}
                 autoFocus

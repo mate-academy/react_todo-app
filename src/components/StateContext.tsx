@@ -8,15 +8,15 @@ type StateContextType = {
   toDoTitle: string;
   filter: FilterType;
   edittedTitle: string;
-  focusOnTodo: boolean;
+  focusOnInput: boolean;
 };
 
 const reducer = (state: StateContextType, action: Action): StateContextType => {
   switch (action.type) {
-    case 'FOCUS_ON_TODO':
+    case 'FOCUS_ON_INPUT':
       return {
         ...state,
-        focusOnTodo: !state.focusOnTodo,
+        focusOnInput: !state.focusOnInput,
       };
     case 'ADD_TODO':
       const newTodo: Todo = {
@@ -29,6 +29,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
       return {
         ...state,
         todos: [...state.todos, newTodo],
+        toDoTitle: '',
       };
     case 'WRITE_NEW_TITLE':
       return {
@@ -55,7 +56,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
       return {
         ...state,
         todos: [...state.todos.filter(todo => todo.id !== action.id)],
-        focusOnTodo: !state.focusOnTodo,
+        focusOnInput: !state.focusOnInput,
       };
     case 'FILTER_TODOS':
       return {
@@ -66,7 +67,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
       return {
         ...state,
         todos: [...state.todos.filter(todo => !todo.completed)],
-        focusOnTodo: !state.focusOnTodo,
+        focusOnInput: !state.focusOnInput,
       };
     case 'TOGGLE_ALL_TODOS':
       const allTodosAreCompleted =
@@ -92,7 +93,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
             return todo;
           }),
         ],
-        focusOnTodo: !state.focusOnTodo,
+        focusOnInput: !state.focusOnInput,
       };
     case 'EDIT_TODO':
       return {
@@ -171,7 +172,7 @@ const InitialState: StateContextType = {
   toDoTitle: '',
   filter: FilterType.ALL,
   edittedTitle: '',
-  focusOnTodo: true,
+  focusOnInput: true,
 };
 
 export const StateContext = createContext(InitialState);
