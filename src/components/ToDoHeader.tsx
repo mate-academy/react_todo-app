@@ -72,6 +72,7 @@ export const ToDoHeader = () => {
               type: 'FOCUS_ON_INPUT',
             });
           }}
+          autoFocus
         />
       </form>
     </header>
