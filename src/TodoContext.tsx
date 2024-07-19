@@ -1,9 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Todo, todos } from './components/todo_items/todo';
+import { Todo } from './components/todo_items/todo';
 import {
   getFromLocalStorage,
   saveToLocalStorage,
 } from './components/locale_storage';
+
+interface TodoContextType {
+  todo: Todo[];
+  setTodos: (todos: Todo[]) => void;
+}
 
 interface Methods {
   handleDelete: (id: number) => void;
@@ -13,10 +18,12 @@ interface Methods {
   renameTodo: (id: number, title: string) => void;
 }
 
-export const TodoContext = React.createContext({
-  todo: todos,
-  setTodos: (todosItem: Todo[]) => {},
-});
+const defaultValue: TodoContextType = {
+  todo: [],
+  setTodos: () => {},
+};
+
+export const TodoContext = React.createContext<TodoContextType>(defaultValue);
 
 export const MethodsContext = React.createContext<Methods>({
   handleDelete: () => {},
