@@ -138,6 +138,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
               return {
                 ...todo,
                 title: state.edittedTitle,
+                editted: !todo.editted,
               };
             }
 
