@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Todo } from './components/todo_items/todo';
 import {
   getFromLocalStorage,
@@ -52,60 +52,72 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     [todo],
   );
 
-  const methods = React.useMemo(
-    () => ({
-      handleDelete(id: number) {
-        const uptadetTodo = todo.filter(todoItem => todoItem.id !== id);
+  const handleDelete = useCallback(
+    (id: number) => {
+      const updatedTodo = todo.filter(todoItem => todoItem.id !== id);
 
-        setTodos(uptadetTodo);
-        saveToLocalStorage('todos', uptadetTodo);
-      },
-
-      handleComplete(id: number) {
-        const updatedTodos = todo.map(todoItem =>
-          todoItem.id === id
-            ? { ...todoItem, completed: !todoItem.completed }
-            : todoItem,
-        );
-
-        setTodos(updatedTodos);
-        saveToLocalStorage('todos', updatedTodos);
-      },
-
-      toggleAll() {
-        setTodos(allTodo => {
-          const completed = allTodo.some(todoItem => !todoItem.completed);
-          const updatedTodos = allTodo.map(item => ({ ...item, completed }));
-
-          saveToLocalStorage('todos', updatedTodos);
-
-          return updatedTodos;
-        });
-      },
-
-      renameTodo(id: number, title: string) {
-        setTodos(allTodo => {
-          const updatedTodos = allTodo.map(todoItem =>
-            todoItem.id === id ? { ...todoItem, title } : todoItem,
-          );
-
-          saveToLocalStorage('todos', updatedTodos);
-
-          return updatedTodos;
-        });
-      },
-
-      clearCompleted() {
-        setTodos(allTodo => {
-          const activeTodos = allTodo.filter(todoItem => !todoItem.completed);
-
-          saveToLocalStorage('todos', activeTodos);
-
-          return activeTodos;
-        });
-      },
-    }),
+      setTodos(updatedTodo);
+      saveToLocalStorage('todos', updatedTodo);
+    },
     [todo],
+  );
+
+  const handleComplete = useCallback(
+    (id: number) => {
+      const updatedTodos = todo.map(todoItem =>
+        todoItem.id === id
+          ? { ...todoItem, completed: !todoItem.completed }
+          : todoItem,
+      );
+
+      setTodos(updatedTodos);
+      saveToLocalStorage('todos', updatedTodos);
+    },
+    [todo],
+  );
+
+  const toggleAll = useCallback(() => {
+    setTodos(allTodo => {
+      const completed = allTodo.some(todoItem => !todoItem.completed);
+      const updatedTodos = allTodo.map(item => ({ ...item, completed }));
+
+      saveToLocalStorage('todos', updatedTodos);
+
+      return updatedTodos;
+    });
+  }, []);
+
+  const renameTodo = useCallback((id: number, title: string) => {
+    setTodos(allTodo => {
+      const updatedTodos = allTodo.map(todoItem =>
+        todoItem.id === id ? { ...todoItem, title } : todoItem,
+      );
+
+      saveToLocalStorage('todos', updatedTodos);
+
+      return updatedTodos;
+    });
+  }, []);
+
+  const clearCompleted = useCallback(() => {
+    setTodos(allTodo => {
+      const activeTodos = allTodo.filter(todoItem => !todoItem.completed);
+
+      saveToLocalStorage('todos', activeTodos);
+
+      return activeTodos;
+    });
+  }, []);
+
+  const methods = useMemo(
+    () => ({
+      handleDelete,
+      handleComplete,
+      toggleAll,
+      renameTodo,
+      clearCompleted,
+    }),
+    [handleDelete, handleComplete, toggleAll, renameTodo, clearCompleted],
   );
 
   return (

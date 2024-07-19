@@ -8,19 +8,21 @@ interface Props {
 }
 
 export const TodoList: React.FC<Props> = ({ todo }) => {
-  const [title, setTitle] = useState(todo.title);
+  const [newTitle, setNewTitle] = useState(todo.title);
   const [editing, setEditing] = useState(false);
+
+  const { id, title, completed } = todo;
 
   const methods = useContext(MethodsContext);
   const fieldRef = useRef<HTMLInputElement>(null);
 
   const save = () => {
-    const trimmed = title.trim();
+    const trimmed = newTitle.trim();
 
     if (trimmed) {
-      methods.renameTodo(todo.id, trimmed);
+      methods.renameTodo(id, trimmed);
     } else {
-      methods.handleDelete(todo.id);
+      methods.handleDelete(id);
     }
 
     setEditing(false);
@@ -28,10 +30,10 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
 
   useEffect(() => {
     if (editing) {
-      setTitle(todo.title);
+      setNewTitle(title);
       fieldRef.current?.focus();
     }
-  }, [editing, todo.title]);
+  }, [editing, title]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,15 +43,15 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames('todo', { completed: completed })}
     >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          onChange={() => methods.handleComplete(todo.id)}
+          checked={completed}
+          onChange={() => methods.handleComplete(id)}
         />
       </label>
 
@@ -61,8 +63,8 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
             type="text"
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
+            value={newTitle}
+            onChange={e => setNewTitle(e.target.value)}
             onBlur={save}
             onKeyUp={e => {
               if (e.key === 'Escape') {
@@ -78,14 +80,14 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={() => setEditing(true)}
           >
-            {todo.title}
+            {title}
           </span>
 
           <button
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => methods.handleDelete(todo.id)}
+            onClick={() => methods.handleDelete(id)}
           >
             ×
           </button>
