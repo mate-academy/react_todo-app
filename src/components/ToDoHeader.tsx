@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useEffect, useRef } from 'react';
+import React, { FormEvent, useContext, useRef } from 'react';
 import { DispatchContext, StateContext } from './StateContext';
 import classNames from 'classnames';
 
@@ -26,13 +26,11 @@ export const ToDoHeader = () => {
     }
   };
 
-  useEffect(() => {
-    if (focusOnTodo) {
-      inputRef.current?.focus();
-    } else {
-      inputRef.current?.blur();
-    }
-  });
+  if (focusOnTodo) {
+    inputRef.current?.focus();
+  } else {
+    inputRef.current?.blur();
+  }
 
   const allTodosAreCompleted =
     todos.filter(todo => todo.completed).length === todos.length;

@@ -22,6 +22,7 @@ export const ToDoList = () => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
+      {/* This is a completed todo */}
       <ToDoItem useFilteredTodos={useFilteredTodos} />
     </section>
   );
