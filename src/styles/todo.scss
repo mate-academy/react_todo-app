@@ -2,12 +2,16 @@
   position: relative;
 
   display: grid;
-  grid-template-columns: 45px 1fr;
+  grid-template-columns: 1fr;
   justify-items: stretch;
 
   font-size: 24px;
   line-height: 1.4em;
   border-bottom: 1px solid #ededed;
+
+  &:has(:nth-child(2)) {
+    grid-template-columns: 45px 1fr;
+  }
 
   &:last-child {
     border-bottom: 0;
@@ -60,6 +64,7 @@
     transform: translateY(-2px);
     opacity: 0;
     transition: color 0.2s ease-out;
+    transition: 0.3s ease;
 
     &:hover {
       color: #af5b5e;
@@ -71,7 +76,8 @@
   }
 
   &__title-field {
-    width: 100%;
+    width: -webkit-fill-available;
+    width: -moz-available;
     padding: 11px 14px;
 
     font-size: inherit;
