@@ -39,23 +39,21 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
     case 'CHANGE_STATUS':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            if (todo.id === action.id) {
-              return {
-                ...todo,
-                completed: !todo.completed,
-              };
-            }
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              completed: !todo.completed,
+            };
+          }
 
-            return todo;
-          }),
-        ],
+          return todo;
+        }),
       };
     case 'DELETE_TODO':
       return {
         ...state,
-        todos: [...state.todos.filter(todo => todo.id !== action.id)],
+        todos: state.todos.filter(todo => todo.id !== action.id),
         focusOnInput: !state.focusOnInput,
       };
     case 'FILTER_TODOS':
@@ -66,7 +64,7 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
     case 'REMOVE_COMPLETED':
       return {
         ...state,
-        todos: [...state.todos.filter(todo => !todo.completed)],
+        todos: state.todos.filter(todo => !todo.completed),
         focusOnInput: !state.focusOnInput,
       };
     case 'TOGGLE_ALL_TODOS':
@@ -76,30 +74,27 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
 
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            if (allTodosAreCompleted) {
-              return {
-                ...todo,
-                completed: false,
-              };
-            } else if (!allTodosAreCompleted) {
-              return {
-                ...todo,
-                completed: true,
-              };
-            }
+        todos: state.todos.map(todo => {
+          if (allTodosAreCompleted) {
+            return {
+              ...todo,
+              completed: false,
+            };
+          } else {
+            return {
+              ...todo,
+              completed: true,
+            };
+          }
+        }),
 
-            return todo;
-          }),
-        ],
         focusOnInput: !state.focusOnInput,
       };
     case 'EDIT_TODO':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
+        todos: state.todos
+          .map(todo => {
             if (todo.id === action.id) {
               return {
                 ...todo,
@@ -109,43 +104,39 @@ const reducer = (state: StateContextType, action: Action): StateContextType => {
             }
 
             return todo;
-          }),
-        ].filter(todo => todo.title),
+          })
+          .filter(todo => todo.title),
         edittedTitle:
           state.todos.find(todo => todo.id === action.id)?.title || '',
       };
     case 'CHANGE_TITLE':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            if (todo.id === action.id) {
-              return {
-                ...todo,
-                title: action.changedTitle,
-              };
-            }
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              title: action.changedTitle,
+            };
+          }
 
-            return todo;
-          }),
-        ],
+          return todo;
+        }),
       };
     case 'HANDLE_ESCAPE':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            if (todo.id === action.id) {
-              return {
-                ...todo,
-                title: state.edittedTitle,
-                editted: !todo.editted,
-              };
-            }
+        todos: state.todos.map(todo => {
+          if (todo.id === action.id) {
+            return {
+              ...todo,
+              title: state.edittedTitle,
+              editted: !todo.editted,
+            };
+          }
 
-            return todo;
-          }),
-        ],
+          return todo;
+        }),
       };
 
     default:
