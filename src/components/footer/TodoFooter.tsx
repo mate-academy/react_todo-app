@@ -7,7 +7,7 @@ import { SortType } from '../../enums/SortType';
 // type Props = {};
 
 const TodoFooter = ({}) => {
-  const { sortType, setSortType, todos, setTodos, inputRef } =
+  const { sortType, changeSortType, todos, inputRef, clearCompleted } =
     useAppContextContainer();
   const navRef = useRef<HTMLElement>(null);
   const completedTasks = todos.reduce(
@@ -18,12 +18,12 @@ const TodoFooter = ({}) => {
   const isSomeCompleted = todos.some(el => el.completed);
 
   const handleClickClearCompleted = () => {
-    setTodos(prev => prev.filter(el => !el.completed));
+    clearCompleted();
     inputRef.current?.focus();
   };
 
   const handleClickFilterOption = (option: SortType) => {
-    setSortType(option);
+    changeSortType(option);
   };
 
   return (

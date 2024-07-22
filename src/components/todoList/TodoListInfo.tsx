@@ -10,38 +10,30 @@ type Props = {
 const TodoListInfo = ({ todo }: Props) => {
   const { id, title, completed, isEdited } = todo;
   const [pastTitle, setPastTitle] = useState<string>('');
-  const { setTodos, inputRef } = useAppContextContainer();
+  const {
+    inputRef,
+    removeTodo,
+    changeTitle,
+    ckiclEsc,
+    switchEdited,
+    todoCompleted,
+    editTodo,
+  } = useAppContextContainer();
 
   const handleClickDelete = () => {
-    setTodos(prev => prev.filter(el => el.id !== id));
+    removeTodo(id);
     inputRef.current?.focus();
   };
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    setTodos(prev =>
-      prev.map(el => {
-        if (id === el.id) {
-          return { ...el, title: value };
-        }
-
-        return el;
-      }),
-    );
+    changeTitle(id, value);
   };
 
   const handlekeyUpClickEsc = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === `Escape`) {
-      setTodos(prev =>
-        prev.map(el => {
-          if (id === el.id) {
-            return { ...el, title: pastTitle, isEdited: false };
-          }
-
-          return el;
-        }),
-      );
+      ckiclEsc(id, pastTitle);
     }
   };
 
@@ -49,62 +41,29 @@ const TodoListInfo = ({ todo }: Props) => {
     if (!title.length) {
       inputRef.current?.focus();
 
-      return setTodos(prev => prev.filter(el => el.id !== id));
+      return removeTodo(id);
     }
 
-    setTodos(prev =>
-      prev.map(el => {
-        if (id === el.id) {
-          return { ...el, isEdited: false, title: el.title.trim() };
-        }
-
-        return el;
-      }),
-    );
+    switchEdited(id);
   };
 
   const handleSubmitNewTitle = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!title.length) {
-      return setTodos(prev => prev.filter(el => el.id !== id));
+      return removeTodo(id);
     }
 
-    return setTodos(prev =>
-      prev.map(el => {
-        if (id === el.id) {
-          return { ...el, isEdited: false, title: el.title.trim() };
-        }
-
-        return el;
-      }),
-    );
+    return switchEdited(id);
   };
 
   const handleClickComplited = () => {
-    setTodos(prev =>
-      prev.map(el => {
-        if (id === el.id) {
-          return { ...el, completed: !el.completed };
-        }
-
-        return el;
-      }),
-    );
+    todoCompleted(id);
   };
 
   const handleDbclickEdit = () => {
     setPastTitle(title);
-
-    setTodos(prev =>
-      prev.map(el => {
-        if (id === el.id) {
-          return { ...el, isEdited: true };
-        }
-
-        return el;
-      }),
-    );
+    editTodo(id);
   };
 
   return (

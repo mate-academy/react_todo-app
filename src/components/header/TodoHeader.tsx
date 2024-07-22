@@ -4,17 +4,16 @@ import classNames from 'classnames';
 
 const TodoHeader = () => {
   const [todoTitle, setTodoTitle] = useState<string>('');
-  const { todos, setTodos, inputRef } = useAppContextContainer();
+  const { addNewTodo, todos, inputRef, makeTodosCompleted, makeTodosActive } =
+    useAppContextContainer();
   const isActiveButton = todos.every(el => el.completed);
 
   const handleClickCompliteAll = () => {
     if (!isActiveButton) {
-      return setTodos(prev => prev.map(el => ({ ...el, completed: true })));
+      return makeTodosCompleted();
     }
 
-    return setTodos(prev =>
-      prev.map(el => ({ ...el, completed: !el.completed })),
-    );
+    return makeTodosActive();
   };
 
   const handleSubmitAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
@@ -22,15 +21,7 @@ const TodoHeader = () => {
 
     if (!!todoTitle.length) {
       setTodoTitle('');
-      setTodos(prev => [
-        ...prev,
-        {
-          id: +new Date(),
-          title: todoTitle.trim(),
-          completed: false,
-          isEdited: false,
-        },
-      ]);
+      addNewTodo(todoTitle);
     }
 
     return;

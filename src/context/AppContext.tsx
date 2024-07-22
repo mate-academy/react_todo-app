@@ -12,9 +12,18 @@ import { SortType } from '../enums/SortType';
 
 type AppContextContainerProps = {
   todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  addNewTodo: (todoTitle: string) => void;
+  changeTitle: (id: number, value: string) => void;
+  clearCompleted: () => void;
+  ckiclEsc: (id: number, pastTitle: string) => void;
+  editTodo: (id: number) => void;
+  makeTodosActive: () => void;
+  makeTodosCompleted: () => void;
+  removeTodo: (id: number) => void;
+  switchEdited: (id: number) => void;
+  todoCompleted: (id: number) => void;
   sortType: SortType;
-  setSortType: React.Dispatch<React.SetStateAction<SortType>>;
+  changeSortType: (option: SortType) => void;
   inputRef: React.RefObject<HTMLInputElement>;
 };
 
@@ -33,13 +42,120 @@ export const AppContext = ({ children }: Props) => {
   const [sortType, setSortType] = useState<SortType>(SortType.ALL);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const addNewTodo = (todoTitle: string) => {
+    setTodos(prev => [
+      ...prev,
+      {
+        id: +new Date(),
+        title: todoTitle.trim(),
+        completed: false,
+        isEdited: false,
+      },
+    ]);
+  };
+
+  const changeTitle = (id: number, value: string) => {
+    setTodos(prev =>
+      prev.map(el => {
+        if (id === el.id) {
+          return { ...el, title: value };
+        }
+
+        return el;
+      }),
+    );
+  };
+
+  const clearCompleted = () => {
+    setTodos(prev => prev.filter(el => !el.completed));
+  };
+
+  const ckiclEsc = (id: number, pastTitle: string) => {
+    setTodos(prev =>
+      prev.map(el => {
+        if (id === el.id) {
+          return { ...el, title: pastTitle, isEdited: false };
+        }
+
+        return el;
+      }),
+    );
+  };
+
+  const editTodo = (id: number) => {
+    setTodos(prev =>
+      prev.map(el => {
+        if (id === el.id) {
+          return { ...el, isEdited: true };
+        }
+
+        return el;
+      }),
+    );
+  };
+
+  const makeTodosActive = () => {
+    setTodos(prev => prev.map(el => ({ ...el, completed: !el.completed })));
+  };
+
+  const makeTodosCompleted = () => {
+    setTodos(prev => prev.map(el => ({ ...el, completed: true })));
+  };
+
+  const removeTodo = (id: number) => {
+    setTodos(prev => prev.filter(el => el.id !== id));
+  };
+
+  const switchEdited = (id: number) => {
+    setTodos(prev =>
+      prev.map(el => {
+        if (id === el.id) {
+          return { ...el, title: el.title.trim(), isEdited: false };
+        }
+
+        return el;
+      }),
+    );
+  };
+
+  const todoCompleted = (id: number) => {
+    setTodos(prev =>
+      prev.map(el => {
+        if (id === el.id) {
+          return { ...el, completed: !el.completed };
+        }
+
+        return el;
+      }),
+    );
+  };
+
+  const changeSortType = (option: SortType) => {
+    setSortType(option);
+  };
+
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
   return (
     <AppContextContainer.Provider
-      value={{ todos, setTodos, sortType, setSortType, inputRef }}
+      value={{
+        todos,
+        removeTodo,
+        changeTitle,
+        switchEdited,
+        ckiclEsc,
+        todoCompleted,
+        editTodo,
+        makeTodosCompleted,
+        makeTodosActive,
+        clearCompleted,
+        addNewTodo,
+        sortType,
+        changeSortType,
+        inputRef,
+      }}
     >
       {children}
     </AppContextContainer.Provider>
