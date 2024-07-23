@@ -14,7 +14,7 @@ const TodoListInfo = ({ todo }: Props) => {
     inputRef,
     removeTodo,
     changeTitle,
-    ckiclEsc,
+    ckickEsc,
     switchEdited,
     todoCompleted,
     editTodo,
@@ -33,7 +33,7 @@ const TodoListInfo = ({ todo }: Props) => {
 
   const handlekeyUpClickEsc = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === `Escape`) {
-      ckiclEsc(id, pastTitle);
+      ckickEsc(id, pastTitle);
     }
   };
 

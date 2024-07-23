@@ -15,7 +15,7 @@ type AppContextContainerProps = {
   addNewTodo: (todoTitle: string) => void;
   changeTitle: (id: number, value: string) => void;
   clearCompleted: () => void;
-  ckiclEsc: (id: number, pastTitle: string) => void;
+  ckickEsc: (id: number, pastTitle: string) => void;
   editTodo: (id: number) => void;
   makeTodosActive: () => void;
   makeTodosCompleted: () => void;
@@ -70,7 +70,7 @@ export const AppContext = ({ children }: Props) => {
     setTodos(prev => prev.filter(el => !el.completed));
   };
 
-  const ckiclEsc = (id: number, pastTitle: string) => {
+  const ckickEsc = (id: number, pastTitle: string) => {
     setTodos(prev =>
       prev.map(el => {
         if (id === el.id) {
@@ -145,7 +145,7 @@ export const AppContext = ({ children }: Props) => {
         removeTodo,
         changeTitle,
         switchEdited,
-        ckiclEsc,
+        ckickEsc,
         todoCompleted,
         editTodo,
         makeTodosCompleted,
