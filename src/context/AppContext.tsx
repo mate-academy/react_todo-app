@@ -9,19 +9,20 @@ import {
 import { Todo } from '../types/todo';
 import useLocalStorage from '../hooks/useLocalStorage.hook';
 import { SortType } from '../enums/SortType';
+import { v4 as uuidv4 } from 'uuid';
 
 type AppContextContainerProps = {
   todos: Todo[];
   addNewTodo: (todoTitle: string) => void;
-  changeTitle: (id: number, value: string) => void;
+  changeTitle: (id: string, value: string) => void;
   clearCompleted: () => void;
-  ckickEsc: (id: number, pastTitle: string) => void;
-  editTodo: (id: number) => void;
+  ckickEsc: (id: string, pastTitle: string) => void;
+  editTodo: (id: string) => void;
   makeTodosActive: () => void;
   makeTodosCompleted: () => void;
-  removeTodo: (id: number) => void;
-  switchEdited: (id: number) => void;
-  todoCompleted: (id: number) => void;
+  removeTodo: (id: string) => void;
+  switchEdited: (id: string) => void;
+  todoCompleted: (id: string) => void;
   sortType: SortType;
   changeSortType: (option: SortType) => void;
   inputRef: React.RefObject<HTMLInputElement>;
@@ -34,7 +35,15 @@ type Props = {
 const AppContextContainer = createContext({} as AppContextContainerProps);
 
 export const useAppContextContainer = () => {
-  return useContext(AppContextContainer);
+  const context = useContext(AppContextContainer);
+
+  if (context === undefined) {
+    throw new Error(
+      'Context must be used within an AppContextContainerProvider',
+    );
+  }
+
+  return context;
 };
 
 export const AppContext = ({ children }: Props) => {
@@ -46,7 +55,7 @@ export const AppContext = ({ children }: Props) => {
     setTodos(prev => [
       ...prev,
       {
-        id: +new Date(),
+        id: uuidv4(),
         title: todoTitle.trim(),
         completed: false,
         isEdited: false,
@@ -54,7 +63,7 @@ export const AppContext = ({ children }: Props) => {
     ]);
   };
 
-  const changeTitle = (id: number, value: string) => {
+  const changeTitle = (id: string, value: string) => {
     setTodos(prev =>
       prev.map(el => {
         if (id === el.id) {
@@ -70,7 +79,7 @@ export const AppContext = ({ children }: Props) => {
     setTodos(prev => prev.filter(el => !el.completed));
   };
 
-  const ckickEsc = (id: number, pastTitle: string) => {
+  const ckickEsc = (id: string, pastTitle: string) => {
     setTodos(prev =>
       prev.map(el => {
         if (id === el.id) {
@@ -82,7 +91,7 @@ export const AppContext = ({ children }: Props) => {
     );
   };
 
-  const editTodo = (id: number) => {
+  const editTodo = (id: string) => {
     setTodos(prev =>
       prev.map(el => {
         if (id === el.id) {
@@ -102,11 +111,11 @@ export const AppContext = ({ children }: Props) => {
     setTodos(prev => prev.map(el => ({ ...el, completed: true })));
   };
 
-  const removeTodo = (id: number) => {
+  const removeTodo = (id: string) => {
     setTodos(prev => prev.filter(el => el.id !== id));
   };
 
-  const switchEdited = (id: number) => {
+  const switchEdited = (id: string) => {
     setTodos(prev =>
       prev.map(el => {
         if (id === el.id) {
@@ -118,7 +127,7 @@ export const AppContext = ({ children }: Props) => {
     );
   };
 
-  const todoCompleted = (id: number) => {
+  const todoCompleted = (id: string) => {
     setTodos(prev =>
       prev.map(el => {
         if (id === el.id) {
