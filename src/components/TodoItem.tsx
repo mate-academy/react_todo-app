@@ -3,6 +3,10 @@ import { Todo } from '../types/Todo';
 import { DispatchContext } from '../context/StateContext';
 import cn from 'classnames';
 
+type SaveTitleEvent =
+  | React.FormEvent<HTMLFormElement>
+  | React.FocusEvent<HTMLInputElement>;
+
 type Props = {
   todo: Todo;
 };
@@ -13,7 +17,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEdited, setIsEdited] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(todo.title);
 
-  const saveTitle = () => {
+  const saveTitle = (event: SaveTitleEvent) => {
+    event.preventDefault();
+
     const trimmedTitle = updatedTitle.trim();
 
     if (!trimmedTitle) {
@@ -83,7 +89,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           </button>
         </>
       ) : (
-        <form>
+        // Use onSubmit to prevent default form behavior
+        <form onSubmit={saveTitle}>
           <input
             data-cy="TodoTitleField"
             type="text"
