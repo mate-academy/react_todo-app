@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import cn from 'classnames';
 import { DispatchContext, StateContext } from './Strore';
 import { Filter } from './types/Filter';
@@ -34,10 +34,25 @@ export const App: React.FC = () => {
 
   const allCompleted = completedTodos.length === todos.length;
 
+  const setInputValue = (value: string) => {
+    dispatch({ type: 'setInputValue', payload: value });
+  };
+
+  const setTodo = (value: Todo) => {
+    dispatch({ type: 'setTodo', payload: value });
+  };
+
+  const setTodos = useCallback(
+    (value: Todo[]) => {
+      dispatch({ type: 'setTodos', payload: value });
+    },
+    [dispatch],
+  );
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
-    dispatch({ type: 'setInputValue', payload: value });
+    setInputValue(value);
   };
 
   const handlePostTodo = (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,12 +70,12 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    dispatch({ type: 'setTodo', payload: newTodo });
-    dispatch({ type: 'setInputValue', payload: '' });
+    setTodo(newTodo);
+    setInputValue('');
   };
 
   const handleDeleteAllCompleted = () => {
-    dispatch({ type: 'setTodos', payload: activeTodos });
+    setTodos(activeTodos);
     inputElement.current?.focus();
   };
 
@@ -85,7 +100,7 @@ export const App: React.FC = () => {
       });
     }
 
-    dispatch({ type: 'setTodos', payload: preparedArray });
+    setTodos(preparedArray);
     inputElement.current?.focus();
   };
 
@@ -94,10 +109,10 @@ export const App: React.FC = () => {
       ? JSON.parse(localStorage.getItem('todos') as string)
       : [];
 
-    dispatch({ type: 'setTodos', payload: todosFromStorage });
+    setTodos(todosFromStorage);
 
     inputElement.current?.focus();
-  }, [dispatch]);
+  }, [setTodos]);
 
   return (
     <div className="todoapp">

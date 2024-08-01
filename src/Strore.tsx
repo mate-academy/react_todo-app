@@ -2,17 +2,23 @@ import React, { useReducer } from 'react';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
+interface State {
+  todos: Todo[];
+  inputValue: string;
+  filterStatus: Filter;
+}
+
 type Action =
   | { type: 'setTodo'; payload: Todo }
   | { type: 'setTodos'; payload: Todo[] }
   | { type: 'setInputValue'; payload: string }
   | { type: 'setFilterStatus'; payload: Filter };
 
-interface State {
-  todos: Todo[];
-  inputValue: string;
-  filterStatus: Filter;
-}
+const initialState: State = {
+  todos: [],
+  inputValue: '',
+  filterStatus: Filter.All,
+};
 
 function reducer(state: State, action: Action): State {
   const { type, payload } = action;
@@ -56,12 +62,6 @@ function reducer(state: State, action: Action): State {
       return state;
   }
 }
-
-const initialState: State = {
-  todos: [],
-  inputValue: '',
-  filterStatus: Filter.All,
-};
 
 export const StateContext = React.createContext(initialState);
 export const DispatchContext = React.createContext<React.Dispatch<Action>>(

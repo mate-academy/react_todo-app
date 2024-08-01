@@ -9,13 +9,13 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo, inputElement }) => {
-  const { todos } = useContext(StateContext);
-  const dispatch = useContext(DispatchContext);
-
-  const { id, title, completed } = todo;
+  const { id: todoId, title, completed } = todo;
 
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(title);
+
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
 
   const editForm = useRef<HTMLInputElement>(null);
 
@@ -33,14 +33,14 @@ export const TodoItem: React.FC<Props> = ({ todo, inputElement }) => {
     }
   };
 
-  const handleDeleteTodo = (idParam: number) => {
-    const filteredTodos = todos.filter(todoItem => todoItem.id !== idParam);
+  const handleDeleteTodo = (id: number) => {
+    const filteredTodos = todos.filter(item => item.id !== id);
 
     dispatch({ type: 'setTodos', payload: filteredTodos });
     inputElement.current?.focus();
   };
 
-  const handleChangeTodo = (idParam: number, data: boolean | string) => {
+  const handleChangeTodo = (id: number, data: boolean | string) => {
     const updateData: Partial<Todo> = {};
 
     if (typeof data === 'boolean') {
@@ -51,15 +51,15 @@ export const TodoItem: React.FC<Props> = ({ todo, inputElement }) => {
       updateData.title = data.trim();
     }
 
-    const updatedTodos = todos.map(todoItem => {
-      if (todoItem.id === idParam) {
+    const updatedTodos = todos.map(item => {
+      if (item.id === id) {
         return {
-          ...todoItem,
+          ...item,
           ...updateData,
         };
       }
 
-      return todoItem;
+      return item;
     });
 
     dispatch({ type: 'setTodos', payload: updatedTodos });
@@ -68,12 +68,12 @@ export const TodoItem: React.FC<Props> = ({ todo, inputElement }) => {
   };
 
   const handleCompletedStatus = () => {
-    handleChangeTodo(id, !completed);
+    handleChangeTodo(todoId, !completed);
   };
 
   const handleTitleChange = () => {
     if (!inputValue) {
-      handleDeleteTodo(id);
+      handleDeleteTodo(todoId);
 
       return;
     }
@@ -85,7 +85,7 @@ export const TodoItem: React.FC<Props> = ({ todo, inputElement }) => {
     }
 
     if (inputValue !== title) {
-      handleChangeTodo(id, inputValue);
+      handleChangeTodo(todoId, inputValue);
       setIsEditing(false);
     }
   };
@@ -143,7 +143,7 @@ export const TodoItem: React.FC<Props> = ({ todo, inputElement }) => {
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={() => handleDeleteTodo(id)}
+              onClick={() => handleDeleteTodo(todoId)}
             >
               ×
             </button>
