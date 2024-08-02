@@ -35,15 +35,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           title: trimmedTitle,
         },
       });
+
+      // Update localStorage
+      localStorage.setItem('todos', JSON.stringify(trimmedTitle));
     }
 
     setIsEdited(false);
   };
 
-  const handleEscape = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setUpdatedTitle(todo.title);
       setIsEdited(false);
+    }
+
+    if (event.key === 'Enter') {
+      saveTitle(event as any);
     }
   };
 
@@ -89,7 +96,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           </button>
         </>
       ) : (
-        // Use onSubmit to prevent default form behavior
         <form onSubmit={saveTitle}>
           <input
             data-cy="TodoTitleField"
@@ -99,7 +105,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             value={updatedTitle}
             onChange={event => setUpdatedTitle(event.target.value)}
             onBlur={saveTitle}
-            onKeyUp={handleEscape}
+            onKeyUp={handleKeyUp}
             autoFocus
           />
         </form>
