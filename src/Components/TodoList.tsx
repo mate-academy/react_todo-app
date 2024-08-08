@@ -39,6 +39,7 @@ export const TodoList: React.FC<Props> = ({ input, filter }) => {
 
   const handleDelete = (todoToRemove: Todo) => {
     setTodos(todos.filter(item => item.id !== todoToRemove.id));
+
     input.current?.focus();
   };
 

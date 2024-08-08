@@ -18,7 +18,12 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
   });
 
   const save = (newValue: T) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
+    if (Array.isArray(newValue) && newValue.length === 0) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(newValue));
+    }
+
     setValue(newValue);
   };
 
