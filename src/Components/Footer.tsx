@@ -4,11 +4,12 @@ import { Filter } from '../Types/Filter';
 import cn from 'classnames';
 
 interface Props {
+  input: React.RefObject<HTMLInputElement>;
   filter: Filter;
   setFilter: (v: Filter) => void;
 }
 
-export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
+export const Footer: React.FC<Props> = ({ input, filter, setFilter }) => {
   const { todos, setTodos } = useContext(TodosContext);
   const activeTodos = todos.reduce(
     (prev, todo) => (todo.completed ? prev : prev + 1),
@@ -17,6 +18,7 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
 
   const handleClearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
+    input.current?.focus();
   };
 
   return (

@@ -5,6 +5,8 @@ const getStateInitialValue = <T>(key: string, defaultValue: T) => {
   const savedValue = localStorage.getItem(key);
 
   if (savedValue === null) {
+    localStorage.setItem(key, JSON.stringify(defaultValue));
+
     return defaultValue;
   }
 
@@ -23,11 +25,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
   );
 
   const save = (newValue: T) => {
-    if (Array.isArray(newValue) && newValue.length === 0) {
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, JSON.stringify(newValue));
-    }
+    localStorage.setItem(key, JSON.stringify(newValue));
 
     setValue(newValue);
   };

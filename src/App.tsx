@@ -20,7 +20,9 @@ export const App: React.FC = () => {
 
         <TodoList input={input} filter={filter} />
 
-        {!!todos.length && <Footer filter={filter} setFilter={setFilter} />}
+        {!!todos.length && (
+          <Footer input={input} filter={filter} setFilter={setFilter} />
+        )}
       </div>
     </div>
   );
