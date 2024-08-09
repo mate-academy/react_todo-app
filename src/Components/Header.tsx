@@ -32,11 +32,9 @@ export const Header: React.FC<Props> = ({ input }) => {
   };
 
   const handleToggleAll = () => {
-    if (areAllTodosCompleted) {
-      setTodos(todos.map(todo => ({ ...todo, completed: false })));
-    } else {
-      setTodos(todos.map(todo => ({ ...todo, completed: true })));
-    }
+    setTodos(
+      todos.map(todo => ({ ...todo, completed: !areAllTodosCompleted })),
+    );
 
     input.current?.focus();
   };
