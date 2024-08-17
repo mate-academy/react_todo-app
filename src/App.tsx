@@ -13,7 +13,7 @@ export const App: React.FC = () => {
 
   const inputElementRef = useRef<HTMLInputElement>(null);
 
-  let filteredTodos: typeof todos = []; // Ініціалізуємо змінну для збереження результату
+  let filteredTodos: typeof todos = [];
 
   switch (filterStatus) {
     case Filter.Active:
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
       break;
 
     default:
-      filteredTodos = todos; // Якщо не співпадає з жодним кейсом, залишаємо весь список
+      filteredTodos = todos;
       break;
   }
 
