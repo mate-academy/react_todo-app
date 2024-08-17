@@ -11,22 +11,23 @@ export const App: React.FC = () => {
   const { todos, inputValue, filterStatus } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
-  const inputElement = useRef<HTMLInputElement>(null);
+  const inputElementRef = useRef<HTMLInputElement>(null);
 
-  const filteredTodos = todos.filter(todo => {
-    const { completed } = todo;
+  let filteredTodos: typeof todos = []; // Ініціалізуємо змінну для збереження результату
 
-    switch (filterStatus) {
-      case Filter.Active:
-        return !completed;
+  switch (filterStatus) {
+    case Filter.Active:
+      filteredTodos = todos.filter(todo => !todo.completed);
+      break;
 
-      case Filter.Completed:
-        return completed;
+    case Filter.Completed:
+      filteredTodos = todos.filter(todo => todo.completed);
+      break;
 
-      default:
-        return todo;
-    }
-  });
+    default:
+      filteredTodos = todos; // Якщо не співпадає з жодним кейсом, залишаємо весь список
+      break;
+  }
 
   const completedTodos = todos.filter(todo => todo.completed);
 
@@ -76,7 +77,7 @@ export const App: React.FC = () => {
 
   const handleDeleteAllCompleted = () => {
     setTodos(activeTodos);
-    inputElement.current?.focus();
+    inputElementRef.current?.focus();
   };
 
   const handleToggleAll = () => {
@@ -101,7 +102,7 @@ export const App: React.FC = () => {
     }
 
     setTodos(preparedArray);
-    inputElement.current?.focus();
+    inputElementRef.current?.focus();
   };
 
   useEffect(() => {
@@ -111,7 +112,7 @@ export const App: React.FC = () => {
 
     setTodos(todosFromStorage);
 
-    inputElement.current?.focus();
+    inputElementRef.current?.focus();
   }, [setTodos]);
 
   return (
@@ -140,14 +141,18 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               value={inputValue}
               onChange={handleInputChange}
-              ref={inputElement}
+              ref={inputElementRef}
             />
           </form>
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
           {filteredTodos.map(todo => (
-            <TodoItem key={todo.id} todo={todo} inputElement={inputElement} />
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              inputElement={inputElementRef}
+            />
           ))}
         </section>
 
