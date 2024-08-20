@@ -13,7 +13,7 @@ export const TodoList: React.FC = () => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {list.map(todo => (
-        <TodoItem key={todo.id} todo={todo} list={list} />
+        <TodoItem key={todo.id} todo={todo} />
       ))}
     </section>
   );

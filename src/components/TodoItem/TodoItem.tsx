@@ -5,13 +5,13 @@ import { TodosContext } from '../TodosContext/TodosContext';
 
 type Props = {
   todo: Todo;
-  list: Todo[];
 };
 
-export const TodoItem: React.FC<Props> = ({ todo, list }) => {
-  const { setTodos, setChoseEditItem } = useContext(TodosContext);
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { todos, setTodos, setChoseEditItem } = useContext(TodosContext);
 
   const { id, title, completed } = todo;
+
   const [isChecked, setIsChecked] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [query, setQuery] = useState(title);
@@ -29,7 +29,7 @@ export const TodoItem: React.FC<Props> = ({ todo, list }) => {
   }, [isEdit]);
 
   function newValue<T>(key: string, value: T) {
-    return list.map(item => {
+    return todos.map(item => {
       return item.id === id ? { ...item, [key]: value } : item;
     });
   }
@@ -46,7 +46,7 @@ export const TodoItem: React.FC<Props> = ({ todo, list }) => {
 
   const removeTodo = () => {
     setTodos(
-      list.filter(item => {
+      todos.filter(item => {
         return item.id !== id;
       }),
     );
