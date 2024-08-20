@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 import { Todo } from '../../type/Todo';
 import { useLocalStorage } from '../../hooks/UseLocalStorage';
 import { Filter } from '../../type/Filter';
@@ -29,6 +29,10 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filter, setFilter] = useState(Filter.All);
   const [choseEditItem, setChoseEditItem] = useState<number | null>(null);
+
+  useEffect(() => {
+    setTodos(todos);
+  }, [todos, setTodos]);
 
   const value = useMemo(
     () => ({

@@ -8,29 +8,29 @@ export const Footer: React.FC = () => {
   const activeItems = todos.filter(item => !item.completed);
   const completed = todos.filter(item => item.completed);
 
+  const text = `${activeItems.length} item${activeItems.length === 1 ? '' : 's'} left`;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${activeItems.length} item${activeItems.length === 1 ? '' : 's'} left`}
+        {text}
       </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        {Object.values(Filter).map(item => {
-          return (
-            <a
-              key={item}
-              href={`#/${item.toLowerCase()}`}
-              className={classNames('filter__link', {
-                selected: filter === item,
-              })}
-              data-cy={`FilterLink${item}`}
-              onClick={() => setFilter(item)}
-            >
-              {item}
-            </a>
-          );
-        })}
+        {Object.values(Filter).map(item => (
+          <a
+            key={item}
+            href={`#/${item.toLowerCase()}`}
+            className={classNames('filter__link', {
+              selected: filter === item,
+            })}
+            data-cy={`FilterLink${item}`}
+            onClick={() => setFilter(item)}
+          >
+            {item}
+          </a>
+        ))}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
