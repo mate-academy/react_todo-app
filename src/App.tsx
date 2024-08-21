@@ -1,95 +1,77 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { useState, useEffect } from 'react';
+
+import { Header } from './Components/Header';
+import { Main } from './Components/Main/Main';
+import { Footer } from './Components/Footer';
+import { Todo } from './Types/todo';
+import { Filter } from './Types/filter';
 
 export const App: React.FC = () => {
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoValue, setTodoValue] = useState('')
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+
+  const addTodo = () => {
+    if (todoValue.trim() !== '') {
+      const newTodo: Todo = {
+        id: +new Date(),
+        title: todoValue,
+        completed: false,
+      };
+
+      setTodos(prevTodos => [newTodo, ...prevTodos]);
+      setTodoValue('');
+    }
+  };
+
+  const completed = todos.filter(todo => todo.completed);
+
+  useEffect(() => {
+    console.log('todos:', todos);
+    console.log('completed:', completed);
+  }, [todos]);
+
+  function getVisibleTodos(): Todo[] {
+    switch (filter) {
+      case Filter.Active:
+        return todos.filter(todo => !todo.completed);
+
+      case Filter.Completed:
+        return completed;
+
+      case Filter.All:
+      default:
+        return todos;
+    }
+  }
+
+  const clearCompleted = () => {
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
+  };
+
   return (
     <div className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
+      <Header
+        todoValue={todoValue}
+        setTodoValue={setTodoValue}
+        addTodo={addTodo}
+      />
 
-        <form>
-          <input
-            type="text"
-            data-cy="createTodo"
-            className="new-todo"
-            placeholder="What needs to be done?"
-          />
-        </form>
-      </header>
+      <Main
+        todos={todos}
+        visibleTodos={getVisibleTodos()}
+        setTodos={setTodos}
+      />
 
-      <section className="main">
-        <input
-          type="checkbox"
-          id="toggle-all"
-          className="toggle-all"
-          data-cy="toggleAll"
-        />
-        <label htmlFor="toggle-all">Mark all as complete</label>
-
-        <ul className="todo-list" data-cy="todosList">
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view" />
-              <label htmlFor="toggle-view">asdfghj</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="completed">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-completed" />
-              <label htmlFor="toggle-completed">qwertyuio</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li className="editing">
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-editing" />
-              <label htmlFor="toggle-editing">zxcvbnm</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-
-          <li>
-            <div className="view">
-              <input type="checkbox" className="toggle" id="toggle-view2" />
-              <label htmlFor="toggle-view2">1234567890</label>
-              <button type="button" className="destroy" data-cy="deleteTodo" />
-            </div>
-            <input type="text" className="edit" />
-          </li>
-        </ul>
-      </section>
-
-      <footer className="footer">
-        <span className="todo-count" data-cy="todosCounter">
-          3 items left
-        </span>
-
-        <ul className="filters">
-          <li>
-            <a href="#/" className="selected">
-              All
-            </a>
-          </li>
-
-          <li>
-            <a href="#/active">Active</a>
-          </li>
-
-          <li>
-            <a href="#/completed">Completed</a>
-          </li>
-        </ul>
-
-        <button type="button" className="clear-completed">
-          Clear completed
-        </button>
-      </footer>
+      <Footer
+        todos={todos}
+        setFilter={setFilter}
+        completed={completed}
+        clearCompleted={clearCompleted}
+      />
     </div>
   );
 };
