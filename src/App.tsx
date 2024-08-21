@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useGlobalDispatch, useGlobalState } from './context/store';
 import { TodoItem } from './components/TodoItem';
-import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import classNames from 'classnames';
 import { handleInputChange, setInputValue } from './helpers/InputHelpers/Input';
@@ -12,6 +11,7 @@ import {
   toggleAllTodos,
   deleteCompletedTodos,
 } from './services/TodoService';
+import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
   const { todos, inputValue, filterStatus } = useGlobalState();
@@ -108,21 +108,11 @@ export const App: React.FC = () => {
           ))}
         </section>
         {!!todos.length && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {`${activeTodos.length} item${activeTodos.length !== 1 ? 's' : ''} left`}
-            </span>
-            <TodoFilter />
-            <button
-              disabled={!completedTodos.length}
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-              onClick={handleDeleteAllCompleted}
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            activeTodos={activeTodos}
+            completedTodos={completedTodos}
+            handleDeleteAllCompleted={handleDeleteAllCompleted}
+          />
         )}
       </div>
     </div>

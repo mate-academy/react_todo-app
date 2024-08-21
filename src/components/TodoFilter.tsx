@@ -21,21 +21,19 @@ export const TodoFilter: React.FC = () => {
 
   return (
     <nav className="filter" data-cy="Filter">
-      {filterParams.map(param => {
-        return (
-          <a
-            key={param}
-            href={`#/${param.toLocaleLowerCase()}`}
-            className={classNames('filter__link', {
-              selected: filterStatus === param,
-            })}
-            data-cy={`FilterLink${param}`}
-            onClick={handleFilter}
-          >
-            {param}
-          </a>
-        );
-      })}
+      {filterParams.map(param => (
+        <a
+          key={param}
+          href={`#/${param.toLocaleLowerCase()}`}
+          className={classNames('filter__link', {
+            selected: filterStatus === param,
+          })}
+          data-cy={`FilterLink${param}`}
+          onClick={handleFilter}
+        >
+          {param}
+        </a>
+      ))}
     </nav>
   );
 };
