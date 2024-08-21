@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { Header } from './Components/Header';
 import { Main } from './Components/Main/Main';
@@ -9,9 +9,8 @@ import { Todo } from './Types/todo';
 import { Filter } from './Types/filter';
 
 export const App: React.FC = () => {
-
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoValue, setTodoValue] = useState('')
+  const [todoValue, setTodoValue] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
   const addTodo = () => {
@@ -29,10 +28,10 @@ export const App: React.FC = () => {
 
   const completed = todos.filter(todo => todo.completed);
 
-  useEffect(() => {
-    console.log('todos:', todos);
-    console.log('completed:', completed);
-  }, [todos]);
+  // useEffect(() => {
+  //   console.log('todos:', todos);
+  //   console.log('completed:', completed);
+  // }, [todos]);
 
   function getVisibleTodos(): Todo[] {
     switch (filter) {

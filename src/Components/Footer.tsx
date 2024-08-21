@@ -1,34 +1,39 @@
 import React from 'react';
 import { Todo } from '../Types/todo';
-import { Filter } from '../Types/filter'
+import { Filter } from '../Types/filter';
 
 type Props = {
-  todos: Todo[]
+  todos: Todo[];
   setFilter: (Filter: Filter) => void;
   clearCompleted: () => void;
   completed: Todo[];
-}
+};
 
-export const Footer: React.FC<Props> = ({ todos, setFilter, clearCompleted, completed}) => {
+export const Footer: React.FC<Props> = ({
+  todos,
+  setFilter,
+  clearCompleted,
+  completed,
+}) => {
   if (todos.length === 0) {
-    return null
+    return null;
   }
 
   const handleAllClick = () => {
-    setFilter(Filter.All)
+    setFilter(Filter.All);
   };
 
   const handleActiveClick = () => {
-    setFilter(Filter.Active)
+    setFilter(Filter.Active);
   };
 
   const handleCompletedClick = () => {
-    setFilter(Filter.Completed)
+    setFilter(Filter.Completed);
   };
 
   const handleClearClick = () => {
     clearCompleted();
-  }
+  };
 
   return (
     <footer className="footer">
@@ -40,28 +45,19 @@ export const Footer: React.FC<Props> = ({ todos, setFilter, clearCompleted, comp
 
       <ul className="filters">
         <li>
-          <a href="#/"
-            className="selected"
-            onClick={handleAllClick}
-          >
+          <a href="#/" className="selected" onClick={handleAllClick}>
             All
           </a>
         </li>
 
         <li>
-          <a
-            href="#/active"
-            onClick={handleActiveClick}
-          >
+          <a href="#/active" onClick={handleActiveClick}>
             Active
           </a>
         </li>
 
         <li>
-          <a
-            href="#/completed"
-            onClick={handleCompletedClick}
-          >
+          <a href="#/completed" onClick={handleCompletedClick}>
             Completed
           </a>
         </li>
@@ -76,7 +72,6 @@ export const Footer: React.FC<Props> = ({ todos, setFilter, clearCompleted, comp
           Clear completed
         </button>
       )}
-
     </footer>
   );
-}
+};
