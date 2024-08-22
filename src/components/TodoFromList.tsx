@@ -105,7 +105,7 @@ export const TodoFromList: React.FC<Props> = ({ todo }) => {
       return;
     }
 
-    if (editTitle.length === 0) {
+    if (editTitle.trim().length === 0) {
       deleteTodo(idTodo);
 
       return;
