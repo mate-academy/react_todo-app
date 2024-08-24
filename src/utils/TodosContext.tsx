@@ -13,6 +13,7 @@ interface TodosContextType {
   deleteTodo: (indexToDelete: number) => void;
   toggleTodo: (indexToToggle: number) => void;
   clearCompletedTodos: () => void;
+  updateTodo: (id: number, updates: Partial<Todo>) => void;
 }
 
 const TodosContext = createContext<TodosContextType | undefined>(undefined);
@@ -39,22 +40,24 @@ export function TodosProvider({ children }: { children: ReactNode }) {
   }, [todos]);
 
   const addTodo = (newTodo: Todo) => {
-    setTodos([...todos, newTodo]);
+    setTodos([...todos, { ...newTodo, id: Date.now() }]);
   };
 
-  const deleteTodo = (indexToDelete: number) => {
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter((todo: Todo) => todo.id !== id));
+  };
+
+  const toggleTodo = (id: number) => {
     setTodos(
-      todos.filter((_: string, index: number) => index !== indexToDelete),
+      todos.map((todo: Todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
     );
   };
 
-  const toggleTodo = (indexToToggle: number) => {
-    setTodos(
-      todos.map((todo: Todo, index: number) =>
-        index === indexToToggle
-          ? { ...todo, completed: !todo.completed }
-          : todo,
-      ),
+  const updateTodo = (id: number, updates: Partial<Todo>) => {
+    setTodos((prevTodos: Todo[]) =>
+      prevTodos.map(todo => (todo.id === id ? { ...todo, ...updates } : todo)),
     );
   };
 
@@ -64,7 +67,14 @@ export function TodosProvider({ children }: { children: ReactNode }) {
 
   return (
     <TodosContext.Provider
-      value={{ todos, addTodo, deleteTodo, toggleTodo, clearCompletedTodos }}
+      value={{
+        todos,
+        addTodo,
+        deleteTodo,
+        toggleTodo,
+        clearCompletedTodos,
+        updateTodo,
+      }}
     >
       {children}
     </TodosContext.Provider>
