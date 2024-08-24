@@ -8,14 +8,15 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { completed, id, title } = todo;
   const { toggleTodo, deleteTodo, updateTodo } = useTodos();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(todo.title);
+  const [editedTitle, setEditedTitle] = useState(title);
 
   const inputElement = useRef<HTMLInputElement>(null);
 
   const handleTodoStatus = () => {
-    toggleTodo(todo.id);
+    toggleTodo(id);
   };
 
   const handleDeleteTodo = () => {
@@ -32,9 +33,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleEditSubmit = () => {
     if (editedTitle.trim() === '') {
-      deleteTodo(todo.id);
+      deleteTodo(id);
     } else {
-      updateTodo(todo.id, { title: editedTitle.trim() });
+      updateTodo(id, { title: editedTitle.trim() });
     }
 
     setIsEditing(false);
@@ -44,7 +45,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (event.key === 'Enter') {
       handleEditSubmit();
     } else if (event.key === 'Escape') {
-      setEditedTitle(todo.title);
+      setEditedTitle(title);
       setIsEditing(false);
     }
   };
@@ -58,7 +59,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames('todo', { completed: completed })}
     >
       <label className="todo__status-label">
         <input
@@ -66,7 +67,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           onClick={handleTodoStatus}
-          checked={todo.completed}
+          checked={completed}
         />
       </label>
 
@@ -86,7 +87,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="todo__title"
           onDoubleClick={startEdit}
         >
-          {todo.title}
+          {title}
         </span>
       )}
       {!isEditing && (
