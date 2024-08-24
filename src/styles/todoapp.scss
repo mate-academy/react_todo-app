@@ -7,6 +7,7 @@
 
   &__content {
     margin-bottom: 20px;
+    margin-top: 0;
     background: #fff;
     box-shadow:
       0 2px 4px 0 rgba(0, 0, 0, 0.2),
@@ -14,6 +15,7 @@
   }
 
   &__title {
+    margin-bottom: 20px;
     font-size: 100px;
     font-weight: 100;
     text-align: center;
@@ -56,6 +58,7 @@
   }
 
   &__new-todo {
+    box-sizing: border-box;
     width: 100%;
     padding: 16px 16px 16px 60px;
 
