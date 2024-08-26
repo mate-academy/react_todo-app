@@ -23,8 +23,8 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
   const { todos, inputHeaderRef } = useGlobalState();
   const dispatch = useDispatch();
 
-  const deleteTodo = (id: number) => {
-    deleteTodoFromStorage(id);
+  const deleteTodo = (idToDelete: number) => {
+    deleteTodoFromStorage(idToDelete);
     dispatch({ type: 'deleteTodo', payload: id });
 
     if (inputHeaderRef?.current) {
@@ -32,27 +32,35 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  const updateTodo = (id: number, data: Omit<Todo, 'id'>) => {
-    patchTodoFromStorage(id, data);
+  const updateTodo = (idToUpdate: number, data: Omit<Todo, 'id'>) => {
+    patchTodoFromStorage(idToUpdate, data);
     dispatch({ type: 'patchTodo', payload: { id, data } });
   };
 
-  const toggleCompleted = (id: number, completed: boolean, title: string) => {
+  const toggleCompleted = (
+    idToToggle: number,
+    completedToToggle: boolean,
+    titleToToggle: string,
+  ) => {
     const data = {
-      completed: !completed,
-      title: title,
+      completed: !completedToToggle,
+      title: titleToToggle,
     };
 
-    updateTodo(id, data);
+    updateTodo(idToToggle, data);
   };
 
-  const updateTitleTodo = (id: number, completed: boolean, title: string) => {
+  const updateTitleTodo = (
+    idToUpdate: number,
+    completedToUpdate: boolean,
+    titleToUpdate: string,
+  ) => {
     const data = {
-      completed: completed,
-      title: title,
+      completed: completedToUpdate,
+      title: titleToUpdate,
     };
 
-    updateTodo(id, data);
+    updateTodo(idToUpdate, data);
   };
 
   useEffect(() => {
