@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      {todos.length && <ToggleButtonHeader />}
+      {todos.length > 0 && <ToggleButtonHeader />}
 
       {/* Add a todo on form submit */}
       <form onSubmit={addTitle}>
