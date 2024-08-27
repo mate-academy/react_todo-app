@@ -117,6 +117,11 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
     setEditingTodoId(null);
   };
 
+  const handleSubmitEditTitle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submitEditTitle(id);
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -153,13 +158,7 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
         </>
       )}
       {editingTodoId === id && (
-        <form
-          key={id}
-          onSubmit={e => {
-            e.preventDefault();
-            submitEditTitle(id);
-          }}
-        >
+        <form key={id} onSubmit={handleSubmitEditTitle}>
           <input
             data-cy="TodoTitleField"
             type="text"
