@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from '../CustomHooks/useDispatch';
 import { useGlobalState } from '../CustomHooks/useGlobalState';
 import { Actions } from '../types/Actions';
-import { filteredTodos } from '../utils/filteredTodos';
+import { getFilteredTodos } from '../utils/getFilteredTodos';
 import { FooterButton } from './FooterButton';
 import { SelectedState } from '../types/SelectedState';
 import classNames from 'classnames';
@@ -37,7 +37,7 @@ export const Footer = () => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${filteredTodos(todos, Actions.ACTIVE).length} items left`}
+        {`${getFilteredTodos(todos, Actions.ACTIVE).length} items left`}
       </span>
 
       {/* Active link should have the 'selected' class */}

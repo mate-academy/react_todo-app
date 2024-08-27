@@ -1,7 +1,7 @@
 import { Actions } from '../types/Actions';
 import { Todo } from '../types/Todo';
 
-export const filteredTodos = (todos: Todo[], action: Actions): Todo[] => {
+export const getFilteredTodos = (todos: Todo[], action: Actions): Todo[] => {
   switch (action) {
     case Actions.ALL:
       return todos;

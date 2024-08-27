@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGlobalState } from '../CustomHooks/useGlobalState';
-import { filteredTodos } from '../utils/filteredTodos';
+import { getFilteredTodos } from '../utils/getFilteredTodos';
 import { TodoFormList } from './TodoFormList';
 
 export const Main: React.FC = () => {
@@ -9,7 +9,7 @@ export const Main: React.FC = () => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
-      {filteredTodos(todos, filterActions).map(todo => (
+      {getFilteredTodos(todos, filterActions).map(todo => (
         <TodoFormList key={todo.id} todo={todo} />
       ))}
     </section>
