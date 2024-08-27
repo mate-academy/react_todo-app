@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { Actions } from '../types/Actions';
+import { Status } from '../types/Status';
 import { RootState } from '../types/RootState';
 import { Action } from '../types/Action';
 import { reducer } from './Reducer';
@@ -7,7 +7,7 @@ import { reducer } from './Reducer';
 const initialState: RootState = {
   todos: [],
   inputHeaderRef: null,
-  filterActions: Actions.ALL,
+  filterActions: Status.ALL,
 };
 
 export const StateContext = React.createContext(initialState);

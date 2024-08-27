@@ -1,15 +1,15 @@
-import { Actions } from '../types/Actions';
+import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-export const getFilteredTodos = (todos: Todo[], action: Actions): Todo[] => {
+export const getFilteredTodos = (todos: Todo[], action: Status): Todo[] => {
   switch (action) {
-    case Actions.ALL:
+    case Status.ALL:
       return todos;
 
-    case Actions.ACTIVE:
+    case Status.ACTIVE:
       return todos.filter(todo => !todo.completed);
 
-    case Actions.COMPLETED:
+    case Status.COMPLETED:
       return todos.filter(todo => todo.completed);
 
     default:

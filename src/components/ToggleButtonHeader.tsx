@@ -11,43 +11,28 @@ export const ToggleButtonHeader: React.FC = () => {
 
   const isAllTodosCompleted = todos.every(todo => todo.completed === true);
 
-  const promiseToggleCompleted = ({ id, completed, title }: Todo) => {
-    return new Promise<void>(resolve => {
-      const data = {
-        completed: completed,
-        title: title,
-      };
+  const toggleTodoStatus = (todo: Todo, completed: boolean) => {
+    const data = {
+      completed: completed,
+      title: todo.title,
+    };
 
-      patchTodoFromStorage(id, data);
-      dispatch({ type: 'patchTodo', payload: { id, data } });
-
-      resolve();
-    });
+    patchTodoFromStorage(todo.id, data);
+    dispatch({ type: 'patchTodo', payload: { id: todo.id, data } });
   };
 
-  const handleCompleteAllTodos = async () => {
-    let togglePromises;
-
+  const handleCompleteAllTodos = () => {
     if (isAllTodosCompleted) {
-      togglePromises = todos.map(todo => {
-        const toggleTodo = { ...todo, completed: false };
-
-        return promiseToggleCompleted(toggleTodo);
+      todos.forEach(todo => {
+        toggleTodoStatus(todo, false);
       });
     } else {
-      const activeTodos = todos.filter(todo => !todo.completed);
-
-      togglePromises = activeTodos.map(todo => {
-        const toggleTodo = {
-          ...todo,
-          completed: todo.completed ? false : true,
-        };
-
-        return promiseToggleCompleted(toggleTodo);
-      });
+      todos
+        .filter(todo => !todo.completed)
+        .forEach(todo => {
+          toggleTodoStatus(todo, true);
+        });
     }
-
-    await Promise.allSettled(togglePromises);
   };
 
   return (

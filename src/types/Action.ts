@@ -1,4 +1,4 @@
-import { Actions } from './Actions';
+import { Status } from './Status';
 import { Todo } from './Todo';
 
 export type Action =
@@ -7,4 +7,4 @@ export type Action =
   | { type: 'addInputRef'; payload: React.RefObject<HTMLInputElement> }
   | { type: 'deleteTodo'; payload: number }
   | { type: 'patchTodo'; payload: { id: number; data: Omit<Todo, 'id'> } }
-  | { type: 'setActions'; payload: Actions };
+  | { type: 'setActions'; payload: Status };

@@ -12,10 +12,7 @@ type Props = {
 export const TodoFormList: React.FC<Props> = ({ todo }) => {
   const { id, completed, title } = todo;
 
-  const [isEditTodo, setIsEditTodo] = useState<{
-    [id: number]: boolean;
-  } | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const inputRefFocus = useRef<HTMLInputElement>(null);
   const returnEditionRef = useRef<(e: KeyboardEvent) => void>(() => {});
@@ -25,7 +22,7 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
 
   const deleteTodo = (idToDelete: number) => {
     deleteTodoFromStorage(idToDelete);
-    dispatch({ type: 'deleteTodo', payload: id });
+    dispatch({ type: 'deleteTodo', payload: idToDelete });
 
     if (inputHeaderRef?.current) {
       inputHeaderRef.current.focus();
@@ -34,7 +31,7 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
 
   const updateTodo = (idToUpdate: number, data: Omit<Todo, 'id'>) => {
     patchTodoFromStorage(idToUpdate, data);
-    dispatch({ type: 'patchTodo', payload: { id, data } });
+    dispatch({ type: 'patchTodo', payload: { id: idToUpdate, data } });
   };
 
   const toggleCompleted = (
@@ -67,14 +64,13 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
     const returnEdition = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
         setEditTitle('');
-        setIsEditTodo(null);
-        setIsEditing(false);
+        setEditingTodoId(null);
       }
     };
 
     returnEditionRef.current = returnEdition;
 
-    if (isEditTodo) {
+    if (editingTodoId !== null) {
       window.addEventListener('keyup', returnEditionRef.current);
     }
 
@@ -83,20 +79,18 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
         window.removeEventListener('keyup', returnEditionRef.current);
       }
     };
-  }, [isEditTodo]);
+  }, [editingTodoId]);
 
   const handleEditTodo = (idTodo: number, titleTodo: string) => {
-    setIsEditTodo(null);
-    setIsEditTodo({ [idTodo]: true });
+    setEditingTodoId(idTodo);
     setEditTitle(titleTodo);
-    setIsEditing(true);
   };
 
   useEffect(() => {
-    if (isEditing && inputRefFocus.current) {
+    if (editingTodoId !== null && inputRefFocus.current) {
       inputRefFocus.current.focus();
     }
-  }, [isEditing]);
+  }, [editingTodoId]);
 
   const handleInputTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditTitle(e.currentTarget.value);
@@ -107,8 +101,7 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
 
     if (todos[index].title === editTitle) {
       setEditTitle('');
-      setIsEditTodo(null);
-      setIsEditing(false);
+      setEditingTodoId(null);
 
       return;
     }
@@ -121,12 +114,7 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
 
     updateTitleTodo(idTodo, todos[index].completed, editTitle.trim());
     setEditTitle('');
-    setIsEditTodo(null);
-    setIsEditing(false);
-  };
-
-  const handleBlur = (idTodo: number) => {
-    submitEditTitle(idTodo);
+    setEditingTodoId(null);
   };
 
   return (
@@ -144,7 +132,7 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {(isEditTodo === null || isEditTodo[id] === undefined) && (
+      {editingTodoId !== id && (
         <>
           <span
             data-cy="TodoTitle"
@@ -154,7 +142,6 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
             {todo.title}
           </span>
 
-          {/* Remove button appears only on hover */}
           <button
             type="button"
             className="todo__remove"
@@ -165,7 +152,7 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
           </button>
         </>
       )}
-      {isEditTodo !== null && isEditTodo[id] && (
+      {editingTodoId === id && (
         <form
           key={id}
           onSubmit={e => {
@@ -173,18 +160,16 @@ export const TodoFormList: React.FC<Props> = ({ todo }) => {
             submitEditTitle(id);
           }}
         >
-          {isEditing && (
-            <input
-              data-cy="TodoTitleField"
-              type="text"
-              ref={inputRefFocus}
-              className="todo__title-field"
-              placeholder="Empty todo will be deleted"
-              value={editTitle}
-              onChange={handleInputTitle}
-              onBlur={() => handleBlur(id)}
-            />
-          )}
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            ref={inputRefFocus}
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value={editTitle}
+            onChange={handleInputTitle}
+            onBlur={() => submitEditTitle(id)}
+          />
         </form>
       )}
     </div>
