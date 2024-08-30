@@ -70,7 +70,12 @@
     opacity: 1;
   }
 
+  &__form {
+    display: flex;
+  }
+
   &__title-field {
+    max-width: 100%;
     width: 100%;
     padding: 11px 14px;
 
