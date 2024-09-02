@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import cn from 'classnames';
 import { Todo } from '../Types/todo';
 import { Filter } from '../Types/filter';
+import { TodoContext } from './Context/TodoContext';
 
 type Props = {
-  todos: Todo[];
   setFilter: (Filter: Filter) => void;
+  filter: Filter;
   clearCompleted: () => void;
+  active: Todo[];
   completed: Todo[];
 };
 
 export const Footer: React.FC<Props> = ({
-  todos,
   setFilter,
+  filter,
   clearCompleted,
+  active,
   completed,
 }) => {
+  const { todos } = useContext(TodoContext);
+
   if (todos.length === 0) {
     return null;
   }
@@ -38,40 +44,51 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="footer">
       <span className="todo-count" data-cy="todosCounter">
-        {todos.length === 1
-          ? `${todos.length} item left`
-          : `${todos.length} items left`}
+        {active.length === 1
+          ? `${active.length} item left`
+          : `${active.length} items left`}
       </span>
 
       <ul className="filters">
         <li>
-          <a href="#/" className="selected" onClick={handleAllClick}>
+          <a
+            href="#/"
+            className={cn({ "selected": filter === Filter.All })}
+            onClick={handleAllClick}
+          >
             All
           </a>
         </li>
 
         <li>
-          <a href="#/active" onClick={handleActiveClick}>
+          <a
+            href="#/active"
+            className={cn({ "selected": filter === Filter.Active })}
+            onClick={handleActiveClick}
+          >
             Active
           </a>
         </li>
 
         <li>
-          <a href="#/completed" onClick={handleCompletedClick}>
+          <a
+            href="#/completed"
+            className={cn({ "selected": filter === Filter.Completed })}
+            onClick={handleCompletedClick}
+          >
             Completed
           </a>
         </li>
       </ul>
 
-      {completed.length > 0 && (
-        <button
-          type="button"
-          className="clear-completed"
-          onClick={handleClearClick}
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={handleClearClick}
+        disabled={completed.length===0}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };

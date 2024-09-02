@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 
 type Props = {
   todoValue: string;
@@ -11,6 +11,15 @@ export const Header: React.FC<Props> = ({
   setTodoValue,
   addTodo,
 }) => {
+  const focusedElement = useRef<HTMLInputElement>(null);
+
+
+  useEffect(() => {
+    if (focusedElement.current) {
+      focusedElement.current.focus();
+    }
+  }, [])
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoValue(event.target.value);
   };
@@ -30,6 +39,7 @@ export const Header: React.FC<Props> = ({
         <input
           type="text"
           value={todoValue}
+          ref={focusedElement}
           data-cy="createTodo"
           className="new-todo"
           placeholder="What needs to be done?"

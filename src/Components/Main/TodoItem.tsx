@@ -5,11 +5,12 @@ import { Todo } from '../../Types/todo';
 type Props = {
   todo: Todo;
   handleChange: (todoId: number, todoCompleted: boolean) => void;
+  deleteTodo: (id: number) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo, handleChange }) => {
+export const TodoItem: React.FC<Props> = ({ todo, handleChange, deleteTodo }) => {
   return (
-    <li className={cn({ completed: todo.completed })}>
+    <li className={cn({ 'completed': todo.completed })}>
       <div className="view">
         <input
           type="checkbox"
@@ -19,7 +20,12 @@ export const TodoItem: React.FC<Props> = ({ todo, handleChange }) => {
           id={todo.id.toString()}
         />
         <label>{todo.title}</label>
-        <button type="button" className="destroy" data-cy="deleteTodo" />
+        <button
+          type="button"
+          className="destroy"
+          onClick={() => deleteTodo(todo.id)}
+          data-cy="deleteTodo"
+        />
       </div>
       <input type="text" className="edit" />
     </li>

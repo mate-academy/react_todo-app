@@ -1,15 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import { Header } from './Components/Header';
 import { Main } from './Components/Main/Main';
 import { Footer } from './Components/Footer';
 import { Todo } from './Types/todo';
 import { Filter } from './Types/filter';
+import { TodoContext} from './Components/Context/TodoContext';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { todos, setTodos } = useContext(TodoContext);
+
   const [todoValue, setTodoValue] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
@@ -21,22 +22,28 @@ export const App: React.FC = () => {
         completed: false,
       };
 
-      setTodos(prevTodos => [newTodo, ...prevTodos]);
+      console.log('Adding Todo:', newTodo);
+
+      setTodos(prevTodos => {
+        return [newTodo, ...prevTodos];
+      });
+
       setTodoValue('');
     }
   };
 
   const completed = todos.filter(todo => todo.completed);
+  const active = todos.filter(todo => !todo.completed);
 
-  // useEffect(() => {
-  //   console.log('todos:', todos);
-  //   console.log('completed:', completed);
-  // }, [todos]);
+  useEffect(() => {
+    console.log('todos:', todos);
+    console.log('completed:', completed);
+  }, [todos]);
 
   function getVisibleTodos(): Todo[] {
     switch (filter) {
       case Filter.Active:
-        return todos.filter(todo => !todo.completed);
+        return active;
 
       case Filter.Completed:
         return completed;
@@ -51,26 +58,31 @@ export const App: React.FC = () => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
+  const deleteTodo = (todoId: number) => {
+    setTodos(prevTodos =>
+      prevTodos.filter(todo => todo.id !== todoId));
+  };
+
   return (
-    <div className="todoapp">
-      <Header
-        todoValue={todoValue}
-        setTodoValue={setTodoValue}
-        addTodo={addTodo}
-      />
+      <div className="todoapp">
+        <Header
+          todoValue={todoValue}
+          setTodoValue={setTodoValue}
+          addTodo={addTodo}
+        />
 
-      <Main
-        todos={todos}
-        visibleTodos={getVisibleTodos()}
-        setTodos={setTodos}
-      />
+        <Main
+          visibleTodos={getVisibleTodos()}
+          deleteTodo={deleteTodo}
+        />
 
-      <Footer
-        todos={todos}
-        setFilter={setFilter}
-        completed={completed}
-        clearCompleted={clearCompleted}
-      />
-    </div>
+        <Footer
+          filter={filter}
+          setFilter={setFilter}
+          clearCompleted={clearCompleted}
+          active={active}
+          completed={completed}
+        />
+      </div>
   );
 };

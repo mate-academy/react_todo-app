@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 import { Todo } from '../../Types/todo';
+import { TodoContext } from '../Context/TodoContext';
 import { TodoList } from './TodoList';
 
 type Props = {
-  todos: Todo[];
   visibleTodos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  deleteTodo: (id: number) => void;
 };
 
-export const Main: React.FC<Props> = ({ todos, visibleTodos, setTodos }) => {
+export const Main: React.FC<Props> = ({ visibleTodos, deleteTodo }) => {
+  const { todos, setTodos } = useContext(TodoContext);
+
   const allChecked = todos.every(todo => todo.completed);
 
   const handleSelectAll = () => {
@@ -42,7 +45,11 @@ export const Main: React.FC<Props> = ({ todos, visibleTodos, setTodos }) => {
       )}
 
       <ul className="todo-list" data-cy="todosList">
-        <TodoList handleChange={handleChange} visibleTodos={visibleTodos} />
+        <TodoList
+          handleChange={handleChange}
+          visibleTodos={visibleTodos}
+          deleteTodo={deleteTodo}
+        />
       </ul>
     </section>
   );
