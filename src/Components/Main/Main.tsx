@@ -9,8 +9,11 @@ type Props = {
 };
 
 export const Main: React.FC<Props> = ({ visibleTodos }) => {
-  const { todos, deleteTodo, allChecked, handleSelectAll, handleChange } =
-    useContext(TodoContext);
+  const {
+    todos,
+    allChecked,
+    handleSelectAll,
+  } = useContext(TodoContext);
 
   return (
     <section className="main">
@@ -30,11 +33,10 @@ export const Main: React.FC<Props> = ({ visibleTodos }) => {
 
       <ul className="todo-list" data-cy="todosList">
         <TodoList
-          handleChange={handleChange}
           visibleTodos={visibleTodos}
-          deleteTodo={deleteTodo}
         />
       </ul>
+
     </section>
   );
 };

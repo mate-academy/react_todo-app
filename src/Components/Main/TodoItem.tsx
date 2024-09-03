@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../Types/todo';
+import { TodoContext } from '../Context/TodoContext';
 
 type Props = {
   todo: Todo;
-  handleChange: (todoId: number, todoCompleted: boolean) => void;
-  deleteTodo: (id: number) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  handleChange,
-  deleteTodo,
-}) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { deleteTodo, handleChange, onTitleChange } = useContext(TodoContext);
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(event.target.value)
+  }
+
+  const handleBlur = () => {
+    setIsEdit(false);
+
+    if (newTitle.trim() !== '') {
+      onTitleChange(todo.id, newTitle.trim())
+    } else {
+      setNewTitle(todo.title);
+    }
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleBlur();
+    }
+
+    if (event.key === 'Escape') {
+      setNewTitle(todo.title)
+      setIsEdit(false)
+    }
+  }
+
   return (
-    <li className={cn({ completed: todo.completed })}>
+    <li className={cn('todo-list', { 'completed': todo.completed, 'edit': isEdit }, )}>
       <div className="view">
         <input
           type="checkbox"
@@ -23,7 +48,21 @@ export const TodoItem: React.FC<Props> = ({
           onChange={() => handleChange(todo.id, todo.completed)}
           id={todo.id.toString()}
         />
-        <label>{todo.title}</label>
+
+        {isEdit ? (
+          <input
+            type="text"
+            className="new-todo"
+            value={newTitle}
+            onChange={handleTitleChange}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          ) : (
+            <label onDoubleClick={() => setIsEdit(true)}>{todo.title}</label>
+        )}
+
         <button
           type="button"
           className="destroy"
@@ -31,7 +70,6 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="deleteTodo"
         />
       </div>
-      <input type="text" className="edit" />
     </li>
   );
 };
