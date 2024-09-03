@@ -1,24 +1,18 @@
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
+import { TodoContext } from './Context/TodoContext';
 
-type Props = {
-  todoValue: string;
-  setTodoValue: (value: string) => void;
-  addTodo: () => void;
-};
+type Props = {};
 
-export const Header: React.FC<Props> = ({
-  todoValue,
-  setTodoValue,
-  addTodo,
-}) => {
+export const Header: React.FC<Props> = () => {
+  const { todoValue, setTodoValue, addTodo } = useContext(TodoContext);
+
   const focusedElement = useRef<HTMLInputElement>(null);
-
 
   useEffect(() => {
     if (focusedElement.current) {
       focusedElement.current.focus();
     }
-  }, [])
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoValue(event.target.value);

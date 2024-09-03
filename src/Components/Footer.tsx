@@ -7,7 +7,6 @@ import { TodoContext } from './Context/TodoContext';
 type Props = {
   setFilter: (Filter: Filter) => void;
   filter: Filter;
-  clearCompleted: () => void;
   active: Todo[];
   completed: Todo[];
 };
@@ -15,11 +14,10 @@ type Props = {
 export const Footer: React.FC<Props> = ({
   setFilter,
   filter,
-  clearCompleted,
   active,
   completed,
 }) => {
-  const { todos } = useContext(TodoContext);
+  const { todos, clearCompleted } = useContext(TodoContext);
 
   if (todos.length === 0) {
     return null;
@@ -53,7 +51,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <a
             href="#/"
-            className={cn({ "selected": filter === Filter.All })}
+            className={cn({ selected: filter === Filter.All })}
             onClick={handleAllClick}
           >
             All
@@ -63,7 +61,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <a
             href="#/active"
-            className={cn({ "selected": filter === Filter.Active })}
+            className={cn({ selected: filter === Filter.Active })}
             onClick={handleActiveClick}
           >
             Active
@@ -73,7 +71,7 @@ export const Footer: React.FC<Props> = ({
         <li>
           <a
             href="#/completed"
-            className={cn({ "selected": filter === Filter.Completed })}
+            className={cn({ selected: filter === Filter.Completed })}
             onClick={handleCompletedClick}
           >
             Completed
@@ -85,7 +83,7 @@ export const Footer: React.FC<Props> = ({
         type="button"
         className="clear-completed"
         onClick={handleClearClick}
-        disabled={completed.length===0}
+        disabled={completed.length === 0}
       >
         Clear completed
       </button>

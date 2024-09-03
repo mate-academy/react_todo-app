@@ -8,9 +8,13 @@ type Props = {
   deleteTodo: (id: number) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo, handleChange, deleteTodo }) => {
+export const TodoItem: React.FC<Props> = ({
+  todo,
+  handleChange,
+  deleteTodo,
+}) => {
   return (
-    <li className={cn({ 'completed': todo.completed })}>
+    <li className={cn({ completed: todo.completed })}>
       <div className="view">
         <input
           type="checkbox"

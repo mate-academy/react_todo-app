@@ -6,27 +6,11 @@ import { TodoList } from './TodoList';
 
 type Props = {
   visibleTodos: Todo[];
-  deleteTodo: (id: number) => void;
 };
 
-export const Main: React.FC<Props> = ({ visibleTodos, deleteTodo }) => {
-  const { todos, setTodos } = useContext(TodoContext);
-
-  const allChecked = todos.every(todo => todo.completed);
-
-  const handleSelectAll = () => {
-    setTodos(prevTodos =>
-      prevTodos.map(todo => ({ ...todo, completed: !allChecked })),
-    );
-  };
-
-  const handleChange = (toId: number, todoCompleted: boolean): void => {
-    setTodos(prevTodos =>
-      prevTodos.map(todo =>
-        todo.id === toId ? { ...todo, completed: !todoCompleted } : todo,
-      ),
-    );
-  };
+export const Main: React.FC<Props> = ({ visibleTodos }) => {
+  const { todos, deleteTodo, allChecked, handleSelectAll, handleChange } =
+    useContext(TodoContext);
 
   return (
     <section className="main">

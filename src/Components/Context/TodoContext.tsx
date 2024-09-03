@@ -1,32 +1,95 @@
-import React, {useState} from "react";
-import { Todo } from "../../Types/todo";
+import React, { useState } from 'react';
+import { useLocalStorage } from '../../Hooks/useLocalStorage';
+import { Todo } from '../../Types/todo';
 
-interface TodoContextType {
-  todos: Todo[],
-  setTodos: (todos: Todo[]) => void,
-}
+type TodoContextType = {
+  todos: Todo[];
+  setTodos: (todos: Todo[]) => void;
+  addTodo: () => void;
+  todoValue: string;
+  setTodoValue: (value: string) => void;
+  clearCompleted: () => void;
+  deleteTodo: (id: number) => void;
+  allChecked: boolean;
+  handleSelectAll: () => void;
+  handleChange: (toId: number, todoCompleted: boolean) => void;
+};
 
 export const TodoContext = React.createContext<TodoContextType>({
   todos: [],
-  setTodos: () => {}
+  setTodos: () => {},
+  addTodo: () => {},
+  todoValue: '',
+  setTodoValue: () => {},
+  clearCompleted: () => {},
+  deleteTodo: () => {},
+  handleSelectAll: () => {},
+  allChecked: false,
+  handleChange: () => {},
 });
 
 type Props = {
   children: React.ReactNode;
-}
-
+};
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  const [todoValue, setTodoValue] = useState('');
+
+  const addTodo = () => {
+    if (todoValue.trim() !== '') {
+      const newTodo: Todo = {
+        id: +new Date(),
+        title: todoValue,
+        completed: false,
+      };
+
+      setTodos((prevTodos: Todo[]) => {
+        return [newTodo, ...prevTodos];
+      });
+
+      setTodoValue('');
+    }
+  };
+
+  const deleteTodo = (todoId: number) => {
+    setTodos((prevTodos: Todo[]) =>
+      prevTodos.filter(todo => todo.id !== todoId),
+    );
+  };
+
+  const clearCompleted = () => {
+    setTodos((prevTodos: Todo[]) => prevTodos.filter(todo => !todo.completed));
+  };
+
+  const allChecked = todos.every(todo => todo.completed);
+
+  const handleSelectAll = () => {
+    setTodos((prevTodos: Todo[]) =>
+      prevTodos.map(todo => ({ ...todo, completed: !allChecked })),
+    );
+  };
+
+  const handleChange = (toId: number, todoCompleted: boolean): void => {
+    setTodos((prevTodos: Todo[]) =>
+      prevTodos.map(todo =>
+        todo.id === toId ? { ...todo, completed: !todoCompleted } : todo,
+      ),
+    );
+  };
 
   const value = {
     todos,
-    setTodos
-  }
+    setTodos,
+    addTodo,
+    todoValue,
+    setTodoValue,
+    clearCompleted,
+    deleteTodo,
+    handleSelectAll,
+    allChecked,
+    handleChange,
+  };
 
-  return (
-    <TodoContext.Provider value={value}>
-      {children}
-    </TodoContext.Provider>
-  )
+  return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };

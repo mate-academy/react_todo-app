@@ -8,7 +8,11 @@ type Props = {
   deleteTodo: (id: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ handleChange, visibleTodos, deleteTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  handleChange,
+  visibleTodos,
+  deleteTodo,
+}) => {
   return (
     <>
       {visibleTodos.map(todo => (
