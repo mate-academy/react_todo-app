@@ -40,7 +40,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <li
-      onDoubleClick={() => setIsEdit(true)}
       className={cn({ completed: todo.completed })}
     >
       <div className="view">
@@ -64,7 +63,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             autoFocus
           />
         ) : (
-          <label>{todo.title}</label>
+            <label onDoubleClick={() => setIsEdit(true)}>{todo.title}</label>
         )}
 
         {!isEdit && (
