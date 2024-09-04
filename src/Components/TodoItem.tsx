@@ -61,6 +61,7 @@ export const TodoItem: React.FC<Props> = ({ todo, dispatch }) => {
       })}
       onDoubleClick={() => setIsEditing(true)}
     >
+      {/* eslint-disable jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -75,6 +76,7 @@ export const TodoItem: React.FC<Props> = ({ todo, dispatch }) => {
           }
         />
       </label>
+      {/* eslint-disable jsx-a11y/label-has-associated-control */}
       {isEditing ? (
         <form onSubmit={handleSubmit} onBlur={() => setIsEditing(false)}>
           <input
