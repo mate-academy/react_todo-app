@@ -275,16 +275,16 @@ export const App: React.FC = () => {
             </nav>
 
             {/* this button should be disabled if there are no completed todos */}
-            {todos.some(todo => todo.completed) && (
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-                onClick={handleCompletedDelete}
-              >
-                Clear completed
-              </button>
-            )}
+
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
+              disabled={!todos.some(todo => todo.completed)}
+              onClick={handleCompletedDelete}
+            >
+              Clear completed
+            </button>
           </footer>
         )}
       </div>
