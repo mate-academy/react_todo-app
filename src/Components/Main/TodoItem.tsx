@@ -39,9 +39,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   return (
-    <li
-      className={cn({ completed: todo.completed })}
-    >
+    <li className={cn({ completed: todo.completed })}>
       <div className="view">
         <input
           type="checkbox"
@@ -63,7 +61,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             autoFocus
           />
         ) : (
-            <label onDoubleClick={() => setIsEdit(true)}>{todo.title}</label>
+          <label onDoubleClick={() => setIsEdit(true)}>{todo.title}</label>
         )}
 
         {!isEdit && (
