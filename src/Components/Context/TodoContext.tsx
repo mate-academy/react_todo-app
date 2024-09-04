@@ -13,7 +13,7 @@ type TodoContextType = {
   allChecked: boolean;
   handleSelectAll: () => void;
   handleChange: (toId: number, todoCompleted: boolean) => void;
-  onTitleChange: (id: number, title: string) => void
+  onTitleChange: (id: number, title: string) => void;
 };
 
 export const TodoContext = React.createContext<TodoContextType>({
@@ -26,8 +26,8 @@ export const TodoContext = React.createContext<TodoContextType>({
   deleteTodo: () => {},
   handleSelectAll: () => {},
   allChecked: false,
-  handleChange: () => { },
-  onTitleChange: () => { },
+  handleChange: () => {},
+  onTitleChange: () => {},
 });
 
 type Props = {
@@ -80,10 +80,13 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     );
   };
 
-  const onTitleChange = (todoId: number, todoTitle: string)=> {
+  const onTitleChange = (todoId: number, todoTitle: string) => {
     setTodos(prevTodos =>
-      prevTodos.map(todo => todo.id === todoId ? { ...todo, title: todoTitle } : todo))
-  }
+      prevTodos.map(todo =>
+        todo.id === todoId ? { ...todo, title: todoTitle } : todo,
+      ),
+    );
+  };
 
   const value = {
     todos,
@@ -96,7 +99,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     handleSelectAll,
     allChecked,
     handleChange,
-    onTitleChange
+    onTitleChange,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;

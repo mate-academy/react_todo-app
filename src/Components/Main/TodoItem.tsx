@@ -14,18 +14,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [newTitle, setNewTitle] = useState(todo.title);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTitle(event.target.value)
-  }
+    setNewTitle(event.target.value);
+  };
 
   const handleBlur = () => {
     setIsEdit(false);
 
     if (newTitle.trim() !== '') {
-      onTitleChange(todo.id, newTitle.trim())
+      onTitleChange(todo.id, newTitle.trim());
     } else {
-      setNewTitle(todo.title);
+      deleteTodo(todo.id);
     }
-  }
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -33,17 +33,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (event.key === 'Escape') {
-      setNewTitle(todo.title)
-      setIsEdit(false)
+      setNewTitle(todo.title);
+      setIsEdit(false);
     }
-  }
+  };
 
   return (
-    <li className={cn('todo-list', { 'completed': todo.completed, 'edit': isEdit }, )}>
+    <li
+      onDoubleClick={() => setIsEdit(true)}
+      className={cn({ completed: todo.completed })}
+    >
       <div className="view">
         <input
           type="checkbox"
-          className="toggle active"
+          className="toggle"
           checked={todo.completed}
           onChange={() => handleChange(todo.id, todo.completed)}
           id={todo.id.toString()}
@@ -52,23 +55,26 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         {isEdit ? (
           <input
             type="text"
-            className="new-todo"
+            className="edited-todo"
             value={newTitle}
+            placeholder="Empty todo will be deleted"
             onChange={handleTitleChange}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             autoFocus
           />
-          ) : (
-            <label onDoubleClick={() => setIsEdit(true)}>{todo.title}</label>
+        ) : (
+          <label>{todo.title}</label>
         )}
 
-        <button
-          type="button"
-          className="destroy"
-          onClick={() => deleteTodo(todo.id)}
-          data-cy="deleteTodo"
-        />
+        {!isEdit && (
+          <button
+            type="button"
+            className="destroy"
+            onClick={() => deleteTodo(todo.id)}
+            data-cy="deleteTodo"
+          />
+        )}
       </div>
     </li>
   );

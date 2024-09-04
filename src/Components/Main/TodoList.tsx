@@ -10,10 +10,7 @@ export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
   return (
     <>
       {visibleTodos.map(todo => (
-        <TodoItem
-          todo={todo}
-          key={todo.id}
-        />
+        <TodoItem todo={todo} key={todo.id} />
       ))}
     </>
   );

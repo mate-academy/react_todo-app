@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useContext } from 'react';
-// import { useEffect } from 'react';
 
 import { Header } from './Components/Header';
 import { Main } from './Components/Main/Main';
@@ -16,11 +15,6 @@ export const App: React.FC = () => {
 
   const completed = todos.filter(todo => todo.completed);
   const active = todos.filter(todo => !todo.completed);
-
-  // useEffect(() => {
-  //   console.log('todos:', todos);
-  //   console.log('completed:', completed);
-  // }, [todos]);
 
   function getVisibleTodos(): Todo[] {
     switch (filter) {

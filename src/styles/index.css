@@ -1,7 +1,6 @@
 html,
 body {
   margin: 0;
-
   padding: 0;
 }
 
@@ -66,7 +65,8 @@ body {
 }
 
 .new-todo,
-.edit {
+.edit,
+.edited-todo {
   position: relative;
   margin: 0;
   width: 100%;
@@ -83,11 +83,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.new-todo {
+.new-todo,
+.edited-todo {
   padding: 16px 16px 16px 60px;
   border: none;
   background: rgba(0, 0, 0, 0.01);
   box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+}
+
+.edited-todo {
+  width: 90%;
+  margin-left: 10%;
 }
 
 .main {
