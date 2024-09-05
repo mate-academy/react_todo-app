@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../Types/todo';
 import { TodoContext } from '../Context/TodoContext';
+import { Key } from '../../Types/key';
 
 type Props = {
   todo: Todo;
@@ -28,11 +29,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === Key.Enter) {
       handleBlur();
     }
 
-    if (event.key === 'Escape') {
+    if (event.key === Key.Escape) {
       setNewTitle(todo.title);
       setIsEdit(false);
     }

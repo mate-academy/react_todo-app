@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useContext } from 'react';
+import { Key } from '../Types/key';
 import { TodoContext } from './Context/TodoContext';
 
 type Props = {};
@@ -19,7 +20,7 @@ export const Header: React.FC<Props> = () => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === Key.Enter) {
       event.preventDefault();
       addTodo();
     }
