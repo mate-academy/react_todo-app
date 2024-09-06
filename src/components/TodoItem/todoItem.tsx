@@ -37,29 +37,31 @@ export const TodoItem: React.FC<Props> = ({
     return null;
   }
 
+  const { id, title, completed } = todo;
+
   const handleEditTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditingValue(event.target.value);
   };
 
   return (
     <div
-      key={todo.id}
+      key={id}
       data-cy="Todo"
       className={cn('todo', {
-        completed: todo.completed,
+        completed: completed,
       })}
-      onDoubleClick={() => onTodoDoubleClick(todo.id)}
+      onDoubleClick={() => onTodoDoubleClick(id)}
     >
       {isEditing ? (
         <>
-          <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
+          <label className="todo__status-label" htmlFor={`todo-${id}`}>
             <input
-              id={`todo-${todo.id}`}
+              id={`todo-${id}`}
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={todo.completed}
-              onChange={() => onTodoStatusChange(todo.id)}
+              checked={completed}
+              onChange={() => onTodoStatusChange(id)}
             />
           </label>
           <input
@@ -78,24 +80,24 @@ export const TodoItem: React.FC<Props> = ({
         </>
       ) : (
         <>
-          <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
+          <label className="todo__status-label" htmlFor={`todo-${id}`}>
             <input
-              id={`todo-${todo.id}`}
+              id={`todo-${id}`}
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
               checked={todo.completed}
-              onChange={() => onTodoStatusChange(todo.id)}
+              onChange={() => onTodoStatusChange(id)}
             />
           </label>
           <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
+            {title}
           </span>
           <button
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => onTodoDelete(todo.id)}
+            onClick={() => onTodoDelete(id)}
           >
             ×
           </button>

@@ -41,13 +41,16 @@ export const Header: React.FC<Props> = ({ updateAll }) => {
     }
   };
 
+  const allTodosCompleted =
+    todos.length > 0 && todos.every(todo => todo.completed);
+
   return (
     <header className="todoapp__header">
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active: todos.length > 0 && todos.every(todo => todo.completed),
+            active: allTodosCompleted,
           })}
           data-cy="ToggleAllButton"
           onClick={updateAll}
