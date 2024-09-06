@@ -15,6 +15,8 @@ export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
   const activeTodos = todos.filter((todo: Todo) => !todo.completed);
   const completedTodos = todos.some((todo: Todo) => todo.completed);
 
+  const tabs = Object.values(IsActiveTab);
+
   return (
     // {/* Hide the footer if there are no todos */}
     <footer className="todoapp__footer" data-cy="Footer">
@@ -24,44 +26,21 @@ export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: isActive === IsActiveTab.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => {
-            setIsActiveTab(IsActiveTab.All);
-          }}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: isActive === IsActiveTab.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => {
-            setIsActiveTab(IsActiveTab.Active);
-          }}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: isActive === IsActiveTab.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => {
-            setIsActiveTab(IsActiveTab.Completed);
-          }}
-        >
-          Completed
-        </a>
+        {tabs.map(tab => (
+          <a
+            key={tab}
+            href={`#/${tab.toLowerCase()}`}
+            className={classNames('filter__link', {
+              selected: isActive === tab,
+            })}
+            data-cy={`FilterLink${tab}`}
+            onClick={() => {
+              setIsActiveTab(tab);
+            }}
+          >
+            {tab}
+          </a>
+        ))}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
@@ -70,7 +49,7 @@ export const Footer: React.FC<PropsFooter> = ({ isActive, setIsActiveTab }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => handleClearCompleted()}
+        onClick={handleClearCompleted}
       >
         Clear completed
       </button>
