@@ -65,6 +65,7 @@ export const TodoItem: React.FC<PropsTodo> = ({ id, title, status }) => {
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed: status })}>
+      {/* eslint-disable jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
