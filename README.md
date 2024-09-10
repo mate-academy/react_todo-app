@@ -22,7 +22,7 @@ Follow the steps below to install and run the project locally.
 2. Navigate to working directory:
 
    ```bash
-   cd react_phone-catalog
+   cd react_todo-app
 
 3. Install all dependencies:
    ```bash
@@ -40,3 +40,9 @@ Follow the steps below to install and run the project locally.
 
 # Hosted Website
 [Click to enjoy](https://denys209818.github.io/react_todo-app/)
+
+
+```css
+a:focus {
+    outline: none;
+}
