@@ -40,9 +40,3 @@ Follow the steps below to install and run the project locally.
 
 # Hosted Website
 [Click to enjoy](https://denys209818.github.io/react_todo-app/)
-
-
-```css
-a:focus {
-    outline: none;
-}

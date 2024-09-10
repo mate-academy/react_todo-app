@@ -44,6 +44,10 @@ export const App: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
 
+    if (formText.trim().length === 0) {
+      return;
+    }
+
     setTasks(prev => [
       ...prev,
       { id: +new Date(), title: formText.trim(), completed: false },
