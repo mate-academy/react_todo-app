@@ -1,0 +1,42 @@
+.errorMessage {
+  display: block;
+  border-end-end-radius: 15px;
+  border-end-start-radius: 15px;
+  box-sizing: content-box;
+  background-color: hsl(348, 100%, 96%, 1);
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+
+    border-start-end-radius: 15px;
+    border-start-start-radius: 15px;
+
+    background-color: #ff6685;
+  }
+
+  &__title {
+    margin: 0;
+
+    font-size: 20px;
+  }
+
+  &__close {
+    display: block;
+    margin: 0;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__body {
+    display: block;
+
+    padding: 20px 24px;
+
+    font-size: 18px;
+  }
+}

@@ -5,6 +5,8 @@ import './styles/todo.scss';
 import './styles/todoapp.scss';
 import './styles/filter.scss';
 
+// import 'bulma/css/bulma.css';
+
 import { App } from './App';
 import { TaskContextProvider } from './contexts/TaskContext';
 

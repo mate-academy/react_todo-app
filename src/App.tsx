@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TaskContext } from './contexts/TaskContext';
 import classNames from 'classnames';
+import MessageError from './components/MessageError';
 
 interface ActiveField {
   id: number;
@@ -13,6 +14,7 @@ export const App: React.FC = () => {
   const [editedText, setEditedText] = useState<ActiveField | null>(null);
   const [activeTask, setActiveTask] = useState<boolean | null>(null);
   const [toggle, setToggle] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const mainInput = useRef<HTMLInputElement>(null);
 
@@ -44,7 +46,11 @@ export const App: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
 
+    setErrorMessage(() => '');
+
     if (formText.trim().length === 0) {
+      setErrorMessage(() => "ToDo can't be empty");
+
       return;
     }
 
@@ -254,6 +260,13 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
+
+      {errorMessage && (
+        <MessageError
+          errorMessage={errorMessage}
+          closeError={() => setErrorMessage('')}
+        />
+      )}
     </div>
   );
 };
