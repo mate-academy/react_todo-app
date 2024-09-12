@@ -6,10 +6,10 @@ export const Footer: React.FC = () => {
   const { todos, dispatch, handleFilterBy, filteredBy, originalTodos } =
     useContext(TodoContext);
 
-  const activeTodos = originalTodos.filter(
+  const activeTodosCount = originalTodos.filter(
     todo => todo.completed === false,
   ).length;
-  const disabled = todos.some(todo => todo.completed);
+  const isDisabled = todos.some(todo => todo.completed);
 
   const handleFilter = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -25,55 +25,32 @@ export const Footer: React.FC = () => {
       {originalTodos.length > 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            {`${activeTodos} items left`}
+            {`${activeTodosCount} items left`}
           </span>
 
           <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={cn('filter__link', {
-                selected: filteredBy === FilterBy.All,
-              })}
-              data-cy="FilterLinkAll"
-              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
-                handleFilter(event, FilterBy.All)
-              }
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className={cn('filter__link', {
-                selected: filteredBy === FilterBy.Active,
-              })}
-              data-cy="FilterLinkActive"
-              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
-                handleFilter(event, FilterBy.Active)
-              }
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={cn('filter__link', {
-                selected: filteredBy === FilterBy.Completed,
-              })}
-              data-cy="FilterLinkCompleted"
-              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
-                handleFilter(event, FilterBy.Completed)
-              }
-            >
-              Completed
-            </a>
+            {Object.values(FilterBy).map(filter => (
+              <a
+                key={filter}
+                href={`#/${filter === FilterBy.All ? '' : filter.toLowerCase()}`}
+                className={cn('filter__link', {
+                  selected: filteredBy === filter,
+                })}
+                data-cy={`FilterLink${filter}`}
+                onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
+                  handleFilter(event, filter)
+                }
+              >
+                {filter}
+              </a>
+            ))}
           </nav>
 
           <button
             type="button"
             className="todoapp__clear-completed"
             data-cy="ClearCompletedButton"
-            disabled={!disabled}
+            disabled={!isDisabled}
             onClick={() =>
               dispatch({
                 type: ActionNames.ClearCompleted,

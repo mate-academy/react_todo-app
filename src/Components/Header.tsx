@@ -20,7 +20,7 @@ export const Header: React.FC = ({}) => {
     }
 
     const newTodo: Todo = {
-      id: +new Date(),
+      id: 100,
       completed: false,
       title: value.trim(),
     };
@@ -30,10 +30,10 @@ export const Header: React.FC = ({}) => {
     dispatch({ type: ActionNames.Add, payload: newTodo });
   };
 
-  const completed =
+  const isCompleted =
     todos.length && todos.some(todo => todo.completed === false);
 
-  const allCompleted = originalTodos.every(todo => todo.completed);
+  const isAllCompleted = originalTodos.every(todo => todo.completed);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -44,10 +44,10 @@ export const Header: React.FC = ({}) => {
   };
 
   useEffect(() => {
-    if (allCompleted) {
+    if (isAllCompleted) {
       focusInput();
     }
-  }, [allCompleted]);
+  }, [isAllCompleted]);
 
   useEffect(() => {
     focusInput();
@@ -63,7 +63,7 @@ export const Header: React.FC = ({}) => {
             dispatch({ type: ActionNames.ToggleAllCompleted, payload: todos })
           }
           className={cn('todoapp__toggle-all', {
-            active: !completed,
+            active: !isCompleted,
           })}
         />
       )}
@@ -73,7 +73,7 @@ export const Header: React.FC = ({}) => {
           data-cy="NewTodoField"
           type="text"
           className={cn('todoapp__new-todo', {
-            active: allCompleted,
+            active: isAllCompleted,
           })}
           placeholder="What needs to be done?"
           autoFocus
