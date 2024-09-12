@@ -1,3 +1,5 @@
+$width: 45px;
+
 .todoapp {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 24px;
@@ -56,9 +58,10 @@
   }
 
   &__new-todo {
+    box-sizing: border-box;
     width: 100%;
     padding: 16px 16px 16px 60px;
-
+    margin-right: $width;
     font-size: 24px;
     line-height: 1.4em;
     font-family: inherit;
