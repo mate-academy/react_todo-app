@@ -46,18 +46,16 @@ function reducer(state: State, action: Action): State {
     case 'deleteTodo':
       return {
         ...state,
-        todos: [...state.todos.filter(todo => todo.id !== action.payload)],
+        todos: state.todos.filter(todo => todo.id !== action.payload),
       };
     case 'updateTodo':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            return todo.id === action.payload.id
-              ? { ...todo, title: action.payload.title }
-              : todo;
-          }),
-        ],
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id
+            ? { ...todo, title: action.payload.title }
+            : todo,
+        ),
       };
     case 'setNewTodoTitle':
       return {
@@ -67,11 +65,10 @@ function reducer(state: State, action: Action): State {
     case 'setAllCompleted':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            return { ...todo, completed: action.payload };
-          }),
-        ],
+        todos: state.todos.map(todo => ({
+          ...todo,
+          completed: action.payload,
+        })),
       };
     case 'setStatus':
       return {
@@ -81,33 +78,28 @@ function reducer(state: State, action: Action): State {
     case 'setNewStatus':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => {
-            return todo.id === action.payload.id
-              ? { ...todo, completed: !todo.completed }
-              : todo;
-          }),
-        ],
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id
+            ? { ...todo, completed: !todo.completed }
+            : todo,
+        ),
       };
     case 'setFilterByStatus':
       return {
         ...state,
-        todos: [
-          ...state.todos.map(todo => ({ ...todo, filter: action.payload })),
-        ],
         filter: action.payload,
       };
     case 'clearAllCompleted':
       return {
         ...state,
-        todos: [...state.todos.filter(todo => !todo.completed)],
+        todos: state.todos.filter(todo => !todo.completed),
       };
     default:
       return state;
   }
 }
 
-export const StateContext = React.createContext(initialState);
+export const StateContext = React.createContext<State>(initialState);
 export const DispatchContext = React.createContext<React.Dispatch<Action>>(
   () => {},
 );

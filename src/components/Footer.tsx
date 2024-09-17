@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { DispatchContext, StateContext } from './Store';
 import { getActiveTodosArray, getCompletedTodosArray } from '../services';
 import { FilterTodos } from '../types/FilterTodos';
@@ -15,47 +15,24 @@ export const Footer = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: filter === FilterTodos.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() =>
-            dispatch({ type: 'setFilterByStatus', payload: FilterTodos.All })
-          }
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filter === FilterTodos.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() =>
-            dispatch({ type: 'setFilterByStatus', payload: FilterTodos.Active })
-          }
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filter === FilterTodos.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() =>
-            dispatch({
-              type: 'setFilterByStatus',
-              payload: FilterTodos.Completed,
-            })
-          }
-        >
-          Completed
-        </a>
+        {Object.values(FilterTodos).map(status => (
+          <a
+            key={status}
+            href={`#/${status}`}
+            className={cn('filter__link', {
+              selected: filter === status,
+            })}
+            data-cy={`FilterLink${status}`}
+            onClick={() =>
+              dispatch({
+                type: 'setFilterByStatus',
+                payload: status,
+              })
+            }
+          >
+            {status}
+          </a>
+        ))}
       </nav>
 
       <button
