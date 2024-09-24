@@ -49,7 +49,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         todos: [...state.todos.filter(todo => todo.id !== action.id)],
-        focusNewTodo: !state.focusNewTodo,
+        focusNewTodo: true,
       };
 
     case 'checked':

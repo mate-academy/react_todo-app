@@ -5,24 +5,20 @@ import cn from 'classnames';
 export const Header = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, newTodo, focusNewTodo } = useContext(StateContext);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const allTodosComplete = todos.reduce((prev, todo) => {
-    return prev && todo.completed;
-  }, true);
+  const allTodosComplete = todos.reduce(
+    (prev, todo) => prev && todo.completed,
+    true,
+  );
 
   const addNewTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (newTodo.trim()) {
       dispatch({ type: 'add' });
-      dispatch({
-        type: 'changeTodo',
-        text: '',
-      });
+      dispatch({ type: 'changeTodo', text: '' });
     }
   };
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (focusNewTodo) {
@@ -37,9 +33,7 @@ export const Header = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={cn('todoapp__toggle-all', {
-            active: allTodosComplete,
-          })}
+          className={cn('todoapp__toggle-all', { active: allTodosComplete })}
           data-cy="ToggleAllButton"
           onClick={() =>
             dispatch({ type: 'setAllCompleate', use: allTodosComplete })
@@ -55,6 +49,8 @@ export const Header = () => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={newTodo}
+          onClick={() => dispatch({ type: 'setFocudNewTodo' })}
+          onBlur={() => dispatch({ type: 'setFocudNewTodo' })}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             dispatch({
               type: 'changeTodo',
