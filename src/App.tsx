@@ -6,28 +6,29 @@ import { Footer } from './components/Footer';
 import { DispatchContext, StateContext } from './Storage/storageFiles';
 import { Todo } from './types/Todo';
 
-const getTodosFromLocalStorage: Todo[] = JSON.parse(
-  localStorage.getItem('todos') || '[]',
-);
-
 export const App: React.FC = () => {
   const { todos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
-
-  useEffect(() => {
-    if (todos.length === 0) {
-      dispatch({ type: 'setTodos', tod: getTodosFromLocalStorage });
-    }
-  }, []);
   const temper = useRef(true);
 
   useEffect(() => {
     if (temper.current) {
       temper.current = false;
 
-      return;
-    }
+      try {
+        const storedTodos: Todo[] = JSON.parse(
+          localStorage.getItem('todos') || '[]',
+        );
 
+        dispatch({ type: 'setTodos', tod: storedTodos });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load todos from localStorage:', error);
+      }
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 

@@ -12,7 +12,7 @@ export const Footer = () => {
       {todos.length !== 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            {todosLeft} items left
+            {`${todosLeft} ${todosLeft === 1 ? 'item left' : 'items left'}`}
           </span>
 
           <nav className="filter" data-cy="Filter">
@@ -56,6 +56,11 @@ export const Footer = () => {
             data-cy="ClearCompletedButton"
             onClick={() => dispatch({ type: 'clearAll' })}
             disabled={todosLeft === todos.length}
+            style={{
+              visibility: todos.some(todo => todo.completed)
+                ? 'visible'
+                : 'hidden',
+            }}
           >
             Clear completed
           </button>

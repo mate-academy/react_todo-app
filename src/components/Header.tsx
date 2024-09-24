@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { DispatchContext, StateContext } from '../Storage/storageFiles';
 import cn from 'classnames';
 
@@ -24,11 +24,13 @@ export const Header = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (focusNewTodo) {
-    inputRef.current?.focus();
-  } else {
-    inputRef.current?.blur();
-  }
+  useEffect(() => {
+    if (focusNewTodo) {
+      inputRef.current?.focus();
+    } else {
+      inputRef.current?.blur();
+    }
+  }, [focusNewTodo]);
 
   return (
     <header className="todoapp__header">
@@ -53,8 +55,6 @@ export const Header = () => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={newTodo}
-          onClick={() => dispatch({ type: 'setFocudNewTodo' })}
-          onBlur={() => dispatch({ type: 'setFocudNewTodo' })}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             dispatch({
               type: 'changeTodo',
