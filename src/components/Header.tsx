@@ -20,13 +20,19 @@ export const Header = () => {
     }
   };
 
-  useEffect(() => {
-    if (focusNewTodo) {
-      inputRef.current?.focus();
-    } else {
-      inputRef.current?.blur();
-    }
-  }, [focusNewTodo]);
+  // useEffect(() => {
+  //   if (focusNewTodo) {
+  //     inputRef.current?.focus();
+  //   } else {
+  //     inputRef.current?.blur();
+  //   }
+  // }, [focusNewTodo]);
+
+  if (focusNewTodo) {
+    inputRef.current?.focus();
+  } else {
+    inputRef.current?.blur();
+  }
 
   return (
     <header className="todoapp__header">

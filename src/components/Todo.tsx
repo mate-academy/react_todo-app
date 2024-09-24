@@ -42,14 +42,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         />
       </label>
 
-      <span
-        data-cy="TodoTitle"
-        className="todo__title"
-        onDoubleClick={() => dispatch({ type: 'setChanged', id: todo.id })}
-      >
-        {todo.changed ? null : todo.title}
-      </span>
-
       {todo.changed ? (
         <form onSubmit={e => handleFormSubmit(e, todo.id)}>
           <input
@@ -70,7 +62,15 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             onBlur={() => dispatch({ type: 'setChanged', id: todo.id })}
           />
         </form>
-      ) : null}
+      ) : (
+        <span
+          data-cy="TodoTitle"
+          className="todo__title"
+          onDoubleClick={() => dispatch({ type: 'setChanged', id: todo.id })}
+        >
+          {todo.title}
+        </span>
+      )}
 
       {!todo.changed ? (
         <button
