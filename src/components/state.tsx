@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, createContext, ReactNode } from 'react';
 import { Todo } from '../Types/Todo';
 import { Filter } from '../Types/Filter';
