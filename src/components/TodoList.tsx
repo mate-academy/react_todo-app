@@ -21,8 +21,10 @@ export const TodoList: React.FC = () => {
         return !todo.completed;
       case Filter.COMPLETED:
         return todo.completed;
-      default:
+      case Filter.ALL:
         return true;
+      default:
+        return false;
     }
   });
 
@@ -68,7 +70,7 @@ export const TodoList: React.FC = () => {
               type="checkbox"
               className="todo__status"
               checked={todo.completed}
-              onClick={() => toggleTodoCompleted(todo.id)}
+              onChange={() => toggleTodoCompleted(todo.id)}
             />
           </label>
 
