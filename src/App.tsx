@@ -1,7 +1,26 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoTitle, setTodoTitle] = useState('');
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (todoTitle.trim()) {
+      const newTodo: Todo = {
+        id: +new Date(),
+        title: todoTitle,
+        completed: false,
+      };
+
+      setTodos([...todos, newTodo]);
+      setTodoTitle('');
+    }
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -16,19 +35,52 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={handleSubmit}>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={todoTitle}
+              onChange={event => setTodoTitle(event.target.value)}
             />
           </form>
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
           {/* This is a completed todo */}
+          {todos.map(todo => (
+            <div
+              key={todo.id}
+              data-cy="Todo"
+              className={`todo ${todo.completed ? 'completed' : ''}`}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
+                <input
+                  data-cy="TodoStatus"
+                  id={`todo-${todo.id}`}
+                  type="checkbox"
+                  className="todo__status"
+                  checked={todo.completed}
+                />
+              </label>
+
+              <span data-cy="TodoTitle" className="todo__title">
+                {todo.title}
+              </span>
+              {/* Remove button appears only on hover */}
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDelete"
+              >
+                ×
+              </button>
+            </div>
+          ))}
           <div data-cy="Todo" className="todo completed">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -50,6 +102,7 @@ export const App: React.FC = () => {
 
           {/* This todo is an active todo */}
           <div data-cy="Todo" className="todo">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -69,6 +122,7 @@ export const App: React.FC = () => {
 
           {/* This todo is being edited */}
           <div data-cy="Todo" className="todo">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -91,6 +145,7 @@ export const App: React.FC = () => {
 
           {/* This todo is in loadind state */}
           <div data-cy="Todo" className="todo">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
