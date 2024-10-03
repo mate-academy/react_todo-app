@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
 import { MyContext } from './state';
 import { Todo } from '../Types/Todo';
 
 export const Header = () => {
-  const { todos, setTodos, title, setTitle } = useContext(MyContext);
-
-  const inputRef = useRef<HTMLInputElement>(null);
+  const { todos, setTodos, title, setTitle, inputRef } = useContext(MyContext);
 
   const isAllCompleted = todos.every((todo: Todo) => todo.completed);
 
@@ -26,25 +24,6 @@ export const Header = () => {
     setTodos((currentTodos: Todo[]) => [...currentTodos, todo]);
     setTitle('');
   }
-
-  useEffect(() => {
-    const savedTodos = localStorage.getItem('todos');
-
-    if (savedTodos) {
-      setTodos(JSON.parse(savedTodos));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [todos]);
 
   return (
     <header className="todoapp__header">

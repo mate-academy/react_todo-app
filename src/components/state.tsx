@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, createContext, ReactNode } from 'react';
+import React, {
+  useState,
+  createContext,
+  ReactNode,
+  useEffect,
+  useRef,
+} from 'react';
 import { Todo } from '../Types/Todo';
 import { Filter } from '../Types/Filter';
 
@@ -19,6 +25,27 @@ export const MyProvider = ({ children }: MyProviderProps) => {
     setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
   }
 
+  useEffect(() => {
+    const savedTodos = localStorage.getItem('todos');
+
+    if (savedTodos) {
+      setTodos(JSON.parse(savedTodos));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [todos]);
+
   return (
     <MyContext.Provider
       value={{
@@ -31,6 +58,7 @@ export const MyProvider = ({ children }: MyProviderProps) => {
         editingTodoId,
         setEditingTodoId,
         deleteTodo,
+        inputRef,
       }}
     >
       {children}
