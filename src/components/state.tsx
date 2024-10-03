@@ -21,9 +21,9 @@ export const MyProvider = ({ children }: MyProviderProps) => {
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
 
-  function deleteTodo(id: number) {
+  const deleteTodo = (id: number) => {
     setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
-  }
+  };
 
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos');

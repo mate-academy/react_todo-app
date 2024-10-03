@@ -7,7 +7,7 @@ export const Header = () => {
 
   const isAllCompleted = todos.every((todo: Todo) => todo.completed);
 
-  function addTodo(e: React.FormEvent<HTMLFormElement>) {
+  const addTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmedTitle = title.trim();
 
@@ -23,7 +23,7 @@ export const Header = () => {
 
     setTodos((currentTodos: Todo[]) => [...currentTodos, todo]);
     setTitle('');
-  }
+  };
 
   return (
     <header className="todoapp__header">

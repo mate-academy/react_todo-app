@@ -28,15 +28,15 @@ export const TodoList: React.FC = () => {
     }
   });
 
-  function toggleTodoCompleted(id: number) {
+  const toggleTodoCompleted = (id: number) => {
     setTodos((currentTodos: Todo[]) =>
       currentTodos.map((todo: Todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       ),
     );
-  }
+  };
 
-  function handleUpdateTodo(id: number, newTitle: string) {
+  const handleUpdateTodo = (id: number, newTitle: string) => {
     const trimmedTitle = newTitle.trim();
 
     if (trimmedTitle) {
@@ -50,7 +50,7 @@ export const TodoList: React.FC = () => {
     }
 
     setEditingTodoId(null);
-  }
+  };
 
   const handleBlur = (id: number, currentTitle: string) => {
     handleUpdateTodo(id, currentTitle);
