@@ -4,6 +4,7 @@ import { MyContext } from './state';
 import { Filter } from '../Types/Filter';
 import React from 'react';
 import { Todo } from '../Types/Todo';
+import classNames from 'classnames';
 
 export const TodoList: React.FC = () => {
   const {
@@ -61,7 +62,7 @@ export const TodoList: React.FC = () => {
       {filteredTodos.map((todo: Todo) => (
         <div
           data-cy="Todo"
-          className={`todo ${todo.completed ? 'completed' : ''}`}
+          className={classNames('todo', { completed: todo.completed })}
           key={todo.id}
         >
           <label className="todo__status-label">

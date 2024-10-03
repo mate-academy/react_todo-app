@@ -3,6 +3,7 @@ import { Filter } from '../Types/Filter';
 import { MyContext } from './state';
 import { Todo } from '../Types/Todo';
 import React from 'react';
+import classNames from 'classnames'; // Ensure this is imported as classNames
 
 export const Footer: React.FC = () => {
   const { todos, filter, deleteTodo, setFilter } = useContext(MyContext);
@@ -19,7 +20,7 @@ export const Footer: React.FC = () => {
 
   return (
     <>
-      {todos.length > 0 ? (
+      {todos.length > 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
             {activeTodoCount} items left
@@ -28,7 +29,9 @@ export const Footer: React.FC = () => {
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
-              className={`filter__link ${filter === Filter.ALL ? 'selected' : ''}`}
+              className={classNames('filter__link', {
+                selected: filter === Filter.ALL,
+              })}
               data-cy="FilterLinkAll"
               onClick={() => handleFilterChange(Filter.ALL)}
             >
@@ -37,7 +40,9 @@ export const Footer: React.FC = () => {
 
             <a
               href="#/active"
-              className={`filter__link ${filter === Filter.ACTIVE ? 'selected' : ''}`}
+              className={classNames('filter__link', {
+                selected: filter === Filter.ACTIVE,
+              })}
               data-cy="FilterLinkActive"
               onClick={() => handleFilterChange(Filter.ACTIVE)}
             >
@@ -46,7 +51,9 @@ export const Footer: React.FC = () => {
 
             <a
               href="#/completed"
-              className={`filter__link ${filter === Filter.COMPLETED ? 'selected' : ''}`}
+              className={classNames('filter__link', {
+                selected: filter === Filter.COMPLETED,
+              })}
               data-cy="FilterLinkCompleted"
               onClick={() => handleFilterChange(Filter.COMPLETED)}
             >
@@ -64,7 +71,7 @@ export const Footer: React.FC = () => {
             Clear completed
           </button>
         </footer>
-      ) : null}
+      )}
     </>
   );
 };
