@@ -21,6 +21,14 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleToggleTodoStatus = (id: number) => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
+    );
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -63,6 +71,7 @@ export const App: React.FC = () => {
                   type="checkbox"
                   className="todo__status"
                   checked={todo.completed}
+                  onClick={() => handleToggleTodoStatus(todo.id)}
                 />
               </label>
 
