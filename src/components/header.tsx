@@ -25,6 +25,19 @@ export const Header = () => {
     setTitle('');
   };
 
+  const toogleTodoComplete = () => {
+    {
+      const allCompleted = todos.every((todo: Todo) => todo.completed);
+
+      setTodos((currentTodos: Todo[]) =>
+        currentTodos.map((todo: Todo) => ({
+          ...todo,
+          completed: !allCompleted,
+        })),
+      );
+    }
+  };
+
   return (
     <header className="todoapp__header">
       {todos.length > 0 ? (
@@ -32,16 +45,7 @@ export const Header = () => {
           type="button"
           className={`todoapp__toggle-all ${isAllCompleted ? 'active' : ''}`}
           data-cy="ToggleAllButton"
-          onClick={() => {
-            const allCompleted = todos.every((todo: Todo) => todo.completed);
-
-            setTodos((currentTodos: Todo[]) =>
-              currentTodos.map((todo: Todo) => ({
-                ...todo,
-                completed: !allCompleted,
-              })),
-            );
-          }}
+          onClick={toogleTodoComplete}
         />
       ) : null}
 

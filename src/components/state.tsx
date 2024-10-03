@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, {
   useState,
   createContext,
@@ -9,6 +8,7 @@ import React, {
 import { Todo } from '../Types/Todo';
 import { Filter } from '../Types/Filter';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const MyContext = createContext<any>(null);
 
 interface MyProviderProps {
@@ -31,7 +31,6 @@ export const MyProvider = ({ children }: MyProviderProps) => {
     if (savedTodos) {
       setTodos(JSON.parse(savedTodos));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -46,22 +45,20 @@ export const MyProvider = ({ children }: MyProviderProps) => {
     }
   }, [todos]);
 
+  const contextValue = {
+    todos,
+    setTodos,
+    title,
+    setTitle,
+    filter,
+    setFilter,
+    editingTodoId,
+    setEditingTodoId,
+    deleteTodo,
+    inputRef,
+  };
+
   return (
-    <MyContext.Provider
-      value={{
-        todos,
-        setTodos,
-        title,
-        setTitle,
-        filter,
-        setFilter,
-        editingTodoId,
-        setEditingTodoId,
-        deleteTodo,
-        inputRef,
-      }}
-    >
-      {children}
-    </MyContext.Provider>
+    <MyContext.Provider value={contextValue}>{children}</MyContext.Provider>
   );
 };
