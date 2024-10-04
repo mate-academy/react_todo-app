@@ -5,6 +5,7 @@ type TodoContextProps = {
   todos: Todo[];
   addTodo: (title: string) => void;
   toggleTodoStatus: (id: number) => void;
+  updateTodoTitle: (id: number, title: string) => void;
   deleteTodo: (id: number) => void;
 };
 
@@ -43,6 +44,14 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     );
   };
 
+  const updateTodoTitle = (id: number, newTitle: string) => {
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
+        todo.id === id ? { ...todo, title: newTitle } : todo,
+      ),
+    );
+  };
+
   const deleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
@@ -51,6 +60,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     todos,
     addTodo,
     toggleTodoStatus,
+    updateTodoTitle,
     deleteTodo,
   };
 
