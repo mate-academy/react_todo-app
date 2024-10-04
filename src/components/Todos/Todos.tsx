@@ -1,7 +1,7 @@
 import { useTodoContext } from '../context/TodoContext';
 
 export const Todos = () => {
-  const { todos, handleToggleTodoStatus } = useTodoContext();
+  const { todos, toggleTodoStatus, deleteTodo } = useTodoContext();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -20,7 +20,7 @@ export const Todos = () => {
               type="checkbox"
               className="todo__status"
               checked={todo.completed}
-              onClick={() => handleToggleTodoStatus(todo.id)}
+              onClick={() => toggleTodoStatus(todo.id)}
             />
           </label>
 
@@ -28,51 +28,16 @@ export const Todos = () => {
             {todo.title}
           </span>
           {/* Remove button appears only on hover */}
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => deleteTodo(todo.id)}
+          >
             ×
           </button>
         </div>
       ))}
-      <div data-cy="Todo" className="todo completed">
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-            checked
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          Completed Todo
-        </span>
-
-        {/* Remove button appears only on hover */}
-        <button type="button" className="todo__remove" data-cy="TodoDelete">
-          ×
-        </button>
-      </div>
-
-      {/* This todo is an active todo */}
-      <div data-cy="Todo" className="todo">
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          Not Completed Todo
-        </span>
-
-        <button type="button" className="todo__remove" data-cy="TodoDelete">
-          ×
-        </button>
-      </div>
 
       {/* This todo is being edited */}
       <div data-cy="Todo" className="todo">

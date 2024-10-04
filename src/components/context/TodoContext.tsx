@@ -4,7 +4,8 @@ import { Todo } from '../../types/Todo';
 type TodoContextProps = {
   todos: Todo[];
   addTodo: (title: string) => void;
-  handleToggleTodoStatus: (id: number) => void;
+  toggleTodoStatus: (id: number) => void;
+  deleteTodo: (id: number) => void;
 };
 
 const TodoContext = createContext<TodoContextProps | undefined>(undefined);
@@ -34,7 +35,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     setTodos(prevTodos => [...prevTodos, newTodo]);
   };
 
-  const handleToggleTodoStatus = (id: number) => {
+  const toggleTodoStatus = (id: number) => {
     setTodos(
       todos.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
@@ -42,10 +43,15 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     );
   };
 
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
   const value = {
     todos,
     addTodo,
-    handleToggleTodoStatus,
+    toggleTodoStatus,
+    deleteTodo,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
