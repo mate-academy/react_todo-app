@@ -3,16 +3,18 @@
 
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { DispatchContext } from '../../utils/GlobalContext';
+import React, {
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { DispatchContext } from '../GlobalContext';
 
 type Props = {
   todo: Todo;
 };
-type SubmitProps =
-  | React.FocusEvent<HTMLInputElement>
-  | React.KeyboardEvent<HTMLInputElement>
-  | React.FormEvent<HTMLFormElement>;
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useContext(DispatchContext);
@@ -35,27 +37,27 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleKeyEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.type === 'keyup') {
-      const keyEvent = event as React.KeyboardEvent<HTMLInputElement>;
-
-      if (keyEvent.key === 'Escape') {
-        handleCancel();
-      }
+    if (event.key === 'Escape') {
+      handleCancel();
     }
   };
 
-  function handleSubmit(event: SubmitProps): void {
+  function handleSubmit(event: SyntheticEvent): void {
     event.preventDefault();
     setEditing(false);
 
-    if (newTitle.length === 0) {
+    if (!newTitle.length) {
       dispatch({ type: 'deleteTodo', payload: todo.id });
 
       return;
     }
 
     if (todo.title !== newTitle) {
-      dispatch({ type: 'editTodo', payload: { id: todo.id, title: newTitle } });
+      setNewTitle(newTitle.trim());
+      dispatch({
+        type: 'editTodo',
+        payload: { id: todo.id, title: newTitle.trim() },
+      });
     }
   }
 

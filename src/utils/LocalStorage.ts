@@ -1,6 +1,6 @@
 import { Todo } from '../types/Todo';
 
-export const LocalStorage = {
+export const accessLocalStorage = {
   key: 'todos',
   get(): Todo[] {
     const data = localStorage.getItem(this.key);
@@ -20,9 +20,5 @@ export const LocalStorage = {
     } catch {
       return [];
     }
-  },
-
-  clear() {
-    localStorage.clear();
   },
 };

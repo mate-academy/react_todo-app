@@ -1,19 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { Todo } from '../types/Todo';
-import { LocalStorage } from './LocalStorage';
+import { accessLocalStorage } from '../utils/LocalStorage';
 import { Filters } from '../types/Filters';
-
-function filterTodos(todos: Todo[], filter: Filters): Todo[] {
-  switch (filter) {
-    case Filters.completed:
-      return todos.filter(todo => todo.completed === true);
-
-    case Filters.active:
-      return todos.filter(todo => todo.completed === false);
-  }
-
-  return todos;
-}
 
 function getNewId(min = 100000, max = 999999) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -21,43 +9,34 @@ function getNewId(min = 100000, max = 999999) {
 
 type State = {
   todos: Todo[];
-  filteredTodos: Todo[];
   filter: Filters;
 };
 
 type Action =
   | { type: 'getTodos' }
-  | { type: 'getFilteredTodos' }
+  | { type: 'setTodos'; payload: Todo[] }
   | { type: 'setFilter'; payload: Filters }
   | { type: 'addTodo'; payload: string }
   | { type: 'editTodo'; payload: { id: number; title: string } }
   | { type: 'deleteTodo'; payload: number }
   | { type: 'toggleTodo'; payload: number }
   | { type: 'deleteAllCompleted' }
-  | { type: 'toggleAll' };
+  | { type: 'toggleAll' }
+  | { type: 'setInputFiled' }
+  | { type: 'getInputField'; payload: number };
 
 function reducer(state: State, action: Action): State {
-  function updateAllTodos() {
-    const latestFromServer = LocalStorage.get();
-
-    return {
-      todos: latestFromServer,
-      filteredTodos: filterTodos(latestFromServer, state.filter),
-    };
-  }
-
   switch (action.type) {
     case 'getTodos':
       return {
         ...state,
-        todos: LocalStorage.get(),
+        todos: accessLocalStorage.get(),
       };
 
-    case 'getFilteredTodos':
-      return {
-        ...state,
-        filteredTodos: filterTodos(LocalStorage.get(), state.filter),
-      };
+    case 'setTodos':
+      accessLocalStorage.set([]);
+
+      return { ...state };
 
     case 'setFilter':
       const newFilter = action.payload;
@@ -65,7 +44,6 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         filter: newFilter,
-        filteredTodos: filterTodos(LocalStorage.get(), newFilter),
       };
 
     case 'addTodo':
@@ -75,15 +53,15 @@ function reducer(state: State, action: Action): State {
         completed: false,
       };
 
-      LocalStorage.set([...LocalStorage.get(), newPost]);
+      accessLocalStorage.set([...accessLocalStorage.get(), newPost]);
 
       return {
         ...state,
-        ...updateAllTodos(),
+        todos: accessLocalStorage.get(),
       };
 
     case 'toggleAll':
-      const currentToToggleAll = LocalStorage.get();
+      const currentToToggleAll = accessLocalStorage.get();
       let toggledTodos: Todo[] = [];
 
       if (currentToToggleAll.every(todo => todo.completed)) {
@@ -98,29 +76,29 @@ function reducer(state: State, action: Action): State {
         }));
       }
 
-      LocalStorage.set(toggledTodos);
+      accessLocalStorage.set(toggledTodos);
 
       return {
         ...state,
-        ...updateAllTodos(),
+        todos: accessLocalStorage.get(),
       };
 
     case 'editTodo':
-      const currentToDel = LocalStorage.get();
+      const currentToDel = accessLocalStorage.get();
       const { id, title } = action.payload;
       const editTodoIndex = currentToDel.findIndex(el => el.id === id);
 
       currentToDel[editTodoIndex].title = title;
 
-      LocalStorage.set(currentToDel);
+      accessLocalStorage.set(currentToDel);
 
       return {
         ...state,
-        ...updateAllTodos(),
+        todos: accessLocalStorage.get(),
       };
 
     case 'toggleTodo':
-      const currentToToggle = LocalStorage.get();
+      const currentToToggle = accessLocalStorage.get();
       const toogleTodoIndex = currentToToggle.findIndex(
         el => el.id === action.payload,
       );
@@ -128,35 +106,35 @@ function reducer(state: State, action: Action): State {
       currentToToggle[toogleTodoIndex].completed =
         !currentToToggle[toogleTodoIndex].completed;
 
-      LocalStorage.set(currentToToggle);
+      accessLocalStorage.set(currentToToggle);
 
       return {
         ...state,
-        ...updateAllTodos(),
+        todos: accessLocalStorage.get(),
       };
 
     case 'deleteTodo':
-      const newTodos = LocalStorage.get().filter(
-        (todo: Todo) => todo.id !== action.payload,
-      );
+      const newTodos = accessLocalStorage
+        .get()
+        .filter((todo: Todo) => todo.id !== action.payload);
 
-      LocalStorage.set(newTodos);
+      accessLocalStorage.set(newTodos);
 
       return {
         ...state,
-        ...updateAllTodos(),
+        todos: accessLocalStorage.get(),
       };
 
     case 'deleteAllCompleted':
-      const allNotCompleted = LocalStorage.get().filter(
-        todo => !todo.completed,
-      );
+      const allNotCompleted = accessLocalStorage
+        .get()
+        .filter(todo => !todo.completed);
 
-      LocalStorage.set(allNotCompleted);
+      accessLocalStorage.set(allNotCompleted);
 
       return {
         ...state,
-        ...updateAllTodos(),
+        todos: accessLocalStorage.get(),
       };
 
     default:
@@ -166,7 +144,6 @@ function reducer(state: State, action: Action): State {
 
 const initialState: State = {
   todos: [],
-  filteredTodos: [],
   filter: Filters.all,
 };
 
@@ -184,8 +161,11 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    if (accessLocalStorage.get().length <= 0) {
+      dispatch({ type: 'setTodos', payload: [] });
+    }
+
     dispatch({ type: 'getTodos' });
-    dispatch({ type: 'getFilteredTodos' });
   }, []);
 
   return (

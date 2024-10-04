@@ -5,7 +5,7 @@ import '../src/styles/todo.scss';
 import '../src/styles/todoapp.scss';
 
 import { App } from './App';
-import { GlobalProvider } from './utils/GlobalContext';
+import { GlobalProvider } from './Components/GlobalContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
