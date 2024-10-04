@@ -1,17 +1,15 @@
 import { useState } from 'react';
+import { useTodoContext } from '../context/TodoContext';
 
-type Props = {
-  onAddTodo: (title: string) => void;
-};
-
-export const Header = ({ onAddTodo }: Props) => {
+export const Header = () => {
   const [todoTitle, setTodoTitle] = useState('');
+  const { addTodo } = useTodoContext();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     if (todoTitle.trim()) {
-      onAddTodo(todoTitle);
+      addTodo(todoTitle);
       setTodoTitle('');
     }
   };

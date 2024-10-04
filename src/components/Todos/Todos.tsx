@@ -1,11 +1,8 @@
-import { Todo } from '../../types/Todo';
+import { useTodoContext } from '../context/TodoContext';
 
-type Props = {
-  todos: Todo[];
-  onToggleTodoStatus: (id: number) => void;
-};
+export const Todos = () => {
+  const { todos, handleToggleTodoStatus } = useTodoContext();
 
-export const Todos = ({ todos, onToggleTodoStatus }: Props) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
@@ -23,7 +20,7 @@ export const Todos = ({ todos, onToggleTodoStatus }: Props) => {
               type="checkbox"
               className="todo__status"
               checked={todo.completed}
-              onClick={() => onToggleTodoStatus(todo.id)}
+              onClick={() => handleToggleTodoStatus(todo.id)}
             />
           </label>
 
