@@ -8,6 +8,20 @@ export const Todos = () => {
   const { todos, toggleTodoStatus, updateTodoTitle, deleteTodo } =
     useTodoContext();
 
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (editingTodoId !== null) {
+      if (editingTitle.trim() === '') {
+        deleteTodo(editingTodoId);
+      } else {
+        updateTodoTitle(editingTodoId, editingTitle);
+      }
+    }
+
+    setEditingTodoId(null);
+  };
+
   const handleDoubleClick = (id: number, currentTitle: string) => {
     setEditingTodoId(id);
     setEditingTitle(currentTitle);
@@ -24,6 +38,12 @@ export const Todos = () => {
         renameInputRef.current &&
         !renameInputRef.current.contains(event.target as Node)
       ) {
+        if (editingTitle.trim() === '') {
+          deleteTodo(editingTodoId);
+        } else {
+          updateTodoTitle(editingTodoId, editingTitle);
+        }
+
         setEditingTodoId(null);
       }
     };
@@ -34,28 +54,16 @@ export const Todos = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutsideForm);
-    document.addEventListener('keydown', handlePressEscape);
+    if (editingTodoId !== null) {
+      document.addEventListener('mousedown', handleClickOutsideForm);
+      document.addEventListener('keydown', handlePressEscape);
+    }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideForm);
       document.removeEventListener('keydown', handlePressEscape);
     };
-  }, [editingTodoId]);
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (editingTodoId !== null) {
-      if (editingTitle.trim() === '') {
-        deleteTodo(editingTodoId);
-      } else {
-        updateTodoTitle(editingTodoId, editingTitle);
-      }
-    }
-
-    setEditingTodoId(null);
-  };
+  }, [editingTitle, editingTodoId, updateTodoTitle]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
