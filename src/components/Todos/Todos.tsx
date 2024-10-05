@@ -63,7 +63,7 @@ export const Todos = () => {
       document.removeEventListener('mousedown', handleClickOutsideForm);
       document.removeEventListener('keydown', handlePressEscape);
     };
-  }, [editingTitle, editingTodoId, updateTodoTitle]);
+  });
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
