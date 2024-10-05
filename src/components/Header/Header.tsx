@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTodoContext } from '../context/TodoContext';
 
 export const Header = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const { addTodo } = useTodoContext();
+  const headerInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,6 +28,7 @@ export const Header = () => {
       <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
+          ref={headerInputRef}
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"

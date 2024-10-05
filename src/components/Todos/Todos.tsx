@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTodoContext } from '../context/TodoContext';
 
 export const Todos = () => {
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
+  const renameInputRef = useRef<HTMLInputElement | null>(null);
   const { todos, toggleTodoStatus, updateTodoTitle, deleteTodo } =
     useTodoContext();
 
@@ -11,6 +12,36 @@ export const Todos = () => {
     setEditingTodoId(id);
     setEditingTitle(currentTitle);
   };
+
+  useEffect(() => {
+    if (editingTodoId !== null && renameInputRef.current) {
+      renameInputRef.current.focus();
+    }
+
+    const handleClickOutsideForm = (event: MouseEvent) => {
+      if (
+        editingTodoId !== null &&
+        renameInputRef.current &&
+        !renameInputRef.current.contains(event.target as Node)
+      ) {
+        setEditingTodoId(null);
+      }
+    };
+
+    const handlePressEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && editingTodoId !== null) {
+        setEditingTodoId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutsideForm);
+    document.addEventListener('keydown', handlePressEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideForm);
+      document.removeEventListener('keydown', handlePressEscape);
+    };
+  }, [editingTodoId]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -44,6 +75,8 @@ export const Todos = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
+                  checked={todo.completed}
+                  onChange={() => toggleTodoStatus(todo.id)}
                 />
               </label>
 
@@ -51,6 +84,7 @@ export const Todos = () => {
               <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                 <input
                   data-cy="TodoTitleField"
+                  ref={renameInputRef}
                   type="text"
                   className="todo__title-field"
                   placeholder="Empty todo will be deleted"
@@ -70,7 +104,7 @@ export const Todos = () => {
                   type="checkbox"
                   className="todo__status"
                   checked={todo.completed}
-                  onClick={() => toggleTodoStatus(todo.id)}
+                  onChange={() => toggleTodoStatus(todo.id)}
                 />
               </label>
 
