@@ -1,7 +1,7 @@
 import { useTodoContext } from '../context/TodoContext';
 
 export const Footer = () => {
-  const { todos } = useTodoContext();
+  const { todos, filter, setFilter } = useTodoContext();
 
   const incompleteTodos = todos.filter(todo => todo.completed === false).length;
 
@@ -18,24 +18,27 @@ export const Footer = () => {
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
-              className="filter__link selected"
+              className={`filter__link ${filter === 'All' ? 'selected' : ''}`}
               data-cy="FilterLinkAll"
+              onClick={() => setFilter('All')}
             >
               All
             </a>
 
             <a
               href="#/active"
-              className="filter__link"
+              className={`filter__link ${filter === 'Active' ? 'selected' : ''}`}
               data-cy="FilterLinkActive"
+              onClick={() => setFilter('Active')}
             >
               Active
             </a>
 
             <a
               href="#/completed"
-              className="filter__link"
+              className={`filter__link ${filter === 'Completed' ? 'selected' : ''}`}
               data-cy="FilterLinkCompleted"
+              onClick={() => setFilter('Completed')}
             >
               Completed
             </a>

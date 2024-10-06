@@ -1,5 +1,6 @@
 import { createContext, useContext, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { Filter } from '../../types/Filter';
 
 type TodoContextProps = {
   todos: Todo[];
@@ -8,6 +9,8 @@ type TodoContextProps = {
   updateTodoTitle: (id: number, title: string) => void;
   deleteTodo: (id: number) => void;
   headerInputRef: React.RefObject<HTMLInputElement>;
+  filter: Filter;
+  setFilter: (filter: Filter) => void;
 };
 
 const TodoContext = createContext<TodoContextProps | undefined>(undefined);
@@ -30,7 +33,20 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
     return storedTodos ? JSON.parse(storedTodos) : [];
   });
+  const [filter, setFilter] = useState<Filter>('All');
   const headerInputRef = useRef<HTMLInputElement>(null);
+
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'Active') {
+      return !todo.completed;
+    }
+
+    if (filter === 'Completed') {
+      return todo.completed;
+    }
+
+    return true;
+  });
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -89,6 +105,9 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     updateTodoTitle,
     deleteTodo,
     headerInputRef,
+    filter,
+    setFilter,
+    filteredTodos,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
