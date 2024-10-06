@@ -1,9 +1,10 @@
 import { useTodoContext } from '../context/TodoContext';
 
 export const Footer = () => {
-  const { todos, filter, setFilter } = useTodoContext();
+  const { todos, filter, setFilter, deleteMultipleTodos } = useTodoContext();
 
   const incompleteTodos = todos.filter(todo => todo.completed === false).length;
+  const isEveryIncompleted = todos.every(todo => !todo.completed);
 
   return (
     <>
@@ -49,6 +50,12 @@ export const Footer = () => {
             type="button"
             className="todoapp__clear-completed"
             data-cy="ClearCompletedButton"
+            onClick={deleteMultipleTodos}
+            disabled={isEveryIncompleted}
+            style={{
+              cursor: isEveryIncompleted ? 'not-allowed' : 'pointer',
+              textDecoration: isEveryIncompleted ? 'none' : '',
+            }}
           >
             Clear completed
           </button>

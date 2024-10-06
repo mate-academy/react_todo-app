@@ -11,6 +11,7 @@ type TodoContextProps = {
   headerInputRef: React.RefObject<HTMLInputElement>;
   filter: Filter;
   setFilter: (filter: Filter) => void;
+  deleteMultipleTodos: () => void;
 };
 
 const TodoContext = createContext<TodoContextProps | undefined>(undefined);
@@ -98,6 +99,16 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     });
   };
 
+  const deleteMultipleTodos = () => {
+    setTodos(prevTodos => {
+      const updatedTodos = prevTodos.filter(todo => !todo.completed);
+
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+      return updatedTodos;
+    });
+  };
+
   const value = {
     todos,
     addTodo,
@@ -108,6 +119,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     filter,
     setFilter,
     filteredTodos,
+    deleteMultipleTodos,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
