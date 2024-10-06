@@ -24,7 +24,11 @@ export const useTodoContext = () => {
 type TodoProviderProps = React.PropsWithChildren<{}>;
 
 export const TodoProvider = ({ children }: TodoProviderProps) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const storedTodos = localStorage.getItem('todos');
+
+    return storedTodos ? JSON.parse(storedTodos) : [];
+  });
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -33,27 +37,47 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       completed: false,
     };
 
-    setTodos(prevTodos => [...prevTodos, newTodo]);
+    setTodos(prevTodos => {
+      const updatedTodos = [...prevTodos, newTodo];
+
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+      return updatedTodos;
+    });
   };
 
   const toggleTodoStatus = (id: number) => {
-    setTodos(
-      todos.map(todo =>
+    setTodos(prevTodos => {
+      const updatedTodos = prevTodos.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
+      );
+
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+      return updatedTodos;
+    });
   };
 
   const updateTodoTitle = (id: number, newTitle: string) => {
-    setTodos(prevTodos =>
-      prevTodos.map(todo =>
+    setTodos(prevTodos => {
+      const updatedTodos = prevTodos.map(todo =>
         todo.id === id ? { ...todo, title: newTitle } : todo,
-      ),
-    );
+      );
+
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+      return updatedTodos;
+    });
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    setTodos(prevTodos => {
+      const updatedTodos = prevTodos.filter(todo => todo.id !== id);
+
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+      return updatedTodos;
+    });
   };
 
   const value = {
