@@ -19,8 +19,13 @@ export const TodoItem: React.FC<Props> = memo(function TodoItem({ todo }) {
   const [isEdited, setIsEdited] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
   const todoDivRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (isEdited) {
+      inputRef.current?.focus();
+    }
+
     const startEditing = () => {
       setIsEdited(true);
     };
@@ -43,7 +48,7 @@ export const TodoItem: React.FC<Props> = memo(function TodoItem({ todo }) {
 
       document.removeEventListener('keyup', stopEditing);
     };
-  }, [title]);
+  }, [title, isEdited]);
   // #endregion
 
   // #region handlings
@@ -100,6 +105,7 @@ export const TodoItem: React.FC<Props> = memo(function TodoItem({ todo }) {
       {isEdited ? (
         <form onSubmit={onSubmit}>
           <input
+            ref={inputRef}
             data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
