@@ -136,26 +136,6 @@ export const Todos = () => {
           )}
         </div>
       ))}
-
-      {/* This todo is in loadind state */}
-      <div data-cy="Todo" className="todo">
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          Todo is being saved now
-        </span>
-
-        <button type="button" className="todo__remove" data-cy="TodoDelete">
-          ×
-        </button>
-      </div>
     </section>
   );
 };

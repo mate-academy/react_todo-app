@@ -34,6 +34,7 @@ export const Header = () => {
           placeholder="What needs to be done?"
           value={todoTitle}
           onChange={event => setTodoTitle(event.target.value)}
+          autoFocus
         />
       </form>
     </header>
