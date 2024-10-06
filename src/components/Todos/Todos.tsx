@@ -6,11 +6,11 @@ export const Todos = () => {
   const [editingTitle, setEditingTitle] = useState('');
   const renameInputRef = useRef<HTMLInputElement | null>(null);
   const {
-    todos,
     toggleTodoStatus,
     updateTodoTitle,
     deleteTodo,
     headerInputRef,
+    filteredTodos,
   } = useTodoContext();
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -83,7 +83,7 @@ export const Todos = () => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <div
           key={todo.id}
           data-cy="Todo"

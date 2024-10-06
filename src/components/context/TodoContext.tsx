@@ -12,6 +12,7 @@ type TodoContextProps = {
   filter: Filter;
   setFilter: (filter: Filter) => void;
   deleteMultipleTodos: () => void;
+  filteredTodos: Todo[];
 };
 
 const TodoContext = createContext<TodoContextProps | undefined>(undefined);
@@ -34,6 +35,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
     return storedTodos ? JSON.parse(storedTodos) : [];
   });
+
   const [filter, setFilter] = useState<Filter>('All');
   const headerInputRef = useRef<HTMLInputElement>(null);
 
@@ -80,7 +82,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const updateTodoTitle = (id: number, newTitle: string) => {
     setTodos(prevTodos => {
       const updatedTodos = prevTodos.map(todo =>
-        todo.id === id ? { ...todo, title: newTitle } : todo,
+        todo.id === id ? { ...todo, title: newTitle.trim() } : todo,
       );
 
       localStorage.setItem('todos', JSON.stringify(updatedTodos));
