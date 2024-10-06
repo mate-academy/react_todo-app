@@ -1,10 +1,16 @@
+import { useTodoContext } from '../context/TodoContext';
+
 export const Footer = () => {
+  const { todos } = useTodoContext();
+
+  const incompleteTodos = todos.filter(todo => todo.completed === false).length;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       {/* Hide the footer if there are no todos */}
 
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {incompleteTodos} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
