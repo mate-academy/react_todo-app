@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type TodoContextProps = {
@@ -7,6 +7,7 @@ type TodoContextProps = {
   toggleTodoStatus: (id: number) => void;
   updateTodoTitle: (id: number, title: string) => void;
   deleteTodo: (id: number) => void;
+  headerInputRef: React.RefObject<HTMLInputElement>;
 };
 
 const TodoContext = createContext<TodoContextProps | undefined>(undefined);
@@ -29,6 +30,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
     return storedTodos ? JSON.parse(storedTodos) : [];
   });
+  const headerInputRef = useRef<HTMLInputElement>(null);
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -86,6 +88,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     toggleTodoStatus,
     updateTodoTitle,
     deleteTodo,
+    headerInputRef,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;

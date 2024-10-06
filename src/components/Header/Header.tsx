@@ -1,10 +1,9 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTodoContext } from '../context/TodoContext';
 
 export const Header = () => {
   const [todoTitle, setTodoTitle] = useState('');
-  const { addTodo } = useTodoContext();
-  const headerInputRef = useRef<HTMLInputElement | null>(null);
+  const { addTodo, headerInputRef } = useTodoContext();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

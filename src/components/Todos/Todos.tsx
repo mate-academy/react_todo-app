@@ -5,8 +5,13 @@ export const Todos = () => {
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
   const renameInputRef = useRef<HTMLInputElement | null>(null);
-  const { todos, toggleTodoStatus, updateTodoTitle, deleteTodo } =
-    useTodoContext();
+  const {
+    todos,
+    toggleTodoStatus,
+    updateTodoTitle,
+    deleteTodo,
+    headerInputRef,
+  } = useTodoContext();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -20,6 +25,10 @@ export const Todos = () => {
     }
 
     setEditingTodoId(null);
+
+    if (headerInputRef.current) {
+      headerInputRef.current.focus();
+    }
   };
 
   const handleDoubleClick = (id: number, currentTitle: string) => {
@@ -45,6 +54,12 @@ export const Todos = () => {
         }
 
         setEditingTodoId(null);
+
+        setTimeout(() => {
+          if (headerInputRef.current) {
+            headerInputRef.current.focus();
+          }
+        }, 0);
       }
     };
 
