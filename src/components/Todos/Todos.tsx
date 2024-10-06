@@ -71,12 +71,12 @@ export const Todos = () => {
 
     if (editingTodoId !== null) {
       document.addEventListener('mousedown', handleClickOutsideForm);
-      document.addEventListener('keydown', handlePressEscape);
+      document.addEventListener('keyup', handlePressEscape);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideForm);
-      document.removeEventListener('keydown', handlePressEscape);
+      document.removeEventListener('keyup', handlePressEscape);
     };
   });
 
