@@ -17,6 +17,12 @@ export const Header = () => {
   const submitHandler: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
 
+    const trimmedValue = value.trim();
+
+    if (!trimmedValue) {
+      return;
+    }
+
     setTodos([
       ...todos,
       { id: Date.now(), title: value.trim(), completed: false },
