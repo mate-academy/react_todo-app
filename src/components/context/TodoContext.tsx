@@ -88,6 +88,8 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
         return { ...todo, completed: !areAllCompleted };
       });
 
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
       return updatedTodos;
     });
   };
