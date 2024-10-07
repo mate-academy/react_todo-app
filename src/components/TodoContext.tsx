@@ -13,7 +13,7 @@ export const TodoContext = React.createContext({
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setFilterBy: (filter: TodoFilter) => {},
-  filterBy: 'All' as TodoFilter,
+  filterBy: TodoFilter.All,
 });
 
 const useLocalStorage = () => {
@@ -39,12 +39,12 @@ const useLocalStorage = () => {
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useLocalStorage();
-  const [filterBy, setFilterBy] = useState<TodoFilter>('All');
+  const [filterBy, setFilterBy] = useState<TodoFilter>(TodoFilter.All);
   let filteredTodos = [...todos];
 
-  if (filterBy !== 'All') {
+  if (filterBy !== TodoFilter.All) {
     filteredTodos = filteredTodos.filter(t =>
-      filterBy === 'Active' ? !t.completed : t.completed,
+      filterBy === TodoFilter.Active ? !t.completed : t.completed,
     );
   }
 

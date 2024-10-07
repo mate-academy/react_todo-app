@@ -13,14 +13,14 @@ export const Footer = () => {
 
   const filterTodos = (status: TodoFilter) => {
     switch (status) {
-      case 'Active':
-        setFilterBy('Active');
+      case TodoFilter.Active:
+        setFilterBy(TodoFilter.Active);
         break;
-      case 'Completed':
-        setFilterBy('Completed');
+      case TodoFilter.Completed:
+        setFilterBy(TodoFilter.Completed);
         break;
       default:
-        setFilterBy('All');
+        setFilterBy(TodoFilter.All);
     }
   };
 
@@ -34,43 +34,26 @@ export const Footer = () => {
         {title}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: filterBy === 'All',
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => filterTodos('All')}
-        >
-          All
-        </a>
+        {Object.values(TodoFilter).map(filterValue => {
+          const capitalizedFilterValue =
+            filterValue[0].toUpperCase() + filterValue.slice(1);
 
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filterBy === 'Active',
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => filterTodos('Active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filterBy === 'Completed',
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => filterTodos('Completed')}
-        >
-          Completed
-        </a>
+          return (
+            <a
+              key={filterValue}
+              href={`#/${filterValue}`}
+              className={classNames('filter__link', {
+                selected: filterBy === filterValue,
+              })}
+              data-cy={`FilterLink${capitalizedFilterValue}`}
+              onClick={() => filterTodos(filterValue)}
+            >
+              {capitalizedFilterValue}
+            </a>
+          );
+        })}
       </nav>
-
-      {/* this button should be disabled if there are no completed todos */}
 
       <button
         type="button"

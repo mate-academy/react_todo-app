@@ -1,1 +1,5 @@
-export type TodoFilter = 'All' | 'Active' | 'Completed';
+export enum TodoFilter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
