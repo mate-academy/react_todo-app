@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
 
@@ -40,6 +40,10 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [filter, setFilter] = useState<Filter>('All');
   const headerInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
   const filteredTodos = todos.filter(todo => {
     if (filter === 'Active') {
       return !todo.completed;
@@ -59,25 +63,15 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       completed: false,
     };
 
-    setTodos(prevTodos => {
-      const updatedTodos = [...prevTodos, newTodo];
-
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
-      return updatedTodos;
-    });
+    setTodos(prevTodos => [...prevTodos, newTodo]);
   };
 
   const toggleTodoStatus = (id: number) => {
-    setTodos(prevTodos => {
-      const updatedTodos = prevTodos.map(todo =>
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      );
-
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
-      return updatedTodos;
-    });
+      ),
+    );
   };
 
   const toggleMultipleTodosStatus = () => {
@@ -88,42 +82,24 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
         return { ...todo, completed: !areAllCompleted };
       });
 
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
       return updatedTodos;
     });
   };
 
   const updateTodoTitle = (id: number, newTitle: string) => {
-    setTodos(prevTodos => {
-      const updatedTodos = prevTodos.map(todo =>
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
         todo.id === id ? { ...todo, title: newTitle.trim() } : todo,
-      );
-
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
-      return updatedTodos;
-    });
+      ),
+    );
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(prevTodos => {
-      const updatedTodos = prevTodos.filter(todo => todo.id !== id);
-
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
-      return updatedTodos;
-    });
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
 
   const deleteMultipleTodos = () => {
-    setTodos(prevTodos => {
-      const updatedTodos = prevTodos.filter(todo => !todo.completed);
-
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
-
-      return updatedTodos;
-    });
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
   const value = {
