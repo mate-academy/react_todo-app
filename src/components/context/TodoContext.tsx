@@ -6,6 +6,7 @@ type TodoContextProps = {
   todos: Todo[];
   addTodo: (title: string) => void;
   toggleTodoStatus: (id: number) => void;
+  toggleMultipleTodosStatus: () => void;
   updateTodoTitle: (id: number, title: string) => void;
   deleteTodo: (id: number) => void;
   headerInputRef: React.RefObject<HTMLInputElement>;
@@ -79,6 +80,18 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     });
   };
 
+  const toggleMultipleTodosStatus = () => {
+    setTodos(prevTodos => {
+      const areAllCompleted = prevTodos.every(todo => todo.completed);
+
+      const updatedTodos = prevTodos.map(todo => {
+        return { ...todo, completed: !areAllCompleted };
+      });
+
+      return updatedTodos;
+    });
+  };
+
   const updateTodoTitle = (id: number, newTitle: string) => {
     setTodos(prevTodos => {
       const updatedTodos = prevTodos.map(todo =>
@@ -115,6 +128,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     todos,
     addTodo,
     toggleTodoStatus,
+    toggleMultipleTodosStatus,
     updateTodoTitle,
     deleteTodo,
     headerInputRef,

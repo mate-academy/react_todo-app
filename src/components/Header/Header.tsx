@@ -3,7 +3,8 @@ import { useTodoContext } from '../context/TodoContext';
 
 export const Header = () => {
   const [todoTitle, setTodoTitle] = useState('');
-  const { addTodo, headerInputRef, todos } = useTodoContext();
+  const { addTodo, headerInputRef, todos, toggleMultipleTodosStatus } =
+    useTodoContext();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -22,6 +23,7 @@ export const Header = () => {
           type="button"
           className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
           data-cy="ToggleAllButton"
+          onClick={toggleMultipleTodosStatus}
         />
       )}
 
