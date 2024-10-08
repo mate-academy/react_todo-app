@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Filter } from '../../types/Filter';
 import { useTodoContext } from '../context/TodoContext';
 
@@ -10,8 +11,13 @@ const FILTERS: Record<Filter, string> = {
 export const Footer = () => {
   const { todos, filter, setFilter, deleteMultipleTodos } = useTodoContext();
 
-  const incompleteTodosCount = todos.filter(todo => !todo.completed).length;
-  const isEveryIncompleted = todos.every(todo => !todo.completed);
+  const incompleteTodosCount = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
+
+  const isEveryIncompleted = useMemo(() => {
+    return todos.every(todo => !todo.completed);
+  }, [todos]);
 
   return (
     <>
