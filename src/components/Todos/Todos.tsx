@@ -6,13 +6,8 @@ export const Todos = () => {
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
   const renameInputRef = useRef<HTMLInputElement | null>(null);
-  const {
-    toggleTodoStatus,
-    updateTodoTitle,
-    deleteTodo,
-    headerInputRef,
-    filteredTodos,
-  } = useTodoContext();
+  const { toggleTodoStatus, updateTodoTitle, deleteTodo, filteredTodos } =
+    useTodoContext();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,48 +30,20 @@ export const Todos = () => {
     setEditingTitle(currentTitle);
   };
 
+  const handleOnBlur = (event: React.FormEvent) => {
+    handleSubmit(event);
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape' && editingTodoId !== null) {
+      setEditingTodoId(null);
+    }
+  };
+
   useEffect(() => {
     if (editingTodoId !== null && renameInputRef.current) {
       renameInputRef.current.focus();
     }
-
-    const handleClickOutsideForm = (event: MouseEvent) => {
-      if (
-        editingTodoId !== null &&
-        renameInputRef.current &&
-        !renameInputRef.current.contains(event.target as Node)
-      ) {
-        if (editingTitle.trim() === '') {
-          deleteTodo(editingTodoId);
-        } else {
-          updateTodoTitle(editingTodoId, editingTitle);
-        }
-
-        setEditingTodoId(null);
-
-        setTimeout(() => {
-          if (headerInputRef.current) {
-            headerInputRef.current.focus();
-          }
-        }, 0);
-      }
-    };
-
-    const handlePressEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && editingTodoId !== null) {
-        setEditingTodoId(null);
-      }
-    };
-
-    if (editingTodoId !== null) {
-      document.addEventListener('mousedown', handleClickOutsideForm);
-      document.addEventListener('keyup', handlePressEscape);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutsideForm);
-      document.removeEventListener('keyup', handlePressEscape);
-    };
   });
 
   return (
@@ -112,6 +79,8 @@ export const Todos = () => {
                   placeholder="Empty todo will be deleted"
                   value={editingTitle}
                   onChange={e => setEditingTitle(e.target.value)}
+                  onBlur={handleOnBlur}
+                  onKeyUp={handleKeyUp}
                 />
               </form>
             </>
