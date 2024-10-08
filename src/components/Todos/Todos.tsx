@@ -82,13 +82,13 @@ export const Todos = () => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
-      {filteredTodos.map(todo => (
+      {filteredTodos.map(({ id, completed, title }) => (
         <div
-          key={todo.id}
+          key={id}
           data-cy="Todo"
-          className={`todo ${todo.completed ? 'completed' : ''}`}
+          className={`todo ${completed ? 'completed' : ''}`}
         >
-          {editingTodoId === todo.id ? (
+          {editingTodoId === id ? (
             <>
               {/* This todo is being edited */}
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -97,8 +97,8 @@ export const Todos = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
-                  checked={todo.completed}
-                  onChange={() => toggleTodoStatus(todo.id)}
+                  checked={completed}
+                  onChange={() => toggleTodoStatus(id)}
                 />
               </label>
 
@@ -117,7 +117,7 @@ export const Todos = () => {
             </>
           ) : (
             <TodoItem
-              todo={todo}
+              todo={{ id, completed, title }}
               toggleTodoStatus={toggleTodoStatus}
               deleteTodo={deleteTodo}
               handleDoubleClick={handleDoubleClick}

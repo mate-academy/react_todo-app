@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const TodoItem = ({
-  todo,
+  todo: { id, title, completed },
   toggleTodoStatus,
   deleteTodo,
   handleDoubleClick,
@@ -16,30 +16,30 @@ export const TodoItem = ({
   return (
     <>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
+      <label className="todo__status-label" htmlFor={`todo-${id}`}>
         <input
           data-cy="TodoStatus"
-          id={`todo-${todo.id}`}
+          id={`todo-${id}`}
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          onChange={() => toggleTodoStatus(todo.id)}
+          checked={completed}
+          onChange={() => toggleTodoStatus(id)}
         />
       </label>
 
       <span
         data-cy="TodoTitle"
         className="todo__title"
-        onDoubleClick={() => handleDoubleClick(todo.id, todo.title)}
+        onDoubleClick={() => handleDoubleClick(id, title)}
       >
-        {todo.title}
+        {title}
       </span>
       {/* Remove button appears only on hover */}
       <button
         type="button"
         className="todo__remove"
         data-cy="TodoDelete"
-        onClick={() => deleteTodo(todo.id)}
+        onClick={() => deleteTodo(id)}
       >
         ×
       </button>
