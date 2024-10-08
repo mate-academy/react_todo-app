@@ -42,6 +42,10 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
+
+    setTimeout(() => {
+      headerInputRef.current?.focus();
+    }, 0);
   }, [todos]);
 
   const filteredTodos = todos.filter(todo => {
@@ -59,7 +63,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const addTodo = (title: string) => {
     const newTodo: Todo = {
       id: +new Date(),
-      title,
+      title: title.trim(),
       completed: false,
     };
 

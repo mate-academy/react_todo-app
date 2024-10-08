@@ -1,11 +1,16 @@
+import { Filter } from '../../types/Filter';
 import { useTodoContext } from '../context/TodoContext';
+
+const FILTERS: Record<Filter, string> = {
+  All: '#/',
+  Active: '#/active',
+  Completed: '#/completed',
+};
 
 export const Footer = () => {
   const { todos, filter, setFilter, deleteMultipleTodos } = useTodoContext();
 
-  const incompleteTodosCount = todos.filter(
-    todo => todo.completed === false,
-  ).length;
+  const incompleteTodosCount = todos.filter(todo => !todo.completed).length;
   const isEveryIncompleted = todos.every(todo => !todo.completed);
 
   return (
@@ -19,32 +24,21 @@ export const Footer = () => {
 
           {/* Active link should have the 'selected' class */}
           <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={`filter__link ${filter === 'All' ? 'selected' : ''}`}
-              data-cy="FilterLinkAll"
-              onClick={() => setFilter('All')}
-            >
-              All
-            </a>
+            {Object.entries(FILTERS).map(([key, href]) => {
+              const currentFilter = key as Filter;
 
-            <a
-              href="#/active"
-              className={`filter__link ${filter === 'Active' ? 'selected' : ''}`}
-              data-cy="FilterLinkActive"
-              onClick={() => setFilter('Active')}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={`filter__link ${filter === 'Completed' ? 'selected' : ''}`}
-              data-cy="FilterLinkCompleted"
-              onClick={() => setFilter('Completed')}
-            >
-              Completed
-            </a>
+              return (
+                <a
+                  key={key}
+                  href={href}
+                  className={`filter__link ${filter === currentFilter ? 'selected' : ''}`}
+                  data-cy={`FilterLink${currentFilter}`}
+                  onClick={() => setFilter(currentFilter)}
+                >
+                  {currentFilter}
+                </a>
+              );
+            })}
           </nav>
 
           {/* this button should be disabled if there are no completed todos */}
