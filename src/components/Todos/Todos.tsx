@@ -103,9 +103,8 @@ export const Todos = () => {
               </label>
 
               {/* This form is shown instead of the title and remove button */}
-              <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+              <form onSubmit={handleSubmit}>
                 <input
-                  style={{ width: '100%', padding: '11 0' }}
                   data-cy="TodoTitleField"
                   ref={renameInputRef}
                   type="text"
