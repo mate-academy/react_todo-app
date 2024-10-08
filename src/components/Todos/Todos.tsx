@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTodoContext } from '../context/TodoContext';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 export const Todos = () => {
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
@@ -27,10 +28,6 @@ export const Todos = () => {
     }
 
     setEditingTodoId(null);
-
-    if (headerInputRef.current) {
-      headerInputRef.current.focus();
-    }
   };
 
   const handleDoubleClick = (id: number, currentTitle: string) => {
@@ -108,48 +105,24 @@ export const Todos = () => {
               {/* This form is shown instead of the title and remove button */}
               <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                 <input
+                  style={{ width: '100%', padding: '11 0' }}
                   data-cy="TodoTitleField"
                   ref={renameInputRef}
                   type="text"
                   className="todo__title-field"
                   placeholder="Empty todo will be deleted"
                   value={editingTitle}
-                  style={{ width: '100%' }}
                   onChange={e => setEditingTitle(e.target.value)}
                 />
               </form>
             </>
           ) : (
-            <>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
-                <input
-                  data-cy="TodoStatus"
-                  id={`todo-${todo.id}`}
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                  onChange={() => toggleTodoStatus(todo.id)}
-                />
-              </label>
-
-              <span
-                data-cy="TodoTitle"
-                className="todo__title"
-                onDoubleClick={() => handleDoubleClick(todo.id, todo.title)}
-              >
-                {todo.title}
-              </span>
-              {/* Remove button appears only on hover */}
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-                onClick={() => deleteTodo(todo.id)}
-              >
-                ×
-              </button>
-            </>
+            <TodoItem
+              todo={todo}
+              toggleTodoStatus={toggleTodoStatus}
+              deleteTodo={deleteTodo}
+              handleDoubleClick={handleDoubleClick}
+            />
           )}
         </div>
       ))}
