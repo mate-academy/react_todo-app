@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -47,6 +48,16 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [filter, setFilter] = useState<Filter>('All');
   const headerInputRef = useRef<HTMLInputElement>(null);
 
+  const areAllCompleted = useMemo(() => {
+    return todos.every(todo => todo.completed);
+  }, [todos]);
+
+  const updatedTodos = useMemo(() => {
+    return todos.map(todo => {
+      return { ...todo, completed: !areAllCompleted };
+    });
+  }, [areAllCompleted, todos]);
+
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
 
@@ -86,16 +97,8 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   }, []);
 
   const toggleMultipleTodosStatus = useCallback(() => {
-    setTodos(prevTodos => {
-      const areAllCompleted = prevTodos.every(todo => todo.completed);
-
-      const updatedTodos = prevTodos.map(todo => {
-        return { ...todo, completed: !areAllCompleted };
-      });
-
-      return updatedTodos;
-    });
-  }, []);
+    setTodos(updatedTodos);
+  }, [updatedTodos]);
 
   const updateTodoTitle = useCallback((id: number, newTitle: string) => {
     setTodos(prevTodos =>

@@ -6,6 +6,7 @@ export const Todos = () => {
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
   const renameInputRef = useRef<HTMLInputElement | null>(null);
+  const checkboxRef = useRef<HTMLInputElement | null>(null);
   const { toggleTodoStatus, updateTodoTitle, deleteTodo, filteredTodos } =
     useTodoContext();
 
@@ -70,6 +71,7 @@ export const Todos = () => {
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label className="todo__status-label">
                 <input
+                  ref={checkboxRef}
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
