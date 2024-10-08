@@ -16,12 +16,14 @@ export const Todos = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (editingTodoId !== null) {
-      if (editingTitle.trim() === '') {
-        deleteTodo(editingTodoId);
-      } else {
-        updateTodoTitle(editingTodoId, editingTitle);
-      }
+    if (editingTodoId === null) {
+      return;
+    }
+
+    if (editingTitle.trim() === '') {
+      deleteTodo(editingTodoId);
+    } else {
+      updateTodoTitle(editingTodoId, editingTitle);
     }
 
     setEditingTodoId(null);
