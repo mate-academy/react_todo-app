@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
 
@@ -60,7 +67,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     return true;
   });
 
-  const addTodo = (title: string) => {
+  const addTodo = useCallback((title: string) => {
     const newTodo: Todo = {
       id: +new Date(),
       title: title.trim(),
@@ -68,17 +75,17 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     };
 
     setTodos(prevTodos => [...prevTodos, newTodo]);
-  };
+  }, []);
 
-  const toggleTodoStatus = (id: number) => {
+  const toggleTodoStatus = useCallback((id: number) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       ),
     );
-  };
+  }, []);
 
-  const toggleMultipleTodosStatus = () => {
+  const toggleMultipleTodosStatus = useCallback(() => {
     setTodos(prevTodos => {
       const areAllCompleted = prevTodos.every(todo => todo.completed);
 
@@ -88,23 +95,23 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
       return updatedTodos;
     });
-  };
+  }, []);
 
-  const updateTodoTitle = (id: number, newTitle: string) => {
+  const updateTodoTitle = useCallback((id: number, newTitle: string) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
         todo.id === id ? { ...todo, title: newTitle.trim() } : todo,
       ),
     );
-  };
+  }, []);
 
-  const deleteTodo = (id: number) => {
+  const deleteTodo = useCallback((id: number) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
-  };
+  }, []);
 
-  const deleteMultipleTodos = () => {
+  const deleteMultipleTodos = useCallback(() => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
-  };
+  }, []);
 
   const value = {
     todos,

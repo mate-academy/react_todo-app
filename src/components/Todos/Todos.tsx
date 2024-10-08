@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTodoContext } from '../context/TodoContext';
 import { TodoItem } from '../TodoItem/TodoItem';
 
@@ -9,36 +9,45 @@ export const Todos = () => {
   const { toggleTodoStatus, updateTodoTitle, deleteTodo, filteredTodos } =
     useTodoContext();
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event: React.FormEvent) => {
+      event.preventDefault();
 
-    if (editingTodoId === null) {
-      return;
-    }
+      if (editingTodoId === null) {
+        return;
+      }
 
-    if (editingTitle.trim() === '') {
-      deleteTodo(editingTodoId);
-    } else {
-      updateTodoTitle(editingTodoId, editingTitle);
-    }
+      if (editingTitle.trim() === '') {
+        deleteTodo(editingTodoId);
+      } else {
+        updateTodoTitle(editingTodoId, editingTitle);
+      }
 
-    setEditingTodoId(null);
-  };
+      setEditingTodoId(null);
+    },
+    [deleteTodo, editingTitle, editingTodoId, updateTodoTitle],
+  );
 
-  const handleDoubleClick = (id: number, currentTitle: string) => {
+  const handleDoubleClick = useCallback((id: number, currentTitle: string) => {
     setEditingTodoId(id);
     setEditingTitle(currentTitle);
-  };
+  }, []);
 
-  const handleOnBlur = (event: React.FormEvent) => {
-    handleSubmit(event);
-  };
+  const handleOnBlur = useCallback(
+    (event: React.FormEvent) => {
+      handleSubmit(event);
+    },
+    [handleSubmit],
+  );
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape' && editingTodoId !== null) {
-      setEditingTodoId(null);
-    }
-  };
+  const handleKeyUp = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Escape' && editingTodoId !== null) {
+        setEditingTodoId(null);
+      }
+    },
+    [editingTodoId],
+  );
 
   useEffect(() => {
     if (editingTodoId !== null && renameInputRef.current) {
