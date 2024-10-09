@@ -41,7 +41,7 @@ export const Todos = () => {
     [handleSubmit],
   );
 
-  const handleKeyUp = useCallback(
+  const handleEscapeUp = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Escape' && editingTodoId !== null) {
         setEditingTodoId(null);
@@ -91,7 +91,7 @@ export const Todos = () => {
                   value={editingTitle}
                   onChange={e => setEditingTitle(e.target.value)}
                   onBlur={handleOnBlur}
-                  onKeyUp={handleKeyUp}
+                  onKeyUp={handleEscapeUp}
                 />
               </form>
             </>
