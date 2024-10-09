@@ -116,19 +116,32 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   }, []);
 
-  const value = {
-    todos,
-    addTodo,
-    toggleTodoStatus,
-    toggleMultipleTodosStatus,
-    updateTodoTitle,
-    deleteTodo,
-    headerInputRef,
-    filter,
-    setFilter,
-    filteredTodos,
-    deleteMultipleTodos,
-  };
+  const value = useMemo(
+    () => ({
+      todos,
+      addTodo,
+      toggleTodoStatus,
+      toggleMultipleTodosStatus,
+      updateTodoTitle,
+      deleteTodo,
+      headerInputRef,
+      filter,
+      setFilter,
+      filteredTodos,
+      deleteMultipleTodos,
+    }),
+    [
+      addTodo,
+      deleteMultipleTodos,
+      deleteTodo,
+      filter,
+      filteredTodos,
+      todos,
+      toggleMultipleTodosStatus,
+      toggleTodoStatus,
+      updateTodoTitle,
+    ],
+  );
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
