@@ -54,7 +54,7 @@ export const Todos = () => {
     if (editingTodoId !== null && renameInputRef.current) {
       renameInputRef.current.focus();
     }
-  });
+  }, [editingTodoId]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
