@@ -36,7 +36,9 @@ export const TodoItem = ({ todo: { id, title, completed } }: Props) => {
 
   const handleOnBlur = useCallback(
     (event: React.FormEvent) => {
-      handleSubmit(event);
+      setTimeout(() => {
+        handleSubmit(event);
+      }, 0);
     },
     [handleSubmit],
   );
