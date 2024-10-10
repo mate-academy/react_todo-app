@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
 import { Filter } from '../../types/Filter';
-import { useTodoContext } from '../context/TodoContext';
+import {
+  useTodoContextState,
+  useTodoContextUpdater,
+} from '../context/TodoContext';
 
 const FILTERS: Record<Filter, string> = {
   All: '#/',
@@ -9,7 +12,8 @@ const FILTERS: Record<Filter, string> = {
 };
 
 export const Footer = () => {
-  const { todos, filter, setFilter, deleteMultipleTodos } = useTodoContext();
+  const { todos, filter } = useTodoContextState();
+  const { setFilter, deleteMultipleTodos } = useTodoContextUpdater();
 
   const incompleteTodosCount = useMemo(() => {
     return todos.filter(todo => !todo.completed).length;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
-import { useTodoContext } from '../context/TodoContext';
+import { useTodoContextUpdater } from '../context/TodoContext';
 
 type Props = {
   todo: Todo;
@@ -12,7 +12,8 @@ export const TodoItem = ({ todo: { id, title, completed } }: Props) => {
   const renameInputRef = useRef<HTMLInputElement | null>(null);
   const checkboxRef = useRef<HTMLInputElement | null>(null);
 
-  const { toggleTodoStatus, updateTodoTitle, deleteTodo } = useTodoContext();
+  const { toggleTodoStatus, updateTodoTitle, deleteTodo } =
+    useTodoContextUpdater();
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {

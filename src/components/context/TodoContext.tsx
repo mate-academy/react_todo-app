@@ -10,27 +10,46 @@ import {
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
 
-type TodoContextProps = {
+type TodoContextStateProps = {
   todos: Todo[];
+  headerInputRef: React.RefObject<HTMLInputElement>;
+  filter: Filter;
+  filteredTodos: Todo[];
+};
+
+type TodoContextUpdaterProps = {
   addTodo: (title: string) => void;
   toggleTodoStatus: (id: number) => void;
   toggleMultipleTodosStatus: () => void;
   updateTodoTitle: (id: number, title: string) => void;
   deleteTodo: (id: number) => void;
-  headerInputRef: React.RefObject<HTMLInputElement>;
-  filter: Filter;
   setFilter: (filter: Filter) => void;
   deleteMultipleTodos: () => void;
-  filteredTodos: Todo[];
 };
 
-const TodoContext = createContext<TodoContextProps | undefined>(undefined);
+const TodoContextState = createContext<TodoContextStateProps | undefined>(
+  undefined,
+);
 
-export const useTodoContext = () => {
-  const context = useContext(TodoContext);
+const TodoContextUpdater = createContext<TodoContextUpdaterProps | undefined>(
+  undefined,
+);
+
+export const useTodoContextState = () => {
+  const context = useContext(TodoContextState);
 
   if (!context) {
-    throw new Error('useTodoContext must be used within a TodoProvider');
+    throw new Error('useTodoContextState must be used within a TodoProvider');
+  }
+
+  return context;
+};
+
+export const useTodoContextUpdater = () => {
+  const context = useContext(TodoContextUpdater);
+
+  if (!context) {
+    throw new Error('useTodoContextUpdater must be used within a TodoProvider');
   }
 
   return context;
@@ -116,32 +135,41 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   }, []);
 
-  const value = useMemo(
+  const stateValue = useMemo(
     () => ({
       todos,
+      headerInputRef,
+      filter,
+      filteredTodos,
+    }),
+    [filter, filteredTodos, todos],
+  );
+
+  const updaterValue = useMemo(
+    () => ({
       addTodo,
       toggleTodoStatus,
       toggleMultipleTodosStatus,
       updateTodoTitle,
       deleteTodo,
-      headerInputRef,
-      filter,
       setFilter,
-      filteredTodos,
       deleteMultipleTodos,
     }),
     [
       addTodo,
       deleteMultipleTodos,
       deleteTodo,
-      filter,
-      filteredTodos,
-      todos,
       toggleMultipleTodosStatus,
       toggleTodoStatus,
       updateTodoTitle,
     ],
   );
 
-  return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
+  return (
+    <TodoContextState.Provider value={stateValue}>
+      <TodoContextUpdater.Provider value={updaterValue}>
+        {children}
+      </TodoContextUpdater.Provider>
+    </TodoContextState.Provider>
+  );
 };

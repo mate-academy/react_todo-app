@@ -1,8 +1,8 @@
-import { useTodoContext } from '../context/TodoContext';
+import { useTodoContextState } from '../context/TodoContext';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const Todos = () => {
-  const { filteredTodos } = useTodoContext();
+  const { filteredTodos } = useTodoContextState();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
