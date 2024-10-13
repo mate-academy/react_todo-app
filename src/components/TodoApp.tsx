@@ -21,8 +21,6 @@ export const TodoApp: React.FC = () => {
     return true;
   });
 
-  // const activeTodoCount = todos.filter(todo => !todo.completed).length;
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -38,11 +36,7 @@ export const TodoApp: React.FC = () => {
               ))}
             </section>
 
-            <Footer
-              filter={filter}
-              setFilter={setFilter}
-              // activeTodoCount={activeTodoCount}
-            />
+            <Footer filter={filter} setFilter={setFilter} />
           </>
         )}
       </div>
