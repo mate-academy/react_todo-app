@@ -28,7 +28,7 @@ export const TodoApp: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <>
             <section className="todoapp__main" data-cy="TodoList">
               {filteredTodos.map(todo => (

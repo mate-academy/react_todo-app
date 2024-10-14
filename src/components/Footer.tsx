@@ -14,46 +14,30 @@ export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
   const dispatch = useGlobalDispatch();
 
   const activeTodoCount = todos.filter(todo => !todo.completed).length;
+  const activeTodoCountLabel = `${activeTodoCount} ${activeTodoCount === 1 ? 'item' : 'items'} left`;
+
+  const filterLinks = Object.values(TodoFilter).map(filterValue => (
+    <a
+      key={filterValue}
+      href={`#/${filterValue}`}
+      className={classNames('filter__link', {
+        selected: filter === filterValue,
+      })}
+      data-cy={`FilterLink${filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}`}
+      onClick={() => setFilter(filterValue)}
+    >
+      {filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}
+    </a>
+  ));
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${activeTodoCount} ${activeTodoCount === 1 ? 'item' : 'items'} left`}
+        {activeTodoCountLabel}
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: filter === TodoFilter.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter(TodoFilter.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filter === TodoFilter.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter(TodoFilter.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filter === TodoFilter.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter(TodoFilter.Completed)}
-        >
-          Completed
-        </a>
+        {filterLinks}
       </nav>
 
       <button

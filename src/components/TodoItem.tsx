@@ -6,6 +6,7 @@ import { ActionType } from '../enums/ActionTypes';
 import classNames from 'classnames';
 
 export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
+  const { id, title, completed } = todo;
   const dispatch = useGlobalDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
@@ -44,16 +45,16 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames('todo', { completed: completed })}
     >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
           onChange={() =>
-            dispatch({ type: ActionType.TOGGLE_TODO, payload: todo.id })
+            dispatch({ type: ActionType.TOGGLE_TODO, payload: id })
           }
         />
       </label>
@@ -78,14 +79,14 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={() => setIsEditing(true)}
           >
-            {todo.title}
+            {title}
           </span>
           <button
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
             onClick={() =>
-              dispatch({ type: ActionType.DELETE_TODO, payload: todo.id })
+              dispatch({ type: ActionType.DELETE_TODO, payload: id })
             }
           >
             ×

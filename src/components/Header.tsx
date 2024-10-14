@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGlobalDispatch, useGlobalState } from '../store/Store';
 import { ActionType } from '../enums/ActionTypes';
+import classNames from 'classnames';
 
 export const Header: React.FC = () => {
   const [newTodo, setNewTodo] = useState('');
@@ -35,7 +36,9 @@ export const Header: React.FC = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
+          className={classNames('todoapp__toggle-all', {
+            active: todos.every(todo => todo.completed),
+          })}
           data-cy="ToggleAllButton"
           onClick={() => dispatch({ type: ActionType.TOGGLE_ALL })}
         />
