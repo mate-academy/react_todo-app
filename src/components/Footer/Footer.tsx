@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useMemo } from 'react';
 import cn from 'classnames';
 
 import { Filter } from '../../types/Filter';
@@ -9,14 +9,25 @@ export const Footer: FC = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, filter } = useContext(StateContext);
 
-  const completedTodosCount = todos.filter(todo => todo.completed).length;
-  const uncompletedTodos = todos.filter(todo => !todo.completed);
+  const completedTodosCount = useMemo(
+    () => todos.filter(todo => todo.completed).length,
+    [todos],
+  );
+
+  const uncompletedTodos = useMemo(
+    () => todos.filter(todo => !todo.completed),
+    [todos],
+  );
+
+  const message = `${uncompletedTodos.length} ${uncompletedTodos.length === 1 ? 'item' : 'items'} left`;
 
   const handleClearCompleted = () => {
     dispatch({ type: 'changeTodos', payload: uncompletedTodos });
   };
 
-  const message = `${uncompletedTodos.length} ${uncompletedTodos.length === 1 ? 'item' : 'items'} left`;
+  const handleChooseFilter = (filterTitle: Filter) => {
+    dispatch({ type: 'setFilter', payload: filterTitle });
+  };
 
   if (!todos.length) {
     return null;
@@ -38,9 +49,7 @@ export const Footer: FC = () => {
                 selected: filter === filterTitle,
               })}
               data-cy={`FilterLink${filterTitle}`}
-              onClick={() =>
-                dispatch({ type: 'setFilter', payload: filterTitle })
-              }
+              onClick={() => handleChooseFilter(filterTitle)}
             >
               {filterTitle}
             </a>
@@ -54,6 +63,9 @@ export const Footer: FC = () => {
         data-cy="ClearCompletedButton"
         onClick={handleClearCompleted}
         disabled={!completedTodosCount}
+        style={{
+          visibility: completedTodosCount ? 'visible' : 'hidden',
+        }}
       >
         Clear completed
       </button>

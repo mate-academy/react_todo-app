@@ -2,6 +2,7 @@ import {
   ChangeEvent,
   FC,
   FormEvent,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -32,15 +33,15 @@ export const TodoItem: FC<Props> = ({ todo }) => {
     });
   };
 
-  const handleDeleteTodo = () => {
+  const handleDeleteTodo = useCallback(() => {
     dispatch({ type: 'removeTodo', payload: todo.id });
-  };
+  }, [dispatch, todo.id]);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value.trimStart());
   };
 
-  const handleTitleSave = () => {
+  const handleTitleSave = useCallback(() => {
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) {
@@ -58,28 +59,28 @@ export const TodoItem: FC<Props> = ({ todo }) => {
     });
 
     setIsEditing(false);
-  };
+  }, [title, todo, dispatch, handleDeleteTodo]);
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
-  const handleKeyUp = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      setIsEditing(false);
-      setTitle(todo.title);
-    } else if (event.key === 'Enter') {
-      handleTitleSave();
-    }
-  };
+  const handleKeyUp = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsEditing(false);
+        setTitle(todo.title);
+      } else if (event.key === 'Enter') {
+        handleTitleSave();
+      }
+    },
+    [todo.title, handleTitleSave],
+  );
 
   useEffect(() => {
     if (isEditing) {
       document.addEventListener('keyup', handleKeyUp);
     }
-    // else {
-    //   document.addEventListener('keyup', handleKeyUp);
-    // }
 
     return () => {
       document.removeEventListener('keyup', handleKeyUp);
@@ -95,6 +96,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
       onDoubleClick={() => setIsEditing(true)}
     >
       <label className="todo__status-label">
+        {' '}
         <input
           data-cy="TodoStatus"
           type="checkbox"

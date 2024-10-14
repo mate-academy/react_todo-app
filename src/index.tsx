@@ -1,8 +1,6 @@
 import { createRoot } from 'react-dom/client';
 
 import './styles/index.scss';
-// import './styles/todo-list.scss';
-// import './styles/filters.scss';
 
 import { App } from './App';
 import { GlobalStateProvider } from './store/store';
