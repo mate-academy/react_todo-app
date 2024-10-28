@@ -1,4 +1,11 @@
-import { createContext, FC, ReactNode, useContext, useReducer } from 'react';
+import {
+  createContext,
+  Dispatch,
+  FC,
+  ReactNode,
+  useContext,
+  useReducer,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { getLocalStorage } from '../utils/getLocalStorageData';
 
@@ -6,8 +13,6 @@ type Action =
   | { type: 'add'; payload: string }
   | { type: 'update'; payload: Todo }
   | { type: 'delete'; payload: number };
-
-type Dispatch = { (action: Action): void };
 
 function reducer(todos: Todo[], action: Action) {
   let newTodos: Todo[] = [];
@@ -45,8 +50,10 @@ function reducer(todos: Todo[], action: Action) {
 
 const initialTodos: Todo[] = getLocalStorage<Todo[]>('todos', []);
 
+const defaultDispatch: Dispatch<Action> = () => {};
+
 export const TodosContext = createContext(initialTodos);
-export const DispatchContext = createContext<Dispatch>(() => {});
+export const DispatchContext = createContext(defaultDispatch);
 
 type Props = {
   children: ReactNode;
@@ -55,9 +62,11 @@ type Props = {
 export const GlobalStateProvider: FC<Props> = ({ children }) => {
   const [todos, dispatch] = useReducer(reducer, initialTodos);
 
-  <DispatchContext.Provider value={dispatch}>
-    <TodosContext.Provider value={todos}>{children}</TodosContext.Provider>
-  </DispatchContext.Provider>;
+  return (
+    <DispatchContext.Provider value={dispatch}>
+      <TodosContext.Provider value={todos}>{children}</TodosContext.Provider>
+    </DispatchContext.Provider>
+  );
 };
 
 export const useGlobalState = () => useContext(TodosContext);

@@ -16,8 +16,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
-  const editField = useRef<HTMLInputElement>(null);
-
   const handleDelete = () => dispatch({ type: 'delete', payload: id });
 
   const handleSubmit = (
@@ -71,9 +69,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     });
   };
 
+  const editField = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
-    if (editField.current && isEditing) {
-      editField.current.focus();
+    if (isEditing) {
+      editField.current?.focus();
     }
   }, [isEditing]);
 

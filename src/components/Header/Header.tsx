@@ -4,7 +4,6 @@ import cn from 'classnames';
 import { useDispatch, useGlobalState } from '../../context/Store';
 
 export const Header: FC = () => {
-  const titleField = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmiting] = useState(false);
 
@@ -42,6 +41,8 @@ export const Header: FC = () => {
       }
     }
   };
+
+  const titleField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     titleField.current?.focus();
