@@ -26,19 +26,20 @@ export const Header: FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setIsSubmiting(true);
-
     const newTitle = title.trim();
 
-    if (newTitle) {
-      try {
-        dispatch({ type: 'add', payload: newTitle });
-        setTitle('');
-      } catch (error) {
-        throw error;
-      } finally {
-        setIsSubmiting(false);
-      }
+    if (!newTitle) {
+      return;
+    }
+
+    try {
+      setIsSubmiting(true);
+      dispatch({ type: 'add', payload: newTitle });
+      setTitle('');
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsSubmiting(false);
     }
   };
 
