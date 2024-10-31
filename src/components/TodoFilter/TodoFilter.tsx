@@ -3,7 +3,6 @@ import cn from 'classNames';
 
 import { Status } from '../../types/Status';
 import { DispatchContext, StateContext } from '../../Store';
-import { deleteTodo } from '../../api/todos';
 import { ErrorMessage } from '../../types/ErrorMessage';
 import { onAutoCloseNotification } from '../../utils/autoCloseNotification';
 
@@ -57,25 +56,8 @@ export const TodoFilter: React.FC = () => {
 
     dispatch({ type: 'startAction', selectedTodo: completedIds });
 
-    const toDeleteTodo: number[] = [];
-
     try {
-      await Promise.all(
-        completedIds.map(async id => {
-          try {
-            await deleteTodo(id);
-            toDeleteTodo.push(id);
-          } catch (error) {
-            dispatch({ type: 'failure', errorMessage: ErrorMessage.delete });
-            onAutoCloseNotification(dispatch);
-          }
-        }),
-      );
-
-      dispatch({ type: 'startAction', selectedTodo: toDeleteTodo });
-      toDeleteTodo.forEach(() => {
-        dispatch({ type: 'deletingSuccesses' });
-      });
+      dispatch({ type: 'deletingSuccesses' });
     } catch {
       dispatch({ type: 'failure', errorMessage: ErrorMessage.delete });
       onAutoCloseNotification(dispatch);

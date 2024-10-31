@@ -6,13 +6,12 @@ import { DispatchContext, StateContext } from '../../Store';
 import { Status } from '../../types/Status';
 import { ErrorMessage } from '../../types/ErrorMessage';
 import { onAutoCloseNotification } from '../../utils/autoCloseNotification';
-import { deleteTodo, editTodo, toggleTodo } from '../../api/todos';
 
 export const TodoList: React.FC = () => {
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [isFailed, setIsFailed] = useState(false);
-  const { todos, status, tempTodo } = useContext(StateContext);
+  const { todos, status } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const handleStartEdit = (prevTitle: string, id: number) => {
@@ -34,25 +33,22 @@ export const TodoList: React.FC = () => {
   const handleDeleteTodo = (id: number) => {
     dispatch({ type: 'startAction', selectedTodo: [id] });
 
-    deleteTodo(id)
-      .then(() => {
-        dispatch({ type: 'deletingSuccesses' });
-      })
-      .catch(() => {
-        dispatch({ type: 'failure', errorMessage: ErrorMessage.delete });
-        onAutoCloseNotification(dispatch);
-      })
-      .finally(() => {
-        dispatch({ type: 'reset' });
-      });
+    try {
+      dispatch({ type: 'deletingSuccesses' });
+    } catch (error) {
+      dispatch({ type: 'failure', errorMessage: ErrorMessage.delete });
+      onAutoCloseNotification(dispatch);
+    } finally {
+      dispatch({ type: 'reset' });
+    }
   };
 
-  const handleToggleTodo = async (todo: Todo, index: number) => {
+  const handleToggleTodo = (todo: Todo, index: number) => {
     const { completed, id } = todo;
 
     try {
       dispatch({ type: 'startAction', selectedTodo: [id] });
-      const updatedTodo = await toggleTodo(id, completed);
+      const updatedTodo = { ...todo, completed: !completed };
 
       dispatch({
         type: 'editTodoSuccess',
@@ -67,7 +63,7 @@ export const TodoList: React.FC = () => {
     }
   };
 
-  const handleEditTitle = async (
+  const handleEditTitle = (
     event: React.FormEvent,
     todo: Todo,
     index: number,
@@ -91,8 +87,7 @@ export const TodoList: React.FC = () => {
 
     try {
       dispatch({ type: 'startAction', selectedTodo: [id] });
-
-      const updatedTodo = await editTodo(id, newTodoTitle.trim());
+      const updatedTodo = { ...todo, title: newTodoTitle.trim() };
 
       dispatch({
         type: 'editTodoSuccess',
@@ -141,31 +136,6 @@ export const TodoList: React.FC = () => {
           onKey={handleKey}
         />
       ))}
-
-      {tempTodo && (
-        <div data-cy="Todo" className="todo">
-          <label className="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-            />
-          </label>
-
-          <span data-cy="TodoTitle" className="todo__title">
-            {tempTodo.title}
-          </span>
-
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
-            ×
-          </button>
-
-          <div data-cy="TodoLoader" className="modal overlay is-active">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-        </div>
-      )}
     </section>
   );
 };

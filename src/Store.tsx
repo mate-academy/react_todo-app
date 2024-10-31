@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { ErrorMessage } from './types/ErrorMessage';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
@@ -18,19 +18,15 @@ export type Action =
 
 interface RootState {
   todos: Todo[];
-  tempTodo: Todo | null;
   selectedTodo: number[];
   status: Status;
-  isProcessing: boolean;
   errorMessage: ErrorMessage | null;
 }
 
 const initialState: RootState = {
   todos: [],
-  tempTodo: null,
   selectedTodo: [],
   status: Status.all,
-  isProcessing: false,
   errorMessage: null,
 };
 
@@ -39,20 +35,17 @@ const reducer = (state: RootState, action: Action): RootState => {
     case 'download':
       return {
         ...state,
-        isProcessing: true,
         errorMessage: null,
       };
     case 'downloadSuccess':
       return {
         ...state,
         todos: action.todos,
-        isProcessing: false,
       };
     case 'failure':
       return {
         ...state,
         errorMessage: action.errorMessage,
-        isProcessing: false,
       };
     case 'closeNotification':
       return {
@@ -67,27 +60,21 @@ const reducer = (state: RootState, action: Action): RootState => {
     case 'addTodo':
       return {
         ...state,
-        tempTodo: action.tempTodo,
-        isProcessing: true,
         errorMessage: null,
       };
     case 'addingSuccess':
       return {
         ...state,
-        isProcessing: false,
-        tempTodo: null,
         todos: [...state.todos, action.newTodo],
       };
     case 'reset':
       return {
         ...state,
-        tempTodo: null,
         selectedTodo: [],
       };
     case 'startAction':
       return {
         ...state,
-        isProcessing: true,
         errorMessage: null,
         selectedTodo: action.selectedTodo,
       };
@@ -99,7 +86,6 @@ const reducer = (state: RootState, action: Action): RootState => {
       return {
         ...state,
         todos: newTodos,
-        isProcessing: false,
       };
     case 'editTodoSuccess': {
       const updatedTodos = state.todos.map((todo, idx) =>
@@ -109,7 +95,6 @@ const reducer = (state: RootState, action: Action): RootState => {
       return {
         ...state,
         todos: updatedTodos,
-        isProcessing: false,
       };
     }
 
@@ -122,7 +107,6 @@ const reducer = (state: RootState, action: Action): RootState => {
       return {
         ...state,
         todos: updatedTodos,
-        isProcessing: false,
       };
     }
 
@@ -140,7 +124,15 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, initial => {
+    const savedTodos = localStorage.getItem('todos');
+
+    return savedTodos ? { ...initial, todos: JSON.parse(savedTodos) } : initial;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(state.todos));
+  }, [state.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>
