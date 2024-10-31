@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import cn from 'classNames';
+import classNames from 'classNames';
 import { Todo } from '../../types/Todo';
 import { useContext, useEffect, useRef } from 'react';
 import { StateContext } from '../../Store';
@@ -46,7 +46,10 @@ export const TodoItem: React.FC<Props> = ({
   const { id, title, completed } = todo;
 
   return (
-    <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
+    <div
+      data-cy="Todo"
+      className={classNames('todo', { completed: todo.completed })}
+    >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -94,7 +97,7 @@ export const TodoItem: React.FC<Props> = ({
 
       <div
         data-cy="TodoLoader"
-        className={cn('modal overlay', {
+        className={classNames('modal overlay', {
           'is-active': selectedTodo.includes(id),
         })}
       >

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useMemo } from 'react';
-import cn from 'classNames';
+import classNames from 'classNames';
 
 import { Status } from '../../types/Status';
 import { DispatchContext, StateContext } from '../../Store';
@@ -76,7 +76,7 @@ export const TodoFilter: React.FC = () => {
         {Object.values(Status).map(statusValue => (
           <a
             href={`#/${statusValue}`}
-            className={cn('filter__link', {
+            className={classNames('filter__link', {
               selected: isActiveButton(statusValue),
             })}
             data-cy={`FilterLink${capitalize(statusValue)}`}

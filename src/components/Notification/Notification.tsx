@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import cn from 'classNames';
+import classNames from 'classNames';
 import { DispatchContext, StateContext } from '../../Store';
 
 export const Notification: React.FC = () => {
@@ -13,9 +13,12 @@ export const Notification: React.FC = () => {
   return (
     <div
       data-cy="ErrorNotification"
-      className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: hasError,
-      })}
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        {
+          hidden: hasError,
+        },
+      )}
     >
       <button
         data-cy="HideErrorButton"

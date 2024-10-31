@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
-import cn from 'classNames';
+import classNames from 'classNames';
 import { DispatchContext, StateContext } from '../../Store';
 import { ErrorMessage } from '../../types/ErrorMessage';
 import { onAutoCloseNotification } from '../../utils/autoCloseNotification';
@@ -84,7 +84,7 @@ export const TodoForm: React.FC = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={cn('todoapp__toggle-all', { active: isActive })}
+          className={classNames('todoapp__toggle-all', { active: isActive })}
           data-cy="ToggleAllButton"
           onClick={handleToggleAll}
         />
