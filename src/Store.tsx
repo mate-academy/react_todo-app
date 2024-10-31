@@ -3,8 +3,6 @@ import { ErrorMessage } from './types/ErrorMessage';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
 export type Action =
-  | { type: 'download' }
-  | { type: 'downloadSuccess'; todos: Todo[] }
   | { type: 'failure'; errorMessage: ErrorMessage | null }
   | { type: 'closeNotification' }
   | { type: 'filterStatus'; status: Status }
@@ -32,16 +30,6 @@ const initialState: RootState = {
 
 const reducer = (state: RootState, action: Action): RootState => {
   switch (action.type) {
-    case 'download':
-      return {
-        ...state,
-        errorMessage: null,
-      };
-    case 'downloadSuccess':
-      return {
-        ...state,
-        todos: action.todos,
-      };
     case 'failure':
       return {
         ...state,
