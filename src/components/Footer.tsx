@@ -7,14 +7,9 @@ import { Todo } from '../types/Todo';
 type Props = {
   visibleTodos: Todo[];
   setVisibleTodos: (vilteredTodos: Todo[]) => void;
-  setFocused: (value: boolean) => void;
 };
 
-export const Footer: React.FC<Props> = ({
-  visibleTodos,
-  setVisibleTodos,
-  setFocused,
-}) => {
+export const Footer: React.FC<Props> = ({ visibleTodos, setVisibleTodos }) => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.All);
@@ -54,12 +49,7 @@ export const Footer: React.FC<Props> = ({
   };
 
   const clearFunction = () => {
-    const completedTodos = todos
-      .filter(todo => todo.completed)
-      .map(todo => todo.id);
-
-    setTodos(todos.filter(todo => !completedTodos.includes(todo.id)));
-    setFocused(true);
+    setTodos(todos.filter(t => !t.completed));
   };
 
   const setFilter = (filter: Filter) => {

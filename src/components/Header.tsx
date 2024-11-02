@@ -1,20 +1,9 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TodosContext } from '../context/TodosContex';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
-type Props = {
-  focused: boolean;
-  setFocused: (value: boolean) => void;
-};
-
-export const Header: React.FC<Props> = ({ focused, setFocused }) => {
+export const Header: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const [title, setTitle] = useState('');
@@ -22,32 +11,17 @@ export const Header: React.FC<Props> = ({ focused, setFocused }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (inputRef.current && focused) {
+    if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [focused]);
+  }, [todos]);
 
-  const checkActiveTodos = useCallback((): boolean => {
+  const checkActiveTodos = (): boolean => {
     if (todos.length > 0) {
       return todos.every(todo => todo.completed);
     }
 
     return false;
-  }, [todos]);
-
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setTitle(event.target.value);
-  };
-
-  const addTodo = (todoTitle: string) => {
-    const newTodo: Todo = {
-      id: +new Date(),
-      title: todoTitle,
-      completed: false,
-    };
-
-    setTodos([...todos, newTodo]);
   };
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,12 +29,18 @@ export const Header: React.FC<Props> = ({ focused, setFocused }) => {
 
     const normalizedTitle = title.trim();
 
-    if (normalizedTitle.length > 0) {
-      addTodo(normalizedTitle);
-      setTitle('');
-    } else {
+    if (!normalizedTitle) {
       return;
     }
+
+    const newTodo: Todo = {
+      id: +new Date(),
+      title: normalizedTitle,
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+    setTitle('');
   };
 
   const toggleAll = () => {
@@ -72,7 +52,6 @@ export const Header: React.FC<Props> = ({ focused, setFocused }) => {
     }));
 
     setTodos(toggledTodos);
-    setFocused(true);
   };
 
   return (
@@ -88,15 +67,12 @@ export const Header: React.FC<Props> = ({ focused, setFocused }) => {
         />
       )}
 
-      <form
-        onSubmit={event => onSubmit(event)}
-        onBlur={() => setFocused(false)}
-      >
+      <form onSubmit={event => onSubmit(event)}>
         <input
           data-cy="NewTodoField"
           ref={inputRef}
           value={title}
-          onChange={event => onInputChange(event)}
+          onChange={event => setTitle(event.target.value)}
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"

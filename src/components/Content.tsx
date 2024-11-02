@@ -7,7 +7,6 @@ import { TodosContext } from '../context/TodosContex';
 export const Content: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
 
-  const [focused, setFocused] = useState(true);
   const [visibleTodos, setVisibleTodos] = useState(todos);
 
   useEffect(() => {
@@ -27,18 +26,21 @@ export const Content: React.FC = () => {
   }, [todos]);
 
   return (
-    <div className="todoapp__content">
-      <Header focused={focused} setFocused={setFocused} />
+    <>
+      <h1 className="todoapp__title">todos</h1>
 
-      <TodoList visibleTodos={visibleTodos} setFocused={setFocused} />
+      <div className="todoapp__content">
+        <Header />
 
-      {todos.length > 0 && (
-        <Footer
-          visibleTodos={visibleTodos}
-          setVisibleTodos={setVisibleTodos}
-          setFocused={setFocused}
-        />
-      )}
-    </div>
+        <TodoList visibleTodos={visibleTodos} />
+
+        {todos.length > 0 && (
+          <Footer
+            visibleTodos={visibleTodos}
+            setVisibleTodos={setVisibleTodos}
+          />
+        )}
+      </div>
+    </>
   );
 };

@@ -7,20 +7,18 @@ import { TodosContext } from '../context/TodosContex';
 
 type Props = {
   todo: Todo;
-  setFocused: (value: boolean) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo, setFocused }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { todos, setTodos } = useContext(TodosContext);
 
   const [onEdit, setOnEdit] = useState(false);
   const [title, setTitle] = useState(todo.title);
 
   const todoInputRef = useRef<HTMLInputElement>(null);
-  const normalizedTitle = title.trim();
 
   useEffect(() => {
-    if (onEdit && todoInputRef.current) {
+    if (todoInputRef.current) {
       todoInputRef.current.focus();
     }
   }, [onEdit]);
@@ -32,32 +30,12 @@ export const TodoItem: React.FC<Props> = ({ todo, setFocused }) => {
     }
   };
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-
-    setTitle(event.target.value);
-  };
-
   const updateTodo = (updatedTodo: Todo) => {
-    const newTodos = [...todos];
-
-    const index = todos.findIndex(
-      currentTodo => currentTodo.id === updatedTodo.id,
-    );
-
-    newTodos.splice(index, 1, updatedTodo);
-
-    setFocused(true);
-    setTodos(newTodos);
-  };
-
-  const deleteTodo = () => {
-    setTodos(todos.filter(currentTodo => currentTodo.id !== todo.id));
+    setTodos(todos.map(t => (t.id === updatedTodo.id ? updatedTodo : t)));
   };
 
   const onDelete = () => {
-    deleteTodo();
-    setFocused(true);
+    setTodos(todos.filter(currentTodo => currentTodo.id !== todo.id));
   };
 
   const statusChange = () => {
@@ -66,22 +44,17 @@ export const TodoItem: React.FC<Props> = ({ todo, setFocused }) => {
 
   const onSubmit = (event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
-
-    if (normalizedTitle.length === 0) {
-      deleteTodo();
-
-      return;
-    }
-
-    if (normalizedTitle === todo.title) {
-      setTitle(normalizedTitle);
-      setOnEdit(false);
-
-      return;
-    }
-
-    updateTodo({ ...todo, title: title });
     setOnEdit(false);
+
+    const normalizedTitle = title.trim();
+
+    if (!normalizedTitle) {
+      onDelete();
+
+      return;
+    }
+
+    updateTodo({ ...todo, title: normalizedTitle });
   };
 
   return (
@@ -122,7 +95,7 @@ export const TodoItem: React.FC<Props> = ({ todo, setFocused }) => {
               ref={todoInputRef}
               value={title}
               onChange={event => {
-                onInputChange(event);
+                setTitle(event.target.value);
               }}
               onBlur={() => onSubmit()}
               onKeyUp={event => handleKeyUp(event)}
