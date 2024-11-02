@@ -7,8 +7,6 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ visibleTodos, setFocused }) => {
-  // const { todos } = useContext(TodosContext);
-
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => (

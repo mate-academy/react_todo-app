@@ -32,7 +32,6 @@ export const Content: React.FC = () => {
 
       <TodoList visibleTodos={visibleTodos} setFocused={setFocused} />
 
-      {/* Hide the footer if there are no todos */}
       {todos.length > 0 && (
         <Footer
           visibleTodos={visibleTodos}
