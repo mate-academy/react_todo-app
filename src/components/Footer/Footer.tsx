@@ -13,15 +13,13 @@ export const Footer: React.FC<Props> = ({ howSort, setHowSort }) => {
   const dispatch = useContext(DispatchContext);
   const todos = useContext(StateContext);
 
+  const completedTodosCount = todos.filter(todo => !todo.completed).length;
+
   const handleClearCompleted = () => {
     todos
       .filter(todo => todo.completed)
       .forEach(todo => dispatch({ type: 'delete', payload: todo.id }));
   };
-
-  const completedTodosCount = todos.filter(
-    todo => todo.completed !== true,
-  ).length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -29,33 +27,28 @@ export const Footer: React.FC<Props> = ({ howSort, setHowSort }) => {
         {completedTodosCount} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        {Object.values(SortBy).map(enumElement => {
-          return (
-            <a
-              key={enumElement}
-              href="#/"
-              className={cn('filter__link', {
-                selected: howSort === enumElement,
-              })}
-              data-cy={`FilterLink${enumElement}`}
-              onClick={() => setHowSort(enumElement)}
-            >
-              {enumElement}
-            </a>
-          );
-        })}
+        {Object.values(SortBy).map(enumElement => (
+          <a
+            key={enumElement}
+            href="#/"
+            className={cn('filter__link', {
+              selected: howSort === enumElement,
+            })}
+            data-cy={`FilterLink${enumElement}`}
+            onClick={() => setHowSort(enumElement)}
+          >
+            {enumElement}
+          </a>
+        ))}
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => {
-          handleClearCompleted();
-        }}
+        onClick={handleClearCompleted}
+        disabled={!todos.filter(todo => todo.completed).length}
       >
         Clear completed
       </button>

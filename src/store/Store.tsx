@@ -8,15 +8,14 @@ type Action =
   | { type: 'updateAll'; payload: boolean }
   | { type: 'updateTitle'; payload: { id: number; title: string } };
 
-// store/Store.ts
 function reducer(state: Todo[], action: Action): Todo[] {
   let newTodosList;
 
   switch (action.type) {
     case 'add':
       const newTodo: Todo = {
-        id: Date.now(), // Генерация числового уникального ID
-        title: action.payload,
+        id: Date.now(),
+        title: action.payload.trim(),
         completed: false,
       };
 
@@ -45,7 +44,7 @@ function reducer(state: Todo[], action: Action): Todo[] {
     case 'updateTitle':
       newTodosList = state.map(todo =>
         todo.id === action.payload.id
-          ? { ...todo, title: action.payload.title }
+          ? { ...todo, title: action.payload.title.trim() }
           : todo,
       );
       break;
@@ -54,17 +53,11 @@ function reducer(state: Todo[], action: Action): Todo[] {
       return state;
   }
 
-  // Обновление localStorage
-  if (newTodosList.length > 0) {
-    localStorage.setItem('todos', JSON.stringify(newTodosList));
-  } else {
-    localStorage.removeItem('todos'); // Удаление при пустом массиве
-  }
+  localStorage.setItem('todos', JSON.stringify(newTodosList));
 
   return newTodosList;
 }
 
-// Инициализация состояния только при наличии данных в localStorage
 const initialState: Todo[] = JSON.parse(localStorage.getItem('todos') || '[]');
 
 export const StateContext = createContext<Todo[]>(initialState);

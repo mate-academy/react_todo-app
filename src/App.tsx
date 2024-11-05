@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Header } from './components/Header/Header';
 import { TodoItem } from './components/TodoItem/TodoItsm';
 import { Todo } from './types/Todo';
@@ -25,12 +25,6 @@ export const App: React.FC = () => {
   };
 
   const sortedTodos: Todo[] = sortList(howSort);
-
-  useEffect(() => {
-    if (todos.length === 0) {
-      localStorage.removeItem('todos');
-    }
-  }, [todos]);
 
   return (
     <div className="todoapp">

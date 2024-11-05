@@ -1,11 +1,13 @@
 import cn from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DispatchContext, StateContext } from '../../store/Store';
 
 type Props = {};
 
 export const Header: React.FC<Props> = () => {
   const [currentTodoTitle, setCurrentTodoTitle] = useState('');
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useContext(DispatchContext);
   const todos = useContext(StateContext);
@@ -27,6 +29,12 @@ export const Header: React.FC<Props> = () => {
 
   const areAllCompleted = todos.every(todo => todo.completed);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [todos]);
+
   return (
     <header className="todoapp__header">
       {!!todos.length && (
@@ -44,15 +52,14 @@ export const Header: React.FC<Props> = () => {
 
       <form onSubmit={handleForm}>
         <input
+          ref={inputRef}
           autoFocus
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={currentTodoTitle}
-          onChange={ev => {
-            setCurrentTodoTitle(ev.target.value);
-          }}
+          onChange={ev => setCurrentTodoTitle(ev.target.value)}
         />
       </form>
     </header>
