@@ -23,12 +23,17 @@ export const Header: FC = () => {
     );
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: // eslint-disable-next-line @typescript-eslint/indent
+    React.FormEvent<HTMLFormElement> | React.FocusEvent<HTMLInputElement>,
+  ) => {
     event.preventDefault();
 
     const newTitle = title.trim();
 
     if (!newTitle) {
+      setTitle('');
+
       return;
     }
 
@@ -72,6 +77,7 @@ export const Header: FC = () => {
           value={title}
           onChange={event => setTitle(event.target.value)}
           disabled={isSubmitting}
+          onBlur={handleSubmit}
         />
       </form>
     </header>

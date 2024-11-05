@@ -38,8 +38,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       return;
     }
 
-    setEditedTitle(validEditedTitle);
-
     try {
       dispatch({
         type: 'update',
