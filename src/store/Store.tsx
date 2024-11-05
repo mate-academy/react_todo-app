@@ -3,18 +3,19 @@ import { Todo } from '../types/Todo';
 
 type Action =
   | { type: 'add'; payload: string }
-  | { type: 'delete'; payload: Date }
-  | { type: 'toggleCompleted'; payload: Date }
+  | { type: 'delete'; payload: number }
+  | { type: 'toggleCompleted'; payload: number }
   | { type: 'updateAll'; payload: boolean }
-  | { type: 'updateTitle'; payload: { id: Date; title: string } };
+  | { type: 'updateTitle'; payload: { id: number; title: string } };
 
+// store/Store.ts
 function reducer(state: Todo[], action: Action): Todo[] {
   let newTodosList;
 
   switch (action.type) {
     case 'add':
       const newTodo: Todo = {
-        id: new Date(),
+        id: Date.now(), // Генерация числового уникального ID
         title: action.payload,
         completed: false,
       };
@@ -53,15 +54,17 @@ function reducer(state: Todo[], action: Action): Todo[] {
       return state;
   }
 
+  // Обновление localStorage
   if (newTodosList.length > 0) {
     localStorage.setItem('todos', JSON.stringify(newTodosList));
   } else {
-    localStorage.removeItem('todos');
+    localStorage.removeItem('todos'); // Удаление при пустом массиве
   }
 
   return newTodosList;
 }
 
+// Инициализация состояния только при наличии данных в localStorage
 const initialState: Todo[] = JSON.parse(localStorage.getItem('todos') || '[]');
 
 export const StateContext = createContext<Todo[]>(initialState);

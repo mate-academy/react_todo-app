@@ -5,9 +5,9 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  handleDelete: (id: Date) => void;
-  handleChangeCheckbox: (id: Date) => void;
-  handleUpdateTodo: (id: Date, newTitle: string) => void;
+  handleDelete: (id: number) => void;
+  handleChangeCheckbox: (id: number) => void;
+  handleUpdateTodo: (id: number, newTitle: string) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
