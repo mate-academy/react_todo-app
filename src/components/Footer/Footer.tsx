@@ -24,7 +24,8 @@ export const Footer: React.FC<Props> = ({ howSort, setHowSort }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {completedTodosCount} items left
+        {completedTodosCount}{' '}
+        {completedTodosCount === 1 ? 'item left' : 'items left'}
       </span>
 
       <nav className="filter" data-cy="Filter">
