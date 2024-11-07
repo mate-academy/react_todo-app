@@ -11,6 +11,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { id, title, completed } = todo;
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [isEscaped, setIsEscaped] = useState(false);
@@ -31,7 +32,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setSelectedTodo(todos.find(t => t.title === selectedTodoTitle));
   }
 
-  function handleSubmitForm(id: number, newTitle: string) {
+  function handleSubmitForm(currId: number, newTitle: string) {
     if (isEscaped) {
       setIsEscaped(false);
 
@@ -39,10 +40,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (!newTitle.trim()) {
-      removeTodo(id);
+      removeTodo(currId);
     }
 
-    renameTodo(id, newTitle);
+    renameTodo(currId, newTitle);
 
     setSelectedTodo(null);
   }
@@ -62,14 +63,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [selectedTodo]);
 
   return (
-    <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
+    <div data-cy="Todo" className={cn('todo', { completed: completed })}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          onChange={() => toggleTodo(todo.id)}
+          checked={completed}
+          onChange={() => toggleTodo(id)}
         />
       </label>
 
@@ -77,9 +78,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <form
           onSubmit={ev => {
             ev.preventDefault();
-            handleSubmitForm(todo.id, query);
+            handleSubmitForm(id, query);
           }}
-          onBlur={() => handleSubmitForm(todo.id, query)}
+          onBlur={() => handleSubmitForm(id, query)}
         >
           <input
             ref={inputRef}
@@ -98,14 +99,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={handleSelectTodo}
           >
-            {todo.title}
+            {title}
           </span>
 
           <button
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => removeTodo(todo.id)}
+            onClick={() => removeTodo(id)}
           >
             ×
           </button>
