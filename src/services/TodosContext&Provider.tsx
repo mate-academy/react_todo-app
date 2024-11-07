@@ -9,10 +9,10 @@ type TodosContextType = {
   setSelectedFilter: (filter: TodoFilter) => void;
 };
 
-const storedTodos = localStorage.getItem('todos');
+export const storedTodos = localStorage.getItem('todos');
 
 export const TodosContext = React.createContext<TodosContextType>({
-  todos: JSON.parse(storedTodos),
+  todos: storedTodos ? JSON.parse(storedTodos) : [],
   setTodos: () => {},
   selectedFilter: TodoFilter.All,
   setSelectedFilter: () => {},

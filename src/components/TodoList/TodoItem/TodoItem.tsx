@@ -69,11 +69,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
-          onClick={() => toggleTodo(todo.id)}
+          onChange={() => toggleTodo(todo.id)}
         />
       </label>
 
-      {/* This form is shown instead of the title and remove button upon editing todo*/}
       {selectedTodo === todo ? (
         <form
           onSubmit={ev => {

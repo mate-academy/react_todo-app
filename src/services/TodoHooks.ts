@@ -52,6 +52,7 @@ export const useTodo = () => {
 
   return {
     todos,
+    setTodos,
     addTodo,
     removeTodo,
     clearCompleted,
