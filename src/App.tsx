@@ -7,10 +7,6 @@ import { TodosContext } from './services/TodosContext&Provider';
 export const App: React.FC = () => {
   const { todos } = useContext(TodosContext);
 
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
