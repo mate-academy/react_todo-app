@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
 export const App: React.FC = () => {
@@ -29,6 +28,7 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           {/* This is a completed todo */}
           <div data-cy="Todo" className="todo completed">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -50,6 +50,7 @@ export const App: React.FC = () => {
 
           {/* This todo is an active todo */}
           <div data-cy="Todo" className="todo">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -69,6 +70,7 @@ export const App: React.FC = () => {
 
           {/* This todo is being edited */}
           <div data-cy="Todo" className="todo">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -91,6 +93,7 @@ export const App: React.FC = () => {
 
           {/* This todo is in loadind state */}
           <div data-cy="Todo" className="todo">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
