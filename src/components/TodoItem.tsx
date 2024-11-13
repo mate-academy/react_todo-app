@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { useTodos } from '../TodosContext';
 import { Todo } from '../types/Todo';
 import { useFocus } from '../FocusContext';
@@ -9,16 +10,17 @@ interface TodoItemProps {
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const { toggleTodo, deleteTodo, updateTodo } = useTodos();
+  const { id, title, completed } = todo;
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(todo.title);
+  const [editText, setEditText] = useState(title);
   const { focusInput } = useFocus();
 
   const handleEdit = () => setIsEditing(true);
   const handleBlur = () => {
     if (editText.trim()) {
-      updateTodo(todo.id, editText.trim());
+      updateTodo(id, editText.trim());
     } else {
-      deleteTodo(todo.id);
+      deleteTodo(id);
       setTimeout(() => focusInput(), 0);
     }
 
@@ -33,8 +35,13 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
 
     if (e.key === 'Escape') {
       setIsEditing(false);
-      setEditText(todo.title);
+      setEditText(title);
     }
+  };
+
+  const handleDelete = () => {
+    deleteTodo(id);
+    focusInput();
   };
 
   useEffect(() => {
@@ -44,15 +51,15 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   }, [isEditing, focusInput]);
 
   return (
-    <li className={`todo ${todo.completed ? 'completed' : ''}`} data-cy="Todo">
+    <li className={classNames('todo', { completed })} data-cy="Todo">
       <label className="todo__status-label">
         <input
-          id={`todo-${todo.id}`}
+          id={`todo-${id}`}
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          onChange={() => toggleTodo(todo.id)}
+          checked={completed}
+          onChange={() => toggleTodo(id)}
           aria-label="Toggle todo status"
         />
       </label>
@@ -63,15 +70,12 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={handleEdit}
           >
-            {todo.title}
+            {title}
           </span>
           <button
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => {
-              deleteTodo(todo.id);
-              focusInput();
-            }}
+            onClick={handleDelete}
           >
             ×
           </button>
