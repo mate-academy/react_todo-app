@@ -14,6 +14,8 @@
   }
 
   &__title {
+    margin: 0;
+    padding: 18px;
     font-size: 100px;
     font-weight: 100;
     text-align: center;
@@ -56,7 +58,7 @@
   }
 
   &__new-todo {
-    width: 100%;
+    width: 85%;
     padding: 16px 16px 16px 60px;
 
     font-size: 24px;
