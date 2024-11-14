@@ -51,7 +51,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   }, [isEditing, focusInput]);
 
   return (
-    <li className={classNames('todo', { completed })} data-cy="Todo">
+    <div className={classNames('todo', { completed })} data-cy="Todo">
       <label className="todo__status-label">
         <input
           id={`todo-${id}`}
@@ -93,6 +93,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           autoFocus
         />
       )}
-    </li>
+    </div>
   );
 };

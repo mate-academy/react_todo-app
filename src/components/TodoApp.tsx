@@ -33,20 +33,22 @@ export const TodoApp: React.FC = () => {
     <FocusProvider>
       <div className="todoapp">
         <h1 className="todoapp__title">todos</h1>
-        <Header hasTodos={!!todos.length} />
-        {todos.length > 0 && (
-          <>
-            <TodoList todos={filteredTodos} />
-            <Footer
-              activeCount={activeTodosCount}
-              hasCompletedTodos={hasCompletedTodos}
-              currFilter={filter}
-              onFilterChange={setFilter}
-              onClearCompleted={clearCompleted}
-              onToggleAll={toggleAllTodos}
-            />
-          </>
-        )}
+        <div className="todoapp__content">
+          <Header hasTodos={!!todos.length} />
+          {todos.length > 0 && (
+            <>
+              <TodoList todos={filteredTodos} />
+              <Footer
+                activeCount={activeTodosCount}
+                hasCompletedTodos={hasCompletedTodos}
+                currFilter={filter}
+                onFilterChange={setFilter}
+                onClearCompleted={clearCompleted}
+                onToggleAll={toggleAllTodos}
+              />
+            </>
+          )}
+        </div>
       </div>
     </FocusProvider>
   );

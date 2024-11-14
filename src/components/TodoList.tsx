@@ -7,9 +7,9 @@ interface TodoListProps {
 }
 
 export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
-  <ul className="todoapp__main" data-cy="TodoList">
+  <section className="todoapp__main" data-cy="TodoList">
     {todos.map(todo => (
       <TodoItem key={todo.id} todo={todo} />
     ))}
-  </ul>
+  </section>
 );
