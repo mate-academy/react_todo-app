@@ -1,22 +1,23 @@
 import { useLayoutEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 import {
+  getCompletedTodos,
   getInCompletedTodos,
   hasInCompletedTodos,
 } from '../utils/todos/getTodos';
-import { validUpdatedTodos } from '../utils/todos/validationTodo';
 import { updateTodosCompleted } from '../utils/todos/updateTodo';
 import { getRandomId } from '../utils/getRandomId';
+import useLocaLStorage from './useLocaLStorage';
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const { getItem, setItem } = useLocaLStorage('todos');
 
   const fetchTodos = () => {
-    const localTodos = localStorage.getItem('todos');
+    const localTodos = <Todo[]>getItem();
 
-    setTodos(localTodos ? JSON.parse(localTodos) : []);
+    setTodos(localTodos ? localTodos : []);
   };
-
   const addTodo = (title: string): Todo | void => {
     const todo = {
       title,
@@ -24,7 +25,7 @@ export const useTodos = () => {
       id: getRandomId(),
     };
 
-    localStorage.setItem('todos', JSON.stringify([...todos, todo]));
+    setItem([...todos, todo]);
 
     setTodos(prevState => [...prevState, todo]);
   };
@@ -34,7 +35,7 @@ export const useTodos = () => {
 
     setTodos(newTodos);
 
-    localStorage.setItem('todos', JSON.stringify(newTodos));
+    setItem(newTodos);
   };
 
   const deleteCompletedTodos = async () => {
@@ -42,7 +43,7 @@ export const useTodos = () => {
 
     setTodos(inCompletedTodos);
 
-    localStorage.setItem('todos', JSON.stringify(inCompletedTodos));
+    setItem(inCompletedTodos);
   };
 
   const updateTodo = (todo: Todo): Todo | void => {
@@ -52,33 +53,28 @@ export const useTodos = () => {
 
     setTodos(updatedTodos);
 
+    setItem(updatedTodos);
+
     return todo;
   };
 
   const updatedAllTodo = (): void => {
     const isIncompletedTodo = hasInCompletedTodos(todos);
 
-    const newTodos = isIncompletedTodo
-      ? updateTodosCompleted(getInCompletedTodos(todos))
-      : updateTodosCompleted(todos);
+    let newTodos: Todo[] = [];
 
-    const res = newTodos.map(todo => updateTodo(todo));
-
-    const updatedTodos = validUpdatedTodos(res);
-
-    if (!!updatedTodos.length) {
-      setTodos(prevState => {
-        const updatedState = prevState.map(todo => {
-          const updatedTodo = updatedTodos.find(
-            updated => updated.id === todo.id,
-          );
-
-          return updatedTodo ? updatedTodo : todo;
-        });
-
-        return updatedState;
-      });
+    if (isIncompletedTodo) {
+      newTodos = [
+        ...updateTodosCompleted(getInCompletedTodos(todos)),
+        ...getCompletedTodos(todos),
+      ];
+    } else {
+      newTodos = updateTodosCompleted(todos);
     }
+
+    setTodos(newTodos);
+
+    setItem(newTodos);
   };
 
   useLayoutEffect(() => {
