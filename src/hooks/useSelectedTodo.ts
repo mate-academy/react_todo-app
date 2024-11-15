@@ -10,7 +10,7 @@ export const useSelectedTodo = () => {
         setSelectedTodo(null);
       }
     },
-    [setSelectedTodo],
+    [selectedTodo],
   );
 
   useLayoutEffect(() => {

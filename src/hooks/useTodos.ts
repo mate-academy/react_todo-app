@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 import {
   getCompletedTodos,
@@ -13,11 +13,12 @@ export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const { getItem, setItem } = useLocaLStorage('todos');
 
-  const fetchTodos = () => {
+  const fetchTodos = useCallback(() => {
     const localTodos = <Todo[]>getItem();
 
     setTodos(localTodos ? localTodos : []);
-  };
+  }, []);
+
   const addTodo = (title: string): Todo | void => {
     const todo = {
       title,
@@ -79,7 +80,7 @@ export const useTodos = () => {
 
   useLayoutEffect(() => {
     fetchTodos();
-  }, []);
+  }, [fetchTodos]);
 
   return {
     todos,

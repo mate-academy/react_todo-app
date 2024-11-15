@@ -6,9 +6,11 @@ interface IUseLocalStorage {
 
 const useLocaLStorage = (key: string): IUseLocalStorage => {
   const setItem = (value: unknown): void => {
-    typeof value === 'string'
-      ? localStorage.setItem(key, value)
-      : localStorage.setItem(key, JSON.stringify(value));
+    if (typeof value === 'string') {
+      localStorage.setItem(key, value);
+    } else {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   };
 
   const getItem = (): unknown => {
