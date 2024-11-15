@@ -67,7 +67,19 @@ export const TodosProvider = ({
       updatedAllTodo,
       onFocus,
     }),
-    [todos, error, inputRef],
+    [
+      todos,
+      error,
+      inputRef,
+      fetchTodos,
+      addTodo,
+      deleteTodo,
+      showError,
+      deleteCompletedTodos,
+      updateTodo,
+      updatedAllTodo,
+      onFocus,
+    ],
   );
 
   return (

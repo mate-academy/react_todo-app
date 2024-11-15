@@ -12,9 +12,9 @@ export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const fetchTodos = () => {
-    const todos = localStorage.getItem('todos');
+    const localTodos = localStorage.getItem('todos');
 
-    setTodos(todos ? JSON.parse(todos) : []);
+    setTodos(localTodos ? JSON.parse(localTodos) : []);
   };
 
   const addTodo = (title: string): Todo | void => {

@@ -21,7 +21,7 @@ export const useTodoFormManager = (initialTitle = '') => {
     if (!isInputDisabled) {
       onFocus();
     }
-  }, [isInputDisabled]);
+  }, [isInputDisabled, onFocus]);
 
   const handleAddTodo = () => {
     setInputDisabled(true);

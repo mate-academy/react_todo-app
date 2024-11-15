@@ -1,11 +1,11 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 export const useTodoInput = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onFocus = () => {
+  const onFocus = useCallback(() => {
     inputRef.current?.focus();
-  };
+  }, []);
 
   return { inputRef, onFocus };
 };
