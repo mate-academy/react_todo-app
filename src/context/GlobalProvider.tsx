@@ -11,7 +11,8 @@ type Action =
   | { type: 'filterTodos'; payload: Filters }
   | { type: 'setFilter'; payload: Filters }
   | { type: 'clearCompletedTodos' }
-  | { type: 'updateFilteredTodos'; payload: Todos[] };
+  | { type: 'updateFilteredTodos'; payload: Todos[] }
+  | { type: 'renameTodo'; payload: { id: number; title: string } };
 
 interface State {
   todos: Todos[];
@@ -83,6 +84,15 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         filteredTodos: action.payload,
+      };
+    case 'renameTodo':
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id
+            ? { ...todo, title: action.payload.title }
+            : todo,
+        ),
       };
     default:
       return state;

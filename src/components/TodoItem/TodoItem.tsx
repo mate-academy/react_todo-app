@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { Todos } from '../../types/Todos';
 import { DispatchContext } from '../../context/GlobalProvider';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 type Props = {
   todo: Todos;
@@ -10,7 +10,45 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo, onDelete }) => {
   const { title, completed, id } = todo;
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editedTitle, setEditedTitle] = useState<string>(title);
   const todoStatusDispatch = useContext(DispatchContext);
+  const todoRenameDispatch = useContext(DispatchContext);
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+  };
+
+  const handleOnBlur = () => {
+    if (!editedTitle.trim()) {
+      onDelete(id);
+    } else if (editedTitle !== title) {
+      todoRenameDispatch({
+        type: 'renameTodo',
+        payload: { id, title: editedTitle.trim() },
+      });
+      cancelEditing();
+    } else {
+      cancelEditing();
+    }
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      cancelEditing();
+    } else if (e.key === 'Enter') {
+      handleOnBlur();
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleOnBlur();
+  };
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>
@@ -27,18 +65,39 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete }) => {
         />
       </label>
 
-      <span data-cy="TodoTitle" className="todo__title">
-        {title}
-      </span>
+      {isEditing ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="todo__title-field"
+            data-cy="TodoTitleField"
+            value={editedTitle}
+            onChange={e => setEditedTitle(e.target.value)}
+            onBlur={handleOnBlur}
+            onKeyUp={handleKeyUp}
+            autoFocus={isEditing}
+          />
+        </form>
+      ) : (
+        <span
+          data-cy="TodoTitle"
+          className="todo__title"
+          onDoubleClick={handleDoubleClick}
+        >
+          {title}
+        </span>
+      )}
 
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={() => onDelete(todo.id)}
-      >
-        ×
-      </button>
+      {!isEditing && (
+        <button
+          type="button"
+          className="todo__remove"
+          data-cy="TodoDelete"
+          onClick={() => onDelete(todo.id)}
+        >
+          ×
+        </button>
+      )}
     </div>
   );
 };
