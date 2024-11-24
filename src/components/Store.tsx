@@ -1,13 +1,12 @@
 import { useEffect, useReducer } from 'react';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
-import { TodoStatus } from '../types/TodoStatus';
 import React from 'react';
 
 type State = {
   todos: Todo[];
   newTodoTitle: string;
-  status: TodoStatus;
+  status: Filter;
   filter: Filter;
 };
 
@@ -22,7 +21,7 @@ const initialTodos: Todo[] = getTodosFromLocaleStorage();
 const initialState: State = {
   todos: initialTodos,
   newTodoTitle: '',
-  status: TodoStatus.all,
+  status: Filter.All,
   filter: Filter.All,
 };
 
@@ -32,7 +31,7 @@ type Action =
   | { type: 'updateTodo'; payload: Todo }
   | { type: 'setNewTodoTitle'; payload: string }
   | { type: 'setAllCompleted'; payload: boolean }
-  | { type: 'setStatus'; payload: TodoStatus }
+  | { type: 'setStatus'; payload: Filter }
   | { type: 'setNewStatus'; payload: Todo }
   | { type: 'setFilterByStatus'; payload: Filter }
   | { type: 'clearAllCompleted' };
