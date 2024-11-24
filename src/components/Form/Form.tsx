@@ -1,18 +1,17 @@
 import { useState, useRef, useContext, useEffect } from 'react';
-import { DispatchContext } from '../../context/GlobalProvider';
+import { StateContext, DispatchContext } from '../../context/GlobalProvider';
 import { Filters } from '../../types/Filters';
 
 export const Form: React.FC = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [currentTitle, setCurrentTitle] = useState<string>('');
   const newTodoDispatch = useContext(DispatchContext);
   const addToFilteredTodos = useContext(DispatchContext);
+  const { todos } = useContext(StateContext);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  });
+    inputRef.current?.focus();
+  }, [todos]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +21,7 @@ export const Form: React.FC = () => {
       newTodoDispatch({ type: 'addTodo', payload: trimmedTitle });
       addToFilteredTodos({ type: 'filterTodos', payload: Filters.all });
       setCurrentTitle('');
+      inputRef.current?.focus();
     }
   };
 
@@ -35,7 +35,6 @@ export const Form: React.FC = () => {
         ref={inputRef}
         value={currentTitle}
         onChange={e => setCurrentTitle(e.target.value)}
-        autoFocus
       />
     </form>
   );

@@ -26,13 +26,11 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete }) => {
   const handleOnBlur = () => {
     if (!editedTitle.trim()) {
       onDelete(id);
-    } else if (editedTitle !== title) {
+    } else {
       todoRenameDispatch({
         type: 'renameTodo',
         payload: { id, title: editedTitle.trim() },
       });
-      cancelEditing();
-    } else {
       cancelEditing();
     }
   };
@@ -70,6 +68,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete }) => {
           <input
             type="text"
             className="todo__title-field"
+            placeholder="Empty todo will be deleted"
             data-cy="TodoTitleField"
             value={editedTitle}
             onChange={e => setEditedTitle(e.target.value)}
