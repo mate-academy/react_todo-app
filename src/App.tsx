@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect } from 'react';
-import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -56,10 +55,6 @@ export const App: React.FC = () => {
         return true;
     }
   });
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   return (
     <div className="todoapp">

@@ -81,7 +81,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
     if (newTitle.trim() === '') {
       try {
-        await handleDeleteTodo(todo.id);
+        await handleDeleteTodo(id);
       } catch (err) {
         if (err) {
           errorMsg = true;
@@ -89,7 +89,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
         focusInput(inputRef);
       }
-    } else if (newTitle.trim() !== todo.title) {
+    } else if (newTitle.trim() !== title) {
       try {
         await handleUpdateTodo(todo, newTitle.trim());
       } catch (err) {

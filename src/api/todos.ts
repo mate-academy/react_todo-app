@@ -1,10 +1,6 @@
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
-// Your userId is 1414
-// Please use it for all your requests to the Students API. For example:
-// https://mate.academy/students-api/todos?userId=1414
-
 export const getTodos = (userid: number) => {
   return client.get<Todo[]>(`/todos?userId=${userid}`);
 };
