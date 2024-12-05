@@ -17,8 +17,6 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const isRenaming = renamingTodo === todo.id;
 
-  // const [isRenaming, setIsRenaming] = useState<boolean>(false);
-
   const todoField = useRef<HTMLInputElement>(null);
 
   const dispatch = useContext(DispatchContext);
@@ -47,7 +45,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
         type: 'updateTodo',
         payload: {
           ...todo,
-          title: inputValue,
+          title: inputValue.trim(),
         },
       });
     }
@@ -55,7 +53,6 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleEditTodo = () => {
     handleRenamingTodo(todo.id);
-    // setIsRenaming(true);
     setInputValue(todo.title);
   };
 
@@ -66,7 +63,6 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleSubmitChange = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleRenamingTodo(null);
-    // setIsRenaming(false);
     if (inputValue === '') {
       handleDelete();
 
@@ -76,7 +72,6 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
     if (inputValue !== todo.title) {
       updateTodo();
       handleRenamingTodo(null);
-      // setIsRenaming(false);
 
       return;
     }
@@ -86,7 +81,6 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         handleRenamingTodo(null);
-        // setIsRenaming(false);
 
         return;
       }
@@ -131,9 +125,10 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
         </span>
       )}
 
-      {!!isRenaming && (
+      {isRenaming && (
         <form onSubmit={handleSubmitChange} onBlur={handleSubmitChange}>
           <input
+            data-cy="TodoTitleField"
             ref={todoField}
             className="todo__title-field"
             type="text"
@@ -143,14 +138,16 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
         </form>
       )}
 
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={handleDelete}
-      >
-        ×
-      </button>
+      {!isRenaming && (
+        <button
+          type="button"
+          className="todo__remove"
+          data-cy="TodoDelete"
+          onClick={handleDelete}
+        >
+          ×
+        </button>
+      )}
     </div>
   );
 };

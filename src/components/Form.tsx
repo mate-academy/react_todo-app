@@ -4,6 +4,8 @@ import { Todo } from '../types/Todo';
 
 const Form: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
+  const { allTodos } = React.useContext(StateContext);
+
   const { renamingTodo } = React.useContext(StateContext);
 
   const dispatch = useContext(DispatchContext);
@@ -14,12 +16,12 @@ const Form: React.FC = () => {
     if (titleField.current && !renamingTodo) {
       titleField.current.focus();
     }
-  }, [renamingTodo]);
+  }, [renamingTodo, allTodos]);
 
   const addTodo = () => {
     const newTodo: Todo = {
       id: Date.now(),
-      title: todoTitle,
+      title: todoTitle.trim(),
       completed: false,
     };
 
