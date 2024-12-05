@@ -3,7 +3,13 @@
 
 import cn from 'classnames';
 
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { DispatchContext, StateContext } from '../Store';
 
@@ -21,11 +27,14 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const dispatch = useContext(DispatchContext);
 
-  const handleRenamingTodo = (id: number | null) => {
-    if (dispatch) {
-      dispatch({ type: 'renameTodo', payload: id });
-    }
-  };
+  const handleRenamingTodo = useCallback(
+    (id: number | null) => {
+      if (dispatch) {
+        dispatch({ type: 'renameTodo', payload: id });
+      }
+    },
+    [dispatch],
+  );
 
   const handleDelete = () => {
     if (dispatch) {
@@ -91,7 +100,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
     return () => {
       window.removeEventListener('keyup', handleEsc);
     };
-  }, []);
+  }, [handleRenamingTodo]);
 
   useEffect(() => {
     if (todoField.current) {
