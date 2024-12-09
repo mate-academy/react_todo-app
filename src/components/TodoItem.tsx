@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import cn from 'classnames';
 
 import React, {
@@ -10,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Todo } from '../types/Todo';
+import { Actions, Todo } from '../types/Todo';
 import { DispatchContext, StateContext } from '../Store';
 
 type Props = {
@@ -30,7 +27,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleRenamingTodo = useCallback(
     (id: number | null) => {
       if (dispatch) {
-        dispatch({ type: 'renameTodo', payload: id });
+        dispatch({ type: Actions.RenameTodo, payload: id });
       }
     },
     [dispatch],
@@ -38,20 +35,20 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleDelete = () => {
     if (dispatch) {
-      dispatch({ type: 'deleteTodo', payload: todo.id });
+      dispatch({ type: Actions.DeleteTodo, payload: todo.id });
     }
   };
 
   const handleToggle = () => {
     if (dispatch) {
-      dispatch({ type: 'toggleTodo', payload: todo.id });
+      dispatch({ type: Actions.ToggleTodo, payload: todo.id });
     }
   };
 
   const updateTodo = () => {
     if (dispatch) {
       dispatch({
-        type: 'updateTodo',
+        type: Actions.UpdateTodo,
         payload: {
           ...todo,
           title: inputValue.trim(),

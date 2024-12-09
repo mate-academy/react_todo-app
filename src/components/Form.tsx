@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DispatchContext, StateContext } from '../Store';
-import { Todo } from '../types/Todo';
+import { Actions, Todo } from '../types/Todo';
 
 const Form: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
@@ -26,7 +26,7 @@ const Form: React.FC = () => {
     };
 
     if (dispatch) {
-      dispatch({ type: 'addTodo', payload: newTodo });
+      dispatch({ type: Actions.AddTodo, payload: newTodo });
     }
   };
 
@@ -36,7 +36,7 @@ const Form: React.FC = () => {
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (todoTitle.trim() === '') {
+    if (!todoTitle.trim()) {
       return;
     }
 

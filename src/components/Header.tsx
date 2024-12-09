@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import cn from 'classnames';
 import Form from './Form';
 import { DispatchContext, StateContext } from '../Store';
+import { Actions } from '../types/Todo';
 
 const Header: React.FC = () => {
   const { allTodos } = useContext(StateContext);
@@ -11,13 +12,12 @@ const Header: React.FC = () => {
 
   const handleToggleAll = () => {
     if (dispatch) {
-      dispatch({ type: 'toggleAllTodos' });
+      dispatch({ type: Actions.ToggleAllTodos });
     }
   };
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       {allTodos.length > 0 && (
         <button
           type="button"

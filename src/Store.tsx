@@ -1,17 +1,17 @@
 import React, { useEffect, useReducer } from 'react';
-import { Filters, Todo } from './types/Todo';
+import { Actions, Filters, Todo } from './types/Todo';
 import { filterTodos } from './utils/services';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
 type Action =
-  | { type: 'filter'; payload: Filters }
-  | { type: 'addTodo'; payload: Todo }
-  | { type: 'updateTodo'; payload: Todo }
-  | { type: 'toggleTodo'; payload: number }
-  | { type: 'deleteTodo'; payload: number }
-  | { type: 'toggleAllTodos' }
-  | { type: 'clearCompleted' }
-  | { type: 'renameTodo'; payload: number | null };
+  | { type: Actions.Filter; payload: Filters }
+  | { type: Actions.AddTodo; payload: Todo }
+  | { type: Actions.UpdateTodo; payload: Todo }
+  | { type: Actions.ToggleTodo; payload: number }
+  | { type: Actions.DeleteTodo; payload: number }
+  | { type: Actions.ToggleAllTodos }
+  | { type: Actions.ClearCompleted }
+  | { type: Actions.RenameTodo; payload: number | null };
 
 interface State {
   allTodos: Todo[];
@@ -24,12 +24,12 @@ const reducer = (state: State, action: Action): State => {
   let updatedTodos = state.allTodos;
 
   switch (action.type) {
-    case 'addTodo': {
+    case Actions.AddTodo: {
       updatedTodos = [...state.allTodos, action.payload];
       break;
     }
 
-    case 'updateTodo': {
+    case Actions.UpdateTodo: {
       updatedTodos = state.allTodos.map(todo =>
         todo.id === action.payload.id
           ? { ...todo, title: action.payload.title }
@@ -38,17 +38,17 @@ const reducer = (state: State, action: Action): State => {
       break;
     }
 
-    case 'deleteTodo': {
+    case Actions.DeleteTodo: {
       updatedTodos = state.allTodos.filter(todo => todo.id !== action.payload);
       break;
     }
 
-    case 'clearCompleted': {
+    case Actions.ClearCompleted: {
       updatedTodos = state.allTodos.filter(todo => !todo.completed);
       break;
     }
 
-    case 'toggleTodo': {
+    case Actions.ToggleTodo: {
       updatedTodos = state.allTodos.map(todo =>
         todo.id === action.payload
           ? { ...todo, completed: !todo.completed }
@@ -57,7 +57,7 @@ const reducer = (state: State, action: Action): State => {
       break;
     }
 
-    case 'toggleAllTodos': {
+    case Actions.ToggleAllTodos: {
       const isAllCompleted = state.allTodos.every(todo => todo.completed);
 
       updatedTodos = state.allTodos.map(todo => ({
@@ -67,7 +67,7 @@ const reducer = (state: State, action: Action): State => {
       break;
     }
 
-    case 'filter': {
+    case Actions.Filter: {
       return {
         ...state,
         activeFilter: action.payload,
@@ -75,7 +75,7 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case 'renameTodo': {
+    case Actions.RenameTodo: {
       return {
         ...state,
         renamingTodo: action.payload,

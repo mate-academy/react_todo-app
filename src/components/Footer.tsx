@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Filters } from '../types/Todo';
+import { Actions, Filters } from '../types/Todo';
 import FilterButton from './FilterButton';
 import { DispatchContext, StateContext } from '../Store';
 
@@ -11,7 +11,7 @@ const Footer: React.FC = ({}) => {
 
   const handleClearCompleted = () => {
     if (dispatch) {
-      dispatch({ type: 'clearCompleted' });
+      dispatch({ type: Actions.ClearCompleted });
     }
   };
 

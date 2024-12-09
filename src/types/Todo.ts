@@ -9,3 +9,14 @@ export enum Filters {
   Active = 'active',
   Completed = 'completed',
 }
+
+export enum Actions {
+  AddTodo,
+  UpdateTodo,
+  DeleteTodo,
+  ClearCompleted,
+  ToggleTodo,
+  ToggleAllTodos,
+  Filter,
+  RenameTodo,
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import cn from 'classnames';
-import { Filters } from '../types/Todo';
+import { Actions, Filters } from '../types/Todo';
 import { DispatchContext, StateContext } from '../Store';
 
 type Props = {
@@ -19,7 +19,7 @@ const FilterButton: React.FC<Props> = ({ filterItem }) => {
   const handleFilterClick = () => {
     if (!isSelectedFilter) {
       if (dispatch) {
-        dispatch({ type: 'filter', payload: filterItem });
+        dispatch({ type: Actions.Filter, payload: filterItem });
       }
     }
   };
