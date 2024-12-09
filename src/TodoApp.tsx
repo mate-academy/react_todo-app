@@ -21,8 +21,8 @@ export const TodoApp: React.FC = () => {
   const incompleteTodosLength = todos.filter(
     todo => todo.completed === false,
   ).length;
-  const isAllTodosCompleted = todos.every(todo => todo.completed === true);
-  const isAnyTodoCompleted = todos.some(todo => todo.completed === true);
+  const isAllTodosCompleted = todos.every(todo => todo.completed);
+  const isAnyTodoCompleted = todos.some(todo => todo.completed);
   const [filter, setFilter] = useState(Status.all);
   const [titleValue, setTitleValue] = useState('');
   const showTodos = filterTodos(todos, filter);

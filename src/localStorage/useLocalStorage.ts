@@ -10,10 +10,8 @@ const initialValue = () => {
   return storedTodos ? JSON.parse(storedTodos) : [];
 };
 
-export const useLocalStorage = (
-  reducer: React.Reducer<Todo[], Action>,
-  startValue: Todo[],
-): [Todo[], Dispatch<Action>] => {
+// eslint-disable-next-line max-len, prettier/prettier
+export const useLocalStorage = (reducer: React.Reducer<Todo[], Action>, startValue: Todo[]): [Todo[], Dispatch<Action>] => {
   const [todos, dispatch] = useReducer(reducer, startValue, initialValue);
 
   useEffect(() => {
@@ -22,4 +20,3 @@ export const useLocalStorage = (
 
   return [todos, dispatch];
 };
-
