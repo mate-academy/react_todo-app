@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   createContext,
+  memo,
   useEffect,
   useMemo,
   useRef,
@@ -48,7 +49,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const TodosProvider: React.FC<Props> = ({ children }) => {
+export const TodosProvider: React.FC<Props> = memo(({ children }) => {
   // #region states
 
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -80,9 +81,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const toogleHandler = (id: number) => {
     const updatedTodos = todos.map(todo => {
-      if (todo.id === id) {
-        const { completed } = todo;
+      const { completed } = todo;
 
+      if (todo.id === id) {
         return { ...todo, completed: !completed };
       }
 
@@ -148,4 +149,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       {children}
     </TodosContext.Provider>
   );
-};
+});
+
+TodosProvider.displayName = 'TodosProvider';

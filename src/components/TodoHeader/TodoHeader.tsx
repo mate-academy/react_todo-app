@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { TodosContext } from '../../context';
 import classNames from 'classnames';
+import { myLocalStorage } from '../../localStorage';
+import { Names } from '../../enums/Filter';
 
 export const TodoHeader: React.FC = () => {
   // #region vars from contexts
@@ -10,28 +12,27 @@ export const TodoHeader: React.FC = () => {
     activeTodos,
     value,
     headerInputRef,
+    setTodos,
     setValue,
     onSubmit,
-    toogleHandler,
   } = useContext(TodosContext);
 
   // #endregion
   // #region handlers
 
   const toogleAll = () => {
-    if (activeTodos === 0) {
-      todos.forEach(todo => toogleHandler(todo.id));
+    const updatedTodos = todos.map(todo => {
+      const { completed } = todo;
 
-      return;
-    }
-
-    todos.forEach(todo => {
-      const { completed, id } = todo;
-
-      if (!completed) {
-        toogleHandler(id);
+      if (activeTodos === 0 && completed) {
+        return { ...todo, completed: !completed };
       }
+
+      return { ...todo, completed: true };
     });
+
+    setTodos(updatedTodos);
+    myLocalStorage.setItem(Names.todos, JSON.stringify(updatedTodos));
   };
 
   // #endregion
