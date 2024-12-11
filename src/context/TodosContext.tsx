@@ -9,9 +9,7 @@ import React, {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { myLocalStorage } from '../localStorage';
-import { Filter, Names } from '../enums/Filter';
-
-// #region context
+import { Names } from '../enums/Enums';
 
 interface TodosContextType {
   todos: Todo[];
@@ -22,7 +20,7 @@ interface TodosContextType {
   setTodos: (todos: Todo[]) => void;
   setValue: (value: string) => void;
   onSubmit: (event: React.FormEvent) => void;
-  setFilter: (value: Filter) => void;
+  setFilter: (value: string) => void;
   toogleHandler: (id: number) => void;
   deleteHandler: (ids: number[]) => void;
 }
@@ -43,26 +41,15 @@ export const TodosContext = createContext<TodosContextType>({
   deleteHandler: () => {},
 });
 
-// #endregion
-
 interface Props {
   children: React.ReactNode;
 }
 
 export const TodosProvider: React.FC<Props> = memo(({ children }) => {
-  // #region states
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [value, setValue] = useState('');
-  const [filter, setFilter] = useState(Filter.all);
-
-  // #endregion
-  // #region refs
-
+  const [filter, setFilter] = useState('All');
   const headerInputRef = useRef<HTMLInputElement | null>(null);
-
-  // #endregion
-  // #region handlers
 
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -102,13 +89,7 @@ export const TodosProvider: React.FC<Props> = memo(({ children }) => {
     headerInputRef.current?.focus();
   };
 
-  // #endregion
-  // #region variables
-
   const activeTodos = todos.filter(_todo => !_todo.completed).length;
-
-  // #endregion
-  // #region useEffects
 
   useEffect(() => {
     const getTodos = myLocalStorage.getItem(Names.todos);
@@ -121,9 +102,6 @@ export const TodosProvider: React.FC<Props> = memo(({ children }) => {
 
     headerInputRef.current?.focus();
   }, []);
-
-  // #endregion
-  // #region contextValue
 
   const contextValue = useMemo(
     () => ({
@@ -141,8 +119,6 @@ export const TodosProvider: React.FC<Props> = memo(({ children }) => {
     }),
     [todos, value, filter],
   );
-
-  // #endregion
 
   return (
     <TodosContext.Provider value={contextValue}>

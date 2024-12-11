@@ -1,29 +1,17 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TodosContext } from '../../context';
-import classNames from 'classnames';
-import { Filter, Names } from '../../enums/Filter';
+import { Filter, Names } from '../../enums/Enums';
 import { myLocalStorage } from '../../localStorage';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList: React.FC = () => {
-  // #regions vars from contexts
-
   const { todos, filter, setTodos, toogleHandler, deleteHandler } =
     useContext(TodosContext);
 
-  // #endregion
-  // #region states
-
   const [editableTodoById, setEditableTodoById] = useState(0);
   const [editableTitle, setEditableTitle] = useState('');
-
-  // #endregion
-  // #region refs
-
   const todoInputRef = useRef<HTMLInputElement | null>(null);
-
-  // #endregion
-  // #region variables
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
@@ -35,9 +23,6 @@ export const TodoList: React.FC = () => {
         return todo;
     }
   });
-
-  // #endregion
-  // #region handlers
 
   const editHandler = (id: number, value: string) => {
     setEditableTodoById(id);
@@ -74,14 +59,9 @@ export const TodoList: React.FC = () => {
     }
   };
 
-  // #endregion
-  // #region useEffects
-
   useEffect(() => {
     todoInputRef.current?.focus();
   }, [editableTodoById]);
-
-  // #endregion
 
   return (
     <section
@@ -94,55 +74,20 @@ export const TodoList: React.FC = () => {
         const isTodoChecked = todo.completed;
 
         return (
-          <div
+          <TodoItem
             key={id}
-            data-cy="Todo"
-            className={classNames('todo', { completed: isTodoChecked })}
-          >
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                onChange={() => toogleHandler(id)}
-                checked={isTodoChecked}
-              />
-            </label>
-
-            {editableTodoById === id ? (
-              <form onSubmit={event => onSubmit(event, id)}>
-                <input
-                  ref={todoInputRef}
-                  onBlur={event => onSubmit(event, id)}
-                  data-cy="TodoTitleField"
-                  type="text"
-                  className="todo__title-field"
-                  placeholder="Empty todo will be deleted"
-                  value={editableTitle}
-                  onChange={event => setEditableTitle(event.target.value)}
-                />
-              </form>
-            ) : (
-              <span
-                data-cy="TodoTitle"
-                className="todo__title"
-                onDoubleClick={() => editHandler(id, title)}
-              >
-                {title || 'Todo is being saved now'}
-              </span>
-            )}
-
-            {editableTodoById !== id && (
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-                onClick={() => deleteHandler([id])}
-              >
-                ×
-              </button>
-            )}
-          </div>
+            id={id}
+            title={title}
+            isTodoChecked={isTodoChecked}
+            editableTitle={editableTitle}
+            editableTodoById={editableTodoById}
+            todoInputRef={todoInputRef}
+            setEditableTitle={setEditableTitle}
+            editHandler={editHandler}
+            deleteHandler={deleteHandler}
+            toogleHandler={toogleHandler}
+            onSubmit={onSubmit}
+          />
         );
       })}
     </section>
