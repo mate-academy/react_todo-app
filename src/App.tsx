@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
-import { Header } from './components/Header/Header';
-import { Main } from './components/Main/Main';
-import { Footer } from './components/Footer/Footer';
-import { StateContext } from './components/GlobalContext/GlobalContext';
+import { TodoAdd } from './component/TodoAdd/TodoAdd';
+import { TodoList } from './component/TodoList/TodoList';
+import { TodoFilters } from './component/TodosFIlter/TodoFilter';
+import { StateContext } from './context/GlobalContext/GlobalContext';
 
 export const App: React.FC = () => {
   const { todos } = useContext(StateContext);
@@ -10,15 +11,11 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-      <h2 className="todoapp__subTitle">
-        May your day be filled with productivity and successful goal
-        achievement.
-      </h2>
 
       <div className="todoapp__content">
-        <Header />
-        <Main />
-        {todos.length > 0 && <Footer />}
+        <TodoAdd />
+        <TodoList />
+        {todos.length > 0 && <TodoFilters />}
       </div>
     </div>
   );
