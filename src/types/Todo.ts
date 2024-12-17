@@ -5,4 +5,4 @@ export type Todo = {
   updatedAt: Date;
   completed: boolean;
   userId: number;
-}
+};

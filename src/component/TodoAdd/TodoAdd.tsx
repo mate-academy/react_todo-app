@@ -1,6 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { DispatchContext, StateContext } from "../../context/GlobalContext/GlobalContext";
-import classNames from "classnames";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import {
+  DispatchContext,
+  StateContext,
+} from '../../context/GlobalContext/GlobalContext';
+import classNames from 'classnames';
 
 export const TodoAdd: React.FC = () => {
   const [value, setValue] = useState('');
@@ -42,7 +45,7 @@ export const TodoAdd: React.FC = () => {
 
       localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
     }
-  }
+  };
 
   const handleCompleteTodos = () => {
     if (!isActive) {
@@ -76,4 +79,4 @@ export const TodoAdd: React.FC = () => {
       </form>
     </header>
   );
-}
+};

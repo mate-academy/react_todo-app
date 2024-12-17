@@ -1,8 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { DispatchContext, StateContext } from "../../context/GlobalContext/GlobalContext";
-import classNames from "classnames";
-import { Todo } from "../../types/Todo";
-import { Filter } from "../TodosFIlter/TodoFilter";
+import { useContext, useEffect, useRef, useState } from 'react';
+import {
+  DispatchContext,
+  StateContext,
+} from '../../context/GlobalContext/GlobalContext';
+import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
+import { Filter } from '../TodosFIlter/TodoFilter';
 
 export const TodoList: React.FC = () => {
   const [pickedTodo, setPickedTodo] = useState<number | null>(null);
@@ -18,7 +21,6 @@ export const TodoList: React.FC = () => {
     if (renameFocus.current && pickedTodo !== null) {
       renameFocus.current.focus();
     }
-
   }, [todos, pickedTodo]);
 
   useEffect(() => {
@@ -38,34 +40,32 @@ export const TodoList: React.FC = () => {
     setFilteredTodos(filteredTask);
   }, [filter, todos]);
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleEscapeKey);
-
-    return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
-    }
-  }, []);
-
   const handleEscapeKey = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       setPickedTodo(null);
     }
   };
 
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscapeKey);
 
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, []);
 
   const handleDeleteTodo = (todo: Todo) => {
     dispatch({ type: 'deleteTodo', payload: todo });
-  }
+  };
 
   const handleCheckTodo = (todo: Todo) => {
     dispatch({ type: 'checkTodo', payload: todo });
-  }
+  };
 
   const handleEditTodo = (todo: Todo) => {
     setPickedTodo(todo.id);
     setEditedTitle(todo.title);
-  }
+  };
 
   const onSubmit = (id: number) => {
     const changedFilter = todos.find(todo => todo.id === id) as Todo;
@@ -74,7 +74,7 @@ export const TodoList: React.FC = () => {
       ...changedFilter,
       updatedAt: new Date(),
       title: editedTitle.trim(),
-    }
+    };
 
     if (!editedTitle.trim()) {
       dispatch({ type: 'deleteTodo', payload: newTodo });
@@ -84,9 +84,7 @@ export const TodoList: React.FC = () => {
 
     setPickedTodo(null);
     setEditedTitle('');
-  }
-
-
+  };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -97,9 +95,7 @@ export const TodoList: React.FC = () => {
           key={todo.id}
           onDoubleClick={() => handleEditTodo(todo)}
         >
-          <label
-            className="todo__status-label"
-          >
+          <label className="todo__status-label">
             <input
               data-cy="TodoStatus"
               type="checkbox"
@@ -109,40 +105,37 @@ export const TodoList: React.FC = () => {
             />
           </label>
 
-          {todo.id === pickedTodo
-            ? (
-              <form onSubmit={() => onSubmit(todo.id)}>
-                <input
-                  data-cy="TodoTitleField"
-                  type="text"
-                  className="todo__title-field"
-                  placeholder="Empty todo will be deleted"
-                  value={editedTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
-                  onBlur={() => onSubmit(todo.id)}
-                  ref={renameFocus}
-                />
-              </form>
-            ) : (
-              <>
-                <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title}
-                </span>
+          {todo.id === pickedTodo ? (
+            <form onSubmit={() => onSubmit(todo.id)}>
+              <input
+                data-cy="TodoTitleField"
+                type="text"
+                className="todo__title-field"
+                placeholder="Empty todo will be deleted"
+                value={editedTitle}
+                onChange={e => setEditedTitle(e.target.value)}
+                onBlur={() => onSubmit(todo.id)}
+                ref={renameFocus}
+              />
+            </form>
+          ) : (
+            <>
+              <span data-cy="TodoTitle" className="todo__title">
+                {todo.title}
+              </span>
 
-                <button
-                  type="button"
-                  className="todo__remove"
-                  data-cy="TodoDelete"
-                  onClick={() => handleDeleteTodo(todo)}
-                >
-                  ×
-                </button>
-              </>
-            )
-          }
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDelete"
+                onClick={() => handleDeleteTodo(todo)}
+              >
+                ×
+              </button>
+            </>
+          )}
         </div>
-      ))
-      }
-    </section >
+      ))}
+    </section>
   );
-}
+};
