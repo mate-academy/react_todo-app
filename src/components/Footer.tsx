@@ -4,7 +4,7 @@ import { FilterType } from '../types/FilterType';
 import classNames from 'classnames';
 
 export const Footer: React.FC = () => {
-  const { state, dispatch } = useContext(TodoContext);
+  const { state, dispatch, inputRef } = useContext(TodoContext);
 
   const todosToDelete = state.todos
     .filter(todo => todo.completed)
@@ -34,18 +34,18 @@ export const Footer: React.FC = () => {
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
-      {state.todos.find(todo => todo.completed) && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-          onClick={() =>
-            dispatch({ type: 'DELETE_COMPLETED_TODOS', payload: todosToDelete })
-          }
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        onClick={() => {
+          dispatch({ type: 'DELETE_COMPLETED_TODOS', payload: todosToDelete });
+          inputRef.current?.focus();
+        }}
+        disabled={!state.todos.some(todo => todo.completed)}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
