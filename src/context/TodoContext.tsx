@@ -1,5 +1,11 @@
 /* eslint-disable no-console */
-import React, { createContext, useEffect, useReducer } from 'react';
+import React, {
+  createContext,
+  MutableRefObject,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
 import { State } from '../types/State';
 import { Todo } from '../types/Todo';
 import { FilterType } from '../types/FilterType';
@@ -7,11 +13,13 @@ import { FilterType } from '../types/FilterType';
 interface ContextProps {
   state: State;
   dispatch: React.Dispatch<Action>;
+  inputRef: MutableRefObject<HTMLInputElement | null>;
 }
 
 export const TodoContext = createContext<ContextProps>({
   state: { todos: [], filter: FilterType.All },
   dispatch: () => {},
+  inputRef: { current: null },
 });
 
 type Action =
@@ -95,8 +103,10 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('todos', JSON.stringify(state.todos));
   }, [state.todos]);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
-    <TodoContext.Provider value={{ state, dispatch }}>
+    <TodoContext.Provider value={{ state, dispatch, inputRef }}>
       {children}
     </TodoContext.Provider>
   );

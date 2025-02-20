@@ -34,16 +34,18 @@ export const Footer: React.FC = () => {
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-        onClick={() =>
-          dispatch({ type: 'DELETE_COMPLETED_TODOS', payload: todosToDelete })
-        }
-      >
-        Clear completed
-      </button>
+      {state.todos.find(todo => todo.completed) && (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+          onClick={() =>
+            dispatch({ type: 'DELETE_COMPLETED_TODOS', payload: todosToDelete })
+          }
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

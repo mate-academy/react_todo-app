@@ -7,7 +7,7 @@ import { Todo } from '../types/Todo';
 import { FilterType } from '../types/FilterType';
 
 export const TodoList: React.FC = () => {
-  const { state, dispatch } = useContext(TodoContext);
+  const { state, dispatch, inputRef } = useContext(TodoContext);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [editedTodo, setEditedTodo] = useState('');
 
@@ -38,6 +38,7 @@ export const TodoList: React.FC = () => {
 
   const handleDelete = (id: number) => {
     dispatch({ type: 'DELETE_TODO', payload: id });
+    inputRef.current?.focus();
   };
 
   const filteredTodos = state.todos.filter(todo => {

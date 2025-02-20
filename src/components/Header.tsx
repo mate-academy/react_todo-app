@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 export const Header: React.FC = () => {
-  const { state, dispatch } = useContext(TodoContext);
+  const { state, dispatch, inputRef } = useContext(TodoContext);
   const [newTodo, setNewTodo] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -18,7 +18,7 @@ export const Header: React.FC = () => {
 
     const todoToAdd: Todo = {
       id: +new Date(),
-      title: newTodo,
+      title: newTodo.trim(),
       completed: false,
     };
 
@@ -68,6 +68,7 @@ export const Header: React.FC = () => {
           value={newTodo}
           onChange={event => setNewTodo(event.target.value)}
           autoFocus
+          ref={inputRef}
         />
       </form>
     </header>
