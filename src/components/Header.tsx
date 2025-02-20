@@ -10,6 +10,12 @@ export const Header: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (newTodo.trim() === '') {
+      setNewTodo('');
+
+      return;
+    }
+
     const todoToAdd: Todo = {
       id: +new Date(),
       title: newTodo,
@@ -20,16 +26,37 @@ export const Header: React.FC = () => {
     setNewTodo('');
   };
 
+  const toggleAll = () => {
+    const allIds = state.todos.map(todo => todo.id);
+    const activeIds = state.todos
+      .filter(todo => !todo.completed)
+      .map(todo => todo.id);
+
+    if (
+      state.todos.every(todo => todo.completed) ||
+      state.todos.every(todo => !todo.completed)
+    ) {
+      dispatch({ type: 'TOGGLE_ALL_TODOS', payload: allIds });
+    } else {
+      dispatch({ type: 'TOGGLE_ALL_TODOS', payload: activeIds });
+    }
+  };
+
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className={classNames('todoapp__toggle-all', {
-          active: state.todos.every(todo => todo.completed),
-        })}
-        data-cy="ToggleAllButton"
-      />
+      {state.todos.length > 0 && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active:
+              state.todos.length > 0 &&
+              state.todos.every(todo => todo.completed),
+          })}
+          data-cy="ToggleAllButton"
+          onClick={toggleAll}
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
@@ -38,7 +65,9 @@ export const Header: React.FC = () => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          value={newTodo}
           onChange={event => setNewTodo(event.target.value)}
+          autoFocus
         />
       </form>
     </header>

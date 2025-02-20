@@ -1,21 +1,30 @@
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useContext, useState } from 'react';
 import { TodoContext } from '../context/TodoContext';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
+import { FilterType } from '../types/FilterType';
 
 export const TodoList: React.FC = () => {
   const { state, dispatch } = useContext(TodoContext);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [editedTodo, setEditedTodo] = useState('');
 
-  const handleEditing = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEditing = (
+    event:
+      | React.FormEvent<HTMLFormElement>
+      | React.FocusEvent<HTMLInputElement>,
+  ) => {
     event.preventDefault();
+
+    if (editedTodo.trim() === '') {
+      dispatch({ type: 'DELETE_TODO', payload: selectedId as number });
+    }
 
     const todoToEdit: Todo = {
       id: selectedId as number,
-      title: editedTodo,
+      title: editedTodo.trim(),
       completed: false,
     };
 
@@ -23,9 +32,29 @@ export const TodoList: React.FC = () => {
     setSelectedId(null);
   };
 
+  const handleToggle = (id: number) => {
+    dispatch({ type: 'TOGGLE_TODO', payload: id });
+  };
+
+  const handleDelete = (id: number) => {
+    dispatch({ type: 'DELETE_TODO', payload: id });
+  };
+
+  const filteredTodos = state.todos.filter(todo => {
+    if (state.filter === FilterType.Active) {
+      return !todo.completed;
+    }
+
+    if (state.filter === FilterType.Completed) {
+      return todo.completed;
+    }
+
+    return true;
+  });
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {state.todos.map(todo => (
+      {filteredTodos.map(todo => (
         <div
           data-cy="Todo"
           className={classNames('todo', { completed: todo.completed })}
@@ -36,7 +65,8 @@ export const TodoList: React.FC = () => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              // checked={todo.completed}
+              onChange={() => handleToggle(todo.id)}
+              checked={todo.completed}
             />
           </label>
 
@@ -49,6 +79,12 @@ export const TodoList: React.FC = () => {
                 placeholder="Empty todo will be deleted"
                 value={editedTodo}
                 onChange={event => setEditedTodo(event.target.value)}
+                onBlur={handleEditing}
+                onKeyUp={event => {
+                  if (event.key === 'Escape') {
+                    setSelectedId(null);
+                  }
+                }}
                 autoFocus
               />
             </form>
@@ -57,7 +93,7 @@ export const TodoList: React.FC = () => {
               <span
                 data-cy="TodoTitle"
                 className="todo__title"
-                onClick={() => {
+                onDoubleClick={() => {
                   setSelectedId(todo.id);
                   setEditedTodo(todo.title);
                 }}
@@ -69,6 +105,7 @@ export const TodoList: React.FC = () => {
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
+                onClick={() => handleDelete(todo.id)}
               >
                 ×
               </button>

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { createContext, useEffect, useReducer } from 'react';
 import { State } from '../types/State';
 import { Todo } from '../types/Todo';
@@ -16,7 +17,11 @@ export const TodoContext = createContext<ContextProps>({
 type Action =
   | { type: 'ADD_TODO'; payload: Todo }
   | { type: 'EDIT_TODO'; payload: Todo }
-  | { type: 'TOGGLE_TODO'; payload: number };
+  | { type: 'TOGGLE_TODO'; payload: number }
+  | { type: 'DELETE_TODO'; payload: number }
+  | { type: 'FILTER_TODOS'; payload: FilterType }
+  | { type: 'DELETE_COMPLETED_TODOS'; payload: number[] }
+  | { type: 'TOGGLE_ALL_TODOS'; payload: number[] };
 
 function reduceTodos(state: State, action: Action): State {
   switch (action.type) {
@@ -28,6 +33,44 @@ function reduceTodos(state: State, action: Action): State {
         ...state,
         todos: state.todos.map(todo =>
           todo.id === action.payload.id ? { ...todo, ...action.payload } : todo,
+        ),
+      };
+
+    case 'TOGGLE_TODO':
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload
+            ? { ...todo, completed: !todo.completed }
+            : todo,
+        ),
+      };
+
+    case 'DELETE_TODO':
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.payload),
+      };
+
+    case 'FILTER_TODOS':
+      return {
+        ...state,
+        filter: action.payload,
+      };
+
+    case 'DELETE_COMPLETED_TODOS':
+      return {
+        ...state,
+        todos: state.todos.filter(todo => !action.payload.includes(todo.id)),
+      };
+
+    case 'TOGGLE_ALL_TODOS':
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          action.payload.includes(todo.id)
+            ? { ...todo, completed: !todo.completed }
+            : todo,
         ),
       };
 
