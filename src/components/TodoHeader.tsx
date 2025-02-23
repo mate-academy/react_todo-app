@@ -5,9 +5,8 @@ import { Todo } from '../type';
 type TodoHeaderProps = {};
 
 export const TodoHeader: React.FC<TodoHeaderProps> = () => {
-    const { todos, setTodos } = useContext(TodoContext);
+    // const { todos, setTodos } = useContext(TodoContext);
 
-    console.log(todos)
 
   return (
     <header className="todoapp__header">
