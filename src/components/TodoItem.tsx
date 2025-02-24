@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
@@ -24,8 +24,27 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 }) => {
   const fieldRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (editing && fieldRef.current) {
+      fieldRef.current.focus();
+      fieldRef.current.select();
+    }
+  }, [editing]);
+
   const save = () => {
-    updateTodoTitle(todo.id, fieldRef.current?.value || '');
+    if (fieldRef.current) {
+      updateTodoTitle(todo.id, fieldRef.current.value);
+      cancelEditing();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      save();
+    } else if (e.key === 'Escape') {
+      cancelEditing();
+    }
   };
 
   return (
@@ -58,11 +77,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             placeholder="Empty todo will be deleted"
             defaultValue={todo.title}
             onBlur={save}
-            onKeyUp={event => {
-              if (event.key === 'Escape') {
-                cancelEditing();
-              }
-            }}
+            onKeyDown={handleKeyDown}
           />
         </form>
       ) : (

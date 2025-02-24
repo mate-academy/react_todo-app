@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useRef, useEffect } from 'react';
 
 interface HeaderProps {
@@ -6,6 +7,7 @@ interface HeaderProps {
   addTodo: (title: string) => void;
   toggleAllTodos: () => void;
   todosLength: number;
+  activeTodosCount: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,6 +16,7 @@ export const Header: React.FC<HeaderProps> = ({
   addTodo,
   toggleAllTodos,
   todosLength,
+  activeTodosCount,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,7 +38,9 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           data-cy="ToggleAllButton"
           type="button"
-          className="todoapp__toggle-all"
+          className={classNames('todoapp__toggle-all', {
+            active: todosLength > 0 && activeTodosCount === 0,
+          })}
           onClick={toggleAllTodos}
         ></button>
       )}

@@ -53,6 +53,7 @@ export const App: React.FC = () => {
           addTodo={addTodo}
           toggleAllTodos={toggleAllTodos}
           todosLength={todos.length}
+          activeTodosCount={activeTodosCount}
         />
         <TodoList
           todos={filteredTodos}
