@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import './errorNotification.scss';
+import './ErrorNotification.scss';
 
 import cn from 'classnames';
 
