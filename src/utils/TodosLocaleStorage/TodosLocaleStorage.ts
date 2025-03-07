@@ -6,6 +6,8 @@ export function getTodos(): Todo[] {
   const data = localStorage.getItem(key);
 
   if (data === null) {
+    localStorage.setItem(key, '[]');
+
     return [];
   }
 

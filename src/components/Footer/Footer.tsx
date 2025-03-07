@@ -52,7 +52,7 @@ export const Footer = () => {
             className={classNames('filter__link', {
               selected: showTodosByStatus === param,
             })}
-            data-cy="FilterLinkAll"
+            data-cy={'FilterLink' + param}
             onClick={() => changeFilterParam(param)}
           >
             {param}

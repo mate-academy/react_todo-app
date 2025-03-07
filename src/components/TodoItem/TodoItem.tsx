@@ -77,7 +77,7 @@ export const TodoItem: React.FC<Props> = ({
       {activeTodo.id === id ? (
         <form onKeyUp={keyUpOnForm} onSubmit={e => e.preventDefault()}>
           <input
-            data-cy="NewTodoField"
+            data-cy="TodoTitleField"
             type="text"
             className="todoapp__change-title"
             placeholder="Empty todo will be deleted"
