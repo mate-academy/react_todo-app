@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import classNames from 'classnames';
+//import classNames from 'classnames';
 import { useTodoContext } from '../TodoContext';
 import { Todo } from '../types/Todo';
 
 export const TodoItem: React.FC<{ todo: Todo; loading?: boolean }> = ({
   todo,
-  loading,
+  //loading,
 }) => {
   const {
     handleDeleteTodo,
     handleStatusTodo,
     handleUpdateTodo,
     setError,
-    isToggleAll,
+    //isToggleAll,
     processingIds,
   } = useTodoContext();
 
@@ -145,7 +145,7 @@ export const TodoItem: React.FC<{ todo: Todo; loading?: boolean }> = ({
           </button>
         )}
 
-        <div
+        {/*<div
           data-cy="TodoLoader"
           className={classNames('modal overlay', {
             'is-active': loading || isToggleAll || isProcessing,
@@ -153,7 +153,7 @@ export const TodoItem: React.FC<{ todo: Todo; loading?: boolean }> = ({
         >
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
-        </div>
+        </div>*/}
       </div>
     </div>
   );

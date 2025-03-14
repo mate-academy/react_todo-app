@@ -36,6 +36,8 @@ interface TodoContextType {
   setError: (error: string | null) => void;
   inputRef: React.RefObject<HTMLInputElement>;
   todoLeft: number;
+  filteredTodos: Todo[];
+  noTodo: boolean;
 }
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -231,6 +233,21 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const filteredTodos = todos.filter(todo => {
+    switch (filter) {
+      case Filter.Active:
+        return !todo.completed;
+      case Filter.Completed:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+
+  const todoLeft = todos.filter(todo => !todo.completed).length;
+
+  const noTodo = todos.length === 0;
+
   useEffect(() => {
     if (USER_ID) {
       getTodos()
@@ -246,6 +263,36 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
         });
     }
   }, []);
+
+  useEffect(() => {
+    const savedTodos = localStorage.getItem('todos');
+
+    if (savedTodos) {
+      setTodos(JSON.parse(savedTodos));
+    } else {
+      if (USER_ID) {
+        getTodos()
+          .then(data => {
+            setTodos(data);
+            setLoading(false);
+          })
+          .catch(() => {
+            setError('Unable to load todos');
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (todos.length === 0) {
+      localStorage.removeItem('todos');
+    } else {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, [todos]);
 
   const value = {
     todos,
@@ -267,7 +314,9 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     handleUpdateTodo,
     setError,
     inputRef,
-    todoLeft: todos.filter(todo => !todo.completed).length,
+    todoLeft,
+    filteredTodos,
+    noTodo,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;

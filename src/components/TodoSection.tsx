@@ -3,11 +3,11 @@ import { TodoItem } from './TodoItem';
 import { useTodoContext } from '../TodoContext';
 
 export const TodoSection: React.FC = () => {
-  const { todos, tempTodo } = useTodoContext();
+  const { tempTodo, filteredTodos } = useTodoContext();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
       {tempTodo && <TodoItem todo={tempTodo} key={tempTodo.id} loading />}
