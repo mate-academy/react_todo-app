@@ -17,3 +17,4 @@ export type TodosContextType = {
   updateTodoTitle: (id: number, newTitle: string) => void;
   toggleAllTodos: () => void;
 };
+//new
