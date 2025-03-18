@@ -77,20 +77,21 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
+  // Виносимо всі значення в окрему змінну перед передачею в Context
+  const contextValue = {
+    todos,
+    filter,
+    setFilter,
+    addTodo,
+    toggleTodo,
+    removeTodo,
+    clearCompleted,
+    updateTodoTitle,
+    toggleAllTodos,
+  };
+
   return (
-    <TodosContext.Provider
-      value={{
-        todos,
-        filter,
-        setFilter,
-        addTodo,
-        toggleTodo,
-        removeTodo,
-        clearCompleted,
-        updateTodoTitle,
-        toggleAllTodos,
-      }}
-    >
+    <TodosContext.Provider value={contextValue}>
       {children}
     </TodosContext.Provider>
   );
@@ -105,4 +106,3 @@ export const useTodos = () => {
 
   return context;
 };
-//new

@@ -18,31 +18,35 @@ export const Footer: React.FC<FooterProps> = ({
   clearCompleted,
   activeTodosCount,
 }) => {
-  const filterLinks = [
-    { filter: TodoFilter.All, label: 'All' },
-    { filter: TodoFilter.Active, label: 'Active' },
-    { filter: TodoFilter.Completed, label: 'Completed' },
-  ];
-
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {activeTodosCount} items left
       </span>
       <nav className="filter" data-cy="Filter">
-        {filterLinks.map(({ filter: currentFilter, label }) => (
-          <a
-            key={currentFilter}
-            data-cy={`FilterLink${label}`}
-            href={`#${currentFilter === TodoFilter.All ? '' : currentFilter}`}
-            className={classNames('filter__link', {
-              selected: filter === currentFilter,
-            })}
-            onClick={() => setFilter(currentFilter)}
-          >
-            {label}
-          </a>
-        ))}
+        {Object.values(TodoFilter).map(currentFilter => {
+          // Призначаємо лейбли на основі значень фільтру
+          const label =
+            currentFilter === TodoFilter.All
+              ? 'All'
+              : currentFilter === TodoFilter.Active
+                ? 'Active'
+                : 'Completed';
+
+          return (
+            <a
+              key={currentFilter}
+              data-cy={`FilterLink${label}`}
+              href={`#${currentFilter === TodoFilter.All ? '' : currentFilter}`}
+              className={classNames('filter__link', {
+                selected: filter === currentFilter,
+              })}
+              onClick={() => setFilter(currentFilter)}
+            >
+              {label}
+            </a>
+          );
+        })}
       </nav>
       <button
         data-cy="ClearCompletedButton"
@@ -56,4 +60,3 @@ export const Footer: React.FC<FooterProps> = ({
     </footer>
   );
 };
-//new

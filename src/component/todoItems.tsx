@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import { Todo } from '../type/Todo';
 
 interface TodoItemProps {
-  todo: Todo;
+  todo: {
+    id: number;
+    title: string;
+    completed: boolean;
+  };
   editing: boolean;
   toggleTodo: (id: number) => void;
   removeTodo: (id: number) => void;
@@ -14,7 +17,7 @@ interface TodoItemProps {
 }
 
 export const TodoItem: React.FC<TodoItemProps> = ({
-  todo,
+  todo: { id, title, completed },
   editing,
   toggleTodo,
   removeTodo,
@@ -33,7 +36,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 
   const save = () => {
     if (fieldRef.current) {
-      updateTodoTitle(todo.id, fieldRef.current.value);
+      updateTodoTitle(id, fieldRef.current.value);
       cancelEditing();
     }
   };
@@ -48,17 +51,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   };
 
   return (
-    <div
-      data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
-    >
+    <div data-cy="Todo" className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           className="todo__status"
           type="checkbox"
-          checked={todo.completed}
-          onChange={() => toggleTodo(todo.id)}
+          checked={completed}
+          onChange={() => toggleTodo(id)}
         />
       </label>
 
@@ -75,7 +75,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             type="text"
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
-            defaultValue={todo.title}
+            defaultValue={title}
             onBlur={save}
             onKeyDown={handleKeyDown}
           />
@@ -85,15 +85,15 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={() => handleEditStart(todo.id)}
+            onDoubleClick={() => handleEditStart(id)}
           >
-            {todo.title}
+            {title}
           </span>
           <button
             data-cy="TodoDelete"
             type="button"
             className="todo__remove"
-            onClick={() => removeTodo(todo.id)}
+            onClick={() => removeTodo(id)}
           >
             ×
           </button>
@@ -102,4 +102,3 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     </div>
   );
 };
-//new

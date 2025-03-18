@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 interface HeaderProps {
   newTitle: string;
@@ -29,7 +30,9 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="todoapp__header">
       <button
         type="button"
-        className={`todoapp__toggle-all ${todosLength === activeTodosCount ? 'active' : ''}`}
+        className={classNames('todoapp__toggle-all', {
+          active: todosLength === activeTodosCount,
+        })}
         onClick={toggleAllTodos}
       />
       <form onSubmit={handleAddTodo}>
@@ -45,4 +48,3 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
-//new
