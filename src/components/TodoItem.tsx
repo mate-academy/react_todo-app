@@ -1,18 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-//import classNames from 'classnames';
+import classNames from 'classnames';
 import { useTodoContext } from '../TodoContext';
 import { Todo } from '../types/Todo';
 
 export const TodoItem: React.FC<{ todo: Todo; loading?: boolean }> = ({
   todo,
-  //loading,
 }) => {
   const {
     handleDeleteTodo,
     handleStatusTodo,
     handleUpdateTodo,
     setError,
-    //isToggleAll,
     processingIds,
   } = useTodoContext();
 
@@ -99,7 +97,7 @@ export const TodoItem: React.FC<{ todo: Todo; loading?: boolean }> = ({
       <div
         key={todo.id}
         data-cy="Todo"
-        className={`todo ${completed ? 'completed' : ''}`}
+        className={classNames('todo', { completed: completed })}
         onDoubleClick={handleDoubleClick}
       >
         <label className="todo__status-label" aria-label="status">
@@ -130,9 +128,7 @@ export const TodoItem: React.FC<{ todo: Todo; loading?: boolean }> = ({
             {title}
           </span>
         )}
-        {isEditing ? (
-          ''
-        ) : (
+        {!isEditing && (
           <button
             type="button"
             className="todo__remove"
@@ -144,16 +140,6 @@ export const TodoItem: React.FC<{ todo: Todo; loading?: boolean }> = ({
             {isProcessing ? '' : '×'}
           </button>
         )}
-
-        {/*<div
-          data-cy="TodoLoader"
-          className={classNames('modal overlay', {
-            'is-active': loading || isToggleAll || isProcessing,
-          })}
-        >
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>*/}
       </div>
     </div>
   );

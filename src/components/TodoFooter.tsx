@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import { useTodoContext } from '../TodoContext';
 
 export const TodoFooter: React.FC = () => {
-  // eslint-disable-next-line
-  const { todos, handleClearCompleted, filter, setFilter, todoLeft } = useTodoContext();
+  const { todos, handleClearCompleted, filter, setFilter, todoLeft } =
+    useTodoContext();
 
   const handleCompletedTodos = todos.some(todo => todo.completed);
   const filters = Object.values(Filter);
