@@ -23,6 +23,10 @@ export const App: React.FC = () => {
 
   // ref for edited input
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // ref for main title input
+  const titleRef = useRef<HTMLInputElement>(null);
+
   const number = originalTodoList.current.filter(
     task => !task.completed,
   ).length;
@@ -166,11 +170,44 @@ export const App: React.FC = () => {
   };
 
   const handleDoubleClick = (task: Todo) => {
-    // console.log(task.id, task.title);
     setEditedId(task.id);
     setEditedTitle(task.title);
+  };
 
-    // console.log(editedId);
+  const handleEditedSubmit = (task: Todo) => {
+    if (editedTitle.length) {
+      const updatedList = todoList.map(todo => {
+        if (todo.id === task.id) {
+          return {
+            ...todo,
+            title: editedTitle,
+          };
+        }
+
+        return todo;
+      });
+
+      setTodoList(updatedList);
+      originalTodoList.current = updatedList;
+      localStorage.setItem('todoList', JSON.stringify(updatedList));
+      // inputRef.current?.blur();
+      setEditedId(null);
+      setEditedTitle('');
+      
+      return;
+    }
+
+    const updatedList = [...todoList];
+    const index = todoList.findIndex(todo => todo.id === task.id);
+
+    updatedList.splice(index, 1);
+
+    setTodoList(updatedList);
+    originalTodoList.current = updatedList;
+    localStorage.setItem('todoList', JSON.stringify(updatedList));
+
+    setEditedId(null);
+    setEditedTitle('');
   };
 
   useEffect(() => {
@@ -187,6 +224,12 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (editedId !== null && inputRef.current) {
       inputRef.current.focus();
+    }
+  }, [editedId]);
+
+  useEffect(() => {
+    if (editedId === null && titleRef.current) {
+      titleRef.current.focus();
     }
   }, [editedId]);
 
@@ -214,6 +257,7 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               value={title}
               onChange={event => setTitle(event.target.value)}
+              ref={titleRef}
             />
           </form>
         </header>
@@ -244,7 +288,7 @@ export const App: React.FC = () => {
                 </label>
 
                 {editedId === task.id ? (
-                  <form>
+                  <form onSubmit={() => handleEditedSubmit(task)}>
                     <input
                       ref={inputRef}
                       data-cy="TodoTitleField"
@@ -253,46 +297,47 @@ export const App: React.FC = () => {
                       placeholder="Empty todo will be deleted"
                       value={editedTitle}
                       onChange={event => setEditedTitle(event.target.value)}
-                      onBlur={() => {
-                        if (editedTitle.length) {
-                          const updatedList = todoList.map(todo => {
-                            if (todo.id === task.id) {
-                              return {
-                                ...todo,
-                                title: editedTitle,
-                              };
-                            }
+                      // onBlur={() => {
+                      //   if (editedTitle.length) {
+                      //     const updatedList = todoList.map(todo => {
+                      //       if (todo.id === task.id) {
+                      //         return {
+                      //           ...todo,
+                      //           title: editedTitle,
+                      //         };
+                      //       }
 
-                            return todo;
-                          });
+                      //       return todo;
+                      //     });
 
-                          setTodoList(updatedList);
-                          originalTodoList.current = updatedList;
-                          localStorage.setItem(
-                            'todoList',
-                            JSON.stringify(updatedList),
-                          );
+                      //     setTodoList(updatedList);
+                      //     originalTodoList.current = updatedList;
+                      //     localStorage.setItem(
+                      //       'todoList',
+                      //       JSON.stringify(updatedList),
+                      //     );
 
-                          return;
-                        }
+                      //     return;
+                      //   }
 
-                        const updatedList = [...todoList];
-                        const index = todoList.findIndex(
-                          todo => todo.id === task.id,
-                        );
+                      //   const updatedList = [...todoList];
+                      //   const index = todoList.findIndex(
+                      //     todo => todo.id === task.id,
+                      //   );
 
-                        updatedList.splice(index, 1);
+                      //   updatedList.splice(index, 1);
 
-                        setTodoList(updatedList);
-                        originalTodoList.current = updatedList;
-                        localStorage.setItem(
-                          'todoList',
-                          JSON.stringify(updatedList),
-                        );
+                      //   setTodoList(updatedList);
+                      //   originalTodoList.current = updatedList;
+                      //   localStorage.setItem(
+                      //     'todoList',
+                      //     JSON.stringify(updatedList),
+                      //   );
 
-                        setEditedId(null);
-                        setEditedTitle('');
-                      }}
+                      //   setEditedId(null);
+                      //   setEditedTitle('');
+                      // }}
+                      onBlur={() => handleEditedSubmit(task)}
                     />
                   </form>
                 ) : (
