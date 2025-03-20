@@ -193,7 +193,7 @@ export const App: React.FC = () => {
       // inputRef.current?.blur();
       setEditedId(null);
       setEditedTitle('');
-      
+
       return;
     }
 
