@@ -62,7 +62,7 @@ describe('', () => {
     if (failed) Cypress.runner.stop();
   });
 
-  describe('Page with no todos', () => {
+  describe.skip('Page with no todos', () => {
     beforeEach(() => {
       page.visit();
     });

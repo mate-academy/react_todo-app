@@ -5,6 +5,8 @@ import Header from './components/Header';
 import TodoList from './components/TodoList';
 import Title from './components/Title';
 
+// localStorage.clear()
+
 export const App: React.FC = () => {
   return (
     <div className="todoapp">
