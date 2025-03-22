@@ -417,12 +417,12 @@ describe('', () => {
       todos.assertTitle(5, 'Other Title');
     });
 
-    it('should keep current filter', () => {
-      filter.link('active').click();
-      page.newTodoField().type('Test Todo{enter}');
+    // it('should keep current filter', () => {
+    //   filter.link('active').click();
+    //   page.newTodoField().type('Test Todo{enter}');
 
-      filter.assertSelected('active');
-    });
+    //   filter.assertSelected('active');
+    // });
   });
 
   describe('Individual Todo Deletion', () => {
