@@ -64,10 +64,6 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
     updatedTodolist.map(todoToggle);
   };
 
-  // const textField = () => {
-
-  // }
-
   const filteredTodos: Todo[] = useMemo(() => {
     const resultTodos = todos;
 

@@ -17,7 +17,9 @@ export const Header: React.FC = () => {
   const toggleActive = filteredTodos.every(todo => todo.completed);
   const hasCompletedTodo = filteredTodos.some(todo => !todo.completed);
 
-  const submitForm = () => {
+  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     if (!query) {
       return;
     }
@@ -49,7 +51,7 @@ export const Header: React.FC = () => {
       )}
 
       {/* Add a todo on form submit */}
-      <form onSubmit={submitForm}>
+      <form onSubmit={e => submitForm(e)}>
         <input
           ref={inputRef}
           data-cy="NewTodoField"
