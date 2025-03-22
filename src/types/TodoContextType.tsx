@@ -7,4 +7,8 @@ export interface TodosContextType {
   removeTodo: (todoId: number) => void;
   filter: string;
   setFilter: (filterType: string) => void;
+  inputRef: React.RefObject<HTMLInputElement>;
+  clearAllCompletedTodo: () => void;
+  todoToggle: (changesTodo: Todo) => void;
+  toggleAllButton: (hasCompletedTodo: boolean) => void;
 }

@@ -1,11 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoContext } from './SetTodosContext';
+import classNames from 'classnames';
 
-interface Props {
-  inputRef: React.RefObject<HTMLInputElement>;
-}
-export const Header: React.FC<Props> = ({ inputRef }) => {
+export const Header: React.FC = () => {
   const [query, setQuery] = useState('');
   const todoContext = useContext(TodoContext);
 
@@ -13,13 +11,22 @@ export const Header: React.FC<Props> = ({ inputRef }) => {
     return null;
   }
 
-  const { filteredTodos, setTodos } = todoContext;
+  const { filteredTodos, todos, setTodos, inputRef, toggleAllButton } =
+    todoContext;
+
+  const toggleActive = filteredTodos.every(todo => todo.completed);
+  const hasCompletedTodo = filteredTodos.some(todo => !todo.completed);
+
   const submitForm = () => {
+    if (!query) {
+      return;
+    }
+
     setTodos((prev: Todo[]) => [
       ...prev,
       {
         id: Date.now(),
-        title: query,
+        title: query.trim(),
         completed: false,
       },
     ]);
@@ -30,11 +37,14 @@ export const Header: React.FC<Props> = ({ inputRef }) => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      {filteredTodos.some(t => !t.completed) && (
+      {todos.length > 0 && (
         <button
           type="button"
-          className="todoapp__toggle-all active"
+          className={classNames('todoapp__toggle-all', {
+            active: toggleActive,
+          })}
           data-cy="ToggleAllButton"
+          onClick={() => toggleAllButton(hasCompletedTodo)}
         />
       )}
 

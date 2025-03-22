@@ -9,16 +9,15 @@ interface Props {
 }
 export const Footer: React.FC<Props> = ({ todos }) => {
   const notCompletedTodos = todos.filter(todo => !todo.completed);
+  const hasActiveTodo = todos.some(todo => todo.completed);
 
   const todoContext = useContext(TodoContext);
-
-  // useEffect(() => {}, [todoContext?.filter]);
 
   if (!todoContext) {
     return null;
   }
 
-  const { filter, setFilter } = todoContext;
+  const { filter, setFilter, clearAllCompletedTodo } = todoContext;
 
   const handleFilterChange = (filteredValue: string) => {
     setFilter(filteredValue);
@@ -45,39 +44,15 @@ export const Footer: React.FC<Props> = ({ todos }) => {
             {filteredValue}
           </a>
         ))}
-        {/* <a
-          href="#/"
-          className="filter__link selected"
-          data-cy="FilterLinkAll"
-          onClick={filterTodos()}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className="filter__link"
-          data-cy="FilterLinkActive"
-          onClick={filterTodos(TypeFilter.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className="filter__link"
-          data-cy="FilterLinkCompleted"
-          onClick={filterTodos(TypeFilter.Completed)}
-        >
-          Completed
-        </a> */}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
       <button
+        disabled={!hasActiveTodo}
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={clearAllCompletedTodo}
       >
         Clear completed
       </button>
