@@ -89,7 +89,6 @@ export const Header: React.FC = () => {
           onClick={handleToggle}
         />
       )}
-
       <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"

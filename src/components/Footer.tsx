@@ -18,10 +18,7 @@ export const Footer: React.FC = () => {
       <span className="todo-count" data-cy="TodosCounter">
         {counter} items left
       </span>
-
       <Filter />
-
-      {/* this button should be disabled if there are no completed todos */}
 
       <button
         type="button"

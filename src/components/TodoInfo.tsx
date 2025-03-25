@@ -157,8 +157,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           </button>
         </>
       )}
-
-      {/* <Loader isLoad={isLoad} /> */}
     </div>
   );
 };
