@@ -64,6 +64,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
     if (valueTitle === '') {
       handleDelete();
+      setIsFocusing(prev => !prev);
 
       return;
     }
@@ -83,6 +84,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
         return newList;
       });
+
+      setIsFocusing(prev => !prev);
     }
   };
 
@@ -103,6 +106,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           : todoItem,
       ),
     );
+    setIsFocusing(prev => !prev);
   };
 
   return (
