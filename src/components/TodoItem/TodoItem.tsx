@@ -95,7 +95,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (isEdit && isEsc) {
       handleEditSubmit();
     }
-  }, [isEdit, isEsc, handleEditSubmit]);
+  }, [isEdit, isEsc]);
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>
