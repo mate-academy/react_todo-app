@@ -74,7 +74,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     reset();
-  }, [editText, todo, id, setTodos, onDelete, reset]);
+  }, [editText, todo, id, setTodos, onDelete]);
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>
