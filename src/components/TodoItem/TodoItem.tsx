@@ -31,12 +31,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setIsEdit(false);
   };
 
-  const onDelete = (todoId: number) => {
-    setTodos(prevTodos =>
-      prevTodos.filter(currentTodo => currentTodo.id !== todoId),
-    );
-    inputFocus?.current?.focus();
-  };
+  const onDelete = useCallback(
+    (todoId: number) => {
+      setTodos(prevTodos =>
+        prevTodos.filter(currentTodo => currentTodo.id !== todoId),
+      );
+      inputFocus?.current?.focus();
+    },
+    [setTodos, inputFocus],
+  );
 
   const onToggle = (todoId: number) => {
     const newTodo = {
@@ -56,7 +59,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (editText.length) {
       if (editText !== title) {
         const newTodo = { ...todo, title: editText.trim() };
-  
+
         if (!isEsc) {
           setTodos(prevTodos =>
             prevTodos.map(currentTodo =>
@@ -69,7 +72,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           itemInput.current?.blur();
         }
       }
-  
+
       reset();
     } else {
       if (!isEsc) {
@@ -80,20 +83,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         setEditText(title);
       }
     }
-  
+
     inputFocus?.current?.focus();
-  
+
     if (isEsc) {
       setIsEsc(false);
     }
   }, [editText, isEsc, title, todo, id, setTodos, inputFocus, onDelete]);
-  
+
   useEffect(() => {
     if (isEdit && isEsc) {
       handleEditSubmit();
     }
   }, [isEdit, isEsc, handleEditSubmit]);
-  
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>
