@@ -16,12 +16,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const itemInput = useRef<HTMLInputElement>(null);
 
-  // const reset = () => {
-  //   setIsEdit(false);
-  //   itemInput.current?.blur();
-  //   inputFocus?.current?.focus();
-  // };
-
   const reset = useCallback(() => {
     setIsEdit(false);
     itemInput.current?.blur();
