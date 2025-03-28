@@ -95,7 +95,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (isEdit && isEsc) {
       handleEditSubmit();
     }
-  }, [isEdit, isEsc]);
+  }, [isEdit, isEsc, handleEditSubmit]);
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>
@@ -121,7 +121,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
                 placeholder="Empty todo will be deleted"
                 value={editText}
                 onChange={e => setEditText(e.target.value)}
-                onBlur={() => handleEditSubmit()}
+                onBlur={handleEditSubmit}
                 aria-label="todo title field"
               />
             </label>

@@ -53,7 +53,7 @@ export const Header: React.FC = () => {
             active: everyCompleted,
           })}
           data-cy="ToggleAllButton"
-          onClick={() => toggleAllTodos()}
+          onClick={toggleAllTodos}
         />
       )}
 
