@@ -10,7 +10,7 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { setTodos, inputFocus } = useTodoContext();
   const { completed, title, id } = todo;
-  
+
   const [isEdit, setIsEdit] = useState(false);
   const [editText, setEditText] = useState(title);
 
@@ -33,7 +33,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         }
       });
     }
-  }, [isEdit]);
+  }, [isEdit, title]);
 
   const onDelete = useCallback(
     (todoId: number) => {
@@ -56,26 +56,25 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         currentTodo.id === todoId ? newTodo : currentTodo,
       ),
     );
-  
+
     inputFocus?.current?.focus();
   };
 
   const handleEditSubmit = useCallback(() => {
     if (editText.length) {
-
       const newTodo = { ...todo, title: editText.trim() };
 
-        setTodos(prevTodos =>
-          prevTodos.map(currentTodo =>
-            currentTodo.id === id ? newTodo : currentTodo,
-          ),
-        );
+      setTodos(prevTodos =>
+        prevTodos.map(currentTodo =>
+          currentTodo.id === id ? newTodo : currentTodo,
+        ),
+      );
     } else {
       onDelete(id);
     }
 
     reset();
-  }, [editText, title, todo, id, setTodos, inputFocus, onDelete]);
+  }, [editText, title, todo, id, setTodos, inputFocus, onDelete, reset]);
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>

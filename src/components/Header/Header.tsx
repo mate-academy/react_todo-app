@@ -32,7 +32,6 @@ export const Header: React.FC = () => {
     inputFocus?.current?.focus();
   };
 
-
   const toggleAllTodos = () => {
     if (everyCompleted) {
       setTodos(prevTodos =>
