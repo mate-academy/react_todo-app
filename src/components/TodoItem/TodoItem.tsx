@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Todo } from '../../types';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTodoContext } from '../../TodoContext';
 
 type Props = {
@@ -52,14 +52,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     inputFocus?.current?.focus();
   };
 
-  const handleEditSubmit = () => {
+  const handleEditSubmit = useCallback(() => {
     if (editText.length) {
       if (editText !== title) {
-        const newTodo = {
-          ...todo,
-          title: editText.trim(),
-        };
-
+        const newTodo = { ...todo, title: editText.trim() };
+  
         if (!isEsc) {
           setTodos(prevTodos =>
             prevTodos.map(currentTodo =>
@@ -72,7 +69,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           itemInput.current?.blur();
         }
       }
-
+  
       reset();
     } else {
       if (!isEsc) {
@@ -83,19 +80,20 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         setEditText(title);
       }
     }
-
+  
     inputFocus?.current?.focus();
-
+  
     if (isEsc) {
       setIsEsc(false);
     }
-  };
-
+  }, [editText, isEsc, title, todo, id, setTodos, inputFocus, onDelete]);
+  
   useEffect(() => {
     if (isEdit && isEsc) {
       handleEditSubmit();
     }
   }, [isEdit, isEsc, handleEditSubmit]);
+  
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>
