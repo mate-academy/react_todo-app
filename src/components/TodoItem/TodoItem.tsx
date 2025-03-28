@@ -10,10 +10,17 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { setTodos, inputFocus } = useTodoContext();
   const { completed, title, id } = todo;
+  
   const [isEdit, setIsEdit] = useState(false);
   const [editText, setEditText] = useState(title);
-  const [isEsc, setIsEsc] = useState(false);
+
   const itemInput = useRef<HTMLInputElement>(null);
+
+  const reset = () => {
+    setIsEdit(false);
+    itemInput.current?.blur();
+    inputFocus?.current?.focus();
+  };
 
   useEffect(() => {
     if (isEdit) {
@@ -21,15 +28,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       window.addEventListener('keyup', (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
-          setIsEsc(true);
+          setIsEdit(false);
+          setEditText(title);
         }
       });
     }
   }, [isEdit]);
-
-  const reset = () => {
-    setIsEdit(false);
-  };
 
   const onDelete = useCallback(
     (todoId: number) => {
@@ -52,50 +56,26 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         currentTodo.id === todoId ? newTodo : currentTodo,
       ),
     );
+  
     inputFocus?.current?.focus();
   };
 
   const handleEditSubmit = useCallback(() => {
     if (editText.length) {
-      if (editText !== title) {
-        const newTodo = { ...todo, title: editText.trim() };
 
-        if (!isEsc) {
-          setTodos(prevTodos =>
-            prevTodos.map(currentTodo =>
-              currentTodo.id === id ? newTodo : currentTodo,
-            ),
-          );
-          itemInput.current?.blur();
-        } else {
-          setEditText(title);
-          itemInput.current?.blur();
-        }
-      }
+      const newTodo = { ...todo, title: editText.trim() };
 
-      reset();
+        setTodos(prevTodos =>
+          prevTodos.map(currentTodo =>
+            currentTodo.id === id ? newTodo : currentTodo,
+          ),
+        );
     } else {
-      if (!isEsc) {
-        onDelete(id);
-      } else {
-        itemInput.current?.blur();
-        setIsEdit(false);
-        setEditText(title);
-      }
+      onDelete(id);
     }
 
-    inputFocus?.current?.focus();
-
-    if (isEsc) {
-      setIsEsc(false);
-    }
-  }, [editText, isEsc, title, todo, id, setTodos, inputFocus, onDelete]);
-
-  useEffect(() => {
-    if (isEdit && isEsc) {
-      handleEditSubmit();
-    }
-  }, [isEdit, isEsc, handleEditSubmit]);
+    reset();
+  }, [editText, title, todo, id, setTodos, inputFocus, onDelete]);
 
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })}>

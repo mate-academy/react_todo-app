@@ -15,7 +15,9 @@ export const Header: React.FC = () => {
     setTitle('');
   };
 
-  const addTodo = () => {
+  const addTodo = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (title.length) {
       const newTodo = {
         id: +new Date(),
@@ -29,6 +31,7 @@ export const Header: React.FC = () => {
 
     inputFocus?.current?.focus();
   };
+
 
   const toggleAllTodos = () => {
     if (everyCompleted) {
@@ -57,7 +60,7 @@ export const Header: React.FC = () => {
         />
       )}
 
-      <form onSubmit={addTodo}>
+      <form onSubmit={e => addTodo(e)}>
         <input
           ref={inputFocus}
           data-cy="NewTodoField"
