@@ -3,7 +3,8 @@ import { TodoType } from '../types/TodoType';
 
 export const TodoContext = createContext({
   todos: [] as TodoType[],
-  setTodos: (todos: TodoType[]) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setTodos: (_todos: TodoType[]) => {},
 });
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {

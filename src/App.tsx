@@ -3,7 +3,6 @@ import React from 'react';
 
 export const App: React.FC = () => {
   return (
-
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
@@ -26,8 +25,6 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
-
-
 
         {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer" data-cy="Footer">
@@ -72,6 +69,6 @@ export const App: React.FC = () => {
           </button>
         </footer>
       </div>
-      </div>
+    </div>
   );
 };
