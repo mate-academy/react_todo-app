@@ -1,51 +1,65 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { useContext } from 'react';
 import { TodoType } from '../types/TodoType';
+import classNames from 'classnames';
+import { TodoContext } from '../context/TodoProvider';
 
 type Props = {
   todo: TodoType;
 };
 
-export const Todo: React.FC<Props> = ({ todo }) => (
-  <div data-cy="Todo" className="todo completed">
-    <label className="todo__status-label">
-      <input
-        data-cy="TodoStatus"
-        type="checkbox"
-        className="todo__status"
-        checked
-      />
-    </label>
+// add here loading for few Todos
 
-    <span data-cy="TodoTitle" className="todo__title">
-      {todo.title}
-    </span>
+export const Todo: React.FC<Props> = ({ todo }) => {
+  const { setTodos } = useContext(TodoContext);
 
-    {/* Remove button appears only on hover */}
-    <button type="button" className="todo__remove" data-cy="TodoDelete">
-      ×
-    </button>
-  </div>
-);
+  const handleDelete = (id: number) => {
+    setTodos(prev => prev.filter(e => e.id !== id));
+  };
 
-// {/* This todo is an active todo */}
-// <div data-cy="Todo" className="todo">
-//   <label className="todo__status-label">
-//     <input
-//       data-cy="TodoStatus"
-//       type="checkbox"
-//       className="todo__status"
-//     />
-//   </label>
+  const handleTogle = (id: number) => {
+    setTodos(prev =>
+      prev.map(e => {
+        if (e.id === id) {
+          return { ...e, completed: !e.completed };
+        } else {
+          return e;
+        }
+      }),
+    );
+  };
 
-//   <span data-cy="TodoTitle" className="todo__title">
-//     Not Completed Todo
-//   </span>
+  return (
+    <div
+      data-cy="Todo"
+      className={classNames('todo', { completed: todo.completed })}
+    >
+      <label className="todo__status-label">
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked={todo.completed}
+          onClick={() => handleTogle(todo.id)}
+        />
+      </label>
 
-//   <button type="button" className="todo__remove" data-cy="TodoDelete">
-//     ×
-//   </button>
-// </div>
+      <span data-cy="TodoTitle" className="todo__title">
+        {todo.title}
+      </span>
+
+      {/* Remove button appears only on hover */}
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={() => handleDelete(todo.id)}
+      >
+        ×
+      </button>
+    </div>
+  );
+};
 
 // {/* This todo is being edited */}
 // <div data-cy="Todo" className="todo">
