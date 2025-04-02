@@ -12,7 +12,6 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(CompleteStatus.ALL);
-  const [loadingIds, setLoadingIds] = useState<number[]>([]);
 
   const getTodosHandler = useCallback(() => {
     todosStorage.get().then(setTodos);
@@ -35,18 +34,14 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    todosStorage
-      .post(newTodo)
-      .then(() => {
-        setTodos(prevTodos => [...prevTodos, newTodo]);
-        setQuery('');
-      });
+    todosStorage.post(newTodo).then(() => {
+      setTodos(prevTodos => [...prevTodos, newTodo]);
+      setQuery('');
+    });
   }, [query]);
 
   const updateTodoHandler = useCallback(
     (updateTodos: Todo[]): Promise<(Todo | void)[]> => {
-      setLoadingIds(updateTodos.map(todo => todo.id));
-
       const promisingTodos = updateTodos.map(updateTodo => {
         return todosStorage
           .patch(updateTodo)
@@ -63,11 +58,6 @@ export const App: React.FC = () => {
             inputRef.current?.focus();
 
             return savedTodo;
-          })
-          .finally(() => {
-            setLoadingIds(prevTodosId =>
-              prevTodosId.filter(todoid => todoid !== updateTodo.id),
-            );
           });
       });
 
@@ -77,17 +67,11 @@ export const App: React.FC = () => {
   );
 
   const deleteTodo = (todoId: number) => {
-    setLoadingIds(prevTodoId => [...prevTodoId, todoId]);
     todosStorage
       .delete(todoId)
-      .then(() =>
-        setTodos(prevtodos => prevtodos.filter(todo => todo.id !== todoId)),
-      )
-      .finally(() => {
+      .then(() => {
+        setTodos(prevtodos => prevtodos.filter(todo => todo.id !== todoId))
         inputRef.current?.focus();
-        setLoadingIds(prevTodosId =>
-          prevTodosId.filter(prevTodoId => prevTodoId !== todoId),
-        );
       });
   };
 
@@ -126,7 +110,6 @@ export const App: React.FC = () => {
           todos={filteredTodos}
           onDelete={deleteTodo}
           onUpdate={updateTodoHandler}
-          loadingIds={loadingIds}
         />
 
         {todos.length > 0 && (

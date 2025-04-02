@@ -39,12 +39,7 @@ export const Header = forwardRef<HTMLInputElement, Props>((props, ref) => {
         />
       )}
 
-      <Form
-        query={query}
-        onInput={onInput}
-        onAdd={onAdd}
-        ref={ref}
-      />
+      <Form query={query} onInput={onInput} onAdd={onAdd} ref={ref} />
     </header>
   );
 });

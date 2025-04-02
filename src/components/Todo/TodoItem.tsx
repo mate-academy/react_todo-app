@@ -7,14 +7,12 @@ import cn from 'classnames';
 type Props = {
   todo: Todo;
   onDelete?: (v: number) => void;
-  isLoading: boolean;
   onUpdate?: (v: Todo[]) => Promise<(Todo | void)[]>;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   onDelete,
-  isLoading,
   onUpdate,
 }) => {
   const [isFormActive, setIsFormActive] = useState(false);
@@ -120,15 +118,13 @@ export const TodoItem: React.FC<Props> = ({
           </form>
         )}
 
-        <div
+        {/* <div
           data-cy="TodoLoader"
-          className={cn('modal overlay', {
-            'is-active': isLoading,
-          })}
+          className={cn('modal overlay', 'is-active')}
         >
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
-        </div>
+        </div> */}
       </div>
     </>
   );
