@@ -4,7 +4,6 @@ import { TodoItem } from '../Todo/TodoItem';
 type Props = {
   todos: Todo[];
   onDelete: (v: number) => void;
-  tempTodo: Todo | null;
   onUpdate: (v: Todo[]) => Promise<(Todo | void)[]>;
   loadingIds: number[];
 };
@@ -12,7 +11,6 @@ type Props = {
 export const TodoList: React.FC<Props> = ({
   todos,
   onDelete,
-  tempTodo,
   onUpdate,
   loadingIds,
 }) => {
@@ -27,7 +25,6 @@ export const TodoList: React.FC<Props> = ({
           onUpdate={onUpdate}
         />
       ))}
-      {tempTodo && <TodoItem todo={tempTodo} isLoading />}
     </section>
   );
 };

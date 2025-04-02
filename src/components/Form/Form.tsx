@@ -4,17 +4,16 @@ type Props = {
   query: string;
   onInput: (v: string) => void;
   onAdd: () => void;
-  isLoading: boolean;
 };
 
 export const Form = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { query, onInput, onAdd, isLoading } = props;
+  const { query, onInput, onAdd } = props;
 
   useEffect(() => {
-    if (!isLoading && typeof ref !== 'function') {
+    if (typeof ref !== 'function') {
       ref?.current?.focus();
     }
-  }, [isLoading, ref]);
+  }, [ref]);
 
   return (
     <form
@@ -32,7 +31,6 @@ export const Form = forwardRef<HTMLInputElement, Props>((props, ref) => {
         onChange={event => onInput(event.target.value)}
         ref={ref}
         autoFocus
-        disabled={isLoading}
       />
     </form>
   );

@@ -7,13 +7,12 @@ type Props = {
   query: string;
   onInput: (v: string) => void;
   onAdd: () => void;
-  isLoading: boolean;
   todos: Todo[];
   onUpdate: (todos: Todo[]) => void;
 };
 
 export const Header = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { query, onInput, onAdd, isLoading, todos, onUpdate } = props;
+  const { query, onInput, onAdd, todos, onUpdate } = props;
 
   const isCompletedAll = todos.every(todo => todo.completed);
   const complitedTodos = todos.filter(todo => todo.completed);
@@ -45,7 +44,6 @@ export const Header = forwardRef<HTMLInputElement, Props>((props, ref) => {
         onInput={onInput}
         onAdd={onAdd}
         ref={ref}
-        isLoading={isLoading}
       />
     </header>
   );

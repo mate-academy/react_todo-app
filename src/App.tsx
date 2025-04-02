@@ -12,7 +12,6 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(CompleteStatus.ALL);
-  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
 
   const getTodosHandler = useCallback(() => {
@@ -36,16 +35,11 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    setTempTodo({ ...newTodo });
-
     todosStorage
       .post(newTodo)
       .then(() => {
         setTodos(prevTodos => [...prevTodos, newTodo]);
         setQuery('');
-      })
-      .finally(() => {
-        setTempTodo(null);
       });
   }, [query]);
 
@@ -54,7 +48,6 @@ export const App: React.FC = () => {
       setLoadingIds(updateTodos.map(todo => todo.id));
 
       const promisingTodos = updateTodos.map(updateTodo => {
-
         return todosStorage
           .patch(updateTodo)
           .then(savedTodo => {
@@ -125,7 +118,6 @@ export const App: React.FC = () => {
           onInput={setQuery}
           onAdd={addTodoHandler}
           ref={inputRef}
-          isLoading={tempTodo !== null}
           todos={todos}
           onUpdate={updateTodoHandler}
         />
@@ -133,7 +125,6 @@ export const App: React.FC = () => {
         <TodoList
           todos={filteredTodos}
           onDelete={deleteTodo}
-          tempTodo={tempTodo}
           onUpdate={updateTodoHandler}
           loadingIds={loadingIds}
         />
