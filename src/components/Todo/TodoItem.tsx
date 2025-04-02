@@ -6,15 +6,11 @@ import cn from 'classnames';
 
 type Props = {
   todo: Todo;
-  onDelete?: (v: number) => void;
-  onUpdate?: (v: Todo[]) => Promise<(Todo | void)[]>;
+  onDelete: (v: number) => void;
+  onUpdate: (v: Todo[]) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  onDelete,
-  onUpdate,
-}) => {
+export const TodoItem: React.FC<Props> = ({ todo, onDelete, onUpdate }) => {
   const [isFormActive, setIsFormActive] = useState(false);
   const [updateTitle, setUpdateTitle] = useState(todo.title);
 
@@ -30,20 +26,14 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (!trimTitle) {
-      onDelete?.(todo.id);
+      onDelete(todo.id);
 
       return;
     }
 
-    onUpdate?.([{ ...todo, title: trimTitle }]).then(resolvedTodos => {
-      if (resolvedTodos.some(resTodo => resTodo?.id === todo.id)) {
-        setIsFormActive(false);
-
-        return;
-      }
-
-      editInputRef.current?.focus();
-    });
+    onUpdate([{ ...todo, title: trimTitle }]);
+    setIsFormActive(false);
+    editInputRef.current?.focus();
   }, [todo, updateTitle, onUpdate, onDelete]);
 
   useEffect(() => {
@@ -117,14 +107,6 @@ export const TodoItem: React.FC<Props> = ({
             />
           </form>
         )}
-
-        {/* <div
-          data-cy="TodoLoader"
-          className={cn('modal overlay', 'is-active')}
-        >
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div> */}
       </div>
     </>
   );

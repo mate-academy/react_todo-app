@@ -41,38 +41,34 @@ export const App: React.FC = () => {
   }, [query]);
 
   const updateTodoHandler = useCallback(
-    (updateTodos: Todo[]): Promise<(Todo | void)[]> => {
-      const promisingTodos = updateTodos.map(updateTodo => {
-        return todosStorage
-          .patch(updateTodo)
-          .then(savedTodo => {
-            setTodos(prevtodos =>
-              prevtodos.map(prevTodo => {
-                if (prevTodo.id === updateTodo.id) {
-                  return updateTodo;
-                }
+    (updateTodos: Todo[]) => {
 
-                return prevTodo;
-              }),
-            );
-            inputRef.current?.focus();
+      updateTodos.map(updateTodo => {
 
-            return savedTodo;
-          });
+        return todosStorage.patch(updateTodo).then(() => {
+
+          setTodos(prevtodos =>
+            prevtodos.map(prevTodo => {
+              if (prevTodo.id === updateTodo.id) {
+                return updateTodo;
+              }
+
+              return prevTodo;
+            }),
+          );
+
+          inputRef.current?.focus();
+        });
       });
-
-      return Promise.all(promisingTodos);
     },
     [todos, inputRef],
   );
 
   const deleteTodo = (todoId: number) => {
-    todosStorage
-      .delete(todoId)
-      .then(() => {
-        setTodos(prevtodos => prevtodos.filter(todo => todo.id !== todoId))
-        inputRef.current?.focus();
-      });
+    todosStorage.delete(todoId).then(() => {
+      setTodos(prevtodos => prevtodos.filter(todo => todo.id !== todoId));
+      inputRef.current?.focus();
+    });
   };
 
   const filteredTodos = todos.filter(todo => {
