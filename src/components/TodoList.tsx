@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { TodoItem } from './TodoItem';
 import { TodoContext } from '../Context/TodoContext';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 interface Props {}
 
@@ -9,9 +11,15 @@ export const TodoList: React.FC<Props> = () => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => {
-        return <TodoItem todo={todo} key={todo.id} />;
-      })}
+      <TransitionGroup>
+        {filteredTodos.map(todo => {
+          return (
+            <CSSTransition key={todo.id} timeout={500} classNames="item">
+              <TodoItem todo={todo} />
+            </CSSTransition>
+          );
+        })}
+      </TransitionGroup>
     </section>
   );
 };
