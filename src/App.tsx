@@ -1,28 +1,22 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import * as todosService from './api/todos';
+import { todosStorage } from './storage/todos.storage';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { Todo } from './types/Todo';
-import { Error } from './components/Error/Error';
-import { ErrorEnum } from './types/ErrorEnum';
 import { CompleteStatus } from './types/CompleteStatus.enum';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<ErrorEnum | null>(null);
   const [filter, setFilter] = useState(CompleteStatus.ALL);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
 
   const getTodosHandler = useCallback(() => {
-    todosService
-      .getTodos()
-      .then(setTodos)
-      .catch(() => setErrorMessage(ErrorEnum.LOAD));
+    todosStorage.get().then(setTodos);
   }, []);
 
   useEffect(() => {
@@ -33,26 +27,23 @@ export const App: React.FC = () => {
 
   const addTodoHandler = useCallback(() => {
     if (query.trim() === '') {
-      setErrorMessage(ErrorEnum.TITLE);
-
       return;
     }
 
     const newTodo = {
-      userId: todosService.USER_ID,
+      id: +new Date(),
       title: query.trim(),
       completed: false,
     };
 
-    setTempTodo({ id: 0, ...newTodo });
+    setTempTodo({ ...newTodo });
 
-    todosService
-      .addTodo(newTodo)
-      .then(todo => {
-        setTodos(prevTodos => [...prevTodos, todo]);
+    todosStorage
+      .post(newTodo)
+      .then(() => {
+        setTodos(prevTodos => [...prevTodos, newTodo]);
         setQuery('');
       })
-      .catch(() => setErrorMessage(ErrorEnum.ADD))
       .finally(() => {
         setTempTodo(null);
       });
@@ -63,10 +54,9 @@ export const App: React.FC = () => {
       setLoadingIds(updateTodos.map(todo => todo.id));
 
       const promisingTodos = updateTodos.map(updateTodo => {
-        const oldTodo = todos.find(todo => todo.id === updateTodo.id);
 
-        return todosService
-          .updateTodo(updateTodo)
+        return todosStorage
+          .patch(updateTodo)
           .then(savedTodo => {
             setTodos(prevtodos =>
               prevtodos.map(prevTodo => {
@@ -80,18 +70,6 @@ export const App: React.FC = () => {
             inputRef.current?.focus();
 
             return savedTodo;
-          })
-          .catch(() => {
-            setTodos(prevtodos =>
-              prevtodos.map(todo => {
-                if (todo.id === oldTodo?.id) {
-                  return oldTodo;
-                }
-
-                return todo;
-              }),
-            );
-            setErrorMessage(ErrorEnum.UPDATE);
           })
           .finally(() => {
             setLoadingIds(prevTodosId =>
@@ -107,15 +85,11 @@ export const App: React.FC = () => {
 
   const deleteTodo = (todoId: number) => {
     setLoadingIds(prevTodoId => [...prevTodoId, todoId]);
-    todosService
-      .deleteTodo(todoId)
+    todosStorage
+      .delete(todoId)
       .then(() =>
         setTodos(prevtodos => prevtodos.filter(todo => todo.id !== todoId)),
       )
-      .catch(() => {
-        setTodos(prevTodos => prevTodos);
-        setErrorMessage(ErrorEnum.DELETE);
-      })
       .finally(() => {
         inputRef.current?.focus();
         setLoadingIds(prevTodosId =>
@@ -174,11 +148,6 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-
-      <Error
-        errorMessage={errorMessage}
-        onClose={() => setErrorMessage(null)}
-      />
     </div>
   );
 };
