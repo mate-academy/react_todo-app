@@ -39,6 +39,7 @@ export const AddTodoForm: React.FC<Props> = () => {
         className="todoapp__new-todo"
         placeholder="What needs to be done?"
         ref={focusInput}
+        autoFocus
       />
     </form>
   );
