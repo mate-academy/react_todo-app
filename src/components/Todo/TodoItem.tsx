@@ -6,7 +6,7 @@ import cn from 'classnames';
 
 type Props = {
   todo: Todo;
-  onDelete: (v: number) => void;
+  onDelete: (v: number[]) => void;
   onUpdate: (v: Todo[]) => void;
 };
 
@@ -26,7 +26,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete, onUpdate }) => {
     }
 
     if (!trimTitle) {
-      onDelete(todo.id);
+      onDelete([todo.id]);
 
       return;
     }
@@ -82,7 +82,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onDelete, onUpdate }) => {
               className="todo__remove"
               data-cy="TodoDelete"
               onClick={() => {
-                onDelete?.(todo.id);
+                onDelete?.([todo.id]);
               }}
             >
               ×

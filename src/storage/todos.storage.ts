@@ -2,7 +2,7 @@ import { Todo } from '../types/Todo';
 
 const KEY = 'todos';
 
-async function getFromLocalStorage(): Promise<Todo[]> {
+function getFromLocalStorage(): Todo[] {
   const strData = localStorage.getItem(KEY);
 
   if (typeof strData === 'string') {
@@ -12,15 +12,25 @@ async function getFromLocalStorage(): Promise<Todo[]> {
   return [];
 }
 
-async function postToLocalStorage(data: Todo) {
-  const currentData = await getFromLocalStorage();
+function initLocalStorage() {
+  const checkStorage = getFromLocalStorage();
+
+  if (!checkStorage.length) {
+    localStorage.setItem(KEY, JSON.stringify([]));
+  }
+
+  return;
+}
+
+function postToLocalStorage(data: Todo) {
+  const currentData = getFromLocalStorage();
 
   currentData.push(data);
   localStorage.setItem(KEY, JSON.stringify(currentData));
 }
 
-async function patchToLocalStorage(newData: Todo) {
-  const currentData = await getFromLocalStorage();
+function patchToLocalStorage(newData: Todo) {
+  const currentData = getFromLocalStorage();
   const updateData = currentData.map(data => {
     if (data.id !== newData.id) {
       return data;
@@ -32,14 +42,15 @@ async function patchToLocalStorage(newData: Todo) {
   localStorage.setItem(KEY, JSON.stringify(updateData));
 }
 
-async function deleteFromLocalStorage(dataId: number) {
-  const currentData = await getFromLocalStorage();
+function deleteFromLocalStorage(dataId: number) {
+  const currentData = getFromLocalStorage();
   const deleteData = currentData.filter(data => data.id !== dataId);
 
   localStorage.setItem(KEY, JSON.stringify(deleteData));
 }
 
 export const todosStorage = {
+  init: initLocalStorage,
   get: getFromLocalStorage,
   post: postToLocalStorage,
   patch: patchToLocalStorage,

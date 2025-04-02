@@ -7,7 +7,7 @@ type Props = {
   onFilter: (v: CompleteStatus) => void;
   activeTodosCount: number;
   complitedTodos: Todo[];
-  onDelete: (v: number) => void;
+  onDelete: (v: number[]) => void;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -64,9 +64,10 @@ export const Footer: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         disabled={!complitedTodos.length}
         onClick={() => {
-          complitedTodos.map(todo => {
-            onDelete(todo.id);
-          });
+          onDelete(complitedTodos.map(todo => todo.id));
+          // complitedTodos.map(todo => {
+          //   onDelete(todo.id);
+          // });
         }}
       >
         Clear completed

@@ -13,13 +13,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(CompleteStatus.ALL);
 
-  const getTodosHandler = useCallback(() => {
-    todosStorage.get().then(setTodos);
-  }, []);
-
   useEffect(() => {
-    getTodosHandler();
-  }, [getTodosHandler]);
+    todosStorage.init();
+    setTodos(todosStorage.get());
+  }, []);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -34,38 +31,35 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    todosStorage.post(newTodo).then(() => {
-      setTodos(prevTodos => [...prevTodos, newTodo]);
-      setQuery('');
-    });
+    todosStorage.post(newTodo);
+    setTodos(prevTodos => [...prevTodos, newTodo]);
+    setQuery('');
   }, [query]);
 
   const updateTodoHandler = useCallback(
     (updateTodos: Todo[]) => {
-
       updateTodos.map(updateTodo => {
+        todosStorage.patch(updateTodo);
 
-        return todosStorage.patch(updateTodo).then(() => {
+        setTodos(prevtodos =>
+          prevtodos.map(prevTodo => {
+            if (prevTodo.id === updateTodo.id) {
+              return updateTodo;
+            }
 
-          setTodos(prevtodos =>
-            prevtodos.map(prevTodo => {
-              if (prevTodo.id === updateTodo.id) {
-                return updateTodo;
-              }
+            return prevTodo;
+          }),
+        );
 
-              return prevTodo;
-            }),
-          );
-
-          inputRef.current?.focus();
-        });
+        inputRef.current?.focus();
       });
     },
-    [todos, inputRef],
+    [inputRef],
   );
 
-  const deleteTodo = (todoId: number) => {
-    todosStorage.delete(todoId).then(() => {
+  const deleteTodo = (todosId: number[]) => {
+    todosId.map(todoId => {
+      todosStorage.delete(todoId);
       setTodos(prevtodos => prevtodos.filter(todo => todo.id !== todoId));
       inputRef.current?.focus();
     });
