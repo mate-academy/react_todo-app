@@ -51,7 +51,6 @@ export const TodoProvider: FC<Props> = ({ children }) => {
     return filterTodo(todos, filterStatus);
   }, [todos, filterStatus]);
 
-  //handlers
   const handleAddTodo = (newTodo: Todo) => {
     setTodos([...todos, newTodo]);
   };
