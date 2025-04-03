@@ -1,26 +1,25 @@
 import cn from 'classnames';
-import { Todo } from '../../types/Todo';
 import { CompleteStatus } from '../../types/CompleteStatus.enum';
+import { useContext } from 'react';
+import { TodosContext } from '../../contexts/Todos.context';
 
 type Props = {
   filter: string;
   onFilter: (v: CompleteStatus) => void;
-  activeTodosCount: number;
-  complitedTodos: Todo[];
   onDelete: (v: number[]) => void;
 };
 
 export const Footer: React.FC<Props> = ({
   filter,
   onFilter,
-  activeTodosCount,
-  complitedTodos,
   onDelete,
 }) => {
+  const { completedTodos, activeTodos } = useContext(TodosContext);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {activeTodosCount} items left
+        {activeTodos.length} items left
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -62,12 +61,9 @@ export const Footer: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={!complitedTodos.length}
+        disabled={!completedTodos.length}
         onClick={() => {
-          onDelete(complitedTodos.map(todo => todo.id));
-          // complitedTodos.map(todo => {
-          //   onDelete(todo.id);
-          // });
+          onDelete(completedTodos.map(todo => todo.id));
         }}
       >
         Clear completed

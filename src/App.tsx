@@ -1,16 +1,17 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { todosStorage } from './storage/todos.storage';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { Todo } from './types/Todo';
 import { CompleteStatus } from './types/CompleteStatus.enum';
+import { TodosContext } from './contexts/Todos.context';
 
 export const App: React.FC = () => {
+  const { todos, setTodos } = useContext(TodosContext);
   const [query, setQuery] = useState('');
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(CompleteStatus.ALL);
 
   useEffect(() => {
@@ -79,9 +80,6 @@ export const App: React.FC = () => {
     }
   });
 
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const complitedTodos = todos.filter(todo => todo.completed);
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -92,7 +90,6 @@ export const App: React.FC = () => {
           onInput={setQuery}
           onAdd={addTodoHandler}
           ref={inputRef}
-          todos={todos}
           onUpdate={updateTodoHandler}
         />
 
@@ -106,8 +103,6 @@ export const App: React.FC = () => {
           <Footer
             filter={filter}
             onFilter={setFilter}
-            activeTodosCount={activeTodos.length}
-            complitedTodos={complitedTodos}
             onDelete={deleteTodo}
           />
         )}

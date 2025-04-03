@@ -1,22 +1,19 @@
-import { forwardRef } from 'react';
+import { forwardRef, useContext } from 'react';
 import { Form } from '../Form/Form';
 import { Todo } from '../../types/Todo';
+import { TodosContext } from '../../contexts/Todos.context';
 import cn from 'classnames';
 
 type Props = {
   query: string;
   onInput: (v: string) => void;
   onAdd: () => void;
-  todos: Todo[];
   onUpdate: (todos: Todo[]) => void;
 };
 
 export const Header = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { query, onInput, onAdd, todos, onUpdate } = props;
-
-  const isCompletedAll = todos.every(todo => todo.completed);
-  const complitedTodos = todos.filter(todo => todo.completed);
-  const activeTodos = todos.filter(todo => !todo.completed);
+  const { query, onInput, onAdd, onUpdate } = props;
+  const { todos, isCompletedAll, completedTodos, activeTodos } = useContext(TodosContext);
 
   const updatingHandler = () => {
     if (!isCompletedAll) {
@@ -25,7 +22,7 @@ export const Header = forwardRef<HTMLInputElement, Props>((props, ref) => {
       return;
     }
 
-    onUpdate(complitedTodos.map(todo => ({ ...todo, completed: false })));
+    onUpdate(completedTodos.map(todo => ({ ...todo, completed: false })));
   };
 
   return (
