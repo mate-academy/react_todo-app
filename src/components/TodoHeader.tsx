@@ -1,4 +1,10 @@
-import React, { FormEvent, useContext, useEffect, useRef } from 'react';
+import React, {
+  FormEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { DispatchContext, StateContext } from './Store';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
@@ -10,11 +16,14 @@ export const TodoHeader = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Novo estado para o contador de IDs
+  const [idCounter, setIdCounter] = useState<number>(0);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  });
+  }, []); // Dependência vazia para execução única após a montagem
 
   const handleSetNewTodoTitle = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -29,14 +38,16 @@ export const TodoHeader = () => {
       return;
     }
 
+    // Gerar um novo ID único
     const newTodo: Todo = {
-      id: +new Date(),
+      id: idCounter, // Usando o contador para o ID
       title: newTodoTitle.trim(),
       completed: false,
     };
 
     dispatch({ type: 'addTodo', payload: newTodo });
     dispatch({ type: 'setNewTodoTitle', payload: '' });
+    setIdCounter(prevCounter => prevCounter + 1); // Atualizar o contador de IDs
   };
 
   const validation = todos.every(todo => todo.completed === true);
