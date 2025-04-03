@@ -18,7 +18,7 @@ export const Header: React.FC = React.memo(() => {
       completed: false,
     };
 
-    setTodos(currentTodos => [...currentTodos, newTodo]);
+    setTodos([...todos, newTodo]);
     setQuery('');
     inputRef.current?.focus();
   };
@@ -29,11 +29,13 @@ export const Header: React.FC = React.memo(() => {
   };
 
   const handleChangeCompletedAllTodos = useCallback(() => {
-    const areAllCompleted = todos.every(todo => todo.completed);
+    const completed = !todos.every(todo => todo.completed);
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed,
+    }));
 
-    setTodos(currentTodos =>
-      currentTodos.map(todo => ({ ...todo, completed: !areAllCompleted })),
-    );
+    setTodos(updatedTodos);
   }, [todos, setTodos]);
 
   const checkAllActiveTodos = () => todos.every(todo => todo.completed);

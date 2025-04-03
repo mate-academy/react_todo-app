@@ -1,15 +1,18 @@
 import classNames from 'classnames';
-import React, { useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { TodoContext } from '../TodoContext/TodoContext';
 import { FilterStatus } from '../types/Todo';
 
 export const Footer: React.FC = React.memo(() => {
-  const {
-    todos,
-    filterStatus,
-    setFilterStatus,
-    handleDeleteAllCompletedTodos,
-  } = useContext(TodoContext);
+  const { todos, setTodos, inputRef, filterStatus, setFilterStatus } =
+    useContext(TodoContext);
+
+  const handleDeleteAllCompletedTodos = useCallback(() => {
+    const completedTodos = todos.filter(todo => !todo.completed);
+
+    setTodos(completedTodos);
+    inputRef.current?.focus();
+  }, [inputRef, setTodos, todos]);
 
   const countActiveTodo = todos.filter(todo => !todo.completed).length;
   const isCompletedEnabled = useMemo(

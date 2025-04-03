@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
-  const { handleDeleteTodo, setTodos, inputRef } = useContext(TodoContext);
+  const { todos, setTodos, inputRef } = useContext(TodoContext);
   const [newTitle, setNewTitle] = useState(todo.title);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
 
@@ -30,14 +30,24 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
   const handleUpdateTodo = useCallback(
     (updatedTodo: Todo) => {
-      setTodos(currentTodos =>
-        currentTodos.map(tod =>
-          tod.id === updatedTodo.id ? updatedTodo : tod,
-        ),
+      const todoToUpdate = todos.map(tod =>
+        tod.id === updatedTodo.id ? updatedTodo : tod,
       );
+
+      setTodos(todoToUpdate);
       setEditingTodoId(null);
     },
-    [setTodos],
+    [setTodos, todos],
+  );
+
+  const handleDeleteTodo = useCallback(
+    (todoId: number) => {
+      const updatedTodos = todos.filter(tod => tod.id !== todoId);
+
+      setTodos(updatedTodos);
+      inputRef.current?.focus();
+    },
+    [setTodos, todos, inputRef],
   );
 
   const handleDoubleClick = () => {
