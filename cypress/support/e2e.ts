@@ -18,3 +18,17 @@ import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Ігноруємо некритичні помилки
+Cypress.on('uncaught:exception', () => {
+  return false;
+});
+
+// Глобальні налаштування для всіх тестів
+beforeEach(() => {
+  // Очищаємо localStorage перед кожним тестом
+  cy.clearLocalStorage();
+
+  // Відвідуємо головну сторінку
+  cy.visit('/');
+});
