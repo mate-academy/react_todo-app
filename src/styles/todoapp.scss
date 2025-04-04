@@ -56,7 +56,7 @@
   }
 
   &__new-todo {
-    width: 100%;
+    width: 85%;
     padding: 16px 16px 16px 60px;
 
     font-size: 24px;
@@ -75,6 +75,10 @@
       font-style: italic;
       font-weight: 300;
       color: #e6e6e6;
+    }
+
+    &__edit {
+      width: 83%;
     }
   }
 
