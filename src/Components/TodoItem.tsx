@@ -1,13 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/Todo';
-import { TodoContext } from '../TodoContext/TodoContext';
+import { useTodoContext } from '../TodoContext/TodoContext';
 import classNames from 'classnames';
 
 type Props = {
@@ -15,7 +9,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
-  const { todos, setTodos, inputRef } = useContext(TodoContext);
+  const { todos, setTodos, inputRef } = useTodoContext();
   const [newTitle, setNewTitle] = useState(todo.title);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
 

@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import React, { useCallback, useContext, useState } from 'react';
-import { TodoContext } from '../TodoContext/TodoContext';
+import React, { useCallback, useState } from 'react';
+import { useTodoContext } from '../TodoContext/TodoContext';
 import { Todo } from '../types/Todo';
 
 export const Header: React.FC = React.memo(() => {
-  const { todos, setTodos, inputRef } = useContext(TodoContext);
+  const { todos, setTodos, inputRef } = useTodoContext();
   const [query, setQuery] = useState('');
 
   const handleAddTodo = () => {

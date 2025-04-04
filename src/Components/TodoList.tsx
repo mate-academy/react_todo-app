@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TodoItem } from './TodoItem';
-import { TodoContext } from '../TodoContext/TodoContext';
+import { useTodoContext } from '../TodoContext/TodoContext';
 
 export const TodoList: React.FC = React.memo(() => {
-  const { filteredTodos } = useContext(TodoContext);
+  const { filteredTodos } = useTodoContext();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => {
-        return <TodoItem key={todo.id} todo={todo} />;
-      })}
+      {filteredTodos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
     </section>
   );
 });

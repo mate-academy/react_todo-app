@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import React, { useCallback, useContext, useMemo } from 'react';
-import { TodoContext } from '../TodoContext/TodoContext';
+import React, { useCallback, useMemo } from 'react';
+import { useTodoContext } from '../TodoContext/TodoContext';
 import { FilterStatus } from '../types/Todo';
 
 export const Footer: React.FC = React.memo(() => {
   const { todos, setTodos, inputRef, filterStatus, setFilterStatus } =
-    useContext(TodoContext);
+    useTodoContext();
 
   const handleDeleteAllCompletedTodos = useCallback(() => {
     const completedTodos = todos.filter(todo => !todo.completed);

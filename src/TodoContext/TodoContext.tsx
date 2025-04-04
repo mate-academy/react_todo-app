@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FilterStatus, Todo } from '../types/Todo';
 import { useLocalStorage } from '../Hooks/useLocalStorage';
 
@@ -19,6 +19,8 @@ export const TodoContext = React.createContext<Props>({
   filteredTodos: [],
   inputRef: { current: null },
 });
+
+export const useTodoContext = () => useContext(TodoContext);
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
