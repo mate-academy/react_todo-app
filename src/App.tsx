@@ -102,8 +102,14 @@ export const TodoApp: React.FC = () => {
   const [filter, setFilter] = useState<string>('All');
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === 'Active') return !todo.completed;
-    if (filter === 'Completed') return todo.completed;
+    if (filter === 'Active') {
+      return !todo.completed;
+    }
+
+    if (filter === 'Completed') {
+      return todo.completed;
+    }
+
     return true;
   });
 

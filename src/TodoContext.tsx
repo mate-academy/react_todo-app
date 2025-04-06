@@ -26,6 +26,7 @@ const TodoContext = createContext<TodoContextProps>({
   updateTodo: () => {},
 });
 
+let uniqueIdCounter = 0;
 interface TodoProviderProps {
   children: React.ReactNode; // Add children as a valid prop
 }
@@ -44,7 +45,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
   const addTodo = (title: string) => {
     setTodos([
       ...todos,
-      { id: +new Date(), title: title.trim(), completed: false },
+      { id: uniqueIdCounter++, title: title.trim(), completed: false },
     ]);
   };
 
