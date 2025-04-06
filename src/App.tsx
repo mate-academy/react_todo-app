@@ -102,14 +102,8 @@ export const TodoApp: React.FC = () => {
   const [filter, setFilter] = useState<string>('All');
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === 'Active') {
-      return !todo.completed;
-    }
-
-    if (filter === 'Completed') {
-      return todo.completed;
-    }
-
+    if (filter === 'Active') return !todo.completed;
+    if (filter === 'Completed') return todo.completed;
     return true;
   });
 
@@ -127,26 +121,37 @@ export const TodoApp: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button
-            type="button"
-            className={`todoapp__toggle-all ${todos.length > 0 && todos.every(todo => todo.completed) ? 'active' : ''}`}
-            onClick={toggleAll}
-            data-cy="ToggleAllButton"
-            title="Toggle all todos"
-          >
-            Toggle All
-          </button>
+          {todos.length === 0 && (
+            <form onSubmit={handleAddTodo}>
+              <label htmlFor="newTodo" className="sr-only">
+                Add a new todo
+              </label>
+              <input
+                id="newTodo"
+                data-cy="NewTodoField"
+                type="text"
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+                value={newTodo}
+                onChange={e => setNewTodo(e.target.value)}
+              />
+            </form>
+          )}
 
-          <form onSubmit={handleAddTodo}>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={newTodo}
-              onChange={e => setNewTodo(e.target.value)}
-            />
-          </form>
+          {todos.length > 0 && (
+            <button
+              type="button"
+              className={`todoapp__toggle-all ${
+                todos.length > 0 && todos.every(todo => todo.completed)
+                  ? 'active'
+                  : ''
+              }`}
+              onClick={toggleAll}
+              data-cy="ToggleAllButton"
+            >
+              Toggle All
+            </button>
+          )}
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
