@@ -3,12 +3,12 @@ import { createRoot } from 'react-dom/client';
 import './styles/index.scss';
 
 import { App } from './App';
-import { GlobalStateProvider } from './utils/GlobalStateContext';
+import { TodoContextProvider } from './utils/TodoContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
 createRoot(container).render(
-  <GlobalStateProvider>
+  <TodoContextProvider>
     <App />
-  </GlobalStateProvider>,
+  </TodoContextProvider>,
 );

@@ -5,10 +5,10 @@ import React, { useContext } from 'react';
 import { TodoAppHeader } from './components/TodoAppHeader';
 import { TodoList } from './components/TodoList';
 import { TodoAppFooter } from './components/TodoAppFooter';
-import { StateContext } from './utils/GlobalStateContext';
+import { TodoContext } from './utils/TodoContext';
 
 export const App: React.FC = () => {
-  const { todos } = useContext(StateContext);
+  const { todos } = useContext(TodoContext);
 
   return (
     <div className="todoapp">

@@ -6,14 +6,14 @@ import React, {
   useState,
 } from 'react';
 import classNames from 'classnames';
-import { StateContext } from '../../utils/GlobalStateContext';
+import { TodoContext } from '../../utils/TodoContext';
 
 export const TodoAppHeader: React.FC = () => {
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { todos, hasAllCompleted, toggleAllTodo, addTodo } =
-    useContext(StateContext);
+    useContext(TodoContext);
 
   const focusOnInput = useCallback(() => inputRef.current?.focus(), []);
 

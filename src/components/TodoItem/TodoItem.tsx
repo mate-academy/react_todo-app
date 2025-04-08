@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
 
 import { Todo } from '../../types/Types';
-import { StateContext } from '../../utils/GlobalStateContext';
+import { TodoContext } from '../../utils/TodoContext';
 
 type Props = {
   todo: Todo;
@@ -14,7 +14,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   const [isEdited, setIsEdited] = useState(false);
   const [todoTitle, setTodoTitle] = useState(todo.title);
 
-  const { renameTodo, deleteTodo, toggleTodo } = useContext(StateContext);
+  const { renameTodo, deleteTodo, toggleTodo } = useContext(TodoContext);
 
   const startTitleChange = () => {
     setIsEdited(true);

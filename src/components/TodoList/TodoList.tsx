@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { StateContext } from '../../utils/GlobalStateContext';
+import { TodoContext } from '../../utils/TodoContext';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList: React.FC = () => {
-  const { visibleTodos } = useContext(StateContext);
+  const { visibleTodos } = useContext(TodoContext);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useLocalStorage<T>(
   key: string,
@@ -14,6 +14,8 @@ export function useLocalStorage<T>(
     try {
       return JSON.parse(data);
     } catch (error) {
+      localStorage.removeItem(key);
+
       return startValue;
     }
   });
@@ -22,6 +24,10 @@ export function useLocalStorage<T>(
     localStorage.setItem(key, JSON.stringify(newValue));
     setValue(newValue);
   };
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
 
   return [value, save];
 }

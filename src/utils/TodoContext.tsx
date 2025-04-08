@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState } from 'react';
 import { FilterBy, Todo } from '../types/Types';
 import { useLocalStorage } from './LocalStorage';
 
-export type State = {
+export type TodoContextType = {
   todos: Todo[];
   visibleTodos: Todo[];
   filterBy: FilterBy;
@@ -20,7 +20,7 @@ export type State = {
   setFilterBy: (filter: FilterBy) => void;
 };
 
-const initialState: State = {
+const initialState: TodoContextType = {
   todos: [],
   visibleTodos: [],
   filterBy: FilterBy.All,
@@ -49,15 +49,14 @@ function filterTodo(todos: Todo[], filterBy: FilterBy): Todo[] {
   }
 }
 
-export const StateContext = React.createContext(initialState);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const TodoContext = React.createContext(initialState);
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const state = useContext(StateContext);
+export const TodoContextProvider: React.FC<Props> = ({ children }) => {
+  const state = useContext(TodoContext);
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filterBy, setFilterBy] = useState(FilterBy.All);
 
@@ -139,6 +138,6 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <StateContext.Provider value={stateValue}>{children}</StateContext.Provider>
+    <TodoContext.Provider value={stateValue}>{children}</TodoContext.Provider>
   );
 };

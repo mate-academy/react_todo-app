@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { FilterBy } from '../../types/Types';
 import classNames from 'classnames';
-import { StateContext } from '../../utils/GlobalStateContext';
+import { TodoContext } from '../../utils/TodoContext';
 
 export const TodoAppFooter: React.FC = () => {
   const {
@@ -10,7 +10,7 @@ export const TodoAppFooter: React.FC = () => {
     activeTodosCount,
     setFilterBy,
     deleteCompletedTodos,
-  } = useContext(StateContext);
+  } = useContext(TodoContext);
 
   const filters: { name: string; value: FilterBy; link: string }[] = [
     { name: 'All', value: FilterBy.All, link: '#/' },
