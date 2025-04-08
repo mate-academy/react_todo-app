@@ -1,3 +1,7 @@
+@use './todoapp';
+@use './todo';
+@use './filter';
+
 iframe {
   display: none;
 }
@@ -9,17 +13,14 @@ body {
 }
 
 .notification {
-  transition-property: opacity, min-height;
-  transition-duration: 1s;
   min-height: 36px;
+  transition-duration: 1s;
+  transition-property: opacity, min-height;
 }
 
 .notification.hidden {
+  pointer-events: none;
   min-height: 0;
   opacity: 0;
-  pointer-events: none;
 }
 
-@import './todoapp';
-@import './todo-list';
-@import './filters';
