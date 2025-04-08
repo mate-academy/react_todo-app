@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { TodoList } from './components/TodoList';
@@ -14,9 +14,6 @@ export const App: React.FC = () => {
   const { todos, filter, getFilteredTodos } = useTodos();
   const filteredTodos = getFilteredTodos(todos, filter);
 
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify([]));
-  }, []);
   if (!USER_ID) {
     return <UserWarning />;
   }

@@ -8,6 +8,8 @@ export const useLocalStorage = <T>(
     const savedValue = localStorage.getItem(key);
 
     if (savedValue === null) {
+      localStorage.setItem(key, JSON.stringify(defaultValue));
+
       return defaultValue;
     }
 
@@ -15,6 +17,7 @@ export const useLocalStorage = <T>(
       return JSON.parse(savedValue);
     } catch (error) {
       localStorage.removeItem(key);
+      localStorage.setItem(key, JSON.stringify(defaultValue));
 
       return defaultValue;
     }
