@@ -1,27 +1,35 @@
+import { useContext } from 'react';
+import { TodoContex } from './Contex';
+import { Filter } from '../types/Filter';
+
 export const TodoFooter = () => {
+  const { todos, filter, setFilter, removeAllCompleted } =
+    useContext(TodoContex);
+  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const filterName = (word: string) =>
+    word.charAt(0).toUpperCase() + word.slice(1);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {`${activeTodos} items left`}
       </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
-          All
-        </a>
-
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className="filter__link"
-          data-cy="FilterLinkCompleted"
-        >
-          Completed
-        </a>
+        {Object.values(Filter).map(type => (
+          <a
+            key={type}
+            href={`#/${type === 'all' ? '' : type}`}
+            className={
+              filter === type ? 'filter__link selected' : 'filter__link'
+            }
+            data-cy={`FilterLink${filterName(type)}`}
+            onClick={() => setFilter(type)}
+          >
+            {filterName(type)}
+          </a>
+        ))}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
@@ -29,6 +37,8 @@ export const TodoFooter = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={todos.every(todo => !todo.completed)}
+        onClick={removeAllCompleted}
       >
         Clear completed
       </button>

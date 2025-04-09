@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import { TodoItems } from './TodoItems';
-export const TodoList = ({ todos, onDelete }) => {
+import { TodoContex } from './Contex';
+export const TodoList = () => {
+  const { getFilter } = useContext(TodoContex);
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
-      {todos.map(todo => {
-        return <TodoItems onDelete={onDelete} todo={todo} key={todo.id} />;
+      {getFilter().map(todo => {
+        return <TodoItems todo={todo} key={todo.id} />;
       })}
     </section>
   );

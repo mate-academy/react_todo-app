@@ -6,10 +6,8 @@ import { App } from './App';
 import { TodoProvider } from './component/Contex';
 const container = document.getElementById('root') as HTMLDivElement;
 
-
-
 createRoot(container).render(
   <TodoProvider>
     <App />
-  </TodoProvider>
+  </TodoProvider>,
 );
