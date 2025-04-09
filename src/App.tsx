@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodoHeader } from './component/TodoHeader';
 import { TodoList } from './component/TodoList';
 import { TodoFooter } from './component/TodoFooter';
 
 import { useLocalStorage } from './hooks/LocalStorage';
+import { TodoContex, TodoProvider} from './component/Contex';
 
 export const App: React.FC = () => {
-  const [isInput, setIsInput] = useState('');
+const {isInput,setIsInput}=useContext(TodoContex)
   const [todos, setTodos, removeTodo] = useLocalStorage('todos', []);
 
   const onDelete = (id: number) => {
@@ -31,8 +32,9 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
+        
         <TodoHeader
-          isInput={isInput}
+
           setIsInput={setIsInput}
           handleSubmit={handleSubmit}
         />

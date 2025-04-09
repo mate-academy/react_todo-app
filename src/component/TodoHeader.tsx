@@ -1,4 +1,8 @@
-export const TodoHeader = ({ isInput, setIsInput, handleSubmit }) => {
+import { useContext } from "react";
+import { TodoContex } from "./Contex";
+
+export const TodoHeader = ({  handleSubmit }) => {
+const {isInput, setIsInput}=useContext(TodoContex)
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
