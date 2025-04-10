@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { TodoContex } from './Contex';
 
 export const TodoItems = ({ todo: { id, title, completed } }) => {
@@ -8,6 +8,13 @@ export const TodoItems = ({ todo: { id, title, completed } }) => {
   const [newTitle, setNewTitle] = useState(title);
 
   const { onDelete, completedChecked, renameTodo } = useContext(TodoContex);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   const handleRename = () => {
     const trimmed = newTitle.trim();
@@ -22,10 +29,9 @@ export const TodoItems = ({ todo: { id, title, completed } }) => {
   };
 
   return (
-    <div data-cy="Todo" className={classNames('todo', { completed })}>
+    <div key={id} data-cy="Todo" className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
-          key={id}
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
@@ -54,6 +60,7 @@ export const TodoItems = ({ todo: { id, title, completed } }) => {
           }}
         >
           <input
+            ref={inputRef}
             data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
