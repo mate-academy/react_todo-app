@@ -8,7 +8,9 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({
+  todo: { id, title, completed },
+}) => {
   const dispatch = useContext(DispatchContext);
   const [showInput, setShowInput] = useState(false);
   const [query, setQuery] = useState('');
@@ -23,7 +25,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleDeleteTodo = () => {
     dispatch({
       type: 'delete',
-      payload: todo.id,
+      payload: id,
     });
   };
 
@@ -31,15 +33,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({
       type: 'update',
       payload: {
-        ...todo,
-        completed: !todo.completed,
+        id: id,
+        title: title,
+        completed: !completed,
       },
     });
   };
 
   const handleShowInput = () => {
     setShowInput(true);
-    setQuery(todo.title);
+    setQuery(title);
 
     setTimeout(() => {
       inputRef.current?.focus();
@@ -55,7 +58,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const handleChangeTodo = (e: FormEvent) => {
     e.preventDefault();
 
-    if (query.trim() === todo.title) {
+    if (query.trim() === title) {
       setShowInput(false);
 
       return;
@@ -64,7 +67,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (query.length === 0) {
       dispatch({
         type: 'delete',
-        payload: todo.id,
+        payload: id,
       });
 
       return;
@@ -75,8 +78,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     dispatch({
       type: 'update',
       payload: {
-        ...todo,
+        id: id,
         title: query.trim(),
+        completed: completed,
       },
     });
   };
@@ -84,14 +88,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', todo.completed ? 'completed' : '')}
+      className={classNames('todo', completed ? 'completed' : '')}
     >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
           onClick={handleChangeCompeted}
         />
       </label>
@@ -103,7 +107,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={handleShowInput}
           >
-            {todo.title}
+            {title}
           </span>
 
           <button

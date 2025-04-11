@@ -88,21 +88,3 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
     </DispatchContext.Provider>
   );
 };
-// export const Test: React.FC = () => {
-// const initialTodos = [
-//   { id: +new Date(), title: 'Title', completed: false },
-//   { id: +new Date() + 1, title: 'Title2', completed: false },
-// ];
-
-//   const [{ todos }, dispatch] = useReducer(reducer, { todos: initialTodos });
-
-//   localStorage.setItem('todos', JSON.stringify(todos));
-
-//   const handleAddTodo = () =>
-//     dispatch({
-//       type: 'add',
-//       payload: { id: +new Date(), title: 'Title', completed: false },
-//     });
-
-//   return <button onClick={handleAddTodo}>Add Todo</button>;
-// };
