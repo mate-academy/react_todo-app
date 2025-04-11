@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TodoItem } from './TodoItems';
+import { TodoItem } from './TodoItem';
 import { TodoContex } from './Contex';
 export const TodoList = () => {
   const { getFilter } = useContext(TodoContex);

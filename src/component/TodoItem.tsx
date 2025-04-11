@@ -70,24 +70,24 @@ export const TodoItem = ({ todo: { id, title, completed } }) => {
           />
         </form>
       ) : (
-        <span
-          data-cy="TodoTitle"
-          className="todo__title"
-          onDoubleClick={() => setIsEditing(true)}
-        >
-          {title}
-        </span>
-      )}
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={() => setIsEditing(true)}
+          >
+            {title}
+          </span>
 
-      {!isEditing && (
-        <button
-          onClick={() => onDelete(id)}
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-        >
-          ×
-        </button>
+          <button
+            onClick={() => onDelete(id)}
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+          >
+            ×
+          </button>
+        </>
       )}
     </div>
   );
