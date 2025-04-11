@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useContext, useState, useRef, useEffect } from 'react';
 import { TodoContex } from './Contex';
 
-export const TodoItems = ({ todo: { id, title, completed } }) => {
+export const TodoItem = ({ todo: { id, title, completed } }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 
@@ -29,7 +29,7 @@ export const TodoItems = ({ todo: { id, title, completed } }) => {
   };
 
   return (
-    <div key={id} data-cy="Todo" className={classNames('todo', { completed })}>
+    <div data-cy="Todo" className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -40,19 +40,7 @@ export const TodoItems = ({ todo: { id, title, completed } }) => {
         />
       </label>
 
-      {!isEditing && (
-        <span
-          data-cy="TodoTitle"
-          className="todo__title"
-          onDoubleClick={() => {
-            setIsEditing(true);
-          }}
-        >
-          {title}
-        </span>
-      )}
-
-      {isEditing && (
+      {isEditing ? (
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -81,6 +69,14 @@ export const TodoItems = ({ todo: { id, title, completed } }) => {
             autoFocus
           />
         </form>
+      ) : (
+        <span
+          data-cy="TodoTitle"
+          className="todo__title"
+          onDoubleClick={() => setIsEditing(true)}
+        >
+          {title}
+        </span>
       )}
 
       {!isEditing && (
