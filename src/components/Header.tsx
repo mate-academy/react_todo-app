@@ -6,6 +6,7 @@ import { Todo } from '../types/Todo';
 export const Header: React.FC = () => {
   const { state, dispatch, inputRef } = useContext(TodoContext);
   const [newTodo, setNewTodo] = useState('');
+  let nextTodoId = 1;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -15,8 +16,6 @@ export const Header: React.FC = () => {
 
       return;
     }
-
-    let nextTodoId = 1;
 
     function generateTodoId(): number {
       return nextTodoId++;
