@@ -21,14 +21,22 @@ export const TodoContext = createContext<ContextProps>({
   inputRef: { current: null },
 });
 
+const ADD_TODO = 'addTodo';
+const EDIT_TODO = 'editTodo';
+const TOGGLE_TODO = 'toggleTodo';
+const DELETE_TODO = 'deleteTodo';
+const FILTER_TODO = 'filterTodos';
+const DELETE_COMPLETED_TODO = 'deleteCompletedTodos';
+const TOGGLE_ALL_TODO = 'toggleAllTodos';
+
 type Action =
-  | { type: 'addTodo'; payload: Todo }
-  | { type: 'editTodo'; payload: Todo }
-  | { type: 'toggleTodo'; payload: number }
-  | { type: 'deleteTodo'; payload: number }
-  | { type: 'filterTodos'; payload: FilterType }
-  | { type: 'deleteCompletedTodos'; payload: number[] }
-  | { type: 'toggleAllTodos'; payload: number[] };
+  | { type: typeof ADD_TODO; payload: Todo }
+  | { type: typeof EDIT_TODO; payload: Todo }
+  | { type: typeof TOGGLE_TODO; payload: number }
+  | { type: typeof DELETE_TODO; payload: number }
+  | { type: typeof FILTER_TODO; payload: FilterType }
+  | { type: typeof DELETE_COMPLETED_TODO; payload: number[] }
+  | { type: typeof TOGGLE_ALL_TODO; payload: number[] };
 
 function reduceTodos(state: State, action: Action) {
   switch (action.type) {
