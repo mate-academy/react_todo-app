@@ -19,7 +19,7 @@ export const TodoList: React.FC = () => {
     event.preventDefault();
 
     if (editedTodo.trim() === '') {
-      dispatch({ type: 'DELETE_TODO', payload: selectedId as number });
+      dispatch({ type: 'deleteTodo', payload: selectedId as number });
     }
 
     const todoToEdit: Todo = {
@@ -28,16 +28,16 @@ export const TodoList: React.FC = () => {
       completed: false,
     };
 
-    dispatch({ type: 'EDIT_TODO', payload: todoToEdit });
+    dispatch({ type: 'editTodo', payload: todoToEdit });
     setSelectedId(null);
   };
 
   const handleToggle = (id: number) => {
-    dispatch({ type: 'TOGGLE_TODO', payload: id });
+    dispatch({ type: 'toggleTodo', payload: id });
   };
 
   const handleDelete = (id: number) => {
-    dispatch({ type: 'DELETE_TODO', payload: id });
+    dispatch({ type: 'deleteTodo', payload: id });
     inputRef.current?.focus();
   };
 

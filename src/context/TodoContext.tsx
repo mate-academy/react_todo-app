@@ -22,29 +22,29 @@ export const TodoContext = createContext<ContextProps>({
 });
 
 type Action =
-  | { type: 'ADD_TODO'; payload: Todo }
-  | { type: 'EDIT_TODO'; payload: Todo }
-  | { type: 'TOGGLE_TODO'; payload: number }
-  | { type: 'DELETE_TODO'; payload: number }
-  | { type: 'FILTER_TODOS'; payload: FilterType }
-  | { type: 'DELETE_COMPLETED_TODOS'; payload: number[] }
-  | { type: 'TOGGLE_ALL_TODOS'; payload: number[] };
+  | { type: 'addTodo'; payload: Todo }
+  | { type: 'editTodo'; payload: Todo }
+  | { type: 'toggleTodo'; payload: number }
+  | { type: 'deleteTodo'; payload: number }
+  | { type: 'filterTodos'; payload: FilterType }
+  | { type: 'deleteCompletedTodos'; payload: number[] }
+  | { type: 'toggleAllTodos'; payload: number[] };
 
 function reduceTodos(state: State, action: Action) {
   switch (action.type) {
-    case 'ADD_TODO':
+    case 'addTodo':
       return {
         ...state,
         todos: [...state.todos, action.payload],
       };
-    case 'EDIT_TODO':
+    case 'editTodo':
       return {
         ...state,
         todos: state.todos.map(todo =>
           todo.id === action.payload.id ? { ...todo, ...action.payload } : todo,
         ),
       };
-    case 'TOGGLE_TODO':
+    case 'toggleTodo':
       return {
         ...state,
         todos: state.todos.map(todo =>
@@ -53,22 +53,22 @@ function reduceTodos(state: State, action: Action) {
             : todo,
         ),
       };
-    case 'DELETE_TODO':
+    case 'deleteTodo':
       return {
         ...state,
         todos: state.todos.filter(todo => todo.id !== action.payload),
       };
-    case 'FILTER_TODOS':
+    case 'filterTodos':
       return {
         ...state,
         filter: action.payload,
       };
-    case 'DELETE_COMPLETED_TODOS':
+    case 'deleteCompletedTodos':
       return {
         ...state,
         todos: state.todos.filter(todo => !action.payload.includes(todo.id)),
       };
-    case 'TOGGLE_ALL_TODOS':
+    case 'toggleAllTodos':
       return {
         ...state,
         todos: state.todos.map(todo =>

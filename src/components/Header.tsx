@@ -16,13 +16,19 @@ export const Header: React.FC = () => {
       return;
     }
 
+    let nextTodoId = 1;
+
+    function generateTodoId(): number {
+      return nextTodoId++;
+    }
+
     const todoToAdd: Todo = {
-      id: +new Date(),
+      id: generateTodoId(),
       title: newTodo.trim(),
       completed: false,
     };
 
-    dispatch({ type: 'ADD_TODO', payload: todoToAdd });
+    dispatch({ type: 'addTodo', payload: todoToAdd });
     setNewTodo('');
   };
 
@@ -36,9 +42,9 @@ export const Header: React.FC = () => {
       state.todos.every(todo => todo.completed) ||
       state.todos.every(todo => !todo.completed)
     ) {
-      dispatch({ type: 'TOGGLE_ALL_TODOS', payload: allIds });
+      dispatch({ type: 'toggleAllTodos', payload: allIds });
     } else {
-      dispatch({ type: 'TOGGLE_ALL_TODOS', payload: activeIds });
+      dispatch({ type: 'toggleAllTodos', payload: activeIds });
     }
   };
 

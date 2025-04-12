@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
             })}
             data-cy={`FilterLink${filter}`}
             key={filter}
-            onClick={() => dispatch({ type: 'FILTER_TODOS', payload: filter })}
+            onClick={() => dispatch({ type: 'filterTodos', payload: filter })}
           >
             {filter}
           </a>
@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         onClick={() => {
-          dispatch({ type: 'DELETE_COMPLETED_TODOS', payload: todosToDelete });
+          dispatch({ type: 'deleteCompletedTodos', payload: todosToDelete });
           inputRef.current?.focus();
         }}
         disabled={!state.todos.some(todo => todo.completed)}
