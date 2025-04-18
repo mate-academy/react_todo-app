@@ -113,6 +113,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             data-cy="TodoTitleField"
             ref={inputRef}
             type="text"
+            placeholder="What needs to be editing?"
             className="todo__title-field"
             value={newTitle}
             onChange={handleChange}
