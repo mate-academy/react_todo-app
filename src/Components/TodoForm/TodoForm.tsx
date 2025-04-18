@@ -13,7 +13,8 @@ export const TodoForm = () => {
   const [title, setTitle] = useState('');
 
   const availableToggelAll = todos.length > 0;
-  const hasCompletedTodos = todos.some(todo => todo.completed);
+  const allTodosCompleted =
+    todos.length > 0 && todos.every(todo => todo.completed);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +52,7 @@ export const TodoForm = () => {
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active: hasCompletedTodos,
+            active: allTodosCompleted,
           })}
           data-cy="ToggleAllButton"
           onClick={handleToggleAll}
