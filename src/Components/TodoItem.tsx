@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useRef, useState } from 'react';
-// import { TodoContext } from './TodoContext';
 import { Todo } from '../types/Todo';
 
 type TodoItemProps = {
@@ -10,7 +9,6 @@ type TodoItemProps = {
 };
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo, onDelete, onUpdate }) => {
-  // const { todos, onDelete, onUpdate } = useContext(TodoContext) || {};
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo?.title || '');
 
@@ -65,7 +63,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onDelete, onUpdate }) => {
           className="todo__status"
           checked={todo.completed}
           onChange={() => onUpdate(todo.id, todo.title, !todo.completed)}
-          // onChange={() => onUpdate(todo.id, (!todo.completed).toString())}
         />
       </label>
 

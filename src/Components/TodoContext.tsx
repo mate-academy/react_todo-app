@@ -20,29 +20,6 @@ interface TodoContextProps {
   title: string;
   setTitle: (value: string) => void;
   setError: (value: string | null) => void;
-  // title: string;
-  // setTitle: (value: string) => void;
-  // setError: (value: string | null) => void;
-  // todo: Todo;
-  // todos: Todo[];
-  // setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  // addTodo: (title: string) => void;
-  // toggleTodo: (id: number) => void;
-  // deleteTodo: (id: number) => void;
-  // onDelete?: (id: number) => void;
-  // onToggle?: (id: number) => void;
-  // onEdit?: (id: number, title: string) => void;
-  // onUpdate?: (id: number, title: string) => void;
-  // clearCompleted: () => void;
-  // updateTodo: (id: number, title: string) => void;
-  // toggleAll: () => void;
-  // filter: FilterType;
-  // setFilter: (filter: FilterType) => void;
-  // activeTodosCount: number;
-  // completedTodosCount: number;
-  // loading: boolean;
-  // submitForm: (event: React.FormEvent<HTMLFormElement>) => void;
-  // error: string | null;
 }
 
 export const TodoContext = createContext<TodoContextProps | undefined>(
@@ -64,14 +41,6 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children }) => {
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
   const [title, setTitle] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   if (todos.length > 0) {
-  //     localStorage.setItem('todos', JSON.stringify(todos));
-  //   } else {
-  //     localStorage.removeItem('todos');
-  //   }
-  // }, [todos]);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));

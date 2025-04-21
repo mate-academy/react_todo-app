@@ -4,16 +4,8 @@ import { TodoContext } from './TodoContext';
 import React, { useEffect, useRef } from 'react';
 
 export const Header: React.FC = () => {
-  const {
-    todos,
-    title,
-    setTitle,
-    setError,
-    // addTodo,
-    toggleAll,
-    loading,
-    submitForm,
-  } = React.useContext(TodoContext)!;
+  const { todos, title, setTitle, setError, toggleAll, loading, submitForm } =
+    React.useContext(TodoContext)!;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,12 +17,6 @@ export const Header: React.FC = () => {
 
   const areAllTodosCompleted =
     todos.length > 0 && todos.every(todo => todo.completed);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {}, 100);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
 
   return (
     <header className="todoapp__header">
