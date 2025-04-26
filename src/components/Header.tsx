@@ -8,7 +8,7 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ unCompletedTodos }) => {
-  const { setTodos } = useTodos();
+  const { todos, setTodos } = useTodos();
   const [todoTitle, setTodoTitle] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ unCompletedTodos }) => {
     if (inputRef.current) {
       inputRef.current?.focus();
     }
-  }, []);
+  }, [todos]);
 
   const handleSubmit = (submitEvent: React.FormEvent) => {
     submitEvent.preventDefault();
@@ -51,12 +51,17 @@ export const Header: React.FC<HeaderProps> = ({ unCompletedTodos }) => {
 
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className={classNames('todoapp__toggle-all', { active: allCompleted })}
-        data-cy="ToggleAllButton"
-        onClick={handleToggleAll}
-      />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: allCompleted,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggleAll}
+          disabled={todos.length === 0}
+        />
+      )}
 
       <form onSubmit={handleSubmit}>
         <input

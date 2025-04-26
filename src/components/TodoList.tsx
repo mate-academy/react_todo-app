@@ -80,7 +80,7 @@ export const TododList: React.FC<TodoListProps> = ({ filteredTodos }) => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked
+              checked={todo.completed}
               onChange={() =>
                 changeCheckbox({ ...todo, completed: !todo.completed })
               }
