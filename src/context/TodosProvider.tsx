@@ -7,18 +7,11 @@ type TodoProviderProps = {
 };
 
 export const TodosProvider: React.FC<TodoProviderProps> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const savedTodos = localStorage.getItem('todos');
 
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    } else {
-      localStorage.setItem('todos', JSON.stringify([]));
-      setTodos([]);
-    }
-  }, []);
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
