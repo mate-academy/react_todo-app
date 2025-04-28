@@ -6,13 +6,24 @@ import { useEffect, useRef, useState } from 'react';
 
 type TodoItemProps = {
   todo: Todo;
+  editingId: number;
+  setEditingId: React.Dispatch<React.SetStateAction<number>>;
+  // changeCheckbox: (todoToUpdate: Todo) => void;
+  // handleEditingId: (event: React.FormEvent) => void;
+  deleteTodo: (todoId: number) => void;
 };
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
-  const { id, title, completed } = todo;
-  const { todos, setTodos } = useTodos();
-  const [editingId, setEditingId] = useState<number>(0);
+export const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  editingId,
+  setEditingId,
+  // changeCheckbox,
+  // handleEditingId,
+  deleteTodo,
+}) => {
   const [titleTochange, setTitleToChange] = useState('');
+  const { setTodos } = useTodos();
+  const { id, title, completed } = todo;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,19 +46,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     return () => {
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
-
-  const changeCheckbox = (todoToUpdate: Todo) => {
-    setTodos((currentTodos: Todo[]) => {
-      return currentTodos.map(currentTodo =>
-        currentTodo.id === todoToUpdate.id ? todoToUpdate : todo,
-      );
-    });
-  };
-
-  const deleteTodo = (todoId: number) => {
-    setTodos(() => todos.filter(currentTodo => todoId !== currentTodo.id));
-  };
+  }, [setEditingId]);
 
   const handleEditingId = (event: React.FormEvent) => {
     event.preventDefault();
@@ -68,6 +67,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     setEditingId(0);
   };
 
+  const changeCheckbox = (todoToUpdate: Todo) => {
+    setTodos((currentTodos: Todo[]) => {
+      return currentTodos.map(currentTodo =>
+        currentTodo.id === todoToUpdate.id ? todoToUpdate : todo,
+      );
+    });
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -80,7 +87,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onChange={() => changeCheckbox({ ...todo, completed: !completed })}
+          onChange={() =>
+            changeCheckbox({ ...todo, completed: !todo.completed })
+          }
         />
       </label>
       {id === editingId ? (
