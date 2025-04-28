@@ -1,15 +1,14 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
 import { Todo } from '../type/Todo';
-import { useTodos } from '../context/TodoContext';
 import { useEffect, useRef, useState } from 'react';
+import { useTodos } from '../context/TodoContext';
 
 type TodoItemProps = {
   todo: Todo;
   editingId: number;
   setEditingId: React.Dispatch<React.SetStateAction<number>>;
-  // changeCheckbox: (todoToUpdate: Todo) => void;
-  // handleEditingId: (event: React.FormEvent) => void;
+  changeCheckbox: (todoToUpdate: Todo) => void;
   deleteTodo: (todoId: number) => void;
 };
 
@@ -17,36 +16,19 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   todo,
   editingId,
   setEditingId,
-  // changeCheckbox,
-  // handleEditingId,
+  changeCheckbox,
   deleteTodo,
 }) => {
   const [titleTochange, setTitleToChange] = useState('');
   const { setTodos } = useTodos();
-  const { id, title, completed } = todo;
-
   const inputRef = useRef<HTMLInputElement>(null);
+  const { id, title, completed } = todo;
 
   useEffect(() => {
     if (editingId !== 0 && inputRef.current) {
       inputRef.current.focus();
     }
   }, [editingId]);
-
-  useEffect(() => {
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setEditingId(0);
-        setTitleToChange('');
-      }
-    };
-
-    window.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  }, [setEditingId]);
 
   const handleEditingId = (event: React.FormEvent) => {
     event.preventDefault();
@@ -67,19 +49,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     setEditingId(0);
   };
 
-  const changeCheckbox = (todoToUpdate: Todo) => {
-    setTodos((currentTodos: Todo[]) => {
-      return currentTodos.map(currentTodo =>
-        currentTodo.id === todoToUpdate.id ? todoToUpdate : todo,
-      );
-    });
-  };
-
   return (
     <div
       data-cy="Todo"
       className={classNames('todo', { completed: completed })}
-      key={id}
     >
       <label className="todo__status-label">
         <input
@@ -87,9 +60,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onChange={() =>
-            changeCheckbox({ ...todo, completed: !todo.completed })
-          }
+          onChange={() => changeCheckbox({ ...todo, completed: !completed })}
         />
       </label>
       {id === editingId ? (
