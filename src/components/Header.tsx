@@ -26,6 +26,10 @@ export const Header: React.FC<HeaderProps> = () => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (title.trim().length === 0) {
+      return;
+    }
+
     changeTodos(
       {
         id: +new Date(),
