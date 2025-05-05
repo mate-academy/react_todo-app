@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {['All', 'Active', 'Completed'].map(value => (
+        {Object.values(FilterValue).map(value => (
           <a
             href="#/"
             className={classNames('filter__link', {
