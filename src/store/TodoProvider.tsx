@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { createContext, useMemo, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 import { Todo } from '../types/todo';
 import { useLocalStorage } from '../hooks/hooks';
 import { FilterStatus } from '../enums/enums';
@@ -25,6 +25,14 @@ type Props = {
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
+
+  useEffect(() => {
+    const rawTodosFromStorage = localStorage.getItem('todos');
+
+    if (todos.length === 0 && rawTodosFromStorage !== JSON.stringify([])) {
+      setTodos([]);
+    }
+  }, [todos, setTodos]);
 
   const filteredTodos = useMemo(() => {
     switch (filterStatus) {
