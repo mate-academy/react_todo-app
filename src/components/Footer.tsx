@@ -6,8 +6,9 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   setFilter: (value: Filter) => void;
-  deleteCompletedToDos: () => void;
+  deleteCompletedToDos: (onDelete?: () => void) => void;
   filter: Filter;
+  mainInputRef: React.RefObject<HTMLInputElement>;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -15,6 +16,7 @@ export const Footer: React.FC<Props> = ({
   setFilter,
   filter,
   deleteCompletedToDos,
+  mainInputRef,
 }) => {
   if (todos.length > 0) {
     return (
@@ -43,7 +45,13 @@ export const Footer: React.FC<Props> = ({
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
-          onClick={deleteCompletedToDos}
+          onClick={() =>
+            deleteCompletedToDos(() => {
+              if (mainInputRef.current) {
+                mainInputRef.current.focus();
+              }
+            })
+          }
           disabled={todos.every(todo => !todo.completed)}
         >
           Clear completed

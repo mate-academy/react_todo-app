@@ -29,10 +29,7 @@ export const Header: React.FC<Props> = ({
         />
       )}
 
-      <ToDoForm
-        onSubmit={addToDo}
-        inputRef={inputRef}
-      />
+      <ToDoForm onSubmit={addToDo} inputRef={inputRef} />
     </header>
   );
 };

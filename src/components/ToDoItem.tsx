@@ -6,9 +6,10 @@ import classNames from 'classnames';
 type Props = {
   todo: Todo;
   updateTodo: (todoId: number, updatedFields: Partial<Todo>) => void;
-  deleteToDo: (todoId: number) => void;
+  deleteToDo: (todoId: number, onDelete?: () => void) => void;
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
+  mainInputRef: React.RefObject<HTMLInputElement>;
 };
 
 export const ToDoItem: React.FC<Props> = ({
@@ -17,6 +18,7 @@ export const ToDoItem: React.FC<Props> = ({
   deleteToDo,
   isEditing,
   setIsEditing,
+  mainInputRef,
 }) => {
   const [editTitle, setEditTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -102,7 +104,13 @@ export const ToDoItem: React.FC<Props> = ({
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => deleteToDo(todo.id)}
+            onClick={() =>
+              deleteToDo(todo.id, () => {
+                if (mainInputRef.current) {
+                  mainInputRef.current.focus();
+                }
+              })
+            }
           >
             ×
           </button>
