@@ -66,9 +66,9 @@ export const Header: React.FC<Props> = ({ areAllCompleted }) => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          ref={inputRef}
           value={inputValue}
           onChange={event => setInputValue(event.target.value)}
+          ref={inputRef}
         />
       </form>
     </header>
