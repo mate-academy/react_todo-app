@@ -1,8 +1,9 @@
-import React from 'react';
-import { useTodos } from '../../context/TodosContext';
+import { useDeleteTodos, useTodos } from '../../context/TodosContext';
 
 export const Footer: React.FC = () => {
-  const { todos } = useTodos();
+  const { todos, status, setStatus } = useTodos();
+
+  const deletTodos = useDeleteTodos();
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -12,18 +13,35 @@ export const Footer: React.FC = () => {
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a
+          href="#/"
+          className={`filter__link ${status === 'all' ? 'selected' : ''}`}
+          data-cy="FilterLinkAll"
+          onClick={e => {
+            setStatus(e.currentTarget.innerHTML.toLowerCase());
+          }}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+        <a
+          href="#/active"
+          className={`filter__link ${status === 'active' ? 'selected' : ''}`}
+          data-cy="FilterLinkActive"
+          onClick={e => {
+            setStatus(e.currentTarget.innerHTML.toLowerCase());
+          }}
+        >
           Active
         </a>
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={`filter__link ${status === 'completed' ? 'selected' : ''}`}
           data-cy="FilterLinkCompleted"
+          onClick={e => {
+            setStatus(e.currentTarget.innerHTML.toLowerCase());
+          }}
         >
           Completed
         </a>
@@ -34,6 +52,11 @@ export const Footer: React.FC = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={() =>
+          deletTodos(
+            todos.filter(todo => todo.completed === true).map(td => td.id),
+          )
+        }
         disabled={
           todos.filter(todo => todo.completed === true).length === 0
             ? true

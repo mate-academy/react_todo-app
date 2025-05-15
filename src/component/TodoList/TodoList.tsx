@@ -1,12 +1,12 @@
-import { useTodos } from '../../context/TodosContext';
+import { useFilteredTodos } from '../../context/TodosContext';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 export const TodoList: React.FC = () => {
-  const { todos } = useTodos();
+  const filtredTodos = useFilteredTodos();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
+      {filtredTodos.map(todo => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
     </section>

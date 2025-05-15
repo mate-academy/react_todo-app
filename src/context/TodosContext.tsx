@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = createContext({
   todos: [] as Todo[],
   setTodos: (todos: Todo[]) => {},
+  status: '',
+  setStatus: (status: string) => {},
 });
 
 export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useLocalStorage<Todo[]>('todo', []);
+  const [status, setStatus] = useState('all');
 
   return (
-    <TodosContext.Provider value={{ todos, setTodos }}>
+    <TodosContext.Provider value={{ todos, setTodos, status, setStatus }}>
       {children}
     </TodosContext.Provider>
   );
@@ -29,7 +32,13 @@ export const useAddTodo = () => {
 export const useUpdateTodos = () => {
   const { todos, setTodos } = useTodos();
 
-  return (todo: Todo[]) => setTodos(todo);
+  return (todo: Todo | Todo[]) => {
+    const newTodos = Array.isArray(todo)
+      ? todos.map(td => todo.find(t => t.id === td.id) || td)
+      : todos.map(td => (td.id === todo.id ? todo : td));
+
+    setTodos(newTodos);
+  };
 };
 
 export const useDeleteTodos = () => {
@@ -37,4 +46,19 @@ export const useDeleteTodos = () => {
 
   return (todoId: number[]) =>
     setTodos([...todos].filter(todo => !todoId.includes(todo.id)));
+};
+
+export const useFilteredTodos = () => {
+  const { todos, status } = useTodos();
+
+  return useMemo(() => {
+    switch (status) {
+      case 'active':
+        return todos.filter(td => !td.completed);
+      case 'completed':
+        return todos.filter(td => td.completed);
+      default:
+        return todos;
+    }
+  }, [todos, status]);
 };

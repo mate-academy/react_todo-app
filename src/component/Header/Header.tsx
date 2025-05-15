@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   useAddTodo,
   useTodos,
@@ -12,20 +12,21 @@ export const Header = () => {
   const addTodo = useAddTodo();
   const updateTodo = useUpdateTodos();
 
-  const toggleAllHandler = () => {
-    const tod =
-      todos.filter(td => !td.completed).length === 0
-        ? todos
-        : todos.filter(td => !td.completed);
+  const allHandelerTogle = () => {
+    const allCompleted = todos.every(td => td.completed);
+    const updated = todos.map(td => ({
+      ...td,
+      completed: !allCompleted,
+    }));
 
-    tod.forEach(td => {
-      todos.map(t =>
-        t.id === td.id ? { ...td, completed: !td.completed } : t,
-      );
-    });
-
-    return updateTodo(tod);
+    updateTodo(updated);
   };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [todos]);
 
   return (
     <header className="todoapp__header">
@@ -35,15 +36,17 @@ export const Header = () => {
           type="button"
           className={`todoapp__toggle-all ${todos?.filter(todo => todo.completed === true).length === todos.length ? 'active' : ''}`}
           data-cy="ToggleAllButton"
-          onClick={() => {
-            toggleAllHandler();
-          }}
+          onClick={() => allHandelerTogle()}
         />
       )}
       {/* Add a todo on form submit */}
       <form
         onSubmit={e => {
           e.preventDefault();
+          if (!query) {
+            return;
+          }
+
           addTodo({
             id: +new Date(),
             title: query.trim(),
@@ -61,7 +64,8 @@ export const Header = () => {
           onChange={e => {
             setQuery(e.target.value);
           }}
-          autoFocus
+          ref={inputRef}
+          autoFocus={true}
         />
       </form>
     </header>
