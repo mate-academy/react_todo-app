@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import { Todo } from '../types/Todo';
 
 export function useLocalStorage<T>(
   key: string,
@@ -9,6 +8,8 @@ export function useLocalStorage<T>(
     const data = localStorage.getItem(key);
 
     if (data === null) {
+      localStorage.setItem(key, JSON.stringify([]));
+
       return startValue;
     }
 

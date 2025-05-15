@@ -11,7 +11,7 @@ export const TodosContext = createContext({
 });
 
 export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
-  const [todos, setTodos] = useLocalStorage<Todo[]>('todo', []);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
   const [status, setStatus] = useState('all');
 
   return (
