@@ -29,16 +29,15 @@ export const Footer: React.FC = () => {
         ))}
       </nav>
 
-      {todos.some(todo => todo.completed) && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-          onClick={event => clearAll(event)}
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        onClick={event => clearAll(event)}
+        disabled={todos.every(todo => !todo.completed)}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };

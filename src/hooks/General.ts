@@ -63,6 +63,7 @@ export const useGeneral = () => {
 
   const clear = useCallback(() => {
     dispatch({ type: 'CLEAR' });
+    inputRef.current?.focus();
   }, []);
 
   const activeCount = useMemo(

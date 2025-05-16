@@ -3,19 +3,21 @@ import { useTodoState } from '../context/TodoContext';
 import { useHeader } from '../hooks/HeaderHooks';
 
 export const Header: React.FC = () => {
-  const { activeCount, inputRef } = useTodoState();
+  const { activeCount, inputRef, todos } = useTodoState();
   const { query, handleToggle, handleChange, handleSubmit } = useHeader();
 
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className={classNames('todoapp__toggle-all', {
-          active: activeCount === 0,
-        })}
-        data-cy="ToggleAllButton"
-        onClick={handleToggle}
-      />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: activeCount === 0,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggle}
+        />
+      )}
 
       <form onSubmit={handleSubmit}>
         <input
