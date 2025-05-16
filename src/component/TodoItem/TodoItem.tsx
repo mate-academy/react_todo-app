@@ -40,8 +40,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (tempQuery === todo.title) {
-      // setIsFocus(false);
       setIsEditing(false);
+      setQuery(todo.title);
 
       return;
     }
@@ -72,7 +72,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           <input
             data-cy="TodoTitleField"
             type="text"
-            className="todoapp__new-todo"
+            className="todo__title-field"
             placeholder="Empty todo will be deleted"
             value={query}
             onChange={e => {

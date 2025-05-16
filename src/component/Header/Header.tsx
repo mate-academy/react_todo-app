@@ -43,13 +43,16 @@ export const Header = () => {
       <form
         onSubmit={e => {
           e.preventDefault();
-          if (!query) {
+
+          const tempQuery = query.trim();
+
+          if (!tempQuery) {
             return;
           }
 
           addTodo({
             id: +new Date(),
-            title: query.trim(),
+            title: tempQuery,
             completed: false,
           });
           setQuery('');

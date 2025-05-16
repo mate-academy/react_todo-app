@@ -5,9 +5,9 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const TodosContext = createContext({
   todos: [] as Todo[],
-  setTodos: (todos: Todo[]) => {},
+  setTodos: (_todos: Todo[]) => {},
   status: '',
-  setStatus: (status: string) => {},
+  setStatus: (_status: string) => {},
 });
 
 export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
