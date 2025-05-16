@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { Todo } from '../types/Todo';
 
 export enum Filter {
@@ -6,37 +7,31 @@ export enum Filter {
   COMPLETED = 'Completed',
 }
 
-type State = {
+export type State = {
   todos: Todo[];
   filter: Filter;
 };
 
-type ChangePayload = {
+export type ChangePayload = {
   id: number;
   data: { param: string; value: string | boolean };
 };
 
-const initialState: State = {
+const initState: State = {
   todos: [],
   filter: Filter.ALL,
 };
 
-type Action =
-  | { type: 'SET_TODOS'; payload: Todo[] }
+export type Action =
   | { type: 'ADD_TODO'; payload: Todo }
   | { type: 'DELETE_TODO'; payload: number }
   | { type: 'CHANGE_TODO'; payload: ChangePayload }
   | { type: 'SET_FILTER'; payload: Filter }
-  | { type: 'CLEAR' }
-  | { type: 'TOGGLE' };
+  | { type: 'TOGGLE_COMPLETED' }
+  | { type: 'CLEAR' };
 
-function reducer(state: State, action: Action) {
+function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'SET_TODOS':
-      return {
-        ...state,
-        todos: action.payload,
-      };
     case 'ADD_TODO':
       return {
         ...state,
@@ -68,18 +63,37 @@ function reducer(state: State, action: Action) {
         ...state,
         todos: remainTodos,
       };
-    case 'TOGGLE':
-      const updatedTodos = state.todos.map(todo =>
-        todo.completed ? { ...todo, completed: !todo.completed } : todo,
-      );
+    case 'TOGGLE_COMPLETED':
+      const mode = state.todos.some(todo => !todo.completed);
+
+      if (mode) {
+        return {
+          ...state,
+          todos: state.todos.map(todo => ({ ...todo, completed: true })),
+        };
+      }
 
       return {
         ...state,
-        todos: updatedTodos,
+        todos: state.todos.map(todo => ({ ...todo, completed: false })),
       };
+
     default:
       return state;
   }
 }
 
-export { reducer, initialState, type State, type Action };
+const init = (initialArg: State) => {
+  const stored = localStorage.getItem('todos');
+
+  if (stored) {
+    return {
+      ...initialArg,
+      todos: JSON.parse(stored),
+    };
+  }
+
+  return initialArg;
+};
+
+export { reducer, initState, init };

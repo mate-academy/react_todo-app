@@ -1,23 +1,10 @@
 import classNames from 'classnames';
 import { Filter } from '../hooks/Reducer';
-import { Todo } from '../types/Todo';
+import { useTodoContext } from '../context/TodoContext';
 
-type Props = {
-  todos: Todo[];
-  filter: Filter;
-  setFilter: (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    value: Filter,
-  ) => void;
-  clear: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-};
+export const Footer: React.FC = () => {
+  const { todos, filter, setFilter, clear } = useTodoContext();
 
-export const Footer: React.FC<Props> = ({
-  todos,
-  filter,
-  setFilter,
-  clear,
-}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">

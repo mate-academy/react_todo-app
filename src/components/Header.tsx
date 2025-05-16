@@ -1,24 +1,18 @@
 import { useRef } from 'react';
-import { Todo } from '../types/Todo';
 import classNames from 'classnames';
+import { useTodoContext } from '../context/TodoContext';
 
-type Props = {
-  addTodo: (event: React.FormEvent, value: string) => void;
-  todos: Todo[];
-  toggle: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-};
-
-export const Header: React.FC<Props> = ({ addTodo, todos, toggle }) => {
+export const Header: React.FC = () => {
+  const { addTodo, todos, toggle } = useTodoContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: React.FormEvent) => {
-    {
-      const input = inputRef.current;
+    event.preventDefault();
+    const input = inputRef.current;
 
-      if (input) {
-        addTodo(event, input.value);
-        input.value = '';
-      }
+    if (input) {
+      addTodo(input.value);
+      input.value = '';
     }
   };
 

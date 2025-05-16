@@ -1,20 +1,24 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { Editor } from '../hooks/General';
-import { useState } from 'react';
+import { useItem } from '../hooks/TodoItemHooks';
 
 type Props = {
   todo: Todo;
-  editTodo: Editor;
-  deleteTodo: (event: React.MouseEvent<HTMLButtonElement>, id: number) => void;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo, deleteTodo, editTodo }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
-
-  const [editFlag, setEditFlag] = useState(false);
-  const [query, setQuery] = useState('');
+  const {
+    handleCheckbox,
+    callEditTitle,
+    handleDelete,
+    editFlag,
+    query,
+    handleTextInput,
+    handleSubmit,
+    cancelSubmit,
+  } = useItem(title, completed, id);
 
   return (
     <>
@@ -26,9 +30,7 @@ export const TodoItem: React.FC<Props> = ({ todo, deleteTodo, editTodo }) => {
           <input
             data-cy="TodoStatus"
             type="checkbox"
-            onChange={() =>
-              editTodo({ id, type: 'completed', value: !completed })
-            }
+            onChange={handleCheckbox}
             className="todo__status"
             checked={completed}
           />
@@ -38,10 +40,7 @@ export const TodoItem: React.FC<Props> = ({ todo, deleteTodo, editTodo }) => {
             <span
               data-cy="TodoTitle"
               className="todo__title"
-              onDoubleClick={() => {
-                setEditFlag(true);
-                setQuery(title);
-              }}
+              onDoubleClick={callEditTitle}
             >
               {title}
             </span>
@@ -49,28 +48,22 @@ export const TodoItem: React.FC<Props> = ({ todo, deleteTodo, editTodo }) => {
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={event => deleteTodo(event, id)}
+              onClick={handleDelete}
             >
               ×
             </button>
           </>
         ) : (
-          <form
-            onSubmit={(event: React.FormEvent) => {
-              event.preventDefault();
-              if (query) {
-                editTodo({ id, type: 'title', value: query });
-              }
-            }}
-          >
+          <form onSubmit={handleSubmit} onKeyUp={cancelSubmit}>
             <input
               data-cy="TodoTitleField"
               type="text"
               className="todo__title-field"
               placeholder="Empty todo will be deleted"
               value={query}
-              onChange={event => setQuery(event.target.value)}
-              onBlur={() => setEditFlag(false)}
+              onChange={handleTextInput}
+              onBlur={handleSubmit}
+              autoFocus
             />
           </form>
         )}

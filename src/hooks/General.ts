@@ -1,33 +1,17 @@
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
-import { reducer, initialState, Filter } from './Reducer';
+import { reducer, initState, Filter, init } from './Reducer';
 import type { Todo } from '../types/Todo';
-import type { State, Action } from './Reducer';
 
-export type Editor = (args: {
+export type EditData = (args: {
   id: number;
   type: keyof Todo;
   value: boolean | string;
 }) => void;
 
 export const useGeneral = () => {
-  const [state, dispatch] = useReducer<React.Reducer<State, Action>>(
-    reducer,
-    initialState,
-  );
+  const [state, dispatch] = useReducer(reducer, initState, init);
 
   const { todos, filter } = state;
-
-  useEffect(() => {
-    const stored = localStorage.getItem('todos');
-
-    if (!stored) {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    } else {
-      const parsed = JSON.parse(stored);
-
-      dispatch({ type: 'SET_TODOS', payload: parsed });
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -44,40 +28,32 @@ export const useGeneral = () => {
     }
   }, [todos, filter]);
 
-  const addTodo = (event: React.FormEvent, value: string) => {
-    event.preventDefault();
-    const newTitle = value.trim();
+  const addTodo = (value: string) => {
     const newId = +new Date();
 
-    if (newTitle) {
-      const newTodo: Todo = {
-        id: newId,
-        title: newTitle,
-        completed: false,
-      };
+    const newTodo: Todo = {
+      id: newId,
+      title: value,
+      completed: false,
+    };
 
-      dispatch({ type: 'ADD_TODO', payload: newTodo });
-    }
+    dispatch({ type: 'ADD_TODO', payload: newTodo });
   };
 
-  const editTodo: Editor = useCallback(({ id, type, value }) => {
+  const editTodo: EditData = useCallback(({ id, type, value }) => {
     dispatch({
       type: 'CHANGE_TODO',
       payload: { id: id, data: { param: type, value: value } },
     });
   }, []);
 
-  const deleteTodo = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement> | null, id: number) => {
-      event?.preventDefault();
-      dispatch({ type: 'DELETE_TODO', payload: id });
-    },
-    [],
-  );
+  const deleteTodo = (id: number) => {
+    dispatch({ type: 'DELETE_TODO', payload: id });
+  };
 
-  const toggle = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const toggle = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    dispatch({ type: 'TOGGLE' });
+    dispatch({ type: 'TOGGLE_COMPLETED' });
   };
 
   const setFilter = (
