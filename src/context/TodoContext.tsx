@@ -4,7 +4,7 @@ import { useGeneral } from '../hooks/General';
 
 type StateContext = Pick<
   ReturnType<typeof useGeneral>,
-  'activeCount' | 'visibleTodos' | 'filter' | 'todos'
+  'activeCount' | 'visibleTodos' | 'filter' | 'todos' | 'inputRef'
 >;
 type ActionContext = Pick<
   ReturnType<typeof useGeneral>,
@@ -19,13 +19,14 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const general = useGeneral();
 
-  const { activeCount, visibleTodos, filter, todos, ...actions } = general;
+  const { activeCount, visibleTodos, filter, todos, inputRef, ...actions } =
+    general;
 
   return (
     <TodoStateContext.Provider
-      value={{ todos, filter, visibleTodos, activeCount }}
+      value={{ todos, filter, visibleTodos, activeCount, inputRef }}
     >
-      <TodoActionContext.Provider value={actions}>
+      <TodoActionContext.Provider value={{ ...actions }}>
         {children}
       </TodoActionContext.Provider>
     </TodoStateContext.Provider>

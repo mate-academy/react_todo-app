@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { reducer, initState, Filter, init } from './Reducer';
 import type { Todo } from '../types/Todo';
 
@@ -10,6 +10,7 @@ export type EditData = (args: {
 
 export const useGeneral = () => {
   const [state, dispatch] = useReducer(reducer, initState, init);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { todos, filter } = state;
 
@@ -49,6 +50,7 @@ export const useGeneral = () => {
 
   const deleteTodo = useCallback((id: number) => {
     dispatch({ type: 'DELETE_TODO', payload: id });
+    inputRef.current?.focus();
   }, []);
 
   const toggle = useCallback(() => {
@@ -79,5 +81,6 @@ export const useGeneral = () => {
     clear,
     toggle,
     activeCount,
+    inputRef,
   };
 };

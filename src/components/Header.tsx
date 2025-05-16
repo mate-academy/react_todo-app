@@ -3,7 +3,7 @@ import { useTodoState } from '../context/TodoContext';
 import { useHeader } from '../hooks/HeaderHooks';
 
 export const Header: React.FC = () => {
-  const { activeCount } = useTodoState();
+  const { activeCount, inputRef } = useTodoState();
   const { query, handleToggle, handleChange, handleSubmit } = useHeader();
 
   return (
@@ -19,12 +19,14 @@ export const Header: React.FC = () => {
 
       <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           data-cy="NewTodoField"
           value={query}
           onChange={handleChange}
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          autoFocus
         />
       </form>
     </header>
