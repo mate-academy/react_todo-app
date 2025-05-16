@@ -1,14 +1,16 @@
 import classNames from 'classnames';
 import { Filter } from '../hooks/Reducer';
-import { useTodoContext } from '../context/TodoContext';
+import { useTodoState } from '../context/TodoContext';
+import { useFooter } from '../hooks/FooterHooks';
 
 export const Footer: React.FC = () => {
-  const { todos, filter, setFilter, clear } = useTodoContext();
+  const { todos, filter, activeCount } = useTodoState();
+  const { applyFilter, clearAll } = useFooter();
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todos.filter(todo => !todo.completed).length + ' items left'}
+        {activeCount + ' items left'}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -20,7 +22,7 @@ export const Footer: React.FC = () => {
               selected: en === filter,
             })}
             data-cy={`FilterLink${en}`}
-            onClick={event => setFilter(event, en)}
+            onClick={event => applyFilter(event, en)}
           >
             {en}
           </a>
@@ -32,7 +34,7 @@ export const Footer: React.FC = () => {
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
-          onClick={clear}
+          onClick={event => clearAll(event)}
         >
           Clear completed
         </button>

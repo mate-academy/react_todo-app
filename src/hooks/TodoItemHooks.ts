@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useTodoContext } from '../context/TodoContext';
+import { useTodoActions } from '../context/TodoContext';
 
 export const useItem = (title: string, completed: boolean, id: number) => {
-  const { deleteTodo, editTodo } = useTodoContext();
+  const { deleteTodo, editTodo } = useTodoActions();
   const [editFlag, setEditFlag] = useState(false);
   const [query, setQuery] = useState('');
 

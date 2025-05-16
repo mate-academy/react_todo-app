@@ -1,28 +1,53 @@
+/* eslint-disable @typescript-eslint/indent */
 import React, { createContext, useContext } from 'react';
 import { useGeneral } from '../hooks/General';
 
-export const TodoContext = createContext<ReturnType<typeof useGeneral> | null>(
-  null,
-);
+type StateContext = Pick<
+  ReturnType<typeof useGeneral>,
+  'activeCount' | 'visibleTodos' | 'filter' | 'todos'
+>;
+type ActionContext = Pick<
+  ReturnType<typeof useGeneral>,
+  'addTodo' | 'editTodo' | 'deleteTodo' | 'toggle' | 'setFilter' | 'clear'
+>;
 
-export const useTodoContext = () => {
-  const context = useContext(TodoContext);
+const TodoStateContext = createContext<StateContext | null>(null);
+const TodoActionContext = createContext<ActionContext | null>(null);
+
+export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const general = useGeneral();
+
+  const { activeCount, visibleTodos, filter, todos, ...actions } = general;
+
+  return (
+    <TodoStateContext.Provider
+      value={{ todos, filter, visibleTodos, activeCount }}
+    >
+      <TodoActionContext.Provider value={actions}>
+        {children}
+      </TodoActionContext.Provider>
+    </TodoStateContext.Provider>
+  );
+};
+
+export const useTodoState = () => {
+  const context = useContext(TodoStateContext);
 
   if (!context) {
-    throw new Error('useTodoContext must be used within a TodoProvider');
+    throw new Error('');
   }
 
   return context;
 };
 
-type Props = {
-  children: React.ReactNode;
-};
+export const useTodoActions = () => {
+  const context = useContext(TodoActionContext);
 
-export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const general = useGeneral();
+  if (!context) {
+    throw new Error('');
+  }
 
-  return (
-    <TodoContext.Provider value={general}>{children}</TodoContext.Provider>
-  );
+  return context;
 };

@@ -2,10 +2,10 @@ import React from 'react';
 import { Header } from './components/Header';
 import { TodoItem } from './components/TodoItem';
 import { Footer } from './components/Footer';
-import { useTodoContext } from './context/TodoContext';
+import { useTodoState } from './context/TodoContext';
 
 export const App: React.FC = () => {
-  const { todos, visibleTodos } = useTodoContext();
+  const { todos, visibleTodos } = useTodoState();
 
   return (
     <div className="todoapp">

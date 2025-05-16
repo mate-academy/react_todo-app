@@ -28,7 +28,7 @@ export const useGeneral = () => {
     }
   }, [todos, filter]);
 
-  const addTodo = (value: string) => {
+  const addTodo = useCallback((value: string) => {
     const newId = +new Date();
 
     const newTodo: Todo = {
@@ -38,7 +38,7 @@ export const useGeneral = () => {
     };
 
     dispatch({ type: 'ADD_TODO', payload: newTodo });
-  };
+  }, []);
 
   const editTodo: EditData = useCallback(({ id, type, value }) => {
     dispatch({
@@ -47,27 +47,26 @@ export const useGeneral = () => {
     });
   }, []);
 
-  const deleteTodo = (id: number) => {
+  const deleteTodo = useCallback((id: number) => {
     dispatch({ type: 'DELETE_TODO', payload: id });
-  };
+  }, []);
 
-  const toggle = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const toggle = useCallback(() => {
     dispatch({ type: 'TOGGLE_COMPLETED' });
-  };
+  }, []);
 
-  const setFilter = (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    value: Filter,
-  ) => {
-    event.preventDefault();
+  const setFilter = useCallback((value: Filter) => {
     dispatch({ type: 'SET_FILTER', payload: value });
-  };
+  }, []);
 
-  const clear = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
+  const clear = useCallback(() => {
     dispatch({ type: 'CLEAR' });
-  };
+  }, []);
+
+  const activeCount = useMemo(
+    () => todos.filter(todo => !todo.completed).length,
+    [todos],
+  );
 
   return {
     addTodo,
@@ -79,5 +78,6 @@ export const useGeneral = () => {
     setFilter,
     clear,
     toggle,
+    activeCount,
   };
 };

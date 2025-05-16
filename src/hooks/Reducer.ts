@@ -14,7 +14,7 @@ export type State = {
 
 export type ChangePayload = {
   id: number;
-  data: { param: string; value: string | boolean };
+  data: { param: keyof Todo; value: string | boolean };
 };
 
 const initState: State = {
@@ -66,18 +66,12 @@ function reducer(state: State, action: Action): State {
     case 'TOGGLE_COMPLETED':
       const mode = state.todos.some(todo => !todo.completed);
 
-      if (mode) {
-        return {
-          ...state,
-          todos: state.todos.map(todo => ({ ...todo, completed: true })),
-        };
-      }
-
       return {
         ...state,
-        todos: state.todos.map(todo => ({ ...todo, completed: false })),
+        todos: state.todos.map(todo =>
+          mode ? { ...todo, completed: true } : { ...todo, completed: false },
+        ),
       };
-
     default:
       return state;
   }

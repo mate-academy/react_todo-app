@@ -1,36 +1,27 @@
-import { useRef } from 'react';
 import classNames from 'classnames';
-import { useTodoContext } from '../context/TodoContext';
+import { useTodoState } from '../context/TodoContext';
+import { useHeader } from '../hooks/HeaderHooks';
 
 export const Header: React.FC = () => {
-  const { addTodo, todos, toggle } = useTodoContext();
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    const input = inputRef.current;
-
-    if (input) {
-      addTodo(input.value);
-      input.value = '';
-    }
-  };
+  const { activeCount } = useTodoState();
+  const { query, handleToggle, handleChange, handleSubmit } = useHeader();
 
   return (
     <header className="todoapp__header">
       <button
         type="button"
         className={classNames('todoapp__toggle-all', {
-          active: todos.every(todo => todo.completed),
+          active: activeCount === 0,
         })}
         data-cy="ToggleAllButton"
-        onClick={toggle}
+        onClick={handleToggle}
       />
 
       <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
-          ref={inputRef}
+          value={query}
+          onChange={handleChange}
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
