@@ -1,4 +1,5 @@
 .todoapp {
+
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 24px;
   font-weight: 300;
@@ -6,6 +7,7 @@
   margin: 40px 20px;
 
   &__content {
+
     margin-bottom: 20px;
     background: #fff;
     box-shadow:
@@ -24,6 +26,7 @@
   }
 
   &__header {
+
     position: relative;
   }
 
@@ -56,7 +59,8 @@
   }
 
   &__new-todo {
-    width: 100%;
+
+    width: 85%;
     padding: 16px 16px 16px 60px;
 
     font-size: 24px;
@@ -79,7 +83,7 @@
   }
 
   &__main {
-    border-top: 1px solid #e6e6e6;
+    border-top: 1px  #e6e6e6;
   }
 
   &__footer {
