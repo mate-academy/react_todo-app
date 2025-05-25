@@ -5,6 +5,7 @@ import TodosFilter from './components/TodoFilter';
 import { Status } from './types/Status';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
+//import { Header } from './components/Header';
 
 export const App: React.FC = () => {
   const getFilterTodos = (filter: Status, todos: Todo[]) => {
@@ -55,9 +56,10 @@ export const App: React.FC = () => {
     event.preventDefault();
   };
 
-  const [currentUrl, setCurrentUrl] = useState(Status.all); //useState(window.location.hash);
+  const [currentUrl, setCurrentUrl] = useState(window.location.hash);
 
   useEffect(() => {
+    setCurrentUrl(Status.all);
     const handlePathChange = () => {
       setCurrentUrl(window.location.hash);
     };
@@ -100,7 +102,7 @@ export const App: React.FC = () => {
             <button
               type="button"
               id="toggle-all"
-              className={cn('toggle-all', 'todoapp__toggle-all', {
+              className={cn('todoapp__toggle-all', {
                 active: allTodoCompleted,
               })}
               data-cy="ToggleAllButton"
@@ -121,29 +123,43 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
+        {/* <Header
+          todos={todos}
+          inputRef={inputRef}
+          allTodoCompleted={allTodoCompleted}
+          handleSubmit={handleSubmit}
+          handleCheckboxChangeAll={handleCheckboxChangeAll}
+          inputValue={inputValue}
+          handleChange={handleChange}
+          handleKeyPress={handleKeyPress}
+          isInputDisabled={false}
+          isTodoLoading={false}
+          //toggleAllTodos={function (): void {
+          //  throw new Error('Function not implemented.');
+          //}}
+        />*/}
+        <TodoList items={filteredTodos} />
+
+        {!!todos.length && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {activeTodos.length} items left
+            </span>
+
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
+              disabled={completedTodos.length === 0}
+              onClick={handleOnClickDeleteAllCompleted}
+            >
+              Clear completed
+            </button>
+
+            <TodosFilter currentUrl={currentUrl} />
+          </footer>
+        )}
       </div>
-
-      <TodoList items={filteredTodos} />
-
-      {!!todos.length && (
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            {activeTodos.length} items left
-          </span>
-
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-            disabled={completedTodos.length === 0}
-            onClick={handleOnClickDeleteAllCompleted}
-          >
-            Clear completed
-          </button>
-
-          <TodosFilter currentUrl={currentUrl} />
-        </footer>
-      )}
     </div>
   );
 };
