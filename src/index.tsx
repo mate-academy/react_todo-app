@@ -1,9 +1,12 @@
+import './styles/index.scss';
 import { createRoot } from 'react-dom/client';
 
-import './styles/index.scss';
-
 import { App } from './App';
+import React from 'react';
+import { GlobalStateProvider } from './app/store';
 
-const container = document.getElementById('root') as HTMLDivElement;
-
-createRoot(container).render(<App />);
+createRoot(document.getElementById('root') as HTMLElement).render(
+  <GlobalStateProvider>
+    <App />
+  </GlobalStateProvider>,
+);
