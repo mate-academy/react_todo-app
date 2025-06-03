@@ -38,15 +38,9 @@ function reducer(state: State, action: Action): State {
     }
 
     case 'deleteTodo': {
-      const deleteItem = state.todos.findIndex(
-        todo => todo.id === action.payload,
-      );
-
-      state.todos.splice(deleteItem, 1);
-
       return {
         ...state,
-        todos: [...state.todos],
+        todos: state.todos.filter(todo => todo.id !== action.payload),
       };
     }
 
