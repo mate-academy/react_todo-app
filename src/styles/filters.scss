@@ -1,6 +1,8 @@
 .filter {
   display: flex;
-  justify-content: space;
+  justify-content: space-between
+  
+  ;
   align-items: center;
   &__link {
     margin: 3px;

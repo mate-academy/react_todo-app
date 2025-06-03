@@ -21,23 +21,24 @@ type Props = {
   currentUrl: string;
 };
 
+// 🔧 Função auxiliar para normalizar o hash
+const normalize = (url: string) => url.replace(/\/$/, '');
+
 const TodosFilter: React.FC<Props> = ({ currentUrl = '#/all/' }) => {
   return (
     <nav className="filter" data-cy="Filter">
       {filters.map(({ title, hash }) => (
-        // <div className="filter__link" key={hash} data-cy={`FilterLink${title}`}>
         <a
           data-cy={`FilterLink${title}`}
           href={hash}
           key={hash}
-          defaultValue={Status.all}
           className={classNames('filter__link', {
-            selected: hash === currentUrl,
+            // 🔧 Corrigida a comparação para funcionar mesmo com "/" no final
+            selected: normalize(hash) === normalize(currentUrl),
           })}
         >
           {title}
         </a>
-        // </div>
       ))}
     </nav>
   );

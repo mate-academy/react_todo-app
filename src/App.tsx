@@ -56,18 +56,19 @@ export const App: React.FC = () => {
     event.preventDefault();
   };
 
-  const [currentUrl, setCurrentUrl] = useState(window.location.hash);
+  const [currentUrl, setCurrentUrl] = useState(
+    window.location.hash || Status.all,
+  );
 
   useEffect(() => {
-    setCurrentUrl(Status.all);
     const handlePathChange = () => {
-      setCurrentUrl(window.location.hash);
+      setCurrentUrl(window.location.hash || Status.all);
     };
 
-    window.addEventListener('popstate', handlePathChange);
+    window.addEventListener('hashchange', handlePathChange);
 
     return () => {
-      window.removeEventListener('popstate', handlePathChange);
+      window.removeEventListener('hashchange', handlePathChange);
     };
   }, []);
 
