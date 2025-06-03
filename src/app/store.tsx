@@ -1,0 +1,114 @@
+import React, { useEffect, useReducer } from 'react';
+import { Todo } from '../types/Todo';
+import { Action } from '../types/Action';
+import { useLocalStorage } from './hocks';
+interface State {
+  todos: Todo[];
+}
+
+const initialState: State = {
+  todos: [],
+};
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'addTodo':
+      return {
+        ...state,
+        todos: (state.todos as Todo[]).concat({
+          id: +new Date(),
+          title: action.payload,
+          completed: false,
+        }),
+      };
+    case 'setCompleted': {
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo.id === action.payload) {
+            return {
+              ...todo,
+              completed: !todo.completed,
+            };
+          }
+
+          return todo;
+        }),
+      };
+    }
+
+    case 'deleteTodo': {
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.payload),
+      };
+    }
+
+    case 'deleteAllCompleted':
+      return {
+        ...state,
+        todos: state.todos.filter(todo => !todo.completed),
+      };
+
+    case 'editTitle':
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo.id === action.payload.id) {
+            return {
+              ...todo,
+              title: action.payload.title,
+            };
+          }
+
+          return todo;
+        }),
+      };
+
+    case 'setToggleAll': {
+      const allCompleted = state.todos.every(item => item.completed);
+
+      return {
+        ...state,
+        todos: state.todos.map(todo => ({
+          ...todo,
+          completed: !allCompleted,
+        })),
+      };
+    }
+
+    default:
+      return state;
+  }
+}
+
+export const TodosContext = React.createContext(initialState);
+export const DispatchContext = React.createContext<React.Dispatch<Action>>(
+  () => {},
+);
+
+type Props = {
+  children: React.ReactNode;
+};
+
+export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
+  const [localStorageValue, setLocalStorageValue] = useLocalStorage(
+    'todos',
+    initialState.todos,
+  );
+
+  const [state, dispatch] = useReducer<typeof reducer>(reducer, {
+    ...initialState,
+    todos: localStorageValue,
+  });
+
+  useEffect(() => {
+    setLocalStorageValue(state.todos);
+  }, [state, setLocalStorageValue]);
+
+  return (
+    <DispatchContext.Provider value={dispatch}>
+      <TodosContext.Provider value={state}>{children}</TodosContext.Provider>
+    </DispatchContext.Provider>
+  );
+};

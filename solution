@@ -1,0 +1,544 @@
+[33mcommit c9b26f169b07848f21f0ddcc26df2a162141cf3e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m
+Author: Dennis Paixão <dennispaixaoads@gmail.com>
+Date:   Mon Jun 2 20:38:18 2025 -0300
+
+    solution2
+
+[33mcommit 4fd94045ab49bb2f830ba3dae88105e6722bd880[m
+Author: Dennis Paixão <dennispaixaoads@gmail.com>
+Date:   Mon Jun 2 19:12:36 2025 -0300
+
+    solution
+
+[33mcommit c867b63061ce1ebb96f0be97b884e639d1fa0f7e[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: c105729 7e953b5
+Author: Alena Tovstukha <106954440+alenatovstukha@users.noreply.github.com>
+Date:   Mon Jan 13 19:23:02 2025 +0200
+
+    Merge pull request #1097 from mykhalenych/bugfix/styles
+    
+    Bugfix/styles
+
+[33mcommit 7e953b52e56245d00a80784cd5acef1c566edf68[m
+Author: mykhalenych <mykhalenych@gmail.com>
+Date:   Fri Jan 10 09:49:20 2025 +0200
+
+    bugfix/styles fixed import issue, renamed files
+
+[33mcommit efb3fdb86ab3625ed86ee55171b2ff560fa0c299[m
+Author: mykhalenych <mykhalenych@gmail.com>
+Date:   Fri Jan 10 09:49:04 2025 +0200
+
+    bugfix/styles fixed import issue, renamed files
+
+[33mcommit c10572957b470372038c551165ec06a65814f034[m
+Author: pavlosoletskyy <165999040+pavlosoletskyy@users.noreply.github.com>
+Date:   Tue Dec 17 11:44:39 2024 +0200
+
+    Rename filter.scss to filters.css
+
+[33mcommit 4220eb1a23795b06c25c8907dda5644ffe0eef67[m
+Author: pavlosoletskyy <165999040+pavlosoletskyy@users.noreply.github.com>
+Date:   Tue Dec 17 11:44:10 2024 +0200
+
+    Rename index.scss to index.css
+
+[33mcommit 5fdc2adb768232611e817b9c35fef13c541df006[m
+Author: pavlosoletskyy <165999040+pavlosoletskyy@users.noreply.github.com>
+Date:   Tue Dec 17 11:43:54 2024 +0200
+
+    Rename todo.scss to todo-list.css
+
+[33mcommit f1536f77daf9afa1e371dac035f6f935d575cce1[m
+Author: Misha Hrynko <glukym@gmail.com>
+Date:   Tue Sep 10 21:24:37 2024 +0300
+
+    Update test.yml
+
+[33mcommit 230e898587938f836c64a9cea3b609706ede8a0d[m
+Merge: 3e9aa73 95b2703
+Author: Misha Hrynko <glukym@gmail.com>
+Date:   Mon Sep 2 20:54:30 2024 +0300
+
+    Merge pull request #1029 from mate-academy/vite-infra
+    
+    add Vite
+
+[33mcommit 95b27032853a6e9739d8b5287393c0496b5f01f9[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Thu Jul 18 17:59:33 2024 +0300
+
+    add Vite
+
+[33mcommit 3e9aa73602850e03301dc7facc775450a4dacd28[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Mon Apr 1 16:55:13 2024 +0300
+
+    use new markup and tests
+
+[33mcommit 9561d145cad50949b9762ca08e2ea3f78ca29056[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Thu Mar 21 11:09:50 2024 +0200
+
+    fix lock versions
+
+[33mcommit 99fc54dc30ddd3285800609b58301029f15e846f[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Mon Mar 18 17:20:14 2024 +0200
+
+    fix node14 deps
+
+[33mcommit edf8b1b12b3f1db87a59f5e89adb9d98efc78703[m
+Merge: 3e4c032 126a538
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Fri Feb 16 15:05:18 2024 +0200
+
+    Merge pull request #876 from SerhiiKirik/update-prettier
+    
+    add/prettier: add prettier, update readme, format code
+
+[33mcommit 126a538a79f9ab2ec7cbd2ee45a35e4783b8674b[m
+Author: Sergey Kirichenko <s.kirichenko@m-dev.org>
+Date:   Fri Feb 16 10:17:40 2024 +0200
+
+    update few deps
+
+[33mcommit 89aa474f379e77bc3b4b51dc3867606b52e55278[m
+Author: Sergey Kirichenko <s.kirichenko@m-dev.org>
+Date:   Tue Feb 13 17:52:51 2024 +0200
+
+    add/prettier: add prettier, update readme, format code
+
+[33mcommit 3e4c032771308778f2a673f54cde5b97fe338bbb[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Tue Feb 6 21:07:07 2024 +0200
+
+    Update App.tsx
+
+[33mcommit d02a2a070b2da69d5777d77d08675f6d910507f1[m
+Merge: 7c47e8b ed3d882
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Tue Feb 6 14:25:45 2024 +0200
+
+    Merge pull request #868 from mykhalenych/patch-1
+    
+    Update README.md
+
+[33mcommit ed3d88236ce7ed5cfca60d40eb58bd2754c22eac[m
+Author: mykhalenych <53228259+mykhalenych@users.noreply.github.com>
+Date:   Tue Feb 6 13:27:18 2024 +0200
+
+    Update README.md
+
+[33mcommit 7c47e8bcbeeee4dbf0ea08cc6016d23695090022[m
+Author: Alena Tovstukha <106954440+alenatovstukha@users.noreply.github.com>
+Date:   Wed Jan 24 08:32:44 2024 +0200
+
+    Update README.md
+
+[33mcommit 27c32579abc8634ef08059059e95ba489fd6e373[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Thu Nov 30 08:43:01 2023 +0200
+
+    fix deps
+
+[33mcommit c63e6116b77a1635b800a95d424d604ccd257bb0[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Tue Nov 21 11:38:18 2023 +0200
+
+    Update package.json
+
+[33mcommit 054540f409609e62c1115ad375c738fae8c1ed82[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Mon Nov 20 08:21:37 2023 +0200
+
+    Update package.json
+
+[33mcommit 3c2abd65ffe2af4faaeb8e790917be413f4cb8ad[m
+Author: Misha Hrynko <misha@mate.academy>
+Date:   Mon Oct 16 19:56:38 2023 +0300
+
+    fix package-lock
+
+[33mcommit a258febe704e1653fb9f6c2cb003e9754288c867[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Sat Oct 7 09:31:26 2023 +0300
+
+    Update package.json
+
+[33mcommit 12f7c540c5a71f80754f75072facd4ab9d1f3430[m
+Author: Misha Hrynko <misha@mate.academy>
+Date:   Thu Jul 20 09:41:19 2023 +0300
+
+    require to use Context and localStorage for state management
+
+[33mcommit 515fdc6118f0b27650ad972a089d3a115cfe5a6d[m
+Author: mhrynko <glukym@gmail.com>
+Date:   Mon Aug 8 13:03:43 2022 +0300
+
+    fix build with await
+
+[33mcommit 0b7a85ee16ecffacdb08129accc303a680634421[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Mon Aug 8 11:07:19 2022 +0300
+
+    Update package.json
+
+[33mcommit e0340716ee0697cb83499afd9840a674cf31f9fc[m
+Author: mhrynko <glukym@gmail.com>
+Date:   Wed Aug 3 08:52:33 2022 +0300
+
+    small description improvement
+
+[33mcommit 8daee82d61646d530203eeaf7e1ea0c92b6e259a[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Wed Aug 3 08:19:57 2022 +0300
+
+    Update README.md
+
+[33mcommit cab7c9d7084d6a35c88fe5452822cd637aba937a[m
+Merge: 136728d 9a1cfb0
+Author: Yevhen Stepanenko <93822605+YevhS@users.noreply.github.com>
+Date:   Tue May 17 14:40:05 2022 +0300
+
+    Merge pull request #366 from mate-academy/cypress_tests
+    
+    Cypress tests added
+
+[33mcommit 9a1cfb0e235ecd336c74b178ecd87f77af600612[m
+Author: Yevhen Stepanenko <yevhen.s@mate.academy>
+Date:   Tue May 17 14:39:23 2022 +0300
+
+    Cypress tests added
+
+[33mcommit 136728da897f2f803155c14caf92ea9ca5e3b3ef[m
+Merge: 50e6ada b070e71
+Author: Yevhen Stepanenko <93822605+YevhS@users.noreply.github.com>
+Date:   Tue May 17 13:41:14 2022 +0300
+
+    Merge pull request #365 from mate-academy/revert-357-cypress_tests_added
+    
+    Revert "Cypress tests added"
+
+[33mcommit b070e716761181d14760198c3fefddf1a3610da7[m
+Author: Yevhen Stepanenko <93822605+YevhS@users.noreply.github.com>
+Date:   Tue May 17 13:40:24 2022 +0300
+
+    Revert "Cypress tests added"
+
+[33mcommit 50e6ada6a3f91bfc0aab1abacc21365be13f90cd[m
+Merge: 1eb98de 0a4bca8
+Author: Yevhen Stepanenko <93822605+YevhS@users.noreply.github.com>
+Date:   Mon May 16 11:21:53 2022 +0300
+
+    Merge pull request #357 from mate-academy/cypress_tests_added
+    
+    Cypress tests added
+
+[33mcommit 0a4bca8a6561da872cd6fcb902a971b2a00beda4[m
+Author: Yevhen Stepanenko <yevhen.s@mate.academy>
+Date:   Sat May 14 14:38:34 2022 +0300
+
+    Fixes after testing on other solutions
+
+[33mcommit 997c45c289cdfedde910f96cdd0b3b0e6f022c06[m
+Author: Yevhen Stepanenko <yevhen.s@mate.academy>
+Date:   Sat May 14 12:25:06 2022 +0300
+
+    Fixes after testing on other solutions
+
+[33mcommit 9910fc6475ca3f89f6dc0b798ee612bb8e1b6180[m
+Author: Yevhen Stepanenko <yevhen.s@mate.academy>
+Date:   Sun May 1 14:03:47 2022 +0300
+
+    Fixes
+
+[33mcommit 80fdfad45c27549abed27ac85417953ddad0da1c[m
+Author: Yevhen Stepanenko <yevhen.s@mate.academy>
+Date:   Fri Apr 22 20:45:29 2022 +0300
+
+    Added test for todo elem values validation
+
+[33mcommit 799d6dbe0bdde41486f290fc63b30e02d50a5d61[m
+Author: Yevhen Stepanenko <yevhen.s@mate.academy>
+Date:   Fri Apr 22 19:11:02 2022 +0300
+
+    Changed title of the test
+
+[33mcommit 8dc15a758cdaa1205e44e0b8940964a40b90ffc4[m
+Author: Yevhen Stepanenko <yevhen.s@mate.academy>
+Date:   Fri Apr 22 19:01:24 2022 +0300
+
+    Cypress tests added
+
+[33mcommit 1eb98dea27548210468adff0f872c1120196bdb3[m
+Merge: 6edbf6e f1ea1b4
+Author: Yurii Holiuk <bionicuss@gmail.com>
+Date:   Thu Apr 7 17:48:07 2022 +0300
+
+    Merge pull request #355 from mate-academy/mate-scripts-update
+    
+    Update and init
+
+[33mcommit f1ea1b471f95926a6a19411b9ae32a7932d37c73[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 17:47:56 2022 +0300
+
+    Update and init
+
+[33mcommit 6edbf6e45b5f7b94d8f1589fbe3407152c7727a6[m
+Merge: 37ff2d8 2902e0c
+Author: Yurii Holiuk <bionicuss@gmail.com>
+Date:   Thu Apr 7 16:36:32 2022 +0300
+
+    Merge pull request #353 from mate-academy/mate-scripts-update
+    
+    Component tests and other improvements
+
+[33mcommit 2902e0c62984a4b1f6c637ceacf9bc0879220a9b[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 16:32:24 2022 +0300
+
+    Update and init
+
+[33mcommit 71840ae2ac74c13e7a31059f14240f04c1cdb0ed[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 16:22:39 2022 +0300
+
+    fix
+
+[33mcommit b47720927ef99103f5b436b5953d6fcb5cfc7816[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 16:09:46 2022 +0300
+
+    Update and init
+
+[33mcommit b62874a25e64e0328296ec92d00a0ba3e0eb90f7[m
+Author: Yurii Holiuk <bionicuss@gmail.com>
+Date:   Thu Apr 7 15:46:21 2022 +0300
+
+    Update App.js
+
+[33mcommit 28ad46a48d7b2b44034e30f5f14aef786c3f0770[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 15:26:26 2022 +0300
+
+    Update scripts
+
+[33mcommit b2f9d5988fb569a5c622d8a87a5afb9b49061eca[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 15:13:57 2022 +0300
+
+    Update workflows
+
+[33mcommit 029211a125475d9dc48b8d88401cc3a45a6e7063[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 13:51:10 2022 +0300
+
+    Update scripts
+
+[33mcommit 4839d555c70ebe152d6153f755c703ef940755f8[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 13:07:54 2022 +0300
+
+    Add cypress verify to postinstall
+
+[33mcommit bb189a90127b15c1e3189c7f9af4912a10736d38[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 10:22:11 2022 +0300
+
+    Downgrade
+
+[33mcommit 3979bde8a23f0fea2abb8e135b1b7dc4fe4e199a[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 09:42:11 2022 +0300
+
+    Restore checklists, update package, fix tests
+
+[33mcommit 4942ac443e1daf66772996442f3b20628641f3d5[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 08:46:52 2022 +0300
+
+    Update workflows
+
+[33mcommit 27d3a5a90eebe6e1cf6a745351bc013fa2274e85[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Thu Apr 7 08:44:49 2022 +0300
+
+    Component tests and other improvements
+
+[33mcommit 06cc59f772fda5ca7edaa993018650622d16e8d0[m
+Author: YuriiHoliuk <yurii.holiuk@mate.academy>
+Date:   Wed Apr 6 21:40:01 2022 +0300
+
+    Component tests and other improvements
+
+[33mcommit 37ff2d8076fd8fd20d72307a99483646bcfa48ee[m
+Author: Vladyslav Polets <46418908+vpolets@users.noreply.github.com>
+Date:   Tue Oct 5 16:45:49 2021 +0300
+
+    Update repo. Added bulma and js config (#336)
+
+[33mcommit 22dd203f83fe7724487739cb0c4ed50842068821[m
+Author: Vladyslav Polets <46418908+vpolets@users.noreply.github.com>
+Date:   Tue Sep 28 13:49:25 2021 +0300
+
+    Update repo. Added cypress (#334)
+
+[33mcommit 9ec21eed47b43a3df8bea831ac3edec87818b906[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Thu Sep 10 16:17:09 2020 +0300
+
+    Update README.md
+
+[33mcommit 0819564fe2c121c80b6a06206ca335110840dc8d[m
+Author: mgrinko <glukym@gmail.com>
+Date:   Wed Sep 9 09:53:48 2020 +0300
+
+    Styles and the description was fixed
+
+[33mcommit 7aa0644c3ea34c0b020884567e8928ccd1a30c9a[m
+Author: Holovko Iryna <33497431+irenhh@users.noreply.github.com>
+Date:   Mon Sep 7 14:39:24 2020 +0300
+
+    Update checklist.md
+
+[33mcommit 0b18d2cf0afee3eb2868f0309199ce94ac48f260[m
+Author: Vladimir Beliy <vovaazick@gmail.com>
+Date:   Mon Jul 13 13:02:39 2020 +0300
+
+    added focus
+
+[33mcommit 58a41bb7660b0f1f271f0ba5ccacf54540d56b83[m
+Author: Vladyslav Polets <46418908+vpolets@users.noreply.github.com>
+Date:   Tue May 12 12:40:27 2020 +0300
+
+    Update checklist.md
+
+[33mcommit 94fd76e6d8ce444a4e20e99c54e331981a4359b3[m
+Author: Vladyslav Polets <46418908+vpolets@users.noreply.github.com>
+Date:   Tue May 12 12:37:59 2020 +0300
+
+    Create checklist.md
+
+[33mcommit 1b3b106d01b038ede7d9a091485997f5d2de49f5[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Wed Apr 22 12:42:08 2020 +0300
+
+    Update package.json
+
+[33mcommit aecefb07e5131d717370c8d631592e6705827282[m
+Merge: 843aaaf d88d659
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Wed Feb 26 14:27:17 2020 +0200
+
+    Merge pull request #120 from irenhh/patch-1
+    
+    edited optional task
+
+[33mcommit d88d6598f1cb182b81d9b1d1bf0f4e4135eca37e[m
+Author: Holovko Iryna <33497431+irenhh@users.noreply.github.com>
+Date:   Wed Feb 26 14:24:27 2020 +0200
+
+    edited optional task
+    
+    the explanation of the task looked confusing to me + saving new todo on blur is quite weird behavior
+
+[33mcommit 843aaaf069a4b1841c7c3d44b78151e1874ca7be[m
+Author: mgrinko <glukym@gmail.com>
+Date:   Fri Jan 17 15:43:32 2020 +0200
+
+    Workflow was updated
+
+[33mcommit 0177ab18f759d0efff7a9d2589868b3858f0fb35[m
+Merge: 41fdfa0 e16f922
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Mon Dec 16 13:27:39 2019 +0200
+
+    Merge pull request #103 from mgrinko/master
+    
+    stylelint was added to npm run lint command
+
+[33mcommit e16f922941bd8c7a07340809c12f41f2e197156f[m
+Author: mgrinko <glukym@gmail.com>
+Date:   Mon Dec 16 13:24:36 2019 +0200
+
+    stylelint was added to npm run lint command
+
+[33mcommit 41fdfa084e985d42f2b987d85028f6aefd9e4bbf[m
+Merge: 5167167 547fd24
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Fri Dec 13 09:47:25 2019 +0200
+
+    Merge pull request #90 from mgrinko/master
+    
+    Initial markup was fixed
+
+[33mcommit 547fd24f39ae2e32606e3d8a972768ec5f6ab9b3[m
+Author: mgrinko <glukym@gmail.com>
+Date:   Fri Dec 13 09:46:28 2019 +0200
+
+    The description was updated
+
+[33mcommit ce2d9b010dd8ea66794710310e85474f47495287[m
+Author: mgrinko <glukym@gmail.com>
+Date:   Fri Dec 13 09:37:01 2019 +0200
+
+    default markup was fixed
+
+[33mcommit 7c17825f30620f8fd850813d3826a4838421c718[m
+Author: mgrinko <glukym@gmail.com>
+Date:   Fri Dec 13 09:28:35 2019 +0200
+
+    Labels lint error was suppressed
+
+[33mcommit 516716723eedb8c36f213a1742906ecf705aeb5a[m
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Thu Dec 12 09:44:50 2019 +0200
+
+    Small fixes
+
+[33mcommit 94448d150e2f85b8107ac22cf89a8597297d31bd[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Sat Nov 2 18:02:18 2019 +0200
+
+    Bump lodash.template from 4.4.0 to 4.5.0 (#70)
+    
+    Bumps [lodash.template](https://github.com/lodash/lodash) from 4.4.0 to 4.5.0.
+    - [Release notes](https://github.com/lodash/lodash/releases)
+    - [Commits](https://github.com/lodash/lodash/compare/4.4.0...4.5.0)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 83e570fa75ed6b7934ebb682106f46e9f395c06f[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Sat Nov 2 15:15:42 2019 +0200
+
+    Bump mixin-deep from 1.3.1 to 1.3.2 (#71)
+    
+    Bumps [mixin-deep](https://github.com/jonschlinkert/mixin-deep) from 1.3.1 to 1.3.2.
+    - [Release notes](https://github.com/jonschlinkert/mixin-deep/releases)
+    - [Commits](https://github.com/jonschlinkert/mixin-deep/compare/1.3.1...1.3.2)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit ee6b044e24a1f319f1a82e5a469caf154b74ccf2[m
+Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Date:   Sat Nov 2 14:31:43 2019 +0200
+
+    Bump eslint-utils from 1.3.1 to 1.4.3 (#69)
+    
+    Bumps [eslint-utils](https://github.com/mysticatea/eslint-utils) from 1.3.1 to 1.4.3.
+    - [Release notes](https://github.com/mysticatea/eslint-utils/releases)
+    - [Commits](https://github.com/mysticatea/eslint-utils/compare/v1.3.1...v1.4.3)
+    
+    Signed-off-by: dependabot[bot] <support@github.com>
+
+[33mcommit 52806ce486df8c6fa4763a6252c7735d7adf8f2f[m
+Merge: 555cbbb 5af143d
+Author: Misha Grinko <glukym@gmail.com>
+Date:   Sat Jul 13 07:54:07 2019 +0300
+
+    Merge pull request #8 from volodymyrkryvytskyy/hooks
+    
+    hooks added
