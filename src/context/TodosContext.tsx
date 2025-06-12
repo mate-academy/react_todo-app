@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type TodosContextValue = {
@@ -17,6 +17,10 @@ type Props = {
 
 export const TodosProvider = ({ children }: Props) => {
   const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <TodosContext.Provider value={{ todos, setTodos }}>

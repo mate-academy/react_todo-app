@@ -7,11 +7,14 @@ import './styles/index.scss';
 import { App } from './App';
 import { ActiveLinkProvider } from './context/ActiveLinkContext';
 import { TodosProvider } from './context/TodosContext';
+import { FocusProvider } from './context/FocusContext';
 
 createRoot(document.getElementById('root') as HTMLDivElement).render(
   <TodosProvider>
     <ActiveLinkProvider>
-      <App />
+      <FocusProvider>
+        <App />
+      </FocusProvider>
     </ActiveLinkProvider>
   </TodosProvider>,
 );

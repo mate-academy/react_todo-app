@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { changeTodo, deleteTodo } from '../api/localStorageFunctions';
 import { useContext, useState } from 'react';
 import { TodosContext } from '../context/TodosContext';
+import { FocusContext } from '../context/FocusContext';
 
 type Props = {
   todo: Todo;
@@ -11,6 +12,7 @@ type Props = {
 
 export const TodoItem = ({ todo: { title, id, completed } }: Props) => {
   const { setTodos } = useContext(TodosContext);
+  const { focusInput } = useContext(FocusContext);
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const handleChanges = (param: 'status' | 'title') => {
@@ -44,6 +46,7 @@ export const TodoItem = ({ todo: { title, id, completed } }: Props) => {
     deleteTodo(id);
     setTodos(prevTodos => prevTodos.filter(prevTodo => prevTodo.id !== id));
     setIsEditing(false);
+    focusInput();
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
