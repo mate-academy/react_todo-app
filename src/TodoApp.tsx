@@ -97,7 +97,7 @@ export const TodoApp: React.FC = () => {
                   todo={todo}
                   toggleTodo={toggleTodo}
                   deleteTodo={handleDelete}
-                  editTodo={updateTodo}
+                  updateTodo={updateTodo}
                 />
               ))}
             </section>

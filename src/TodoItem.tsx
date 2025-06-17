@@ -10,18 +10,17 @@ interface TodoItemProps {
   todo: Todo;
   toggleTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
-  editTodo: (id: number, newTitle: string) => void;
+  updateTodo: (id: number, newTitle: string) => void; // zmienione z editTodo
 }
 
 export const TodoItem: React.FC<TodoItemProps> = ({
   todo,
   toggleTodo,
   deleteTodo,
-  editTodo,
+  updateTodo, // zmienione z editTodo
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     const trimmed = editTitle.trim();
 
     if (trimmed) {
-      editTodo(todo.id, trimmed);
+      updateTodo(todo.id, trimmed); // zmienione z editTodo
     } else {
       deleteTodo(todo.id);
     }
