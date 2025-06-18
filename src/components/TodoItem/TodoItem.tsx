@@ -3,21 +3,21 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/types';
-import { ActionType, useDispatch } from '../../globalProvider';
+import { useTodoContext } from '../../globalProvider';
 
 interface Props {
   todo: Todo;
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { handleUpdate, deleteTodo, toggleTodo } = useTodoContext();
+
   const { id, completed, title } = todo;
 
   const [editingTitle, setEditingTitle] = useState(title);
   const [isTodoEditing, setIsTodoEditing] = useState<boolean>(false);
 
-  const dispatch = useDispatch();
-
-  const handleSubmit = async (event?: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
 
     const normalizedTitle = editingTitle.trim();
@@ -29,16 +29,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
 
     if (!normalizedTitle) {
-      dispatch({ type: ActionType.Delete, payload: id });
+      deleteTodo(id);
 
       return;
     }
 
-    dispatch({
-      type: ActionType.Update,
-      payload: { id: id, title: normalizedTitle },
-    });
-
+    handleUpdate(normalizedTitle, id);
     setIsTodoEditing(false);
   };
 
@@ -49,10 +45,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   };
 
-  const handleDelete = () => {
-    dispatch({ type: ActionType.Delete, payload: id });
-  };
-
   return (
     <div data-cy="Todo" className={cn('todo', { completed: completed })}>
       <label className="todo__status-label">
@@ -61,12 +53,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onChange={() =>
-            dispatch({
-              type: ActionType.Toggle,
-              payload: { id: id, status: !completed },
-            })
-          }
+          onChange={() => toggleTodo(id)}
         />
       </label>
 
@@ -84,7 +71,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={handleDelete}
+            onClick={() => deleteTodo(id)}
           >
             ×
           </button>

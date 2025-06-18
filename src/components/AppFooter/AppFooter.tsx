@@ -1,12 +1,6 @@
 import cn from 'classnames';
-import React, { useMemo } from 'react';
 import { FilterParams } from '../../types/types';
-import { ActionType, useDispatch, useGlobalState } from '../../globalProvider';
-
-interface Props {
-  filter: FilterParams;
-  setFilter: (value: FilterParams) => void;
-}
+import { useTodoContext } from '../../globalProvider';
 
 const filterOptions = [
   { value: FilterParams.All, label: 'All' },
@@ -14,27 +8,9 @@ const filterOptions = [
   { value: FilterParams.Completed, label: 'Completed' },
 ];
 
-export const AppFooter: React.FC<Props> = ({ filter, setFilter }) => {
-  const dispatch = useDispatch();
-  const todos = useGlobalState();
-
-  const { activeTodos, isCompletedTodos } = useMemo(() => {
-    const active = todos.filter(todo => !todo.completed).length;
-    const hasCompleted = todos.some(todo => todo.completed);
-
-    return {
-      activeTodos: active,
-      isCompletedTodos: hasCompleted,
-    };
-  }, [todos]);
-
-  const handleDeleteCompleted = () => {
-    const completedIds = todos
-      .filter(todo => todo.completed)
-      .map(todo => todo.id);
-
-    dispatch({ type: ActionType.DeleteCompleted, payload: completedIds });
-  };
+export const AppFooter = () => {
+  const { isCompletedTodos, filter, activeTodos, deleteCompleted, setFilter } =
+    useTodoContext();
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -67,7 +43,7 @@ export const AppFooter: React.FC<Props> = ({ filter, setFilter }) => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!isCompletedTodos}
-        onClick={handleDeleteCompleted}
+        onClick={deleteCompleted}
       >
         Clear completed
       </button>

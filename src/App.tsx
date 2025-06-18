@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
-import { prepareTodoList } from './utils/prepareTodoList';
+import React from 'react';
 
-import { FilterParams, Todo } from './types/types';
+import { useTodoContext } from './globalProvider';
 
 import { AppHeader } from './components/AppHeader';
-import { TodoItem } from './components/TodoItem';
+import { TodoList } from './components/TodoList';
 import { AppFooter } from './components/AppFooter';
-import { useGlobalState } from './globalProvider';
 
 export const App: React.FC = () => {
-  const [filter, setFilter] = useState<FilterParams>(FilterParams.All);
-
-  const todos = useGlobalState();
-
-  const todoList = prepareTodoList(todos, filter);
+  const { hasTodo } = useTodoContext();
 
   return (
     <div className="todoapp">
@@ -22,13 +16,9 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <AppHeader />
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {todoList.map((todo: Todo) => (
-            <TodoItem key={todo.id} todo={todo} />
-          ))}
-        </section>
+        <TodoList />
 
-        {!!todos.length && <AppFooter filter={filter} setFilter={setFilter} />}
+        {hasTodo && <AppFooter />}
       </div>
     </div>
   );

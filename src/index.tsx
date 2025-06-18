@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 
 import './styles/index.scss';
+// import 'bulma/css/bulma.css';
 
 import { App } from './App';
 import { GlobalProvider } from './globalProvider';

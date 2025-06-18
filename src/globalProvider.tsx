@@ -1,88 +1,155 @@
-import React, { createContext, useEffect, useReducer } from 'react';
-import { Todo } from './types/types';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { FilterParams, Todo } from './types/types';
+import { prepareTodoList } from './utils/prepareTodoList';
 
-export enum ActionType {
-  Add = 'addTodo',
-  Delete = 'deleteTodo',
-  Update = 'updateTodo',
-  Toggle = 'toggleTodo',
-  DeleteCompleted = 'deleteCompleted',
-  ToggleAll = 'toggleAll',
+type EmptyFunc = () => void;
+const emptyFunc: EmptyFunc = () => {};
+
+interface InitialState {
+  isAllTodoCompleted: boolean;
+  isCompletedTodos: boolean;
+  activeTodos: number;
+  todoData: Todo[];
+  hasTodo: boolean;
+  filter: FilterParams;
+  todoList: Todo[];
+  deleteCompleted: () => void;
+  handleUpdate: (normalizedTitle: string, id: number) => void;
+  deleteTodo: (id: number) => void;
+  toggleTodo: (currentId: number) => void;
+  toggleAll: () => void;
+  addTodo: (title: string) => void;
+  setFilter: React.Dispatch<React.SetStateAction<FilterParams>>;
 }
 
-type Actions =
-  | { type: ActionType.Add; payload: Todo }
-  | { type: ActionType.Delete; payload: number }
-  | { type: ActionType.Update; payload: { id: number; title: string } }
-  | { type: ActionType.Toggle; payload: { id: number; status: boolean } }
-  | { type: ActionType.DeleteCompleted; payload: number[] }
-  | { type: ActionType.ToggleAll; payload: boolean };
-
-const reducer = (state: Todo[], action: Actions): Todo[] => {
-  switch (action.type) {
-    case ActionType.Add:
-      return [...state, action.payload];
-
-    case ActionType.Delete:
-      return state.filter(cur => cur.id !== action.payload);
-
-    case ActionType.Update:
-      return state.map(todo =>
-        todo.id === action.payload.id
-          ? { ...todo, title: action.payload.title }
-          : todo,
-      );
-
-    case ActionType.Toggle:
-      return state.map(todo =>
-        todo.id === action.payload.id
-          ? { ...todo, completed: action.payload.status }
-          : todo,
-      );
-
-    case ActionType.DeleteCompleted:
-      return state.filter(todo => !action.payload.includes(todo.id));
-
-    case ActionType.ToggleAll:
-      return state.map(todo => ({ ...todo, completed: action.payload }));
-
-    default:
-      return state;
-  }
+const initialState: InitialState = {
+  isAllTodoCompleted: false,
+  isCompletedTodos: false,
+  activeTodos: 0,
+  todoData: [],
+  hasTodo: false,
+  filter: FilterParams.All,
+  todoList: [],
+  deleteCompleted: emptyFunc,
+  handleUpdate: emptyFunc,
+  deleteTodo: emptyFunc,
+  toggleTodo: emptyFunc,
+  toggleAll: emptyFunc,
+  addTodo: emptyFunc,
+  setFilter: emptyFunc,
 };
 
-const initializer = (initialValue: Todo[]): Todo[] => {
-  const data = localStorage.getItem('todos');
-
-  if (data === null) {
-    return initialValue;
-  }
-
-  try {
-    return JSON.parse(data);
-  } catch {
-    return initialValue;
-  }
-};
-
-const initialState: Todo[] = [];
-
-const StateContext = createContext<Todo[]>(initialState);
-const DispatchContext = createContext<React.Dispatch<Actions>>(() => {});
+const TodoContext = createContext<InitialState>(initialState);
 
 export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialState, initializer);
+  const [todoData, setTodoData] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<FilterParams>(FilterParams.All);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(state));
-  }, [state]);
+    const data = localStorage.getItem('todos');
 
-  return (
-    <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>{children}</StateContext.Provider>
-    </DispatchContext.Provider>
-  );
+    if (data === null) {
+      setTodoData([]);
+
+      return;
+    }
+
+    try {
+      setTodoData(JSON.parse(data));
+    } catch {
+      setTodoData([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todoData));
+  }, [todoData]);
+
+  const { activeTodos, isCompletedTodos, isAllTodoCompleted, hasTodo } =
+    useMemo(
+      () => ({
+        activeTodos: todoData.filter(todo => !todo.completed).length,
+
+        isCompletedTodos: todoData.some(todo => todo.completed),
+
+        isAllTodoCompleted:
+          todoData.length > 0 && todoData.every(todo => todo.completed),
+
+        hasTodo: !!todoData.length,
+      }),
+      [todoData],
+    );
+
+  const addTodo = (title: string) => {
+    const normalizedTitle = title.trim();
+
+    const newTodo: Todo = {
+      id: +new Date(),
+      title: normalizedTitle,
+      completed: false,
+    };
+
+    const newData = [...todoData, newTodo];
+
+    setTodoData(newData);
+  };
+
+  const deleteTodo = (id: number) => {
+    const newData = todoData.filter(todo => todo.id !== id);
+
+    setTodoData(newData);
+  };
+
+  const handleUpdate = (normalizedTitle: string, id: number) => {
+    const newData = todoData.map(todo =>
+      todo.id === id ? { ...todo, title: normalizedTitle } : todo,
+    );
+
+    setTodoData(newData);
+  };
+
+  const toggleTodo = (currentId: number) => {
+    const newData = todoData.map(todo =>
+      todo.id === currentId ? { ...todo, completed: !todo.completed } : todo,
+    );
+
+    setTodoData(newData);
+  };
+
+  const deleteCompleted = () => {
+    const newData = todoData.filter(todo => !todo.completed);
+
+    setTodoData(newData);
+  };
+
+  const toggleAll = () => {
+    const newStatus = !isAllTodoCompleted;
+
+    const newData = todoData.map(todo => ({ ...todo, completed: newStatus }));
+
+    setTodoData(newData);
+  };
+
+  const todoList = prepareTodoList(todoData, filter);
+
+  const value = {
+    isAllTodoCompleted,
+    isCompletedTodos,
+    activeTodos,
+    todoData,
+    hasTodo,
+    filter,
+    todoList,
+    deleteCompleted,
+    handleUpdate,
+    deleteTodo,
+    toggleTodo,
+    toggleAll,
+    addTodo,
+    setFilter,
+  };
+
+  return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
 
-export const useGlobalState = () => React.useContext(StateContext);
-export const useDispatch = () => React.useContext(DispatchContext);
+export const useTodoContext = () => useContext(TodoContext);
