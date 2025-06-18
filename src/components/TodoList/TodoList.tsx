@@ -1,4 +1,4 @@
-import { useTodoContext } from '../../globalProvider';
+import { useTodoContext } from '../../TodoProvider';
 import { Todo } from '../../types/types';
 import { TodoItem } from '../TodoItem';
 

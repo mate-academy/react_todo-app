@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { useTodoContext } from '../../globalProvider';
+import { useTodoContext } from '../../TodoProvider';
 
 export const AppHeader = () => {
   const { isAllTodoCompleted, todoData, hasTodo, toggleAll, addTodo } =

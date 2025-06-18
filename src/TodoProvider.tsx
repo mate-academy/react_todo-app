@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { FilterParams, Todo } from './types/types';
 import { prepareTodoList } from './utils/prepareTodoList';
 
@@ -13,13 +20,13 @@ interface InitialState {
   hasTodo: boolean;
   filter: FilterParams;
   todoList: Todo[];
-  deleteCompleted: () => void;
+  deleteCompleted: EmptyFunc;
   handleUpdate: (normalizedTitle: string, id: number) => void;
   deleteTodo: (id: number) => void;
   toggleTodo: (currentId: number) => void;
-  toggleAll: () => void;
+  toggleAll: EmptyFunc;
   addTodo: (title: string) => void;
-  setFilter: React.Dispatch<React.SetStateAction<FilterParams>>;
+  setFilter: (filter: FilterParams) => void;
 }
 
 const initialState: InitialState = {
@@ -41,7 +48,7 @@ const initialState: InitialState = {
 
 const TodoContext = createContext<InitialState>(initialState);
 
-export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
+export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todoData, setTodoData] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterParams>(FilterParams.All);
 
@@ -80,7 +87,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
       [todoData],
     );
 
-  const addTodo = (title: string) => {
+  const addTodo = useCallback((title: string) => {
     const normalizedTitle = title.trim();
 
     const newTodo: Todo = {
@@ -89,48 +96,43 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
       completed: false,
     };
 
-    const newData = [...todoData, newTodo];
+    setTodoData(cur => [...cur, newTodo]);
+  }, []);
 
-    setTodoData(newData);
-  };
+  const deleteTodo = useCallback((id: number) => {
+    setTodoData(cur => cur.filter(todo => todo.id !== id));
+  }, []);
 
-  const deleteTodo = (id: number) => {
-    const newData = todoData.filter(todo => todo.id !== id);
-
-    setTodoData(newData);
-  };
-
-  const handleUpdate = (normalizedTitle: string, id: number) => {
-    const newData = todoData.map(todo =>
-      todo.id === id ? { ...todo, title: normalizedTitle } : todo,
+  const handleUpdate = useCallback((normalizedTitle: string, id: number) => {
+    setTodoData(cur =>
+      cur.map(todo =>
+        todo.id === id ? { ...todo, title: normalizedTitle } : todo,
+      ),
     );
+  }, []);
 
-    setTodoData(newData);
-  };
-
-  const toggleTodo = (currentId: number) => {
-    const newData = todoData.map(todo =>
-      todo.id === currentId ? { ...todo, completed: !todo.completed } : todo,
+  const toggleTodo = useCallback((currentId: number) => {
+    setTodoData(cur =>
+      cur.map(todo =>
+        todo.id === currentId ? { ...todo, completed: !todo.completed } : todo,
+      ),
     );
+  }, []);
 
-    setTodoData(newData);
-  };
+  const deleteCompleted = useCallback(() => {
+    setTodoData(cur => cur.filter(todo => !todo.completed));
+  }, []);
 
-  const deleteCompleted = () => {
-    const newData = todoData.filter(todo => !todo.completed);
-
-    setTodoData(newData);
-  };
-
-  const toggleAll = () => {
+  const toggleAll = useCallback(() => {
     const newStatus = !isAllTodoCompleted;
 
-    const newData = todoData.map(todo => ({ ...todo, completed: newStatus }));
+    setTodoData(cur => cur.map(todo => ({ ...todo, completed: newStatus })));
+  }, [isAllTodoCompleted]);
 
-    setTodoData(newData);
-  };
-
-  const todoList = prepareTodoList(todoData, filter);
+  const todoList = useMemo(
+    () => prepareTodoList(todoData, filter),
+    [todoData, filter],
+  );
 
   const value = {
     isAllTodoCompleted,

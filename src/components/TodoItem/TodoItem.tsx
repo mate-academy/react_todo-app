@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/types';
-import { useTodoContext } from '../../globalProvider';
+import { useTodoContext } from '../../TodoProvider';
 
 interface Props {
   todo: Todo;

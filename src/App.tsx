@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useTodoContext } from './globalProvider';
+import { useTodoContext } from './TodoProvider';
 
 import { AppHeader } from './components/AppHeader';
 import { TodoList } from './components/TodoList';

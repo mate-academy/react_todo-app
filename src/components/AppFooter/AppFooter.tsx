@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { FilterParams } from '../../types/types';
-import { useTodoContext } from '../../globalProvider';
+import { useTodoContext } from '../../TodoProvider';
 
 const filterOptions = [
   { value: FilterParams.All, label: 'All' },
