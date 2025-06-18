@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { useTodoContext } from '../../hooks/useTodos';
+import { useTodoContext } from '../../context/useTodosContext';
 
 export const ToggleAllButton = () => {
   const { state, toggleAll } = useTodoContext();

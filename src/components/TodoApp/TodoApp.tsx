@@ -1,6 +1,6 @@
-import { useTodoContext } from '../../hooks/useTodos';
+import { useTodoContext } from '../../context/useTodosContext';
 import { AddTodoForm } from '../AddTodoForm';
-import { TodoFooter } from '../TodoFooter/TodoFooter';
+import { TodoFooter } from '../TodoFooter';
 import { TodoList } from '../TodoList';
 import { ToggleAllButton } from '../ToggleAllButton';
 

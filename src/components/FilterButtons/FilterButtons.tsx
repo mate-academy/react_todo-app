@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { Filter, FilterLabels } from '../../entities/Todo';
-import { useTodoContext } from '../../hooks/useTodos';
+import { useTodoContext } from '../../context/useTodosContext';
 
 const filters: Record<FilterLabels, Filter> = {
   All: 'all',

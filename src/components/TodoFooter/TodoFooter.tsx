@@ -1,4 +1,4 @@
-import { useTodoContext } from '../../hooks/useTodos';
+import { useTodoContext } from '../../context/useTodosContext';
 import { FilterButtons } from '../FilterButtons';
 
 export const TodoFooter = () => {

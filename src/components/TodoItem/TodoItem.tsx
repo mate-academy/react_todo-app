@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import cn from 'classnames';
 import { Todo } from '../../entities/Todo';
-import { useTodoContext } from '../../hooks/useTodos';
+import { useTodoContext } from '../../context/useTodosContext';
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -38,9 +38,7 @@ export const TodoItem = ({ todo }: Props) => {
     }
 
     setIsEditing(false);
-    if (focusAddInput) {
-      focusAddInput();
-    }
+    focusAddInput?.();
   };
 
   const cancelEdit = () => {
@@ -59,6 +57,14 @@ export const TodoItem = ({ todo }: Props) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     saveEdit();
+  };
+
+  const handleDelete = () => {
+    removeTodo(todo.id);
+
+    if (focusAddInput) {
+      focusAddInput();
+    }
   };
 
   return (
@@ -102,7 +108,7 @@ export const TodoItem = ({ todo }: Props) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => removeTodo(todo.id)}
+            onClick={handleDelete}
           >
             ×
           </button>

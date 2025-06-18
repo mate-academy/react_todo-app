@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTodoContext } from '../../hooks/useTodos';
+import { useTodoContext } from '../../context/useTodosContext';
 
 export const AddTodoForm = () => {
   const [title, setTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const { addTodo, setFocusAddInput } = useTodoContext();
+  const { addTodo, focusTrigger } = useTodoContext();
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [focusTrigger]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,14 +26,6 @@ export const AddTodoForm = () => {
     addTodo(newTodo);
     setTitle('');
   };
-
-  useEffect(() => {
-    if (setFocusAddInput) {
-      setFocusAddInput(() => () => {
-        inputRef.current?.focus();
-      });
-    }
-  }, [setFocusAddInput]);
 
   return (
     <form onSubmit={handleSubmit}>
