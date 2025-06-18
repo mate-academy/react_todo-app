@@ -70,9 +70,15 @@
     opacity: 1;
   }
 
+  & form {
+    grid-column: 2 / 3;
+    width: 100%;
+  }
+
   &__title-field {
     width: 100%;
     padding: 11px 14px;
+    box-sizing: border-box;
 
     font-size: inherit;
     line-height: inherit;
