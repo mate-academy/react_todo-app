@@ -1,14 +1,13 @@
 import cn from 'classnames';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/Todo';
-import { DispatchContext, StateContext } from '../GlobalProvider';
+import { useTodos } from '../hooks/useTodos';
 
 export const Header: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { todos } = useContext(StateContext);
-  const dispatch = useContext(DispatchContext);
+  const { todos, addTodo, updateTodoStatus } = useTodos();
 
   useEffect(() => {
     if (inputRef.current) {
@@ -23,13 +22,12 @@ export const Header: React.FC = () => {
     event.preventDefault();
 
     const newTodo: Todo = {
-      userId: 3044,
       id: +Date.now(),
       title: todoTitle.trim(),
       completed: false,
     };
 
-    dispatch({ type: 'addTodo', payload: newTodo });
+    addTodo(newTodo);
     setTodoTitle('');
   };
 
@@ -38,10 +36,7 @@ export const Header: React.FC = () => {
 
     todos.forEach(todo => {
       if (todo.completed !== !areAllCompleted) {
-        dispatch({
-          type: 'updateTodoStatus',
-          payload: { id: todo.id, complete: !todo.completed },
-        });
+        updateTodoStatus(todo.id, !todo.completed);
       }
     });
   };

@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useMemo, useState } from 'react';
-import { StateContext } from './GlobalProvider';
+import React, { useMemo, useState } from 'react';
 import { Filter } from './types/Filter';
 import { getVisibleTodos } from './utils/getVisibleTodos';
 import { Header } from './components/Header';
 import { TodoItem } from './components/TodoItem';
 import { Footer } from './components/Footer';
+import { useTodos } from './hooks/useTodos';
 
 export const App: React.FC = () => {
-  const { todos } = useContext(StateContext);
+  const { todos } = useTodos();
 
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const visibleTodos = useMemo(

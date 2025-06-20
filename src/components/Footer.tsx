@@ -1,7 +1,6 @@
 import cn from 'classnames';
 import { Filter } from '../types/Filter';
-import { useContext } from 'react';
-import { DispatchContext, StateContext } from '../GlobalProvider';
+import { useTodos } from '../hooks/useTodos';
 
 type Props = {
   filter: Filter;
@@ -9,8 +8,7 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ filter, onFilterChange }) => {
-  const { todos } = useContext(StateContext);
-  const dispatch = useContext(DispatchContext);
+  const { todos, deleteTodo } = useTodos();
 
   const isAnyTodosCompleted = todos.some(todo => todo.completed);
   const countOfUncompleted = todos.filter(todo => !todo.completed).length;
@@ -18,7 +16,7 @@ export const Footer: React.FC<Props> = ({ filter, onFilterChange }) => {
   const onClearCompleted = () => {
     todos.forEach(todo => {
       if (todo.completed) {
-        dispatch({ type: 'deleteTodo', payload: { id: todo.id } });
+        deleteTodo(todo.id);
       }
     });
   };

@@ -3,8 +3,8 @@
 
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
-import React, { useContext, useState } from 'react';
-import { DispatchContext } from '../GlobalProvider';
+import React, { useState } from 'react';
+import { useTodos } from '../hooks/useTodos';
 
 type Props = {
   todo: Todo;
@@ -14,7 +14,7 @@ export const TodoItem = React.memo(function TodoItem({ todo }: Props) {
   const [isTodoEditing, setIsTodoEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
 
-  const dispatch = useContext(DispatchContext);
+  const { deleteTodo, updateTodoTitle, updateTodoStatus } = useTodos();
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
@@ -22,16 +22,13 @@ export const TodoItem = React.memo(function TodoItem({ todo }: Props) {
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) {
-      dispatch({ type: 'deleteTodo', payload: { id: todo.id } });
+      deleteTodo(todo.id);
 
       return;
     }
 
     if (trimmedTitle !== todo.title) {
-      dispatch({
-        type: 'updateTodoTitle',
-        payload: { id: todo.id, title: trimmedTitle },
-      });
+      updateTodoTitle(todo.id, trimmedTitle);
 
       e?.currentTarget?.blur();
     }
@@ -53,12 +50,7 @@ export const TodoItem = React.memo(function TodoItem({ todo }: Props) {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          onChange={() =>
-            dispatch({
-              type: 'updateTodoStatus',
-              payload: { id: todo.id, complete: !todo.completed },
-            })
-          }
+          onChange={() => updateTodoStatus(todo.id, !todo.completed)}
           checked={todo.completed}
         />
       </label>
@@ -92,9 +84,7 @@ export const TodoItem = React.memo(function TodoItem({ todo }: Props) {
           type="button"
           className="todo__remove"
           data-cy="TodoDelete"
-          onClick={() =>
-            dispatch({ type: 'deleteTodo', payload: { id: todo.id } })
-          }
+          onClick={() => deleteTodo(todo.id)}
         >
           ×
         </button>

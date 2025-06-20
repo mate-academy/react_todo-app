@@ -1,119 +1,74 @@
-import React from 'react';
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  PropsWithChildren,
+  useCallback,
+} from 'react';
 import { Todo } from './types/Todo';
 
-// function useLocalStorage<T>(
-//   key: string,
-//   defaultValue: T,
-// ): [T, React.Dispatch<React.SetStateAction<T>>] {
-//   const [value, setValue] = useState<T>(() => {
-//     const saved = localStorage.getItem(key);
-
-//     if (saved === null) {
-//       return defaultValue;
-//     }
-
-//     try {
-//       return JSON.parse(saved);
-//     } catch (e) {
-//       localStorage.removeItem(key);
-
-//       return defaultValue;
-//     }
-//   });
-
-//   React.useEffect(() => {
-//     localStorage.setItem(key, JSON.stringify(value));
-//   }, [key, value]);
-
-//   return [value, setValue];
-// }
-
-type RootState = {
+type TodosContextType = {
   todos: Todo[];
+  addTodo: (todo: Todo) => void;
+  deleteTodo: (id: number) => void;
+  updateTodoTitle: (id: number, title: string) => void;
+  updateTodoStatus: (id: number, complete: boolean) => void;
 };
 
-type Action =
-  | { type: 'getTodos' }
-  | { type: 'addTodo'; payload: Todo }
-  | { type: 'deleteTodo'; payload: { id: Todo['id'] } }
-  | { type: 'updateTodoStatus'; payload: { id: Todo['id']; complete: boolean } }
-  | { type: 'updateTodoTitle'; payload: { id: Todo['id']; title: string } };
-
-const reducer = (state: RootState, action: Action): RootState => {
-  switch (action.type) {
-    case 'getTodos':
-      return state;
-
-    case 'addTodo':
-      return {
-        todos: [...state.todos, action.payload],
-      };
-
-    case 'deleteTodo':
-      return {
-        todos: state.todos.filter(todo => todo.id !== action.payload.id),
-      };
-
-    case 'updateTodoTitle':
-      return {
-        todos: state.todos.map(todo =>
-          todo.id === action.payload.id
-            ? { ...todo, title: action.payload.title }
-            : todo,
-        ),
-      };
-
-    case 'updateTodoStatus':
-      return {
-        todos: state.todos.map(todo =>
-          todo.id === action.payload.id
-            ? { ...todo, completed: action.payload.complete }
-            : todo,
-        ),
-      };
-
-    default:
-      return state;
-  }
-};
-
-const initialState: RootState = {
+export const TodosContext = createContext<TodosContextType>({
   todos: [],
-};
+  addTodo: () => {},
+  deleteTodo: () => {},
+  updateTodoTitle: () => {},
+  updateTodoStatus: () => {},
+});
 
-export const StateContext = React.createContext<RootState>(initialState);
-export const DispatchContext = React.createContext<React.Dispatch<Action>>(
-  () => {},
-);
-
-export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
-  const initializer = (state: RootState): RootState => {
+export const GlobalProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const [todos, setTodos] = useState<Todo[]>(() => {
     try {
-      const todosStr = localStorage.getItem('todos');
+      const todosData = localStorage.getItem('todos');
 
-      if (todosStr) {
-        const todos = JSON.parse(todosStr);
+      return todosData ? JSON.parse(todosData) : [];
+    } catch {
+      return [];
+    }
+  });
 
-        return { todos };
-      }
-    } catch {}
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
-    return state;
+  const addTodo = useCallback((todo: Todo) => {
+    setTodos(prev => [...prev, todo]);
+  }, []);
+
+  const deleteTodo = useCallback((id: number) => {
+    setTodos(prev => prev.filter(todo => todo.id !== id));
+  }, []);
+
+  const updateTodoTitle = useCallback((id: number, title: string) => {
+    setTodos(prev =>
+      prev.map(todo => (todo.id === id ? { ...todo, title } : todo)),
+    );
+  }, []);
+
+  const updateTodoStatus = useCallback((id: number, complete: boolean) => {
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === id ? { ...todo, completed: complete } : todo,
+      ),
+    );
+  }, []);
+
+  const value = {
+    todos,
+    addTodo,
+    deleteTodo,
+    updateTodoTitle,
+    updateTodoStatus,
   };
 
-  const [state, dispatch] = React.useReducer(
-    reducer,
-    initialState,
-    initializer,
-  );
-
-  React.useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(state.todos));
-  }, [state.todos]);
-
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>{children}</StateContext.Provider>
-    </DispatchContext.Provider>
+    <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
   );
 };
