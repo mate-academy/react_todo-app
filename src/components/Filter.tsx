@@ -4,15 +4,21 @@ import cn from 'classnames';
 import { FilterType } from '../types/FilterType';
 import { useTodos } from './TodosContext';
 
-const filters = [
-  { type: FilterType.All, href: '#/', dataCy: 'FilterLinkAll' },
-  { type: FilterType.Active, href: '#/active', dataCy: 'FilterLinkActive' },
-  {
-    type: FilterType.Completed,
-    href: '#/completed',
-    dataCy: 'FilterLinkCompleted',
-  },
-];
+// const filters = [
+//   { type: FilterType.All, href: '#/', dataCy: 'FilterLinkAll' },
+//   { type: FilterType.Active, href: '#/active', dataCy: 'FilterLinkActive' },
+//   {
+//     type: FilterType.Completed,
+//     href: '#/completed',
+//     dataCy: 'FilterLinkCompleted',
+//   },
+// ];
+
+const filters = Object.values(FilterType).map(type => ({
+  type,
+  href: `#/${type === FilterType.All ? '' : type.toLowerCase()}`,
+  dataCy: `FilterLink${type}`,
+}));
 
 export const Filter: React.FC = () => {
   const { filter, setFilter } = useTodos();

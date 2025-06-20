@@ -38,8 +38,14 @@ export const App: React.FC = () => {
           handleAllTodoCompleted={handleAllTodoCompleted}
           inputRef={inputRef}
         />
-        {todos.length > 0 && <TodoList />}
-        {todos.length > 0 && <Footer />}
+        {/* {todos.length > 0 && <TodoList />} */}
+        {/* {todos.length > 0 && <Footer />} */}
+        {todos.length > 0 && (
+          <>
+            <TodoList />
+            <Footer />
+          </>
+        )}
       </div>
     </div>
   );
