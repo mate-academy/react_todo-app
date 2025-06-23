@@ -1,5 +1,5 @@
 .todoapp {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 24px;
   font-weight: 300;
   color: #4d4d4d;
@@ -29,7 +29,6 @@
 
   &__toggle-all {
     position: absolute;
-
     height: 100%;
     width: 45px;
 
@@ -49,7 +48,7 @@
     }
 
     &::before {
-      content: '❯';
+      content: "❯";
       transform: translateY(2px) rotate(90deg);
       line-height: 0;
     }
@@ -57,6 +56,7 @@
 
   &__new-todo {
     width: 100%;
+    box-sizing: border-box;
     padding: 16px 16px 16px 60px;
 
     font-size: 24px;
