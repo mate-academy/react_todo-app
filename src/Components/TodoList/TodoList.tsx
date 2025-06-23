@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTodoContext } from '../../hooks/useTodoContext';
+import classNames from 'classnames';
 
 export const TodoList: React.FC = () => {
   const { filteredTodos, toggleTodo, removeTodo, editTodo } = useTodoContext();
@@ -27,35 +28,46 @@ export const TodoList: React.FC = () => {
     setUpdatedTodoId(null);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, title) => {
+    e.preventDefault();
+
+    if (e.key === 'Escape') {
+      setUpdatedTodoId(null);
+      setNewTodoTitle(title);
+    }
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => (
+      {filteredTodos.map(({ id, title, completed }) => (
         <div
           data-cy="Todo"
-          className={`todo ${todo.completed ? 'completed' : ''}`}
-          key={todo.id}
+          className={classNames('todo', {
+            completed: completed,
+          })}
+          key={id}
         >
           <label className="todo__status-label">
-            {}
+            {/* eslint-disable jsx-a11y/label-has-associated-control */}
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={todo.completed}
-              onChange={() => toggleTodo(todo.id)}
+              checked={completed}
+              onChange={() => toggleTodo(id)}
             />
           </label>
 
-          {updatedTodoId !== todo.id ? (
+          {updatedTodoId !== id ? (
             <span
               data-cy="TodoTitle"
               className="todo__title"
               onDoubleClick={() => {
-                setUpdatedTodoId(todo.id);
-                setNewTodoTitle(todo.title);
+                setUpdatedTodoId(id);
+                setNewTodoTitle(title);
               }}
             >
-              {todo.title}
+              {title}
             </span>
           ) : (
             <form
@@ -74,22 +86,18 @@ export const TodoList: React.FC = () => {
                 onChange={e => setNewTodoTitle(e.target.value)}
                 onBlur={handleUpdateTodo}
                 onKeyDown={e => {
-                  if (e.key === 'Escape') {
-                    e.preventDefault();
-                    setUpdatedTodoId(null);
-                    setNewTodoTitle(todo.title);
-                  }
+                  handleKeyDown(e, title);
                 }}
               />
             </form>
           )}
 
-          {updatedTodoId !== todo.id && (
+          {updatedTodoId !== id && (
             <button
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={() => removeTodo(todo.id)}
+              onClick={() => removeTodo(id)}
             >
               ×
             </button>

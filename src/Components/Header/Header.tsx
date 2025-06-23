@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTodoContext } from '../../hooks/useTodoContext';
+import classNames from 'classnames';
 
 export const Header: React.FC = () => {
   const { todos, addTodo, toggleAll } = useTodoContext();
@@ -24,17 +25,15 @@ export const Header: React.FC = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+          className={classNames('todoapp__toggle-all', {
+            active: allCompleted,
+          })}
           data-cy="ToggleAllButton"
           onClick={toggleAll}
         />
       )}
 
-      <form
-        onSubmit={e => {
-          handleSubmit(e);
-        }}
-      >
+      <form onSubmit={handleSubmit}>
         <input
           ref={inputRef}
           data-cy="NewTodoField"

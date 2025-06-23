@@ -29,7 +29,7 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
       return [];
     }
   });
-  const [filter, setFilter] = useState<FilterTodos>('all');
+  const [filter, setFilter] = useState<FilterTodos>(FilterTodos.All);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
 
   const addTodo = (title: string) => {
@@ -78,10 +78,10 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     switch (filter) {
-      case 'active':
+      case FilterTodos.Active:
         setFilteredTodos(todos.filter(todo => !todo.completed));
         break;
-      case 'completed':
+      case FilterTodos.Completed:
         setFilteredTodos(todos.filter(todo => todo.completed));
         break;
       default:

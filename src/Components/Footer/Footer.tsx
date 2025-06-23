@@ -1,5 +1,13 @@
 import React from 'react';
 import { useTodoContext } from '../../hooks/useTodoContext';
+import classNames from 'classnames';
+import { FilterTodos } from '../../types/FilterTodos';
+
+const FILTER_TITLES: Record<FilterTodos, string> = {
+  all: 'All',
+  active: 'Active',
+  completed: 'Completed',
+};
 
 export const Footer: React.FC = () => {
   const { todos, filter, setFilter, clearCompleted } = useTodoContext();
@@ -14,32 +22,19 @@ export const Footer: React.FC = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter('all')}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter('active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('completed')}
-        >
-          Completed
-        </a>
+        {Object.values(FilterTodos).map(type => (
+          <a
+            key={type}
+            href={`#/${type === FilterTodos.All ? '' : type}`}
+            className={classNames('filter__link', {
+              selected: filter === type,
+            })}
+            data-cy={`FilterLink${type.charAt(0).toUpperCase() + type.slice(1)}`}
+            onClick={() => setFilter(type)}
+          >
+            {FILTER_TITLES[type]}
+          </a>
+        ))}
       </nav>
 
       <button
@@ -47,9 +42,7 @@ export const Footer: React.FC = () => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={countCompletedTodos === 0}
-        onClick={() => {
-          clearCompleted();
-        }}
+        onClick={clearCompleted}
       >
         Clear completed
       </button>
