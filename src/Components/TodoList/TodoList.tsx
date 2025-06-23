@@ -28,12 +28,17 @@ export const TodoList: React.FC = () => {
     setUpdatedTodoId(null);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, title) => {
-    e.preventDefault();
-
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    title: string,
+  ) => {
     if (e.key === 'Escape') {
+      e.preventDefault();
       setUpdatedTodoId(null);
       setNewTodoTitle(title);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      handleUpdateTodo();
     }
   };
 
