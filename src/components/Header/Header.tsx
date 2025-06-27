@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     mainInput?.current?.focus();
-  }, [todos]);
+  }, [todos, mainInput]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

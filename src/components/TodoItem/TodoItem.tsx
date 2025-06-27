@@ -100,6 +100,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="todo__status"
           checked={todo.completed}
           onClick={handleClick}
+          aria-label="Mark todo as done"
         />
       </label>
 
