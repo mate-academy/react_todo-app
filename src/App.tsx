@@ -1,157 +1,147 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { TodoProvider, useTodos } from './TodoContext';
+import { StatusFilter } from './types';
+import { TodoItem } from './TodoItem';
 
-export const App: React.FC = () => {
+const TodoApp: React.FC = () => {
+  const { todos, filter, addTodo, toggleAll, clearCompleted, setFilter } =
+    useTodos();
+
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const prevTodosLength = useRef(todos.length);
+
+  useEffect(() => {
+    if (todos.length < prevTodosLength.current && inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    prevTodosLength.current = todos.length;
+  }, [todos.length]);
+
+  const filteredTodos = todos.filter(todo => {
+    if (filter === StatusFilter.Active) {
+      return !todo.completed;
+    }
+
+    if (filter === StatusFilter.Completed) {
+      return todo.completed;
+    }
+
+    return true;
+  });
+
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const hasCompletedTodos = todos.some(todo => todo.completed);
+  const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
+
+  const handleAddTodo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newTodoTitle.trim()) {
+      addTodo(newTodoTitle);
+      setNewTodoTitle('');
+    }
+  };
+
+  if (todos.length === 0) {
+    return (
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
+        <div className="todoapp__content">
+          <header className="todoapp__header">
+            <form onSubmit={handleAddTodo}>
+              <input
+                ref={inputRef}
+                data-cy="NewTodoField"
+                type="text"
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+                value={newTodoTitle}
+                onChange={e => setNewTodoTitle(e.target.value)}
+                autoFocus
+              />
+            </form>
+          </header>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className="todoapp__toggle-all active"
+            className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
             data-cy="ToggleAllButton"
+            onClick={toggleAll}
           />
 
-          {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={handleAddTodo}>
             <input
+              ref={inputRef}
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={newTodoTitle}
+              onChange={e => setNewTodoTitle(e.target.value)}
+              autoFocus
             />
           </form>
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {/* This is a completed todo */}
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
-            </span>
-
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-
-          {/* This todo is an active todo */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
+          {filteredTodos.map(todo => (
+            <TodoItem key={todo.id} todo={todo} />
+          ))}
         </section>
 
-        {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            3 items left
+            {activeTodosCount} items left
           </span>
 
-          {/* Active link should have the 'selected' class */}
           <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
+            {Object.values(StatusFilter).map(filterType => (
+              <a
+                key={filterType}
+                href={`#/${filterType}`}
+                className={`filter__link ${filter === filterType ? 'selected' : ''}`}
+                data-cy={`FilterLink${filterType.charAt(0).toUpperCase() + filterType.slice(1)}`}
+                onClick={e => {
+                  e.preventDefault();
+                  setFilter(filterType);
+                }}
+              >
+                {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+              </a>
+            ))}
           </nav>
 
-          {/* this button should be disabled if there are no completed todos */}
           <button
             type="button"
             className="todoapp__clear-completed"
             data-cy="ClearCompletedButton"
+            disabled={!hasCompletedTodos}
+            onClick={clearCompleted}
           >
             Clear completed
           </button>
         </footer>
       </div>
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <TodoProvider>
+      <TodoApp />
+    </TodoProvider>
   );
 };
