@@ -35,11 +35,11 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
     setTodoEditing(false);
 
-    if (todo.title === newTitle) {
+    if (todo.title === trimTitle) {
       return;
     }
 
-    if (newTitle.trim() === '') {
+    if (trimTitle === '') {
       handleDelete(todo.id);
 
       return;
