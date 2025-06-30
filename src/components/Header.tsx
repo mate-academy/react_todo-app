@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
           className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
           data-cy="ToggleAllButton"
           onClick={toggleAll}
-        />
+        ></button>
       )}
 
       <form onSubmit={handleSubmit}>
