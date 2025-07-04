@@ -6,7 +6,6 @@ import { TodoContext } from '../../context/TodoContext';
 export const TodoList: React.FC = () => {
   const [isEditingId, setIsEditingId] = useState(0);
   const [title, setTitle] = useState('');
-  const [isLoadingId, setIsLoadingId] = useState(0);
   const editInput = useRef<HTMLInputElement>(null);
 
   const { removeTodos, filteredTodos, changeTodo } = useContext(TodoContext);
@@ -26,15 +25,7 @@ export const TodoList: React.FC = () => {
     e.preventDefault();
 
     if (title.trim().length === 0) {
-      setIsLoadingId(isEditingId);
-      removeTodos(isEditingId)
-        .then(() => {
-          setIsLoadingId(0);
-          setIsEditingId(0);
-        })
-        .catch(() => {
-          setIsLoadingId(0);
-        });
+      removeTodos(isEditingId);
 
       return;
     }
@@ -49,14 +40,8 @@ export const TodoList: React.FC = () => {
       return;
     }
 
-    setIsLoadingId(item.id);
-    changeTodo(item.id, title.trim(), item.completed)
-      .then(() => {
-        setIsEditingId(0);
-      })
-      .finally(() => {
-        setIsLoadingId(0);
-      });
+    changeTodo(item.id, title.trim(), item.completed);
+    setIsEditingId(0);
   };
 
   return (
@@ -79,10 +64,7 @@ export const TodoList: React.FC = () => {
               className="todo__status"
               checked={item.completed}
               onChange={() => {
-                setIsLoadingId(item.id);
-                changeTodo(item.id, item.title, !item.completed).finally(() => {
-                  setIsLoadingId(0);
-                });
+                changeTodo(item.id, item.title, !item.completed);
               }}
             />
           </label>
@@ -123,26 +105,13 @@ export const TodoList: React.FC = () => {
             </form>
           )}
 
-          <div
-            data-cy="TodoLoader"
-            className={classNames('modal', 'overlay', {
-              'is-active': isLoadingId === item.id || item.id === Date.now(),
-              hidden: isLoadingId !== item.id,
-            })}
-          >
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
           {isEditingId !== item.id && (
             <button
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
               onClick={() => {
-                setIsLoadingId(item.id);
-                removeTodos(item.id).finally(() => {
-                  setIsLoadingId(0);
-                });
+                removeTodos(item.id);
               }}
             >
               ×

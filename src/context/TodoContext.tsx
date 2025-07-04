@@ -2,7 +2,6 @@ import { createContext } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
 import { useEffect, useRef, useState } from 'react';
-import { addTodos, deleteTodo, getTodos, patchTodos } from '../api/todos';
 
 type TodoContextTypes = {
   todos: Todo[];
@@ -14,13 +13,9 @@ type TodoContextTypes = {
   inputRef: React.RefObject<HTMLInputElement>;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
   filter: (type: Filter) => void;
-  postTodos: (title: string) => Promise<void>;
-  removeTodos: (todoId: number) => Promise<void>;
-  changeTodo: (
-    todoId: number,
-    title: string,
-    completed: boolean,
-  ) => Promise<void>;
+  postTodos: (title: string) => void;
+  removeTodos: (todoId: number) => void;
+  changeTodo: (todoId: number, title: string, completed: boolean) => void;
   changeComplite: () => void;
   clearCompleted: () => void;
   clearError: () => void;
@@ -45,7 +40,19 @@ export const TodoContext = createContext<TodoContextTypes>({
 });
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const data = localStorage.getItem('todos');
+
+    if (!data) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(data) as Todo[];
+    } catch {
+      return [];
+    }
+  });
   const [error, setError] = useState('');
   const [filterSelect, setFilterSelected] = useState<Filter>(Filter.All);
   const [isDisabledInput, setIsDisabledInput] = useState(false);
@@ -53,20 +60,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    getTodos()
-      .then(setTodos)
-      .catch(() => {
-        setError('Unable to load todos');
-        throw new Error('Cant find todos');
-      });
-  }, []);
-
-  useEffect(() => {
-    if (todos.length === 0) {
-      localStorage.removeItem('todos');
-    } else {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    }
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const filteredTodos = todos.filter(todo => {
@@ -81,7 +75,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     return true;
   });
 
-  async function postTodos(title: string) {
+  function postTodos(title: string) {
     const trimmedTitle = title.trim();
 
     if (trimmedTitle.length === 0) {
@@ -105,11 +99,12 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     setTodos(prev => [...prev, tempTodo]);
 
     try {
-      const newTodo = await addTodos({
+      const newTodo = {
+        id: tempId,
         title: trimmedTitle,
         completed: false,
         userId: 3177,
-      });
+      };
 
       setTodos(prev => prev.map(todo => (todo.id === tempId ? newTodo : todo)));
       setSearchTerm('');
@@ -127,56 +122,42 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function removeTodos(todoId: number) {
-    return deleteTodo(todoId)
-      .then(() => {
-        setTodos(prev => prev.filter(todo => todo.id !== todoId));
-        inputRef.current?.focus();
-      })
-      .catch(() => {
-        setError('Unable to delete a todo');
-        throw new Error('Cant delete todos');
-      });
+    try {
+      setTodos(prev => prev.filter(todo => todo.id !== todoId));
+      inputRef.current?.focus();
+    } catch {
+      setError('Unable to delete a todo');
+      throw new Error('Cant delete todos');
+    }
   }
 
   function changeTodo(todoId: number, title: string, completed: boolean) {
-    return patchTodos({ id: todoId, title, completed, userId: 3177 })
-      .then(() => {
-        setTodos(prev =>
-          prev.map(todo =>
-            todo.id === todoId ? { ...todo, title, completed } : todo,
-          ),
-        );
-      })
-      .catch(() => {
-        setError('Unable to update a todo');
-        throw new Error('Cant change todos');
-      });
+    try {
+      setTodos(prev =>
+        prev.map(todo =>
+          todo.id === todoId ? { ...todo, title, completed } : todo,
+        ),
+      );
+    } catch {
+      setError('Unable to update a todo');
+      throw new Error('Cant change todos');
+    }
   }
 
   function changeComplite() {
-    const isAllCompleted = todos.every(todo => todo.completed);
-    const updatedTodos = todos.map(todo => ({
-      ...todo,
-      completed: !isAllCompleted,
-    }));
+    try {
+      const isAllCompleted = todos.every(todo => todo.completed);
 
-    setTodos(updatedTodos);
-
-    const todosToUpdate = todos.filter(
-      todo => todo.completed === isAllCompleted,
-    );
-
-    Promise.all(
-      todosToUpdate.map(todo =>
-        patchTodos({ ...todo, completed: !isAllCompleted }),
-      ),
-    )
-      .then(() => getTodos())
-      .then(setTodos)
-      .catch(() => {
-        setError('Unable to update todos');
-        throw new Error('Cant change all todos');
-      });
+      setTodos(prev =>
+        prev.map(todo => ({
+          ...todo,
+          completed: !isAllCompleted,
+        })),
+      );
+    } catch {
+      setError('Unable to update todos');
+      throw new Error('Cant change all todos');
+    }
   }
 
   function filter(type: Filter) {
@@ -184,33 +165,12 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function clearCompleted() {
-    const completedTodos = todos.filter(todo => todo.completed);
-
-    Promise.allSettled(completedTodos.map(todo => deleteTodo(todo.id)))
-      .then(results => {
-        const failedTodos = completedTodos.filter(
-          (todo, index) => results[index].status === 'rejected',
-        );
-
-        setTodos(prevTodos =>
-          prevTodos.filter(todo => {
-            if (!todo.completed) {
-              return true;
-            }
-
-            return failedTodos.some(failed => failed.id === todo.id);
-          }),
-        );
-
-        inputRef.current?.focus();
-
-        if (failedTodos.length > 0) {
-          setError('Unable to delete a todo');
-        }
-      })
-      .catch(() => {
-        setError('Unexpected error');
-      });
+    try {
+      setTodos(prev => prev.filter(todo => !todo.completed));
+      inputRef.current?.focus();
+    } catch {
+      setError('Unexpected error');
+    }
   }
 
   const clearError = () => {

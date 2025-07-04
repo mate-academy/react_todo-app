@@ -1,18 +1,12 @@
-import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList';
 import { FormTodo } from './components/FormTodo';
 import { FooterTodos } from './components/FooterTodos';
 import { ErrorTodos } from './components/ErrorTodos';
 import { useContext } from 'react';
 import { TodoContext } from './context/TodoContext';
-import { USER_ID } from './api/todos';
 
 export const App: React.FC = () => {
   const { todos } = useContext(TodoContext);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   return (
     <div className="todoapp">

@@ -37,10 +37,10 @@ export const FormTodo: React.FC = () => {
       )}
 
       <form
-        onSubmit={async e => {
+        onSubmit={e => {
           e.preventDefault();
           try {
-            await postTodos(searchTerm);
+            postTodos(searchTerm);
           } catch (error) {}
         }}
       >
