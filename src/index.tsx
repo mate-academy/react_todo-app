@@ -3,7 +3,10 @@ import { createRoot } from 'react-dom/client';
 import './styles/index.scss';
 
 import { App } from './App';
+import { GlobalProvider } from './Context/state';
 
-const container = document.getElementById('root') as HTMLDivElement;
-
-createRoot(container).render(<App />);
+createRoot(document.getElementById('root') as HTMLDivElement).render(
+  <GlobalProvider>
+    <App />
+  </GlobalProvider>,
+);
