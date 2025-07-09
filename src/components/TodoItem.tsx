@@ -11,7 +11,7 @@ type TodoItemProps = {
 };
 
 export const TodoItem: React.FC<TodoItemProps> = ({
-  todo: { id, title, completed, userId },
+  todo: { id, title, completed },
   removeTodo,
   handleUpdateTodo,
 }) => {
@@ -136,7 +136,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             className="todo__remove"
             data-cy="TodoDelete"
             onClick={() => {
-              removeTodo({ id, title, completed, userId });
+              removeTodo({ id, title, completed });
             }}
           >
             ×

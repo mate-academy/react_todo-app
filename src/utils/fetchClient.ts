@@ -1,5 +1,7 @@
+import { Todo } from '../types/Todo';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api';
+const STORAGE_KEY = 'todos';
 
 // returns a promise resolved after a given delay
 function wait(delay: number) {
@@ -8,39 +10,69 @@ function wait(delay: number) {
   });
 }
 
-// To have autocompletion and avoid mistypes
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+function loadFromStorage() {
+  const data = localStorage.getItem(STORAGE_KEY);
 
-function request<T>(
-  url: string,
-  method: RequestMethod = 'GET',
-  data: any = null, // we can send any data to the server
-): Promise<T> {
-  const options: RequestInit = { method };
+  return data ? JSON.parse(data) : [];
+}
 
-  if (data) {
-    // We add body and Content-Type only for the requests with data
-    options.body = JSON.stringify(data);
-    options.headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
-  }
+function saveToStorage(data: Todo) {
+  const todos = loadFromStorage();
+  const updatedData = [...todos, data];
 
-  // DON'T change the delay it is required for tests
-  return wait(100)
-    .then(() => fetch(BASE_URL + url, options))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error();
-      }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+}
 
-      return response.json();
-    });
+function generateId() {
+  return +new Date();
 }
 
 export const client = {
-  get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  get: async (): Promise<Todo[]> => {
+    await wait(100);
+    const data = loadFromStorage();
+
+    return data as Todo[];
+  },
+
+  post: async (newItem: Todo): Promise<Todo> => {
+    await wait(100);
+    const itemWithId = { ...newItem, id: generateId() };
+
+    saveToStorage(itemWithId);
+
+    return itemWithId as Todo;
+  },
+
+  patch: async (changedId: number, changes: any): Promise<Todo> => {
+    await wait(100);
+
+    if (!changedId) {
+      throw new Error('ID is required for PATCH');
+    }
+
+    const data: Todo[] = loadFromStorage();
+    const updated = data.map(item =>
+      item.id === changedId ? { ...item, ...changes } : item,
+    );
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    const updatedItem = updated.find(item => item.id === changedId);
+
+    return updatedItem as Todo;
+  },
+
+  delete: async (url: string): Promise<void> => {
+    await wait(100);
+    const id = url.split('/').pop();
+
+    if (!id) {
+      throw new Error('ID is required in URL for DELETE');
+    }
+
+    const data: Todo[] = loadFromStorage();
+    const updated = data.filter(item => item.id !== +id);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  },
 };

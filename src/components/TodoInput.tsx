@@ -16,7 +16,7 @@ export const TodoInput: React.FC = () => {
     inputRef.current?.focus();
   }, [todos]);
 
-  const addTodo = async (newTodo: Omit<Todo, 'id'>) => {
+  const addTodo = async (newTodo: Todo) => {
     try {
       const todo = await addNewTodo(newTodo);
 

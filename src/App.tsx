@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useEffect } from 'react';
-// import { UserWarning } from './UserWarning';
 import { deleteTodo, getTodos, updateTodo, USER_ID } from './api/todos';
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoFooter } from './components/TodoFooter';
@@ -76,10 +75,6 @@ export const App: React.FC = () => {
 
   // #endregion
 
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
-
   const checkError = () => {
     const errorsList = [];
 
@@ -141,7 +136,7 @@ export const App: React.FC = () => {
 
   const handleUpdateTodo = async (
     updatedTodoId: number,
-    updatedInfo: Omit<Todo, 'id' | 'userId'>,
+    updatedInfo: Omit<Todo, 'id'>,
   ) => {
     dispatch({ type: 'setActiveTodoId', payload: updatedTodoId });
     try {
