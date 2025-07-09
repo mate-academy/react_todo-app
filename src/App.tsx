@@ -1,7 +1,13 @@
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useEffect } from 'react';
-import { deleteTodo, getTodos, updateTodo, USER_ID } from './api/todos';
+import {
+  addNewTodo,
+  deleteTodo,
+  getTodos,
+  updateTodo,
+  USER_ID,
+} from './api/todos';
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoList } from './components/TodoList';
@@ -31,8 +37,13 @@ export const App: React.FC = () => {
       return;
     }
 
-    const getTodosList = async () => {
+    const makeTodosList = async () => {
       try {
+        if (localStorage.getItem('todos') === null) {
+          await addNewTodo([]);
+        }
+
+        // В любом случае, грузим данные
         const todosList = await getTodos();
 
         dispatch({ type: 'setVisibleTodos', payload: todosList });
@@ -44,7 +55,7 @@ export const App: React.FC = () => {
       }
     };
 
-    getTodosList();
+    makeTodosList();
   }, [dispatch]);
 
   useEffect(() => {

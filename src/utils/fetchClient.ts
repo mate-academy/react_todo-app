@@ -16,11 +16,16 @@ function loadFromStorage() {
   return data ? JSON.parse(data) : [];
 }
 
-function saveToStorage(data: Todo) {
-  const todos = loadFromStorage();
-  const updatedData = [...todos, data];
+function saveToStorage(data: Todo | Todo[]) {
+  if (Array.isArray(data)) {
+    // полная перезапись
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } else {
+    const todos = loadFromStorage();
+    const updatedData = [...todos, data];
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+  }
 }
 
 function generateId() {
@@ -35,13 +40,25 @@ export const client = {
     return data as Todo[];
   },
 
-  post: async (newItem: Todo): Promise<Todo> => {
+  post: async (newItem: Todo | []): Promise<Todo> => {
     await wait(100);
-    const itemWithId = { ...newItem, id: generateId() };
 
-    saveToStorage(itemWithId);
+    if (Array.isArray(newItem) && newItem.length === 0) {
+      saveToStorage([]);
 
-    return itemWithId as Todo;
+      return {} as Todo;
+    }
+
+    // сюда попадём только если передан объект Todo
+    if (!Array.isArray(newItem)) {
+      const itemWithId = { ...newItem, id: generateId() };
+
+      saveToStorage(itemWithId);
+
+      return itemWithId as Todo;
+    }
+
+    throw new Error('Invalid data passed to post');
   },
 
   patch: async (changedId: number, changes: any): Promise<Todo> => {

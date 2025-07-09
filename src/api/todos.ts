@@ -7,7 +7,7 @@ export const getTodos = () => {
   return client.get();
 };
 
-export const addNewTodo = (data: Todo) => {
+export const addNewTodo = (data: Todo | []) => {
   return client.post(data);
 };
 
