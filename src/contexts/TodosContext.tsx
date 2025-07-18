@@ -13,7 +13,7 @@ type TodosContextType = {
   deleteTodo: (id: number) => void;
   clearCompleted: () => void;
   toggleAll: () => void;
-  updateTodoTitle: (id: number, title: string) => void; // добавляем сюда
+  updateTodoTitle: (id: number, title: string) => void;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 

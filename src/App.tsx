@@ -59,7 +59,7 @@ export const App: React.FC = () => {
       return todo.completed;
     }
 
-    return true; // all
+    return true;
   });
 
   return (
