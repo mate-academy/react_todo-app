@@ -1,16 +1,15 @@
-import classNames from 'classnames';
-import { Todo } from '../../types/Todo';
 import { TodoStatus } from '../TodoStatus';
-import { TodoEdit } from '../TodoEdit';
 import { TodoTitle } from '../TodoTitle/TodoTitle';
-import { TodoDelete } from '../TodoDelete';
+import { Todo } from '../types/Todo';
 import { TodoLoader } from '../TodoLoader';
+import { TodoDelete } from '../TodoDelete';
 import { useState } from 'react';
+import { TodoEdit } from '../TodoEdit';
 
 interface TodoElementProps {
   todo: Todo;
   handleTodoDelete: (keyTodo: number) => Promise<boolean>;
-  handleToggleStatus: (idTodo: number) => void;
+  handleToggleStatus: (todo: Todo) => void;
   handleUpdateTodo: (
     updateTodo: Todo,
     setIsEditing: (val: boolean) => void,
@@ -18,6 +17,7 @@ interface TodoElementProps {
     trimmedTitle: string,
   ) => Promise<boolean>;
 }
+
 export const TodoElement: React.FC<TodoElementProps> = ({
   todo,
   handleTodoDelete,
@@ -91,14 +91,8 @@ export const TodoElement: React.FC<TodoElementProps> = ({
   const loading = !todo.isLoaded;
 
   return (
-    <div
-      data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
-    >
-      <TodoStatus
-        isCompletedTodo={todo.completed}
-        todoStatus={() => handleToggleStatus(todo.id)}
-      />
+    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+      <TodoStatus todo={todo} todoStatus={handleToggleStatus} />
 
       <TodoEdit
         handleEditedTitle={handleEditedTitle}

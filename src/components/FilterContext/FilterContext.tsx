@@ -1,9 +1,9 @@
 import { createContext, useContext, useState } from 'react';
-import { FilterType } from '../../types/Filter';
+import { FilterType } from '../types/Filter';
 
 type FilterContextType = {
   filter: FilterType;
-  setFilter: (todos: FilterType) => void;
+  setFilter: (filter: FilterType) => void;
 };
 
 export const FilterContext = createContext<FilterContextType>({
@@ -13,7 +13,7 @@ export const FilterContext = createContext<FilterContextType>({
 
 export const useFilter = () => useContext(FilterContext);
 
-export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
+export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
 
   return (

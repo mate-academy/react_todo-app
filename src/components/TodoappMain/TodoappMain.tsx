@@ -1,40 +1,37 @@
 import { deleteTodo, patchTodo } from '../../api/todos';
-import { FilterType } from '../../types/Filter';
-import { Todo } from '../../types/Todo';
-import { useUpdateTodo } from '../../utils/helpers';
-import { useFilter } from '../FilterContext';
-import { TodoElement } from '../Todo/TodoElement';
+import { TodoElement } from '../TodoElement/TodoElement';
 import { useTodos } from '../TodosContext';
+import { Todo } from '../types/Todo';
 
-export const TodoList: React.FC = () => {
+interface TodoappMainProps {
+  filteredTodos: Todo[];
+  inputRef: React.RefObject<HTMLInputElement>;
+}
+
+export const TodoappMain: React.FC<TodoappMainProps> = ({
+  filteredTodos,
+  inputRef,
+}) => {
   const { todos, setTodos } = useTodos();
-  const { filter } = useFilter();
-  const updateTodo = useUpdateTodo();
-
-  const filteredTodos = todos.filter(todo => {
-    switch (filter) {
-      case FilterType.Active:
-        return !todo.completed;
-      case FilterType.Completed:
-        return todo.completed;
-      case FilterType.All:
-      default:
-        return true;
-    }
-  });
-
   const handleTodoDelete = async (idTodo: number) => {
-    updateTodo(idTodo, false);
+    setTodos(
+      todos.map(todo =>
+        todo.id === idTodo ? { ...todo, isLoaded: false } : todo,
+      ),
+    );
 
     try {
       await deleteTodo(idTodo);
-      const updatedTodoList = todos.filter(todo => todo.id !== idTodo);
-
-      setTodos(updatedTodoList);
+      setTodos(todos.filter(todo => todo.id !== idTodo));
+      inputRef.current?.focus();
 
       return true;
     } catch {
-      updateTodo(idTodo, true);
+      setTodos(
+        todos.map(todo =>
+          todo.id === idTodo ? { ...todo, isLoaded: true } : todo,
+        ),
+      );
 
       return false;
     }
@@ -43,20 +40,28 @@ export const TodoList: React.FC = () => {
   const handleToggleStatus = async (todoToUpdate: Todo) => {
     const idTodo = todoToUpdate.id;
 
-    updateTodo(idTodo, false);
+    const updatedTodos = todos.map(todo =>
+      todo.id === idTodo ? { ...todo, isLoaded: false } : todo,
+    );
+
+    setTodos(updatedTodos);
 
     try {
       const updated = await patchTodo(idTodo, {
         completed: !todoToUpdate.completed,
       });
 
-      const updatedTodos = todos.map(todo =>
+      const updatedTodosList = todos.map(todo =>
         todo.id === idTodo ? { ...updated, isLoaded: true } : todo,
       );
 
-      setTodos(updatedTodos);
+      setTodos(updatedTodosList);
     } catch {
-      updateTodo(idTodo, true);
+      const notUpdatedTodos = todos.map(todo =>
+        todo.id === idTodo ? { ...todo, isLoaded: true } : todo,
+      );
+
+      setTodos(notUpdatedTodos);
     }
   };
 
@@ -66,7 +71,11 @@ export const TodoList: React.FC = () => {
     setEditedTitle: (val: string) => void,
     trimmedTitle: string,
   ) => {
-    updateTodo(updatedTodo.id, false);
+    const updatedTodos = todos.map(todo =>
+      todo.id === updatedTodo.id ? { ...todo, isLoaded: false } : todo,
+    );
+
+    setTodos(updatedTodos);
 
     try {
       const serverTodo = await patchTodo(updatedTodo.id, {
@@ -88,11 +97,11 @@ export const TodoList: React.FC = () => {
     } catch {
       setIsEditing(true);
 
-      const updatedTodosList = todos.map(todo =>
+      const notUpdatedTodos = todos.map(todo =>
         todo.id === updatedTodo.id ? { ...todo, isLoaded: true } : todo,
       );
 
-      setTodos(updatedTodosList);
+      setTodos(notUpdatedTodos);
 
       return false;
     }
@@ -105,7 +114,7 @@ export const TodoList: React.FC = () => {
           key={todo.id}
           todo={todo}
           handleTodoDelete={handleTodoDelete}
-          handleToggleStatus={() => handleToggleStatus(todo)}
+          handleToggleStatus={handleToggleStatus}
           handleUpdateTodo={handleUpdateTodo}
         />
       ))}

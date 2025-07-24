@@ -1,7 +1,11 @@
-export const TodosCounter: React.FC = () => {
+interface TodosCounterProps {
+  todosCount: number;
+}
+
+export const TodosCounter: React.FC<TodosCounterProps> = ({ todosCount }) => {
   return (
     <span className="todo-count" data-cy="TodosCounter">
-      3 items left
+      {todosCount} items left
     </span>
   );
 };

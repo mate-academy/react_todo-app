@@ -1,15 +1,142 @@
-import { NewTodoField } from '../NewTodoField';
-import { ToggleAllButton } from '../ToggleAllButton';
+import React, { useEffect, useState } from 'react';
+import { USER_ID, patchTodo, postTodo } from '../../api/todos';
+import classNames from 'classnames';
+import { useTodos } from '../TodosContext';
 
-export const TodoappHeader: React.FC = () => {
+interface TodoappHeaderProps {
+  inputRef: React.RefObject<HTMLInputElement>;
+}
+
+export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
+  const { todos, setTodos } = useTodos();
+  const [newTodo, setNewTodo] = useState<string>('');
+  const [activeTodo, setActiveTodo] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const everyActive = todos.length > 0 && todos.every(todo => todo.completed);
+
+    setActiveTodo(everyActive);
+  }, [todos]);
+
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isLoading, inputRef]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (newTodo.trim() === '') {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const lastTodoId = Date.now();
+
+    const newTodos = {
+      userId: USER_ID,
+      title: newTodo.trim(),
+      completed: false,
+    };
+
+    const newTodosList = [
+      ...todos,
+      { ...newTodos, id: lastTodoId, isLoaded: false },
+    ];
+
+    setTodos(newTodosList);
+
+    try {
+      const createdTodo = await postTodo(newTodos);
+
+      const newCreatedTodos = todos.map(todo =>
+        todo.id === lastTodoId ? { ...createdTodo, isLoaded: true } : todo,
+      );
+
+      setTodos(newCreatedTodos);
+
+      setNewTodo('');
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    } catch (error) {
+      setTodos(todos.filter(todo => todo.id !== lastTodoId));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleToggleAllActive = async () => {
+    const toggledCompleted = !activeTodo;
+
+    const todosToUpdate = todos.filter(
+      todo => todo.completed !== toggledCompleted,
+    );
+
+    if (todosToUpdate.length === 0) {
+      return;
+    }
+
+    const newTodos = todos.map(todo => ({ ...todo, isLoaded: false }));
+
+    setTodos(newTodos);
+
+    try {
+      const updatedTodos = await Promise.all(
+        todosToUpdate.map(async todo => {
+          const updatedTodo = await patchTodo(todo.id, {
+            completed: toggledCompleted,
+          });
+
+          return { ...updatedTodo, isLoaded: true };
+        }),
+      );
+
+      const newUpdatedTodos = todos.map(
+        todo =>
+          updatedTodos.find(t => t.id === todo.id) || {
+            ...todo,
+            isLoaded: true,
+          },
+      );
+
+      setTodos(newUpdatedTodos);
+    } catch (error) {
+      setTodos(
+        todos.map(todo => ({
+          ...todo,
+          isLoaded: true,
+        })),
+      );
+    }
+  };
+
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
-      <ToggleAllButton />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', { active: activeTodo })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggleAllActive}
+        />
+      )}
 
-      {/* Add a todo on form submit */}
-      <NewTodoField />
+      <form onSubmit={handleSubmit}>
+        <input
+          data-cy="NewTodoField"
+          type="text"
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+          value={newTodo}
+          onChange={e => setNewTodo(e.target.value)}
+          ref={inputRef}
+          disabled={isLoading}
+        />
+      </form>
     </header>
   );
 };
- 

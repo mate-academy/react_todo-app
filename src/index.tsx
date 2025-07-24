@@ -4,13 +4,14 @@ import './styles/index.scss';
 
 import { App } from './App';
 import { TodosProvider } from './components/TodosContext';
+import { FilterProvider } from './components/FilterContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
 createRoot(container).render(
-  <TodosProvider>
+  <FilterProvider>
     <TodosProvider>
       <App />
     </TodosProvider>
-  </TodosProvider>,
+  </FilterProvider>,
 );

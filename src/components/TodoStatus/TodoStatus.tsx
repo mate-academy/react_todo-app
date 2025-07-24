@@ -1,21 +1,20 @@
+import { Todo } from '../types/Todo';
+
 interface TodoStatusProps {
-  isCompletedTodo: boolean;
-  todoStatus: () => void;
+  todo: Todo;
+  todoStatus: (todo: Todo) => void;
 }
 
-export const TodoStatus: React.FC<TodoStatusProps> = ({
-  isCompletedTodo,
-  todoStatus,
-}) => {
+export const TodoStatus: React.FC<TodoStatusProps> = ({ todo, todoStatus }) => {
   return (
     <label className="todo__status-label">
       <input
         data-cy="TodoStatus"
         type="checkbox"
         className="todo__status"
-        checked={isCompletedTodo}
+        checked={todo.completed}
         aria-label="Toggle todo status"
-        onChange={todoStatus}
+        onChange={() => todoStatus(todo)}
       />
     </label>
   );

@@ -1,6 +1,5 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-import { getTodos } from '../../api/todos';
+import { useEffect, useState, createContext, useContext } from 'react';
+import { Todo } from '../types/Todo';
 
 type TodosContextType = {
   todos: Todo[];
@@ -15,15 +14,16 @@ export const TodosContext = createContext<TodosContextType>({
 export const useTodos = () => useContext(TodosContext);
 
 export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const stored = localStorage.getItem('todos');
 
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  // сохраняем todos в localStorage при каждом изменении
   useEffect(() => {
-    getTodos().then(data => {
-      const newData = data.map(todo => ({ ...todo, isLoaded: true }));
-
-      setTodos(newData);
-    });
-  }, []);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <TodosContext.Provider value={{ todos, setTodos }}>
