@@ -1,7 +1,10 @@
 import { useContext } from 'react';
-import { DispatchContext, StateContext } from '../GlobalProvider';
-import { FocusContext } from '../FocusContext';
+import {
+  DispatchContext,
+  FocusContext,
+  StateContext,
+} from '../GlobalContextProvider';
 
 export const useDispatch = () => useContext(DispatchContext);
 export const useGlobalState = () => useContext(StateContext);
-export const useInputRef = () => useContext(FocusContext);
+export const useHeaderInputRef = () => useContext(FocusContext);

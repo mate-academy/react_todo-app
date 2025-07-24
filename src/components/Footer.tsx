@@ -1,5 +1,10 @@
+import { ActionType } from '../constants/ActionType';
 import { FilterType } from '../constants/FilterType';
-import { useDispatch, useGlobalState } from '../hooks/GlobalHooks';
+import {
+  useDispatch,
+  useGlobalState,
+  useHeaderInputRef,
+} from '../hooks/GlobalHooks';
 import { filterTodos } from '../utils/filterTodos';
 import cn from 'classnames';
 
@@ -11,8 +16,18 @@ type Props = {
 export const Footer: React.FC<Props> = ({ filterBy, setFilterBy }) => {
   const { todos } = useGlobalState();
   const dispatch = useDispatch();
+  const headerInputRef = useHeaderInputRef();
+
   const activeTodosCount = filterTodos(todos, FilterType.Active).length;
   const completedTodosCount = filterTodos(todos, FilterType.Completed).length;
+
+  const handledeleteCompletedTodo = () => {
+    dispatch({ type: ActionType.DeleteCompleted });
+
+    if (headerInputRef) {
+      headerInputRef.current?.focus();
+    }
+  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -42,7 +57,7 @@ export const Footer: React.FC<Props> = ({ filterBy, setFilterBy }) => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!completedTodosCount}
-        onClick={() => dispatch({ type: 'clearCompleted' })}
+        onClick={handledeleteCompletedTodo}
       >
         Clear completed
       </button>

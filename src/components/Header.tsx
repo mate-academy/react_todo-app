@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import { useDispatch, useGlobalState, useInputRef } from '../hooks/GlobalHooks';
+import {
+  useDispatch,
+  useGlobalState,
+  useHeaderInputRef,
+} from '../hooks/GlobalHooks';
 import { Todo } from '../types/Todo';
 import cn from 'classnames';
+import { ActionType } from '../constants/ActionType';
 
 export const Header = () => {
   const [todoInput, setTodoInput] = useState('');
   const { todos } = useGlobalState();
   const dispatch = useDispatch();
-  const inputRef = useInputRef();
+  const headerInputRef = useHeaderInputRef();
 
   const isToggleAllVisible = todos.length > 0;
   const isAllTodosCompleted = todos.every(todo => todo.completed);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     const prepearedInputValue = todoInput.trim();
 
     if (!prepearedInputValue) {
@@ -21,29 +27,33 @@ export const Header = () => {
     }
 
     const newTodo: Todo = {
-      id: +new Date(),
+      id: Date.now(),
       title: prepearedInputValue,
       completed: false,
     };
 
-    dispatch({ type: 'addTodo', newTodo });
+    dispatch({ type: ActionType.Add, newTodo });
     setTodoInput('');
   };
 
-  const toggleAllTodos = () => {
+  const buildUpdatedTodos = (): Todo[] => {
     const newStatus = !isAllTodosCompleted;
-    const todosToUpdate = todos.filter(todo => todo.completed !== newStatus);
 
-    if (todosToUpdate.length === 0) {
-      return;
-    }
+    return todos
+      .filter(todo => todo.completed !== newStatus)
+      .map(todo => ({
+        ...todo,
+        completed: newStatus,
+      }));
+  };
 
-    const updatedTodos = todosToUpdate.map(todo => ({
-      ...todo,
-      completed: newStatus,
-    }));
+  const toggleAllTodos = () => {
+    const updatedTodos = buildUpdatedTodos();
 
-    dispatch({ type: 'toggleTodos', updatedTodos });
+    dispatch({
+      type: ActionType.Toggle,
+      updatedTodos,
+    });
   };
 
   return (
@@ -65,7 +75,7 @@ export const Header = () => {
           placeholder="What needs to be done?"
           value={todoInput}
           onChange={e => setTodoInput(e.target.value)}
-          ref={inputRef}
+          ref={headerInputRef}
           autoFocus
         />
       </form>

@@ -4,7 +4,7 @@ import { ESCAPE_KEY } from '../constants/appConstants';
 type Props = {
   value: string;
   onValueChange: (value: string) => void;
-  changeEditing: (eidting: boolean) => void;
+  changeEditing: (editing: boolean) => void;
   onSubmit: () => void;
 };
 

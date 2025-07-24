@@ -1,21 +1,24 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import React, { useState } from 'react';
-import { Todo } from '../types/Todo';
-import cn from 'classnames';
 import { EditForm } from './EditForm';
-import { useDispatch, useInputRef } from '../hooks/GlobalHooks';
+import { Todo } from '../types/Todo';
+import { useDispatch, useHeaderInputRef } from '../hooks/GlobalHooks';
+import { DEFAULT_COMPLETED } from '../constants/appConstants';
+import cn from 'classnames';
+import { ActionType } from '../constants/ActionType';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(DEFAULT_COMPLETED);
   const [editedTitle, setEditedTitle] = useState('');
 
   const dispatch = useDispatch();
-  const inputRef = useInputRef();
+  const headerInputRef = useHeaderInputRef();
+
   const { completed, id: todoId, title } = todo;
 
   const handleStartEditing = () => {
@@ -29,33 +32,41 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     if (trimmedTitle === title) {
       setIsEditing(false);
 
-      if (inputRef) {
-        inputRef.current?.focus();
+      if (headerInputRef) {
+        headerInputRef.current?.focus();
       }
 
       return;
     }
 
     if (!trimmedTitle) {
-      dispatch({ type: 'deleteTodo', todoId });
+      dispatch({ type: ActionType.Delete, todoId });
 
-      if (inputRef) {
-        inputRef.current?.focus();
+      if (headerInputRef) {
+        headerInputRef.current?.focus();
       }
 
       return;
     }
 
     dispatch({
-      type: 'updateTodo',
+      type: ActionType.Update,
       updatedTodo: { ...todo, title: trimmedTitle },
     });
 
-    if (inputRef) {
-      inputRef.current?.focus();
+    if (headerInputRef) {
+      headerInputRef.current?.focus();
     }
 
     setIsEditing(false);
+  };
+
+  const handleDelete = () => {
+    dispatch({ type: ActionType.Delete, todoId });
+
+    if (headerInputRef) {
+      headerInputRef.current?.focus();
+    }
   };
 
   return (
@@ -96,7 +107,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => dispatch({ type: 'deleteTodo', todoId })}
+            onClick={handleDelete}
           >
             ×
           </button>
