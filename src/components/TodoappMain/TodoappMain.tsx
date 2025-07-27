@@ -12,7 +12,7 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
   filteredTodos,
   inputRef,
 }) => {
-  const { todos, setTodos } = useTodos();
+  const { setTodos } = useTodos();
 
   const handleTodoDelete = async (idTodo: number) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== idTodo));
@@ -37,28 +37,28 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
   const handleToggleStatus = async (todoToUpdate: Todo) => {
     const idTodo = todoToUpdate.id;
 
-    const updatedTodos = todos.map(todo =>
-      todo.id === idTodo ? { ...todo, isLoaded: false } : todo,
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === idTodo ? { ...todo, isLoaded: false } : todo,
+      ),
     );
-
-    setTodos(updatedTodos);
 
     try {
       const updated = await patchTodo(idTodo, {
         completed: !todoToUpdate.completed,
       });
 
-      const updatedTodosList = todos.map(todo =>
-        todo.id === idTodo ? { ...updated, isLoaded: true } : todo,
+      setTodos(prev =>
+        prev.map(todo =>
+          todo.id === idTodo ? { ...updated, isLoaded: true } : todo,
+        ),
       );
-
-      setTodos(updatedTodosList);
     } catch {
-      const notUpdatedTodos = todos.map(todo =>
-        todo.id === idTodo ? { ...todo, isLoaded: true } : todo,
+      setTodos(prev =>
+        prev.map(todo =>
+          todo.id === idTodo ? { ...todo, isLoaded: true } : todo,
+        ),
       );
-
-      setTodos(notUpdatedTodos);
     }
   };
 
@@ -68,24 +68,24 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
     setEditedTitle: (val: string) => void,
     trimmedTitle: string,
   ) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === updatedTodo.id ? { ...todo, isLoaded: false } : todo,
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === updatedTodo.id ? { ...todo, isLoaded: false } : todo,
+      ),
     );
-
-    setTodos(updatedTodos);
 
     try {
       const serverTodo = await patchTodo(updatedTodo.id, {
         title: updatedTodo.title,
       });
 
-      const updatedTodosList = todos.map(todo =>
-        todo.id === serverTodo.id
-          ? { ...todo, title: updatedTodo.title.trim(), isLoaded: true }
-          : todo,
+      setTodos(prev =>
+        prev.map(todo =>
+          todo.id === serverTodo.id
+            ? { ...todo, title: updatedTodo.title.trim(), isLoaded: true }
+            : todo,
+        ),
       );
-
-      setTodos(updatedTodosList);
 
       setEditedTitle(trimmedTitle);
       setIsEditing(false);
@@ -94,11 +94,11 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
     } catch {
       setIsEditing(true);
 
-      const notUpdatedTodos = todos.map(todo =>
-        todo.id === updatedTodo.id ? { ...todo, isLoaded: true } : todo,
+      setTodos(prev =>
+        prev.map(todo =>
+          todo.id === updatedTodo.id ? { ...todo, isLoaded: true } : todo
+        ),
       );
-
-      setTodos(notUpdatedTodos);
 
       return false;
     }

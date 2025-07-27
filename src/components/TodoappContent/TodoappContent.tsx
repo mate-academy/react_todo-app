@@ -8,7 +8,7 @@ import { deleteTodo, getTodos } from '../../api/todos';
 import { useTodos } from '../TodosContext';
 import { useFilter } from '../FilterContext';
 
-export const TodoappContent: React.FC = () => {
+export const TodoAppContent: React.FC = () => {
   const { todos, setTodos } = useTodos();
   const { filter } = useFilter();
   const inputRef = useRef<HTMLInputElement>(null);

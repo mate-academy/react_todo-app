@@ -42,24 +42,24 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
       completed: false,
     };
 
-    setTodos(prev => [
-      ...prev,
-      { ...newTodos, id: lastTodoId, isLoaded: false },
-    ]);
+    setTodos([...todos, { ...newTodos, id: lastTodoId, isLoaded: false }]);
 
     try {
       const createdTodo = await postTodo(newTodos);
 
       setTodos(prev =>
         prev.map(todo =>
-          todo.id === lastTodoId ? { ...createdTodo, isLoaded: true } : todo)
+          todo.id === lastTodoId ? { ...createdTodo, isLoaded: true } : todo,
+        ),
       );
-
       setNewTodo('');
+      setIsLoading(false);
       setTimeout(() => {
         inputRef.current?.focus();
       }, 0);
     } catch (error) {
+      setIsLoading(false);
+
       setTodos(prev => prev.filter(todo => todo.id !== lastTodoId));
     } finally {
       setIsLoading(false);
