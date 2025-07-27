@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TodosContext } from '../context/TodoContext';
+import classNames from 'classnames';
 
 export const Header: React.FC = () => {
   const { todos, addTodo, onToggleAll, registerFocusHandler } =
@@ -44,7 +45,9 @@ export const Header: React.FC = () => {
       {todos.length !== 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? `active` : ''}`}
+          className={classNames(
+            `todoapp__toggle-all ${todos.every(todo => todo.completed) ? `active` : ''}`,
+          )}
           data-cy="ToggleAllButton"
           onClick={handleOnclick}
         />

@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { TodosContext } from '../context/TodoContext';
 import { FilterStatus } from '../types/FilterStatus';
+import classNames from 'classnames';
 
 export const Footer: React.FC = () => {
   const { todos, filter, setFilter, clearCompleted, focusHeaderInput } =
@@ -21,7 +22,9 @@ export const Footer: React.FC = () => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${filter === FilterStatus.all ? `selected` : ''}`}
+          className={classNames(
+            `filter__link ${filter === FilterStatus.all ? `selected` : ''}`,
+          )}
           data-cy="FilterLinkAll"
           onClick={() => setFilter(FilterStatus.all)}
         >
@@ -30,7 +33,9 @@ export const Footer: React.FC = () => {
 
         <a
           href="#/active"
-          className={`filter__link ${filter === FilterStatus.active ? `selected` : ''}`}
+          className={classNames(
+            `filter__link ${filter === FilterStatus.active ? `selected` : ''}`,
+          )}
           data-cy="FilterLinkActive"
           onClick={() => setFilter(FilterStatus.active)}
         >
@@ -39,7 +44,9 @@ export const Footer: React.FC = () => {
 
         <a
           href="#/completed"
-          className={`filter__link ${filter === FilterStatus.completed ? `selected` : ''}`}
+          className={classNames(
+            `filter__link ${filter === FilterStatus.completed ? `selected` : ''}`,
+          )}
           data-cy="FilterLinkCompleted"
           onClick={() => setFilter(FilterStatus.completed)}
         >
