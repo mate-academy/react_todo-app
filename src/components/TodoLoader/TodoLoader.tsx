@@ -5,10 +5,14 @@ interface TodoLoaderProps {
 }
 
 export const TodoLoader: React.FC<TodoLoaderProps> = ({ loading }) => {
+  if (!loading) {
+    return;
+  }
+
   return (
     <div
       data-cy="TodoLoader"
-      className={classNames('modal', 'overlay', { 'is-active': loading })}
+      className={classNames('modal', 'overlay', { 'is-active': !loading })}
     >
       <div className="modal-background has-background-white-ter" />
       <div className="loader" />

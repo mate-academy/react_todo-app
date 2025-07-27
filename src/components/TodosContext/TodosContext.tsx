@@ -3,7 +3,7 @@ import { Todo } from '../types/Todo';
 
 type TodosContextType = {
   todos: Todo[];
-  setTodos: (todos: Todo[]) => void;
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
 export const TodosContext = createContext<TodosContextType>({

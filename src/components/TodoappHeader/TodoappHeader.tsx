@@ -42,28 +42,25 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
       completed: false,
     };
 
-    const newTodosList = [
-      ...todos,
+    setTodos(prev => [
+      ...prev,
       { ...newTodos, id: lastTodoId, isLoaded: false },
-    ];
-
-    setTodos(newTodosList);
+    ]);
 
     try {
       const createdTodo = await postTodo(newTodos);
 
-      const newCreatedTodos = todos.map(todo =>
-        todo.id === lastTodoId ? { ...createdTodo, isLoaded: true } : todo,
+      setTodos(prev =>
+        prev.map(todo =>
+          todo.id === lastTodoId ? { ...createdTodo, isLoaded: true } : todo)
       );
-
-      setTodos(newCreatedTodos);
 
       setNewTodo('');
       setTimeout(() => {
         inputRef.current?.focus();
       }, 0);
     } catch (error) {
-      setTodos(todos.filter(todo => todo.id !== lastTodoId));
+      setTodos(prev => prev.filter(todo => todo.id !== lastTodoId));
     } finally {
       setIsLoading(false);
     }
@@ -80,9 +77,7 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
       return;
     }
 
-    const newTodos = todos.map(todo => ({ ...todo, isLoaded: false }));
-
-    setTodos(newTodos);
+    setTodos(prev => prev.map(todo => ({ ...todo, isLoaded: false })));
 
     try {
       const updatedTodos = await Promise.all(
@@ -95,18 +90,18 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
         }),
       );
 
-      const newUpdatedTodos = todos.map(
-        todo =>
-          updatedTodos.find(t => t.id === todo.id) || {
-            ...todo,
-            isLoaded: true,
-          },
+      setTodos(prev =>
+        prev.map(
+          todo =>
+            updatedTodos.find(t => t.id === todo.id) || {
+              ...todo,
+              isLoaded: true,
+            },
+        ),
       );
-
-      setTodos(newUpdatedTodos);
     } catch (error) {
-      setTodos(
-        todos.map(todo => ({
+      setTodos(prev =>
+        prev.map(todo => ({
           ...todo,
           isLoaded: true,
         })),

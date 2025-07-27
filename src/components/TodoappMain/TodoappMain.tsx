@@ -13,22 +13,19 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
   inputRef,
 }) => {
   const { todos, setTodos } = useTodos();
+
   const handleTodoDelete = async (idTodo: number) => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === idTodo ? { ...todo, isLoaded: false } : todo,
-      ),
-    );
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== idTodo));
 
     try {
       await deleteTodo(idTodo);
-      setTodos(todos.filter(todo => todo.id !== idTodo));
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== idTodo));
       inputRef.current?.focus();
 
       return true;
     } catch {
-      setTodos(
-        todos.map(todo =>
+      setTodos(prevTodos =>
+        prevTodos.map(todo =>
           todo.id === idTodo ? { ...todo, isLoaded: true } : todo,
         ),
       );
