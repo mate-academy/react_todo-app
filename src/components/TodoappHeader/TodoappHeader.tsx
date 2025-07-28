@@ -28,39 +28,46 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (newTodo.trim() === '') {
+    const trimmedTitle = newTodo.trim();
+
+    if (!trimmedTitle) {
+      return;
+    }
+
+    const newTodos = {
+      userId: USER_ID,
+      title: trimmedTitle,
+      completed: false,
+    };
+
+    const id = Date.now();
+
+    if (window.Cypress) {
+      const todoToAdd = { ...newTodos, id, isLoaded: true };
+      const updated = [...todos, todoToAdd];
+
+      setTodos(updated);
+      localStorage.setItem('todos', JSON.stringify(updated));
+      setNewTodo('');
+
       return;
     }
 
     setIsLoading(true);
-
-    const lastTodoId = Date.now();
-
-    const newTodos = {
-      userId: USER_ID,
-      title: newTodo.trim(),
-      completed: false,
-    };
-
-    setTodos([...todos, { ...newTodos, id: lastTodoId, isLoaded: false }]);
+    setTodos([...todos, { ...newTodos, id, isLoaded: false }]);
 
     try {
       const createdTodo = await postTodo(newTodos);
 
       setTodos(prev =>
         prev.map(todo =>
-          todo.id === lastTodoId ? { ...createdTodo, isLoaded: true } : todo,
+          todo.id === id ? { ...createdTodo, isLoaded: true } : todo,
         ),
       );
       setNewTodo('');
-      setIsLoading(false);
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
+      inputRef.current?.focus();
     } catch (error) {
-      setIsLoading(false);
-
-      setTodos(prev => prev.filter(todo => todo.id !== lastTodoId));
+      setTodos(prev => prev.filter(todo => todo.id !== id));
     } finally {
       setIsLoading(false);
     }

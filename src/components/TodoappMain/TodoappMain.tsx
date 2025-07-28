@@ -96,7 +96,7 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
 
       setTodos(prev =>
         prev.map(todo =>
-          todo.id === updatedTodo.id ? { ...todo, isLoaded: true } : todo
+          todo.id === updatedTodo.id ? { ...todo, isLoaded: true } : todo,
         ),
       );
 
@@ -113,7 +113,7 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
           handleTodoDelete={handleTodoDelete}
           handleToggleStatus={handleToggleStatus}
           handleUpdateTodo={handleUpdateTodo}
-        />
+        /> 
       ))}
     </section>
   );

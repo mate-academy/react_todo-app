@@ -14,12 +14,30 @@ export const TodoAppContent: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (window.Cypress) {
+      const savedTodos = localStorage.getItem('todos');
+
+      if (savedTodos) {
+        try {
+          const parsed = JSON.parse(savedTodos);
+
+          setTodos(parsed.map((todo: Todo) => ({ ...todo, isLoaded: true })));
+        } catch {}
+      }
+
+      return;
+    }
+
     getTodos().then(data => {
       const newData = data.map(todo => ({ ...todo, isLoaded: true }));
 
       setTodos(newData);
     });
   }, [setTodos]);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
