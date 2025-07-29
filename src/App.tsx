@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoForm } from './components/TodoForm';
 import { Footer } from './components/Footer';
@@ -9,19 +9,7 @@ import { FilterOption } from './types/FIlterOption';
 export const App: React.FC = () => {
   const { todos } = useContext(TodosContext);
 
-  const [filter, setFilter] = useState<FilterOption>('All');
-
-  const filteredTodos = useMemo(
-    () =>
-      todos.filter(todo =>
-        filter === 'Active'
-          ? !todo.completed
-          : filter === 'Completed'
-            ? todo.completed
-            : true,
-      ),
-    [todos, filter],
-  );
+  const [filter, setFilter] = useState<FilterOption>(FilterOption.All);
 
   return (
     <div className="todoapp">
@@ -30,7 +18,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoForm />
 
-        <TodoList todos={filteredTodos} />
+        <TodoList todos={todos} filter={filter} />
 
         <Footer filter={filter} onFilter={setFilter} />
       </div>

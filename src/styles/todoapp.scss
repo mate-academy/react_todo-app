@@ -129,12 +129,17 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    &:hover {
-      text-decoration: underline;
-    }
-
     &:active {
       text-decoration: none;
+    }
+
+    &:hover {
+      &:disabled {
+        cursor: auto;
+        text-decoration: none;
+      }
+
+      text-decoration: underline;
     }
   }
 }

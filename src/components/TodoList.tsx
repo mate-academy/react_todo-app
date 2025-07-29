@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { TodoItem } from './TodoItem';
 import { TodosContext } from '../context/TodosContext';
 import { Todo } from '../types/Todo';
+import { FilterOption } from '../types/FIlterOption';
 
 interface ListProps {
   todos: Todo[];
+  filter: FilterOption;
 }
 
-export const TodoList: React.FC<ListProps> = ({ todos }) => {
+export const TodoList: React.FC<ListProps> = ({ todos, filter }) => {
   const { setTodos, focusNewTodoInput } = useContext(TodosContext);
 
   const deleteTodo = (id: Date) => {
@@ -29,9 +31,21 @@ export const TodoList: React.FC<ListProps> = ({ todos }) => {
     );
   };
 
+  const filteredTodos = useMemo(
+    () =>
+      todos.filter(todo =>
+        filter === FilterOption.Active
+          ? !todo.completed
+          : filter === FilterOption.Completed
+            ? todo.completed
+            : true,
+      ),
+    [todos, filter],
+  );
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map((todo, index) => (
+      {filteredTodos.map((todo, index) => (
         <TodoItem
           key={index}
           todo={todo}

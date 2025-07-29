@@ -42,10 +42,10 @@ export const Footer: React.FC<FooterProps> = ({ filter, onFilter }) => {
           <a
             href="#/"
             className={classNames('filter__link', {
-              selected: filter === 'All',
+              selected: filter === FilterOption.All,
             })}
             data-cy="FilterLinkAll"
-            onClick={() => onFilter('All')}
+            onClick={() => onFilter(FilterOption.All)}
           >
             All
           </a>
@@ -53,10 +53,10 @@ export const Footer: React.FC<FooterProps> = ({ filter, onFilter }) => {
           <a
             href="#/active"
             className={classNames('filter__link', {
-              selected: filter === 'Active',
+              selected: filter === FilterOption.Active,
             })}
             data-cy="FilterLinkActive"
-            onClick={() => onFilter('Active')}
+            onClick={() => onFilter(FilterOption.Active)}
           >
             Active
           </a>
@@ -64,16 +64,15 @@ export const Footer: React.FC<FooterProps> = ({ filter, onFilter }) => {
           <a
             href="#/completed"
             className={classNames('filter__link', {
-              selected: filter === 'Completed',
+              selected: filter === FilterOption.Completed,
             })}
             data-cy="FilterLinkCompleted"
-            onClick={() => onFilter('Completed')}
+            onClick={() => onFilter(FilterOption.Completed)}
           >
             Completed
           </a>
         </nav>
 
-        {/* this button should be disabled if there are no completed todos */}
         <button
           type="button"
           className="todoapp__clear-completed"
