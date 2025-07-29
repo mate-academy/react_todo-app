@@ -25,6 +25,11 @@
 
   &__header {
     position: relative;
+
+    form {
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 
   &__toggle-all {
@@ -70,6 +75,7 @@
     border: none;
     background: rgba(0, 0, 0, 0.01);
     box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
 
     &::placeholder {
       font-style: italic;
@@ -123,12 +129,17 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    &:hover {
-      text-decoration: underline;
-    }
-
     &:active {
       text-decoration: none;
+    }
+
+    &:hover {
+      &:disabled {
+        cursor: auto;
+        text-decoration: none;
+      }
+
+      text-decoration: underline;
     }
   }
 }
