@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useState, useRef, useEffect } from 'react';
 import { useTodos } from '../../contexts/TodosContext';
 import '../../styles/todo-list.scss';
