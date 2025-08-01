@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTodos } from '../hooks/useTodos';
+import { useTodosContext } from '../hooks/useTodosContext';
 import { Todo } from '../types/Todo';
 
 export const Header = () => {
-  const { todos, setTodos, activeTodosAmount } = useTodos();
+  const { todos, setTodos, activeTodosAmount } = useTodosContext();
   const [query, setQuery] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);

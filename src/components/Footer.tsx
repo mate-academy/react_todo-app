@@ -1,19 +1,12 @@
-import { useEffect, useState } from 'react';
 import { filters } from '../constants/filters';
-import { useTodos } from '../hooks/useTodos';
+import { useTodosContext } from '../hooks/useTodosContext';
 import { filterTodos } from '../helpers/filterTodos';
 import { FilterBy } from '../types/FilterBy';
 
 export const Footer = () => {
   const { filterBy, setFilterBy, todos, setTodos, activeTodosAmount } =
-    useTodos();
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  useEffect(() => {
-    const hasCompletedTodos = todos.filter(t => t.completed).length !== 0;
-
-    setIsButtonDisabled(!hasCompletedTodos);
-  }, [todos]);
+    useTodosContext();
+  const isButtonDisabled = !todos.some(todo => todo.completed);
 
   const clearCompleted = () => {
     setTodos(prev => filterTodos(prev, FilterBy.Active));

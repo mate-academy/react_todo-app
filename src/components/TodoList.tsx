@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import { useTodos } from '../hooks/useTodos';
+import { useTodosContext } from '../hooks/useTodosContext';
 import { TodoItem } from './TodoItem';
 import { filterTodos } from '../helpers/filterTodos';
 
 export const TodoList = () => {
-  const { todos, filterBy } = useTodos();
+  const { todos, filterBy } = useTodosContext();
 
   const visibleTodos = useMemo(() => {
     return filterTodos(todos, filterBy);

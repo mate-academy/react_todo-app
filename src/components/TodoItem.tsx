@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
-import { useTodos } from '../hooks/useTodos';
+import { useTodosContext } from '../hooks/useTodosContext';
 
 type Props = {
   todo: Todo;
@@ -8,7 +8,7 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
-  const { setTodos } = useTodos();
+  const { setTodos } = useTodosContext();
 
   const [isBeingEdited, setIsBeingEdited] = useState(false);
   const [query, setQuery] = useState(title);

@@ -2,11 +2,11 @@
 import React from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-import { useTodos } from './hooks/useTodos';
+import { useTodosContext } from './hooks/useTodosContext';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
-  const { todos } = useTodos();
+  const { todos } = useTodosContext();
 
   return (
     <div className="todoapp">
