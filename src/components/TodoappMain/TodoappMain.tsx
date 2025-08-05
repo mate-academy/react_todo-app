@@ -113,7 +113,7 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
           handleTodoDelete={handleTodoDelete}
           handleToggleStatus={handleToggleStatus}
           handleUpdateTodo={handleUpdateTodo}
-        /> 
+        />
       ))}
     </section>
   );

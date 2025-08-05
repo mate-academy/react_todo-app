@@ -23,10 +23,16 @@ export const TodosProvider: React.FC<TodoProviderProps> = ({ children }) => {
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
 
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    } else {
-      localStorage.setItem('todos', JSON.stringify([]));
+    try {
+      const parsed = storedTodos ? JSON.parse(storedTodos) : [];
+
+      setTodos(
+        parsed.map((todo: Todo) => ({
+          ...todo,
+          isLoaded: todo.isLoaded ?? true,
+        })),
+      );
+    } catch (e) {
       setTodos([]);
     }
   }, []);

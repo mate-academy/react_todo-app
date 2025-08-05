@@ -21,23 +21,27 @@ export const TodoAppContent: React.FC = () => {
         try {
           const parsed = JSON.parse(savedTodos);
 
-          setTodos(parsed.map((todo: Todo) => ({ ...todo, isLoaded: true })));
+          if (Array.isArray(parsed)) {
+            setTodos(parsed.map((todo: Todo) => ({ ...todo, isLoaded: true })));
+          }
         } catch {}
       }
 
       return;
     }
 
-    getTodos().then(data => {
-      const newData = data.map(todo => ({ ...todo, isLoaded: true }));
+    const fetchTodos = async () => {
+      try {
+        const data = await getTodos();
 
-      setTodos(newData);
-    });
+        setTodos(data.map(todo => ({ ...todo, isLoaded: true })));
+      } catch (e) {
+        setTodos([]);
+      }
+    };
+
+    fetchTodos();
   }, [setTodos]);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
@@ -78,6 +82,7 @@ export const TodoAppContent: React.FC = () => {
     );
 
     setTodos(updatedTodos);
+ 
     inputRef.current?.focus();
   };
 

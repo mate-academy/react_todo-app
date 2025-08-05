@@ -96,7 +96,7 @@ export const TodoElement: React.FC<TodoElementProps> = ({
 
       <TodoEdit
         handleEditedTitle={handleEditedTitle}
-        handleKeyDown={handleKeyDown}
+        handleKeyDown={handleKeyDown} 
         handleInputBlur={handleInputBlur}
         editedTitle={editedTitle}
         isEditing={isEditing}

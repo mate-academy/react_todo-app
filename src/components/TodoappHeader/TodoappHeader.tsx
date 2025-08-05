@@ -42,16 +42,16 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
 
     const id = Date.now();
 
-    if (window.Cypress) {
-      const todoToAdd = { ...newTodos, id, isLoaded: true };
-      const updated = [...todos, todoToAdd];
+    // if (window.Cypress) {
+    //   const todoToAdd = { ...newTodos, id, isLoaded: true };
+    //   const updated = [...todos, todoToAdd];
 
-      setTodos(updated);
-      localStorage.setItem('todos', JSON.stringify(updated));
-      setNewTodo('');
+    //   setTodos(updated);
+    //   localStorage.setItem('todos', JSON.stringify(updated));
+    //   setNewTodo('');
 
-      return;
-    }
+    //   return;
+    // }
 
     setIsLoading(true);
     setTodos([...todos, { ...newTodos, id, isLoaded: false }]);
