@@ -15,11 +15,12 @@ body {
 }
 
 .notification.hidden {
+  display: none !important;
   min-height: 0;
   opacity: 0;
   pointer-events: none;
 }
 
-@import './todoapp';
-@import './todo-list';
-@import './filters';
+@import "./todoapp";
+@import "./todo";
+@import "./filter";
