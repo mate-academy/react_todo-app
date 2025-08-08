@@ -15,7 +15,7 @@ export const ClearCompletedButton: React.FC<ClearCompletedButtonProps> = ({
       disabled={!todoCompleted}
       onClick={handleClearCompletedButton}
     >
-      Clear completed 
+      Clear completed
     </button>
   );
 };

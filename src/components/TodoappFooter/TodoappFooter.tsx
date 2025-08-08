@@ -16,6 +16,7 @@ export const TodoappFooter: React.FC<TodoappFooterProps> = ({
   const todosLength = todos.filter(
     todo => !todo.completed && todo.isLoaded,
   ).length;
+
   const todoIsCompleted = todos.some(todo => todo.completed && todo.isLoaded);
 
   if (todos.length === 0) {

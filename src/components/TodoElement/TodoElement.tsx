@@ -56,20 +56,7 @@ export const TodoElement: React.FC<TodoElementProps> = ({
       return;
     }
 
-    const updateTodos = { ...todo, title: trimmedTitle };
-
-    const success = await handleUpdateTodo(
-      updateTodos,
-      setIsEditing,
-      setEditedTitle,
-      trimmedTitle,
-    );
-
-    if (success) {
-      setIsEditing(false);
-    } else {
-      setIsEditing(true);
-    }
+    handleUpdateTodo(todo, setIsEditing, setEditedTitle, trimmedTitle);
   };
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -96,7 +83,7 @@ export const TodoElement: React.FC<TodoElementProps> = ({
 
       <TodoEdit
         handleEditedTitle={handleEditedTitle}
-        handleKeyDown={handleKeyDown} 
+        handleKeyDown={handleKeyDown}
         handleInputBlur={handleInputBlur}
         editedTitle={editedTitle}
         isEditing={isEditing}
