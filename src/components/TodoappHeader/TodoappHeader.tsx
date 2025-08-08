@@ -19,7 +19,7 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({ inputRef }) => {
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
