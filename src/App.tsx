@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, useMemo } from 'react';
+import { USER_ID } from './api/todos';
 import { UserWarning } from './UserWarning';
 import { ErrorMessage } from './types/ErrorMessage';
 import { Footer } from './components/Footer';
@@ -7,7 +8,6 @@ import { TodoList } from './components/TodoList';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Todo } from './types/Todo';
 import { TodoContext } from './context/TodoContext';
-import { USER_ID } from './api/todos';
 import { FilterType } from './constants/constants';
 
 export const App: React.FC = () => {
@@ -22,13 +22,22 @@ export const App: React.FC = () => {
   } = useContext(TodoContext);
 
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
-  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.All);
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [processingTodoId, setProcessingTodoId] = useState<number | null>(null);
   const [isTogglingAll, setIsTogglingAll] = useState(false);
   const newTodoField = useRef<HTMLInputElement>(null);
+
+  const [filterBy, setFilterBy] = useState<FilterType>(() => {
+    const saved = localStorage.getItem('filterBy');
+
+    return saved ? (saved as FilterType) : FilterType.All;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('filterBy', filterBy);
+  }, [filterBy]);
 
   useEffect(() => {
     if (errorMessage !== null) {
@@ -38,6 +47,8 @@ export const App: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
+
+    return undefined;
   }, [errorMessage]);
 
   useEffect(() => {
@@ -52,6 +63,10 @@ export const App: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (loading) {
+      return;
+    }
+
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) {
@@ -61,7 +76,6 @@ export const App: React.FC = () => {
     }
 
     setLoading(true);
-
     setTempTodo({
       id: -Date.now(),
       userId: USER_ID,
@@ -107,7 +121,6 @@ export const App: React.FC = () => {
     const shouldBeCompleted = !todos.every(todo => todo.completed);
 
     setIsTogglingAll(true);
-
     try {
       await toggleAll(shouldBeCompleted);
     } catch {
@@ -122,7 +135,6 @@ export const App: React.FC = () => {
     newTitle: string,
   ): Promise<boolean> => {
     setProcessingTodoId(id);
-
     try {
       await updateTodoTitle(id, newTitle);
 
@@ -144,13 +156,17 @@ export const App: React.FC = () => {
     }
   };
 
-  let filteredTodos = todos;
-
-  if (filterBy === FilterType.Active) {
-    filteredTodos = todos.filter(todo => !todo.completed);
-  } else if (filterBy === FilterType.Completed) {
-    filteredTodos = todos.filter(todo => todo.completed);
-  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const filteredTodos = useMemo(() => {
+    switch (filterBy) {
+      case FilterType.Active:
+        return todos.filter(todo => !todo.completed);
+      case FilterType.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, filterBy]);
 
   return (
     <div className="todoapp">

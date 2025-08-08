@@ -48,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
         value={newTitle}
         onChange={e => setNewTitle(e.target.value)}
         disabled={loading}
+        aria-disabled={loading}
         required
         autoFocus
       />
