@@ -1,6 +1,7 @@
 import { Actions } from '../constants/Actions';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
+import { TODOS_KEY } from '../utils/localStorage';
 
 export interface State {
   todos: Todo[];
@@ -8,7 +9,7 @@ export interface State {
 }
 
 export const initialState: State = {
-  todos: JSON.parse(localStorage.getItem('todos') || '[]'),
+  todos: JSON.parse(localStorage.getItem(TODOS_KEY) || '[]'),
   filter: Filter.All,
 };
 

@@ -13,6 +13,8 @@ const Header = () => {
   const {
     state: { todos },
     dispatch,
+    inputRef,
+    focusInput,
   } = context;
 
   const [title, setTitle] = useState('');
@@ -42,6 +44,12 @@ const Header = () => {
     setTitle('');
   };
 
+  useEffect(() => {
+    if (todos.length === 0 || !todos.some(todo => todo.completed)) {
+      focusInput();
+    }
+  }, [todos, focusInput]);
+
   return (
     <header className="todoapp__header">
       {todos.length > 0 && (
@@ -61,8 +69,9 @@ const Header = () => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          autoFocus
+          ref={inputRef}
           value={title}
+          autoFocus
           onChange={e => setTitle(e.target.value)}
         />
       </form>

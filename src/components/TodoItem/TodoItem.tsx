@@ -19,7 +19,7 @@ const TodoItem = ({ todo }: Props) => {
     throw new Error('TodosContext must be used within a TodosProvider');
   }
 
-  const { dispatch } = context;
+  const { dispatch, focusInput } = context;
 
   const handleSave = () => {
     const trimmed = newTitle.trim();
@@ -45,6 +45,11 @@ const TodoItem = ({ todo }: Props) => {
       setNewTitle(todo.title);
       setIsEditing(false);
     }
+  };
+
+  const handleDelete = () => {
+    dispatch({ type: Actions.DELETE, payload: todo.id });
+    focusInput();
   };
 
   return (
@@ -89,7 +94,7 @@ const TodoItem = ({ todo }: Props) => {
           type="button"
           className="todo__remove"
           data-cy="TodoDelete"
-          onClick={() => dispatch({ type: Actions.DELETE, payload: todo.id })}
+          onClick={handleDelete}
         >
           ×
         </button>

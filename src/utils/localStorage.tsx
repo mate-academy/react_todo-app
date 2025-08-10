@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Todo } from '../types/Todo';
 
-const TODOS_KEY = 'todosApp.todos';
+export const TODOS_KEY = 'todos';
 
 export const loadTodos = (): Todo[] => {
   try {
