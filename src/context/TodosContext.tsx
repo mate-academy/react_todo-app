@@ -1,5 +1,7 @@
 import { createContext, Dispatch, useReducer, useRef } from 'react';
 import { Action, initialState, State, TodoReducer } from './TodosReducer';
+import { loadTodos } from '../utils/localStorage';
+import { Filter } from '../types/Filter';
 
 export interface TodosContextType {
   state: State;
@@ -15,7 +17,10 @@ interface Props {
 }
 
 export const TodosProvider = ({ children }: Props) => {
-  const [state, dispatch] = useReducer(TodoReducer, initialState);
+  const [state, dispatch] = useReducer(TodoReducer, initialState, () => ({
+    todos: loadTodos(),
+    filter: Filter.All,
+  }));
 
   const inputRef = useRef<HTMLInputElement>(null);
 
