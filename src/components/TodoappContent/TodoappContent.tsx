@@ -8,7 +8,7 @@ import { FilterType } from '../types/Filter';
 import { useTodos } from '../TodosContext';
 import { useFilter } from '../FilterContext';
 
-export const TodoAppContent: React.FC = () => {
+export const TodoappContent: React.FC = () => {
   const { todos, setTodos } = useTodos();
   const { filter } = useFilter();
   const inputRef = useRef<HTMLInputElement>(null);
