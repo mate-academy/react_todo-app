@@ -16,9 +16,12 @@ export const TodoAppContent: React.FC = () => {
     const data = localStorage.getItem('todos');
 
     if (data) {
-      const parsed = JSON.parse(data);
+      const parsed = JSON.parse(data).map((todo: Todo) => ({
+        ...todo,
+        isLoaded: true,
+      }));
 
-      setTodos(parsed.map((todo: Todo) => ({ ...todo, isLoaded: true })));
+      setTodos(parsed);
     }
   }, [setTodos]);
 
