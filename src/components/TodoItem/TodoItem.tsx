@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
-import { TodosContext } from '../../context/TodosContext';
+import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { Actions } from '../../constants/Actions';
 import classNames from 'classnames';
+import { useTodosContext } from '../../context/useTodosContext';
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
@@ -11,20 +11,16 @@ interface Props {
 }
 
 const TodoItem = ({ todo }: Props) => {
-  const context = useContext(TodosContext);
+  const context = useTodosContext();
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
-
-  if (!context) {
-    throw new Error('TodosContext must be used within a TodosProvider');
-  }
 
   const { dispatch, focusInput } = context;
 
   const handleSave = () => {
     const trimmed = newTitle.trim();
 
-    if (trimmed === '') {
+    if (!trimmed) {
       dispatch({ type: Actions.DELETE, payload: todo.id });
     } else if (trimmed !== todo.title) {
       dispatch({

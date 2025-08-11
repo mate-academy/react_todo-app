@@ -1,14 +1,9 @@
-import { useContext } from 'react';
 import TodoItem from '../TodoItem/TodoItem';
-import { TodosContext } from '../../context/TodosContext';
 import { Filter } from '../../types/Filter';
+import { useTodosContext } from '../../context/useTodosContext';
 
 const TodoList = () => {
-  const context = useContext(TodosContext);
-
-  if (!context) {
-    throw new Error('TodosContext must be used within a TodosProvider');
-  }
+  const context = useTodosContext();
 
   const { state } = context;
   const { todos, filter } = state;

@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useReducer, useRef } from 'react';
 import { Action, initialState, State, TodoReducer } from './TodosReducer';
 
-interface TodosContextType {
+export interface TodosContextType {
   state: State;
   dispatch: Dispatch<Action>;
   focusInput: () => void;

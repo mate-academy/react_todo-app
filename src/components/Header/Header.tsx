@@ -1,14 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
-import { TodosContext } from '../../context/TodosContext';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Actions } from '../../constants/Actions';
+import { useTodosContext } from '../../context/useTodosContext';
 
 const Header = () => {
-  const context = useContext(TodosContext);
-
-  if (!context) {
-    throw new Error('TodosContext must be used within a TodosProvider');
-  }
+  const context = useTodosContext();
 
   const {
     state: { todos },
