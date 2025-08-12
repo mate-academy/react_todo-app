@@ -9,7 +9,10 @@ export interface State {
 }
 
 export const initialState: State = {
-  todos: JSON.parse(localStorage.getItem(TODOS_KEY) || '[]'),
+  todos:
+    typeof window !== 'undefined'
+      ? JSON.parse(localStorage.getItem(TODOS_KEY) || '[]')
+      : [],
   filter: Filter.All,
 };
 

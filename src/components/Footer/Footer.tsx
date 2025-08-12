@@ -14,7 +14,7 @@ const Footer = () => {
 
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-  if (todos.length === 0) {
+  if (!todos || todos.length === 0) {
     return null;
   }
 
