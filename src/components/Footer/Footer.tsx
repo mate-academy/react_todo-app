@@ -4,17 +4,19 @@ import classNames from 'classnames';
 import { useTodosContext } from '../../context/useTodosContext';
 
 const Footer = () => {
-  const context = useTodosContext();
-
   const {
     state: { todos, filter },
     dispatch,
-  } = context;
+  } = useTodosContext();
 
   const hasCompleted = todos.some(todo => todo.completed);
   const itemsLeft = todos.filter(todo => !todo.completed).length;
 
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+  if (todos.length === 0) {
+    return null;
+  }
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">

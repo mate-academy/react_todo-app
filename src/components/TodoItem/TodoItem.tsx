@@ -11,11 +11,10 @@ interface Props {
 }
 
 const TodoItem = ({ todo }: Props) => {
-  const context = useTodosContext();
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
-  const { dispatch, focusInput } = context;
+  const { dispatch, focusInput } = useTodosContext();
 
   const handleSave = () => {
     const trimmed = newTitle.trim();

@@ -3,9 +3,7 @@ import { Filter } from '../../types/Filter';
 import { useTodosContext } from '../../context/useTodosContext';
 
 const TodoList = () => {
-  const context = useTodosContext();
-
-  const { state } = context;
+  const { state } = useTodosContext();
   const { todos, filter } = state;
 
   const filteredTodos = todos.filter(todo => {

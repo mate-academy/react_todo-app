@@ -4,14 +4,12 @@ import { Actions } from '../../constants/Actions';
 import { useTodosContext } from '../../context/useTodosContext';
 
 const Header = () => {
-  const context = useTodosContext();
-
   const {
     state: { todos },
     dispatch,
     inputRef,
     focusInput,
-  } = context;
+  } = useTodosContext();
 
   const [title, setTitle] = useState('');
   const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);

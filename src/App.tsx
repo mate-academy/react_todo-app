@@ -7,14 +7,12 @@ import { TODOS_KEY } from './utils/localStorage';
 import { useTodosContext } from './context/useTodosContext';
 
 export const App: React.FC = () => {
-  const context = useTodosContext();
-
-  const { state } = context;
+  const { state } = useTodosContext();
   const { todos } = state;
 
   useEffect(() => {
-    localStorage.setItem(TODOS_KEY, JSON.stringify(state.todos));
-  }, [state.todos]);
+    localStorage.setItem(TODOS_KEY, JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <div className="todoapp">
@@ -23,7 +21,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList />
-        {todos.length > 0 && <Footer />}
+        <Footer />
       </div>
     </div>
   );
