@@ -1,10 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { Actions } from '../../constants/Actions';
 import classNames from 'classnames';
 import { useTodosContext } from '../../context/useTodosContext';
 
-/* eslint-disable jsx-a11y/label-has-associated-control */
 
 interface Props {
   todo: Todo;
