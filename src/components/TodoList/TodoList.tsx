@@ -1,11 +1,17 @@
 import React from 'react';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {};
 
 export const TodoList: React.FC<Props> = () => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {/* This is a completed todo */}
+      <TodoItem />
+    </section>
+  );
+};
+
+/*
       <div data-cy="Todo" className="todo completed">
         <label className="todo__status-label">
           <input
@@ -20,13 +26,11 @@ export const TodoList: React.FC<Props> = () => {
           Completed Todo
         </span>
 
-        {/* Remove button appears only on hover */}
         <button type="button" className="todo__remove" data-cy="TodoDelete">
           ×
         </button>
       </div>
 
-      {/* This todo is an active todo */}
       <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
@@ -45,7 +49,6 @@ export const TodoList: React.FC<Props> = () => {
         </button>
       </div>
 
-      {/* This todo is being edited */}
       <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
@@ -54,8 +57,6 @@ export const TodoList: React.FC<Props> = () => {
             className="todo__status"
           />
         </label>
-
-        {/* This form is shown instead of the title and remove button */}
         <form>
           <input
             data-cy="TodoTitleField"
@@ -67,7 +68,6 @@ export const TodoList: React.FC<Props> = () => {
         </form>
       </div>
 
-      {/* This todo is in loadind state */}
       <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
@@ -85,6 +85,4 @@ export const TodoList: React.FC<Props> = () => {
           ×
         </button>
       </div>
-    </section>
-  );
-};
+*/
