@@ -1,5 +1,28 @@
 import { createContext, useContext } from 'react';
 
+export const classNames = (
+  ...args: (string | { [key: string]: boolean } | undefined | null | false)[]
+): string => {
+  return args
+    .filter(Boolean)
+    .map(arg => {
+      if (typeof arg === 'string') {
+        return arg;
+}
+
+      if (typeof arg === 'object' && arg !== null) {
+        return Object.entries(arg)
+          .filter(([, value]) => value)
+          .map(([key]) => key)
+          .join(' ');
+      }
+
+      return '';
+    })
+    .join(' ')
+    .trim();
+};
+
 export interface Todo {
   id: number;
   title: string;

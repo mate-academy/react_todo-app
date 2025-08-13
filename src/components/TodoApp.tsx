@@ -3,6 +3,7 @@ import { useTodos } from './TodoContext';
 import { TodoInput } from './TodoInput';
 import { TodoItem } from './TodoItem';
 import { TodoFilters } from './TodoFilters';
+import classNames from 'classnames';
 
 export const TodoApp: React.FC = () => {
   const { todos, toggleAll, clearCompleted, filter } = useTodos();
@@ -43,7 +44,9 @@ export const TodoApp: React.FC = () => {
         <header className="todoapp__header">
           <button
             type="button"
-            className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+            className={classNames('todoapp__toggle-all', {
+              active: allCompleted,
+            })}
             data-cy="ToggleAllButton"
             onClick={toggleAll}
           />

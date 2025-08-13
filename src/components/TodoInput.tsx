@@ -1,27 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTodos } from './TodoContext';
-import { TodoFilters } from './TodoFilters';
 
 export const TodoInput: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
-  const { addTodo } = useTodos();
+  const { addTodo, todos } = useTodos();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const previousTodosLength = useRef(TodoFilters.length);
+  const previousTodosLength = useRef(todos.length);
 
   useEffect(() => {
     if (todos.length < previousTodosLength.current && inputRef.current) {
       inputRef.current.focus();
     }
 
-    previousTodosLength.current = TodoFilters.length;
-  }, []);
+    previousTodosLength.current = todos.length;
+  }, [todos.length]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      addTodo(inputValue);
-      setInputValue('');
+      const trimmedValue = inputValue.trim();
+
+      if (trimmedValue) {
+        addTodo(inputValue);
+        setInputValue('');
+      }
     }
   };
 

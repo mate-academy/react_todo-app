@@ -15,14 +15,28 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      updateTodo(todo.id, editValue);
-      setIsEditing(false);
+      const trimmedValue = editValue.trim();
+
+      if (trimmedValue) {
+        updateTodo(todo.id, trimmedValue);
+        setIsEditing(false);
+      } else {
+        deleteTodo(todo.id);
+        setIsEditing(false);
+      }
     }
   };
 
   const handleBlur = () => {
-    updateTodo(todo.id, editValue);
-    setIsEditing(false);
+    const trimmedValue = editValue.trim();
+
+    if (trimmedValue) {
+      updateTodo(todo.id, trimmedValue);
+      setIsEditing(false);
+    } else {
+      deleteTodo(todo.id);
+      setIsEditing(false);
+    }
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
