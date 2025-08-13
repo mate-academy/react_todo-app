@@ -3,7 +3,15 @@ import { createRoot } from 'react-dom/client';
 import './styles/index.scss';
 
 import { App } from './App';
+import { TodosProvider } from './components/TodosContext';
+import { FilterProvider } from './components/FilterContext';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
-createRoot(container).render(<App />);
+createRoot(container).render(
+  <FilterProvider>
+    <TodosProvider>
+      <App />
+    </TodosProvider>
+  </FilterProvider>,
+);
