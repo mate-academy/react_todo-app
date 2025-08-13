@@ -5,16 +5,16 @@ import { Actions } from '../../constants/Actions';
 import classNames from 'classnames';
 import { useTodosContext } from '../../context/useTodosContext';
 
-
 interface Props {
   todo: Todo;
+  focusInput: () => void;
 }
 
-const TodoItem = ({ todo }: Props) => {
+const TodoItem = ({ todo, focusInput }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
 
-  const { dispatch, focusInput } = useTodosContext();
+  const { dispatch } = useTodosContext();
 
   const handleSave = () => {
     const trimmed = newTitle.trim();

@@ -1,14 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Actions } from '../../constants/Actions';
 import { useTodosContext } from '../../context/useTodosContext';
 
-const Header = () => {
+interface Props {
+  inputRef: React.RefObject<HTMLInputElement>;
+  focusInput: () => void;
+}
+
+const Header = ({ inputRef, focusInput }: Props) => {
   const {
     state: { todos },
     dispatch,
-    inputRef,
-    focusInput,
   } = useTodosContext();
 
   const [title, setTitle] = useState('');

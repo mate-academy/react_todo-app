@@ -1,4 +1,4 @@
-import { createContext, Dispatch, useReducer, useRef } from 'react';
+import { createContext, Dispatch, useReducer } from 'react';
 import { Action, initialState, State, TodoReducer } from './TodosReducer';
 import { loadTodos } from '../utils/localStorage';
 import { Filter } from '../types/Filter';
@@ -6,8 +6,6 @@ import { Filter } from '../types/Filter';
 export interface TodosContextType {
   state: State;
   dispatch: Dispatch<Action>;
-  focusInput: () => void;
-  inputRef: React.RefObject<HTMLInputElement>;
 }
 
 export const TodosContext = createContext<TodosContextType | null>(null);
@@ -22,14 +20,8 @@ export const TodosProvider = ({ children }: Props) => {
     filter: Filter.All,
   }));
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const focusInput = () => {
-    inputRef.current?.focus();
-  };
-
   return (
-    <TodosContext.Provider value={{ state, dispatch, focusInput, inputRef }}>
+    <TodosContext.Provider value={{ state, dispatch }}>
       {children}
     </TodosContext.Provider>
   );

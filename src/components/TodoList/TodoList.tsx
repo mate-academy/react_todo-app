@@ -2,7 +2,11 @@ import TodoItem from '../TodoItem/TodoItem';
 import { Filter } from '../../types/Filter';
 import { useTodosContext } from '../../context/useTodosContext';
 
-const TodoList = () => {
+interface Props {
+  focusInput: () => void;
+}
+
+const TodoList = ({ focusInput }: Props) => {
   const { state } = useTodosContext();
   const { todos, filter } = state;
 
@@ -21,7 +25,7 @@ const TodoList = () => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {filteredTodos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} />
+        <TodoItem key={todo.id} todo={todo} focusInput={focusInput} />
       ))}
     </section>
   );
