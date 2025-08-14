@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from './types/Todo';
 import {
-  getTodos,
   deleteTodo as apiDeleteTodo,
   createTodo,
   updateTodo as apiUpdateTodo,
@@ -74,28 +73,36 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const USER_ID = 2576;
 
-  useEffect(() => {
-    setIsLoading(true);
-    setCurrentFilter(FilterType.all);
-    setErrorMessage(ErrorMessages.default);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   setCurrentFilter(FilterType.all);
+  //   setErrorMessage(ErrorMessages.default);
 
-    getTodos()
-      .then(setTodos)
-      .catch(() => {
-        setErrorMessage(ErrorMessages.getError);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  //   getTodos()
+  //     .then(setTodos)
+  //     .catch(() => {
+  //       setErrorMessage(ErrorMessages.getError);
+  //     })
+  //     .finally(() => {
+  //       setIsLoading(false);
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    if (todos.length > 0) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    } else {
+      localStorage.removeItem('todos');
+    }
+  }, [todos]);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, [isLoading]);
 
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  // useEffect(() => {
+  //   localStorage.setItem('todos', JSON.stringify(todos));
+  // }, [todos]);
 
   const deleteTodo = (todoId: number) => {
     setLoadingTodoIds(ids => [...ids, todoId]);
@@ -191,11 +198,9 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
     );
 
     todosToUpdate.forEach(todo => {
-      try {
-        updateTodo({ ...todo, completed: !areAllCompleted });
-      } catch (error) {
+      updateTodo({ ...todo, completed: !areAllCompleted }).catch(() => {
         setErrorMessage(ErrorMessages.updateError || 'Unable to toggle todos');
-      }
+      });
     });
   };
 
