@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTodos } from './TodoContext';
 import classNames from 'classnames';
+import { FILTERS } from '../constants/filters';
 
 export const TodoFilters: React.FC = () => {
   const { filter, setFilter } = useTodos();
@@ -9,11 +10,13 @@ export const TodoFilters: React.FC = () => {
     <nav className="filter" data-cy="Filter">
       <a
         href="#/"
-        className={classNames('filter__link', { selected: filter === 'All' })}
+        className={classNames('filter__link', {
+          selected: filter === FILTERS.all,
+        })}
         data-cy="FilterLinkAll"
         onClick={e => {
           e.preventDefault();
-          setFilter('All');
+          setFilter(FILTERS.all);
         }}
       >
         All
@@ -23,11 +26,11 @@ export const TodoFilters: React.FC = () => {
         href="#/active"
         data-cy="FilterLinkActive"
         className={classNames('filter__link', {
-          selected: filter === 'Active',
+          selected: filter === FILTERS.active,
         })}
         onClick={e => {
           e.preventDefault();
-          setFilter('Active');
+          setFilter(FILTERS.active);
         }}
       >
         Active
@@ -37,11 +40,11 @@ export const TodoFilters: React.FC = () => {
         href="#/completed"
         data-cy="FilterLinkCompleted"
         className={classNames('filter__link', {
-          selected: filter === 'Completed',
+          selected: filter === FILTERS.completed,
         })}
         onClick={e => {
           e.preventDefault();
-          setFilter('Completed');
+          setFilter(FILTERS.completed);
         }}
       >
         Completed

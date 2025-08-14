@@ -22,7 +22,7 @@ export const TodoInput: React.FC = () => {
       const trimmedValue = inputValue.trim();
 
       if (trimmedValue) {
-        addTodo(inputValue);
+        addTodo(trimmedValue);
         setInputValue('');
       }
     }

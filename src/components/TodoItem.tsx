@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { Todo, useTodos } from './TodoContext';
+import classNames from 'classnames';
 
 export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -19,11 +20,11 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
 
       if (trimmedValue) {
         updateTodo(todo.id, trimmedValue);
-        setIsEditing(false);
       } else {
         deleteTodo(todo.id);
-        setIsEditing(false);
       }
+
+      setIsEditing(false);
     }
   };
 
@@ -32,11 +33,11 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
 
     if (trimmedValue) {
       updateTodo(todo.id, trimmedValue);
-      setIsEditing(false);
     } else {
       deleteTodo(todo.id);
-      setIsEditing(false);
     }
+
+    setIsEditing(false);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
@@ -79,7 +80,10 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
   }
 
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+    <div
+      data-cy="Todo"
+      className={classNames('todo', { completed: todo.completed })}
+    >
       <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
         <input
           id={`todo-status-${todo.id}`}

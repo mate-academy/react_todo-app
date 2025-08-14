@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Todo, TodoContext } from './TodoContext';
+import { FILTERS, FilterType } from '../constants/filters';
 
 export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<FilterType>('All');
+  const [filter, setFilter] = useState<FilterType>(FILTERS.all);
 
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos');
@@ -82,7 +83,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     setTodos(prev => prev.filter(todo => !todo.completed));
   }, []);
 
-  const value: TodoContextType = {
+  const value = {
     todos,
     addTodo,
     toggleTodo,
