@@ -71,7 +71,8 @@
   }
 
   &__title-field {
-    width: 100%;
+    // width: 100%;
+    width: -webkit-fill-available;
     padding: 11px 14px;
 
     font-size: inherit;
@@ -93,6 +94,7 @@
   .overlay {
     position: absolute;
     inset: 0;
+    pointer-events: none;
 
     opacity: 0.5;
   }
