@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useTodos } from '../TodosContext';
 
 export const Header: React.FC = ({}) => {
-  const { todoList, addTodo, toggleAllTodos } = useTodos();
+  const { todos, addTodo, toggleAllTodos } = useTodos();
   const [title, setTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -24,12 +24,11 @@ export const Header: React.FC = ({}) => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      {todoList.length > 0 && (
+      {todos.length > 0 && (
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active:
-              todoList.length > 0 && todoList.every(todo => todo.completed),
+            active: todos.length > 0 && todos.every(todo => todo.completed),
           })}
           data-cy="ToggleAllButton"
           onClick={toggleAllTodos}

@@ -5,7 +5,7 @@ import { useTodos } from '../TodosContext';
 
 export const TodoList: React.FC = () => {
   const {
-    todoList,
+    todos,
     loadingTodoIds,
     deleteTodo,
     updateTodo,
@@ -13,7 +13,7 @@ export const TodoList: React.FC = () => {
     setErrorMessage,
   } = useTodos();
 
-  const filteredTodos = todoList.filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     switch (currentFilter) {
       case FilterType.all:
         return true;

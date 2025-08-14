@@ -10,7 +10,7 @@ import { FilterType } from './types/FilterType';
 import { ErrorMessages } from './types/ErrorMessages';
 
 type TodoContextType = {
-  todoList: Todo[];
+  todos: Todo[];
   deleteTodo: (todoId: number) => void;
   clearCompletedTodos: () => void;
   addTodo: (title: string) => void;
@@ -50,8 +50,8 @@ type TodosProviderProps = {
 };
 
 export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
-  const [todoList, setTodoList] = React.useState<Todo[]>(() => {
-    const data = localStorage.getItem('todoList');
+  const [todos, setTodos] = React.useState<Todo[]>(() => {
+    const data = localStorage.getItem('todos');
 
     if (!data) {
       return [];
@@ -80,7 +80,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
     setErrorMessage(ErrorMessages.default);
 
     getTodos()
-      .then(setTodoList)
+      .then(setTodos)
       .catch(() => {
         setErrorMessage(ErrorMessages.getError);
       })
@@ -94,8 +94,8 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   }, [isLoading]);
 
   useEffect(() => {
-    localStorage.setItem('todoList', JSON.stringify(todoList));
-  }, [todoList]);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const deleteTodo = (todoId: number) => {
     setLoadingTodoIds(ids => [...ids, todoId]);
@@ -103,7 +103,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
 
     apiDeleteTodo(todoId)
       .then(() => {
-        setTodoList(todos => todos.filter(todo => todo.id !== todoId));
+        setTodos(todoList => todoList.filter(todo => todo.id !== todoId));
       })
       .catch(() => {
         setErrorMessage(ErrorMessages.deleteError);
@@ -115,7 +115,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   };
 
   function clearCompletedTodos() {
-    const completedTodos = todoList.filter(todo => todo.completed);
+    const completedTodos = todos.filter(todo => todo.completed);
 
     if (completedTodos.length === 0) {
       setErrorMessage(ErrorMessages.deleteError || 'No completed todos');
@@ -149,7 +149,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
 
     createTodo({ title: trimmedTitle, userId: USER_ID, completed: false })
       .then(newTodo => {
-        setTodoList(currentTodoList => [...currentTodoList, newTodo]);
+        setTodos(currentTodoList => [...currentTodoList, newTodo]);
         setTitle('');
         setErrorMessage(ErrorMessages.default);
       })
@@ -168,7 +168,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
 
     return apiUpdateTodo(itemToUpdate)
       .then(updatedTodo => {
-        setTodoList(currentTodoList =>
+        setTodos(currentTodoList =>
           currentTodoList.map(todo =>
             todo.id === updatedTodo.id ? updatedTodo : todo,
           ),
@@ -184,9 +184,9 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   }
 
   const toggleAllTodos = () => {
-    const areAllCompleted = todoList.every(todo => todo.completed);
+    const areAllCompleted = todos.every(todo => todo.completed);
 
-    const todosToUpdate = todoList.filter(
+    const todosToUpdate = todos.filter(
       todo => todo.completed === areAllCompleted,
     );
 
@@ -200,7 +200,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   };
 
   const contextValue: TodoContextType = {
-    todoList,
+    todos,
     addTodo,
     deleteTodo,
     clearCompletedTodos,

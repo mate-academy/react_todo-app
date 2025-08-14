@@ -3,15 +3,15 @@ import { TodoFilter } from './TodoFilter';
 import { useTodos } from '../TodosContext';
 
 export const Footer: React.FC = () => {
-  const { todoList, clearCompletedTodos, currentFilter, setCurrentFilter } =
+  const { todos, clearCompletedTodos, currentFilter, setCurrentFilter } =
     useTodos();
 
-  if (todoList.length === 0) {
+  if (todos.length === 0) {
     return null;
   }
 
-  const activeTodosCount = todoList.filter(todo => !todo.completed).length;
-  const hasCompletedTodos = todoList.some(todo => todo.completed);
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
