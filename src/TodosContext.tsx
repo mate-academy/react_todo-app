@@ -89,20 +89,12 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   // }, []);
 
   useEffect(() => {
-    if (todos.length > 0) {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    } else {
-      localStorage.removeItem('todos');
-    }
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [isLoading]);
-
   // useEffect(() => {
-  //   localStorage.setItem('todos', JSON.stringify(todos));
-  // }, [todos]);
+  //   inputRef.current?.focus();
+  // }, [isLoading]);
 
   const deleteTodo = (todoId: number) => {
     setLoadingTodoIds(ids => [...ids, todoId]);
@@ -118,6 +110,7 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
       .finally(() => {
         setIsLoading(false);
         setLoadingTodoIds(ids => ids.filter(id => id !== todoId));
+        inputRef.current?.focus();
       });
   };
 

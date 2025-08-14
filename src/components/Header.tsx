@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useTodos } from '../TodosContext';
 
 export const Header: React.FC = ({}) => {
-  const { todos, addTodo, toggleAllTodos } = useTodos();
+  const { todos, addTodo, toggleAllTodos, inputRef } = useTodos();
   const [title, setTitle] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();

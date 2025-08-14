@@ -28,9 +28,9 @@ export const TodoList: React.FC = () => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map((todo, i) => (
+      {filteredTodos.map(todo => (
         <TodoItem
-          key={todo.id + new Date().getTime() + i}
+          key={todo.id}
           todo={todo}
           deleteTodo={deleteTodo}
           isLoading={loadingTodoIds.includes(todo.id)}

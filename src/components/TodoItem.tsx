@@ -36,7 +36,6 @@ export const TodoItem: React.FC<Props> = ({
 
     if (trimmedTitle === '') {
       setEditedTitle(todo.title);
-      // setIsEditing(false);
       deleteTodo(todo.id);
 
       return;
@@ -48,7 +47,7 @@ export const TodoItem: React.FC<Props> = ({
       return;
     }
 
-    if (editedTitle !== todo.title) {
+    if (trimmedTitle !== todo.title) {
       try {
         await updateTodo?.({ ...todo, title: editedTitle.trim() });
         setIsEditing(false);
