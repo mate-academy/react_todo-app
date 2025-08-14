@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable @typescript-eslint/indent */
 import classNames from 'classnames';
 import { CSSTransition } from 'react-transition-group';
 import { Todo } from '../types/Todo';
