@@ -85,13 +85,13 @@ export const TodoElem: React.FC<Props> = ({
           >
             <label
               className="todo__status-label"
-              onClick={() => onChecked(todo)}
             >
               <input
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
                 checked={todo.completed}
+                onClick={() => onChecked(todo)}
               />
             </label>
 
