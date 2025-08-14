@@ -1,26 +1,26 @@
 .todoapp {
+  margin: 40px 20px;
+  color: #4d4d4d;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 24px;
   font-weight: 300;
-  color: #4d4d4d;
-  margin: 40px 20px;
 
   &__content {
-    margin-bottom: 20px;
     background: #fff;
     box-shadow:
-      0 2px 4px 0 rgba(0, 0, 0, 0.2),
-      0 25px 50px 0 rgba(0, 0, 0, 0.1);
+      0 2px 4px 0 rgb(0 0 0 / 20%),
+      0 25px 50px 0 rgb(0 0 0 / 10%);
+    margin-bottom: 20px;
   }
 
   &__title {
+    color: rgb(175 47 47 / 15%);
     font-size: 100px;
     font-weight: 100;
     text-align: center;
-    color: rgba(175, 47, 47, 0.15);
-    -webkit-text-rendering: optimizeLegibility;
-    -moz-text-rendering: optimizeLegibility;
-    text-rendering: optimizeLegibility;
+    -webkit-text-rendering: optimizelegibility;
+    -moz-text-rendering: optimizelegibility;
+    text-rendering: optimizelegibility;
   }
 
   &__header {
@@ -29,52 +29,46 @@
 
   &__toggle-all {
     position: absolute;
-
-    height: 100%;
-    width: 45px;
-
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-size: 24px;
-    color: #e6e6e6;
-
+    width: 45px;
+    height: 100%;
     border: 0;
-    background-color: transparent;
+    color: #e6e6e6;
+    font-size: 24px;
     cursor: pointer;
+    align-items: center;
+    background-color: transparent;
+    justify-content: center;
 
     &.active {
       color: #737373;
     }
 
     &::before {
+      line-height: 0;
       content: '❯';
       transform: translateY(2px) rotate(90deg);
-      line-height: 0;
     }
   }
 
   &__new-todo {
     width: 100%;
     padding: 16px 16px 16px 60px;
-
-    font-size: 24px;
-    line-height: 1.4em;
-    font-family: inherit;
-    font-weight: inherit;
+    border: none;
+    background: rgb(0 0 0 / 1%);
     color: inherit;
+    font-family: inherit;
+    font-size: 24px;
+    font-weight: inherit;
+    line-height: 1.4em;
+    box-shadow: inset 0 -2px 1px rgb(0 0 0 / 3%);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    border: none;
-    background: rgba(0, 0, 0, 0.01);
-    box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
-
     &::placeholder {
-      font-style: italic;
-      font-weight: 300;
       color: #e6e6e6;
+      font-weight: 300;
+      font-style: italic;
     }
   }
 
@@ -84,44 +78,36 @@
 
   &__footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    box-sizing: content-box;
     height: 20px;
     padding: 10px 15px;
-
-    font-size: 14px;
-
     color: #777;
+    font-size: 14px;
     text-align: center;
+    align-items: center;
     border-top: 1px solid #e6e6e6;
-
     box-shadow:
-      0 1px 1px rgba(0, 0, 0, 0.2),
+      0 1px 1px rgb(0 0 0 / 20%),
       0 8px 0 -3px #f6f6f6,
-      0 9px 1px -3px rgba(0, 0, 0, 0.2),
+      0 9px 1px -3px rgb(0 0 0 / 20%),
       0 16px 0 -6px #f6f6f6,
-      0 17px 2px -6px rgba(0, 0, 0, 0.2);
+      0 17px 2px -6px rgb(0 0 0 / 20%);
+    box-sizing: content-box;
+    justify-content: space-between;
   }
 
   &__clear-completed {
     margin: 0;
     padding: 0;
     border: 0;
-
+    background: none;
+    color: inherit;
     font-family: inherit;
     font-weight: inherit;
-    color: inherit;
-    text-decoration: none;
-
     cursor: pointer;
-    background: none;
-
-    -webkit-appearance: none;
     appearance: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-decoration: none;
 
     &:hover {
       text-decoration: underline;
@@ -131,4 +117,51 @@
       text-decoration: none;
     }
   }
+}
+
+.item-enter {
+  max-height: 0;
+}
+
+.item-enter-active {
+  transition: max-height 0.3s ease-in-out;
+  max-height: 58px;
+  overflow: hidden;
+}
+
+.item-exit {
+  max-height: 58px;
+}
+
+.item-exit-active {
+  transition: max-height 0.3s ease-in-out;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.temp-item-enter {
+  max-height: 0;
+}
+
+.temp-item-enter-active {
+  transition: max-height 0.3s ease-in-out;
+  max-height: 58px;
+  overflow: hidden;
+}
+
+.temp-item-exit {
+  max-height: 58px;
+}
+
+.temp-item-exit-active {
+  transition: 0.3s ease-in-out;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-58px);
+  transition-property: opacity, max-height, transform;
+}
+
+.has-error .temp-item-exit-active {
+  overflow: hidden;
+  transform: translateY(0);
 }

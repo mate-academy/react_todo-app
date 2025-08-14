@@ -1,17 +1,25 @@
+@import url('./todoapp');
+@import url('./todo-list');
+@import url('./filters');
+
+* {
+  box-sizing: border-box;
+}
+
 iframe {
   display: none;
 }
 
 body {
-  min-width: 230px;
-  max-width: 550px;
   margin: 0 auto;
+  max-width: 550px;
+  min-width: 230px;
 }
 
 .notification {
-  transition-property: opacity, min-height;
-  transition-duration: 1s;
   min-height: 36px;
+  transition-duration: 1s;
+  transition-property: opacity, min-height;
 }
 
 .notification.hidden {
@@ -19,7 +27,3 @@ body {
   opacity: 0;
   pointer-events: none;
 }
-
-@import './todoapp';
-@import './todo-list';
-@import './filters';
