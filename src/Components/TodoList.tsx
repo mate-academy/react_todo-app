@@ -12,13 +12,16 @@ export const TodoList: React.FC = () => {
   const { filteredTodos, tempTodo, todos } = context;
 
   return (
-    <section className="todoapp__main" data-cy="TodoList">
-      {todos.length > 0 &&
-        filteredTodos.map(todo => <TodoItem todo={todo} key={todo.id} />)}
+    todos.length > 0 && (
+      <section className="todoapp__main" data-cy="TodoList">
+        {filteredTodos.map(todo => (
+          <TodoItem todo={todo} key={todo.id} />
+        ))}
 
-      {tempTodo && !todos.some(t => t.id === tempTodo.id) && (
-        <TodoItem todo={tempTodo} key={`temp-${tempTodo.id}`} />
-      )}
-    </section>
+        {tempTodo && !todos.some(t => t.id === tempTodo.id) && (
+          <TodoItem todo={tempTodo} key={`temp-${tempTodo.id}`} />
+        )}
+      </section>
+    )
   );
 };

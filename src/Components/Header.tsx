@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { createTodo, USER_ID } from '../api/todos';
+import { USER_ID } from '../api/todos';
 import { TodoContext } from '../TodoContext';
 
 export const Header: React.FC = () => {
@@ -38,31 +38,29 @@ export const Header: React.FC = () => {
     }
 
     const createdTodo = {
+      id: +new Date(),
       userId: USER_ID,
       title: trimmedTitle,
       completed: false,
     };
 
-    setTempTodo({ id: 0, ...createdTodo });
+    setTempTodo({ ...createdTodo });
 
     setIsAdding(true);
 
-    await createTodo(createdTodo)
-      .then(newTodo => {
-        setProcessingIds(prev => [...prev, newTodo.id]);
-        setTodos(currentTodos => [...currentTodos, newTodo]);
-        setTitle('');
-        setProcessingIds(prev => prev.filter(id => id !== newTodo.id));
-      })
-      .catch(() => {
-        setErrorMessage('Unable to add a todo');
-        focusInput();
-      })
-      .finally(() => {
-        setTempTodo(null);
-        setIsAdding(false);
-        focusInput();
-      });
+    try {
+      setProcessingIds(prev => [...prev, createdTodo.id]);
+      setTodos(currentTodos => [...currentTodos, createdTodo]);
+      setTitle('');
+      setProcessingIds(prev => prev.filter(id => id !== createdTodo.id));
+    } catch {
+      setErrorMessage('Unable to add a todo');
+      focusInput();
+    } finally {
+      setTempTodo(null);
+      setIsAdding(false);
+      focusInput();
+    }
   };
 
   return (

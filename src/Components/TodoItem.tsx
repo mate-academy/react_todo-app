@@ -1,6 +1,4 @@
-// import { Todo } from '../types/Todo';
 import classNames from 'classnames';
-import { deleteTodo } from '../api/todos';
 import { useContext, useEffect, useRef } from 'react';
 import { TodoContext } from '../TodoContext';
 import { Todo } from '../types/Todo';
@@ -26,7 +24,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setErrorMessage,
     focusInput,
     editingTitle,
-    // handleToggle,
     toggleTodo,
     saveTitle,
     tempTodo,
@@ -36,7 +33,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setProcessingIds(prev => [...prev, todo.id]);
 
     try {
-      await deleteTodo(todo.id);
       setTodos(currentTodos => currentTodos.filter(t => t.id !== todo.id));
       if (editingTodoId === todo.id) {
         setEditingTodoId(null);

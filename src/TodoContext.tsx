@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useRef, useState } from 'react';
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
-import { getTodos, updateTodo } from './api/todos';
 
 interface TodoContextType {
   todos: Todo[];
@@ -25,7 +24,6 @@ interface TodoContextType {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   focusInput: () => void | undefined;
-  // handleToggle: (todo: Todo) => Promise<void>;
   toggleTodo: (todo: Todo) => Promise<void>;
   saveTitle: (todo: Todo, newTitle: string) => Promise<void>;
   handleToggleAll: () => Promise<void>;
@@ -42,7 +40,9 @@ export const TodoContext = createContext<TodoContextType | undefined>(
 );
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(
+    JSON.parse(localStorage.getItem('todos') || '[]'),
+  );
   const [errorMessage, setErrorMessage] = useState('');
   const [title, setTitle] = useState('');
   const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
@@ -58,13 +58,15 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     setErrorMessage('');
-    getTodos()
-      .then(setTodos)
-      .catch(error => {
-        setErrorMessage('Unable to load todos');
-        throw error;
-      })
-      .finally(() => setIsLoading(false));
+    try {
+      const loadedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+
+      setTodos(loadedTodos);
+    } catch {
+      setErrorMessage('Unable to load todos');
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -77,14 +79,16 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     return;
   }, [errorMessage]);
 
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
   const toggleTodo = async (todo: Todo) => {
     const updated = { ...todo, completed: !todo.completed };
 
     setProcessingIds(prev => [...prev, todo.id]);
     try {
-      const saved = await updateTodo(todo.id, updated);
-
-      setTodos(ts => ts.map(t => (t.id === todo.id ? saved : t)));
+      setTodos(ts => ts.map(t => (t.id === todo.id ? updated : t)));
     } catch {
       setErrorMessage('Unable to update a todo');
     } finally {
@@ -112,9 +116,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
     setProcessingIds(prev => [...prev, todo.id]);
     try {
-      const saved = await updateTodo(todo.id, updated);
-
-      setTodos(ts => ts.map(t => (t.id === todo.id ? saved : t)));
+      setTodos(ts => ts.map(t => (t.id === todo.id ? updated : t)));
       setEditingTitle('');
       setEditingTodoId(null);
     } catch {
@@ -124,32 +126,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       focusInput();
     }
   };
-
-  // const handleToggle = async (todo: Todo) => {
-  //   const updatedTodo = {
-  //     ...todo,
-  //     completed: editingTitle ? todo.completed : !todo.completed,
-  //     title: editingTitle ? editingTitle.trim() : todo.title,
-  //   };
-
-  //   setProcessingIds(prev => [...prev, todo.id]);
-
-  //   await updateTodo(todo.id, updatedTodo)
-  //     .then(updated => {
-  //       setTodos(currentTodos =>
-  //         currentTodos.map(t => (t.id === todo.id ? updated : t)),
-  //       );
-  //       setEditingTitle('');
-  //       setEditingTodoId(null);
-  //     })
-  //     .catch(() => {
-  //       setErrorMessage('Unable to update a todo');
-  //     })
-  //     .finally(() => {
-  //       setProcessingIds(prev => prev.filter(id => id !== todo.id));
-  //       focusInput();
-  //     });
-  // };
 
   const handleToggleAll = async () => {
     const hasUncompleted = todos.some(t => !t.completed);
@@ -207,7 +183,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
         isLoading,
         setIsLoading,
         focusInput,
-        // handleToggle,
         toggleTodo,
         saveTitle,
         handleToggleAll,
