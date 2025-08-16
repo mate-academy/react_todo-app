@@ -7,8 +7,10 @@ const page = {
   todosCounter: () => cy.byDataCy('TodosCounter'),
   clearCompletedButton: () => cy.byDataCy('ClearCompletedButton'),
   footer: () => cy.byDataCy('Footer'),
-  localStorage: () => cy.getAllLocalStorage().its('http://localhost:3001'),
-  data: () => page.localStorage().then(({ todos = '[]' }) => JSON.parse(todos)),
+  localStorage: () =>
+    cy.window().then(win => ({
+      todos: win.localStorage.getItem('todos') || '[]',
+    })),  data: () => page.localStorage().then(({ todos = '[]' }) => JSON.parse(todos)),
 
   visit: (initialTodos) => {
     cy.visit('/', {

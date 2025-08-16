@@ -1,4 +1,38 @@
 module.exports = {
-  extends: "@mate-academy/stylelint-config",
-  rules: {}
+  extends: ['stylelint-config-standard'],
+  plugins: ['stylelint-order'],
+  rules: {
+    'order/properties-order': [
+      [
+        'position',
+        'top',
+        'right',
+        'bottom',
+        'left',
+        'display',
+        'width',
+        'height',
+        'margin',
+        'padding',
+        'border',
+        'background',
+        'color',
+        'font',
+        'font-family',
+        'font-size',
+        'font-weight',
+        'line-height',
+        'text-align',
+        'cursor',
+        'transition',
+      ],
+      { unspecified: 'bottomAlphabetical' },
+    ],
+    'order/order': [
+      'custom-properties',
+      'declarations',
+      'rules',
+      'at-rules',
+    ],
+  },
 };
