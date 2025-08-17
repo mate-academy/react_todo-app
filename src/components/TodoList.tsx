@@ -7,8 +7,8 @@ export const TodoList: React.FC = () => {
   const {
     todos,
     loadingTodoIds,
-    deleteTodo,
-    updateTodo,
+    deleteTodoFromList,
+    updateTodoInList,
     currentFilter,
     setErrorMessage,
   } = useTodos();
@@ -32,9 +32,9 @@ export const TodoList: React.FC = () => {
         <TodoItem
           key={todo.id}
           todo={todo}
-          deleteTodo={deleteTodo}
+          deleteTodo={deleteTodoFromList}
           isLoading={loadingTodoIds.includes(todo.id)}
-          updateTodo={newTodo => updateTodo(newTodo)}
+          updateTodo={newTodo => updateTodoInList(newTodo)}
           setErrorMessage={setErrorMessage}
         />
       ))}

@@ -1,7 +1,5 @@
 import { Todo } from '../types/Todo';
-// import { client } from '../utils/fetchClient';
 
-export const USER_ID = 2576;
 const STORAGE_KEY = 'todos';
 
 function loadTodos(): Todo[] {
@@ -19,43 +17,33 @@ function saveTodos(todos: Todo[]): void {
 }
 
 // Add more methods here
-export const deleteTodo = (todoId: number): Promise<void> => {
-  return new Promise(resolve => {
-    const todos = loadTodos();
-    const filteredTodos = todos.filter(todo => todo.id !== todoId);
+export const deleteTodo = (todoId: number) => {
+  const todos = loadTodos();
+  const filteredTodos = todos.filter(todo => todo.id !== todoId);
 
-    saveTodos(filteredTodos);
-    resolve();
-  });
+  saveTodos(filteredTodos);
 };
 
-export const createTodo = ({
-  title,
-  userId,
-  completed,
-}: Omit<Todo, 'id'>): Promise<Todo> => {
-  return new Promise(resolve => {
-    const todos = loadTodos();
-    const newTodo: Todo = {
-      id: Date.now(),
-      title,
-      userId,
-      completed,
-    };
+export const createTodo = ({ title, completed }: Omit<Todo, 'id'>): Todo => {
+  const todos = loadTodos();
+  const newTodo: Todo = {
+    id: Date.now(),
+    title,
+    completed,
+  };
 
-    saveTodos([...todos, newTodo]);
-    resolve(newTodo);
-  });
+  saveTodos([...todos, newTodo]);
+
+  return newTodo;
 };
 
-export const updateTodo = (updated: Todo): Promise<Todo> => {
-  return new Promise(resolve => {
-    const todos = loadTodos();
-    const updatedTodos = todos.map(todo =>
-      todo.id === updated.id ? { ...todo, ...updated } : todo,
-    );
+export const updateTodo = (updated: Todo): Todo => {
+  const todos = loadTodos();
+  const updatedTodos = todos.map(todo =>
+    todo.id === updated.id ? { ...todo, ...updated } : todo,
+  );
 
-    saveTodos(updatedTodos);
-    resolve(updated);
-  });
+  saveTodos(updatedTodos);
+
+  return updated;
 };

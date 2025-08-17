@@ -1,19 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from './types/Todo';
-import {
-  deleteTodo as apiDeleteTodo,
-  createTodo,
-  updateTodo as apiUpdateTodo,
-} from './api/todos';
+import { deleteTodo, createTodo, updateTodo } from './api/todos';
 import { FilterType } from './types/FilterType';
 import { ErrorMessages } from './types/ErrorMessages';
 
 type TodoContextType = {
   todos: Todo[];
-  deleteTodo: (todoId: number) => void;
+  deleteTodoFromList: (todoId: number) => void;
   clearCompletedTodos: () => void;
   addTodo: (title: string) => void;
-  updateTodo: (itemToUpdate: Todo) => void;
+  updateTodoInList: (itemToUpdate: Todo) => void;
   toggleAllTodos: () => void;
   currentFilter: FilterType;
   setCurrentFilter: (filter: FilterType) => void;
@@ -30,9 +26,30 @@ type TodoContextType = {
   inputRef: React.RefObject<HTMLInputElement>;
 };
 
-export const TodosContext = React.createContext<TodoContextType | undefined>(
-  undefined,
-);
+const defaultTodoContext: TodoContextType = {
+  todos: [],
+  deleteTodoFromList: () => {},
+  clearCompletedTodos: () => {},
+  addTodo: () => {},
+  updateTodoInList: async () => {},
+  toggleAllTodos: () => {},
+  currentFilter: FilterType.all,
+  setCurrentFilter: () => {},
+  errorMessage: ErrorMessages.default,
+  setErrorMessage: () => {},
+  isLoading: false,
+  setIsLoading: () => {},
+  title: '',
+  setTitle: () => {},
+  tempTodo: null,
+  setTempTodo: () => {},
+  loadingTodoIds: [],
+  setLoadingTodoIds: () => {},
+  inputRef: React.createRef<HTMLInputElement>(),
+};
+
+export const TodosContext =
+  React.createContext<TodoContextType>(defaultTodoContext);
 
 export const useTodos = () => {
   const context = useContext(TodosContext);
@@ -71,47 +88,25 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const USER_ID = 2576;
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   setCurrentFilter(FilterType.all);
-  //   setErrorMessage(ErrorMessages.default);
-
-  //   getTodos()
-  //     .then(setTodos)
-  //     .catch(() => {
-  //       setErrorMessage(ErrorMessages.getError);
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  // }, []);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  // useEffect(() => {
-  //   inputRef.current?.focus();
-  // }, [isLoading]);
-
-  const deleteTodo = (todoId: number) => {
+  const deleteTodoFromList = async (todoId: number) => {
     setLoadingTodoIds(ids => [...ids, todoId]);
     setIsLoading(true);
 
-    apiDeleteTodo(todoId)
-      .then(() => {
-        setTodos(todoList => todoList.filter(todo => todo.id !== todoId));
-      })
-      .catch(() => {
-        setErrorMessage(ErrorMessages.deleteError);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setLoadingTodoIds(ids => ids.filter(id => id !== todoId));
-        inputRef.current?.focus();
-      });
+    try {
+      await deleteTodo(todoId);
+      setTodos(todoList => todoList.filter(todo => todo.id !== todoId));
+    } catch {
+      setErrorMessage(ErrorMessages.deleteError);
+    } finally {
+      setIsLoading(false);
+      setLoadingTodoIds(ids => ids.filter(id => id !== todoId));
+      inputRef.current?.focus();
+    }
   };
 
   function clearCompletedTodos() {
@@ -124,10 +119,10 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
     }
 
     setIsLoading(true);
-    completedTodos.forEach(todo => deleteTodo(todo.id));
+    completedTodos.forEach(todo => deleteTodoFromList(todo.id));
   }
 
-  function addTodo(todoTitle: string) {
+  async function addTodo(todoTitle: string) {
     const trimmedTitle = todoTitle.trim();
 
     if (!trimmedTitle) {
@@ -140,69 +135,67 @@ export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
     // тимчасовий todo
     const newTempTodo: Todo = {
       id: 0,
-      userId: USER_ID,
       title: trimmedTitle,
       completed: false,
     };
 
     setTempTodo(newTempTodo);
 
-    createTodo({ title: trimmedTitle, userId: USER_ID, completed: false })
-      .then(newTodo => {
-        setTodos(currentTodoList => [...currentTodoList, newTodo]);
-        setTitle('');
-        setErrorMessage(ErrorMessages.default);
-      })
-      .catch(() => {
-        setErrorMessage(ErrorMessages.addError || 'Unable to add a todo');
-      })
-      .finally(() => {
-        setTempTodo(null);
-        setIsLoading(false);
-        inputRef.current?.focus();
+    try {
+      const newTodo = await createTodo({
+        title: trimmedTitle,
+        completed: false,
       });
+
+      setTodos(currentTodoList => [...currentTodoList, newTodo]);
+      setTitle('');
+      setErrorMessage(ErrorMessages.default);
+    } catch (error) {
+      setErrorMessage(ErrorMessages.addError || 'Unable to add a todo');
+    } finally {
+      setTempTodo(null);
+      setIsLoading(false);
+      inputRef.current?.focus();
+    }
   }
 
-  function updateTodo(itemToUpdate: Todo) {
+  async function updateTodoInList(itemToUpdate: Todo) {
     setLoadingTodoIds(prev => [...prev, itemToUpdate.id]);
 
-    return apiUpdateTodo(itemToUpdate)
-      .then(updatedTodo => {
-        setTodos(currentTodoList =>
-          currentTodoList.map(todo =>
-            todo.id === updatedTodo.id ? updatedTodo : todo,
-          ),
-        );
-      })
-      .catch(() => {
-        setErrorMessage(ErrorMessages.updateError || 'Unable to update todo');
-        throw new Error();
-      })
-      .finally(() => {
-        setLoadingTodoIds(prev => prev.filter(id => id !== itemToUpdate.id));
-      });
+    try {
+      const updatedTodo = await updateTodo(itemToUpdate);
+
+      setTodos(currentTodoList =>
+        currentTodoList.map(todo =>
+          todo.id === updatedTodo.id ? updatedTodo : todo,
+        ),
+      );
+    } catch (error) {
+      setErrorMessage(ErrorMessages.updateError || 'Unable to update todo');
+      throw error;
+    } finally {
+      setLoadingTodoIds(prev => prev.filter(id => id !== itemToUpdate.id));
+    }
   }
 
   const toggleAllTodos = () => {
     const areAllCompleted = todos.every(todo => todo.completed);
 
-    const todosToUpdate = todos.filter(
-      todo => todo.completed === areAllCompleted,
-    );
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !areAllCompleted,
+    }));
 
-    todosToUpdate.forEach(todo => {
-      updateTodo({ ...todo, completed: !areAllCompleted }).catch(() => {
-        setErrorMessage(ErrorMessages.updateError || 'Unable to toggle todos');
-      });
-    });
+    setTodos(updatedTodos);
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
   };
 
   const contextValue: TodoContextType = {
     todos,
     addTodo,
-    deleteTodo,
+    deleteTodoFromList,
     clearCompletedTodos,
-    updateTodo,
+    updateTodoInList,
     toggleAllTodos,
     currentFilter,
     setCurrentFilter,
