@@ -1,32 +1,29 @@
-import { useContext, useRef } from 'react';
+import { useContext } from 'react';
 import { Todo } from '../Type/Todo';
-import { Edit } from '../Enum/Edit';
+import { Action } from '../Enum/Action';
 import { TodoListContext } from '../Context/TodoListContext';
 
-export const useEdit = (todos: Todo[]) => {
-  const editedTodoList = useRef<Todo[]>(todos);
+export const useEdit = () => {
   const { todoList, setTodoList } = useContext(TodoListContext);
 
-  const getStatus = (list: Todo[]) => {
+  const checkAllCompletedStatus = (list: Todo[]) => {
     if (list.every(todoItem => todoItem.completed)) {
-      return false;
-    } else if (list.every(todoItem => !todoItem.completed)) {
-      return true;
-    } else {
       return true;
     }
+
+    return false;
   };
 
-  const getlistAfterDel = (todo: Todo) => {
+  const getlistAfterDelete = (todo: Todo) => {
     return todoList.filter(todoItem => todoItem.id !== todo.id);
   };
 
   const getChangedStatusList = (list: Todo[]) => {
-    const status = getStatus(todos);
+    const status = checkAllCompletedStatus(todoList);
 
     return list.map((todoElement: Todo) => ({
       ...todoElement,
-      completed: status,
+      completed: !status,
     }));
   };
 
@@ -34,23 +31,23 @@ export const useEdit = (todos: Todo[]) => {
     return list.filter(todoItem => !todoItem.completed);
   };
 
-  const getEditTitle = (
-    editType: keyof typeof Edit,
+  const applyTodoChange = (
+    actionType: keyof typeof Action,
     todo: Todo,
     editedTitle: string | '',
   ) => {
     let newTargetTodo: Todo = { ...todo };
     const targetIndex = todoList.findIndex(todoItem => todoItem.id === todo.id);
 
-    if (editType === Edit.title) {
+    if (actionType === Action.add) {
       if (editedTitle.length === 0) {
-        return getlistAfterDel(todo);
+        return getlistAfterDelete(todo);
       } else {
         newTargetTodo = { ...todo, title: editedTitle };
       }
     }
 
-    if (editType === Edit.completed) {
+    if (actionType === Action.edit) {
       newTargetTodo = { ...todo, completed: !todo.completed };
     }
 
@@ -58,12 +55,12 @@ export const useEdit = (todos: Todo[]) => {
   };
 
   const getEditedTodoList = ({
-    todosForChange = todos,
-    editType,
+    todosForChange = todoList,
+    actionType,
     editedTitle,
   }: {
     todosForChange?: Todo[];
-    editType: keyof typeof Edit;
+    actionType: keyof typeof Action;
     editedTitle?: string;
   }) => {
     let todo: Todo | null;
@@ -76,20 +73,19 @@ export const useEdit = (todos: Todo[]) => {
     }
 
     if (
-      (editType === Edit.title || editType === Edit.completed) &&
+      (actionType === Action.add || actionType === Action.edit) &&
       todo !== null
     ) {
-      newTodoList = getEditTitle(editType, todo, editedTitle ?? '');
-    } else if (editType === Edit.delete && todo) {
-      newTodoList = getlistAfterDel(todo);
-    } else if (editType === Edit.deleteCompleted) {
-      newTodoList = getDeleteCompletedList(todos);
+      newTodoList = applyTodoChange(actionType, todo, editedTitle ?? '');
+    } else if (actionType === Action.delete && todo) {
+      newTodoList = getlistAfterDelete(todo);
+    } else if (actionType === Action.deleteCompleted) {
+      newTodoList = getDeleteCompletedList(todoList);
     } else {
-      newTodoList = getChangedStatusList(todos);
+      newTodoList = getChangedStatusList(todoList);
     }
 
-    if (editedTodoList.current && newTodoList) {
-      editedTodoList.current = newTodoList;
+    if (newTodoList) {
       setTodoList(newTodoList);
     }
   };

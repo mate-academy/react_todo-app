@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Todo } from '../Type/Todo';
 import React from 'react';
+import { Todo } from '../Type/Todo';
+import { useLocalStorage } from '../Hooks/useLocalStorage';
 
 type TodoListContextType = {
   todoList: Todo[];
-  setTodoList: React.Dispatch<React.SetStateAction<Todo[]>>;
+  setTodoList: (a: Todo[]) => void;
 };
 
 export const TodoListContext = React.createContext<TodoListContextType>({
@@ -17,15 +17,7 @@ export const TodoListProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [todoList, setTodoList] = useState<Todo[] | []>(() => {
-    const storedVal = localStorage.getItem('todos');
-
-    return storedVal ? JSON.parse(storedVal) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todoList));
-  }, [todoList]);
+  const [todoList, setTodoList] = useLocalStorage<Todo[] | []>('todos', []);
 
   return (
     <TodoListContext.Provider

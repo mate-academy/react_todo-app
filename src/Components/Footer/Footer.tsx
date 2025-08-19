@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useContext } from 'react';
 import { TodoListContext } from '../../Context/TodoListContext';
 import { EditContext } from '../../Context/EditContext';
-import { Edit } from '../../Enum/Edit';
+import { Action } from '../../Enum/Action';
 import { FilterContext } from '../../Context/FilterContext';
 import { Filters, filtersButtons } from '../../Enum/Filters';
 
@@ -20,9 +20,9 @@ export const Footer = () => {
     setFilter(filterItem);
   };
 
-  const handleDeleteCompleted = (editType: keyof typeof Edit) => {
+  const handleDeleteCompleted = (actionType: keyof typeof Action) => {
     setEditedTodoList({
-      editType,
+      actionType,
     });
   };
 

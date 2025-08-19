@@ -4,11 +4,11 @@ import { TodoItem } from '../TodoItem';
 import { FilterContext } from '../../Context/FilterContext';
 
 export const TodoList = () => {
-  const { filteredList } = useContext(FilterContext);
+  const { filteredTodoList } = useContext(FilterContext);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredList.map(todoItem => (
+      {filteredTodoList.map(todoItem => (
         <TodoItem key={todoItem.id} todoItem={todoItem} />
       ))}
     </section>

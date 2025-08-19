@@ -1,12 +1,11 @@
-import React, { createContext, useContext } from 'react';
-import { Edit } from '../Enum/Edit';
+import React, { createContext } from 'react';
+import { Action } from '../Enum/Action';
 import { Todo } from '../Type/Todo';
-import { TodoListContext } from './TodoListContext';
 import { useEdit } from '../Hooks/useEdit';
 
 type EditedItems = {
   todosForChange?: Todo[];
-  editType: keyof typeof Edit;
+  actionType: keyof typeof Action;
   editedTitle?: string;
 };
 
@@ -23,9 +22,7 @@ export const EditContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { todoList } = useContext(TodoListContext);
-
-  const setEditedTodoList = useEdit(todoList);
+  const setEditedTodoList = useEdit();
 
   return (
     <EditContext.Provider value={{ setEditedTodoList }}>

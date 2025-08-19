@@ -27,16 +27,12 @@ export const Header = () => {
   const handleSwitchStatus = () => {
     setEditedTodoList({
       todosForChange: todoList,
-      editType: 'completed'
+      actionType: 'edit'
     });
   };
 
   const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (localStorage.getItem('todos') === null) {
-      localStorage.setItem('todos', JSON.stringify(todoList));
-    }
 
     addTodo();
     setTodoTitle('');

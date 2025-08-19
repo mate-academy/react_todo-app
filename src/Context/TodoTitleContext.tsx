@@ -26,7 +26,7 @@ export const TodoTitleProvider = ({
 }) => {
   const [todoTitle, setTodoTitle] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
-  const { setTodoList } = useContext(TodoListContext);
+  const { todoList, setTodoList } = useContext(TodoListContext);
 
   const handleTodoTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const title = event.target.value;
@@ -41,13 +41,7 @@ export const TodoTitleProvider = ({
       completed: false,
     };
 
-    setTodoList(prev => {
-      const updated = [...prev, newTodoItem];
-
-      localStorage.setItem('todos', JSON.stringify(updated));
-
-      return updated;
-    });
+    setTodoList([...todoList, newTodoItem]);
   };
 
   return (

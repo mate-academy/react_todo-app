@@ -2,7 +2,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../Type/Todo';
 import classNames from 'classnames';
-import { Edit } from '../../Enum/Edit';
+import { Action } from '../../Enum/Action';
 import { EditContext } from '../../Context/EditContext';
 import { TodoListContext } from '../../Context/TodoListContext';
 
@@ -14,14 +14,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [editedTitle, setEditedTitle] = useState<string | ''>(todoItem.title);
   const removeButton = useRef(false);
-  const todoFocus = useRef<HTMLInputElement>(null);
+  const editTodoInputRef = useRef<HTMLInputElement>(null);
 
   const { setEditedTodoList } = useContext(EditContext);
   const { todoList } = useContext(TodoListContext);
 
   useEffect(() => {
-    if (todoFocus.current) {
-      todoFocus.current.focus();
+    if (editTodoInputRef.current) {
+      editTodoInputRef.current.focus();
     }
   }, [isEdit, todoList]);
 
@@ -29,24 +29,20 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
     removeButton.current = !removeButton;
   };
 
-  const submitTodo = (editType: keyof typeof Edit) => {
-    if (editType === 'delete') {
+  const submitTodo = (actionType: keyof typeof Action) => {
+    if (actionType === 'delete') {
       setEditedTodoList({
         todosForChange: [todoItem],
-        editType: 'delete',
+        actionType: 'delete',
       });
-
-      localStorage.setItem('todos', JSON.stringify([ ...todoList ]));
 
       setIsEdit(false);
     } else {
       setEditedTodoList({
         todosForChange: [todoItem],
-        editType,
+        actionType,
         editedTitle: editedTitle.trim(),
       });
-
-      localStorage.setItem('todos', JSON.stringify([ ...todoList ]));
 
       setIsEdit(false);
     }
@@ -54,9 +50,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
 
   const handleDenyEdit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
-      setIsEdit(false)
+      setIsEdit(false);
     }
-  }
+  };
 
   return (
     <div
@@ -71,7 +67,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          onChange={() => submitTodo('completed')}
+          onChange={() => submitTodo('edit')}
           checked={todoItem.completed}
         />
       </label>
@@ -95,12 +91,13 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
           </button>
         </>
       ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              submitTodo('title')
-            }}
-            style={{ display: 'flex' }}>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            submitTodo('add');
+          }}
+          style={{ display: 'flex' }}
+        >
           <input
             data-cy="TodoTitleField"
             type="text"
@@ -108,9 +105,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
             placeholder={todoItem.title}
             value={editedTitle}
             onChange={e => setEditedTitle(e.target.value)}
-            ref={todoFocus}
+            ref={editTodoInputRef}
             onKeyDown={handleDenyEdit}
-            onBlur={() => submitTodo('title')}
+            onBlur={() => submitTodo('add')}
           />
         </form>
       )}
