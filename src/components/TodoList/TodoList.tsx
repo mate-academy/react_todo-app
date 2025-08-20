@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TodoItem } from '../TodoItem/TodoItem';
+import { TodoContext } from '../GlobalContext/GlobalContext';
+import { FilterType } from '../../type/FilterType';
+import { Todo } from '../../type/Todo';
 
-type Props = {};
+type Props = {
+  filterValue: FilterType;
+};
 
-export const TodoList: React.FC<Props> = () => {
+function filtering(todos: Todo[], filters: FilterType): Todo[] {
+  switch (filters) {
+    case FilterType.all:
+      return todos;
+    case FilterType.active:
+      return todos.filter(todo => !todo.completed);
+    case FilterType.completed:
+      return todos.filter(todo => todo.completed);
+  }
+}
+
+export const TodoList: React.FC<Props> = ({ filterValue }) => {
+  const todos = useContext(TodoContext);
+  const [visibleTodos, setVisibleTodos] = useState(todos);
+
+  useEffect(() => {
+    setVisibleTodos(filtering(todos, filterValue));
+  }, [filterValue, todos]);
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <TodoItem />
+      {visibleTodos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
     </section>
   );
 };

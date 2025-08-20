@@ -1,24 +1,31 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
-import { TodoProvider } from './components/TodoContext/TodoContext';
+import { TodoContext } from './components/GlobalContext/GlobalContext';
+import { FilterType } from './type/FilterType';
 
 export const App: React.FC = () => {
+  const todos = useContext(TodoContext);
+  const [filter, setFilter] = useState<FilterType>(FilterType.all);
+
   return (
-    <TodoProvider>
-      <div className="todoapp">
-        <h1 className="todoapp__title">todos</h1>
+    <div className="todoapp">
+      <h1 className="todoapp__title">todos</h1>
 
-        <div className="todoapp__content">
-          <TodoHeader />
+      <div className="todoapp__content">
+        <TodoHeader />
 
-          <TodoList />
+        <TodoList filterValue={filter} />
 
-          <TodoFooter />
-        </div>
+        {todos.length !== 0 && (
+          <TodoFooter
+            filterValue={filter}
+            setFilter={(value: FilterType) => setFilter(value)}
+          />
+        )}
       </div>
-    </TodoProvider>
+    </div>
   );
 };
