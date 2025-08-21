@@ -1,15 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTodos } from '../context/TodosContext';
 
-export const Header: React.FC = () => {
+export const Header: React.FC<{
+  inputRef: React.RefObject<HTMLInputElement>;
+}> = ({ inputRef }) => {
   const { todos, addTodo, toggleAll, allCompleted } = useTodos();
   const [title, setTitle] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  }, [inputRef]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();

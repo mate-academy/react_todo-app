@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import type { Todo } from '../types/todo';
+import { STORAGE_KEY } from '../context/constants';
 
 interface TodosContextValue {
   todos: Todo[];
@@ -30,8 +31,6 @@ export function useTodos() {
 
   return ctx;
 }
-
-const STORAGE_KEY = 'todos';
 
 function loadTodos(): Todo[] {
   try {

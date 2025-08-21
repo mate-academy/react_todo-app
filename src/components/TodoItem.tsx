@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import type { Todo } from '../types/todo';
 import { useTodos } from '../context/TodosContext';
 
-export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
+export const TodoItem: React.FC<{
+  todo: Todo;
+  inputRef: React.RefObject<HTMLInputElement>;
+}> = ({ todo, inputRef }) => {
   const { toggleTodo, deleteTodo, updateTodo } = useTodos();
   const [isEditing, setIsEditing] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
@@ -63,13 +66,7 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
             data-cy="TodoDelete"
             onClick={() => {
               deleteTodo(todo.id);
-              setTimeout(() => {
-                const input = document.querySelector<HTMLInputElement>(
-                  '[data-cy="NewTodoField"]',
-                );
-
-                input?.focus();
-              }, 0);
+              setTimeout(() => inputRef.current?.focus(), 0);
             }}
           >
             ×

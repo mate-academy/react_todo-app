@@ -2,7 +2,10 @@ import React from 'react';
 import { useTodos } from '../context/TodosContext';
 import type { Filter } from '../hooks/useHashFilter';
 
-export const Footer: React.FC<{ filter: Filter }> = ({ filter }) => {
+export const Footer: React.FC<{
+  filter: Filter;
+  inputRef: React.RefObject<HTMLInputElement>;
+}> = ({ filter, inputRef }) => {
   const { activeCount, clearCompleted, todos } = useTodos();
   const completedCount = todos.length - activeCount;
 
@@ -10,18 +13,9 @@ export const Footer: React.FC<{ filter: Filter }> = ({ filter }) => {
     return null;
   }
 
-  const focusNewField = () => {
-    const input = document.querySelector<HTMLInputElement>(
-      '[data-cy="NewTodoField"]',
-    );
-
-    input?.focus();
-  };
-
   const onClearCompleted = () => {
     clearCompleted();
-    // вернуть фокус после пересчёта/перерендера
-    setTimeout(focusNewField, 0);
+    setTimeout(() => inputRef.current?.focus(), 0);
   };
 
   return (
