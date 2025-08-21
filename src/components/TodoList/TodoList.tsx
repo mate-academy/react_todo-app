@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props> = ({ filterValue }) => {
     <section className="todoapp__main" data-cy="TodoList">
       <TransitionGroup component="div">
         {visibleTodos.map(todo => (
-          <CSSTransition key={todo.id} timeout={700} classNames="item">
+          <CSSTransition key={todo.id} timeout={300} classNames="item">
             <TodoItem key={todo.id} todo={todo} />
           </CSSTransition>
         ))}
