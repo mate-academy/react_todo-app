@@ -3,7 +3,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 import { TodoContext } from '../GlobalContext/GlobalContext';
 import { FilterType } from '../../type/FilterType';
 import { Todo } from '../../type/Todo';
-
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 type Props = {
   filterValue: FilterType;
 };
@@ -29,9 +29,13 @@ export const TodoList: React.FC<Props> = ({ filterValue }) => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {visibleTodos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} />
-      ))}
+      <TransitionGroup component="div">
+        {visibleTodos.map(todo => (
+          <CSSTransition key={todo.id} timeout={700} classNames="item">
+            <TodoItem key={todo.id} todo={todo} />
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
     </section>
   );
 };
