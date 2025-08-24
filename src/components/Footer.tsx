@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTodos } from '../context/TodosContext';
 import type { Filter } from '../hooks/useHashFilter';
+import cn from 'classnames';
 
 export const Footer: React.FC<{
   filter: Filter;
@@ -27,21 +28,21 @@ export const Footer: React.FC<{
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+          className={cn('filter__link', { selected: filter === 'all' })}
           data-cy="FilterLinkAll"
         >
           All
         </a>
         <a
           href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+          className={cn('filter__link', { selected: filter === 'active' })}
           data-cy="FilterLinkActive"
         >
           Active
         </a>
         <a
           href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+          className={cn('filter__link', { selected: filter === 'completed' })}
           data-cy="FilterLinkCompleted"
         >
           Completed

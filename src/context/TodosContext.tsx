@@ -52,9 +52,10 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [todos]);
 
   const activeCount = useMemo(
-    () => todos.filter(t => !t.completed).length,
+    () => todos.filter(todo => !todo.completed).length,
     [todos],
   );
+
   const allCompleted = useMemo(
     () => todos.length > 0 && activeCount === 0,
     [todos, activeCount],
@@ -71,12 +72,16 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(prev => prev.filter(t => t.id !== id));
+    setTodos(prev => prev.filter(todo => todo.id !== id));
   };
 
   const toggleTodo = (id: number) => {
     setTodos(prev =>
-      prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
+      prev.map(prevTodo =>
+        prevTodo.id === id
+          ? { ...prevTodo, completed: !prevTodo.completed }
+          : prevTodo,
+      ),
     );
   };
 
@@ -89,18 +94,22 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    setTodos(prev => prev.map(t => (t.id === id ? { ...t, title } : t)));
+    setTodos(prev =>
+      prev.map(prevTodo =>
+        prevTodo.id === id ? { ...prevTodo, title } : prevTodo,
+      ),
+    );
   };
 
   const clearCompleted = () => {
-    setTodos(prev => prev.filter(t => !t.completed));
+    setTodos(prev => prev.filter(todo => !todo.completed));
   };
 
   const toggleAll = () => {
     setTodos(prev => {
-      const shouldCompleteAll = prev.some(t => !t.completed);
+      const shouldCompleteAll = prev.some(todo => !todo.completed);
 
-      return prev.map(t => ({ ...t, completed: shouldCompleteAll }));
+      return prev.map(todo => ({ ...todo, completed: shouldCompleteAll }));
     });
   };
 
