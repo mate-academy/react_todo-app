@@ -46,7 +46,14 @@ export const App: React.FC = () => {
     todoService
       .getTodos()
       // eslint-disable-next-line @typescript-eslint/no-shadow
-      .then(todos => dispatch({ type: 'SET_TODOS', payload: todos }))
+      .then(todos => {
+        // Explicitly clear localStorage if no todos are returned
+        if (todos.length === 0) {
+          localStorage.removeItem('todos');
+        }
+
+        dispatch({ type: 'SET_TODOS', payload: todos });
+      })
       .catch(() => {
         dispatch({ type: 'SET_ERROR', payload: 'Unable to load todos' });
       })
@@ -95,29 +102,8 @@ export const App: React.FC = () => {
     }
   };
 
-  // const toggleTodo = async (todo: Todo) => {
-  //   try {
-  //     dispatch({ type: 'ADD_UPDATING_ID', payload: todo.id });
-
-  //     const updatedTodo = await todoService.updateCompleted(
-  //       todo.id,
-  //       !todo.completed,
-  //     );
-
-  //     dispatch({
-  //       type: 'TOGGLE_TODO',
-  //       payload: { id: todo.id, updatedTodo },
-  //     });
-  //   } catch {
-  //     dispatch({ type: 'SET_ERROR', payload: 'Unable to update a todo' });
-  //   } finally {
-  //     dispatch({ type: 'REMOVE_UPDATING_ID', payload: todo.id });
-  //   }
-  // };
-
   const toggleTodo = async (todo: Todo) => {
     try {
-      // console.log('Starting toggle for todo:', todo.id);
       dispatch({ type: 'ADD_UPDATING_ID', payload: todo.id });
 
       const updatedTodo = await todoService.updateCompleted(
@@ -125,21 +111,13 @@ export const App: React.FC = () => {
         !todo.completed,
       );
 
-      // console.log('API returned:', updatedTodo);
-      // console.log('Dispatching TOGGLE_TODO with:', {
-      //   id: todo.id,
-      //   updatedTodo,
-      // });
-
       dispatch({
         type: 'TOGGLE_TODO',
         payload: { id: todo.id, updatedTodo },
       });
 
-      // console.log('Toggle successful for todo:', todo.id);
       // eslint-disable-next-line @typescript-eslint/no-shadow
     } catch (error) {
-      // console.error('Toggle failed for todo:', todo.id, 'Error:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Unable to update a todo' });
     } finally {
       dispatch({ type: 'REMOVE_UPDATING_ID', payload: todo.id });
