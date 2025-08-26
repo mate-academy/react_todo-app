@@ -6,6 +6,7 @@ Implement a simple [TODO app](https://mate-academy.github.io/react_todo-app/) th
 
 ![todoapp](./description/todoapp.gif)
 
+
 1. Learn the markup in `App.tsx`.
 2. Show only a field to create a new todo if there are no todos yet.
 3. Use React Context to manage todos.
