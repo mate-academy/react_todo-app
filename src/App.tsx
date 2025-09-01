@@ -6,27 +6,9 @@ import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
 import { TodosContext } from './TodosContext';
 import { Filter } from './types/Filter';
+import { useLocalStorage } from './services/useLocalStorage';
 
 export const App: React.FC = () => {
-  function useLocalStorage<T>(key: string, defaultValue: T) {
-    const [value, setValue] = useState(() => {
-      const savedValue = localStorage.getItem(key);
-
-      return savedValue === null ? defaultValue : JSON.parse(savedValue);
-    });
-
-    function save(newValue: T) {
-      setValue(newValue);
-      if (Array.isArray(newValue) && newValue.length === 0) {
-        localStorage.removeItem(key);
-      } else {
-        localStorage.setItem(key, JSON.stringify(newValue));
-      }
-    }
-
-    return [value, save] as const;
-  }
-
   const [todos, saveTodos] = useLocalStorage<Todo[]>('todos', []);
   const [query, setQuery] = useState('');
   const mainInput = useRef<HTMLInputElement>(null);
