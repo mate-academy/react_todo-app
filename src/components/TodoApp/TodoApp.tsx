@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {
   useCallback,
   useEffect,
@@ -10,14 +11,21 @@ import { TodoList } from '../TodoList';
 import { Footer } from '../Footer';
 import { useTodosContext } from '../../context/TodoContext';
 import { TodosStatus } from '../../types/enums';
+import { Todo } from '../../types/Todo';
 
 export const TodoApp = () => {
-  const { todos, addTodo, removeTodo, updateTodo, clearCompleted, toggleAll } =
+  const {
+    todos,
+    addTodo,
+    removeTodo,
+    updateTodo,
+    clearCompleted,
+    toggleAll } =
     useTodosContext();
 
   const [status, setStatus] = useState(TodosStatus.ALL);
   const [title, setTitle] = useState('');
-  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+  const [editingTodoId, setEditingTodoId] = useState<Todo['id'] | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -52,7 +60,7 @@ export const TodoApp = () => {
     });
   }, [todos, status]);
 
-  const handleEdit = useCallback((todoId: number | null) => {
+  const handleEdit = useCallback((todoId: Todo['id'] | null) => {
     setEditingTodoId(todoId);
   }, []);
 
@@ -72,7 +80,7 @@ export const TodoApp = () => {
   );
 
   const handleRemove = useCallback(
-    (todoId: number) => {
+    (todoId: Todo['id']) => {
       removeTodo(todoId);
       inputRef.current?.focus();
     },

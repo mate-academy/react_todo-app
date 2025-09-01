@@ -4,10 +4,10 @@ import { TodoInfo } from '../TodoInfo';
 
 interface Props {
   todos: Todo[];
-  editingTodoId: number | null;
-  onEdit: (todoId: number | null) => void;
-  onUpdate: (id: number, data: Partial<Todo>) => void;
-  onRemove: (todoId: number) => void;
+  editingTodoId: Todo['id'] | null;
+  onEdit: (todoId: Todo['id'] | null) => void;
+  onUpdate: (id: Todo['id'], data: Partial<Todo>) => void;
+  onRemove: (todoId: Todo['id']) => void;
 }
 
 const TodoListComponent: React.FC<Props> = ({

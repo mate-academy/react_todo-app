@@ -37,7 +37,9 @@ const FooterComponent: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${itemsCount} item${itemsCount !== 1 ? 's' : ''} left`}
+        {itemsCount === 0
+          ? 'No items left'
+          : `${itemsCount} item${itemsCount !== 1 ? 's' : ''} left`}
       </span>
 
       <nav className="filter" data-cy="Filter">

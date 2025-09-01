@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import cn from 'classnames';
@@ -5,10 +6,10 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
-  editingTodoId: number | null;
-  onEdit: (todoId: number | null) => void;
-  onUpdate: (id: number, data: Partial<Todo>) => void;
-  onRemove: (todoId: number) => void;
+  editingTodoId: Todo['id'] | null;
+  onEdit: (todoId: Todo['id'] | null) => void;
+  onUpdate: (id: Todo['id'], data: Partial<Todo>) => void;
+  onRemove: (todoId: Todo['id']) => void;
 }
 
 const TodoInfoComponent: React.FC<Props> = ({
@@ -73,7 +74,13 @@ const TodoInfoComponent: React.FC<Props> = ({
   }, [onUpdate, todo.id, todo.completed]);
 
   return (
-    <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
+    <div
+      data-cy="Todo"
+      className={cn(
+        'todo',
+        { completed: todo.completed },
+      )}
+    >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
