@@ -9,8 +9,6 @@ export const Filter: React.FC = () => {
   return (
     <nav className="filter" data-cy="Filter">
       {Object.values(Status).map(status => {
-        const title = status.charAt(0).toUpperCase() + status.slice(1);
-
         return (
           <a
             key={status}
@@ -18,10 +16,10 @@ export const Filter: React.FC = () => {
             className={cn('filter__link', {
               selected: filterStatus === status,
             })}
-            data-cy={`FilterLink${title}`}
+            data-cy={`FilterLink${status}`}
             onClick={() => setFilterStatus(status)}
           >
-            {title}
+            {status}
           </a>
         );
       })}
