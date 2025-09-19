@@ -5,9 +5,10 @@ import { TodosContext } from '../context/TodosContext';
 
 type Props = {
   todo: Todo;
+  headerInput: React.RefObject<HTMLInputElement>;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo, headerInput }) => {
   const { deleteTodo, toggleTodo, updatedTodo } = useContext(TodosContext);
 
   const [updatingTodo, setUpdatingTodo] = useState(false);
@@ -29,6 +30,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       })}
       onDoubleClick={() => setUpdatingTodo(true)}
     >
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -48,7 +50,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="button"
         className="todo__remove"
         data-cy="TodoDelete"
-        onClick={() => deleteTodo(todo.id)}
+        onClick={() => {
+          deleteTodo(todo.id);
+          headerInput.current?.focus();
+        }}
       >
         ×
       </button>
@@ -60,6 +65,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         ' completed': todo.completed,
       })}
     >
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input data-cy="TodoStatus" type="checkbox" className="todo__status" />
       </label>

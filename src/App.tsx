@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
@@ -7,6 +7,7 @@ import { TodosContext } from './context/TodosContext';
 
 export const App: React.FC = () => {
   const { todos, setTodos, filter, setFilter } = useContext(TodosContext);
+  const input = useRef<HTMLInputElement>(null);
 
   const filteredTodos = todos.filter(todo => {
     if (filter === 'ALL') {
@@ -25,7 +26,15 @@ export const App: React.FC = () => {
   });
 
   const handleClearCompleted = () => {
-    setTodos(currentTodos => currentTodos.filter(todo => !todo.completed));
+    setTodos(currentTodos => {
+      const newTodos = currentTodos.filter(todo => !todo.completed);
+
+      if (newTodos.length !== currentTodos.length) {
+        input.current?.focus();
+      }
+
+      return newTodos;
+    });
   };
 
   return (
@@ -33,9 +42,9 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header input={input} />
 
-        <TodoList filteredTodos={filteredTodos} />
+        <TodoList filteredTodos={filteredTodos} input={input} />
 
         {/* Hide the footer if there are no todos */}
         {todos.length !== 0 && (

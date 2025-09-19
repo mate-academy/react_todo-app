@@ -1,16 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TodosContext } from '../context/TodosContext';
 import classNames from 'classnames';
 
-export const Header: React.FC = () => {
+type Props = {
+  input: React.RefObject<HTMLInputElement>;
+};
+
+export const Header: React.FC<Props> = ({ input }) => {
   const { todos, addTodo, setTodos } = useContext(TodosContext);
   const [title, setTitle] = useState('');
 
-  const input = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     input.current?.focus();
-  }, []);
+  }, [input]);
 
   const handleToggleAll = () => {
     const allCompleted = todos.every(todo => todo.completed);
@@ -39,9 +41,12 @@ export const Header: React.FC = () => {
 
       {/* Add a todo on form submit */}
       <form
-        onSubmit={() => {
-          addTodo(title);
-          setTitle('');
+        onSubmit={e => {
+          e.preventDefault();
+          if (title.trim()) {
+            addTodo(title);
+            setTitle('');
+          }
         }}
       >
         <input
