@@ -4,12 +4,8 @@ import { useTodoService } from './Hooks/useTodoService';
 import classNames from 'classnames';
 
 export const TodoHeader = () => {
-  const {
-    todo: titleTodo,
-    setTodo: setTodoTitle,
-    focusInputFn,
-  } = useContext(TodoContext);
-  const { tasks: todo, updateTasks: updateTodo } = useTodoService();
+  const { todoTitle, setTodoTitle, focusInputFn } = useContext(TodoContext);
+  const { todos, updateTodos } = useTodoService();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -24,27 +20,27 @@ export const TodoHeader = () => {
   }, [focusInputFn]);
 
   const addTodo = () => {
-    if (!titleTodo.trim()) {
+    if (!todoTitle.trim()) {
       return;
     }
 
-    const trimmedTitle = titleTodo.trim();
+    const trimmedTitle = todoTitle.trim();
 
     const newTask = { id: Date.now(), title: trimmedTitle, completed: false };
 
-    updateTodo([...todo, newTask]);
+    updateTodos([...todos, newTask]);
     setTodoTitle('');
   };
 
   const toggleAll = () => {
-    const allCompleted = todo.every(t => t.completed);
+    const allCompleted = todos.every(t => t.completed);
 
-    const update = todo.map(task => ({
+    const update = todos.map(task => ({
       ...task,
       completed: !allCompleted,
     }));
 
-    updateTodo(update);
+    updateTodos(update);
 
     inputRef.current?.focus();
   };
@@ -57,11 +53,11 @@ export const TodoHeader = () => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      {!!todo.length && (
+      {!!todos.length && (
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active: todo.every(t => t.completed),
+            active: todos.every(t => t.completed),
           })}
           data-cy="ToggleAllButton"
           onClick={toggleAll}
@@ -76,7 +72,7 @@ export const TodoHeader = () => {
           type="text"
           ref={inputRef}
           placeholder="What needs to be done?"
-          value={titleTodo}
+          value={todoTitle}
           onChange={e => setTodoTitle(e.target.value)}
         />
       </form>

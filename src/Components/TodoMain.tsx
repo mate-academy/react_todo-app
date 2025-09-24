@@ -8,11 +8,11 @@ import { EditingTask } from '../Types/EditingTask';
 
 export const TodoMain = () => {
   const { statusFilter, focusInput } = useContext(TodoContext);
-  const { tasks: todo, updateTasks: updateTodo } = useTodoService();
+  const { todos, updateTodos } = useTodoService();
 
   const [editingTask, setEditingTask] = useState<EditingTask>(null);
 
-  const visibleTodos = todo.filter(task => {
+  const visibleTodos = todos.filter(task => {
     return (
       statusFilter === StatusFilter.All ||
       (statusFilter === StatusFilter.Active && !task.completed) ||
@@ -32,17 +32,17 @@ export const TodoMain = () => {
   };
 
   const handleChangeCompleted = (task: Todos) => {
-    const update = todo.map(t =>
+    const update = todos.map(t =>
       t.id === task.id ? { ...t, completed: !t.completed } : t,
     );
 
-    updateTodo(update);
+    updateTodos(update);
   };
 
   const deleteTask = (id: number) => {
-    const updatedTasks = todo.filter(item => item.id !== id);
+    const updatedTasks = todos.filter(item => item.id !== id);
 
-    updateTodo(updatedTasks);
+    updateTodos(updatedTasks);
     focusInput.current?.();
   };
 
@@ -64,8 +64,8 @@ export const TodoMain = () => {
     if (trimmedTitle === '') {
       deleteTask(editingTask.id);
     } else if (editingTask.original !== trimmedTitle) {
-      updateTodo(
-        todo.map(t =>
+      updateTodos(
+        todos.map(t =>
           t.id === editingTask.id ? { ...t, title: trimmedTitle } : t,
         ),
       );

@@ -4,10 +4,10 @@ import { Props } from '../Types/TodoProvider';
 import { TodoContextType } from '../Types/TodoContext';
 
 export const TodoContext = createContext<TodoContextType>({
-  todo: '',
-  setTodo: () => {},
-  tasks: [],
-  setTask: () => {},
+  todoTitle: '',
+  setTodoTitle: () => {},
+  todos: [],
+  setTodos: () => {},
   statusFilter: '',
   setStatusFilter: () => {},
   focusInput: { current: undefined },
@@ -20,7 +20,7 @@ export const TodoProvider: React.FC<Props> = ({
   children: React.ReactNode;
 }) => {
   const [todoTitle, setTodoTitle] = useState('');
-  const [todo, setTodo] = useState<Todos[]>(() => {
+  const [todos, setTodos] = useState<Todos[]>(() => {
     const data = localStorage.getItem('todos');
 
     if (!data) {
@@ -44,16 +44,16 @@ export const TodoProvider: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todo));
-  }, [todo]);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <TodoContext.Provider
       value={{
-        todo: todoTitle,
-        setTodo: setTodoTitle,
-        tasks: todo,
-        setTask: setTodo,
+        todoTitle,
+        setTodoTitle,
+        todos,
+        setTodos,
         statusFilter,
         setStatusFilter,
         focusInput,

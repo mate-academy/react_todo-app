@@ -4,12 +4,12 @@ import { Todos } from '../../Types/Task';
 import { updateTodoToLocalStorage } from '../../TodoService/updateStorage';
 
 export const useTodoService = () => {
-  const { tasks, setTask } = useContext(TodoContext);
+  const { todos, setTodos } = useContext(TodoContext);
 
-  const updateTodo = (updatedTasks: Todos[]) => {
+  const updateTodos = (updatedTasks: Todos[]) => {
     updateTodoToLocalStorage(updatedTasks);
-    setTask(updatedTasks);
+    setTodos(updatedTasks);
   };
 
-  return { tasks, updateTasks: updateTodo };
+  return { todos, updateTodos };
 };

@@ -5,24 +5,24 @@ import classNames from 'classnames';
 import { useTodoService } from './Hooks/useTodoService';
 
 export const TodoFooter = () => {
-  const { tasks, statusFilter, setStatusFilter, focusInput } =
+  const { todos, statusFilter, setStatusFilter, focusInput } =
     useContext(TodoContext);
-  const { updateTasks } = useTodoService();
-  const someCompletedTodos = tasks.some(t => t.completed === true);
+  const { updateTodos } = useTodoService();
+  const someCompletedTodos = todos.some(t => t.completed === true);
 
   const handleClearCompleted = () => {
-    const update = tasks.filter(t => !t.completed);
+    const update = todos.filter(t => !t.completed);
 
-    updateTasks(update);
+    updateTodos(update);
     focusInput.current?.();
   };
 
   return (
     <>
-      {!!tasks.length && (
+      {!!todos.length && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            {tasks.filter(task => !task.completed).length} items left
+            {todos.filter(task => !task.completed).length} items left
           </span>
 
           <nav className="filter" data-cy="Filter">
