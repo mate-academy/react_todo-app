@@ -13,45 +13,30 @@ export const TodoFooter: React.FC = () => {
     completedTodos.map(todo => removeTodo(todo.id));
   }
 
+  const noCompletedTodos = todos.filter(todo => !todo.completed).length;
+
+  const filtersValue = Object.values(Filter);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${noCompletedTodos} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: selectedFilter === Filter.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setSelectedFilter(Filter.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: selectedFilter === Filter.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setSelectedFilter(Filter.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: selectedFilter === Filter.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setSelectedFilter(Filter.Completed)}
-        >
-          Completed
-        </a>
+        {filtersValue.map(filter => (
+          <a
+            key={filter}
+            href={filter === 'All' ? '#/' : `#/${filter}`}
+            className={classNames('filter__link', {
+              selected: selectedFilter === filter,
+            })}
+            data-cy={`FilterLink${filter}`}
+            onClick={() => setSelectedFilter(filter)}
+          >
+            {filter}
+          </a>
+        ))}
       </nav>
 
       <button

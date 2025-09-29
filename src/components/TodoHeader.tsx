@@ -9,7 +9,7 @@ export const TodoHeader: React.FC = () => {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const AllTodosCompleted = todos.every(todo => todo.completed);
+  const allTodosCompleted = todos.every(todo => todo.completed);
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -27,7 +27,7 @@ export const TodoHeader: React.FC = () => {
   }
 
   function toggleAll() {
-    if (AllTodosCompleted) {
+    if (allTodosCompleted) {
       todos.map(todo => {
         updateTodo({ ...todo, completed: !todo.completed });
       });
@@ -50,7 +50,7 @@ export const TodoHeader: React.FC = () => {
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
-            active: AllTodosCompleted,
+            active: allTodosCompleted,
           })}
           data-cy="ToggleAllButton"
           onClick={toggleAll}

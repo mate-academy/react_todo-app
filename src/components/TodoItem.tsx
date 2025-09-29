@@ -11,6 +11,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { id, title, completed } = todo;
   const { removeTodo, updateTodo } = useTodos();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -22,12 +23,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     event.preventDefault();
 
     if (todoTitle.trim() === '') {
-      removeTodo(todo.id);
+      removeTodo(id);
 
       return;
     }
 
-    if (todo.title.trim() === todoTitle.trim()) {
+    if (title.trim() === todoTitle.trim()) {
       setEditingTodoId(null);
 
       return;
@@ -53,23 +54,23 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames('todo', { completed: completed })}
     >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
           onChange={() => {
-            const updatedTodo = { ...todo, completed: !todo.completed };
+            const updatedTodo = { ...todo, completed: !completed };
 
             updateTodo(updatedTodo);
           }}
         />
       </label>
 
-      {editingTodoId === todo?.id ? (
+      {editingTodoId === id ? (
         <form onSubmit={handleSubmit}>
           <input
             ref={inputRef}
@@ -90,19 +91,19 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             className="todo__title"
             onDoubleClick={() => {
               if (todo) {
-                setEditingTodoId(todo.id);
-                setTodoTitle(todo.title);
+                setEditingTodoId(id);
+                setTodoTitle(title);
               }
             }}
           >
-            {todo.title}
+            {title}
           </span>
 
           <button
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => todo && removeTodo(todo.id)}
+            onClick={() => todo && removeTodo(id)}
           >
             ×
           </button>
