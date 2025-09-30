@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useTodos } from '../context/TodosContext';
+import classNames from 'classnames';
 
 export const Header: React.FC = () => {
   const {
@@ -26,7 +27,9 @@ export const Header: React.FC = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${isAllCompleted ? 'active' : ''}`}
+          className={classNames('todoapp__toggle-all', {
+            active: isAllCompleted,
+          })}
           data-cy="ToggleAllButton"
           onClick={toggleAll}
         />

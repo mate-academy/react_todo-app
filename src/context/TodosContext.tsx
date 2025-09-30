@@ -7,14 +7,6 @@ import React, {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
-import {
-  addTodo,
-  deleteTodo,
-  getTodos,
-  updateTodo,
-  USER_ID,
-} from '../api/todos';
-import { UserWarning } from '../UserWarning';
 
 const LS_KEY = 'todos';
 
@@ -40,10 +32,11 @@ type TodosContextType = {
   tempTodo: Todo | null;
   setTempTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
   isCreating: boolean;
+  setIsCreating: React.Dispatch<React.SetStateAction<boolean>>;
   handleSubmit: (event: React.FormEvent) => void;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
-  toggleAll: () => Promise<void>;
+  toggleAll: () => void;
   onClearCompleted: () => void;
   completedCount: number;
   filteredTodos: Todo[];
@@ -90,7 +83,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setError('');
 
     try {
-      const data = await getTodos();
+      const data = JSON.parse(localStorage.getItem('todos') || '[]');
 
       setTodos(data);
     } catch (err) {
@@ -118,18 +111,17 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setDeletingTodoIds(ids => [...ids, todoId]);
 
     try {
-      setTodos(current => current.filter(todo => todo.id !== todoId));
-      await deleteTodo(todoId);
+      setTodos(current => {
+        const updated = current.filter(todo => todo.id !== todoId);
+
+        localStorage.setItem('todos', JSON.stringify(updated));
+
+        return updated;
+      });
       inputRef.current?.focus();
     } catch (err) {
       setError('Unable to delete a todo');
-      setTodos(prev => {
-        const deletedTodo = deletingTodoIds.includes(todoId)
-          ? { id: todoId, title: '', completed: false, userId: USER_ID }
-          : null;
-
-        return deletedTodo ? [...prev, deletedTodo] : prev;
-      });
+      setTodos(prev => prev);
       setTimeout(() => setError(''), 3000);
       throw err;
     } finally {
@@ -141,13 +133,21 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     try {
       setLoadingTodoIds(ids => [...ids, todoId]);
 
-      const updatedTodo = await updateTodo(todoId, { title: newTitle });
+      setTodos(prevTodos => {
+        const updatedTodos = prevTodos.map(todo => {
+          if (todo.id === todoId) {
+            const updatedTodo = { ...todo, title: newTitle };
 
-      setTodos(prevTodos =>
-        prevTodos.map(todo =>
-          todo.id === todoId ? { ...todo, title: updatedTodo.title } : todo,
-        ),
-      );
+            return updatedTodo;
+          } else {
+            return todo;
+          }
+        });
+
+        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+        return updatedTodos;
+      });
     } catch (err) {
       setError('Unable to update a todo');
       setTimeout(() => setError(''), 3000);
@@ -160,30 +160,30 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const onToggleStatus = async (todoId: number, newStatus: boolean) => {
     setLoadingTodoIds(ids => [...ids, todoId]);
 
-    setTodos(current =>
-      current.map(todo =>
-        todo.id === todoId ? { ...todo, completed: newStatus } : todo,
-      ),
-    );
-
     try {
-      const updatedTodo = await updateTodo(todoId, { completed: newStatus });
+      setTodos(current => {
+        const updatedTodos = current.map(todo => {
+          if (todo.id === todoId) {
+            return { ...todo, completed: newStatus };
+          } else {
+            return todo;
+          }
+        });
 
-      if (updatedTodo && typeof updatedTodo.completed !== 'undefined') {
-        setTodos(current =>
-          current.map(todo =>
-            todo.id === todoId
-              ? { ...todo, completed: updatedTodo.completed }
-              : todo,
-          ),
-        );
-      }
+        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+        return updatedTodos;
+      });
     } catch {
       setError('Unable to update a todo');
       setTodos(current =>
-        current.map(todo =>
-          todo.id === todoId ? { ...todo, completed: !newStatus } : todo,
-        ),
+        current.map(todo => {
+          if (todo.id === todoId) {
+            return { ...todo, completed: !newStatus };
+          } else {
+            return todo;
+          }
+        }),
       );
       setTimeout(() => setError(''), 3000);
     } finally {
@@ -204,87 +204,46 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
 
     const newTodo = {
-      userId: USER_ID,
+      userId: 1,
       title: trimmedTitle,
       completed: false,
-      id: 0,
+      id: Date.now(),
     };
 
-    setTodos(prev => [...prev, newTodo]);
-    setIsCreating(true);
-    setTempTodo({ ...newTodo, id: 0 });
+    setTodos(prev => {
+      const updatedTodos = [...prev, newTodo];
+
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+
+      return updatedTodos;
+    });
     setTitle('');
-
-    try {
-      const createdTodo = await addTodo(newTodo);
-
-      setTodos(prev => prev.map(todo => (todo.id === 0 ? createdTodo : todo)));
-    } catch {
-      setError('Unable to add a todo');
-      setTimeout(() => setError(''), 3000);
-      setTodos(prev => prev.filter(todo => todo.id !== 0));
-    } finally {
-      setIsCreating(false);
-      setTempTodo(null);
-    }
   };
 
-  const toggleAll = async () => {
+  const toggleAll = () => {
     const areAllCompleted = todos.every(todo => todo.completed);
     const newStatus = !areAllCompleted;
 
-    const todosToUpdate = todos.filter(todo => todo.completed !== newStatus);
+    setTodos(current => {
+      const updatedTodos = current.map(todo => ({
+        ...todo,
+        completed: newStatus,
+      }));
 
-    setTodos(current =>
-      current.map(todo =>
-        todosToUpdate.some(t => t.id === todo.id)
-          ? { ...todo, completed: newStatus }
-          : todo,
-      ),
-    );
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
 
-    setLoadingTodoIds(ids => [...ids, ...todosToUpdate.map(todo => todo.id)]);
-    try {
-      await Promise.all(
-        todosToUpdate.map(todo =>
-          updateTodo(todo.id, { completed: newStatus }),
-        ),
-      );
-    } catch {
-      setError('Unable to update some todos');
-
-      setTodos(current =>
-        current.map(todo =>
-          todosToUpdate.some(t => t.id === todo.id)
-            ? { ...todo, completed: !newStatus }
-            : todo,
-        ),
-      );
-
-      setTimeout(() => setError(''), 3000);
-    } finally {
-      setLoadingTodoIds(ids =>
-        ids.filter(id => !todosToUpdate.some(todo => todo.id === id)),
-      );
-    }
+      return updatedTodos;
+    });
   };
 
-  const onClearCompleted = async () => {
-    const completed = todos.filter(t => t.completed);
-    const completedIds = completed.map(t => t.id);
+  const onClearCompleted = () => {
+    setTodos(curr => {
+      const remainingTodos = curr.filter(t => !t.completed);
 
-    setTodos(curr => curr.filter(t => !completedIds.includes(t.id)));
+      localStorage.setItem('todos', JSON.stringify(remainingTodos));
 
-    setDeletingTodoIds(curr => [...curr, ...completedIds]);
-
-    try {
-      await Promise.all(completed.map(t => deleteTodo(t.id)));
-    } catch {
-      setError('Unable to delete some todos');
-      setTimeout(() => setError(''), 3000);
-    } finally {
-      setDeletingTodoIds(curr => curr.filter(id => !completedIds.includes(id)));
-    }
+      return remainingTodos;
+    });
 
     inputRef.current?.focus();
   };
@@ -300,10 +259,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
     return true;
   });
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   return (
     <TodosContext.Provider
@@ -323,6 +278,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         tempTodo,
         setTempTodo,
         isCreating,
+        setIsCreating,
         handleSubmit,
         title,
         setTitle,

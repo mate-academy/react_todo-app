@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { useTodos } from '../context/TodosContext';
+import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -100,7 +101,8 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <div
       data-cy="Todo"
-      className={`todo ${completed ? 'completed' : ''}`}
+      // className={`todo ${completed ? 'completed' : ''}`}
+      className={classNames('todo', { completed })}
       key={id}
     >
       <label className="todo__status-label" htmlFor={`todo-status-${id}`}>
@@ -154,7 +156,14 @@ export const TodoItem: React.FC<Props> = ({
 
       <div
         data-cy="TodoLoader"
-        className={`modal overlay ${isTemp || deletingTodoIds.includes(id) || isSaving || loadingTodoIds.includes(id) ? 'is-active' : ''}`}
+        className={classNames('modal overlay', {
+          'is-active':
+            isTemp ||
+            deletingTodoIds.includes(id) ||
+            isSaving ||
+            loadingTodoIds.includes(id),
+        })}
+        // className={`modal overlay ${isTemp || deletingTodoIds.includes(id) || isSaving || loadingTodoIds.includes(id) ? 'is-active' : ''}`}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
