@@ -1,11 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Filter } from '../../types/Filter';
-
-export type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { Todo } from '../../types/Todo';
 
 type TodosContextType = {
   todos: Todo[];
@@ -51,6 +46,7 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
       id: +new Date(),
       title: title.trim(),
       completed: false,
+      userId: 0,
     };
 
     if (newTodo.title) {
