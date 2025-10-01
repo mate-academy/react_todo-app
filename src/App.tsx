@@ -1,7 +1,30 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import { Todo } from './types/todo';
+import { todo } from 'node:test';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoTitle, setTodoTitle] = useState<string>('');
+
+  const handleSubmitTodo = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (todoTitle.trim() === '') return;
+
+    const maxId =
+      todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) : 100;
+
+    const newTodo: Todo = {
+      id: maxId + 1,
+      title: todoTitle.trim(),
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+    setTodoTitle('');
+    console.log(todos);
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -9,19 +32,31 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
+          {todos.length > 0 && (
+            <button
+              type="button"
+              className="todoapp__toggle-all active"
+              data-cy="ToggleAllButton"
+            />
+          )}
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={handleSubmitTodo}>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={todoTitle}
+              onChange={e => setTodoTitle(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Escape') {
+                  setTodoTitle('');
+                }
+                if (e.key === 'Enter') {
+                  setTodoTitle(todoTitle);
+                }
+              }}
             />
           </form>
         </header>
@@ -110,47 +145,51 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
+        {todos.length > 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {todos.length === 1
+                ? '1 item left'
+                : `${todos.length} items left`}
+            </span>
 
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
+            {/* Active link should have the 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className="filter__link selected"
+                data-cy="FilterLinkAll"
+              >
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className="filter__link"
+                data-cy="FilterLinkActive"
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className="filter__link"
+                data-cy="FilterLinkCompleted"
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* this button should be disabled if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
             >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
     </div>
   );
