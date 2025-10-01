@@ -99,12 +99,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   return (
-    <div
-      data-cy="Todo"
-      // className={`todo ${completed ? 'completed' : ''}`}
-      className={classNames('todo', { completed })}
-      key={id}
-    >
+    <div data-cy="Todo" className={classNames('todo', { completed })} key={id}>
       <label className="todo__status-label" htmlFor={`todo-status-${id}`}>
         {/* {} */}
         <input
@@ -163,7 +158,6 @@ export const TodoItem: React.FC<Props> = ({
             isSaving ||
             loadingTodoIds.includes(id),
         })}
-        // className={`modal overlay ${isTemp || deletingTodoIds.includes(id) || isSaving || loadingTodoIds.includes(id) ? 'is-active' : ''}`}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
