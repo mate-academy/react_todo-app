@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Filter } from '../types/Filter';
 import { TodosContext } from '../context/TodosContext';
+import classNames from 'classnames';
 
 export const Footer: React.FC = () => {
   const {
@@ -14,31 +15,19 @@ export const Footer: React.FC = () => {
     (todo: { completed: unknown }) => !todo.completed,
   );
 
-  const filterLinks = [
-    {
-      name: 'All',
-      href: '#/',
-      dataCy: 'FilterLinkAll',
-      value: Filter.All,
-    },
-    {
-      name: 'Active',
-      href: '#/active',
-      dataCy: 'FilterLinkActive',
-      value: Filter.Active,
-    },
-    {
-      name: 'Completed',
-      href: '#/completed',
-      dataCy: 'FilterLinkCompleted',
-      value: Filter.Completed,
-    },
-  ];
+  const filterLinks = Object.values(Filter).map(filter => {
+    return {
+      name: filter.charAt(0).toUpperCase() + filter.slice(1),
+      href: filter === Filter.All ? '#/' : `#/${filter}`,
+      dataCy: `FilterLink${filter.charAt(0).toUpperCase() + filter.slice(1)}`,
+      value: filter,
+    };
+  });
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${notCompletedTodos.length} items left`}
+        {notCompletedTodos.length} items left
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -46,7 +35,9 @@ export const Footer: React.FC = () => {
           <a
             key={value}
             href={href}
-            className={`filter__link ${statusFilter === value ? 'selected' : ''}`}
+            className={classNames('filter__link', {
+              selected: statusFilter === value,
+            })}
             data-cy={dataCy}
             onClick={() => setStatusFilter(value)}
           >

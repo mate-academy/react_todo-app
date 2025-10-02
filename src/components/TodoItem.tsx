@@ -101,12 +101,12 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <div data-cy="Todo" className={classNames('todo', { completed })} key={id}>
       <label className="todo__status-label" htmlFor={`todo-status-${id}`}>
-        {/* {} */}
         <input
           id={`todo-status-${id}`}
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          aria-label="Toggle todo"
           checked={completed}
           onChange={() => {
             onToggleStatus(id, !completed);
