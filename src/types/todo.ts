@@ -5,4 +5,3 @@ export interface Todo {
 }
 
 export type Filter = 'all' | 'active' | 'completed';
-
