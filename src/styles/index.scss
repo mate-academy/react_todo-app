@@ -20,6 +20,10 @@ body {
   pointer-events: none;
 }
 
+form{
+  display: flex
+}
+
 @import './todoapp';
 @import './todo-list';
 @import './filters';

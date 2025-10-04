@@ -1,13 +1,25 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Todo } from '../../types/todo';
+import classNames from 'classnames';
+import { use } from 'chai';
 
 type Props = {
   todos: Todo[];
   handleSetTodos: (newTodo: Todo) => void;
+  handleToggleALL: () => void;
+  mainRef: React.RefObject<HTMLInputElement>;
 };
 
-export const Header: FC<Props> = ({ todos, handleSetTodos }) => {
+export const Header: FC<Props> = ({
+  todos,
+  handleSetTodos = () => {},
+  handleToggleALL = () => {},
+  mainRef,
+}) => {
   const [todoTitle, setTodoTitle] = useState<string>('');
+
+  const isActiveToggleAll =
+    todos.length > 0 && todos.every(todo => todo.completed);
 
   const handleSubmitTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,7 +37,12 @@ export const Header: FC<Props> = ({ todos, handleSetTodos }) => {
 
     handleSetTodos(newTodo);
     setTodoTitle('');
+    // mainRef.current?.blur();
   };
+
+  useEffect(() => {
+    mainRef.current?.focus();
+  }, []);
 
   return (
     <header className="todoapp__header">
@@ -33,8 +50,11 @@ export const Header: FC<Props> = ({ todos, handleSetTodos }) => {
       {todos.length > 0 && (
         <button
           type="button"
-          className="todoapp__toggle-all active"
+          className={classNames('todoapp__toggle-all', {
+            active: isActiveToggleAll,
+          })}
           data-cy="ToggleAllButton"
+          onClick={handleToggleALL}
         />
       )}
 
@@ -48,11 +68,7 @@ export const Header: FC<Props> = ({ todos, handleSetTodos }) => {
           placeholder="What needs to be done?"
           value={todoTitle}
           onChange={e => setTodoTitle(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === 'Escape') {
-              setTodoTitle('');
-            }
-          }}
+          ref={mainRef}
         />
       </form>
     </header>

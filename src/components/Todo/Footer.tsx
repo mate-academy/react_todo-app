@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { Filter } from '../../types/todo';
+import { FC } from 'react';
+import { Filter, Todo } from '../../types/todo';
 import classNames from 'classnames';
 
 type Props = {
@@ -7,6 +7,7 @@ type Props = {
   handleActiveFilter: (filter: Filter) => void;
   handleClearCompleted: () => void;
   counter: number;
+  completedTodos: Todo[];
 };
 
 export const Footer: FC<Props> = ({
@@ -14,8 +15,8 @@ export const Footer: FC<Props> = ({
   activeFilter,
   handleActiveFilter = () => {},
   handleClearCompleted = () => {},
+  completedTodos,
 }) => {
-  console.log(activeFilter);
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -41,6 +42,7 @@ export const Footer: FC<Props> = ({
             selected: activeFilter === 'active',
           })}
           data-cy="FilterLinkActive"
+          onClick={() => handleActiveFilter('active')}
         >
           Active
         </a>
@@ -48,20 +50,23 @@ export const Footer: FC<Props> = ({
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: activeFilter === 'all',
+            selected: activeFilter === 'completed',
           })}
           data-cy="FilterLinkCompleted"
+          onClick={() => handleActiveFilter('completed')}
         >
           Completed
         </a>
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
+
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={handleClearCompleted}
+        onClick={() => handleClearCompleted()}
+        disabled={completedTodos.length < 1}
       >
         Clear completed
       </button>
