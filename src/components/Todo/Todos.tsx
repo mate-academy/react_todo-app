@@ -3,9 +3,15 @@ import { Filter, Todo } from '../../types/todo';
 import { Header } from './Header';
 import { Main } from './Main';
 import { Footer } from './Footer';
+import { useLocalHost } from '../../hooks/useLocalHost';
 
 export const Todos = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosFromLocalHost, setTodosFromLocalHost] = useLocalHost();
+  const [todos, setTodos] = useState<Todo[]>(todosFromLocalHost);
+
+  useEffect(() => {
+    setTodosFromLocalHost(todos);
+  }, [todos]);
 
   // const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [activeFilter, setActiveFilter] = useState<Filter>('all');
@@ -24,6 +30,7 @@ export const Todos = () => {
   function handleUpdateTodo(updatedTodo: Todo) {
     if (updatedTodo.title.trim() === '') {
       handleDeleteTodo(updatedTodo.id);
+
       return;
     }
 
@@ -88,7 +95,7 @@ export const Todos = () => {
         handleDeleteTodo={handleDeleteTodo}
         handleToggleCompleted={handleToggleCompleted}
         handleUpdateTodo={handleUpdateTodo}
-         mainRef={mainRef}
+        mainRef={mainRef}
       />
 
       {/* Hide the footer if there are no todos */}

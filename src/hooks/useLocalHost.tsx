@@ -1,5 +1,26 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Todo } from '../types/todo';
 
-export const useLocalHost = () => {
-  const [] = useState(null);
+// Вынесите функцию за пределы хука
+function getLocalHostValue(): Todo[] {
+  const data = localStorage.getItem('todos');
+  if (data) {
+    try {
+      return JSON.parse(data);
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+export const useLocalHost = (): [Todo[], (newTodo: Todo[]) => void] => {
+  const [value, setValue] = useState<Todo[]>(getLocalHostValue);
+
+  function setNewValue(todos: Todo[]): void {
+    setValue(todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }
+
+  return [value, setNewValue];
 };
