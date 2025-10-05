@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Todo } from '../types/todo';
 
 // Вынесите функцию за пределы хука
-function getLocalHostValue(): Todo[] {
+function getLocalStorage(): Todo[] {
   const data = localStorage.getItem('todos');
   if (data) {
     try {
@@ -15,7 +15,7 @@ function getLocalHostValue(): Todo[] {
 }
 
 export const useLocalHost = (): [Todo[], (newTodo: Todo[]) => void] => {
-  const [value, setValue] = useState<Todo[]>(getLocalHostValue);
+  const [value, setValue] = useState<Todo[]>(getLocalStorage);
 
   function setNewValue(todos: Todo[]): void {
     setValue(todos);

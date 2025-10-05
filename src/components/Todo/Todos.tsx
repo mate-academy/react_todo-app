@@ -1,13 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter, Todo } from '../../types/todo';
 import { Header } from './Header';
 import { Main } from './Main';
 import { Footer } from './Footer';
-import { useLocalHost } from '../../hooks/useLocalHost';
+import { useLocalHost } from '../../hooks/useLocalStorage';
+import { DispatchContext, StateContext } from '../../context/Store';
 
 export const Todos = () => {
   const [todosFromLocalHost, setTodosFromLocalHost] = useLocalHost();
-  const [todos, setTodos] = useState<Todo[]>(todosFromLocalHost);
+  // const [todos, setTodos] = useState<Todo[]>(todosFromLocalHost);
+  const dispatch = useContext(DispatchContext);
+  const { todos } = useContext(StateContext);
 
   useEffect(() => {
     setTodosFromLocalHost(todos);
@@ -19,55 +22,6 @@ export const Todos = () => {
   const filteredTodos = getActivesTodos(activeFilter);
   const completedTodos = getActivesTodos('completed');
 
-  function handleActiveFilter(filter: Filter) {
-    setActiveFilter(filter);
-  }
-
-  function handleSetTodos(newTodos: Todo) {
-    setTodos(todos => [...todos, newTodos]);
-  }
-
-  function handleUpdateTodo(updatedTodo: Todo) {
-    if (updatedTodo.title.trim() === '') {
-      handleDeleteTodo(updatedTodo.id);
-
-      return;
-    }
-
-    setTodos(prevTodos => {
-      return prevTodos.map(todo =>
-        todo.id === updatedTodo.id
-          ? { ...todo, title: updatedTodo.title }
-          : todo,
-      );
-    });
-  }
-
-  function handleClearCompleted() {
-    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
-  }
-
-  function handleDeleteTodo(id: number) {
-    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
-  }
-
-  function handleToggleCompleted(id: number) {
-    setTodos(prevTodos => {
-      return prevTodos.map(todo => {
-        return todo.id === id ? { ...todo, completed: !todo.completed } : todo;
-      });
-    });
-  }
-
-  function handleToggleALL() {
-    setTodos(prevTodos => {
-      if (prevTodos.find(todo => !todo.completed)) {
-        return prevTodos.map(todo => ({ ...todo, completed: true }));
-      } else {
-        return prevTodos.map(todo => ({ ...todo, completed: false }));
-      }
-    });
-  }
 
   function getActivesTodos(filterType: Filter) {
     if (filterType === 'all') {
@@ -79,6 +33,62 @@ export const Todos = () => {
     }
     return todos;
   }
+
+  function handleActiveFilter(filter: Filter) {
+    setActiveFilter(filter);
+  }
+
+  // function handleSetTodos(newTodos: Todo) {
+  //   setTodos(todos => [...todos, newTodos]);
+  // }
+
+  function handleSetTodos(newTodos: Todo) {
+    dispatch({ type: 'add', payload: newTodos });
+  }
+
+  // function handleUpdateTodo(updatedTodo: Todo) {
+  //   if (updatedTodo.title.trim() === '') {
+  //     handleDeleteTodo(updatedTodo.id);
+
+  //     return;
+  //   }
+
+  //   setTodos(prevTodos => {
+  //     return prevTodos.map(todo =>
+  //       todo.id === updatedTodo.id
+  //         ? { ...todo, title: updatedTodo.title }
+  //         : todo,
+  //     );
+  //   });
+  // }
+
+  // function handleClearCompleted() {
+  //   setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
+  // }
+
+  // function handleDeleteTodo(id: number) {
+  //   setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  // }
+
+  // function handleToggleCompleted(id: number) {
+  //   setTodos(prevTodos => {
+  //     return prevTodos.map(todo => {
+  //       return todo.id === id ? { ...todo, completed: !todo.completed } : todo;
+  //     });
+  //   });
+  // }
+
+  // function handleToggleALL() {
+  //   setTodos(prevTodos => {
+  //     if (prevTodos.find(todo => !todo.completed)) {
+  //       return prevTodos.map(todo => ({ ...todo, completed: true }));
+  //     } else {
+  //       return prevTodos.map(todo => ({ ...todo, completed: false }));
+  //     }
+  //   });
+  // }
+
+
 
   const mainRef = useRef<HTMLInputElement | null>(null);
 

@@ -8,6 +8,7 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <Title title="Todos" />
       <Todos />
+
     </div>
   );
 };
