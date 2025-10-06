@@ -1,15 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
 import { Todo } from '../types/Todo';
 
-/* eslint-disable */
+interface UpdatePayload {
+  id: number;
+  changes: Partial<Omit<Todo, 'id'>>;
+}
+
 type Action =
   | { type: 'add'; payload: Todo }
   | { type: 'remove'; payload: number }
-  | {
-      type: 'update';
-      payload: { id: number; changes: Partial<Omit<Todo, 'id'>> };
-    };
-/* eslint-enable */
+  | { type: 'update'; payload: UpdatePayload };
 
 interface State {
   todos: Todo[];
