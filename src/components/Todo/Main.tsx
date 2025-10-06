@@ -11,7 +11,7 @@ export const Main: FC<Props> = ({ mainRef }) => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const editTodoRef = useRef<HTMLInputElement | null>(null);
 
-  const { todos } = useContext(StateContext);
+  const { todos, filteredTodos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
@@ -20,11 +20,14 @@ export const Main: FC<Props> = ({ mainRef }) => {
     }
   }, [tempTodo]);
 
+  useEffect(() => {}, [todos]);
+
   const editTempTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!tempTodo) return;
     const newTodo = e.target.value;
 
     setTempTodo({ ...tempTodo, title: newTodo });
+    dispatch({ type: 'updateTodo', payload: { ...tempTodo, title: newTodo } });
   };
 
   const handleDoubleClick = (
@@ -70,7 +73,7 @@ export const Main: FC<Props> = ({ mainRef }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <div
           data-cy="Todo"
           className={classNames('todo', { completed: todo.completed })}

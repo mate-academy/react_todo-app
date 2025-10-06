@@ -1,22 +1,23 @@
-import { FC } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Filter, Todo } from '../../types/todo';
 import classNames from 'classnames';
+import { DispatchContext, StateContext } from '../../context/Store';
 
-type Props = {
-  activeFilter: Filter;
-  handleActiveFilter: (filter: Filter) => void;
-  handleClearCompleted: () => void;
-  counter: number;
-  completedTodos: Todo[];
-};
+type Props = {};
+export const Footer: FC<Props> = () => {
+  const dispatch = useContext(DispatchContext);
+  const { todos } = useContext(StateContext);
 
-export const Footer: FC<Props> = ({
-  counter,
-  activeFilter,
-  handleActiveFilter = () => {},
-  handleClearCompleted = () => {},
-  completedTodos,
-}) => {
+  const [activeFilter, setActiveFilter] = useState<Filter>('all');
+
+  const completedTodos = todos.filter(todo => todo.completed);
+  const counter = todos.filter(todo => !todo.completed).length;
+
+  function handleActiveFilter(filter: Filter) {
+    setActiveFilter(filter);
+    dispatch(filter);
+  }
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -65,7 +66,7 @@ export const Footer: FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => handleClearCompleted()}
+        onClick={() => dispatch({ type: 'clearCompletedTodo' })}
         disabled={completedTodos.length < 1}
       >
         Clear completed

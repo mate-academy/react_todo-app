@@ -30,9 +30,8 @@ export const Header: FC<Props> = ({ mainRef }) => {
     };
 
     dispatch({ type: 'add', payload: newTodo });
-    // handleSetTodos(newTodo);
+    dispatch('all');
     setTodoTitle('');
-    // mainRef.current?.blur();
   };
 
   useEffect(() => {
