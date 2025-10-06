@@ -13,7 +13,7 @@ export type Todo = {
 };
 
 type State = {
-  allTodos : Todo[]
+  allTodos: Todo[];
   todos: Todo[];
   sortFilter: 'ALL' | 'ACTIVE' | 'COMPLETED';
 };
@@ -25,14 +25,12 @@ type Action =
   | { type: 'REMOVE_TODO'; payload: number }
   | { type: 'CHANGE_STATUS'; payload?: number | 'ALL' }
   | { type: 'CHANGE_FILTER'; payload: 'ALL' | 'ACTIVE' | 'COMPLETED' }
-  | { type: 'TOGGLE_ALL'}
+  | { type: 'TOGGLE_ALL' };
 
 const initialState: State = {
   todos: [],
   allTodos: [],
   sortFilter: 'ALL',
-
-
 };
 
 function reducer(state: State, action: Action): State {
@@ -42,8 +40,14 @@ function reducer(state: State, action: Action): State {
         ...state,
         allTodos: action.payload,
         todos: action.payload.filter(todo => {
-          if (state.sortFilter === 'ACTIVE') return !todo.completed;
-          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          if (state.sortFilter === 'ACTIVE') {
+            return !todo.completed;
+          }
+
+          if (state.sortFilter === 'COMPLETED') {
+            return todo.completed;
+          }
+
           return true;
         }),
       };
@@ -51,25 +55,41 @@ function reducer(state: State, action: Action): State {
 
     case 'ADD_TODO': {
       const newAllTodos = [...state.allTodos, action.payload];
+
       return {
         ...state,
         allTodos: newAllTodos,
         todos: newAllTodos.filter(todo => {
-          if (state.sortFilter === 'ACTIVE') return !todo.completed;
-          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          if (state.sortFilter === 'ACTIVE') {
+            return !todo.completed;
+          }
+
+          if (state.sortFilter === 'COMPLETED') {
+            return todo.completed;
+          }
+
           return true;
         }),
       };
     }
 
     case 'REMOVE_TODO': {
-      const newAllTodos = state.allTodos.filter(todo => todo.id !== action.payload);
+      const newAllTodos = state.allTodos.filter(
+        todo => todo.id !== action.payload,
+      );
+
       return {
         ...state,
         allTodos: newAllTodos,
         todos: newAllTodos.filter(todo => {
-          if (state.sortFilter === 'ACTIVE') return !todo.completed;
-          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          if (state.sortFilter === 'ACTIVE') {
+            return !todo.completed;
+          }
+
+          if (state.sortFilter === 'COMPLETED') {
+            return todo.completed;
+          }
+
           return true;
         }),
       };
@@ -85,14 +105,23 @@ function reducer(state: State, action: Action): State {
 
     case 'CHANGE_STATUS': {
       const updatedAllTodos = state.allTodos.map(todo =>
-        todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
+        todo.id === action.payload
+          ? { ...todo, completed: !todo.completed }
+          : todo,
       );
+
       return {
         ...state,
         allTodos: updatedAllTodos,
         todos: updatedAllTodos.filter(todo => {
-          if (state.sortFilter === 'ACTIVE') return !todo.completed;
-          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          if (state.sortFilter === 'ACTIVE') {
+            return !todo.completed;
+          }
+
+          if (state.sortFilter === 'COMPLETED') {
+            return todo.completed;
+          }
+
           return true;
         }),
       };
@@ -103,8 +132,14 @@ function reducer(state: State, action: Action): State {
         ...state,
         sortFilter: action.payload,
         todos: state.allTodos.filter(todo => {
-          if (action.payload === 'ACTIVE') return !todo.completed;
-          if (action.payload === 'COMPLETED') return todo.completed;
+          if (action.payload === 'ACTIVE') {
+            return !todo.completed;
+          }
+
+          if (action.payload === 'COMPLETED') {
+            return todo.completed;
+          }
+
           return true;
         }),
       };
@@ -112,14 +147,23 @@ function reducer(state: State, action: Action): State {
 
     case 'TOGGLE_ALL': {
       const completed = !state.allTodos.every(todo => todo.completed);
-      const updatedAllTodos = state.allTodos.map(todo => ({ ...todo, completed }));
+      const updatedAllTodos = state.allTodos.map(todo => ({
+        ...todo,
+        completed,
+      }));
 
       return {
         ...state,
         allTodos: updatedAllTodos,
         todos: updatedAllTodos.filter(todo => {
-          if (state.sortFilter === 'ACTIVE') return !todo.completed;
-          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          if (state.sortFilter === 'ACTIVE') {
+            return !todo.completed;
+          }
+
+          if (state.sortFilter === 'COMPLETED') {
+            return todo.completed;
+          }
+
           return true;
         }),
       };

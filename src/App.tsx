@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect,  useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TodoList } from './TodoList';
 import { Context, Todo } from './Context/Context';
 import classNames from 'classnames';
@@ -7,75 +7,62 @@ import classNames from 'classnames';
 export const App: React.FC = () => {
   const [title, setTitle] = useState('');
 
-
   const inputRef = useRef<HTMLInputElement>(null);
   const { state, dispatch } = useContext(Context);
 
   const allCompleted =
-  state.allTodos.length > 0 && state.allTodos.every(todo => todo.completed === true);
+    state.allTodos.length > 0 &&
+    state.allTodos.every(todo => todo.completed === true);
 
-  const todosCounter = state.allTodos.filter(todo => todo.completed === false).length;
+  const todosCounter = state.allTodos.filter(
+    todo => todo.completed === false,
+  ).length;
 
-
-  const CompletedCount = state.allTodos.filter(todo => todo.completed).length < 1;
-
-
-
+  const CompletedCount =
+    state.allTodos.filter(todo => todo.completed).length < 1;
 
   const handleDeleteCompleted = () => {
-
-    const todosCleared = state.allTodos.filter(todo => !todo.completed)
+    const todosCleared = state.allTodos.filter(todo => !todo.completed);
 
     localStorage.setItem('todos', JSON.stringify(todosCleared));
 
-    dispatch({ type: 'SET_TODOS', payload: todosCleared })
+    dispatch({ type: 'SET_TODOS', payload: todosCleared });
 
     inputRef.current?.focus();
-
-  }
-
-
-
-
-
- const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  if (!title.trim()) return;
-
-  const newTodo: Todo = {
-    id: Date.now(),
-    title: title.trim(),
-    completed: false
   };
 
-  const updatedTodos = [...state.todos, newTodo];
-  dispatch({ type: "ADD_TODO", payload: newTodo });
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!title.trim()) {
+      return;
+    }
 
-  localStorage.setItem("todos", JSON.stringify(updatedTodos));
-  setTitle('');
-};
+    const newTodo: Todo = {
+      id: Date.now(),
+      title: title.trim(),
+      completed: false,
+    };
 
+    const updatedTodos = [...state.todos, newTodo];
 
+    dispatch({ type: 'ADD_TODO', payload: newTodo });
 
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+    setTitle('');
+  };
 
-useEffect(() => {
-  localStorage.setItem('todos', JSON.stringify(state.allTodos));
-}, [state.allTodos]);
-
-
-
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(state.allTodos));
+  }, [state.allTodos]);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
   const handleToogleButton = () => {
-
-
-  dispatch({ type: 'TOGGLE_ALL' });
-  inputRef.current?.focus();
-};
-
+    dispatch({ type: 'TOGGLE_ALL' });
+    inputRef.current?.focus();
+  };
 
   return (
     <div className="todoapp">
@@ -88,13 +75,12 @@ useEffect(() => {
           {state.allTodos.length > 0 && (
             <button
               type="button"
-              className={classNames("todoapp__toggle-all", {
-                active : allCompleted
+              className={classNames('todoapp__toggle-all', {
+                active: allCompleted,
               })}
               data-cy="ToggleAllButton"
               onClick={handleToogleButton}
             />
-
           )}
 
           {/* Add a todo on form submit */}
@@ -111,7 +97,7 @@ useEffect(() => {
           </form>
         </header>
 
-        <TodoList inputRef={inputRef}  />
+        <TodoList inputRef={inputRef} />
 
         {state.allTodos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
@@ -123,36 +109,39 @@ useEffect(() => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={classNames("filter__link", {
+                className={classNames('filter__link', {
                   selected: state.sortFilter === 'ALL',
                 })}
-
-
-
                 data-cy="FilterLinkAll"
-                onClick={() => dispatch({type : 'CHANGE_FILTER',payload : 'ALL'})}
+                onClick={() =>
+                  dispatch({ type: 'CHANGE_FILTER', payload: 'ALL' })
+                }
               >
                 All
               </a>
 
               <a
                 href="#/active"
-                className={classNames("filter__link", {
+                className={classNames('filter__link', {
                   selected: state.sortFilter === 'ACTIVE',
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => dispatch({type : 'CHANGE_FILTER',payload : 'ACTIVE'})}
+                onClick={() =>
+                  dispatch({ type: 'CHANGE_FILTER', payload: 'ACTIVE' })
+                }
               >
                 Active
               </a>
 
               <a
                 href="#/completed"
-                className={classNames("filter__link", {
+                className={classNames('filter__link', {
                   selected: state.sortFilter === 'COMPLETED',
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => dispatch({type : 'CHANGE_FILTER',payload : 'COMPLETED'})}
+                onClick={() =>
+                  dispatch({ type: 'CHANGE_FILTER', payload: 'COMPLETED' })
+                }
               >
                 Completed
               </a>
@@ -165,7 +154,6 @@ useEffect(() => {
               data-cy="ClearCompletedButton"
               disabled={CompletedCount}
               onClick={handleDeleteCompleted}
-
             >
               Clear completed
             </button>
