@@ -1,3 +1,4 @@
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Todo } from '../types/todo';
 import { createContext, FC, useReducer } from 'react';
 
@@ -67,6 +68,8 @@ function reducer(state: State, action: Action): State {
       return state;
   }
 }
+
+// const [initialTodos] = useLocalStorage();
 
 const initialState: State = {
   todos: [],

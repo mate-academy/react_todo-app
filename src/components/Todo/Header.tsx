@@ -1,22 +1,16 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Todo } from '../../types/todo';
 import classNames from 'classnames';
-import { use } from 'chai';
+import { DispatchContext, StateContext } from '../../context/Store';
 
 type Props = {
-  todos: Todo[];
-  handleSetTodos: (newTodo: Todo) => void;
-  handleToggleALL: () => void;
   mainRef: React.RefObject<HTMLInputElement>;
 };
 
-export const Header: FC<Props> = ({
-  todos,
-  handleSetTodos = () => {},
-  handleToggleALL = () => {},
-  mainRef,
-}) => {
+export const Header: FC<Props> = ({ mainRef }) => {
   const [todoTitle, setTodoTitle] = useState<string>('');
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
 
   const isActiveToggleAll =
     todos.length > 0 && todos.every(todo => todo.completed);
@@ -35,7 +29,8 @@ export const Header: FC<Props> = ({
       completed: false,
     };
 
-    handleSetTodos(newTodo);
+    dispatch({ type: 'add', payload: newTodo });
+    // handleSetTodos(newTodo);
     setTodoTitle('');
     // mainRef.current?.blur();
   };
@@ -54,7 +49,7 @@ export const Header: FC<Props> = ({
             active: isActiveToggleAll,
           })}
           data-cy="ToggleAllButton"
-          onClick={handleToggleALL}
+          onClick={() => dispatch({ type: 'toggleAll' })}
         />
       )}
 

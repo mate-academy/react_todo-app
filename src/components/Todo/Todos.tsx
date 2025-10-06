@@ -1,16 +1,18 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Filter, Todo } from '../../types/todo';
 import { Header } from './Header';
 import { Main } from './Main';
 import { Footer } from './Footer';
-import { useLocalHost } from '../../hooks/useLocalStorage';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { DispatchContext, StateContext } from '../../context/Store';
 
 export const Todos = () => {
-  const [todosFromLocalHost, setTodosFromLocalHost] = useLocalHost();
+  const [todosFromLocalHost, setTodosFromLocalHost] = useLocalStorage();
   // const [todos, setTodos] = useState<Todo[]>(todosFromLocalHost);
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     setTodosFromLocalHost(todos);
@@ -21,7 +23,6 @@ export const Todos = () => {
 
   const filteredTodos = getActivesTodos(activeFilter);
   const completedTodos = getActivesTodos('completed');
-
 
   function getActivesTodos(filterType: Filter) {
     if (filterType === 'all') {
@@ -42,9 +43,9 @@ export const Todos = () => {
   //   setTodos(todos => [...todos, newTodos]);
   // }
 
-  function handleSetTodos(newTodos: Todo) {
-    dispatch({ type: 'add', payload: newTodos });
-  }
+  // function handleSetTodos(newTodos: Todo) {
+  //   dispatch({ type: 'add', payload: newTodos });
+  // }
 
   // function handleUpdateTodo(updatedTodo: Todo) {
   //   if (updatedTodo.title.trim() === '') {
@@ -88,35 +89,32 @@ export const Todos = () => {
   //   });
   // }
 
-
-
   const mainRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div className="todoapp__content">
       <Header
-        todos={todos}
-        handleSetTodos={handleSetTodos}
-        handleToggleALL={handleToggleALL}
         mainRef={mainRef}
       />
       <Main
-        todos={filteredTodos}
-        handleDeleteTodo={handleDeleteTodo}
-        handleToggleCompleted={handleToggleCompleted}
-        handleUpdateTodo={handleUpdateTodo}
-        mainRef={mainRef}
-      />
+      {/* // todos={filteredTodos} */}
+      {/* // handleDeleteTodo={handleDeleteTodo} */}
+      {/* // handleToggleCompleted={handleToggleCompleted} */}
+      {/* // handleUpdateTodo={handleUpdateTodo} */}
+       mainRef={mainRef}
 
+      />
       {/* Hide the footer if there are no todos */}
       {todos.length > 0 && (
-        <Footer
-          handleActiveFilter={handleActiveFilter}
-          activeFilter={activeFilter}
-          counter={todos.length}
-          handleClearCompleted={handleClearCompleted}
-          completedTodos={completedTodos}
-        />
+        // <Footer
+        // handleActiveFilter={handleActiveFilter}
+        // activeFilter={activeFilter}
+        // counter={todos.length}
+        // handleClearCompleted={handleClearCompleted}
+        // completedTodos={completedTodos}
+        // />
+
+        <></>
       )}
     </div>
   );

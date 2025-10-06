@@ -14,8 +14,8 @@ function getLocalStorage(): Todo[] {
   return [];
 }
 
-export const useLocalHost = (): [Todo[], (newTodo: Todo[]) => void] => {
-  const [value, setValue] = useState<Todo[]>(getLocalStorage);
+export const useLocalStorage = (): [Todo[], (newTodo: Todo[]) => void] => {
+  const [value, setValue] = useState<Todo[]>(getLocalStorage());
 
   function setNewValue(todos: Todo[]): void {
     setValue(todos);
