@@ -19,7 +19,8 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
   const editedRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = (id: number) => {
-    const todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
+   const todos: Todo[] = JSON.parse(localStorage.getItem('todos') ?? '[]');
+
 
     const deleted = todos.filter(todo => todo.id !== id);
 
@@ -44,7 +45,10 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
   const handleSubmit = (id: number, e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
 
-    if (!title.trim()) {
+
+
+    if (title.trim().length === 0) {
+      handleDelete(id)
       return;
     }
 
@@ -69,6 +73,23 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
       }, 0);
     }
   }, [editedId]);
+
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setEditedId(null);
+      }
+    };
+
+    // Подписка на событие
+    window.addEventListener('keydown', handleEscape);
+
+    // Очистка при размонтировании компонента
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
 
   const handleChangeTitle = (todo: Todo) => {
     setEditedId(todo.id);
@@ -110,7 +131,7 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           </label>
 
-          {editedId ? (
+          {editedId === todo.id  ? (
             <form onSubmit={e => handleSubmit(todo.id, e)}>
               <input
                 ref={editedRef}
