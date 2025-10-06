@@ -1,24 +1,18 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/todo';
 import classNames from 'classnames';
+import { DispatchContext, StateContext } from '../../context/Store';
 
 type Props = {
-  todos: Todo[];
-  handleDeleteTodo: (id: number) => void;
-  handleToggleCompleted: (id: number) => void;
-  handleUpdateTodo: (updatedTodo: Todo) => void;
   mainRef: React.RefObject<HTMLInputElement>;
 };
 
-export const Main: FC<Props> = ({
-  todos,
-  handleDeleteTodo = () => {},
-  handleToggleCompleted = () => {},
-  handleUpdateTodo = () => {},
-  mainRef,
-}) => {
+export const Main: FC<Props> = ({ mainRef }) => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const editTodoRef = useRef<HTMLInputElement | null>(null);
+
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
     if (tempTodo) {
@@ -33,7 +27,7 @@ export const Main: FC<Props> = ({
     setTempTodo({ ...tempTodo, title: newTodo });
   };
 
-  const handleDounbleClick = (
+  const handleDoubleClick = (
     e: React.MouseEvent<HTMLSpanElement>,
     tempTodo: Todo,
   ) => {
@@ -43,7 +37,7 @@ export const Main: FC<Props> = ({
 
   const handleKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && tempTodo) {
-      handleUpdateTodo(tempTodo);
+      dispatch({ type: 'updateTodo', payload: tempTodo });
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
@@ -58,14 +52,14 @@ export const Main: FC<Props> = ({
 
   const handleBlur = () => {
     if (tempTodo?.title.trim() === '') {
-      handleDeleteTodo(tempTodo.id);
+      dispatch({ type: 'remove', payload: tempTodo.id });
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
       return;
     }
     if (tempTodo) {
-      handleUpdateTodo(tempTodo);
+      dispatch({ type: 'updateTodo', payload: tempTodo });
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
@@ -88,7 +82,9 @@ export const Main: FC<Props> = ({
               type="checkbox"
               className="todo__status"
               checked={todo.completed}
-              onChange={() => handleToggleCompleted(todo.id)}
+              onChange={() =>
+                dispatch({ type: 'toggleCompleted', payload: todo.id })
+              }
             />
           </label>
 
@@ -111,7 +107,7 @@ export const Main: FC<Props> = ({
               <span
                 data-cy="TodoTitle"
                 className="todo__title"
-                onDoubleClick={e => handleDounbleClick(e, todo)}
+                onDoubleClick={e => handleDoubleClick(e, todo)}
               >
                 {todo.title}
               </span>
@@ -120,7 +116,7 @@ export const Main: FC<Props> = ({
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
-                onClick={() => handleDeleteTodo(todo.id)}
+                onClick={() => dispatch({ type: 'remove', payload: todo.id })}
               >
                 ×
               </button>
@@ -128,48 +124,6 @@ export const Main: FC<Props> = ({
           )}
         </div>
       ))}
-
-      {/* This todo is an active todo */}
-      {/* <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          Not Completed Todo
-        </span>
-
-        <button type="button" className="todo__remove" data-cy="TodoDelete">
-          ×
-        </button>
-      </div> */}
-
-      {/* This todo is being edited */}
-
-      {/* <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label> */}
-
-      {/* This form is shown instead of the title and remove button */}
-      {/* <form>
-          <input
-            data-cy="TodoTitleField"
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
-          />
-        </form>
-      </div> */}
     </section>
   );
 };

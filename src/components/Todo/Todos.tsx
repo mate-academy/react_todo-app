@@ -18,7 +18,6 @@ export const Todos = () => {
     setTodosFromLocalHost(todos);
   }, [todos]);
 
-  // const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [activeFilter, setActiveFilter] = useState<Filter>('all');
 
   const filteredTodos = getActivesTodos(activeFilter);
@@ -93,28 +92,17 @@ export const Todos = () => {
 
   return (
     <div className="todoapp__content">
-      <Header
-        mainRef={mainRef}
-      />
-      <Main
-      {/* // todos={filteredTodos} */}
-      {/* // handleDeleteTodo={handleDeleteTodo} */}
-      {/* // handleToggleCompleted={handleToggleCompleted} */}
-      {/* // handleUpdateTodo={handleUpdateTodo} */}
-       mainRef={mainRef}
-
-      />
+      <Header mainRef={mainRef} />
+      <Main mainRef={mainRef} />
       {/* Hide the footer if there are no todos */}
       {todos.length > 0 && (
-        // <Footer
-        // handleActiveFilter={handleActiveFilter}
-        // activeFilter={activeFilter}
-        // counter={todos.length}
-        // handleClearCompleted={handleClearCompleted}
-        // completedTodos={completedTodos}
-        // />
-
-        <></>
+        <Footer
+          handleActiveFilter={handleActiveFilter}
+          activeFilter={activeFilter}
+          counter={todos.length}
+          handleClearCompleted={handleClearCompleted}
+          completedTodos={completedTodos}
+        />
       )}
     </div>
   );
