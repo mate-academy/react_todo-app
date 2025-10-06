@@ -1,13 +1,17 @@
-import React, { useContext, useEffect, RefObject } from 'react';
+import React, { useContext, useEffect, RefObject, useState, useRef, } from 'react';
 import { Context, Todo } from '../Context/Context';
 import classNames from 'classnames';
 
 type Props = {
   inputRef: RefObject<HTMLInputElement>;
+
 };
 
-export const TodoList: React.FC<Props> = ({ inputRef }) => {
+export const TodoList: React.FC<Props> = ({ inputRef}) => {
   const { state, dispatch } = useContext(Context);
+  const [title, setTitle] = useState('');
+  const [editedId, setEditedId] = useState<null | number>(null)
+  const editedRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = (id: number) => {
     const todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
@@ -21,28 +25,73 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
     inputRef.current?.focus();
   };
 
-  useEffect(() => {
-    const saved = localStorage.getItem('todos');
+useEffect(() => {
+  const savedTodos = localStorage.getItem('todos');
+  const todos: Todo[] = savedTodos ? JSON.parse(savedTodos) : [];
 
-    if (saved) {
-      const parsed: Todo[] = JSON.parse(saved);
 
-      dispatch({ type: 'SET_TODOS', payload: parsed });
-    } else {
-      dispatch({ type: 'SET_TODOS', payload: [] }); // ключ не трогаем
-    }
-  }, [dispatch]);
+  if (!savedTodos) {
+    localStorage.setItem('todos', JSON.stringify([]));
+  }
+
+  dispatch({ type: "SET_TODOS", payload: todos });
+}, []);
+
+
+
+  const handleSubmit = (id: number, e?: React.FormEvent<HTMLFormElement>) => {
+  e?.preventDefault();
+
+  if (!title.trim()) return;
+
+  const updatedTodos = state.allTodos.map(todo =>
+    todo.id === id ? { ...todo, title: title.trim() } : todo
+  );
+
+  // Сохраняем в localStorage
+  localStorage.setItem("todos", JSON.stringify(updatedTodos));
+
+  // Обновляем state через dispatch
+  dispatch({ type: 'SET_TODOS', payload: updatedTodos });
+
+  setTitle('');
+  setEditedId(null);
+};
+
+
+
+ useEffect(() => {
+  if (editedRef.current) {
+    setTimeout(() => {
+      editedRef.current?.focus();
+    }, 0);
+  }
+}, [editedId]);
+
+
+  const handleChangeTitle = (todo : Todo) => {
+
+    setEditedId(todo.id);
+    setTitle(todo.title);
+
+
+  }
+
+
+
 
   const handleChangeStatusTodo = (id?: number) => {
-    const todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
 
-    const updatedTodos = todos.map(todo =>
+
+    const updatedTodos = state.allTodos.map(todo =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo,
     );
 
     localStorage.setItem('todos', JSON.stringify(updatedTodos));
 
     dispatch({ type: 'CHANGE_STATUS', payload: id });
+
+    inputRef.current?.focus();
   };
 
   return (
@@ -68,21 +117,65 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           </label>
 
-          <span data-cy="TodoTitle" className="todo__title">
+          { editedId ? (
+
+
+          <form onSubmit={e => handleSubmit(todo.id, e)}>
+              <input
+                ref={editedRef}
+                type="text"
+                data-cy="TodoTitleField"
+                className="todo__title-field"
+                placeholder="Empty todo will be deleted"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                onBlur={() => handleSubmit(todo.id)}
+              />
+            </form>) : (
+
+
+              <>
+
+              <span data-cy="TodoTitle"
+                className="todo__title"
+                onDoubleClick={() => handleChangeTitle(todo)}
+          >
             {todo.title}
-          </span>
+              </span>
 
-          {/* Remove button appears only on hover */}
 
-          <button
+
+              <button
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
             onClick={() => handleDelete(todo.id)}
           >
             ×
-          </button>
+                </button>
+
+
+                </>
+                )
+
+
+
+          }
+
+          {/* Remove button appears only on hover */}
+
+
+
+
+
+
+
+
         </div>
+
+
+
+
       ))}
     </section>
   );

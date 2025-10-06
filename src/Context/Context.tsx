@@ -13,7 +13,9 @@ export type Todo = {
 };
 
 type State = {
+  allTodos : Todo[]
   todos: Todo[];
+  sortFilter: 'ALL' | 'ACTIVE' | 'COMPLETED';
 };
 
 type Action =
@@ -21,47 +23,107 @@ type Action =
   | { type: 'CLEAR_TODOS' }
   | { type: 'SET_TODOS'; payload: Todo[] }
   | { type: 'REMOVE_TODO'; payload: number }
-  | { type: 'CHANGE_STATUS'; payload?: number | 'ALL' };
+  | { type: 'CHANGE_STATUS'; payload?: number | 'ALL' }
+  | { type: 'CHANGE_FILTER'; payload: 'ALL' | 'ACTIVE' | 'COMPLETED' }
+  | { type: 'TOGGLE_ALL'}
 
 const initialState: State = {
   todos: [],
+  allTodos: [],
+  sortFilter: 'ALL',
+
+
 };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'ADD_TODO':
-      return { ...state, todos: [...state.todos, action.payload] };
-
-    case 'CLEAR_TODOS':
-      return { ...state, todos: [] };
-
-    case 'SET_TODOS':
+    case 'SET_TODOS': {
       return {
         ...state,
-        todos: action.payload,
-      };
-
-    case 'CHANGE_STATUS':
-      return {
-        ...state,
-        todos: state.todos.map(todo => {
-          if (action.payload === 'ALL') {
-            // переключаем все туду
-            return { ...todo, completed: todo.completed };
-          } else if (todo.id === action.payload) {
-            // переключаем конкретный туду
-            return { ...todo, completed: !todo.completed };
-          } else {
-            return todo;
-          }
+        allTodos: action.payload,
+        todos: action.payload.filter(todo => {
+          if (state.sortFilter === 'ACTIVE') return !todo.completed;
+          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          return true;
         }),
       };
+    }
 
-    case 'REMOVE_TODO':
+    case 'ADD_TODO': {
+      const newAllTodos = [...state.allTodos, action.payload];
       return {
         ...state,
-        todos: state.todos.filter(todo => todo.id !== action.payload),
+        allTodos: newAllTodos,
+        todos: newAllTodos.filter(todo => {
+          if (state.sortFilter === 'ACTIVE') return !todo.completed;
+          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          return true;
+        }),
       };
+    }
+
+    case 'REMOVE_TODO': {
+      const newAllTodos = state.allTodos.filter(todo => todo.id !== action.payload);
+      return {
+        ...state,
+        allTodos: newAllTodos,
+        todos: newAllTodos.filter(todo => {
+          if (state.sortFilter === 'ACTIVE') return !todo.completed;
+          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          return true;
+        }),
+      };
+    }
+
+    case 'CLEAR_TODOS': {
+      return {
+        ...state,
+        allTodos: [],
+        todos: [],
+      };
+    }
+
+    case 'CHANGE_STATUS': {
+      const updatedAllTodos = state.allTodos.map(todo =>
+        todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
+      );
+      return {
+        ...state,
+        allTodos: updatedAllTodos,
+        todos: updatedAllTodos.filter(todo => {
+          if (state.sortFilter === 'ACTIVE') return !todo.completed;
+          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          return true;
+        }),
+      };
+    }
+
+    case 'CHANGE_FILTER': {
+      return {
+        ...state,
+        sortFilter: action.payload,
+        todos: state.allTodos.filter(todo => {
+          if (action.payload === 'ACTIVE') return !todo.completed;
+          if (action.payload === 'COMPLETED') return todo.completed;
+          return true;
+        }),
+      };
+    }
+
+    case 'TOGGLE_ALL': {
+      const completed = !state.allTodos.every(todo => todo.completed);
+      const updatedAllTodos = state.allTodos.map(todo => ({ ...todo, completed }));
+
+      return {
+        ...state,
+        allTodos: updatedAllTodos,
+        todos: updatedAllTodos.filter(todo => {
+          if (state.sortFilter === 'ACTIVE') return !todo.completed;
+          if (state.sortFilter === 'COMPLETED') return todo.completed;
+          return true;
+        }),
+      };
+    }
 
     default:
       return state;
