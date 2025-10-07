@@ -7,6 +7,7 @@ interface State {
 }
 
 type Action =
+  | { type: 'addArray'; payload: Todo[] | [] }
   | { type: 'add'; payload: Todo }
   | { type: 'remove'; payload: number }
   | { type: 'updateTodo'; payload: Todo }
@@ -14,8 +15,17 @@ type Action =
   | { type: 'clearCompletedTodo' }
   | { type: 'toggleAll' };
 
+const initialState: State = {
+  todos: [],
+  filteredTodos: [],
+};
+
 function reducer(state: State, action: Action | Filter): State {
   const { todos } = state;
+
+  if (action === null) {
+    return { ...state, filteredTodos: [] };
+  }
 
   if (typeof action === 'string') {
     switch (action) {
@@ -31,11 +41,14 @@ function reducer(state: State, action: Action | Filter): State {
           ...state,
           filteredTodos: todos.filter(todo => todo.completed),
         };
+
       default:
         return state;
     }
   } else {
     switch (action.type) {
+      case 'addArray':
+        return { ...state, todos: [...action.payload] };
       case 'add':
         return { ...state, todos: [...todos, action.payload] };
       case 'remove':
@@ -44,8 +57,8 @@ function reducer(state: State, action: Action | Filter): State {
           todos: todos.filter(todo => todo.id !== action.payload),
         };
       case 'updateTodo':
-        const isTitile = action.payload.title.trim() === '';
-        return isTitile
+        const isTitle = action.payload.title.trim() === '';
+        return isTitle
           ? {
               ...state,
               todos: todos.filter(todo => todo.id !== action.payload.id),
@@ -92,11 +105,6 @@ function reducer(state: State, action: Action | Filter): State {
     }
   }
 }
-
-const initialState: State = {
-  todos: [],
-  filteredTodos: [],
-};
 
 export const StateContext = createContext(initialState);
 export const DispatchContext = createContext((action: Action | Filter) => {});

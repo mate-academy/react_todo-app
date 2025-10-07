@@ -20,27 +20,33 @@ export const Main: FC<Props> = ({ mainRef }) => {
     }
   }, [tempTodo]);
 
-  useEffect(() => {}, [todos]);
+  useEffect(() => {
+    if (todos.length === 0) {
+      dispatch(null);
+    }
+  }, [todos]);
 
   const editTempTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!tempTodo) return;
     const newTodo = e.target.value;
 
     setTempTodo({ ...tempTodo, title: newTodo });
-    dispatch({ type: 'updateTodo', payload: { ...tempTodo, title: newTodo } });
   };
 
-  const handleDoubleClick = (
-    e: React.MouseEvent<HTMLSpanElement>,
-    tempTodo: Todo,
-  ) => {
+  const handleDoubleClick = (tempTodo: Todo) => {
     setTempTodo(tempTodo);
     editTodoRef.current?.focus();
   };
 
   const handleKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && tempTodo) {
-      dispatch({ type: 'updateTodo', payload: tempTodo });
+      dispatch({
+        type: 'updateTodo',
+        payload: {
+          ...tempTodo,
+          title: tempTodo.title.trim().replaceAll('  ', ' '),
+        },
+      });
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
@@ -72,7 +78,6 @@ export const Main: FC<Props> = ({ mainRef }) => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {/* This is a completed todo */}
       {filteredTodos.map(todo => (
         <div
           data-cy="Todo"
@@ -110,7 +115,7 @@ export const Main: FC<Props> = ({ mainRef }) => {
               <span
                 data-cy="TodoTitle"
                 className="todo__title"
-                onDoubleClick={e => handleDoubleClick(e, todo)}
+                onDoubleClick={() => handleDoubleClick(todo)}
               >
                 {todo.title}
               </span>
@@ -119,7 +124,10 @@ export const Main: FC<Props> = ({ mainRef }) => {
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
-                onClick={() => dispatch({ type: 'remove', payload: todo.id })}
+                onClick={() => {
+                  dispatch({ type: 'remove', payload: todo.id });
+                  mainRef.current?.focus();
+                }}
               >
                 ×
               </button>

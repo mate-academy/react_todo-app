@@ -1,5 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Filter, Todo } from '../../types/todo';
+import { useContext, useEffect, useRef } from 'react';
 import { Header } from './Header';
 import { Main } from './Main';
 import { Footer } from './Footer';
@@ -10,11 +9,15 @@ export const Todos = () => {
   const [todosFromLocalHost, setTodosFromLocalHost] = useLocalStorage();
 
   const dispatch = useContext(DispatchContext);
-  const { todos, filteredTodos } = useContext(StateContext);
+  const { todos } = useContext(StateContext);
 
   useEffect(() => {
     setTodosFromLocalHost(todos);
-  }, [todos, filteredTodos]);
+  }, [todos]);
+
+  useEffect(() => {
+    dispatch({ type: 'addArray', payload: todosFromLocalHost });
+  }, []);
 
   const mainRef = useRef<HTMLInputElement | null>(null);
 
@@ -22,8 +25,7 @@ export const Todos = () => {
     <div className="todoapp__content">
       <Header mainRef={mainRef} />
       <Main mainRef={mainRef} />
-      {/* Hide the footer if there are no todos */}
-      {todos.length > 0 && <Footer />}
+      {todos.length > 0 && <Footer mainRef={mainRef} />}
     </div>
   );
 };

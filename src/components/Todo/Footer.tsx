@@ -1,10 +1,12 @@
-import { FC, useContext, useState } from 'react';
-import { Filter, Todo } from '../../types/todo';
+import { FC, useContext, useEffect, useState } from 'react';
+import { Filter } from '../../types/todo';
 import classNames from 'classnames';
 import { DispatchContext, StateContext } from '../../context/Store';
 
-type Props = {};
-export const Footer: FC<Props> = () => {
+type Props = {
+  mainRef: React.RefObject<HTMLInputElement>;
+};
+export const Footer: FC<Props> = ({ mainRef }) => {
   const dispatch = useContext(DispatchContext);
   const { todos } = useContext(StateContext);
 
@@ -18,13 +20,20 @@ export const Footer: FC<Props> = () => {
     dispatch(filter);
   }
 
+  useEffect(() => {
+    if (todos.length) {
+      dispatch(activeFilter);
+    } else {
+      dispatch(null);
+    }
+  }, [todos]);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {counter === 1 ? '1 item left' : `${counter} items left`}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -60,13 +69,14 @@ export const Footer: FC<Props> = () => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
-
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => dispatch({ type: 'clearCompletedTodo' })}
+        onClick={() => {
+          dispatch({ type: 'clearCompletedTodo' });
+          mainRef.current?.focus();
+        }}
         disabled={completedTodos.length < 1}
       >
         Clear completed

@@ -40,7 +40,7 @@ export const Header: FC<Props> = ({ mainRef }) => {
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
+
       {todos.length > 0 && (
         <button
           type="button"
@@ -51,8 +51,6 @@ export const Header: FC<Props> = ({ mainRef }) => {
           onClick={() => dispatch({ type: 'toggleAll' })}
         />
       )}
-
-      {/* Add a todo on form submit */}
 
       <form onSubmit={handleSubmitTodo}>
         <input
