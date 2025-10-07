@@ -16,7 +16,7 @@ export const Todos = () => {
   }, [todos]);
 
   useEffect(() => {
-    dispatch({ type: 'addArray', payload: todosFromLocalHost });
+    dispatch({ type: 'addAll', payload: todosFromLocalHost });
   }, []);
 
   const mainRef = useRef<HTMLInputElement | null>(null);

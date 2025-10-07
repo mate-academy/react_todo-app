@@ -38,13 +38,18 @@ export const Main: FC<Props> = ({ mainRef }) => {
     editTodoRef.current?.focus();
   };
 
-  const handleKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && tempTodo) {
+  const handleKeyboardEvent = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    oldTempTodo: Todo,
+    newTempTodo: Todo,
+  ) => {
+    if (e.key === 'Enter' && oldTempTodo) {
+      e.preventDefault();
       dispatch({
         type: 'updateTodo',
         payload: {
-          ...tempTodo,
-          title: tempTodo.title.trim().replaceAll('  ', ' '),
+          ...oldTempTodo,
+          title: oldTempTodo.title.trim(),
         },
       });
       setTempTodo(null);
@@ -53,22 +58,44 @@ export const Main: FC<Props> = ({ mainRef }) => {
     }
 
     if (e.key === 'Escape') {
-      setTempTodo(null);
+      dispatch({
+        type: 'updateTodo',
+        payload: {
+          ...oldTempTodo,
+          title: newTempTodo.title,
+        },
+      });
+
       editTodoRef.current = null;
       mainRef.current?.focus();
     }
   };
 
-  const handleBlur = () => {
-    if (tempTodo?.title.trim() === '') {
-      dispatch({ type: 'remove', payload: tempTodo.id });
+  function updateTitle(newTodo: Todo, oldTodo: Todo) {
+    const isEdit = newTodo.id === oldTodo.id && newTodo.title === oldTodo.title;
+
+    if (isEdit) {
+      return;
+    }
+  }
+
+  const handleBlur = (
+    event: React.FocusEvent<HTMLInputElement, Element>,
+    updateTodo: Todo,
+  ) => {
+    event.preventDefault();
+    if (updateTodo.title.trim() === '') {
+      dispatch({ type: 'remove', payload: updateTodo.id });
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
       return;
     }
-    if (tempTodo) {
-      dispatch({ type: 'updateTodo', payload: tempTodo });
+    if (updateTodo.title) {
+      dispatch({
+        type: 'updateTodo',
+        payload: updateTodo,
+      });
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
@@ -105,9 +132,10 @@ export const Main: FC<Props> = ({ mainRef }) => {
                 placeholder="Empty todo will be deleted"
                 value={tempTodo.title}
                 onChange={e => editTempTodo(e)}
-                onKeyDown={e => handleKeyboardEvent(e)}
+                onKeyDown={e => handleKeyboardEvent(e, tempTodo, todo)}
+                onKeyUp={e => handleKeyboardEvent(e, tempTodo, todo)}
                 ref={editTodoRef}
-                onBlur={handleBlur}
+                onBlur={event => handleBlur(event, tempTodo)}
               />
             </form>
           ) : (

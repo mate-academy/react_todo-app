@@ -40,7 +40,6 @@ export const Header: FC<Props> = ({ mainRef }) => {
 
   return (
     <header className="todoapp__header">
-
       {todos.length > 0 && (
         <button
           type="button"
@@ -48,7 +47,10 @@ export const Header: FC<Props> = ({ mainRef }) => {
             active: isActiveToggleAll,
           })}
           data-cy="ToggleAllButton"
-          onClick={() => dispatch({ type: 'toggleAll' })}
+          onClick={() => {
+            dispatch({ type: 'toggleAll' });
+            mainRef.current?.focus();
+          }}
         />
       )}
 

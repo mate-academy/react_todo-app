@@ -7,7 +7,7 @@ interface State {
 }
 
 type Action =
-  | { type: 'addArray'; payload: Todo[] | [] }
+  | { type: 'addAll'; payload: Todo[] | [] }
   | { type: 'add'; payload: Todo }
   | { type: 'remove'; payload: number }
   | { type: 'updateTodo'; payload: Todo }
@@ -20,7 +20,7 @@ const initialState: State = {
   filteredTodos: [],
 };
 
-function reducer(state: State, action: Action | Filter): State {
+function reducer(state: State, action: Action | Filter | null): State {
   const { todos } = state;
 
   if (action === null) {
@@ -47,7 +47,7 @@ function reducer(state: State, action: Action | Filter): State {
     }
   } else {
     switch (action.type) {
-      case 'addArray':
+      case 'addAll':
         return { ...state, todos: [...action.payload] };
       case 'add':
         return { ...state, todos: [...todos, action.payload] };
@@ -107,7 +107,9 @@ function reducer(state: State, action: Action | Filter): State {
 }
 
 export const StateContext = createContext(initialState);
-export const DispatchContext = createContext((action: Action | Filter) => {});
+export const DispatchContext = createContext(
+  (action: Action | Filter | null) => {},
+);
 
 type Props = {
   children: React.ReactNode;
