@@ -26,7 +26,7 @@ export const Footer: FC<Props> = ({ mainRef }) => {
     } else {
       dispatch(null);
     }
-  }, [todos]);
+  }, [todos, dispatch]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">

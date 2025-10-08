@@ -20,6 +20,7 @@ const initialState: State = {
   filteredTodos: [],
 };
 
+/* eslint-disable  @typescript-eslint/indent*/
 function reducer(state: State, action: Action | Filter | null): State {
   const { todos } = state;
 
@@ -108,6 +109,7 @@ function reducer(state: State, action: Action | Filter | null): State {
 }
 
 export const StateContext = createContext(initialState);
+/* eslint-disable @typescript-eslint/no-unused-vars*/
 export const DispatchContext = createContext(
   (action: Action | Filter | null) => {},
 );

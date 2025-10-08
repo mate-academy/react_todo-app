@@ -11,7 +11,7 @@ export const Main: FC<Props> = ({ mainRef }) => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const editTodoRef = useRef<HTMLInputElement | null>(null);
 
-  const { filteredTodos } = useContext(StateContext);
+  const { todos, filteredTodos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
@@ -19,6 +19,12 @@ export const Main: FC<Props> = ({ mainRef }) => {
       editTodoRef.current?.focus();
     }
   }, [tempTodo]);
+
+  useEffect(() => {
+    if (todos.length === 0) {
+      dispatch(null);
+    }
+  }, [todos, dispatch]);
 
   const editTempTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!tempTodo) {
@@ -97,6 +103,7 @@ export const Main: FC<Props> = ({ mainRef }) => {
     }
   };
 
+  // eslint-disable-next-line jsx-a11y/label-has-associated-control
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {filteredTodos.map(todo => (
@@ -105,9 +112,14 @@ export const Main: FC<Props> = ({ mainRef }) => {
           className={classNames('todo', { completed: todo.completed })}
           key={todo.id}
         >
-          <label className="todo__status-label" id="toggle-input">
+          {/*  eslint-disable jsx-a11y/label-has-associated-control
+           */}
+          <label
+            className="todo__status-label"
+            htmlFor={`toggle-input-${todo.id}`}
+          >
             <input
-              name="toggle-input"
+              id={`toggle-input-${todo.id}`}
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
@@ -117,7 +129,7 @@ export const Main: FC<Props> = ({ mainRef }) => {
               }
             />
           </label>
-
+          {/* eslint-enable jsx-a11y/label-has-associated-control */}
           {tempTodo && tempTodo?.id === todo.id ? (
             <form>
               <input

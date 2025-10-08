@@ -13,7 +13,7 @@ export const Todos = () => {
 
   useEffect(() => {
     setTodosFromLocalHost(todos);
-  }, [todos]);
+  }, [todos, todosFromLocalHost]);
 
   useEffect(() => {
     dispatch({ type: 'addAll', payload: todosFromLocalHost });

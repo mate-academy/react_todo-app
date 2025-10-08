@@ -38,7 +38,7 @@ export const Header: FC<Props> = ({ mainRef }) => {
 
   useEffect(() => {
     mainRef.current?.focus();
-  }, []);
+  }, [mainRef]);
 
   return (
     <header className="todoapp__header">
