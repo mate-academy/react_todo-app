@@ -18,7 +18,9 @@ export const Header: FC<Props> = ({ mainRef }) => {
   const handleSubmitTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (todoTitle.trim() === '') return;
+    if (todoTitle.trim() === '') {
+      return;
+    }
 
     const maxId =
       todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) : 100;

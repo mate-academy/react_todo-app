@@ -58,6 +58,7 @@ function reducer(state: State, action: Action | Filter | null): State {
         };
       case 'updateTodo':
         const isTitle = action.payload.title.trim() === '';
+
         return isTitle
           ? {
               ...state,
@@ -116,6 +117,7 @@ type Props = {
 };
 export const GlobalStateProvader: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>{children}</StateContext.Provider>

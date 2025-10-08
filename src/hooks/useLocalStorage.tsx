@@ -4,6 +4,7 @@ import { Todo } from '../types/todo';
 // Вынесите функцию за пределы хука
 function getLocalStorage(): Todo[] {
   const data = localStorage.getItem('todos');
+
   if (data) {
     try {
       return JSON.parse(data);
@@ -11,6 +12,7 @@ function getLocalStorage(): Todo[] {
       return [];
     }
   }
+
   return [];
 }
 

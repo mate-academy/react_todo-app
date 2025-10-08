@@ -11,7 +11,7 @@ export const Main: FC<Props> = ({ mainRef }) => {
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const editTodoRef = useRef<HTMLInputElement | null>(null);
 
-  const { todos, filteredTodos } = useContext(StateContext);
+  const { filteredTodos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
@@ -20,21 +20,18 @@ export const Main: FC<Props> = ({ mainRef }) => {
     }
   }, [tempTodo]);
 
-  useEffect(() => {
-    if (todos.length === 0) {
-      dispatch(null);
-    }
-  }, [todos]);
-
   const editTempTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!tempTodo) return;
+    if (!tempTodo) {
+      return;
+    }
+
     const newTodo = e.target.value;
 
     setTempTodo({ ...tempTodo, title: newTodo });
   };
 
-  const handleDoubleClick = (tempTodo: Todo) => {
-    setTempTodo(tempTodo);
+  const handleDoubleClick = (atempTodo: Todo) => {
+    setTempTodo(atempTodo);
     editTodoRef.current?.focus();
   };
 
@@ -62,22 +59,12 @@ export const Main: FC<Props> = ({ mainRef }) => {
         type: 'updateTodo',
         payload: {
           ...oldTempTodo,
-          title: newTempTodo.title,
+          title: newTempTodo.title.trim(),
         },
       });
-
-      editTodoRef.current = null;
-      mainRef.current?.focus();
+      setTempTodo(null);
     }
   };
-
-  function updateTitle(newTodo: Todo, oldTodo: Todo) {
-    const isEdit = newTodo.id === oldTodo.id && newTodo.title === oldTodo.title;
-
-    if (isEdit) {
-      return;
-    }
-  }
 
   const handleBlur = (
     event: React.FocusEvent<HTMLInputElement, Element>,
@@ -89,16 +76,23 @@ export const Main: FC<Props> = ({ mainRef }) => {
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
+
       return;
     }
+
     if (updateTodo.title) {
       dispatch({
         type: 'updateTodo',
-        payload: updateTodo,
+        payload: {
+          ...updateTodo,
+          title: updateTodo.title.trim(),
+        },
       });
+
       setTempTodo(null);
       editTodoRef.current = null;
       mainRef.current?.focus();
+
       return;
     }
   };
@@ -111,8 +105,9 @@ export const Main: FC<Props> = ({ mainRef }) => {
           className={classNames('todo', { completed: todo.completed })}
           key={todo.id}
         >
-          <label className="todo__status-label">
+          <label className="todo__status-label" id="toggle-input">
             <input
+              name="toggle-input"
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
