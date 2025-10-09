@@ -1,14 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TodoList } from './TodoList';
-import { Context, Todo } from './Context/Context';
+import { todoContext} from './Context/Context';
 import classNames from 'classnames';
+import { FilterType, Todo } from './Utils/types';
+
+
+
+
+
 
 export const App: React.FC = () => {
   const [title, setTitle] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const { state, dispatch } = useContext(Context);
+  const { state, dispatch } = useContext(todoContext);
 
   const allCompleted =
     state.allTodos.length > 0 &&
@@ -18,7 +24,12 @@ export const App: React.FC = () => {
     todo => todo.completed === false,
   ).length;
 
-  const CompletedCount =
+
+  const handleFilterChange = (sortFilter : FilterType) => {
+    dispatch({ type: 'CHANGE_FILTER', payload: sortFilter })
+  };
+
+  const completedCount =
     state.allTodos.filter(todo => todo.completed).length < 1;
 
   const handleDeleteCompleted = () => {
@@ -113,8 +124,8 @@ export const App: React.FC = () => {
                   selected: state.sortFilter === 'ALL',
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() =>
-                  dispatch({ type: 'CHANGE_FILTER', payload: 'ALL' })
+               onClick={() =>
+                  handleFilterChange(FilterType.All)
                 }
               >
                 All
@@ -127,7 +138,7 @@ export const App: React.FC = () => {
                 })}
                 data-cy="FilterLinkActive"
                 onClick={() =>
-                  dispatch({ type: 'CHANGE_FILTER', payload: 'ACTIVE' })
+                  handleFilterChange(FilterType.Active)
                 }
               >
                 Active
@@ -140,7 +151,7 @@ export const App: React.FC = () => {
                 })}
                 data-cy="FilterLinkCompleted"
                 onClick={() =>
-                  dispatch({ type: 'CHANGE_FILTER', payload: 'COMPLETED' })
+                  handleFilterChange(FilterType.Completed)
                 }
               >
                 Completed
@@ -152,7 +163,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={CompletedCount}
+              disabled={completedCount}
               onClick={handleDeleteCompleted}
             >
               Clear completed

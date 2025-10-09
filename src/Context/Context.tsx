@@ -1,16 +1,13 @@
 import React, { createContext, useReducer } from 'react';
+import { Todo } from '../Utils/types';
 
 interface ContextType {
   state: State;
   dispatch: React.Dispatch<Action>;
 }
-export const Context = createContext<ContextType>({} as ContextType);
+export const todoContext = createContext<ContextType>({} as ContextType);
 
-export type Todo = {
-  completed: boolean;
-  title: string;
-  id: number;
-};
+
 
 type State = {
   allTodos: Todo[];
@@ -182,6 +179,8 @@ export const Provider: React.FC<Propss> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
+    <todoContext.Provider value={{ state, dispatch }}>
+      {children}
+    </todoContext.Provider>
   );
 };

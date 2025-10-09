@@ -5,22 +5,22 @@ import React, {
   useState,
   useRef,
 } from 'react';
-import { Context, Todo } from '../Context/Context';
+import { todoContext } from '../Context/Context';
 import classNames from 'classnames';
+import { Todo } from '../Utils/types';
 
 type Props = {
   inputRef: RefObject<HTMLInputElement>;
 };
 
 export const TodoList: React.FC<Props> = ({ inputRef }) => {
-  const { state, dispatch } = useContext(Context);
+  const { state, dispatch } = useContext(todoContext);
   const [title, setTitle] = useState('');
   const [editedId, setEditedId] = useState<null | number>(null);
   const editedRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = (id: number) => {
-   const todos: Todo[] = JSON.parse(localStorage.getItem('todos') ?? '[]');
-
+    const todos: Todo[] = JSON.parse(localStorage.getItem('todos') ?? '[]');
 
     const deleted = todos.filter(todo => todo.id !== id);
 
@@ -45,10 +45,9 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
   const handleSubmit = (id: number, e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
 
-
-
     if (title.trim().length === 0) {
-      handleDelete(id)
+      handleDelete(id);
+
       return;
     }
 
@@ -56,10 +55,10 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
       todo.id === id ? { ...todo, title: title.trim() } : todo,
     );
 
-    // Сохраняем в localStorage
+
     localStorage.setItem('todos', JSON.stringify(updatedTodos));
 
-    // Обновляем state через dispatch
+
     dispatch({ type: 'SET_TODOS', payload: updatedTodos });
 
     setTitle('');
@@ -74,7 +73,6 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
     }
   }, [editedId]);
 
-
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -82,10 +80,10 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
       }
     };
 
-    // Подписка на событие
+
     window.addEventListener('keydown', handleEscape);
 
-    // Очистка при размонтировании компонента
+
     return () => {
       window.removeEventListener('keydown', handleEscape);
     };
@@ -131,7 +129,7 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           </label>
 
-          {editedId === todo.id  ? (
+          {editedId === todo.id ? (
             <form onSubmit={e => handleSubmit(todo.id, e)}>
               <input
                 ref={editedRef}
@@ -172,68 +170,4 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
   );
 };
 
-/*
 
-
-
-  This todo is an active todo
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-
-           This todo is being edited
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            /* This form is shown instead of the title and remove button
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-          </div>
-
-          /* This todo is in loadind state
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-
-*/
