@@ -12,10 +12,6 @@ export const TodoList: React.FC<Props> = ({ filter }) => {
   const { todos } = useTodosContext();
 
   const filteredTodos = todos.filter((todo: Todo) => {
-    if (todo.isLoading) {
-      return true;
-    }
-
     if (filter === 'active') {
       return !todo.completed;
     }

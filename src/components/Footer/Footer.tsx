@@ -2,7 +2,6 @@ import React from 'react';
 import { Filter } from '../../types/Filter';
 import classNames from 'classnames';
 import { useTodosContext } from '../../contexts/TodosContext';
-import { useDeleteContext } from '../../contexts/DeleteContext';
 
 type Props = {
   filter: Filter;
@@ -10,12 +9,9 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ filter, stateFilter }) => {
-  const { todos } = useTodosContext();
-  const { handleDelete } = useDeleteContext();
+  const { todos, actions } = useTodosContext();
 
-  const todosCounter = todos.filter(
-    todo => !todo.completed && !todo.isLoading,
-  ).length;
+  const todosCounter = todos.filter(todo => !todo.completed).length;
 
   return (
     !!todos.length && (
@@ -64,9 +60,7 @@ export const Footer: React.FC<Props> = ({ filter, stateFilter }) => {
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
           disabled={todos.every(todo => !todo.completed)}
-          onClick={() =>
-            todos.forEach(todo => todo.completed && handleDelete(todo.id))
-          }
+          onClick={actions.clearCompleted}
         >
           Clear completed
         </button>

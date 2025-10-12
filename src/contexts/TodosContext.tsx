@@ -1,29 +1,28 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Todo } from '../types/Todo';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { Client } from '../types/Client';
 
 interface TodosContextType {
   todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  actions: Client<Todo>;
 }
 
-export const TodosContext = React.createContext<TodosContextType>({
-  todos: [],
-  setTodos: () => {},
-});
+export const TodosContext = React.createContext<TodosContextType | null>(null);
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, actions] = useLocalStorage<Todo>('todos', []);
 
   const value = useMemo(
     () => ({
       todos,
-      setTodos,
+      actions,
     }),
-    [todos],
+    [actions, todos],
   );
 
   return (

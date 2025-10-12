@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
-import { useDeleteContext } from '../../contexts/DeleteContext';
-import { useUpdateContext } from '../../contexts/UpdateContext';
+import { useTodosContext } from '../../contexts/TodosContext';
 
 export type Props = {
   todo: Todo;
@@ -14,8 +13,15 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentTitle, setCurrentTitle] = useState('');
 
-  const { handleDelete } = useDeleteContext();
-  const { updateTodo } = useUpdateContext();
+  const { actions } = useTodosContext();
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus();
+    }
+  }, [isEditing]);
 
   function handleEdit(
     event:
@@ -24,22 +30,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   ) {
     event.preventDefault();
     if (!currentTitle.trim()) {
-      handleDelete(todo.id);
+      actions.delete(todo.id);
 
       return;
     }
 
-    if (currentTitle !== todo.title) {
-      updateTodo({
-        ...todo,
-        title: currentTitle.trim(),
-        isLoading: false,
-      })
-        .then(() => setIsEditing(false))
-        .catch(() => {});
-    } else {
-      setIsEditing(false);
-    }
+    actions.update({
+      ...todo,
+      title: currentTitle.trim(),
+    });
+    setIsEditing(false);
   }
 
   return (
@@ -55,10 +55,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="todo__status"
           checked={todo.completed}
           onChange={() => {
-            updateTodo({
+            actions.update({
               ...todo,
               completed: !todo.completed,
-              isLoading: false,
             });
           }}
         />
@@ -80,6 +79,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       {isEditing && (
         <form>
           <input
+            ref={inputRef}
             data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
@@ -95,7 +95,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
                 setIsEditing(false);
               }
             }}
-            autoFocus
           />
         </form>
       )}
@@ -105,21 +104,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="todo__remove"
           data-cy="TodoDelete"
-          onClick={() => handleDelete(todo.id)}
+          onClick={() => actions.delete(todo.id)}
         >
           ×
         </button>
       )}
-
-      <div
-        data-cy="TodoLoader"
-        className={classNames('modal overlay', {
-          'is-active': todo.isLoading,
-        })}
-      >
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
     </div>
   );
 };

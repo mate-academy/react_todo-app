@@ -6,9 +6,12 @@ import './styles/index.scss';
 
 import { App } from './App';
 import { ErrorProvider } from './contexts/ErrorContext';
+import { TodosProvider } from './contexts/TodosContext';
 
 createRoot(document.getElementById('root') as HTMLDivElement).render(
   <ErrorProvider>
-    <App />
+    <TodosProvider>
+      <App />
+    </TodosProvider>
   </ErrorProvider>,
 );

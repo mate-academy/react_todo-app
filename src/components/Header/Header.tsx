@@ -1,81 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-import { USER_ID } from '../../api/todos';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { ErrorMessage } from '../../types/ErrorMessage';
 import { useTodosContext } from '../../contexts/TodosContext';
-import { useAddContext } from '../../contexts/AddContext';
 import { useErrorContext } from '../../contexts/ErrorContext';
-import { useUpdateContext } from '../../contexts/UpdateContext';
-import { useDeleteContext } from '../../contexts/DeleteContext';
+import { getCheckCompleted } from '../../utils/getCheckCompleted';
 
-type Props = {
-  onAddLoader: (value: boolean) => void;
-  isAddLoader: boolean;
-  IsLoadLoader: boolean;
-  inputRef: React.RefObject<HTMLInputElement>;
-};
-
-export const Header: React.FC<Props> = ({
-  onAddLoader,
-  isAddLoader,
-  IsLoadLoader,
-  inputRef,
-}) => {
+export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
 
-  const { todos, setTodos } = useTodosContext();
+  const { todos, actions } = useTodosContext();
   const { setErrorMessage, setIsHiddenErrorMessage } = useErrorContext();
-  const { addTodo } = useAddContext();
-  const { updateTodo } = useUpdateContext();
-  const { beforeDeleteBlur } = useDeleteContext();
 
-  const checkCompleted = todos.every(todo => todo.completed);
-
-  const handleToggleTodos = () => {
-    setTodos((prev: Todo[]) =>
-      prev.map(todo => {
-        if (todo.completed !== !checkCompleted) {
-          const updated = {
-            ...todo,
-            completed: !checkCompleted,
-            isLoading: false,
-          };
-
-          updateTodo(updated);
-
-          return updated;
-        }
-
-        return todo;
-      }),
-    );
-  };
-
-  useEffect(() => {
-    if (!isAddLoader) {
-      inputRef.current?.focus();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAddLoader]);
-
-  useEffect(() => {
-    if (!beforeDeleteBlur) {
-      inputRef.current?.focus();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [beforeDeleteBlur]);
+  const checkCompleted = getCheckCompleted(todos);
 
   return (
     <header className="todoapp__header">
-      {!IsLoadLoader && todos.length !== 0 && (
+      {todos.length !== 0 && (
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {
             active: checkCompleted,
           })}
           data-cy="ToggleAllButton"
-          onClick={handleToggleTodos}
+          onClick={actions.toggle}
         />
       )}
 
@@ -85,17 +32,11 @@ export const Header: React.FC<Props> = ({
           const cleanTitle = title.trim();
 
           if (cleanTitle !== '') {
-            onAddLoader(true);
-            addTodo({
+            actions.add({
               title: cleanTitle,
               completed: false,
-              userId: USER_ID,
-            })
-              .then(() => setTitle(''))
-              .catch(() => {})
-              .finally(() => {
-                onAddLoader(false);
-              });
+            });
+            setTitle('');
           } else {
             setErrorMessage(ErrorMessage.emptyTitleError);
             setIsHiddenErrorMessage(false);
@@ -103,7 +44,6 @@ export const Header: React.FC<Props> = ({
         }}
       >
         <input
-          ref={inputRef}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
@@ -111,7 +51,6 @@ export const Header: React.FC<Props> = ({
           value={title}
           onChange={e => setTitle(e.target.value)}
           autoFocus
-          disabled={isAddLoader}
         />
       </form>
     </header>
