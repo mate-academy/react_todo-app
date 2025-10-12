@@ -1,9 +1,17 @@
 import { createRoot } from 'react-dom/client';
 
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 import './styles/index.scss';
 
 import { App } from './App';
+import { ErrorProvider } from './contexts/ErrorContext';
+import { TodosProvider } from './contexts/TodosContext';
 
-const container = document.getElementById('root') as HTMLDivElement;
-
-createRoot(container).render(<App />);
+createRoot(document.getElementById('root') as HTMLDivElement).render(
+  <ErrorProvider>
+    <TodosProvider>
+      <App />
+    </TodosProvider>
+  </ErrorProvider>,
+);
