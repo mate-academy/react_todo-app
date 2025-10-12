@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Client } from '../types/Client';
@@ -6,6 +6,7 @@ import { Client } from '../types/Client';
 interface TodosContextType {
   todos: Todo[];
   actions: Client<Todo>;
+  headerInputRef: React.RefObject<HTMLInputElement>;
 }
 
 export const TodosContext = React.createContext<TodosContextType | null>(null);
@@ -17,10 +18,13 @@ interface Props {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, actions] = useLocalStorage<Todo>('todos', []);
 
+  const headerInputRef = useRef<HTMLInputElement>(null);
+
   const value = useMemo(
     () => ({
       todos,
       actions,
+      headerInputRef,
     }),
     [actions, todos],
   );

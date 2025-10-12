@@ -8,7 +8,7 @@ import { getCheckCompleted } from '../../utils/getCheckCompleted';
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
 
-  const { todos, actions } = useTodosContext();
+  const { todos, actions, headerInputRef } = useTodosContext();
   const { setErrorMessage, setIsHiddenErrorMessage } = useErrorContext();
 
   const checkCompleted = getCheckCompleted(todos);
@@ -44,6 +44,7 @@ export const Header: React.FC = () => {
         }}
       >
         <input
+          ref={headerInputRef}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"

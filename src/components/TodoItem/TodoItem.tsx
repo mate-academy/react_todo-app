@@ -13,13 +13,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentTitle, setCurrentTitle] = useState('');
 
-  const { actions } = useTodosContext();
+  const { actions, headerInputRef } = useTodosContext();
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const todoItemInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isEditing) {
-      inputRef.current?.focus();
+      todoItemInputRef.current?.focus();
     }
   }, [isEditing]);
 
@@ -79,7 +79,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       {isEditing && (
         <form>
           <input
-            ref={inputRef}
+            ref={todoItemInputRef}
             data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
@@ -104,7 +104,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="button"
           className="todo__remove"
           data-cy="TodoDelete"
-          onClick={() => actions.delete(todo.id)}
+          onClick={() => {
+            actions.delete(todo.id);
+            headerInputRef.current?.focus();
+          }}
         >
           ×
         </button>

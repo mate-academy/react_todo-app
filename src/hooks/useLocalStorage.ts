@@ -10,6 +10,8 @@ export function useLocalStorage<T extends { id: number; completed: boolean }>(
     const data = localStorage.getItem(key);
 
     if (data === null) {
+      localStorage.setItem(key, JSON.stringify(startValue));
+
       return startValue;
     }
 

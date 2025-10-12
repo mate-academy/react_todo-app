@@ -5,11 +5,11 @@ import { useTodosContext } from '../../contexts/TodosContext';
 
 type Props = {
   filter: Filter;
-  stateFilter: (value: Filter) => void;
+  setFilter: (value: Filter) => void;
 };
 
-export const Footer: React.FC<Props> = ({ filter, stateFilter }) => {
-  const { todos, actions } = useTodosContext();
+export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
+  const { todos, actions, headerInputRef } = useTodosContext();
 
   const todosCounter = todos.filter(todo => !todo.completed).length;
 
@@ -27,7 +27,7 @@ export const Footer: React.FC<Props> = ({ filter, stateFilter }) => {
               selected: filter === 'all',
             })}
             data-cy="FilterLinkAll"
-            onClick={() => stateFilter('all')}
+            onClick={() => setFilter('all')}
           >
             All
           </a>
@@ -38,7 +38,7 @@ export const Footer: React.FC<Props> = ({ filter, stateFilter }) => {
               selected: filter === 'active',
             })}
             data-cy="FilterLinkActive"
-            onClick={() => stateFilter('active')}
+            onClick={() => setFilter('active')}
           >
             Active
           </a>
@@ -49,7 +49,7 @@ export const Footer: React.FC<Props> = ({ filter, stateFilter }) => {
               selected: filter === 'completed',
             })}
             data-cy="FilterLinkCompleted"
-            onClick={() => stateFilter('completed')}
+            onClick={() => setFilter('completed')}
           >
             Completed
           </a>
@@ -60,7 +60,10 @@ export const Footer: React.FC<Props> = ({ filter, stateFilter }) => {
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
           disabled={todos.every(todo => !todo.completed)}
-          onClick={actions.clearCompleted}
+          onClick={() => {
+            actions.clearCompleted();
+            headerInputRef.current?.focus();
+          }}
         >
           Clear completed
         </button>

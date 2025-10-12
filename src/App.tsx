@@ -19,7 +19,7 @@ export const App: React.FC = () => {
 
         <Main filter={filter} />
 
-        <Footer filter={filter} stateFilter={setFilter} />
+        <Footer filter={filter} setFilter={setFilter} />
       </div>
       <ErrorNotifications />
     </div>
