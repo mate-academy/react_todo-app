@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { useTodos } from '../context/TodoContext';
 
-type Props = {
-  todo: Todo;
-};
+type Props = { todo: Todo };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { toggle, remove, rename } = useTodos();
@@ -15,7 +13,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [pendingDelete, setPendingDelete] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
   const savingRef = useRef(false);
 
   useEffect(() => {
@@ -83,11 +80,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   return (
-    <div
-      key={todo.id}
-      data-cy="Todo"
-      className={`todo ${todo.completed ? 'completed' : ''}`}
-    >
+    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
       {/* eslint-disable jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input
@@ -148,13 +141,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         </form>
       )}
 
-      <div
-        data-cy="TodoLoader"
-        className={`modal overlay ${pendingDelete || pendingUpdate ? 'is-active' : ''}`}
-      >
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
+      {(pendingDelete || pendingUpdate) && (
+        <div data-cy="TodoLoader" className="modal overlay is-active">
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
+      )}
     </div>
   );
 };
