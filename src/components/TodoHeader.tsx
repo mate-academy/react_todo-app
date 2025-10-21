@@ -21,7 +21,7 @@ export const TodoHeader: React.FC<Props> = ({
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  }, [inputRef]);
 
   return (
     <header className="todoapp__header">
