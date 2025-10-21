@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodosFooter';
 import { ErrorNotification } from './components/ErrorNotification';
 import { useTodos } from './context/TodoContext';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const App: React.FC = () => {
   const { todos, error, clearError, add } = useTodos();
@@ -29,6 +29,10 @@ export const App: React.FC = () => {
       setTimeout(() => inputRef.current?.focus(), 0);
     });
   };
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [todos.length]);
 
   return (
     <div className="todoapp">

@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
-import { addTodo, removeTodo, STORAGE_KEY, updateTodo } from '../api/todos';
+import { removeTodo, STORAGE_KEY, updateTodo } from '../api/todos';
 
 type TodoContextValue = {
   todos: Todo[];
@@ -154,9 +154,6 @@ export function TodoProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        setError(null);
-        setIsAdding(true);
-
         const temp: Todo = {
           id: Date.now(),
           userId: 0,
@@ -166,16 +163,10 @@ export function TodoProvider({ children }: { children: ReactNode }) {
 
         setTempTodo(temp);
 
-        try {
-          const created = await addTodo(trimmed);
+        setTodos(prev => [...prev, temp]);
 
-          setTodos(prev => [...prev, created]);
-        } catch (e) {
-          setError(e instanceof Error ? e.message : 'Failed to add todo');
-        } finally {
-          setIsAdding(false);
-          setTempTodo(null);
-        }
+        setIsAdding(false);
+        setTempTodo(null);
       },
 
       remove: async (id: number) => {
