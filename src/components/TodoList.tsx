@@ -5,7 +5,7 @@ import { useTodos } from '../context/TodoContext';
 type Props = {};
 
 export const TodoList: React.FC<Props> = () => {
-  const { todos, filtered, isAdding, tempTodo } = useTodos();
+  const { filtered, isAdding, tempTodo } = useTodos();
 
   if (filtered.length === 0) {
     return null;
@@ -13,7 +13,7 @@ export const TodoList: React.FC<Props> = () => {
 
   return (
     <>
-      {todos.length > 0 && (
+      {filtered.length > 0 && (
         <section className="todoapp__main" data-cy="TodoList">
           {filtered.map(todo => (
             <TodoItem key={todo.id} todo={todo} />

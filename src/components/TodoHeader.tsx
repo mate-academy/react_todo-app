@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTodos } from '../context/TodoContext';
 
 type Props = {
@@ -14,10 +14,14 @@ export const TodoHeader: React.FC<Props> = ({
   onChangeTitle,
   inputRef,
 }) => {
-  const { todos, loading, toggleAll } = useTodos();
+  const { todos, toggleAll, isAdding } = useTodos();
 
   const hasTodos = todos.length > 0;
   const allCompleted = hasTodos && todos.every(t => t.completed);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <header className="todoapp__header">
@@ -28,7 +32,7 @@ export const TodoHeader: React.FC<Props> = ({
           className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
           data-cy="ToggleAllButton"
           onClick={() => void toggleAll()}
-          disabled={loading}
+          disabled={isAdding}
         />
       )}
 
@@ -41,7 +45,7 @@ export const TodoHeader: React.FC<Props> = ({
           placeholder="What needs to be done?"
           value={title}
           onChange={e => onChangeTitle(e.target.value)}
-          disabled={loading}
+          disabled={isAdding}
           autoFocus
           ref={inputRef}
         />

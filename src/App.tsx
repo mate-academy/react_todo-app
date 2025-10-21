@@ -6,18 +6,12 @@ import { TodoFooter } from './components/TodosFooter';
 import { ErrorNotification } from './components/ErrorNotification';
 import { useTodos } from './context/TodoContext';
 import { useRef, useState } from 'react';
-import { USER_ID } from './api/todos';
-import { UserWarning } from './UserWarning';
 
 export const App: React.FC = () => {
   const { todos, error, clearError, add } = useTodos();
 
   const [title, setTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   const hasTodos = todos.length > 0;
   const onAdd = (e: React.FormEvent) => {

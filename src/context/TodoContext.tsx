@@ -4,18 +4,11 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
-import {
-  addTodo,
-  getTodos,
-  removeTodo,
-  updateTodo,
-  USER_ID,
-} from '../api/todos';
+import { addTodo, removeTodo, STORAGE_KEY, updateTodo } from '../api/todos';
 
 type TodoContextValue = {
   todos: Todo[];
@@ -24,7 +17,6 @@ type TodoContextValue = {
   completedCount: number;
   filter: Filter;
   setFilter: (f: Filter) => void;
-  loading: boolean;
   error: string | null;
   clearError: () => void;
   add: (title: string) => Promise<void>;
@@ -37,7 +29,16 @@ type TodoContextValue = {
   tempTodo: Todo | null;
 };
 
-const STORAGE_KEY = 'todos';
+declare global {
+  interface Window {
+    Cypress?: unknown;
+  }
+}
+
+// const isTestEnv =
+//   (typeof window !== 'undefined' && typeof window.Cypress !== 'undefined') ||
+//   process.env.NODE_ENV === 'test';
+
 const TodoContext = createContext<TodoContextValue | undefined>(undefined);
 
 export function TodoProvider({ children }: { children: ReactNode }) {
@@ -57,45 +58,53 @@ export function TodoProvider({ children }: { children: ReactNode }) {
   });
 
   const [filter, setFilter] = useState<Filter>('all');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const bootstrapped = useRef(false);
   const [isAdding, setIsAdding] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   // #endregion
 
-  // localstorage после каждого изменения
+  // localstorage
+  // useEffect(() => {
+  //   if (isTestEnv) {
+  //     try {
+  //       localStorage.removeItem(STORAGE_KEY);
+  //       setTodos([]);
+  //     } catch (e) {
+  //       // eslint-disable-next-line no-console
+  //       console.warn('Failed to clear localStorage before test:', e);
+  //     }
+  //   } else {
+  //     try {
+  //       const raw = localStorage.getItem(STORAGE_KEY);
+
+  //       if (!raw) {
+  //         return;
+  //       }
+
+  //       const parsed: unknown = JSON.parse(raw);
+
+  //       if (Array.isArray(parsed)) {
+  //         setTodos(parsed as Todo[]);
+  //       }
+  //     } catch (e: unknown) {
+  //       setError(
+  //         e instanceof Error
+  //           ? e.message
+  //           : 'Failed to load todos from localStorage',
+  //       );
+  //     }
+  //   }
+  // }, []);
+
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-    } catch {
-      setError('Failed to save a copy todos');
+    } catch (e: unknown) {
+      setError(
+        e instanceof Error ? e.message : 'Failed to save todos to localStorage',
+      );
     }
   }, [todos]);
-
-  useEffect(() => {
-    if (bootstrapped.current) {
-      return;
-    }
-
-    bootstrapped.current = true;
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    (async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const data = await getTodos();
-
-        setTodos(Array.isArray(data) ? data : []);
-      } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : 'Failed to load todos');
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
 
   const activeTodos = todos.filter(t => !t.completed);
   const activeCount = activeTodos.length;
@@ -135,7 +144,6 @@ export function TodoProvider({ children }: { children: ReactNode }) {
       setFilter: (f: Filter) => {
         setFilter(f);
       },
-      loading,
       error,
       clearError: () => setError(null),
 
@@ -148,22 +156,21 @@ export function TodoProvider({ children }: { children: ReactNode }) {
 
         setError(null);
         setIsAdding(true);
+
         const temp: Todo = {
           id: Date.now(),
-          userId: USER_ID,
+          userId: 0,
           title: trimmed,
           completed: false,
         };
 
         setTempTodo(temp);
-        setTodos(prev => [...prev, temp]);
 
         try {
           const created = await addTodo(trimmed);
 
-          setTodos(prev => prev.map(t => (t.id === temp.id ? created : t)));
+          setTodos(prev => [...prev, created]);
         } catch (e) {
-          setTodos(prev => prev.filter(t => t.id !== temp.id));
           setError(e instanceof Error ? e.message : 'Failed to add todo');
         } finally {
           setIsAdding(false);
@@ -290,7 +297,6 @@ export function TodoProvider({ children }: { children: ReactNode }) {
       filtered,
       activeCount,
       completedCount,
-      loading,
       error,
       filter,
       isAdding,

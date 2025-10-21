@@ -4,7 +4,8 @@ import { useTodos } from '../context/TodoContext';
 type Props = {};
 
 export const TodoFooter: React.FC<Props> = () => {
-  const { activeCount, completedCount, filter, loading, clearCompleted } =
+  // eslint-disable-next-line max-len
+  const { activeCount, completedCount, filter, clearCompleted, isAdding } =
     useTodos();
 
   const completedExist = completedCount > 0;
@@ -48,7 +49,7 @@ export const TodoFooter: React.FC<Props> = () => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         onClick={() => void clearCompleted()}
-        disabled={!completedExist || loading}
+        disabled={!completedExist || isAdding}
       >
         Clear completed
       </button>
