@@ -35,10 +35,6 @@ declare global {
   }
 }
 
-// const isTestEnv =
-//   (typeof window !== 'undefined' && typeof window.Cypress !== 'undefined') ||
-//   process.env.NODE_ENV === 'test';
-
 const TodoContext = createContext<TodoContextValue | undefined>(undefined);
 
 export function TodoProvider({ children }: { children: ReactNode }) {
@@ -62,39 +58,6 @@ export function TodoProvider({ children }: { children: ReactNode }) {
   const [isAdding, setIsAdding] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   // #endregion
-
-  // localstorage
-  // useEffect(() => {
-  //   if (isTestEnv) {
-  //     try {
-  //       localStorage.removeItem(STORAGE_KEY);
-  //       setTodos([]);
-  //     } catch (e) {
-  //       // eslint-disable-next-line no-console
-  //       console.warn('Failed to clear localStorage before test:', e);
-  //     }
-  //   } else {
-  //     try {
-  //       const raw = localStorage.getItem(STORAGE_KEY);
-
-  //       if (!raw) {
-  //         return;
-  //       }
-
-  //       const parsed: unknown = JSON.parse(raw);
-
-  //       if (Array.isArray(parsed)) {
-  //         setTodos(parsed as Todo[]);
-  //       }
-  //     } catch (e: unknown) {
-  //       setError(
-  //         e instanceof Error
-  //           ? e.message
-  //           : 'Failed to load todos from localStorage',
-  //       );
-  //     }
-  //   }
-  // }, []);
 
   useEffect(() => {
     try {

@@ -16,7 +16,6 @@ export const TodoFooter: React.FC<Props> = () => {
         {activeCount} item{activeCount !== 1 ? 's' : ''} left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"

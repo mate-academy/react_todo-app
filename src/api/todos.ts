@@ -22,9 +22,12 @@ function save(list: Todo[]) {
 }
 
 function nextId(list: Todo[]) {
-  const max = list.reduce((m, t) => (t.id > m ? t.id : m), 0);
+  const maxId = list.reduce(
+    (currentMaxId, todo) => (todo.id > currentMaxId ? todo.id : currentMaxId),
+    0,
+  );
 
-  return max > 0 ? max + 1 : 1;
+  return maxId > 0 ? maxId + 1 : 1;
 }
 
 export async function getTodos(): Promise<Todo[]> {

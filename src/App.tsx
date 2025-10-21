@@ -16,15 +16,15 @@ export const App: React.FC = () => {
   const hasTodos = todos.length > 0;
   const onAdd = (e: React.FormEvent) => {
     e.preventDefault();
-    const t = title.trim();
+    const trimmedTitle = title.trim();
 
-    if (!t) {
+    if (!trimmedTitle) {
       clearError();
 
       return;
     }
 
-    void add(t).then(() => {
+    void add(trimmedTitle).then(() => {
       setTitle('');
       setTimeout(() => inputRef.current?.focus(), 0);
     });
