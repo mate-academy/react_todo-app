@@ -1,29 +1,22 @@
 import { FC } from 'react';
 import cn from 'classnames';
+import { useTodoContext } from '../context/TodoContext';
 
-interface Props {
-  errorMessage: string;
-  showError: boolean;
-  setShowError: (shoeError: boolean) => void;
-}
+export const ErrorNotification: FC = () => {
+  const { errorMessage, setErrorMessage } = useTodoContext();
 
-export const ErrorNotification: FC<Props> = ({
-  errorMessage,
-  showError,
-  setShowError,
-}) => {
   return (
     <div
       data-cy="ErrorNotification"
       className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: !showError,
+        hidden: !errorMessage,
       })}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setShowError(false)}
+        onClick={() => setErrorMessage('')}
       />
       {errorMessage}
     </div>

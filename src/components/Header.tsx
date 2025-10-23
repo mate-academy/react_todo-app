@@ -1,31 +1,23 @@
 import { FC } from 'react';
 import cn from 'classnames';
+import { useTodoContext } from '../context/TodoContext';
 
-interface Props {
-  isToggleAllVisible: boolean;
-  inputRef: React.MutableRefObject<HTMLInputElement | null>;
-  inputDisable: boolean;
-  todoTitle: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (event: React.FormEvent) => void;
-  allCompleted: boolean;
-  handleToggleAll: () => void;
-}
+export const Header: FC = () => {
+  const {
+    noTodos,
+    newTodoInput,
+    isAdding,
+    todoTitle,
+    setTodoTitle,
+    handleSubmit,
+    allCompleted,
+    handleToggleAll,
+  } = useTodoContext();
 
-export const Header: FC<Props> = ({
-  isToggleAllVisible,
-  inputRef,
-  inputDisable,
-  todoTitle,
-  handleInputChange,
-  handleSubmit,
-  allCompleted,
-  handleToggleAll,
-}) => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      {isToggleAllVisible && (
+      {!noTodos && (
         <button
           type="button"
           className={cn('todoapp__toggle-all', { active: allCompleted })}
@@ -41,11 +33,11 @@ export const Header: FC<Props> = ({
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          ref={inputRef}
+          ref={newTodoInput}
           name={'title'}
           value={todoTitle}
-          onChange={handleInputChange}
-          disabled={inputDisable}
+          onChange={event => setTodoTitle(event.target.value)}
+          disabled={isAdding}
           autoFocus
         />
       </form>

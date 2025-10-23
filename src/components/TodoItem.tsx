@@ -4,21 +4,14 @@
 import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
-import { PayloadProps } from '../types/PayloadProps';
+import { useTodoContext } from '../context/TodoContext';
 
 interface Props {
   todo: Todo;
-  removeTodo?: (id: number) => void;
-  updateTodo?: (id: number, payload: PayloadProps) => Promise<void>;
-  loadingIds?: number[];
 }
 
-export const TodoItem: FC<Props> = ({
-  todo,
-  removeTodo = () => {},
-  updateTodo = () => {},
-  loadingIds = [],
-}) => {
+export const TodoItem: FC<Props> = ({ todo }) => {
+  const { removeTodo, updateTodo, loadingIds } = useTodoContext();
   const [showForm, setShowForm] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
   const [isSaving, setIsSaving] = useState(false);

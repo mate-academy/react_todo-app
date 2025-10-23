@@ -1,32 +1,32 @@
 import { FC } from 'react';
-import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
-import { PayloadProps } from '../types/PayloadProps';
+import { useTodoContext } from '../context/TodoContext';
+import { Filter } from '../types/Filter';
 
-interface Props {
-  visibleTodos: Todo[];
-  removeTodo: (id: number) => void;
-  updateTodo: (id: number, payload: PayloadProps) => Promise<void>;
-  loadingIds: number[];
-}
+export const TodoList: FC = () => {
+  const { todos, filter, tempTodo } = useTodoContext();
+  const filteredTodos = todos.filter(todo => {
+    if (filter === Filter.ACTIVE) {
+      return !todo.completed;
+    }
 
-export const TodoList: FC<Props> = ({
-  visibleTodos,
-  removeTodo,
-  updateTodo,
-  loadingIds,
-}) => {
+    if (filter === Filter.COMPLETED) {
+      return todo.completed;
+    }
+
+    return true;
+  });
+
+  if (!filteredTodos.length) {
+    return;
+  }
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {visibleTodos.map(todo => (
-        <TodoItem
-          todo={todo}
-          removeTodo={removeTodo}
-          updateTodo={updateTodo}
-          loadingIds={loadingIds}
-          key={todo.id}
-        />
+      {filteredTodos.map(todo => (
+        <TodoItem todo={todo} key={todo.id} />
       ))}
+      {tempTodo && <TodoItem todo={tempTodo} />}
     </section>
   );
 };
