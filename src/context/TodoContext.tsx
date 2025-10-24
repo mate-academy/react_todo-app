@@ -3,6 +3,7 @@ import { Todo } from '../types/Todo';
 import { addTodo, deleteTodo, editTodo, getTodos, USER_ID } from '../api/todos';
 import { PayloadProps } from '../types/PayloadProps';
 import { Filter } from '../types/Filter';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface TodoContextProps {
   todos: Todo[];
@@ -51,7 +52,8 @@ const TodoContext = createContext<TodoContextProps>({
 });
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
+  //const [todos, setTodos] = useState<Todo[]>([]);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [todoTitle, setTodoTitle] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -59,7 +61,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
   const [isAdding, setIsAdding] = useState(false);
 
-  const completedTodos = todos.filter(todo => todo.completed === true);
+  const completedTodos = todos.filter((todo: Todo) => todo.completed === true);
   const countActive = todos.length - completedTodos.length;
   const allCompleted = countActive === 0;
   const newTodoInput = useRef<HTMLInputElement | null>(null);
@@ -77,7 +79,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
-  useEffect(loadTodos, []);
+  useEffect(loadTodos, [setTodos]);
 
   useEffect(() => {
     newTodoInput.current?.focus();
@@ -165,7 +167,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const newTodo = {
-      id: 0,
+      id: +new Date(),
       userId: USER_ID,
       title: trimmedTitle,
       completed: false,
