@@ -4,7 +4,7 @@ import { useTodoContext } from '../context/TodoContext';
 import { Filter } from '../types/Filter';
 
 export const TodoList: FC = () => {
-  const { todos, filter, tempTodo } = useTodoContext();
+  const { todos, filter } = useTodoContext();
   const filteredTodos = todos.filter(todo => {
     if (filter === Filter.ACTIVE) {
       return !todo.completed;
@@ -26,7 +26,6 @@ export const TodoList: FC = () => {
       {filteredTodos.map(todo => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
-      {tempTodo && <TodoItem todo={tempTodo} />}
     </section>
   );
 };

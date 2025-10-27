@@ -6,7 +6,6 @@ export const Header: FC = () => {
   const {
     noTodos,
     newTodoInput,
-    isAdding,
     todoTitle,
     setTodoTitle,
     handleSubmit,
@@ -37,7 +36,6 @@ export const Header: FC = () => {
           name={'title'}
           value={todoTitle}
           onChange={event => setTodoTitle(event.target.value)}
-          disabled={isAdding}
           autoFocus
         />
       </form>

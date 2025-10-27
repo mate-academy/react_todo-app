@@ -4,7 +4,6 @@ import React from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { Header } from './components/Header';
-import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { TodoProvider } from './context/TodoContext';
@@ -24,7 +23,6 @@ export const App: React.FC = () => {
           <TodoList />
           <Footer />
         </div>
-        <ErrorNotification />
       </div>
     </TodoProvider>
   );

@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const TodoItem: FC<Props> = ({ todo }) => {
-  const { removeTodo, updateTodo, loadingIds } = useTodoContext();
+  const { removeTodo, updateTodo } = useTodoContext();
   const [showForm, setShowForm] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
   const [isSaving, setIsSaving] = useState(false);
@@ -114,16 +114,6 @@ export const TodoItem: FC<Props> = ({ todo }) => {
           </button>
         </>
       )}
-
-      <div
-        data-cy="TodoLoader"
-        className={cn('modal overlay', {
-          'is-active': loadingIds.includes(todo.id) || todo.id === 0,
-        })}
-      >
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
     </div>
   );
 };
