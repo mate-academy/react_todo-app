@@ -14,7 +14,19 @@ import { FooterTodos, FilterType } from './components/FooterTodos';
 import { ErrorTodos } from './components/ErrorTodos';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<(Todo & { loading?: boolean })[]>([]);
+  const [todos, setTodos] = useState<(Todo & { loading?: boolean })[]>(() => {
+    const item = localStorage.getItem('todos');
+
+    if (!item) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(item) as Todo & { loading?: boolean };
+    } catch {
+      return [];
+    }
+  });
   const [error, setError] = useState('');
   const [filterSelect, setFilterSelected] = useState<FilterType>(
     FilterType.All,
