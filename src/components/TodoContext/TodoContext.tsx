@@ -24,6 +24,12 @@ export const TodoContext = React.createContext<ContextType>({
 });
 
 export const Provider: React.FC<Props> = ({ children }) => {
+  useEffect(() => {
+    if (!localStorage.getItem('todos')) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    }
+  }, []);
+
   const initialValue = localStorage.getItem('todos')
     ? JSON.parse(localStorage.getItem('todos')).filter(Boolean)
     : [];
@@ -43,14 +49,6 @@ export const Provider: React.FC<Props> = ({ children }) => {
 
     return todo;
   });
-
-  // useEffect(() => {
-  //   if (state.length > 0) {
-  //     localStorage.setItem('todos', JSON.stringify(state));
-  //   } else {
-  //     localStorage.removeItem('todos');
-  //   }
-  // }, [state]);
 
   const value = { state, dispatch, filter, setFilter, filteredTodos };
 

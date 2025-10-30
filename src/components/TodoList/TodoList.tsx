@@ -55,7 +55,7 @@ export const TodoList: React.FC = () => {
                   } else {
                     dispatch({
                       type: 'edit',
-                      payload: { id: todo.id, title: title },
+                      payload: { id: todo.id, title: title?.trim() },
                     });
                     setIsEditingTodoId(null);
                   }
@@ -64,10 +64,29 @@ export const TodoList: React.FC = () => {
                 <input
                   data-cy="TodoTitleField"
                   type="text"
-                  ref={inputRef}
                   className="todo__title-field"
                   placeholder="Empty todo will be deleted"
+                  ref={inputRef}
                   value={title}
+                  onBlur={() => {
+                    if (title === '') {
+                      dispatch({ type: 'delete', payload: { id: todo.id } });
+                    } else {
+                      dispatch({
+                        type: 'edit',
+                        payload: { id: todo.id, title: title?.trim() },
+                      });
+                    }
+
+                    setIsEditingTodoId(null);
+                  }}
+                  onKeyUp={e => {
+                    if (e.key === 'Escape') {
+                      setTitle(todo.title);
+
+                      setIsEditingTodoId(null);
+                    }
+                  }}
                   onChange={e => setTitle(e.target.value)}
                 />
               </form>
