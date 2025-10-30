@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
-import { Provider, TodoContext } from './components/TodoContext/TodoContext';
+import { Provider } from './components/TodoContext/TodoContext';
 
 export const App: React.FC = () => {
   return (
