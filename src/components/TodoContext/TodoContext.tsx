@@ -1,7 +1,9 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { Action } from '../../types/Action';
+
 import { todoReducer } from '../Reducer/todoReducer';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   children: React.ReactNode;
@@ -10,9 +12,9 @@ type Props = {
 type ContextType = {
   state: Todo[];
   dispatch: React.Dispatch<Action>;
-  setFilter: (filter: 'all' | 'active' | 'completed') => void;
+  setFilter: (filter: Filter) => void;
   filteredTodos: Todo[];
-  filter: 'all' | 'active' | 'completed';
+  filter: Filter;
 };
 
 export const TodoContext = React.createContext<ContextType>({
@@ -20,7 +22,7 @@ export const TodoContext = React.createContext<ContextType>({
   dispatch: () => {},
   setFilter: () => {},
   filteredTodos: [],
-  filter: 'all',
+  filter: Filter.all,
 });
 
 export const Provider: React.FC<Props> = ({ children }) => {
@@ -36,7 +38,7 @@ export const Provider: React.FC<Props> = ({ children }) => {
 
   const [state, dispatch] = useReducer(todoReducer, initialValue);
 
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
 
   const filteredTodos = state.filter(todo => {
     if (filter === 'active') {

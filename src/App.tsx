@@ -15,8 +15,6 @@ export const App: React.FC = () => {
         <Provider>
           <Header />
           <TodoList />
-
-          {/* Hide the footer if there are no todos */}
           <Footer />
         </Provider>
       </div>
