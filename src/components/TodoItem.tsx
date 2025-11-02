@@ -34,6 +34,12 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     setIsEditing(false);
   };
 
+  const keyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      cancelEditing();
+    }
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -89,11 +95,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
             value={editedTitle}
             onChange={e => setEditedTitle(e.target.value)}
             onBlur={save}
-            onKeyUp={e => {
-              if (e.key === 'Escape') {
-                cancelEditing();
-              }
-            }}
+            onKeyUp={keyUpHandler}
             autoFocus
           />
         </form>
