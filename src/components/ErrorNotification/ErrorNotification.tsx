@@ -6,10 +6,11 @@ interface ErrorNotificationProps {
 }
 
 export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
-  error,
-  onClose,
-}) => {
-  const isHidden = error === null || error === '';
+                                                                      error,
+                                                                      onClose
+                                                                    }) => {
+  // const isHidden = error === null || error === '';
+  const isHidden = !error;
 
   return (
     <div

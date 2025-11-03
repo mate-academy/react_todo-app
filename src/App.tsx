@@ -21,6 +21,29 @@ export const TodoAppContent: React.FC = () => {
     : () => {
     };
 
+  const getFilteredTodos = () => {
+    switch (context?.filter) {
+      case 'active':
+        return todos.filter((todo) => !todo.completed);
+      case 'completed':
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  };
+
+  const handleRemoveTodo = async (id: number) => {
+    if (context?.removeTodo) {
+      await context.removeTodo(id);
+    }
+  };
+
+  const handleRenameTodo = async (id: number, newTitle: string) => {
+    if (context?.updateTodo) {
+      await context.updateTodo(id, {title: newTitle.trim()});
+    }
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -31,23 +54,10 @@ export const TodoAppContent: React.FC = () => {
           <TodoList
             todos={todos}
             processingIds={context?.processingIds || []}
-            getFilteredTodos={() => {
-              switch (context?.filter) {
-                case 'active':
-                  return todos.filter((todo) => !todo.completed);
-                case 'completed':
-                  return todos.filter((todo) => todo.completed);
-                default:
-                  return todos;
-              }
-            }}
+            getFilteredTodos={getFilteredTodos}
             handleToggleTodo={handleToggleTodo}
-            handleRemoveTodo={context?.removeTodo || (() => {
-            })}
-            handleRenameTodo={(id: number, newTitle: string) =>
-              context?.updateTodo(id, {title: newTitle.trim()}) ||
-              Promise.resolve()
-            }
+            handleRemoveTodo={handleRemoveTodo}
+            handleRenameTodo={handleRenameTodo}
             tempTodo={null}
             isLoading={false}
           />

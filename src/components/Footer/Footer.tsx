@@ -1,5 +1,5 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
+import {Todo} from '../../types/Todo';
 
 interface FooterProps {
   todos: Todo[];
@@ -9,23 +9,31 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({
-  todos,
-  status,
-  setStatus,
-  handleClearCompleted,
-}) => {
+                                                todos,
+                                                status,
+                                                setStatus,
+                                                handleClearCompleted
+                                              }) => {
   const filters: {
     key: 'all' | 'active' | 'completed';
     label: string;
     cy: string;
   }[] = [
-    { key: 'all', label: 'All', cy: 'FilterLinkAll' },
-    { key: 'active', label: 'Active', cy: 'FilterLinkActive' },
-    { key: 'completed', label: 'Completed', cy: 'FilterLinkCompleted' },
+    {key: 'all', label: 'All', cy: 'FilterLinkAll'},
+    {key: 'active', label: 'Active', cy: 'FilterLinkActive'},
+    {key: 'completed', label: 'Completed', cy: 'FilterLinkCompleted'}
   ];
 
   const activeTodosCount = todos.filter((todo) => !todo.completed).length;
   const completedTodosCount = todos.filter((todo) => todo.completed).length;
+
+  const buttonProps = {
+    type: 'button' as const,
+    className: 'todoapp__clear-completed',
+    'data-cy': 'ClearCompletedButton',
+    disabled: completedTodosCount === 0,
+    onClick: handleClearCompleted
+  };
 
   if (todos.length === 0) {
     return null;
@@ -55,11 +63,7 @@ export const Footer: React.FC<FooterProps> = ({
       </nav>
 
       <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-        disabled={completedTodosCount === 0}
-        onClick={handleClearCompleted}
+        {...buttonProps}
       >
         Clear completed
       </button>

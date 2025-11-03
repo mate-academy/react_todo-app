@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Todo } from '../../types/Todo';
+import React, {useEffect, useRef, useState} from 'react';
+import {Todo} from '../../types/Todo';
 
 interface TodoItemProps {
   todo: Todo;
@@ -10,17 +10,19 @@ interface TodoItemProps {
 }
 
 export const TodoItem: React.FC<TodoItemProps> = ({
-  todo,
-  processingIds,
-  handleToggleTodo,
-  handleRemoveTodo,
-  handleRenameTodo,
-}) => {
+                                                    todo,
+                                                    processingIds,
+                                                    handleToggleTodo,
+                                                    handleRemoveTodo,
+                                                    handleRenameTodo
+                                                  }) => {
   const isProcessing = processingIds.includes(todo.id);
 
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
   const editInputRef = useRef<HTMLInputElement | null>(null);
+
+  const itemClassName = `todo ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`;
 
   useEffect(() => {
     if (isEditing) {
@@ -30,7 +32,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         inputRef.focus();
         inputRef.setSelectionRange(
           inputRef.value.length,
-          inputRef.value.length,
+          inputRef.value.length
         );
       }
     }
@@ -57,23 +59,26 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      void handleSave();
-    }
 
-    if (e.key === 'Escape') {
-      setIsEditing(false);
-      setNewTitle(todo.title);
+    switch (e.key) {
+      case 'Enter':
+        e.preventDefault();
+        void handleSave();
+        break;
+
+      case 'Escape':
+        setIsEditing(false);
+        setNewTitle(todo.title);
+        break;
     }
   };
 
   return (
     <div
       data-cy="Todo"
-      className={`todo ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}
+      className={itemClassName}
       key={todo.id}
-      style={{ position: 'relative' }}
+      style={{position: 'relative'}}
     >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label htmlFor={`todo-${todo.id}`} className="todo__status-label">
@@ -127,8 +132,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         data-cy="TodoLoader"
         className={`modal overlay ${isProcessing ? 'is-active' : ''}`}
       >
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
+        <div className="modal-background has-background-white-ter"/>
+        <div className="loader"/>
       </div>
     </div>
   );
