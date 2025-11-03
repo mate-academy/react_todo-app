@@ -1,0 +1,43 @@
+.todo-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-top: 1px solid #eee;
+}
+
+.todo-footer .count {
+  flex: 1;
+  color: var(--muted);
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  border: 1px solid transparent;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  border-color: #f0d6d6;
+}
+
+.clear-btn {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.clear-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

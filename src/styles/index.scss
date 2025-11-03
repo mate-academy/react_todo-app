@@ -1,32 +1,102 @@
-@use "./todoapp";
-@use "./todo";
-@use "./filter";
+@import './TodoApp';
+@import './TodoItem';
+@import './TodoFooter';
 
-iframe {
-  display: none;
+:root {
+  --bg: #fafafa;
+  --card-bg: #fff;
+  --accent: #efc6c6;
+  --muted: #c9c9c9;
+  --text: #222;
+  --shadow: rgba(0, 0, 0, 0.08);
+  --shadow-strong: rgba(0, 0, 0, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
-  min-width: 230px;
-
-  max-width: 550px;
-
-  margin: 0 auto;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: var(--bg);
+  margin: 0;
 }
 
-.notification {
-  transition-property: opacity, min-height;
-
-  transition-duration: 1s;
-
-  min-height: 36px;
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 80px 20px;
 }
 
-.notification.hidden {
-  min-height: 0;
-
-  opacity: 0%;
-
-  pointer-events: none;
+.title {
+  font-size: 128px;
+  margin: 0 0 20px;
+  color: var(--accent);
+  opacity: 0.55;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: none;
 }
 
+.todo-card {
+  width: 620px;
+  border-radius: 4px;
+  background: var(--card-bg);
+  box-shadow: 0 30px 60px var(--shadow), 0 6px 12px var(--shadow-strong);
+  overflow: hidden;
+}
+
+.todo-header .hero-form {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  border-bottom: 1px solid #eee;
+}
+
+.todo-header .inline-form {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.new-todo {
+  flex: 1;
+  font-size: 22px;
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.new-todo::placeholder {
+  color: var(--muted);
+}
+
+.toggle-all input {
+  display: none;
+}
+
+.todo-list {
+  min-height: 60px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.empty {
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+}

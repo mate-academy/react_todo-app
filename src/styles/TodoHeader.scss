@@ -1,0 +1,43 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px solid #ededed;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header .toggle-all {
+  position: absolute;
+  left: 18px;
+  font-size: 28px;
+  color: #e6e6e6;
+  transform: rotate(90deg);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  line-height: 1;
+  font-weight: 100;
+  transition: color 0.2s ease;
+}
+
+.header .toggle-all:hover {
+  color: #737373;
+}
+
+.header .new-todo {
+  flex: 1;
+  font-size: 24px;
+  padding: 16px 16px 16px 60px;
+  border: none;
+  outline: none;
+  color: #4d4d4d;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+}
+
+.header .new-todo::placeholder {
+  color: #e6e6e6;
+  font-style: italic;
+}

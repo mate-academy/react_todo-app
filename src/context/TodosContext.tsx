@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export interface Todo {
   id: number;
@@ -6,87 +6,91 @@ export interface Todo {
   completed: boolean;
 }
 
-interface TodosContextType {
+interface TodosContextProps {
   todos: Todo[];
+  filter: 'all' | 'active' | 'completed';
   addTodo: (title: string) => void;
-  removeTodo: (id: number) => void;
   toggleTodo: (id: number) => void;
-  editTodo: (id: number, title: string) => void;
-  toggleAll: () => void;
+  deleteTodo: (id: number) => void;
   clearCompleted: () => void;
+  toggleAll: () => void;
+  setFilter: (filter: 'all' | 'active' | 'completed') => void;
+  updateTodoTitle: (id: number, title: string) => void;
 }
 
-const TodosContext = createContext<TodosContextType | undefined>(undefined);
+const TodosContext = createContext<TodosContextProps | null>(null);
 
 export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  // Завантаження з localStorage
-  useEffect(() => {
+  const [todos, setTodos] = useState<Todo[]>(() => {
     const saved = localStorage.getItem('todos');
 
-    if (saved) {
-      setTodos(JSON.parse(saved));
-    }
-  }, []);
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const addTodo = (title: string) => {
-    const trimmed = title.trim();
+    const trimmedTitle = title.trim();
 
-    if (!trimmed) {
+    if (!trimmedTitle) {
       return;
     }
 
-    const newTodo: Todo = { id: +new Date(), title: trimmed, completed: false };
+    const newTodo = { id: Date.now(), title: trimmedTitle, completed: false };
 
     setTodos(prev => [...prev, newTodo]);
   };
 
-  const removeTodo = (id: number) =>
-    setTodos(prev => prev.filter(t => t.id !== id));
-  const toggleTodo = (id: number) =>
+  const toggleTodo = (id: number) => {
     setTodos(prev =>
-      prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
+      prev.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
     );
+  };
 
-  const editTodo = (id: number, title: string) => {
-    const trimmed = title.trim();
+  const deleteTodo = (id: number) => {
+    setTodos(prev => prev.filter(todo => todo.id !== id));
+  };
 
-    if (!trimmed) {
-      removeTodo(id);
-
-      return;
-    }
-
-    setTodos(prev =>
-      prev.map(t => (t.id === id ? { ...t, title: trimmed } : t)),
-    );
+  const clearCompleted = () => {
+    setTodos(prev => prev.filter(todo => !todo.completed));
   };
 
   const toggleAll = () => {
-    const allCompleted = todos.every(t => t.completed);
+    const allCompleted = todos.every(todo => todo.completed);
 
-    setTodos(prev => prev.map(t => ({ ...t, completed: !allCompleted })));
+    setTodos(prev => prev.map(todo => ({ ...todo, completed: !allCompleted })));
   };
 
-  const clearCompleted = () => setTodos(prev => prev.filter(t => !t.completed));
+  const updateTodoTitle = (id: number, title: string) => {
+    const trimmedTitle = title.trim();
+
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === id ? { ...todo, title: trimmedTitle } : todo,
+      ),
+    );
+  };
 
   return (
     <TodosContext.Provider
       value={{
         todos,
+        filter,
         addTodo,
-        removeTodo,
         toggleTodo,
-        editTodo,
-        toggleAll,
+        deleteTodo,
         clearCompleted,
+        toggleAll,
+        setFilter,
+        updateTodoTitle,
       }}
     >
       {children}
@@ -94,11 +98,13 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useTodos = () => {
+export const useTodos = (): TodosContextProps => {
   const context = useContext(TodosContext);
 
   if (!context) {
-    throw new Error('useTodos must be used within TodosProvider');
+    throw new Error(
+      'useTodos потрібно використовувати всередині TodosProvider',
+    );
   }
 
   return context;
