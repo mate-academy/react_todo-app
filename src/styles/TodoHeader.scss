@@ -1,0 +1,39 @@
+.todo-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ededed;
+
+  .toggle-all {
+    font-size: 22px;
+    border: none;
+    background: transparent;
+    color: #e6e6e6;
+    cursor: pointer;
+    padding: 0 10px;
+    transform: rotate(90deg);
+
+    &:hover {
+      color: #737373;
+    }
+  }
+
+  .todo-form {
+    flex: 1;
+  }
+
+  .todo-input {
+    width: 100%;
+    font-size: 24px;
+    padding: 16px 16px 16px 60px;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    color: inherit;
+    font-family: inherit;
+
+    &::placeholder {
+      color: #e6e6e6;
+      font-style: italic;
+    }
+  }
+}

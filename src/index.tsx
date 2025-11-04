@@ -1,9 +1,16 @@
-import { createRoot } from 'react-dom/client';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { TodosProvider } from './context/TodosContext';
+import TodoApp from './components/TodoApp';
 
-import './styles/index.scss';
+const rootElement = document.getElementById('root');
 
-import { App } from './App';
-
-const container = document.getElementById('root') as HTMLDivElement;
-
-createRoot(container).render(<App />);
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <TodosProvider>
+        <TodoApp />
+      </TodosProvider>
+    </React.StrictMode>,
+  );
+}
