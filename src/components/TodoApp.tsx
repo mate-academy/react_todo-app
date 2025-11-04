@@ -4,6 +4,10 @@ import TodoHeader from './TodoHeader';
 import TodoList from './TodoList';
 import TodoFooter from './TodoFooter';
 import '../styles/TodoApp.scss';
+import '../styles/TodoItem.scss';
+import '../styles/TodoHeader.scss';
+import '../styles/TodoList.scss';
+import '../styles/TodoFooter.scss';
 
 const TodoApp: React.FC = () => {
   const { todos, filter } = useTodos();

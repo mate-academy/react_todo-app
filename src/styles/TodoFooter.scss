@@ -1,43 +1,49 @@
 .todo-footer {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  border-top: 1px solid #eee;
-}
+  justify-content: space-between;
+  padding: 10px 15px;
+  color: #777;
+  font-size: 14px;
 
-.todo-footer .count {
-  flex: 1;
-  color: var(--muted);
-}
+  .count {
+    flex: 1;
+  }
 
-.filters {
-  display: flex;
-  gap: 8px;
-}
+  .filters {
+    display: flex;
+    gap: 5px;
 
-.filter-btn {
-  border: 1px solid transparent;
-  padding: 6px 10px;
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-}
+    .filter-btn {
+      border: 1px solid transparent;
+      border-radius: 3px;
+      padding: 3px 7px;
+      cursor: pointer;
+      background: none;
 
-.filter-btn.active {
-  border-color: #f0d6d6;
-}
+      &.active {
+        border-color: rgba(175, 47, 47, 0.2);
+      }
 
-.clear-btn {
-  margin-left: auto;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  background: transparent;
-  cursor: pointer;
-}
+      &:hover {
+        border-color: rgba(175, 47, 47, 0.1);
+      }
+    }
+  }
 
-.clear-btn:disabled {
-  opacity: 0.4;
-  cursor: default;
+  .clear-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:disabled {
+      color: #ccc;
+      cursor: default;
+    }
+  }
 }
