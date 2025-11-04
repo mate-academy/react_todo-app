@@ -40,7 +40,6 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
       className={todo.completed ? 'todo-item completed' : 'todo-item'}
       data-cy="TodoItem"
     >
-      {/* Чекбокс для toggle */}
       <input
         type="checkbox"
         checked={todo.completed}

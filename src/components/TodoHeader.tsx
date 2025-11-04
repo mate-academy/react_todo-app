@@ -9,7 +9,7 @@ const TodoHeader: React.FC = () => {
     e.preventDefault();
     if (title.trim() === '') {
       return;
-    } // не додавати порожні завдання
+    }
 
     addTodo(title.trim());
     setTitle('');
@@ -29,8 +29,8 @@ const TodoHeader: React.FC = () => {
           value={title}
           onChange={e => setTitle(e.target.value)}
           className="todo-input"
-          placeholder="Що потрібно зробити?"
-          data-cy="NewTodoField" // ← обов’язково для Cypress тесту
+          placeholder="What needs to be done?"
+          data-cy="NewTodoField"
           autoFocus
         />
       </form>

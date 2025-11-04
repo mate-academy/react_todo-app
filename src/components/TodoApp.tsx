@@ -22,7 +22,7 @@ const TodoApp: React.FC = () => {
 
   return (
     <div className="page">
-      <h1 className="title">Завдання</h1>
+      <h1 className="title">todos</h1>
 
       <div className="todo-card">
         <TodoHeader />
