@@ -8,31 +8,32 @@ import { useState } from 'react';
 type Props = {
   todo: Todo;
 };
+
 export default function TodoItem({ todo }: Props) {
   const dispatch = useDispatch();
   const [isEdit, setEdit] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
 
-  function handleCompletedTodo() {
+  const handleCompletedTodo = () => {
     dispatch({
-      type: 'CHANGE_StATUS_TODO',
+      type: 'CHANGE_STATUS_TODO',
       payload: { id: todo.id },
     });
-  }
+  };
 
-  function handleDeleteTodo() {
+  const handleDeleteTodo = () => {
     dispatch({
       type: 'DELETE_TODO',
       payload: { id: todo.id },
     });
-  }
+  };
 
-  function handleCancelEdit() {
+  const handleCancelEdit = () => {
     setEdit(false);
     setEditTitle(todo.title);
-  }
+  };
 
-  function handleSaveEdit() {
+  const handleSaveEdit = () => {
     setEdit(false);
     if (editTitle.length === 0) {
       handleDeleteTodo();
@@ -48,7 +49,7 @@ export default function TodoItem({ todo }: Props) {
       type: 'EDIT_TITLE_TODO',
       payload: { id: todo.id, title: editTitle.trim() },
     });
-  }
+  };
 
   return (
     <div
@@ -88,24 +89,24 @@ export default function TodoItem({ todo }: Props) {
       )}
 
       {!isEdit && (
-        <span
-          data-cy="TodoTitle"
-          className="todo__title"
-          onDoubleClick={() => setEdit(true)}
-        >
-          {todo.title}
-        </span>
-      )}
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={() => setEdit(true)}
+          >
+            {todo.title}
+          </span>
 
-      {!isEdit && (
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-          onClick={handleDeleteTodo}
-        >
-          ×
-        </button>
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={handleDeleteTodo}
+          >
+            ×
+          </button>
+        </>
       )}
     </div>
   );

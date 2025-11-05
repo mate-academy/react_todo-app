@@ -14,8 +14,8 @@ export type Action =
   | { type: 'ADD_ALL_TODO'; payload: Todo[] }
   | { type: 'ADD_TODO'; payload: { title: string } }
   | { type: 'DELETE_TODO'; payload: { id: number } }
-  | { type: 'CHANGE_StATUS_TODO'; payload: { id: number } }
+  | { type: 'CHANGE_STATUS_TODO'; payload: { id: number } }
   | { type: 'EDIT_TITLE_TODO'; payload: Omit<Todo, 'completed'> }
   | { type: 'SET_FILTER'; payload: StatusFilter }
   | { type: 'DELETE_COMPLETED_TODOS' }
-  | { type: 'TOOGLE_COMPLETE_TODOS' };
+  | { type: 'TOGGLE_COMPLETE_TODOS' };

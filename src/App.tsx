@@ -7,8 +7,7 @@ import { StatusFilter } from './types/Todo';
 import classNames from 'classnames';
 
 export const App: React.FC = () => {
-  const todos = useTodos().todos;
-  const currentFilter = useTodos().filter;
+  const { todos, filter: currentFilter } = useTodos();
   const dispatch = useDispatch();
 
   const notCompletedTodos = todos.filter(todo => !todo.completed).length;

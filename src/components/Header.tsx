@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Header() {
   const [query, setQuery] = useState('');
-  const todos = useTodos().todos;
+  const { todos } = useTodos();
   const dispatch = useDispatch();
 
   const isAllTodosCompleted = todos.every(todo => todo.completed);
@@ -36,7 +36,6 @@ export default function Header() {
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       {todos.length > 0 && (
         <button
           type="button"
@@ -46,13 +45,12 @@ export default function Header() {
           data-cy="ToggleAllButton"
           onClick={() => {
             dispatch({
-              type: 'TOOGLE_COMPLETE_TODOS',
+              type: 'TOGGLE_COMPLETE_TODOS',
             });
           }}
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handleSubmitForm}>
         <input
           data-cy="NewTodoField"

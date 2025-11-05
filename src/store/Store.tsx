@@ -31,7 +31,7 @@ function reducer(state: State, action: Action): State {
         todos: state.todos.filter(todo => todo.id !== action.payload.id),
       };
 
-    case 'CHANGE_StATUS_TODO':
+    case 'CHANGE_STATUS_TODO':
       const newTodos = state.todos.map(todo => {
         if (todo.id !== action.payload.id) {
           return todo;
@@ -69,7 +69,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         todos: state.todos.filter(todo => !todo.completed),
       };
-    case 'TOOGLE_COMPLETE_TODOS':
+    case 'TOGGLE_COMPLETE_TODOS':
       const isAllTodosCompleted = state.todos.every(todo => todo.completed);
 
       return {
