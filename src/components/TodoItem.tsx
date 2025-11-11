@@ -1,13 +1,15 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoContext } from '../contexts/TodoContext';
+import cn from 'classnames';
 
 type Props = {
   todo: Todo;
 };
 
 const TodoItem: React.FC<Props> = ({ todo }) => {
-  const todoCtx = React.useContext(TodoContext);
+  const {  handleDeleteTodo, handleUpdatedTodos, handleTodoToggle } =
+    React.useContext(TodoContext);
   const [editTodoTitle, setEditTodoTitle] = React.useState<string>(todo.title);
   const [isEditing, setIsEditing] = React.useState(false);
 
@@ -25,46 +27,31 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleFormSubmission = () => {
-    if (!editTodoTitle) {
-      todoCtx.handleDeleteTodo(todo.id);
+    const trimedEditTodoTitle = editTodoTitle.trim();
+
+    if (!trimedEditTodoTitle) {
+      handleDeleteTodo(todo.id);
 
       return;
     }
 
-    const trimedEditTodoTitle = editTodoTitle.trim();
-
-    const updatedTodos = todoCtx.todos.map(td => {
-      if (td.id === todo.id) {
-        return { ...td, title: trimedEditTodoTitle };
-      }
-
-      return td;
-    });
-
-    todoCtx.setTodos(updatedTodos);
+    handleUpdatedTodos(todo.id, trimedEditTodoTitle);
     handleIsNotEditingTodo();
   };
-
-  document.addEventListener('keyup', event => {
-    if (event.key === 'Escape') {
-      handleIsNotEditingTodo();
-      setEditTodoTitle(todo.title);
-    }
-  });
 
   return (
     <div
       data-cy="Todo"
       onDoubleClick={handleIsEditingTodo}
-      className={`todo ${todo.completed ? 'completed' : ''}`}
+      className={cn('todo', { completed: todo.completed })}
     >
-     { /* eslint-disable jsx-a11y/label-has-associated-control */}
-      <label className="todo__status-label" htmlFor="todoTitleField">
+      {/* eslint-disable jsx-a11y/label-has-associated-control */}
+      <label className="todo__status-label" htmlFor={todo.id.toString()}>
         <input
           data-cy="TodoStatus"
-          id="todoTitleField"
+          id={todo.id.toString()}
           type="checkbox"
-          onClick={() => todoCtx.handleTodoToggle(todo.id)}
+          onClick={() => handleTodoToggle(todo.id)}
           className="todo__status"
           checked={todo.completed}
         />
@@ -83,6 +70,12 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
             onBlur={handleFormSubmission}
             data-cy="TodoTitleField"
             type="text"
+            onKeyUp={event => {
+              if (event.key === 'Escape') {
+                handleIsNotEditingTodo();
+                setEditTodoTitle(todo.title);
+              }
+            }}
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             onChange={handleEditingTodo}
@@ -99,7 +92,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => todoCtx.handleDeleteTodo(todo.id)}
+            onClick={() => handleDeleteTodo(todo.id)}
           >
             ×
           </button>

@@ -1,31 +1,20 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
-
-type TodoContextType = {
-  todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  todoTitle: string;
-  filterBy: string;
-  setFilterBy: React.Dispatch<React.SetStateAction<string>>;
-  filteredTodos: Todo[];
-  setTodoTitle: React.Dispatch<React.SetStateAction<string>>;
-  handleToggleAll: () => void;
-  handleTodoSubmission: (event: React.FormEvent<HTMLFormElement>) => void;
-  handleTodoToggle: (id: number) => void;
-  handleClearActiveTodos: () => void;
-  handleDeleteTodo: (id: number) => void;
-};
+import { FILTER_TYPE } from '../constants';
+import { FilterType } from '../types/FilterType';
+import { TodoContextType } from '../types/TodoContextType';
 
 export const TodoContext = React.createContext<TodoContextType>({
   todos: [],
   setTodos: () => {},
   todoTitle: '',
-  filterBy: 'all',
+  filterBy: FILTER_TYPE.ALL,
   setFilterBy: () => {},
   filteredTodos: [],
   setTodoTitle: () => {},
-  handleToggleAll: () => {},
-  handleClearActiveTodos: () => {},
+  handleToggleAll: () => { },
+  handleUpdatedTodos: () => {},
+  handleClearCompletedTodos: () => {},
   handleTodoSubmission: () => {},
   handleTodoToggle: () => {},
   handleDeleteTodo: () => {},
@@ -48,7 +37,7 @@ export const TodoContextProvider = ({
 }) => {
   const [todos, setTodos] = React.useState<Todo[]>(initialTodos());
   const [todoTitle, setTodoTitle] = React.useState<string>('');
-  const [filterBy, setFilterBy] = React.useState<string>('all');
+  const [filterBy, setFilterBy] = React.useState<FilterType>(FILTER_TYPE.ALL);
 
   React.useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -56,9 +45,9 @@ export const TodoContextProvider = ({
 
   const filteredTodos = React.useMemo(() => {
     switch (filterBy) {
-      case 'active':
+      case FILTER_TYPE.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'completed':
+      case FILTER_TYPE.COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
@@ -68,7 +57,7 @@ export const TodoContextProvider = ({
   const handleTodoSubmission = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!todoTitle) {
+    if (!todoTitle.trim()) {
       return;
     }
 
@@ -98,12 +87,23 @@ export const TodoContextProvider = ({
     );
   };
 
-  const handleClearActiveTodos = () => {
+  const handleClearCompletedTodos = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
 
   const handleDeleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const handleUpdatedTodos = (id: number, trimedTodoTitle: string) => {
+    const updatedTodos = todos.map(td => {
+      if (td.id === id) {
+        return { ...td, title: trimedTodoTitle };
+      }
+      return td;
+    });
+
+    setTodos(updatedTodos);
   };
 
   const contextValue = {
@@ -115,9 +115,10 @@ export const TodoContextProvider = ({
     todoTitle,
     setTodoTitle,
     handleToggleAll,
+    handleUpdatedTodos,
     handleTodoSubmission,
     handleTodoToggle,
-    handleClearActiveTodos,
+    handleClearCompletedTodos,
     handleDeleteTodo,
   };
 
