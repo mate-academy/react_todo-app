@@ -3,7 +3,7 @@ import TodoItem from './TodoItem';
 import { TodoContext } from '../contexts/TodoContext';
 
 export const TodoList: React.FC = () => {
-  const {filteredTodos} = React.useContext(TodoContext);
+  const { filteredTodos } = React.useContext(TodoContext);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

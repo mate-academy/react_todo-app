@@ -12,7 +12,7 @@ export const TodoContext = React.createContext<TodoContextType>({
   setFilterBy: () => {},
   filteredTodos: [],
   setTodoTitle: () => {},
-  handleToggleAll: () => { },
+  handleToggleAll: () => {},
   handleUpdatedTodos: () => {},
   handleClearCompletedTodos: () => {},
   handleTodoSubmission: () => {},
@@ -80,11 +80,9 @@ export const TodoContextProvider = ({
   };
 
   const handleTodoToggle = (id: number) => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
+    setTodos(prevTodo => {
+      return prevTodo.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
+    });
   };
 
   const handleClearCompletedTodos = () => {
@@ -100,6 +98,7 @@ export const TodoContextProvider = ({
       if (td.id === id) {
         return { ...td, title: trimedTodoTitle };
       }
+
       return td;
     });
 

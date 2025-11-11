@@ -20,7 +20,9 @@ export const Footer: React.FC = () => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={cn('filter__link', { selected: filterBy === FILTER_TYPE.ALL })}
+          className={cn('filter__link', {
+            selected: filterBy === FILTER_TYPE.ALL,
+          })}
           data-cy="FilterLinkAll"
           onClick={() => setFilterBy(FILTER_TYPE.ALL)}
         >
@@ -29,7 +31,9 @@ export const Footer: React.FC = () => {
 
         <a
           href="#/active"
-          className={cn('filter__link', { selected: filterBy === FILTER_TYPE.ACTIVE })}
+          className={cn('filter__link', {
+            selected: filterBy === FILTER_TYPE.ACTIVE,
+          })}
           data-cy="FilterLinkActive"
           onClick={() => {
             setFilterBy(FILTER_TYPE.ACTIVE);
@@ -40,7 +44,9 @@ export const Footer: React.FC = () => {
 
         <a
           href="#/completed"
-          className={cn('filter__link', { selected: filterBy === FILTER_TYPE.COMPLETED })}
+          className={cn('filter__link', {
+            selected: filterBy === FILTER_TYPE.COMPLETED,
+          })}
           data-cy="FilterLinkCompleted"
           onClick={() => setFilterBy(FILTER_TYPE.COMPLETED)}
         >

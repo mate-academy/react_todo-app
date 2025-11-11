@@ -8,7 +8,7 @@ type Props = {
 };
 
 const TodoItem: React.FC<Props> = ({ todo }) => {
-  const {  handleDeleteTodo, handleUpdatedTodos, handleTodoToggle } =
+  const { handleDeleteTodo, handleUpdatedTodos, handleTodoToggle } =
     React.useContext(TodoContext);
   const [editTodoTitle, setEditTodoTitle] = React.useState<string>(todo.title);
   const [isEditing, setIsEditing] = React.useState(false);
