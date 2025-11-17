@@ -47,7 +47,7 @@ function reducer(
       };
 
       return {
-        todos: [newTodo, ...state.todos],
+        todos: [...state.todos, newTodo],
         filter: state.filter,
         editingId: state.editingId,
       };
