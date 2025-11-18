@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTodo } from '../hooks/useTodo';
-import { Link } from '../types/Link';
+import { TypeLink } from '../types/Link';
 import { Todo } from '../types/Todo';
 import cn from 'classnames';
 
-function filterTodos(todos: Todo[], filter: Link): Todo[] {
+function filterTodos(todos: Todo[], filter: TypeLink): Todo[] {
   switch (filter) {
     case 'All':
       return todos;

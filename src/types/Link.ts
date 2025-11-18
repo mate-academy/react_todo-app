@@ -1,1 +1,5 @@
-export type Link = 'All' | 'Active' | 'Completed';
+export enum TypeLink {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}

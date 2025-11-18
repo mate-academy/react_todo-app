@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { Todo } from '../types/Todo';
-import { Link } from '../types/Link';
+import { TypeLink } from '../types/Link';
 
 export interface TodoContextValue {
   todos: Todo[];
-  filter: Link;
+  filter: TypeLink;
   editingId: number | null;
   addTodo: (title: string) => void;
   deleteTodo: (id: number) => void;
@@ -12,14 +12,14 @@ export interface TodoContextValue {
   clearSelectTodo: () => void;
   editTodo: (id: number, newTitle: string) => void;
   selectAllTodos: (completed: boolean) => void;
-  changeFilter: (filter: Link) => void;
+  changeFilter: (filter: TypeLink) => void;
   startEditing: (id: number) => void;
   finishEditing: () => void;
 }
 
 interface State {
   todos: Todo[];
-  filter: Link;
+  filter: TypeLink;
   editingId: number | null;
 }
 
@@ -30,12 +30,12 @@ type Action =
   | { type: 'clearSelectTodo' }
   | { type: 'editTodo'; payload: { id: number; newTitle: string } }
   | { type: 'selectAllTodos'; payload: { completed: boolean } }
-  | { type: 'changeFilter'; payload: { newfilter: Link } }
+  | { type: 'changeFilter'; payload: { newfilter: TypeLink } }
   | { type: 'startEditing'; payload: { id: number } }
   | { type: 'finishEditing' };
 
 function reducer(
-  state: { todos: Todo[]; filter: Link; editingId: number | null },
+  state: { todos: Todo[]; filter: TypeLink; editingId: number | null },
   action: Action,
 ): State {
   switch (action.type) {
@@ -147,7 +147,7 @@ export const TodoContext = React.createContext<TodoContextValue | undefined>(
 
 const initialState: State = {
   todos: getTodosLocalStorage(),
-  filter: 'All',
+  filter: TypeLink.All,
   editingId: null,
 };
 
@@ -179,7 +179,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const selectAllTodos = (completed: boolean) =>
     dispatch({ type: 'selectAllTodos', payload: { completed } });
 
-  const changeFilter = (newfilter: Link) =>
+  const changeFilter = (newfilter: TypeLink) =>
     dispatch({ type: 'changeFilter', payload: { newfilter } });
 
   const startEditing = (id: number) =>
