@@ -3,8 +3,8 @@ import { useTodos } from '../context/TodosProvider';
 import { FilterState } from '../types/FilterState';
 
 export const Footer: React.FC = () => {
-  const { todos, visibleTodos, filter, dispatch } = useTodos();
-  const activeTodos = visibleTodos.filter(todo => !todo.completed);
+  const { todos, filter, dispatch } = useTodos();
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   if (todos.length === 0) {
     return null;
