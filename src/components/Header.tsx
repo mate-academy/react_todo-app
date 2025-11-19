@@ -11,7 +11,7 @@ export const Header: React.FC = () => {
     if (newTodoFormRef.current) {
       newTodoFormRef.current.focus();
     }
-  }, []);
+  }, [newTodoFormRef]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
