@@ -37,18 +37,16 @@ export const Todo: React.FC<Props> = ({ todo }) => {
 
     setLoading(true);
 
-    setTimeout(() => {
-      if (inputText.trim().length === 0) {
-        dispatch({ type: 'DELETE_TODO', payload: id });
-      } else {
-        dispatch({
-          type: 'EDIT_TODO',
-          payload: { id, newTitle: inputText.trim() },
-        });
-      }
+    if (inputText.trim().length === 0) {
+      dispatch({ type: 'DELETE_TODO', payload: id });
+    } else {
+      dispatch({
+        type: 'EDIT_TODO',
+        payload: { id, newTitle: inputText.trim() },
+      });
+    }
 
-      setLoading(false);
-    }, 1000);
+    setLoading(false);
   };
 
   document.addEventListener('keyup', e => {
