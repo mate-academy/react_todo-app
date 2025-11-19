@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
       return;
     }
 
-    dispatch({ type: 'ADD_TODO', payload: newTodoTitle });
+    dispatch({ type: 'ADD_TODO', payload: newTodoTitle.trim() });
     setNewTodoTitle('');
   };
 
