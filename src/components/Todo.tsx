@@ -44,6 +44,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
         type: 'EDIT_TODO',
         payload: { id, newTitle: inputText.trim() },
       });
+      setInputText(inputText.trim());
     }
 
     setLoading(false);
