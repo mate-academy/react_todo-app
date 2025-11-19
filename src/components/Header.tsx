@@ -1,16 +1,15 @@
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTodos } from '../context/TodosProvider';
 
 export const Header: React.FC = () => {
-  const { todos, visibleTodos, dispatch } = useTodos();
+  const { todos, visibleTodos, newTodoFormRef, dispatch } = useTodos();
   const [newTodoTitle, setNewTodoTitle] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
   const isAllTodosCompleted = visibleTodos.every(todo => todo.completed);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if (newTodoFormRef.current) {
+      newTodoFormRef.current.focus();
     }
   }, []);
 
@@ -41,7 +40,7 @@ export const Header: React.FC = () => {
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
         <input
-          ref={inputRef}
+          ref={newTodoFormRef}
           value={newTodoTitle}
           data-cy="NewTodoField"
           type="text"

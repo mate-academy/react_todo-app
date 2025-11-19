@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useReducer,
+  useRef,
 } from 'react';
 import { Todo } from '../types/Todo';
 import { FilterState } from '../types/FilterState';
@@ -12,6 +13,7 @@ interface TodosContextType {
   todos: Todo[];
   visibleTodos: Todo[];
   filter: FilterState;
+  newTodoFormRef: React.RefObject<HTMLInputElement>;
   dispatch: Dispatch<TodosAction>;
 }
 
@@ -124,6 +126,8 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
     todos: initialTodos(),
   });
 
+  const newTodoFormRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     try {
       localStorage.setItem('todos', JSON.stringify(todos));
@@ -146,7 +150,9 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   return (
-    <TodosContext.Provider value={{ todos, visibleTodos, filter, dispatch }}>
+    <TodosContext.Provider
+      value={{ todos, visibleTodos, newTodoFormRef, filter, dispatch }}
+    >
       {children}
     </TodosContext.Provider>
   );

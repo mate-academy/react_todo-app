@@ -9,7 +9,7 @@ type Props = {
 
 export const Todo: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
-  const { dispatch } = useTodos();
+  const { dispatch, newTodoFormRef } = useTodos();
 
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(title);
@@ -95,7 +95,10 @@ export const Todo: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => dispatch({ type: 'DELETE_TODO', payload: id })}
+            onClick={() => (
+              dispatch({ type: 'DELETE_TODO', payload: id }),
+              newTodoFormRef.current?.focus()
+            )}
           >
             ×
           </button>

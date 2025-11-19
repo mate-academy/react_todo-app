@@ -3,8 +3,9 @@ import { useTodos } from '../context/TodosProvider';
 import { FilterState } from '../types/FilterState';
 
 export const Footer: React.FC = () => {
-  const { todos, filter, dispatch } = useTodos();
+  const { todos, filter, newTodoFormRef, dispatch } = useTodos();
   const activeTodos = todos.filter(todo => !todo.completed);
+  const isCompletedTodo = todos.some(todo => todo.completed);
 
   if (todos.length === 0) {
     return null;
@@ -61,10 +62,14 @@ export const Footer: React.FC = () => {
 
       {/* this button should be disabled if there are no completed todos */}
       <button
+        disabled={!isCompletedTodo}
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => dispatch({ type: 'DELETE_COMPLETED_TODOS' })}
+        onClick={() => (
+          dispatch({ type: 'DELETE_COMPLETED_TODOS' }),
+          newTodoFormRef.current?.focus()
+        )}
       >
         Clear completed
       </button>
