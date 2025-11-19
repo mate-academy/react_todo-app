@@ -40,7 +40,7 @@ const reducer = (state: StateType, action: TodosAction) => {
 
       return {
         ...state,
-        todos: [newTodo, ...state.todos],
+        todos: [...state.todos, newTodo],
       };
     }
 
