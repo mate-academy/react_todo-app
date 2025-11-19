@@ -71,6 +71,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           onClick={() => dispatch({ type: 'TOGGLE_TODO', payload: id })}
+          checked={completed}
         />
       </label>
       {isEditing ? (
