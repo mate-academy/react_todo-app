@@ -11,6 +11,11 @@ export const Footer: React.FC = () => {
     return null;
   }
 
+  const handleDeleteCompleted = () => (
+    dispatch({ type: 'DELETE_COMPLETED_TODOS' }),
+    newTodoFormRef.current?.focus()
+  );
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       {/* Hide the footer if there are no todos */}
@@ -66,10 +71,7 @@ export const Footer: React.FC = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => (
-          dispatch({ type: 'DELETE_COMPLETED_TODOS' }),
-          newTodoFormRef.current?.focus()
-        )}
+        onClick={handleDeleteCompleted}
       >
         Clear completed
       </button>

@@ -50,6 +50,11 @@ export const Todo: React.FC<Props> = ({ todo }) => {
     setLoading(false);
   };
 
+  const handleDelete = () => (
+    dispatch({ type: 'DELETE_TODO', payload: id }),
+    newTodoFormRef.current?.focus()
+  );
+
   document.addEventListener('keyup', e => {
     if (e.key === 'Escape') {
       setIsEditing(false);
@@ -96,10 +101,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => (
-              dispatch({ type: 'DELETE_TODO', payload: id }),
-              newTodoFormRef.current?.focus()
-            )}
+            onClick={handleDelete}
           >
             ×
           </button>
