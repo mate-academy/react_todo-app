@@ -47,7 +47,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           {hasTodos && (
             <button
               type="button"
@@ -59,7 +58,6 @@ export const App: React.FC = () => {
             />
           )}
 
-          {/* Add a todo on form submit */}
           <NewTodoForm ref={newTodoFormRef} />
         </header>
 
@@ -83,7 +81,6 @@ export const App: React.FC = () => {
                 {activeTodosCount.length !== 1 ? 's' : ''} left
               </span>
 
-              {/* Active link should have the 'selected' class */}
               <nav className="filter" data-cy="Filter">
                 {FILTER_STATUSES.map(status => (
                   <a
@@ -107,7 +104,6 @@ export const App: React.FC = () => {
                 ))}
               </nav>
 
-              {/* this button should be disabled if there are no completed todos */}
               <button
                 type="button"
                 className="todoapp__clear-completed"
