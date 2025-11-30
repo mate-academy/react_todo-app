@@ -8,7 +8,6 @@ import React, {
   useMemo,
 } from 'react';
 import { Todo } from '../types/Todo';
-// import { createContext } from 'vm';
 import { initialState, saveTodos } from '../utils/storage';
 import { Filter } from '../types/Filter';
 

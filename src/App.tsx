@@ -36,6 +36,11 @@ export const App: React.FC = () => {
     newTodoFormRef.current?.focusInput();
   };
 
+  const handleClearCompleted = () => {
+    dispatch({ type: ActionType.ClearCompleted });
+    focusNewTodoField();
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -108,10 +113,7 @@ export const App: React.FC = () => {
                 className="todoapp__clear-completed"
                 data-cy="ClearCompletedButton"
                 disabled={isClearDisabled}
-                onClick={() => {
-                  dispatch({ type: ActionType.ClearCompleted });
-                  focusNewTodoField();
-                }}
+                onClick={handleClearCompleted}
               >
                 Clear completed
               </button>
