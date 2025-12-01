@@ -95,7 +95,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     const allCompleted = todos.every(t => t.completed);
     const updates = allCompleted
       ? todos.map(t => ({ ...t, completed: false }))
-      : todos.filter(t => !t.completed).map(t => ({ ...t, completed: true }));
+      : todos.map(t => ({ ...t, completed: true }));
 
     setTodos(prev => prev.map(t => updates.find(u => u.id === t.id) || t));
 
