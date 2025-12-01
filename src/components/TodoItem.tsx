@@ -1,11 +1,9 @@
-import cn from 'classnames';
 import { Todo } from '../types/Todo';
 import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   todo: Todo;
   handleCompletedChange: (id: number) => void;
-  loading?: boolean;
   deleteTodo: (id: number) => void;
   renamingTodo: (todo: Todo) => void;
   isSelected: Todo | null;
@@ -18,7 +16,6 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({
   todo,
   handleCompletedChange,
-  loading = false,
   deleteTodo,
   renamingTodo,
   isSelected,
@@ -48,7 +45,6 @@ export const TodoItem: React.FC<Props> = ({
           className="todo__status"
           checked={todo.completed}
           onChange={() => handleCompletedChange(todo.id)}
-          disabled={loading}
         />
       </label>
 
@@ -62,7 +58,6 @@ export const TodoItem: React.FC<Props> = ({
           onKeyDown={e => handleUpdate(e, { ...todo, title: value })}
           onBlur={() => handleUpdate(null, { ...todo, title: value })}
           ref={inputRef}
-          disabled={loading}
         />
       )}
 
@@ -87,19 +82,10 @@ export const TodoItem: React.FC<Props> = ({
           onClick={() => {
             deleteTodo(todo.id);
           }}
-          disabled={loading}
         >
           ×
         </button>
       )}
-
-      <div
-        data-cy="TodoLoader"
-        className={cn('modal overlay', { 'is-active': loading })}
-      >
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
     </div>
   );
 };

@@ -7,37 +7,27 @@ import { TodosContext } from '../todosContext';
 interface Props {
   filter: Filter;
   handleCompletedChange: (id: number) => void;
-  tempTodo: Todo | null;
   deleteTodo: (id: number) => void;
-  deletedIds: number[];
   renamingTodo: (todo: Todo) => void;
   isSelected: Todo | null;
   handleUpdate: (
     e: React.KeyboardEvent<HTMLInputElement> | null,
     todo: Todo,
   ) => void;
-  updatingIds: number[];
 }
 
 export const TodoList: React.FC<Props> = ({
   filter,
   handleCompletedChange,
-  tempTodo,
   deleteTodo,
-  deletedIds,
   renamingTodo,
   isSelected,
   handleUpdate,
-  updatingIds,
 }) => {
   const { todos } = useContext(TodosContext);
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
-      if (updatingIds.includes(todo.id)) {
-        return true;
-      }
-
       switch (filter) {
         case Filter.Active:
           return !todo.completed;
@@ -49,9 +39,9 @@ export const TodoList: React.FC<Props> = ({
           return true;
       }
     });
-  }, [todos, filter, updatingIds]);
+  }, [todos, filter]);
 
-  const todosToShow = tempTodo ? [...visibleTodos, tempTodo] : visibleTodos;
+  const todosToShow = visibleTodos;
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -64,11 +54,6 @@ export const TodoList: React.FC<Props> = ({
           renamingTodo={renamingTodo}
           isSelected={isSelected}
           handleUpdate={handleUpdate}
-          loading={
-            todo.id === 0 ||
-            deletedIds.includes(todo.id) ||
-            updatingIds.includes(todo.id)
-          }
         />
       ))}
     </section>
