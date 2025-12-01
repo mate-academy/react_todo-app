@@ -59,9 +59,9 @@ export const TodoList: React.FC<Props> = ({
         <TodoItem
           key={todo.id || 'temp'}
           todo={todo}
-          handleCompletedChange={tempTodo ? () => {} : handleCompletedChange}
-          deleteTodo={tempTodo ? () => {} : deleteTodo}
-          renamingTodo={tempTodo ? () => {} : renamingTodo}
+          handleCompletedChange={handleCompletedChange}
+          deleteTodo={deleteTodo}
+          renamingTodo={renamingTodo}
           isSelected={isSelected}
           handleUpdate={handleUpdate}
           loading={
