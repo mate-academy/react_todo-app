@@ -1,5 +1,6 @@
 import { Todo } from '../types/Todo';
 import { useEffect, useRef, useState } from 'react';
+import cn from 'classnames';
 
 interface Props {
   todo: Todo;
@@ -14,73 +15,77 @@ interface Props {
 }
 
 export const TodoItem: React.FC<Props> = ({
-  todo,
+  todo: { title, id, completed, userId },
   handleCompletedChange,
   deleteTodo,
   renamingTodo,
   isSelected,
   handleUpdate,
 }) => {
-  const [value, setValue] = useState(todo.title);
+  const [value, setValue] = useState(title);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isSelected?.id === todo.id) {
+    if (isSelected?.id === id) {
       inputRef.current?.focus();
     }
-  }, [isSelected, todo.id]);
+  }, [isSelected, id]);
 
   useEffect(() => {
-    setValue(todo.title);
-  }, [todo.title]);
+    setValue(title);
+  }, [title]);
 
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+    <div data-cy="Todo" className={cn('todo', { completed: completed })}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          onChange={() => handleCompletedChange(todo.id)}
+          checked={completed}
+          onChange={() => handleCompletedChange(id)}
         />
       </label>
 
-      {isSelected?.id === todo.id && (
+      {isSelected?.id === id && (
         <input
           data-cy="TodoTitleField"
           className="todo__title"
           type="text"
           onChange={e => setValue(e.target.value)}
           value={value}
-          onKeyDown={e => handleUpdate(e, { ...todo, title: value })}
-          onBlur={() => handleUpdate(null, { ...todo, title: value })}
+          onKeyDown={e =>
+            handleUpdate(e, { userId, id, completed, title: value })
+          }
+          onBlur={() =>
+            handleUpdate(null, { userId, id, completed, title: value })
+          }
           ref={inputRef}
         />
       )}
 
-      {isSelected?.id !== todo.id && (
+      {isSelected?.id !== id && (
         <span
           data-cy="TodoTitle"
           className="todo__title"
           onDoubleClick={() => {
-            renamingTodo(todo);
+            renamingTodo({ title, id, completed, userId });
           }}
         >
-          {todo.title}
+          {title}
         </span>
       )}
 
       {/* Remove button appears only on hover */}
-      {isSelected?.id !== todo.id && (
+      {isSelected?.id !== id && (
         <button
           type="button"
           className="todo__remove"
           data-cy="TodoDelete"
           onClick={() => {
-            deleteTodo(todo.id);
+            deleteTodo(id);
           }}
         >
           ×
