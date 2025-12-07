@@ -1,9 +1,10 @@
 .todoapp {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 24px;
-  font-weight: 300;
-  color: #4d4d4d;
   margin: 40px 20px;
+  font-weight: 300;
+
+  color: #4d4d4d;
 
   &__content {
     margin-bottom: 20px;
@@ -16,8 +17,8 @@
   &__title {
     font-size: 100px;
     font-weight: 100;
-    text-align: center;
     color: rgba(175, 47, 47, 0.15);
+    text-align: center;
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -30,50 +31,56 @@
   &__toggle-all {
     position: absolute;
 
-    height: 100%;
-    width: 45px;
-
     display: flex;
-    justify-content: center;
-    align-items: center;
 
-    font-size: 24px;
-    color: #e6e6e6;
+    align-items: center;
+    width: 45px;
+    height: 100%;
+
+    justify-content: center;
 
     border: 0;
-    background-color: transparent;
+    font-size: 24px;
     cursor: pointer;
+
+    color: #e6e6e6;
+
+    background-color: transparent;
+
+    &::before {
+      content: "❯";
+      transform: translateY(2px) rotate(90deg);
+      line-height: 0;
+    }
 
     &.active {
       color: #737373;
     }
-
-    &::before {
-      content: '❯';
-      transform: translateY(2px) rotate(90deg);
-      line-height: 0;
-    }
   }
 
   &__new-todo {
+    box-sizing: border-box;
     width: 100%;
     padding: 16px 16px 16px 60px;
 
-    font-size: 24px;
-    line-height: 1.4em;
     font-family: inherit;
+    font-size: 24px;
     font-weight: inherit;
-    color: inherit;
+    line-height: 1.4em;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 
     border: none;
+
+    color: inherit;
+
+    -moz-osx-font-smoothing: grayscale;
+
     background: rgba(0, 0, 0, 0.01);
     box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 
     &::placeholder {
-      font-style: italic;
       font-weight: 300;
+      font-style: italic;
       color: #e6e6e6;
     }
   }
@@ -84,8 +91,8 @@
 
   &__footer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
     box-sizing: content-box;
     height: 20px;
@@ -93,9 +100,10 @@
 
     font-size: 14px;
 
-    color: #777;
-    text-align: center;
     border-top: 1px solid #e6e6e6;
+    color: #777;
+
+    text-align: center;
 
     box-shadow:
       0 1px 1px rgba(0, 0, 0, 0.2),
@@ -113,14 +121,14 @@
     font-family: inherit;
     font-weight: inherit;
     color: inherit;
-    text-decoration: none;
-
     cursor: pointer;
+    text-decoration: none;
+    -webkit-appearance: none;
+    -webkit-font-smoothing: antialiased;
+    appearance: none;
+
     background: none;
 
-    -webkit-appearance: none;
-    appearance: none;
-    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
     &:hover {
