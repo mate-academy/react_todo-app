@@ -1,16 +1,17 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Todo } from '../types/todo';
+import { FILTERS, FilterType } from '../constants';
 
 export type TodoContextType = {
   todos: Todo[];
-  filter: 'All' | 'Active' | 'Completed';
+  filter: FilterType;
   addTodo: (title: string) => void;
   deleteTodo: (id: number) => void;
   toggleTodo: (id: number) => void;
   updateTodo: (id: number, title: string) => void;
   clearCompleted: () => void;
   toggleAll: (completed: boolean) => void;
-  setFilter: (newFilter: TodoContextType['filter']) => void;
+  setFilter: (newFilter: FilterType) => void;
 };
 
 export const TodoContext = createContext<TodoContextType | null>(null);
@@ -19,17 +20,33 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<'All' | 'Active' | 'Completed'>('All');
-  const generateId = () => +new Date();
+  const [filter, setFilter] = useState<FilterType>(FILTERS.all);
+  const [nextId, setNextId] = useState(1);
+
+  useEffect(() => {
+    const data = localStorage.getItem('todos');
+
+    if (data) {
+      const initialTodos: Todo[] = JSON.parse(data);
+
+      setTodos(initialTodos);
+      if (initialTodos.length > 0) {
+        const maxId = Math.max(...initialTodos.map(t => t.id));
+
+        setNextId(maxId + 1);
+      }
+    }
+  }, []);
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
-      id: generateId(),
-      title: title,
+      id: nextId,
+      title,
       completed: false,
     };
 
     setTodos([...todos, newTodo]);
+    setNextId(prevId => prevId + 1);
   };
 
   const deleteTodo = (idToDelete: number) => {
@@ -94,16 +111,6 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     updateTodo,
     setFilter,
   };
-
-  useEffect(() => {
-    const data = localStorage.getItem('todos');
-
-    if (data) {
-      const initialTodos = JSON.parse(data);
-
-      setTodos(initialTodos);
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));

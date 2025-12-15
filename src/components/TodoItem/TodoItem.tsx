@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/todo';
 
 interface Props {
@@ -39,11 +40,13 @@ export const TodoItem: React.FC<Props> = ({
     setIsEditing(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSave(newTitle);
     }
+  };
 
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
       setIsEditing(false);
       setNewTitle(todo.title);
@@ -58,9 +61,10 @@ export const TodoItem: React.FC<Props> = ({
   return (
     <div
       data-cy="Todo"
-      className={`todo ${todo.completed ? 'completed' : ''} ${
-        isEditing ? 'editing' : ''
-      }`}
+      className={classNames('todo', {
+        completed: todo.completed,
+        editing: isEditing,
+      })}
     >
       <label className="todo__status-label" htmlFor={checkboxId}>
         <input
@@ -82,7 +86,8 @@ export const TodoItem: React.FC<Props> = ({
           value={newTitle}
           onChange={e => setNewTitle(e.target.value)}
           onBlur={() => handleSave(newTitle)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleInputKeyPress}
+          onKeyUp={handleKeyUp}
           ref={inputRef}
         />
       ) : (
