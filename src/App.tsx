@@ -5,10 +5,15 @@ import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { RefsContext } from './contexts/RefsContext';
 import { TodosContext } from './contexts/TodosContext';
+import { SelectedTodosContext } from './contexts/SelectedTodosContext';
+import { TodosFiltersContext } from './contexts/TodosFilters';
+import { TodosFilters } from './types/TodosFilters';
 
 export const App: React.FC = () => {
   const { newTodoRef, selectedTodoRef } = React.useContext(RefsContext);
   const { todos } = React.useContext(TodosContext);
+  const { todosFilter } = React.useContext(TodosFiltersContext);
+  const { setSelectedTodos } = React.useContext(SelectedTodosContext);
 
   useEffect(() => {
     if (selectedTodoRef && selectedTodoRef.current) {
@@ -17,6 +22,19 @@ export const App: React.FC = () => {
       newTodoRef.current.focus();
     }
   }, [selectedTodoRef, newTodoRef]);
+
+  useEffect(() => {
+    switch (todosFilter) {
+      case TodosFilters.Active:
+        setSelectedTodos(todos.filter(todo => !todo.completed));
+        break;
+      case TodosFilters.Completed:
+        setSelectedTodos(todos.filter(todo => todo.completed));
+        break;
+      default:
+        setSelectedTodos(todos);
+    }
+  }, [todosFilter, todos]);
 
   return (
     <div className="todoapp">

@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SelectedTodosContext } from '../../contexts/SelectedTodosContext';
 import { TodosContext } from '../../contexts/TodosContext';
 import classNames from 'classnames';
 import { TodosFilters } from '../../types/TodosFilters';
+import { TodosFiltersContext } from '../../contexts/TodosFilters';
 
 export const TodoFooter: React.FC = () => {
-  const { setSelectedTodos } = useContext(SelectedTodosContext);
   const { todos, setTodos } = useContext(TodosContext);
-  const [todosFilter, setTodosFilter] = useState<TodosFilters>(
-    TodosFilters.All,
-  );
+  const { todosFilter, setTodosFilter } = useContext(TodosFiltersContext);
   const [isCompletedExist, setIsCompletedExist] = useState(
     todos.some(todo => todo.completed),
   );
@@ -17,37 +14,21 @@ export const TodoFooter: React.FC = () => {
     todos.filter(todo => !todo.completed).length,
   );
 
-  useEffect(() => {
-    setIsCompletedExist(todos.some(todo => todo.completed));
-    setTodosCount(todos.filter(todo => !todo.completed).length);
-  }, [todos]);
-
-  useEffect(() => {
-    switch (todosFilter) {
-      case TodosFilters.Active:
-        setSelectedTodos(todos.filter(todo => !todo.completed));
-        setTodosFilter(TodosFilters.Active);
-        break;
-      case TodosFilters.Completed:
-        setSelectedTodos(todos.filter(todo => todo.completed));
-        setTodosFilter(TodosFilters.Completed);
-        break;
-      default:
-        setSelectedTodos(todos);
-        setTodosFilter(TodosFilters.All);
-    }
-  }, [todosFilter, todos]);
-
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed));
-  };
-
   const setFilter = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     filter: TodosFilters,
   ) => {
     event.preventDefault();
     setTodosFilter(filter);
+  };
+
+  useEffect(() => {
+    setIsCompletedExist(todos.some(todo => todo.completed));
+    setTodosCount(todos.filter(todo => !todo.completed).length);
+  }, [todos]);
+
+  const clearCompleted = () => {
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   return (
