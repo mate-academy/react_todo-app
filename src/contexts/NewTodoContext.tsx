@@ -1,8 +1,13 @@
 import React, { useMemo, useState } from 'react';
 
-export const NewTodoContext = React.createContext({
-  newTodo: '' as string,
-  setNewTodo: (newTodo: string) => {},
+interface NewTodoContextType {
+  newTodo: string;
+  setNewTodo: (newTodo: string) => void;
+}
+
+export const NewTodoContext = React.createContext<NewTodoContextType>({
+  newTodo: '',
+  setNewTodo: () => {},
 });
 
 type Props = {
@@ -10,7 +15,7 @@ type Props = {
 };
 
 export const NewTodoProvider: React.FC<Props> = ({ children }) => {
-  const [newTodo, setNewTodo] = useState<string>('');
+  const [newTodo, setNewTodo] = useState('');
 
   const value = useMemo(
     () => ({

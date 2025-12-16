@@ -1,10 +1,17 @@
 import React, { useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 
-export const SelectedTodoContext = React.createContext({
-  selectedTodo: null as Todo | null,
-  setSelectedTodo: (selectedTodo: Todo | null) => {},
-});
+interface SelectedTodoContextType {
+  selectedTodo: Todo | null;
+  setSelectedTodo: (selectedTodo: Todo | null) => void;
+}
+
+export const SelectedTodoContext = React.createContext<SelectedTodoContextType>(
+  {
+    selectedTodo: null,
+    setSelectedTodo: () => {},
+  },
+);
 
 type Props = {
   children: React.ReactNode;

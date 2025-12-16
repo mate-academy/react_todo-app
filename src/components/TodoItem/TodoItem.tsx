@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext } from 'react';
 import { Todo } from '../../types/Todo';
@@ -13,8 +14,7 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const selectedTodo = useContext(SelectedTodoContext).selectedTodo;
   const setSelectedTodo = useContext(SelectedTodoContext).setSelectedTodo;
-  const todos = useContext(TodosContext).todos;
-  const setTodos = useContext(TodosContext).setTodos;
+  const { todos, setTodos } = useContext(TodosContext);
   const selectedTodoRef = React.useContext(RefsContext).selectedTodoRef;
 
   const handleChoose = (

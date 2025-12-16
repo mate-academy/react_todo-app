@@ -2,9 +2,13 @@ import React, { useMemo } from 'react';
 import { Todo } from '../types/Todo';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
-export const TodosContext = React.createContext({
-  todos: [] as Todo[],
-  setTodos: (todos: Todo[]) => {},
+export interface TodosContextType {
+  todos: Todo[];
+  setTodos: (todos: Todo[]) => void;
+}
+export const TodosContext = React.createContext<TodosContextType>({
+  todos: [],
+  setTodos: () => {},
 });
 
 type Props = {
