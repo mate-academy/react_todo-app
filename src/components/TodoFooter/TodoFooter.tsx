@@ -3,10 +3,12 @@ import { TodosContext } from '../../contexts/TodosContext';
 import classNames from 'classnames';
 import { TodosFilters } from '../../types/TodosFilters';
 import { TodosFiltersContext } from '../../contexts/TodosFilters';
+import { FocusContext } from '../../contexts/FocusContext';
 
 export const TodoFooter: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
   const { todosFilter, setTodosFilter } = useContext(TodosFiltersContext);
+  const { handleFocus } = React.useContext(FocusContext);
   const [isCompletedExist, setIsCompletedExist] = useState(
     todos.some(todo => todo.completed),
   );
@@ -29,6 +31,7 @@ export const TodoFooter: React.FC = () => {
 
   const clearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
+    handleFocus();
   };
 
   return (

@@ -4,15 +4,15 @@ import classNames from 'classnames';
 import { NewTodoContext } from '../../contexts/NewTodoContext';
 import { Todo } from '../../types/Todo';
 import { RefsContext } from '../../contexts/RefsContext';
+import { FocusContext } from '../../contexts/FocusContext';
 
 export const TodoHeader: React.FC = () => {
-  const todos = useContext(TodosContext).todos;
-  const setTodos = useContext(TodosContext).setTodos;
-  const newTodo = useContext(NewTodoContext).newTodo;
-  const setNewTodo = useContext(NewTodoContext).setNewTodo;
+  const { todos, setTodos } = useContext(TodosContext);
+  const { newTodo, setNewTodo } = useContext(NewTodoContext);
+  const { newTodoRef } = React.useContext(RefsContext);
+  const { handleFocus } = React.useContext(FocusContext);
   const todosExist = todos.length > 0;
   const allCompleted = todosExist && todos.every(todo => todo.completed);
-  const newTodoRef = React.useContext(RefsContext).newTodoRef;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,6 +29,10 @@ export const TodoHeader: React.FC = () => {
 
     setTodos([newTodoItem, ...todos]);
     setNewTodo('');
+
+    if (newTodoRef && newTodoRef.current) {
+      newTodoRef.current?.focus();
+    }
   };
 
   const handleToggleAll = () => {
@@ -37,6 +41,8 @@ export const TodoHeader: React.FC = () => {
     } else {
       setTodos(todos.map(todo => ({ ...todo, completed: true })));
     }
+
+    handleFocus();
   };
 
   return (

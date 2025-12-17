@@ -3,25 +3,25 @@ import React, { useEffect } from 'react';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
-import { RefsContext } from './contexts/RefsContext';
 import { TodosContext } from './contexts/TodosContext';
 import { SelectedTodosContext } from './contexts/SelectedTodosContext';
 import { TodosFiltersContext } from './contexts/TodosFilters';
 import { TodosFilters } from './types/TodosFilters';
+import { SelectedTodoContext } from './contexts/SelectedTodoContext';
+import { FocusContext } from './contexts/FocusContext';
 
 export const App: React.FC = () => {
-  const { newTodoRef, selectedTodoRef } = React.useContext(RefsContext);
+  const { handleFocus } = React.useContext(FocusContext);
   const { todos } = React.useContext(TodosContext);
   const { todosFilter } = React.useContext(TodosFiltersContext);
   const { setSelectedTodos } = React.useContext(SelectedTodosContext);
+  const { selectedTodo } = React.useContext(SelectedTodoContext);
 
   useEffect(() => {
-    if (selectedTodoRef && selectedTodoRef.current) {
-      selectedTodoRef.current.focus();
-    } else if (newTodoRef && newTodoRef.current) {
-      newTodoRef.current.focus();
-    }
-  }, [selectedTodoRef, newTodoRef]);
+    setTimeout(() => {
+      handleFocus();
+    }, 0);
+  }, [selectedTodo]);
 
   useEffect(() => {
     switch (todosFilter) {
@@ -34,6 +34,8 @@ export const App: React.FC = () => {
       default:
         setSelectedTodos(todos);
     }
+
+    handleFocus();
   }, [todosFilter, todos]);
 
   return (

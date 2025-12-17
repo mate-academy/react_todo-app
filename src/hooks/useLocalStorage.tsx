@@ -8,6 +8,8 @@ export function useLocalStorage<T>(
     const data = localStorage.getItem(key);
 
     if (data === null) {
+      localStorage.setItem(key, JSON.stringify(initialValue));
+
       return initialValue;
     }
 

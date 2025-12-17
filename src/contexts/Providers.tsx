@@ -5,6 +5,7 @@ import { SelectedTodoProvider } from './SelectedTodoContext';
 import { TodosProvider } from './TodosContext';
 import { SelectedTodosProvider } from './SelectedTodosContext';
 import { TodosFiltersProvider } from './TodosFilters';
+import { FocusProvider } from './FocusContext';
 
 type Props = {
   children: React.ReactNode;
@@ -17,7 +18,9 @@ export const Providers: React.FC<Props> = ({ children }) => {
         <SelectedTodosProvider>
           <NewTodoProvider>
             <RefsProvider>
-              <SelectedTodoProvider>{children}</SelectedTodoProvider>
+              <SelectedTodoProvider>
+                <FocusProvider>{children}</FocusProvider>
+              </SelectedTodoProvider>
             </RefsProvider>
           </NewTodoProvider>
         </SelectedTodosProvider>

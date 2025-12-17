@@ -6,16 +6,17 @@ import classNames from 'classnames';
 import { SelectedTodoContext } from '../../contexts/SelectedTodoContext';
 import { TodosContext } from '../../contexts/TodosContext';
 import { RefsContext } from '../../contexts/RefsContext';
+import { FocusContext } from '../../contexts/FocusContext';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const selectedTodo = useContext(SelectedTodoContext).selectedTodo;
-  const setSelectedTodo = useContext(SelectedTodoContext).setSelectedTodo;
+  const { selectedTodo, setSelectedTodo } = useContext(SelectedTodoContext);
   const { todos, setTodos } = useContext(TodosContext);
-  const selectedTodoRef = React.useContext(RefsContext).selectedTodoRef;
+  const { selectedTodoRef } = React.useContext(RefsContext);
+  const { handleFocus } = React.useContext(FocusContext);
 
   const handleChoose = (
     event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
@@ -51,6 +52,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     setTodos(
       todos.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
     );
+    handleFocus();
+  };
+
+  const handleTodoDelete = (id: number) => {
+    setTodos(todos.filter(t => t.id !== id));
+    handleFocus();
   };
 
   return (
@@ -66,7 +73,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          defaultChecked={todo.completed}
+          checked={todo.completed}
           onClick={() => updateTodoStatus(todo.id)}
         />
       </label>
@@ -102,7 +109,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => setTodos(todos.filter(t => t.id !== todo.id))}
+            onClick={() => handleTodoDelete(todo.id)}
           >
             ×
           </button>
