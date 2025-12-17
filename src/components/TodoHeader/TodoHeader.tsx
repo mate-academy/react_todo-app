@@ -27,7 +27,7 @@ export const TodoHeader: React.FC = () => {
       completed: false,
     };
 
-    setTodos([newTodoItem, ...todos]);
+    setTodos([...todos, newTodoItem]);
     setNewTodo('');
   };
 

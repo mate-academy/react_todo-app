@@ -80,6 +80,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       {selectedTodo?.id === todo.id ? (
         <form
           onSubmit={event => handleChange(event)}
+          onKeyDown={event => event.key === 'Escape' && setSelectedTodo(null)}
           onBlur={event => handleChange(event)}
         >
           <input
