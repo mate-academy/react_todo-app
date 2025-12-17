@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodosContext } from './contexts/TodosContext';
 import { SelectedTodosContext } from './contexts/SelectedTodosContext';
-import { TodosFiltersContext } from './contexts/TodosFilters';
+import { TodosFiltersContext } from './contexts/TodosFiltersContext';
 import { TodosFilters } from './types/TodosFilters';
 import { SelectedTodoContext } from './contexts/SelectedTodoContext';
 import { FocusContext } from './contexts/FocusContext';

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { TodosContext } from '../../contexts/TodosContext';
 import classNames from 'classnames';
 import { TodosFilters } from '../../types/TodosFilters';
-import { TodosFiltersContext } from '../../contexts/TodosFilters';
+import { TodosFiltersContext } from '../../contexts/TodosFiltersContext';
 import { FocusContext } from '../../contexts/FocusContext';
 
 export const TodoFooter: React.FC = () => {

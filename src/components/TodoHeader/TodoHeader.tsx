@@ -22,17 +22,13 @@ export const TodoHeader: React.FC = () => {
     }
 
     const newTodoItem: Todo = {
-      id: (Math.max(...todos.map(todo => todo.id)) + 1) | 1,
+      id: todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) + 1 : 1,
       title: newTodo.trim(),
       completed: false,
     };
 
     setTodos([newTodoItem, ...todos]);
     setNewTodo('');
-
-    if (newTodoRef && newTodoRef.current) {
-      newTodoRef.current?.focus();
-    }
   };
 
   const handleToggleAll = () => {

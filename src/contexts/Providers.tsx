@@ -4,7 +4,7 @@ import { RefsProvider } from './RefsContext';
 import { SelectedTodoProvider } from './SelectedTodoContext';
 import { TodosProvider } from './TodosContext';
 import { SelectedTodosProvider } from './SelectedTodosContext';
-import { TodosFiltersProvider } from './TodosFilters';
+import { TodosFiltersProvider } from './TodosFiltersContext';
 import { FocusProvider } from './FocusContext';
 
 type Props = {
