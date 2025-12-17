@@ -69,6 +69,7 @@ export const TodoHeader: React.FC = () => {
           placeholder="What needs to be done?"
           value={newTodo}
           onChange={event => setNewTodo(event.target.value)}
+          onBlur={handleFocus}
         />
       </form>
     </header>
