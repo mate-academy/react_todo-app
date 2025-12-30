@@ -59,13 +59,9 @@ interface Params {
 }
 
 export const useTodosHandlers = ({ id, title }: Params) => {
-  const {
-    toggleTodo,
-    deleteTodo,
-    updateTodo,
-    setEditingId,
-    editingId,
-  } = useTodos();
+  // eslint-disable-next-line max-len
+  const { toggleTodo, deleteTodo, updateTodo, setEditingId, editingId } =
+    useTodos();
 
   const handleToggle = useCallback(() => {
     toggleTodo(id);
