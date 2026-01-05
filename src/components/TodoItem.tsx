@@ -27,8 +27,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       data-cy="Todo"
       className={`todo ${todo.completed ? 'completed' : ''} ${isLoading ? 'loading' : ''}`}
     >
-      <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
-        <span className="visually-hidden">Toggle todo status</span>
+      <label
+        className="todo__status-label"
+        htmlFor={`todo-status-{todo.id}`}
+        aria-label="Toggle todo status"
+      >
         <input
           id={`todo-status-${todo.id}`}
           data-cy="TodoStatus"

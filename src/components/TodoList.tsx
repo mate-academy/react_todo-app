@@ -3,7 +3,7 @@ import { useTodos } from '../context/ TodosContext';
 import { TodoItem } from '../components/TodoItem';
 
 export const TodoList: React.FC = () => {
-  const { todos, filter } = useTodos();
+  const { todos, filter, toggleAll } = useTodos();
 
   const visibleTodos = todos.filter(todo => {
     switch (filter) {
@@ -20,8 +20,18 @@ export const TodoList: React.FC = () => {
     return null;
   }
 
+  const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
+      <button
+        data-cy="ToggleAllButton"
+        className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+        onClick={toggleAll}
+      >
+        {allCompleted ? 'Uncheck all' : 'Check all'}
+      </button>
+
       {visibleTodos.map(todo => (
         <TodoItem key={todo.id} todo={todo} />
       ))}

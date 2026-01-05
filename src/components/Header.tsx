@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTodos } from '../context/ TodosContext';
 
 export const Header: React.FC = () => {
   const { todos, addTodo } = useTodos();
   const [title, setTitle] = useState('');
 
-  if (todos.length > 0) {
-    return null;
-  }
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus on mount AND whenever todos change (add/delete/edit)
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [todos]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +22,7 @@ export const Header: React.FC = () => {
     <header className="todoapp__header">
       <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
