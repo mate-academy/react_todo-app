@@ -11,7 +11,7 @@ export const addTodoHandler = (todos: Todo[], title: string): Todo[] => {
 
 export const toggleTodoHandler = (todos: Todo[], id: TodoId): Todo[] =>
   todos.map(todo =>
-    todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    todo.id === id ? { ...todo, completed: !todo.completed } : todo,
   );
 
 export const deleteTodoHandler = (todos: Todo[], id: TodoId): Todo[] =>

@@ -21,12 +21,10 @@ export const TodoList: React.FC = () => {
   });
 
   return (
-    <section className="todoapp__main">
-      <ul className="todoapp__list" data-cy="TodoList">
-        {visibleTodos.map(todo => (
-          <TodoItem key={todo.id} todo={todo} />
-        ))}
-      </ul>
+    <section className="todoapp__main" data-cy="TodoList">
+      {visibleTodos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
     </section>
   );
 };
