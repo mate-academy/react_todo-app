@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/ Todo';
-import { useTodos } from '../context/ TodosContext';
-import { useTodosHandlers } from '../handlers/todosHandlers';
+import { useTodos } from '../context/TodosContext';
+import { useTodosHandlers } from '../hooks/useTodosHandlers';
 
 interface Props {
   todo: Todo;
@@ -13,14 +13,23 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const {
     isEditing,
+    currentTitle,
     handleToggle,
     handleDelete,
     handleStartEdit,
     handleSubmitEdit,
     handleCancelEdit,
-  } = useTodosHandlers({ id: todo.id, title: todo.title });
+  } = useTodosHandlers({ id: todo.id });
 
   const [editValue, setEditValue] = useState(todo.title);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      setEditValue(currentTitle);
+      inputRef.current?.focus();
+    }
+  }, [isEditing, currentTitle]);
 
   return (
     <div
@@ -29,7 +38,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     >
       <label
         className="todo__status-label"
-        htmlFor={`todo-status-{todo.id}`}
+        htmlFor={`todo-status-${todo.id}`}
         aria-label="Toggle todo status"
       >
         <input
@@ -43,7 +52,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {!isEditing && (
+      {!isEditing ? (
         <>
           <span
             data-cy="TodoTitle"
@@ -63,9 +72,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             ×
           </button>
         </>
-      )}
-
-      {isEditing && (
+      ) : (
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -73,6 +80,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           }}
         >
           <input
+            ref={inputRef}
             data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
@@ -82,10 +90,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             onKeyUp={e => {
               if (e.key === 'Escape') {
                 handleCancelEdit();
-                setEditValue(todo.title);
+                setEditValue(currentTitle);
               }
             }}
-            autoFocus
           />
         </form>
       )}

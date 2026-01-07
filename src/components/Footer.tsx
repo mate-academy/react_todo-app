@@ -1,5 +1,6 @@
+// components/Footer/Footer.tsx
 import React from 'react';
-import { useTodos } from '../context/ TodosContext';
+import { useTodos } from '../context/TodosContext';
 
 export const Footer: React.FC = () => {
   const { todos, clearCompleted, filter, setFilter } = useTodos();

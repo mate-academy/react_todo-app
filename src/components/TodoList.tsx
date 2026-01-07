@@ -1,9 +1,13 @@
 import React from 'react';
-import { useTodos } from '../context/ TodosContext';
+import { useTodos } from '../context/TodosContext';
 import { TodoItem } from '../components/TodoItem';
 
 export const TodoList: React.FC = () => {
-  const { todos, filter, toggleAll } = useTodos();
+  const { todos, filter } = useTodos();
+
+  if (todos.length === 0) {
+    return null;
+  }
 
   const visibleTodos = todos.filter(todo => {
     switch (filter) {
@@ -16,25 +20,13 @@ export const TodoList: React.FC = () => {
     }
   });
 
-  if (visibleTodos.length === 0 && todos.length === 0) {
-    return null;
-  }
-
-  const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
-
   return (
-    <section className="todoapp__main" data-cy="TodoList">
-      <button
-        data-cy="ToggleAllButton"
-        className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
-        onClick={toggleAll}
-      >
-        {allCompleted ? 'Uncheck all' : 'Check all'}
-      </button>
-
-      {visibleTodos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} />
-      ))}
+    <section className="todoapp__main">
+      <ul className="todoapp__list" data-cy="TodoList">
+        {visibleTodos.map(todo => (
+          <TodoItem key={todo.id} todo={todo} />
+        ))}
+      </ul>
     </section>
   );
 };
