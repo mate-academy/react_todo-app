@@ -1,9 +1,64 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+type Todo = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
+
+const STORAGE_KEY = 'todos';
+
+const loadTodos = (): Todo[] => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+
+    if (!raw) {
+      return [];
+    }
+
+    const parsed = JSON.parse(raw) as Todo[];
+
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>(() => loadTodos());
+  const [newTitle, setNewTitle] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
+
+  const handleNewTodoKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key !== 'Enter') {
+      return;
+    }
+
+    event.preventDefault();
+    const trimmedTitle = newTitle.trim();
+
+    if (!trimmedTitle) {
+      return;
+    }
+
+    const newTodo: Todo = {
+      id: +new Date(),
+      title: trimmedTitle,
+      completed: false,
+    };
+
+    setTodos(prevTodos => [...prevTodos, newTodo]);
+    setNewTitle('');
+  };
   /* eslint-disable jsx-a11y/label-has-associated-control */
   /* eslint-disable jsx-a11y/control-has-associated-label */
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -24,6 +79,9 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={newTitle}
+              onChange={event => setNewTitle(event.target.value)}
+              onKeyDown={handleNewTodoKeyDown}
             />
           </form>
         </header>
@@ -51,24 +109,35 @@ export const App: React.FC = () => {
           </div>
           */}
 
-          {/* This todo is an active todo */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+          {todos.map(todo => (
+            <div
+              key={todo.id}
+              data-cy="Todo"
+              className={todo.completed ? 'todo completed' : 'todo'}
+            >
+              <label className="todo__status-label">
+                <input
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                  checked={todo.completed}
+                  readOnly
+                />
+              </label>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
+              <span data-cy="TodoTitle" className="todo__title">
+                {todo.title}
+              </span>
 
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDelete"
+              >
+                ×
+              </button>
+            </div>
+          ))}
 
           {/* This todo is being edited */}
           {/*
@@ -116,47 +185,49 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
+        {todos.length > 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {todos.filter(todo => !todo.completed).length} items left
+            </span>
 
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
+            {/* Active link should have the 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className="filter__link selected"
+                data-cy="FilterLinkAll"
+              >
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className="filter__link"
+                data-cy="FilterLinkActive"
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className="filter__link"
+                data-cy="FilterLinkCompleted"
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* this button should be disabled if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
             >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
     </div>
   );
