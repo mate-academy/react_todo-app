@@ -71,6 +71,16 @@ export const App: React.FC = () => {
     addTodo(trimmedTitle);
     setNewTitle('');
   };
+
+  const handleRemoveTodo = (id: number) => {
+    removeTodo(id);
+    newTodoFieldRef.current?.focus();
+  };
+
+  const handleClearCompleted = () => {
+    clearCompleted();
+    newTodoFieldRef.current?.focus();
+  };
   /* eslint-disable jsx-a11y/label-has-associated-control */
   /* eslint-disable jsx-a11y/control-has-associated-label */
 
@@ -80,15 +90,16 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className={classNames('todoapp__toggle-all', {
-              active: allTodosCompleted,
-            })}
-            data-cy="ToggleAllButton"
-            onClick={() => toggleAll(!allTodosCompleted)}
-          />
+          {todos.length > 0 && (
+            <button
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                active: allTodosCompleted,
+              })}
+              data-cy="ToggleAllButton"
+              onClick={() => toggleAll(!allTodosCompleted)}
+            />
+          )}
 
           {/* Add a todo on form submit */}
           <form>
@@ -106,28 +117,6 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {/* This is a completed todo */}
-          {/*
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-          */}
-
           {visibleTodos.map(todo => (
             <div
               key={todo.id}
@@ -152,7 +141,7 @@ export const App: React.FC = () => {
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
-                onClick={() => removeTodo(todo.id)}
+                onClick={() => handleRemoveTodo(todo.id)}
               >
                 ×
               </button>
@@ -211,7 +200,6 @@ export const App: React.FC = () => {
               {todos.filter(todo => !todo.completed).length} items left
             </span>
 
-            {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
@@ -250,7 +238,7 @@ export const App: React.FC = () => {
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
               disabled={!hasCompletedTodos}
-              onClick={clearCompleted}
+              onClick={handleClearCompleted}
             >
               Clear completed
             </button>
