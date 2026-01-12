@@ -1,37 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
-
-const STORAGE_KEY = 'todos';
-
-const loadTodos = (): Todo[] => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-
-    if (!raw) {
-      return [];
-    }
-
-    const parsed = JSON.parse(raw) as Todo[];
-
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-};
+import { useTodos } from './TodoContext';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>(() => loadTodos());
+  const { todos, addTodo, removeTodo, clearCompleted } = useTodos();
   const [newTitle, setNewTitle] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-  }, [todos]);
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   const handleNewTodoKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -47,13 +22,7 @@ export const App: React.FC = () => {
       return;
     }
 
-    const newTodo: Todo = {
-      id: +new Date(),
-      title: trimmedTitle,
-      completed: false,
-    };
-
-    setTodos(prevTodos => [...prevTodos, newTodo]);
+    addTodo(trimmedTitle);
     setNewTitle('');
   };
   /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -133,6 +102,7 @@ export const App: React.FC = () => {
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
+                onClick={() => removeTodo(todo.id)}
               >
                 ×
               </button>
@@ -223,6 +193,8 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
+              disabled={!hasCompletedTodos}
+              onClick={clearCompleted}
             >
               Clear completed
             </button>
