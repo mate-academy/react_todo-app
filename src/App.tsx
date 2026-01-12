@@ -4,9 +4,12 @@ import React, { useState } from 'react';
 import { useTodos } from './TodoContext';
 
 export const App: React.FC = () => {
-  const { todos, addTodo, removeTodo, clearCompleted } = useTodos();
+  const { todos, addTodo, toggleTodo, removeTodo, clearCompleted, toggleAll } =
+    useTodos();
   const [newTitle, setNewTitle] = useState('');
   const hasCompletedTodos = todos.some(todo => todo.completed);
+  const allTodosCompleted =
+    todos.length > 0 && todos.every(todo => todo.completed);
 
   const handleNewTodoKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -37,8 +40,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className="todoapp__toggle-all active"
+            className={`todoapp__toggle-all${allTodosCompleted ? ' active' : ''}`}
             data-cy="ToggleAllButton"
+            onClick={() => toggleAll(!allTodosCompleted)}
           />
 
           {/* Add a todo on form submit */}
@@ -90,7 +94,7 @@ export const App: React.FC = () => {
                   type="checkbox"
                   className="todo__status"
                   checked={todo.completed}
-                  readOnly
+                  onChange={() => toggleTodo(todo.id)}
                 />
               </label>
 
