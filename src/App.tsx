@@ -2,6 +2,8 @@
 import React from 'react';
 
 export const App: React.FC = () => {
+  /* eslint-disable jsx-a11y/label-has-associated-control */
+  /* eslint-disable jsx-a11y/control-has-associated-label */
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -28,6 +30,7 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main" data-cy="TodoList">
           {/* This is a completed todo */}
+          {/*
           <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
               <input
@@ -42,11 +45,11 @@ export const App: React.FC = () => {
               Completed Todo
             </span>
 
-            {/* Remove button appears only on hover */}
             <button type="button" className="todo__remove" data-cy="TodoDelete">
               ×
             </button>
           </div>
+          */}
 
           {/* This todo is an active todo */}
           <div data-cy="Todo" className="todo">
@@ -68,6 +71,7 @@ export const App: React.FC = () => {
           </div>
 
           {/* This todo is being edited */}
+          {/*
           <div data-cy="Todo" className="todo">
             <label className="todo__status-label">
               <input
@@ -77,7 +81,6 @@ export const App: React.FC = () => {
               />
             </label>
 
-            {/* This form is shown instead of the title and remove button */}
             <form>
               <input
                 data-cy="TodoTitleField"
@@ -88,8 +91,10 @@ export const App: React.FC = () => {
               />
             </form>
           </div>
+          */}
 
           {/* This todo is in loadind state */}
+          {/*
           <div data-cy="Todo" className="todo">
             <label className="todo__status-label">
               <input
@@ -107,6 +112,7 @@ export const App: React.FC = () => {
               ×
             </button>
           </div>
+          */}
         </section>
 
         {/* Hide the footer if there are no todos */}
