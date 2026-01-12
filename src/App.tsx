@@ -1,15 +1,58 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import classNames from 'classnames';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTodos } from './TodoContext';
+import { Filter } from './types/filter';
+
+const getFilterFromHash = (hash: string): Filter => {
+  switch (hash) {
+    case '#/active':
+      return 'active';
+    case '#/completed':
+      return 'completed';
+    default:
+      return 'all';
+  }
+};
 
 export const App: React.FC = () => {
   const { todos, addTodo, toggleTodo, removeTodo, clearCompleted, toggleAll } =
     useTodos();
   const [newTitle, setNewTitle] = useState('');
+  const newTodoFieldRef = useRef<HTMLInputElement>(null);
+  const [filter, setFilter] = useState<Filter>(() =>
+    getFilterFromHash(window.location.hash),
+  );
   const hasCompletedTodos = todos.some(todo => todo.completed);
   const allTodosCompleted =
     todos.length > 0 && todos.every(todo => todo.completed);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setFilter(getFilterFromHash(window.location.hash));
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange();
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  useEffect(() => {
+    newTodoFieldRef.current?.focus();
+  }, []);
+
+  const visibleTodos = useMemo(() => {
+    switch (filter) {
+      case 'active':
+        return todos.filter(todo => !todo.completed);
+      case 'completed':
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [filter, todos]);
 
   const handleNewTodoKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -40,7 +83,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className={`todoapp__toggle-all${allTodosCompleted ? ' active' : ''}`}
+            className={classNames('todoapp__toggle-all', {
+              active: allTodosCompleted,
+            })}
             data-cy="ToggleAllButton"
             onClick={() => toggleAll(!allTodosCompleted)}
           />
@@ -52,6 +97,7 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              ref={newTodoFieldRef}
               value={newTitle}
               onChange={event => setNewTitle(event.target.value)}
               onKeyDown={handleNewTodoKeyDown}
@@ -82,11 +128,11 @@ export const App: React.FC = () => {
           </div>
           */}
 
-          {todos.map(todo => (
+          {visibleTodos.map(todo => (
             <div
               key={todo.id}
               data-cy="Todo"
-              className={todo.completed ? 'todo completed' : 'todo'}
+              className={classNames('todo', { completed: todo.completed })}
             >
               <label className="todo__status-label">
                 <input
@@ -169,7 +215,9 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={classNames('filter__link', {
+                  selected: filter === 'all',
+                })}
                 data-cy="FilterLinkAll"
               >
                 All
@@ -177,7 +225,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className="filter__link"
+                className={classNames('filter__link', {
+                  selected: filter === 'active',
+                })}
                 data-cy="FilterLinkActive"
               >
                 Active
@@ -185,7 +235,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className="filter__link"
+                className={classNames('filter__link', {
+                  selected: filter === 'completed',
+                })}
                 data-cy="FilterLinkCompleted"
               >
                 Completed

@@ -61,9 +61,11 @@ const todosReducer = (state: Todo[], action: TodoAction): Todo[] => {
   }
 };
 
-export const TodoProvider: React.FC<React.PropsWithChildren> = ({
-  children,
-}) => {
+type TodoProviderProps = {
+  children: React.ReactNode;
+};
+
+export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [todos, dispatch] = useReducer(todosReducer, undefined, loadTodos);
 
   useEffect(() => {
