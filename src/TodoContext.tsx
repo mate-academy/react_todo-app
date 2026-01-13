@@ -6,7 +6,7 @@ import React, {
   useReducer,
 } from 'react';
 
-import { Todo, TodoAction, TodoContextValue } from './types/todo';
+import { ActionType, Todo, TodoAction, TodoContextValue } from './types/todo';
 
 const STORAGE_KEY = 'todos';
 
@@ -30,7 +30,7 @@ const loadTodos = (): Todo[] => {
 
 const todosReducer = (state: Todo[], action: TodoAction): Todo[] => {
   switch (action.type) {
-    case 'add': {
+    case ActionType.ADD: {
       const trimmedTitle = action.title.trim();
 
       if (!trimmedTitle) {
@@ -46,11 +46,11 @@ const todosReducer = (state: Todo[], action: TodoAction): Todo[] => {
       return [...state, newTodo];
     }
 
-    case 'toggle':
+    case ActionType.TOGGLE:
       return state.map(todo =>
         todo.id === action.id ? { ...todo, completed: !todo.completed } : todo,
       );
-    case 'update': {
+    case ActionType.UPDATE: {
       const trimmedTitle = action.title.trim();
 
       if (!trimmedTitle) {
@@ -62,11 +62,11 @@ const todosReducer = (state: Todo[], action: TodoAction): Todo[] => {
       );
     }
 
-    case 'remove':
+    case ActionType.REMOVE:
       return state.filter(todo => todo.id !== action.id);
-    case 'clearCompleted':
+    case ActionType.CLEAR_COMPLETED:
       return state.filter(todo => !todo.completed);
-    case 'toggleAll':
+    case ActionType.TOGGLE_ALL:
       return state.map(todo => ({ ...todo, completed: action.completed }));
     default:
       return state;
@@ -87,14 +87,14 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const value = useMemo(
     () => ({
       todos,
-      addTodo: (title: string) => dispatch({ type: 'add', title }),
-      toggleTodo: (id: number) => dispatch({ type: 'toggle', id }),
+      addTodo: (title: string) => dispatch({ type: ActionType.ADD, title }),
+      toggleTodo: (id: number) => dispatch({ type: ActionType.TOGGLE, id }),
       updateTodo: (id: number, title: string) =>
-        dispatch({ type: 'update', id, title }),
-      removeTodo: (id: number) => dispatch({ type: 'remove', id }),
-      clearCompleted: () => dispatch({ type: 'clearCompleted' }),
+        dispatch({ type: ActionType.UPDATE, id, title }),
+      removeTodo: (id: number) => dispatch({ type: ActionType.REMOVE, id }),
+      clearCompleted: () => dispatch({ type: ActionType.CLEAR_COMPLETED }),
       toggleAll: (completed: boolean) =>
-        dispatch({ type: 'toggleAll', completed }),
+        dispatch({ type: ActionType.TOGGLE_ALL, completed }),
     }),
     [todos],
   );

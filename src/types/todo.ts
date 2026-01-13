@@ -4,6 +4,21 @@ export type Todo = {
   completed: boolean;
 };
 
+export enum ActionType {
+  ADD = 'add',
+  TOGGLE = 'toggle',
+  UPDATE = 'update',
+  REMOVE = 'remove',
+  CLEAR_COMPLETED = 'clearCompleted',
+  TOGGLE_ALL = 'toggleAll',
+}
+
+export enum Filter {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export type TodoContextValue = {
   todos: Todo[];
   addTodo: (title: string) => void;
@@ -15,9 +30,9 @@ export type TodoContextValue = {
 };
 
 export type TodoAction =
-  | { type: 'add'; title: string }
-  | { type: 'toggle'; id: number }
-  | { type: 'update'; id: number; title: string }
-  | { type: 'remove'; id: number }
-  | { type: 'clearCompleted' }
-  | { type: 'toggleAll'; completed: boolean };
+  | { type: ActionType.ADD; title: string }
+  | { type: ActionType.TOGGLE; id: number }
+  | { type: ActionType.UPDATE; id: number; title: string }
+  | { type: ActionType.REMOVE; id: number }
+  | { type: ActionType.CLEAR_COMPLETED }
+  | { type: ActionType.TOGGLE_ALL; completed: boolean };

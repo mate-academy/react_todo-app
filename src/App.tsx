@@ -3,16 +3,16 @@ import classNames from 'classnames';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTodos } from './TodoContext';
-import { Filter } from './types/filter';
+import { Filter } from './types/todo';
 
 const getFilterFromHash = (hash: string): Filter => {
   switch (hash) {
     case '#/active':
-      return 'active';
+      return Filter.ACTIVE;
     case '#/completed':
-      return 'completed';
+      return Filter.COMPLETED;
     default:
-      return 'all';
+      return Filter.ALL;
   }
 };
 
@@ -55,9 +55,9 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     switch (filter) {
-      case 'active':
+      case Filter.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'completed':
+      case Filter.COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
@@ -113,6 +113,28 @@ export const App: React.FC = () => {
     clearCompleted();
     newTodoFieldRef.current?.focus();
   };
+
+  const handleToggleAll = () => {
+    toggleAll(!allTodosCompleted);
+  };
+
+  const handleEditBlur = (todoId: number) => {
+    if (ignoreBlurSave) {
+      setIgnoreBlurSave(false);
+
+      return;
+    }
+
+    handleSaveEditing(todoId);
+  };
+
+  const handleEditKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setIgnoreBlurSave(true);
+      handleCancelEditing();
+    }
+  };
+
   /* eslint-disable jsx-a11y/label-has-associated-control */
   /* eslint-disable jsx-a11y/control-has-associated-label */
 
@@ -129,7 +151,7 @@ export const App: React.FC = () => {
                 active: allTodosCompleted,
               })}
               data-cy="ToggleAllButton"
-              onClick={() => toggleAll(!allTodosCompleted)}
+              onClick={handleToggleAll}
             />
           )}
 
@@ -195,23 +217,8 @@ export const App: React.FC = () => {
                       value={editingTitle}
                       autoFocus
                       onChange={event => setEditingTitle(event.target.value)}
-                      onBlur={() => {
-                        if (ignoreBlurSave) {
-                          setIgnoreBlurSave(false);
-
-                          return;
-                        }
-
-                        handleSaveEditing(todo.id);
-                      }}
-                      onKeyUp={event => {
-                        if (event.key !== 'Escape') {
-                          return;
-                        }
-
-                        setIgnoreBlurSave(true);
-                        handleCancelEditing();
-                      }}
+                      onBlur={() => handleEditBlur(todo.id)}
+                      onKeyUp={handleEditKeyUp}
                     />
                   </form>
                 )}
@@ -242,7 +249,7 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: filter === 'all',
+                  selected: filter === Filter.ALL,
                 })}
                 data-cy="FilterLinkAll"
               >
@@ -252,7 +259,7 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: filter === 'active',
+                  selected: filter === Filter.ACTIVE,
                 })}
                 data-cy="FilterLinkActive"
               >
@@ -262,7 +269,7 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: filter === 'completed',
+                  selected: filter === Filter.COMPLETED,
                 })}
                 data-cy="FilterLinkCompleted"
               >
