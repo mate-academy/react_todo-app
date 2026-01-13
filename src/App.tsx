@@ -17,10 +17,20 @@ const getFilterFromHash = (hash: string): Filter => {
 };
 
 export const App: React.FC = () => {
-  const { todos, addTodo, toggleTodo, removeTodo, clearCompleted, toggleAll } =
-    useTodos();
+  const {
+    todos,
+    addTodo,
+    toggleTodo,
+    updateTodo,
+    removeTodo,
+    clearCompleted,
+    toggleAll,
+  } = useTodos();
   const [newTitle, setNewTitle] = useState('');
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+  const [editingTitle, setEditingTitle] = useState('');
   const newTodoFieldRef = useRef<HTMLInputElement>(null);
+  const [ignoreBlurSave, setIgnoreBlurSave] = useState(false);
   const [filter, setFilter] = useState<Filter>(() =>
     getFilterFromHash(window.location.hash),
   );
@@ -77,6 +87,28 @@ export const App: React.FC = () => {
     newTodoFieldRef.current?.focus();
   };
 
+  const handleStartEditing = (id: number, title: string) => {
+    setEditingTodoId(id);
+    setEditingTitle(title);
+  };
+
+  const handleCancelEditing = () => {
+    setEditingTodoId(null);
+    setEditingTitle('');
+  };
+
+  const handleSaveEditing = (id: number) => {
+    const trimmedTitle = editingTitle.trim();
+
+    if (!trimmedTitle) {
+      removeTodo(id);
+    } else {
+      updateTodo(id, trimmedTitle);
+    }
+
+    handleCancelEditing();
+  };
+
   const handleClearCompleted = () => {
     clearCompleted();
     newTodoFieldRef.current?.focus();
@@ -117,80 +149,86 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {visibleTodos.map(todo => (
-            <div
-              key={todo.id}
-              data-cy="Todo"
-              className={classNames('todo', { completed: todo.completed })}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                  onChange={() => toggleTodo(todo.id)}
-                />
-              </label>
+          {visibleTodos.map(todo => {
+            const isEditing = editingTodoId === todo.id;
 
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-                onClick={() => handleRemoveTodo(todo.id)}
+            return (
+              <div
+                key={todo.id}
+                data-cy="Todo"
+                className={classNames('todo', { completed: todo.completed })}
               >
-                ×
-              </button>
-            </div>
-          ))}
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                    checked={todo.completed}
+                    onChange={() => toggleTodo(todo.id)}
+                  />
+                </label>
 
-          {/* This todo is being edited */}
-          {/*
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+                {!isEditing && (
+                  <span
+                    data-cy="TodoTitle"
+                    className="todo__title"
+                    onDoubleClick={() =>
+                      handleStartEditing(todo.id, todo.title)
+                    }
+                  >
+                    {todo.title}
+                  </span>
+                )}
 
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-          </div>
-          */}
+                {isEditing && (
+                  <form
+                    onSubmit={event => {
+                      event.preventDefault();
+                      handleSaveEditing(todo.id);
+                    }}
+                  >
+                    <input
+                      data-cy="TodoTitleField"
+                      type="text"
+                      className="todo__title-field"
+                      placeholder="Empty todo will be deleted"
+                      value={editingTitle}
+                      autoFocus
+                      onChange={event => setEditingTitle(event.target.value)}
+                      onBlur={() => {
+                        if (ignoreBlurSave) {
+                          setIgnoreBlurSave(false);
 
-          {/* This todo is in loadind state */}
-          {/*
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+                          return;
+                        }
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
+                        handleSaveEditing(todo.id);
+                      }}
+                      onKeyUp={event => {
+                        if (event.key !== 'Escape') {
+                          return;
+                        }
 
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-          </div>
-          */}
+                        setIgnoreBlurSave(true);
+                        handleCancelEditing();
+                      }}
+                    />
+                  </form>
+                )}
+
+                {!isEditing && (
+                  <button
+                    type="button"
+                    className="todo__remove"
+                    data-cy="TodoDelete"
+                    onClick={() => handleRemoveTodo(todo.id)}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </section>
 
         {/* Hide the footer if there are no todos */}

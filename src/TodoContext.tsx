@@ -50,6 +50,18 @@ const todosReducer = (state: Todo[], action: TodoAction): Todo[] => {
       return state.map(todo =>
         todo.id === action.id ? { ...todo, completed: !todo.completed } : todo,
       );
+    case 'update': {
+      const trimmedTitle = action.title.trim();
+
+      if (!trimmedTitle) {
+        return state;
+      }
+
+      return state.map(todo =>
+        todo.id === action.id ? { ...todo, title: trimmedTitle } : todo,
+      );
+    }
+
     case 'remove':
       return state.filter(todo => todo.id !== action.id);
     case 'clearCompleted':
@@ -77,6 +89,8 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       todos,
       addTodo: (title: string) => dispatch({ type: 'add', title }),
       toggleTodo: (id: number) => dispatch({ type: 'toggle', id }),
+      updateTodo: (id: number, title: string) =>
+        dispatch({ type: 'update', id, title }),
       removeTodo: (id: number) => dispatch({ type: 'remove', id }),
       clearCompleted: () => dispatch({ type: 'clearCompleted' }),
       toggleAll: (completed: boolean) =>
@@ -92,7 +106,7 @@ export const useTodos = (): TodoContextValue => {
   const context = useContext(TodoContext);
 
   if (!context) {
-    throw new Error('useTodos must be used within a TodoProvider');
+    throw new Error('Error!');
   }
 
   return context;
