@@ -58,13 +58,33 @@ export const TodoItem: React.FC<TodoItemProps> = ({ visibleTodos }) => {
     setEditing(null);
   };
 
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+    id: number,
+  ) => {
+    event.preventDefault();
+    updateTodo(id);
+  };
+
+  const startEditingTodo = (todo: Todo) => {
+    setEditing(todo.id);
+    setNewTitle(todo.title);
+  };
+
+  const handleEscape = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setEditing(null);
+      setNewTitle('');
+    }
+  };
+
   return (
     <>
       {visibleTodos.map(todo => (
         <div
           key={todo.id}
           data-cy="Todo"
-          className={classNames('todo', { ' completed': todo.completed })}
+          className={classNames('todo', { completed: todo.completed })}
         >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className="todo__status-label">
@@ -77,12 +97,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ visibleTodos }) => {
             />
           </label>
           {editing === todo.id ? (
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                updateTodo(todo.id);
-              }}
-            >
+            <form onSubmit={event => handleSubmit(event, todo.id)}>
               <input
                 ref={inputRef}
                 data-cy="TodoTitleField"
@@ -92,22 +107,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({ visibleTodos }) => {
                 value={newTitle}
                 onChange={event => setNewTitle(event.target.value)}
                 onBlur={() => updateTodo(todo.id)}
-                onKeyUp={event => {
-                  if (event.key === 'Escape') {
-                    setEditing(null);
-                    setNewTitle('');
-                  }
-                }}
+                onKeyUp={event => handleEscape(event)}
               />
             </form>
           ) : (
             <span
               data-cy="TodoTitle"
               className="todo__title"
-              onDoubleClick={() => {
-                setEditing(todo.id);
-                setNewTitle(todo.title);
-              }}
+              onDoubleClick={() => startEditingTodo(todo)}
             >
               {todo.title}
             </span>

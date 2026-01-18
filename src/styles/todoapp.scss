@@ -76,6 +76,8 @@
       font-weight: 300;
       color: #e6e6e6;
     }
+
+    box-sizing: border-box;
   }
 
   &__main {
@@ -128,6 +130,17 @@
     }
 
     &:active {
+      text-decoration: none;
+    }
+
+    &:disabled {
+      opacity: 0.8;
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
+
+    &:disabled:hover {
       text-decoration: none;
     }
   }

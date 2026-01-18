@@ -11,6 +11,8 @@ interface FotterProps {
 export const Footer: React.FC<FotterProps> = ({ filter, filterChange }) => {
   const { todos, setTodos, focusHeaderInput } = useTodos();
 
+  const activeTodos = todos.filter(todo => !todo.completed).length;
+
   const clearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
     focusHeaderInput();
@@ -19,7 +21,7 @@ export const Footer: React.FC<FotterProps> = ({ filter, filterChange }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${activeTodos} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -57,7 +59,6 @@ export const Footer: React.FC<FotterProps> = ({ filter, filterChange }) => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
