@@ -29,7 +29,11 @@ export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const savedTodos = localStorage.getItem('todos');
 
-    return savedTodos ? JSON.parse(savedTodos) : [];
+    try {
+      return savedTodos ? JSON.parse(savedTodos) : [];
+    } catch {
+      return [];
+    }
   });
 
   const [filter, setFilter] = useState<Filter>('all');
@@ -37,13 +41,7 @@ export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
   const mainInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (todos.length === 0) {
-        localStorage.removeItem('todos');
-      } else {
-        localStorage.setItem('todos', JSON.stringify(todos));
-      }
-    }
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const addTodo = useCallback((todoTitle: string) => {
