@@ -76,6 +76,10 @@
       font-weight: 300;
       color: #e6e6e6;
     }
+
+    &:focus {
+      outline: none;
+    }
   }
 
   &__main {
