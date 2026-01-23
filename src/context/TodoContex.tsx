@@ -10,7 +10,7 @@ import { Todo } from '../types/Todo';
 
 type TodoContextType = {
   todoList: Todo[];
-  inputRef: React.RefObject<HTMLInputElement> | null;
+  inputRef: React.RefObject<HTMLInputElement>;
   editedTodo: number | null;
   updateTodo: (todo: Todo) => void;
   addTodo: (todoTitle: string) => void;
@@ -24,7 +24,7 @@ type TodoContextType = {
 
 export const TodoContext = createContext<TodoContextType>({
   todoList: [],
-  inputRef: null,
+  inputRef: { current: null },
   editedTodo: null,
   updateTodo: () => {},
   addTodo: () => {},
@@ -60,10 +60,16 @@ export function TodoProvider({ children }: { children: ReactNode }) {
   }, [todoList]);
 
   function addTodo(todoTitle: string) {
-    const newTodo = {
-      title: todoTitle.trim(),
+    const trimmedTitle = todoTitle.trim();
+
+    if (!trimmedTitle) {
+      return;
+    }
+
+    const newTodo: Todo = {
+      title: trimmedTitle,
       completed: false,
-      id: +new Date(),
+      id: Date.now(),
     };
 
     setTodoList(prev => [...prev, newTodo]);
@@ -78,14 +84,18 @@ export function TodoProvider({ children }: { children: ReactNode }) {
   }
 
   function updateTodo(newTodo: Todo) {
-    setTodoList(prev =>
-      prev.map(todo => {
-        if (todo.id === newTodo.id) {
-          return { ...newTodo, title: newTodo.title.trim() };
-        }
+    const trimmedTitle = newTodo.title.trim();
 
-        return todo;
-      }),
+    if (!trimmedTitle) {
+      deleteTodo(newTodo);
+
+      return;
+    }
+
+    setTodoList(prev =>
+      prev.map(todo =>
+        todo.id === newTodo.id ? { ...newTodo, title: trimmedTitle } : todo,
+      ),
     );
   }
 
