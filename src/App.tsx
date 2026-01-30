@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.ALL);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState('');
 
   const visibleTodos = useMemo(() => {
     if (filter === 'active') {
@@ -132,6 +133,8 @@ export const App: React.FC = () => {
         deleteTodo: deletTodo,
         updateTodo,
         clearCompleted,
+        error,
+        setError,
       }}
     >
       <div className="todoapp">

@@ -18,6 +18,8 @@ export type TodoContextType = {
     changes: Partial<Pick<Todo, 'title' | 'completed'>>,
   ) => void;
   clearCompleted: () => void;
+  error: string;
+  setError: (value: string) => void;
 };
 
 export const TodoContext = createContext<TodoContextType | null>(null);
