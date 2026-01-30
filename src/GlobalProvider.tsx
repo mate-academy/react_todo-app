@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React, { useReducer, useState } from 'react';
 import { Filter } from './types/Filter';
 import { Todo } from './types/todo';
@@ -19,12 +20,15 @@ type InitialState = {
 };
 
 type Action =
-  | { type: 'addTodo'; payload: Todo }
-  | { type: 'deleteTodo'; payload: number }
-  | { type: 'change'; payload: { title: string; id: number } }
-  | { type: 'deleteCompleted' }
-  | { type: 'toggleTodo'; payload: { completed: boolean; id: number } }
-  | { type: 'toggleTodoAll'; payload: boolean };
+  | { type: ActionType.ADD_TODO; payload: Todo }
+  | { type: ActionType.DELETE_TODO; payload: number }
+  | { type: ActionType.CHANGE; payload: { title: string; id: number } }
+  | { type: ActionType.DELETE_COMPLETED }
+  | {
+      type: ActionType.TOGGLE_TODO;
+      payload: { completed: boolean; id: number };
+    }
+  | { type: ActionType.TOGGLE_TODO_ALL; payload: boolean };
 
 const reducer = (state: Todo[], action: Action) => {
   switch (action.type) {
