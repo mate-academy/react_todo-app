@@ -5,6 +5,7 @@ import {
   DispatchContext,
   FilterContext,
   StateContext,
+  ActionType,
 } from '../../GlobalProvider';
 
 export const Footer: React.FC = () => {
@@ -65,7 +66,7 @@ export const Footer: React.FC = () => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!todoList.some(todo => todo.completed)}
-        onClick={() => dispatch({ type: 'deleteCompleted' })}
+        onClick={() => dispatch({ type: ActionType.DELETE_COMPLETED })}
       >
         Clear completed
       </button>

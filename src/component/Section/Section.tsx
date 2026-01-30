@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/todo';
 import cn from 'classnames';
-import { DispatchContext, StateContext } from '../../GlobalProvider';
+import {
+  DispatchContext,
+  StateContext,
+  ActionType,
+} from '../../GlobalProvider';
 
 export const Section: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
@@ -23,14 +27,14 @@ export const Section: React.FC = () => {
 
   const handleSubmit = (todo: Todo) => {
     if (inputValue.trim().length === 0) {
-      dispatch({ type: 'deleteTodo', payload: todo.id });
+      dispatch({ type: ActionType.DELETE_TODO, payload: todo.id });
 
       return;
     }
 
     if (todo.title !== inputValue) {
       dispatch({
-        type: 'change',
+        type: ActionType.CHANGE,
         payload: {
           title: inputValue.trim(),
           id: todo.id,
@@ -71,7 +75,7 @@ export const Section: React.FC = () => {
               checked={todo.completed}
               onChange={() =>
                 dispatch({
-                  type: 'toggleTodo',
+                  type: ActionType.TOGGLE_TODO,
                   payload: {
                     completed: !todo.completed,
                     id: todo.id,
@@ -106,7 +110,9 @@ export const Section: React.FC = () => {
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={() => dispatch({ type: 'deleteTodo', payload: todo.id })}
+              onClick={() =>
+                dispatch({ type: ActionType.DELETE_TODO, payload: todo.id })
+              }
             >
               ×
             </button>

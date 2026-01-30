@@ -2,6 +2,15 @@ import React, { useReducer, useState } from 'react';
 import { Filter } from './types/Filter';
 import { Todo } from './types/todo';
 
+export enum ActionType {
+  ADD_TODO = 'addTodo',
+  DELETE_TODO = 'deleteTodo',
+  CHANGE = 'change',
+  DELETE_COMPLETED = 'deleteCompleted',
+  TOGGLE_TODO = 'toggleTodo',
+  TOGGLE_TODO_ALL = 'toggleTodoAll',
+}
+
 const startState: Todo[] = [];
 
 type InitialState = {
@@ -19,30 +28,30 @@ type Action =
 
 const reducer = (state: Todo[], action: Action) => {
   switch (action.type) {
-    case 'addTodo':
+    case ActionType.ADD_TODO:
       return [...state, action.payload];
 
-    case 'deleteTodo':
+    case ActionType.DELETE_TODO:
       return state.filter(todo => todo.id !== action.payload);
 
-    case 'deleteCompleted':
+    case ActionType.DELETE_COMPLETED:
       return state.filter(todo => todo.completed === false);
 
-    case 'change':
+    case ActionType.CHANGE:
       return state.map(todo =>
         todo.id === action.payload.id
           ? { ...todo, title: action.payload.title }
           : todo,
       );
 
-    case 'toggleTodo':
+    case ActionType.TOGGLE_TODO:
       return state.map(todo =>
         todo.id === action.payload.id
           ? { ...todo, completed: action.payload.completed }
           : todo,
       );
 
-    case 'toggleTodoAll':
+    case ActionType.TOGGLE_TODO_ALL:
       return state.map(todo => ({ ...todo, completed: action.payload }));
 
     default:

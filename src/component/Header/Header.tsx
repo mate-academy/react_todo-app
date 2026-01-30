@@ -1,6 +1,10 @@
 import cn from 'classnames';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { DispatchContext, StateContext } from '../../GlobalProvider';
+import {
+  DispatchContext,
+  StateContext,
+  ActionType,
+} from '../../GlobalProvider';
 
 export const Header: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
@@ -15,7 +19,7 @@ export const Header: React.FC = () => {
     }
 
     dispatch({
-      type: 'addTodo',
+      type: ActionType.ADD_TODO,
       payload: { id: Date.now(), title: inputValue.trim(), completed: false },
     });
 
@@ -41,7 +45,10 @@ export const Header: React.FC = () => {
           data-cy="ToggleAllButton"
           disabled={todoList.length < 0}
           onClick={() =>
-            dispatch({ type: 'toggleTodoAll', payload: !allCompleted })
+            dispatch({
+              type: ActionType.TOGGLE_TODO_ALL,
+              payload: !allCompleted,
+            })
           }
         />
       )}
