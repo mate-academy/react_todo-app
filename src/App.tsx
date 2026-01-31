@@ -7,6 +7,7 @@ import { TodoSection } from './components/TodoSection';
 import { TodoButtons } from './components/TodoButtons';
 import { FilterStatus } from './types/FilterStatus';
 import { TodoContext } from './context/TodoContext';
+import classNames from 'classnames';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -158,6 +159,21 @@ export const App: React.FC = () => {
 
           <TodoButtons />
         </div>
+      </div>
+      <div
+        data-cy="ErrorNotification"
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !error },
+        )}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setError('')}
+        />
+        {error}
       </div>
     </TodoContext.Provider>
   );

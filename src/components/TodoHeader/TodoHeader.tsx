@@ -71,7 +71,7 @@ export const TodoHeader: React.FC<Props> = ({
           />
         </form>
       </header>
-      {error && (
+      {/* {error && (
         <p
           className="help is-danger"
           data-cy="ErrorMessage"
@@ -79,7 +79,7 @@ export const TodoHeader: React.FC<Props> = ({
         >
           {error}
         </p>
-      )}
+      )} */}
     </>
   );
 };
