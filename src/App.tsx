@@ -13,7 +13,7 @@ export const App: React.FC = () => {
 
   const [todo, setTodo] = useLocalStorage<Todo[]>('todo', []);
 
-  const { all } = FILTERS;
+  const { all, active, completed } = FILTERS;
 
   const [filter, setFilter] = useState<string>(all);
 
@@ -75,13 +75,25 @@ export const App: React.FC = () => {
       */
     if (!t) {
       return false;
-    } else if (filter === 'active') {
+    } else if (filter === active) {
+      /* - Se o filtro atual for "active", retorna true apenas para os itens
+      não concluídos (t.completed === false).
+- Resultado: só tarefas ativas entram no array.
+*/
       return t.completed === false;
-    } else if (filter === 'completed') {
+    } else if (filter === completed) {
+      /*- Se o filtro atual for "completed",
+      retorna true apenas para os itens concluídos (t.completed === true).
+- Resultado: só tarefas concluídas entram no array.
+
+      */
       return t.completed === true;
     }
 
-    return true;
+    return true; /* - Se não for "active" nem "completed", cai aqui.
+- Isso significa que o filtro é "all".
+- Retorna true para todos os itens, ou seja, mantém todos no array.
+ */
   });
 
   const handleActiveAll = () => {
@@ -100,11 +112,11 @@ export const App: React.FC = () => {
     setTodo(newArray);
   };
 
-  const handleFilterAll = () => setFilter('all');
+  const handleFilterAll = () => setFilter(all);
 
-  const handleActive = () => setFilter('active');
+  const handleActive = () => setFilter(active);
 
-  const handleCompleted = () => setFilter('completed');
+  const handleCompleted = () => setFilter(completed);
 
   const handleRemoveCompleted = () => {
     setTodo(todo.filter(t => t.completed === false));
@@ -118,12 +130,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setIsShowActiveAll(
-      filteredTodo.every(f => f.completed === true),
+      todo.every(f => f.completed === true),
     ); /* toda vez que houver uma alteração na
     dependencia filteredtodo o useefect é ativado e faz a verificação do settIsShowActiveAll
     every verifica se todos são true, a condição que passei como callback, se todos forem true ele retorna true
     */
-  }, [filteredTodo]);
+  }, [todo]);
 
   return (
     <div className="todoapp">

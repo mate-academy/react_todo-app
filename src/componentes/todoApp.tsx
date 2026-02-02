@@ -34,10 +34,10 @@ export const TodoApp: React.FC = () => {
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: filter === 'all',
+            selected: filter === all,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => handleFilterAll(all)}
+          onClick={() => handleFilterAll()}
         >
           All
         </a>
@@ -45,10 +45,10 @@ export const TodoApp: React.FC = () => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: filter === 'active',
+            selected: filter === active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => handleActive(active)}
+          onClick={() => handleActive()}
         >
           Active
         </a>
@@ -56,10 +56,10 @@ export const TodoApp: React.FC = () => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: filter === 'completed',
+            selected: filter === completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => handleCompleted(completed)}
+          onClick={() => handleCompleted()}
         >
           Completed
         </a>

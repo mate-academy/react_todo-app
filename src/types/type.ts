@@ -4,12 +4,6 @@ export interface Todo {
   completed: boolean;
 }
 
-export type Props = {
-  todos: Todo[];
-  onSelected: () => void;
-  onRemove: () => void;
-};
-
 export type TodoContextType = {
   todo: Todo[];
   handleSelected: (id: number) => void;

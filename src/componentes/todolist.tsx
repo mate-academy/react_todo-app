@@ -13,12 +13,19 @@ export const TodoList: React.FC = () => {
     return null;
   }
 
-  const { handleSelected, handleRemove, filteredTodo, setTodo } = context;
+  const { handleSelected, handleRemove, filteredTodo, setTodo, todo } = context;
 
   const handleEdit = (id: number, newTitle: string) => {
-    const newArray = filteredTodo.map(t => {
-      return t.id === id ? { ...t, title: newTitle } : t;
-    });
+    const newArray =
+      newTitle.length === 0
+        ? todo.filter(
+          t => t.id !== id,
+        ) /* o filter pega todos os objetos que tem o id diferente do id do objeto que estou
+      editando e retorna true para esses objetos montando um novo array com eles, enquanto os objetos com id igual retorna false
+      e remove da matriz */
+        : todo.map(t => {
+          return t.id === id ? { ...t, title: newTitle } : t;
+          });
 
     setTodo(newArray); // corrigir
   };
@@ -63,7 +70,7 @@ export const TodoList: React.FC = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
-                  aria-label='Marcar como concluido'
+                  aria-label="Marcar como concluido"
                   onChange={() => handleSelected(t.id)} // em checkbox usamos onchang
                 />
               </label>
