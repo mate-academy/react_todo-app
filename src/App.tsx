@@ -5,12 +5,17 @@ import { TodoList } from './componentes/todolist';
 import { useLocalStorage } from './localstorage/localstorage';
 import { TodoContext } from './context/todocontext';
 import { TodoApp } from './componentes/todoApp';
+import { FILTERS } from './filters/filter';
+import classNames from 'classnames';
 
 export const App: React.FC = () => {
   const [title, setTitle] = useState<string>('');
 
   const [todo, setTodo] = useLocalStorage<Todo[]>('todo', []);
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+
+  const { all } = FILTERS;
+
+  const [filter, setFilter] = useState<string>(all);
 
   const [isShowFooter, setIsShowFooter] = useState<boolean>(false);
   const [isShowActiveAll, setIsShowActiveAll] = useState<boolean>(false);
@@ -36,7 +41,7 @@ export const App: React.FC = () => {
 
     addTodo({
       id: +new Date(),
-      title: title,
+      title: title.trim(),
       completed: false,
     });
 
@@ -130,7 +135,9 @@ export const App: React.FC = () => {
           {isShowFooter && (
             <button
               type="button"
-              className={`todoapp__toggle-all ${isShowActiveAll ? 'active' : ''}`}
+              className={classNames('todoapp__toggle-all', {
+                active: isShowActiveAll,
+              })}
               data-cy="ToggleAllButton"
               onClick={() => handleActiveAll()}
             />
@@ -148,40 +155,31 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
-
-        <section className="todoapp__main" data-cy="TodoList">
-          <TodoContext.Provider
-            value={{
-              todo,
-              setTodo,
-              handleSelected,
-              handleRemove,
-              filteredTodo,
-            }}
-          >
+        <TodoContext.Provider
+          value={{
+            todo,
+            setTodo,
+            handleSelected,
+            handleRemove,
+            filteredTodo,
+            handleRemoveCompleted,
+            filter,
+            handleActive,
+            handleCompleted,
+            handleFilterAll,
+          }}
+        >
+          <section className="todoapp__main" data-cy="TodoList">
             <TodoList />
-          </TodoContext.Provider>
-        </section>
+          </section>
 
-        {/* Hide the footer if there are no todos */}
-        {isShowFooter && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <TodoContext.Provider
-              value={{
-                todo,
-                handleRemoveCompleted,
-                filter,
-                handleSelected,
-                handleRemove,
-                handleActive,
-                handleCompleted,
-                handleFilterAll,
-              }}
-            >
+          {/* Hide the footer if there are no todos */}
+          {isShowFooter && (
+            <footer className="todoapp__footer" data-cy="Footer">
               <TodoApp />
-            </TodoContext.Provider>
-          </footer>
-        )}
+            </footer>
+          )}
+        </TodoContext.Provider>
       </div>
     </div>
   );

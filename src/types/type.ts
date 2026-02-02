@@ -18,7 +18,7 @@ export type TodoContextType = {
   handleActive: () => void;
   handleCompleted: () => void;
   filteredTodo: Todo[];
-  filter: 'all' | 'active' | 'completed';
+  filter: string;
   handleRemoveCompleted: () => void;
   setTodo: (todos: Todo[]) => void;
 };

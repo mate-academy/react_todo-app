@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 import { TodoContext } from '../context/todocontext';
+import classNames from 'classnames';
+import { FILTERS } from '../filters/filter';
 
 export const TodoApp: React.FC = () => {
   const context = useContext(TodoContext);
@@ -17,6 +19,10 @@ export const TodoApp: React.FC = () => {
   );
   const tamanho = contagem.length;
 
+  const hasCompleted = todo.some(t => t.completed === true);
+
+  const { all, completed, active } = FILTERS;
+
   return (
     <>
       <span className="todo-count" data-cy="TodosCounter">
@@ -27,27 +33,33 @@ export const TodoApp: React.FC = () => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === 'all',
+          })}
           data-cy="FilterLinkAll"
-          onClick={() => handleFilterAll('all')}
+          onClick={() => handleFilterAll(all)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === 'active',
+          })}
           data-cy="FilterLinkActive"
-          onClick={() => handleActive('active')}
+          onClick={() => handleActive(active)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === 'completed',
+          })}
           data-cy="FilterLinkCompleted"
-          onClick={() => handleCompleted('completed')}
+          onClick={() => handleCompleted(completed)}
         >
           Completed
         </a>
@@ -57,8 +69,9 @@ export const TodoApp: React.FC = () => {
       <button
         type="button"
         className="todoapp__clear-completed"
+        disabled={!hasCompleted}
         data-cy="ClearCompletedButton"
-        onClick={() => handleRemoveCompleted(todo)}
+        onClick={() => handleRemoveCompleted()}
       >
         Clear completed
       </button>

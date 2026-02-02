@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { TodoContext } from '../context/todocontext';
 import React, { useContext, useState } from 'react';
 
@@ -6,7 +7,7 @@ export const TodoList: React.FC = () => {
   const context = useContext(TodoContext);
 
   const [editTitle, setEdiTitle] = useState<string>(''); //elber
-  const [editingId, setEditingId] = useState<number | null>(0);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   if (!context) {
     return null;
@@ -19,7 +20,7 @@ export const TodoList: React.FC = () => {
       return t.id === id ? { ...t, title: newTitle } : t;
     });
 
-    setTodo(newArray);
+    setTodo(newArray); // corrigir
   };
 
   const handleId = (itemId: number) => {
@@ -52,18 +53,20 @@ export const TodoList: React.FC = () => {
             <div
               key={t.id}
               data-cy="Todo"
-              className={`todo ${t.completed ? 'completed' : ''}`}
+              className={classNames('todo', {
+                completed: t.completed,
+              })}
             >
               <label className="todo__status-label" htmlFor={`todo-${t.id}`}>
-                {' '}
+                <input
+                  id={`todo-${t.id}`}
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                  aria-label='Marcar como concluido'
+                  onChange={() => handleSelected(t.id)} // em checkbox usamos onchang
+                />
               </label>
-              <input
-                id={`todo-${t.id}`}
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                onChange={() => handleSelected(t.id)} // em checkbox usamos onchang
-              />
 
               {editingId === t.id ? (
                 <input
@@ -71,11 +74,11 @@ export const TodoList: React.FC = () => {
                   value={editTitle}
                   autoFocus
                   onBlur={() => {
-                    handleEdit(t.id, editTitle);
+                    handleEdit(t.id, editTitle.trim());
                     setEditingId(null);
                   }}
                   onKeyDown={event => {
-                    handleEventKey(event, t.id, editTitle);
+                    handleEventKey(event, t.id, editTitle.trim());
                   }}
                   onKeyUp={event => handleEventCancel(event)}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
