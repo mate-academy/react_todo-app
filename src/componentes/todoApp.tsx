@@ -26,7 +26,7 @@ export const TodoApp: React.FC = () => {
   return (
     <>
       <span className="todo-count" data-cy="TodosCounter">
-        {`${tamanho} item left`}
+        {contagem > 1 ? `${tamanho} item lefts` : `${tamanho} item lefts` }
       </span>
 
       {/* Active link should have the 'selected' class */}

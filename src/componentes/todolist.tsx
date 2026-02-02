@@ -14,21 +14,22 @@ export const TodoList: React.FC = () => {
   }
 
   const { handleSelected, handleRemove, filteredTodo, setTodo, todo } = context;
+/* eslint-disable */
 
   const handleEdit = (id: number, newTitle: string) => {
+    /* o filter pega todos os objetos que tem o id diferente do id do objeto que estou
+        editando e retorna true para esses objetos montando um novo array com eles, enquanto os objetos com id igual retorna false
+        e remove da matriz */
     const newArray =
       newTitle.length === 0
-        ? todo.filter(
-          t => t.id !== id,
-        ) /* o filter pega todos os objetos que tem o id diferente do id do objeto que estou
-      editando e retorna true para esses objetos montando um novo array com eles, enquanto os objetos com id igual retorna false
-      e remove da matriz */
+        ? todo.filter(t => t.id !== id)
         : todo.map(t => {
           return t.id === id ? { ...t, title: newTitle } : t;
-          });
+        });
 
     setTodo(newArray); // corrigir
   };
+  /* eslint-enable */
 
   const handleId = (itemId: number) => {
     setEditingId(itemId);
@@ -70,6 +71,7 @@ export const TodoList: React.FC = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
+                  checked={t.completed}
                   aria-label="Marcar como concluido"
                   onChange={() => handleSelected(t.id)} // em checkbox usamos onchang
                 />
