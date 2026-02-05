@@ -82,13 +82,24 @@ export const TodoItem: React.FC<Props> = ({ todo, onTodoAction }) => {
       </label>
 
       {!isEditing ? (
-        <span
-          data-cy="TodoTitle"
-          className="todo__title"
-          onDoubleClick={handleDoubleClick}
-        >
-          {todo.title}
-        </span>
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={handleDoubleClick}
+          >
+            {todo.title}
+          </span>
+
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => handleRemoveTodo(todo.id)}
+          >
+            ×
+          </button>
+        </>
       ) : (
         <form onSubmit={handleSubmit}>
           <input
@@ -102,17 +113,6 @@ export const TodoItem: React.FC<Props> = ({ todo, onTodoAction }) => {
             ref={inputRef}
           />
         </form>
-      )}
-
-      {!isEditing && (
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-          onClick={() => handleRemoveTodo(todo.id)}
-        >
-          ×
-        </button>
       )}
     </div>
   );
