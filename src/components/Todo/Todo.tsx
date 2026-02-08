@@ -30,12 +30,7 @@ export const TodoItem = forwardRef<HTMLDivElement, Props>(
 
       const normalizedValue = value.trim();
 
-      if (normalizedValue === title) {
-        setEditMode(false);
-
-        return;
-      }
-
+      setEditMode(false);
       isSubmitting.current = true;
 
       renameTodo(id, normalizedValue);
