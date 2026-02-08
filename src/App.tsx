@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
 import { Todo } from './types/Todo';
@@ -6,7 +6,21 @@ import { Footer } from './components/Footer';
 import classNames from 'classnames';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const raw = localStorage.getItem('todos');
+
+    if (!raw) {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as Todo[];
+
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
   const [filter, setFilter] = useState<string | undefined>('all');
 
   const [inputValue, setInputValue] = useState('');
@@ -15,6 +29,10 @@ export const App: React.FC = () => {
   function inputFocus() {
     inputRef.current?.focus();
   }
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const filteredTodos = todos.filter(todo => {
     if (filter === 'all') {
@@ -51,6 +69,7 @@ export const App: React.FC = () => {
 
   const handleDeleteTodo = (todoId: number) => {
     setTodos(prevState => prevState.filter(todo => todo.id !== todoId));
+    inputFocus();
   };
 
   const handleStatusUpdate = (todoId: number, nextCompleted?: boolean) => {
@@ -139,15 +158,9 @@ export const App: React.FC = () => {
             setFilter={setFilter}
             clearCompeleted={() => {
               setTodos((prevState: Todo[]) =>
-                // need to rewrite to promise.all()
-                prevState.map(item => {
-                  if (item.completed === true) {
-                    handleDeleteTodo(item.id);
-                  }
-
-                  return item;
-                }),
+                prevState.filter(item => item.completed !== true),
               );
+              inputFocus();
             }}
           />
         )}
