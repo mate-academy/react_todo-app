@@ -1,18 +1,20 @@
-import { Todo } from '../../types/Todo';
+import { useContext } from 'react';
 import { Filter } from '../Filter';
+import { TodosContext } from '../TodosContext';
 
 type Props = {
-  data: Todo[];
   setFilter: (value: string | undefined) => void;
-  clearCompeleted: () => void;
 };
 
-export const Footer: React.FC<Props> = ({
-  data,
-  setFilter,
-  clearCompeleted,
-}) => {
-  const counter = data
+export const Footer: React.FC<Props> = ({ setFilter }) => {
+  const todosContext = useContext(TodosContext);
+
+  if (!todosContext) {
+    throw new Error('TodosContext is not available');
+  }
+
+  const { todos, clearCompleted } = todosContext;
+  const counter = todos
     .filter(todo => {
       return todo.completed !== true;
     })
@@ -20,14 +22,14 @@ export const Footer: React.FC<Props> = ({
       return !todo.hasOwnProperty('temp');
     });
 
-  const completedLength = [...data].filter(
+  const completedLength = [...todos].filter(
     item => item.completed === true,
   ).length;
 
   const footerHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    clearCompeleted();
+    clearCompleted();
   };
 
   return (
