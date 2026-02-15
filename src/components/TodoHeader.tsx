@@ -1,22 +1,34 @@
 import React, { useState, useRef, useEffect } from 'react';
+import classNames from 'classnames';
 import { useTodos } from '../context/TodoContext';
 
 export const TodoHeader: React.FC = () => {
-  const { todos, addTodo, toggleAll, setFocusHandler } = useTodos();
+  const { todos, addTodo, toggleAll } = useTodos();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Zapamiętujemy poprzednią liczbę zadań
+  const prevCount = useRef(todos.length);
+
   useEffect(() => {
-    const focusInput = () => inputRef.current?.focus();
+    // Jeśli liczba zadań się zmieniła (dodanie lub usunięcie)
+    if (todos.length !== prevCount.current) {
+      inputRef.current?.focus();
+      prevCount.current = todos.length;
+    }
+  }, [todos.length]);
 
-    setFocusHandler(() => focusInput);
-    focusInput();
-  }, [setFocusHandler]);
+  // Focus przy pierwszym załadowaniu
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
-  const handleAddTodo = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      addTodo(query);
+    const trimmed = query.trim();
+
+    if (trimmed) {
+      addTodo(trimmed);
       setQuery('');
     }
   };
@@ -28,12 +40,15 @@ export const TodoHeader: React.FC = () => {
       {todos.length > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+          className={classNames('todoapp__toggle-all', {
+            active: allCompleted,
+          })}
           onClick={toggleAll}
           data-cy="ToggleAllButton"
         />
       )}
-      <form onSubmit={handleAddTodo}>
+
+      <form onSubmit={handleSubmit}>
         <input
           ref={inputRef}
           type="text"

@@ -1,5 +1,6 @@
 import React from 'react';
-import { useTodos } from '../context/TodoContext';
+import classNames from 'classnames';
+import { useTodos, FILTERS } from '../context/TodoContext';
 
 export const TodoFilter: React.FC = () => {
   const { filter, setFilter, activeCount, hasCompleted, clearCompleted } =
@@ -12,18 +13,18 @@ export const TodoFilter: React.FC = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {(['all', 'active', 'completed'] as const).map(type => (
+        {Object.values(FILTERS).map(f => (
           <a
-            key={type}
-            href={`#/${type === 'all' ? '' : type}`}
-            className={`filter__link ${filter === type ? 'selected' : ''}`}
+            key={f}
+            href={`#/${f === FILTERS.all ? '' : f}`}
+            className={classNames('filter__link', { selected: filter === f })}
             onClick={e => {
               e.preventDefault();
-              setFilter(type);
+              setFilter(f);
             }}
-            data-cy={`FilterLink${type.charAt(0).toUpperCase() + type.slice(1)}`}
+            data-cy={`FilterLink${f.charAt(0).toUpperCase() + f.slice(1)}`}
           >
-            {type.charAt(0).toUpperCase() + type.slice(1)}
+            {f.charAt(0).toUpperCase() + f.slice(1)}
           </a>
         ))}
       </nav>

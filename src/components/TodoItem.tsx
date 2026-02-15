@@ -1,37 +1,53 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Todo, useTodos } from '../context/TodoContext';
+import classNames from 'classnames';
+import { useTodos, Todo } from '../context/TodoContext';
 
 export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
   const { toggleTodo, deleteTodo, updateTodo } = useTodos();
   const [isEditing, setIsEditing] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
+  const isCanceled = useRef(false);
   const editInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isEditing) {
+      isCanceled.current = false;
       editInputRef.current?.focus();
     }
   }, [isEditing]);
 
-  const handleSubmit = () => {
-    updateTodo(todo.id, tempTitle);
+  const handleEditSubmit = () => {
+    if (isCanceled.current) {
+      return;
+    }
+
+    const trimmed = tempTitle.trim();
+
+    if (!trimmed) {
+      deleteTodo(todo.id);
+    } else if (trimmed !== todo.title) {
+      updateTodo(todo.id, trimmed);
+    }
+
     setIsEditing(false);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
-      setTempTitle(todo.title);
+      isCanceled.current = true;
       setIsEditing(false);
-    }
-
-    if (e.key === 'Enter') {
-      handleSubmit();
+      setTempTitle(todo.title);
+    } else if (e.key === 'Enter') {
+      handleEditSubmit();
     }
   };
 
   return (
     <div
-      className={`todo ${todo.completed ? 'completed' : ''} ${isEditing ? 'editing' : ''}`}
+      className={classNames('todo', {
+        completed: todo.completed,
+        editing: isEditing,
+      })}
       data-cy="Todo"
     >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -44,15 +60,14 @@ export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
           data-cy="TodoStatus"
         />
       </label>
+
       {isEditing ? (
         <input
           ref={editInputRef}
-          type="text"
           className="todo__title-field"
-          style={{ width: '100%', boxSizing: 'border-box' }}
           value={tempTitle}
           onChange={e => setTempTitle(e.target.value)}
-          onBlur={handleSubmit}
+          onBlur={handleEditSubmit}
           onKeyUp={handleKeyUp}
           data-cy="TodoTitleField"
         />
