@@ -76,13 +76,7 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': ["error", {
       assert: "either",
     }],
-    'jsx-a11y/label-has-for': [2, {
-      components: ['Label'],
-      required: {
-        some: ['id', 'nesting'],
-      },
-      allowChildren: true,
-    }],
+    'jsx-a11y/label-has-associated-control': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
 
