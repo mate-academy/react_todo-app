@@ -6,12 +6,14 @@ type TodoState = {
   todos: Todo[];
   filter: FilterType;
   nextId: number;
+  deletingTodoId: number | null;
 };
 
 const initialState: TodoState = {
   todos: [],
   filter: FILTERS.ALL,
   nextId: 1,
+  deletingTodoId: null,
 };
 
 type Action =
@@ -21,7 +23,8 @@ type Action =
   | { type: 'UPDATE_TODO'; payload: { id: number; title: string } }
   | { type: 'TOGGLE_ALL' }
   | { type: 'CLEAR_COMPLETED' }
-  | { type: 'SET_FILTER'; payload: FilterType };
+  | { type: 'SET_FILTER'; payload: FilterType }
+  | { type: 'SET_DELETING_TODO_ID'; payload: { id: number | null } };
 
 function reducer(state: TodoState, action: Action): TodoState {
   switch (action.type) {
@@ -88,6 +91,12 @@ function reducer(state: TodoState, action: Action): TodoState {
         filter: action.payload,
       };
 
+    case 'SET_DELETING_TODO_ID':
+      return {
+        ...state,
+        deletingTodoId: action.payload.id,
+      };
+
     default:
       return state;
   }
@@ -106,6 +115,7 @@ function loadInitialState(): TodoState {
         todos: todos,
         filter: FILTERS.ALL,
         nextId: maxId + 1,
+        deletingTodoId: null,
       };
     } catch (error) {
       return initialState;

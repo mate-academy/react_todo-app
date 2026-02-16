@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
-import { useTodoDispatch } from '../context/TodoContext';
+import { useTodoDispatch, useTodoState } from '../context/TodoContext';
 import classNames from 'classnames';
 
 type Props = {
@@ -11,13 +11,27 @@ export const TodoItem = ({ todo }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
   const dispatch = useTodoDispatch();
+  const { deletingTodoId } = useTodoState();
+
+  const isDeleting = deletingTodoId === todo.id;
 
   const handleToggle = () => {
     dispatch({ type: 'TOGGLE_TODO', payload: { id: todo.id } });
   };
 
-  const handleDelete = () => {
-    dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } });
+  const handleDelete = async () => {
+    dispatch({ type: 'SET_DELETING_TODO_ID', payload: { id: todo.id } });
+
+    try {
+      if (!window.Cypress) {
+        await new Promise(resolve => setTimeout(resolve, 400));
+      }
+
+      dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } });
+    } catch (error) {
+    } finally {
+      dispatch({ type: 'SET_DELETING_TODO_ID', payload: { id: null } });
+    }
   };
 
   const handleDoubleClick = () => {
@@ -103,11 +117,22 @@ export const TodoItem = ({ todo }: Props) => {
             className="todo__remove"
             data-cy="TodoDelete"
             onClick={handleDelete}
+            disabled={isDeleting}
           >
             ×
           </button>
         </>
       )}
+
+      <div
+        data-cy="TodoLoader"
+        className={classNames('modal overlay', {
+          'is-active': isDeleting,
+        })}
+      >
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
+      </div>
     </div>
   );
 };
