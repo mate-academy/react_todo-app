@@ -4,9 +4,10 @@ import { useTodoContext } from '../context/TodoContext';
 
 interface Props {
   todo: Todo;
+  isDeleting?: boolean;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo, isDeleting = false }) => {
   const { deleteTodo, toggleTodo, updateTodo } = useTodoContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
@@ -54,6 +55,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+      {isDeleting && <div data-cy="TodoLoader" className="overlay" />}
+
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
         <input

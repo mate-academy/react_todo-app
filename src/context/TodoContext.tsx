@@ -11,6 +11,9 @@ interface TodoContextType {
   clearCompleted: () => void;
   filter: FilterStatus;
   filteredTodos: Todo[];
+  errorMessage: string;
+  setErrorMessage: (msg: string) => void;
+  deletingTodos: Todo[];
 }
 
 const TodoContext = createContext<TodoContextType | null>(null);
@@ -44,6 +47,8 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [todos, setTodos] = useState<Todo[]>(loadTodosFromStorage);
   const [filter, setFilter] = useState<FilterStatus>(getFilterFromHash);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [deletingTodos, setDeletingTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -63,6 +68,8 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
     const trimmed = title.trim();
 
     if (!trimmed) {
+      setErrorMessage('Title should not be empty');
+
       return;
     }
 
@@ -77,7 +84,17 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const deleteTodo = (id: number) => {
+    const todoToDelete = todos.find(t => t.id === id);
+
     setTodos(prev => prev.filter(todo => todo.id !== id));
+
+    if (todoToDelete) {
+      setDeletingTodos(prev => [...prev, todoToDelete]);
+
+      setTimeout(() => {
+        setDeletingTodos(prev => prev.filter(t => t.id !== id));
+      }, 300);
+    }
   };
 
   const toggleTodo = (id: number) => {
@@ -136,6 +153,9 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
         clearCompleted,
         filter,
         filteredTodos,
+        errorMessage,
+        setErrorMessage,
+        deletingTodos,
       }}
     >
       {children}

@@ -6,11 +6,16 @@ export const Header: React.FC = () => {
   const { todos, addTodo, toggleAll } = useTodoContext();
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const prevLengthRef = useRef(todos.length);
 
   const allCompleted = todos.length > 0 && todos.every(t => t.completed);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    if (todos.length < prevLengthRef.current) {
+      inputRef.current?.focus();
+    }
+
+    prevLengthRef.current = todos.length;
   }, [todos.length]);
 
   const handleSubmit = (e: React.FormEvent) => {
