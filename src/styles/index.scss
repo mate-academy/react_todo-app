@@ -12,12 +12,46 @@ body {
   transition-property: opacity, min-height;
   transition-duration: 1s;
   min-height: 36px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 20px;
+  background-color: rgba(255, 54, 54, 0.9);
+  color: white;
+  font-size: 14px;
+
+  .delete {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+
+    &::before {
+      content: '×';
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+  }
 }
 
 .notification.hidden {
   min-height: 0;
   opacity: 0;
   pointer-events: none;
+  margin: 0;
+  padding: 0;
 }
 
 @import './todoapp';
