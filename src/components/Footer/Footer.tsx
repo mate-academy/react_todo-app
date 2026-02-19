@@ -36,6 +36,7 @@ export const Footer: React.FC = () => {
       {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
+        hidden={!hasCompleted}
         className="todoapp__clear-completed"
         disabled={!hasCompleted}
         data-cy="ClearCompletedButton"

@@ -6,7 +6,7 @@ export const initialState: State = {
   editingId: null,
 };
 
-type Actions =
+export type Actions =
   | { type: 'ADD'; payload: string }
   | { type: 'DELETE'; payload: number }
   | { type: 'TOGGLE'; payload: number }

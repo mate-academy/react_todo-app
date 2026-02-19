@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { FilterEnum, State } from './types';
-import { reducer } from './todosReducer';
+import { Actions, reducer } from './todosReducer';
 
 const initialState: State = {
   todos: JSON.parse(localStorage.getItem('todos') || '[]'),
@@ -10,7 +10,8 @@ const initialState: State = {
 
 type TodoContextType = {
   state: State;
-  dispatch: React.Dispatch<any>;
+
+  dispatch: React.Dispatch<Actions>;
 };
 
 const TodosContext = createContext<TodoContextType | undefined>(undefined);
