@@ -1,4 +1,3 @@
-
 export const Footer = () => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
